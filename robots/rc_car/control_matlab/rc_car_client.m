@@ -25,7 +25,7 @@
 % IMPORTANT: for each successful call to simxStart, there
 % should be a corresponding call to simxFinish at the end!
 
-function rc_car_control()
+function rc_car_client()
 	disp('Program started');
 	% vrep=remApi('remoteApi','extApi.h'); % using the header (requires a compiler)
 	vrep=remApi('remoteApi'); % using the prototype file (remoteApiProto.m)
@@ -61,26 +61,22 @@ function rc_car_control()
         [return_code, driving_fl_handle] = vrep.simxGetObjectHandle(clientID, 'driving_joint_front_left', vrep.simx_opmode_oneshot_wait);
         [return_code, driving_rr_handle] = vrep.simxGetObjectHandle(clientID, 'driving_joint_rear_right', vrep.simx_opmode_oneshot_wait);
         [return_code, driving_rl_handle] = vrep.simxGetObjectHandle(clientID, 'driving_joint_rear_left', vrep.simx_opmode_oneshot_wait);
-                
-        while (currentTime-startTime < 5)	
-			[returnCode,data]=vrep.simxGetIntegerParameter(clientID,vrep.sim_intparam_mouse_x,vrep.simx_opmode_buffer); % Try to retrieve the streamed data
-			if (returnCode==vrep.simx_return_ok) % After initialization of streaming, it will take a few ms before the first value arrives, so check the return code
-				fprintf('Mouse position x: %d\n',data); % Mouse position x is actualized when the cursor is over V-REP's window
-			end
-			t=clock;
-			currentTime=t(6);
+        
+        % prepare for data streaming
+        % add as needed
+        
+        % enter main loop
+        while (vrep.simxGetConnectionId(clientID)~=-1) 
+			% process sensor data
             
             % steering test
-            vrep.simxSetJointTargetPosition(clientID,steering_r_handle,-15/180*pi,vrep.simx_opmode_oneshot);
-            vrep.simxSetJointTargetPosition(clientID,steering_l_handle,-15/180*pi,vrep.simx_opmode_oneshot);
+            vrep.simxSetJointTargetPosition(clientID,steering_r_handle,15/180*pi,vrep.simx_opmode_oneshot);
+            vrep.simxSetJointTargetPosition(clientID,steering_l_handle,15/180*pi,vrep.simx_opmode_oneshot);
             
             % driving test
             vrep.simxSetJointTargetVelocity(clientID,driving_rr_handle,-5,vrep.simx_opmode_oneshot);
             vrep.simxSetJointTargetVelocity(clientID,driving_rl_handle,-5,vrep.simx_opmode_oneshot);
-		end
-			
-		% Now send some data to V-REP in a non-blocking fashion:
-		vrep.simxAddStatusbarMessage(clientID,'Hello V-REP!',vrep.simx_opmode_oneshot);
+        end
 
 		% Before closing the connection to V-REP, make sure that the last command sent out had time to arrive. You can guarantee this with (for example):
 		vrep.simxGetPingTime(clientID);
