@@ -3,6 +3,10 @@
 
 namespace srcl_ctrl {
 
+class TreeNode{
+
+};
+
 class QuadTree{
 public:
 	QuadTree();

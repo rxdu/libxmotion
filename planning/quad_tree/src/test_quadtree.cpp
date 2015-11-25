@@ -2,12 +2,13 @@
 #include <stdio.h>
 
 // opencv
-#include <opencv2/opencv.hpp>
+#include "opencv2/opencv.hpp"
 
 // quad_tree
-#include "quad_tree.h"
+#include "qtree_builder.h"
 
 using namespace cv;
+using namespace srcl_ctrl;
 
 int main(int argc, char** argv )
 {
@@ -34,12 +35,17 @@ int main(int argc, char** argv )
     Mat image_bin;
     threshold(image_gray, image_bin, 200, 255, THRESH_BINARY);
 
+    QTreeBuilder builder;
+
     // display final image
     //namedWindow("Original Image", WINDOW_AUTOSIZE );
     //imshow("Original Image", image_gray);
 
+    Mat image_pad;
+    builder.PadGrayscaleImage(image_bin, image_pad);
+
     namedWindow("Binarized Image", WINDOW_AUTOSIZE );
-    imshow("Binarized Image", image_bin);
+    imshow("Binarized Image", image_pad);
 
     waitKey(0);
 

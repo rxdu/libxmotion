@@ -24,3 +24,8 @@ You can install an Eclipse plugin from the following source to edit CMAKE files:
 Name: CMAKE Editor
 Location: http://cmakeed.sourceforge.net/eclipse/
 ```
+
+## 2. Reference
+
+* [Check integer is power of two](http://www.exploringbinary.com/ten-ways-to-check-if-an-integer-is-a-power-of-two-in-c/)
+* [OpenCV function implementation reference](https://github.com/Itseez/opencv/blob/master/modules/imgproc/src/thresh.cpp#L1192)

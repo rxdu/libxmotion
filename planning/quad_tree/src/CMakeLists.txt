@@ -19,4 +19,4 @@ target_link_libraries(qtree ${OpenCV_LIBS})
 
 # Add executables
 add_executable(build_quadtree test_quadtree.cpp)
-target_link_libraries(build_quadtree ${OpenCV_LIBS})
+target_link_libraries(build_quadtree qtree ${OpenCV_LIBS})
