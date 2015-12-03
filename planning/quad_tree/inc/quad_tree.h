@@ -6,8 +6,15 @@ namespace srcl_ctrl {
 // Definition of Supporting Types
 enum class NodeType
 {
-	Node,
-	Leaf
+	INNER,
+	LEAF
+};
+
+enum class OccupancyType
+{
+	FREE,
+	OCCUPIED,
+	MIXED
 };
 
 typedef struct
@@ -25,22 +32,25 @@ typedef struct
 // Definition of Tree Node
 class TreeNode{
 public:
-	TreeNode(BoundingBox bound, bool is_occupied);
+	TreeNode(BoundingBox bound, OccupancyType occupancy);
 	~TreeNode();
 
 public:
+	// Node contents
 	NodeType type_;
-	bool occupied_;
+	OccupancyType occupancy_;
+	BoundingBox bounding_box_;
+
+	// Pointers to child nodes
 	/* 0 - top_left, 1 - top_right */
 	/* 2 - bot_left, 3 - bot_right */
 	TreeNode* child_nodes_[4];
-	BoundingBox bounding_box_;
 };
 
 // Definition of Quad-Tree
 class QuadTree{
 public:
-	QuadTree(BoundingBox root_bound, bool root_occupied);
+	QuadTree();
 	~QuadTree();
 
 public:

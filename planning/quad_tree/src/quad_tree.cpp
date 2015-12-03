@@ -5,26 +5,27 @@ using namespace srcl_ctrl;
 /*********************************************************/
 /*              Implementation of Quad Tree              */
 /*********************************************************/
-QuadTree::QuadTree(BoundingBox root_bound, bool root_occupied):
-		tree_depth_(0),
-		root_node_(new TreeNode(root_bound,root_occupied))
+QuadTree::QuadTree():tree_depth_(0), root_node_(nullptr)
 {
 
 }
 
 QuadTree::~QuadTree()
 {
-	if(root_node_ != nullptr)
-		delete(root_node_);
+	// TODO
+	// Think about how to free memory of the whole tree
+//	if(root_node_ != nullptr)
+//		delete(root_node_);
 }
 
 /*********************************************************/
 /*              Implementation of Tree Node              */
 /*********************************************************/
 
-TreeNode::TreeNode(BoundingBox bound, bool is_occupied):occupied_(is_occupied)
+TreeNode::TreeNode(BoundingBox bound, OccupancyType occupancy):
+		occupancy_(occupancy)
 {
-	type_ = NodeType::Node;
+	type_ = NodeType::INNER;
 
 	bounding_box_.x.min = bound.x.min;
 	bounding_box_.x.max = bound.x.max;

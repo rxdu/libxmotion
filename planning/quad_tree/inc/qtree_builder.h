@@ -19,7 +19,7 @@ private:
 
 private:
 	void PadGrayscaleImage(cv::InputArray src);
-	bool CheckAreaOccupancy(unsigned int x_start, unsigned int x_end, unsigned int y_start, unsigned int y_end);
+	OccupancyType CheckAreaOccupancy(BoundingBox area);
 
 public:
 	void PadGrayscaleImage(cv::InputArray src, cv::OutputArray dst);
