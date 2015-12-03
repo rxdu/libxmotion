@@ -70,12 +70,12 @@ function rc_car_client()
 			% process sensor data
             
             % steering test
-            vrep.simxSetJointTargetPosition(clientID,steering_r_handle,15/180*pi,vrep.simx_opmode_oneshot);
-            vrep.simxSetJointTargetPosition(clientID,steering_l_handle,15/180*pi,vrep.simx_opmode_oneshot);
+            vrep.simxSetJointTargetPosition(clientID,steering_r_handle,5/180*pi,vrep.simx_opmode_oneshot);
+            vrep.simxSetJointTargetPosition(clientID,steering_l_handle,5/180*pi,vrep.simx_opmode_oneshot);
             
             % driving test
-            vrep.simxSetJointTargetVelocity(clientID,driving_rr_handle,-5,vrep.simx_opmode_oneshot);
-            vrep.simxSetJointTargetVelocity(clientID,driving_rl_handle,-5,vrep.simx_opmode_oneshot);
+            vrep.simxSetJointTargetVelocity(clientID,driving_rr_handle,-80,vrep.simx_opmode_oneshot);
+            vrep.simxSetJointTargetVelocity(clientID,driving_rl_handle,-80,vrep.simx_opmode_oneshot);
         end
 
 		% Before closing the connection to V-REP, make sure that the last command sent out had time to arrive. You can guarantee this with (for example):
