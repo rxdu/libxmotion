@@ -8,6 +8,13 @@
 
 namespace srcl_ctrl{
 
+enum class TreeVisType
+{
+	FREE_SPACE,
+	OCCU_SPACE,
+	ALL_SPACE
+};
+
 class QTreeBuilder{
 public:
 	QTreeBuilder();
@@ -19,13 +26,14 @@ private:
 	QuadTree* tree_;
 
 private:
-	void PadGrayscaleImage(cv::InputArray _src);
+	bool PreprocessImage(cv::InputArray _src);
+	bool PadGrayscaleImage(cv::InputArray _src);
 	OccupancyType CheckAreaOccupancy(BoundingBox area);
 
 public:
-	void PadGrayscaleImage(cv::InputArray _src, cv::OutputArray _dst);
+//	void PadGrayscaleImage(cv::InputArray _src, cv::OutputArray _dst);
 	void BuildQuadTree(cv::InputArray _src, unsigned int max_depth);
-	void VisualizeQuadTree(cv::OutputArray _dst);
+	void VisualizeQuadTree(cv::OutputArray _dst, TreeVisType vis_type);
 };
 
 }

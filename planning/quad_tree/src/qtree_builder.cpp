@@ -1,4 +1,5 @@
 #include <vector>
+#include <cmath>
 
 #include "qtree_builder.h"
 
@@ -19,32 +20,72 @@ QTreeBuilder::~QTreeBuilder()
 // TODO
 // 1. Needs to handle src images of different sizes dynamically
 // 2. Needs to check if src image is grayscale
-void QTreeBuilder::PadGrayscaleImage(cv::InputArray _src, cv::OutputArray _dst)
+//void QTreeBuilder::PadGrayscaleImage(cv::InputArray _src, cv::OutputArray _dst)
+//{
+//	// create a image with size of power of 2
+//	Mat src = _src.getMat();
+//	_dst.create(1024,1024,0);
+//	Mat dst = _dst.getMat();
+//
+//	int left, right, top, bottom;
+//
+//	left = (dst.cols - src.cols)/2;
+//	right = dst.cols - src.cols - left;
+//	top = (dst.rows - src.rows)/2;
+//	bottom = dst.rows - src.rows - top;
+//
+//	Scalar value = Scalar(0);
+//	copyMakeBorder(_src, dst, top, bottom, left, right, BORDER_CONSTANT,value);
+//
+////	std::cout << "type - " << _src.type() << std::endl;
+////	std::cout << "(cols, rows) = " << "(" << dst.cols << " , " << dst.rows << ")" << std::endl;
+//}
+
+bool QTreeBuilder::PreprocessImage(cv::InputArray _src)
 {
-	// create a image with size of power of 2
+	Mat image_bin;
 	Mat src = _src.getMat();
-	_dst.create(1024,1024,0);
-	Mat dst = _dst.getMat();
 
-	int left, right, top, bottom;
+	// Binarize grayscale image
+	threshold(src, image_bin, 200, 255, THRESH_BINARY);
 
-	left = (dst.cols - src.cols)/2;
-	right = dst.cols - src.cols - left;
-	top = (dst.rows - src.rows)/2;
-	bottom = dst.rows - src.rows - top;
+	// Pad image to be square
+	bool pad_result = false;
 
-	Scalar value = Scalar(0);
-	copyMakeBorder(_src, dst, top, bottom, left, right, BORDER_CONSTANT,value);
+	pad_result = PadGrayscaleImage(image_bin);
 
-//	std::cout << "type - " << _src.type() << std::endl;
-//	std::cout << "(cols, rows) = " << "(" << dst.cols << " , " << dst.rows << ")" << std::endl;
+	return pad_result;
 }
 
-void QTreeBuilder::PadGrayscaleImage(cv::InputArray _src)
+bool QTreeBuilder::PadGrayscaleImage(cv::InputArray _src)
 {
 	// create a image with size of power of 2
 	Mat src = _src.getMat();
-	src_img_.create(1024,1024,0);
+
+	unsigned long img_max_side;
+	unsigned long padded_size = -1;
+
+	if(src.cols > src.rows)
+		img_max_side = src.cols;
+	else
+		img_max_side = src.rows;
+
+	// find the minimal size of the padded image
+	for(unsigned int i = 0; i <= 16; i++)
+	{
+		if((img_max_side > pow(2,i)) && (img_max_side <= pow(2, i+1)))
+		{
+			padded_size = pow(2, i+1);
+			break;
+		}
+	}
+
+	if(padded_size == -1)
+		return false;
+
+	std::cout << "padded size:" << padded_size << std::endl;
+
+	src_img_.create(padded_size,padded_size,0);
 	Mat dst = src_img_;
 
 	int left, right, top, bottom;
@@ -56,6 +97,8 @@ void QTreeBuilder::PadGrayscaleImage(cv::InputArray _src)
 
 	Scalar value = Scalar(0);
 	copyMakeBorder(_src, dst, top, bottom, left, right, BORDER_CONSTANT,value);
+
+	return true;
 
 //	std::cout << "type - " << _src.type() << std::endl;
 //	std::cout << "(cols, rows) = " << "(" << dst.cols << " , " << dst.rows << ")" << std::endl;
@@ -78,9 +121,9 @@ OccupancyType QTreeBuilder::CheckAreaOccupancy(BoundingBox area)
 		for(int j = 0; j < checked_area.rows; j++)
 		{
 			if(checked_area.at<uchar>(Point(i,j)) > 0)
-				occupied_points++;
-			else
 				free_points++;
+			else
+				occupied_points++;
 
 			if(occupied_points !=0 && free_points != 0)
 			{
@@ -100,11 +143,17 @@ OccupancyType QTreeBuilder::CheckAreaOccupancy(BoundingBox area)
 //	std::cout << "(cols, rows) = " << "(" << checked_area.cols << " , " << checked_area.rows << ")" << std::endl;
 }
 
+/*
+ * @param _src: grayscale image, max size: 2^16 * 2^16 = 65535 * 65535 pixels
+ * @param max_depth: maximum depth of the tree to be built
+ */
 void QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_depth)
 {
 	// Pad image to get a image with size of power of 2
 	//	src_img_ can be used only after this step
-	PadGrayscaleImage(_src);
+	if(!PreprocessImage(_src))
+		return;
+//	PadGrayscaleImage(_src);
 //	PadGrayscaleImage(_src,src_img_);
 
 	// Create quadtree
@@ -114,8 +163,9 @@ void QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_depth)
 
 	for(int grown_depth = 0; grown_depth < max_depth; grown_depth++)
 	{
+#ifdef DEBUG
 		std::cout << "growth level:" << grown_depth << std::endl;
-
+#endif
 		// root level
 		if(grown_depth == 0)
 		{
@@ -218,7 +268,11 @@ void QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_depth)
 	}
 }
 
-void QTreeBuilder::VisualizeQuadTree(cv::OutputArray _dst)
+/*
+ * @param _dst: an Mat object that points to the result image
+ * @param vis_type: FREE_SPACE, OCCU_SPACE or ALL_SPACE
+ */
+void QTreeBuilder::VisualizeQuadTree(cv::OutputArray _dst, TreeVisType vis_type)
 {
 	Mat src_img_color;
 	cvtColor(src_img_, src_img_color, CV_GRAY2BGR);
@@ -264,15 +318,39 @@ void QTreeBuilder::VisualizeQuadTree(cv::OutputArray _dst)
 
 					for(int i = 0; i < 4; i++)
 					{
-						Point top_left(parent->child_nodes_[i]->bounding_box_.x.min, parent->child_nodes_[i]->bounding_box_.y.min);
-						Point top_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.min);
-						Point bot_left(parent->child_nodes_[i]->bounding_box_.x.min,parent->child_nodes_[i]->bounding_box_.y.max);
-						Point bot_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.max);
+						if(vis_type == TreeVisType::ALL_SPACE)
+						{
+							Point top_left(parent->child_nodes_[i]->bounding_box_.x.min, parent->child_nodes_[i]->bounding_box_.y.min);
+							Point top_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.min);
+							Point bot_left(parent->child_nodes_[i]->bounding_box_.x.min,parent->child_nodes_[i]->bounding_box_.y.max);
+							Point bot_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.max);
 
-						line(src_img_color, top_left, top_right, Scalar(0,255,0));
-						line(src_img_color, top_right, bot_right, Scalar(0,255,0));
-						line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
-						line(src_img_color, bot_left, top_left, Scalar(0,255,0));
+							line(src_img_color, top_left, top_right, Scalar(0,255,0));
+							line(src_img_color, top_right, bot_right, Scalar(0,255,0));
+							line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
+							line(src_img_color, bot_left, top_left, Scalar(0,255,0));
+						}
+						else
+						{
+							OccupancyType disp_type;
+
+							if(vis_type == TreeVisType::FREE_SPACE)
+								disp_type = OccupancyType::FREE;
+							else
+								disp_type = OccupancyType::OCCUPIED;
+
+							if(parent->child_nodes_[i]->occupancy_ == disp_type){
+								Point top_left(parent->child_nodes_[i]->bounding_box_.x.min, parent->child_nodes_[i]->bounding_box_.y.min);
+								Point top_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.min);
+								Point bot_left(parent->child_nodes_[i]->bounding_box_.x.min,parent->child_nodes_[i]->bounding_box_.y.max);
+								Point bot_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.max);
+
+								line(src_img_color, top_left, top_right, Scalar(0,255,0));
+								line(src_img_color, top_right, bot_right, Scalar(0,255,0));
+								line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
+								line(src_img_color, bot_left, top_left, Scalar(0,255,0));
+							}
+						}
 
 						if(parent->child_nodes_[i]->type_ != NodeType::LEAF)
 							inner_nodes.push_back(parent->child_nodes_[i]);

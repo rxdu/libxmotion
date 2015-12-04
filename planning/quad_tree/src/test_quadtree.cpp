@@ -19,7 +19,7 @@ int main(int argc, char** argv )
     }
 
     Mat image_raw;
-    image_raw = imread( argv[1], 1 );
+    image_raw = imread( argv[1], IMREAD_GRAYSCALE );
 
     if ( !image_raw.data )
     {
@@ -28,30 +28,32 @@ int main(int argc, char** argv )
     }
 
     // convert image to gray
-    Mat image_gray;
-    cvtColor(image_raw, image_gray, COLOR_BGR2GRAY);
+//    Mat image_gray;
+//    cvtColor(image_raw, image_gray, COLOR_BGR2GRAY);
 
     // binarize image
-    Mat image_bin;
-    threshold(image_gray, image_bin, 200, 255, THRESH_BINARY);
+//    Mat image_bin;
+//    threshold(image_raw, image_bin, 200, 255, THRESH_BINARY);
 
-    QTreeBuilder builder;
+//    QTreeBuilder builder;
 
     // display final image
     //namedWindow("Original Image", WINDOW_AUTOSIZE );
     //imshow("Original Image", image_gray);
 
-    Mat image_pad;
-    builder.PadGrayscaleImage(image_bin, image_pad);
-    builder.BuildQuadTree(image_bin, 16);
+//    Mat image_pad;
+//    builder.PadGrayscaleImage(image_bin, image_pad);
+
+    // example to use quadtree builder
+    QTreeBuilder builder;
+    builder.BuildQuadTree(image_raw, 16);
 
     Mat image_tree;
-    builder.VisualizeQuadTree(image_tree);
+    builder.VisualizeQuadTree(image_tree, TreeVisType::ALL_SPACE);
 
 //    imwrite( "quadtree.jpg", image_tree );
 
-//    namedWindow("Processed Image", WINDOW_AUTOSIZE );
-    namedWindow("Processed Image", WINDOW_NORMAL );
+    namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
     imshow("Processed Image", image_tree);
 
     waitKey(0);
