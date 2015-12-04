@@ -43,10 +43,14 @@ int main(int argc, char** argv )
 
     Mat image_pad;
     builder.PadGrayscaleImage(image_bin, image_pad);
-    builder.BuildQuadTree(image_bin, 8);
+    builder.BuildQuadTree(image_bin, 16);
 
-    namedWindow("Binarized Image", WINDOW_AUTOSIZE );
-    imshow("Binarized Image", image_pad);
+    Mat image_tree;
+    builder.VisualizeQuadTree(image_tree);
+
+//    namedWindow("Processed Image", WINDOW_AUTOSIZE );
+    namedWindow("Processed Image", WINDOW_NORMAL );
+    imshow("Processed Image", image_tree);
 
     waitKey(0);
 

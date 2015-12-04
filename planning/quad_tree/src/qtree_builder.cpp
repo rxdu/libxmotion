@@ -63,11 +63,41 @@ void QTreeBuilder::PadGrayscaleImage(cv::InputArray _src)
 
 OccupancyType QTreeBuilder::CheckAreaOccupancy(BoundingBox area)
 {
-	Mat checked_area = src_img_(Range(area.x.min,area.x.max+1),Range(area.y.min, area.y.max+1));
+	Range rngx(area.x.min,area.x.max+1);
+	Range rngy(area.y.min, area.y.max+1);
+
+	// Attention:
+	//	Points and Size go (x,y); (width,height) ,- Mat has (row,col).
+	Mat checked_area = src_img_(rngy,rngx);
+
+	unsigned long free_points = 0;
+	unsigned long occupied_points = 0;
+	OccupancyType type;
+
+	for(int i = 0; i < checked_area.cols; i++)
+		for(int j = 0; j < checked_area.rows; j++)
+		{
+			if(checked_area.at<uchar>(Point(i,j)) > 0)
+				occupied_points++;
+			else
+				free_points++;
+
+			if(occupied_points !=0 && free_points != 0)
+			{
+				type = OccupancyType::MIXED;
+				break;
+			}
+		}
+
+	if(free_points !=0 && occupied_points == 0)
+		type = OccupancyType::FREE;
+
+	if(free_points ==0 && occupied_points != 0)
+		type = OccupancyType::OCCUPIED;
+
+	return type;
 
 //	std::cout << "(cols, rows) = " << "(" << checked_area.cols << " , " << checked_area.rows << ")" << std::endl;
-
-	return OccupancyType::MIXED;
 }
 
 void QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_depth)
@@ -75,6 +105,7 @@ void QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_depth)
 	// Pad image to get a image with size of power of 2
 	//	src_img_ can be used only after this step
 	PadGrayscaleImage(_src);
+//	PadGrayscaleImage(_src,src_img_);
 
 	// Create quadtree
 	tree_ = new QuadTree();
@@ -131,30 +162,35 @@ void QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_depth)
 
 				// top left area
 				bbox[0].x.min = parent->bounding_box_.x.min;
-				bbox[0].x.max = (parent->bounding_box_.x.max + 1)/2 - 1;
+				bbox[0].x.max = parent->bounding_box_.x.min + (parent->bounding_box_.x.max - parent->bounding_box_.x.min + 1)/2 - 1;
 				bbox[0].y.min = parent->bounding_box_.y.min;
-				bbox[0].y.max = (parent->bounding_box_.y.max + 1)/2 - 1;
+				bbox[0].y.max = parent->bounding_box_.y.min + (parent->bounding_box_.y.max - parent->bounding_box_.y.min + 1)/2 - 1;
 
 				// top right area
-				bbox[1].x.min = (parent->bounding_box_.x.max + 1)/2;
+				bbox[1].x.min = bbox[0].x.max + 1;
 				bbox[1].x.max = parent->bounding_box_.x.max;
-				bbox[1].y.min = parent->bounding_box_.y.min;
-				bbox[1].y.max = (parent->bounding_box_.y.max + 1)/2 - 1;
+				bbox[1].y.min = bbox[0].y.min;
+				bbox[1].y.max = bbox[0].y.max;
 
 				// bottom left area
-				bbox[2].x.min = parent->bounding_box_.x.min;
-				bbox[2].x.max = (parent->bounding_box_.x.max + 1)/2 - 1;
-				bbox[2].y.min =(parent->bounding_box_.y.max + 1)/2;
+				bbox[2].x.min = bbox[0].x.min;
+				bbox[2].x.max = bbox[0].x.max;
+				bbox[2].y.min = bbox[0].y.max + 1;
 				bbox[2].y.max = parent->bounding_box_.y.max;
 
 				// bottom right area
-				bbox[3].x.min = (parent->bounding_box_.x.max + 1)/2;
-				bbox[3].x.max = parent->bounding_box_.x.max;
-				bbox[3].y.min =(parent->bounding_box_.y.max + 1)/2;
-				bbox[3].y.max = parent->bounding_box_.y.max;
+				bbox[3].x.min = bbox[1].x.min;
+				bbox[3].x.max = bbox[1].x.max;
+				bbox[3].y.min = bbox[2].y.min;
+				bbox[3].y.max = bbox[2].y.max;
 
 				for(int i = 0; i < 4; i++)
 				{
+#ifdef DEBUG
+					std::cout << "bounding box " << i <<": " << "x " << bbox[i].x.min << "-" << bbox[i].x.max
+							<< " y " << bbox[i].y.min << "-" << bbox[i].y.max << std::endl;
+#endif
+
 					occupancy[i] = CheckAreaOccupancy(bbox[i]);
 					parent->child_nodes_[i] = new TreeNode(bbox[i], occupancy[i]);
 
@@ -167,9 +203,6 @@ void QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_depth)
 					}
 					else
 						parent->child_nodes_[i]->type_ = NodeType::LEAF;
-
-					std::cout << "bounding box " << i <<": " << "x " << bbox[i].x.min << "-" << bbox[i].x.max
-											<< " y " << bbox[i].y.min << "-" << bbox[i].y.max << std::endl;
 				}
 
 				// delete the processed node
@@ -180,5 +213,83 @@ void QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_depth)
 			parent_nodes.clear();
 			parent_nodes = inner_nodes;
 		}
+
+		tree_->tree_depth_++;
 	}
+}
+
+void QTreeBuilder::VisualizeQuadTree(cv::OutputArray _dst)
+{
+	Mat src_img_color;
+	cvtColor(src_img_, src_img_color, CV_GRAY2BGR);
+	_dst.create(src_img_color.size(), src_img_color.type());
+	Mat dst = _dst.getMat();
+
+	if(tree_ != nullptr)
+	{
+		std::vector<TreeNode*> parent_nodes;
+
+		for(int i = 0; i < tree_->tree_depth_; i++)
+		{
+			if(i == 0)
+			{
+				Point top_left(tree_->root_node_->bounding_box_.x.min, tree_->root_node_->bounding_box_.y.min);
+				Point top_right(tree_->root_node_->bounding_box_.x.max,tree_->root_node_->bounding_box_.y.min);
+				Point bot_left(tree_->root_node_->bounding_box_.x.min,tree_->root_node_->bounding_box_.y.max);
+				Point bot_right(tree_->root_node_->bounding_box_.x.max,tree_->root_node_->bounding_box_.y.max);
+
+				line(src_img_color, top_left, top_right, Scalar(0,255,0));
+				line(src_img_color, top_right, bot_right, Scalar(0,255,0));
+				line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
+				line(src_img_color, bot_left, top_left, Scalar(0,255,0));
+
+				if(tree_->root_node_->type_ != NodeType::LEAF)
+				{
+					for(int i = 0; i < 4; i++)
+					{
+						parent_nodes.clear();
+						parent_nodes.push_back(tree_->root_node_);
+					}
+				}
+				else
+					break;
+			}
+			else
+			{
+				std::vector<TreeNode*> inner_nodes;
+
+				while(!parent_nodes.empty())
+				{
+					TreeNode* parent = parent_nodes.at(0);
+
+					for(int i = 0; i < 4; i++)
+					{
+						Point top_left(parent->child_nodes_[i]->bounding_box_.x.min, parent->child_nodes_[i]->bounding_box_.y.min);
+						Point top_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.min);
+						Point bot_left(parent->child_nodes_[i]->bounding_box_.x.min,parent->child_nodes_[i]->bounding_box_.y.max);
+						Point bot_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.max);
+
+						line(src_img_color, top_left, top_right, Scalar(0,255,0));
+						line(src_img_color, top_right, bot_right, Scalar(0,255,0));
+						line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
+						line(src_img_color, bot_left, top_left, Scalar(0,255,0));
+
+						if(parent->child_nodes_[i]->type_ != NodeType::LEAF)
+							inner_nodes.push_back(parent->child_nodes_[i]);
+					}
+
+					// delete the processed node
+					parent_nodes.erase(parent_nodes.begin());
+				}
+
+				// prepare for next iteration
+				parent_nodes.clear();
+				parent_nodes = inner_nodes;
+			}
+		}
+//		std::cout << "image size: "<<dst.cols << ","<< dst.rows<<std::endl;
+	}
+
+	vis_img_ = src_img_color;
+	src_img_color.copyTo(dst);
 }
