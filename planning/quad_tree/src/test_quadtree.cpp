@@ -48,6 +48,8 @@ int main(int argc, char** argv )
     Mat image_tree;
     builder.VisualizeQuadTree(image_tree);
 
+//    imwrite( "quadtree.jpg", image_tree );
+
 //    namedWindow("Processed Image", WINDOW_AUTOSIZE );
     namedWindow("Processed Image", WINDOW_NORMAL );
     imshow("Processed Image", image_tree);
