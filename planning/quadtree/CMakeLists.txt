@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.0)
-project(quad_tree)
+project(quadtree)
 
 # Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
