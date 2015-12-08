@@ -14,7 +14,7 @@ $ cd build
 * Run the command to generate eclipse project from cmake
 
 ```
-$ cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug ../quad_tree/
+$ cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug ../quadtree/
 ```
 * Import generated project located at build folder into eclipse
 
