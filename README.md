@@ -4,13 +4,9 @@ This repository contains a collection of software that are used to develop and t
 
 ## 1. Repository structure
 
-+ control : control code for the robot/simulation
-  - hummingbird
-  - rc_car
-+ planning : planning algorithms
-  - octomap
-  - quadtree
-+ (build) : default location to build the code in planning folder, not tracked in git
++ **control** : control code for the robot/simulation
++ **planning** : planning algorithms
++ **(build)** : default location to build the code in planning folder, not tracked in git
 
 ## 2. Use Eclipse to build project
 
