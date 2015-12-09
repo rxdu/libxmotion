@@ -329,6 +329,24 @@ void QTreeBuilder::VisualizeQuadTree(cv::OutputArray _dst, TreeVisType vis_type)
 							line(src_img_color, top_right, bot_right, Scalar(0,255,0));
 							line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
 							line(src_img_color, bot_left, top_left, Scalar(0,255,0));
+
+//							if(parent->child_nodes_[i]->type_ == NodeType::LEAF)
+//							{
+//								int thickness = -1;
+//								int lineType = 8;
+//								unsigned int x,y;
+//								x = parent->child_nodes_[i]->bounding_box_.x.min +
+//										(parent->child_nodes_[i]->bounding_box_.x.max - parent->child_nodes_[i]->bounding_box_.x.min + 1)/2;
+//								y = parent->child_nodes_[i]->bounding_box_.y.min +
+//										(parent->child_nodes_[i]->bounding_box_.y.max - parent->child_nodes_[i]->bounding_box_.y.min + 1)/2;
+//								Point center(x,y);
+//								circle( src_img_color,
+//										center,
+//										5,
+//										Scalar( 0, 0, 255 ),
+//										thickness,
+//										lineType);
+//							}
 						}
 						else
 						{
@@ -349,7 +367,43 @@ void QTreeBuilder::VisualizeQuadTree(cv::OutputArray _dst, TreeVisType vis_type)
 								line(src_img_color, top_right, bot_right, Scalar(0,255,0));
 								line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
 								line(src_img_color, bot_left, top_left, Scalar(0,255,0));
+
+//								if(parent->child_nodes_[i]->type_ == NodeType::LEAF)
+//								{
+//									int thickness = -1;
+//									int lineType = 8;
+//									unsigned int x,y;
+//									x = parent->child_nodes_[i]->bounding_box_.x.min +
+//											(parent->child_nodes_[i]->bounding_box_.x.max - parent->child_nodes_[i]->bounding_box_.x.min + 1)/2;
+//									y = parent->child_nodes_[i]->bounding_box_.y.min +
+//											(parent->child_nodes_[i]->bounding_box_.y.max - parent->child_nodes_[i]->bounding_box_.y.min + 1)/2;
+//									Point center(x,y);
+//									circle( src_img_color,
+//											center,
+//											5,
+//											Scalar( 0, 0, 255 ),
+//											thickness,
+//											lineType);
+//								}
 							}
+						}
+
+						if(parent->child_nodes_[i]->type_ == NodeType::LEAF && parent->child_nodes_[i]->occupancy_ == OccupancyType::FREE)
+						{
+							int thickness = -1;
+							int lineType = 8;
+							unsigned int x,y;
+							x = parent->child_nodes_[i]->bounding_box_.x.min +
+									(parent->child_nodes_[i]->bounding_box_.x.max - parent->child_nodes_[i]->bounding_box_.x.min + 1)/2;
+							y = parent->child_nodes_[i]->bounding_box_.y.min +
+									(parent->child_nodes_[i]->bounding_box_.y.max - parent->child_nodes_[i]->bounding_box_.y.min + 1)/2;
+							Point center(x,y);
+							circle( src_img_color,
+									center,
+									5,
+									Scalar( 0, 0, 255 ),
+									thickness,
+									lineType);
 						}
 
 						if(parent->child_nodes_[i]->type_ != NodeType::LEAF)
