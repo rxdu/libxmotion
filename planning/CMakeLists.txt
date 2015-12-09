@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.0)
-project(quadtree)
+project(srcl_planning)
 
 # Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
@@ -14,4 +14,5 @@ else()
 endif()
 
 # Add sub source directories
-add_subdirectory(src bin)
+add_subdirectory(src/quadtree)
+add_subdirectory(src/graph)

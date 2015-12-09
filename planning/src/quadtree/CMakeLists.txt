@@ -3,14 +3,14 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 # Include path
-include_directories(${CMAKE_SOURCE_DIR}/inc)
-# include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+#include_directories(${CMAKE_SOURCE_DIR}/inc)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Dependency libraries
 find_package(OpenCV REQUIRED)
 
 # Add libraries
-set(QTREE_LIB_SRC 
+set(QTREE_LIB_SRC
 	qtree_builder.cpp
 	quad_tree.cpp
 )
