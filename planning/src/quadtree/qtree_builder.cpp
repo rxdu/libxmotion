@@ -646,7 +646,7 @@ void QTreeBuilder::VisualizeExtQuadTree(cv::OutputArray _dst, TreeVisType vis_ty
 							}
 						}
 
-#ifndef DEBUG
+#ifdef DEBUG
 						if(parent->child_nodes_[i]->node_type_ == NodeType::LEAF && parent->child_nodes_[i]->occupancy_ == OccupancyType::FREE)
 						{
 							int thickness = -1;
@@ -679,7 +679,7 @@ void QTreeBuilder::VisualizeExtQuadTree(cv::OutputArray _dst, TreeVisType vis_ty
 			}
 		}
 
-#ifdef DEBUG
+//#ifdef DEBUG
 		std::cout << "side node number from manager: " << exttree_->node_manager_->side_node_num_<<std::endl;
 		for(int i = 0; i < exttree_->node_manager_->side_node_num_; i++)
 			for(int j = 0; j < exttree_->node_manager_->side_node_num_; j++)
@@ -687,7 +687,7 @@ void QTreeBuilder::VisualizeExtQuadTree(cv::OutputArray _dst, TreeVisType vis_ty
 //				std::cout << "i,j = " << i << "," << j << std::endl;
 				TreeNode* node = exttree_->node_manager_->GetNodeReference(i,j);
 
-				if(node != nullptr)
+				if(node->node_type_ == NodeType::DUMMY)
 				{
 				int thickness = -1;
 				int lineType = 8;
@@ -705,7 +705,7 @@ void QTreeBuilder::VisualizeExtQuadTree(cv::OutputArray _dst, TreeVisType vis_ty
 						lineType);
 				}
 			}
-#endif
+//#endif
 		//		std::cout << "image size: "<<dst.cols << ","<< dst.rows<<std::endl;
 	}
 
