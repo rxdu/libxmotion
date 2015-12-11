@@ -1,33 +1,10 @@
 #ifndef QUAD_TREE_
 #define QUAD_TREE_
 
+#include <cstdint>
+#include "qtree_types.h"
+
 namespace srcl_ctrl {
-
-// Definition of Supporting Types
-enum class NodeType
-{
-	INNER,
-	LEAF
-};
-
-enum class OccupancyType
-{
-	FREE,
-	OCCUPIED,
-	MIXED
-};
-
-typedef struct
-{
-	unsigned long min;
-	unsigned long max;
-}NodeRange;
-
-typedef struct
-{
-	NodeRange x;
-	NodeRange y;
-}BoundingBox;
 
 // Definition of Tree Node
 class TreeNode{
