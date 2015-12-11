@@ -46,10 +46,11 @@ int main(int argc, char** argv )
 
     // example to use quadtree builder
     QTreeBuilder builder;
-    builder.BuildQuadTree(image_raw, 7);
+//    builder.BuildQuadTree(image_raw, 1);
+    builder.BuildExtQuadTree(image_raw, 7);
 
     Mat image_tree;
-    builder.VisualizeQuadTree(image_tree, TreeVisType::ALL_SPACE);
+    builder.VisualizeExtQuadTree(image_tree, TreeVisType::ALL_SPACE);
 
 //    imwrite( "quadtree_freenodes.jpg", image_tree );
 

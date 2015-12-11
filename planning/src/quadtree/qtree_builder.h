@@ -24,6 +24,7 @@ private:
 	cv::Mat src_img_;
 	cv::Mat vis_img_;
 	QuadTree* tree_;
+	QuadTree* exttree_;
 
 private:
 	bool PreprocessImage(cv::InputArray _src);
@@ -31,9 +32,10 @@ private:
 	OccupancyType CheckAreaOccupancy(BoundingBox area);
 
 public:
-//	void PadGrayscaleImage(cv::InputArray _src, cv::OutputArray _dst);
 	void BuildQuadTree(cv::InputArray _src, unsigned int max_depth);
+	void BuildExtQuadTree(cv::InputArray _src, unsigned int max_depth);
 	void VisualizeQuadTree(cv::OutputArray _dst, TreeVisType vis_type);
+	void VisualizeExtQuadTree(cv::OutputArray _dst, TreeVisType vis_type);
 };
 
 }

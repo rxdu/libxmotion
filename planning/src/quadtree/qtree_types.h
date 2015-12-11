@@ -14,7 +14,8 @@ namespace srcl_ctrl {
 enum class NodeType
 {
 	INNER,
-	LEAF
+	LEAF,
+	DUMMY
 };
 
 enum class OccupancyType
