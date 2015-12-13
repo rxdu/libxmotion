@@ -687,22 +687,23 @@ void QTreeBuilder::VisualizeExtQuadTree(cv::OutputArray _dst, TreeVisType vis_ty
 //				std::cout << "i,j = " << i << "," << j << std::endl;
 				TreeNode* node = exttree_->node_manager_->GetNodeReference(i,j);
 
+//				if(node->node_type_ == NodeType::LEAF)
 				if(node->node_type_ == NodeType::DUMMY)
 				{
-				int thickness = -1;
-				int lineType = 8;
-				unsigned int x,y;
-				x = node->bounding_box_.x.min +
-						(node->bounding_box_.x.max - node->bounding_box_.x.min + 1)/2;
-				y = node->bounding_box_.y.min +
-						(node->bounding_box_.y.max - node->bounding_box_.y.min + 1)/2;
-				Point center(x,y);
-				circle( src_img_color,
-						center,
-						5,
-						Scalar( 0, 0, 255 ),
-						thickness,
-						lineType);
+					int thickness = -1;
+					int lineType = 8;
+					unsigned int x,y;
+					x = node->bounding_box_.x.min +
+							(node->bounding_box_.x.max - node->bounding_box_.x.min + 1)/2;
+					y = node->bounding_box_.y.min +
+							(node->bounding_box_.y.max - node->bounding_box_.y.min + 1)/2;
+					Point center(x,y);
+					circle( src_img_color,
+							center,
+							5,
+							Scalar( 0, 0, 255 ),
+							thickness,
+							lineType);
 				}
 			}
 //#endif
