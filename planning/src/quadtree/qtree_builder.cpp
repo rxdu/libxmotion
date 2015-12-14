@@ -727,10 +727,14 @@ void QTreeBuilder::VisualizeExtQuadTree(cv::OutputArray _dst, TreeVisType vis_ty
 			}
 #endif
 
-//		TreeNode* node = exttree_->GetNodeAtPosition(0,1)->dummy_root_;
+		// Code to visualize neighbour finding
+		TreeNode* node = exttree_->GetNodeAtPosition(0,1)->dummy_root_;
+//		TreeNode* node = exttree_->GetNodeAtPosition(2047,1)->dummy_root_;
+//		TreeNode* node = exttree_->GetNodeAtPosition(0,2047)->dummy_root_;
+//		TreeNode* node = exttree_->GetNodeAtPosition(2047,2047)->dummy_root_;
 //		TreeNode* node = exttree_->GetNodeAtPosition(1312,1024)->dummy_root_;
 //		TreeNode* node = exttree_->GetNodeAtPosition(1023,1024)->dummy_root_;
-		TreeNode* node = exttree_->GetNodeAtPosition(1023,1100)->dummy_root_;
+//		TreeNode* node = exttree_->GetNodeAtPosition(1023,1100)->dummy_root_;
 
 		if(node!=nullptr)
 		{

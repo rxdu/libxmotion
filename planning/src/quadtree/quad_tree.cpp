@@ -1,4 +1,5 @@
 #include <cmath>
+#include <algorithm>
 #include "quad_tree.h"
 
 //#ifdef DEBUG
@@ -88,7 +89,7 @@ std::vector<TreeNode*> QuadTree::GetDummyNeighbours(TreeNode* dummy_leaf)
 
 std::vector<TreeNode*> QuadTree::FindNeighbours(TreeNode* node)
 {
-	std::vector<TreeNode*> leaf_dummies;
+//	std::vector<TreeNode*> leaf_dummies;
 	std::vector<TreeNode*> dummy_neighbours;
 	std::vector<TreeNode*> neighbours;
 
@@ -110,58 +111,130 @@ std::vector<TreeNode*> QuadTree::FindNeighbours(TreeNode* node)
 			node_index = node_index->child_nodes_[0];
 		}
 
-		std::cout << "dummy node depth: "<<dummy_depth<<std::endl;
-
-		// find all leaf dummy nodes
-		std::vector<TreeNode*> parent_nodes;
-		parent_nodes.push_back(node);
-
-		for(int i = 0; i < dummy_depth; i++)
-		{
-			std::vector<TreeNode*> inner_nodes;
-
-			while(!parent_nodes.empty())
-			{
-				TreeNode* parent = parent_nodes.at(0);
-
-				for(int i = 0; i < 4; i++)
-				{
-					if(parent->child_nodes_[i]->node_type_ == NodeType::DUMMY_LEAF)
-						leaf_dummies.push_back(parent->child_nodes_[i]);
-					else
-						inner_nodes.push_back(parent->child_nodes_[i]);
-				}
-
-				// delete the processed node
-				parent_nodes.erase(parent_nodes.begin());
-			}
-
-			// prepare for next iteration
-			parent_nodes.clear();
-			parent_nodes = inner_nodes;
+//		std::cout << "dummy node depth: "<<dummy_depth<<std::endl;
+//
+//		// find all leaf dummy nodes
+//		std::vector<TreeNode*> parent_nodes;
+//		parent_nodes.push_back(node);
+//
+//		for(int i = 0; i < dummy_depth; i++)
+//		{
+//			std::vector<TreeNode*> inner_nodes;
+//
+//			while(!parent_nodes.empty())
+//			{
+//				TreeNode* parent = parent_nodes.at(0);
+//
+//				for(int i = 0; i < 4; i++)
+//				{
+//					if(parent->child_nodes_[i]->node_type_ == NodeType::DUMMY_LEAF)
+//						leaf_dummies.push_back(parent->child_nodes_[i]);
+//					else
+//						inner_nodes.push_back(parent->child_nodes_[i]);
+//				}
+//
+//				// delete the processed node
+//				parent_nodes.erase(parent_nodes.begin());
+//			}
+//
+//			// prepare for next iteration
+//			parent_nodes.clear();
+//			parent_nodes = inner_nodes;
 		}
 
-		std::cout << "dummy node num: "<<leaf_dummies.size()<<std::endl;
-	}
-	else
-	{
-//		std::cout<<"no dummy"<<std::endl;
-		leaf_dummies.push_back(node);
-	}
+//		std::cout << "dummy node num: "<<leaf_dummies.size()<<std::endl;
+//	}
+//	else
+//	{
+////		std::cout<<"no dummy"<<std::endl;
+//		leaf_dummies.push_back(node);
+//	}
 
 	// find neighbour dummies around the leaf dummies
 	if(dummy_depth == 0)
 	{
-		dummy_neighbours = GetDummyNeighbours(leaf_dummies.at(0));
+		dummy_neighbours = GetDummyNeighbours(node);
 	}
 	else
 	{
-		// first find all leaf dummies at edges
-		int side_node_num = pow(2,dummy_depth);
+		// first find the coordinates of top left corner neighbour leaf dummy
+		uint16_t x,y;
+		x = (node->bounding_box_.x.min - 1)/cell_res_;
+		y = (node->bounding_box_.y.min - 1)/cell_res_;
+
+		uint16_t neighbour_side_num;
+		neighbour_side_num = pow(2,dummy_depth)+2;
+
+		// add first row
+		for(int i = 0; i < neighbour_side_num; i++)
+		{
+			uint16_t x_loc, y_loc;
+			x_loc = x + i;
+			y_loc = y;
+
+			if(x_loc >= 0 && x_loc < node_manager_->side_node_num_
+					&& y_loc >= 0 && y_loc < node_manager_->side_node_num_)
+				dummy_neighbours.push_back(node_manager_->GetNodeReference(x_loc,y_loc));
+		}
+
+		// add last row
+		for(int i = 0; i < neighbour_side_num; i++)
+		{
+			uint16_t x_loc, y_loc;
+			x_loc = x + i;
+			y_loc = y + neighbour_side_num - 1;
+
+			if(x_loc >= 0 && x_loc < node_manager_->side_node_num_
+					&& y_loc >= 0 && y_loc < node_manager_->side_node_num_)
+				dummy_neighbours.push_back(node_manager_->GetNodeReference(x_loc,y_loc));
+		}
+
+		// add left column
+		for(int i = 0; i < neighbour_side_num - 2; i++)
+		{
+			uint16_t x_loc, y_loc;
+			x_loc = x;
+			y_loc = y + 1 + i;
+
+			if(x_loc >= 0 && x_loc < node_manager_->side_node_num_
+					&& y_loc >= 0 && y_loc < node_manager_->side_node_num_)
+				dummy_neighbours.push_back(node_manager_->GetNodeReference(x_loc, y_loc));
+		}
+
+		// add right column
+		for(int i = 0; i < neighbour_side_num - 2; i++)
+		{
+			uint16_t x_loc, y_loc;
+			x_loc = x + neighbour_side_num - 1;
+			y_loc = y + 1 + i;
+
+			if(x_loc >= 0 && x_loc < node_manager_->side_node_num_
+					&& y_loc >= 0 && y_loc < node_manager_->side_node_num_)
+				dummy_neighbours.push_back(node_manager_->GetNodeReference(x_loc,y_loc));
+		}
 	}
 
-//	return neighbours;
-	return dummy_neighbours;
+	std::cout << "number of dummy neighbours: "<< dummy_neighbours.size() <<std::endl;
+
+	// now find all dummy roots as neighbours in the quadtree
+	neighbours.clear();
+	while(!dummy_neighbours.empty())
+	{
+		TreeNode* qt_neighbour = dummy_neighbours.at(0)->dummy_root_;
+
+		if(neighbours.empty())
+			neighbours.push_back(qt_neighbour);
+		else
+		{
+			if(*(std::find(neighbours.begin(), neighbours.end(), qt_neighbour)) != qt_neighbour)
+				neighbours.push_back(qt_neighbour);
+		}
+
+		dummy_neighbours.erase(dummy_neighbours.begin());
+	}
+
+	return neighbours;
+//	return dummy_neighbours;
 }
 
 /*********************************************************/
