@@ -7,7 +7,7 @@
 
 #include "graph.h"
 
-using namespace srcl;
+using namespace srcl_ctrl;
 
 Graph::Graph()
 {

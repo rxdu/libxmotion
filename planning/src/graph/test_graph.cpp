@@ -10,7 +10,7 @@
 
 #include "graph.h"
 
-using namespace srcl;
+using namespace srcl_ctrl;
 
 int main(int argc, char** argv )
 {

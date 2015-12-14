@@ -11,8 +11,8 @@ find_package(OpenCV REQUIRED)
 
 # Add libraries
 set(QTREE_LIB_SRC
+    quad_tree.cpp
 	qtree_builder.cpp
-	quad_tree.cpp
 )
 add_library(qtree STATIC ${QTREE_LIB_SRC})
 target_link_libraries(qtree ${OpenCV_LIBS})

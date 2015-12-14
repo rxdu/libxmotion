@@ -8,13 +8,18 @@
 #ifndef SRC_GRAPH_GRAPH_H_
 #define SRC_GRAPH_GRAPH_H_
 
-namespace srcl {
+#include "graph_types.h"
+
+namespace srcl_ctrl {
 
 class Graph
 {
 public:
 	Graph();
 	~Graph();
+
+public:
+	void AddEdge();
 };
 
 }
