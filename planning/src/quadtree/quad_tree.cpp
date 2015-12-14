@@ -8,33 +8,6 @@
 using namespace srcl_ctrl;
 
 /*********************************************************/
-/*          Data Structure for Neighbor Finding          */
-/*********************************************************/
-QTreeNodeManager::QTreeNodeManager(uint8_t tree_depth)
-{
-	tree_nodes_.clear();
-	side_node_num_ = uint32_t(pow(2,tree_depth));
-	tree_nodes_.resize(side_node_num_*side_node_num_);
-
-//	std::cout << "node number: "<< tree_nodes_.size() << std::endl;
-}
-
-QTreeNodeManager::~QTreeNodeManager()
-{
-
-}
-
-void QTreeNodeManager::SetNodeReference(uint16_t index_x, uint16_t index_y, TreeNode* node)
-{
-	tree_nodes_.at(index_y*side_node_num_ + index_x) = node;
-}
-
-TreeNode* QTreeNodeManager::GetNodeReference(uint16_t index_x, uint16_t index_y)
-{
-	return tree_nodes_.at(index_y*side_node_num_ + index_x);
-}
-
-/*********************************************************/
 /*              Implementation of Quad Tree              */
 /*********************************************************/
 QuadTree::QuadTree():MAX_DEPTH(32),
@@ -72,12 +45,159 @@ QuadTree::~QuadTree()
 		delete(node_manager_);
 }
 
+TreeNode* QuadTree::GetNodeAtPosition(uint16_t pixel_x, uint16_t pixel_y)
+{
+	uint16_t x,y;
+
+	if(node_manager_ != nullptr)
+	{
+		x = pixel_x / cell_res_;
+		y = pixel_y / cell_res_;
+
+//		std::cout << "(x, y): "<<x<<" , "<<y<<std::endl;
+//		std::cout << "Node list size: "<<node_manager_->side_node_num_<<std::endl;
+//		if(node_manager_->GetNodeReference(x , y) == nullptr)
+//			std::cout << "get empty node"<<std::endl;
+
+		return node_manager_->GetNodeReference(x , y);
+	}
+	else
+		return nullptr;
+}
+
+std::vector<TreeNode*> QuadTree::GetDummyNeighbours(TreeNode* dummy_leaf)
+{
+	std::vector<TreeNode*> dummy_neighbours;
+	uint16_t x,y;
+	TreeNode* leaf = dummy_leaf;
+
+	x = ((leaf->bounding_box_.x.min + leaf->bounding_box_.x.max + 1)/2)/cell_res_;
+	y = ((leaf->bounding_box_.y.min + leaf->bounding_box_.y.max + 1)/2)/cell_res_;
+
+	dummy_neighbours.push_back(node_manager_->GetNodeReference(x-1,y-1));
+	dummy_neighbours.push_back(node_manager_->GetNodeReference(x,y-1));
+	dummy_neighbours.push_back(node_manager_->GetNodeReference(x+1,y-1));
+	dummy_neighbours.push_back(node_manager_->GetNodeReference(x-1,y));
+	dummy_neighbours.push_back(node_manager_->GetNodeReference(x+1,y));
+	dummy_neighbours.push_back(node_manager_->GetNodeReference(x-1,y+1));
+	dummy_neighbours.push_back(node_manager_->GetNodeReference(x,y+1));
+	dummy_neighbours.push_back(node_manager_->GetNodeReference(x+1,y+1));
+
+	return dummy_neighbours;
+}
+
+std::vector<TreeNode*> QuadTree::FindNeighbours(TreeNode* node)
+{
+	std::vector<TreeNode*> leaf_dummies;
+	std::vector<TreeNode*> dummy_neighbours;
+	std::vector<TreeNode*> neighbours;
+
+//	leaf_dummies.clear();
+//	neighbour_dummies.clear();
+//	neighbours.clear();
+
+	// if the node is not at the highest resolution, find
+	//	all its dummy leaf nodes
+	int dummy_depth = 0;
+	if(node->has_dummy_)
+	{
+		TreeNode* node_index = node;
+
+		// check how many levels of dummy nodes the node has
+		while(node_index->node_type_!=NodeType::DUMMY_LEAF)
+		{
+			dummy_depth++;
+			node_index = node_index->child_nodes_[0];
+		}
+
+		std::cout << "dummy node depth: "<<dummy_depth<<std::endl;
+
+		// find all leaf dummy nodes
+		std::vector<TreeNode*> parent_nodes;
+		parent_nodes.push_back(node);
+
+		for(int i = 0; i < dummy_depth; i++)
+		{
+			std::vector<TreeNode*> inner_nodes;
+
+			while(!parent_nodes.empty())
+			{
+				TreeNode* parent = parent_nodes.at(0);
+
+				for(int i = 0; i < 4; i++)
+				{
+					if(parent->child_nodes_[i]->node_type_ == NodeType::DUMMY_LEAF)
+						leaf_dummies.push_back(parent->child_nodes_[i]);
+					else
+						inner_nodes.push_back(parent->child_nodes_[i]);
+				}
+
+				// delete the processed node
+				parent_nodes.erase(parent_nodes.begin());
+			}
+
+			// prepare for next iteration
+			parent_nodes.clear();
+			parent_nodes = inner_nodes;
+		}
+
+		std::cout << "dummy node num: "<<leaf_dummies.size()<<std::endl;
+	}
+	else
+	{
+//		std::cout<<"no dummy"<<std::endl;
+		leaf_dummies.push_back(node);
+	}
+
+	// find neighbour dummies around the leaf dummies
+	if(dummy_depth == 0)
+	{
+		dummy_neighbours = GetDummyNeighbours(leaf_dummies.at(0));
+	}
+	else
+	{
+		// first find all leaf dummies at edges
+		int side_node_num = pow(2,dummy_depth);
+	}
+
+//	return neighbours;
+	return dummy_neighbours;
+}
+
+/*********************************************************/
+/*          Data Structure for Neighbor Finding          */
+/*********************************************************/
+
+QTreeNodeManager::QTreeNodeManager(uint8_t tree_depth)
+{
+	tree_nodes_.clear();
+	side_node_num_ = uint32_t(pow(2,tree_depth));
+	tree_nodes_.resize(side_node_num_*side_node_num_);
+
+//	std::cout << "node number: "<< tree_nodes_.size() << std::endl;
+}
+
+QTreeNodeManager::~QTreeNodeManager()
+{
+
+}
+
+void QTreeNodeManager::SetNodeReference(uint16_t index_x, uint16_t index_y, TreeNode* node)
+{
+	tree_nodes_.at(index_y*side_node_num_ + index_x) = node;
+}
+
+TreeNode* QTreeNodeManager::GetNodeReference(uint16_t index_x, uint16_t index_y)
+{
+	return tree_nodes_.at(index_y*side_node_num_ + index_x);
+}
+
 /*********************************************************/
 /*              Implementation of Tree Node              */
 /*********************************************************/
 
 TreeNode::TreeNode(BoundingBox bound, OccupancyType occupancy):
-		occupancy_(occupancy),dummy_root_(nullptr)
+		occupancy_(occupancy),dummy_root_(this),has_dummy_(false)
 {
 	node_type_ = NodeType::INNER;
 

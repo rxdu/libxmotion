@@ -29,6 +29,7 @@ public:
 
 	// Extra information for neighbor search
 	TreeNode* dummy_root_;
+	bool has_dummy_;
 };
 
 class QTreeNodeManager{
@@ -63,8 +64,12 @@ public:
 	// Extra information for neighbor search
 	QTreeNodeManager* node_manager_;
 
+private:
+	std::vector<TreeNode*> GetDummyNeighbours(TreeNode* dummy_leaf);
+
 public:
-	void FindNeighbours();
+	TreeNode* GetNodeAtPosition(uint16_t pixel_x, uint16_t pixel_y);
+	std::vector<TreeNode*> FindNeighbours(TreeNode* node);
 };
 
 }

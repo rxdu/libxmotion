@@ -527,7 +527,17 @@ void QTreeBuilder::BuildExtQuadTree(cv::InputArray _src, unsigned int max_depth)
 						if(occupancy[i] != OccupancyType::MIXED)
 						{
 							if(parent->node_type_ != NodeType::INNER)
-								parent->child_nodes_[i]->node_type_ = NodeType::DUMMY;
+							{
+								parent->child_nodes_[i]->node_type_ = NodeType::DUMMY_INNER;
+
+								if(parent->node_type_ == NodeType::LEAF)
+								{
+									parent->child_nodes_[i]->dummy_root_ = parent;
+									parent->has_dummy_ = true;
+								}
+								else
+									parent->child_nodes_[i]->dummy_root_ = parent->dummy_root_;
+							}
 							else
 								parent->child_nodes_[i]->node_type_ = NodeType::LEAF;
 						}
@@ -536,7 +546,17 @@ void QTreeBuilder::BuildExtQuadTree(cv::InputArray _src, unsigned int max_depth)
 					{
 						// assign node type as leaf
 						if(parent->node_type_ != NodeType::INNER)
-							parent->child_nodes_[i]->node_type_ = NodeType::DUMMY;
+						{
+							parent->child_nodes_[i]->node_type_ = NodeType::DUMMY_LEAF;
+
+							if(parent->node_type_ == NodeType::LEAF)
+							{
+								parent->child_nodes_[i]->dummy_root_ = parent;
+								parent->has_dummy_ = true;
+							}
+							else
+								parent->child_nodes_[i]->dummy_root_ = parent->dummy_root_;
+						}
 						else
 							parent->child_nodes_[i]->node_type_ = NodeType::LEAF;
 //						parent->child_nodes_[i]->node_type_ = NodeType::LEAF;
@@ -679,7 +699,7 @@ void QTreeBuilder::VisualizeExtQuadTree(cv::OutputArray _dst, TreeVisType vis_ty
 			}
 		}
 
-//#ifdef DEBUG
+#ifdef DEBUG
 		std::cout << "side node number from manager: " << exttree_->node_manager_->side_node_num_<<std::endl;
 		for(int i = 0; i < exttree_->node_manager_->side_node_num_; i++)
 			for(int j = 0; j < exttree_->node_manager_->side_node_num_; j++)
@@ -687,8 +707,7 @@ void QTreeBuilder::VisualizeExtQuadTree(cv::OutputArray _dst, TreeVisType vis_ty
 //				std::cout << "i,j = " << i << "," << j << std::endl;
 				TreeNode* node = exttree_->node_manager_->GetNodeReference(i,j);
 
-//				if(node->node_type_ == NodeType::LEAF)
-				if(node->node_type_ == NodeType::DUMMY)
+				if(node->node_type_ == NodeType::LEAF)
 				{
 					int thickness = -1;
 					int lineType = 8;
@@ -706,7 +725,58 @@ void QTreeBuilder::VisualizeExtQuadTree(cv::OutputArray _dst, TreeVisType vis_ty
 							lineType);
 				}
 			}
-//#endif
+#endif
+
+//		TreeNode* node = exttree_->GetNodeAtPosition(0,1)->dummy_root_;
+//		TreeNode* node = exttree_->GetNodeAtPosition(1312,1024)->dummy_root_;
+//		TreeNode* node = exttree_->GetNodeAtPosition(1023,1024)->dummy_root_;
+		TreeNode* node = exttree_->GetNodeAtPosition(1023,1100)->dummy_root_;
+
+		if(node!=nullptr)
+		{
+			int thickness = -1;
+			int lineType = 8;
+			unsigned int x,y;
+			x = node->bounding_box_.x.min +
+					(node->bounding_box_.x.max - node->bounding_box_.x.min + 1)/2;
+			y = node->bounding_box_.y.min +
+					(node->bounding_box_.y.max - node->bounding_box_.y.min + 1)/2;
+			Point center(x,y);
+			circle( src_img_color,
+					center,
+					10,
+					Scalar( 0, 0, 255 ),
+					thickness,
+					lineType);
+			std::vector<TreeNode*> node_list;
+
+			std::cout << "Trying to find neighbours"<<std::endl;
+			node_list = exttree_->FindNeighbours(node);
+
+			std::cout << "checked node num: "<<node_list.size()<<std::endl;
+
+			while(!node_list.empty())
+			{
+				TreeNode* dispnode = node_list.at(0);
+
+				x = dispnode->bounding_box_.x.min +
+						(dispnode->bounding_box_.x.max - dispnode->bounding_box_.x.min + 1)/2;
+				y = dispnode->bounding_box_.y.min +
+						(dispnode->bounding_box_.y.max - dispnode->bounding_box_.y.min + 1)/2;
+				Point center(x,y);
+				circle( src_img_color,
+						center,
+						5,
+						Scalar( 0, 128, 255 ),
+						thickness,
+						lineType);
+
+				node_list.erase(node_list.begin());
+			}
+		}
+		else
+			std::cout << "Node to be checked is empty"<<std::endl;
+
 		//		std::cout << "image size: "<<dst.cols << ","<< dst.rows<<std::endl;
 	}
 

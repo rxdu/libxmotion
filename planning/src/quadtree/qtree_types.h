@@ -15,7 +15,8 @@ enum class NodeType
 {
 	INNER,
 	LEAF,
-	DUMMY
+	DUMMY_INNER,
+	DUMMY_LEAF
 };
 
 enum class OccupancyType
