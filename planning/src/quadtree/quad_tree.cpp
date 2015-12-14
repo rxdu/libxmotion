@@ -218,19 +218,23 @@ std::vector<TreeNode*> QuadTree::FindNeighbours(TreeNode* node)
 
 	// now find all dummy roots as neighbours in the quadtree
 	neighbours.clear();
-	while(!dummy_neighbours.empty())
+	std::vector<TreeNode*>::iterator it;
+	for(it = dummy_neighbours.begin(); it != dummy_neighbours.end(); ++it)
 	{
-		TreeNode* qt_neighbour = dummy_neighbours.at(0)->dummy_root_;
+		TreeNode* qt_neighbour = (*it)->dummy_root_;
 
-		if(neighbours.empty())
-			neighbours.push_back(qt_neighbour);
-		else
+		bool existed = false;
+		for(std::vector<TreeNode*>::iterator it_qt = neighbours.begin(); it_qt != neighbours.end(); it_qt++)
 		{
-			if(*(std::find(neighbours.begin(), neighbours.end(), qt_neighbour)) != qt_neighbour)
-				neighbours.push_back(qt_neighbour);
+			if(*(it_qt) == qt_neighbour)
+			{
+				existed = true;
+				break;
+			}
 		}
 
-		dummy_neighbours.erase(dummy_neighbours.begin());
+		if(!existed)
+			neighbours.push_back(qt_neighbour);
 	}
 
 	return neighbours;
@@ -290,4 +294,11 @@ TreeNode::~TreeNode()
 
 }
 
+bool TreeNode::operator ==(const TreeNode* other)
+{
+	if(this != other)
+		return false;
+	else
+		return true;
+}
 

@@ -30,6 +30,9 @@ public:
 	// Extra information for neighbor search
 	TreeNode* dummy_root_;
 	bool has_dummy_;
+
+public:
+	bool operator ==(const TreeNode* other);
 };
 
 class QTreeNodeManager{
