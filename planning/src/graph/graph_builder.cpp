@@ -20,11 +20,29 @@ GraphBuilder::~GraphBuilder()
 
 }
 
-void GraphBuilder::BuildGraphFromQuadTree(QuadTree *tree)
+Graph* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 {
 	graph_ = new Graph();
 
-	tree->cell_res_;
+	std::vector<TreeNode*> leaf_nodes;
+	leaf_nodes = tree->leaf_nodes_;
+
+	// Find neighbors of each leaf node
+	std::vector<TreeNode*>::iterator it;
+	for(it = leaf_nodes.begin(); it != leaf_nodes.end(); it++)
+	{
+		std::vector<TreeNode*> neighbours;
+		std::vector<TreeNode*>::iterator itn;
+
+		neighbours = tree->FindNeighbours((*it));
+
+		for(itn = neighbours.begin(); itn != neighbours.end(); itn++)
+		{
+			graph_->AddEdge((*it)->node_id_, (*itn)->node_id_, 1.0);
+		}
+	}
+
+	return graph_;
 }
 
 

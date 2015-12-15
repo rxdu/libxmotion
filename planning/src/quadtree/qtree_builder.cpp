@@ -417,12 +417,12 @@ void QTreeBuilder::VisualizeQuadTree(cv::OutputArray _dst, TreeVisType vis_type)
  * @param _src: grayscale image, max size: 2^16 * 2^16 = 65535 * 65535 pixels
  * @param max_depth: maximum depth of the tree to be built
  */
-void QTreeBuilder::BuildExtQuadTree(cv::InputArray _src, unsigned int max_depth)
+QuadTree* QTreeBuilder::BuildExtQuadTree(cv::InputArray _src, unsigned int max_depth)
 {
 	// Pad image to get a image with size of power of 2
 	//	src_img_ can be used only after this step
 	if(!PreprocessImage(_src))
-		return;
+		return nullptr;
 
 	// Create quadtree
 	exttree_ = new QuadTree(src_img_.cols, max_depth);
@@ -458,7 +458,7 @@ void QTreeBuilder::BuildExtQuadTree(cv::InputArray _src, unsigned int max_depth)
 			if(map_occupancy != OccupancyType::MIXED)
 			{
 				exttree_->root_node_->node_type_ = NodeType::LEAF;
-				return;
+				return exttree_;
 			}
 
 			// prepare for next iteration
@@ -584,6 +584,11 @@ void QTreeBuilder::BuildExtQuadTree(cv::InputArray _src, unsigned int max_depth)
 
 		exttree_->tree_depth_++;
 	}
+
+	// Store all leaf nodes into a vector
+	exttree_->leaf_nodes_ = GetAllLeafNodes();
+
+	return exttree_;
 }
 
 void QTreeBuilder::VisualizeExtQuadTree(cv::OutputArray _dst, TreeVisType vis_type)
@@ -756,7 +761,7 @@ void QTreeBuilder::VisualizeExtQuadTree(cv::OutputArray _dst, TreeVisType vis_ty
 
 			std::cout << "Trying to find neighbours"<<std::endl;
 			node_list = exttree_->FindNeighbours(node);
-
+//			node_list = GetAllLeafNodes();
 			std::cout << "checked node num: "<<node_list.size()<<std::endl;
 
 			while(!node_list.empty())
@@ -786,4 +791,66 @@ void QTreeBuilder::VisualizeExtQuadTree(cv::OutputArray _dst, TreeVisType vis_ty
 
 	vis_img_ = src_img_color;
 	src_img_color.copyTo(dst);
+}
+
+std::vector<TreeNode*> QTreeBuilder::GetAllLeafNodes()
+{
+	std::vector<TreeNode*> leaves;
+
+	if(exttree_ != nullptr)
+	{
+		std::vector<TreeNode*> parent_nodes;
+
+		for(int i = 0; i < exttree_->tree_depth_; i++)
+		{
+			if(i == 0)
+			{
+				if(exttree_->root_node_->node_type_ != NodeType::LEAF)
+				{
+					for(int i = 0; i < 4; i++)
+					{
+						parent_nodes.clear();
+						parent_nodes.push_back(exttree_->root_node_);
+					}
+				}
+				else
+				{
+					leaves.push_back(exttree_->root_node_);
+					break;
+				}
+			}
+			else
+			{
+				std::vector<TreeNode*> inner_nodes;
+
+				while(!parent_nodes.empty())
+				{
+					TreeNode* parent = parent_nodes.at(0);
+
+					for(int i = 0; i < 4; i++)
+					{
+						if(parent->child_nodes_[i]->node_type_ == NodeType::INNER)
+							inner_nodes.push_back(parent->child_nodes_[i]);
+						else if(parent->child_nodes_[i]->node_type_ == NodeType::LEAF)
+							leaves.push_back(parent->child_nodes_[i]);
+					}
+
+					// delete the processed node
+					parent_nodes.erase(parent_nodes.begin());
+				}
+
+				// prepare for next iteration
+				parent_nodes.clear();
+				parent_nodes = inner_nodes;
+			}
+		}
+	}
+
+	// Assign id to tree nodes and according vertices
+	std::vector<TreeNode*>::iterator it;
+	uint64_t id = 0;
+	for(it = leaves.begin(); it != leaves.end(); it++)
+		(*it)->node_id_ = id;
+
+	return leaves;
 }

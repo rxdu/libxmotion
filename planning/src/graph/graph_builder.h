@@ -23,7 +23,7 @@ public:
 	Graph* graph_;
 
 public:
-	void BuildGraphFromQuadTree(QuadTree* tree);
+	Graph* BuildFromQuadTree(QuadTree* tree);
 };
 }
 

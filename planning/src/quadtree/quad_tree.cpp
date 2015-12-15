@@ -29,10 +29,6 @@ QuadTree::QuadTree(uint16_t padded_img_size, uint8_t depth):MAX_DEPTH(32),
 	node_manager_  = new QTreeNodeManager(depth);
 
 	cell_res_ = padded_img_size/(uint16_t(pow(2,depth)));
-
-//	std::cout << "image size: "<< int(image_size )<< std::endl;
-//	std::cout << "depth: "<< int(depth) << std::endl;
-//	std::cout << "tree cell size: "<< int(cell_res_ )<< std::endl;
 }
 
 QuadTree::~QuadTree()
@@ -54,11 +50,6 @@ TreeNode* QuadTree::GetNodeAtPosition(uint16_t pixel_x, uint16_t pixel_y)
 	{
 		x = pixel_x / cell_res_;
 		y = pixel_y / cell_res_;
-
-//		std::cout << "(x, y): "<<x<<" , "<<y<<std::endl;
-//		std::cout << "Node list size: "<<node_manager_->side_node_num_<<std::endl;
-//		if(node_manager_->GetNodeReference(x , y) == nullptr)
-//			std::cout << "get empty node"<<std::endl;
 
 		return node_manager_->GetNodeReference(x , y);
 	}
@@ -89,13 +80,8 @@ std::vector<TreeNode*> QuadTree::GetDummyNeighbours(TreeNode* dummy_leaf)
 
 std::vector<TreeNode*> QuadTree::FindNeighbours(TreeNode* node)
 {
-//	std::vector<TreeNode*> leaf_dummies;
 	std::vector<TreeNode*> dummy_neighbours;
 	std::vector<TreeNode*> neighbours;
-
-//	leaf_dummies.clear();
-//	neighbour_dummies.clear();
-//	neighbours.clear();
 
 	// if the node is not at the highest resolution, find
 	//	all its dummy leaf nodes
@@ -110,45 +96,7 @@ std::vector<TreeNode*> QuadTree::FindNeighbours(TreeNode* node)
 			dummy_depth++;
 			node_index = node_index->child_nodes_[0];
 		}
-
-//		std::cout << "dummy node depth: "<<dummy_depth<<std::endl;
-//
-//		// find all leaf dummy nodes
-//		std::vector<TreeNode*> parent_nodes;
-//		parent_nodes.push_back(node);
-//
-//		for(int i = 0; i < dummy_depth; i++)
-//		{
-//			std::vector<TreeNode*> inner_nodes;
-//
-//			while(!parent_nodes.empty())
-//			{
-//				TreeNode* parent = parent_nodes.at(0);
-//
-//				for(int i = 0; i < 4; i++)
-//				{
-//					if(parent->child_nodes_[i]->node_type_ == NodeType::DUMMY_LEAF)
-//						leaf_dummies.push_back(parent->child_nodes_[i]);
-//					else
-//						inner_nodes.push_back(parent->child_nodes_[i]);
-//				}
-//
-//				// delete the processed node
-//				parent_nodes.erase(parent_nodes.begin());
-//			}
-//
-//			// prepare for next iteration
-//			parent_nodes.clear();
-//			parent_nodes = inner_nodes;
-		}
-
-//		std::cout << "dummy node num: "<<leaf_dummies.size()<<std::endl;
-//	}
-//	else
-//	{
-////		std::cout<<"no dummy"<<std::endl;
-//		leaf_dummies.push_back(node);
-//	}
+	}
 
 	// find neighbour dummies around the leaf dummies
 	if(dummy_depth == 0)
@@ -217,6 +165,8 @@ std::vector<TreeNode*> QuadTree::FindNeighbours(TreeNode* node)
 	std::cout << "number of dummy neighbours: "<< dummy_neighbours.size() <<std::endl;
 
 	// now find all dummy roots as neighbours in the quadtree
+	// TODO
+	// Implement this part using std::set<> instead of std::vector<>
 	neighbours.clear();
 	std::vector<TreeNode*>::iterator it;
 	for(it = dummy_neighbours.begin(); it != dummy_neighbours.end(); ++it)
@@ -274,6 +224,7 @@ TreeNode* QTreeNodeManager::GetNodeReference(uint16_t index_x, uint16_t index_y)
 /*********************************************************/
 
 TreeNode::TreeNode(BoundingBox bound, OccupancyType occupancy):
+		node_id_(0),
 		occupancy_(occupancy),dummy_root_(this),has_dummy_(false)
 {
 	node_type_ = NodeType::INNER;

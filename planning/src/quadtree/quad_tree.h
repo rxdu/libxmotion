@@ -20,6 +20,7 @@ public:
 
 public:
 	// Node contents
+	uint64_t node_id_;
 	NodeType node_type_;
 	OccupancyType occupancy_;
 	BoundingBox bounding_box_;
@@ -59,6 +60,7 @@ public:
 	~QuadTree();
 
 public:
+	// Basic tree information
 	TreeNode* root_node_;
 	uint8_t tree_depth_;
 	uint16_t cell_res_;
@@ -66,6 +68,9 @@ public:
 
 	// Extra information for neighbor search
 	QTreeNodeManager* node_manager_;
+
+	// Other data
+	std::vector<TreeNode*> leaf_nodes_;
 
 private:
 	std::vector<TreeNode*> GetDummyNeighbours(TreeNode* dummy_leaf);

@@ -5,6 +5,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 # Include path
 #include_directories(${CMAKE_SOURCE_DIR}/inc)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/src/graph)
 
 # Dependency libraries
 find_package(OpenCV REQUIRED)
@@ -19,4 +20,4 @@ target_link_libraries(qtree ${OpenCV_LIBS})
 
 # Add executables
 add_executable(build_quadtree test_quadtree.cpp)
-target_link_libraries(build_quadtree qtree ${OpenCV_LIBS})
+target_link_libraries(build_quadtree qtree graph ${OpenCV_LIBS})

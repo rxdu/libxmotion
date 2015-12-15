@@ -9,8 +9,9 @@
 #define SRC_GRAPH_GRAPH_TYPES_H_
 
 #include <vector>
+#include <cstdint>
 
-namespace srcl {
+namespace srcl_ctrl {
 
 struct vertex;
 
@@ -25,7 +26,11 @@ typedef struct edge
 
 typedef struct vertex
 {
-	std::vector<Edge> adj;
+	uint64_t vertex_id_;
+	std::vector<Edge> adj_;
+
+	vertex(uint64_t id):
+		vertex_id_(id){};
 }Vertex;
 
 }
