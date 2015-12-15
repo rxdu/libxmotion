@@ -166,6 +166,19 @@ void GraphVis::DrawQTreeNode(TreeNode *node, cv::Mat img)
 	}
 }
 
+void GraphVis::DrawEdge(cv::Point pt1, cv::Point pt2, cv::Mat img)
+{
+	int thickness = 1;
+	int lineType = 8;
+
+	line( img,
+			pt1,
+			pt2,
+			Scalar( 237, 149, 100 ),
+			thickness,
+			lineType);
+}
+
 void GraphVis::DrawQTreeSingleNode(TreeNode* node, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src = _src.getMat();
@@ -235,7 +248,28 @@ void GraphVis::DrawQTreeGraph(Graph *graph, QuadTree *tree, cv::InputArray _src,
 	for(itv = vertices.begin(); itv != vertices.end(); itv++)
 	{
 		DrawQTreeNode((*itv)->node_,dst);
+
+		// current vertex center coordinate
+		uint64_t x1,y1,x2,y2;
+		x1 = (*itv)->node_->bounding_box_.x.min +
+				((*itv)->node_->bounding_box_.x.max - (*itv)->node_->bounding_box_.x.min + 1)/2;
+		y1 = (*itv)->node_->bounding_box_.y.min +
+				((*itv)->node_->bounding_box_.y.max - (*itv)->node_->bounding_box_.y.min + 1)/2;
+
+		std::vector<Edge>::iterator ite;
+		for(ite = (*itv)->adj_.begin(); ite != (*itv)->adj_.end(); ite++)
+		{
+			// neighbor vertices center coordinate
+			TreeNode* n = (*ite).dst_->node_;
+
+			x2 = n->bounding_box_.x.min +
+					(n->bounding_box_.x.max - n->bounding_box_.x.min + 1)/2;
+			y2 = n->bounding_box_.y.min +
+					(n->bounding_box_.y.max - n->bounding_box_.y.min + 1)/2;
+
+			DrawEdge(Point(x1,y1), Point(x2,y2), dst);
+		}
 	}
 
-	std::cout<<"number of vertices "<< vertices.size()<<std::endl;
+//	std::cout<<"number of vertices "<< vertices.size()<<std::endl;
 }

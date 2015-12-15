@@ -32,6 +32,7 @@ public:
 	~GraphVis();
 
 private:
+	void DrawEdge(cv::Point pt1, cv::Point pt2, cv::Mat img);
 	void DrawQTreeNode(TreeNode *node, cv::Mat img);
 
 public:
