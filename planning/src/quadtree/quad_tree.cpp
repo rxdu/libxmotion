@@ -162,7 +162,7 @@ std::vector<TreeNode*> QuadTree::FindNeighbours(TreeNode* node)
 		}
 	}
 
-	std::cout << "number of dummy neighbours: "<< dummy_neighbours.size() <<std::endl;
+//	std::cout << "number of dummy neighbours: "<< dummy_neighbours.size() <<std::endl;
 
 	// now find all dummy roots as neighbours in the quadtree
 	// TODO
