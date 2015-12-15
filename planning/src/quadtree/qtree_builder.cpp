@@ -269,16 +269,11 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 						}
 						else
 							parent->child_nodes_[i]->node_type_ = NodeType::LEAF;
-//						parent->child_nodes_[i]->node_type_ = NodeType::LEAF;
 
 						// generate index for the node
 						uint16_t x,y;
 						x = ((bbox[i].x.min + bbox[i].x.max + 1)/2)/tree_->cell_res_;
 						y = ((bbox[i].y.min + bbox[i].y.max + 1)/2)/tree_->cell_res_;
-//						std::cout << "bounding box " << i <<": " << "x " << bbox[i].x.min << "-" << bbox[i].x.max
-//								<< " y " << bbox[i].y.min << "-" << bbox[i].y.max << std::endl;
-//						std::cout << "cell res: "<<exttree_->cell_res_<<std::endl;
-//						std::cout << "coordinate: x - "<< x << " y - "<< y << std::endl;
 						tree_->node_manager_->SetNodeReference(x,y,parent->child_nodes_[i]);
 					}
 				}

@@ -159,7 +159,7 @@ void GraphVis::DrawQTreeNode(TreeNode *node, cv::Mat img)
 		Point center(x,y);
 		circle( img,
 				center,
-				2,
+				3,
 				Scalar( 0, 0, 255 ),
 				thickness,
 				lineType);

@@ -61,7 +61,7 @@ int main(int argc, char** argv )
 	Mat image_graph;
 	vis.DrawQTreeGraph(graph, tree, image_tree, image_graph);
 
-    imwrite( "qtree_graph.jpg", image_graph );
+//    imwrite( "qtree_graph2.jpg", image_graph );
 
     namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
     imshow("Processed Image", image_graph);

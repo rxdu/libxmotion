@@ -36,7 +36,7 @@ Graph* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 			leaf_nodes.push_back((*it));
 	}
 
-	std::cout<<"free leaf nodes: "<<leaf_nodes.size()<<std::endl;
+//	std::cout<<"free leaf nodes: "<<leaf_nodes.size()<<std::endl;
 
 	// Find neighbors of each leaf node
 	for(it = leaf_nodes.begin(); it != leaf_nodes.end(); it++)
@@ -54,7 +54,7 @@ Graph* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 		}
 	}
 
-	std::cout<<"graph vertex num: "<<graph_->GetGraphVertices().size()<<std::endl;
+//	std::cout<<"graph vertex num: "<<graph_->GetGraphVertices().size()<<std::endl;
 
 	return graph_;
 }
