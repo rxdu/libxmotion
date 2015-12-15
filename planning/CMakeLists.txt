@@ -16,3 +16,4 @@ endif()
 # Add sub source directories
 add_subdirectory(src/quadtree)
 add_subdirectory(src/graph)
+add_subdirectory(src/visualizer)

@@ -1,3 +1,10 @@
+/*
+ * test_graph.cpp
+ *
+ *  Created on: Dec 15, 2015
+ *      Author: rdu
+ */
+
 // standard libaray
 #include <stdio.h>
 
@@ -7,6 +14,7 @@
 // quad_tree
 #include "qtree_builder.h"
 #include "graph_builder.h"
+#include "graph_vis.h"
 
 using namespace cv;
 using namespace srcl_ctrl;
@@ -28,41 +36,40 @@ int main(int argc, char** argv )
         return -1;
     }
 
-    // convert image to gray
-//    Mat image_gray;
-//    cvtColor(image_raw, image_gray, COLOR_BGR2GRAY);
-
-    // binarize image
-//    Mat image_bin;
-//    threshold(image_raw, image_bin, 200, 255, THRESH_BINARY);
-
-//    QTreeBuilder builder;
-
-    // display final image
-    //namedWindow("Original Image", WINDOW_AUTOSIZE );
-    //imshow("Original Image", image_gray);
-
-//    Mat image_pad;
-//    builder.PadGrayscaleImage(image_bin, image_pad);
-
     // example to use quadtree builder
     QTreeBuilder builder;
     QuadTree* tree = builder.BuildQuadTree(image_raw, 6);
 
-    Mat image_tree;
-//    builder.VisualizeExtQuadTree(image_tree, TreeVisType::ALL_SPACE);
+    Mat image_tree, image_nodes;
+    GraphVis vis;
+    vis.DrawQuadTree(tree, builder.padded_img_, image_tree, TreeVisType::FREE_SPACE);
+//    TreeNode* node = tree->leaf_nodes_.at(0);
+//    vis.DrawQTreeSingleNode(node, image_tree, image_nodes);
+    vector<TreeNode*> free_leaves;
+    vector<TreeNode*>::iterator it;
+    for(it = tree->leaf_nodes_.begin(); it != tree->leaf_nodes_.end(); it++)
+    {
+    	if((*it)->occupancy_ == OccupancyType::FREE)
+    		free_leaves.push_back((*it));
+    }
+    vis.DrawQTreeNodes(free_leaves, image_tree, image_nodes);
 
     GraphBuilder gbuilder;
     Graph* graph;
 
 	graph = gbuilder.BuildFromQuadTree(tree);
+	Mat image_graph;
+	vis.DrawQTreeGraph(graph, tree, image_tree, image_graph);
 
 //    imwrite( "quadtree_freenodes.jpg", image_tree );
 
     namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
-    imshow("Processed Image", image_tree);
+    imshow("Processed Image", image_graph);
 
     waitKey(0);
 
     return 0;
 }
+
+
+

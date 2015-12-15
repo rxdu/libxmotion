@@ -10,23 +10,16 @@
 
 namespace srcl_ctrl{
 
-enum class TreeVisType
-{
-	FREE_SPACE,
-	OCCU_SPACE,
-	ALL_SPACE
-};
-
 class QTreeBuilder{
 public:
 	QTreeBuilder();
 	~QTreeBuilder();
 
+public:
+	cv::Mat padded_img_;
+
 private:
-	cv::Mat src_img_;
-	cv::Mat vis_img_;
 	QuadTree* tree_;
-	QuadTree* exttree_;
 
 private:
 	bool PreprocessImage(cv::InputArray _src);
@@ -35,10 +28,7 @@ private:
 	std::vector<TreeNode*> GetAllLeafNodes();
 
 public:
-	void BuildQuadTree(cv::InputArray _src, unsigned int max_depth);
-	QuadTree* BuildExtQuadTree(cv::InputArray _src, unsigned int max_depth);
-	void VisualizeQuadTree(cv::OutputArray _dst, TreeVisType vis_type);
-	void VisualizeExtQuadTree(cv::OutputArray _dst, TreeVisType vis_type);
+	QuadTree* BuildQuadTree(cv::InputArray _src, unsigned int max_depth);
 };
 
 }

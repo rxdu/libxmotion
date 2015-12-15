@@ -11,6 +11,8 @@
 #include <vector>
 #include <cstdint>
 
+#include "quad_tree.h"
+
 namespace srcl_ctrl {
 
 struct vertex;
@@ -26,11 +28,15 @@ typedef struct edge
 
 typedef struct vertex
 {
+	TreeNode *node_;
 	uint64_t vertex_id_;
 	std::vector<Edge> adj_;
 
 	vertex(uint64_t id):
-		vertex_id_(id){};
+		vertex_id_(id), node_(nullptr){};
+
+	vertex(TreeNode *node = nullptr):
+		node_(node), vertex_id_(node->node_id_){};
 }Vertex;
 
 }

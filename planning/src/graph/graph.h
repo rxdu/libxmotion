@@ -9,6 +9,7 @@
 #define SRC_GRAPH_GRAPH_H_
 
 #include <map>
+#include <vector>
 #include <cstdint>
 #include "graph_types.h"
 
@@ -25,9 +26,12 @@ private:
 
 private:
 	Vertex* GetVertex(const uint64_t vertex_id);
+	Vertex* GetVertex(const TreeNode* vertex_node);
 
 public:
 	void AddEdge(uint64_t src_id, uint64_t dst_id, double cost);
+	void AddEdge(TreeNode* src_node, TreeNode* dst_node, double cost);
+	std::vector<Vertex*> GetGraphVertices();
 };
 
 }

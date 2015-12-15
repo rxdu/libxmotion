@@ -5,6 +5,8 @@
  *      Author: rdu
  */
 
+#include <iostream>
+
 #include "graph_builder.h"
 
 using namespace srcl_ctrl;
@@ -34,6 +36,8 @@ Graph* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 			leaf_nodes.push_back((*it));
 	}
 
+	std::cout<<"free leaf nodes: "<<leaf_nodes.size()<<std::endl;
+
 	// Find neighbors of each leaf node
 	for(it = leaf_nodes.begin(); it != leaf_nodes.end(); it++)
 	{
@@ -44,9 +48,13 @@ Graph* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 
 		for(itn = neighbours.begin(); itn != neighbours.end(); itn++)
 		{
-			graph_->AddEdge((*it)->node_id_, (*itn)->node_id_, 1.0);
+//			graph_->AddEdge((*it)->node_id_, (*itn)->node_id_, 1.0);
+			if((*itn)->occupancy_ == OccupancyType::FREE)
+				graph_->AddEdge((*it), (*itn), 1.0);
 		}
 	}
+
+	std::cout<<"graph vertex num: "<<graph_->GetGraphVertices().size()<<std::endl;
 
 	return graph_;
 }
