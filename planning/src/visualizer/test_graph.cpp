@@ -7,6 +7,7 @@
 
 // standard libaray
 #include <stdio.h>
+#include <vector>
 
 // opencv
 #include "opencv2/opencv.hpp"
@@ -45,8 +46,8 @@ int main(int argc, char** argv )
     vis.DrawQuadTree(tree, builder.padded_img_, image_tree, TreeVisType::FREE_SPACE);
 //    TreeNode* node = tree->leaf_nodes_.at(0);
 //    vis.DrawQTreeSingleNode(node, image_tree, image_nodes);
-    vector<TreeNode*> free_leaves;
-    vector<TreeNode*>::iterator it;
+    std::vector<TreeNode*> free_leaves;
+    std::vector<TreeNode*>::iterator it;
     for(it = tree->leaf_nodes_.begin(); it != tree->leaf_nodes_.end(); it++)
     {
     	if((*it)->occupancy_ == OccupancyType::FREE)
