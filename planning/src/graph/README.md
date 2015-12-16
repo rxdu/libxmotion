@@ -11,3 +11,8 @@ Graph
 Search
 
 * http://users.cis.fiu.edu/~weiss/adspc++2/code/
+* http://heyes-jones.com/astar.php
+* http://stackoverflow.com/questions/11912736/c-a-star-implementation-determining-whether-a-node-is-already-in-the-priori
+* http://stackoverflow.com/questions/10394508/which-std-container-to-use-in-a-algorithms-openset
+* https://github.com/justinhj/astar-algorithm-cpp
+* http://code.activestate.com/recipes/577457-a-star-shortest-path-algorithm/
