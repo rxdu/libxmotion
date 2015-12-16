@@ -16,3 +16,4 @@ Search
 * http://stackoverflow.com/questions/10394508/which-std-container-to-use-in-a-algorithms-openset
 * https://github.com/justinhj/astar-algorithm-cpp
 * http://code.activestate.com/recipes/577457-a-star-shortest-path-algorithm/
+* http://theory.stanford.edu/~amitp/GameProgramming/
