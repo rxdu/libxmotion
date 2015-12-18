@@ -55,6 +55,9 @@ int main(int argc, char** argv )
     }
     vis.DrawQTreeNodes(free_leaves, image_tree, image_nodes);
 
+    Mat image_dummy;
+    vis.DrawQTreeWithDummies(tree,builder.padded_img_, image_dummy);
+
     GraphBuilder gbuilder;
     Graph* graph;
 
@@ -65,7 +68,7 @@ int main(int argc, char** argv )
 //    imwrite( "free_graph.jpg", image_graph );
 
     namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
-    imshow("Processed Image", image_graph);
+    imshow("Processed Image", image_dummy);
 
     waitKey(0);
 

@@ -37,6 +37,7 @@ private:
 
 public:
 	void DrawQuadTree(QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst, TreeVisType vis_type);
+	void DrawQTreeWithDummies(QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst);
 	void DrawQTreeSingleNode(TreeNode* node, cv::InputArray _src, cv::OutputArray _dst);
 	void DrawQTreeNodes(std::vector<TreeNode*>& nodes, cv::InputArray _src, cv::OutputArray _dst);
 
