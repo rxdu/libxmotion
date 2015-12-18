@@ -43,7 +43,7 @@ int main(int argc, char** argv )
 
     Mat image_tree, image_nodes;
     GraphVis vis;
-    vis.DrawQuadTree(tree, builder.padded_img_, image_tree, TreeVisType::FREE_SPACE);
+    vis.DrawQuadTree(tree, builder.padded_img_, image_tree, TreeVisType::ALL_SPACE);
 //    TreeNode* node = tree->leaf_nodes_.at(0);
 //    vis.DrawQTreeSingleNode(node, image_tree, image_nodes);
     std::vector<TreeNode*> free_leaves;
@@ -62,7 +62,7 @@ int main(int argc, char** argv )
 	Mat image_graph;
 	vis.DrawQTreeGraph(graph, tree, image_tree, image_graph);
 
-//    imwrite( "qtree_graph2.jpg", image_graph );
+//    imwrite( "free_graph.jpg", image_graph );
 
     namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
     imshow("Processed Image", image_graph);
