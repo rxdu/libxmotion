@@ -41,7 +41,7 @@ public:
 	void DrawQTreeSingleNode(TreeNode* node, cv::InputArray _src, cv::OutputArray _dst);
 	void DrawQTreeNodes(std::vector<TreeNode*>& nodes, cv::InputArray _src, cv::OutputArray _dst);
 
-	void DrawQTreeGraph(Graph *graph, QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst);
+//	void DrawQTreeGraph(Graph *graph, QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst);
 };
 
 }
