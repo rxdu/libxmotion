@@ -58,13 +58,10 @@ int main(int argc, char** argv )
     Mat image_dummy;
     vis.DrawQTreeWithDummies(tree,builder.padded_img_, image_dummy);
 
-    // example to use graph builder
-    GraphBuilder gbuilder;
-
     // build a graph from quadtree
     Graph<QuadTreeNode>* graph;
 
-	graph = gbuilder.BuildFromQuadTree(tree);
+	graph = GraphBuilder::BuildFromQuadTree(tree);
 	Mat image_graph;
 	vis.DrawQTreeGraph(graph, tree, image_tree, image_graph);
 

@@ -11,10 +11,8 @@
 
 using namespace srcl_ctrl;
 
-GraphBuilder::GraphBuilder():
-		graph_(nullptr)
+GraphBuilder::GraphBuilder()
 {
-	delete graph_;
 }
 
 GraphBuilder::~GraphBuilder()
@@ -24,7 +22,7 @@ GraphBuilder::~GraphBuilder()
 
 Graph<QuadTreeNode>* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 {
-	graph_ = new Graph<QuadTreeNode>();
+	Graph<QuadTreeNode>* graph_ = new Graph<QuadTreeNode>();
 
 	std::vector<QuadTreeNode*> leaf_nodes;
 
