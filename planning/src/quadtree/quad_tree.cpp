@@ -42,7 +42,7 @@ QuadTree::~QuadTree()
 		delete(node_manager_);
 }
 
-TreeNode* QuadTree::GetNodeAtPosition(uint16_t pixel_x, uint16_t pixel_y)
+QuadTreeNode* QuadTree::GetNodeAtPosition(uint16_t pixel_x, uint16_t pixel_y)
 {
 	uint16_t x,y;
 
@@ -57,11 +57,11 @@ TreeNode* QuadTree::GetNodeAtPosition(uint16_t pixel_x, uint16_t pixel_y)
 		return nullptr;
 }
 
-std::vector<TreeNode*> QuadTree::GetDummyNeighbours(TreeNode* dummy_leaf)
+std::vector<QuadTreeNode*> QuadTree::GetDummyNeighbours(QuadTreeNode* dummy_leaf)
 {
-	std::vector<TreeNode*> dummy_neighbours;
+	std::vector<QuadTreeNode*> dummy_neighbours;
 	uint16_t x,y;
-	TreeNode* leaf = dummy_leaf;
+	QuadTreeNode* leaf = dummy_leaf;
 
 	x = ((leaf->bounding_box_.x.min + leaf->bounding_box_.x.max + 1)/2)/cell_res_;
 	y = ((leaf->bounding_box_.y.min + leaf->bounding_box_.y.max + 1)/2)/cell_res_;
@@ -78,17 +78,17 @@ std::vector<TreeNode*> QuadTree::GetDummyNeighbours(TreeNode* dummy_leaf)
 	return dummy_neighbours;
 }
 
-std::vector<TreeNode*> QuadTree::FindNeighbours(TreeNode* node)
+std::vector<QuadTreeNode*> QuadTree::FindNeighbours(QuadTreeNode* node)
 {
-	std::vector<TreeNode*> dummy_neighbours;
-	std::vector<TreeNode*> neighbours;
+	std::vector<QuadTreeNode*> dummy_neighbours;
+	std::vector<QuadTreeNode*> neighbours;
 
 	// if the node is not at the highest resolution, find
 	//	all its dummy leaf nodes
 	int dummy_depth = 0;
 	if(node->has_dummy_)
 	{
-		TreeNode* node_index = node;
+		QuadTreeNode* node_index = node;
 
 		// check how many levels of dummy nodes the node has
 		while(node_index->node_type_!=NodeType::DUMMY_LEAF)
@@ -168,13 +168,13 @@ std::vector<TreeNode*> QuadTree::FindNeighbours(TreeNode* node)
 	// TODO
 	// Implement this part using std::set<> instead of std::vector<>
 	neighbours.clear();
-	std::vector<TreeNode*>::iterator it;
+	std::vector<QuadTreeNode*>::iterator it;
 	for(it = dummy_neighbours.begin(); it != dummy_neighbours.end(); ++it)
 	{
-		TreeNode* qt_neighbour = (*it)->dummy_root_;
+		QuadTreeNode* qt_neighbour = (*it)->dummy_root_;
 
 		bool existed = false;
-		for(std::vector<TreeNode*>::iterator it_qt = neighbours.begin(); it_qt != neighbours.end(); it_qt++)
+		for(std::vector<QuadTreeNode*>::iterator it_qt = neighbours.begin(); it_qt != neighbours.end(); it_qt++)
 		{
 			if(*(it_qt) == qt_neighbour)
 			{
@@ -209,12 +209,12 @@ QTreeNodeManager::~QTreeNodeManager()
 
 }
 
-void QTreeNodeManager::SetNodeReference(uint16_t index_x, uint16_t index_y, TreeNode* node)
+void QTreeNodeManager::SetNodeReference(uint16_t index_x, uint16_t index_y, QuadTreeNode* node)
 {
 	tree_nodes_.at(index_y*side_node_num_ + index_x) = node;
 }
 
-TreeNode* QTreeNodeManager::GetNodeReference(uint16_t index_x, uint16_t index_y)
+QuadTreeNode* QTreeNodeManager::GetNodeReference(uint16_t index_x, uint16_t index_y)
 {
 	return tree_nodes_.at(index_y*side_node_num_ + index_x);
 }
@@ -223,7 +223,7 @@ TreeNode* QTreeNodeManager::GetNodeReference(uint16_t index_x, uint16_t index_y)
 /*              Implementation of Tree Node              */
 /*********************************************************/
 
-TreeNode::TreeNode(BoundingBox bound, OccupancyType occupancy):
+QuadTreeNode::QuadTreeNode(BoundingBox bound, OccupancyType occupancy):
 		node_id_(0),
 		occupancy_(occupancy),dummy_root_(this),has_dummy_(false)
 {
@@ -240,12 +240,12 @@ TreeNode::TreeNode(BoundingBox bound, OccupancyType occupancy):
 	child_nodes_[3] = nullptr;
 }
 
-TreeNode::~TreeNode()
+QuadTreeNode::~QuadTreeNode()
 {
 
 }
 
-bool TreeNode::operator ==(const TreeNode* other)
+bool QuadTreeNode::operator ==(const QuadTreeNode* other)
 {
 	if(this != other)
 		return false;

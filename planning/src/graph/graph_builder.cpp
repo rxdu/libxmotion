@@ -22,14 +22,14 @@ GraphBuilder::~GraphBuilder()
 
 }
 
-Graph<TreeNode>* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
+Graph<QuadTreeNode>* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 {
-	graph_ = new Graph<TreeNode>();
+	graph_ = new Graph<QuadTreeNode>();
 
-	std::vector<TreeNode*> leaf_nodes;
+	std::vector<QuadTreeNode*> leaf_nodes;
 
 	// Get all empty leaf nodes
-	std::vector<TreeNode*>::iterator it;
+	std::vector<QuadTreeNode*>::iterator it;
 	for(it = tree->leaf_nodes_.begin(); it != tree->leaf_nodes_.end(); it++)
 	{
 		if((*it)->occupancy_ == OccupancyType::FREE)
@@ -41,8 +41,8 @@ Graph<TreeNode>* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 	// Find neighbors of each leaf node
 	for(it = leaf_nodes.begin(); it != leaf_nodes.end(); it++)
 	{
-		std::vector<TreeNode*> neighbours;
-		std::vector<TreeNode*>::iterator itn;
+		std::vector<QuadTreeNode*> neighbours;
+		std::vector<QuadTreeNode*>::iterator itn;
 
 		neighbours = tree->FindNeighbours((*it));
 

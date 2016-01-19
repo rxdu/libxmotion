@@ -143,7 +143,7 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 		std::cout << "Maximum depth allowed is 32. Only 32 levels will be built." << std::endl;
 	}
 
-	std::vector<TreeNode*> parent_nodes;
+	std::vector<QuadTreeNode*> parent_nodes;
 
 	for(int grown_depth = 0; grown_depth <= max_depth; grown_depth++)
 	{
@@ -162,7 +162,7 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 			OccupancyType map_occupancy;
 			map_occupancy = CheckAreaOccupancy(bbox);
 
-			tree_->root_node_ = new TreeNode(bbox, map_occupancy);
+			tree_->root_node_ = new QuadTreeNode(bbox, map_occupancy);
 
 			// if map is empty, terminate the process
 			if(map_occupancy != OccupancyType::MIXED)
@@ -178,12 +178,12 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 		// lower levels
 		else
 		{
-			std::vector<TreeNode*> inner_nodes;
+			std::vector<QuadTreeNode*> inner_nodes;
 
 			while(!parent_nodes.empty())
 			{
 				// divide the parent area
-				TreeNode* parent = parent_nodes.at(0);
+				QuadTreeNode* parent = parent_nodes.at(0);
 
 				/* opencv image coordinate:
 				 * 	0 - > x
@@ -226,7 +226,7 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 #endif
 
 					occupancy[i] = CheckAreaOccupancy(bbox[i]);
-					parent->child_nodes_[i] = new TreeNode(bbox[i], occupancy[i]);
+					parent->child_nodes_[i] = new QuadTreeNode(bbox[i], occupancy[i]);
 
 					if(grown_depth < max_depth)
 					{
@@ -296,13 +296,13 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 	return tree_;
 }
 
-std::vector<TreeNode*> QTreeBuilder::GetAllLeafNodes()
+std::vector<QuadTreeNode*> QTreeBuilder::GetAllLeafNodes()
 {
-	std::vector<TreeNode*> leaves;
+	std::vector<QuadTreeNode*> leaves;
 
 	if(tree_ != nullptr)
 	{
-		std::vector<TreeNode*> parent_nodes;
+		std::vector<QuadTreeNode*> parent_nodes;
 
 		for(int i = 0; i < tree_->tree_depth_; i++)
 		{
@@ -324,11 +324,11 @@ std::vector<TreeNode*> QTreeBuilder::GetAllLeafNodes()
 			}
 			else
 			{
-				std::vector<TreeNode*> inner_nodes;
+				std::vector<QuadTreeNode*> inner_nodes;
 
 				while(!parent_nodes.empty())
 				{
-					TreeNode* parent = parent_nodes.at(0);
+					QuadTreeNode* parent = parent_nodes.at(0);
 
 					for(int i = 0; i < 4; i++)
 					{
@@ -350,7 +350,7 @@ std::vector<TreeNode*> QTreeBuilder::GetAllLeafNodes()
 	}
 
 	// Assign id to tree nodes and according vertices
-	std::vector<TreeNode*>::iterator it;
+	std::vector<QuadTreeNode*>::iterator it;
 	uint64_t id = 0;
 	for(it = leaves.begin(); it != leaves.end(); it++)
 	{

@@ -13,10 +13,10 @@ namespace srcl_ctrl {
 /*     Order of child nodes    */
 /* 2 - top_left, 3 - top_right */
 /* 0 - bot_left, 1 - bot_right */
-class TreeNode{
+class QuadTreeNode{
 public:
-	TreeNode(BoundingBox bound, OccupancyType occupancy);
-	~TreeNode();
+	QuadTreeNode(BoundingBox bound, OccupancyType occupancy);
+	~QuadTreeNode();
 
 public:
 	// Node contents
@@ -26,14 +26,14 @@ public:
 	BoundingBox bounding_box_;
 
 	// Pointers to child nodes
-	TreeNode* child_nodes_[4];
+	QuadTreeNode* child_nodes_[4];
 
 	// Extra information for neighbor search
-	TreeNode* dummy_root_;
+	QuadTreeNode* dummy_root_;
 	bool has_dummy_;
 
 public:
-	bool operator ==(const TreeNode* other);
+	bool operator ==(const QuadTreeNode* other);
 };
 
 class QTreeNodeManager{
@@ -42,14 +42,14 @@ public:
 	~QTreeNodeManager();
 
 private:
-	std::vector<TreeNode*> tree_nodes_;
+	std::vector<QuadTreeNode*> tree_nodes_;
 
 public:
 	uint16_t side_node_num_;
 
 public:
-	void SetNodeReference(uint16_t index_x, uint16_t index_y, TreeNode* node);
-	TreeNode* GetNodeReference(uint16_t index_x, uint16_t index_y);
+	void SetNodeReference(uint16_t index_x, uint16_t index_y, QuadTreeNode* node);
+	QuadTreeNode* GetNodeReference(uint16_t index_x, uint16_t index_y);
 };
 
 // Definition of Quad-Tree
@@ -61,7 +61,7 @@ public:
 
 public:
 	// Basic tree information
-	TreeNode* root_node_;
+	QuadTreeNode* root_node_;
 	uint8_t tree_depth_;
 	uint16_t cell_res_;
 	const uint8_t MAX_DEPTH;
@@ -70,14 +70,14 @@ public:
 	QTreeNodeManager* node_manager_;
 
 	// Other data
-	std::vector<TreeNode*> leaf_nodes_;
+	std::vector<QuadTreeNode*> leaf_nodes_;
 
 private:
-	std::vector<TreeNode*> GetDummyNeighbours(TreeNode* dummy_leaf);
+	std::vector<QuadTreeNode*> GetDummyNeighbours(QuadTreeNode* dummy_leaf);
 
 public:
-	TreeNode* GetNodeAtPosition(uint16_t pixel_x, uint16_t pixel_y);
-	std::vector<TreeNode*> FindNeighbours(TreeNode* node);
+	QuadTreeNode* GetNodeAtPosition(uint16_t pixel_x, uint16_t pixel_y);
+	std::vector<QuadTreeNode*> FindNeighbours(QuadTreeNode* node);
 };
 
 }

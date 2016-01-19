@@ -25,7 +25,7 @@ private:
 	bool PreprocessImage(cv::InputArray _src);
 	bool PadGrayscaleImage(cv::InputArray _src);
 	OccupancyType CheckAreaOccupancy(BoundingBox area);
-	std::vector<TreeNode*> GetAllLeafNodes();
+	std::vector<QuadTreeNode*> GetAllLeafNodes();
 
 public:
 	QuadTree* BuildQuadTree(cv::InputArray _src, unsigned int max_depth);

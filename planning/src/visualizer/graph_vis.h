@@ -33,15 +33,15 @@ public:
 
 private:
 	void DrawEdge(cv::Point pt1, cv::Point pt2, cv::Mat img);
-	void DrawQTreeNode(const TreeNode *node, cv::Mat img);
+	void DrawQTreeNode(const QuadTreeNode *node, cv::Mat img);
 
 public:
 	void DrawQuadTree(QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst, TreeVisType vis_type);
 	void DrawQTreeWithDummies(QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst);
-	void DrawQTreeSingleNode(TreeNode* node, cv::InputArray _src, cv::OutputArray _dst);
-	void DrawQTreeNodes(std::vector<TreeNode*>& nodes, cv::InputArray _src, cv::OutputArray _dst);
+	void DrawQTreeSingleNode(QuadTreeNode* node, cv::InputArray _src, cv::OutputArray _dst);
+	void DrawQTreeNodes(std::vector<QuadTreeNode*>& nodes, cv::InputArray _src, cv::OutputArray _dst);
 
-	void DrawQTreeGraph(Graph<TreeNode> *graph, QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst);
+	void DrawQTreeGraph(Graph<QuadTreeNode> *graph, QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst);
 };
 
 }

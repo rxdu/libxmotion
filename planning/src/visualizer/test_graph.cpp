@@ -46,8 +46,8 @@ int main(int argc, char** argv )
     vis.DrawQuadTree(tree, builder.padded_img_, image_tree, TreeVisType::ALL_SPACE);
 //    TreeNode* node = tree->leaf_nodes_.at(0);
 //    vis.DrawQTreeSingleNode(node, image_tree, image_nodes);
-    std::vector<TreeNode*> free_leaves;
-    std::vector<TreeNode*>::iterator it;
+    std::vector<QuadTreeNode*> free_leaves;
+    std::vector<QuadTreeNode*>::iterator it;
     for(it = tree->leaf_nodes_.begin(); it != tree->leaf_nodes_.end(); it++)
     {
     	if((*it)->occupancy_ == OccupancyType::FREE)
@@ -58,8 +58,11 @@ int main(int argc, char** argv )
     Mat image_dummy;
     vis.DrawQTreeWithDummies(tree,builder.padded_img_, image_dummy);
 
+    // example to use graph builder
     GraphBuilder gbuilder;
-    Graph<TreeNode>* graph;
+
+    // build a graph from quadtree
+    Graph<QuadTreeNode>* graph;
 
 	graph = gbuilder.BuildFromQuadTree(tree);
 	Mat image_graph;

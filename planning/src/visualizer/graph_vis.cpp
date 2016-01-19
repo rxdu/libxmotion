@@ -37,7 +37,7 @@ void GraphVis::DrawQuadTree(QuadTree *tree, cv::InputArray _src, cv::OutputArray
 
 	if(tree != nullptr)
 	{
-		std::vector<TreeNode*> parent_nodes;
+		std::vector<QuadTreeNode*> parent_nodes;
 
 		for(int i = 0; i < tree->tree_depth_; i++)
 		{
@@ -66,11 +66,11 @@ void GraphVis::DrawQuadTree(QuadTree *tree, cv::InputArray _src, cv::OutputArray
 			}
 			else
 			{
-				std::vector<TreeNode*> inner_nodes;
+				std::vector<QuadTreeNode*> inner_nodes;
 
 				while(!parent_nodes.empty())
 				{
-					TreeNode* parent = parent_nodes.at(0);
+					QuadTreeNode* parent = parent_nodes.at(0);
 
 					for(int i = 0; i < 4; i++)
 					{
@@ -155,7 +155,7 @@ void GraphVis::DrawQTreeWithDummies(QuadTree *tree, cv::InputArray _src, cv::Out
 	if(tree != nullptr)
 	{
 		// first draw dummies
-		std::vector<TreeNode*> parent_nodes;
+		std::vector<QuadTreeNode*> parent_nodes;
 
 		for(int i = 0; i < tree->tree_depth_; i++)
 		{
@@ -184,11 +184,11 @@ void GraphVis::DrawQTreeWithDummies(QuadTree *tree, cv::InputArray _src, cv::Out
 			}
 			else
 			{
-				std::vector<TreeNode*> inner_nodes;
+				std::vector<QuadTreeNode*> inner_nodes;
 
 				while(!parent_nodes.empty())
 				{
-					TreeNode* parent = parent_nodes.at(0);
+					QuadTreeNode* parent = parent_nodes.at(0);
 
 					for(int i = 0; i < 4; i++)
 					{
@@ -218,7 +218,7 @@ void GraphVis::DrawQTreeWithDummies(QuadTree *tree, cv::InputArray _src, cv::Out
 		}
 
 		// then draw real leaves
-		std::vector<TreeNode*>::iterator it;
+		std::vector<QuadTreeNode*>::iterator it;
 		for(it = tree->leaf_nodes_.begin(); it != tree->leaf_nodes_.end(); it++)
 		{
 			Point top_left((*it)->bounding_box_.x.min, (*it)->bounding_box_.y.min);
@@ -236,7 +236,7 @@ void GraphVis::DrawQTreeWithDummies(QuadTree *tree, cv::InputArray _src, cv::Out
 	src_img_color.copyTo(dst);
 }
 
-void GraphVis::DrawQTreeNode(const TreeNode *node, cv::Mat img)
+void GraphVis::DrawQTreeNode(const QuadTreeNode *node, cv::Mat img)
 {
 	if(node!=nullptr)
 	{
@@ -270,7 +270,7 @@ void GraphVis::DrawEdge(cv::Point pt1, cv::Point pt2, cv::Mat img)
 			lineType);
 }
 
-void GraphVis::DrawQTreeSingleNode(TreeNode* node, cv::InputArray _src, cv::OutputArray _dst)
+void GraphVis::DrawQTreeSingleNode(QuadTreeNode* node, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src = _src.getMat();
 	_dst.create(_src.size(), _src.type());
@@ -296,7 +296,7 @@ void GraphVis::DrawQTreeSingleNode(TreeNode* node, cv::InputArray _src, cv::Outp
 	}
 }
 
-void GraphVis::DrawQTreeNodes(std::vector<TreeNode*>& nodes, cv::InputArray _src, cv::OutputArray _dst)
+void GraphVis::DrawQTreeNodes(std::vector<QuadTreeNode*>& nodes, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src = _src.getMat();
 	_dst.create(_src.size(), _src.type());
@@ -307,7 +307,7 @@ void GraphVis::DrawQTreeNodes(std::vector<TreeNode*>& nodes, cv::InputArray _src
 	int thickness = -1;
 	int lineType = 8;
 
-	std::vector<TreeNode*>::iterator it;
+	std::vector<QuadTreeNode*>::iterator it;
 	for(it = nodes.begin(); it != nodes.end(); it++)
 	{
 		x = (*it)->bounding_box_.x.min +
@@ -324,15 +324,15 @@ void GraphVis::DrawQTreeNodes(std::vector<TreeNode*>& nodes, cv::InputArray _src
 	}
 }
 
-void GraphVis::DrawQTreeGraph(Graph<TreeNode> *graph, QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst)
+void GraphVis::DrawQTreeGraph(Graph<QuadTreeNode> *graph, QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src = _src.getMat();
 	_dst.create(_src.size(), _src.type());
 	Mat dst = _dst.getMat();
 	src.copyTo(dst);
 
-	std::vector<Vertex<TreeNode>*> vertices;
-	std::vector<Vertex<TreeNode>*>::iterator itv;
+	std::vector<Vertex<QuadTreeNode>*> vertices;
+	std::vector<Vertex<QuadTreeNode>*>::iterator itv;
 
 	vertices = graph->GetGraphVertices();
 
@@ -347,11 +347,11 @@ void GraphVis::DrawQTreeGraph(Graph<TreeNode> *graph, QuadTree *tree, cv::InputA
 		y1 = (*itv)->node_->bounding_box_.y.min +
 				((*itv)->node_->bounding_box_.y.max - (*itv)->node_->bounding_box_.y.min + 1)/2;
 
-		std::vector<Edge<Vertex<TreeNode>>>::iterator ite;
+		std::vector<Edge<Vertex<QuadTreeNode>>>::iterator ite;
 		for(ite = (*itv)->adj_.begin(); ite != (*itv)->adj_.end(); ite++)
 		{
 			// neighbor vertices center coordinate
-			const TreeNode* n = (*ite).dst_->node_;
+			const QuadTreeNode* n = (*ite).dst_->node_;
 
 			x2 = n->bounding_box_.x.min +
 					(n->bounding_box_.x.max - n->bounding_box_.x.min + 1)/2;
