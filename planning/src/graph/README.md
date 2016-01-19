@@ -17,3 +17,8 @@ Search
 * https://github.com/justinhj/astar-algorithm-cpp
 * http://code.activestate.com/recipes/577457-a-star-shortest-path-algorithm/
 * http://theory.stanford.edu/~amitp/GameProgramming/
+
+C++
+
+* http://stackoverflow.com/questions/642229/why-do-i-need-to-use-typedef-typename-in-g-but-not-vs
+* http://stackoverflow.com/questions/8584431/why-is-the-keyword-typename-needed-before-qualified-dependent-names-and-not-b

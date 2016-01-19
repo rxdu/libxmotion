@@ -236,7 +236,7 @@ void GraphVis::DrawQTreeWithDummies(QuadTree *tree, cv::InputArray _src, cv::Out
 	src_img_color.copyTo(dst);
 }
 
-void GraphVis::DrawQTreeNode(TreeNode *node, cv::Mat img)
+void GraphVis::DrawQTreeNode(const TreeNode *node, cv::Mat img)
 {
 	if(node!=nullptr)
 	{
@@ -324,43 +324,43 @@ void GraphVis::DrawQTreeNodes(std::vector<TreeNode*>& nodes, cv::InputArray _src
 	}
 }
 
-//void GraphVis::DrawQTreeGraph(Graph *graph, QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst)
-//{
-//	Mat src = _src.getMat();
-//	_dst.create(_src.size(), _src.type());
-//	Mat dst = _dst.getMat();
-//	src.copyTo(dst);
-//
-//	std::vector<Vertex*> vertices;
-//	std::vector<Vertex*>::iterator itv;
-//
-//	vertices = graph->GetGraphVertices();
-//
-//	for(itv = vertices.begin(); itv != vertices.end(); itv++)
-//	{
-//		DrawQTreeNode((*itv)->node_,dst);
-//
-//		// current vertex center coordinate
-//		uint64_t x1,y1,x2,y2;
-//		x1 = (*itv)->node_->bounding_box_.x.min +
-//				((*itv)->node_->bounding_box_.x.max - (*itv)->node_->bounding_box_.x.min + 1)/2;
-//		y1 = (*itv)->node_->bounding_box_.y.min +
-//				((*itv)->node_->bounding_box_.y.max - (*itv)->node_->bounding_box_.y.min + 1)/2;
-//
-//		std::vector<Edge>::iterator ite;
-//		for(ite = (*itv)->adj_.begin(); ite != (*itv)->adj_.end(); ite++)
-//		{
-//			// neighbor vertices center coordinate
-//			TreeNode* n = (*ite).dst_->node_;
-//
-//			x2 = n->bounding_box_.x.min +
-//					(n->bounding_box_.x.max - n->bounding_box_.x.min + 1)/2;
-//			y2 = n->bounding_box_.y.min +
-//					(n->bounding_box_.y.max - n->bounding_box_.y.min + 1)/2;
-//
-//			DrawEdge(Point(x1,y1), Point(x2,y2), dst);
-//		}
-//	}
-//
-////	std::cout<<"number of vertices "<< vertices.size()<<std::endl;
-//}
+void GraphVis::DrawQTreeGraph(Graph<TreeNode> *graph, QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst)
+{
+	Mat src = _src.getMat();
+	_dst.create(_src.size(), _src.type());
+	Mat dst = _dst.getMat();
+	src.copyTo(dst);
+
+	std::vector<Vertex<TreeNode>*> vertices;
+	std::vector<Vertex<TreeNode>*>::iterator itv;
+
+	vertices = graph->GetGraphVertices();
+
+	for(itv = vertices.begin(); itv != vertices.end(); itv++)
+	{
+		DrawQTreeNode((*itv)->node_,dst);
+
+		// current vertex center coordinate
+		uint64_t x1,y1,x2,y2;
+		x1 = (*itv)->node_->bounding_box_.x.min +
+				((*itv)->node_->bounding_box_.x.max - (*itv)->node_->bounding_box_.x.min + 1)/2;
+		y1 = (*itv)->node_->bounding_box_.y.min +
+				((*itv)->node_->bounding_box_.y.max - (*itv)->node_->bounding_box_.y.min + 1)/2;
+
+		std::vector<Edge<Vertex<TreeNode>>>::iterator ite;
+		for(ite = (*itv)->adj_.begin(); ite != (*itv)->adj_.end(); ite++)
+		{
+			// neighbor vertices center coordinate
+			const TreeNode* n = (*ite).dst_->node_;
+
+			x2 = n->bounding_box_.x.min +
+					(n->bounding_box_.x.max - n->bounding_box_.x.min + 1)/2;
+			y2 = n->bounding_box_.y.min +
+					(n->bounding_box_.y.max - n->bounding_box_.y.min + 1)/2;
+
+			DrawEdge(Point(x1,y1), Point(x2,y2), dst);
+		}
+	}
+
+//	std::cout<<"number of vertices "<< vertices.size()<<std::endl;
+}

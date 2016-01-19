@@ -22,9 +22,9 @@ GraphBuilder::~GraphBuilder()
 
 }
 
-Graph* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
+Graph<TreeNode>* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 {
-	graph_ = new Graph();
+	graph_ = new Graph<TreeNode>();
 
 	std::vector<TreeNode*> leaf_nodes;
 

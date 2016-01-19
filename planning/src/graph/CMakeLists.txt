@@ -12,7 +12,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src/quadtree)
 
 # Add libraries
 set(GRAPH_LIB_SRC
-	graph.cpp
+	#graph.cpp
 	graph_builder.cpp
 )
 add_library(graph STATIC ${GRAPH_LIB_SRC})

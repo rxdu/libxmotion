@@ -20,10 +20,10 @@ public:
 	~GraphBuilder();
 
 public:
-	Graph* graph_;
+	Graph<TreeNode>* graph_;
 
 public:
-	Graph* BuildFromQuadTree(QuadTree* tree);
+	Graph<TreeNode>* BuildFromQuadTree(QuadTree* tree);
 };
 }
 

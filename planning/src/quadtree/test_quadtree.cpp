@@ -52,10 +52,10 @@ int main(int argc, char** argv )
     Mat image_tree;
 //    builder.VisualizeExtQuadTree(image_tree, TreeVisType::ALL_SPACE);
 
-    GraphBuilder gbuilder;
-    Graph* graph;
-
-	graph = gbuilder.BuildFromQuadTree(tree);
+//    GraphBuilder gbuilder;
+//    Graph* graph;
+//
+//	graph = gbuilder.BuildFromQuadTree(tree);
 
 //    imwrite( "quadtree_freenodes.jpg", image_tree );
 

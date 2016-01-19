@@ -58,17 +58,17 @@ int main(int argc, char** argv )
     Mat image_dummy;
     vis.DrawQTreeWithDummies(tree,builder.padded_img_, image_dummy);
 
-//    GraphBuilder gbuilder;
-//    Graph* graph;
-//
-//	graph = gbuilder.BuildFromQuadTree(tree);
-//	Mat image_graph;
-//	vis.DrawQTreeGraph(graph, tree, image_tree, image_graph);
+    GraphBuilder gbuilder;
+    Graph<TreeNode>* graph;
+
+	graph = gbuilder.BuildFromQuadTree(tree);
+	Mat image_graph;
+	vis.DrawQTreeGraph(graph, tree, image_tree, image_graph);
 
 //    imwrite( "free_graph.jpg", image_graph );
 
     namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
-    imshow("Processed Image", image_nodes);
+    imshow("Processed Image", image_graph);
 
     waitKey(0);
 
