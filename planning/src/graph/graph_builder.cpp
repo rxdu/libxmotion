@@ -14,7 +14,7 @@ using namespace srcl_ctrl;
 GraphBuilder::GraphBuilder():
 		graph_(nullptr)
 {
-
+	delete graph_;
 }
 
 GraphBuilder::~GraphBuilder()
