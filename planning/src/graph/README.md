@@ -10,6 +10,8 @@ Graph
 
 Search
 
+* http://homepages.abdn.ac.uk/f.guerin/pages/teaching/CS1013/practicals/aStarTutorial.htm
+* http://www.cppblog.com/mythit/archive/2009/04/19/80492.aspx (Chinese Version)
 * http://users.cis.fiu.edu/~weiss/adspc++2/code/
 * http://heyes-jones.com/astar.php
 * http://stackoverflow.com/questions/11912736/c-a-star-implementation-determining-whether-a-node-is-already-in-the-priori

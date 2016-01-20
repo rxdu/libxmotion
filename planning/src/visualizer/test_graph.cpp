@@ -15,6 +15,7 @@
 // quad_tree
 #include "qtree_builder.h"
 #include "graph_builder.h"
+#include "astar.h"
 #include "graph_vis.h"
 
 using namespace cv;
@@ -64,6 +65,8 @@ int main(int argc, char** argv )
 	graph = GraphBuilder::BuildFromQuadTree(tree);
 	Mat image_graph;
 	vis.DrawQTreeGraph(graph, tree, image_tree, image_graph);
+
+	AStar<Graph<QuadTreeNode>> astarsearch;
 
 //    imwrite( "free_graph.jpg", image_graph );
 

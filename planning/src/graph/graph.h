@@ -66,10 +66,11 @@ class Vertex
 public:
 	Vertex();
 	Vertex(const VertexNodeType *node = nullptr):
-		node_(node), vertex_id_(node->node_id_){};
+		node_(node), vertex_id_(node->node_id_), is_checked_(false){};
 
 	const VertexNodeType *node_;
 	uint64_t vertex_id_;
+	bool is_checked_;
 	std::vector<Edge<Vertex<VertexNodeType>>> adj_;
 };
 
@@ -133,6 +134,7 @@ public:
 		return vertices;
 	};
 };
+
 }
 
 #endif /* SRC_GRAPH_GRAPH_H_ */

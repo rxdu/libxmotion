@@ -113,12 +113,13 @@ void GraphVis::DrawQuadTree(QuadTree *tree, cv::InputArray _src, cv::OutputArray
 						{
 							int thickness = -1;
 							int lineType = 8;
-							unsigned int x,y;
-							x = parent->child_nodes_[i]->bounding_box_.x.min +
-									(parent->child_nodes_[i]->bounding_box_.x.max - parent->child_nodes_[i]->bounding_box_.x.min + 1)/2;
-							y = parent->child_nodes_[i]->bounding_box_.y.min +
-									(parent->child_nodes_[i]->bounding_box_.y.max - parent->child_nodes_[i]->bounding_box_.y.min + 1)/2;
-							Point center(x,y);
+//							unsigned int x,y;
+//							x = parent->child_nodes_[i]->bounding_box_.x.min +
+//									(parent->child_nodes_[i]->bounding_box_.x.max - parent->child_nodes_[i]->bounding_box_.x.min + 1)/2;
+//							y = parent->child_nodes_[i]->bounding_box_.y.min +
+//									(parent->child_nodes_[i]->bounding_box_.y.max - parent->child_nodes_[i]->bounding_box_.y.min + 1)/2;
+//							Point center(x,y);
+							Point center(parent->child_nodes_[i]->location_.x,parent->child_nodes_[i]->location_.y);
 							circle( src_img_color,
 									center,
 									5,
@@ -242,12 +243,13 @@ void GraphVis::DrawQTreeNode(const QuadTreeNode *node, cv::Mat img)
 	{
 		int thickness = -1;
 		int lineType = 8;
-		unsigned int x,y;
-		x = node->bounding_box_.x.min +
-				(node->bounding_box_.x.max - node->bounding_box_.x.min + 1)/2;
-		y = node->bounding_box_.y.min +
-				(node->bounding_box_.y.max - node->bounding_box_.y.min + 1)/2;
-		Point center(x,y);
+//		unsigned int x,y;
+//		x = node->bounding_box_.x.min +
+//				(node->bounding_box_.x.max - node->bounding_box_.x.min + 1)/2;
+//		y = node->bounding_box_.y.min +
+//				(node->bounding_box_.y.max - node->bounding_box_.y.min + 1)/2;
+//		Point center(x,y);
+		Point center(node->location_.x,node->location_.y);
 		circle( img,
 				center,
 				3,
@@ -281,12 +283,13 @@ void GraphVis::DrawQTreeSingleNode(QuadTreeNode* node, cv::InputArray _src, cv::
 	{
 		int thickness = -1;
 		int lineType = 8;
-		unsigned int x,y;
-		x = node->bounding_box_.x.min +
-				(node->bounding_box_.x.max - node->bounding_box_.x.min + 1)/2;
-		y = node->bounding_box_.y.min +
-				(node->bounding_box_.y.max - node->bounding_box_.y.min + 1)/2;
-		Point center(x,y);
+//		unsigned int x,y;
+//		x = node->bounding_box_.x.min +
+//				(node->bounding_box_.x.max - node->bounding_box_.x.min + 1)/2;
+//		y = node->bounding_box_.y.min +
+//				(node->bounding_box_.y.max - node->bounding_box_.y.min + 1)/2;
+//		Point center(x,y);
+		Point center(node->location_.x,node->location_.y);
 		circle( dst,
 				center,
 				10,
@@ -310,11 +313,12 @@ void GraphVis::DrawQTreeNodes(std::vector<QuadTreeNode*>& nodes, cv::InputArray 
 	std::vector<QuadTreeNode*>::iterator it;
 	for(it = nodes.begin(); it != nodes.end(); it++)
 	{
-		x = (*it)->bounding_box_.x.min +
-				((*it)->bounding_box_.x.max - (*it)->bounding_box_.x.min + 1)/2;
-		y = (*it)->bounding_box_.y.min +
-				((*it)->bounding_box_.y.max - (*it)->bounding_box_.y.min + 1)/2;
-		Point center(x,y);
+//		x = (*it)->bounding_box_.x.min +
+//				((*it)->bounding_box_.x.max - (*it)->bounding_box_.x.min + 1)/2;
+//		y = (*it)->bounding_box_.y.min +
+//				((*it)->bounding_box_.y.max - (*it)->bounding_box_.y.min + 1)/2;
+//		Point center(x,y);
+		Point center((*it)->location_.x,(*it)->location_.y);
 		circle( dst,
 				center,
 				5,
@@ -342,21 +346,18 @@ void GraphVis::DrawQTreeGraph(Graph<QuadTreeNode> *graph, QuadTree *tree, cv::In
 
 		// current vertex center coordinate
 		uint64_t x1,y1,x2,y2;
-		x1 = (*itv)->node_->bounding_box_.x.min +
-				((*itv)->node_->bounding_box_.x.max - (*itv)->node_->bounding_box_.x.min + 1)/2;
-		y1 = (*itv)->node_->bounding_box_.y.min +
-				((*itv)->node_->bounding_box_.y.max - (*itv)->node_->bounding_box_.y.min + 1)/2;
+		x1 = (*itv)->node_->location_.x;
+		y1 = (*itv)->node_->location_.y;
 
+		// draw all edges from current vertex
 		std::vector<Edge<Vertex<QuadTreeNode>>>::iterator ite;
 		for(ite = (*itv)->adj_.begin(); ite != (*itv)->adj_.end(); ite++)
 		{
 			// neighbor vertices center coordinate
 			const QuadTreeNode* n = (*ite).dst_->node_;
 
-			x2 = n->bounding_box_.x.min +
-					(n->bounding_box_.x.max - n->bounding_box_.x.min + 1)/2;
-			y2 = n->bounding_box_.y.min +
-					(n->bounding_box_.y.max - n->bounding_box_.y.min + 1)/2;
+			x2 = n->location_.x;
+			y2 = n->location_.y;
 
 			DrawEdge(Point(x1,y1), Point(x2,y2), dst);
 		}

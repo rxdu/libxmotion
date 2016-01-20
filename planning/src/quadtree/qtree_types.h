@@ -38,6 +38,12 @@ typedef struct
 	NodeRange y;
 }BoundingBox;
 
+typedef struct
+{
+	uint32_t x;
+	uint32_t y;
+}NodeLocation;
+
 }
 
 #endif /* SRC_QUADTREE_QTREE_TYPES_H_ */

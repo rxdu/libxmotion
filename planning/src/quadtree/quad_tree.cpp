@@ -234,6 +234,9 @@ QuadTreeNode::QuadTreeNode(BoundingBox bound, OccupancyType occupancy):
 	bounding_box_.y.min = bound.y.min;
 	bounding_box_.y.max = bound.y.max;
 
+	location_.x = bounding_box_.x.min + (bounding_box_.x.max - bounding_box_.x.min + 1)/2;
+	location_.y = bounding_box_.y.min + (bounding_box_.y.max - bounding_box_.y.min + 1)/2;
+
 	child_nodes_[0] = nullptr;
 	child_nodes_[1] = nullptr;
 	child_nodes_[2] = nullptr;
@@ -247,7 +250,8 @@ QuadTreeNode::~QuadTreeNode()
 
 bool QuadTreeNode::operator ==(const QuadTreeNode* other)
 {
-	if(this != other)
+//	if(this != other)
+	if(this->node_id_ != other->node_id_)
 		return false;
 	else
 		return true;
