@@ -224,7 +224,6 @@ QuadTreeNode* QTreeNodeManager::GetNodeReference(uint16_t index_x, uint16_t inde
 /*********************************************************/
 
 QuadTreeNode::QuadTreeNode(BoundingBox bound, OccupancyType occupancy):
-		node_id_(0),
 		occupancy_(occupancy),dummy_root_(this),has_dummy_(false)
 {
 	node_type_ = NodeType::INNER;
@@ -251,7 +250,7 @@ QuadTreeNode::~QuadTreeNode()
 bool QuadTreeNode::operator ==(const QuadTreeNode* other)
 {
 //	if(this != other)
-	if(this->node_id_ != other->node_id_)
+	if(this->vertex_id_ != other->vertex_id_)
 		return false;
 	else
 		return true;

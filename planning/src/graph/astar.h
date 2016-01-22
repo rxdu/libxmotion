@@ -57,11 +57,6 @@ public:
 		{
 			current_vertex = openlist.get();
 
-			if(current_vertex == goal)
-				break;
-			else
-				current_vertex.is_checked_ = true;
-
 			// find all adjacent vertices
 			std::vector<GraphVertexType*> adjacent_vertices;
 			typename std::vector<Edge<GraphVertexType>>::iterator ite;
@@ -69,6 +64,11 @@ public:
 			{
 				adjacent_vertices.push_back((*ite)->dst_);
 			}
+
+			if(current_vertex == goal)
+				break;
+			else
+				current_vertex.is_checked_ = true;
 		}
 
 		return trajectory;
