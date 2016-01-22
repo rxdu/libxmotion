@@ -69,6 +69,8 @@ public:
 				break;
 			else
 				current_vertex.is_checked_ = true;
+
+			// TODO algorithm not finished yet
 		}
 
 		return trajectory;

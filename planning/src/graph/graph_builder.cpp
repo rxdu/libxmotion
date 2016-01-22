@@ -46,7 +46,6 @@ Graph<QuadTreeNode>* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 
 		for(itn = neighbours.begin(); itn != neighbours.end(); itn++)
 		{
-//			graph_->AddEdge((*it)->node_id_, (*itn)->node_id_, 1.0);
 			if((*itn)->occupancy_ == OccupancyType::FREE)
 				graph_->AddEdge((*it), (*itn), 1.0);
 		}

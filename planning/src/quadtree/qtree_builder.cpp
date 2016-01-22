@@ -349,7 +349,7 @@ std::vector<QuadTreeNode*> QTreeBuilder::GetAllLeafNodes()
 		}
 	}
 
-	// Assign id to tree nodes and according vertices
+	// Assign id to tree leaf nodes
 	std::vector<QuadTreeNode*>::iterator it;
 	uint64_t id = 0;
 	for(it = leaves.begin(); it != leaves.end(); it++)

@@ -20,11 +20,11 @@
  *  	3. A visualized illustration of the graph structure
  *
  *  	Graph "G":
- *  		Vertex V1 - Edge 1 to vertex V_x1
- *  				  - Edge 2 to vertex V_x2
+ *  		Vertex V1 - Edge E1_V1 to vertex V_x1
+ *  				  - Edge E2_V1 to vertex V_x2
  *  				  			...
- *  		Vertex V2 - Edge 1 to vertex V_x1
- *  				  - Edge 2 to vertex V_x2
+ *  		Vertex V2 - Edge E1_V2 to vertex V_x1
+ *  				  - Edge E2_V2 to vertex V_x2
  *  				  			...
  *  			...
  *
