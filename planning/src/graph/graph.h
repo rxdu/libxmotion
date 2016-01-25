@@ -76,6 +76,10 @@ public:
 	// member variables for search
 	bool is_checked_;
 	Vertex<VertexNodeType>* parent;
+	void ClearVertexSearchInfo(){
+		is_checked_ = false;
+		parent = nullptr;
+	}
 };
 
 /****************************************************************************/
@@ -136,6 +140,17 @@ public:
 		}
 
 		return vertices;
+	};
+
+	// This function is used to reset the vertices for a new search
+	void ResetGraphVertices()
+	{
+		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it;
+
+		for(it = vertex_map_.begin(); it != vertex_map_.end(); it++)
+		{
+			it->second.ClearVertexSearchInfo();
+		}
 	};
 };
 
