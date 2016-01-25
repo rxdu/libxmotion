@@ -13,9 +13,8 @@
  *  	A vertex is associated with a node (such as a tree node); an edge connects two vertices;
  *  	A graph is a collection of vertices and the edges of each vertex.
  *
- *  	2. The graph uses unique IDs to index its vertices. To perform searching algorithms on
- *  	on the graph, additional variables and methods may be needed. So it's required that the
- *  	node used to construct the graph should inherit from the VertexBase class.
+ *  	2. The graph uses unique IDs to index its vertices. So it's required that each
+ *  	node used to construct the graph should have an unique ID with the name "node_id_".
  *
  *  	3. A visualized illustration of the graph structure
  *
@@ -67,7 +66,7 @@ class Vertex
 public:
 	Vertex();
 	Vertex(const VertexNodeType *node = nullptr):
-		node_(node), vertex_id_(node->vertex_id_), is_checked_(false){};
+		node_(node), vertex_id_(node->node_id_), is_checked_(false){};
 
 	const VertexNodeType *node_;
 	uint64_t vertex_id_;
@@ -98,12 +97,12 @@ private:
 	//	otherwise it creates a new vertex.
 	Vertex<GraphNodeType>* GetVertex(const GraphNodeType* vertex_node)
 	{
-		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it = vertex_map_.find((uint64_t)vertex_node->vertex_id_);
+		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it = vertex_map_.find((uint64_t)vertex_node->node_id_);
 
 		if(it == vertex_map_.end())
 		{
 			Vertex<GraphNodeType>* new_vertex = new Vertex<GraphNodeType>(vertex_node);
-			vertex_map_[vertex_node->vertex_id_] = new_vertex;
+			vertex_map_[vertex_node->node_id_] = new_vertex;
 			return new_vertex;
 		}
 

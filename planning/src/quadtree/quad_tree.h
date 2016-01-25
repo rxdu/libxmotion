@@ -6,7 +6,7 @@
 #include <cstdint>
 
 #include "qtree_types.h"
-#include "vertex_base.h"
+#include "common_types.h"
 
 namespace srcl_ctrl {
 
@@ -14,7 +14,7 @@ namespace srcl_ctrl {
 /*     Order of child nodes    */
 /* 2 - top_left, 3 - top_right */
 /* 0 - bot_left, 1 - bot_right */
-class QuadTreeNode: public VertexBase
+class QuadTreeNode
 {
 public:
 	QuadTreeNode(BoundingBox bound, OccupancyType occupancy);
@@ -22,7 +22,7 @@ public:
 
 public:
 	// Node contents
-//	uint64_t node_id_;
+	uint64_t node_id_;
 	NodeType node_type_;
 	OccupancyType occupancy_;
 	Position2D location_;
