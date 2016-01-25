@@ -66,12 +66,16 @@ class Vertex
 public:
 	Vertex();
 	Vertex(const VertexNodeType *node = nullptr):
-		node_(node), vertex_id_(node->node_id_), is_checked_(false){};
+		node_(node), vertex_id_(node->node_id_),
+		is_checked_(false), parent(nullptr){};
 
 	const VertexNodeType *node_;
 	uint64_t vertex_id_;
-	bool is_checked_;
 	std::vector<Edge<Vertex<VertexNodeType>>> adj_;
+
+	// member variables for search
+	bool is_checked_;
+	Vertex<VertexNodeType>* parent;
 };
 
 /****************************************************************************/
