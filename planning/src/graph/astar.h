@@ -45,33 +45,70 @@ public:
 	~AStar(){};
 
 public:
-	std::vector<GraphVertexType> Search(GraphVertexType start, GraphVertexType goal){
+	std::vector<GraphVertexType> Search(GraphVertexType *start, GraphVertexType *goal){
+		bool found_path = false;
 		std::vector<GraphVertexType> trajectory;
 		GraphVertexType current_vertex;
 		// open list - a list of vertices that need to be checked out
 		PriorityQueue<GraphVertexType> openlist;
 
 		openlist.put(start, 0);
+		start->is_under_checking = true;
+
+		start->search_parent_ = start;
+		start->search_cost_ = 0;
 
 		while(!openlist.empty())
 		{
 			current_vertex = openlist.get();
+			current_vertex.is_under_checking = false;
+			current_vertex.is_checked_ = true;
+
+			if(current_vertex == goal){
+				found_path = true;
+				break;
+			}
 
 			// find all adjacent vertices
-			std::vector<GraphVertexType*> adjacent_vertices;
+//			std::vector<GraphVertexType*> adjacent_vertices;
 			typename std::vector<Edge<GraphVertexType>>::iterator ite;
 			for(ite = current_vertex.adj_.begin(); ite != current_vertex.adj_.end(); ite++)
 			{
-				adjacent_vertices.push_back((*ite)->dst_);
+//				adjacent_vertices.push_back((*ite)->dst_);
+				if((*ite)->dst_.is_checked_ == false)
+				{
+					// check if the vertex is already in open list
+					if((*ite)->dst_.is_under_checking == false)
+					{
+						(*ite)->dst_.search_parent_ = current_vertex;
+						double cost_so_far = current_vertex.search_cost_so_far_ +
+								(*ite).cost_ +
+								CalcHeuristic((*ite)->dst_, goal);
+						openlist.put((*ite)->dst_, cost_so_far);
+					}
+					else
+					{
+						double cost1 = current_vertex.search_parent_.GetEdgeCost(current_vertex) + (*ite).cost_;
+						double cost2 = current_vertex.search_parent_.GetEdgeCost((*ite)->dst_);
+
+						if(cost1 < cost2) {
+							current_vertex = current_vertex.search_parent_;
+							double cost_so_far = current_vertex.search_cost_so_far_ +
+									cost2 +
+									CalcHeuristic((*ite)->dst_, goal);
+							openlist.put((*ite)->dst_, cost_so_far);
+						}
+					}
+				}
 			}
-
-			if(current_vertex == goal)
-				break;
-			else
-				current_vertex.is_checked_ = true;
-
-			// TODO algorithm not finished yet
 		}
+
+		// reconstruct path from search
+		if(found_path)
+		{
+
+		}
+
 
 		return trajectory;
 	};

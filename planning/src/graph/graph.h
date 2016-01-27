@@ -64,10 +64,12 @@ template<typename VertexNodeType>
 class Vertex
 {
 public:
-	Vertex();
+//	Vertex();
 	Vertex(const VertexNodeType *node = nullptr):
 		node_(node), vertex_id_(node->node_id_),
-		is_checked_(false), parent(nullptr){};
+		is_checked_(false), is_under_checking_(false),
+		search_parent_(nullptr),
+		search_cost_so_far_(0){};
 
 	const VertexNodeType *node_;
 	uint64_t vertex_id_;
@@ -75,10 +77,30 @@ public:
 
 	// member variables for search
 	bool is_checked_;
-	Vertex<VertexNodeType>* parent;
+	bool is_under_checking_;
+	double search_cost_so_far_;
+	Vertex<VertexNodeType>* search_parent_;
 	void ClearVertexSearchInfo(){
+		search_cost_so_far_ = 0;
 		is_checked_ = false;
-		parent = nullptr;
+		is_under_checking_ = false;
+		search_parent_ = nullptr;
+	}
+
+	double GetEdgeCost(VertexNodeType dst_node)
+	{
+		double cost = -1;
+		typename std::vector<Edge<Vertex<VertexNodeType>>>::iterator ite;
+		for(ite = adj_.begin(); ite != adj_.end(); ite++)
+		{
+			if((*ite)->dst_.vertex_id_ == dst_node.vertex_id_)
+			{
+				cost = (*ite)->cost_;
+				break;
+			}
+		}
+
+		return cost;
 	}
 };
 

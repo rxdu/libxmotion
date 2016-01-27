@@ -68,6 +68,9 @@ int main(int argc, char** argv )
 
 	AStar<Graph<QuadTreeNode>> astarsearch;
 
+	std::vector<Vertex<QuadTreeNode>*> vertices = graph->GetGraphVertices();
+//	astarsearch.Search(vertices[0], vertices[50]);
+
 //    imwrite( "free_graph.jpg", image_graph );
 
     namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
