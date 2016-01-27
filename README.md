@@ -8,7 +8,14 @@ This repository contains a collection of software that are used to develop and t
 + **planning** : planning algorithms
 + **(build)** : default location to build the code in planning folder, not tracked in git
 
-## 2. Use Eclipse to build project
+## 2. Install Dependencies
+
+* OpenCV
+```
+$ sudo apt-get install libopencv-dev python-opencv
+```
+
+## 3. Use Eclipse to build project
 
 * Create a new folder outside of the project root directory
 
