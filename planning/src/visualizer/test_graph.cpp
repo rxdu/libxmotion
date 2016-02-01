@@ -66,15 +66,24 @@ int main(int argc, char** argv )
 	Mat image_graph;
 	vis.DrawQTreeGraph(graph, tree, image_tree, image_graph);
 
-	AStar<Graph<QuadTreeNode>> astarsearch;
+	AStar<Vertex<QuadTreeNode>> astarsearch;
 
 	std::vector<Vertex<QuadTreeNode>*> vertices = graph->GetGraphVertices();
-//	astarsearch.Search(vertices[0], vertices[50]);
+	std::vector<Vertex<QuadTreeNode>*> traj = astarsearch.Search(vertices[1], vertices[50]);
+
+	std::vector<QuadTreeNode*> path_nodes;
+	for(auto itn = traj.begin(); itn != traj.end(); itn++)
+	{
+		path_nodes.push_back((*itn)->node_);
+	}
+
+	Mat path_img;
+	vis.DrawQTreeNodes(path_nodes, image_tree,path_img);
 
 //    imwrite( "free_graph.jpg", image_graph );
 
     namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
-    imshow("Processed Image", image_graph);
+    imshow("Processed Image", path_img);
 
     waitKey(0);
 

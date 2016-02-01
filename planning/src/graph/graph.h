@@ -64,38 +64,38 @@ template<typename VertexNodeType>
 class Vertex
 {
 public:
-//	Vertex();
-	Vertex(const VertexNodeType *node = nullptr):
+	Vertex(VertexNodeType *node = nullptr):
 		node_(node), vertex_id_(node->node_id_),
-		is_checked_(false), is_under_checking_(false),
+		is_checked_(false), is_in_openlist_(false),
 		search_parent_(nullptr),
-		search_cost_so_far_(0){};
+		f_astar_(0),g_astar_(0),h_astar_(0){};
 
-	const VertexNodeType *node_;
+	VertexNodeType *node_;
 	uint64_t vertex_id_;
 	std::vector<Edge<Vertex<VertexNodeType>>> adj_;
 
 	// member variables for search
 	bool is_checked_;
-	bool is_under_checking_;
-	double search_cost_so_far_;
+	bool is_in_openlist_;
+	double f_astar_;
+	double g_astar_;
+	double h_astar_;
 	Vertex<VertexNodeType>* search_parent_;
+
 	void ClearVertexSearchInfo(){
-		search_cost_so_far_ = 0;
 		is_checked_ = false;
-		is_under_checking_ = false;
+		is_in_openlist_ = false;
 		search_parent_ = nullptr;
 	}
 
-	double GetEdgeCost(VertexNodeType dst_node)
+	double GetEdgeCost(Vertex<VertexNodeType>* dst_node)
 	{
 		double cost = -1;
-		typename std::vector<Edge<Vertex<VertexNodeType>>>::iterator ite;
-		for(ite = adj_.begin(); ite != adj_.end(); ite++)
+		for(auto ite = adj_.begin(); ite != adj_.end(); ite++)
 		{
-			if((*ite)->dst_.vertex_id_ == dst_node.vertex_id_)
+			if((*ite).dst_->vertex_id_ == dst_node->vertex_id_)
 			{
-				cost = (*ite)->cost_;
+				cost = (*ite).cost_;
 				break;
 			}
 		}
@@ -125,7 +125,7 @@ private:
 	// This function checks if a vertex already exists in the graph.
 	//	If yes, the functions returns the index of the existing vertex,
 	//	otherwise it creates a new vertex.
-	Vertex<GraphNodeType>* GetVertex(const GraphNodeType* vertex_node)
+	Vertex<GraphNodeType>* GetVertex(GraphNodeType* vertex_node)
 	{
 		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it = vertex_map_.find((uint64_t)vertex_node->node_id_);
 
