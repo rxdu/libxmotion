@@ -69,6 +69,7 @@ int main(int argc, char** argv )
 	// try a* search
 	std::vector<Vertex<QuadTreeNode>*> vertices = graph->GetGraphVertices();
 	std::cout<<"vertex number: "<<vertices.size()<<std::endl;
+	std::cout<<"Start from "<< vertices[150]->vertex_id_<<" and finish at "<< vertices[50]->vertex_id_<<std::endl;
 
 	std::vector<Vertex<QuadTreeNode>*> traj = graph->AStarSearch(vertices[150], vertices[50]);
 

@@ -20,7 +20,7 @@
 
 namespace srcl_ctrl {
 
-template<typename T, typename Number=int>
+template<typename T, typename Number=double>
 struct PriorityQueue {
 	typedef std::pair<Number, T> PQElement;
 
@@ -63,6 +63,9 @@ public:
 		while(!openlist.empty())
 		{
 			current_vertex = openlist.get();
+			if(current_vertex->is_checked_)
+				continue;
+
 			current_vertex->is_in_openlist_ = false;
 			current_vertex->is_checked_ = true;
 
@@ -111,7 +114,7 @@ public:
 							successor->h_astar_ = CalcHeuristic(successor, goal);
 							successor->f_astar_ = successor->g_astar_ + successor->f_astar_;
 
-//							openlist.put((*ite)->dst_, successor->f_astar_);
+							openlist.put((*ite).dst_, successor->f_astar_);
 						}
 						else
 						{
@@ -120,7 +123,7 @@ public:
 							successor->h_astar_ = CalcHeuristic(successor, goal);
 							successor->f_astar_ = successor->g_astar_ + successor->f_astar_;
 
-//							openlist.put((*ite)->dst_, successor->f_astar_);
+							openlist.put((*ite).dst_, successor->f_astar_);
 						}
 					}
 				}
@@ -136,6 +139,11 @@ public:
 				trajectory.push_back(current_vertex);
 				current_vertex = current_vertex->search_parent_;
 			}
+
+			auto traj_s = trajectory.begin();
+			auto traj_e = trajectory.end() - 1;
+			std::cout << "starting vertex id: " << (*traj_s)->vertex_id_ << std::endl;
+			std::cout << "finishing vertex id: " << (*traj_e)->vertex_id_ << std::endl;
 		}
 		else
 			std::cout << "failed to find a path" << std::endl;
