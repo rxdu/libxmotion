@@ -38,71 +38,10 @@
 #include <vector>
 #include <cstdint>
 
+#include <vertex.h>
+#include <astar.h>
+
 namespace srcl_ctrl {
-
-template<typename VertexNodeType>
-class Vertex;
-
-/****************************************************************************/
-/*								 Edge  										*/
-/****************************************************************************/
-template<typename EdgeVertexType>
-class Edge
-{
-public:
-	Edge(EdgeVertexType *d = nullptr, double c = 0.0):
-			dst_(d), cost_(c){};
-
-	EdgeVertexType *dst_;
-	double cost_;
-};
-
-/****************************************************************************/
-/*								 Vertex										*/
-/****************************************************************************/
-template<typename VertexNodeType>
-class Vertex
-{
-public:
-	Vertex(VertexNodeType *node = nullptr):
-		node_(node), vertex_id_(node->node_id_),
-		is_checked_(false), is_in_openlist_(false),
-		search_parent_(nullptr),
-		f_astar_(0),g_astar_(0),h_astar_(0){};
-
-	VertexNodeType *node_;
-	uint64_t vertex_id_;
-	std::vector<Edge<Vertex<VertexNodeType>>> adj_;
-
-	// member variables for search
-	bool is_checked_;
-	bool is_in_openlist_;
-	double f_astar_;
-	double g_astar_;
-	double h_astar_;
-	Vertex<VertexNodeType>* search_parent_;
-
-	void ClearVertexSearchInfo(){
-		is_checked_ = false;
-		is_in_openlist_ = false;
-		search_parent_ = nullptr;
-	}
-
-	double GetEdgeCost(Vertex<VertexNodeType>* dst_node)
-	{
-		double cost = -1;
-		for(auto ite = adj_.begin(); ite != adj_.end(); ite++)
-		{
-			if((*ite).dst_->vertex_id_ == dst_node->vertex_id_)
-			{
-				cost = (*ite).cost_;
-				break;
-			}
-		}
-
-		return cost;
-	}
-};
 
 /****************************************************************************/
 /*								 Graph										*/
@@ -120,6 +59,7 @@ public:
 
 private:
 	std::map<uint64_t, Vertex<GraphNodeType>*> vertex_map_;
+	AStar<Vertex<GraphNodeType>> astar_;
 
 private:
 	// This function checks if a vertex already exists in the graph.
@@ -174,6 +114,12 @@ public:
 			it->second.ClearVertexSearchInfo();
 		}
 	};
+
+	// Perform A* Search and return a path represented by a serious of vertices
+	std::vector<Vertex<GraphNodeType>*> AStarSearch(Vertex<GraphNodeType> *start, Vertex<GraphNodeType> *goal)
+	{
+		return astar_.Search(start, goal);
+	}
 };
 
 }

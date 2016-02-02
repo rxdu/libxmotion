@@ -365,3 +365,63 @@ void GraphVis::DrawQTreeGraph(Graph<QuadTreeNode> *graph, QuadTree *tree, cv::In
 
 //	std::cout<<"number of vertices "<< vertices.size()<<std::endl;
 }
+
+void GraphVis::DrawQTreeGraphPath(std::vector<Vertex<QuadTreeNode>*>& vertices, cv::InputArray _src, cv::OutputArray _dst)
+{
+	Mat src = _src.getMat();
+	_dst.create(_src.size(), _src.type());
+	Mat dst = _dst.getMat();
+	src.copyTo(dst);
+
+	std::vector<QuadTreeNode*> path_nodes;
+	for(auto itn = vertices.begin(); itn != vertices.end(); itn++)
+	{
+		path_nodes.push_back((*itn)->node_);
+	}
+
+	// draw vertices
+	uint64_t x, y;
+	Scalar vertex_color;
+	int thickness = 3;
+	int lineType = 8;
+
+	for(auto it = path_nodes.begin(); it != path_nodes.end(); it++)
+	{
+		Point center((*it)->location_.x,(*it)->location_.y);
+
+		if(it == path_nodes.begin())
+			vertex_color = Scalar( 0, 0, 255 );
+		else if(it == path_nodes.end() - 1)
+			vertex_color = Scalar( 153, 0, 0 );
+		else
+			vertex_color = Scalar( 153, 153, 0 );
+
+		circle( dst,
+				center,
+				5,
+				vertex_color,
+				thickness,
+				lineType);
+	}
+
+	// draw edges
+	uint64_t x1,y1,x2,y2;
+	int pathline_thickness = 2;
+	for(auto it = path_nodes.begin(); it != path_nodes.end()-1; it++)
+	{
+		// neighbor vertices center coordinate
+		x1 = (*it)->location_.x;
+		y1 = (*it)->location_.y;
+
+		x2 = (*(it+1))->location_.x;
+		y2 = (*(it+1))->location_.y;
+
+		line( dst,
+				Point(x1,y1),
+				Point(x2,y2),
+				//Scalar( 237, 149, 100 ),
+				Scalar( 255, 153, 51 ),
+				pathline_thickness,
+				lineType);
+	}
+}

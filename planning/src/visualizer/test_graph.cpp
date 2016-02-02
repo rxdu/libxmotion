@@ -66,19 +66,14 @@ int main(int argc, char** argv )
 	Mat image_graph;
 	vis.DrawQTreeGraph(graph, tree, image_tree, image_graph);
 
-	AStar<Vertex<QuadTreeNode>> astarsearch;
-
+	// try a* search
 	std::vector<Vertex<QuadTreeNode>*> vertices = graph->GetGraphVertices();
-	std::vector<Vertex<QuadTreeNode>*> traj = astarsearch.Search(vertices[1], vertices[50]);
+	std::cout<<"vertex number: "<<vertices.size()<<std::endl;
 
-	std::vector<QuadTreeNode*> path_nodes;
-	for(auto itn = traj.begin(); itn != traj.end(); itn++)
-	{
-		path_nodes.push_back((*itn)->node_);
-	}
+	std::vector<Vertex<QuadTreeNode>*> traj = graph->AStarSearch(vertices[150], vertices[50]);
 
 	Mat path_img;
-	vis.DrawQTreeNodes(path_nodes, image_tree,path_img);
+	vis.DrawQTreeGraphPath(traj, image_graph,path_img);
 
 //    imwrite( "free_graph.jpg", image_graph );
 

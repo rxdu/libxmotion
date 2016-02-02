@@ -16,6 +16,8 @@
 #include <utility>
 #include <cmath>
 
+#include <vertex.h>
+
 namespace srcl_ctrl {
 
 template<typename T, typename Number=int>
@@ -109,7 +111,7 @@ public:
 							successor->h_astar_ = CalcHeuristic(successor, goal);
 							successor->f_astar_ = successor->g_astar_ + successor->f_astar_;
 
-							//							openlist.put((*ite)->dst_, successor->f_astar_);
+//							openlist.put((*ite)->dst_, successor->f_astar_);
 						}
 						else
 						{
@@ -118,7 +120,7 @@ public:
 							successor->h_astar_ = CalcHeuristic(successor, goal);
 							successor->f_astar_ = successor->g_astar_ + successor->f_astar_;
 
-							//							openlist.put((*ite)->dst_, successor->f_astar_);
+//							openlist.put((*ite)->dst_, successor->f_astar_);
 						}
 					}
 				}
@@ -136,7 +138,7 @@ public:
 			}
 		}
 		else
-			std::cout << "path not found" << std::endl;
+			std::cout << "failed to find a path" << std::endl;
 
 
 		return trajectory;
@@ -155,8 +157,6 @@ private:
 
 		return std::abs(x1-x2) + std::abs(y1-y2);
 	};
-
-	void ReconstructPath();
 };
 
 }
