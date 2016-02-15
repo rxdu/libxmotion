@@ -45,34 +45,6 @@ typedef struct
 
 typedef struct
 {
-	float q[2];
-	float q_dot[2];
-	float q_ddot[2];
-}JointState;
-
-typedef struct
-{
-	float torque[2];
-	float velocity[2];
-}JointCmd;
-
-typedef struct
-{
-	float body_vel;
-	float driving_vel_right;
-	float driving_vel_left;
-	float steering_ang;
-}VehicleState;
-
-typedef struct
-{
-	float driving_vel_rcmd;
-	float driving_vel_lcmd;
-	float steering_ang_cmd;
-}VehicleCmd;
-
-typedef struct
-{
 	float ang_vel[4];
 }QuadCmd;
 
@@ -88,7 +60,7 @@ typedef struct
 
 typedef struct
 {
-	QuadCmd vel_cmd;
+	QuadCmd motor_cmd;
 } DataToRobot;
 
 }

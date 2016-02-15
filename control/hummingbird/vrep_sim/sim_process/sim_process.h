@@ -22,13 +22,13 @@ public:
 
 public:
 	virtual void SimLoopUpdate() = 0;
-	bool ReceiveDataFromSimulator(){return sim_client_->ReceiveDataFromRobot(&rs_m);};
-	void SendDataToSimulator(){sim_client_->SendDataToRobot(cmd_m);};
+	bool ReceiveDataFromSimulator(){return sim_client_->ReceiveDataFromRobot(&rs_m_);};
+	void SendDataToSimulator(){sim_client_->SendDataToRobot(cmd_m_);};
 
 protected:
 	RobotSimClient *sim_client_;
-	DataFromRobot rs_m;
-	DataToRobot cmd_m;
+	DataFromRobot rs_m_;
+	DataToRobot cmd_m_;
 };
 
 }

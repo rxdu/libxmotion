@@ -52,8 +52,8 @@ void QuadSimClient::ConfigDataStreaming(void)
 {
 	// initialize robot status data streaming
 	simxGetObjectPosition(client_id_, quad_handle_, -1, quad_pos,simx_opmode_streaming);
-	simxGetStringSignal(client_id_,"imu_gyro",&gyro_sig,&gyro_sig_size,simx_opmode_streaming);
-	simxGetStringSignal(client_id_,"imu_acc",&acc_sig,&acc_sig_size,simx_opmode_streaming);
+	simxGetStringSignal(client_id_,"hummingbird_gyro",&gyro_sig,&gyro_sig_size,simx_opmode_streaming);
+	simxGetStringSignal(client_id_,"hummingbird_acc",&acc_sig,&acc_sig_size,simx_opmode_streaming);
 
 	// initialize motor values
 	simxSetFloatSignal(client_id_, "propeller_cmd_front", 0.0, simx_opmode_oneshot);
@@ -61,23 +61,6 @@ void QuadSimClient::ConfigDataStreaming(void)
 	simxSetFloatSignal(client_id_, "propeller_cmd_right", 0.0, simx_opmode_oneshot);
 	simxSetFloatSignal(client_id_, "propeller_cmd_left", 0.0, simx_opmode_oneshot);
 }
-
-//bool QuadSimClient::GetCarSteeringAngle(float *data)
-//{
-//	// get joint position and joint velocity
-//	if(simxGetJointPosition(client_id_,steering_right_, &steering_angle_ ,simx_opmode_buffer) == simx_error_noerror)
-//	{
-//		// here you have a valid value!
-//		//		std::cout << "linear: " << "( "<< body_lin_vel_[0] << "," << body_lin_vel_[1] <<","<<body_lin_vel_[2] << " ) ";
-//		//		std::cout << "angular: " << "( "<< body_ang_vel_[0] << "," << body_ang_vel_[1] <<","<<body_ang_vel_[2] << " )" << std::endl;
-//
-//		*data = steering_angle_;
-//
-//		return true;
-//	}
-//	else
-//		return false;
-//}
 
 bool QuadSimClient::GetVisionImage(simxUChar img[IMG_RES_Y][IMG_RES_X])
 {
@@ -108,10 +91,8 @@ bool QuadSimClient::ReceiveGyroData(IMU_DataType *data)
 			data->raw_y=((float*)gyro_sig)[1];
 			data->raw_z=((float*)gyro_sig)[2];
 		}
-
+//		std::cout << "gyro (x, y, z) = " << "( " << data->raw_x <<" , " << data->raw_y << " , " << data->raw_z << " )" << std::endl;
 		return true;
-
-//		std::cout << "gyro (x, y, z) = " << "( " << gyro_data[0] <<" , " << gyro_data[1] << " , " << gyro_data[2] << " )" << std::endl;
 	}
 	else
 		return false;
@@ -129,19 +110,8 @@ bool QuadSimClient::ReceiveAccData(IMU_DataType *data)
 			data->raw_y=((float*)acc_sig)[1];
 			data->raw_z=((float*)acc_sig)[2];
 		}
+//		std::cout << "acc (x, y, z) = " << "( " << data->raw_x <<" , " << data->raw_y << " , " << data->raw_z << " )" << std::endl;
 
-		return true;
-//		std::cout << "acc (x, y, z) = " << "( " << acc_data[0] <<" , " << acc_data[1] << " , " << acc_data[2] << " )" << std::endl;
-	}
-	else
-		return false;
-}
-
-bool QuadSimClient::ReceiveQuadPosition(void)
-{
-	if (simxGetObjectPosition(client_id_, quad_handle_, -1, quad_pos,simx_opmode_buffer) == simx_error_noerror)
-	{
-//		std::cout << "pos (x, y, z) = " << "( " << pos[0] <<" , " << pos[1] << " , " << pos[2] << " )" << std::endl;
 		return true;
 	}
 	else
@@ -152,10 +122,10 @@ bool QuadSimClient::ReceiveQuadPosition(Position *data)
 {
 	if (simxGetObjectPosition(client_id_, quad_handle_, -1, quad_pos,simx_opmode_buffer) == simx_error_noerror)
 	{
-//		std::cout << "pos (x, y, z) = " << "( " << pos[0] <<" , " << pos[1] << " , " << pos[2] << " )" << std::endl;
 		(*data).x = quad_pos[0];
 		(*data).y = quad_pos[1];
 		(*data).z = quad_pos[2];
+//		std::cout << "pos (x, y, z) = " << "( " << (*data).x <<" , " << (*data).y << " , " << (*data).z << " )" << std::endl;
 		return true;
 	}
 	else
@@ -185,15 +155,20 @@ void QuadSimClient::SendPropellerCmd(QuadCmd cmd)
 
 bool QuadSimClient::ReceiveDataFromRobot(DataFromRobot *rx_data)
 {
+//	std::cout << "receiving new data!"<<std::endl;
+
 	if(ReceiveGyroData(&(rx_data->imu_data.gyro)) &&
 			ReceiveAccData(&(rx_data->imu_data.acc)) &&
 			ReceiveQuadPosition(&(rx_data->pos)))
+	{
+//		std::cout << "got it!"<<std::endl;
 		return true;
+	}
 	else
 		return false;
 }
 
 void QuadSimClient::SendDataToRobot(const DataToRobot &rcmd)
 {
-	SendPropellerCmd(rcmd.vel_cmd);
+	SendPropellerCmd(rcmd.motor_cmd);
 }

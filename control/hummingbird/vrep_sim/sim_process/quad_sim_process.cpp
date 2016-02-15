@@ -31,18 +31,22 @@ void QuadSimProcess::SimLoopUpdate(void)
 
 
 	// process image
-	line_det_.BinarizeImage(rs_m.mono_image);
+	line_det_.BinarizeImage(rs_m_.mono_image);
 
 	// invoke controller update
 
 
 	// set control variables
 	// balance force 4800 rpm ~ 6.11e-8*4800*4800*4/9.8 = 0.57458938775 kg
-	cmd_m.vel_cmd[0] = 4800;
-	cmd_m.vel_cmd[0] = 4800;
-	cmd_m.vel_cmd[0] = 4800;
-	cmd_m.vel_cmd[0] = 4800;
-
+	cmd_m_.motor_cmd.ang_vel[0] = 4800;
+	cmd_m_.motor_cmd.ang_vel[1] = 4800;
+	cmd_m_.motor_cmd.ang_vel[2] = 4800;
+	cmd_m_.motor_cmd.ang_vel[3] = 4800;
+	// velocity for rotation 5200
+//	cmd_m_.motor_cmd.ang_vel[0] = 0;
+//	cmd_m_.motor_cmd.ang_vel[1] = 0;
+//	cmd_m_.motor_cmd.ang_vel[2] = 5200;
+//	cmd_m_.motor_cmd.ang_vel[3] = 5200;
 
 	// code below is used for debugging
 	process_loop_count++;
