@@ -15,6 +15,7 @@
 #include <functional>
 #include <utility>
 #include <cmath>
+#include <algorithm>
 
 #include <vertex.h>
 
@@ -57,10 +58,10 @@ public:
 		openlist.put(start, 0);
 		start->is_in_openlist_ = true;
 
-		start->search_parent_ = start;
+		//start->search_parent_ = start;
 		start->g_astar_ = 0;
 
-		while(!openlist.empty())
+		while(!openlist.empty() && found_path != true)
 		{
 			current_vertex = openlist.get();
 			if(current_vertex->is_checked_)
@@ -68,11 +69,6 @@ public:
 
 			current_vertex->is_in_openlist_ = false;
 			current_vertex->is_checked_ = true;
-
-			if(current_vertex == goal){
-				found_path = true;
-				break;
-			}
 
 			// check all adjacent vertices (successors of current vertex)
 			typename std::vector<Edge<GraphVertexType>>::iterator ite;
@@ -85,45 +81,37 @@ public:
 				if(successor->is_checked_ == false)
 				{
 					// first set the parent of the adjacent vertex to be the current vertex
-					successor->search_parent_ = current_vertex;
+					double new_cost = current_vertex->g_astar_ + (*ite).cost_;
 
 					// if the vertex is not in open list
 					if(successor->is_in_openlist_ == false)
 					{
-						successor->g_astar_ = successor->search_parent_->g_astar_ + (*ite).cost_;
+						successor->search_parent_ = current_vertex;
+						successor->g_astar_ = new_cost;
 						successor->h_astar_ = CalcHeuristic(successor, goal);
 						successor->f_astar_ = successor->g_astar_ + successor->f_astar_;
 
 						openlist.put((*ite).dst_, successor->f_astar_);
+
+						if(successor == goal){
+							found_path = true;
+						}
 					}
 					// if the vertex has already been added into open list
 					else
 					{
-						// cost = parent vertex -> current vertex
-						//		+ current vertex -> successor vertex
-						double cost1 = current_vertex->search_parent_->GetEdgeCost(current_vertex) + (*ite).cost_;
-						// cost = parent vertex -> successor vertex
-						double cost2 = current_vertex->search_parent_->GetEdgeCost(successor);
-
-						if(cost1 < cost2) {
-							current_vertex = current_vertex->search_parent_;
+						if(new_cost < successor->g_astar_) {
 							successor->search_parent_ = current_vertex;
 
-							successor->g_astar_ = successor->search_parent_->g_astar_ +
-									current_vertex->search_parent_->GetEdgeCost(successor);
+							successor->g_astar_ = new_cost;
 							successor->h_astar_ = CalcHeuristic(successor, goal);
 							successor->f_astar_ = successor->g_astar_ + successor->f_astar_;
 
 							openlist.put((*ite).dst_, successor->f_astar_);
-						}
-						else
-						{
-							successor->g_astar_ = successor->search_parent_->g_astar_ +
-									current_vertex->search_parent_->GetEdgeCost(current_vertex) + (*ite).cost_;
-							successor->h_astar_ = CalcHeuristic(successor, goal);
-							successor->f_astar_ = successor->g_astar_ + successor->f_astar_;
 
-							openlist.put((*ite).dst_, successor->f_astar_);
+							if(successor == goal){
+								found_path = true;
+							}
 						}
 					}
 				}
@@ -134,11 +122,15 @@ public:
 		if(found_path)
 		{
 			std::cout << "path found" << std::endl;
-			while(current_vertex != start)
+			GraphVertexType* waypoint = goal;
+			while(waypoint != start)
 			{
-				trajectory.push_back(current_vertex);
-				current_vertex = current_vertex->search_parent_;
+				trajectory.push_back(waypoint);
+				waypoint = waypoint->search_parent_;
 			}
+			// add the start node
+			trajectory.push_back(waypoint);
+			std::reverse(trajectory.begin(), trajectory.end());
 
 			auto traj_s = trajectory.begin();
 			auto traj_e = trajectory.end() - 1;
@@ -147,7 +139,6 @@ public:
 		}
 		else
 			std::cout << "failed to find a path" << std::endl;
-
 
 		return trajectory;
 	};

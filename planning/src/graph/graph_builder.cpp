@@ -50,7 +50,7 @@ Graph<QuadTreeNode>* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 			if((*itn)->occupancy_ == OccupancyType::FREE){
 				double cost = sqrt(pow((double)((*it)->location_.x - (*itn)->location_.x),2)
 						+ pow((double)((*it)->location_.y - (*itn)->location_.y),2));
-				graph_->AddEdge((*it), (*itn), 1.0);
+				graph_->AddEdge((*it), (*itn), cost);
 			}
 		}
 	}

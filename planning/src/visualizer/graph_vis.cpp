@@ -349,6 +349,9 @@ void GraphVis::DrawQTreeGraph(Graph<QuadTreeNode> *graph, QuadTree *tree, cv::In
 		x1 = (*itv)->node_->location_.x;
 		y1 = (*itv)->node_->location_.y;
 
+//		std::string id = std::to_string((*itv)->node_->node_id_);
+//		putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
+
 		// draw all edges from current vertex
 		std::vector<Edge<Vertex<QuadTreeNode>>>::iterator ite;
 		for(ite = (*itv)->adj_.begin(); ite != (*itv)->adj_.end(); ite++)
