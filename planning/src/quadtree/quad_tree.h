@@ -5,10 +5,20 @@
 #include <vector>
 #include <cstdint>
 
-#include "qtree_types.h"
-#include "common_types.h"
+//#include "qtree_types.h"
+#include "common/common_types.h"
 
 namespace srcl_ctrl {
+
+// Definition of Supporting Types
+enum class NodeType
+{
+	INNER,
+	LEAF,
+	DUMMY_INNER,
+	DUMMY_LEAF
+};
+
 
 // Definition of Tree Node
 /*     Order of child nodes    */

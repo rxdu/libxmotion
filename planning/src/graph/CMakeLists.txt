@@ -4,8 +4,8 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 # Include path
 #include_directories(${CMAKE_SOURCE_DIR}/inc)
+#include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/src/quadtree)
 
 # Dependency libraries
 #find_package(OpenCV REQUIRED)
@@ -13,10 +13,10 @@ include_directories(${CMAKE_SOURCE_DIR}/src/quadtree)
 # Add libraries
 set(GRAPH_LIB_SRC
 	#graph.cpp
-	graph_builder.cpp
+	#graph_builder.cpp
 )
-add_library(graph STATIC ${GRAPH_LIB_SRC})
-target_link_libraries(graph qtree)
+#add_library(graph STATIC ${GRAPH_LIB_SRC})
+#target_link_libraries(graph qtree)
 
 # Add executables
 #add_executable(build_graph test_graph.cpp)

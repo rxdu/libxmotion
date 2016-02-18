@@ -6,7 +6,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 #include_directories(${CMAKE_SOURCE_DIR}/inc)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/src)
-include_directories(${CMAKE_SOURCE_DIR}/src/map)
+include_directories(${CMAKE_SOURCE_DIR}/src/square_grid)
 include_directories(${CMAKE_SOURCE_DIR}/src/quadtree)
 include_directories(${CMAKE_SOURCE_DIR}/src/graph)
 
@@ -14,12 +14,14 @@ include_directories(${CMAKE_SOURCE_DIR}/src/graph)
 find_package(OpenCV REQUIRED)
 
 # Add libraries
-set(VIS_LIB_SRC
-    graph_vis.cpp
+set(MAP_LIB_SRC
+    map_manager.cpp
+    qtree_builder.cpp
+    graph_builder.cpp
 )
-add_library(vis STATIC ${VIS_LIB_SRC})
-target_link_libraries(vis map ${OpenCV_LIBS})
+add_library(map STATIC ${MAP_LIB_SRC})
+target_link_libraries(map squaregrid qtree ${OpenCV_LIBS})
 
 # Add executables
-add_executable(test_graph test_graph.cpp)
-target_link_libraries(test_graph qtree vis map ${OpenCV_LIBS})
+#add_executable(test_graph test_graph.cpp)
+#target_link_libraries(test_graph h2c graph_vis ${OpenCV_LIBS})
