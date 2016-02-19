@@ -52,8 +52,10 @@ class Graph
 public:
 	Graph(){};
 	~Graph(){
-		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it;
-		for(it = vertex_map_.begin(); it != vertex_map_.end(); it++)
+		// graph is only responsible to recycle of memory for vertices, the node which
+		//	each vertex is associated to needs to be recycled by the quadtree/square_grid
+		//	structure
+		for(auto it = vertex_map_.begin(); it != vertex_map_.end(); it++)
 			delete it->second;
 	};
 

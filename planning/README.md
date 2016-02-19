@@ -8,3 +8,9 @@
 * graph: independent, headers only
 * map: depends on square_grid, quadtree, graph
 * visualizer: depends on map, square_grid, quadtree, graph
+
+Reference
+
+C++
+
+* http://stackoverflow.com/questions/23488326/c-stdvector-of-references

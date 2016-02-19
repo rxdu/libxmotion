@@ -224,7 +224,7 @@ QuadTreeNode* QTreeNodeManager::GetNodeReference(uint16_t index_x, uint16_t inde
 /*********************************************************/
 
 QuadTreeNode::QuadTreeNode(BoundingBox bound, OccupancyType occupancy):
-		occupancy_(occupancy),dummy_root_(this),has_dummy_(false)
+		occupancy_(occupancy),dummy_root_(this),has_dummy_(false),node_id_(0)
 {
 	node_type_ = NodeType::INNER;
 
