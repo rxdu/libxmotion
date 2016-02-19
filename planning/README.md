@@ -14,3 +14,4 @@ Reference
 C++
 
 * http://stackoverflow.com/questions/23488326/c-stdvector-of-references
+* http://stackoverflow.com/questions/332030/when-should-static-cast-dynamic-cast-const-cast-and-reinterpret-cast-be-used
