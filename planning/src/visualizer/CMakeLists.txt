@@ -9,6 +9,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/src/map)
 include_directories(${CMAKE_SOURCE_DIR}/src/quadtree)
 include_directories(${CMAKE_SOURCE_DIR}/src/graph)
+include_directories(${CMAKE_SOURCE_DIR}/src/square_grid)
 
 # Dependency libraries
 find_package(OpenCV REQUIRED)

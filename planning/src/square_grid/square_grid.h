@@ -16,7 +16,7 @@
 namespace srcl_ctrl{
 
 struct SquareCell{
-	SquareCell():cell_id_(0){
+	SquareCell():node_id_(0){
 		occu_ = OccupancyType::FREE;
 
 		bbox_.x.min = 0;
@@ -26,7 +26,7 @@ struct SquareCell{
 	}
 
 	SquareCell(uint64_t id, uint32_t row, uint32_t col, OccupancyType occupancy):
-		cell_id_(id),occu_(occupancy)
+		node_id_(id),occu_(occupancy)
 	{
 		index_.x = col;
 		index_.y = row;
@@ -37,7 +37,7 @@ struct SquareCell{
 		bbox_.y.max = 0;
 	}
 
-	const uint64_t cell_id_;
+	const uint64_t node_id_;
 	Position2D index_;
 	OccupancyType occu_;
 	BoundingBox bbox_;

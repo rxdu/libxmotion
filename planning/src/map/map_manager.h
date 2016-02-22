@@ -33,8 +33,6 @@ public:
 	SquareGrid* CreateTestGridMap25N25Case1();
 	SquareGrid* CreateTestGridMap12N12Astar();
 	SquareGrid* CreateTestGridMap3N3();
-//	SquareGrid* CreateSquareGridMap(uint32_t row_num, uint32_t col_num, uint32_t square_size);
-//	void SetUniCellMapOccupancy(uint32_t row, uint32_t col, OccupancyType occ);
 
 };
 

@@ -10,6 +10,7 @@
 
 #include "graph.h"
 #include "quad_tree.h"
+#include "square_grid.h"
 
 namespace srcl_ctrl {
 
@@ -21,6 +22,7 @@ public:
 
 public:
 	static Graph<QuadTreeNode>* BuildFromQuadTree(QuadTree* tree);
+	static Graph<SquareCell>* BuildFromQuadTree(SquareGrid* grid);
 };
 }
 

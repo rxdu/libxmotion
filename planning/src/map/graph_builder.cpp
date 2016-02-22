@@ -21,9 +21,10 @@ GraphBuilder::~GraphBuilder()
 
 }
 
+// TODO fix the memory leak issue
 Graph<QuadTreeNode>* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 {
-	Graph<QuadTreeNode>* graph_ = new Graph<QuadTreeNode>();
+	Graph<QuadTreeNode>* graph = new Graph<QuadTreeNode>();
 
 	std::vector<QuadTreeNode*> leaf_nodes;
 
@@ -50,14 +51,36 @@ Graph<QuadTreeNode>* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 			if((*itn)->occupancy_ == OccupancyType::FREE){
 				double cost = sqrt(pow((double)((*it)->location_.x - (*itn)->location_.x),2)
 						+ pow((double)((*it)->location_.y - (*itn)->location_.y),2));
-				graph_->AddEdge((*it), (*itn), cost);
+				graph->AddEdge((*it), (*itn), cost);
 			}
 		}
 	}
 
 //	std::cout<<"graph vertex num: "<<graph_->GetGraphVertices().size()<<std::endl;
 
-	return graph_;
+	return graph;
 }
 
+// TODO fix the memory leak issue
+Graph<SquareCell>* GraphBuilder::BuildFromQuadTree(SquareGrid* grid)
+{
+	Graph<SquareCell>* graph = new Graph<SquareCell>();
+
+	for(auto itc = grid->cells_.begin(); itc != grid->cells_.end(); itc++)
+	{
+		uint64_t current_nodeid = (*itc).second->node_id_;
+
+		if(grid->cells_[current_nodeid]->occu_ != OccupancyType::OCCUPIED) {
+			std::vector<SquareCell*> neighbour_list = grid->GetNeighbours(current_nodeid);
+
+			for(auto itn = neighbour_list.begin(); itn != neighbour_list.end(); itn++)
+			{
+				if(grid->cells_[(*itn)->node_id_]->occu_ != OccupancyType::OCCUPIED)
+					graph->AddEdge((*itc).second, (*itn), 1.0);
+			}
+		}
+	}
+
+	return graph;
+}
 
