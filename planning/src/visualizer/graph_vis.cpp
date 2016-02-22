@@ -533,7 +533,7 @@ void GraphVis::DrawSquareGridPath(Graph<SquareCell>* graph, SquareGrid* grid, st
 	// draw the graph
 	_dst.create(Size(grid->col_size_*grid->cell_size_, grid->row_size_*grid->cell_size_), CV_8UC3);
 	Mat dst = _dst.getMat();
-	DrawSquareGrid(grid, dst);
+	DrawSquareGridGraph(graph,grid, dst);
 
 	// draw starting and finishing cell
 	auto cell_s = path[0]->node_;

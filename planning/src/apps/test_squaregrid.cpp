@@ -8,6 +8,7 @@
 // standard libaray
 #include <stdio.h>
 #include <vector>
+#include <ctime>
 
 // opencv
 #include "opencv2/opencv.hpp"
@@ -69,10 +70,16 @@ int main(int argc, char** argv )
 //	vis.DrawSquareGrid(grid, vis_result);
 	vis.DrawSquareGridGraph(graph, grid, vis_result);
 
-	auto start_it = graph->GetVertexFromID(13);
-	auto finish_it = graph->GetVertexFromID(132);
+	auto start_it = graph->GetVertexFromID(132);
+	auto finish_it = graph->GetVertexFromID(13);
 
+	clock_t		exec_time;
+
+	exec_time = clock();
 	std::vector<Vertex<SquareCell>*> path = graph->AStarSearch(start_it,finish_it);
+	exec_time = clock() - exec_time;
+	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
+
 	vis.DrawSquareGridPath(graph, grid, path, vis_result);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
