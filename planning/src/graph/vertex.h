@@ -51,6 +51,10 @@ public:
 		is_checked_ = false;
 		is_in_openlist_ = false;
 		search_parent_ = nullptr;
+
+		f_astar_ = 0.0;
+		g_astar_ = 0.0;
+		h_astar_ = 0.0;
 	}
 
 	double GetEdgeCost(Vertex<VertexNodeType>* dst_node)

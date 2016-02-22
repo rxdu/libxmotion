@@ -69,7 +69,11 @@ int main(int argc, char** argv )
 //	vis.DrawSquareGrid(grid, vis_result);
 	vis.DrawSquareGridGraph(graph, grid, vis_result);
 
-	//	g1.show_edges();
+	auto start_it = graph->GetVertexFromID(13);
+	auto finish_it = graph->GetVertexFromID(132);
+
+	std::vector<Vertex<SquareCell>*> path = graph->AStarSearch(start_it,finish_it);
+	vis.DrawSquareGridPath(graph, grid, path, vis_result);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 	imshow("Processed Image", vis_result);

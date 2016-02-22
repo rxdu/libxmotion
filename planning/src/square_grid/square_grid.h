@@ -37,8 +37,21 @@ struct SquareCell{
 		bbox_.y.max = 0;
 	}
 
+	SquareCell(uint64_t id, uint32_t row, uint32_t col, BoundingBox bbox, OccupancyType occupancy):
+		node_id_(id),occu_(occupancy)
+	{
+		index_.x = col;
+		index_.y = row;
+
+		bbox_ = bbox;
+
+		location_.x = bbox_.x.min + (bbox_.x.max - bbox_.x.min)/2;
+		location_.y = bbox_.y.min + (bbox_.y.max - bbox_.y.min)/2;
+	}
+
 	const uint64_t node_id_;
 	Position2D index_;
+	Position2D location_;
 	OccupancyType occu_;
 	BoundingBox bbox_;
 };

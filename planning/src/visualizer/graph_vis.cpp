@@ -492,152 +492,92 @@ void GraphVis::DrawSquareGridGraph(Graph<SquareCell>* graph, SquareGrid* grid, c
 
 	for(auto itv = vertices.begin(); itv != vertices.end(); itv++)
 	{
-		uint64_t x1, y1;
+		uint64_t xc, yc;
 		int thickness = -1;
 		int lineType = 8;
 
-		x1 = (*itv)->node_->bbox_.x.min + ((*itv)->node_->bbox_.x.max - (*itv)->node_->bbox_.x.min)/2;
-		y1 = (*itv)->node_->bbox_.y.min + ((*itv)->node_->bbox_.y.max - (*itv)->node_->bbox_.y.min)/2;
+		xc = (*itv)->node_->bbox_.x.min + ((*itv)->node_->bbox_.x.max - (*itv)->node_->bbox_.x.min)/2;
+		yc = (*itv)->node_->bbox_.y.min + ((*itv)->node_->bbox_.y.max - (*itv)->node_->bbox_.y.min)/2;
 		circle( dst,
-				Point(x1,y1),
+				Point(xc,yc),
 				5,
 				Scalar( 0, 0, 255 ),
 				thickness,
 				lineType );
 
-		uint64_t id1 = (*itv)->node_->node_id_;
+		// current vertex center coordinate
+		uint64_t x1,y1,x2,y2;
+		x1 = (*itv)->node_->location_.x;
+		y1 = (*itv)->node_->location_.y;
+
+		//		std::string id = std::to_string((*itv)->node_->node_id_);
+		//		putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
 
 		// draw all edges from current vertex
-		for(auto ite = (*itv)->adj_.begin(); ite != (*itv)->adj_.end(); ite++)
+		std::vector<Edge<Vertex<SquareCell>>>::iterator ite;
+		for(ite = (*itv)->adj_.begin(); ite != (*itv)->adj_.end(); ite++)
 		{
-			uint64_t id2 = (*ite).dst_->node_->node_id_;
+			// neighbor vertices center coordinate
+			const SquareCell* n = (*ite).dst_->node_;
 
-			uint64_t x1,x2,y1,y2;
+			x2 = n->location_.x;
+			y2 = n->location_.y;
 
-			auto idx1 = grid->cells_.find(id1);
-			if(idx1 != grid->cells_.end())
-			{
-				x1 = (*idx1).second->bbox_.x.min + ((*idx1).second->bbox_.x.max - (*idx1).second->bbox_.x.min)/2;
-				y1 = (*idx1).second->bbox_.y.min + ((*idx1).second->bbox_.y.max - (*idx1).second->bbox_.y.min)/2;
-			}
-
-			auto idx2 = grid->cells_.find(id2);
-			if(idx2 != grid->cells_.end())
-			{
-				x2 = (*idx2).second->bbox_.x.min + ((*idx2).second->bbox_.x.max - (*idx2).second->bbox_.x.min)/2;
-				y2 = (*idx2).second->bbox_.y.min + ((*idx2).second->bbox_.y.max - (*idx2).second->bbox_.y.min)/2;
-			}
-
-			line(dst, Point(x1,y1), Point(x2,y2), Scalar(0,255,0));
+			DrawEdge(Point(x1,y1), Point(x2,y2), dst);
 		}
 	}
-
-//	// draw vertices of graph
-//	for(auto itv = graph->GetGraphVertices().vertices.begin(); itv != g.vertices.end(); itv++)
-//
-//	for(auto itv = g.vertices.begin(); itv != g.vertices.end(); itv++)
-//	{
-//		uint64_t vid = (*itv).second.get_id();
-//
-//		auto idx = grid.cells_.find(vid);
-//
-//		if(idx != grid.cells_.end())
-//		{
-//			uint64_t x1, y1;
-//			int thickness = -1;
-//			int lineType = 8;
-//
-//			x1 = (*idx).second->bbox_.x.min + ((*idx).second->bbox_.x.max - (*idx).second->bbox_.x.min)/2;
-//			y1 = (*idx).second->bbox_.y.min + ((*idx).second->bbox_.y.max - (*idx).second->bbox_.y.min)/2;
-//			circle( dst,
-//					Point(x1,y1),
-//					5,
-//					Scalar( 0, 0, 255 ),
-//					thickness,
-//					lineType );
-//		}
-//	}
-//
-//	// draw edges of graph
-//	for(auto itadj = g.vertices.begin(); itadj != g.vertices.end(); itadj++)
-//	{
-//		uint64_t id1 = (*itadj).first;
-//
-//		for(auto itn = (*itadj).second.edges.begin(); itn != (*itadj).second.edges.end(); itn++)
-//		{
-//			uint64_t id2 = (*itn).end_vertex_id;
-//
-//			uint64_t x1,x2,y1,y2;
-//
-//			auto idx1 = grid.cells_.find(id1);
-//			if(idx1 != grid.cells_.end())
-//			{
-//				x1 = (*idx1).second->bbox_.x.min + ((*idx1).second->bbox_.x.max - (*idx1).second->bbox_.x.min)/2;
-//				y1 = (*idx1).second->bbox_.y.min + ((*idx1).second->bbox_.y.max - (*idx1).second->bbox_.y.min)/2;
-//			}
-//
-//			auto idx2 = grid.cells_.find(id2);
-//			if(idx2 != grid.cells_.end())
-//			{
-//				x2 = (*idx2).second->bbox_.x.min + ((*idx2).second->bbox_.x.max - (*idx2).second->bbox_.x.min)/2;
-//				y2 = (*idx2).second->bbox_.y.min + ((*idx2).second->bbox_.y.max - (*idx2).second->bbox_.y.min)/2;
-//			}
-//
-//			line(dst, Point(x1,y1), Point(x2,y2), Scalar(0,255,0));
-//		}
-//	}
 }
 
-void GraphVis::DrawSquareGridPath(Graph<SquareCell>& g, const SquareGrid& grid, std::vector<unsigned long>& path, cv::OutputArray _dst)
+void GraphVis::DrawSquareGridPath(Graph<SquareCell>* graph, SquareGrid* grid, std::vector<Vertex<SquareCell>*>& path, cv::OutputArray _dst)
 {
-//	// draw the graph
-//	_dst.create(Size(grid.col_size_*grid.cell_size_, grid.row_size_*grid.cell_size_), CV_8UC3);
-//	Mat dst = _dst.getMat();
-//	VisualizeGraph(g, grid, dst);
-//
-//	// draw starting and finishing cell
-//	auto cell_s = grid.cells_.at(path[0]);
-//	uint64_t x,y;
-//	x = cell_s->bbox_.x.min + (cell_s->bbox_.x.max - cell_s->bbox_.x.min)/2;
-//	x = x - (cell_s->bbox_.x.max - cell_s->bbox_.x.min)/8;
-//	y = cell_s->bbox_.y.min + (cell_s->bbox_.y.max - cell_s->bbox_.y.min)/2;
-//	y = y + (cell_s->bbox_.y.max - cell_s->bbox_.y.min)/8;
-//	FillSquareCellColor((*cell_s).bbox_, start_color_, dst);
-//	putText(dst, "S" ,Point(x,y), CV_FONT_NORMAL, 1, Scalar(0,0,0),1,1);
-//
-//	auto cell_f = grid.cells_.at(*(path.end() - 1));
-//	x = cell_f->bbox_.x.min + (cell_f->bbox_.x.max - cell_f->bbox_.x.min)/2;
-//	x = x - (cell_f->bbox_.x.max - cell_f->bbox_.x.min)/8;
-//	y = cell_f->bbox_.y.min + (cell_f->bbox_.y.max - cell_f->bbox_.y.min)/2;
-//	y = y + (cell_f->bbox_.y.max - cell_f->bbox_.y.min)/8;
-//	FillSquareCellColor((*cell_f).bbox_, finish_color_, dst);
-//	putText(dst, "F" ,Point(x,y), CV_FONT_NORMAL, 1, Scalar(0,0,0),1,1);
-//
-//	// draw path
-//	uint64_t x1,y1,x2,y2;
-//	int thickness = 3;
-//	int lineType = 8;
-//	int pathline_thickness = 2;
-//
-//	for(auto it = path.begin(); it != path.end()-1; it++)
-//	{
-//		// consecutive cells
-//		auto cell1 = grid.cells_.at(*it);
-//		auto cell2 = grid.cells_.at(*(it+1));
-//
-//		// center coordinates
-//		x1 = (*cell1).bbox_.x.min + ((*cell1).bbox_.x.max - (*cell1).bbox_.x.min)/2;
-//		y1 = (*cell1).bbox_.y.min + ((*cell1).bbox_.y.max - (*cell1).bbox_.y.min)/2;
-//
-//		x2 = (*cell2).bbox_.x.min + ((*cell2).bbox_.x.max - (*cell2).bbox_.x.min)/2;
-//		y2 = (*cell2).bbox_.y.min + ((*cell2).bbox_.y.max - (*cell2).bbox_.y.min)/2;
-//
-//		line( dst,
-//				Point(x1,y1),
-//				Point(x2,y2),
-//				//Scalar( 237, 149, 100 ),
-//				Scalar( 255, 153, 51 ),
-//				pathline_thickness,
-//				lineType);
-//	}
+	// draw the graph
+	_dst.create(Size(grid->col_size_*grid->cell_size_, grid->row_size_*grid->cell_size_), CV_8UC3);
+	Mat dst = _dst.getMat();
+	DrawSquareGrid(grid, dst);
+
+	// draw starting and finishing cell
+	auto cell_s = path[0]->node_;
+	uint64_t x,y;
+	x = cell_s->location_.x;
+	x = x - (cell_s->bbox_.x.max - cell_s->bbox_.x.min)/8;
+	y = cell_s->location_.y;
+	y = y + (cell_s->bbox_.y.max - cell_s->bbox_.y.min)/8;
+	FillSquareCellColor((*cell_s).bbox_, start_color_, dst);
+	putText(dst, "S" ,Point(x,y), CV_FONT_NORMAL, 1, Scalar(0,0,0),1,1);
+
+	auto cell_f = (*(path.end()-1))->node_;
+	x = cell_f->location_.x;
+	x = x - (cell_f->bbox_.x.max - cell_f->bbox_.x.min)/8;
+	y = cell_f->location_.y;
+	y = y + (cell_f->bbox_.y.max - cell_f->bbox_.y.min)/8;
+	FillSquareCellColor((*cell_f).bbox_, finish_color_, dst);
+	putText(dst, "F" ,Point(x,y), CV_FONT_NORMAL, 1, Scalar(0,0,0),1,1);
+
+	// draw path
+	uint64_t x1,y1,x2,y2;
+	int thickness = 3;
+	int lineType = 8;
+	int pathline_thickness = 2;
+
+	for(auto it = path.begin(); it != path.end()-1; it++)
+	{
+		// consecutive cells
+		auto cell1 = (*it)->node_;
+		auto cell2 = (*(it+1))->node_;
+
+		// center coordinates
+		x1 = (*cell1).location_.x;
+		y1 = (*cell1).location_.y;
+
+		x2 = (*cell2).location_.x;
+		y2 = (*cell2).location_.y;
+
+		line( dst,
+				Point(x1,y1),
+				Point(x2,y2),
+				//Scalar( 237, 149, 100 ),
+				Scalar( 255, 153, 51 ),
+				pathline_thickness,
+				lineType);
+	}
 }

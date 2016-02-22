@@ -113,13 +113,24 @@ public:
 
 		for(it = vertex_map_.begin(); it != vertex_map_.end(); it++)
 		{
-			it->second.ClearVertexSearchInfo();
+			it->second->ClearVertexSearchInfo();
 		}
 	};
+
+	Vertex<GraphNodeType>* GetVertexFromID(uint64_t vertex_id)
+	{
+		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it = vertex_map_.find(vertex_id);
+
+		return (*it).second;
+	}
 
 	// Perform A* Search and return a path represented by a serious of vertices
 	std::vector<Vertex<GraphNodeType>*> AStarSearch(Vertex<GraphNodeType> *start, Vertex<GraphNodeType> *goal)
 	{
+		// clear previous search information before new search
+		ResetGraphVertices();
+
+		// do a* search and return search result
 		return astar_.Search(start, goal);
 	}
 };

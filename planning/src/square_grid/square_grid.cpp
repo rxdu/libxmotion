@@ -17,8 +17,7 @@ SquareGrid::SquareGrid(uint32_t row_num, uint32_t col_num, uint32_t cell_size):
 		for(uint32_t j = 0; j < col_num; j++)
 		{
 			uint64_t new_id = i * col_num + j;
-			SquareCell* new_cell = new SquareCell(new_id, i, j, OccupancyType::FREE);
-			new_cell->bbox_ = CalcBoundingBox(new_id);
+			SquareCell* new_cell = new SquareCell(new_id, i, j, CalcBoundingBox(new_id), OccupancyType::FREE);
 			cells_[new_id] = new_cell;
 		}
 }

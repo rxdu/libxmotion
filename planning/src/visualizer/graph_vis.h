@@ -59,7 +59,7 @@ public:
 	// square grid visualization
 	void DrawSquareGrid(SquareGrid* grid, cv::OutputArray _dst);
 	void DrawSquareGridGraph(Graph<SquareCell>* g, SquareGrid* grid, cv::OutputArray _dst);
-	void DrawSquareGridPath(Graph<SquareCell>& g, const SquareGrid& grid, std::vector<unsigned long>& path, cv::OutputArray _dst);
+	void DrawSquareGridPath(Graph<SquareCell>* g, SquareGrid* grid, std::vector<Vertex<SquareCell>*>& path, cv::OutputArray _dst);
 };
 
 }
