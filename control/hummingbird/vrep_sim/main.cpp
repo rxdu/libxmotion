@@ -97,7 +97,6 @@ int main(int argc,char* argv[])
 //			else
 //				std::cout<<"failed to fetch data from simulator"<<std::endl;
 
-			sim_process.SimLoopUpdate();
 			// send command to robot
 			sim_process.SendDataToSimulator();
 

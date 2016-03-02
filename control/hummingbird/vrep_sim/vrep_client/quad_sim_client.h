@@ -18,6 +18,7 @@ extern "C" {
 
 #define MAX_JOINT1_TORQUE 100
 #define MAX_JOINT2_TORQUE 100
+#define MAX_MOTOR_SPEED	10000
 
 namespace srcl_ctrl{
 
@@ -34,20 +35,26 @@ public:
 private:
 	void ConfigDataStreaming(void);
 
-	bool ReceiveQuadPosition(Position *data);
 	bool ReceiveGyroData(IMU_DataType *data);
 	bool ReceiveAccData(IMU_DataType *data);
-	void SendPropellerCmd(QuadCmd cmd);
-
 	bool GetVisionImage(simxUChar img[IMG_RES_Y][IMG_RES_X]);
+
+	bool ReceiveQuadPosition(Point3 *data);
+	bool ReceiveQuadVelocity(Point3 *data);
+	bool ReceiveQuadOrientation(Point3 *data);
+
+	void SendPropellerCmd(QuadCmd cmd);
 
 private:
 	simxInt quad_handle_;
 
 private:
-	// quadrotor essential
+	// quadrotor kinematics/dynamics
 	IMUData imu_data;
 	simxFloat quad_pos[3];
+	simxFloat quad_linear_vel[3];
+	simxFloat quad_angular_vel[3];
+	simxFloat quad_ori[3];
 	simxUChar* gyro_sig;
 	simxInt gyro_sig_size;
 	simxUChar* acc_sig;

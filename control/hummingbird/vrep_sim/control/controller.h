@@ -9,10 +9,28 @@
 #define CONTROL_CONTROLLER_H_
 
 #include <vrep_client/robot_datatypes.h>
-#include "robot_state/robot_state.h"
+#include "navigation/robot_state.h"
 
 namespace srcl_ctrl
 {
+
+typedef struct
+{
+	float pos_d[3];
+	float vel_d[3];
+	float euler_d[3];
+	float rot_rate_d[3];
+	float delta_w_F;
+}ControlInput;
+
+typedef struct{
+	// output of position controller
+	float euler_d[3];
+	float delta_w_F;
+
+	// output of attitude controller
+	float ang_vel_d[3];
+}ControlOutput;
 
 class Controller
 {
@@ -24,7 +42,7 @@ protected:
 	RobotState *rs_;
 
 public:
-	virtual void Update(const VehicleState &rs_d, VehicleCmd *cmd) = 0;
+	virtual void Update(ControlInput *input, ControlOutput *cmd) = 0;
 };
 
 }

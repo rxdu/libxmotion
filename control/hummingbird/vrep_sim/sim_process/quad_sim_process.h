@@ -11,7 +11,7 @@
 #include <vrep_client/quad_sim_client.h>
 #include "sim_process/sim_process.h"
 #include <vrep_client/robot_sim_client.h>
-#include "perception/line_detector.h"
+#include "navigation/robot_state.h"
 
 namespace srcl_ctrl
 {
@@ -22,13 +22,13 @@ public:
 	QuadSimProcess(int client_id);
 	~QuadSimProcess();
 
-public:
-	void SimLoopUpdate();
-
 private:
 	unsigned long process_loop_count;
-	LineDetector line_det_;
 
+	RobotState rs_;
+
+public:
+	void SimLoopUpdate();
 };
 
 }

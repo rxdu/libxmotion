@@ -27,15 +27,21 @@ QuadSimClient::QuadSimClient(simxInt clientId):
 	img_res[0] = IMG_RES_X;
 	img_res[1] = IMG_RES_Y;
 
-	quad_pos[0] = 0;
 	gyro_sig = NULL;
 	gyro_sig_size = 0;
 	acc_sig = NULL;
 	acc_sig_size = 0;
 
+	for(int i = 0; i < 3; i++)
+	{
+		quad_pos[i] = 0;
+		quad_linear_vel[i] = 0;
+		quad_angular_vel[i] = 0;
+		quad_ori[i] = 0;
+	}
+
 	// get simulation object handles
 	simxGetObjectHandle(client_id_, "asctec_hummingbird",&quad_handle_,simx_opmode_oneshot_wait);
-
 
 	// initialize communication between server and client
 	ConfigDataStreaming();
@@ -46,12 +52,17 @@ QuadSimClient::QuadSimClient(simxInt clientId):
 QuadSimClient::~QuadSimClient()
 {
 	delete[] image_raw_;
+	delete gyro_sig;
+	delete acc_sig;
 }
 
 void QuadSimClient::ConfigDataStreaming(void)
 {
 	// initialize robot status data streaming
 	simxGetObjectPosition(client_id_, quad_handle_, -1, quad_pos,simx_opmode_streaming);
+	simxGetObjectVelocity(client_id_, quad_handle_, quad_linear_vel, quad_angular_vel,simx_opmode_streaming);
+	simxGetObjectOrientation(client_id_, quad_handle_, -1, quad_ori, simx_opmode_streaming);
+
 	simxGetStringSignal(client_id_,"hummingbird_gyro",&gyro_sig,&gyro_sig_size,simx_opmode_streaming);
 	simxGetStringSignal(client_id_,"hummingbird_acc",&acc_sig,&acc_sig_size,simx_opmode_streaming);
 
@@ -118,7 +129,7 @@ bool QuadSimClient::ReceiveAccData(IMU_DataType *data)
 		return false;
 }
 
-bool QuadSimClient::ReceiveQuadPosition(Position *data)
+bool QuadSimClient::ReceiveQuadPosition(Point3 *data)
 {
 	if (simxGetObjectPosition(client_id_, quad_handle_, -1, quad_pos,simx_opmode_buffer) == simx_error_noerror)
 	{
@@ -126,6 +137,34 @@ bool QuadSimClient::ReceiveQuadPosition(Position *data)
 		(*data).y = quad_pos[1];
 		(*data).z = quad_pos[2];
 //		std::cout << "pos (x, y, z) = " << "( " << (*data).x <<" , " << (*data).y << " , " << (*data).z << " )" << std::endl;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool QuadSimClient::ReceiveQuadVelocity(Point3 *data)
+{
+	if (simxGetObjectVelocity(client_id_, quad_handle_, quad_linear_vel, quad_angular_vel ,simx_opmode_buffer) == simx_error_noerror)
+	{
+		(*data).x = quad_linear_vel[0];
+		(*data).y = quad_linear_vel[1];
+		(*data).z = quad_linear_vel[2];
+//		std::cout << "vel (x, y, z) = " << "( " << (*data).x <<" , " << (*data).y << " , " << (*data).z << " )" << std::endl;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool QuadSimClient::ReceiveQuadOrientation(Point3 *data)
+{
+	if (simxGetObjectOrientation(client_id_, quad_handle_, -1, quad_ori, simx_opmode_buffer) == simx_error_noerror)
+	{
+		(*data).x = quad_ori[0];
+		(*data).y = quad_ori[1];
+		(*data).z = quad_ori[2];
+//		std::cout << "ori (x, y, z) = " << "( " << (*data).x <<" , " << (*data).y << " , " << (*data).z << " )" << std::endl;
 		return true;
 	}
 	else
@@ -142,6 +181,23 @@ void QuadSimClient::SendPropellerCmd(QuadCmd cmd)
 	right_prop = cmd.ang_vel[3];
 
 	// add limits
+	if(front_prop > MAX_MOTOR_SPEED)
+		front_prop = MAX_MOTOR_SPEED;
+	if(rear_prop > MAX_MOTOR_SPEED)
+		rear_prop = MAX_MOTOR_SPEED;
+	if(left_prop > MAX_MOTOR_SPEED)
+		left_prop = MAX_MOTOR_SPEED;
+	if(right_prop > MAX_MOTOR_SPEED)
+		right_prop = MAX_MOTOR_SPEED;
+
+	if(front_prop < 0)
+		front_prop = 0;
+	if(rear_prop < 0)
+		rear_prop = 0;
+	if(left_prop < 0)
+		left_prop = 0;
+	if(right_prop < 0)
+		right_prop = 0;
 
 	// send commands to simulator
 	simxSetFloatSignal(client_id_, "propeller_cmd_front", front_prop, simx_opmode_oneshot);
@@ -159,8 +215,14 @@ bool QuadSimClient::ReceiveDataFromRobot(DataFromRobot *rx_data)
 
 	if(ReceiveGyroData(&(rx_data->imu_data.gyro)) &&
 			ReceiveAccData(&(rx_data->imu_data.acc)) &&
-			ReceiveQuadPosition(&(rx_data->pos)))
+			ReceiveQuadPosition(&(rx_data->pos_i)) &&
+			ReceiveQuadVelocity(&(rx_data->vel_i)) &&
+			ReceiveQuadOrientation(&rx_data->rot_i))
 	{
+		rx_data->rot_rate_b.x = rx_data->imu_data.gyro.raw_x;
+		rx_data->rot_rate_b.y = rx_data->imu_data.gyro.raw_y;
+		rx_data->rot_rate_b.z = rx_data->imu_data.gyro.raw_z;
+
 //		std::cout << "got it!"<<std::endl;
 		return true;
 	}
