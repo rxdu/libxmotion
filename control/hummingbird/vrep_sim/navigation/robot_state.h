@@ -36,6 +36,7 @@ public:
 
 	// quadrotor parameters
 	double mass;
+	double arm_length;
 	double kF;
 	double kM;
 

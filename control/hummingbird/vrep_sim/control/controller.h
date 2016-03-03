@@ -16,17 +16,27 @@ namespace srcl_ctrl
 
 typedef struct
 {
+	// input of position controller
 	float pos_d[3];
 	float vel_d[3];
+
+	// input of attitude controller (using Euler)
 	float euler_d[3];
 	float rot_rate_d[3];
 	float delta_w_F;
+
+	// input of attitude controller (using Quaternion)
+	Eigen::Quaterniond quat_d;
+
 }ControlInput;
 
 typedef struct{
-	// output of position controller
+	// output of position controller (using Euler)
 	float euler_d[3];
 	float delta_w_F;
+
+	// output of position controller (using Quaternion)
+	Eigen::Quaterniond quat_d;
 
 	// output of attitude controller
 	float motor_ang_vel_d[3];

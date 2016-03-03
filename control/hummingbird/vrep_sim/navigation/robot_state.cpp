@@ -13,6 +13,7 @@ using namespace srcl_ctrl;
 
 RobotState::RobotState():
 		g(9.8),mass(0.57375),
+		arm_length(0.175),
 		kF(6.11e-8),kM(1.5e-9)
 {
 	w_h = sqrt(mass * g / 4 / kF);
@@ -64,7 +65,7 @@ void RobotState::UpdateRobotState(const DataFromRobot & new_data)
 
 	quat = rotz * roty * rotx;
 
-	std::cout<<"robot orientation (x,y,z,w): "<<quat.x()<<" , "<<quat.y()<<" , "<<quat.z()<<" , "<< quat.w()<<std::endl;
+	std::cout<<"robot orientation (w,x,y,z): "<<quat.w()<<" , "<<quat.x()<<" , "<<quat.y()<<" , "<< quat.z()<<std::endl;
 
 	rotation_rate.x = new_data.rot_rate_b.x;
 	rotation_rate.y = new_data.rot_rate_b.y;

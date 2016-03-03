@@ -8,6 +8,9 @@
 #ifndef CONTROL_ATT_QUAT_CON_H_
 #define CONTROL_ATT_QUAT_CON_H_
 
+#include "library/eigen3/Eigen/Core"
+#include "library/eigen3/Eigen/Geometry"
+
 #include "control/controller.h"
 
 namespace srcl_ctrl {
@@ -25,6 +28,9 @@ private:
 	float kd_theta;
 	float kp_psi;
 	float kd_psi;
+
+private:
+	Eigen::Matrix<double,4,1> CalcMotorCmd(Eigen::Matrix<float,4,1> force_toqure);
 
 public:
 	void Update(ControlInput *input, ControlOutput *cmd);
