@@ -6,6 +6,7 @@
  */
 
 #include <cmath>
+#include <iostream>
 #include "robot_state.h"
 
 using namespace srcl_ctrl;
@@ -55,6 +56,15 @@ void RobotState::UpdateRobotState(const DataFromRobot & new_data)
 	orientation.x = new_data.rot_i.x;
 	orientation.y = new_data.rot_i.y;
 	orientation.z = new_data.rot_i.z;
+
+	// quaternion
+	Eigen::Quaterniond rotx(Eigen::AngleAxisd(Eigen::AngleAxisd(orientation.x, Eigen::Vector3d::UnitX())));
+	Eigen::Quaterniond roty(Eigen::AngleAxisd(orientation.y, rotx.matrix().col(1)));
+	Eigen::Quaterniond rotz(Eigen::AngleAxisd(orientation.z, roty.matrix().col(2)));
+
+	quat = rotz * roty * rotx;
+
+	std::cout<<"robot orientation (x,y,z,w): "<<quat.x()<<" , "<<quat.y()<<" , "<<quat.z()<<" , "<< quat.w()<<std::endl;
 
 	rotation_rate.x = new_data.rot_rate_b.x;
 	rotation_rate.y = new_data.rot_rate_b.y;

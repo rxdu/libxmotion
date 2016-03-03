@@ -54,7 +54,7 @@ void AttEulerCon::Update(ControlInput *input, ControlOutput *cmd)
 
 //	std::cout<< "euler_d[0]: "<< input->euler_d[0] << " , rs_->orientation.x: "<< rs_->orientation.x <<std::endl;
 //	std::cout<< "euler_error[0]: "<< euler_error[0] << " , rate_error[0]: "<< rate_error[0]<<std::endl;
-	std::cout << "euler z desired/actual: "<< input->euler_d[2] << " , " << rs_->orientation.z << std::endl;
+//	std::cout << "euler z desired/actual: "<< input->euler_d[2] << " , " << rs_->orientation.z << std::endl;
 //	std::cout << "euler error: "<< euler_error[0] << " , " << euler_error[1] << " , " << euler_error[2] << std::endl;
 //	std::cout << "rate error: "<< rate_error[0] << " , " << rate_error[1] << " , " << rate_error[2] << std::endl;
 //
@@ -65,7 +65,7 @@ void AttEulerCon::Update(ControlInput *input, ControlOutput *cmd)
 	double force;
 	force = rs_->w_h + input->delta_w_F;
 
-	std::cout<<"force:"<<force << std::endl;
+//	std::cout<<"force:"<<force << std::endl;
 
 	cmd->motor_ang_vel_d[0] = 1 * force + 0 * delta_w_phi + (-1) * delta_w_theta + 1 * delta_w_psi;
 	cmd->motor_ang_vel_d[1] = 1 * force + (-1) * delta_w_phi +   0 * delta_w_theta + (-1) * delta_w_psi;

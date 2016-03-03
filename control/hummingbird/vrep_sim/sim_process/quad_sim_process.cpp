@@ -72,20 +72,27 @@ void QuadSimProcess::SimLoopUpdate(void)
 	ControlInput att_con_input;
 	ControlOutput att_con_output;
 
+	att_con_output.motor_ang_vel_d[0] = 0;
+	att_con_output.motor_ang_vel_d[1] = 0;
+	att_con_output.motor_ang_vel_d[2] = 0;
+	att_con_output.motor_ang_vel_d[3] = 0;
+
 	att_con_input.euler_d[0] = pos_con_output.euler_d[0];
 	att_con_input.euler_d[1] = pos_con_output.euler_d[1];
 	att_con_input.euler_d[2] = pos_con_output.euler_d[2];
 
-	std::cout << "desired yaw: " << att_con_input.euler_d[2] << std::endl;
+//	std::cout << "desired yaw: " << att_con_input.euler_d[2] << std::endl;
 	att_con_input.rot_rate_d[0] = 0;
 	att_con_input.rot_rate_d[1] = 0;
 	att_con_input.rot_rate_d[2] = 0;
 	att_con_input.delta_w_F = pos_con_output.delta_w_F;
 
 	/*------------- test attitude controller -------------*/
-//	att_con_input.euler_d[0] = 0.0/180.0*3.14;
-//	att_con_input.euler_d[1] = 0.0/180.0*3.14;
-//	att_con_input.euler_d[2] = 0.0/180.0*3.14;
+	if(process_loop_count >= time_label1){
+		att_con_input.euler_d[0] = 0.0/180.0*3.14;
+		att_con_input.euler_d[1] = 0.0/180.0*3.14;
+		att_con_input.euler_d[2] = 30.0/180.0*3.14;
+	}
 //	att_con_input.delta_w_F = 0;
 //
 //	att_con_input.rot_rate_d[0] = 0;

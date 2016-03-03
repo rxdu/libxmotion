@@ -9,6 +9,7 @@
 #define NAVIGATION_ROBOT_STATE_H_
 
 #include "library/eigen3/Eigen/Core"
+#include "library/eigen3/Eigen/Geometry"
 
 #include "vrep_client/robot_datatypes.h"
 
@@ -23,6 +24,7 @@ public:
 	Point3 position;
 	Point3 velocity;
 	Point3 orientation;
+	Eigen::Quaterniond quat;
 	Point3 rotation_rate;
 
 private:
