@@ -14,12 +14,14 @@ using namespace srcl_ctrl;
 PosEulerCon::PosEulerCon(RobotState *_rs):
 		Controller(_rs)
 {
-	kp_0 = 0.1;
-	kd_0 = 0.1;
-	kp_1 = 0.1;
-	kd_1 = 0.1;
-	kp_2 = 0.0002;
-	kd_2 = 0.0002;
+//	kp_0 = 0.75;
+//	kd_0 = 1.5;
+	kp_0 = 0.95;
+	kd_0 = 2.0;
+	kp_1 = 0.8;
+	kd_1 = 2.0;
+	kp_2 = 2.0;
+	kd_2 = 1.8;
 }
 
 PosEulerCon::~PosEulerCon()
@@ -48,20 +50,20 @@ void PosEulerCon::Update(ControlInput* input, ControlOutput *cmd)
 			vel_error[i] = 0;
 	}
 
-	std::cout << "position error: "<< pos_error[0] << " , " << pos_error[1] << " , " << pos_error[2] << std::endl;
-	std::cout << "velocity error: "<< vel_error[0] << " , " << vel_error[1] << " , " << vel_error[2] << std::endl;
+//	std::cout << "position error: "<< pos_error[0] << " , " << pos_error[1] << " , " << pos_error[2] << std::endl;
+//	std::cout << "velocity error: "<< vel_error[0] << " , " << vel_error[1] << " , " << vel_error[2] << std::endl;
 
 	acc_desired[0] = kp_0 * pos_error[0] + kd_0 * vel_error[0];
 	acc_desired[1] = kp_1 * pos_error[1] + kd_1 * vel_error[1];
 	acc_desired[2] = kp_2 * pos_error[2] + kd_2 * vel_error[2];
 
-	cmd->ang_vel_d[0] = 1/rs_->g * (-acc_desired[1]);
-	cmd->ang_vel_d[1] = 1/rs_->g * (acc_desired[0]);
-	cmd->delta_w_F = rs_->mass/(8*rs_->kF*rs_->w_h) * acc_desired[2];
+	cmd->euler_d[0] = 1/rs_->g * (-acc_desired[1]);
+	cmd->euler_d[1] = 1/rs_->g * (acc_desired[0]);
+	cmd->delta_w_F = rs_->mass/(8.0*rs_->kF*rs_->w_h) * acc_desired[2];
 
-	std::cout << "ang_vel_d[0]: " << cmd->ang_vel_d[0] <<std::endl;
-	std::cout << "ang_vel_d[1]: " << cmd->ang_vel_d[1] <<std::endl;
-	std::cout << "delta_w_F: " << cmd->delta_w_F <<std::endl;
+//	std::cout << "euler_d[0]: " << cmd->euler_d[0] <<std::endl;
+//	std::cout << "euler_d[1]: " << cmd->euler_d[1] <<std::endl;
+//	std::cout << "delta_w_F: " << cmd->delta_w_F <<std::endl;
 }
 
 

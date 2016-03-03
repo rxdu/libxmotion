@@ -47,6 +47,7 @@ private:
 
 private:
 	simxInt quad_handle_;
+	simxInt ref_handle_;
 
 private:
 	// quadrotor kinematics/dynamics

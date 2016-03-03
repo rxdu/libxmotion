@@ -12,6 +12,7 @@
 #include <string>
 #include <unistd.h>
 #include <math.h>
+#include <ctime>
 
 // headers for vrep remote api
 extern "C" {
@@ -36,6 +37,8 @@ using namespace srcl_ctrl;
 #ifdef USE_FIXED_PORT_NUM
 #define EXP_PORT_NUM 29999
 #endif
+
+clock_t	last_time = 0;
 
 int main(int argc,char* argv[])
 {
@@ -93,6 +96,11 @@ int main(int argc,char* argv[])
 				// update simulated control loop
 				sim_process.SimLoopUpdate();
 
+				clock_t time_now = clock();
+				double freq = 1.0/(double(time_now - last_time)/CLOCKS_PER_SEC);
+				last_time = time_now;
+
+				std::cout << "Control loop frequency: " << freq << std::endl;
 			}
 //			else
 //				std::cout<<"failed to fetch data from simulator"<<std::endl;
@@ -100,7 +108,8 @@ int main(int argc,char* argv[])
 			// send command to robot
 			sim_process.SendDataToSimulator();
 
-			extApi_sleepMs(2); 		// use usleep(1750) to get shorter delay
+//			extApi_sleepMs(1); 		// use usleep(1750) to get shorter delay
+			usleep(50);
 
 			loop_count++;
 			simxSynchronousTrigger(clientID);

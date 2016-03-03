@@ -29,7 +29,7 @@ typedef struct{
 	float delta_w_F;
 
 	// output of attitude controller
-	float ang_vel_d[3];
+	float motor_ang_vel_d[3];
 }ControlOutput;
 
 class Controller

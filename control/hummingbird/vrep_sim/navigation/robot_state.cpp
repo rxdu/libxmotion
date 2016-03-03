@@ -11,10 +11,28 @@
 using namespace srcl_ctrl;
 
 RobotState::RobotState():
-		g(9.8),mass(0.575),
+		g(9.8),mass(0.57375),
 		kF(6.11e-8),kM(1.5e-9)
 {
 	w_h = sqrt(mass * g / 4 / kF);
+
+	// get values directly from simulator, will be replaced by state estimator later
+	position.x = 0;
+	position.y = 0;
+	position.z = 0.04;
+
+	velocity.x = 0;
+	velocity.y = 0;
+	velocity.z = 0;
+
+	// euler in X-Y-Z convension
+	orientation.x = 0;
+	orientation.y = 0;
+	orientation.z = 0;
+
+	rotation_rate.x = 0;
+	rotation_rate.y = 0;
+	rotation_rate.z = 0;
 }
 
 RobotState::~RobotState()

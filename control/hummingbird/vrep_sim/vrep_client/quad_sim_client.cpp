@@ -42,6 +42,7 @@ QuadSimClient::QuadSimClient(simxInt clientId):
 
 	// get simulation object handles
 	simxGetObjectHandle(client_id_, "asctec_hummingbird",&quad_handle_,simx_opmode_oneshot_wait);
+	simxGetObjectHandle(client_id_, "ctrl_ref",&ref_handle_,simx_opmode_oneshot_wait);
 
 	// initialize communication between server and client
 	ConfigDataStreaming();
@@ -59,9 +60,9 @@ QuadSimClient::~QuadSimClient()
 void QuadSimClient::ConfigDataStreaming(void)
 {
 	// initialize robot status data streaming
-	simxGetObjectPosition(client_id_, quad_handle_, -1, quad_pos,simx_opmode_streaming);
-	simxGetObjectVelocity(client_id_, quad_handle_, quad_linear_vel, quad_angular_vel,simx_opmode_streaming);
-	simxGetObjectOrientation(client_id_, quad_handle_, -1, quad_ori, simx_opmode_streaming);
+	simxGetObjectPosition(client_id_, ref_handle_, -1, quad_pos,simx_opmode_streaming);
+	simxGetObjectVelocity(client_id_, ref_handle_, quad_linear_vel, quad_angular_vel,simx_opmode_streaming);
+	simxGetObjectOrientation(client_id_, ref_handle_, -1, quad_ori, simx_opmode_streaming);
 
 	simxGetStringSignal(client_id_,"hummingbird_gyro",&gyro_sig,&gyro_sig_size,simx_opmode_streaming);
 	simxGetStringSignal(client_id_,"hummingbird_acc",&acc_sig,&acc_sig_size,simx_opmode_streaming);
@@ -131,7 +132,7 @@ bool QuadSimClient::ReceiveAccData(IMU_DataType *data)
 
 bool QuadSimClient::ReceiveQuadPosition(Point3 *data)
 {
-	if (simxGetObjectPosition(client_id_, quad_handle_, -1, quad_pos,simx_opmode_buffer) == simx_error_noerror)
+	if (simxGetObjectPosition(client_id_, ref_handle_, -1, quad_pos,simx_opmode_buffer) == simx_error_noerror)
 	{
 		(*data).x = quad_pos[0];
 		(*data).y = quad_pos[1];
@@ -145,7 +146,7 @@ bool QuadSimClient::ReceiveQuadPosition(Point3 *data)
 
 bool QuadSimClient::ReceiveQuadVelocity(Point3 *data)
 {
-	if (simxGetObjectVelocity(client_id_, quad_handle_, quad_linear_vel, quad_angular_vel ,simx_opmode_buffer) == simx_error_noerror)
+	if (simxGetObjectVelocity(client_id_, ref_handle_, quad_linear_vel, quad_angular_vel ,simx_opmode_buffer) == simx_error_noerror)
 	{
 		(*data).x = quad_linear_vel[0];
 		(*data).y = quad_linear_vel[1];
@@ -159,7 +160,7 @@ bool QuadSimClient::ReceiveQuadVelocity(Point3 *data)
 
 bool QuadSimClient::ReceiveQuadOrientation(Point3 *data)
 {
-	if (simxGetObjectOrientation(client_id_, quad_handle_, -1, quad_ori, simx_opmode_buffer) == simx_error_noerror)
+	if (simxGetObjectOrientation(client_id_, ref_handle_, -1, quad_ori, simx_opmode_buffer) == simx_error_noerror)
 	{
 		(*data).x = quad_ori[0];
 		(*data).y = quad_ori[1];
@@ -176,9 +177,9 @@ void QuadSimClient::SendPropellerCmd(QuadCmd cmd)
 	float front_prop, rear_prop, left_prop, right_prop;
 
 	front_prop = cmd.ang_vel[0];
-	rear_prop = cmd.ang_vel[1];
-	left_prop = cmd.ang_vel[2];
-	right_prop = cmd.ang_vel[3];
+	right_prop = cmd.ang_vel[1];
+	rear_prop = cmd.ang_vel[2];
+	left_prop = cmd.ang_vel[3];
 
 	// add limits
 	if(front_prop > MAX_MOTOR_SPEED)
