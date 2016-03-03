@@ -57,8 +57,11 @@ void PosEulerCon::Update(ControlInput* input, ControlOutput *cmd)
 	acc_desired[1] = kp_1 * pos_error[1] + kd_1 * vel_error[1];
 	acc_desired[2] = kp_2 * pos_error[2] + kd_2 * vel_error[2];
 
-	cmd->euler_d[0] = 1/rs_->g * (-acc_desired[1]);
+//	cmd->euler_d[0] = 1/rs_->g * (acc_desired[0]*sin(input->euler_d[2]) - acc_desired[1]*cos(input->euler_d[2]));
+//	cmd->euler_d[1] = 1/rs_->g * (acc_desired[0]*cos(input->euler_d[2]) + acc_desired[1]*sin(input->euler_d[2]));
+	cmd->euler_d[0] = 1/rs_->g * (- acc_desired[1]);
 	cmd->euler_d[1] = 1/rs_->g * (acc_desired[0]);
+	cmd->euler_d[2] = input->euler_d[2];
 	cmd->delta_w_F = rs_->mass/(8.0*rs_->kF*rs_->w_h) * acc_desired[2];
 
 //	std::cout << "euler_d[0]: " << cmd->euler_d[0] <<std::endl;

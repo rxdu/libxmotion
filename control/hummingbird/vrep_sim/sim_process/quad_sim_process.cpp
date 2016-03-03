@@ -45,13 +45,23 @@ void QuadSimProcess::SimLoopUpdate(void)
 	ControlOutput pos_con_output;
 	PosEulerCon pos_con(&rs_);
 
-//	if(process_loop_count < 85)
-	pos_con_input.pos_d[0] = 0.8;
-//	else
-//		pos_con_input.pos_d[0] = 0.2;
-	pos_con_input.pos_d[1] = -0.8;
-	pos_con_input.pos_d[2] = 2.0;
-//	std::cout << "desired height: "<< pos_con_input.pos_d[2] << std::endl;
+	double height = 0.5;
+	double radius = 0.8;
+	double circle_ang_vel = 180.0/180.0*3.14;
+	unsigned int time_label1 = 120;
+
+	if(process_loop_count < time_label1) {
+		pos_con_input.pos_d[0] = radius;
+		pos_con_input.pos_d[1] = 0.0;
+		pos_con_input.pos_d[2] = height;
+		pos_con_input.euler_d[2] = 0;
+	}
+	else {
+		pos_con_input.pos_d[0] = radius * cos((process_loop_count - 125)*0.01*circle_ang_vel);
+		pos_con_input.pos_d[1] = radius * sin((process_loop_count - 125)*0.01*circle_ang_vel);
+		pos_con_input.pos_d[2] = height;
+		pos_con_input.euler_d[2] = 0;// + (process_loop_count - 125)*0.01*circle_ang_vel;
+	}
 
 	pos_con_input.vel_d[0] = 0;
 	pos_con_input.vel_d[1] = 0;
@@ -64,7 +74,9 @@ void QuadSimProcess::SimLoopUpdate(void)
 
 	att_con_input.euler_d[0] = pos_con_output.euler_d[0];
 	att_con_input.euler_d[1] = pos_con_output.euler_d[1];
-	att_con_input.euler_d[2] = 0;
+	att_con_input.euler_d[2] = pos_con_output.euler_d[2];
+
+	std::cout << "desired yaw: " << att_con_input.euler_d[2] << std::endl;
 	att_con_input.rot_rate_d[0] = 0;
 	att_con_input.rot_rate_d[1] = 0;
 	att_con_input.rot_rate_d[2] = 0;
