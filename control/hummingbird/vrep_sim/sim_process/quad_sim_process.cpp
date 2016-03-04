@@ -14,7 +14,7 @@
 #include "control/pos_euler_con.h"
 
 #include "control/att_quat_con.h"
-
+#include "control/pos_quat_con.h"
 
 using namespace srcl_ctrl;
 
@@ -119,23 +119,37 @@ void QuadSimProcess::SimLoopUpdate(void)
 //	}
 //	else{
 
-//	if(process_loop_count < time_label1) {
-//		pos_con_input.pos_d[0] = 0;
-//		pos_con_input.pos_d[1] = 0;
-//		pos_con_input.pos_d[2] = 1.0;
-//	}
+	if(process_loop_count < time_label1) {
+		pos_con_input.pos_d[0] = 0;
+		pos_con_input.pos_d[1] = 0;
+		pos_con_input.pos_d[2] = height;
+		pos_con_input.yaw_d = 0;
+//		pos_con_input.pos_d[0] = radius;
+//		pos_con_input.pos_d[1] = 0.0;
+//		pos_con_input.pos_d[2] = height;
+	}
 //	else if(process_loop_count < time_label2) {
 //		pos_con_input.pos_d[0] = 1.0;
 //		pos_con_input.pos_d[1] = 0;
 //		pos_con_input.pos_d[2] = 1.0;
 //	}
-//	else
-//	{
-		pos_con_input.pos_d[0] = 1.0;
-		pos_con_input.pos_d[1] = 1.0;
-		pos_con_input.pos_d[2] = 1.0;
-//	}
-		pos_con_input.yaw_d = 0;
+	else
+	{
+//		pos_con_input.pos_d[0] = 1.0;
+//		pos_con_input.pos_d[1] = 1.0;
+//		pos_con_input.pos_d[2] = 1.0;
+		pos_con_input.pos_d[0] = 0.0;//radius * cos((process_loop_count - 125)*0.01*circle_ang_vel);
+		pos_con_input.pos_d[1] = 0.0;//radius * sin((process_loop_count - 125)*0.01*circle_ang_vel);
+		pos_con_input.pos_d[2] = height;
+		pos_con_input.yaw_d = M_PI;
+
+		if(process_loop_count == time_label1) {
+			std::cout << "------------------------------------------------" << std::endl;
+			std::cout << "------------------------------------------------" << std::endl;
+			std::cout << "------------------------------------------------" << std::endl;
+		}
+	}
+
 
 		pos_con_input.vel_d[0] = 0;
 		pos_con_input.vel_d[1] = 0;
@@ -156,22 +170,24 @@ void QuadSimProcess::SimLoopUpdate(void)
 		//		Eigen::Quaterniond rotd(Eigen::AngleAxisd(Eigen::AngleAxisd(M_PI+M_PI/6, Eigen::Vector3d::UnitZ())));
 		//		quat_con_input.quat_d = rotd;
 		//	}
-		Eigen::Quaterniond rotd(Eigen::AngleAxisd(Eigen::AngleAxisd(-M_PI/2, Eigen::Vector3d::UnitZ())));
+		Eigen::Quaterniond rotd(Eigen::AngleAxisd(Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitZ())));
 
 		//	Eigen::Quaterniond rotx(Eigen::AngleAxisd(Eigen::AngleAxisd(M_PI/180.0*5, Eigen::Vector3d::UnitX())));
 		//	Eigen::Quaterniond roty(Eigen::AngleAxisd(0, rotx.matrix().col(1)));
 		//	Eigen::Quaterniond rotz(Eigen::AngleAxisd(M_PI - M_PI/36, roty.matrix().col(2)));
 		//	Eigen::Quaterniond rotd = rotz * roty * rotx;
-		//	quat_con_input.quat_d = rotd;
 
 		quat_con_input.quat_d = pos_con_output.quat_d;
+		if(process_loop_count >= time_label1)
+			quat_con_input.quat_d = rotd;
+
+//		std::cout << "quaterion desired: "<< quat_con_input.quat_d.w() << " , " << quat_con_input.quat_d.x() << " , " << quat_con_input.quat_d.y() << " , "<<quat_con_input.quat_d.z() << std::endl;
 		quat_con_input.ftotal_d = pos_con_output.ftotal_d;
 		quat_con_input.rot_rate_d[0] = 0;
 		quat_con_input.rot_rate_d[1] = 0;
 		quat_con_input.rot_rate_d[2] = 0;
 		AttQuatCon attquat_con(&rs_);
 		attquat_con.Update(&quat_con_input, &att_con_output);
-//	}
 
 	// set control variables
 	cmd_m_.motor_cmd.ang_vel[0] = att_con_output.motor_ang_vel_d[0];
@@ -179,12 +195,12 @@ void QuadSimProcess::SimLoopUpdate(void)
 	cmd_m_.motor_cmd.ang_vel[2] = att_con_output.motor_ang_vel_d[2];
 	cmd_m_.motor_cmd.ang_vel[3] = att_con_output.motor_ang_vel_d[3];
 
-	std::cout << "----------------" << std::endl;
-	std::cout<< "desired motor vel: ( "<< cmd_m_.motor_cmd.ang_vel[0] << " , "
-			<< cmd_m_.motor_cmd.ang_vel[1] << " , "
-			<< cmd_m_.motor_cmd.ang_vel[2] << " , "
-			<< cmd_m_.motor_cmd.ang_vel[3] << " ) "<<std::endl;
-	std::cout << "----------------" << std::endl;
+//	std::cout << "----------------" << std::endl;
+//	std::cout<< "desired motor vel: ( "<< cmd_m_.motor_cmd.ang_vel[0] << " , "
+//			<< cmd_m_.motor_cmd.ang_vel[1] << " , "
+//			<< cmd_m_.motor_cmd.ang_vel[2] << " , "
+//			<< cmd_m_.motor_cmd.ang_vel[3] << " ) "<<std::endl;
+//	std::cout << "----------------" << std::endl;
 
 	// code below is used for debugging
 	process_loop_count++;

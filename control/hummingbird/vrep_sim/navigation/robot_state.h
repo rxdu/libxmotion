@@ -21,26 +21,28 @@ public:
 	~RobotState();
 
 public:
-	Point3 position;
-	Point3 velocity;
-	Point3 orientation;
-	Eigen::Quaterniond quat;
-	Point3 rotation_rate;
+	Point3 position_;
+	Point3 velocity_;
+	Point3 orientation_;
+	Eigen::Quaterniond quat_;
+	Point3 rotation_rate_;
 
 private:
 	Eigen::Matrix<float,2,2> M_matrix_;
+	Eigen::Quaterniond last_quat_;
+	Point3 last_orientation_;
 
 public:
-	double w_h;
-	const float g;
+	double w_h_;
+	const float g_;
 
 	// quadrotor parameters
-	double mass;
-	double arm_length;
-	double kF;
-	double kM;
+	double mass_;
+	double arm_length_;
+	double kF_;
+	double kM_;
 
-	double sim_step;
+	double sim_step_;
 
 public:
 	void UpdateRobotState(const DataFromRobot &new_data);

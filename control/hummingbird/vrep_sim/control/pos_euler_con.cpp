@@ -34,13 +34,13 @@ void PosEulerCon::Update(ControlInput* input, ControlOutput *cmd)
 	float pos_error[3],vel_error[3];
 	float acc_desired[3];
 
-	pos_error[0] = input->pos_d[0] - rs_->position.x;
-	pos_error[1] = input->pos_d[1] - rs_->position.y;
-	pos_error[2] = input->pos_d[2] - rs_->position.z;
+	pos_error[0] = input->pos_d[0] - rs_->position_.x;
+	pos_error[1] = input->pos_d[1] - rs_->position_.y;
+	pos_error[2] = input->pos_d[2] - rs_->position_.z;
 
-	vel_error[0] = input->vel_d[0] - rs_->velocity.x;
-	vel_error[1] = input->vel_d[1] - rs_->velocity.y;
-	vel_error[2] = input->vel_d[2] - rs_->velocity.z;
+	vel_error[0] = input->vel_d[0] - rs_->velocity_.x;
+	vel_error[1] = input->vel_d[1] - rs_->velocity_.y;
+	vel_error[2] = input->vel_d[2] - rs_->velocity_.z;
 
 	for(int i = 0; i < 3; i++)
 	{
@@ -59,10 +59,10 @@ void PosEulerCon::Update(ControlInput* input, ControlOutput *cmd)
 
 //	cmd->euler_d[0] = 1/rs_->g * (acc_desired[0]*sin(input->euler_d[2]) - acc_desired[1]*cos(input->euler_d[2]));
 //	cmd->euler_d[1] = 1/rs_->g * (acc_desired[0]*cos(input->euler_d[2]) + acc_desired[1]*sin(input->euler_d[2]));
-	cmd->euler_d[0] = 1/rs_->g * (- acc_desired[1]);
-	cmd->euler_d[1] = 1/rs_->g * (acc_desired[0]);
+	cmd->euler_d[0] = 1/rs_->g_ * (- acc_desired[1]);
+	cmd->euler_d[1] = 1/rs_->g_ * (acc_desired[0]);
 	cmd->euler_d[2] = input->euler_d[2];
-	cmd->delta_w_F = rs_->mass/(8.0*rs_->kF*rs_->w_h) * acc_desired[2];
+	cmd->delta_w_F = rs_->mass_/(8.0*rs_->kF_*rs_->w_h_) * acc_desired[2];
 
 //	std::cout << "euler_d[0]: " << cmd->euler_d[0] <<std::endl;
 //	std::cout << "euler_d[1]: " << cmd->euler_d[1] <<std::endl;

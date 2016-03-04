@@ -100,7 +100,7 @@ int main(int argc,char* argv[])
 				double freq = 1.0/(double(time_now - last_time)/CLOCKS_PER_SEC);
 				last_time = time_now;
 
-				std::cout << "Control loop frequency: " << freq << std::endl;
+//				std::cout << "Control loop frequency: " << freq << std::endl;
 			}
 //			else
 //				std::cout<<"failed to fetch data from simulator"<<std::endl;

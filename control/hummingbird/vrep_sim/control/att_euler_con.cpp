@@ -32,13 +32,13 @@ void AttEulerCon::Update(ControlInput *input, ControlOutput *cmd)
 	double euler_error[3];
 	double rate_error[3];
 
-	euler_error[0] = input->euler_d[0] - rs_->orientation.x;
-	euler_error[1] = input->euler_d[1] - rs_->orientation.y;
-	euler_error[2] = input->euler_d[2] - rs_->orientation.z;
+	euler_error[0] = input->euler_d[0] - rs_->orientation_.x;
+	euler_error[1] = input->euler_d[1] - rs_->orientation_.y;
+	euler_error[2] = input->euler_d[2] - rs_->orientation_.z;
 
-	rate_error[0] = input->rot_rate_d[0] - rs_->rotation_rate.x;
-	rate_error[1] = input->rot_rate_d[1] - rs_->rotation_rate.y;
-	rate_error[2] = input->rot_rate_d[2] - rs_->rotation_rate.z;
+	rate_error[0] = input->rot_rate_d[0] - rs_->rotation_rate_.x;
+	rate_error[1] = input->rot_rate_d[1] - rs_->rotation_rate_.y;
+	rate_error[2] = input->rot_rate_d[2] - rs_->rotation_rate_.z;
 
 	for(int i = 0; i < 3; i++)
 	{
@@ -63,7 +63,7 @@ void AttEulerCon::Update(ControlInput *input, ControlOutput *cmd)
 //	std::cout<< "delta_w_theta: " << delta_w_psi << std::endl;
 
 	double force;
-	force = rs_->w_h + input->delta_w_F;
+	force = rs_->w_h_ + input->delta_w_F;
 
 //	std::cout<<"force:"<<force << std::endl;
 

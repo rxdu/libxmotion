@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <iomanip>
 #include <cmath>
 #include "control/att_quat_con.h"
 
@@ -34,8 +35,8 @@ Eigen::Matrix<double,4,1> AttQuatCon::CalcMotorCmd(Eigen::Matrix<float,4,1> forc
 	Eigen::Matrix<double,4,1> f_motor;
 	Eigen::Matrix<double,4,1> ang_vel;
 
-	double d = rs_->arm_length;
-	double c = rs_->kM/rs_->kF;
+	double d = rs_->arm_length_;
+	double c = rs_->kM_/rs_->kF_;
 
 	trans << 1, 1, 1, 1,
 			 0,-d, 0, d,
@@ -66,14 +67,15 @@ Eigen::Matrix<double,4,1> AttQuatCon::CalcMotorCmd(Eigen::Matrix<float,4,1> forc
 //	std::cout<<"motor force: \n"<<f_motor<<std::endl;
 
 //	f_motor = trans.inverse() * force_toqure;
-	ang_vel = f_motor/rs_->kF;
+	ang_vel = f_motor/rs_->kF_;
 
 //	std::cout<<"ang_vel 0: \n"<<ang_vel<<std::endl;
 
 	for(int i = 0; i < 4; i++) {
 		if(ang_vel(i) < 0)
 			ang_vel(i) = 0;
-		ang_vel(i) = sqrt(ang_vel(i));
+		ang_vel(i) = std::sqrt(ang_vel(i));
+//		ang_vel(i) = std::round(ang_vel(i));
 	}
 
 //	std::cout<<"ang_vel 0: \n"<<ang_vel<<std::endl;
@@ -87,7 +89,7 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 {
 	Eigen::Quaterniond quat_e;
 
-	quat_e = rs_->quat.conjugate() * input->quat_d;
+	quat_e = rs_->quat_.conjugate() * input->quat_d;
 
 	double qe0 = quat_e.w();
 	double M_sign;
@@ -100,12 +102,12 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	Eigen::Matrix<float,4,1> desired_ft;
 
 	double rate_error[3];
-	rate_error[0] = input->rot_rate_d[0] - rs_->rotation_rate.x;
-	rate_error[1] = input->rot_rate_d[1] - rs_->rotation_rate.y;
-	rate_error[2] = input->rot_rate_d[2] - rs_->rotation_rate.z;
+	rate_error[0] = input->rot_rate_d[0] - rs_->rotation_rate_.x;
+	rate_error[1] = input->rot_rate_d[1] - rs_->rotation_rate_.y;
+	rate_error[2] = input->rot_rate_d[2] - rs_->rotation_rate_.z;
 
 	for(int i = 0; i < 4; i++){
-		if(rate_error[i] < 0.00001 && rate_error[i] > -0.00001)
+		if(rate_error[i] < 10e-6 && rate_error[i] > -10e-6)
 			rate_error[i] = 0;
 	}
 
@@ -120,6 +122,16 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	desired_ft(1) = M_sign * kp_phi * quat_e.x() + kd_phi * rate_error[0];
 	desired_ft(2) = M_sign * kp_theta * quat_e.y() + kd_theta * rate_error[1];
 	desired_ft(3) = M_sign * kp_psi * quat_e.z() + kd_psi * rate_error[2];
+
+	for(int i = 0; i < 4; i++)
+		if(desired_ft(i) < 10e-4 && desired_ft(i) > -10e-4)
+			desired_ft(i) = 0;
+
+//	std::cout<<"quaternion error: "<< std::setw(13) << quat_e.w()<<" , "<< std::setw(13) <<quat_e.x()<<" , "<< std::setw(13) <<quat_e.y()<<" , "<< std::setw(13) << quat_e.z()
+//			<< " , " << std::setw(5) << M_sign
+//			<< " , " << std::setw(13) << desired_ft(1)
+//			<< " , " << std::setw(13) << desired_ft(2)
+//			<< " , " << std::setw(13) << desired_ft(3)<<std::endl;
 
 //	desired_ft(1) = 0;
 //	desired_ft(2) = 0;
@@ -136,6 +148,17 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	//	desired_ft << 6.1198,0,0,-0.0120;
 	//	force_torque << 5.6310,0,0,0;
 	Eigen::Matrix<double,4,1> motor_vel = CalcMotorCmd(desired_ft);
+
+	std::cout<<"data: "
+				<< std::setw(10) << desired_ft(0)
+				<< " , " << std::setw(12) << desired_ft(1)
+				<< " , " << std::setw(12) << desired_ft(2)
+				<< " , " << std::setw(12) << desired_ft(3)
+				<< " * " << std::setw(12) << motor_vel(0)
+				<< " , " << std::setw(12) << motor_vel(1)
+				<< " , " << std::setw(12) << motor_vel(2)
+				<< " , " << std::setw(12) << motor_vel(3)
+				<<std::endl;
 
 	cmd->motor_ang_vel_d[0] = motor_vel(0);
 	cmd->motor_ang_vel_d[1] = motor_vel(1);

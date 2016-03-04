@@ -200,6 +200,8 @@ void QuadSimClient::SendPropellerCmd(QuadCmd cmd)
 	if(right_prop < 0)
 		right_prop = 0;
 
+//	std::cout << "prop cmd 0-4: "<<cmd.ang_vel[0] << " , "<< cmd.ang_vel[1] << " , " << cmd.ang_vel[2] << " , " << cmd.ang_vel[3] << std::endl;
+
 	// send commands to simulator
 	simxSetFloatSignal(client_id_, "propeller_cmd_front", front_prop, simx_opmode_oneshot);
 	simxSetFloatSignal(client_id_, "propeller_cmd_rear", rear_prop, simx_opmode_oneshot);
