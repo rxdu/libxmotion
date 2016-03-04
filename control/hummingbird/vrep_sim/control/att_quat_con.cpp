@@ -116,7 +116,7 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	if(quat_e.z() < 10e-6 && quat_e.z() > -10e-6)
 		quat_e.z() = 0;
 
-	desired_ft(0) = rs_->kF * (rs_->w_h)*(rs_->w_h) * 4;
+	desired_ft(0) = input->ftotal_d; //rs_->kF * (rs_->w_h)*(rs_->w_h) * 4;
 	desired_ft(1) = M_sign * kp_phi * quat_e.x() + kd_phi * rate_error[0];
 	desired_ft(2) = M_sign * kp_theta * quat_e.y() + kd_theta * rate_error[1];
 	desired_ft(3) = M_sign * kp_psi * quat_e.z() + kd_psi * rate_error[2];
@@ -124,12 +124,12 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 //	desired_ft(1) = 0;
 //	desired_ft(2) = 0;
 
-	std::cout<<"desired quaternion (w,x,y,z):"<< input->quat_d.w() << " , " << input->quat_d.x() << " , "
-				<<input->quat_d.y() << " , "<< input->quat_d.z() << std::endl;
-	std::cout<<"quaternion error (w,x,y,z):"<< quat_e.w() << " , " << quat_e.x() << " , "
-			<<quat_e.y() << " , "<< quat_e.z() << std::endl;
-	std::cout<<"quaternion error, rate error (z): "<< quat_e.z() << " , " <<rate_error[2]<< std::endl;
-	std::cout << "desired force/toqrue: \n"<< desired_ft << std::endl;
+//	std::cout<<"desired quaternion (w,x,y,z):"<< input->quat_d.w() << " , " << input->quat_d.x() << " , "
+//				<<input->quat_d.y() << " , "<< input->quat_d.z() << std::endl;
+//	std::cout<<"quaternion error (w,x,y,z):"<< quat_e.w() << " , " << quat_e.x() << " , "
+//			<<quat_e.y() << " , "<< quat_e.z() << std::endl;
+//	std::cout<<"quaternion error, rate error (z): "<< quat_e.z() << " , " <<rate_error[2]<< std::endl;
+//	std::cout << "desired force/toqrue: \n"<< desired_ft << std::endl;
 
 	// calculate desired motor cmd from desired force and torque
 	// w1,w2,w3,w4 = 4800,5200,4800,5200

@@ -12,6 +12,7 @@
 #include "sim_process/sim_process.h"
 #include <vrep_client/robot_sim_client.h>
 #include "navigation/robot_state.h"
+#include "control/pos_quat_con.h"
 
 namespace srcl_ctrl
 {
@@ -26,6 +27,8 @@ private:
 	unsigned long process_loop_count;
 
 	RobotState rs_;
+
+	PosQuatCon* pos_quat_con;
 
 public:
 	void SimLoopUpdate();

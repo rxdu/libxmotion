@@ -1,0 +1,139 @@
+/*
+ * pos_quat_con.cpp
+ *
+ *  Created on: Mar 3, 2016
+ *      Author: rdu
+ */
+
+#include <iostream>
+#include <cmath>
+#include "control/pos_quat_con.h"
+
+using namespace srcl_ctrl;
+
+PosQuatCon::PosQuatCon(RobotState* _rs):
+		Controller(_rs),zint_uppper_limit(0.1),zint_lower_limit(-1.0),
+		xyint_uppper_limit(0.8), xyint_lower_limit(-0.8)
+{
+	kp_0 = 3.8;
+	ki_0 = 0.08;
+	kd_0 = 3.2;
+
+	kp_1 = 3.8;
+	ki_1 = 0.08;
+	kd_1 = 3.2;
+
+	// kp kd 1.8 2.45
+	kp_2 = 3.2;
+	ki_2 = 0.08;
+	kd_2 = 2.85;
+
+	pos_e_integral[0] = 0.0;
+	pos_e_integral[1] = 0.0;
+	pos_e_integral[2] = 0.0;
+}
+
+PosQuatCon::~PosQuatCon()
+{
+
+}
+
+void PosQuatCon::Update(ControlInput *input, ControlOutput *cmd)
+{
+	float pos_error[3],vel_error[3];
+	float acc_desired[3];
+
+	pos_error[0] = input->pos_d[0] - rs_->position.x;
+	pos_error[1] = input->pos_d[1] - rs_->position.y;
+	pos_error[2] = input->pos_d[2] - rs_->position.z;
+
+	std::cout << "pos error (x, y, z): " << pos_error[0] << " , " << pos_error[1] << " , " << pos_error[2] << std::endl;
+
+	vel_error[0] = input->vel_d[0] - rs_->velocity.x;
+	vel_error[1] = input->vel_d[1] - rs_->velocity.y;
+	vel_error[2] = input->vel_d[2] - rs_->velocity.z;
+
+	std::cout << "vel error (x, y, z): " << vel_error[0] << " , " << vel_error[1] << " , " << vel_error[2] << std::endl;
+
+	for(int i = 0; i < 3; i++)
+	{
+		if(pos_error[i] < 0.001 && pos_error[i] > -0.001)
+			pos_error[i] = 0;
+		if(vel_error[i] < 0.001 && vel_error[i] > -0.001)
+			vel_error[i] = 0;
+	}
+
+	acc_desired[0] = kp_0 * pos_error[0] + ki_0 * pos_e_integral[0] + kd_0 * vel_error[0];
+	acc_desired[1] = kp_1 * pos_error[1] + ki_1 * pos_e_integral[1] + kd_1 * vel_error[1];
+		acc_desired[2] = kp_2 * pos_error[2] + ki_2 * pos_e_integral[2] + kd_2 * vel_error[2];
+
+	std::cout << "desired acc - z: "<< acc_desired[2] << std::endl;
+
+	pos_e_integral[0] = pos_e_integral[0] + pos_error[0];
+	pos_e_integral[1] = pos_e_integral[1] + pos_error[1];
+	pos_e_integral[2] = pos_e_integral[2] + pos_error[2];
+
+	if(pos_e_integral[0] > xyint_uppper_limit)
+		pos_e_integral[0] = xyint_uppper_limit;
+	if(pos_e_integral[0] < xyint_lower_limit)
+		pos_e_integral[0] = xyint_lower_limit;
+
+	if(pos_e_integral[1] > xyint_uppper_limit)
+		pos_e_integral[1] = xyint_uppper_limit;
+	if(pos_e_integral[1] < xyint_lower_limit)
+		pos_e_integral[1] = xyint_lower_limit;
+
+	if(pos_e_integral[2] > zint_uppper_limit)
+		pos_e_integral[2] = zint_uppper_limit;
+	if(pos_e_integral[2] < zint_lower_limit)
+		pos_e_integral[2] = zint_lower_limit;
+
+
+	std::cout << "pos error integral (x, y, z): " << pos_e_integral[0] << " , " << pos_e_integral[1] << " , " << pos_e_integral[2] << std::endl;
+
+	Eigen::Vector3d Fi(acc_desired[0], acc_desired[1], acc_desired[2] + rs_->g);
+	Eigen::Vector3d Fi_n;
+	Eigen::Vector3d Fb_n(0,0,1);
+
+	Fi_n = Fi.normalized();
+
+//	std::cout<< "Fi: \n"<<Fi<<std::endl;
+//	std::cout<< "Fi_n: \n"<<Fi_n<<std::endl;
+
+	Eigen::Vector4d qd_n;
+	Eigen::Vector3d FbFi_cross;
+	double FbT_Fi;
+	double scale;
+	double qd_wd;
+	Eigen::Quaterniond quat_pr;
+	Eigen::Quaterniond quat_y;
+
+	FbT_Fi = Fb_n.transpose() * Fi_n;
+
+	if(FbT_Fi < 0)
+	{
+		Fb_n(2) = -1;
+		FbT_Fi = Fb_n.transpose() * Fi_n;
+	}
+
+	qd_wd = 1+FbT_Fi;
+	scale = 1/sqrt(2*qd_wd);
+	FbFi_cross = Fb_n.cross(Fi_n);
+
+	quat_pr.w() = qd_wd/scale;
+	quat_pr.x() = FbFi_cross(0)/scale;
+	quat_pr.y() = FbFi_cross(1)/scale;
+	quat_pr.z() = FbFi_cross(2)/scale;
+
+	quat_y.w() = cos(input->yaw_d/2);
+	quat_y.x() = 0;
+	quat_y.y() = 0;
+	quat_y.z() = sin(input->yaw_d/2);
+
+	Eigen::Quaterniond quat_result = quat_pr * quat_y;
+	cmd->quat_d = quat_result.normalized();
+	cmd->ftotal_d = Fi.norm() * rs_->mass;
+
+	std::cout << "quaterion desired: "<< cmd->quat_d.w() << " , " << cmd->quat_d.x() << " , " << cmd->quat_d.y() << " , "<<cmd->quat_d.z() << std::endl;
+}
+

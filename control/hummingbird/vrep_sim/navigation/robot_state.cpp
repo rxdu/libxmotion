@@ -14,7 +14,8 @@ using namespace srcl_ctrl;
 RobotState::RobotState():
 		g(9.8),mass(0.57375),
 		arm_length(0.175),
-		kF(6.11e-8),kM(1.5e-9)
+		kF(6.11e-8),kM(1.5e-9),
+		sim_step(0.01)
 {
 	w_h = sqrt(mass * g / 4 / kF);
 

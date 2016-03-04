@@ -19,6 +19,7 @@ typedef struct
 	// input of position controller
 	float pos_d[3];
 	float vel_d[3];
+	float yaw_d;
 
 	// input of attitude controller (using Euler)
 	float euler_d[3];
@@ -27,6 +28,7 @@ typedef struct
 
 	// input of attitude controller (using Quaternion)
 	Eigen::Quaterniond quat_d;
+	float ftotal_d;
 
 }ControlInput;
 
@@ -37,6 +39,7 @@ typedef struct{
 
 	// output of position controller (using Quaternion)
 	Eigen::Quaterniond quat_d;
+	float ftotal_d;
 
 	// output of attitude controller
 	float motor_ang_vel_d[3];

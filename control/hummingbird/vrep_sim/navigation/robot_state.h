@@ -40,6 +40,8 @@ public:
 	double kF;
 	double kM;
 
+	double sim_step;
+
 public:
 	void UpdateRobotState(const DataFromRobot &new_data);
 	Eigen::Matrix<float,2,2> GetMMatrix(void);
