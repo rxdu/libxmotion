@@ -32,6 +32,7 @@ extern "C" {
 using namespace g3;
 using namespace srcl_ctrl;
 
+#define ENABLE_LOG
 #define USE_FIXED_PORT_NUM
 
 #ifdef USE_FIXED_PORT_NUM

@@ -178,7 +178,7 @@ void QuadSimProcess::SimLoopUpdate(void)
 		//		Eigen::Quaterniond rotd(Eigen::AngleAxisd(Eigen::AngleAxisd(M_PI+M_PI/6, Eigen::Vector3d::UnitZ())));
 		//		quat_con_input.quat_d = rotd;
 		//	}
-		Eigen::Quaterniond rotd(Eigen::AngleAxisd(M_PI*75.0/180.0, Eigen::Vector3d::UnitX()));
+		Eigen::Quaterniond rotd(Eigen::AngleAxisd(M_PI*100.0/180.0, Eigen::Vector3d::UnitX()));
 
 //			Eigen::Quaterniond rotx(Eigen::AngleAxisd(M_PI*10.0/180.0, Eigen::Vector3d::UnitX()));
 //			Eigen::Quaterniond roty(Eigen::AngleAxisd(M_PI*10.0/180.0, rotx.matrix().col(1)));
@@ -226,7 +226,7 @@ void QuadSimProcess::SimLoopUpdate(void)
 	/* data format: image(IMG_RES_X * IMG_RES_Y bytes) +							*/
 //	if(process_loop_count == 10)
 //	{
-//		std::string str;
+		std::string str;
 //		int i,j;
 //
 //		for(i = 0; i < IMG_RES_Y; i++)
@@ -238,6 +238,13 @@ void QuadSimProcess::SimLoopUpdate(void)
 //			}
 //		}
 
+		str += std::to_string(cmd_m_.motor_cmd.ang_vel[0]);
+		str += ",";
+		str += std::to_string(cmd_m_.motor_cmd.ang_vel[1]);
+		str += ",";
+		str += std::to_string(cmd_m_.motor_cmd.ang_vel[2]);
+		str += ",";
+		str += std::to_string(cmd_m_.motor_cmd.ang_vel[3]);
 
 		LOG(INFO) << str;
 //	}
