@@ -63,7 +63,7 @@ int main(int argc,char* argv[])
 #ifdef ENABLE_LOG
 	// initialize logger
 	std::unique_ptr<LogWorker> logworker{ LogWorker::createWithNoSink() };
-	auto sinkHandle = logworker->addSink(std2::make_unique<DataSink>("carsim","/home/rdu/Workspace/robot_toolkit/simulator/vrep/ackermann/log"),
+	auto sinkHandle = logworker->addSink(std2::make_unique<DataSink>("hummingbird_sim","/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/control/hummingbird/vrep_sim/log"),
 			&DataSink::fileWrite);
 	initializeLogging(logworker.get());
 #endif

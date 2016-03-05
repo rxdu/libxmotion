@@ -18,6 +18,8 @@
 
 using namespace srcl_ctrl;
 
+#define ENABLE_LOG
+
 QuadSimProcess::QuadSimProcess(int client_id):
 	SimProcess(new QuadSimClient(client_id)),
 	process_loop_count(0),pos_quat_con(new PosQuatCon(&rs_))
@@ -224,17 +226,17 @@ void QuadSimProcess::SimLoopUpdate(void)
 	/* data format: image(IMG_RES_X * IMG_RES_Y bytes) +							*/
 //	if(process_loop_count == 10)
 //	{
-		std::string str;
-		int i,j;
-
-		for(i = 0; i < IMG_RES_Y; i++)
-		{
-			for(j = 0; j < IMG_RES_X; j++){
+//		std::string str;
+//		int i,j;
+//
+//		for(i = 0; i < IMG_RES_Y; i++)
+//		{
+//			for(j = 0; j < IMG_RES_X; j++){
 //				str += std::to_string((unsigned int)(rs_m.mono_image[i][j]));
-				str += std::to_string((unsigned int)(line_det_.bin_image_[i][j]));
-				str += ",";
-			}
-		}
+//				str += std::to_string((unsigned int)(line_det_.bin_image_[i][j]));
+//				str += ",";
+//			}
+//		}
 
 
 		LOG(INFO) << str;
