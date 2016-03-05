@@ -131,16 +131,17 @@ void PosQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	quat_y.z() = sin(input->yaw_d/2);
 
 	Eigen::Quaterniond quat_result = quat_pr * quat_y;
+
 	cmd->quat_d = quat_result.normalized();
 	cmd->ftotal_d = Fi.norm() * rs_->mass_;
 
-	if(cmd->quat_d.x() < 10e-5 && cmd->quat_d.x() > -10e-5)
+	if(cmd->quat_d.x() < 10e-6 && cmd->quat_d.x() > -10e-6)
 		cmd->quat_d.x() = 0;
-	if(cmd->quat_d.y() < 10e-5 && cmd->quat_d.y() > -10e-5)
+	if(cmd->quat_d.y() < 10e-6 && cmd->quat_d.y() > -10e-6)
 		cmd->quat_d.y() = 0;
-	if(cmd->quat_d.z() < 10e-5 && cmd->quat_d.z() > -10e-5)
+	if(cmd->quat_d.z() < 10e-6 && cmd->quat_d.z() > -10e-6)
 		cmd->quat_d.z() = 0;
-	if(cmd->quat_d.w() < 10e-5 && cmd->quat_d.w() > -10e-5)
+	if(cmd->quat_d.w() < 10e-6 && cmd->quat_d.w() > -10e-6)
 		cmd->quat_d.w() = 0;
 
 //	std::cout << "quaterion desired: "<< cmd->quat_d.w() << " , " << cmd->quat_d.x() << " , " << cmd->quat_d.y() << " , "<<cmd->quat_d.z() << std::endl;

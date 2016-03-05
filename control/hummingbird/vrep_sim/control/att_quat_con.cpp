@@ -15,7 +15,7 @@ using namespace srcl_ctrl;
 AttQuatCon::AttQuatCon(RobotState* _rs):
 	Controller(_rs)
 {
-	kp_phi = 0.8;
+	kp_phi = 1;
 	kd_phi = 0.1;
 	kp_theta = 1;
 	kd_theta = 0.1;
@@ -136,17 +136,25 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 
 	std::cout<<"data: "
 				<< std::setw(5) << M_sign
-				<< " | " << std::setw(12) << quat_e.w()
-				<< " , " << std::setw(12) << quat_e.x()
-				<< " , " << std::setw(12) << quat_e.y()
-				<< " , " << std::setw(12) << quat_e.z()
-				<< " | " << std::setw(12) << rate_error[0]
-				<< " , " << std::setw(12) << rate_error[1]
-				<< " , " << std::setw(12) << rate_error[2]
-				<< " | " << std::setw(12) << desired_ft(0)
-				<< " , " << std::setw(12) << desired_ft(1)
-				<< " , " << std::setw(12) << desired_ft(2)
-				<< " , " << std::setw(12) << desired_ft(3)
+				<< " | " << std::setw(10) << rs_->quat_.w()
+//				<< " , " << std::setw(10) << rs_->quat_.x()
+//				<< " , " << std::setw(10) << rs_->quat_.y()
+//				<< " , " << std::setw(10) << rs_->quat_.z()
+//				<< " | " << std::setw(10) << input->quat_d.w()
+//				<< " , " << std::setw(10) << input->quat_d.x()
+//				<< " , " << std::setw(10) << input->quat_d.y()
+//				<< " , " << std::setw(10) << input->quat_d.z()
+				<< " | " << std::setw(10) << quat_e.w()
+				<< " , " << std::setw(10) << quat_e.x()
+				<< " , " << std::setw(10) << quat_e.y()
+				<< " , " << std::setw(10) << quat_e.z()
+//				<< " | " << std::setw(12) << rate_error[0]
+//				<< " , " << std::setw(12) << rate_error[1]
+//				<< " , " << std::setw(12) << rate_error[2]
+//				<< " | " << std::setw(12) << desired_ft(0)
+				<< " * " << std::setw(10) << desired_ft(1)
+//				<< " , " << std::setw(12) << desired_ft(2)
+//				<< " , " << std::setw(12) << desired_ft(3)
 				<<std::endl;
 
 //	desired_ft(1) = 0;
