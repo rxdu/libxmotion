@@ -16,9 +16,9 @@ AttQuatCon::AttQuatCon(RobotState* _rs):
 	Controller(_rs)
 {
 	kp_phi = 0.8;
-	kd_phi = 0.2;
+	kd_phi = 0.1;
 	kp_theta = 1;
-	kd_theta = 0.15;
+	kd_theta = 0.1;
 	kp_psi = 1.2;
 	kd_psi = 0.15;
 }
@@ -90,6 +90,7 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	Eigen::Quaterniond quat_e;
 
 	quat_e = rs_->quat_.conjugate() * input->quat_d;
+	quat_e = quat_e.normalized();
 
 	double qe0 = quat_e.w();
 	double M_sign;

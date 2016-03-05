@@ -170,7 +170,7 @@ void QuadSimProcess::SimLoopUpdate(void)
 		//		Eigen::Quaterniond rotd(Eigen::AngleAxisd(Eigen::AngleAxisd(M_PI+M_PI/6, Eigen::Vector3d::UnitZ())));
 		//		quat_con_input.quat_d = rotd;
 		//	}
-		Eigen::Quaterniond rotd(Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitZ()));
+		Eigen::Quaterniond rotd(Eigen::AngleAxisd(M_PI/36, Eigen::Vector3d::UnitX()));
 
 		//	Eigen::Quaterniond rotx(Eigen::AngleAxisd(M_PI/180.0*5, Eigen::Vector3d::UnitX()));
 		//	Eigen::Quaterniond roty(Eigen::AngleAxisd(0, rotx.matrix().col(1)));
