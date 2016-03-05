@@ -15,10 +15,10 @@ using namespace srcl_ctrl;
 AttQuatCon::AttQuatCon(RobotState* _rs):
 	Controller(_rs)
 {
-	kp_phi = 1;
-	kd_phi = 0.1;
+	kp_phi = 0.8;
+	kd_phi = 0.2;
 	kp_theta = 1;
-	kd_theta = 0.1;
+	kd_theta = 0.15;
 	kp_psi = 1.2;
 	kd_psi = 0.15;
 }
@@ -124,7 +124,7 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	desired_ft(3) = M_sign * kp_psi * quat_e.z() + kd_psi * rate_error[2];
 
 	for(int i = 0; i < 4; i++)
-		if(desired_ft(i) < 10e-4 && desired_ft(i) > -10e-4)
+		if(desired_ft(i) < 10e-5 && desired_ft(i) > -10e-5)
 			desired_ft(i) = 0;
 
 //	std::cout<<"quaternion error: "<< std::setw(13) << quat_e.w()<<" , "<< std::setw(13) <<quat_e.x()<<" , "<< std::setw(13) <<quat_e.y()<<" , "<< std::setw(13) << quat_e.z()
@@ -132,6 +132,21 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 //			<< " , " << std::setw(13) << desired_ft(1)
 //			<< " , " << std::setw(13) << desired_ft(2)
 //			<< " , " << std::setw(13) << desired_ft(3)<<std::endl;
+
+	std::cout<<"data: "
+				<< std::setw(5) << M_sign
+				<< " | " << std::setw(12) << quat_e.w()
+				<< " , " << std::setw(12) << quat_e.x()
+				<< " , " << std::setw(12) << quat_e.y()
+				<< " , " << std::setw(12) << quat_e.z()
+				<< " | " << std::setw(12) << rate_error[0]
+				<< " , " << std::setw(12) << rate_error[1]
+				<< " , " << std::setw(12) << rate_error[2]
+				<< " | " << std::setw(12) << desired_ft(0)
+				<< " , " << std::setw(12) << desired_ft(1)
+				<< " , " << std::setw(12) << desired_ft(2)
+				<< " , " << std::setw(12) << desired_ft(3)
+				<<std::endl;
 
 //	desired_ft(1) = 0;
 //	desired_ft(2) = 0;
@@ -149,16 +164,21 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	//	force_torque << 5.6310,0,0,0;
 	Eigen::Matrix<double,4,1> motor_vel = CalcMotorCmd(desired_ft);
 
-	std::cout<<"data: "
-				<< std::setw(10) << desired_ft(0)
-				<< " , " << std::setw(12) << desired_ft(1)
-				<< " , " << std::setw(12) << desired_ft(2)
-				<< " , " << std::setw(12) << desired_ft(3)
-				<< " * " << std::setw(12) << motor_vel(0)
-				<< " , " << std::setw(12) << motor_vel(1)
-				<< " , " << std::setw(12) << motor_vel(2)
-				<< " , " << std::setw(12) << motor_vel(3)
-				<<std::endl;
+//	std::cout<<"data: "
+//			<< std::setw(5) << M_sign
+//			<< " | " << std::setw(12) << quat_e.w()
+//			<< " , " << std::setw(12) << quat_e.x()
+//			<< " , " << std::setw(12) << quat_e.y()
+//			<< " , " << std::setw(12) << quat_e.z()
+//			<< std::setw(10) << desired_ft(0)
+//			<< " , " << std::setw(12) << desired_ft(1)
+//			<< " , " << std::setw(12) << desired_ft(2)
+//			<< " , " << std::setw(12) << desired_ft(3)
+//			<< " * " << std::setw(12) << motor_vel(0)
+//			<< " , " << std::setw(12) << motor_vel(1)
+//			<< " , " << std::setw(12) << motor_vel(2)
+//			<< " , " << std::setw(12) << motor_vel(3)
+//			<<std::endl;
 
 	cmd->motor_ang_vel_d[0] = motor_vel(0);
 	cmd->motor_ang_vel_d[1] = motor_vel(1);

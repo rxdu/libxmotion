@@ -35,14 +35,18 @@ private:
 public:
 	double w_h_;
 	const float g_;
+	const float max_euler_change_;
 
 	// quadrotor parameters
-	double mass_;
-	double arm_length_;
-	double kF_;
-	double kM_;
+	const double mass_;
+	const double arm_length_;
+	const double kF_;
+	const double kM_;
 
 	double sim_step_;
+
+private:
+	unsigned int invert_quat;
 
 public:
 	void UpdateRobotState(const DataFromRobot &new_data);

@@ -17,7 +17,7 @@
 // headers for vrep remote api
 extern "C" {
     #include "extApi.h"
-/*	#include "extApiCustom.h" // custom remote API functions */
+//	#include "extApiCustom.h" // custom remote API functions
 }
 
 // headers for g3log
