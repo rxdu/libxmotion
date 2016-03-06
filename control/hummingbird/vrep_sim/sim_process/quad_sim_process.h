@@ -27,6 +27,7 @@ private:
 	unsigned long process_loop_count;
 
 	RobotState rs_;
+	RobotState est_rs_;
 
 	PosQuatCon* pos_quat_con;
 

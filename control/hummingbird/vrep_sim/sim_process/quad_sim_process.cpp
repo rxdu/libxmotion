@@ -18,7 +18,7 @@
 
 using namespace srcl_ctrl;
 
-#define ENABLE_LOG
+//#define ENABLE_LOG
 
 QuadSimProcess::QuadSimProcess(int client_id):
 	SimProcess(new QuadSimClient(client_id)),

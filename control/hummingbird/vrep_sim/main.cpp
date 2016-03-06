@@ -97,9 +97,9 @@ int main(int argc,char* argv[])
 				// update simulated control loop
 				sim_process.SimLoopUpdate();
 
-				clock_t time_now = clock();
-				double freq = 1.0/(double(time_now - last_time)/CLOCKS_PER_SEC);
-				last_time = time_now;
+//				clock_t time_now = clock();
+//				double freq = 1.0/(double(time_now - last_time)/CLOCKS_PER_SEC);
+//				last_time = time_now;
 
 //				std::cout << "Control loop frequency: " << freq << std::endl;
 			}
