@@ -50,7 +50,7 @@ void QuadSimProcess::SimLoopUpdate(void)
 	ControlOutput pos_con_output;
 	PosEulerCon pos_con(&rs_);
 
-	double height = 5.0;
+	double height = 0.5;
 	double radius = 0.8;
 	double circle_ang_vel = 180.0/180.0*3.14;
 	unsigned int time_label1 = 120;
@@ -135,13 +135,13 @@ void QuadSimProcess::SimLoopUpdate(void)
 //		pos_con_input.pos_d[1] = 0;
 //		pos_con_input.pos_d[2] = 1.0;
 //	}
-	else if(process_loop_count < time_label2)
+	else //if(process_loop_count < time_label2)
 	{
 //		pos_con_input.pos_d[0] = 1.0;
 //		pos_con_input.pos_d[1] = 1.0;
 //		pos_con_input.pos_d[2] = 1.0;
-		pos_con_input.pos_d[0] = 0.0;//radius * cos((process_loop_count - 125)*0.01*circle_ang_vel);
-		pos_con_input.pos_d[1] = 0.0;//radius * sin((process_loop_count - 125)*0.01*circle_ang_vel);
+		pos_con_input.pos_d[0] = radius * cos((process_loop_count - 125)*0.01*circle_ang_vel);
+		pos_con_input.pos_d[1] = radius * sin((process_loop_count - 125)*0.01*circle_ang_vel);
 		pos_con_input.pos_d[2] = height;
 		pos_con_input.yaw_d = 0;//M_PI/2 - M_PI * 15.0/180.0 ;//M_PI;
 
@@ -151,13 +151,16 @@ void QuadSimProcess::SimLoopUpdate(void)
 			std::cout << "------------------------------------------------" << std::endl;
 		}
 	}
-	else{
-		pos_con_input.pos_d[0] = rs_.position_.x;
-		pos_con_input.pos_d[1] = rs_.position_.y;//radius * sin((process_loop_count - 125)*0.01*circle_ang_vel);
-		pos_con_input.pos_d[2] = rs_.position_.z;
-		pos_con_input.yaw_d = 0;//M_PI/2 - M_PI * 15.0/180.0 ;//M_PI;
-	}
+//	else{
+//		pos_con_input.pos_d[0] = rs_.position_.x;
+//		pos_con_input.pos_d[1] = rs_.position_.y;//radius * sin((process_loop_count - 125)*0.01*circle_ang_vel);
+//		pos_con_input.pos_d[2] = rs_.position_.z;
+//		pos_con_input.yaw_d = 0;//M_PI/2 - M_PI * 15.0/180.0 ;//M_PI;
+//	}
 
+	//		pos_con_input.pos_d[0] = radius;
+	//		pos_con_input.pos_d[1] = 0.0;
+	//		pos_con_input.pos_d[2] = height;
 
 		pos_con_input.vel_d[0] = 0;
 		pos_con_input.vel_d[1] = 0;
@@ -178,24 +181,26 @@ void QuadSimProcess::SimLoopUpdate(void)
 		//		Eigen::Quaterniond rotd(Eigen::AngleAxisd(Eigen::AngleAxisd(M_PI+M_PI/6, Eigen::Vector3d::UnitZ())));
 		//		quat_con_input.quat_d = rotd;
 		//	}
-		Eigen::Quaterniond rotd(Eigen::AngleAxisd(M_PI*100.0/180.0, Eigen::Vector3d::UnitX()));
+//		Eigen::Quaterniond rotd(Eigen::AngleAxisd(M_PI*100.0/180.0, Eigen::Vector3d::UnitX()));
 
-//			Eigen::Quaterniond rotx(Eigen::AngleAxisd(M_PI*10.0/180.0, Eigen::Vector3d::UnitX()));
-//			Eigen::Quaterniond roty(Eigen::AngleAxisd(M_PI*10.0/180.0, rotx.matrix().col(1)));
-//			Eigen::Quaterniond rotz(Eigen::AngleAxisd(M_PI/2, roty.matrix().col(2)));
-//			Eigen::Quaterniond rotd = rotz * roty * rotx;
+			Eigen::Quaterniond rotx(Eigen::AngleAxisd(M_PI*15.0/180.0, Eigen::Vector3d::UnitX()));
+			Eigen::Quaterniond roty(Eigen::AngleAxisd(M_PI*15.0/180.0, rotx.matrix().col(1)));
+			Eigen::Quaterniond rotz(Eigen::AngleAxisd(M_PI*15.0/180.0, roty.matrix().col(2)));
+			Eigen::Quaterniond rotd = rotz * roty * rotx;
 
 		quat_con_input.quat_d = pos_con_output.quat_d;
-		if(process_loop_count >= time_label1 && process_loop_count < time_label2)
-			quat_con_input.quat_d = rotd;
-		else
-		{
-//			quat_con_input.quat_d.w() = 1;
-//			quat_con_input.quat_d.x() = 0;
-//			quat_con_input.quat_d.y() = 0;
-//			quat_con_input.quat_d.z() = 0;
-			quat_con_input.quat_d = pos_con_output.quat_d;
-		}
+//		if(process_loop_count >= time_label1)
+//					quat_con_input.quat_d = rotd;
+//		if(process_loop_count >= time_label1 && process_loop_count < time_label2)
+//			quat_con_input.quat_d = rotd;
+//		else
+//		{
+////			quat_con_input.quat_d.w() = 1;
+////			quat_con_input.quat_d.x() = 0;
+////			quat_con_input.quat_d.y() = 0;
+////			quat_con_input.quat_d.z() = 0;
+//			quat_con_input.quat_d = pos_con_output.quat_d;
+//		}
 
 //		std::cout << "quaterion desired: "<< quat_con_input.quat_d.w() << " , " << quat_con_input.quat_d.x() << " , " << quat_con_input.quat_d.y() << " , "<<quat_con_input.quat_d.z() << std::endl;
 		quat_con_input.ftotal_d = pos_con_output.ftotal_d;
