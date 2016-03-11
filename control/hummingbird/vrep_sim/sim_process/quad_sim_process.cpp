@@ -9,7 +9,7 @@
 #include <string>
 
 #include <sim_process/quad_sim_process.h>
-#include "library/g3log/g3log.hpp"
+#include "g3log/g3log.hpp"
 #include "control/att_euler_con.h"
 #include "control/pos_euler_con.h"
 

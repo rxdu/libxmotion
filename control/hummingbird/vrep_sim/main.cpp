@@ -21,10 +21,9 @@ extern "C" {
 }
 
 // headers for g3log
-#include "library/g3log/g3log.hpp"
-#include "library/g3log/logworker.hpp"
-#include "library/g3log/std2_make_unique.hpp"
-#include "library/g3log/datasink.hpp"
+#include "g3log/g3log.hpp"
+#include "g3log/logworker.hpp"
+#include "g3log/std2_make_unique.hpp"
 
 // headers for user code
 #include <sim_process/quad_sim_process.h>
@@ -63,10 +62,10 @@ int main(int argc,char* argv[])
 
 #ifdef ENABLE_LOG
 	// initialize logger
-	std::unique_ptr<LogWorker> logworker{ LogWorker::createWithNoSink() };
-	auto sinkHandle = logworker->addSink(std2::make_unique<DataSink>("hummingbird_sim","/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/control/hummingbird/vrep_sim/log"),
-			&DataSink::fileWrite);
-	initializeLogging(logworker.get());
+	auto worker = LogWorker::createLogWorker();
+	auto defaultHandler = worker->addDefaultLogger("hummingbird_sim",
+			"/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/control/hummingbird/vrep_sim/log");
+	initializeLogging(worker.get());
 #endif
 
 	// initialize simulator

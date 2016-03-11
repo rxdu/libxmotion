@@ -12,7 +12,7 @@
 #include <iostream>
 #include <cmath>
 
-#include "library/g3log/g3log.hpp"
+#include "g3log/g3log.hpp"
 
 using namespace srcl_ctrl;
 
