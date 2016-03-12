@@ -27,11 +27,11 @@ extern "C" {
 
 // headers for user code
 #include <sim_process/quad_sim_process.h>
+#include "main.h"
 
 using namespace g3;
 using namespace srcl_ctrl;
 
-#define ENABLE_LOG
 #define USE_FIXED_PORT_NUM
 
 #ifdef USE_FIXED_PORT_NUM
@@ -66,6 +66,9 @@ int main(int argc,char* argv[])
 	auto defaultHandler = worker->addDefaultLogger("hummingbird_sim",
 			"/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/control/hummingbird/vrep_sim/log");
 	initializeLogging(worker.get());
+
+	// add data title
+	LOG(INFO) << "pos_r, " << "vel_r, " << "euler_r, " << "quat_r, " << "rot_rate_r";
 #endif
 
 	// initialize simulator

@@ -38,6 +38,14 @@ Name: CMAKE Editor
 Location: http://cmakeed.sourceforge.net/eclipse/
 ```
 
+## 4. Utils
+
+* Log Analysis: this tool depends on Qt5, so you need to install Qt5 and any Dependencies of Qt5 
+
+```
+$ sudo apt-get install libglu1-mesa-dev
+```
+
 ## [Reference]
 
 * [Check integer is power of two](http://www.exploringbinary.com/ten-ways-to-check-if-an-integer-is-a-power-of-two-in-c/)

@@ -10,4 +10,10 @@
 
 #define RCCAR_SIM_VERSION 0.1
 
+#define ENABLE_LOG
+
+#ifdef ENABLE_LOG
+#include "utils_log/utils_log.h"
+#endif
+
 #endif /* MAIN_H_ */

@@ -6,6 +6,7 @@ build
 */~
 */*.*~
 *.m~
+utils/log_analyzer/build-log_analyzer-Desktop_Qt_5_5_1_GCC_64bit-Debug/
 
 # Compiled Object files
 *.slo

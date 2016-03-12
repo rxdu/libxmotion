@@ -8,6 +8,10 @@
 #include <cmath>
 #include <iostream>
 #include <iomanip>
+
+#include "g3log/g3log.hpp"
+
+#include "main.h"
 #include "robot_state.h"
 
 using namespace srcl_ctrl;
@@ -37,6 +41,10 @@ RobotState::RobotState():
 	orientation_.x = 0;
 	orientation_.y = 0;
 	orientation_.z = 0;
+
+	last_orientation_.x = 0;
+	last_orientation_.y = 0;
+	last_orientation_.z = 0;
 
 	rotation_rate_.x = 0;
 	rotation_rate_.y = 0;
@@ -153,6 +161,14 @@ void RobotState::UpdateRobotState(const DataFromRobot & new_data)
 	rotation_rate_.x = new_data.rot_rate_b.x;
 	rotation_rate_.y = new_data.rot_rate_b.y;
 	rotation_rate_.z = new_data.rot_rate_b.z;
+
+#ifdef ENABLE_LOG
+	UtilsLog::AppendLogMsgTuple3f(position_.x,position_.y,position_.z);
+	UtilsLog::AppendLogMsgTuple3f(velocity_.x,velocity_.y,velocity_.z);
+	UtilsLog::AppendLogMsgTuple3f(orientation_.x,orientation_.y,orientation_.z);
+	UtilsLog::AppendLogMsgTuple4f(quat_.w(), quat_.x(), quat_.y(), quat_.z());
+	UtilsLog::AppendLogMsgTuple3f(rotation_rate_.x,rotation_rate_.y,rotation_rate_.z);
+#endif
 }
 
 

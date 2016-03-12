@@ -8,17 +8,16 @@
 #include <iostream>
 #include <string>
 
-#include <sim_process/quad_sim_process.h>
 #include "g3log/g3log.hpp"
+
+#include "main.h"
+#include "sim_process/quad_sim_process.h"
 #include "control/att_euler_con.h"
 #include "control/pos_euler_con.h"
-
 #include "control/att_quat_con.h"
 #include "control/pos_quat_con.h"
 
 using namespace srcl_ctrl;
-
-//#define ENABLE_LOG
 
 QuadSimProcess::QuadSimProcess(int client_id):
 	SimProcess(new QuadSimClient(client_id)),
@@ -216,12 +215,10 @@ void QuadSimProcess::SimLoopUpdate(void)
 	cmd_m_.motor_cmd.ang_vel[2] = att_con_output.motor_ang_vel_d[2];
 	cmd_m_.motor_cmd.ang_vel[3] = att_con_output.motor_ang_vel_d[3];
 
-//	std::cout << "----------------" << std::endl;
-//	std::cout<< "desired motor vel: ( "<< cmd_m_.motor_cmd.ang_vel[0] << " , "
-//			<< cmd_m_.motor_cmd.ang_vel[1] << " , "
-//			<< cmd_m_.motor_cmd.ang_vel[2] << " , "
-//			<< cmd_m_.motor_cmd.ang_vel[3] << " ) "<<std::endl;
-//	std::cout << "----------------" << std::endl;
+#ifdef ENABLE_LOG
+	UtilsLog::AppendLogMsgTuple4f(cmd_m_.motor_cmd.ang_vel[0],cmd_m_.motor_cmd.ang_vel[1],
+			cmd_m_.motor_cmd.ang_vel[2],cmd_m_.motor_cmd.ang_vel[3]);
+#endif
 
 	// code below is used for debugging
 	process_loop_count++;
@@ -229,30 +226,8 @@ void QuadSimProcess::SimLoopUpdate(void)
 #ifdef ENABLE_LOG
 	// log data
 	/* data format: image(IMG_RES_X * IMG_RES_Y bytes) +							*/
-//	if(process_loop_count == 10)
-//	{
-		std::string str;
-//		int i,j;
-//
-//		for(i = 0; i < IMG_RES_Y; i++)
-//		{
-//			for(j = 0; j < IMG_RES_X; j++){
-//				str += std::to_string((unsigned int)(rs_m.mono_image[i][j]));
-//				str += std::to_string((unsigned int)(line_det_.bin_image_[i][j]));
-//				str += ",";
-//			}
-//		}
-
-		str += std::to_string(cmd_m_.motor_cmd.ang_vel[0]);
-		str += ",";
-		str += std::to_string(cmd_m_.motor_cmd.ang_vel[1]);
-		str += ",";
-		str += std::to_string(cmd_m_.motor_cmd.ang_vel[2]);
-		str += ",";
-		str += std::to_string(cmd_m_.motor_cmd.ang_vel[3]);
-
-		LOG(INFO) << str;
-//	}
+	LOG(INFO) << UtilsLog::GetLogEntry();
+	UtilsLog::EmptyLogMsgEntry();
 #endif
 }
 
