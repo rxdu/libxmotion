@@ -19,29 +19,42 @@ MainWindow::MainWindow(QWidget *parent) :
     QIcon openfile_ico("/icons/open_file.ico");
     ui->mainToolBar->addAction(openfile_ico, "Open File");
 
-    // build menu for items in log head list
-    BuildLogHeadMenu();
-
     /* setup central widget layout */
     // add qcustomplot widgets to plot log data
     QGridLayout *central_widget_layout = new QGridLayout;
-    central_widget_layout->addWidget(plot_manager_->GetCustomPlotPtr(QCPLOT_ID::QCPLOT0),0,0,1,4);
-    central_widget_layout->addWidget(plot_manager_->GetCustomPlotPtr(QCPLOT_ID::QCPLOT1),1,0,1,4);
-    central_widget_layout->addWidget(plot_manager_->GetCustomPlotPtr(QCPLOT_ID::QCPLOT2),2,0,1,4);
-    central_widget_layout->addWidget(plot_manager_->GetCustomPlotPtr(QCPLOT_ID::QCPLOT3),3,0,1,4);
+    int plot_col_span = 17;
+    central_widget_layout->addWidget(plot_manager_->GetCustomPlotPtr(QCPLOT_ID::QCPLOT0),0,0,1,plot_col_span);
+    central_widget_layout->addWidget(plot_manager_->GetCustomPlotPtr(QCPLOT_ID::QCPLOT1),1,0,1,plot_col_span);
+    central_widget_layout->addWidget(plot_manager_->GetCustomPlotPtr(QCPLOT_ID::QCPLOT2),2,0,1,plot_col_span);
+    central_widget_layout->addWidget(plot_manager_->GetCustomPlotPtr(QCPLOT_ID::QCPLOT3),3,0,1,plot_col_span);
 
     // add a vertical separation line
     sep_vline1 = new QFrame(this);
     sep_vline1->setObjectName(QString::fromUtf8("line"));
     sep_vline1->setFrameShape(QFrame::VLine);
     sep_vline1->setFrameShadow(QFrame::Sunken);
-    central_widget_layout->addWidget(sep_vline1, 0, 4, 4, 1);
+    central_widget_layout->addWidget(sep_vline1, 0, plot_col_span, 4, 1);
+
+    // configure plots
+//    plot_config_group = new QGroupBox(tr("Select Active Plot"));
+
+//    plot_config_rbtns[0] = new QRadioButton(tr("Plot 1"));
+//    plot_config_rbtns[1] = new QRadioButton(tr("Plot 2"));
+//    plot_config_rbtns[2] = new QRadioButton(tr("Plot 3"));
+//    plot_config_rbtns[3] = new QRadioButton(tr("Plot 4"));
+//    plot_config_rbtns[0]->setChecked(true);
+//    plot_cofig_vbox = new QVBoxLayout;
+//    for(int i = 0; i < 4; i++)
+//        plot_cofig_vbox->addWidget(plot_config_rbtns[i]);
+//    plot_cofig_vbox->addStretch(1);
+//    plot_config_group->setLayout(plot_cofig_vbox);
+//    central_widget_layout->addWidget(plot_config_group, 0, plot_col_span+1, 1, 2);
 
     // add tree view for log head
     logheadview = new QTreeView();
-    central_widget_layout->addWidget(logheadview, 0, 5, 4, 1);
+    central_widget_layout->addWidget(logheadview, 2, plot_col_span+1, 2, 2);
     logheadview->setContextMenuPolicy(Qt::CustomContextMenu);
-    loghead_stditem_model = new QStandardItemModel();
+    loghead_stditem_model = new QStandardItemModel();    
 
     ui->centralWidget->setLayout(central_widget_layout);
 
@@ -56,10 +69,12 @@ MainWindow::~MainWindow()
 
     // delete ui elements
     delete logheadview;
-    delete logheadmenu;
     loghead_stditem_model->clear();
     delete loghead_stditem_model;
     delete sep_vline1;
+    delete plot_config_group;
+    for(int i = 0; i < 4; i++)
+        delete plot_config_rbtns[i];
 
     delete ui;
 }
@@ -67,25 +82,6 @@ MainWindow::~MainWindow()
 void MainWindow::ConfigGuiEvents()
 {
 //    connect(log_head_view_,&QTreeWidget::customContextMenuRequested,this,&MainWindow::on_treeWidget_customContextMenuRequested);
-    connect(logheadview, SIGNAL(customContextMenuRequested(QPoint)),this, SLOT(on_logheadview_customContextMenuRequested(QPoint)));
-}
-
-void MainWindow::BuildLogHeadMenu()
-{
-    logheadmenu = new QMenu(this);
-    logheadmenu->addAction(QString("Copy"));
-}
-
-void MainWindow::on_logheadview_customContextMenuRequested(const QPoint &pos)
-{
-//    QMenu menu;
-
-////    menu.addAction(QString("Copy"), this,SLOT(on_copy()));
-//    menu.addAction(QString("Copy"));
-//    menu.popup(log_head_view_->viewport()->mapToGlobal(pos));
-//    QMenu *menu=new QMenu(this);
-//    menu->addAction(QString("Copy"), this,SLOT(on_copy()));
-    logheadmenu->popup(logheadview->viewport()->mapToGlobal(pos));
 }
 
 void MainWindow::on_actionExit_triggered()
@@ -110,6 +106,11 @@ void MainWindow::on_actionOpenLogFile_triggered()
         ui->statusBar->showMessage(QString::fromStdString(strstream.str()));
 
         UpdateLogDataHeads();
+//        std::vector<double> x,y;
+        plot_manager_->PlotData(log_parser_.log_data_[0],log_parser_.log_data_[1],QCPLOT_ID::QCPLOT0);
+        plot_manager_->PlotData(log_parser_.log_data_[0],log_parser_.log_data_[2],QCPLOT_ID::QCPLOT1);
+        plot_manager_->PlotData(log_parser_.log_data_[0],log_parser_.log_data_[3],QCPLOT_ID::QCPLOT2);
+        plot_manager_->PlotData(log_parser_.log_data_[0],log_parser_.log_data_[4],QCPLOT_ID::QCPLOT3);
     }
 }
 

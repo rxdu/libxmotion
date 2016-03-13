@@ -7,6 +7,8 @@
 #include <QStringList>
 #include <QStandardItemModel>
 #include <QStandardItem>
+#include <QGroupBox>
+#include <QRadioButton>
 
 #include <qcustomplot.h>
 
@@ -28,7 +30,6 @@ public:
 private slots:
     void on_actionOpenLogFile_triggered();
     void on_actionExit_triggered();
-    void on_logheadview_customContextMenuRequested(const QPoint &pos);
 
 private:
     // UI elements
@@ -37,6 +38,9 @@ private:
     QTreeView *logheadview;
     QMenu *logheadmenu;
     QStandardItemModel *loghead_stditem_model;
+    QGroupBox* plot_config_group;
+    QRadioButton* plot_config_rbtns[4];
+    QVBoxLayout* plot_cofig_vbox;
 
     // log related
     PlotManager* plot_manager_;
@@ -44,7 +48,6 @@ private:
 
 private:
     void ConfigGuiEvents();
-    void BuildLogHeadMenu();
     void UpdateLogDataHeads();
 };
 

@@ -27,6 +27,7 @@ public:
 
 public:
     QCustomPlot* GetCustomPlotPtr(QCPLOT_ID id);
+    void PlotData(std::vector<double>& x_data, std::vector<double> y_data, QCPLOT_ID id);
 };
 
 #endif // PLOTMANAGER_H

@@ -13,7 +13,7 @@ LogParser::LogParser()
 LogParser::~LogParser()
 {
     log_head_.clear();
-    log_data_.clear();
+    log_entries_.clear();
 }
 
 void LogParser::ParseLogFile(std::string file)
@@ -23,6 +23,7 @@ void LogParser::ParseLogFile(std::string file)
 
     // clear data from last function call
     log_head_.clear();
+    log_entries_.clear();
     log_data_.clear();
 
     // line starts from 1, used to index log entries
@@ -52,11 +53,23 @@ void LogParser::ParseLogFile(std::string file)
             break;
     }
 
-//    for(auto it = log_data_.begin(); it != log_data_.end(); it++) {
-//        for(auto itv = (*it).begin(); itv != (*it).end(); itv++)
-//            std::cout<<(*itv) << " , ";
-//        std::cout << std::endl;
-//    }
+    // group data of the same meaning from log entries
+    auto first_log_entry = log_entries_.begin();
+    log_data_.resize((*first_log_entry).size());
+    for(auto it = log_entries_.begin(); it != log_entries_.end(); it++)
+    {
+        unsigned long data_cols = 0;
+
+        for(auto itv = (*it).begin(); itv != (*it).end(); itv++) {
+            log_data_[data_cols].push_back(*itv);
+            data_cols++;
+        }
+    }
+
+//    auto first_log_col = log_data_.begin() + 1;
+//    for(auto it = (*first_log_col).begin(); it != (*first_log_col).end(); it++)
+//        std::cout << (*it) << " , ";
+//    std::cout << std::endl;
 }
 
 void LogParser::ProcessLogHead(std::string log_head)
@@ -109,7 +122,7 @@ void LogParser::ProcessLogEntry(std::string entry_str)
                     vec.push_back(std::stod((*it)));
             }
 
-            log_data_.push_back(vec);
+            log_entries_.push_back(vec);
         }
     }
 }

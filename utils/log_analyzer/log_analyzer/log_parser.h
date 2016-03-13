@@ -11,6 +11,7 @@ public:
 
 public:
     std::vector<std::string> log_head_;
+    std::vector<std::vector<double>> log_entries_;
     std::vector<std::vector<double>> log_data_;
 
 private:
