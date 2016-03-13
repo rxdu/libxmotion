@@ -68,7 +68,11 @@ int main(int argc,char* argv[])
 	initializeLogging(worker.get());
 
 	// add data title
-	LOG(INFO) << "pos_r, " << "vel_r, " << "euler_r, " << "quat_r, " << "rot_rate_r";
+	LOG(INFO) << "pos_real.x, " << "pos_real.y, " << "pos_real.z, "
+			<< "vel_real.x, " << "vel_real.y, "<< "vel_real.z, "
+			<< "euler_real.alpha, "<< "euler_real.beta, "<< "euler_real.gamma, "
+			<< "quat_real.w, "<< "quat_real.x, "<< "quat_real.y, "<< "quat_real.z, "
+			<< "rot_rate_real.x, "<< "rot_rate_real.y, "<< "rot_rate_real.z ";
 #endif
 
 	// initialize simulator

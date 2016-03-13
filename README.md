@@ -40,7 +40,7 @@ Location: http://cmakeed.sourceforge.net/eclipse/
 
 ## 4. Utils
 
-* Log Analysis: this tool depends on Qt5, so you need to install Qt5 and any Dependencies of Qt5 
+* Log Analysis: this tool depends on Qt5, so you need to install Qt5 and any Dependencies of Qt5
 
 ```
 $ sudo apt-get install libglu1-mesa-dev
@@ -50,3 +50,5 @@ $ sudo apt-get install libglu1-mesa-dev
 
 * [Check integer is power of two](http://www.exploringbinary.com/ten-ways-to-check-if-an-integer-is-a-power-of-two-in-c/)
 * [OpenCV function implementation reference](https://github.com/Itseez/opencv/blob/master/modules/imgproc/src/thresh.cpp#L1192)
+* https://gehrcke.de/2011/06/reading-files-in-c-using-ifstream-dealing-correctly-with-badbit-failbit-eofbit-and-perror/
+* http://stackoverflow.com/questions/7868936/read-file-line-by-line
