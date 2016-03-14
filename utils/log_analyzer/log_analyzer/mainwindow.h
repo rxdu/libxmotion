@@ -34,6 +34,7 @@ private slots:
 private:
     // UI elements
     Ui::MainWindow *ui;
+
     QFrame* sep_vline1;
     QTreeView *logheadview;
     QMenu *logheadmenu;

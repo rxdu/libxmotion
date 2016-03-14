@@ -19,47 +19,47 @@ MainWindow::MainWindow(QWidget *parent) :
     QIcon openfile_ico("/icons/open_file.ico");
     ui->mainToolBar->addAction(openfile_ico, "Open File");
 
-    /* setup central widget layout */
-    // add qcustomplot widgets to plot log data
-    QGridLayout *central_widget_layout = new QGridLayout;
-    int plot_col_span = 17;
-    central_widget_layout->addWidget(plot_manager_->GetCustomPlotPtr(QCPLOT_ID::QCPLOT0),0,0,1,plot_col_span);
-    central_widget_layout->addWidget(plot_manager_->GetCustomPlotPtr(QCPLOT_ID::QCPLOT1),1,0,1,plot_col_span);
-    central_widget_layout->addWidget(plot_manager_->GetCustomPlotPtr(QCPLOT_ID::QCPLOT2),2,0,1,plot_col_span);
-    central_widget_layout->addWidget(plot_manager_->GetCustomPlotPtr(QCPLOT_ID::QCPLOT3),3,0,1,plot_col_span);
+//    /* setup central widget layout */
+//    // add qcustomplot widgets to plot log data
+//    QGridLayout *central_widget_layout = new QGridLayout;
+//    int plot_col_span = 17;
+//    central_widget_layout->addWidget(plot_manager_->GetCustomPlotPtr(QCPLOT_ID::QCPLOT0),0,0,1,plot_col_span);
+//    central_widget_layout->addWidget(plot_manager_->GetCustomPlotPtr(QCPLOT_ID::QCPLOT1),1,0,1,plot_col_span);
+//    central_widget_layout->addWidget(plot_manager_->GetCustomPlotPtr(QCPLOT_ID::QCPLOT2),2,0,1,plot_col_span);
+//    central_widget_layout->addWidget(plot_manager_->GetCustomPlotPtr(QCPLOT_ID::QCPLOT3),3,0,1,plot_col_span);
 
-    // add a vertical separation line
-    sep_vline1 = new QFrame(this);
-    sep_vline1->setObjectName(QString::fromUtf8("line"));
-    sep_vline1->setFrameShape(QFrame::VLine);
-    sep_vline1->setFrameShadow(QFrame::Sunken);
-    central_widget_layout->addWidget(sep_vline1, 0, plot_col_span, 4, 1);
+//    // add a vertical separation line
+//    sep_vline1 = new QFrame(this);
+//    sep_vline1->setObjectName(QString::fromUtf8("line"));
+//    sep_vline1->setFrameShape(QFrame::VLine);
+//    sep_vline1->setFrameShadow(QFrame::Sunken);
+//    central_widget_layout->addWidget(sep_vline1, 0, plot_col_span, 4, 1);
 
-    // configure plots
-//    plot_config_group = new QGroupBox(tr("Select Active Plot"));
+//    // configure plots
+////    plot_config_group = new QGroupBox(tr("Select Active Plot"));
 
-//    plot_config_rbtns[0] = new QRadioButton(tr("Plot 1"));
-//    plot_config_rbtns[1] = new QRadioButton(tr("Plot 2"));
-//    plot_config_rbtns[2] = new QRadioButton(tr("Plot 3"));
-//    plot_config_rbtns[3] = new QRadioButton(tr("Plot 4"));
-//    plot_config_rbtns[0]->setChecked(true);
-//    plot_cofig_vbox = new QVBoxLayout;
-//    for(int i = 0; i < 4; i++)
-//        plot_cofig_vbox->addWidget(plot_config_rbtns[i]);
-//    plot_cofig_vbox->addStretch(1);
-//    plot_config_group->setLayout(plot_cofig_vbox);
-//    central_widget_layout->addWidget(plot_config_group, 0, plot_col_span+1, 1, 2);
+////    plot_config_rbtns[0] = new QRadioButton(tr("Plot 1"));
+////    plot_config_rbtns[1] = new QRadioButton(tr("Plot 2"));
+////    plot_config_rbtns[2] = new QRadioButton(tr("Plot 3"));
+////    plot_config_rbtns[3] = new QRadioButton(tr("Plot 4"));
+////    plot_config_rbtns[0]->setChecked(true);
+////    plot_cofig_vbox = new QVBoxLayout;
+////    for(int i = 0; i < 4; i++)
+////        plot_cofig_vbox->addWidget(plot_config_rbtns[i]);
+////    plot_cofig_vbox->addStretch(1);
+////    plot_config_group->setLayout(plot_cofig_vbox);
+////    central_widget_layout->addWidget(plot_config_group, 0, plot_col_span+1, 1, 2);
 
-    // add tree view for log head
-    logheadview = new QTreeView();
-    central_widget_layout->addWidget(logheadview, 2, plot_col_span+1, 2, 2);
-    logheadview->setContextMenuPolicy(Qt::CustomContextMenu);
-    loghead_stditem_model = new QStandardItemModel();    
+//    // add tree view for log head
+//    logheadview = new QTreeView();
+//    central_widget_layout->addWidget(logheadview, 2, plot_col_span+1, 2, 2);
+//    logheadview->setContextMenuPolicy(Qt::CustomContextMenu);
+//    loghead_stditem_model = new QStandardItemModel();
 
-    ui->centralWidget->setLayout(central_widget_layout);
+//    ui->centralWidget->setLayout(central_widget_layout);
 
-    // configure slots and signals
-    ConfigGuiEvents();
+//    // configure slots and signals
+//    ConfigGuiEvents();
 }
 
 MainWindow::~MainWindow()
