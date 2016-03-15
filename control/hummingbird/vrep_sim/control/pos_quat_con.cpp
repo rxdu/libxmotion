@@ -7,6 +7,10 @@
 
 #include <iostream>
 #include <cmath>
+
+#include "g3log/g3log.hpp"
+
+#include "main.h"
 #include "control/pos_quat_con.h"
 
 using namespace srcl_ctrl;
@@ -143,6 +147,10 @@ void PosQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 		cmd->quat_d.z() = 0;
 	if(cmd->quat_d.w() < 10e-6 && cmd->quat_d.w() > -10e-6)
 		cmd->quat_d.w() = 0;
+
+#ifdef ENABLE_LOG
+	UtilsLog::AppendLogMsgTuple4f(cmd->quat_d.w(), cmd->quat_d.x(), cmd->quat_d.y(), cmd->quat_d.z());
+#endif
 
 //	std::cout << "quaterion desired: "<< cmd->quat_d.w() << " , " << cmd->quat_d.x() << " , " << cmd->quat_d.y() << " , "<<cmd->quat_d.z() << std::endl;
 }

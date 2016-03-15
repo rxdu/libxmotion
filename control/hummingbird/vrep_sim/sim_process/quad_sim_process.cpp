@@ -82,7 +82,7 @@ void QuadSimProcess::SimLoopUpdate(void)
 		pos_con_input.pos_d[0] = 0;
 		pos_con_input.pos_d[1] = 0;
 		pos_con_input.pos_d[2] = height;
-		pos_con_input.yaw_d = M_PI;// - M_PI * 15.0/180.0 ;//M_PI;
+		pos_con_input.yaw_d = M_PI*2/3;// - M_PI * 15.0/180.0 ;//M_PI;
 
 //		if(process_loop_count == time_label1) {
 //			std::cout << "------------------------------------------------" << std::endl;
