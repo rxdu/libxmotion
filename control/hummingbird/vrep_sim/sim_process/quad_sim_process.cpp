@@ -40,7 +40,6 @@ void QuadSimProcess::SimLoopUpdate(void)
 	//(Extended Kalman Filter)
 
 
-
 	/********* update position control *********/
 	// invoke position controller update
 	// input: (x,y,z,u,v,w)^desired
@@ -62,104 +61,35 @@ void QuadSimProcess::SimLoopUpdate(void)
 	att_con_output.motor_ang_vel_d[2] = 0;
 	att_con_output.motor_ang_vel_d[3] = 0;
 
-//	if(process_loop_count < time_label1) {
-//		pos_con_input.pos_d[0] = radius;
-//		pos_con_input.pos_d[1] = 0.0;
-//		pos_con_input.pos_d[2] = height;
-//		pos_con_input.euler_d[2] = 0;
-//	}
-//	else {
-//		pos_con_input.pos_d[0] = radius * cos((process_loop_count - 125)*0.01*circle_ang_vel);
-//		pos_con_input.pos_d[1] = radius * sin((process_loop_count - 125)*0.01*circle_ang_vel);
-//		pos_con_input.pos_d[2] = height;
-//		pos_con_input.euler_d[2] = 0;// + (process_loop_count - 125)*0.01*circle_ang_vel;
-//	}
-
-//	if(process_loop_count < time_label1) {
-//		pos_con_input.pos_d[0] = 0;
-//		pos_con_input.pos_d[1] = 0.0;
-//		pos_con_input.pos_d[2] = height;
-//		pos_con_input.euler_d[2] = 0;
-//
-//		pos_con_input.vel_d[0] = 0;
-//		pos_con_input.vel_d[1] = 0;
-//		pos_con_input.vel_d[2] = 0;
-//
-//		pos_con.Update(&pos_con_input, &pos_con_output);
-//
-//		ControlInput att_con_input;
-//
-//		att_con_input.euler_d[0] = pos_con_output.euler_d[0];
-//		att_con_input.euler_d[1] = pos_con_output.euler_d[1];
-//		att_con_input.euler_d[2] = pos_con_output.euler_d[2];
-//
-//		//	std::cout << "desired yaw: " << att_con_input.euler_d[2] << std::endl;
-//		att_con_input.rot_rate_d[0] = 0;
-//		att_con_input.rot_rate_d[1] = 0;
-//		att_con_input.rot_rate_d[2] = 0;
-//		att_con_input.delta_w_F = pos_con_output.delta_w_F;
-//
-//		/*------------- test attitude controller -------------*/
-//		//	if(process_loop_count >= time_label1){
-//		//		att_con_input.euler_d[0] = 0.0/180.0*3.14;
-//		//		att_con_input.euler_d[1] = 0.0/180.0*3.14;
-//		//		att_con_input.euler_d[2] = 30.0/180.0*3.14;
-//		//	}
-//		//	att_con_input.delta_w_F = 0;
-//		//
-//		//	att_con_input.rot_rate_d[0] = 0;
-//		//	att_con_input.rot_rate_d[1] = 0;
-//		//	att_con_input.rot_rate_d[2] = 0;
-//		/*----------------------------------------------------*/
-//
-//		/********* update attitude control *********/
-//		// input: (phi, theta, psi, p, q, r)^desired
-//		// output: motor angular velocities
-//		AttEulerCon att_con(&rs_);
-//		att_con.Update(&att_con_input, &att_con_output);
-//	}
-//	else{
+	/********* update attitude control *********/
 
 	if(process_loop_count < time_label1) {
 		pos_con_input.pos_d[0] = 0;
 		pos_con_input.pos_d[1] = 0;
 		pos_con_input.pos_d[2] = height;
 		pos_con_input.yaw_d = 0;
-//		pos_con_input.pos_d[0] = radius;
-//		pos_con_input.pos_d[1] = 0.0;
-//		pos_con_input.pos_d[2] = height;
 	}
 //	else if(process_loop_count < time_label2) {
 //		pos_con_input.pos_d[0] = 1.0;
 //		pos_con_input.pos_d[1] = 0;
 //		pos_con_input.pos_d[2] = 1.0;
 //	}
-	else //if(process_loop_count < time_label2)
+	else
 	{
-//		pos_con_input.pos_d[0] = 1.0;
-//		pos_con_input.pos_d[1] = 1.0;
-//		pos_con_input.pos_d[2] = 1.0;
-		pos_con_input.pos_d[0] = radius * cos((process_loop_count - 125)*0.01*circle_ang_vel);
-		pos_con_input.pos_d[1] = radius * sin((process_loop_count - 125)*0.01*circle_ang_vel);
+//		pos_con_input.pos_d[0] = radius * cos((process_loop_count - 125)*0.01*circle_ang_vel);
+//		pos_con_input.pos_d[1] = radius * sin((process_loop_count - 125)*0.01*circle_ang_vel);
+//		pos_con_input.pos_d[2] = height;
+		pos_con_input.pos_d[0] = 0;
+		pos_con_input.pos_d[1] = 0;
 		pos_con_input.pos_d[2] = height;
-		pos_con_input.yaw_d = 0;//M_PI/2 - M_PI * 15.0/180.0 ;//M_PI;
+		pos_con_input.yaw_d = M_PI;// - M_PI * 15.0/180.0 ;//M_PI;
 
-		if(process_loop_count == time_label1) {
-			std::cout << "------------------------------------------------" << std::endl;
-			std::cout << "------------------------------------------------" << std::endl;
-			std::cout << "------------------------------------------------" << std::endl;
-		}
+//		if(process_loop_count == time_label1) {
+//			std::cout << "------------------------------------------------" << std::endl;
+//			std::cout << "------------------------------------------------" << std::endl;
+//			std::cout << "------------------------------------------------" << std::endl;
+//		}
 	}
-//	else{
-//		pos_con_input.pos_d[0] = rs_.position_.x;
-//		pos_con_input.pos_d[1] = rs_.position_.y;//radius * sin((process_loop_count - 125)*0.01*circle_ang_vel);
-//		pos_con_input.pos_d[2] = rs_.position_.z;
-//		pos_con_input.yaw_d = 0;//M_PI/2 - M_PI * 15.0/180.0 ;//M_PI;
-//	}
-
-	//		pos_con_input.pos_d[0] = radius;
-	//		pos_con_input.pos_d[1] = 0.0;
-	//		pos_con_input.pos_d[2] = height;
 
 		pos_con_input.vel_d[0] = 0;
 		pos_con_input.vel_d[1] = 0;
@@ -182,10 +112,10 @@ void QuadSimProcess::SimLoopUpdate(void)
 		//	}
 //		Eigen::Quaterniond rotd(Eigen::AngleAxisd(M_PI*100.0/180.0, Eigen::Vector3d::UnitX()));
 
-			Eigen::Quaterniond rotx(Eigen::AngleAxisd(M_PI*15.0/180.0, Eigen::Vector3d::UnitX()));
-			Eigen::Quaterniond roty(Eigen::AngleAxisd(M_PI*15.0/180.0, rotx.matrix().col(1)));
-			Eigen::Quaterniond rotz(Eigen::AngleAxisd(M_PI*15.0/180.0, roty.matrix().col(2)));
-			Eigen::Quaterniond rotd = rotz * roty * rotx;
+		Eigen::Quaterniond rotx(Eigen::AngleAxisd(M_PI*15.0/180.0, Eigen::Vector3d::UnitX()));
+		Eigen::Quaterniond roty(Eigen::AngleAxisd(M_PI*15.0/180.0, rotx.matrix().col(1)));
+		Eigen::Quaterniond rotz(Eigen::AngleAxisd(M_PI*15.0/180.0, roty.matrix().col(2)));
+		Eigen::Quaterniond rotd = rotz * roty * rotx;
 
 		quat_con_input.quat_d = pos_con_output.quat_d;
 //		if(process_loop_count >= time_label1)

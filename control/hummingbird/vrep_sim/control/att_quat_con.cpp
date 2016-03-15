@@ -8,6 +8,10 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+
+#include "g3log/g3log.hpp"
+
+#include "main.h"
 #include "control/att_quat_con.h"
 
 using namespace srcl_ctrl;
@@ -128,35 +132,6 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 		if(desired_ft(i) < 10e-5 && desired_ft(i) > -10e-5)
 			desired_ft(i) = 0;
 
-//	std::cout<<"quaternion error: "<< std::setw(13) << quat_e.w()<<" , "<< std::setw(13) <<quat_e.x()<<" , "<< std::setw(13) <<quat_e.y()<<" , "<< std::setw(13) << quat_e.z()
-//			<< " , " << std::setw(5) << M_sign
-//			<< " , " << std::setw(13) << desired_ft(1)
-//			<< " , " << std::setw(13) << desired_ft(2)
-//			<< " , " << std::setw(13) << desired_ft(3)<<std::endl;
-
-	std::cout<<"data: "
-				<< std::setw(5) << M_sign
-				<< " | " << std::setw(10) << rs_->quat_.w()
-//				<< " , " << std::setw(10) << rs_->quat_.x()
-//				<< " , " << std::setw(10) << rs_->quat_.y()
-//				<< " , " << std::setw(10) << rs_->quat_.z()
-//				<< " | " << std::setw(10) << input->quat_d.w()
-//				<< " , " << std::setw(10) << input->quat_d.x()
-//				<< " , " << std::setw(10) << input->quat_d.y()
-//				<< " , " << std::setw(10) << input->quat_d.z()
-				<< " | " << std::setw(10) << quat_e.w()
-				<< " , " << std::setw(10) << quat_e.x()
-				<< " , " << std::setw(10) << quat_e.y()
-				<< " , " << std::setw(10) << quat_e.z()
-//				<< " | " << std::setw(12) << rate_error[0]
-//				<< " , " << std::setw(12) << rate_error[1]
-//				<< " , " << std::setw(12) << rate_error[2]
-//				<< " | " << std::setw(12) << desired_ft(0)
-				<< " * " << std::setw(10) << desired_ft(1)
-//				<< " , " << std::setw(12) << desired_ft(2)
-//				<< " , " << std::setw(12) << desired_ft(3)
-				<<std::endl;
-
 //	desired_ft(1) = 0;
 //	desired_ft(2) = 0;
 
@@ -173,25 +148,15 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	//	force_torque << 5.6310,0,0,0;
 	Eigen::Matrix<double,4,1> motor_vel = CalcMotorCmd(desired_ft);
 
-//	std::cout<<"data: "
-//			<< std::setw(5) << M_sign
-//			<< " | " << std::setw(12) << quat_e.w()
-//			<< " , " << std::setw(12) << quat_e.x()
-//			<< " , " << std::setw(12) << quat_e.y()
-//			<< " , " << std::setw(12) << quat_e.z()
-//			<< std::setw(10) << desired_ft(0)
-//			<< " , " << std::setw(12) << desired_ft(1)
-//			<< " , " << std::setw(12) << desired_ft(2)
-//			<< " , " << std::setw(12) << desired_ft(3)
-//			<< " * " << std::setw(12) << motor_vel(0)
-//			<< " , " << std::setw(12) << motor_vel(1)
-//			<< " , " << std::setw(12) << motor_vel(2)
-//			<< " , " << std::setw(12) << motor_vel(3)
-//			<<std::endl;
-
 	cmd->motor_ang_vel_d[0] = motor_vel(0);
 	cmd->motor_ang_vel_d[1] = motor_vel(1);
 	cmd->motor_ang_vel_d[2] = motor_vel(2);
 	cmd->motor_ang_vel_d[3] = motor_vel(3);
+
+#ifdef ENABLE_LOG
+	UtilsLog::AppendLogMsgTuple4f(quat_e.w(), M_sign * quat_e.x(), M_sign * quat_e.y(), M_sign * quat_e.z());
+	UtilsLog::AppendLogMsgTuple3f(rate_error[0],rate_error[1],rate_error[2]);
+	UtilsLog::AppendLogMsgTuple4f(desired_ft(0),desired_ft(1),desired_ft(2),desired_ft(3));
+#endif
 }
 

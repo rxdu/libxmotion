@@ -67,12 +67,18 @@ int main(int argc,char* argv[])
 			"/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/control/hummingbird/vrep_sim/log");
 	initializeLogging(worker.get());
 
-	// add data title
+	/* add data title */
+			// from robot_state
 	LOG(INFO) << "pos_real.x, " << "pos_real.y, " << "pos_real.z, "
 			<< "vel_real.x, " << "vel_real.y, "<< "vel_real.z, "
 			<< "euler_real.alpha, "<< "euler_real.beta, "<< "euler_real.gamma, "
 			<< "quat_real.w, "<< "quat_real.x, "<< "quat_real.y, "<< "quat_real.z, "
-			<< "rot_rate_real.x, "<< "rot_rate_real.y, "<< "rot_rate_real.z ";
+			<< "rot_rate_real.x, "<< "rot_rate_real.y, "<< "rot_rate_real.z, "
+			<< "quat_e.w, "<< "quat_e.x, "<< "quat_e.y, "<< "quat_e.z, "
+			// from att_quat_con
+			<< "rot_rate_e.x, "<< "rot_rate_e.y, "<< "rot_rate_e.z, "
+			<< "desired_ft.0, "<< "desired_ft.1, "<< "desired_ft.2, "<< "desired_ft.3, "
+			<< "motor_vel.0, "<< "motor_vel.1, "<< "motor_vel.2, " << "motor_vel.3";
 #endif
 
 	// initialize simulator
