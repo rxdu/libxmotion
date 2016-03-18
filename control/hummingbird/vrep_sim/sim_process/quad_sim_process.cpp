@@ -82,7 +82,7 @@ void QuadSimProcess::SimLoopUpdate(void)
 		pos_con_input.pos_d[0] = 0;
 		pos_con_input.pos_d[1] = 0;
 		pos_con_input.pos_d[2] = height;
-		pos_con_input.yaw_d = M_PI*2/3;// - M_PI * 15.0/180.0 ;//M_PI;
+		pos_con_input.yaw_d = M_PI;// - M_PI * 15.0/180.0 ;//M_PI;
 
 //		if(process_loop_count == time_label1) {
 //			std::cout << "------------------------------------------------" << std::endl;
@@ -110,16 +110,16 @@ void QuadSimProcess::SimLoopUpdate(void)
 		//		Eigen::Quaterniond rotd(Eigen::AngleAxisd(Eigen::AngleAxisd(M_PI+M_PI/6, Eigen::Vector3d::UnitZ())));
 		//		quat_con_input.quat_d = rotd;
 		//	}
-//		Eigen::Quaterniond rotd(Eigen::AngleAxisd(M_PI*100.0/180.0, Eigen::Vector3d::UnitX()));
+		Eigen::Quaterniond rotd(Eigen::AngleAxisd(M_PI, Eigen::Vector3d::UnitZ()));
 
-		Eigen::Quaterniond rotx(Eigen::AngleAxisd(M_PI*15.0/180.0, Eigen::Vector3d::UnitX()));
-		Eigen::Quaterniond roty(Eigen::AngleAxisd(M_PI*15.0/180.0, rotx.matrix().col(1)));
-		Eigen::Quaterniond rotz(Eigen::AngleAxisd(M_PI*15.0/180.0, roty.matrix().col(2)));
-		Eigen::Quaterniond rotd = rotz * roty * rotx;
+//		Eigen::Quaterniond rotx(Eigen::AngleAxisd(M_PI*15.0/180.0, Eigen::Vector3d::UnitX()));
+//		Eigen::Quaterniond roty(Eigen::AngleAxisd(M_PI*15.0/180.0, rotx.matrix().col(1)));
+//		Eigen::Quaterniond rotz(Eigen::AngleAxisd(M_PI*15.0/180.0, roty.matrix().col(2)));
+//		Eigen::Quaterniond rotd = rotz * roty * rotx;
 
 		quat_con_input.quat_d = pos_con_output.quat_d;
-//		if(process_loop_count >= time_label1)
-//					quat_con_input.quat_d = rotd;
+		if(process_loop_count >= time_label1)
+			quat_con_input.quat_d = rotd;
 //		if(process_loop_count >= time_label1 && process_loop_count < time_label2)
 //			quat_con_input.quat_d = rotd;
 //		else

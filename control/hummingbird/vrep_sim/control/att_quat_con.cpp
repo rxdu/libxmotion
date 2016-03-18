@@ -47,44 +47,20 @@ Eigen::Matrix<double,4,1> AttQuatCon::CalcMotorCmd(Eigen::Matrix<float,4,1> forc
 			-d, 0, d, 0,
 			 c,-c, c,-c;
 
-//	std::cout<<"tran matrix: \n"<<trans<<std::endl;
-
 	trans_inv = trans.inverse();
 
-//	std::cout<<"desired force/torque: \n"<<force_toqure<<std::endl;
-//	std::cout<<"tran inverse: \n"<<trans_inv<<std::endl;
-//	std::cout<<"tran inverse element: \n"<<trans_inv(5)<<std::endl;
-
-//	std::cout<<"force elements 0: "<< force_toqure(0) << std::endl;
-//	std::cout<<"force elements 1: "<< force_toqure(1) << std::endl;
-//	std::cout<<"force elements 2: "<< force_toqure(2) << std::endl;
-//	std::cout<<"force elements 3: "<< force_toqure(3) << std::endl;
-//	std::cout<<"trans_inv elements 0: "<< trans_inv(0,0) << std::endl;
-//	std::cout<<"trans_inv elements 1: "<< trans_inv(1,0) << std::endl;
-//	std::cout<<"trans_inv elements 2: "<< trans_inv(2,0) << std::endl;
-//	std::cout<<"trans_inv elements 3: "<< trans_inv(3,0) << std::endl;
 	f_motor(0) = trans_inv(0,0) * force_toqure(0) + trans_inv(0,1) * force_toqure(1) + trans_inv(0,2) * force_toqure(2) + trans_inv(0,3) * force_toqure(3);
 	f_motor(1) = trans_inv(1,0) * force_toqure(0) + trans_inv(1,1) * force_toqure(1) + trans_inv(1,2) * force_toqure(2) + trans_inv(1,3) * force_toqure(3);
 	f_motor(2) = trans_inv(2,0) * force_toqure(0) + trans_inv(2,1) * force_toqure(1) + trans_inv(2,2) * force_toqure(2) + trans_inv(2,3) * force_toqure(3);
 	f_motor(3) = trans_inv(3,0) * force_toqure(0) + trans_inv(3,1) * force_toqure(1) + trans_inv(3,2) * force_toqure(2) + trans_inv(3,3) * force_toqure(3);
 
-//	std::cout<<"motor force: \n"<<f_motor<<std::endl;
-
-//	f_motor = trans.inverse() * force_toqure;
 	ang_vel = f_motor/rs_->kF_;
-
-//	std::cout<<"ang_vel 0: \n"<<ang_vel<<std::endl;
 
 	for(int i = 0; i < 4; i++) {
 		if(ang_vel(i) < 0)
 			ang_vel(i) = 0;
 		ang_vel(i) = std::sqrt(ang_vel(i));
-//		ang_vel(i) = std::round(ang_vel(i));
 	}
-
-//	std::cout<<"ang_vel 0: \n"<<ang_vel<<std::endl;
-
-//	std::cout<<"motor speed: \n"<<ang_vel<<std::endl;
 
 	return ang_vel;
 }
@@ -123,6 +99,36 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	if(quat_e.z() < 10e-6 && quat_e.z() > -10e-6)
 		quat_e.z() = 0;
 
+	Eigen::Vector3d x_axis_v(1.0, 0.0, 0.0);
+	Eigen::Vector3d y_axis_v(0.0, 1.0, 0.0);
+	Eigen::Vector3d z_axis_v(0.0, 0.0, 1.0);
+
+	Eigen::Vector3d v(1, 2, -1);
+	Eigen::Quaterniond p_x,p_y,p_z;
+	Eigen::Quaterniond quad_rot = rs_->quat_;
+	p_x.w() = 0;
+	p_x.vec() = x_axis_v;
+	p_y.w() = 0;
+	p_y.vec() = y_axis_v;
+	p_z.w() = 0;
+	p_z.vec() = z_axis_v;
+	Eigen::Quaterniond rotatedPx = quad_rot * p_x * quad_rot.inverse();
+	Eigen::Quaterniond rotatedPy = quad_rot * p_y * quad_rot.inverse();
+	Eigen::Quaterniond rotatedPz = quad_rot * p_z * quad_rot.inverse();
+	Eigen::Vector3d new_x_axis = rotatedPx.vec();
+	Eigen::Vector3d new_y_axis = rotatedPy.vec();
+	Eigen::Vector3d new_z_axis = rotatedPz.vec();
+	double axis_dot_product[3];
+	axis_dot_product[0] = new_x_axis.dot(x_axis_v);
+	axis_dot_product[1] = new_y_axis.dot(y_axis_v);
+	axis_dot_product[2] = new_z_axis.dot(z_axis_v);
+	if(axis_dot_product[0] < 0)
+		quat_e.x() = - quat_e.x();
+	if(axis_dot_product[1] < 0)
+		quat_e.y() = - quat_e.y();
+	if(axis_dot_product[2] < 0)
+		quat_e.z() = - quat_e.z();
+
 	desired_ft(0) = input->ftotal_d; //rs_->kF * (rs_->w_h)*(rs_->w_h) * 4;
 	desired_ft(1) = M_sign * kp_phi * quat_e.x() + kd_phi * rate_error[0];
 	desired_ft(2) = M_sign * kp_theta * quat_e.y() + kd_theta * rate_error[1];
@@ -132,20 +138,7 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 		if(desired_ft(i) < 10e-5 && desired_ft(i) > -10e-5)
 			desired_ft(i) = 0;
 
-//	desired_ft(1) = 0;
-//	desired_ft(2) = 0;
-
-//	std::cout<<"desired quaternion (w,x,y,z):"<< input->quat_d.w() << " , " << input->quat_d.x() << " , "
-//				<<input->quat_d.y() << " , "<< input->quat_d.z() << std::endl;
-//	std::cout<<"quaternion error (w,x,y,z):"<< quat_e.w() << " , " << quat_e.x() << " , "
-//			<<quat_e.y() << " , "<< quat_e.z() << std::endl;
-//	std::cout<<"quaternion error, rate error (z): "<< quat_e.z() << " , " <<rate_error[2]<< std::endl;
-//	std::cout << "desired force/toqrue: \n"<< desired_ft << std::endl;
-
 	// calculate desired motor cmd from desired force and torque
-	// w1,w2,w3,w4 = 4800,5200,4800,5200
-	//	desired_ft << 6.1198,0,0,-0.0120;
-	//	force_torque << 5.6310,0,0,0;
 	Eigen::Matrix<double,4,1> motor_vel = CalcMotorCmd(desired_ft);
 
 	cmd->motor_ang_vel_d[0] = motor_vel(0);
@@ -154,6 +147,7 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	cmd->motor_ang_vel_d[3] = motor_vel(3);
 
 #ifdef ENABLE_LOG
+	UtilsLog::AppendLogMsgTuple4f(input->quat_d.w(), input->quat_d.x(), input->quat_d.y(), input->quat_d.z());
 	UtilsLog::AppendLogMsgTuple4f(quat_e.w(), M_sign * quat_e.x(), M_sign * quat_e.y(), M_sign * quat_e.z());
 	UtilsLog::AppendLogMsgTuple3f(rate_error[0],rate_error[1],rate_error[2]);
 	UtilsLog::AppendLogMsgTuple4f(desired_ft(0),desired_ft(1),desired_ft(2),desired_ft(3));

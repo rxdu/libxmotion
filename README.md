@@ -52,3 +52,4 @@ $ sudo apt-get install libglu1-mesa-dev
 * [OpenCV function implementation reference](https://github.com/Itseez/opencv/blob/master/modules/imgproc/src/thresh.cpp#L1192)
 * https://gehrcke.de/2011/06/reading-files-in-c-using-ifstream-dealing-correctly-with-badbit-failbit-eofbit-and-perror/
 * http://stackoverflow.com/questions/7868936/read-file-line-by-line
+* http://www.cc.gatech.edu/classes/AY2015/cs4496_spring/Eigen.html

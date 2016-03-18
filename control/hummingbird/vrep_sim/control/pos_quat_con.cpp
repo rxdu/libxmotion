@@ -110,7 +110,8 @@ void PosQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	double scale;
 	double qd_wd;
 	Eigen::Quaterniond quat_pr;
-	Eigen::Quaterniond quat_y;
+//	Eigen::Quaterniond quat_y;
+	Eigen::Quaterniond quat_y(Eigen::AngleAxisd(input->yaw_d, Eigen::Vector3d::UnitZ()));
 
 	FbT_Fi = Fb_n.transpose() * Fi_n;
 
@@ -129,12 +130,12 @@ void PosQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	quat_pr.y() = FbFi_cross(1)/scale;
 	quat_pr.z() = FbFi_cross(2)/scale;
 
-	quat_y.w() = cos(input->yaw_d/2);
-	quat_y.x() = 0;
-	quat_y.y() = 0;
-	quat_y.z() = sin(input->yaw_d/2);
+//	quat_y.w() = cos(input->yaw_d/2);
+//	quat_y.x() = 0;
+//	quat_y.y() = 0;
+//	quat_y.z() = sin(input->yaw_d/2);
 
-	Eigen::Quaterniond quat_result = quat_pr * quat_y;
+	Eigen::Quaterniond quat_result = quat_y * quat_pr;
 
 	cmd->quat_d = quat_result.normalized();
 	cmd->ftotal_d = Fi.norm() * rs_->mass_;
@@ -148,10 +149,8 @@ void PosQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	if(cmd->quat_d.w() < 10e-6 && cmd->quat_d.w() > -10e-6)
 		cmd->quat_d.w() = 0;
 
-#ifdef ENABLE_LOG
-	UtilsLog::AppendLogMsgTuple4f(cmd->quat_d.w(), cmd->quat_d.x(), cmd->quat_d.y(), cmd->quat_d.z());
-#endif
-
-//	std::cout << "quaterion desired: "<< cmd->quat_d.w() << " , " << cmd->quat_d.x() << " , " << cmd->quat_d.y() << " , "<<cmd->quat_d.z() << std::endl;
+//#ifdef ENABLE_LOG
+//	UtilsLog::AppendLogMsgTuple4f(cmd->quat_d.w(), cmd->quat_d.x(), cmd->quat_d.y(), cmd->quat_d.z());
+//#endif
 }
 

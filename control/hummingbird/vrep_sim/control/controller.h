@@ -19,7 +19,9 @@ typedef struct
 	// input of position controller
 	float pos_d[3];
 	float vel_d[3];
+	float acc_d[3];
 	float yaw_d;
+	float yaw_rate_d;
 
 	// input of attitude controller (using Euler)
 	float euler_d[3];

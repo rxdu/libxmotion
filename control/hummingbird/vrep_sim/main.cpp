@@ -75,8 +75,9 @@ int main(int argc,char* argv[])
 			<< "quat_real.w, "<< "quat_real.x, "<< "quat_real.y, "<< "quat_real.z, "
 			<< "rot_rate_real.x, "<< "rot_rate_real.y, "<< "rot_rate_real.z, "
 			// from pos_quat_con
-			<< "quat_d.w, "<< "quat_d.x, "<< "quat_d.y, "<< "quat_d.z, "
+//
 			// from att_quat_con
+			<< "quat_d.w, "<< "quat_d.x, "<< "quat_d.y, "<< "quat_d.z, "
 			<< "quat_e.w, "<< "quat_e.x, "<< "quat_e.y, "<< "quat_e.z, "
 			<< "rot_rate_e.x, "<< "rot_rate_e.y, "<< "rot_rate_e.z, "
 			<< "desired_ft.0, "<< "desired_ft.1, "<< "desired_ft.2, "<< "desired_ft.3, "
