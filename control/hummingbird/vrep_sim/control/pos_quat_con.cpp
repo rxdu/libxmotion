@@ -111,7 +111,6 @@ void PosQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	double qd_wd;
 	Eigen::Quaterniond quat_pr;
 //	Eigen::Quaterniond quat_y;
-	Eigen::Quaterniond quat_y(Eigen::AngleAxisd(input->yaw_d, Eigen::Vector3d::UnitZ()));
 
 	FbT_Fi = Fb_n.transpose() * Fi_n;
 
@@ -135,6 +134,8 @@ void PosQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 //	quat_y.y() = 0;
 //	quat_y.z() = sin(input->yaw_d/2);
 
+	quat_pr.normalize();
+	Eigen::Quaterniond quat_y(Eigen::AngleAxisd(input->yaw_d, quat_pr.matrix().col(2)));
 	Eigen::Quaterniond quat_result = quat_y * quat_pr;
 
 	cmd->quat_d = quat_result.normalized();
