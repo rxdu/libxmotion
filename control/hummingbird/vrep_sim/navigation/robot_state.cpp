@@ -42,6 +42,11 @@ RobotState::RobotState():
 	orientation_.y = 0;
 	orientation_.z = 0;
 
+	quat_.x() = 0;
+	quat_.y() = 0;
+	quat_.z() = 0;
+	quat_.w() = 0;
+
 	last_orientation_.x = 0;
 	last_orientation_.y = 0;
 	last_orientation_.z = 0;
@@ -72,91 +77,11 @@ void RobotState::UpdateRobotState(const DataFromRobot & new_data)
 	orientation_.y = new_data.rot_i.y;
 	orientation_.z = new_data.rot_i.z;
 
-//	if(last_orientation_.x * orientation_.x < 0)
-//	{
-//		if(last_orientation_.x < 0)
-//			orientation_.x = last_orientation_.x - std::abs(M_PI - std::abs(orientation_.x));
-//		else
-//			orientation_.x = last_orientation_.x + std::abs(M_PI - std::abs(orientation_.x));
-//	}
-//
-//	if(last_orientation_.y * orientation_.y < 0)
-//	{
-//		if(last_orientation_.y < 0)
-//			orientation_.y = last_orientation_.y - std::abs(M_PI - std::abs(orientation_.y));
-//		else
-//			orientation_.y = last_orientation_.y + std::abs(M_PI - std::abs(orientation_.y));
-//	}
-//
-//	if(last_orientation_.z * orientation_.z < 0)
-//	{
-//		if(last_orientation_.z < 0)
-//			orientation_.z = last_orientation_.z - std::abs(M_PI - std::abs(orientation_.z));
-//		else
-//			orientation_.z= last_orientation_.z + std::abs( - std::abs(orientation_.z));
-//	}
-//
-
 	// quaternion
-	Eigen::Quaterniond rotx(Eigen::AngleAxisd(Eigen::AngleAxisd(orientation_.x, Eigen::Vector3d::UnitX())));
-	Eigen::Quaterniond roty(Eigen::AngleAxisd(orientation_.y, rotx.matrix().col(1)));
-	Eigen::Quaterniond rotz(Eigen::AngleAxisd(orientation_.z, roty.matrix().col(2)));
-
-	quat_ =  rotz * roty * rotx;
-
-	unsigned int euler_inverted_count = 0;
-	if((last_orientation_.x * orientation_.x) < 0)
-	{
-		if(std::abs(last_orientation_.x - orientation_.x) > max_euler_change_) {
-			euler_inverted_count++;
-			std::cout<< " ******************** euler jump detected ************************"<<std::endl;
-		}
-	}
-
-	if((last_orientation_.y * orientation_.y) < 0)
-	{
-		if(std::abs(last_orientation_.y - orientation_.y) > max_euler_change_) {
-			euler_inverted_count++;
-			std::cout<< " ******************** euler jump detected ************************"<<std::endl;
-		}
-	}
-
-	if((last_orientation_.z * orientation_.z) < 0)
-	{
-		if(std::abs(last_orientation_.z - orientation_.z) > max_euler_change_) {
-			euler_inverted_count++;
-			std::cout<< " ******************** euler jump detected ************************"<<std::endl;
-		}
-	}
-
-	if(euler_inverted_count % 2 != 0)
-		invert_quat = (invert_quat++)%2;
-
-//	if(invert_quat != 0) {
-//		quat_.x() =  - quat_.x();
-//		quat_.y() =  - quat_.y();
-//		quat_.z() =  - quat_.z();
-//		quat_.w() =  - quat_.w();
-//	}
-
-	last_orientation_.x = orientation_.x;
-	last_orientation_.y = orientation_.y;
-	last_orientation_.z = orientation_.z;
-
-	last_quat_ = quat_;
-//	std::cout<<"robot orientation (w,x,y,z): "<< std::setw(15) << quat_.w()<<" , "<< std::setw(15) <<quat_.x()<<" , "<< std::setw(15) <<quat_.y()<<" , "<< std::setw(15) << quat_.z()<<std::endl;
-
-//	std::cout<<"euler: "
-//					<< std::setw(12) << orientation_.x
-//					<< " , " << std::setw(12) << orientation_.y
-//					<< " , " << std::setw(12) << orientation_.z
-//					<< std::setw(15) << " quaternion: "
-//					<< std::setw(12) << quat_.w()
-//					<< " , " << std::setw(12) << quat_.x()
-//					<< " , " << std::setw(12) << quat_.y()
-//					<< " , " << std::setw(12) << quat_.z()
-//					<< " * " << invert_quat
-//					<<std::endl;
+	quat_.x() = new_data.quat_i.x;
+	quat_.y() = new_data.quat_i.y;
+	quat_.z() = new_data.quat_i.z;
+	quat_.w() = new_data.quat_i.w;
 
 	rotation_rate_.x = new_data.rot_rate_b.x;
 	rotation_rate_.y = new_data.rot_rate_b.y;

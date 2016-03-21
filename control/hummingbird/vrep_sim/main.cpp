@@ -67,7 +67,7 @@ int main(int argc,char* argv[])
 			"/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/control/hummingbird/vrep_sim/log");
 	initializeLogging(worker.get());
 
-	/* add data title */
+	/* add log data head */
 			// from robot_state
 	LOG(INFO) << "pos_real.x, " << "pos_real.y, " << "pos_real.z, "
 			<< "vel_real.x, " << "vel_real.y, "<< "vel_real.z, "

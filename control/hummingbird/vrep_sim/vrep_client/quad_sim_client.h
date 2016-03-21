@@ -42,6 +42,7 @@ private:
 	bool ReceiveQuadPosition(Point3 *data);
 	bool ReceiveQuadVelocity(Point3 *data);
 	bool ReceiveQuadOrientation(Point3 *data);
+	bool ReceiveQuadQuaternion(Quaternion *data);
 
 	void SendPropellerCmd(QuadCmd cmd);
 
@@ -60,6 +61,8 @@ private:
 	simxInt gyro_sig_size;
 	simxUChar* acc_sig;
 	simxInt acc_sig_size;
+	simxUChar* quat_sig;
+	simxInt quat_sig_size;
 
 	// vision
 	simxInt camera_handle_;

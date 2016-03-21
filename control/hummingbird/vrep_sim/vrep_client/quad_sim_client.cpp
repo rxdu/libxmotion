@@ -31,6 +31,8 @@ QuadSimClient::QuadSimClient(simxInt clientId):
 	gyro_sig_size = 0;
 	acc_sig = NULL;
 	acc_sig_size = 0;
+	quat_sig = NULL;
+	quat_sig_size = 0;
 
 	for(int i = 0; i < 3; i++)
 	{
@@ -65,6 +67,7 @@ void QuadSimClient::ConfigDataStreaming(void)
 	simxGetObjectOrientation(client_id_, ref_handle_, -1, quad_ori, simx_opmode_streaming);
 
 	simxGetStringSignal(client_id_,"hummingbird_gyro",&gyro_sig,&gyro_sig_size,simx_opmode_streaming);
+	simxGetStringSignal(client_id_,"hummingbird_quat",&quat_sig,&quat_sig_size,simx_opmode_streaming);
 	simxGetStringSignal(client_id_,"hummingbird_acc",&acc_sig,&acc_sig_size,simx_opmode_streaming);
 
 	// initialize motor values
@@ -159,13 +162,35 @@ bool QuadSimClient::ReceiveQuadVelocity(Point3 *data)
 }
 
 bool QuadSimClient::ReceiveQuadOrientation(Point3 *data)
-{
-	if (simxGetObjectOrientation(client_id_, ref_handle_, -1, quad_ori, simx_opmode_buffer) == simx_error_noerror)
+{if (simxGetObjectOrientation(client_id_, ref_handle_, -1, quad_ori, simx_opmode_buffer) == simx_error_noerror)
 	{
 		(*data).x = quad_ori[0];
 		(*data).y = quad_ori[1];
 		(*data).z = quad_ori[2];
 //		std::cout << "ori (x, y, z) = " << "( " << (*data).x <<" , " << (*data).y << " , " << (*data).z << " )" << std::endl;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool QuadSimClient::ReceiveQuadQuaternion(Quaternion *data)
+{
+	if (simxGetStringSignal(client_id_,"hummingbird_quat",&quat_sig,&quat_sig_size,simx_opmode_buffer) == simx_error_noerror)
+	{
+		int cnt=acc_sig_size/4;
+
+		if(cnt == 3)
+		{
+			data->x=((float*)quat_sig)[0];
+			data->y=((float*)quat_sig)[1];
+			data->z=((float*)quat_sig)[2];
+			data->w=((float*)quat_sig)[3];
+
+//			std::cout << "new quaternion: "<< data->w << " , "
+//					<< data->x << " , " << data->y << " , "
+//					<< data->z << std::endl;
+		}
 		return true;
 	}
 	else
@@ -220,7 +245,8 @@ bool QuadSimClient::ReceiveDataFromRobot(DataFromRobot *rx_data)
 			ReceiveAccData(&(rx_data->imu_data.acc)) &&
 			ReceiveQuadPosition(&(rx_data->pos_i)) &&
 			ReceiveQuadVelocity(&(rx_data->vel_i)) &&
-			ReceiveQuadOrientation(&rx_data->rot_i))
+			ReceiveQuadOrientation(&rx_data->rot_i) &&
+			ReceiveQuadQuaternion(&rx_data->quat_i))
 	{
 		rx_data->rot_rate_b.x = rx_data->imu_data.gyro.raw_x;
 		rx_data->rot_rate_b.y = rx_data->imu_data.gyro.raw_y;

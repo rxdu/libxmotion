@@ -69,9 +69,8 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 {
 	Eigen::Quaterniond quat_e;
 
-	// qe = q - qd
+	//qe = q - qd
 	quat_e = rs_->quat_.conjugate() * input->quat_d;
-//	quat_e = input->quat_d * rs_->quat_.conjugate();
 	quat_e = quat_e.normalized();
 
 	double qe0 = quat_e.w();
@@ -113,25 +112,23 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	Eigen::Vector3d new_x_axis = rotatedPx.vec();
 	Eigen::Vector3d new_y_axis = rotatedPy.vec();
 	Eigen::Vector3d new_z_axis = rotatedPz.vec();
-//	std::cout << "new_x_axis vector: "<< new_x_axis.x() << " , " << new_x_axis.y() << " , " << new_x_axis.z() << std::endl;
-//	std::cout << "new_y_axis vector: "<< new_y_axis.x() << " , " << new_y_axis.y() << " , " << new_y_axis.z() << std::endl;
-//	std::cout << "new_z_axis vector: "<< new_z_axis.x() << " , " << new_z_axis.y() << " , " << new_z_axis.z() << std::endl;
+
 	double axis_dot_product[3];
 	axis_dot_product[0] = new_x_axis.dot(x_axis_v);
 	axis_dot_product[1] = new_y_axis.dot(y_axis_v);
 	axis_dot_product[2] = new_z_axis.dot(z_axis_v);
-	if(axis_dot_product[0] < 0) {
+//	if(axis_dot_product[0] < 0) {
 //		std::cout << "************ x direction dot product change ************" << std::endl;
 //		quat_e.x() = - quat_e.x();
-	}
-	if(axis_dot_product[1] < 0) {
+//	}
+//	if(axis_dot_product[1] < 0) {
 //		std::cout << "************ y direction dot product change ************" << std::endl;
 //		quat_e.y() = - quat_e.y();
-	}
-	if(axis_dot_product[2] < 0) {
+//	}
+//	if(axis_dot_product[2] < 0) {
 //		std::cout << "************ z direction dot product change ************" << std::endl;
 //		quat_e.z() = - quat_e.z();
-	}
+//	}
 
 	if(quat_e.x() < 10e-6 && quat_e.x() > -10e-6)
 		quat_e.x() = 0;

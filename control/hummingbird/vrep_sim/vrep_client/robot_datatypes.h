@@ -33,6 +33,14 @@ typedef struct
 
 typedef struct
 {
+	float x;
+	float y;
+	float z;
+	float w;
+}Quaternion;
+
+typedef struct
+{
 	Point3 pos;
 	EulerAngle ori;
 }Pose;
@@ -61,6 +69,7 @@ typedef struct
 	Point3 pos_i;
 	Point3 vel_i;
 	Point3 rot_i;
+	Quaternion quat_i;
 	Point3 rot_rate_b;
 } DataFromRobot;
 
