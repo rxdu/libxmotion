@@ -89,7 +89,7 @@ public:
 						successor->search_parent_ = current_vertex;
 						successor->g_astar_ = new_cost;
 						successor->h_astar_ = CalcHeuristic(successor, goal);
-						successor->f_astar_ = successor->g_astar_ + successor->f_astar_;
+						successor->f_astar_ = successor->g_astar_ + successor->h_astar_;
 
 						openlist.put((*ite).dst_, successor->f_astar_);
 
@@ -105,7 +105,7 @@ public:
 
 							successor->g_astar_ = new_cost;
 							successor->h_astar_ = CalcHeuristic(successor, goal);
-							successor->f_astar_ = successor->g_astar_ + successor->f_astar_;
+							successor->f_astar_ = successor->g_astar_ + successor->h_astar_;
 
 							openlist.put((*ite).dst_, successor->f_astar_);
 
@@ -136,6 +136,7 @@ public:
 			auto traj_e = trajectory.end() - 1;
 			std::cout << "starting vertex id: " << (*traj_s)->vertex_id_ << std::endl;
 			std::cout << "finishing vertex id: " << (*traj_e)->vertex_id_ << std::endl;
+			std::cout << "path length: " << trajectory.size() << std::endl;
 		}
 		else
 			std::cout << "failed to find a path" << std::endl;
@@ -154,7 +155,14 @@ private:
 		x2 = vertex_b->node_->location_.x;
 		y2 = vertex_b->node_->location_.y;
 
-		return std::abs(x1-x2) + std::abs(y1-y2);
+		// static_cast: can get wrong result to use "unsigned long" type for deduction
+		long x_error = static_cast<long>(x1) - static_cast<long>(x2);
+		long y_error = static_cast<long>(y1) - static_cast<long>(y2);
+
+		double cost = std::abs(x_error) + std::abs(y_error);
+//		std::cout<< "heuristic cost: " << cost << std::endl;
+
+		return cost;
 	};
 };
 

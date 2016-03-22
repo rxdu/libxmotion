@@ -89,7 +89,7 @@ public:
 		Vertex<GraphNodeType>* dst_vertex = GetVertex(dst_node);
 
 //		Edge<Vertex<GraphNodeType>>* new_edge = new Edge<Vertex<GraphNodeType>>(dst_vertex,cost);
-		Edge<Vertex<GraphNodeType>> new_edge(dst_vertex,cost);
+		Edge<Vertex<GraphNodeType>> new_edge(src_vertex, dst_vertex,cost);
 		src_vertex->edges_.push_back(new_edge);
 	};
 
@@ -105,6 +105,26 @@ public:
 		}
 
 		return vertices;
+	};
+
+	// This functions is used to access all edges of a constructed graph
+	std::vector<Edge<Vertex<GraphNodeType>>> GetGraphEdges()
+	{
+		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it;
+		std::vector<Edge<Vertex<GraphNodeType>>> edges;
+
+		for(it = vertex_map_.begin(); it != vertex_map_.end(); it++)
+		{
+			Vertex<GraphNodeType>* vertex = it->second;
+			for(auto ite = vertex->edges_.begin(); ite != vertex->edges_.end(); ite++) {
+				auto itedge = std::find(edges.begin(), edges.end(), (*ite));
+
+				if(itedge == edges.end())
+					edges.push_back(*ite);
+			}
+		}
+
+		return edges;
 	};
 
 	// This function is used to reset the vertices for a new search

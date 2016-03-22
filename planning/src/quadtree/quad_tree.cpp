@@ -92,14 +92,38 @@ std::vector<QuadTreeNode*> QuadTree::GetDummyNeighbours(QuadTreeNode* dummy_leaf
 	x = ((leaf->bounding_box_.x.min + leaf->bounding_box_.x.max + 1)/2)/cell_res_;
 	y = ((leaf->bounding_box_.y.min + leaf->bounding_box_.y.max + 1)/2)/cell_res_;
 
-	dummy_neighbours.push_back(node_manager_->GetNodeReference(x-1,y-1));
-	dummy_neighbours.push_back(node_manager_->GetNodeReference(x,y-1));
-	dummy_neighbours.push_back(node_manager_->GetNodeReference(x+1,y-1));
-	dummy_neighbours.push_back(node_manager_->GetNodeReference(x-1,y));
-	dummy_neighbours.push_back(node_manager_->GetNodeReference(x+1,y));
-	dummy_neighbours.push_back(node_manager_->GetNodeReference(x-1,y+1));
-	dummy_neighbours.push_back(node_manager_->GetNodeReference(x,y+1));
-	dummy_neighbours.push_back(node_manager_->GetNodeReference(x+1,y+1));
+	QuadTreeNode* element;
+	element = node_manager_->GetNodeReference(x-1,y-1);
+	if(element != nullptr)
+		dummy_neighbours.push_back(element);
+
+	element = node_manager_->GetNodeReference(x,y-1);
+	if(element != nullptr)
+		dummy_neighbours.push_back(node_manager_->GetNodeReference(x,y-1));
+
+	element = node_manager_->GetNodeReference(x+1,y-1);
+	if(element != nullptr)
+		dummy_neighbours.push_back(node_manager_->GetNodeReference(x+1,y-1));
+
+	element = node_manager_->GetNodeReference(x-1,y);
+	if(element != nullptr)
+		dummy_neighbours.push_back(node_manager_->GetNodeReference(x-1,y));
+
+	element = node_manager_->GetNodeReference(x+1,y);
+	if(element != nullptr)
+		dummy_neighbours.push_back(node_manager_->GetNodeReference(x+1,y));
+
+	element = node_manager_->GetNodeReference(x-1,y+1);
+	if(element != nullptr)
+		dummy_neighbours.push_back(node_manager_->GetNodeReference(x-1,y+1));
+
+	element = node_manager_->GetNodeReference(x,y+1);
+	if(element != nullptr)
+		dummy_neighbours.push_back(node_manager_->GetNodeReference(x,y+1));
+
+	element = node_manager_->GetNodeReference(x+1,y+1);
+	if(element != nullptr)
+		dummy_neighbours.push_back(node_manager_->GetNodeReference(x+1,y+1));
 
 	return dummy_neighbours;
 }
@@ -240,7 +264,12 @@ void QTreeNodeManager::SetNodeReference(uint16_t index_x, uint16_t index_y, Quad
 
 QuadTreeNode* QTreeNodeManager::GetNodeReference(uint16_t index_x, uint16_t index_y)
 {
-	return tree_nodes_.at(index_y*side_node_num_ + index_x);
+	uint32_t index = index_y*side_node_num_ + index_x;
+	if(index_x > 0 && index_x < side_node_num_ &&
+			index_y > 0 && index_y < side_node_num_)
+		return tree_nodes_.at(index_y*side_node_num_ + index_x);
+	else
+		return nullptr;
 }
 
 /*********************************************************/

@@ -342,12 +342,10 @@ void GraphVis::DrawQTreeGraph(Graph<QuadTreeNode> *graph, QuadTree *tree, cv::In
 	Mat dst = _dst.getMat();
 	src.copyTo(dst);
 
+	// draw all vertices
 	std::vector<Vertex<QuadTreeNode>*> vertices;
-	std::vector<Vertex<QuadTreeNode>*>::iterator itv;
-
 	vertices = graph->GetGraphVertices();
-
-	for(itv = vertices.begin(); itv != vertices.end(); itv++)
+	for(auto itv = vertices.begin(); itv != vertices.end(); itv++)
 	{
 		DrawQTreeNode((*itv)->node_,dst);
 
@@ -360,17 +358,44 @@ void GraphVis::DrawQTreeGraph(Graph<QuadTreeNode> *graph, QuadTree *tree, cv::In
 //		putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
 
 		// draw all edges from current vertex
-		std::vector<Edge<Vertex<QuadTreeNode>>>::iterator ite;
-		for(ite = (*itv)->edges_.begin(); ite != (*itv)->edges_.end(); ite++)
-		{
-			// neighbor vertices center coordinate
-			const QuadTreeNode* n = (*ite).dst_->node_;
+//		std::vector<Edge<Vertex<QuadTreeNode>>>::iterator ite;
+//		for(ite = (*itv)->edges_.begin(); ite != (*itv)->edges_.end(); ite++)
+//		{
+//			// neighbor vertices center coordinate
+//			const QuadTreeNode* n = (*ite).dst_->node_;
+//
+//			x2 = n->location_.x;
+//			y2 = n->location_.y;
+//
+//			DrawEdge(Point(x1,y1), Point(x2,y2), dst);
+//
+//			// draw cost
+//			std::string str = std::to_string(static_cast<int>((*ite).cost_));
+//			int tx = (x1 + x2)/2;
+//			int ty = (y1 + y2)/2;
+////			putText(dst, str ,Point(tx,ty), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
+//		}
+	}
 
-			x2 = n->location_.x;
-			y2 = n->location_.y;
+	// draw all edges
+	std::vector<Edge<Vertex<QuadTreeNode>>> edges;
+	edges = graph->GetGraphEdges();
+//	std::cout<<"number of edges "<< edges.size()<<std::endl;
+	for(auto it = edges.begin(); it != edges.end(); it++)
+	{
+		uint64_t x1,y1,x2,y2;
+		x1 = (*it).src_->node_->location_.x;
+		y1 = (*it).src_->node_->location_.y;
+		x2 = (*it).dst_->node_->location_.x;
+		y2 = (*it).dst_->node_->location_.y;
 
-			DrawEdge(Point(x1,y1), Point(x2,y2), dst);
-		}
+		DrawEdge(Point(x1,y1), Point(x2,y2), dst);
+
+		// draw cost
+		std::string str = std::to_string(static_cast<int>((*it).cost_));
+		int tx = (x1 + x2)/2;
+		int ty = (y1 + y2)/2;
+		putText(dst, str ,Point(tx,ty), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
 	}
 
 //	std::cout<<"number of vertices "<< vertices.size()<<std::endl;

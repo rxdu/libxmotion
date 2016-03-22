@@ -15,11 +15,21 @@ template<typename EdgeVertexType>
 class Edge
 {
 public:
-	Edge(EdgeVertexType *d = nullptr, double c = 0.0):
-			dst_(d), cost_(c){};
+	Edge(EdgeVertexType *src = nullptr, EdgeVertexType *dst = nullptr, double c = 0.0):
+		src_(src),dst_(dst), cost_(c){};
 
+	EdgeVertexType *src_;
 	EdgeVertexType *dst_;
 	double cost_;
+
+	bool operator ==(const Edge<EdgeVertexType> other)
+	{
+		if((src_ == other.src_ && dst_ == other.dst_)
+			|| (src_ == other.dst_ && dst_ == other.src_))
+			return true;
+		else
+			return false;
+	}
 };
 
 /****************************************************************************/
