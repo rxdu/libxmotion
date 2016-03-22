@@ -6,16 +6,13 @@
 using namespace srcl_ctrl;
 using namespace cv;
 
-QTreeBuilder::QTreeBuilder():
-		tree_(nullptr)
+QTreeBuilder::QTreeBuilder()
 {
 
 }
 
 QTreeBuilder::~QTreeBuilder()
 {
-	if(tree_ != nullptr)
-		delete tree_;
 }
 
 // TODO
@@ -135,7 +132,7 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 		return nullptr;
 
 	// Create quadtree
-	tree_ = new QuadTree(padded_img_.cols, max_depth);
+	QuadTree *tree_ = new QuadTree(padded_img_.cols, max_depth);
 
 	if(max_depth > tree_->MAX_DEPTH)
 	{
@@ -291,34 +288,34 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 	}
 
 	// Store all leaf nodes into a vector
-	tree_->leaf_nodes_ = GetAllLeafNodes();
+	tree_->leaf_nodes_ = GetAllLeafNodes(tree_);
 
 	return tree_;
 }
 
-std::vector<QuadTreeNode*> QTreeBuilder::GetAllLeafNodes()
+std::vector<QuadTreeNode*> QTreeBuilder::GetAllLeafNodes(QuadTree *tree)
 {
 	std::vector<QuadTreeNode*> leaves;
 
-	if(tree_ != nullptr)
+	if(tree != nullptr)
 	{
 		std::vector<QuadTreeNode*> parent_nodes;
 
-		for(int i = 0; i < tree_->tree_depth_; i++)
+		for(int i = 0; i < tree->tree_depth_; i++)
 		{
 			if(i == 0)
 			{
-				if(tree_->root_node_->node_type_ != NodeType::LEAF)
+				if(tree->root_node_->node_type_ != NodeType::LEAF)
 				{
 					for(int i = 0; i < 4; i++)
 					{
 						parent_nodes.clear();
-						parent_nodes.push_back(tree_->root_node_);
+						parent_nodes.push_back(tree->root_node_);
 					}
 				}
 				else
 				{
-					leaves.push_back(tree_->root_node_);
+					leaves.push_back(tree->root_node_);
 					break;
 				}
 			}

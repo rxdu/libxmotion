@@ -19,13 +19,10 @@ public:
 	cv::Mat padded_img_;
 
 private:
-	QuadTree* tree_;
-
-private:
 	bool PreprocessImage(cv::InputArray _src);
 	bool PadGrayscaleImage(cv::InputArray _src);
 	OccupancyType CheckAreaOccupancy(BoundingBox area);
-	std::vector<QuadTreeNode*> GetAllLeafNodes();
+	std::vector<QuadTreeNode*> GetAllLeafNodes(QuadTree *tree);
 
 public:
 	QuadTree* BuildQuadTree(cv::InputArray _src, unsigned int max_depth);

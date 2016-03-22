@@ -361,7 +361,7 @@ void GraphVis::DrawQTreeGraph(Graph<QuadTreeNode> *graph, QuadTree *tree, cv::In
 
 		// draw all edges from current vertex
 		std::vector<Edge<Vertex<QuadTreeNode>>>::iterator ite;
-		for(ite = (*itv)->adj_.begin(); ite != (*itv)->adj_.end(); ite++)
+		for(ite = (*itv)->edges_.begin(); ite != (*itv)->edges_.end(); ite++)
 		{
 			// neighbor vertices center coordinate
 			const QuadTreeNode* n = (*ite).dst_->node_;
@@ -515,7 +515,7 @@ void GraphVis::DrawSquareGridGraph(Graph<SquareCell>* graph, SquareGrid* grid, c
 
 		// draw all edges from current vertex
 		std::vector<Edge<Vertex<SquareCell>>>::iterator ite;
-		for(ite = (*itv)->adj_.begin(); ite != (*itv)->adj_.end(); ite++)
+		for(ite = (*itv)->edges_.begin(); ite != (*itv)->edges_.end(); ite++)
 		{
 			// neighbor vertices center coordinate
 			const SquareCell* n = (*ite).dst_->node_;

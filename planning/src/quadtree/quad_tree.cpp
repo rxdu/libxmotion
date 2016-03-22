@@ -33,13 +33,39 @@ QuadTree::QuadTree(uint16_t padded_img_size, uint8_t depth):MAX_DEPTH(32),
 
 QuadTree::~QuadTree()
 {
-	// TODO
-	// Think about how to free memory of the whole tree
-//	if(root_node_ != nullptr)
-//		delete(root_node_);
+	// collect memory for all tree nodes
+	std::vector<std::vector<QuadTreeNode*>> node_parents;
 
-	if(node_manager_ != nullptr)
-		delete(node_manager_);
+	// collect root level node
+	std::vector<QuadTreeNode*> root_level;
+	root_level.push_back(root_node_);
+	node_parents.push_back(root_level);
+
+	// collect lower level nodes
+	for(int i = 0; i < this->tree_depth_ - 1; i++)
+	{
+		std::vector<QuadTreeNode*> nodes;
+
+		for(auto it = node_parents[i].begin(); it != node_parents[i].end(); it++) {
+			for(int i = 0; i < 4; i++)
+				nodes.push_back((*it)->child_nodes_[i]);
+		}
+
+		node_parents.push_back(nodes);
+	}
+//	std::cout<<"total depth collected: " << node_parents.size() << std::endl;
+
+	for(auto itr = node_parents.rbegin(); itr != node_parents.rend(); itr++)
+	{
+		for(auto ite = (*itr).begin(); ite != (*itr).end(); ite++)
+		{
+			for(int i = 0; i < 4; i++)
+				delete (*ite)->child_nodes_[i];
+		}
+	}
+	delete root_node_;
+
+	delete node_manager_;
 }
 
 QuadTreeNode* QuadTree::GetNodeAtPosition(uint16_t pixel_x, uint16_t pixel_y)
@@ -165,8 +191,6 @@ std::vector<QuadTreeNode*> QuadTree::FindNeighbours(QuadTreeNode* node)
 //	std::cout << "number of dummy neighbours: "<< dummy_neighbours.size() <<std::endl;
 
 	// now find all dummy roots as neighbours in the quadtree
-	// TODO
-	// Implement this part using std::set<> instead of std::vector<>
 	neighbours.clear();
 	std::vector<QuadTreeNode*>::iterator it;
 	for(it = dummy_neighbours.begin(); it != dummy_neighbours.end(); ++it)

@@ -83,6 +83,9 @@ int main(int argc, char** argv )
 
     waitKey(0);
 
+    delete graph;
+    delete tree;
+
     return 0;
 }
 

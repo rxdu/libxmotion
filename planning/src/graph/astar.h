@@ -72,7 +72,7 @@ public:
 
 			// check all adjacent vertices (successors of current vertex)
 			typename std::vector<Edge<GraphVertexType>>::iterator ite;
-			for(ite = current_vertex->adj_.begin(); ite != current_vertex->adj_.end(); ite++)
+			for(ite = current_vertex->edges_.begin(); ite != current_vertex->edges_.end(); ite++)
 			{
 				GraphVertexType* successor;
 				successor = (*ite).dst_;

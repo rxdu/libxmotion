@@ -58,7 +58,7 @@ int main(int argc, char** argv )
 	/************************************************************************************/
 
 	// Construct a graph from the grid map
-	Graph<SquareCell>* graph = GraphBuilder::BuildFromQuadTree(grid);
+	Graph<SquareCell>* graph = GraphBuilder::BuildFromSquareGrid(grid);
 
 	// Search path in the graph
 
@@ -88,6 +88,9 @@ int main(int argc, char** argv )
 	waitKey(0);
 
 	//    imwrite( "astar.jpg", vis_result);
+
+	delete grid;
+	delete graph;
 
 	return 0;
 }

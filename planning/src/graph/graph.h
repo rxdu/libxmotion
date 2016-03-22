@@ -88,8 +88,9 @@ public:
 		Vertex<GraphNodeType>* src_vertex = GetVertex(src_node);
 		Vertex<GraphNodeType>* dst_vertex = GetVertex(dst_node);
 
-		Edge<Vertex<GraphNodeType>>* new_edge = new Edge<Vertex<GraphNodeType>>(dst_vertex,cost);
-		src_vertex->adj_.push_back(*new_edge);
+//		Edge<Vertex<GraphNodeType>>* new_edge = new Edge<Vertex<GraphNodeType>>(dst_vertex,cost);
+		Edge<Vertex<GraphNodeType>> new_edge(dst_vertex,cost);
+		src_vertex->edges_.push_back(new_edge);
 	};
 
 	// This functions is used to access all vertices of a constructed graph

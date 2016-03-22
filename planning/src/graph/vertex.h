@@ -34,10 +34,13 @@ public:
 		is_checked_(false), is_in_openlist_(false),
 		search_parent_(nullptr),
 		f_astar_(0),g_astar_(0),h_astar_(0){};
+	~Vertex(){
+		edges_.clear();
+	};
 
 	VertexNodeType *node_;
 	uint64_t vertex_id_;
-	std::vector<Edge<Vertex<VertexNodeType>>> adj_;
+	std::vector<Edge<Vertex<VertexNodeType>>> edges_;
 
 	// member variables for search
 	bool is_checked_;
@@ -60,7 +63,7 @@ public:
 	double GetEdgeCost(Vertex<VertexNodeType>* dst_node)
 	{
 		double cost = -1;
-		for(auto ite = adj_.begin(); ite != adj_.end(); ite++)
+		for(auto ite = edges_.begin(); ite != edges_.end(); ite++)
 		{
 			if((*ite).dst_->vertex_id_ == dst_node->vertex_id_)
 			{

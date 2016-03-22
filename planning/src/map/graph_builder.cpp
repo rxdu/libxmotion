@@ -61,8 +61,7 @@ Graph<QuadTreeNode>* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 	return graph;
 }
 
-// TODO fix the memory leak issue
-Graph<SquareCell>* GraphBuilder::BuildFromQuadTree(SquareGrid* grid)
+Graph<SquareCell>* GraphBuilder::BuildFromSquareGrid(SquareGrid* grid)
 {
 	Graph<SquareCell>* graph = new Graph<SquareCell>();
 
