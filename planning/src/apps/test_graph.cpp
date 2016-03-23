@@ -77,15 +77,17 @@ int main(int argc, char** argv )
 
 //	start_vertex = vertices[0];
 //	end_vertex = vertices[15];
-	start_vertex = graph->GetVertexFromID(262);
-	end_vertex = graph->GetVertexFromID(100);
+	start_vertex = graph->GetVertexFromID(172);
+	end_vertex = graph->GetVertexFromID(20);
 	std::cout<<"Start from "<< start_vertex->vertex_id_<<" and finish at "<< end_vertex->vertex_id_<< std::endl;
 	std::vector<Vertex<QuadTreeNode>*> traj = graph->AStarSearch(start_vertex, end_vertex);
 
-//	Mat path_img;
-	vis.DrawQTreeGraphPath(traj, image_graph,image_disp);
+	Mat path_img;
+	vis.DrawQTreeGraphPath(traj, image_graph,path_img);
 
-    imwrite( "quad_tree_astar.jpg", image_disp);
+	image_disp = path_img;
+
+//    imwrite( "new_map_path.jpg", image_disp);
 
     namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
     imshow("Processed Image", image_disp);
