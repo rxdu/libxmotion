@@ -110,7 +110,7 @@ SquareGrid* MapManager::CreateTestGridMap12N12Astar()
 	for(int i = 88; i <= 93; i++)
 		grid->SetCellOccupancy(i, OccupancyType::OCCUPIED);
 
-	for(int i = 73; i <= 75; i++)
+	for(int i = 74; i <= 75; i++)
 		grid->SetCellOccupancy(i, OccupancyType::OCCUPIED);
 
 	for(int i = 0; i < 8; i++)

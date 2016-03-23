@@ -92,7 +92,6 @@ public:
 						successor->h_astar_ = CalcHeuristic(successor, goal);
 						successor->f_astar_ = successor->g_astar_ + successor->h_astar_;
 
-//						openlist.put((*ite).dst_, successor->f_astar_);
 						openlist.put(successor, successor->f_astar_);
 						successor->is_in_openlist_ = true;
 
@@ -100,23 +99,6 @@ public:
 							found_path = true;
 						}
 					}
-					// if the vertex has already been added into open list
-//					else
-//					{
-//						if(new_cost < successor->g_astar_) {
-//							successor->search_parent_ = current_vertex;
-//
-//							successor->g_astar_ = new_cost;
-//							successor->h_astar_ = CalcHeuristic(successor, goal);
-//							successor->f_astar_ = successor->g_astar_ + successor->h_astar_;
-//
-//							openlist.put((*ite).dst_, successor->f_astar_);
-//
-//							if(successor == goal){
-//								found_path = true;
-//							}
-//						}
-//					}
 				}
 			}
 		}

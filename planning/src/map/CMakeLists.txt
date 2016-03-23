@@ -17,6 +17,7 @@ find_package(OpenCV REQUIRED)
 set(MAP_LIB_SRC
     map_manager.cpp
     qtree_builder.cpp
+    sgrid_builder.cpp
     graph_builder.cpp
 )
 add_library(map STATIC ${MAP_LIB_SRC})

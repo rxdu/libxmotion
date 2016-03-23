@@ -41,7 +41,7 @@ int main(int argc, char** argv )
 
     // example to use quadtree builder
     QTreeBuilder builder;
-    QuadTree* tree = builder.BuildQuadTree(image_raw, 6);
+    QuadTree* tree = builder.BuildQuadTree(image_raw, 8);
 
     Mat image_tree, image_nodes;
     GraphVis vis;
@@ -87,7 +87,7 @@ int main(int argc, char** argv )
 
 	image_disp = path_img;
 
-//    imwrite( "new_map_path.jpg", image_disp);
+//    imwrite( "new_map_path_test.jpg", image_disp);
 
     namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
     imshow("Processed Image", image_disp);

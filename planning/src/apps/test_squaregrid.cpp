@@ -15,9 +15,8 @@
 
 // user
 #include "map_manager.h"
-#include "qtree_builder.h"
+#include "graph.h"
 #include "graph_builder.h"
-#include "astar.h"
 #include "graph_vis.h"
 
 using namespace cv;
