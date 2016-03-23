@@ -335,7 +335,7 @@ void GraphVis::DrawQTreeNodes(std::vector<QuadTreeNode*>& nodes, cv::InputArray 
 	}
 }
 
-void GraphVis::DrawQTreeGraph(Graph<QuadTreeNode> *graph, QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst)
+void GraphVis::DrawQTreeGraph(Graph<QuadTreeNode> *graph, QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost)
 {
 	Mat src = _src.getMat();
 	_dst.create(_src.size(), _src.type());
@@ -354,8 +354,11 @@ void GraphVis::DrawQTreeGraph(Graph<QuadTreeNode> *graph, QuadTree *tree, cv::In
 		x1 = (*itv)->node_->location_.x;
 		y1 = (*itv)->node_->location_.y;
 
-//		std::string id = std::to_string((*itv)->node_->node_id_);
-//		putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
+		if(show_id)
+		{
+			std::string id = std::to_string((*itv)->node_->node_id_);
+			putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+		}
 
 		// draw all edges from current vertex
 //		std::vector<Edge<Vertex<QuadTreeNode>>>::iterator ite;
@@ -392,10 +395,13 @@ void GraphVis::DrawQTreeGraph(Graph<QuadTreeNode> *graph, QuadTree *tree, cv::In
 		DrawEdge(Point(x1,y1), Point(x2,y2), dst);
 
 		// draw cost
-		std::string str = std::to_string(static_cast<int>((*it).cost_));
-		int tx = (x1 + x2)/2;
-		int ty = (y1 + y2)/2;
-		putText(dst, str ,Point(tx,ty), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
+		if(show_cost)
+		{
+			std::string str = std::to_string(static_cast<int>((*it).cost_));
+			int tx = (x1 + x2)/2;
+			int ty = (y1 + y2)/2;
+			putText(dst, str ,Point(tx,ty), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
+		}
 	}
 
 //	std::cout<<"number of vertices "<< vertices.size()<<std::endl;

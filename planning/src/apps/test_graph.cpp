@@ -41,7 +41,7 @@ int main(int argc, char** argv )
 
     // example to use quadtree builder
     QTreeBuilder builder;
-    QuadTree* tree = builder.BuildQuadTree(image_raw, 4);
+    QuadTree* tree = builder.BuildQuadTree(image_raw, 6);
 
     Mat image_tree, image_nodes;
     GraphVis vis;
@@ -65,20 +65,27 @@ int main(int argc, char** argv )
 
 	graph = GraphBuilder::BuildFromQuadTree(tree);
 	Mat image_graph;
-	vis.DrawQTreeGraph(graph, tree, image_tree, image_graph);
+	vis.DrawQTreeGraph(graph, tree, image_tree, image_graph,false, false);
 //	vis.DrawQTreeGraph(graph, tree, image_tree, image_disp);
 
 	// try a* search
 	std::vector<Vertex<QuadTreeNode>*> vertices = graph->GetGraphVertices();
 	std::cout<<"vertex number: "<<vertices.size()<<std::endl;
 
-	std::cout<<"Start from "<< vertices[0]->vertex_id_<<" and finish at "<< vertices[3]->vertex_id_<< std::endl;
-	std::vector<Vertex<QuadTreeNode>*> traj = graph->AStarSearch(vertices[0], vertices[3]);
+	Vertex<QuadTreeNode>* start_vertex;
+	Vertex<QuadTreeNode>* end_vertex;
+
+//	start_vertex = vertices[0];
+//	end_vertex = vertices[15];
+	start_vertex = graph->GetVertexFromID(262);
+	end_vertex = graph->GetVertexFromID(100);
+	std::cout<<"Start from "<< start_vertex->vertex_id_<<" and finish at "<< end_vertex->vertex_id_<< std::endl;
+	std::vector<Vertex<QuadTreeNode>*> traj = graph->AStarSearch(start_vertex, end_vertex);
 
 //	Mat path_img;
 	vis.DrawQTreeGraphPath(traj, image_graph,image_disp);
 
-//    imwrite( "free_graph.jpg", image_graph );
+    imwrite( "quad_tree_astar.jpg", image_disp);
 
     namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
     imshow("Processed Image", image_disp);

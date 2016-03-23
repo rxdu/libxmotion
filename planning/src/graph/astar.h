@@ -84,36 +84,39 @@ public:
 					double new_cost = current_vertex->g_astar_ + (*ite).cost_;
 
 					// if the vertex is not in open list
-					if(successor->is_in_openlist_ == false)
+					// or if the vertex is in open list but has a higher cost
+					if(successor->is_in_openlist_ == false || new_cost < successor->g_astar_)
 					{
 						successor->search_parent_ = current_vertex;
 						successor->g_astar_ = new_cost;
 						successor->h_astar_ = CalcHeuristic(successor, goal);
 						successor->f_astar_ = successor->g_astar_ + successor->h_astar_;
 
-						openlist.put((*ite).dst_, successor->f_astar_);
+//						openlist.put((*ite).dst_, successor->f_astar_);
+						openlist.put(successor, successor->f_astar_);
+						successor->is_in_openlist_ = true;
 
 						if(successor == goal){
 							found_path = true;
 						}
 					}
 					// if the vertex has already been added into open list
-					else
-					{
-						if(new_cost < successor->g_astar_) {
-							successor->search_parent_ = current_vertex;
-
-							successor->g_astar_ = new_cost;
-							successor->h_astar_ = CalcHeuristic(successor, goal);
-							successor->f_astar_ = successor->g_astar_ + successor->h_astar_;
-
-							openlist.put((*ite).dst_, successor->f_astar_);
-
-							if(successor == goal){
-								found_path = true;
-							}
-						}
-					}
+//					else
+//					{
+//						if(new_cost < successor->g_astar_) {
+//							successor->search_parent_ = current_vertex;
+//
+//							successor->g_astar_ = new_cost;
+//							successor->h_astar_ = CalcHeuristic(successor, goal);
+//							successor->f_astar_ = successor->g_astar_ + successor->h_astar_;
+//
+//							openlist.put((*ite).dst_, successor->f_astar_);
+//
+//							if(successor == goal){
+//								found_path = true;
+//							}
+//						}
+//					}
 				}
 			}
 		}

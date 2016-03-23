@@ -53,7 +53,7 @@ public:
 	void DrawQTreeSingleNode(QuadTreeNode* node, cv::InputArray _src, cv::OutputArray _dst);
 	void DrawQTreeNodes(std::vector<QuadTreeNode*>& nodes, cv::InputArray _src, cv::OutputArray _dst);
 
-	void DrawQTreeGraph(Graph<QuadTreeNode> *graph, QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst);
+	void DrawQTreeGraph(Graph<QuadTreeNode> *graph, QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost);
 	void DrawQTreeGraphPath(std::vector<Vertex<QuadTreeNode>*>& vertices, cv::InputArray _src, cv::OutputArray _dst);
 
 	// square grid visualization

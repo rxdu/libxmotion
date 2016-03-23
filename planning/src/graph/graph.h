@@ -138,6 +138,7 @@ public:
 		}
 	};
 
+	// This function return the vertex with specified id
 	Vertex<GraphNodeType>* GetVertexFromID(uint64_t vertex_id)
 	{
 		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it = vertex_map_.find(vertex_id);

@@ -265,8 +265,8 @@ void QTreeNodeManager::SetNodeReference(uint16_t index_x, uint16_t index_y, Quad
 QuadTreeNode* QTreeNodeManager::GetNodeReference(uint16_t index_x, uint16_t index_y)
 {
 	uint32_t index = index_y*side_node_num_ + index_x;
-	if(index_x > 0 && index_x < side_node_num_ &&
-			index_y > 0 && index_y < side_node_num_)
+	if(index_x >= 0 && index_x < side_node_num_ &&
+			index_y >= 0 && index_y < side_node_num_)
 		return tree_nodes_.at(index_y*side_node_num_ + index_x);
 	else
 		return nullptr;
