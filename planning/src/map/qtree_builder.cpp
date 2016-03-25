@@ -2,123 +2,10 @@
 #include <cmath>
 
 #include "qtree_builder.h"
+#include "image_utils.h"
 
 using namespace srcl_ctrl;
 using namespace cv;
-
-QTreeBuilder::QTreeBuilder()
-{
-
-}
-
-QTreeBuilder::~QTreeBuilder()
-{
-}
-
-// TODO
-// 1. Needs to handle src images of different sizes dynamically
-// 2. Needs to check if src image is grayscale
-bool QTreeBuilder::PreprocessImage(cv::InputArray _src)
-{
-	Mat image_bin;
-	Mat src = _src.getMat();
-
-	// Binarize grayscale image
-	threshold(src, image_bin, 200, 255, THRESH_BINARY);
-
-	// Pad image to be square
-	bool pad_result = false;
-
-	pad_result = PadGrayscaleImage(image_bin);
-
-	return pad_result;
-}
-
-bool QTreeBuilder::PadGrayscaleImage(cv::InputArray _src)
-{
-	// create a image with size of power of 2
-	Mat src = _src.getMat();
-
-	unsigned long img_max_side;
-	unsigned long padded_size = -1;
-
-	if(src.cols > src.rows)
-		img_max_side = src.cols;
-	else
-		img_max_side = src.rows;
-
-	// find the minimal size of the padded image
-	for(unsigned int i = 0; i <= 16; i++)
-	{
-		if((img_max_side > pow(2,i)) && (img_max_side <= pow(2, i+1)))
-		{
-			padded_size = pow(2, i+1);
-			break;
-		}
-	}
-
-	if(padded_size == -1)
-		return false;
-
-	std::cout << "padded size:" << padded_size << std::endl;
-
-	padded_img_.create(padded_size,padded_size,0);
-	Mat dst = padded_img_;
-
-	int left, right, top, bottom;
-
-	left = (dst.cols - src.cols)/2;
-	right = dst.cols - src.cols - left;
-	top = (dst.rows - src.rows)/2;
-	bottom = dst.rows - src.rows - top;
-
-	Scalar value = Scalar(0);
-	copyMakeBorder(_src, dst, top, bottom, left, right, BORDER_CONSTANT,value);
-
-	return true;
-
-//	std::cout << "type - " << _src.type() << std::endl;
-//	std::cout << "(cols, rows) = " << "(" << dst.cols << " , " << dst.rows << ")" << std::endl;
-}
-
-OccupancyType QTreeBuilder::CheckAreaOccupancy(BoundingBox area)
-{
-	Range rngx(area.x.min,area.x.max+1);
-	Range rngy(area.y.min, area.y.max+1);
-
-	// Attention:
-	//	Points and Size go (x,y); (width,height) ,- Mat has (row,col).
-	Mat checked_area = padded_img_(rngy,rngx);
-
-	unsigned long free_points = 0;
-	unsigned long occupied_points = 0;
-	OccupancyType type;
-
-	for(int i = 0; i < checked_area.cols; i++)
-		for(int j = 0; j < checked_area.rows; j++)
-		{
-			if(checked_area.at<uchar>(Point(i,j)) > 0)
-				free_points++;
-			else
-				occupied_points++;
-
-			if(occupied_points !=0 && free_points != 0)
-			{
-				type = OccupancyType::MIXED;
-				break;
-			}
-		}
-
-	if(free_points !=0 && occupied_points == 0)
-		type = OccupancyType::FREE;
-
-	if(free_points ==0 && occupied_points != 0)
-		type = OccupancyType::OCCUPIED;
-
-	return type;
-
-//	std::cout << "(cols, rows) = " << "(" << checked_area.cols << " , " << checked_area.rows << ")" << std::endl;
-}
 
 /*
  * @param _src: grayscale image, max size: 2^16 * 2^16 = 65535 * 65535 pixels
@@ -126,13 +13,19 @@ OccupancyType QTreeBuilder::CheckAreaOccupancy(BoundingBox area)
  */
 QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_depth)
 {
-	// Pad image to get a image with size of power of 2
-	//	src_img_ can be used only after this step
-	if(!PreprocessImage(_src))
-		return nullptr;
+	Mat image_bin;
+	Mat image_map;
+	Mat src = _src.getMat();
+
+	// binarize grayscale image
+	ImageUtils::BinarizeImage(src, image_bin, 200);
+
+	// pad image to 2^n on each side so that we can calculate
+	//	the dimension of the grid more conveniently
+	ImageUtils::PadImageToSquared(image_bin, image_map);
 
 	// Create quadtree
-	QuadTree *tree_ = new QuadTree(padded_img_.cols, max_depth);
+	QuadTree *tree_ = new QuadTree(image_map.cols, max_depth);
 
 	if(max_depth > tree_->MAX_DEPTH)
 	{
@@ -152,12 +45,12 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 		{
 			BoundingBox bbox;
 			bbox.x.min = 0;
-			bbox.x.max = padded_img_.cols - 1;
+			bbox.x.max = image_map.cols - 1;
 			bbox.y.min = 0;
-			bbox.y.max = padded_img_.rows - 1;
+			bbox.y.max = image_map.rows - 1;
 
 			OccupancyType map_occupancy;
-			map_occupancy = CheckAreaOccupancy(bbox);
+			map_occupancy = ImageUtils::CheckAreaOccupancy(image_map, bbox);
 
 			tree_->root_node_ = new QuadTreeNode(bbox, map_occupancy);
 
@@ -222,7 +115,7 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 							<< " y " << bbox[i].y.min << "-" << bbox[i].y.max << std::endl;
 #endif
 
-					occupancy[i] = CheckAreaOccupancy(bbox[i]);
+					occupancy[i] = ImageUtils::CheckAreaOccupancy(image_map, bbox[i]);
 					parent->child_nodes_[i] = new QuadTreeNode(bbox[i], occupancy[i]);
 
 					if(grown_depth < max_depth)
@@ -288,7 +181,7 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 	}
 
 	// Store all leaf nodes into a vector
-	tree_->leaf_nodes_ = GetAllLeafNodes(tree_);
+	tree_->leaf_nodes_ = QTreeBuilder::GetAllLeafNodes(tree_);
 
 	return tree_;
 }

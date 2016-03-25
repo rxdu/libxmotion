@@ -18,6 +18,7 @@
 #include "graph_builder.h"
 #include "astar.h"
 #include "graph_vis.h"
+#include "image_utils.h"
 
 using namespace cv;
 using namespace srcl_ctrl;
@@ -41,12 +42,16 @@ int main(int argc, char** argv )
     }
 
     // example to use quadtree builder
-    QTreeBuilder builder;
-    QuadTree* tree = builder.BuildQuadTree(image_raw, 6);
+//    QTreeBuilder builder;
+//    QuadTree* tree = builder.BuildQuadTree(image_raw, 6);
+    QuadTree* tree = QTreeBuilder::BuildQuadTree(image_raw, 6);
 
     Mat image_tree, image_nodes;
     GraphVis vis;
-    vis.DrawQuadTree(tree, builder.padded_img_, image_tree, TreeVisType::ALL_SPACE);
+    Mat bin_map, pad_map, vis_map;
+    ImageUtils::BinarizeImage(image_raw, bin_map, 200);
+    ImageUtils::PadImageToSquared(bin_map, pad_map);
+    vis.DrawQuadTree(tree, pad_map, image_tree, TreeVisType::ALL_SPACE);
 //    TreeNode* node = tree->leaf_nodes_.at(0);
 //    vis.DrawQTreeSingleNode(node, image_tree, image_nodes);
     std::vector<QuadTreeNode*> free_leaves;
@@ -58,8 +63,8 @@ int main(int argc, char** argv )
     }
     vis.DrawQTreeNodes(free_leaves, image_tree, image_nodes);
 
-    Mat image_dummy;
-    vis.DrawQTreeWithDummies(tree,builder.padded_img_, image_dummy);
+//    Mat image_dummy;
+//    vis.DrawQTreeWithDummies(tree,builder.padded_img_, image_dummy);
 
     // build a graph from quadtree
     Graph<QuadTreeNode>* graph;

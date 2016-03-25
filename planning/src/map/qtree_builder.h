@@ -12,20 +12,14 @@ namespace srcl_ctrl{
 
 class QTreeBuilder{
 public:
-	QTreeBuilder();
-	~QTreeBuilder();
-
-public:
-	cv::Mat padded_img_;
+	QTreeBuilder(){};
+	~QTreeBuilder(){};
 
 private:
-	bool PreprocessImage(cv::InputArray _src);
-	bool PadGrayscaleImage(cv::InputArray _src);
-	OccupancyType CheckAreaOccupancy(BoundingBox area);
-	std::vector<QuadTreeNode*> GetAllLeafNodes(QuadTree *tree);
+	static std::vector<QuadTreeNode*> GetAllLeafNodes(QuadTree *tree);
 
 public:
-	QuadTree* BuildQuadTree(cv::InputArray _src, unsigned int max_depth);
+	static QuadTree* BuildQuadTree(cv::InputArray _src, unsigned int max_depth);
 };
 
 }
