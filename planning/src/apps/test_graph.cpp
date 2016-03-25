@@ -65,7 +65,7 @@ int main(int argc, char** argv )
 
 	graph = GraphBuilder::BuildFromQuadTree(tree);
 	Mat image_graph;
-	vis.DrawQTreeGraph(graph, tree, image_tree, image_graph,false, false);
+	vis.DrawQTreeGraph(graph, tree, image_tree, image_graph,true, false);
 //	vis.DrawQTreeGraph(graph, tree, image_tree, image_disp);
 
 	// try a* search
@@ -74,16 +74,17 @@ int main(int argc, char** argv )
 
 	Vertex<QuadTreeNode>* start_vertex;
 	Vertex<QuadTreeNode>* end_vertex;
+	std::vector<Vertex<QuadTreeNode>*> traj;
 
 //	start_vertex = vertices[0];
 //	end_vertex = vertices[15];
 	start_vertex = graph->GetVertexFromID(172);
-	end_vertex = graph->GetVertexFromID(20);
+	end_vertex = graph->GetVertexFromID(22);
 	std::cout<<"Start from "<< start_vertex->vertex_id_<<" and finish at "<< end_vertex->vertex_id_<< std::endl;
-	std::vector<Vertex<QuadTreeNode>*> traj = graph->AStarSearch(start_vertex, end_vertex);
+	traj = graph->AStarSearch(start_vertex, end_vertex);
 
 	Mat path_img;
-	vis.DrawQTreeGraphPath(traj, image_graph,path_img);
+	vis.DrawQTreeGraphPath(traj,image_graph,path_img);
 
 	image_disp = path_img;
 

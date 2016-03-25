@@ -81,6 +81,17 @@ private:
 		return it->second;
 	}
 
+	// This function is used to reset the vertices for a new search
+	void ResetGraphVertices()
+	{
+		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it;
+
+		for(it = vertex_map_.begin(); it != vertex_map_.end(); it++)
+		{
+			it->second->ClearVertexSearchInfo();
+		}
+	};
+
 public:
 	// This function is used to create a graph
 	void AddEdge(GraphNodeType* src_node, GraphNodeType* dst_node, double cost)
@@ -125,17 +136,6 @@ public:
 		}
 
 		return edges;
-	};
-
-	// This function is used to reset the vertices for a new search
-	void ResetGraphVertices()
-	{
-		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it;
-
-		for(it = vertex_map_.begin(); it != vertex_map_.end(); it++)
-		{
-			it->second->ClearVertexSearchInfo();
-		}
 	};
 
 	// This function return the vertex with specified id

@@ -39,12 +39,17 @@ int main(int argc, char** argv )
 //	ImageUtils image_utils;
 //	image_utils.BinarizeImage(image_raw, image_disp,200);
 
-	ImageUtils::BinarizeImage(image_raw, image_disp,200);
+	Mat image_bin;
+	ImageUtils::BinarizeImage(image_raw, image_bin,200);
+//	ImageUtils::PadImageToSquared(image_bin, image_disp);
+	ImageUtils::PadImageTo2Exp(image_bin, image_disp);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 	imshow("Processed Image", image_disp);
 
 	waitKey(0);
+
+	imwrite( "test_image.jpg", image_disp);
 
 	return 0;
 }
