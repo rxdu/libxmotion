@@ -34,6 +34,7 @@ public:
 	SquareGrid* CreateTestGridMap12N12Astar();
 	SquareGrid* CreateTestGridMap3N3();
 
+	SquareGrid* BuildSquareGridMap(cv::InputArray _src, uint32_t cell_size);
 };
 
 }

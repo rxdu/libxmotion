@@ -31,3 +31,6 @@ target_link_libraries(test_grid squaregrid vis map ${OpenCV_LIBS})
 
 add_executable(test_image test_image.cpp)
 target_link_libraries(test_image vis ${OpenCV_LIBS})
+
+add_executable(test_plan test_plan.cpp)
+target_link_libraries(test_plan vis ${OpenCV_LIBS})
