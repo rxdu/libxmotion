@@ -15,6 +15,7 @@ find_package(OpenCV REQUIRED)
 
 # Add libraries
 set(MAP_LIB_SRC
+	image_utils.cpp
     map_manager.cpp
     qtree_builder.cpp
     sgrid_builder.cpp

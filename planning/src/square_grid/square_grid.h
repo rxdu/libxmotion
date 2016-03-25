@@ -58,7 +58,7 @@ struct SquareCell{
 
 class SquareGrid{
 public:
-	SquareGrid(uint32_t row_num, uint32_t col_num, uint32_t size);
+	SquareGrid(uint32_t row_num, uint32_t col_num, uint32_t cell_size);
 	~SquareGrid();
 
 public:

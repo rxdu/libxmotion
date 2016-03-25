@@ -80,11 +80,8 @@ std::vector<SquareCell*> SquareGrid::GetNeighbours(uint64_t id)
 
 	for(int i = 0; i < 4; i++)
 	{
-		if(pos[i].x >= 0 && pos[i].x < col_size_
-				&& pos[i].y >= 0 && pos[i].y < row_size_)
-		{
+		if(pos[i].x < col_size_ && pos[i].y < row_size_)
 			neighbours.push_back(cells_[pos[i].y * col_size_ + pos[i].x]);
-		}
 	}
 
 	return neighbours;

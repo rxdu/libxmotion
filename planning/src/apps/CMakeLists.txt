@@ -28,3 +28,6 @@ target_link_libraries(test_graph qtree vis map ${OpenCV_LIBS})
 
 add_executable(test_grid test_squaregrid.cpp)
 target_link_libraries(test_grid squaregrid vis map ${OpenCV_LIBS})
+
+add_executable(test_image test_image.cpp)
+target_link_libraries(test_image vis ${OpenCV_LIBS})
