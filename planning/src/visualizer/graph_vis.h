@@ -42,7 +42,7 @@ private:
 
 private:
 	void DrawEdge(cv::Point pt1, cv::Point pt2, cv::Mat img);
-	void DrawQTreeNode(const QuadTreeNode *node, cv::Mat img);
+	void DrawNodeCenter(cv::Point pos, cv::Mat img);
 
 	void FillSquareCellColor(BoundingBox bbox, cv::Scalar color, cv::Mat img);
 
@@ -60,6 +60,15 @@ public:
 	void DrawSquareGrid(SquareGrid* grid, cv::OutputArray _dst);
 	void DrawSquareGridGraph(Graph<SquareCell>* g, SquareGrid* grid, cv::OutputArray _dst);
 	void DrawSquareGridPath(Graph<SquareCell>* g, SquareGrid* grid, std::vector<Vertex<SquareCell>*>& path, cv::OutputArray _dst);
+
+	void VisSquareGrid(SquareGrid* grid, cv::InputArray _src, cv::OutputArray _dst);
+
+	// graph visualization
+	void VisQTreeGraph(Graph<QuadTreeNode> *graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost);
+	void VisQTreeGraphPath(std::vector<Vertex<QuadTreeNode>*>& vertices, cv::InputArray _src, cv::OutputArray _dst);
+
+	void VisSquareGridGraph(Graph<SquareCell>* graph, SquareGrid* grid, cv::InputArray _src, cv::OutputArray _dst, bool show_id);
+	void VisSquareGridPath(std::vector<Vertex<SquareCell>*>& path, cv::InputArray _src, cv::OutputArray _dst);
 };
 
 }

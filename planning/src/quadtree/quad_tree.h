@@ -69,7 +69,7 @@ public:
 class QuadTree{
 public:
 	QuadTree();
-	QuadTree(uint16_t image_size, uint8_t depth);
+	QuadTree(uint16_t area_size, uint8_t depth);
 	~QuadTree();
 
 public:

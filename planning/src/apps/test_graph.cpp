@@ -8,6 +8,7 @@
 // standard libaray
 #include <stdio.h>
 #include <vector>
+#include <ctime>
 
 // opencv
 #include "opencv2/opencv.hpp"
@@ -41,7 +42,7 @@ int main(int argc, char** argv )
 
     // example to use quadtree builder
     QTreeBuilder builder;
-    QuadTree* tree = builder.BuildQuadTree(image_raw, 8);
+    QuadTree* tree = builder.BuildQuadTree(image_raw, 6);
 
     Mat image_tree, image_nodes;
     GraphVis vis;
@@ -79,16 +80,22 @@ int main(int argc, char** argv )
 //	start_vertex = vertices[0];
 //	end_vertex = vertices[15];
 	start_vertex = graph->GetVertexFromID(172);
-	end_vertex = graph->GetVertexFromID(22);
+	end_vertex = graph->GetVertexFromID(20);
+
+	clock_t		exec_time;
+
 	std::cout<<"Start from "<< start_vertex->vertex_id_<<" and finish at "<< end_vertex->vertex_id_<< std::endl;
+	exec_time = clock();
 	traj = graph->AStarSearch(start_vertex, end_vertex);
+	exec_time = clock() - exec_time;
+	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 
 	Mat path_img;
 	vis.DrawQTreeGraphPath(traj,image_graph,path_img);
 
 	image_disp = path_img;
 
-//    imwrite( "new_map_path_test.jpg", image_disp);
+//    imwrite( "new_map_path_cmp1.jpg", image_disp);
 
     namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
     imshow("Processed Image", image_disp);

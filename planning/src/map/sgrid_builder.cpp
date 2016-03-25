@@ -6,6 +6,7 @@
  */
 
 #include "sgrid_builder.h"
+#include "image_utils.h"
 
 using namespace srcl_ctrl;
 using namespace cv;
@@ -20,54 +21,33 @@ SGridBuilder::~SGridBuilder()
 
 }
 
-OccupancyType SGridBuilder::CheckAreaOccupancy(Mat img, BoundingBox area)
-{
-	Range rngx(area.x.min,area.x.max+1);
-	Range rngy(area.y.min, area.y.max+1);
-
-	// Attention:
-	//	Points and Size go (x,y); (width,height) ,- Mat has (row,col).
-	Mat checked_area = img(rngy,rngx);
-
-	unsigned long free_points = 0;
-	unsigned long occupied_points = 0;
-	OccupancyType type;
-
-	for(int i = 0; i < checked_area.cols; i++)
-		for(int j = 0; j < checked_area.rows; j++)
-		{
-			if(checked_area.at<uchar>(Point(i,j)) > 0)
-				free_points++;
-			else
-				occupied_points++;
-
-			if(occupied_points !=0 && free_points != 0)
-			{
-				type = OccupancyType::MIXED;
-				break;
-			}
-		}
-
-	if(free_points !=0 && occupied_points == 0)
-		type = OccupancyType::FREE;
-
-	if(free_points ==0 && occupied_points != 0)
-		type = OccupancyType::OCCUPIED;
-
-	return type;
-}
-
-SquareGrid* SGridBuilder::BuildSquareGrid(cv::InputArray _src, uint32_t width, uint32_t height)
+SquareGrid* SGridBuilder::BuildSquareGrid(cv::InputArray _src, uint32_t cell_size)
 {
 	Mat image_bin;
+	Mat image_map;
 	Mat src = _src.getMat();
 
 	// Binarize grayscale image
-	threshold(src, image_bin, 200, 255, THRESH_BINARY);
+	ImageUtils::BinarizeImage(src, image_bin, 200);
+
+	// pad image to 2^n on each side so that we can calculate
+	//	the dimension of the grid more conveniently
+	ImageUtils::PadImageTo2Exp(image_bin, image_map);
 
 	// Create quadtree
-//	uint32_t cell_size = image_bin.cols /
-	SquareGrid *sgrid = new SquareGrid(height,width, 5);
+	uint32_t row_num = image_map.rows / cell_size;
+	uint32_t col_num = image_map.cols / cell_size;
+	SquareGrid *sgrid = new SquareGrid(row_num,col_num, cell_size);
+
+	// set occupancy of each cell
+	for(uint32_t i = 0; i < row_num; i++)
+		for(uint32_t j = 0; j < col_num; j++)
+		{
+			uint32_t id = sgrid->GetIDFromPosition(i,j);
+			if(ImageUtils::CheckAreaOccupancy(image_map, sgrid->cells_[id]->bbox_) == OccupancyType::OCCUPIED ||
+					ImageUtils::CheckAreaOccupancy(image_map, sgrid->cells_[id]->bbox_) == OccupancyType::MIXED)
+				sgrid->SetCellOccupancy(id, OccupancyType::OCCUPIED);
+		}
 
 	return sgrid;
 }

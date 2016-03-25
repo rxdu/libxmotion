@@ -1,6 +1,6 @@
 ## Planning
 
-1. Module Dependencies
+### 1. Module Dependencies
 
 * common: headers shared by multiple modules
 * square_grid: independent
@@ -8,6 +8,13 @@
 * graph: independent, headers only
 * map: depends on square_grid, quadtree, graph
 * visualizer: depends on map, square_grid, quadtree, graph
+
+### 2. Data Structures
+
+* square grid: represents a 2D space in a uniform way
+* quadtree: represents a 2D space with non-uniform cells
+* map: since a map in the image format cannot be used for path planning directly, this data structure stores the world information in the image using a square grid or a quadtree structure
+* graph: a graph consists of a set of vertices and edges, representing the connectivities among entities. A graph can be constructed from a square grid or quadtree structure.
 
 Reference
 

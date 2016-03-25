@@ -25,12 +25,7 @@ public:
 	~SGridBuilder();
 
 public:
-
-private:
-	OccupancyType CheckAreaOccupancy(cv::Mat img, BoundingBox area);
-
-public:
-	SquareGrid* BuildSquareGrid(cv::InputArray _src, uint32_t width, uint32_t height);
+	static SquareGrid* BuildSquareGrid(cv::InputArray _src, uint32_t cell_size);
 
 };
 

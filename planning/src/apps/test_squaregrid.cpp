@@ -15,9 +15,11 @@
 
 // user
 #include "map_manager.h"
+#include "sgrid_builder.h"
 #include "graph.h"
 #include "graph_builder.h"
 #include "graph_vis.h"
+#include "image_utils.h"
 
 using namespace cv;
 using namespace srcl_ctrl;
@@ -39,9 +41,7 @@ int main(int argc, char** argv )
 		}
 		else
 		{
-			// TODO
-			// The map manager should be able to read a image
-			//	and generate a grid map from the input image
+			grid = SGridBuilder::BuildSquareGrid(input_map, 32);
 		}
 	}
 	else{
@@ -68,9 +68,16 @@ int main(int argc, char** argv )
 
 //	vis.DrawSquareGrid(grid, vis_result);
 	vis.DrawSquareGridGraph(graph, grid, vis_result);
+	Mat bin_map, pad_map, vis_map;
+	ImageUtils::BinarizeImage(input_map, bin_map, 200);
+	ImageUtils::PadImageTo2Exp(bin_map, pad_map);
+	vis.VisSquareGrid(grid, pad_map, vis_map);
+	vis.VisSquareGridGraph(graph, grid, vis_map, vis_result, true);
 
-	auto start_it = graph->GetVertexFromID(132);
-	auto finish_it = graph->GetVertexFromID(13);
+	auto start_it = graph->GetVertexFromID(1710);
+	auto finish_it = graph->GetVertexFromID(272);
+//	auto start_it = graph->GetVertexFromID(0);
+//	auto finish_it = graph->GetVertexFromID(1);
 
 	clock_t		exec_time;
 
@@ -79,14 +86,14 @@ int main(int argc, char** argv )
 	exec_time = clock() - exec_time;
 	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 
-	vis.DrawSquareGridPath(graph, grid, path, vis_result);
+	vis.VisSquareGridPath(path, vis_result, vis_result);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 	imshow("Processed Image", vis_result);
 
 	waitKey(0);
 
-	//    imwrite( "astar.jpg", vis_result);
+//	imwrite( "new_map_path_cmp2.jpg", vis_result);
 
 	delete grid;
 	delete graph;

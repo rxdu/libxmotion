@@ -28,7 +28,7 @@ public:
 	static bool PadImageToSquared(cv::InputArray _src, cv::OutputArray _dst);
 	static bool PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst);
 
-	OccupancyType CheckAreaOccupancy(cv::InputArray _src, BoundingBox area);
+	static OccupancyType CheckAreaOccupancy(cv::InputArray _src, BoundingBox area);
 };
 
 }

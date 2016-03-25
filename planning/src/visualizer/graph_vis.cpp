@@ -244,26 +244,17 @@ void GraphVis::DrawQTreeWithDummies(QuadTree *tree, cv::InputArray _src, cv::Out
 	src_img_color.copyTo(dst);
 }
 
-void GraphVis::DrawQTreeNode(const QuadTreeNode *node, cv::Mat img)
+void GraphVis::DrawNodeCenter(cv::Point pos, cv::Mat img)
 {
-	if(node!=nullptr)
-	{
-		int thickness = -1;
-		int lineType = 8;
-//		unsigned int x,y;
-//		x = node->bounding_box_.x.min +
-//				(node->bounding_box_.x.max - node->bounding_box_.x.min + 1)/2;
-//		y = node->bounding_box_.y.min +
-//				(node->bounding_box_.y.max - node->bounding_box_.y.min + 1)/2;
-//		Point center(x,y);
-		Point center(node->location_.x,node->location_.y);
-		circle( img,
-				center,
-				3,
-				Scalar( 0, 0, 255 ),
-				thickness,
-				lineType);
-	}
+	int thickness = -1;
+	int lineType = 8;
+	Point center(pos.x,pos.y);
+	circle( img,
+			center,
+			3,
+			Scalar( 0, 0, 255 ),
+			thickness,
+			lineType);
 }
 
 void GraphVis::DrawEdge(cv::Point pt1, cv::Point pt2, cv::Mat img)
@@ -347,7 +338,8 @@ void GraphVis::DrawQTreeGraph(Graph<QuadTreeNode> *graph, QuadTree *tree, cv::In
 	vertices = graph->GetGraphVertices();
 	for(auto itv = vertices.begin(); itv != vertices.end(); itv++)
 	{
-		DrawQTreeNode((*itv)->node_,dst);
+		cv::Point center((*itv)->node_->location_.x, (*itv)->node_->location_.y);
+		DrawNodeCenter(center, dst);
 
 		// current vertex center coordinate
 		uint64_t x1,y1,x2,y2;
@@ -565,6 +557,166 @@ void GraphVis::DrawSquareGridPath(Graph<SquareCell>* graph, SquareGrid* grid, st
 	_dst.create(Size(grid->col_size_*grid->cell_size_, grid->row_size_*grid->cell_size_), CV_8UC3);
 	Mat dst = _dst.getMat();
 	DrawSquareGridGraph(graph,grid, dst);
+
+	// draw starting and finishing cell
+	auto cell_s = path[0]->node_;
+	uint64_t x,y;
+	x = cell_s->location_.x;
+	x = x - (cell_s->bbox_.x.max - cell_s->bbox_.x.min)/8;
+	y = cell_s->location_.y;
+	y = y + (cell_s->bbox_.y.max - cell_s->bbox_.y.min)/8;
+	FillSquareCellColor((*cell_s).bbox_, start_color_, dst);
+	putText(dst, "S" ,Point(x,y), CV_FONT_NORMAL, 1, Scalar(0,0,0),1,1);
+
+	auto cell_f = (*(path.end()-1))->node_;
+	x = cell_f->location_.x;
+	x = x - (cell_f->bbox_.x.max - cell_f->bbox_.x.min)/8;
+	y = cell_f->location_.y;
+	y = y + (cell_f->bbox_.y.max - cell_f->bbox_.y.min)/8;
+	FillSquareCellColor((*cell_f).bbox_, finish_color_, dst);
+	putText(dst, "F" ,Point(x,y), CV_FONT_NORMAL, 1, Scalar(0,0,0),1,1);
+
+	// draw path
+	uint64_t x1,y1,x2,y2;
+	int thickness = 3;
+	int lineType = 8;
+	int pathline_thickness = 2;
+
+	for(auto it = path.begin(); it != path.end()-1; it++)
+	{
+		// consecutive cells
+		auto cell1 = (*it)->node_;
+		auto cell2 = (*(it+1))->node_;
+
+		// center coordinates
+		x1 = (*cell1).location_.x;
+		y1 = (*cell1).location_.y;
+
+		x2 = (*cell2).location_.x;
+		y2 = (*cell2).location_.y;
+
+		line( dst,
+				Point(x1,y1),
+				Point(x2,y2),
+				//Scalar( 237, 149, 100 ),
+				Scalar( 255, 153, 51 ),
+				pathline_thickness,
+				lineType);
+	}
+}
+
+/***---------------------------------------------------------------------------------------------------------------***/
+
+void GraphVis::VisSquareGrid(SquareGrid* grid, cv::InputArray _src, cv::OutputArray _dst)
+{
+	Mat src_img_color;
+	cvtColor(_src, src_img_color, CV_GRAY2BGR);
+	_dst.create(src_img_color.size(), src_img_color.type());
+	Mat dst = _dst.getMat();
+
+	if(grid != nullptr)
+	{
+		std::vector<SquareCell*> cells;
+		for(auto it = grid->cells_.begin(); it != grid->cells_.end(); it++)
+		{
+			cells.push_back((*it).second);
+		}
+
+		for(auto itc = cells.begin(); itc != cells.end(); itc++)
+		{
+			Point top_left((*itc)->bbox_.x.min, (*itc)->bbox_.y.min);
+			Point top_right((*itc)->bbox_.x.max,(*itc)->bbox_.y.min);
+			Point bot_left((*itc)->bbox_.x.min,(*itc)->bbox_.y.max);
+			Point bot_right((*itc)->bbox_.x.max,(*itc)->bbox_.y.max);
+
+			line(src_img_color, top_left, top_right, Scalar(0,255,0));
+			line(src_img_color, top_right, bot_right, Scalar(0,255,0));
+			line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
+			line(src_img_color, bot_left, top_left, Scalar(0,255,0));
+		}
+	}
+
+	src_img_color.copyTo(dst);
+}
+
+void GraphVis::VisSquareGridGraph(Graph<SquareCell>* graph, SquareGrid* grid, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
+{
+//	Mat src = _src.getMat();
+//	_dst.create(_src.size(), _src.type());
+//	Mat dst = _dst.getMat();
+//	src.copyTo(dst);
+
+	Mat src, dst;
+	int src_type = _src.getMat().type();
+	if(src_type == CV_8UC1)
+	{
+		cvtColor(_src, src, CV_GRAY2BGR);
+		_dst.create(src.size(), src.type());
+		dst = _dst.getMat();
+	}
+	else
+	{
+		src = _src.getMat();
+		_dst.create(_src.size(), _src.type());
+		dst = _dst.getMat();
+		src.copyTo(dst);
+	}
+
+	// draw all vertices
+	std::vector<Vertex<SquareCell>*> vertices;
+	vertices = graph->GetGraphVertices();
+	for(auto itv = vertices.begin(); itv != vertices.end(); itv++)
+	{
+		cv::Point center((*itv)->node_->location_.x, (*itv)->node_->location_.y);
+		DrawNodeCenter(center,dst);
+
+		// current vertex center coordinate
+		uint64_t x1,y1,x2,y2;
+		x1 = (*itv)->node_->location_.x;
+		y1 = (*itv)->node_->location_.y;
+
+		if(show_id) {
+			if((*itv)->node_->node_id_ % 2 == 0)
+			{
+				std::string id = std::to_string((*itv)->node_->node_id_);
+				putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+			}
+		}
+	}
+
+	// draw all edges
+	std::vector<Edge<Vertex<SquareCell>>> edges;
+	edges = graph->GetGraphEdges();
+	for(auto it = edges.begin(); it != edges.end(); it++)
+	{
+		uint64_t x1,y1,x2,y2;
+		x1 = (*it).src_->node_->location_.x;
+		y1 = (*it).src_->node_->location_.y;
+		x2 = (*it).dst_->node_->location_.x;
+		y2 = (*it).dst_->node_->location_.y;
+
+		DrawEdge(Point(x1,y1), Point(x2,y2), dst);
+	}
+
+}
+
+void GraphVis::VisSquareGridPath(std::vector<Vertex<SquareCell>*>& path, cv::InputArray _src, cv::OutputArray _dst)
+{
+	Mat src, dst;
+	int src_type = _src.getMat().type();
+	if(src_type == CV_8UC1)
+	{
+		cvtColor(_src, src, CV_GRAY2BGR);
+		_dst.create(src.size(), src.type());
+		dst = _dst.getMat();
+	}
+	else
+	{
+		src = _src.getMat();
+		_dst.create(_src.size(), _src.type());
+		dst = _dst.getMat();
+		src.copyTo(dst);
+	}
 
 	// draw starting and finishing cell
 	auto cell_s = path[0]->node_;

@@ -107,11 +107,6 @@ bool ImageUtils::PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst)
 	top = (dst.rows - src.rows)/2;
 	bottom = dst.rows - src.rows - top;
 
-	std::cout<<"left: "<<left<<std::endl;
-	std::cout<<"right: "<<right<<std::endl;
-	std::cout<<"top: "<<top<<std::endl;
-	std::cout<<"bottom: "<<bottom<<std::endl;
-
 	Scalar value = Scalar(0);
 	copyMakeBorder(_src, dst, top, bottom, left, right, BORDER_CONSTANT,value);
 

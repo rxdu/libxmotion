@@ -19,7 +19,7 @@ QuadTree::QuadTree():MAX_DEPTH(32),
 {
 }
 
-QuadTree::QuadTree(uint16_t padded_img_size, uint8_t depth):MAX_DEPTH(32),
+QuadTree::QuadTree(uint16_t image_size, uint8_t depth):MAX_DEPTH(32),
 		tree_depth_(0),
 		root_node_(nullptr)
 {
@@ -28,7 +28,7 @@ QuadTree::QuadTree(uint16_t padded_img_size, uint8_t depth):MAX_DEPTH(32),
 
 	node_manager_  = new QTreeNodeManager(depth);
 
-	cell_res_ = padded_img_size/(uint16_t(pow(2,depth)));
+	cell_res_ = image_size/(uint16_t(pow(2,depth)));
 }
 
 QuadTree::~QuadTree()

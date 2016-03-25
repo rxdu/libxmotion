@@ -74,12 +74,21 @@ Graph<SquareCell>* GraphBuilder::BuildFromSquareGrid(SquareGrid* grid)
 		uint64_t current_nodeid = (*itc).second->node_id_;
 
 		if(grid->cells_[current_nodeid]->occu_ != OccupancyType::OCCUPIED) {
-			std::vector<SquareCell*> neighbour_list = grid->GetNeighbours(current_nodeid);
+			std::vector<SquareCell*> neighbour_list = grid->GetNeighbours(current_nodeid,true);
 
 			for(auto itn = neighbour_list.begin(); itn != neighbour_list.end(); itn++)
 			{
 				if(grid->cells_[(*itn)->node_id_]->occu_ != OccupancyType::OCCUPIED)
-					graph->AddEdge((*itc).second, (*itn), 1.0);
+				{
+					double error_x,error_y, cost = 0;
+					error_x = std::abs(static_cast<long>((*itn)->location_.x) - static_cast<long>((*itc).second->location_.x));
+					error_y = std::abs(static_cast<long>((*itn)->location_.y) - static_cast<long>((*itc).second->location_.y));
+					cost = std::sqrt(error_x*error_x + error_y*error_y);
+//					std::cout << "cost: "<<cost<<std::endl;
+					graph->AddEdge((*itc).second, (*itn), cost);
+
+//					graph->AddEdge((*itc).second, (*itn), 1.0);
+				}
 			}
 		}
 	}
