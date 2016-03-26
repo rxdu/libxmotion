@@ -22,7 +22,7 @@ public:
 
 public:
 	static Graph<QuadTreeNode>* BuildFromQuadTree(QuadTree* tree);
-	static Graph<SquareCell>* BuildFromSquareGrid(SquareGrid* grid);
+	static Graph<SquareCell>* BuildFromSquareGrid(SquareGrid* grid, bool allow_diag_move);
 };
 }
 

@@ -3,6 +3,9 @@
  *
  *  Created on: Mar 25, 2016
  *      Author: rdu
+ *
+ *  Descriptions: This file provides an example of using squared_grid for path search
+ *
  */
 
 // standard libaray
@@ -57,16 +60,12 @@ int main(int argc, char** argv )
 	/************************************************************************************/
 
 	// Construct a graph from the grid map
-	Graph<SquareCell>* graph = GraphBuilder::BuildFromSquareGrid(grid);
-
-	// Search path in the graph
-
+	Graph<SquareCell>* graph = GraphBuilder::BuildFromSquareGrid(grid, true);
 
 	// Visualize the map and graph
 	GraphVis vis;
 	Mat vis_result;
 
-//	vis.DrawSquareGrid(grid, vis_result);
 	vis.DrawSquareGridGraph(graph, grid, vis_result);
 	Mat bin_map, pad_map, vis_map;
 	ImageUtils::BinarizeImage(input_map, bin_map, 200);
@@ -74,6 +73,7 @@ int main(int argc, char** argv )
 	vis.VisSquareGrid(grid, pad_map, vis_map);
 	vis.VisSquareGridGraph(graph, grid, vis_map, vis_result, true);
 
+	// Search path in the graph
 	auto start_it = graph->GetVertexFromID(1710);
 	auto finish_it = graph->GetVertexFromID(272);
 //	auto start_it = graph->GetVertexFromID(0);

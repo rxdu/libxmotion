@@ -57,7 +57,7 @@ int main(int argc, char** argv )
 	/************************************************************************************/
 
 	// Construct a graph from the grid map
-	Graph<SquareCell>* graph = GraphBuilder::BuildFromSquareGrid(grid);
+	Graph<SquareCell>* graph = GraphBuilder::BuildFromSquareGrid(grid,true);
 
 	// Search path in the graph
 

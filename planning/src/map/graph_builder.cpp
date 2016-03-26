@@ -65,7 +65,7 @@ Graph<QuadTreeNode>* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 	return graph;
 }
 
-Graph<SquareCell>* GraphBuilder::BuildFromSquareGrid(SquareGrid* grid)
+Graph<SquareCell>* GraphBuilder::BuildFromSquareGrid(SquareGrid* grid, bool allow_diag_move)
 {
 	Graph<SquareCell>* graph = new Graph<SquareCell>();
 
@@ -74,7 +74,7 @@ Graph<SquareCell>* GraphBuilder::BuildFromSquareGrid(SquareGrid* grid)
 		uint64_t current_nodeid = (*itc).second->node_id_;
 
 		if(grid->cells_[current_nodeid]->occu_ != OccupancyType::OCCUPIED) {
-			std::vector<SquareCell*> neighbour_list = grid->GetNeighbours(current_nodeid,true);
+			std::vector<SquareCell*> neighbour_list = grid->GetNeighbours(current_nodeid,allow_diag_move);
 
 			for(auto itn = neighbour_list.begin(); itn != neighbour_list.end(); itn++)
 			{
