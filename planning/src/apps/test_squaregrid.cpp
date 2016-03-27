@@ -67,12 +67,12 @@ int main(int argc, char** argv )
 	Mat vis_result;
 
 //	vis.DrawSquareGrid(grid, vis_result);
-	vis.DrawSquareGridGraph(graph, grid, vis_result);
+//	vis.DrawSquareGridGraph(graph, grid, vis_result);
 	Mat bin_map, pad_map, vis_map;
 	ImageUtils::BinarizeImage(input_map, bin_map, 200);
 	ImageUtils::PadImageTo2Exp(bin_map, pad_map);
 	vis.VisSquareGrid(grid, pad_map, vis_map);
-	vis.VisSquareGridGraph(graph, grid, vis_map, vis_result, true);
+	vis.VisSquareGridGraph(*graph, vis_map, vis_result, true);
 
 	auto start_it = graph->GetVertexFromID(1710);
 	auto finish_it = graph->GetVertexFromID(272);

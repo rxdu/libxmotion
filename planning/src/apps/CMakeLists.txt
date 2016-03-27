@@ -16,11 +16,11 @@ include_directories(${CMAKE_SOURCE_DIR}/src/square_grid)
 find_package(OpenCV REQUIRED)
 
 # Add libraries
-#set(VIS_LIB_SRC
-#    graph_vis.cpp
-#)
-#add_library(graph_vis STATIC ${VIS_LIB_SRC})
-#target_link_libraries(vis ${OpenCV_LIBS})
+set(APP_LIB_SRC
+    examples.cpp
+)
+add_library(apps STATIC ${APP_LIB_SRC})
+target_link_libraries(apps ${OpenCV_LIBS})
 
 # Add executables
 add_executable(test_graph test_graph.cpp)
@@ -32,5 +32,6 @@ target_link_libraries(test_grid squaregrid vis map ${OpenCV_LIBS})
 add_executable(test_image test_image.cpp)
 target_link_libraries(test_image vis ${OpenCV_LIBS})
 
-add_executable(test_plan test_plan.cpp)
-target_link_libraries(test_plan vis ${OpenCV_LIBS})
+add_executable(test_examples test_examples.cpp)
+target_link_libraries(test_examples apps vis ${OpenCV_LIBS})
+
