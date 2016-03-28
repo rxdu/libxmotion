@@ -9,6 +9,7 @@
 #define SRC_MAP_SGRID_BUILDER_H_
 
 #include <vector>
+#include <tuple>
 #include <cstdint>
 
 #include "opencv2/opencv.hpp"
@@ -26,7 +27,7 @@ public:
 
 public:
 	static SquareGrid* BuildSquareGrid(cv::InputArray _src, uint32_t cell_size);
-
+	static std::tuple<SquareGrid*, cv::Mat> BuildSquareGridMap(cv::InputArray _src, uint32_t cell_size);
 };
 
 }

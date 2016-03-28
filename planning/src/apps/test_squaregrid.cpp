@@ -29,6 +29,8 @@ int main(int argc, char** argv )
 	Mat input_map;
 	MapManager map_manager;
 	SquareGrid* grid;
+	Mat map;
+
 
 	if ( argc == 2 )
 	{
@@ -42,6 +44,7 @@ int main(int argc, char** argv )
 		else
 		{
 			grid = SGridBuilder::BuildSquareGrid(input_map, 32);
+//			std::tie<grid, map> = SGridBuilder::BuildSquareGridMap(input_map, 32);
 		}
 	}
 	else{
