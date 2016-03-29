@@ -137,9 +137,9 @@ int main(int argc, char** argv )
 	/*** Image Layouts: (map) -> square grid -> graph -> path ***/
 	/*** you can visualize the squre grid by itself or overlay it on the map image ***/
 	if(map.empty())
-		vis.VisSquareGrid(grid, vis_img);
+		vis.VisSquareGrid(*grid, vis_img);
 	else
-		vis.VisSquareGrid(grid, map, vis_img);
+		vis.VisSquareGrid(*grid, map, vis_img);
 
 	/*** put the graph on top of the square grid ***/
 	vis.VisSquareGridGraph(*graph, vis_img, vis_img, true);

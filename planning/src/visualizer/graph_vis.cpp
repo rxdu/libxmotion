@@ -617,14 +617,14 @@ void GraphVis::VisQTreeGraphPath(std::vector<Vertex<QuadTreeNode>*>& vertices, c
 	}
 }
 
-void GraphVis::VisSquareGrid(SquareGrid* grid, cv::OutputArray _dst)
+void GraphVis::VisSquareGrid(SquareGrid& grid, cv::OutputArray _dst)
 {
-	_dst.create(Size(grid->col_size_*grid->cell_size_, grid->row_size_*grid->cell_size_), CV_8UC3);
+	_dst.create(Size(grid.col_size_*grid.cell_size_, grid.row_size_*grid.cell_size_), CV_8UC3);
 	Mat dst = _dst.getMat();
 	dst = bk_color_;
 
 	// fill cell color
-	for(auto itc = grid->cells_.begin(); itc != grid->cells_.end(); itc++)
+	for(auto itc = grid.cells_.begin(); itc != grid.cells_.end(); itc++)
 	{
 		if((*itc).second->occu_ == OccupancyType::OCCUPIED)
 			FillSquareCellColor((*itc).second->bbox_, obs_color_, dst);
@@ -644,44 +644,41 @@ void GraphVis::VisSquareGrid(SquareGrid* grid, cv::OutputArray _dst)
 	}
 
 	// draw grid lines
-	line(dst, Point(0,0),Point(0,grid->row_size_*grid->cell_size_-1),ln_color_, 1);
-	for(int i = 1; i <= grid->col_size_; i++){
-		line(dst, Point(i*grid->cell_size_-1,0),Point(i*grid->cell_size_-1,grid->row_size_*grid->cell_size_-1),ln_color_, 1);
+	line(dst, Point(0,0),Point(0,grid.row_size_*grid.cell_size_-1),ln_color_, 1);
+	for(int i = 1; i <= grid.col_size_; i++){
+		line(dst, Point(i*grid.cell_size_-1,0),Point(i*grid.cell_size_-1,grid.row_size_*grid.cell_size_-1),ln_color_, 1);
 	}
 
-	line(dst, Point(0,0),Point(grid->col_size_*grid->cell_size_-1,0),ln_color_, 1);
-	for(int i = 1; i <= grid->row_size_; i++){
-		line(dst, Point(0,i*grid->cell_size_-1),Point(grid->col_size_*grid->cell_size_-1,i*grid->cell_size_-1),ln_color_, 1);
+	line(dst, Point(0,0),Point(grid.col_size_*grid.cell_size_-1,0),ln_color_, 1);
+	for(int i = 1; i <= grid.row_size_; i++){
+		line(dst, Point(0,i*grid.cell_size_-1),Point(grid.col_size_*grid.cell_size_-1,i*grid.cell_size_-1),ln_color_, 1);
 	}
 }
 
-void GraphVis::VisSquareGrid(SquareGrid* grid, cv::InputArray _src, cv::OutputArray _dst)
+void GraphVis::VisSquareGrid(SquareGrid& grid, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src_img_color;
 	cvtColor(_src, src_img_color, CV_GRAY2BGR);
 	_dst.create(src_img_color.size(), src_img_color.type());
 	Mat dst = _dst.getMat();
 
-	if(grid != nullptr)
+	std::vector<SquareCell*> cells;
+	for(auto it = grid.cells_.begin(); it != grid.cells_.end(); it++)
 	{
-		std::vector<SquareCell*> cells;
-		for(auto it = grid->cells_.begin(); it != grid->cells_.end(); it++)
-		{
-			cells.push_back((*it).second);
-		}
+		cells.push_back((*it).second);
+	}
 
-		for(auto itc = cells.begin(); itc != cells.end(); itc++)
-		{
-			Point top_left((*itc)->bbox_.x.min, (*itc)->bbox_.y.min);
-			Point top_right((*itc)->bbox_.x.max,(*itc)->bbox_.y.min);
-			Point bot_left((*itc)->bbox_.x.min,(*itc)->bbox_.y.max);
-			Point bot_right((*itc)->bbox_.x.max,(*itc)->bbox_.y.max);
+	for(auto itc = cells.begin(); itc != cells.end(); itc++)
+	{
+		Point top_left((*itc)->bbox_.x.min, (*itc)->bbox_.y.min);
+		Point top_right((*itc)->bbox_.x.max,(*itc)->bbox_.y.min);
+		Point bot_left((*itc)->bbox_.x.min,(*itc)->bbox_.y.max);
+		Point bot_right((*itc)->bbox_.x.max,(*itc)->bbox_.y.max);
 
-			line(src_img_color, top_left, top_right, Scalar(0,255,0));
-			line(src_img_color, top_right, bot_right, Scalar(0,255,0));
-			line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
-			line(src_img_color, bot_left, top_left, Scalar(0,255,0));
-		}
+		line(src_img_color, top_left, top_right, Scalar(0,255,0));
+		line(src_img_color, top_right, bot_right, Scalar(0,255,0));
+		line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
+		line(src_img_color, bot_left, top_left, Scalar(0,255,0));
 	}
 
 	src_img_color.copyTo(dst);

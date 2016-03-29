@@ -69,8 +69,8 @@ int main(int argc, char** argv )
 	GraphVis vis;
 	Mat vis_img;
 
-	vis.VisSquareGrid(grid, map, vis_img);
-//	vis.VisSquareGrid(grid, vis_img);
+	vis.VisSquareGrid(*grid, map, vis_img);
+//	vis.VisSquareGrid(*grid, vis_img);
 
 	vis.VisSquareGridGraph(*graph, vis_img, vis_img, true);
 

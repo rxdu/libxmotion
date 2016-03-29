@@ -55,8 +55,8 @@ public:
 
 	// square grid visualization
 //	void DrawSquareGrid(SquareGrid* grid, cv::OutputArray _dst);
-	void VisSquareGrid(SquareGrid* grid, cv::OutputArray _dst);
-	void VisSquareGrid(SquareGrid* grid, cv::InputArray _src, cv::OutputArray _dst);
+	void VisSquareGrid(SquareGrid& grid, cv::OutputArray _dst);
+	void VisSquareGrid(SquareGrid& grid, cv::InputArray _src, cv::OutputArray _dst);
 
 	// graph visualization
 	void VisQTreeGraph(Graph<QuadTreeNode>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost);
