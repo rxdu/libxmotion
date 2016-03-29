@@ -8,6 +8,8 @@
 #ifndef SRC_GRAPH_VERTEX_H_
 #define SRC_GRAPH_VERTEX_H_
 
+namespace srcl_ctrl {
+
 /****************************************************************************/
 /*								 Edge  										*/
 /****************************************************************************/
@@ -29,6 +31,11 @@ public:
 			return true;
 		else
 			return false;
+	}
+
+	void PrintEdge()
+	{
+		std::cout << "Edge: start - " << src_->vertex_id_ << " , end - " << dst_->vertex_id_ << " , cost - " << cost_ << std::endl;
 	}
 };
 
@@ -86,5 +93,6 @@ public:
 	}
 };
 
+}
 
 #endif /* SRC_GRAPH_VERTEX_H_ */
