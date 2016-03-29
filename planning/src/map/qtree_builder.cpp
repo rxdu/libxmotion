@@ -25,11 +25,11 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 	ImageUtils::PadImageToSquared(image_bin, image_map);
 
 	// Create quadtree
-	QuadTree *tree_ = new QuadTree(image_map.cols, max_depth);
+	QuadTree *tree = new QuadTree(image_map.cols, max_depth);
 
-	if(max_depth > tree_->MAX_DEPTH)
+	if(max_depth > tree->MAX_DEPTH)
 	{
-		max_depth = tree_->MAX_DEPTH;
+		max_depth = tree->MAX_DEPTH;
 		std::cout << "Maximum depth allowed is 32. Only 32 levels will be built." << std::endl;
 	}
 
@@ -52,18 +52,18 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 			OccupancyType map_occupancy;
 			map_occupancy = ImageUtils::CheckAreaOccupancy(image_map, bbox);
 
-			tree_->root_node_ = new QuadTreeNode(bbox, map_occupancy);
+			tree->root_node_ = new QuadTreeNode(bbox, map_occupancy);
 
 			// if map is empty, terminate the process
 			if(map_occupancy != OccupancyType::MIXED)
 			{
-				tree_->root_node_->node_type_ = NodeType::LEAF;
-				return tree_;
+				tree->root_node_->node_type_ = NodeType::LEAF;
+				return tree;
 			}
 
 			// prepare for next iteration
 			parent_nodes.clear();
-			parent_nodes.push_back(tree_->root_node_);
+			parent_nodes.push_back(tree->root_node_);
 		}
 		// lower levels
 		else
@@ -162,9 +162,9 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 
 						// generate index for the node
 						uint16_t x,y;
-						x = ((bbox[i].x.min + bbox[i].x.max + 1)/2)/tree_->cell_res_;
-						y = ((bbox[i].y.min + bbox[i].y.max + 1)/2)/tree_->cell_res_;
-						tree_->node_manager_->SetNodeReference(x,y,parent->child_nodes_[i]);
+						x = ((bbox[i].x.min + bbox[i].x.max + 1)/2)/tree->cell_res_;
+						y = ((bbox[i].y.min + bbox[i].y.max + 1)/2)/tree->cell_res_;
+						tree->node_manager_->SetNodeReference(x,y,parent->child_nodes_[i]);
 					}
 				}
 
@@ -177,13 +177,31 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 			parent_nodes = inner_nodes;
 		}
 
-		tree_->tree_depth_++;
+		tree->tree_depth_++;
 	}
 
 	// Store all leaf nodes into a vector
-	tree_->leaf_nodes_ = QTreeBuilder::GetAllLeafNodes(tree_);
+	tree->leaf_nodes_ = QTreeBuilder::GetAllLeafNodes(tree);
 
-	return tree_;
+	return tree;
+}
+
+std::tuple<QuadTree*, cv::Mat> QTreeBuilder::BuildQuadTreeMap(cv::InputArray _src, unsigned int max_depth)
+{
+	Mat image_bin;
+	Mat image_map;
+	Mat src = _src.getMat();
+
+	// binarize grayscale image
+	ImageUtils::BinarizeImage(src, image_bin, 200);
+
+	// pad image to 2^n on each side so that we can calculate
+	//	the dimension of the grid more conveniently
+	ImageUtils::PadImageToSquared(image_bin, image_map);
+
+	QuadTree *tree = QTreeBuilder::BuildQuadTree(_src, max_depth);
+
+	return std::make_tuple(tree, image_map);
 }
 
 std::vector<QuadTreeNode*> QTreeBuilder::GetAllLeafNodes(QuadTree *tree)

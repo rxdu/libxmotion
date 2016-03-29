@@ -66,19 +66,7 @@ std::tuple<SquareGrid*, cv::Mat> SGridBuilder::BuildSquareGridMap(cv::InputArray
 	ImageUtils::PadImageTo2Exp(image_bin, image_map);
 
 	// create square grid
-	uint32_t row_num = image_map.rows / cell_size;
-	uint32_t col_num = image_map.cols / cell_size;
-	SquareGrid *sgrid = new SquareGrid(row_num,col_num, cell_size);
-
-	// set occupancy of each cell
-	for(uint32_t i = 0; i < row_num; i++)
-		for(uint32_t j = 0; j < col_num; j++)
-		{
-			uint32_t id = sgrid->GetIDFromPosition(i,j);
-			if(ImageUtils::CheckAreaOccupancy(image_map, sgrid->cells_[id]->bbox_) == OccupancyType::OCCUPIED ||
-					ImageUtils::CheckAreaOccupancy(image_map, sgrid->cells_[id]->bbox_) == OccupancyType::MIXED)
-				sgrid->SetCellOccupancy(id, OccupancyType::OCCUPIED);
-		}
+	SquareGrid *sgrid = SGridBuilder::BuildSquareGrid(_src, cell_size);
 
 	return std::make_tuple(sgrid, image_map);
 }

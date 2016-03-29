@@ -466,142 +466,41 @@ void GraphVis::FillSquareCellColor(BoundingBox bbox, cv::Scalar color, cv::Mat i
 	img(rngy,rngx) = color;
 }
 
-void GraphVis::DrawSquareGrid(SquareGrid* grid, cv::OutputArray _dst)
-{
-	_dst.create(Size(grid->col_size_*grid->cell_size_, grid->row_size_*grid->cell_size_), CV_8UC3);
-	Mat dst = _dst.getMat();
-	dst = bk_color_;
-
-	// fill cell color
-	for(auto itc = grid->cells_.begin(); itc != grid->cells_.end(); itc++)
-	{
-		if((*itc).second->occu_ == OccupancyType::OCCUPIED)
-			FillSquareCellColor((*itc).second->bbox_, obs_color_, dst);
-		else if((*itc).second->occu_ == OccupancyType::INTERESTED)
-			FillSquareCellColor((*itc).second->bbox_, aoi_color_, dst);
-
-		auto cell = (*itc);
-		uint64_t x,y;
-		x = cell.second->bbox_.x.min + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/2;
-		x = x + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/6;
-		y = cell.second->bbox_.y.min + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)/2;
-		y = y + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)*3/7;
-
-		std::string id = std::to_string(cell.second->node_id_);
-
-		putText(dst, id ,Point(x,y), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
-	}
-
-	// draw grid lines
-	line(dst, Point(0,0),Point(0,grid->row_size_*grid->cell_size_-1),ln_color_, 1);
-	for(int i = 1; i <= grid->col_size_; i++){
-		line(dst, Point(i*grid->cell_size_-1,0),Point(i*grid->cell_size_-1,grid->row_size_*grid->cell_size_-1),ln_color_, 1);
-	}
-
-	line(dst, Point(0,0),Point(grid->col_size_*grid->cell_size_-1,0),ln_color_, 1);
-	for(int i = 1; i <= grid->row_size_; i++){
-		line(dst, Point(0,i*grid->cell_size_-1),Point(grid->col_size_*grid->cell_size_-1,i*grid->cell_size_-1),ln_color_, 1);
-	}
-}
-
-//void GraphVis::DrawSquareGridGraph(Graph<SquareCell>* graph, SquareGrid* grid, cv::OutputArray _dst)
+//void GraphVis::DrawSquareGrid(SquareGrid* grid, cv::OutputArray _dst)
 //{
-//	// draw the square grid
 //	_dst.create(Size(grid->col_size_*grid->cell_size_, grid->row_size_*grid->cell_size_), CV_8UC3);
 //	Mat dst = _dst.getMat();
-//	DrawSquareGrid(grid, dst);
+//	dst = bk_color_;
 //
-//	auto vertices = graph->GetGraphVertices();
-//
-//	for(auto itv = vertices.begin(); itv != vertices.end(); itv++)
+//	// fill cell color
+//	for(auto itc = grid->cells_.begin(); itc != grid->cells_.end(); itc++)
 //	{
-//		uint64_t xc, yc;
-//		int thickness = -1;
-//		int lineType = 8;
+//		if((*itc).second->occu_ == OccupancyType::OCCUPIED)
+//			FillSquareCellColor((*itc).second->bbox_, obs_color_, dst);
+//		else if((*itc).second->occu_ == OccupancyType::INTERESTED)
+//			FillSquareCellColor((*itc).second->bbox_, aoi_color_, dst);
 //
-//		xc = (*itv)->node_->bbox_.x.min + ((*itv)->node_->bbox_.x.max - (*itv)->node_->bbox_.x.min)/2;
-//		yc = (*itv)->node_->bbox_.y.min + ((*itv)->node_->bbox_.y.max - (*itv)->node_->bbox_.y.min)/2;
-//		circle( dst,
-//				Point(xc,yc),
-//				5,
-//				Scalar( 0, 0, 255 ),
-//				thickness,
-//				lineType );
+//		auto cell = (*itc);
+//		uint64_t x,y;
+//		x = cell.second->bbox_.x.min + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/2;
+//		x = x + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/6;
+//		y = cell.second->bbox_.y.min + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)/2;
+//		y = y + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)*3/7;
 //
-//		// current vertex center coordinate
-//		uint64_t x1,y1,x2,y2;
-//		x1 = (*itv)->node_->location_.x;
-//		y1 = (*itv)->node_->location_.y;
+//		std::string id = std::to_string(cell.second->node_id_);
 //
-//		//		std::string id = std::to_string((*itv)->node_->node_id_);
-//		//		putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
-//
-//		// draw all edges from current vertex
-//		std::vector<Edge<Vertex<SquareCell>>>::iterator ite;
-//		for(ite = (*itv)->edges_.begin(); ite != (*itv)->edges_.end(); ite++)
-//		{
-//			// neighbor vertices center coordinate
-//			const SquareCell* n = (*ite).dst_->node_;
-//
-//			x2 = n->location_.x;
-//			y2 = n->location_.y;
-//
-//			DrawEdge(Point(x1,y1), Point(x2,y2), dst);
-//		}
+//		putText(dst, id ,Point(x,y), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
 //	}
-//}
 //
-//void GraphVis::DrawSquareGridPath(Graph<SquareCell>* graph, SquareGrid* grid, std::vector<Vertex<SquareCell>*>& path, cv::OutputArray _dst)
-//{
-//	// draw the graph
-//	_dst.create(Size(grid->col_size_*grid->cell_size_, grid->row_size_*grid->cell_size_), CV_8UC3);
-//	Mat dst = _dst.getMat();
-//	DrawSquareGridGraph(graph,grid, dst);
+//	// draw grid lines
+//	line(dst, Point(0,0),Point(0,grid->row_size_*grid->cell_size_-1),ln_color_, 1);
+//	for(int i = 1; i <= grid->col_size_; i++){
+//		line(dst, Point(i*grid->cell_size_-1,0),Point(i*grid->cell_size_-1,grid->row_size_*grid->cell_size_-1),ln_color_, 1);
+//	}
 //
-//	// draw starting and finishing cell
-//	auto cell_s = path[0]->node_;
-//	uint64_t x,y;
-//	x = cell_s->location_.x;
-//	x = x - (cell_s->bbox_.x.max - cell_s->bbox_.x.min)/8;
-//	y = cell_s->location_.y;
-//	y = y + (cell_s->bbox_.y.max - cell_s->bbox_.y.min)/8;
-//	FillSquareCellColor((*cell_s).bbox_, start_color_, dst);
-//	putText(dst, "S" ,Point(x,y), CV_FONT_NORMAL, 1, Scalar(0,0,0),1,1);
-//
-//	auto cell_f = (*(path.end()-1))->node_;
-//	x = cell_f->location_.x;
-//	x = x - (cell_f->bbox_.x.max - cell_f->bbox_.x.min)/8;
-//	y = cell_f->location_.y;
-//	y = y + (cell_f->bbox_.y.max - cell_f->bbox_.y.min)/8;
-//	FillSquareCellColor((*cell_f).bbox_, finish_color_, dst);
-//	putText(dst, "F" ,Point(x,y), CV_FONT_NORMAL, 1, Scalar(0,0,0),1,1);
-//
-//	// draw path
-//	uint64_t x1,y1,x2,y2;
-//	int thickness = 3;
-//	int lineType = 8;
-//	int pathline_thickness = 2;
-//
-//	for(auto it = path.begin(); it != path.end()-1; it++)
-//	{
-//		// consecutive cells
-//		auto cell1 = (*it)->node_;
-//		auto cell2 = (*(it+1))->node_;
-//
-//		// center coordinates
-//		x1 = (*cell1).location_.x;
-//		y1 = (*cell1).location_.y;
-//
-//		x2 = (*cell2).location_.x;
-//		y2 = (*cell2).location_.y;
-//
-//		line( dst,
-//				Point(x1,y1),
-//				Point(x2,y2),
-//				//Scalar( 237, 149, 100 ),
-//				Scalar( 255, 153, 51 ),
-//				pathline_thickness,
-//				lineType);
+//	line(dst, Point(0,0),Point(grid->col_size_*grid->cell_size_-1,0),ln_color_, 1);
+//	for(int i = 1; i <= grid->row_size_; i++){
+//		line(dst, Point(0,i*grid->cell_size_-1),Point(grid->col_size_*grid->cell_size_-1,i*grid->cell_size_-1),ln_color_, 1);
 //	}
 //}
 
@@ -715,6 +614,44 @@ void GraphVis::VisQTreeGraphPath(std::vector<Vertex<QuadTreeNode>*>& vertices, c
 				Scalar( 255, 153, 51 ),
 				pathline_thickness,
 				lineType);
+	}
+}
+
+void GraphVis::VisSquareGrid(SquareGrid* grid, cv::OutputArray _dst)
+{
+	_dst.create(Size(grid->col_size_*grid->cell_size_, grid->row_size_*grid->cell_size_), CV_8UC3);
+	Mat dst = _dst.getMat();
+	dst = bk_color_;
+
+	// fill cell color
+	for(auto itc = grid->cells_.begin(); itc != grid->cells_.end(); itc++)
+	{
+		if((*itc).second->occu_ == OccupancyType::OCCUPIED)
+			FillSquareCellColor((*itc).second->bbox_, obs_color_, dst);
+		else if((*itc).second->occu_ == OccupancyType::INTERESTED)
+			FillSquareCellColor((*itc).second->bbox_, aoi_color_, dst);
+
+		auto cell = (*itc);
+		uint64_t x,y;
+		x = cell.second->bbox_.x.min + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/2;
+		x = x + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/6;
+		y = cell.second->bbox_.y.min + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)/2;
+		y = y + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)*3/7;
+
+		std::string id = std::to_string(cell.second->node_id_);
+
+		putText(dst, id ,Point(x,y), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
+	}
+
+	// draw grid lines
+	line(dst, Point(0,0),Point(0,grid->row_size_*grid->cell_size_-1),ln_color_, 1);
+	for(int i = 1; i <= grid->col_size_; i++){
+		line(dst, Point(i*grid->cell_size_-1,0),Point(i*grid->cell_size_-1,grid->row_size_*grid->cell_size_-1),ln_color_, 1);
+	}
+
+	line(dst, Point(0,0),Point(grid->col_size_*grid->cell_size_-1,0),ln_color_, 1);
+	for(int i = 1; i <= grid->row_size_; i++){
+		line(dst, Point(0,i*grid->cell_size_-1),Point(grid->col_size_*grid->cell_size_-1,i*grid->cell_size_-1),ln_color_, 1);
 	}
 }
 

@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <vector>
 #include <ctime>
+#include <tuple>
 
 // opencv
 #include "opencv2/opencv.hpp"
@@ -30,7 +31,7 @@ int main(int argc, char** argv )
 	MapManager map_manager;
 	SquareGrid* grid;
 	Mat map;
-
+	std::tuple<SquareGrid*, Mat> sg_map;
 
 	if ( argc == 2 )
 	{
@@ -43,8 +44,10 @@ int main(int argc, char** argv )
 		}
 		else
 		{
-			grid = SGridBuilder::BuildSquareGrid(input_map, 32);
-//			std::tie<grid, map> = SGridBuilder::BuildSquareGridMap(input_map, 32);
+//			grid = SGridBuilder::BuildSquareGrid(input_map, 32);
+			sg_map = SGridBuilder::BuildSquareGridMap(input_map, 32);
+			grid = std::get<0>(sg_map);
+			map = std::get<1>(sg_map);
 		}
 	}
 	else{
@@ -52,7 +55,7 @@ int main(int argc, char** argv )
 
 		// Use map manager to create a test map
 		grid = map_manager.CreateTestGridMap12N12Astar();
-		//    	grid = map_manager.CreateTestGridMap3N3();
+//		grid = map_manager.CreateTestGridMap3N3();
 	}
 
 	/************************************************************************************/
@@ -62,37 +65,32 @@ int main(int argc, char** argv )
 	// Construct a graph from the grid map
 	Graph<SquareCell>* graph = GraphBuilder::BuildFromSquareGrid(grid,true);
 
-	// Search path in the graph
-
-
 	// Visualize the map and graph
 	GraphVis vis;
-	Mat vis_result;
+	Mat vis_img;
 
-//	vis.DrawSquareGrid(grid, vis_result);
-//	vis.DrawSquareGridGraph(graph, grid, vis_result);
-	Mat bin_map, pad_map, vis_map;
-	ImageUtils::BinarizeImage(input_map, bin_map, 200);
-	ImageUtils::PadImageTo2Exp(bin_map, pad_map);
-	vis.VisSquareGrid(grid, pad_map, vis_map);
-	vis.VisSquareGridGraph(*graph, vis_map, vis_result, true);
+	vis.VisSquareGrid(grid, map, vis_img);
+//	vis.VisSquareGrid(grid, vis_img);
 
+	vis.VisSquareGridGraph(*graph, vis_img, vis_img, true);
+
+	// Search path in the graph
 	auto start_it = graph->GetVertexFromID(1710);
 	auto finish_it = graph->GetVertexFromID(272);
 //	auto start_it = graph->GetVertexFromID(0);
 //	auto finish_it = graph->GetVertexFromID(1);
 
 	clock_t		exec_time;
-
 	exec_time = clock();
 	std::vector<Vertex<SquareCell>*> path = graph->AStarSearch(start_it,finish_it);
 	exec_time = clock() - exec_time;
 	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 
-	vis.VisSquareGridPath(path, vis_result, vis_result);
+	vis.VisSquareGridPath(path, vis_img, vis_img);
 
+	// display visualization result
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
-	imshow("Processed Image", vis_result);
+	imshow("Processed Image", vis_img);
 
 	waitKey(0);
 

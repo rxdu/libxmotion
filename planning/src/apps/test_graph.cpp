@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <vector>
 #include <ctime>
+#include <tuple>
 
 // opencv
 #include "opencv2/opencv.hpp"
@@ -44,14 +45,19 @@ int main(int argc, char** argv )
     // example to use quadtree builder
 //    QTreeBuilder builder;
 //    QuadTree* tree = builder.BuildQuadTree(image_raw, 6);
-    QuadTree* tree = QTreeBuilder::BuildQuadTree(image_raw, 6);
+//    QuadTree* tree = QTreeBuilder::BuildQuadTree(image_raw, 6);
+
+    QuadTree* tree;
+    Mat map;
+    std::tuple<QuadTree*, Mat> qt_map;
+    qt_map = QTreeBuilder::BuildQuadTreeMap(image_raw, 6);
+    tree = std::get<0>(qt_map);
+    map = std::get<1>(qt_map);
 
     Mat image_tree, image_nodes;
     GraphVis vis;
-    Mat bin_map, pad_map, vis_map;
-    ImageUtils::BinarizeImage(image_raw, bin_map, 200);
-    ImageUtils::PadImageToSquared(bin_map, pad_map);
-    vis.DrawQuadTree(tree, pad_map, image_tree, TreeVisType::ALL_SPACE);
+    Mat vis_map;
+    vis.DrawQuadTree(tree, map, image_tree, TreeVisType::ALL_SPACE);
 //    TreeNode* node = tree->leaf_nodes_.at(0);
 //    vis.DrawQTreeSingleNode(node, image_tree, image_nodes);
     std::vector<QuadTreeNode*> free_leaves;
