@@ -35,3 +35,6 @@ target_link_libraries(test_image vis ${OpenCV_LIBS})
 add_executable(run_example example.cpp)
 target_link_libraries(run_example vis ${OpenCV_LIBS})
 
+add_executable(simple_graph simple_graph.cpp)
+#target_link_libraries(simple_graph )
+

@@ -8,6 +8,8 @@
 #ifndef SRC_GRAPH_VERTEX_H_
 #define SRC_GRAPH_VERTEX_H_
 
+#include <iostream>
+
 namespace srcl_ctrl {
 
 /****************************************************************************/

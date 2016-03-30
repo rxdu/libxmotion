@@ -44,6 +44,19 @@
 namespace srcl_ctrl {
 
 /****************************************************************************/
+/*							   Graph Node						  			*/
+/****************************************************************************/
+// an example of node that can be associated with a vertex, this node can be
+//	either a "struct" or a "class", only need to provide the node_id_ attribute
+struct ExampleNode{
+	ExampleNode(uint64_t id):node_id_(id){}
+
+	const uint64_t node_id_;
+
+	// you can add more attributes here
+};
+
+/****************************************************************************/
 /*								 Graph										*/
 /****************************************************************************/
 template<typename GraphNodeType>
