@@ -39,6 +39,9 @@ int main(int argc, char** argv )
 	for(auto& e : all_edges)
 		e.PrintEdge();
 
+	for(auto e : nodes)
+		delete e;
+
 	return 0;
 }
 
