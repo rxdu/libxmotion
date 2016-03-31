@@ -28,7 +28,7 @@ using namespace srcl_ctrl;
 int main(int argc, char** argv )
 {
 	Mat input_map;
-	MapManager map_manager;
+	bool use_input_image = false;
 	SquareGrid* grid;
 	Mat map;
 	std::tuple<SquareGrid*, Mat> sg_map;
@@ -48,44 +48,96 @@ int main(int argc, char** argv )
 			sg_map = SGridBuilder::BuildSquareGridMap(input_map, 32);
 			grid = std::get<0>(sg_map);
 			map = std::get<1>(sg_map);
+
+			use_input_image = true;
 		}
 	}
 	else{
 		printf("Default test map is used \n");
 
-		// Use map manager to create a test map
-		grid = map_manager.CreateTestGridMap12N12Astar();
-//		grid = map_manager.CreateTestGridMap3N3();
+		// create a empty grid
+		grid = new SquareGrid(12,12,95);
+
+		// set occupancy for cells
+		for(int i = 52; i <= 57; i++)
+			grid->SetCellOccupancy(i, OccupancyType::OCCUPIED);
+
+		for(int i = 88; i <= 93; i++)
+			grid->SetCellOccupancy(i, OccupancyType::OCCUPIED);
+
+		for(int i = 74; i <= 75; i++)
+			grid->SetCellOccupancy(i, OccupancyType::OCCUPIED);
+
+		for(int i = 0; i < 8; i++)
+			grid->SetCellOccupancy(i,10, OccupancyType::OCCUPIED);
+
+		for(int i = 24; i <= 28; i++)
+			grid->SetCellOccupancy(i, OccupancyType::OCCUPIED);
+
+		grid->SetCellOccupancy(58, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(87, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(22, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(34, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(46, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(118, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(119, OccupancyType::OCCUPIED);
+
+		grid->SetCellOccupancy(7, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(19, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(31, OccupancyType::OCCUPIED);
+
+		grid->SetCellOccupancy(66, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(81, OccupancyType::OCCUPIED);
 	}
 
 	/************************************************************************************/
 	/* Below this point, a SquareGrid object should be available for graph construction */
 	/************************************************************************************/
 
-	// Construct a graph from the grid map
+	/*** Construct a graph from the square grid ***/
+	/*** the second argument determines if move along diagonal is allowed ***/
 	Graph<SquareCell>* graph = GraphBuilder::BuildFromSquareGrid(grid,true);
 
-	// Visualize the map and graph
-	GraphVis vis;
-	Mat vis_img;
+	/*** Search path in the graph ***/
+	Vertex<SquareCell> * start_vertex;
+	Vertex<SquareCell> * finish_vertex;
+	if(use_input_image)
+	{
+		start_vertex = graph->GetVertexFromID(160);
+		finish_vertex = graph->GetVertexFromID(830);
+	}
+	else
+	{
+		start_vertex = graph->GetVertexFromID(0);
+		finish_vertex = graph->GetVertexFromID(143);
+	}
 
-	vis.VisSquareGrid(*grid, map, vis_img);
-//	vis.VisSquareGrid(*grid, vis_img);
-
-	vis.VisSquareGridGraph(*graph, vis_img, vis_img, true);
-
-	// Search path in the graph
-	auto start_it = graph->GetVertexFromID(1710);
-	auto finish_it = graph->GetVertexFromID(272);
-//	auto start_it = graph->GetVertexFromID(0);
-//	auto finish_it = graph->GetVertexFromID(1);
+	if(start_vertex == nullptr || finish_vertex == nullptr) {
+		std::cerr << "Invalid starting and finishing vertices, please choose two vertices in free space!" << std::endl;
+		std::cerr << "Use image \"example.png\" inside \\planning\\data folder for this demo." << std::endl;
+		return 0;
+	}
 
 	clock_t		exec_time;
 	exec_time = clock();
-	std::vector<Vertex<SquareCell>*> path = graph->AStarSearch(start_it,finish_it);
+	std::vector<Vertex<SquareCell>*> path = graph->AStarSearch(start_vertex,finish_vertex);
 	exec_time = clock() - exec_time;
 	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 
+	/*** Visualize the map and graph ***/
+	GraphVis vis;
+	Mat vis_img;
+
+	/*** Image Layouts: (map) -> square grid -> graph -> path ***/
+	/*** you can visualize the squre grid by itself or overlay it on the map image ***/
+	if(map.empty())
+		vis.VisSquareGrid(*grid, vis_img);
+	else
+		vis.VisSquareGrid(*grid, map, vis_img);
+
+	/*** put the graph on top of the square grid ***/
+	vis.VisSquareGridGraph(*graph, vis_img, vis_img, true);
+	/*** put the path on top of the graph ***/
 	vis.VisSquareGridPath(path, vis_img, vis_img);
 
 	// display visualization result
