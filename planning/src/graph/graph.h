@@ -5,29 +5,39 @@
  *      Author: rdu
  *
  *  Description:
- *  	1. This file defines template classes of the graph structure, for creating graphs
- *  	from trees and other similar data structures. The basic elements include:
+ *  	1. This file defines template classes of the graph structure.
+ *  	The basic elements include:
  *  	 	a. Vertex
  *  	 	b. Edge
  *  	 	c. Graph
- *  	A vertex is associated with a node (such as a tree node); an edge connects two vertices;
- *  	A graph is a collection of vertices and the edges of each vertex.
  *
- *  	2. The graph uses unique IDs to index its vertices. So it's required that each
+ *  	Note that all above 3 concepts have a "type". This type is determined by "nodes" used
+ *  	to construct the graph. For example, a graph is built to represent the connectivities
+ *  	among the leaf nodes of a quad tree. Then we have the following three types of graph
+ *  	elements:
+ *  		a. Vertex<QuadTreeNode>
+ *  		b. Edge<Vertex<QuadTreeNode>>
+ *  		c. Graph<QuadTreeNode>
+ *
+ *  	A vertex must be associated with a node (such as the tree node); an edge connects two
+ *  	vertices; a graph is a collection of vertices and the edges of each vertex.
+ *
+ *  	2. The graph uses unique IDs to index its vertices. So it's required that the
  *  	node used to construct the graph should have an unique ID with the name "node_id_".
+ *  	Refer to the definition of "struct ExampleNode" defined below.
  *
  *  	3. A visualized illustration of the graph structure
  *
  *  	Graph "G":
- *  		Vertex V1 - Edge E1_V1 to vertex V_x1
- *  				  - Edge E2_V1 to vertex V_x2
+ *  		Vertex "V1" - Edge "V1_E1", which connects "V1" to "Vx1"
+ *  				    - Edge "V1_E2", which connects "V1" to "Vx2"
  *  				  			...
- *  		Vertex V2 - Edge E1_V2 to vertex V_x1
- *  				  - Edge E2_V2 to vertex V_x2
+ *  		Vertex "V2" - Edge "V2_E1", which connects "V2" to "Vx3"
+ *  				    - Edge "V2_E2", which connects "V2" to "Vx4"
  *  				  			...
  *  			...
  *
- *  		Vertex V_x			...
+ *  		Vertex "Vx"			...
  *
  */
 
