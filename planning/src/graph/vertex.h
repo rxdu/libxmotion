@@ -69,6 +69,14 @@ public:
 	double h_astar_;
 	Vertex<VertexNodeType>* search_parent_;
 
+	bool operator ==(const Vertex<VertexNodeType> other)
+	{
+		if(vertex_id_ == other.vertex_id_)
+			return true;
+		else
+			return false;
+	}
+
 	void ClearVertexSearchInfo(){
 		is_checked_ = false;
 		is_in_openlist_ = false;
