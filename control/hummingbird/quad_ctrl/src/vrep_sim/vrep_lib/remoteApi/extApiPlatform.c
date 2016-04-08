@@ -26,8 +26,8 @@
 //
 // This file was automatically created for V-REP release V3.2.1 on May 3rd 2015
 
-#include "extApiPlatform.h"
 #include <stdio.h>
+#include <vrep_lib/remoteApi/extApiPlatform.h>
 
 #ifdef _WIN32
 	#include <Windows.h>

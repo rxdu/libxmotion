@@ -29,7 +29,7 @@
 #ifndef __EXTAPIINTERNAL_
 #define __EXTAPIINTERNAL_
 
-#include "extApiPlatform.h"
+#include <vrep_lib/remoteApi/extApiPlatform.h>
 
 #define SIMX_INIT_BUFF_SIZE 500
 #define SIMX_MIN_BUFF_INCR 500

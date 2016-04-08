@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.0)
-project(hummingbird_sim_ctrl)
+project(quad_ctrl)
 
 # Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
@@ -20,8 +20,18 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
+# Choose to enable g3log or not
+set(ENABLE_G3LOG off)
+
+# Check if g3log needs to be built
+if(ENABLE_G3LOG)
+	add_subdirectory(src/g3log_srcl)
+	message( "-- Enable logging with g3log -- Yes" )
+	message( "-- Deafult log directory: srcl_ctrl/control/hummingbird/quad_ctrl/data/log " )
+else(ENABLE_G3LOG)
+	message( "-- Enable logging with g3log -- No" )
+endif(ENABLE_G3LOG)
+
 # Add sub source directories
-add_subdirectory(src/g3log_srcl)
-add_subdirectory(src/vrep_remote_api)
 add_subdirectory(src/control)
 add_subdirectory(src/vrep_sim)

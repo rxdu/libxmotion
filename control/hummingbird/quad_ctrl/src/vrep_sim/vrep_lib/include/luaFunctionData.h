@@ -16,8 +16,8 @@
 
 #pragma once
 
-#include "luaFunctionDataItem.h"
-#include "v_repLib.h"
+#include <vrep_lib/include/luaFunctionDataItem.h>
+#include <vrep_lib/include/v_repLib.h>
 
 #define SIM_LUA_ARG_NIL_ALLOWED (65536)
 

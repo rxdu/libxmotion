@@ -12,6 +12,7 @@
 #include "g3log/g3log.hpp"
 
 #include "estimator/robot_state.h"
+#include "utils/utils_log.h"
 
 using namespace srcl_ctrl;
 

@@ -29,7 +29,7 @@
 #if !defined(EXTAPICUSTOMCONST_INCLUDED_)
 #define EXTAPICUSTOMCONST_INCLUDED_
 
-#include "v_repConst.h"
+#include <vrep_lib/include/v_repConst.h>
 
 /* Your custom remote API command IDs. Following are just simple examples */
 enum {	

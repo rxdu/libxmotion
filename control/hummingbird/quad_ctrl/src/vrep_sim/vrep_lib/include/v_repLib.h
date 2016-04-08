@@ -34,8 +34,8 @@
 #if !defined(V_REPLIB_INCLUDED_)
 #define V_REPLIB_INCLUDED_
 
-#include "v_repConst.h"
-#include "v_repTypes.h"
+#include <vrep_lib/include/v_repConst.h>
+#include <vrep_lib/include/v_repTypes.h>
 
 #ifdef QT_FRAMEWORK
 	#include <QLibrary>

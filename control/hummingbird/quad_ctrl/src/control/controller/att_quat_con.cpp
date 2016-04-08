@@ -12,6 +12,7 @@
 #include "g3log/g3log.hpp"
 
 #include "controller/att_quat_con.h"
+#include "utils/utils_log.h"
 
 using namespace srcl_ctrl;
 

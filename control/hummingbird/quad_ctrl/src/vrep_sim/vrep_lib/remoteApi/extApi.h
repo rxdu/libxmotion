@@ -30,8 +30,8 @@
 #define _EXTAPI__
 
 #ifdef NON_MATLAB_PARSING /* when compiling, make sure NON_MATLAB_PARSING is always defined! */
-	#include "extApiPlatform.h"
-	#include "v_repConst.h"
+	#include <vrep_lib/remoteApi/extApiPlatform.h>
+	#include <vrep_lib/include/v_repConst.h>
 #else 
 	typedef char simxChar;
 	typedef unsigned char simxUChar;

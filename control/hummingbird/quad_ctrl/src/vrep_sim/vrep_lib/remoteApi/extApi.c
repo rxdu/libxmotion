@@ -26,9 +26,9 @@
 //
 // This file was automatically created for V-REP release V3.2.1 on May 3rd 2015
 
-#include "extApi.h"
-#include "extApiInternal.h"
 #include <stdio.h>
+#include <vrep_lib/remoteApi/extApi.h>
+#include <vrep_lib/remoteApi/extApiInternal.h>
 
 #ifdef _Included_extApiJava
 	#include "extApiJava.h"

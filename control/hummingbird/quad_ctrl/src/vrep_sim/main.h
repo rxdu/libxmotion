@@ -8,9 +8,9 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
-#define RCCAR_SIM_VERSION 0.1
+#define QUAD_SIM_VERSION 0.1
 
-#define ENABLE_LOG
+//#define ENABLE_LOG
 
 #ifdef ENABLE_LOG
 #include "utils/utils_log.h"

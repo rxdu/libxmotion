@@ -26,10 +26,10 @@
 //
 // This file was automatically created for V-REP release V3.2.1 on May 3rd 2015
 
-#include "extApiCustom.h"
-#include "extApi.h"
-#include "extApiInternal.h"
-#include "extApiCustomConst.h"
+#include <vrep_lib/include/extApiCustomConst.h>
+#include <vrep_lib/remoteApi/extApi.h>
+#include <vrep_lib/remoteApi/extApiCustom.h>
+#include <vrep_lib/remoteApi/extApiInternal.h>
 
 /* Your custom remote API functions. Following are examples: */
 

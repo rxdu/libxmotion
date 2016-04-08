@@ -17,9 +17,16 @@ set(QUADCON_LIB_SRC
     controller/pos_euler_con.cpp
     controller/att_quat_con.cpp
     controller/pos_quat_con.cpp
+    # utils
+    utils/utils_log.cpp
 )
 add_library(quad_con STATIC ${QUADCON_LIB_SRC})
-#target_link_libraries(vis ${OpenCV_LIBS})
+if (ENABLE_G3LOG)
+	add_definitions(-DENABLE_LOG)
+endif (ENABLE_G3LOG)
+if (ENABLE_G3LOG)
+	target_link_libraries(quad_con g3logger)
+endif (ENABLE_G3LOG)
 
 # Add executables
 #add_executable(test_graph test_graph.cpp)

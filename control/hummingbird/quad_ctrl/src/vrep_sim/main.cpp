@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <math.h>
 #include <ctime>
+#include <pwd.h>
 
 // headers for vrep remote api
 extern "C" {
@@ -63,8 +64,11 @@ int main(int argc,char* argv[])
 #ifdef ENABLE_LOG
 	// initialize logger
 	auto worker = LogWorker::createLogWorker();
+	// get home path of current user
+	passwd* pw = getpwuid(getuid());
+	std::string home_path(pw->pw_dir);
 	auto defaultHandler = worker->addDefaultLogger("hummingbird_sim",
-			"/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/control/hummingbird/vrep_sim/log");
+			home_path + "/Workspace/srcl_robot_suite/srcl_ctrl/control/hummingbird/quad_ctrl/data/log");
 	initializeLogging(worker.get());
 
 	/* add log data head */
