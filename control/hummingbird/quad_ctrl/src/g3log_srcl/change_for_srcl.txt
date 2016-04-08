@@ -1,0 +1,17 @@
+# Change For SRCL
+
+The following changes are made for easier data processing in Matlab.
+
+filesink.cpp
+
+* FileSink::~FileSink: changed "\ng3log g3FileSink shutdown at: " to "\n\ng3log g3FileSink shutdown at: "
+
+filesinkhelper.ipp
+
+* std::string header(): removed "\t\t" before ""g3log created log at ..."
+* std::string header(): commented out log format instruction
+
+logmessage.cpp
+
+* std::string LogMessage::toString() const: changed return normalToString(*this); to return normalToStringMinimal(*this);
+* added function: std::string normalToStringMinimal(const LogMessage& msg){}
