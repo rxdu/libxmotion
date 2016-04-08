@@ -56,8 +56,8 @@ namespace srcl_ctrl {
 /****************************************************************************/
 /*							   Graph Node						  			*/
 /****************************************************************************/
-// an example of node that can be associated with a vertex, this node can be
-//	either a "struct" or a "class", only need to provide the node_id_ attribute
+/// An example node that can be associated with a vertex. This node can be
+///	either a "struct" or a "class", only need to provide the node_id_ attribute.
 struct ExampleNode{
 	ExampleNode(uint64_t id):node_id_(id){}
 
@@ -69,15 +69,17 @@ struct ExampleNode{
 /****************************************************************************/
 /*								 Graph										*/
 /****************************************************************************/
+/// A graph data structure template.
 template<typename GraphNodeType>
 class Graph
 {
 public:
+	/// Graph constructor.
 	Graph(){};
+	/// Graph destructor. Graph class is only responsible for the memory recycling of Vertex and Edge
+	/// objects. The node, such as a quadtree node or a square cell, which each vertex is associated
+	///  with needs to be recycled separately, for example by the quadtree/square_grid class.
 	~Graph(){
-		// graph is only responsible to recycle of memory for vertices, the node which
-		//	each vertex is associated to needs to be recycled by the quadtree/square_grid
-		//	structure
 		for(auto it = vertex_map_.begin(); it != vertex_map_.end(); it++)
 			delete it->second;
 	};
@@ -87,9 +89,9 @@ private:
 	AStar<Vertex<GraphNodeType>> astar_;
 
 private:
-	// This function checks if a vertex already exists in the graph.
-	//	If yes, the functions returns the index of the existing vertex,
-	//	otherwise it creates a new vertex.
+	/// This function checks if a vertex already exists in the graph.
+	///	If yes, the functions returns the index of the existing vertex,
+	///	otherwise it creates a new vertex.
 	Vertex<GraphNodeType>* GetVertex(GraphNodeType* vertex_node)
 	{
 		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it = vertex_map_.find((uint64_t)vertex_node->node_id_);
@@ -104,7 +106,7 @@ private:
 		return it->second;
 	}
 
-	// This function is used to reset the vertices for a new search
+	/// This function is used to reset the vertices for a new search
 	void ResetGraphVertices()
 	{
 		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it;
@@ -116,18 +118,17 @@ private:
 	};
 
 public:
-	// This function is used to create a graph
+	/// This function is used to create a graph by adding edges connecting two nodes
 	void AddEdge(GraphNodeType* src_node, GraphNodeType* dst_node, double cost)
 	{
 		Vertex<GraphNodeType>* src_vertex = GetVertex(src_node);
 		Vertex<GraphNodeType>* dst_vertex = GetVertex(dst_node);
 
-//		Edge<Vertex<GraphNodeType>>* new_edge = new Edge<Vertex<GraphNodeType>>(dst_vertex,cost);
 		Edge<Vertex<GraphNodeType>> new_edge(src_vertex, dst_vertex,cost);
 		src_vertex->edges_.push_back(new_edge);
 	};
 
-	// This functions is used to access all vertices of a constructed graph
+	/// This functions is used to access all vertices of a graph
 	std::vector<Vertex<GraphNodeType>*> GetGraphVertices()
 	{
 		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it;
@@ -141,7 +142,7 @@ public:
 		return vertices;
 	};
 
-	// This functions is used to access all edges of a constructed graph
+	/// This functions is used to access all edges of a graph
 	std::vector<Edge<Vertex<GraphNodeType>>> GetGraphEdges()
 	{
 		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it;
@@ -161,7 +162,7 @@ public:
 		return edges;
 	};
 
-	// This function return the vertex with specified id
+	/// This function return the vertex with specified id
 	Vertex<GraphNodeType>* GetVertexFromID(uint64_t vertex_id)
 	{
 		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it = vertex_map_.find(vertex_id);
@@ -169,7 +170,7 @@ public:
 		return (*it).second;
 	}
 
-	// Perform A* Search and return a path represented by a serious of vertices
+	/// Perform A* Search and return a path represented by a serious of vertices
 	std::vector<Vertex<GraphNodeType>*> AStarSearch(Vertex<GraphNodeType> *start, Vertex<GraphNodeType> *goal)
 	{
 		// clear previous search information before new search

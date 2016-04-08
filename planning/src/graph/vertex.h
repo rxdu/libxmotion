@@ -15,6 +15,7 @@ namespace srcl_ctrl {
 /****************************************************************************/
 /*								 Edge  										*/
 /****************************************************************************/
+/// An edge data structure template.
 template<typename EdgeVertexType>
 class Edge
 {
@@ -44,6 +45,7 @@ public:
 /****************************************************************************/
 /*								 Vertex										*/
 /****************************************************************************/
+/// A vertex data structure template.
 template<typename VertexNodeType>
 class Vertex
 {

@@ -21,6 +21,7 @@
 
 namespace srcl_ctrl {
 
+/// A simple priority queue structure used as A* open list.
 template<typename T, typename Number=double>
 struct PriorityQueue {
 	typedef std::pair<Number, T> PQElement;
@@ -41,6 +42,7 @@ struct PriorityQueue {
 	}
 };
 
+/// A* search algorithm.
 template<typename GraphVertexType>
 class AStar{
 public:
