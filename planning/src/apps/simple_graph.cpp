@@ -34,9 +34,9 @@ int main(int argc, char** argv )
 	graph.AddEdge(nodes[1], nodes[2], 2.0);
 	graph.AddEdge(nodes[2], nodes[3], 2.5);
 
-	std::vector<Edge<Vertex<ExampleNode>>> all_edges = graph.GetGraphEdges();
+	auto all_edges = graph.GetGraphEdges();
 
-	for(auto& e : all_edges)
+	for(auto e : all_edges)
 		e.PrintEdge();
 
 	for(auto e : nodes)
