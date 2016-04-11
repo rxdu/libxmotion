@@ -98,7 +98,7 @@ for(auto e : nodes)
 ### d. Notes
 
 * You may have noticed that when constructing a graph, you don't need to explicitly create objects of "Vertex". By calling member function **AddEdge(src_node, dst_node, cost)** of the graph, vertices are created and associated with the according node internally.
-* There are two views of the graph data structure. When constructing the graph (bottom-up view), the nodes are manipulated directly and vertices are handled implicitly. When using the graph (top-down view) for path search, vertices are the the entities you're directly interacting with and the nodes they associate with are of less interest.
+* There are two views of the graph data structure. When constructing the graph (bottom-up view), the nodes are manipulated directly and vertices are handled implicitly. When using the graph (top-down view) for path search, vertices are the the entities you're directly interacting with and the nodes they associate with are probably of less interest. Of course, you can access one from the other easily from their common ID.
 * An detailed example of using the graph for path search can be found in "apps/example.cpp". The work flow is shown as follows.
 
 ~~~
