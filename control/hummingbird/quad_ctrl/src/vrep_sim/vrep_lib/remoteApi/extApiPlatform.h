@@ -1,6 +1,6 @@
 // This file is part of the REMOTE API
 // 
-// Copyright 2006-2015 Coppelia Robotics GmbH. All rights reserved. 
+// Copyright 2006-2016 Coppelia Robotics GmbH. All rights reserved. 
 // marc@coppeliarobotics.com
 // www.coppeliarobotics.com
 // 
@@ -24,7 +24,7 @@
 // along with the REMOTE API.  If not, see <http://www.gnu.org/licenses/>.
 // -------------------------------------------------------------------
 //
-// This file was automatically created for V-REP release V3.2.1 on May 3rd 2015
+// This file was automatically created for V-REP release V3.3.0 on February 19th 2016
 
 #ifndef _EXTAPIPLATFORM__
 #define _EXTAPIPLATFORM__

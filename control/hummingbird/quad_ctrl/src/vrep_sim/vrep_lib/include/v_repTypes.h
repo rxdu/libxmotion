@@ -1,6 +1,6 @@
 // This file is part of V-REP, the Virtual Robot Experimentation Platform.
 // 
-// Copyright 2006-2015 Coppelia Robotics GmbH. All rights reserved. 
+// Copyright 2006-2016 Coppelia Robotics GmbH. All rights reserved. 
 // marc@coppeliarobotics.com
 // www.coppeliarobotics.com
 // 
@@ -27,7 +27,7 @@
 // along with V-REP.  If not, see <http://www.gnu.org/licenses/>.
 // -------------------------------------------------------------------
 //
-// This file was automatically created for V-REP release V3.2.1 on May 3rd 2015
+// This file was automatically created for V-REP release V3.3.0 on February 19th 2016
 
 #if !defined(V_REPTYPES_INCLUDED_)
 #define V_REPTYPES_INCLUDED_
@@ -41,6 +41,7 @@ typedef double simDouble;
 typedef void simVoid;
 typedef unsigned char simUChar;
 typedef unsigned int simUInt;
+typedef unsigned long long int simUInt64;
 
 struct SLuaCallBack
 {

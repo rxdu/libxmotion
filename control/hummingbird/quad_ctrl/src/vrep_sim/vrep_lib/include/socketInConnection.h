@@ -1,4 +1,4 @@
-// Copyright 2006-2015 Coppelia Robotics GmbH. All rights reserved. 
+// Copyright 2006-2016 Coppelia Robotics GmbH. All rights reserved. 
 // marc@coppeliarobotics.com
 // www.coppeliarobotics.com
 // 
@@ -12,7 +12,7 @@
 // You are free to use/modify/distribute this file for whatever purpose!
 // -------------------------------------------------------------------
 //
-// This file was automatically created for V-REP release V3.2.1 on May 3rd 2015
+// This file was automatically created for V-REP release V3.3.0 on February 19th 2016
 
 #pragma once
 

@@ -16,7 +16,6 @@ endif (ENABLE_G3LOG)
 set(VREPSIM_LIB_SRC
   # vrep remote api
   vrep_lib/remoteApi/extApi.c
-  vrep_lib/remoteApi/extApiCustom.c
   vrep_lib/remoteApi/extApiPlatform.c
   # vrep quad simulation
   vrep_client/quad_sim_client.cpp
@@ -35,9 +34,9 @@ if (UNIX)
 endif (UNIX)
 
 # Add executables
-add_executable(quad_vrep_sim main.cpp)
-if (ENABLE_G3LOG)
-	target_link_libraries(quad_vrep_sim vrep_sim quad_con g3logger)
-else (ENABLE_G3LOG)
-	target_link_libraries(quad_vrep_sim vrep_sim quad_con)
-endif (ENABLE_G3LOG)
+#add_executable(quad_vrep_sim main.cpp)
+#if (ENABLE_G3LOG)
+#	target_link_libraries(quad_vrep_sim vrep_sim quad_con g3logger)
+#else (ENABLE_G3LOG)
+#	target_link_libraries(quad_vrep_sim vrep_sim quad_con)
+#endif (ENABLE_G3LOG)

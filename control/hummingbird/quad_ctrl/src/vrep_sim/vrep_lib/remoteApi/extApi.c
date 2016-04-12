@@ -1,6 +1,6 @@
 // This file is part of the REMOTE API
 // 
-// Copyright 2006-2015 Coppelia Robotics GmbH. All rights reserved. 
+// Copyright 2006-2016 Coppelia Robotics GmbH. All rights reserved. 
 // marc@coppeliarobotics.com
 // www.coppeliarobotics.com
 // 
@@ -24,11 +24,11 @@
 // along with the REMOTE API.  If not, see <http://www.gnu.org/licenses/>.
 // -------------------------------------------------------------------
 //
-// This file was automatically created for V-REP release V3.2.1 on May 3rd 2015
+// This file was automatically created for V-REP release V3.3.0 on February 19th 2016
 
+#include "extApi.h"
+#include "extApiInternal.h"
 #include <stdio.h>
-#include <vrep_lib/remoteApi/extApi.h>
-#include <vrep_lib/remoteApi/extApiInternal.h>
 
 #ifdef _Included_extApiJava
 	#include "extApiJava.h"
@@ -191,6 +191,12 @@ EXTAPI_DLLEXPORT simxInt simxStart(const simxChar* connectionAddress,simxInt con
 	_lastReceivedMessageID[clientID]=-1;
 	_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=-1; /* do not wait */
 	_minCommunicationDelay[clientID]=commThreadCycleInMs;
+
+	if (timeOutInMs<0)
+	{ /* a positive time out is for the first connection. A negative, for all blocking commands */
+		_replyWaitTimeoutInMs[clientID]=-timeOutInMs;
+		timeOutInMs=5000;
+	}
 
 	extApi_createMutexes(clientID);
 
@@ -398,7 +404,7 @@ simxUChar* _exec_null(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUChar o
 			}
 		}
 
-		if (opMode==simx_opmode_oneshot_wait)
+		if (opMode==simx_opmode_blocking)
 			_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=_nextMessageIDToSend[clientID];
 		extApi_unlockResources(clientID);
 
@@ -413,7 +419,7 @@ simxUChar* _exec_null(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUChar o
 	cmdPtr=_setLastFetchedCmd(clientID,cmdPtr,error);
 	_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=-1; /* make sure to enable the communication thread again! */
 	extApi_unlockResources(clientID);
-	if (opMode==simx_opmode_oneshot_wait) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_oneshot_wait (to avoid polluting the inbox) */
+	if (opMode==simx_opmode_blocking) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_blocking (to avoid polluting the inbox) */
 		_removeCommandReply_null(clientID,cmdRaw);
 	return(cmdPtr);
 }
@@ -461,7 +467,7 @@ simxUChar* _exec_null_buffer(simxInt clientID,simxInt cmdRaw,simxInt opMode,simx
 			_messageToSend[clientID]=_appendCommand_null_buff(cmdRaw+opMode,options,buffer,bufferSize,delayOrSplit,_messageToSend[clientID],&_messageToSend_bufferSize[clientID],&_messageToSend_dataSize[clientID]);
 		}
 
-		if (opMode==simx_opmode_oneshot_wait)
+		if (opMode==simx_opmode_blocking)
 			_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=_nextMessageIDToSend[clientID];
 		extApi_unlockResources(clientID);
 
@@ -476,7 +482,7 @@ simxUChar* _exec_null_buffer(simxInt clientID,simxInt cmdRaw,simxInt opMode,simx
 	cmdPtr=_setLastFetchedCmd(clientID,cmdPtr,error);
 	_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=-1; /* make sure to enable the communication thread again! */
 	extApi_unlockResources(clientID);
-	if (opMode==simx_opmode_oneshot_wait) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_oneshot_wait (to avoid polluting the inbox) */
+	if (opMode==simx_opmode_blocking) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_blocking (to avoid polluting the inbox) */
 		_removeCommandReply_null(clientID,cmdRaw);
 	return(cmdPtr);
 }
@@ -521,7 +527,7 @@ simxUChar* _exec_int(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUChar op
 			}
 		}
 
-		if (opMode==simx_opmode_oneshot_wait)
+		if (opMode==simx_opmode_blocking)
 			_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=_nextMessageIDToSend[clientID];
 		extApi_unlockResources(clientID);
 
@@ -536,7 +542,7 @@ simxUChar* _exec_int(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUChar op
 	cmdPtr=_setLastFetchedCmd(clientID,cmdPtr,error);
 	_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=-1; /* make sure to enable the communication thread again! */
 	extApi_unlockResources(clientID);
-	if (opMode==simx_opmode_oneshot_wait) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_oneshot_wait (to avoid polluting the inbox) */
+	if (opMode==simx_opmode_blocking) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_blocking (to avoid polluting the inbox) */
 		_removeCommandReply_int(clientID,cmdRaw,intValue);
 	return(cmdPtr);
 }
@@ -579,7 +585,7 @@ simxUChar* _exec_intint(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUChar
 			}
 		}
 
-		if (opMode==simx_opmode_oneshot_wait)
+		if (opMode==simx_opmode_blocking)
 			_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=_nextMessageIDToSend[clientID];
 		extApi_unlockResources(clientID);
 
@@ -594,7 +600,7 @@ simxUChar* _exec_intint(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUChar
 	cmdPtr=_setLastFetchedCmd(clientID,cmdPtr,error);
 	_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=-1; /* make sure to enable the communication thread again! */
 	extApi_unlockResources(clientID);
-	if (opMode==simx_opmode_oneshot_wait) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_oneshot_wait (to avoid polluting the inbox) */
+	if (opMode==simx_opmode_blocking) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_blocking (to avoid polluting the inbox) */
 		_removeCommandReply_intint(clientID,cmdRaw,intValue1,intValue2);
 	return(cmdPtr);
 }
@@ -640,7 +646,7 @@ simxUChar* _exec_string(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUChar
 			}
 		}
 
-		if (opMode==simx_opmode_oneshot_wait)
+		if (opMode==simx_opmode_blocking)
 			_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=_nextMessageIDToSend[clientID];
 		extApi_unlockResources(clientID);
 
@@ -655,7 +661,7 @@ simxUChar* _exec_string(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUChar
 	cmdPtr=_setLastFetchedCmd(clientID,cmdPtr,error);
 	_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=-1; /* make sure to enable the communication thread again! */
 	extApi_unlockResources(clientID);
-	if (opMode==simx_opmode_oneshot_wait) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_oneshot_wait (to avoid polluting the inbox) */
+	if (opMode==simx_opmode_blocking) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_blocking (to avoid polluting the inbox) */
 		_removeCommandReply_string(clientID,cmdRaw,stringValue);
 	return(cmdPtr);
 }
@@ -702,7 +708,7 @@ simxUChar* _exec_int_int(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUCha
 			}
 		}
 
-		if (opMode==simx_opmode_oneshot_wait)
+		if (opMode==simx_opmode_blocking)
 			_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=_nextMessageIDToSend[clientID];
 		extApi_unlockResources(clientID);
 
@@ -717,7 +723,7 @@ simxUChar* _exec_int_int(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUCha
 	cmdPtr=_setLastFetchedCmd(clientID,cmdPtr,error);
 	_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=-1; /* make sure to enable the communication thread again! */
 	extApi_unlockResources(clientID);
-	if (opMode==simx_opmode_oneshot_wait) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_oneshot_wait (to avoid polluting the inbox) */
+	if (opMode==simx_opmode_blocking) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_blocking (to avoid polluting the inbox) */
 		_removeCommandReply_int(clientID,cmdRaw,intValue);
 	return(cmdPtr);
 }
@@ -764,7 +770,7 @@ simxUChar* _exec_intint_int(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxU
 			}
 		}
 
-		if (opMode==simx_opmode_oneshot_wait)
+		if (opMode==simx_opmode_blocking)
 			_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=_nextMessageIDToSend[clientID];
 		extApi_unlockResources(clientID);
 
@@ -779,7 +785,7 @@ simxUChar* _exec_intint_int(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxU
 	cmdPtr=_setLastFetchedCmd(clientID,cmdPtr,error);
 	_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=-1; /* make sure to enable the communication thread again! */
 	extApi_unlockResources(clientID);
-	if (opMode==simx_opmode_oneshot_wait) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_oneshot_wait (to avoid polluting the inbox) */
+	if (opMode==simx_opmode_blocking) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_blocking (to avoid polluting the inbox) */
 		_removeCommandReply_intint(clientID,cmdRaw,intValue1,intValue2);
 	return(cmdPtr);
 }
@@ -823,7 +829,7 @@ simxUChar* _exec_intint_buffer(simxInt clientID,simxInt cmdRaw,simxInt opMode,si
 			_messageToSend[clientID]=_appendCommand_ii_buff(cmdRaw+opMode,options,intValue1,intValue2,buffer,bufferSize,delayOrSplit,_messageToSend[clientID],&_messageToSend_bufferSize[clientID],&_messageToSend_dataSize[clientID]);
 		}
 
-		if (opMode==simx_opmode_oneshot_wait)
+		if (opMode==simx_opmode_blocking)
 			_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=_nextMessageIDToSend[clientID];
 		extApi_unlockResources(clientID);
 
@@ -838,7 +844,7 @@ simxUChar* _exec_intint_buffer(simxInt clientID,simxInt cmdRaw,simxInt opMode,si
 	cmdPtr=_setLastFetchedCmd(clientID,cmdPtr,error);
 	_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=-1; /* make sure to enable the communication thread again! */
 	extApi_unlockResources(clientID);
-	if (opMode==simx_opmode_oneshot_wait) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_oneshot_wait (to avoid polluting the inbox) */
+	if (opMode==simx_opmode_blocking) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_blocking (to avoid polluting the inbox) */
 		_removeCommandReply_intint(clientID,cmdRaw,intValue1,intValue2);
 	return(cmdPtr);
 }
@@ -885,7 +891,7 @@ simxUChar* _exec_int_float(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUC
 			}
 		}
 
-		if (opMode==simx_opmode_oneshot_wait)
+		if (opMode==simx_opmode_blocking)
 			_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=_nextMessageIDToSend[clientID];
 		extApi_unlockResources(clientID);
 
@@ -900,7 +906,7 @@ simxUChar* _exec_int_float(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUC
 	cmdPtr=_setLastFetchedCmd(clientID,cmdPtr,error);
 	_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=-1; /* make sure to enable the communication thread again! */
 	extApi_unlockResources(clientID);
-	if (opMode==simx_opmode_oneshot_wait) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_oneshot_wait (to avoid polluting the inbox) */
+	if (opMode==simx_opmode_blocking) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_blocking (to avoid polluting the inbox) */
 		_removeCommandReply_int(clientID,cmdRaw,intValue);
 	return(cmdPtr);
 }
@@ -947,7 +953,7 @@ simxUChar* _exec_int_buffer(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxU
 			_messageToSend[clientID]=_appendCommand_i_buff(cmdRaw+opMode,options,intValue,buffer,bufferSize,delayOrSplit,_messageToSend[clientID],&_messageToSend_bufferSize[clientID],&_messageToSend_dataSize[clientID]);
 		}
 
-		if (opMode==simx_opmode_oneshot_wait)
+		if (opMode==simx_opmode_blocking)
 			_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=_nextMessageIDToSend[clientID];
 		extApi_unlockResources(clientID);
 
@@ -962,7 +968,7 @@ simxUChar* _exec_int_buffer(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxU
 	cmdPtr=_setLastFetchedCmd(clientID,cmdPtr,error);
 	_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=-1; /* make sure to enable the communication thread again! */
 	extApi_unlockResources(clientID);
-	if (opMode==simx_opmode_oneshot_wait) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_oneshot_wait (to avoid polluting the inbox) */
+	if (opMode==simx_opmode_blocking) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_blocking (to avoid polluting the inbox) */
 		_removeCommandReply_int(clientID,cmdRaw,intValue);
 	return(cmdPtr);
 }
@@ -1009,7 +1015,7 @@ simxUChar* _exec_string_buffer(simxInt clientID,simxInt cmdRaw,simxInt opMode,si
 			_messageToSend[clientID]=_appendCommand_s_buff(cmdRaw+opMode,options,stringValue,buffer,bufferSize,delayOrSplit,_messageToSend[clientID],&_messageToSend_bufferSize[clientID],&_messageToSend_dataSize[clientID]);
 		}
 
-		if (opMode==simx_opmode_oneshot_wait)
+		if (opMode==simx_opmode_blocking)
 			_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=_nextMessageIDToSend[clientID];
 		extApi_unlockResources(clientID);
 
@@ -1024,8 +1030,69 @@ simxUChar* _exec_string_buffer(simxInt clientID,simxInt cmdRaw,simxInt opMode,si
 	cmdPtr=_setLastFetchedCmd(clientID,cmdPtr,error);
 	_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=-1; /* make sure to enable the communication thread again! */
 	extApi_unlockResources(clientID);
-	if (opMode==simx_opmode_oneshot_wait) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_oneshot_wait (to avoid polluting the inbox) */
+	if (opMode==simx_opmode_blocking) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_blocking (to avoid polluting the inbox) */
 		_removeCommandReply_string(clientID,cmdRaw,stringValue);
+	return(cmdPtr);
+}
+
+simxUChar* _exec_intstringstring_buffer(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUChar options,simxInt intValue,const simxUChar* stringValue1,const simxUChar* stringValue2,simxUChar* buffer,simxInt bufferSize,simxInt* error)
+{
+	simxUChar* cmdPtr;
+	simxUShort delayOrSplit;
+
+	error[0]=simx_return_ok;
+
+	delayOrSplit=opMode&simx_cmdmask;
+	opMode-=(opMode&simx_cmdmask);
+
+	if (opMode!=simx_opmode_buffer)
+	{
+		/* Check if the command is already present in the request list */
+		extApi_lockResources(clientID);
+		if (opMode==simx_opmode_oneshot_split)
+		{
+			if (delayOrSplit<_MIN_SPLIT_AMOUNT_IN_BYTES)
+				delayOrSplit=_MIN_SPLIT_AMOUNT_IN_BYTES;
+			cmdPtr=_getCommandPointer_iss(cmdRaw,intValue,stringValue1,stringValue2,_splitCommandsToSend[clientID],_splitCommandsToSend_dataSize[clientID]);
+			if (cmdPtr!=0)
+			{ /* Command already there */
+				/* Now make sure we have the same command size, otherwise we have to remove the old cmd and add freshly the new */
+				if (extApi_endianConversionInt(((simxInt*)(cmdPtr+simx_cmdheaderoffset_mem_size))[0])==SIMX_SUBHEADER_SIZE+extApi_getStringLength((simxChar*)stringValue1)+extApi_getStringLength((simxChar*)stringValue2)+6+bufferSize)
+					error[0]|=simx_return_split_progress_flag; /* ok, we have the same size */
+				else
+				{ /* we don't have the same size! Remove the old command */
+					_removeChunkFromBuffer(_splitCommandsToSend[clientID],cmdPtr,extApi_endianConversionInt(((simxInt*)(cmdPtr+simx_cmdheaderoffset_mem_size))[0]),&_splitCommandsToSend_dataSize[clientID]);
+					cmdPtr=0; /* so that we will add the new command in next section */
+				}
+			}
+			if (cmdPtr==0)
+				_splitCommandsToSend[clientID]=_appendCommand_iss_buff(cmdRaw+opMode,options,intValue,stringValue1,stringValue2,buffer,bufferSize,delayOrSplit,_splitCommandsToSend[clientID],&_splitCommandsToSend_bufferSize[clientID],&_splitCommandsToSend_dataSize[clientID]);
+		}
+		else
+		{
+			cmdPtr=_getCommandPointer_iss(cmdRaw,intValue,stringValue1,stringValue2,_messageToSend[clientID]+SIMX_HEADER_SIZE,_messageToSend_dataSize[clientID]-SIMX_HEADER_SIZE);
+			if ((cmdPtr!=0)&&((options&1)==0))	/* Command already there, and we can overwrite it. Remove it and add it again */
+				_removeChunkFromBuffer(_messageToSend[clientID],cmdPtr,extApi_endianConversionInt(((simxInt*)(cmdPtr+simx_cmdheaderoffset_mem_size))[0]),&_messageToSend_dataSize[clientID]); /* we remove then add the command again (b/c no guarantee the buffer has the same size) */
+			_messageToSend[clientID]=_appendCommand_iss_buff(cmdRaw+opMode,options,intValue,stringValue1,stringValue2,buffer,bufferSize,delayOrSplit,_messageToSend[clientID],&_messageToSend_bufferSize[clientID],&_messageToSend_dataSize[clientID]);
+		}
+
+		if (opMode==simx_opmode_blocking)
+			_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=_nextMessageIDToSend[clientID];
+		extApi_unlockResources(clientID);
+
+		/* wait until we received a reply, or a timeout (if we wanna wait for the reply) */
+		if (_waitBeforeSendingAgainWhenMessageIDArrived[clientID]!=-1)
+			_waitUntilMessageArrived(clientID,error); 
+	}
+
+	/* Check if the command is present in the input list (we might have this situation when we want to check if there was an error on the server side) */
+	extApi_lockResources(clientID);
+	cmdPtr=_getCommandPointer_iss(cmdRaw,intValue,stringValue1,stringValue2,_messageReceived[clientID]+SIMX_HEADER_SIZE,_messageReceived_dataSize[clientID]-SIMX_HEADER_SIZE);
+	cmdPtr=_setLastFetchedCmd(clientID,cmdPtr,error);
+	_waitBeforeSendingAgainWhenMessageIDArrived[clientID]=-1; /* make sure to enable the communication thread again! */
+	extApi_unlockResources(clientID);
+	if (opMode==simx_opmode_blocking) /* A cmd reply stays in the inbox always.. except when the mode is simx_opmode_blocking (to avoid polluting the inbox) */
+		_removeCommandReply_intstringstring(clientID,cmdRaw,intValue,stringValue1,stringValue2);
 	return(cmdPtr);
 }
 
@@ -1152,6 +1219,31 @@ simxUChar* _getCommandPointer_s(simxInt cmdRaw,const simxUChar* stringValue,cons
 			{
 				retVal=(simxUChar*)(commandBufferStart+offset);
 				break;
+			}
+		}
+		offset+=extApi_endianConversionInt(((simxInt*)(commandBufferStart+offset+simx_cmdheaderoffset_mem_size))[0]);
+	}
+	return(retVal);
+}
+
+simxUChar* _getCommandPointer_iss(simxInt cmdRaw,simxInt intValue,const simxUChar* stringValue1,const simxUChar* stringValue2,const simxUChar* commandBufferStart,simxInt commandBufferSize)
+{
+	simxUChar* retVal=0;
+	simxInt offset=0;
+	while (offset<commandBufferSize)
+	{
+		if ((extApi_endianConversionInt(((simxInt*)(commandBufferStart+offset+simx_cmdheaderoffset_cmd))[0])&simx_cmdmask)==cmdRaw)
+		{
+			if (((simxInt*)(commandBufferStart+offset+SIMX_SUBHEADER_SIZE))[0]==extApi_endianConversionInt(intValue))
+			{
+				if (extApi_areStringsSame((simxChar*)stringValue1,(simxChar*)commandBufferStart+offset+SIMX_SUBHEADER_SIZE+sizeof(simxInt))!=0)
+				{
+					if (extApi_areStringsSame((simxChar*)stringValue2,(simxChar*)commandBufferStart+offset+SIMX_SUBHEADER_SIZE+sizeof(simxInt)+extApi_getStringLength((simxChar*)commandBufferStart+offset+SIMX_SUBHEADER_SIZE+sizeof(simxInt))+1)!=0)
+					{
+						retVal=(simxUChar*)(commandBufferStart+offset);
+						break;
+					}
+				}
 			}
 		}
 		offset+=extApi_endianConversionInt(((simxInt*)(commandBufferStart+offset+simx_cmdheaderoffset_mem_size))[0]);
@@ -1384,6 +1476,32 @@ simxUChar* _appendCommand_s_buff(simxInt cmd,simxUChar options,const simxUChar* 
 	return(retVal);
 }
 
+simxUChar* _appendCommand_iss_buff(simxInt cmd,simxUChar options,simxInt intValue,const simxUChar* stringValue1,const simxUChar* stringValue2,simxUChar* buffer,simxInt bufferSize,simxUShort delayOrSplit,simxUChar* destBuffer,simxInt* destBuffer_bufferSize,simxInt* destBuffer_dataSize)
+{
+	simxInt i;
+	simxUChar* retVal;
+	simxUChar* data=extApi_allocateBuffer(SIMX_SUBHEADER_SIZE+extApi_getStringLength((simxChar*)stringValue1)+extApi_getStringLength((simxChar*)stringValue2)+6+bufferSize);
+	((simxInt*)(data+simx_cmdheaderoffset_mem_size))[0]=extApi_endianConversionInt(SIMX_SUBHEADER_SIZE+extApi_getStringLength((simxChar*)stringValue1)+extApi_getStringLength((simxChar*)stringValue2)+6+bufferSize);
+
+	((simxInt*)(data+simx_cmdheaderoffset_full_mem_size))[0]=extApi_endianConversionInt(SIMX_SUBHEADER_SIZE+extApi_getStringLength((simxChar*)stringValue1)+extApi_getStringLength((simxChar*)stringValue2)+6+bufferSize);
+	((simxUShort*)(data+simx_cmdheaderoffset_pdata_offset0))[0]=extApi_endianConversionUShort(extApi_getStringLength((simxChar*)stringValue1)+extApi_getStringLength((simxChar*)stringValue2)+6);
+	((simxInt*)(data+simx_cmdheaderoffset_pdata_offset1))[0]=extApi_endianConversionInt(0);
+
+	((simxInt*)(data+simx_cmdheaderoffset_cmd))[0]=extApi_endianConversionInt(cmd);
+	((simxUShort*)(data+simx_cmdheaderoffset_delay_or_split))[0]=extApi_endianConversionUShort(delayOrSplit);
+	data[simx_cmdheaderoffset_status]=options;
+	((simxInt*)(data+SIMX_SUBHEADER_SIZE))[0]=extApi_endianConversionInt(intValue);
+	for (i=0;i<extApi_getStringLength((simxChar*)stringValue1)+1;i++)
+		data[SIMX_SUBHEADER_SIZE+i+4]=stringValue1[i];
+	for (i=0;i<extApi_getStringLength((simxChar*)stringValue2)+1;i++)
+		data[SIMX_SUBHEADER_SIZE+i+4+extApi_getStringLength((simxChar*)stringValue1)+1]=stringValue2[i];
+	for (i=0;i<bufferSize;i++)
+		data[SIMX_SUBHEADER_SIZE+extApi_getStringLength((simxChar*)stringValue1)+extApi_getStringLength((simxChar*)stringValue2)+6+i]=buffer[i];
+	retVal=_appendChunkToBuffer(data,SIMX_SUBHEADER_SIZE+extApi_getStringLength((simxChar*)stringValue1)+extApi_getStringLength((simxChar*)stringValue2)+6+bufferSize,destBuffer,destBuffer_bufferSize,destBuffer_dataSize);
+	extApi_releaseBuffer(data);
+	return(retVal);
+}
+
 simxUChar* _appendChunkToBuffer(const simxUChar* chunk,simxInt chunkSize,simxUChar* buffer,simxInt* buffer_bufferSize,simxInt* buffer_dataSize)
 {
 	simxInt i,incr;
@@ -1457,7 +1575,7 @@ simxUChar* _appendCommandToBufferAndTakeIntoAccountPreviouslyReceivedData(const 
 
 simxUChar* _getSameCommandPointer(const simxUChar* cmdPtr,simxUChar* cmdBuffer,simxInt cmdBufferSize)
 {
-	simxInt off,cmd1Raw,cmd2Raw;
+	simxInt off,cmd1Raw,cmd2Raw,tmp;
 
 	cmd1Raw=extApi_endianConversionInt(((simxInt*)(cmdPtr+simx_cmdheaderoffset_cmd))[0])&simx_cmdmask;
 	off=0;
@@ -1479,10 +1597,22 @@ simxUChar* _getSameCommandPointer(const simxUChar* cmdPtr,simxUChar* cmdBuffer,s
 						return(cmdBuffer+off);
 				}
 			}
-			if ((cmd1Raw>simx_cmd1string_start)&&(cmd1Raw<simx_cmdreserved_start))
+			if ((cmd1Raw>simx_cmd1string_start)&&(cmd1Raw<simx_cmd4bytes2strings_start))
 			{
 				if (extApi_areStringsSame((simxChar*)cmdPtr+SIMX_SUBHEADER_SIZE,(simxChar*)cmdBuffer+off+SIMX_SUBHEADER_SIZE)!=0)
 					return(cmdBuffer+off);
+			}
+			if ((cmd1Raw>simx_cmd4bytes2strings_start)&&(cmd1Raw<simx_cmd4bytes2strings_end))
+			{
+				if ( ((simxInt*)(cmdPtr+SIMX_SUBHEADER_SIZE))[0]==((simxInt*)(cmdBuffer+off+SIMX_SUBHEADER_SIZE))[0] )
+				{
+					if (extApi_areStringsSame((simxChar*)cmdPtr+SIMX_SUBHEADER_SIZE+4,(simxChar*)cmdBuffer+off+SIMX_SUBHEADER_SIZE+4)!=0)
+					{
+						tmp=extApi_getStringLength((simxChar*)cmdPtr+SIMX_SUBHEADER_SIZE+4)+1;
+						if (extApi_areStringsSame((simxChar*)cmdPtr+SIMX_SUBHEADER_SIZE+4+tmp,(simxChar*)cmdBuffer+off+SIMX_SUBHEADER_SIZE+4+tmp)!=0)
+							return(cmdBuffer+off);
+					}
+				}
 			}
 		}
 		off+=extApi_endianConversionInt(((simxInt*)(cmdBuffer+off+simx_cmdheaderoffset_mem_size))[0]);
@@ -1493,13 +1623,19 @@ simxUChar* _getSameCommandPointer(const simxUChar* cmdPtr,simxUChar* cmdBuffer,s
 simxInt _getCmdDataSize(simxUChar* commandPointer)
 {
 	simxInt retVal=0;
+	simxInt tmp;
 	simxInt cmdRaw=extApi_endianConversionInt(((simxInt*)(commandPointer+simx_cmdheaderoffset_cmd))[0])&simx_cmdmask;
 	if ((cmdRaw>simx_cmd4bytes_start)&&(cmdRaw<simx_cmd8bytes_start))
 		retVal=4;
 	if ((cmdRaw>simx_cmd8bytes_start)&&(cmdRaw<simx_cmd1string_start))
 		retVal=8;
-	if ((cmdRaw>simx_cmd1string_start)&&(cmdRaw<simx_cmdreserved_start))
+	if ((cmdRaw>simx_cmd1string_start)&&(cmdRaw<simx_cmd4bytes2strings_start))
 		retVal=extApi_getStringLength((simxChar*)commandPointer+SIMX_SUBHEADER_SIZE)+1;
+	if ((cmdRaw>simx_cmd4bytes2strings_start)&&(cmdRaw<simx_cmd4bytes2strings_end))
+	{
+		tmp=extApi_getStringLength((simxChar*)commandPointer+SIMX_SUBHEADER_SIZE+4)+1;
+		retVal=4+tmp+extApi_getStringLength((simxChar*)commandPointer+SIMX_SUBHEADER_SIZE+4+tmp)+1;
+	}
 	return(retVal);
 }
 
@@ -2021,6 +2157,22 @@ simxInt _removeCommandReply_string(simxInt clientID,simxInt cmdRaw,const simxUCh
 	return(retVal);
 }
 
+simxInt _removeCommandReply_intstringstring(simxInt clientID,simxInt cmdRaw,simxInt intValue,const simxUChar* stringValue1,const simxUChar* stringValue2)
+{
+	simxUChar* cmdPtr;
+	simxInt retVal=simx_return_ok;
+	extApi_lockResources(clientID);
+	cmdPtr=_getCommandPointer_iss(cmdRaw,intValue,stringValue1,stringValue2,_messageReceived[clientID]+SIMX_HEADER_SIZE,_messageReceived_dataSize[clientID]-SIMX_HEADER_SIZE);
+	if (cmdPtr!=0)
+		_removeChunkFromBuffer(_messageReceived[clientID],cmdPtr,extApi_endianConversionInt(((simxInt*)(cmdPtr+simx_cmdheaderoffset_mem_size))[0]),&_messageReceived_dataSize[clientID]);
+	else
+		retVal=simx_return_novalue_flag;
+	/* Data is removed, but buffer keeps same size. It will be resized next time we receive something */
+	extApi_unlockResources(clientID);
+	return(retVal);
+}
+
+
 
 /*
 **********************************************
@@ -2041,7 +2193,7 @@ EXTAPI_DLLEXPORT simxInt simxGetPingTime(simxInt clientID,simxInt* pingTime)
 	simxInt startTime=extApi_getTimeInMs();
 	if (_communicationThreadRunning[clientID]==0)
 		return(0);
-	res=simxGetIntegerParameter(clientID,sim_intparam_program_version,&dummyVal,simx_opmode_oneshot_wait); /* just a dummy command */
+	res=simxGetIntegerParameter(clientID,sim_intparam_program_version,&dummyVal,simx_opmode_blocking); /* just a dummy command */
 	res=(res|simx_return_remote_error_flag)-simx_return_remote_error_flag;
 	pingTime[0]=extApi_getTimeDiffInMs(startTime);
 	return(res);
@@ -2052,7 +2204,7 @@ EXTAPI_DLLEXPORT simxInt simxSynchronousTrigger(simxInt clientID)
 	simxInt returnValue;
 	if (_communicationThreadRunning[clientID]==0)
 		return(simx_return_initialize_error_flag);
-	_exec_null(clientID,simx_cmd_synchronous_next,simx_opmode_oneshot_wait,0,&returnValue);
+	_exec_null(clientID,simx_cmd_synchronous_next,simx_opmode_blocking,0,&returnValue);
 	return(returnValue);
 }
 
@@ -2064,7 +2216,7 @@ EXTAPI_DLLEXPORT simxInt simxSynchronous(simxInt clientID,simxUChar enable)
 		return(simx_return_initialize_error_flag);
 	if (enable)
 		cmd=simx_cmd_synchronous_enable;
-	_exec_null(clientID,cmd,simx_opmode_oneshot_wait,0,&returnValue);
+	_exec_null(clientID,cmd,simx_opmode_blocking,0,&returnValue);
 	return(returnValue);
 }
 
@@ -2570,7 +2722,7 @@ EXTAPI_DLLEXPORT simxInt simxLoadModel(simxInt clientID,const simxChar* modelPat
 		tmpFileName[21]='0'+(char)(extApi_rand()*9.1f);
 		tmpFileName[22]='0'+(char)(extApi_rand()*9.1f);
 		tmpFileName[23]='0'+(char)(extApi_rand()*9.1f);
-		returnValue=simxTransferFile(clientID,modelPathAndName,tmpFileName,_replyWaitTimeoutInMs[clientID],simx_opmode_oneshot_wait);
+		returnValue=simxTransferFile(clientID,modelPathAndName,tmpFileName,_replyWaitTimeoutInMs[clientID],simx_opmode_blocking);
 		if (returnValue==0)
 		{
 			dataPointer=_exec_string(clientID,simx_cmd_load_model,operationMode,0,(simxUChar*)tmpFileName,&returnValue);
@@ -2601,7 +2753,7 @@ EXTAPI_DLLEXPORT simxInt simxLoadUI(simxInt clientID,const simxChar* uiPathAndNa
 		tmpFileName[21]='0'+(char)(extApi_rand()*9.1f);
 		tmpFileName[22]='0'+(char)(extApi_rand()*9.1f);
 		tmpFileName[23]='0'+(char)(extApi_rand()*9.1f);
-		returnValue=simxTransferFile(clientID,uiPathAndName,tmpFileName,_replyWaitTimeoutInMs[clientID],simx_opmode_oneshot_wait);
+		returnValue=simxTransferFile(clientID,uiPathAndName,tmpFileName,_replyWaitTimeoutInMs[clientID],simx_opmode_blocking);
 		if (returnValue==0)
 		{
 			dataPointer=_exec_string(clientID,simx_cmd_load_ui,operationMode,0,(simxUChar*)tmpFileName,&returnValue);
@@ -2635,7 +2787,7 @@ EXTAPI_DLLEXPORT simxInt simxLoadScene(simxInt clientID,const simxChar* scenePat
 		tmpFileName[21]='0'+(char)(extApi_rand()*9.1f);
 		tmpFileName[22]='0'+(char)(extApi_rand()*9.1f);
 		tmpFileName[23]='0'+(char)(extApi_rand()*9.1f);
-		returnValue=simxTransferFile(clientID,scenePathAndName,tmpFileName,_replyWaitTimeoutInMs[clientID],simx_opmode_oneshot_wait); 
+		returnValue=simxTransferFile(clientID,scenePathAndName,tmpFileName,_replyWaitTimeoutInMs[clientID],simx_opmode_blocking); 
 		if (returnValue==0)
 		{
 			_exec_string(clientID,simx_cmd_load_scene,operationMode,0,(simxUChar*)tmpFileName,&returnValue);
@@ -2730,7 +2882,7 @@ EXTAPI_DLLEXPORT simxInt simxAddStatusbarMessage(simxInt clientID,const simxChar
 		return(simx_return_initialize_error_flag);
 	if (operationMode==simx_opmode_remove)
 		return(_removeCommandReply_string(clientID,simx_cmd_add_statusbar_message,(simxUChar*)message));
-	_exec_string(clientID,simx_cmd_add_statusbar_message,operationMode,0,(simxUChar*)message,&returnValue);
+	_exec_string(clientID,simx_cmd_add_statusbar_message,operationMode,1,(simxUChar*)message,&returnValue);
 	return(returnValue);
 }
 
@@ -2760,6 +2912,87 @@ EXTAPI_DLLEXPORT simxInt simxCreateDummy(simxInt clientID,simxFloat size,const s
 	return(returnValue);
 }
 
+EXTAPI_DLLEXPORT simxInt simxCallScriptFunction(simxInt clientID,const simxChar* scriptDescription,simxInt options,const simxChar* functionName,simxInt inIntCnt,const simxInt* inInt,simxInt inFloatCnt,const simxFloat* inFloat,simxInt inStringCnt,const simxChar* inString,simxInt inBufferSize,const simxUChar* inBuffer,simxInt* outIntCnt,simxInt** outInt,simxInt* outFloatCnt,simxFloat** outFloat,simxInt* outStringCnt,simxChar** outString,simxInt* outBufferSize,simxUChar** outBuffer,simxInt operationMode)
+{
+	simxUChar* dataPointer;
+	simxInt returnValue;
+	simxUChar* buffer;
+	simxInt i,off,totStrSize,bufferSize,outIntC,outFloatC,outStringC,outBufferS;
+	simxChar* outStr;
+	if (_communicationThreadRunning[clientID]==0)
+		return(simx_return_initialize_error_flag);
+	if (operationMode==simx_opmode_remove)
+		return(_removeCommandReply_intstringstring(clientID,simx_cmd_aux_console_open,options,(simxUChar*)scriptDescription,(simxUChar*)functionName));
+
+	totStrSize=0;
+	for (i=0;i<inStringCnt;i++)
+		totStrSize+=extApi_getStringLength(inString+totStrSize)+1;
+	bufferSize=4+4+4+4+4*(inIntCnt+inFloatCnt)+totStrSize+inBufferSize;
+	buffer=extApi_allocateBuffer(bufferSize);
+
+	((simxInt*)buffer)[0]=extApi_endianConversionInt(inIntCnt);
+	((simxInt*)buffer)[1]=extApi_endianConversionInt(inFloatCnt);
+	((simxInt*)buffer)[2]=extApi_endianConversionInt(inStringCnt);
+	((simxInt*)buffer)[3]=extApi_endianConversionInt(inBufferSize);
+	off=4;
+	for (i=0;i<inIntCnt;i++)
+		((simxInt*)buffer)[off+i]=extApi_endianConversionInt(inInt[i]);
+	off+=inIntCnt;
+	for (i=0;i<inFloatCnt;i++)
+		((simxFloat*)buffer)[off+i]=extApi_endianConversionFloat(inFloat[i]);
+	off+=inFloatCnt;
+	off*=4;
+	for (i=0;i<totStrSize;i++)
+		buffer[off+i]=(simxUChar)inString[i];
+	off+=totStrSize;
+	for (i=0;i<inBufferSize;i++)
+		buffer[off+i]=inBuffer[i];
+
+	dataPointer=_exec_intstringstring_buffer(clientID,simx_cmd_call_script_function,operationMode,1,options,(simxUChar*)scriptDescription,(simxUChar*)functionName,buffer,bufferSize,&returnValue);
+
+	extApi_releaseBuffer(buffer);
+
+	if ((dataPointer!=0)&&(returnValue==0))
+	{
+		outIntC=_readPureDataInt(dataPointer,0,0);
+		outFloatC=_readPureDataInt(dataPointer,0,4);
+		outStringC=_readPureDataInt(dataPointer,0,8);
+		outBufferS=_readPureDataInt(dataPointer,0,12);
+		off=4+4+4+4;
+
+		if ((outIntCnt!=0)&&(outInt!=0))
+		{
+			outIntCnt[0]=outIntC;
+			outInt[0]=((simxInt*)(dataPointer+SIMX_SUBHEADER_SIZE+_getCmdDataSize(dataPointer)+off)); /* little/big endian conversion happened on the server side */
+		}
+		off+=outIntC*4;
+
+		if ((outFloatCnt!=0)&&(outFloat!=0))
+		{
+			outFloatCnt[0]=outFloatC;
+			outFloat[0]=((simxFloat*)(dataPointer+SIMX_SUBHEADER_SIZE+_getCmdDataSize(dataPointer)+off)); /* little/big endian conversion happened on the server side */
+		}
+		off+=outFloatC*4;
+
+		outStr=((simxChar*)(dataPointer+SIMX_SUBHEADER_SIZE+_getCmdDataSize(dataPointer)+off));
+		if ((outStringCnt!=0)&&(outString!=0))
+		{
+			outStringCnt[0]=outStringC;
+			outString[0]=outStr;
+		}
+		totStrSize=0;
+		for (i=0;i<outStringC;i++)
+			totStrSize+=extApi_getStringLength(outStr+totStrSize)+1;
+		off+=totStrSize;
+
+		if ((outBufferSize!=0)&&(outBuffer!=0))
+		{
+			outBufferSize[0]=outBufferS;
+			outBuffer[0]=((simxUChar*)(dataPointer+SIMX_SUBHEADER_SIZE+_getCmdDataSize(dataPointer)+off));
+		}
+	}
+	return(returnValue);
+}
 
 EXTAPI_DLLEXPORT simxInt simxAuxiliaryConsoleOpen(simxInt clientID,const simxChar* title,simxInt maxLines,simxInt mode,simxInt* position,simxInt* size,simxFloat* textColor,simxFloat* backgroundColor,simxInt* consoleHandle,simxInt operationMode)
 {
@@ -3137,6 +3370,20 @@ EXTAPI_DLLEXPORT simxInt simxGetDistanceHandle(simxInt clientID,const simxChar* 
 	return(returnValue);
 }
 
+EXTAPI_DLLEXPORT simxInt simxGetCollectionHandle(simxInt clientID,const simxChar* collectionName,simxInt* handle,simxInt operationMode)
+{
+	simxUChar* dataPointer;
+	simxInt returnValue;
+	if (_communicationThreadRunning[clientID]==0)
+		return(simx_return_initialize_error_flag);
+	if (operationMode==simx_opmode_remove)
+		return(_removeCommandReply_string(clientID,simx_cmd_get_collection_handle,(simxUChar*)collectionName));
+	dataPointer=_exec_string(clientID,simx_cmd_get_collection_handle,operationMode,0,(simxUChar*)collectionName,&returnValue);
+	if ((dataPointer!=0)&&(returnValue==0))
+		handle[0]=_readPureDataInt(dataPointer,0,0);
+	return(returnValue);
+}
+
 EXTAPI_DLLEXPORT simxInt simxReadCollision(simxInt clientID,simxInt collisionObjectHandle,simxUChar* collisionState,simxInt operationMode)
 {
 	simxUChar* dataPointer;
@@ -3333,7 +3580,7 @@ EXTAPI_DLLEXPORT simxInt simxCopyPasteObjects(simxInt clientID,const simxInt* ob
 		return(simx_return_initialize_error_flag);
 	if (operationMode==simx_opmode_remove)
 		return(_removeCommandReply_int(clientID,simx_cmd_copy_paste_objects,0));
-	dataPointer=_exec_int_buffer(clientID,simx_cmd_copy_paste_objects,operationMode,0,0,(simxUChar*)objectHandles,objectCount*4,&returnValue);
+	dataPointer=_exec_int_buffer(clientID,simx_cmd_copy_paste_objects,operationMode,1,0,(simxUChar*)objectHandles,objectCount*4,&returnValue);
 	if ((dataPointer!=0)&&(returnValue==0))
 	{
 		newObjectCount[0]=_readPureDataInt(dataPointer,0,0);
@@ -3494,7 +3741,7 @@ EXTAPI_DLLEXPORT simxInt simxReadStringStream(simxInt clientID,const simxChar* s
 		return(_removeCommandReply_string(clientID,simx_cmd_read_string_stream,(simxUChar*)signalName));
 
 	/* following 2 lines special here */
-	if (operationMode==simx_opmode_oneshot_wait)
+	if (operationMode==simx_opmode_blocking)
 		return(simx_return_illegal_opmode_flag);
 
 	extApi_lockResources(clientID); /* special here */
@@ -3648,7 +3895,7 @@ EXTAPI_DLLEXPORT simxInt simxQuery(simxInt clientID,const simxChar* signalName,c
 	_removeCommandReply_string(clientID,simx_cmd_get_and_clear_string_signal,(simxUChar*)retSignalName); /* just in case */
 
 	simxGetAndClearStringSignal(clientID,retSignalName,retSignalValue,retSignalLength,simx_opmode_streaming);
-	err=simxSetStringSignal(clientID,signalName,signalValue,signalLength,simx_opmode_oneshot_wait);
+	err=simxSetStringSignal(clientID,signalName,signalValue,signalLength,simx_opmode_blocking);
 	if (err!=0)
 		return(err);
 	while (extApi_getTimeDiffInMs(startTime)<timeOutInMs)
@@ -3834,6 +4081,109 @@ EXTAPI_DLLEXPORT simxInt mtlb_simxGetObjectGroupData(simxInt* clientIDandObjectT
 	return(ret);
 }
 
+EXTAPI_DLLEXPORT simxInt mtlb_simxCallScriptFunction_a(const simxInt* variousIntsIn,const simxChar* scriptDescriptionAndFunctionName,const simxInt* inInt,const simxFloat* inFloat,const simxChar* inString,const simxUChar* inBuffer)
+{
+	int clientID;
+	int i,off,tmp;
+	int cnt=7*4; /* clientID, options, inIntCnt, inFloatCnt, inStringCnt, inBufferSize, opMode */
+	clientID=variousIntsIn[0];
+	off=extApi_getStringLength(scriptDescriptionAndFunctionName)+1;
+	cnt+=off;
+	off=extApi_getStringLength(scriptDescriptionAndFunctionName+off)+1;
+	cnt+=off;
+	cnt+=variousIntsIn[2]*4;
+	cnt+=variousIntsIn[3]*4;
+
+	off=0;
+	for (i=0;i<variousIntsIn[4];i++)
+		off+=extApi_getStringLength(inString+off)+1;
+	cnt+=off;
+	cnt+=variousIntsIn[5];
+
+	_tmpBuffer[variousIntsIn[0]]=extApi_allocateBuffer(cnt);
+	
+	((simxInt*)_tmpBuffer[clientID])[0]=variousIntsIn[0];
+	((simxInt*)_tmpBuffer[clientID])[1]=variousIntsIn[1];
+	((simxInt*)_tmpBuffer[clientID])[2]=variousIntsIn[2];
+	((simxInt*)_tmpBuffer[clientID])[3]=variousIntsIn[3];
+	((simxInt*)_tmpBuffer[clientID])[4]=variousIntsIn[4];
+	((simxInt*)_tmpBuffer[clientID])[5]=variousIntsIn[5];
+	((simxInt*)_tmpBuffer[clientID])[6]=variousIntsIn[6];
+
+	off=7*4;
+	tmp=extApi_getStringLength(scriptDescriptionAndFunctionName)+1;
+	tmp+=extApi_getStringLength(scriptDescriptionAndFunctionName+tmp)+1;
+	for (i=0;i<tmp;i++)
+		_tmpBuffer[clientID][off+i]=scriptDescriptionAndFunctionName[i];
+	off+=tmp;
+
+	for (i=0;i<variousIntsIn[2];i++)
+		((simxInt*)(_tmpBuffer[clientID]+off))[i]=inInt[i];
+	off+=variousIntsIn[2]*4;
+
+	for (i=0;i<variousIntsIn[3];i++)
+		((simxFloat*)(_tmpBuffer[clientID]+off))[i]=inFloat[i];
+	off+=variousIntsIn[3]*4;
+
+	/* put buffer before strings, easier after */
+	for (i=0;i<variousIntsIn[5];i++)
+		_tmpBuffer[clientID][off+i]=inBuffer[i];
+	off+=variousIntsIn[5];
+
+	tmp=0;
+	for (i=0;i<variousIntsIn[4];i++)
+		tmp+=extApi_getStringLength(inString+tmp)+1;
+	for (i=0;i<tmp;i++)
+		_tmpBuffer[clientID][off+i]=inString[i];
+	off+=tmp;
+	return(0);
+}
+
+EXTAPI_DLLEXPORT simxInt mtlb_simxCallScriptFunction_b(simxInt clientID,simxInt* variousIntsOut,simxInt** outInt,simxFloat** outFloat,simxChar** outString,simxUChar** outBuffer)
+{
+
+	simxInt ret,off;
+	simxInt inIntCnt,inFloatCnt,inStringCnt,inBufferSize,options,opMode;
+	simxChar* scriptDescription;
+	simxChar* funcName;
+	simxChar* inStrings;
+	simxInt* inInts;
+	simxFloat* inFloats;
+	simxUChar* inBuffer;
+
+	options=((simxInt*)_tmpBuffer[clientID])[1];
+	inIntCnt=((simxInt*)_tmpBuffer[clientID])[2];
+	inFloatCnt=((simxInt*)_tmpBuffer[clientID])[3];
+	inStringCnt=((simxInt*)_tmpBuffer[clientID])[4];
+	inBufferSize=((simxInt*)_tmpBuffer[clientID])[5];
+	opMode=((simxInt*)_tmpBuffer[clientID])[6];
+	off=7*4;
+
+	scriptDescription=(simxChar*)(_tmpBuffer[clientID]+off);
+	off+=extApi_getStringLength(scriptDescription)+1;
+
+	funcName=(simxChar*)(_tmpBuffer[clientID]+off);
+	off+=extApi_getStringLength(funcName)+1;
+	
+	inInts=(simxInt*)(_tmpBuffer[clientID]+off);
+	off+=inIntCnt*4;
+	
+	inFloats=(simxFloat*)(_tmpBuffer[clientID]+off);
+	off+=inFloatCnt*4;
+
+	inBuffer=(simxUChar*)(_tmpBuffer[clientID]+off);
+	off+=inBufferSize;
+
+	inStrings=(simxChar*)(_tmpBuffer[clientID]+off);
+
+
+	/* variousIntsOut: [0]:outIntC, [1]:outFloatC, [2]:outStringC, [3]:outBufferS */
+
+	ret=simxCallScriptFunction(clientID,scriptDescription,options,funcName,inIntCnt,inInts,inFloatCnt,inFloats,inStringCnt,inStrings,inBufferSize,inBuffer,&variousIntsOut[0],outInt,&variousIntsOut[1],outFloat,&variousIntsOut[2],outString,&variousIntsOut[3],outBuffer,opMode);
+	extApi_releaseBuffer(_tmpBuffer[clientID]);
+
+	return(ret);
+}
 
 
 
@@ -3989,7 +4339,6 @@ JNIEXPORT jint JNICALL Java_coppelia_remoteApi_simxGetVisionSensorImage(JNIEnv *
 		jintArray resArray = (jintArray)env->CallObjectMethod(res, mid, 2);
 		env->SetIntArrayRegion(resArray, 0, 2, (jint *)resolution);
 
-		//jsize start = 0;
 		jsize size = (options&1) ? (resolution[0]*resolution[1]) : (resolution[0]*resolution[1]*3);
 		cls = env->GetObjectClass(img);
 		mid = env->GetMethodID(cls, "getNewArray", "(I)[C");
@@ -3998,7 +4347,6 @@ JNIEXPORT jint JNICALL Java_coppelia_remoteApi_simxGetVisionSensorImage(JNIEnv *
 		for (jsize i=0;i<size;i++)
 			arr[i]=(unsigned char)image[i];
 		env->ReleaseCharArrayElements(imgArray,arr, 0);			
-		//env->SetCharArrayRegion(imgArray, start, size, (const jchar *)image);
 	}
 
 	return retVal;
@@ -4013,7 +4361,6 @@ JNIEXPORT jint JNICALL Java_coppelia_remoteApi_simxSetVisionSensorImage(JNIEnv *
 	simxInt operationMode = opMode;
 
 	char* imgbuf=new char[bufferSize];
-	//jsize start = 0;
 	jsize size = bufsize;	
 	jclass cls = env->GetObjectClass(img);
 	jmethodID mid = env->GetMethodID(cls, "getArray", "()[C");
@@ -4022,7 +4369,6 @@ JNIEXPORT jint JNICALL Java_coppelia_remoteApi_simxSetVisionSensorImage(JNIEnv *
 	for (jsize i=0;i<size;i++)
 		imgbuf[i]=(arr[i]&255);
 	env->ReleaseCharArrayElements(imgArray,arr, 0);			
-	//env->GetCharArrayRegion(imgArray, start, size, imgbuf);
 
 	simxInt retVal = simxSetVisionSensorImage(theClientID,sensorHandle,  (simxUChar*)imgbuf, bufferSize, options, operationMode);
 	delete[] imgbuf; 
@@ -5096,6 +5442,25 @@ JNIEXPORT jint JNICALL Java_coppelia_remoteApi_simxGetDistanceHandle(JNIEnv *env
 }
 
 
+JNIEXPORT jint JNICALL Java_coppelia_remoteApi_simxGetCollectionHandle(JNIEnv *env, jobject obj, jint clientID, jstring con, jobject hdl, jint opMode)
+{
+	simxInt theClientID = clientID;
+	const simxChar *collectionName = (simxChar*)env->GetStringUTFChars(con, 0);
+	simxInt handle;
+	simxInt operationMode = opMode;
+
+	simxInt retVal = simxGetCollectionHandle(theClientID,collectionName, &handle, operationMode);
+
+	env->ReleaseStringUTFChars(con,collectionName);
+
+	jclass cls = env->GetObjectClass(hdl);
+	jmethodID mid = env->GetMethodID(cls, "setValue", "(I)V");
+	env->CallVoidMethod( hdl, mid, handle);
+
+	return retVal;
+}
+
+
 JNIEXPORT jint JNICALL Java_coppelia_remoteApi_simxReadCollision(JNIEnv *env, jobject obj, jint clientID, jint hdl, jobject cs, jint opMode)
 {
 	simxInt theClientID = clientID;
@@ -5376,16 +5741,13 @@ JNIEXPORT jint JNICALL Java_coppelia_remoteApi_simxGetStringSignal(JNIEnv *env, 
 
 	if (retVal==0)
 	{
-		if (signalLength>0)
-		{
-			jclass cls = env->GetObjectClass(sv);
-			jmethodID mid = env->GetMethodID(cls, "getNewArray", "(I)[C");
-			jcharArray s = (jcharArray)env->CallObjectMethod(sv, mid, signalLength);
-			jchar* arr=env->GetCharArrayElements(s,0);
-			for (jsize i=0;i<signalLength;i++)
-				arr[i]=(unsigned char)signalValue[i];
-			env->ReleaseCharArrayElements(s,arr, 0);			
-		}
+		jclass cls = env->GetObjectClass(sv);
+		jmethodID mid = env->GetMethodID(cls, "getNewArray", "(I)[C");
+		jcharArray s = (jcharArray)env->CallObjectMethod(sv, mid, signalLength);
+		jchar* arr=env->GetCharArrayElements(s,0);
+		for (jsize i=0;i<signalLength;i++)
+			arr[i]=(unsigned char)signalValue[i];
+		env->ReleaseCharArrayElements(s,arr, 0);			
 	}
 	env->ReleaseStringUTFChars(sn,signalName);
 
@@ -5405,16 +5767,13 @@ JNIEXPORT jint JNICALL Java_coppelia_remoteApi_simxGetAndClearStringSignal(JNIEn
 
 	if (retVal==0)
 	{
-		if (signalLength>0)
-		{
-			jclass cls = env->GetObjectClass(sv);
-			jmethodID mid = env->GetMethodID(cls, "getNewArray", "(I)[C");
-			jcharArray s = (jcharArray)env->CallObjectMethod(sv, mid, signalLength);
-			jchar* arr=env->GetCharArrayElements(s,0);
-			for (jsize i=0;i<signalLength;i++)
-				arr[i]=(unsigned char)signalValue[i];
-			env->ReleaseCharArrayElements(s,arr, 0);			
-		}
+		jclass cls = env->GetObjectClass(sv);
+		jmethodID mid = env->GetMethodID(cls, "getNewArray", "(I)[C");
+		jcharArray s = (jcharArray)env->CallObjectMethod(sv, mid, signalLength);
+		jchar* arr=env->GetCharArrayElements(s,0);
+		for (jsize i=0;i<signalLength;i++)
+			arr[i]=(unsigned char)signalValue[i];
+		env->ReleaseCharArrayElements(s,arr, 0);			
 	}
 	env->ReleaseStringUTFChars(sn,signalName);
 
@@ -5434,16 +5793,13 @@ JNIEXPORT jint JNICALL Java_coppelia_remoteApi_simxReadStringStream(JNIEnv *env,
 
 	if (retVal==0)
 	{
-		if (signalLength>0)
-		{
-			jclass cls = env->GetObjectClass(sv);
-			jmethodID mid = env->GetMethodID(cls, "getNewArray", "(I)[C");
-			jcharArray s = (jcharArray)env->CallObjectMethod(sv, mid, signalLength);
-			jchar* arr=env->GetCharArrayElements(s,0);
-			for (jsize i=0;i<signalLength;i++)
-				arr[i]=(unsigned char)signalValue[i];
-			env->ReleaseCharArrayElements(s,arr, 0);			
-		}
+		jclass cls = env->GetObjectClass(sv);
+		jmethodID mid = env->GetMethodID(cls, "getNewArray", "(I)[C");
+		jcharArray s = (jcharArray)env->CallObjectMethod(sv, mid, signalLength);
+		jchar* arr=env->GetCharArrayElements(s,0);
+		for (jsize i=0;i<signalLength;i++)
+			arr[i]=(unsigned char)signalValue[i];
+		env->ReleaseCharArrayElements(s,arr, 0);			
 	}
 	env->ReleaseStringUTFChars(sn,signalName);
 
@@ -5693,16 +6049,13 @@ JNIEXPORT jint JNICALL Java_coppelia_remoteApi_simxQuery(JNIEnv *env, jobject ob
 
 	if (retVal==0)
 	{
-		if (retSignalLength>0)
-		{
-			jclass cls2 = env->GetObjectClass(rsv);
-			jmethodID mid3 = env->GetMethodID(cls2, "getNewArray", "(I)[C");
-			jcharArray s = (jcharArray)env->CallObjectMethod(rsv, mid3, retSignalLength);
-			jchar* arr=env->GetCharArrayElements(s,0);
-			for (jsize i=0;i<retSignalLength;i++)
-				arr[i]=(unsigned char)retSignalValue[i];
-			env->ReleaseCharArrayElements(s,arr, 0);			
-		}
+		jclass cls2 = env->GetObjectClass(rsv);
+		jmethodID mid3 = env->GetMethodID(cls2, "getNewArray", "(I)[C");
+		jcharArray s = (jcharArray)env->CallObjectMethod(rsv, mid3, retSignalLength);
+		jchar* arr=env->GetCharArrayElements(s,0);
+		for (jsize i=0;i<retSignalLength;i++)
+			arr[i]=(unsigned char)retSignalValue[i];
+		env->ReleaseCharArrayElements(s,arr, 0);			
 	}
 
 	env->ReleaseStringUTFChars( sn,signalName);
@@ -5713,8 +6066,6 @@ JNIEXPORT jint JNICALL Java_coppelia_remoteApi_simxQuery(JNIEnv *env, jobject ob
 JNIEXPORT jint JNICALL Java_coppelia_remoteApi_simxGetObjectGroupData(JNIEnv *env, jobject obj, jint clientID, jint objectType, jint dataType, jobject handles, jobject intData, jobject floatData, jobject stringData, jint operationMode)
 {
 	simxInt theClientID = clientID;
-//	simxInt theObjectType = objectType;
-//	simxInt theDataType = dataType;
 	simxInt theHandleCount;
 	simxInt theIntDataCount;
 	simxInt theFloatDataCount;
@@ -5788,6 +6139,152 @@ JNIEXPORT jint JNICALL Java_coppelia_remoteApi_simxGetObjectVelocity(JNIEnv *env
 	return retVal;
 }
 
+JNIEXPORT jint JNICALL Java_coppelia_remoteApi_simxCallScriptFunction(JNIEnv *env, jobject obj, jint clientID, jstring scriptDescription, jint options, jstring functionName, jobject inInts, jobject inFloats, jobject inStrings, jobject inBuffer, jobject outInts, jobject outFloats, jobject outStrings, jobject outBuffer, jint operationMode)
+{
+	simxInt theClientID = clientID;
+	const char *theScriptDescription = env->GetStringUTFChars(scriptDescription, 0);
+	simxInt theOptions = options;
+	const char *theFunctionName = env->GetStringUTFChars(functionName, 0);
+	simxInt theOpMode=operationMode;
+
+	simxInt theOutIntCnt;
+	simxInt theOutFloatCnt;
+	simxInt theOutStringCnt;
+	simxInt theOutBufferSize;
+	simxInt* theOutInts;
+	simxFloat* theOutFloats;
+	simxChar* theOutStrings;
+	simxUChar* theOutBuffer;
+
+
+	jsize theInIntCnt=0;
+	simxInt* theInInts=NULL;
+	if (inInts!=NULL)
+	{
+		jclass cls = env->GetObjectClass(inInts);
+		jmethodID mid = env->GetMethodID(cls, "getLength", "()I");
+		theInIntCnt = env->CallIntMethod(inInts, mid );	
+		theInInts = new simxInt[theInIntCnt];
+		cls = env->GetObjectClass(inInts);
+		mid = env->GetMethodID(cls, "getArray", "()[I");
+		jintArray hdlArray = (jintArray)env->CallObjectMethod(inInts, mid);	
+		env->GetIntArrayRegion(hdlArray,0, theInIntCnt, (jint*)theInInts);
+	}
+
+	jsize theInFloatCnt=0;
+	simxFloat* theInFloats=NULL;
+	if (inFloats!=NULL)
+	{
+		jclass cls = env->GetObjectClass(inFloats);
+		jmethodID mid = env->GetMethodID(cls, "getLength", "()I");
+		theInFloatCnt = env->CallIntMethod(inFloats, mid );	
+		theInFloats = new simxFloat[theInFloatCnt];
+		cls = env->GetObjectClass(inFloats);
+		mid = env->GetMethodID(cls, "getArray", "()[F");
+		jfloatArray hdlArray = (jfloatArray)env->CallObjectMethod(inFloats, mid);	
+		env->GetFloatArrayRegion(hdlArray,0, theInFloatCnt, (jfloat*)theInFloats);
+	}
+
+	jsize theInStringCnt=0;
+	simxChar* theInStrings=NULL;
+	if (inStrings!=NULL)
+	{
+		jclass cls = env->GetObjectClass(inStrings);
+		jmethodID mid = env->GetMethodID(cls, "getLength", "()I");
+		theInStringCnt = env->CallIntMethod(inStrings, mid );
+		cls = env->GetObjectClass(inStrings);
+		mid = env->GetMethodID(cls, "getArray", "()[Ljava/lang/String;");
+		jobjectArray hdlArray = (jobjectArray)env->CallObjectMethod(inStrings, mid);	
+		int totSize=0;
+		for (int i=0;i<theInStringCnt;i++)
+		{
+			jstring str=(jstring)env->GetObjectArrayElement(hdlArray,i);
+			const char *str2=env->GetStringUTFChars(str,0);
+			totSize=extApi_getStringLength(str2)+1;
+		}
+		theInStrings = new simxChar[totSize];
+		int _of=0;
+		for (int i=0;i<theInStringCnt;i++)
+		{
+			jstring str=(jstring)env->GetObjectArrayElement(hdlArray,i);
+			const char *str2=env->GetStringUTFChars(str,0);
+			for (int j=0;j<int(extApi_getStringLength(str2))+1;j++)
+			{
+				theInStrings[_of]=str2[j];
+				_of++;
+			}
+		}
+	}
+
+	jint theInBufferSize=0;
+	char* theInBuffer=NULL;
+	if (inBuffer!=NULL)
+	{
+		jclass inBufferCls = env->GetObjectClass(inBuffer);
+		jmethodID inBufferMid1 = env->GetMethodID(inBufferCls, "getLength", "()I");
+		theInBufferSize = env->CallIntMethod(inBuffer, inBufferMid1);
+		theInBuffer=new char[theInBufferSize];
+		jmethodID inBufferMid2 = env->GetMethodID(inBufferCls, "getArray", "()[C");
+		jcharArray buffArray = (jcharArray)env->CallObjectMethod(inBuffer, inBufferMid2);
+		jchar* arr=env->GetCharArrayElements(buffArray,0);
+		for (jsize i=0;i<theInBufferSize;i++)
+			theInBuffer[i]=(arr[i]&255);
+		env->ReleaseCharArrayElements(buffArray,arr, 0);			
+	}
+
+	simxInt retVal = simxCallScriptFunction(theClientID,theScriptDescription,theOptions,theFunctionName,theInIntCnt,theInInts,theInFloatCnt,theInFloats,theInStringCnt,theInStrings,theInBufferSize,(simxUChar*)theInBuffer,&theOutIntCnt,&theOutInts,&theOutFloatCnt,&theOutFloats,&theOutStringCnt,&theOutStrings,&theOutBufferSize,&theOutBuffer,theOpMode);
+
+
+	delete[] theInInts; 
+	delete[] theInFloats; 
+	delete[] theInStrings; 
+	delete[] theInBuffer; 
+
+	if (retVal==0)
+	{
+		if (outInts!=NULL)
+		{
+			jclass outIntsCls = env->GetObjectClass(outInts);
+			jmethodID outIntsMid = env->GetMethodID(outIntsCls, "getNewArray", "(I)[I");
+			jintArray outIntsArray = (jintArray)env->CallObjectMethod(outInts, outIntsMid, theOutIntCnt);	
+			env->SetIntArrayRegion( outIntsArray, 0, theOutIntCnt, (const jint*)theOutInts );
+		}
+
+		if (outFloats!=NULL)
+		{
+			jclass outFloatsCls = env->GetObjectClass(outFloats);
+			jmethodID outFloatsMid = env->GetMethodID(outFloatsCls, "getNewArray", "(I)[F");
+			jfloatArray outFloatsArray = (jfloatArray)env->CallObjectMethod(outFloats, outFloatsMid, theOutFloatCnt);	
+			env->SetFloatArrayRegion( outFloatsArray, 0, theOutFloatCnt, (const jfloat*)theOutFloats );
+		}
+
+		if (outStrings!=NULL)
+		{
+			jclass outStringsCls = env->GetObjectClass(outStrings);
+			jmethodID outStringsMid = env->GetMethodID(outStringsCls, "getNewArray", "(I)[Ljava/lang/String;");
+			jobjectArray outStringsArray = (jobjectArray)env->CallObjectMethod( outStrings, outStringsMid, theOutStringCnt);
+			int slen = 0;
+			for(int i=0;i<theOutStringCnt;i++)
+			{
+				jstring s = env->NewStringUTF(theOutStrings+slen);
+				env->SetObjectArrayElement(outStringsArray, i, s);
+				slen += (env->GetStringLength(s) + 1);
+			}
+		}
+
+		if (outBuffer!=NULL)
+		{
+			jclass outBufferCls = env->GetObjectClass(outBuffer);
+			jmethodID outBufferMid = env->GetMethodID(outBufferCls, "getNewArray", "(I)[C");
+			jcharArray s = (jcharArray)env->CallObjectMethod(outBuffer, outBufferMid, theOutBufferSize);
+			jchar* arr=env->GetCharArrayElements(s,0);
+			for (jsize i=0;i<theOutBufferSize;i++)
+				arr[i]=(unsigned char)theOutBuffer[i];
+			env->ReleaseCharArrayElements(s,arr, 0);
+		}
+	}
+	return retVal;
+}
 
 
 }

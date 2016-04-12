@@ -1,6 +1,6 @@
 // This file is part of the REMOTE API
 // 
-// Copyright 2006-2015 Coppelia Robotics GmbH. All rights reserved. 
+// Copyright 2006-2016 Coppelia Robotics GmbH. All rights reserved. 
 // marc@coppeliarobotics.com
 // www.coppeliarobotics.com
 // 
@@ -24,14 +24,14 @@
 // along with the REMOTE API.  If not, see <http://www.gnu.org/licenses/>.
 // -------------------------------------------------------------------
 //
-// This file was automatically created for V-REP release V3.2.1 on May 3rd 2015
+// This file was automatically created for V-REP release V3.3.0 on February 19th 2016
 
 #ifndef _EXTAPI__
 #define _EXTAPI__
 
 #ifdef NON_MATLAB_PARSING /* when compiling, make sure NON_MATLAB_PARSING is always defined! */
-	#include <vrep_lib/remoteApi/extApiPlatform.h>
-	#include <vrep_lib/include/v_repConst.h>
+	#include "extApiPlatform.h"
+	#include "v_repConst.h"
 #else 
 	typedef char simxChar;
 	typedef unsigned char simxUChar;
@@ -72,6 +72,7 @@ simxUChar* _exec_intint_buffer(simxInt clientID,simxInt cmdRaw,simxInt opMode,si
 simxUChar* _exec_int_float(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUChar options,simxInt intValue,simxFloat floatValue,simxInt* error);
 simxUChar* _exec_int_buffer(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUChar options,simxInt intValue,simxUChar* buffer,simxInt bufferSize,simxInt* error);
 simxUChar* _exec_string_buffer(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUChar options,const simxUChar* stringValue,simxUChar* buffer,simxInt bufferSize,simxInt* error);
+simxUChar* _exec_intstringstring_buffer(simxInt clientID,simxInt cmdRaw,simxInt opMode,simxUChar options,simxInt intValue,const simxUChar* stringValue1,const simxUChar* stringValue2,simxUChar* buffer,simxInt bufferSize,simxInt* error);
 
 simxUChar _readPureDataChar(simxUChar* commandPointer,simxInt stringCnt,simxInt byteOffset);
 simxInt _readPureDataInt(simxUChar* commandPointer,simxInt stringCnt,simxInt byteOffset);
@@ -82,6 +83,7 @@ simxUChar* _getCommandPointer_(simxInt cmdRaw,const simxUChar* commandBufferStar
 simxUChar* _getCommandPointer_i(simxInt cmdRaw,simxInt intValue,const simxUChar* commandBufferStart,simxInt commandBufferSize);
 simxUChar* _getCommandPointer_ii(simxInt cmdRaw,simxInt intValue1,simxInt intValue2,const simxUChar* commandBufferStart,simxInt commandBufferSize);
 simxUChar* _getCommandPointer_s(simxInt cmdRaw,const simxUChar* stringValue,const simxUChar* commandBufferStart,simxInt commandBufferSize);
+simxUChar* _getCommandPointer_iss(simxInt cmdRaw,simxInt intValue,const simxUChar* stringValue1,const simxUChar* stringValue2,const simxUChar* commandBufferStart,simxInt commandBufferSize);
 
 simxUChar* _appendCommand_(simxInt cmd,simxUChar options,simxUShort delayOrSplit,simxUChar* buffer,simxInt* buffer_bufferSize,simxInt* buffer_dataSize);
 simxUChar* _appendCommand_null_buff(simxInt cmd,simxUChar options,simxUChar* buffer,simxInt bufferSize,simxUShort delayOrSplit,simxUChar* destBuffer,simxInt* destBuffer_bufferSize,simxInt* destBuffer_dataSize);
@@ -94,6 +96,7 @@ simxUChar* _appendCommand_i_f(simxInt cmd,simxUChar options,simxInt intValue,sim
 simxUChar* _appendCommand_i_buff(simxInt cmd,simxUChar options,simxInt intValue,simxUChar* buffer,simxInt bufferSize,simxUShort delayOrSplit,simxUChar* destBuffer,simxInt* destBuffer_bufferSize,simxInt* destBuffer_dataSize);
 simxUChar* _appendCommand_ii_buff(simxInt cmd,simxUChar options,simxInt intValue1,simxInt intValue2,simxUChar* buffer,simxInt bufferSize,simxUShort delayOrSplit,simxUChar* destBuffer,simxInt* destBuffer_bufferSize,simxInt* destBuffer_dataSize);
 simxUChar* _appendCommand_s_buff(simxInt cmd,simxUChar options,const simxUChar* stringValue,simxUChar* buffer,simxInt bufferSize,simxUShort delayOrSplit,simxUChar* destBuffer,simxInt* destBuffer_bufferSize,simxInt* destBuffer_dataSize);
+simxUChar* _appendCommand_iss_buff(simxInt cmd,simxUChar options,simxInt intValue,const simxUChar* stringValue1,const simxUChar* stringValue2,simxUChar* buffer,simxInt bufferSize,simxUShort delayOrSplit,simxUChar* destBuffer,simxInt* destBuffer_bufferSize,simxInt* destBuffer_dataSize);
 
 simxUChar* _appendChunkToBuffer(const simxUChar* chunk,simxInt chunkSize,simxUChar* buffer,simxInt* buffer_bufferSize,simxInt* buffer_dataSize);
 simxVoid _removeChunkFromBuffer(const simxUChar* bufferStart,simxUChar* chunkStart,simxInt chunkSize,simxInt* buffer_dataSize);
@@ -104,6 +107,7 @@ simxInt _removeCommandReply_null(simxInt clientID,simxInt cmdRaw);
 simxInt _removeCommandReply_int(simxInt clientID,simxInt cmdRaw,simxInt intValue);
 simxInt _removeCommandReply_intint(simxInt clientID,simxInt cmdRaw,simxInt intValue1,simxInt intValue2);
 simxInt _removeCommandReply_string(simxInt clientID,simxInt cmdRaw,const simxUChar* stringValue);
+simxInt _removeCommandReply_intstringstring(simxInt clientID,simxInt cmdRaw,simxInt intValue,const simxUChar* stringValue1,const simxUChar* stringValue2);
 
 simxUChar* _getSameCommandPointer(const simxUChar* cmdPtr,simxUChar* cmdBuffer,simxInt cmdBufferSize);
 SIMX_THREAD_RET_TYPE _communicationThread(simxVoid* p);
@@ -174,6 +178,7 @@ EXTAPI_DLLEXPORT simxInt simxSetFloatingParameter(simxInt clientID,simxInt param
 EXTAPI_DLLEXPORT simxInt simxGetStringParameter(simxInt clientID,simxInt paramIdentifier,simxChar** paramValue,simxInt operationMode);
 EXTAPI_DLLEXPORT simxInt simxGetCollisionHandle(simxInt clientID,const simxChar* collisionObjectName,simxInt* handle,simxInt operationMode);
 EXTAPI_DLLEXPORT simxInt simxGetDistanceHandle(simxInt clientID,const simxChar* distanceObjectName,simxInt* handle,simxInt operationMode);
+EXTAPI_DLLEXPORT simxInt simxGetCollectionHandle(simxInt clientID,const simxChar* collectionName,simxInt* handle,simxInt operationMode);
 EXTAPI_DLLEXPORT simxInt simxReadCollision(simxInt clientID,simxInt collisionObjectHandle,simxUChar* collisionState,simxInt operationMode);
 EXTAPI_DLLEXPORT simxInt simxReadDistance(simxInt clientID,simxInt distanceObjectHandle,simxFloat* minimumDistance,simxInt operationMode);
 EXTAPI_DLLEXPORT simxInt simxRemoveObject(simxInt clientID,simxInt objectHandle,simxInt operationMode);
@@ -211,6 +216,7 @@ EXTAPI_DLLEXPORT simxInt simxCreateDummy(simxInt clientID,simxFloat size,const s
 EXTAPI_DLLEXPORT simxInt simxQuery(simxInt clientID,const simxChar* signalName,const simxUChar* signalValue,simxInt signalLength,const simxChar* retSignalName,simxUChar** retSignalValue,simxInt* retSignalLength,simxInt timeOutInMs);
 EXTAPI_DLLEXPORT simxInt simxGetObjectGroupData(simxInt clientID,simxInt objectType,simxInt dataType,simxInt* handlesCount,simxInt** handles,simxInt* intDataCount,simxInt** intData,simxInt* floatDataCount,simxFloat** floatData,simxInt* stringDataCount,simxChar** stringData,simxInt operationMode);
 EXTAPI_DLLEXPORT simxInt simxGetObjectVelocity(simxInt clientID,simxInt objectHandle,simxFloat* linearVelocity,simxFloat* angularVelocity,simxInt operationMode);
+EXTAPI_DLLEXPORT simxInt simxCallScriptFunction(simxInt clientID,const simxChar* scriptDescription,simxInt options,const simxChar* functionName,simxInt inIntCnt,const simxInt* inInt,simxInt inFloatCnt,const simxFloat* inFloat,simxInt inStringCnt,const simxChar* inString,simxInt inBufferSize,const simxUChar* inBuffer,simxInt* outIntCnt,simxInt** outInt,simxInt* outFloatCnt,simxFloat** outFloat,simxInt* outStringCnt,simxChar** outString,simxInt* outBufferSize,simxUChar** outBuffer,simxInt operationMode);
 
 
 
@@ -249,6 +255,8 @@ EXTAPI_DLLEXPORT simxInt mtlb_simxAuxiliaryConsoleOpen(simxInt* clientIDandMaxLi
 EXTAPI_DLLEXPORT simxInt mtlb_simxDisplayDialog(simxInt* clientIDandDlgTypeAndOperationMode,const simxChar* titleText,const simxChar* mainText,const simxChar* initialText,const simxFloat* titleColorsAndDlgColors,simxInt* dialogHandleAndUiHandle);
 EXTAPI_DLLEXPORT simxInt mtlb_simxQuery(simxInt* clientIDandSignalLengthAndTimeOutInMs,const simxChar* signalName,const simxUChar* signalValue,const simxChar* retSignalName,simxUChar** retSignalValue,simxInt* retSignalLength);
 EXTAPI_DLLEXPORT simxInt mtlb_simxGetObjectGroupData(simxInt* clientIDandObjectTypeAndDataTypeAndOperationMode,simxInt* handlesCountAndIntDataCountAndFloatDataCountAndStringDataCount,simxInt** handles,simxInt** intData,simxFloat** floatData,simxChar** stringData);
+EXTAPI_DLLEXPORT simxInt mtlb_simxCallScriptFunction_a(const simxInt* variousIntsIn,const simxChar* scriptDescriptionAndFunctionName,const simxInt* inInt,const simxFloat* inFloat,const simxChar* inString,const simxUChar* inBuffer);
+EXTAPI_DLLEXPORT simxInt mtlb_simxCallScriptFunction_b(simxInt clientID,simxInt* variousIntsOut,simxInt** outInt,simxFloat** outFloat,simxChar** outString,simxUChar** outBuffer);
 
 
 #endif /* _EXTAPI__ */		

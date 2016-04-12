@@ -35,3 +35,4 @@ endif(ENABLE_G3LOG)
 # Add sub source directories
 add_subdirectory(src/control)
 add_subdirectory(src/vrep_sim)
+add_subdirectory(src/apps)
