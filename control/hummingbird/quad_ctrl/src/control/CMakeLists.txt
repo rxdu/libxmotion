@@ -2,7 +2,9 @@
 include_directories(${CMAKE_SOURCE_DIR}/inc)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/src)
+if (ENABLE_G3LOG)
 include_directories(${CMAKE_SOURCE_DIR}/src/g3log_srcl/src)
+endif (ENABLE_G3LOG)
 
 # Dependency libraries
 #find_package(OpenCV REQUIRED)

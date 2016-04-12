@@ -5,7 +5,9 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/src/control)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/vrep_lib/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/vrep_lib/remoteApi)
+if (ENABLE_G3LOG)
 include_directories(${CMAKE_SOURCE_DIR}/src/g3log_srcl/src)
+endif (ENABLE_G3LOG)
 
 # Dependency libraries
 #find_package(OpenCV REQUIRED)
