@@ -22,7 +22,7 @@ Graph is a type of data structure that can be used to represent pairwise relatio
     * ...
     * Edge n_m
 
-A minimal implementation of Graph consists of a list of vertices, each of which has an unique ID and a list of edges. For path finding in the graph, we have attributes, such as cost, in the edge and search function, such as A* search can be provided with the graph. These attributes and methods are generic for all graphs.
+A minimal implementation of Graph consists of a list of vertices, each of which has an unique ID and a list of edges. For path finding in the graph, we need to add extra attributes, such as edge cost in Edge and heuristics, flags in Vertex for A* search. These attributes are generic for all graphs.
 
 In different contexts, we usually want to add non-generic attributes to the vertex so that it can be meaningful for the application. For example when we use a graph to represent a square grid, a square cell can be regarded as a vertex, and the connectivities of a cell with its neighbour cells can be represented as edges. In this case, a square cell (vertex) may have attributes such as its location in the grid and its occupancy type (cell filled with obstacle or not). Such attributes can be very different across different applications, thus they are not modeled directly in the "Vertex" data structure. Instead, the "additional information" is packed into a separate object (called a **node** in this design) and we associate a node with a vertex uniquely.
 
@@ -87,7 +87,7 @@ Edge: start - 2 , end - 3 , cost - 2.5
 
 ### c. Memory Management
 
-When a Graph object goes out of scope, its destructor function will recycle memory allocated for this its vertices and edges. However, **the graph doesn't recycle memoery allocated for the node that each vertex is associated with**. In the square grid example, the graph doesn't assume the square grid also becomes useless when the graph itself is destructed. The **square grid** should be responsible for recycling the memory allocated for its square cells when it becomes of no use. Thus in the above simple example, we will need to do the following operation to free the memory at the end.
+When a Graph object goes out of scope, its destructor function will recycle memory allocated for this its vertices and edges. However, **the graph doesn't recycle memory allocated for the node that each vertex is associated with**. In the square grid example, the graph doesn't assume the square grid also becomes useless when the graph itself is destructed. The **square grid** should be responsible for recycling the memory allocated for its square cells when it becomes of no use. Thus in the above simple example, we will need to do the following operation to free the memory at the end.
 
 ~~~
 // delete objects of ExampleNode
@@ -95,10 +95,11 @@ for(auto e : nodes)
 		delete e;
 ~~~
 
-### d. Notes
+### d. Notes on Graph
 
 * You may have noticed that when constructing a graph, you don't need to explicitly create objects of "Vertex". By calling member function **AddEdge(src_node, dst_node, cost)** of the graph, vertices are created and associated with the according node internally.
-* There are two views of the graph data structure. When constructing the graph (bottom-up view), the nodes are manipulated directly and vertices are handled implicitly. When using the graph (top-down view) for path search, vertices are the the entities you're directly interacting with and the nodes they associate with are probably of less interest. Of course, you can access one from the other easily from their common ID.
+* There are two views of the graph data structure. When constructing the graph (bottom-up view), the nodes are manipulated directly and vertices are handled implicitly. When using the graph (top-down view) for path search, vertices are the the entities you're directly interacting with and the nodes they associate with are probably of less interest. Of course, you can access one from the other easily using their common ID.
+* A* performs search on Vertex objects, so the A* algorithm also has a "type". In this implementation, A* search is provided as a member function of Graph. So you don't need to explicitly declare and initialize an A* instance. You can simply perform search on a graph by calling the search function packed in the graph.
 * An detailed example of using the graph for path search can be found in "apps/example.cpp". The work flow is shown as follows.
 
 ~~~

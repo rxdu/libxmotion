@@ -34,8 +34,6 @@ Graph<QuadTreeNode>* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 			leaf_nodes.push_back((*it));
 	}
 
-//	std::cout<<"free leaf nodes: "<<leaf_nodes.size()<<std::endl;
-
 	// Find neighbors of each leaf node
 	int idx = 0;
 	for(auto it = leaf_nodes.begin(); it != leaf_nodes.end(); it++)
@@ -43,7 +41,6 @@ Graph<QuadTreeNode>* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 		std::vector<QuadTreeNode*> neighbours;
 
 		neighbours = tree->FindNeighbours((*it));
-//		std::cout<<"neighbour num: "<<neighbours.size()<<std::endl;
 
 		for(auto itn = neighbours.begin(); itn != neighbours.end(); itn++)
 		{
@@ -52,15 +49,11 @@ Graph<QuadTreeNode>* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 				long y_error =  static_cast<long>((*it)->location_.y) - static_cast<long>((*itn)->location_.y);
 				double cost = sqrt(static_cast<double>(pow(x_error,2)
 						+ pow(y_error,2)));
-//				std::cout << "pos a (x,y): ( " <<  (*it)->location_.x << " , "<< (*it)->location_.y << " )"<< std::endl;
-//				std::cout << "pos b (x,y): ( " <<  (*itn)->location_.x << " , "<< (*itn)->location_.y << " )" << std::endl;
-//				std::cout << "cost: "<< cost << std::endl;
+
 				graph->AddEdge((*it), (*itn), cost);
 			}
 		}
 	}
-
-//	std::cout<<"graph vertex num: "<<graph_->GetGraphVertices().size()<<std::endl;
 
 	return graph;
 }
@@ -84,10 +77,8 @@ Graph<SquareCell>* GraphBuilder::BuildFromSquareGrid(SquareGrid* grid, bool allo
 					error_x = std::abs(static_cast<long>((*itn)->location_.x) - static_cast<long>((*itc).second->location_.x));
 					error_y = std::abs(static_cast<long>((*itn)->location_.y) - static_cast<long>((*itc).second->location_.y));
 					cost = std::sqrt(error_x*error_x + error_y*error_y);
-//					std::cout << "cost: "<<cost<<std::endl;
-					graph->AddEdge((*itc).second, (*itn), cost);
 
-//					graph->AddEdge((*itc).second, (*itn), 1.0);
+					graph->AddEdge((*itc).second, (*itn), cost);
 				}
 			}
 		}
