@@ -21,15 +21,24 @@ $ sudo apt-get install libopencv-dev python-opencv
 
 ```
 $ cd ~/Workspace/srcl_robot_suite/srcl_ctrl/
-$ mkdir build
-$ cd build
+$ mkdir -p build/planning_build
+$ cd build/planning_build
 ```
 * Run the command to generate eclipse project from cmake
 
 ```
-$ cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug ../planning
+$ cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug ../../planning
 ```
 * Import generated project located at build folder into eclipse
+
+Similarly you can generate eclipse project for the quadrotor simulation code.
+
+```
+$ cd ~/Workspace/srcl_robot_suite/srcl_ctrl/build
+$ mkdir quadctrl_build
+$ cd quadctrl_build
+$ cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug ../../control/hummingbird/quad_ctrl/
+```
 
 You can install an Eclipse plugin from the following source to edit CMAKE files:
 

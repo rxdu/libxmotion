@@ -22,15 +22,20 @@ extern "C" {
 }
 
 // headers for g3log
+#ifdef ENABLE_LOG
 #include "g3log/g3log.hpp"
 #include "g3log/logworker.hpp"
 #include "g3log/std2_make_unique.hpp"
+#endif
 
 // headers for user code
 #include "sim_process/quad_sim_process.h"
 #include "main.h"
 
+#ifdef ENABLE_LOG
 using namespace g3;
+#endif
+
 using namespace srcl_ctrl;
 
 #define USE_FIXED_PORT_NUM

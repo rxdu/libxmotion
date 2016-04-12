@@ -9,7 +9,9 @@
 #include <iomanip>
 #include <cmath>
 
+#ifdef ENABLE_LOG
 #include "g3log/g3log.hpp"
+#endif
 
 #include "controller/att_quat_con.h"
 #include "utils/utils_log.h"

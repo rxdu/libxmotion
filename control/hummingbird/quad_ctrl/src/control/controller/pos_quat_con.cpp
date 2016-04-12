@@ -8,7 +8,9 @@
 #include <iostream>
 #include <cmath>
 
+#ifdef ENABLE_LOG
 #include "g3log/g3log.hpp"
+#endif
 
 #include "controller/pos_quat_con.h"
 

@@ -8,9 +8,10 @@
 #include <iostream>
 #include <string>
 
+#ifdef ENABLE_LOG
 #include "g3log/g3log.hpp"
+#endif
 
-#include "main.h"
 #include "sim_process/quad_sim_process.h"
 #include "controller/att_euler_con.h"
 #include "controller/pos_euler_con.h"

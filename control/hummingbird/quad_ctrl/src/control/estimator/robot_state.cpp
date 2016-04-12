@@ -9,7 +9,9 @@
 #include <iostream>
 #include <iomanip>
 
+#ifdef ENABLE_LOG
 #include "g3log/g3log.hpp"
+#endif
 
 #include "estimator/robot_state.h"
 #include "utils/utils_log.h"
