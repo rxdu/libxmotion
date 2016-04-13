@@ -20,6 +20,7 @@ PosQuatCon::PosQuatCon(RobotState* _rs):
 		Controller(_rs),zint_uppper_limit(0.1),zint_lower_limit(-1.0),
 		xyint_uppper_limit(0.8), xyint_lower_limit(-0.8)
 {
+	// 0-1: 3.8, 0.08, 3.2
 	kp_0 = 3.8;
 	ki_0 = 0.08;
 	kd_0 = 3.2;
@@ -29,8 +30,12 @@ PosQuatCon::PosQuatCon(RobotState* _rs):
 	kd_1 = 3.2;
 
 	// kp kd 1.8 2.45
-	kp_2 = 1.2;
-	ki_2 = 0.08;
+//	kp_2 = 1.2;
+//	ki_2 = 0.08;
+//	kd_2 = 1.85;
+	// 1.25, 0.145, 1.65
+	kp_2 = 1.8;
+	ki_2 = 0.05;
 	kd_2 = 1.85;
 
 	pos_e_integral[0] = 0.0;
@@ -96,7 +101,8 @@ void PosQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 
 //	std::cout << "pos error integral (x, y, z): " << pos_e_integral[0] << " , " << pos_e_integral[1] << " , " << pos_e_integral[2] << std::endl;
 
-	Eigen::Vector3d Fi(acc_desired[0], acc_desired[1], acc_desired[2] + rs_->g_);
+	Eigen::Vector3d Fi(acc_desired[0]+input->acc_d[0], acc_desired[1]+input->acc_d[1], acc_desired[2] + input->acc_d[2] + rs_->g_);
+//	Eigen::Vector3d Fi(acc_desired[0], acc_desired[1], acc_desired[2] + rs_->g_);
 	Eigen::Vector3d Fi_n;
 	Eigen::Vector3d Fb_n(0,0,1);
 
@@ -111,7 +117,6 @@ void PosQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	double scale;
 	double qd_wd;
 	Eigen::Quaterniond quat_pr;
-//	Eigen::Quaterniond quat_y;
 
 	FbT_Fi = Fb_n.transpose() * Fi_n;
 

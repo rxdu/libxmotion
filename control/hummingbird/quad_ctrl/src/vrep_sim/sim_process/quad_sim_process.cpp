@@ -10,6 +10,7 @@
 
 #ifdef ENABLE_LOG
 #include "g3log/g3log.hpp"
+#include "utils/utils_log.h"
 #endif
 
 #include "sim_process/quad_sim_process.h"
@@ -40,14 +41,10 @@ void QuadSimProcess::SimLoopUpdate(void)
 
 	//(Extended Kalman Filter)
 
-
 	/********* update position control *********/
 	// invoke position controller update
-	// input: (x,y,z,u,v,w)^desired
-	// output: (phi, theta, psi, p, q, r)^desired
 	ControlInput pos_con_input;
 	ControlOutput pos_con_output;
-	PosEulerCon pos_con(&rs_);
 
 	double height = 0.5;
 	double radius = 1.5;
@@ -67,6 +64,12 @@ void QuadSimProcess::SimLoopUpdate(void)
 		pos_con_input.pos_d[0] = 0;
 		pos_con_input.pos_d[1] = -radius;
 		pos_con_input.pos_d[2] = height;
+		pos_con_input.vel_d[0] = 0;
+		pos_con_input.vel_d[1] = 0;
+		pos_con_input.vel_d[2] = 0;
+		pos_con_input.acc_d[0] = 0;
+		pos_con_input.acc_d[1] = 0;
+		pos_con_input.acc_d[2] = 0;
 		pos_con_input.yaw_d = 0;
 	}
 	else
@@ -75,31 +78,33 @@ void QuadSimProcess::SimLoopUpdate(void)
 		pos_con_input.pos_d[0] = radius * cos(angle - M_PI/2);
 		pos_con_input.pos_d[1] = radius * sin(angle - M_PI/2);
 		pos_con_input.pos_d[2] = height;
-		pos_con_input.yaw_d = angle; //0;//M_PI/2;
-//		pos_con_input.pos_d[0] = 0;
-//		pos_con_input.pos_d[1] = 0;
-//		pos_con_input.pos_d[2] = height;
-//		pos_con_input.yaw_d = M_PI/2;// - M_PI * 15.0/180.0 ;//M_PI;
+
+		pos_con_input.vel_d[0] = - radius * sin(angle - M_PI/2) * 0.01*circle_ang_vel;
+		pos_con_input.vel_d[1] = radius * cos(angle - M_PI/2) * 0.01*circle_ang_vel;
+		pos_con_input.vel_d[2] = 0;
+
+		pos_con_input.acc_d[0] = - radius * cos(angle - M_PI/2) * 0.01*circle_ang_vel * 0.01*circle_ang_vel;
+		pos_con_input.acc_d[1] = - radius * sin(angle - M_PI/2) * 0.01*circle_ang_vel * 0.01*circle_ang_vel;
+		pos_con_input.acc_d[2] = 0;
+
+		pos_con_input.yaw_d = angle;
 	}
 
-	pos_con_input.vel_d[0] = 0;
-	pos_con_input.vel_d[1] = 0;
-	pos_con_input.vel_d[2] = 0;
+//	pos_con_input.pos_d[0] = 0;
+//	pos_con_input.pos_d[1] = 0;
+//	pos_con_input.pos_d[2] = height;
+//	pos_con_input.vel_d[0] = 0;
+//	pos_con_input.vel_d[1] = 0;
+//	pos_con_input.vel_d[2] = 0;
+//	pos_con_input.acc_d[0] = 0;
+//	pos_con_input.acc_d[1] = 0;
+//	pos_con_input.acc_d[2] = 0;
+//	pos_con_input.yaw_d = 0;
 
 	pos_quat_con->Update(&pos_con_input, &pos_con_output);
 
 	ControlInput quat_con_input;
-
-	Eigen::Quaterniond rotd(Eigen::AngleAxisd(M_PI*90.0/180.0, Eigen::Vector3d::UnitZ()));
-
-//	Eigen::Quaterniond rotx(Eigen::AngleAxisd(M_PI*15.0/180.0, Eigen::Vector3d::UnitX()));
-//	Eigen::Quaterniond roty(Eigen::AngleAxisd(M_PI*15.0/180.0, rotx.matrix().col(1)));
-//	Eigen::Quaterniond rotz(Eigen::AngleAxisd(M_PI*15.0/180.0, roty.matrix().col(2)));
-//	Eigen::Quaterniond rotd = rotz * roty * rotx;
-
 	quat_con_input.quat_d = pos_con_output.quat_d;
-//	if(process_loop_count >= time_label1)
-//		quat_con_input.quat_d = rotd;
 	quat_con_input.ftotal_d = pos_con_output.ftotal_d;
 	quat_con_input.rot_rate_d[0] = 0;
 	quat_con_input.rot_rate_d[1] = 0;

@@ -20,7 +20,7 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
-# Choose to enable g3log or not
+# Choose to enable g3log or not: on/off
 set(ENABLE_G3LOG off)
 
 # Check if g3log needs to be built
