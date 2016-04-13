@@ -78,6 +78,15 @@ typedef struct
 	QuadCmd motor_cmd;
 } DataToRobot;
 
+typedef struct
+{
+	bool point_empty;
+	float positions[3];
+	float velocities[3];
+	float accelerations[3];
+	float yaw;
+} TrajectoryPoint;
+
 }
 
 #endif /* QUADSIM_CLIENT_QUADSIM_DATATYPES_H_ */

@@ -30,6 +30,7 @@ extern "C" {
 
 // headers for user code
 #include "sim_process/quad_sim_process.h"
+#include "control/motion/trajectory_manager.h"
 #include "main.h"
 
 #ifdef ENABLE_LOG
@@ -44,7 +45,8 @@ using namespace srcl_ctrl;
 #define EXP_PORT_NUM 29999
 #endif
 
-clock_t	last_time = 0;
+uint64_t sim_time = 0;
+TrajectoryPoint last_state;
 
 int main(int argc,char* argv[])
 {
@@ -105,6 +107,11 @@ int main(int argc,char* argv[])
 		// initialize a simulation process
 		QuadSimProcess sim_process(clientID);
 		simxInt ping_time = 0;
+		TrajectoryManager traj_manager;
+		last_state.point_empty = 0;
+		last_state.positions[0] = 0;
+		last_state.positions[1] = 0;
+		last_state.positions[2] = 0;
 
 		std::cout << "INFO: Created a simulation client." << std::endl;
 
@@ -118,16 +125,21 @@ int main(int argc,char* argv[])
 			if(loop_count == 0)
 				std::cout << "INFO: Entered control loop." << std::endl;
 
+			// update simulated control loop
 			if(sim_process.ReceiveDataFromSimulator())
 			{
-				// update simulated control loop
-				sim_process.SimLoopUpdate();
+				// fetch the latest trajectory waypoint
+				TrajectoryPoint pt;
+				pt = traj_manager.GetTrajectoryPoint(sim_time);
 
-//				clock_t time_now = clock();
-//				double freq = 1.0/(double(time_now - last_time)/CLOCKS_PER_SEC);
-//				last_time = time_now;
-
-//				std::cout << "Control loop frequency: " << freq << std::endl;
+				// if no new point, stay where it was
+				if(!pt.point_empty)
+				{
+					sim_process.SimLoopUpdate(pt);
+					last_state = pt;
+				}
+				else
+					sim_process.SimLoopUpdate(last_state);
 			}
 //			else
 //				std::cout<<"failed to fetch data from simulator"<<std::endl;
@@ -135,13 +147,17 @@ int main(int argc,char* argv[])
 			// send command to robot
 			sim_process.SendDataToSimulator();
 
-//			extApi_sleepMs(1); 		// use usleep(1750) to get shorter delay
+			//extApi_sleepMs(1); 		// use usleep(1750) to get shorter delay
 			usleep(50);
 
-			loop_count++;
+			// send trigger to simulator
 			simxSynchronousTrigger(clientID);
 
-			// After this call, the first simulation step is finished (Blocking function call)
+			// every time a trigger is sent, simulation time forwards 10ms
+			sim_time++;
+			loop_count++;
+
+			// after this call, the first simulation step is finished (Blocking function call)
 			simxGetPingTime(clientID, &ping_time);
 		}
 

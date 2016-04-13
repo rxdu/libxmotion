@@ -19,6 +19,8 @@ set(QUADCON_LIB_SRC
     controller/pos_euler_con.cpp
     controller/att_quat_con.cpp
     controller/pos_quat_con.cpp
+    # motion management
+    motion/trajectory_manager.cpp
     # utils
     utils/utils_log.cpp
 )

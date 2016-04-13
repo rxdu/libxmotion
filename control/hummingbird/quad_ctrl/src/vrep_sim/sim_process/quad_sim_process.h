@@ -12,6 +12,7 @@
 #include "sim_process/sim_process.h"
 #include "vrep_client/robot_sim_client.h"
 #include "estimator/robot_state.h"
+#include "controller/att_quat_con.h"
 #include "controller/pos_quat_con.h"
 
 namespace srcl_ctrl
@@ -29,10 +30,12 @@ private:
 	RobotState rs_;
 	RobotState est_rs_;
 
-	PosQuatCon* pos_quat_con;
+	AttQuatCon* att_quat_con_;
+	PosQuatCon* pos_quat_con_;
 
 public:
 	void SimLoopUpdate();
+	void SimLoopUpdate(TrajectoryPoint pt);
 };
 
 }
