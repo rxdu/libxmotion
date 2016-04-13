@@ -103,6 +103,28 @@ public:
 
 		return cost;
 	}
+
+	std::vector<Vertex<VertexNodeType>*> GetNeighbours()
+	{
+		std::vector<Vertex<VertexNodeType>*> neighbours;
+
+		for(auto edge:edges_)
+			neighbours.push_back(edge.dst_);
+
+		return neighbours;
+	}
+
+	bool CheckNeighbour(Vertex<VertexNodeType>* dst_node)
+	{
+		std::vector<Vertex<VertexNodeType>*> neighbours = GetNeighbours();
+
+		auto it = find(neighbours.begin(), neighbours.end(), dst_node);
+
+		if(it != neighbours.end())
+			return true;
+		else
+			return false;
+	}
 };
 
 }

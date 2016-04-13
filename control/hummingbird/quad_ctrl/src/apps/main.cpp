@@ -108,7 +108,7 @@ int main(int argc,char* argv[])
 		QuadSimProcess sim_process(clientID);
 		simxInt ping_time = 0;
 		TrajectoryManager traj_manager;
-		last_state.point_empty = 0;
+		last_state.point_empty = false;
 		last_state.positions[0] = 0;
 		last_state.positions[1] = 0;
 		last_state.positions[2] = 0;
