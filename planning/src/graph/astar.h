@@ -73,8 +73,7 @@ public:
 			current_vertex->is_checked_ = true;
 
 			// check all adjacent vertices (successors of current vertex)
-			typename std::vector<Edge<GraphVertexType>>::iterator ite;
-			for(ite = current_vertex->edges_.begin(); ite != current_vertex->edges_.end(); ite++)
+			for(auto ite = current_vertex->edges_.begin(); ite != current_vertex->edges_.end(); ite++)
 			{
 				GraphVertexType* successor;
 				successor = (*ite).dst_;
@@ -136,11 +135,11 @@ private:
 	{
 		double x1,x2,y1,y2;
 
-		x1 = vertex_a->node_->location_.x;
-		y1 = vertex_a->node_->location_.y;
+		x1 = vertex_a->node_.location_.x;
+		y1 = vertex_a->node_.location_.y;
 
-		x2 = vertex_b->node_->location_.x;
-		y2 = vertex_b->node_->location_.y;
+		x2 = vertex_b->node_.location_.x;
+		y2 = vertex_b->node_.location_.y;
 
 		// static_cast: can get wrong result to use "unsigned long" type for deduction
 		long x_error = static_cast<long>(x1) - static_cast<long>(x2);

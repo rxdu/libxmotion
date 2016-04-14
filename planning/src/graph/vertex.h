@@ -20,17 +20,17 @@ template<typename EdgeVertexType>
 class Edge
 {
 public:
-	Edge(EdgeVertexType *src = nullptr, EdgeVertexType *dst = nullptr, double c = 0.0):
+	Edge(EdgeVertexType* src = nullptr, EdgeVertexType* dst = nullptr, double c = 0.0):
 		src_(src),dst_(dst), cost_(c){};
 
-	EdgeVertexType *src_;
-	EdgeVertexType *dst_;
+	EdgeVertexType* src_;
+	EdgeVertexType* dst_;
 	double cost_;
 
 	bool operator ==(const Edge<EdgeVertexType> other)
 	{
-		if((src_ == other.src_ && dst_ == other.dst_)
-			|| (src_ == other.dst_ && dst_ == other.src_))
+		if((src_->vertex_id_ == other.src_->vertex_id_ && dst_->vertex_id_ == other.dst_->vertex_id_)
+			|| (src_->vertex_id_ == other.dst_->vertex_id_ && dst_->vertex_id_ == other.src_->vertex_id_))
 			return true;
 		else
 			return false;
@@ -50,16 +50,19 @@ template<typename VertexNodeType>
 class Vertex
 {
 public:
-	Vertex(VertexNodeType *node = nullptr):
-		node_(node), vertex_id_(node->node_id_),
-		is_checked_(false), is_in_openlist_(false),
+	Vertex(const VertexNodeType &node):
+		// attributes related to associated node
+		node_(node), vertex_id_(node.node_id_),
+		// common attributes
 		search_parent_(nullptr),
+		is_checked_(false), is_in_openlist_(false),
 		f_astar_(0),g_astar_(0),h_astar_(0){};
+
 	~Vertex(){
 		edges_.clear();
 	};
 
-	VertexNodeType *node_;
+	const VertexNodeType& node_;
 	uint64_t vertex_id_;
 	std::vector<Edge<Vertex<VertexNodeType>>> edges_;
 
@@ -89,14 +92,15 @@ public:
 		h_astar_ = 0.0;
 	}
 
-	double GetEdgeCost(Vertex<VertexNodeType>* dst_node)
+	double GetEdgeCost(const Vertex<VertexNodeType>& dst_node)
 	{
 		double cost = -1;
-		for(auto ite = edges_.begin(); ite != edges_.end(); ite++)
+
+		for(const auto& it : edges_)
 		{
-			if((*ite).dst_->vertex_id_ == dst_node->vertex_id_)
+			if(it.dst_.vertex_id_ == dst_node.vertex_id_)
 			{
-				cost = (*ite).cost_;
+				cost = it.cost_;
 				break;
 			}
 		}
@@ -108,7 +112,7 @@ public:
 	{
 		std::vector<Vertex<VertexNodeType>*> neighbours;
 
-		for(auto edge:edges_)
+		for(const auto& edge:edges_)
 			neighbours.push_back(edge.dst_);
 
 		return neighbours;

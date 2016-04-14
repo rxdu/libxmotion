@@ -22,3 +22,5 @@ C++
 
 * http://stackoverflow.com/questions/23488326/c-stdvector-of-references
 * http://stackoverflow.com/questions/332030/when-should-static-cast-dynamic-cast-const-cast-and-reinterpret-cast-be-used
+* http://stackoverflow.com/questions/14528902/class-template-with-both-pointer-type-and-regular-type
+* http://stackoverflow.com/questions/14466620/c-template-specialization-calling-methods-on-types-that-could-be-pointers-or/14466705

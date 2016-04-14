@@ -50,7 +50,7 @@ Graph<QuadTreeNode>* GraphBuilder::BuildFromQuadTree(QuadTree *tree)
 				double cost = sqrt(static_cast<double>(pow(x_error,2)
 						+ pow(y_error,2)));
 
-				graph->AddEdge((*it), (*itn), cost);
+				graph->AddEdge(*(*it), *(*itn), cost);
 			}
 		}
 	}
@@ -78,7 +78,7 @@ Graph<SquareCell>* GraphBuilder::BuildFromSquareGrid(SquareGrid* grid, bool allo
 					error_y = std::abs(static_cast<long>((*itn)->location_.y) - static_cast<long>((*itc).second->location_.y));
 					cost = std::sqrt(error_x*error_x + error_y*error_y);
 
-					graph->AddEdge((*itc).second, (*itn), cost);
+					graph->AddEdge(*((*itc).second), *(*itn), cost);
 				}
 			}
 		}
