@@ -25,6 +25,8 @@ private:
 
 public:
 	void ClearTrajectory();
+	void SetTrajectory(std::vector<TrajectoryPoint>& traj);
+	void SetTestTrajectory();
 	TrajectoryPoint GetTrajectoryPoint(uint64_t t);
 };
 
