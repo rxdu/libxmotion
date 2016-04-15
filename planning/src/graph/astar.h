@@ -135,11 +135,11 @@ private:
 	{
 		double x1,x2,y1,y2;
 
-		x1 = vertex_a->node_.location_.x;
-		y1 = vertex_a->node_.location_.y;
+		x1 = vertex_a->bundled_data_.location_.x;
+		y1 = vertex_a->bundled_data_.location_.y;
 
-		x2 = vertex_b->node_.location_.x;
-		y2 = vertex_b->node_.location_.y;
+		x2 = vertex_b->bundled_data_.location_.x;
+		y2 = vertex_b->bundled_data_.location_.y;
 
 		// static_cast: can get wrong result to use "unsigned long" type for deduction
 		long x_error = static_cast<long>(x1) - static_cast<long>(x2);

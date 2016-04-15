@@ -16,18 +16,28 @@ namespace srcl_ctrl {
 /*								 Edge  										*/
 /****************************************************************************/
 /// An edge data structure template.
-template<typename EdgeVertexType>
+template<typename BundledVertexType>
 class Edge
 {
 public:
-	Edge(EdgeVertexType* src = nullptr, EdgeVertexType* dst = nullptr, double c = 0.0):
+	/**
+	 * @param src a pointer to the source vertex of the edge
+	 * @param dst a pointer to the destination vertex of the edge
+	 * @param c cost associated with the edge
+	 */
+	Edge(BundledVertexType* src = nullptr, BundledVertexType* dst = nullptr, double c = 0.0):
 		src_(src),dst_(dst), cost_(c){};
+	~Edge(){};
 
-	EdgeVertexType* src_;
-	EdgeVertexType* dst_;
+	BundledVertexType* src_;
+	BundledVertexType* dst_;
 	double cost_;
 
-	bool operator ==(const Edge<EdgeVertexType> other)
+	/**
+	 * == operator overloading. If two edges connect the same pair of vertices, they're
+	 * regarded as equal.
+	 */
+	bool operator ==(const Edge<BundledVertexType> other)
 	{
 		if((src_->vertex_id_ == other.src_->vertex_id_ && dst_->vertex_id_ == other.dst_->vertex_id_)
 			|| (src_->vertex_id_ == other.dst_->vertex_id_ && dst_->vertex_id_ == other.src_->vertex_id_))
@@ -36,9 +46,12 @@ public:
 			return false;
 	}
 
+	/**
+	 * Print edge information: start vertex id, destination vertex id, edge cost.
+	 */
 	void PrintEdge()
 	{
-		std::cout << "Edge: start - " << src_->vertex_id_ << " , end - " << dst_->vertex_id_ << " , cost - " << cost_ << std::endl;
+		std::cout << "Edge: src - " << src_->vertex_id_ << " , dst - " << dst_->vertex_id_ << " , cost - " << cost_ << std::endl;
 	}
 };
 
@@ -46,13 +59,16 @@ public:
 /*								 Vertex										*/
 /****************************************************************************/
 /// A vertex data structure template.
-template<typename VertexNodeType>
+template<typename BundledStructType>
 class Vertex
 {
 public:
-	Vertex(const VertexNodeType &node):
+	/**
+	 * @param bundled_data a reference to the bundled data structure
+	 */
+	Vertex(const BundledStructType &bundled_data):
 		// attributes related to associated node
-		node_(node), vertex_id_(node.node_id_),
+		bundled_data_(bundled_data), vertex_id_(bundled_data.node_id_),
 		// common attributes
 		search_parent_(nullptr),
 		is_checked_(false), is_in_openlist_(false),
@@ -62,19 +78,27 @@ public:
 		edges_.clear();
 	};
 
-	const VertexNodeType& node_;
+	const BundledStructType& bundled_data_;
 	uint64_t vertex_id_;
-	std::vector<Edge<Vertex<VertexNodeType>>> edges_;
+	std::vector<Edge<Vertex<BundledStructType>>> edges_;
 
 	// member variables for search
+    template<typename GraphVertexType>
+    friend class AStar;
+private:
 	bool is_checked_;
 	bool is_in_openlist_;
 	double f_astar_;
 	double g_astar_;
 	double h_astar_;
-	Vertex<VertexNodeType>* search_parent_;
+	Vertex<BundledStructType>* search_parent_;
 
-	bool operator ==(const Vertex<VertexNodeType> other)
+public:
+	/**
+	 * == operator overloading. If two vertices have the same id, they're
+	 * regarded as equal.
+	 */
+	bool operator ==(const Vertex<BundledStructType> other)
 	{
 		if(vertex_id_ == other.vertex_id_)
 			return true;
@@ -92,7 +116,7 @@ public:
 		h_astar_ = 0.0;
 	}
 
-	double GetEdgeCost(const Vertex<VertexNodeType>& dst_node)
+	double GetEdgeCost(const Vertex<BundledStructType>& dst_node)
 	{
 		double cost = -1;
 
@@ -108,9 +132,9 @@ public:
 		return cost;
 	}
 
-	std::vector<Vertex<VertexNodeType>*> GetNeighbours()
+	std::vector<Vertex<BundledStructType>*> GetNeighbours()
 	{
-		std::vector<Vertex<VertexNodeType>*> neighbours;
+		std::vector<Vertex<BundledStructType>*> neighbours;
 
 		for(const auto& edge:edges_)
 			neighbours.push_back(edge.dst_);
@@ -118,9 +142,9 @@ public:
 		return neighbours;
 	}
 
-	bool CheckNeighbour(Vertex<VertexNodeType>* dst_node)
+	bool CheckNeighbour(Vertex<BundledStructType>* dst_node)
 	{
-		std::vector<Vertex<VertexNodeType>*> neighbours = GetNeighbours();
+		std::vector<Vertex<BundledStructType>*> neighbours = GetNeighbours();
 
 		auto it = find(neighbours.begin(), neighbours.end(), dst_node);
 
