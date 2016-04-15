@@ -90,7 +90,8 @@ public:
 					{
 						successor->search_parent_ = current_vertex;
 						successor->g_astar_ = new_cost;
-						successor->h_astar_ = CalcHeuristic(successor, goal);
+//						successor->h_astar_ = CalcHeuristic(successor, goal);
+						successor->h_astar_ = successor->bundled_data_.GetHeuristic(goal->bundled_data_);
 						successor->f_astar_ = successor->g_astar_ + successor->h_astar_;
 
 						openlist.put(successor, successor->f_astar_);

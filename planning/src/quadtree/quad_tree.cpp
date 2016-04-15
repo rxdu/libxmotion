@@ -277,7 +277,8 @@ QuadTreeNode* QTreeNodeManager::GetNodeReference(uint16_t index_x, uint16_t inde
 /*********************************************************/
 
 QuadTreeNode::QuadTreeNode(BoundingBox bound, OccupancyType occupancy):
-		occupancy_(occupancy),dummy_root_(this),has_dummy_(false),node_id_(0)
+		BDSBase<QuadTreeNode>(0),
+		occupancy_(occupancy),dummy_root_(this),has_dummy_(false)
 {
 	node_type_ = NodeType::INNER;
 
@@ -309,3 +310,21 @@ bool QuadTreeNode::operator ==(const QuadTreeNode* other)
 		return true;
 }
 
+double QuadTreeNode::GetHeuristic(const QuadTreeNode& other_struct) const {
+	double x1,x2,y1,y2;
+
+	x1 = other_struct.location_.x;
+	y1 = other_struct.location_.y;
+
+	x2 = other_struct.location_.x;
+	y2 = other_struct.location_.y;
+
+	// static_cast: can get wrong result to use "unsigned long" type for deduction
+	long x_error = static_cast<long>(x1) - static_cast<long>(x2);
+	long y_error = static_cast<long>(y1) - static_cast<long>(y2);
+
+	double cost = std::abs(x_error) + std::abs(y_error);
+//	std::cout<< "heuristic cost: " << cost << std::endl;
+
+	return cost;
+}

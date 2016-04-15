@@ -528,7 +528,7 @@ void GraphVis::VisQTreeGraph(Graph<QuadTreeNode>& graph, cv::InputArray _src, cv
 
 		if(show_id)
 		{
-			std::string id = std::to_string((*itv)->bundled_data_.node_id_);
+			std::string id = std::to_string((*itv)->bundled_data_.data_id_);
 			putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
 		}
 	}
@@ -638,7 +638,7 @@ void GraphVis::VisSquareGrid(SquareGrid& grid, cv::OutputArray _dst)
 		y = cell.second->bbox_.y.min + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)/2;
 		y = y + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)*3/7;
 
-		std::string id = std::to_string(cell.second->node_id_);
+		std::string id = std::to_string(cell.second->data_id_);
 
 		putText(dst, id ,Point(x,y), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
 	}
@@ -721,9 +721,9 @@ void GraphVis::VisSquareGridGraph(Graph<SquareCell>& graph, cv::InputArray _src,
 		y1 = (*itv)->bundled_data_.location_.y;
 
 		if(show_id) {
-			if((*itv)->bundled_data_.node_id_ % 2 == 0)
+			if((*itv)->bundled_data_.data_id_ % 2 == 0)
 			{
-				std::string id = std::to_string((*itv)->bundled_data_.node_id_);
+				std::string id = std::to_string((*itv)->bundled_data_.data_id_);
 				putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
 			}
 		}

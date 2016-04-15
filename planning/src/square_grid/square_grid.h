@@ -11,13 +11,16 @@
 #include <map>
 #include <vector>
 #include <cstdint>
+
 #include "common/common_types.h"
+#include "graph/bds_base.h"
 
 namespace srcl_ctrl{
 
-struct SquareCell{
+struct SquareCell: public BDSBase<SquareCell>{
 	SquareCell(uint64_t id, uint32_t row, uint32_t col, BoundingBox bbox, OccupancyType occupancy):
-		node_id_(id),occu_(occupancy)
+		BDSBase<SquareCell>(id),
+		occu_(occupancy)
 	{
 		index_.x = col;
 		index_.y = row;
@@ -28,11 +31,30 @@ struct SquareCell{
 		location_.y = bbox_.y.min + (bbox_.y.max - bbox_.y.min)/2;
 	}
 
-	const uint64_t node_id_;
+//	const uint64_t node_id_;
 	Position2D index_;
 	Position2D location_;
 	OccupancyType occu_;
 	BoundingBox bbox_;
+
+	double GetHeuristic(const SquareCell& other_struct) const{
+		double x1,x2,y1,y2;
+
+		x1 = other_struct.location_.x;
+		y1 = other_struct.location_.y;
+
+		x2 = other_struct.location_.x;
+		y2 = other_struct.location_.y;
+
+		// static_cast: can get wrong result to use "unsigned long" type for deduction
+		long x_error = static_cast<long>(x1) - static_cast<long>(x2);
+		long y_error = static_cast<long>(y1) - static_cast<long>(y2);
+
+		double cost = std::abs(x_error) + std::abs(y_error);
+		//	std::cout<< "heuristic cost: " << cost << std::endl;
+
+		return cost;
+	}
 };
 
 class SquareGrid{

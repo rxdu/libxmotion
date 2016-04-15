@@ -64,14 +64,14 @@ Graph<SquareCell>* GraphBuilder::BuildFromSquareGrid(SquareGrid* grid, bool allo
 
 	for(auto itc = grid->cells_.begin(); itc != grid->cells_.end(); itc++)
 	{
-		uint64_t current_nodeid = (*itc).second->node_id_;
+		uint64_t current_nodeid = (*itc).second->data_id_;
 
 		if(grid->cells_[current_nodeid]->occu_ != OccupancyType::OCCUPIED) {
 			std::vector<SquareCell*> neighbour_list = grid->GetNeighbours(current_nodeid,allow_diag_move);
 
 			for(auto itn = neighbour_list.begin(); itn != neighbour_list.end(); itn++)
 			{
-				if(grid->cells_[(*itn)->node_id_]->occu_ != OccupancyType::OCCUPIED)
+				if(grid->cells_[(*itn)->data_id_]->occu_ != OccupancyType::OCCUPIED)
 				{
 					double error_x,error_y, cost = 0;
 					error_x = std::abs(static_cast<long>((*itn)->location_.x) - static_cast<long>((*itc).second->location_.x));

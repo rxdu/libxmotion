@@ -262,7 +262,7 @@ std::vector<QuadTreeNode*> QTreeBuilder::GetAllLeafNodes(QuadTree *tree)
 	uint64_t id = 0;
 	for(it = leaves.begin(); it != leaves.end(); it++)
 	{
-		(*it)->node_id_ = id;
+		(*it)->data_id_ = id;
 		id++;
 	}
 

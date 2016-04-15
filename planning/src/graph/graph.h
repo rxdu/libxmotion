@@ -54,19 +54,6 @@
 namespace srcl_ctrl {
 
 /****************************************************************************/
-/*							   Graph Node						  			*/
-/****************************************************************************/
-/// An example node that can be associated with a vertex. This node can be
-///	either a "struct" or a "class", only need to provide the node_id_ attribute.
-struct ExampleNode{
-	ExampleNode(uint64_t id):node_id_(id){}
-
-	const uint64_t node_id_;
-
-	// you can add more attributes here
-};
-
-/****************************************************************************/
 /*								 Graph										*/
 /****************************************************************************/
 /// A graph data structure template.
@@ -94,12 +81,12 @@ private:
 	///	otherwise it creates a new vertex.
 	Vertex<BundledStructType>* GetVertex(const BundledStructType& vertex_node)
 	{
-		auto it = vertex_map_.find((uint64_t)vertex_node.node_id_);
+		auto it = vertex_map_.find((uint64_t)vertex_node.data_id_);
 
 		if(it == vertex_map_.end())
 		{
 			Vertex<BundledStructType>* new_vertex = new Vertex<BundledStructType>(vertex_node);
-			vertex_map_[vertex_node.node_id_] = new_vertex;
+			vertex_map_[vertex_node.data_id_] = new_vertex;
 			return new_vertex;
 		}
 

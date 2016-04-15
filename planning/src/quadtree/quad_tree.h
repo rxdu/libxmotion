@@ -7,6 +7,7 @@
 
 //#include "qtree_types.h"
 #include "common/common_types.h"
+#include "graph/bds_base.h"
 
 namespace srcl_ctrl {
 
@@ -24,7 +25,7 @@ enum class NodeType
 /*     Order of child nodes    */
 /* 2 - top_left, 3 - top_right */
 /* 0 - bot_left, 1 - bot_right */
-class QuadTreeNode
+class QuadTreeNode: public BDSBase<QuadTreeNode>
 {
 public:
 	QuadTreeNode(BoundingBox bound, OccupancyType occupancy);
@@ -32,7 +33,7 @@ public:
 
 public:
 	// Node contents
-	uint64_t node_id_;
+//	uint64_t node_id_;
 	NodeType node_type_;
 	OccupancyType occupancy_;
 	Position2D location_;
@@ -47,6 +48,7 @@ public:
 
 public:
 	bool operator ==(const QuadTreeNode* other);
+	double GetHeuristic(const QuadTreeNode& other_struct) const;
 };
 
 class QTreeNodeManager{

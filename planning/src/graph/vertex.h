@@ -68,7 +68,7 @@ public:
 	 */
 	Vertex(const BundledStructType &bundled_data):
 		// attributes related to associated node
-		bundled_data_(bundled_data), vertex_id_(bundled_data.node_id_),
+		bundled_data_(bundled_data), vertex_id_(bundled_data.data_id_),
 		// common attributes
 		search_parent_(nullptr),
 		is_checked_(false), is_in_openlist_(false),
