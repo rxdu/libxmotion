@@ -15,11 +15,13 @@ namespace srcl_ctrl {
 /****************************************************************************/
 /*				   Bundled Data Structure (BDS) Base						*/
 /****************************************************************************/
-
+/// The base class of bundled data structure
 template<typename BundledDataStructType>
 class BDSBase {
 public:
-	BDSBase():data_id_(0){};
+	// this enforces the derived class to initialize the id somehow, just to make
+	//	sure "data_id_" is used as the ID, not with any other names
+	BDSBase() = delete;
 	BDSBase(uint64_t struct_id):data_id_(struct_id){};
 	virtual ~BDSBase(){};
 

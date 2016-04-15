@@ -15,8 +15,9 @@ namespace srcl_ctrl {
 /****************************************************************************/
 /*				   Bundled Data Structure (BDS) Example						*/
 /****************************************************************************/
-/// An example node that can be associated with a vertex. This node can be
-///	either a "struct" or a "class", only need to provide the node_id_ attribute.
+/// An example BDS that can be associated with a vertex. This BDS can be
+///	either a "struct" or a "class", but need to provide an implementation of
+/// the GetHeuristic() function. A "data_id_" is provided with the base class.
 struct BDSExample: public BDSBase<BDSExample>
 {
 	BDSExample(uint64_t id):
@@ -24,7 +25,7 @@ struct BDSExample: public BDSBase<BDSExample>
 	~BDSExample(){};
 
 	double GetHeuristic(const BDSExample& other_struct) const {
-		return 1.0;
+		return 0.0;
 	}
 };
 
