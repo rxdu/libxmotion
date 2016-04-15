@@ -93,7 +93,7 @@ private:
 	double h_astar_;
 	Vertex<BundledStructType>* search_parent_;
 
-public:
+public:friend
 	/**
 	 * == operator overloading. If two vertices have the same id, they're
 	 * regarded as equal.
