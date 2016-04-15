@@ -24,3 +24,4 @@ C++
 
 * http://stackoverflow.com/questions/642229/why-do-i-need-to-use-typedef-typename-in-g-but-not-vs
 * http://stackoverflow.com/questions/8584431/why-is-the-keyword-typename-needed-before-qualified-dependent-names-and-not-b
+* http://stackoverflow.com/questions/18671062/override-function-parameter-type-with-type-of-derived-class

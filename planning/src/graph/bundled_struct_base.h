@@ -10,13 +10,14 @@
 
 namespace srcl_ctrl {
 
+template<typename BundledStructType>
 class BundledStructBase {
 public:
 	BundledStructBase();
 	virtual ~BundledStructBase();
 
 public:
-	virtual double CalcHeuristic(BundledStructBase* other_struct) = 0;
+	virtual double CalcHeuristic(BundledStructType* other_struct) = 0;
 };
 
 }
