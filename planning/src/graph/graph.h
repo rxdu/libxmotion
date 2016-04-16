@@ -54,23 +54,10 @@
 namespace srcl_ctrl {
 
 /****************************************************************************/
-/*							   Graph Node						  			*/
-/****************************************************************************/
-/// An example node that can be associated with a vertex. This node can be
-///	either a "struct" or a "class", only need to provide the node_id_ attribute.
-struct ExampleNode{
-	ExampleNode(uint64_t id):node_id_(id){}
-
-	const uint64_t node_id_;
-
-	// you can add more attributes here
-};
-
-/****************************************************************************/
 /*								 Graph										*/
 /****************************************************************************/
 /// A graph data structure template.
-template<typename GraphNodeType>
+template<typename BundledStructType>
 class Graph
 {
 public:
@@ -85,21 +72,21 @@ public:
 	};
 
 private:
-	std::map<uint64_t, Vertex<GraphNodeType>*> vertex_map_;
-	AStar<Vertex<GraphNodeType>> astar_;
+	std::map<uint64_t, Vertex<BundledStructType>*> vertex_map_;
+	AStar<Vertex<BundledStructType>> astar_;
 
 private:
 	/// This function checks if a vertex already exists in the graph.
 	///	If yes, the functions returns the index of the existing vertex,
 	///	otherwise it creates a new vertex.
-	Vertex<GraphNodeType>* GetVertex(GraphNodeType* vertex_node)
+	Vertex<BundledStructType>* GetVertex(const BundledStructType& vertex_node)
 	{
-		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it = vertex_map_.find((uint64_t)vertex_node->node_id_);
+		auto it = vertex_map_.find((uint64_t)vertex_node.data_id_);
 
 		if(it == vertex_map_.end())
 		{
-			Vertex<GraphNodeType>* new_vertex = new Vertex<GraphNodeType>(vertex_node);
-			vertex_map_[vertex_node->node_id_] = new_vertex;
+			Vertex<BundledStructType>* new_vertex = new Vertex<BundledStructType>(vertex_node);
+			vertex_map_[vertex_node.data_id_] = new_vertex;
 			return new_vertex;
 		}
 
@@ -109,32 +96,34 @@ private:
 	/// This function is used to reset the vertices for a new search
 	void ResetGraphVertices()
 	{
-		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it;
+//		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it;
+//
+//		for(it = vertex_map_.begin(); it != vertex_map_.end(); it++)
+//		{
+//			it->second->ClearVertexSearchInfo();
+//		}
 
-		for(it = vertex_map_.begin(); it != vertex_map_.end(); it++)
-		{
-			it->second->ClearVertexSearchInfo();
-		}
+		for(const auto& vertex_pair: vertex_map_)
+			vertex_pair.second->ClearVertexSearchInfo();
 	};
 
 public:
 	/// This function is used to create a graph by adding edges connecting two nodes
-	void AddEdge(GraphNodeType* src_node, GraphNodeType* dst_node, double cost)
+	void AddEdge(const BundledStructType& src_node, const BundledStructType& dst_node, double cost)
 	{
-		Vertex<GraphNodeType>* src_vertex = GetVertex(src_node);
-		Vertex<GraphNodeType>* dst_vertex = GetVertex(dst_node);
+		Vertex<BundledStructType>* src_vertex = GetVertex(src_node);
+		Vertex<BundledStructType>* dst_vertex = GetVertex(dst_node);
 
-		Edge<Vertex<GraphNodeType>> new_edge(src_vertex, dst_vertex,cost);
+		Edge<Vertex<BundledStructType>> new_edge(src_vertex, dst_vertex,cost);
 		src_vertex->edges_.push_back(new_edge);
 	};
 
 	/// This functions is used to access all vertices of a graph
-	std::vector<Vertex<GraphNodeType>*> GetGraphVertices()
+	std::vector<Vertex<BundledStructType>*> GetGraphVertices()
 	{
-		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it;
-		std::vector<Vertex<GraphNodeType>*> vertices;
+		std::vector<Vertex<BundledStructType>*> vertices;
 
-		for(it = vertex_map_.begin(); it != vertex_map_.end(); it++)
+		for(auto it = vertex_map_.begin(); it != vertex_map_.end(); it++)
 		{
 			vertices.push_back(it->second);
 		}
@@ -143,14 +132,13 @@ public:
 	};
 
 	/// This functions is used to access all edges of a graph
-	std::vector<Edge<Vertex<GraphNodeType>>> GetGraphEdges()
+	std::vector<Edge<Vertex<BundledStructType>>> GetGraphEdges()
 	{
-		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it;
-		std::vector<Edge<Vertex<GraphNodeType>>> edges;
+		std::vector<Edge<Vertex<BundledStructType>>> edges;
 
-		for(it = vertex_map_.begin(); it != vertex_map_.end(); it++)
+		for(auto it = vertex_map_.begin(); it != vertex_map_.end(); it++)
 		{
-			Vertex<GraphNodeType>* vertex = it->second;
+			Vertex<BundledStructType>* vertex = it->second;
 			for(auto ite = vertex->edges_.begin(); ite != vertex->edges_.end(); ite++) {
 				auto itedge = std::find(edges.begin(), edges.end(), (*ite));
 
@@ -163,15 +151,15 @@ public:
 	};
 
 	/// This function return the vertex with specified id
-	Vertex<GraphNodeType>* GetVertexFromID(uint64_t vertex_id)
+	Vertex<BundledStructType>* GetVertexFromID(uint64_t vertex_id)
 	{
-		typename std::map<uint64_t, Vertex<GraphNodeType>*>::iterator it = vertex_map_.find(vertex_id);
+		auto it = vertex_map_.find(vertex_id);
 
 		return (*it).second;
 	}
 
 	/// Perform A* Search and return a path represented by a serious of vertices
-	std::vector<Vertex<GraphNodeType>*> AStarSearch(Vertex<GraphNodeType> *start, Vertex<GraphNodeType> *goal)
+	std::vector<Vertex<BundledStructType>*> AStarSearch(Vertex<BundledStructType> *start, Vertex<BundledStructType> *goal)
 	{
 		// clear previous search information before new search
 		ResetGraphVertices();

@@ -1,7 +1,7 @@
 /*
- * simple_graph.cpp
+ * test_template.cpp
  *
- *  Created on: Mar 30, 2016
+ *  Created on: April 14, 2016
  *      Author: rdu
  */
 
