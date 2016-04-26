@@ -8,6 +8,8 @@
 #ifndef SRC_MAP_COMMON_TYPES_H_
 #define SRC_MAP_COMMON_TYPES_H_
 
+#include <cstdint>
+
 namespace srcl_ctrl{
 
 typedef struct

@@ -7,7 +7,7 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
 
-#include "quad_tree.h"
+#include "quadtree/quad_tree.h"
 
 namespace srcl_ctrl{
 

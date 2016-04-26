@@ -8,7 +8,7 @@
 #include <iostream>
 #include <cmath>
 
-#include "graph_builder.h"
+#include "map/graph_builder.h"
 
 using namespace srcl_ctrl;
 

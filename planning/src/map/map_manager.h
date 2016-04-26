@@ -16,7 +16,7 @@
 #include "opencv2/core/core.hpp"
 
 // User-defined headers
-#include "square_grid.h"
+#include "square_grid/square_grid.h"
 
 namespace srcl_ctrl{
 

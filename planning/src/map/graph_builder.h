@@ -8,9 +8,9 @@
 #ifndef SRC_GRAPH_GRAPH_BUILDER_H_
 #define SRC_GRAPH_GRAPH_BUILDER_H_
 
-#include "graph.h"
-#include "quad_tree.h"
-#include "square_grid.h"
+#include "graph/graph.h"
+#include "quadtree/quad_tree.h"
+#include "square_grid/square_grid.h"
 
 namespace srcl_ctrl {
 

@@ -1,8 +1,8 @@
 #include <vector>
 #include <cmath>
 
-#include "qtree_builder.h"
-#include "image_utils.h"
+#include "map/qtree_builder.h"
+#include "map/image_utils.h"
 
 using namespace srcl_ctrl;
 using namespace cv;

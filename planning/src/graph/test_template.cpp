@@ -13,8 +13,8 @@
 //#include <tuple>
 
 // user
-#include "graph.h"
-#include <bds_example.h>
+#include "graph/graph.h"
+#include "graph/bds_example.h"
 
 using namespace srcl_ctrl;
 

@@ -8,7 +8,7 @@
 #ifndef SRC_GRAPH_BDS_EXAMPLE_H_
 #define SRC_GRAPH_BDS_EXAMPLE_H_
 
-#include <bds_base.h>
+#include "graph/bds_base.h"
 
 namespace srcl_ctrl {
 
