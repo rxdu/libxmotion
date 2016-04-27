@@ -48,8 +48,8 @@
 #include <vector>
 #include <cstdint>
 
-#include <vertex.h>
-#include <astar.h>
+#include "graph/vertex.h"
+#include "graph/astar.h"
 
 namespace srcl_ctrl {
 

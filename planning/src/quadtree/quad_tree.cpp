@@ -1,6 +1,6 @@
 #include <cmath>
 #include <algorithm>
-#include "quad_tree.h"
+#include "quadtree/quad_tree.h"
 
 //#ifdef DEBUG
 #include <iostream>

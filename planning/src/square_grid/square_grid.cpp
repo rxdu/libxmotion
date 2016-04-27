@@ -6,7 +6,7 @@
  */
 
 //#include <iostream>
-#include "square_grid.h"
+#include "square_grid/square_grid.h"
 
 using namespace srcl_ctrl;
 

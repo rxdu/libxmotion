@@ -15,7 +15,7 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
 
-#include "square_grid.h"
+#include "square_grid/square_grid.h"
 
 namespace srcl_ctrl {
 

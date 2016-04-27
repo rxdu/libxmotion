@@ -17,7 +17,7 @@
 #include <cmath>
 #include <algorithm>
 
-#include <vertex.h>
+#include "graph/vertex.h"
 
 namespace srcl_ctrl {
 
