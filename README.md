@@ -15,6 +15,11 @@ This repository contains a collection of software that are used to develop and t
 $ sudo apt-get install libopencv-dev python-opencv
 ```
 
+* Boost (required by the Qt GUI)
+```
+$ sudo apt-get install libboost-all-dev
+```
+
 ## 3. Use Eclipse to build project
 
 * Create a new folder outside of the project root directory
