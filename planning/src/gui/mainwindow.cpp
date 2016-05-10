@@ -242,3 +242,8 @@ QImage MainWindow::ConvertMatToQImage(const Mat& mat)
 //
 //    start_sgvertex_ = sgrid_graph_->GetVertexFromID(id);
 //}
+
+void srcl_ctrl::MainWindow::on_actionOpenMap_triggered()
+{
+    std::cout << "clicked" << std::endl;
+}

@@ -56,6 +56,8 @@ private:
 public:
     QImage ConvertMatToQImage(const cv::Mat& mat);
 //    void UpdateQuadPositionOnMap(const geometry_msgs::PoseStampedConstPtr& msg);
+private slots:
+    void on_actionOpenMap_triggered();
 };
 }
 
