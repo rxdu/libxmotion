@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstdint>
 
+#include <QFileDialog>
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -22,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     image_label_ = new ImageLabel(this);
     ui->gbMap->layout()->addWidget(image_label_);
+
+    ui->actionOpenMap->setIcon(QIcon(":/icons/icons/open_map.ico"));
 
     SetupMap();
 
@@ -246,4 +250,45 @@ QImage MainWindow::ConvertMatToQImage(const Mat& mat)
 void srcl_ctrl::MainWindow::on_actionOpenMap_triggered()
 {
     std::cout << "clicked" << std::endl;
+
+    QString map_file_name = QFileDialog::getOpenFileName(this,
+        tr("Open Map File"), "/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/planning/data", tr("Map Images (*.png *.jpg)"));
+
+    if(!map_file_name.isEmpty()) {
+        // read map image
+        std::tuple<SquareGrid*, Mat> sg_map;
+
+        raw_image_ = imread(map_file_name.toStdString(), IMREAD_GRAYSCALE);
+
+        if (!raw_image_.data) {
+            printf("No image data \n");
+            //        ui->qLabelMap->setText("Failed to load map");
+            return;
+        }
+        else {
+            sg_map = SGridBuilder::BuildSquareGridMap(raw_image_, 32);
+            sgrid_ = std::get<0>(sg_map);
+            sgrid_map_ = std::get<1>(sg_map);
+
+            // build graph from square grid
+            sgrid_graph_ = GraphBuilder::BuildFromSquareGrid(sgrid_, true);
+
+            GraphVis vis;
+            Mat vis_img;
+
+            if (sgrid_map_.empty())
+                vis.VisSquareGrid(*sgrid_, vis_img);
+            else
+                vis.VisSquareGrid(*sgrid_, sgrid_map_, vis_img);
+
+            /*** put the graph on top of the square grid ***/
+            vis.VisSquareGridGraph(*sgrid_graph_, vis_img, vis_img, true);
+            sgrid_map_ = vis_img;
+
+            QImage map_image = ConvertMatToQImage(sgrid_map_);
+            QPixmap pix = QPixmap::fromImage(map_image);
+
+            image_label_->setPixmap(pix);
+        }
+    }
 }
