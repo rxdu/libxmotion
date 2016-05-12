@@ -49,7 +49,7 @@ public:
 	/**
 	 * Print edge information: start vertex id, destination vertex id, edge cost.
 	 */
-	void PrintEdge()
+	void PrintEdge() const
 	{
 		std::cout << "Edge: src - " << src_->vertex_id_ << " , dst - " << dst_->vertex_id_ << " , cost - " << cost_ << std::endl;
 	}
@@ -106,7 +106,18 @@ public:
 			return false;
 	}
 
-	void ClearVertexSearchInfo(){
+	/**
+	 * This functions returns a pointer to the bundled data struct so that you can change properties of it.
+	 * Otherwise you're not allowed to change bundled data from the graph.
+	 * @return Pointer to bundled data structure associated with this vertex.
+	 */
+	BundledStructType* GetBundledStructPtr()
+	{
+		return const_cast<BundledStructType*>(&bundled_data_);
+	}
+
+	void ClearVertexSearchInfo()
+	{
 		is_checked_ = false;
 		is_in_openlist_ = false;
 		search_parent_ = nullptr;
