@@ -49,7 +49,7 @@ public:
 	/**
 	 * Print edge information: start vertex id, destination vertex id, edge cost.
 	 */
-	void PrintEdge()
+	void PrintEdge() const
 	{
 		std::cout << "Edge: src - " << src_->vertex_id_ << " , dst - " << dst_->vertex_id_ << " , cost - " << cost_ << std::endl;
 	}
