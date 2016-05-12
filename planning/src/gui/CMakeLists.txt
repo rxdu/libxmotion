@@ -52,6 +52,11 @@ set(SOURCE_FILES
 set(FORM_FILES 
   mainwindow.ui
 )
+
+set(RES_FILES 
+  icon_res.qrc
+)
+
 qt5_wrap_cpp(MOC_SRC_H
   ${HEADER_FILES}
 )
@@ -60,7 +65,11 @@ qt5_wrap_ui(MOC_GUI_H
   ${FORM_FILES}
 )
 
+qt5_add_resources(MOC_RES_H 
+  ${RES_FILES}
+)
+
 qt5_generate_moc(planner_gui.cpp quad_gui.moc)
-add_executable(planner_gui ${SOURCE_FILES} ${MOC_SRC_H} ${MOC_GUI_H})
+add_executable(planner_gui ${SOURCE_FILES} ${MOC_SRC_H} ${MOC_GUI_H} ${MOC_RES_H})
 set_target_properties(planner_gui PROPERTIES COMPILE_FLAGS "-std=c++11 -g")
 target_link_libraries(planner_gui map squaregrid vis ${OpenCV_LIBS} ${Boost_LIBRARIES} Qt5::Widgets)

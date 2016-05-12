@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/open_map.ico</file>
+    </qresource>
+</RCC>

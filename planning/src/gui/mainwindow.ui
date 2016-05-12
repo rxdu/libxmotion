@@ -18,7 +18,7 @@
     <item row="0" column="0" colspan="2">
      <widget class="QGroupBox" name="gbMap">
       <property name="title">
-       <string>Map</string>
+       <string>2D Map</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignHCenter|Qt::AlignTop</set>
@@ -38,7 +38,21 @@
        <string>Control</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="1">
+        <widget class="QRadioButton" name="radioButton">
+         <property name="text">
+          <string>Quad-Tree</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
+        <widget class="QRadioButton" name="radioButton_2">
+         <property name="text">
+          <string>Square Grid</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
         <widget class="QPushButton" name="btnSendTraj">
          <property name="text">
           <string>Send Trajectory</string>
@@ -60,15 +74,27 @@
     </rect>
    </property>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionOpenMap"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionOpenMap">
+   <property name="text">
+    <string>OpenMap</string>
+   </property>
+   <property name="toolTip">
+    <string>Open Map</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

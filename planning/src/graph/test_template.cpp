@@ -63,13 +63,13 @@ int main(int argc, char** argv )
 		std::cout << "id: " << e->vertex_id_ << std::endl;
 
 	auto vtx = graph.GetVertexFromID(0);
-	auto node_ptr = vtx->GetBundledStructPtr();
+	auto node_ptr = vtx->GetBDSNonConstRef();
 
-	std::cout << "id before change: " << node_ptr->data_id_ << std::endl;
+	std::cout << "id before change: " << node_ptr.data_id_ << std::endl;
 
-	node_ptr->data_id_ = 100;
+	node_ptr.data_id_ = 100;
 
-	std::cout << "id after change: " << node_ptr->data_id_ << std::endl;
+	std::cout << "id after change: " << node_ptr.data_id_ << std::endl;
 
 	// delete all nodes
 	for(auto e : nodes)
