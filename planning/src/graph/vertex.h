@@ -85,6 +85,10 @@ public:
 	// member variables for search
     template<typename GraphVertexType>
     friend class AStar;
+
+    template<typename BDSType>
+    friend class Graph;
+
 private:
 	bool is_checked_;
 	bool is_in_openlist_;
@@ -92,6 +96,18 @@ private:
 	double g_astar_;
 	double h_astar_;
 	Vertex<BundledStructType>* search_parent_;
+
+private:
+	void ClearVertexSearchInfo()
+	{
+		is_checked_ = false;
+		is_in_openlist_ = false;
+		search_parent_ = nullptr;
+
+		f_astar_ = 0.0;
+		g_astar_ = 0.0;
+		h_astar_ = 0.0;
+	}
 
 public:
 	/**
@@ -107,24 +123,15 @@ public:
 	}
 
 	/**
-	 * This functions returns a pointer to the bundled data struct so that you can change properties of it.
+	 * This functions returns a non-const reference to the bundled data struct
+	 * so that you can change properties of it.
 	 * Otherwise you're not allowed to change bundled data from the graph.
-	 * @return Pointer to bundled data structure associated with this vertex.
+	 *
+	 * @return Reference to bundled data structure associated with this vertex.
 	 */
-	BundledStructType* GetBundledStructPtr()
+	BundledStructType& GetBDSNonConstRef()
 	{
-		return const_cast<BundledStructType*>(&bundled_data_);
-	}
-
-	void ClearVertexSearchInfo()
-	{
-		is_checked_ = false;
-		is_in_openlist_ = false;
-		search_parent_ = nullptr;
-
-		f_astar_ = 0.0;
-		g_astar_ = 0.0;
-		h_astar_ = 0.0;
+		return const_cast<BundledStructType&>(bundled_data_);
 	}
 
 	double GetEdgeCost(const Vertex<BundledStructType>& dst_node)
