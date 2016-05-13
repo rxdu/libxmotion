@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <tuple>
+#include <memory>
 
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
@@ -20,8 +21,8 @@ private:
 	static std::vector<QuadTreeNode*> GetAllLeafNodes(QuadTree *tree);
 
 public:
-	static QuadTree* BuildQuadTree(cv::InputArray _src, unsigned int max_depth);
-	static std::tuple<QuadTree*, cv::Mat> BuildQuadTreeMap(cv::InputArray _src, unsigned int max_depth);
+	static std::shared_ptr<QuadTree> BuildQuadTree(cv::InputArray _src, unsigned int max_depth);
+	static std::tuple<std::shared_ptr<QuadTree>, cv::Mat> BuildQuadTreeMap(cv::InputArray _src, unsigned int max_depth);
 };
 
 }

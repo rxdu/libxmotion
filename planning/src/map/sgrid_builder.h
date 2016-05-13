@@ -11,6 +11,7 @@
 #include <vector>
 #include <tuple>
 #include <cstdint>
+#include <memory>
 
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
@@ -26,8 +27,8 @@ public:
 	~SGridBuilder();
 
 public:
-	static SquareGrid* BuildSquareGrid(cv::InputArray _src, uint32_t cell_size);
-	static std::tuple<SquareGrid*, cv::Mat> BuildSquareGridMap(cv::InputArray _src, uint32_t cell_size);
+	static std::shared_ptr<SquareGrid> BuildSquareGrid(cv::InputArray _src, uint32_t cell_size);
+	static std::tuple<std::shared_ptr<SquareGrid>, cv::Mat> BuildSquareGridMap(cv::InputArray _src, uint32_t cell_size);
 };
 
 }

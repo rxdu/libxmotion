@@ -11,7 +11,7 @@ using namespace cv;
  * @param _src: grayscale image, max size: 2^16 * 2^16 = 65535 * 65535 pixels
  * @param max_depth: maximum depth of the tree to be built
  */
-QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_depth)
+std::shared_ptr<QuadTree> QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_depth)
 {
 	Mat image_bin;
 	Mat image_map;
@@ -25,7 +25,7 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 	ImageUtils::PadImageToSquared(image_bin, image_map);
 
 	// Create quadtree
-	QuadTree *tree = new QuadTree(image_map.cols, max_depth);
+	std::shared_ptr<QuadTree> tree = std::make_shared<QuadTree>(image_map.cols, max_depth);
 
 	if(max_depth > tree->MAX_DEPTH)
 	{
@@ -181,12 +181,12 @@ QuadTree* QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsigned int max_dept
 	}
 
 	// Store all leaf nodes into a vector
-	tree->leaf_nodes_ = QTreeBuilder::GetAllLeafNodes(tree);
+	tree->leaf_nodes_ = QTreeBuilder::GetAllLeafNodes(tree.get());
 
 	return tree;
 }
 
-std::tuple<QuadTree*, cv::Mat> QTreeBuilder::BuildQuadTreeMap(cv::InputArray _src, unsigned int max_depth)
+std::tuple<std::shared_ptr<QuadTree>, cv::Mat> QTreeBuilder::BuildQuadTreeMap(cv::InputArray _src, unsigned int max_depth)
 {
 	Mat image_bin;
 	Mat image_map;
@@ -199,7 +199,7 @@ std::tuple<QuadTree*, cv::Mat> QTreeBuilder::BuildQuadTreeMap(cv::InputArray _sr
 	//	the dimension of the grid more conveniently
 	ImageUtils::PadImageToSquared(image_bin, image_map);
 
-	QuadTree *tree = QTreeBuilder::BuildQuadTree(_src, max_depth);
+	std::shared_ptr<QuadTree> tree = QTreeBuilder::BuildQuadTree(_src, max_depth);
 
 	return std::make_tuple(tree, image_map);
 }

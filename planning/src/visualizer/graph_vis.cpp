@@ -29,221 +29,6 @@ GraphVis::~GraphVis()
 
 }
 
-/*
- * @param *tree : pointer to the tree to be visualized
- * @param _src : padded image from the tree builder
- * @param _dst : result image to be shown
- * @param vis_type : visualization type - FREE_SPACE, OCCU_SPACE or ALL_SPACE
- */
-void GraphVis::DrawQuadTree(QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst, TreeVisType vis_type)
-{
-	Mat src_img_color;
-	cvtColor(_src, src_img_color, CV_GRAY2BGR);
-	_dst.create(src_img_color.size(), src_img_color.type());
-	Mat dst = _dst.getMat();
-
-	if(tree != nullptr)
-	{
-		std::vector<QuadTreeNode*> parent_nodes;
-
-		for(int i = 0; i < tree->tree_depth_; i++)
-		{
-			if(i == 0)
-			{
-				Point top_left(tree->root_node_->bounding_box_.x.min, tree->root_node_->bounding_box_.y.min);
-				Point top_right(tree->root_node_->bounding_box_.x.max,tree->root_node_->bounding_box_.y.min);
-				Point bot_left(tree->root_node_->bounding_box_.x.min,tree->root_node_->bounding_box_.y.max);
-				Point bot_right(tree->root_node_->bounding_box_.x.max,tree->root_node_->bounding_box_.y.max);
-
-				line(src_img_color, top_left, top_right, Scalar(0,255,0));
-				line(src_img_color, top_right, bot_right, Scalar(0,255,0));
-				line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
-				line(src_img_color, bot_left, top_left, Scalar(0,255,0));
-
-				if(tree->root_node_->node_type_ != NodeType::LEAF)
-				{
-					for(int i = 0; i < 4; i++)
-					{
-						parent_nodes.clear();
-						parent_nodes.push_back(tree->root_node_);
-					}
-				}
-				else
-					break;
-			}
-			else
-			{
-				std::vector<QuadTreeNode*> inner_nodes;
-
-				while(!parent_nodes.empty())
-				{
-					QuadTreeNode* parent = parent_nodes.at(0);
-
-					for(int i = 0; i < 4; i++)
-					{
-						if(vis_type == TreeVisType::ALL_SPACE)
-						{
-							Point top_left(parent->child_nodes_[i]->bounding_box_.x.min, parent->child_nodes_[i]->bounding_box_.y.min);
-							Point top_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.min);
-							Point bot_left(parent->child_nodes_[i]->bounding_box_.x.min,parent->child_nodes_[i]->bounding_box_.y.max);
-							Point bot_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.max);
-
-							line(src_img_color, top_left, top_right, Scalar(0,255,0));
-							line(src_img_color, top_right, bot_right, Scalar(0,255,0));
-							line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
-							line(src_img_color, bot_left, top_left, Scalar(0,255,0));
-						}
-						else
-						{
-							OccupancyType disp_type;
-
-							if(vis_type == TreeVisType::FREE_SPACE)
-								disp_type = OccupancyType::FREE;
-							else
-								disp_type = OccupancyType::OCCUPIED;
-
-							if(parent->child_nodes_[i]->occupancy_ == disp_type){
-								Point top_left(parent->child_nodes_[i]->bounding_box_.x.min, parent->child_nodes_[i]->bounding_box_.y.min);
-								Point top_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.min);
-								Point bot_left(parent->child_nodes_[i]->bounding_box_.x.min,parent->child_nodes_[i]->bounding_box_.y.max);
-								Point bot_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.max);
-
-								line(src_img_color, top_left, top_right, Scalar(0,255,0));
-								line(src_img_color, top_right, bot_right, Scalar(0,255,0));
-								line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
-								line(src_img_color, bot_left, top_left, Scalar(0,255,0));
-							}
-						}
-
-#ifdef DEBUG
-						if(parent->child_nodes_[i]->node_type_ == NodeType::LEAF && parent->child_nodes_[i]->occupancy_ == OccupancyType::FREE)
-						{
-							int thickness = -1;
-							int lineType = 8;
-//							unsigned int x,y;
-//							x = parent->child_nodes_[i]->bounding_box_.x.min +
-//									(parent->child_nodes_[i]->bounding_box_.x.max - parent->child_nodes_[i]->bounding_box_.x.min + 1)/2;
-//							y = parent->child_nodes_[i]->bounding_box_.y.min +
-//									(parent->child_nodes_[i]->bounding_box_.y.max - parent->child_nodes_[i]->bounding_box_.y.min + 1)/2;
-//							Point center(x,y);
-							Point center(parent->child_nodes_[i]->location_.x,parent->child_nodes_[i]->location_.y);
-							circle( src_img_color,
-									center,
-									5,
-									Scalar( 0, 0, 255 ),
-									thickness,
-									lineType);
-						}
-#endif
-						if(parent->child_nodes_[i]->node_type_ == NodeType::INNER)
-							inner_nodes.push_back(parent->child_nodes_[i]);
-					}
-
-					// delete the processed node
-					parent_nodes.erase(parent_nodes.begin());
-				}
-
-				// prepare for next iteration
-				parent_nodes.clear();
-				parent_nodes = inner_nodes;
-			}
-		}
-	}
-
-	src_img_color.copyTo(dst);
-}
-
-void GraphVis::DrawQTreeWithDummies(QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst)
-{
-	Mat src_img_color;
-	cvtColor(_src, src_img_color, CV_GRAY2BGR);
-	_dst.create(src_img_color.size(), src_img_color.type());
-	Mat dst = _dst.getMat();
-
-	if(tree != nullptr)
-	{
-		// first draw dummies
-		std::vector<QuadTreeNode*> parent_nodes;
-
-		for(int i = 0; i < tree->tree_depth_; i++)
-		{
-			if(i == 0)
-			{
-				Point top_left(tree->root_node_->bounding_box_.x.min, tree->root_node_->bounding_box_.y.min);
-				Point top_right(tree->root_node_->bounding_box_.x.max,tree->root_node_->bounding_box_.y.min);
-				Point bot_left(tree->root_node_->bounding_box_.x.min,tree->root_node_->bounding_box_.y.max);
-				Point bot_right(tree->root_node_->bounding_box_.x.max,tree->root_node_->bounding_box_.y.max);
-
-				line(src_img_color, top_left, top_right, Scalar(0,255,0));
-				line(src_img_color, top_right, bot_right, Scalar(0,255,0));
-				line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
-				line(src_img_color, bot_left, top_left, Scalar(0,255,0));
-
-				if(tree->root_node_->node_type_ != NodeType::LEAF)
-				{
-					for(int i = 0; i < 4; i++)
-					{
-						parent_nodes.clear();
-						parent_nodes.push_back(tree->root_node_);
-					}
-				}
-				else
-					break;
-			}
-			else
-			{
-				std::vector<QuadTreeNode*> inner_nodes;
-
-				while(!parent_nodes.empty())
-				{
-					QuadTreeNode* parent = parent_nodes.at(0);
-
-					for(int i = 0; i < 4; i++)
-					{
-						Point top_left(parent->child_nodes_[i]->bounding_box_.x.min, parent->child_nodes_[i]->bounding_box_.y.min);
-						Point top_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.min);
-						Point bot_left(parent->child_nodes_[i]->bounding_box_.x.min,parent->child_nodes_[i]->bounding_box_.y.max);
-						Point bot_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.max);
-
-						if(parent->child_nodes_[i]->node_type_ != NodeType::LEAF){
-						line(src_img_color, top_left, top_right, Scalar(1,97,230));
-						line(src_img_color, top_right, bot_right, Scalar(1,97,230));
-						line(src_img_color, bot_right, bot_left, Scalar(1,97,230));
-						line(src_img_color, bot_left, top_left, Scalar(1,97,230));
-						}
-//						if(parent->child_nodes_[i]->node_type_ == NodeType::INNER)
-							inner_nodes.push_back(parent->child_nodes_[i]);
-					}
-
-					// delete the processed node
-					parent_nodes.erase(parent_nodes.begin());
-				}
-
-				// prepare for next iteration
-				parent_nodes.clear();
-				parent_nodes = inner_nodes;
-			}
-		}
-
-		// then draw real leaves
-		std::vector<QuadTreeNode*>::iterator it;
-		for(it = tree->leaf_nodes_.begin(); it != tree->leaf_nodes_.end(); it++)
-		{
-			Point top_left((*it)->bounding_box_.x.min, (*it)->bounding_box_.y.min);
-			Point top_right((*it)->bounding_box_.x.max,(*it)->bounding_box_.y.min);
-			Point bot_left((*it)->bounding_box_.x.min,(*it)->bounding_box_.y.max);
-			Point bot_right((*it)->bounding_box_.x.max,(*it)->bounding_box_.y.max);
-
-			line(src_img_color, top_left, top_right, Scalar(255,144,30));
-			line(src_img_color, top_right, bot_right, Scalar(255,144,30));
-			line(src_img_color, bot_right, bot_left, Scalar(255,144,30));
-			line(src_img_color, bot_left, top_left, Scalar(255,144,30));
-		}
-	}
-
-	src_img_color.copyTo(dst);
-}
-
 void GraphVis::DrawNodeCenter(cv::Point pos, cv::Mat img)
 {
 	int thickness = -1;
@@ -270,34 +55,214 @@ void GraphVis::DrawEdge(cv::Point pt1, cv::Point pt2, cv::Mat img)
 			lineType);
 }
 
-void GraphVis::DrawQTreeSingleNode(QuadTreeNode* node, cv::InputArray _src, cv::OutputArray _dst)
+/*
+ * @param &tree : reference to the tree to be visualized
+ * @param _src : padded image from the tree builder
+ * @param _dst : result image to be shown
+ * @param vis_type : visualization type - FREE_SPACE, OCCU_SPACE or ALL_SPACE
+ */
+void GraphVis::VisQuadTree(const QuadTree& tree, cv::InputArray _src, cv::OutputArray _dst, TreeVisType vis_type)
+{
+	Mat src_img_color;
+	cvtColor(_src, src_img_color, CV_GRAY2BGR);
+	_dst.create(src_img_color.size(), src_img_color.type());
+	Mat dst = _dst.getMat();
+
+	std::vector<QuadTreeNode*> parent_nodes;
+
+	for(int i = 0; i < tree.tree_depth_; i++)
+	{
+		if(i == 0)
+		{
+			Point top_left(tree.root_node_->bounding_box_.x.min, tree.root_node_->bounding_box_.y.min);
+			Point top_right(tree.root_node_->bounding_box_.x.max,tree.root_node_->bounding_box_.y.min);
+			Point bot_left(tree.root_node_->bounding_box_.x.min,tree.root_node_->bounding_box_.y.max);
+			Point bot_right(tree.root_node_->bounding_box_.x.max,tree.root_node_->bounding_box_.y.max);
+
+			line(src_img_color, top_left, top_right, Scalar(0,255,0));
+			line(src_img_color, top_right, bot_right, Scalar(0,255,0));
+			line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
+			line(src_img_color, bot_left, top_left, Scalar(0,255,0));
+
+			if(tree.root_node_->node_type_ != NodeType::LEAF)
+			{
+				for(int i = 0; i < 4; i++)
+				{
+					parent_nodes.clear();
+					parent_nodes.push_back(tree.root_node_);
+				}
+			}
+			else
+				break;
+		}
+		else
+		{
+			std::vector<QuadTreeNode*> inner_nodes;
+
+			while(!parent_nodes.empty())
+			{
+				QuadTreeNode* parent = parent_nodes.at(0);
+
+				for(int i = 0; i < 4; i++)
+				{
+					if(vis_type == TreeVisType::ALL_SPACE)
+					{
+						Point top_left(parent->child_nodes_[i]->bounding_box_.x.min, parent->child_nodes_[i]->bounding_box_.y.min);
+						Point top_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.min);
+						Point bot_left(parent->child_nodes_[i]->bounding_box_.x.min,parent->child_nodes_[i]->bounding_box_.y.max);
+						Point bot_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.max);
+
+						line(src_img_color, top_left, top_right, Scalar(0,255,0));
+						line(src_img_color, top_right, bot_right, Scalar(0,255,0));
+						line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
+						line(src_img_color, bot_left, top_left, Scalar(0,255,0));
+					}
+					else
+					{
+						OccupancyType disp_type;
+
+						if(vis_type == TreeVisType::FREE_SPACE)
+							disp_type = OccupancyType::FREE;
+						else
+							disp_type = OccupancyType::OCCUPIED;
+
+						if(parent->child_nodes_[i]->occupancy_ == disp_type){
+							Point top_left(parent->child_nodes_[i]->bounding_box_.x.min, parent->child_nodes_[i]->bounding_box_.y.min);
+							Point top_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.min);
+							Point bot_left(parent->child_nodes_[i]->bounding_box_.x.min,parent->child_nodes_[i]->bounding_box_.y.max);
+							Point bot_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.max);
+
+							line(src_img_color, top_left, top_right, Scalar(0,255,0));
+							line(src_img_color, top_right, bot_right, Scalar(0,255,0));
+							line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
+							line(src_img_color, bot_left, top_left, Scalar(0,255,0));
+						}
+					}
+
+					if(parent->child_nodes_[i]->node_type_ == NodeType::INNER)
+						inner_nodes.push_back(parent->child_nodes_[i]);
+				}
+
+				// delete the processed node
+				parent_nodes.erase(parent_nodes.begin());
+			}
+
+			// prepare for next iteration
+			parent_nodes.clear();
+			parent_nodes = inner_nodes;
+		}
+	}
+
+	src_img_color.copyTo(dst);
+}
+
+void GraphVis::VisQTreeWithDummies(const QuadTree& tree, cv::InputArray _src, cv::OutputArray _dst)
+{
+	Mat src_img_color;
+	cvtColor(_src, src_img_color, CV_GRAY2BGR);
+	_dst.create(src_img_color.size(), src_img_color.type());
+	Mat dst = _dst.getMat();
+
+	// first draw dummies
+	std::vector<QuadTreeNode*> parent_nodes;
+
+	for(int i = 0; i < tree.tree_depth_; i++)
+	{
+		if(i == 0)
+		{
+			Point top_left(tree.root_node_->bounding_box_.x.min, tree.root_node_->bounding_box_.y.min);
+			Point top_right(tree.root_node_->bounding_box_.x.max,tree.root_node_->bounding_box_.y.min);
+			Point bot_left(tree.root_node_->bounding_box_.x.min,tree.root_node_->bounding_box_.y.max);
+			Point bot_right(tree.root_node_->bounding_box_.x.max,tree.root_node_->bounding_box_.y.max);
+
+			line(src_img_color, top_left, top_right, Scalar(0,255,0));
+			line(src_img_color, top_right, bot_right, Scalar(0,255,0));
+			line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
+			line(src_img_color, bot_left, top_left, Scalar(0,255,0));
+
+			if(tree.root_node_->node_type_ != NodeType::LEAF)
+			{
+				for(int i = 0; i < 4; i++)
+				{
+					parent_nodes.clear();
+					parent_nodes.push_back(tree.root_node_);
+				}
+			}
+			else
+				break;
+		}
+		else
+		{
+			std::vector<QuadTreeNode*> inner_nodes;
+
+			while(!parent_nodes.empty())
+			{
+				QuadTreeNode* parent = parent_nodes.at(0);
+
+				for(int i = 0; i < 4; i++)
+				{
+					Point top_left(parent->child_nodes_[i]->bounding_box_.x.min, parent->child_nodes_[i]->bounding_box_.y.min);
+					Point top_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.min);
+					Point bot_left(parent->child_nodes_[i]->bounding_box_.x.min,parent->child_nodes_[i]->bounding_box_.y.max);
+					Point bot_right(parent->child_nodes_[i]->bounding_box_.x.max,parent->child_nodes_[i]->bounding_box_.y.max);
+
+					if(parent->child_nodes_[i]->node_type_ != NodeType::LEAF){
+						line(src_img_color, top_left, top_right, Scalar(1,97,230));
+						line(src_img_color, top_right, bot_right, Scalar(1,97,230));
+						line(src_img_color, bot_right, bot_left, Scalar(1,97,230));
+						line(src_img_color, bot_left, top_left, Scalar(1,97,230));
+					}
+					//						if(parent->child_nodes_[i]->node_type_ == NodeType::INNER)
+					inner_nodes.push_back(parent->child_nodes_[i]);
+				}
+
+				// delete the processed node
+				parent_nodes.erase(parent_nodes.begin());
+			}
+
+			// prepare for next iteration
+			parent_nodes.clear();
+			parent_nodes = inner_nodes;
+		}
+	}
+
+	// then draw real leaves
+	for(auto it = tree.leaf_nodes_.begin(); it != tree.leaf_nodes_.end(); it++)
+	{
+		Point top_left((*it)->bounding_box_.x.min, (*it)->bounding_box_.y.min);
+		Point top_right((*it)->bounding_box_.x.max,(*it)->bounding_box_.y.min);
+		Point bot_left((*it)->bounding_box_.x.min,(*it)->bounding_box_.y.max);
+		Point bot_right((*it)->bounding_box_.x.max,(*it)->bounding_box_.y.max);
+
+		line(src_img_color, top_left, top_right, Scalar(255,144,30));
+		line(src_img_color, top_right, bot_right, Scalar(255,144,30));
+		line(src_img_color, bot_right, bot_left, Scalar(255,144,30));
+		line(src_img_color, bot_left, top_left, Scalar(255,144,30));
+	}
+
+	src_img_color.copyTo(dst);
+}
+
+void GraphVis::VisQTreeSingleNode(const QuadTreeNode& node, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src = _src.getMat();
 	_dst.create(_src.size(), _src.type());
 	Mat dst = _dst.getMat();
 	src.copyTo(dst);
 
-	if(node!=nullptr)
-	{
-		int thickness = -1;
-		int lineType = 8;
-//		unsigned int x,y;
-//		x = node->bounding_box_.x.min +
-//				(node->bounding_box_.x.max - node->bounding_box_.x.min + 1)/2;
-//		y = node->bounding_box_.y.min +
-//				(node->bounding_box_.y.max - node->bounding_box_.y.min + 1)/2;
-//		Point center(x,y);
-		Point center(node->location_.x,node->location_.y);
-		circle( dst,
-				center,
-				10,
-				Scalar( 0, 0, 255 ),
-				thickness,
-				lineType);
-	}
+	int thickness = -1;
+	int lineType = 8;
+
+	Point center(node.location_.x,node.location_.y);
+	circle( dst,
+			center,
+			10,
+			Scalar( 0, 0, 255 ),
+			thickness,
+			lineType);
 }
 
-void GraphVis::DrawQTreeNodes(std::vector<QuadTreeNode*>& nodes, cv::InputArray _src, cv::OutputArray _dst)
+void GraphVis::VisQTreeNodes(const std::vector<QuadTreeNode*>& nodes, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src = _src.getMat();
 	_dst.create(_src.size(), _src.type());
@@ -308,14 +273,8 @@ void GraphVis::DrawQTreeNodes(std::vector<QuadTreeNode*>& nodes, cv::InputArray 
 	int thickness = -1;
 	int lineType = 8;
 
-	std::vector<QuadTreeNode*>::iterator it;
-	for(it = nodes.begin(); it != nodes.end(); it++)
+	for(auto it = nodes.begin(); it != nodes.end(); it++)
 	{
-//		x = (*it)->bounding_box_.x.min +
-//				((*it)->bounding_box_.x.max - (*it)->bounding_box_.x.min + 1)/2;
-//		y = (*it)->bounding_box_.y.min +
-//				((*it)->bounding_box_.y.max - (*it)->bounding_box_.y.min + 1)/2;
-//		Point center(x,y);
 		Point center((*it)->location_.x,(*it)->location_.y);
 		circle( dst,
 				center,
@@ -506,7 +465,7 @@ void GraphVis::FillSquareCellColor(BoundingBox bbox, cv::Scalar color, cv::Mat i
 
 /***---------------------------------------------------------------------------------------------------------------***/
 
-void GraphVis::VisQTreeGraph(Graph<QuadTreeNode>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost)
+void GraphVis::VisQTreeGraph(const Graph<QuadTreeNode>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost)
 {
 	Mat src = _src.getMat();
 	_dst.create(_src.size(), _src.type());
@@ -557,7 +516,7 @@ void GraphVis::VisQTreeGraph(Graph<QuadTreeNode>& graph, cv::InputArray _src, cv
 	}
 }
 
-void GraphVis::VisQTreeGraphPath(std::vector<Vertex<QuadTreeNode>*>& vertices, cv::InputArray _src, cv::OutputArray _dst)
+void GraphVis::VisQTreeGraphPath(const std::vector<Vertex<QuadTreeNode>*>& vertices, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src = _src.getMat();
 	_dst.create(_src.size(), _src.type());
@@ -617,7 +576,7 @@ void GraphVis::VisQTreeGraphPath(std::vector<Vertex<QuadTreeNode>*>& vertices, c
 	}
 }
 
-void GraphVis::VisSquareGrid(SquareGrid& grid, cv::OutputArray _dst)
+void GraphVis::VisSquareGrid(const SquareGrid& grid, cv::OutputArray _dst)
 {
 	_dst.create(Size(grid.col_size_*grid.cell_size_, grid.row_size_*grid.cell_size_), CV_8UC3);
 	Mat dst = _dst.getMat();
@@ -655,7 +614,7 @@ void GraphVis::VisSquareGrid(SquareGrid& grid, cv::OutputArray _dst)
 	}
 }
 
-void GraphVis::VisSquareGrid(SquareGrid& grid, cv::InputArray _src, cv::OutputArray _dst)
+void GraphVis::VisSquareGrid(const SquareGrid& grid, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src_img_color;
 	cvtColor(_src, src_img_color, CV_GRAY2BGR);
@@ -684,7 +643,7 @@ void GraphVis::VisSquareGrid(SquareGrid& grid, cv::InputArray _src, cv::OutputAr
 	src_img_color.copyTo(dst);
 }
 
-void GraphVis::VisSquareGridGraph(Graph<SquareCell>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
+void GraphVis::VisSquareGridGraph(const Graph<SquareCell>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
 {
 //	Mat src = _src.getMat();
 //	_dst.create(_src.size(), _src.type());
@@ -745,7 +704,7 @@ void GraphVis::VisSquareGridGraph(Graph<SquareCell>& graph, cv::InputArray _src,
 
 }
 
-void GraphVis::VisSquareGridPath(std::vector<Vertex<SquareCell>*>& path, cv::InputArray _src, cv::OutputArray _dst)
+void GraphVis::VisSquareGridPath(const std::vector<Vertex<SquareCell>*>& path, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src, dst;
 	int src_type = _src.getMat().type();

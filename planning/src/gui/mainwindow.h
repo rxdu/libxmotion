@@ -5,6 +5,7 @@
 #include <QMouseEvent>
 
 #include <vector>
+#include <memory>
 
 #include "opencv2/opencv.hpp"
 
@@ -34,8 +35,9 @@ private:
 //    void BtnSendTrajectory();
 
 private:
-    SquareGrid* sgrid_;
-    Graph<SquareCell>* sgrid_graph_;
+    std::shared_ptr<SquareGrid> sgrid_;
+    std::shared_ptr<Graph<SquareCell>> sgrid_graph_;
+
     Vertex<SquareCell>* start_sgvertex_;
     Vertex<SquareCell>* end_sgvertex_;
     std::vector<Vertex<SquareCell>*> sg_path_;

@@ -21,7 +21,7 @@ SGridBuilder::~SGridBuilder()
 
 }
 
-SquareGrid* SGridBuilder::BuildSquareGrid(cv::InputArray _src, uint32_t cell_size)
+std::shared_ptr<SquareGrid> SGridBuilder::BuildSquareGrid(cv::InputArray _src, uint32_t cell_size)
 {
 	Mat image_bin;
 	Mat image_map;
@@ -37,7 +37,7 @@ SquareGrid* SGridBuilder::BuildSquareGrid(cv::InputArray _src, uint32_t cell_siz
 	// create square grid
 	uint32_t row_num = image_map.rows / cell_size;
 	uint32_t col_num = image_map.cols / cell_size;
-	SquareGrid *sgrid = new SquareGrid(row_num,col_num, cell_size);
+	std::shared_ptr<SquareGrid> sgrid = std::make_shared<SquareGrid>(row_num,col_num, cell_size);
 
 	// set occupancy of each cell
 	for(uint32_t i = 0; i < row_num; i++)
@@ -52,7 +52,7 @@ SquareGrid* SGridBuilder::BuildSquareGrid(cv::InputArray _src, uint32_t cell_siz
 	return sgrid;
 }
 
-std::tuple<SquareGrid*, cv::Mat> SGridBuilder::BuildSquareGridMap(cv::InputArray _src, uint32_t cell_size)
+std::tuple<std::shared_ptr<SquareGrid>, cv::Mat> SGridBuilder::BuildSquareGridMap(cv::InputArray _src, uint32_t cell_size)
 {
 	Mat image_bin;
 	Mat image_map;
@@ -66,7 +66,7 @@ std::tuple<SquareGrid*, cv::Mat> SGridBuilder::BuildSquareGridMap(cv::InputArray
 	ImageUtils::PadImageTo2Exp(image_bin, image_map);
 
 	// create square grid
-	SquareGrid *sgrid = SGridBuilder::BuildSquareGrid(_src, cell_size);
+	std::shared_ptr<SquareGrid> sgrid = SGridBuilder::BuildSquareGrid(_src, cell_size);
 
 	return std::make_tuple(sgrid, image_map);
 }

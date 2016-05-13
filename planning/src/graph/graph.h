@@ -112,7 +112,7 @@ public:
 	};
 
 	/// This functions is used to access all vertices of a graph
-	std::vector<Vertex<BundledStructType>*> GetGraphVertices()
+	std::vector<Vertex<BundledStructType>*> GetGraphVertices() const
 	{
 		std::vector<Vertex<BundledStructType>*> vertices;
 
@@ -125,7 +125,7 @@ public:
 	};
 
 	/// This functions is used to access all edges of a graph
-	std::vector<Edge<Vertex<BundledStructType>>> GetGraphEdges()
+	std::vector<Edge<Vertex<BundledStructType>>> GetGraphEdges() const
 	{
 		std::vector<Edge<Vertex<BundledStructType>>> edges;
 
@@ -141,7 +141,7 @@ public:
 	};
 
 	/// This functions is used to access all edges of a graph
-	std::vector<Edge<Vertex<BundledStructType>>> GetGraphUndirectedEdges()
+	std::vector<Edge<Vertex<BundledStructType>>> GetGraphUndirectedEdges() const
 	{
 		std::vector<Edge<Vertex<BundledStructType>>> edges;
 

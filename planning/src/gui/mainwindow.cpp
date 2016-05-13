@@ -47,7 +47,7 @@ MainWindow::~MainWindow()
 void MainWindow::SetupMap()
 {
     // read map image
-    std::tuple<SquareGrid*, Mat> sg_map;
+    std::tuple<std::shared_ptr<SquareGrid> , Mat> sg_map;
 
     raw_image_ = imread("/home/rdu/Workspace/srcl_robot_suite/srcl_ros/srcl_planning/data/path_repair_case1.png", IMREAD_GRAYSCALE);
 //    raw_image_ = imread("/home/rdu/Workspace/catkin_ws/src/srcl_ros/srcl_planning/data/new_map.png", IMREAD_GRAYSCALE);
@@ -256,7 +256,7 @@ void srcl_ctrl::MainWindow::on_actionOpenMap_triggered()
 
     if(!map_file_name.isEmpty()) {
         // read map image
-        std::tuple<SquareGrid*, Mat> sg_map;
+        std::tuple<std::shared_ptr<SquareGrid>, Mat> sg_map;
 
         raw_image_ = imread(map_file_name.toStdString(), IMREAD_GRAYSCALE);
 

@@ -27,11 +27,9 @@ using namespace srcl_ctrl;
 
 int main(int argc, char** argv )
 {
-	Mat input_map;
+	Mat input_map, map;
 	bool use_input_image = false;
-	SquareGrid* grid;
-	Mat map;
-	std::tuple<SquareGrid*, Mat> sg_map;
+	std::shared_ptr<SquareGrid> grid;
 
 	if ( argc == 2 )
 	{
@@ -44,7 +42,8 @@ int main(int argc, char** argv )
 		}
 		else
 		{
-//			grid = SGridBuilder::BuildSquareGrid(input_map, 32);
+			std::tuple<std::shared_ptr<SquareGrid>, Mat> sg_map;
+
 			sg_map = SGridBuilder::BuildSquareGridMap(input_map, 32);
 			grid = std::get<0>(sg_map);
 			map = std::get<1>(sg_map);
@@ -56,7 +55,7 @@ int main(int argc, char** argv )
 		printf("Default test map is used \n");
 
 		// create a empty grid
-		grid = new SquareGrid(12,12,95);
+		grid = std::make_shared<SquareGrid>(12,12,95);
 
 		// set occupancy for cells
 		for(int i = 52; i <= 57; i++)
@@ -96,7 +95,7 @@ int main(int argc, char** argv )
 
 	/*** Construct a graph from the square grid ***/
 	/*** the second argument determines if move along diagonal is allowed ***/
-	Graph<SquareCell>* graph = GraphBuilder::BuildFromSquareGrid(grid,true);
+	std::shared_ptr<Graph<SquareCell>> graph = GraphBuilder::BuildFromSquareGrid(grid,true);
 
 	/*** Search path in the graph ***/
 	Vertex<SquareCell> * start_vertex;
@@ -147,9 +146,6 @@ int main(int argc, char** argv )
 	waitKey(0);
 
 //	imwrite( "new_map_path_cmp2.jpg", vis_result);
-
-	delete grid;
-	delete graph;
 
 	return 0;
 }

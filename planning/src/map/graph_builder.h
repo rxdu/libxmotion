@@ -8,6 +8,8 @@
 #ifndef SRC_GRAPH_GRAPH_BUILDER_H_
 #define SRC_GRAPH_GRAPH_BUILDER_H_
 
+#include <memory>
+
 #include "graph/graph.h"
 #include "quadtree/quad_tree.h"
 #include "square_grid/square_grid.h"
@@ -21,8 +23,8 @@ public:
 	~GraphBuilder();
 
 public:
-	static Graph<QuadTreeNode>* BuildFromQuadTree(QuadTree* tree);
-	static Graph<SquareCell>* BuildFromSquareGrid(SquareGrid* grid, bool allow_diag_move);
+	static std::shared_ptr<Graph<QuadTreeNode>> BuildFromQuadTree(std::shared_ptr<QuadTree>& tree);
+	static std::shared_ptr<Graph<SquareCell>> BuildFromSquareGrid(std::shared_ptr<SquareGrid>& grid, bool allow_diag_move);
 };
 }
 

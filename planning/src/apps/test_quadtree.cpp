@@ -1,5 +1,5 @@
 /*
- * test_graph.cpp
+ * test_quadtree.cpp
  *
  *  Created on: Dec 15, 2015
  *      Author: rdu
@@ -32,8 +32,9 @@ int main(int argc, char** argv )
         return -1;
     }
 
-    Mat image_raw;
-    Mat image_disp;
+    Mat map;
+    Mat image_raw,image_disp;
+
     image_raw = imread( argv[1], IMREAD_GRAYSCALE );
 
     if ( !image_raw.data )
@@ -43,13 +44,9 @@ int main(int argc, char** argv )
     }
 
     // example to use quadtree builder
-//    QTreeBuilder builder;
-//    QuadTree* tree = builder.BuildQuadTree(image_raw, 6);
-//    QuadTree* tree = QTreeBuilder::BuildQuadTree(image_raw, 6);
+    std::shared_ptr<QuadTree> tree;
 
-    QuadTree* tree;
-    Mat map;
-    std::tuple<QuadTree*, Mat> qt_map;
+    std::tuple<std::shared_ptr<QuadTree>, Mat> qt_map;
     qt_map = QTreeBuilder::BuildQuadTreeMap(image_raw, 6);
     tree = std::get<0>(qt_map);
     map = std::get<1>(qt_map);
@@ -57,7 +54,7 @@ int main(int argc, char** argv )
     Mat image_tree, image_nodes;
     GraphVis vis;
     Mat vis_map;
-    vis.DrawQuadTree(tree, map, image_tree, TreeVisType::ALL_SPACE);
+    vis.VisQuadTree(*tree, map, image_tree, TreeVisType::ALL_SPACE);
 //    TreeNode* node = tree->leaf_nodes_.at(0);
 //    vis.DrawQTreeSingleNode(node, image_tree, image_nodes);
     std::vector<QuadTreeNode*> free_leaves;
@@ -67,19 +64,15 @@ int main(int argc, char** argv )
     	if((*it)->occupancy_ == OccupancyType::FREE)
     		free_leaves.push_back((*it));
     }
-    vis.DrawQTreeNodes(free_leaves, image_tree, image_nodes);
+    vis.VisQTreeNodes(free_leaves, image_tree, image_nodes);
 
 //    Mat image_dummy;
 //    vis.DrawQTreeWithDummies(tree,builder.padded_img_, image_dummy);
 
     // build a graph from quadtree
-    Graph<QuadTreeNode>* graph;
-
-	graph = GraphBuilder::BuildFromQuadTree(tree);
+	std::shared_ptr<Graph<QuadTreeNode>> graph = GraphBuilder::BuildFromQuadTree(tree);
 	Mat image_graph;
 	vis.VisQTreeGraph(*graph, image_tree, image_graph, true,false);
-//	vis.DrawQTreeGraph(graph, tree, image_tree, image_graph,true, false);
-//	vis.DrawQTreeGraph(graph, tree, image_tree, image_disp);
 
 	// try a* search
 	std::vector<Vertex<QuadTreeNode>*> vertices = graph->GetGraphVertices();
@@ -89,10 +82,10 @@ int main(int argc, char** argv )
 	Vertex<QuadTreeNode>* end_vertex;
 	std::vector<Vertex<QuadTreeNode>*> traj;
 
-//	start_vertex = vertices[0];
-//	end_vertex = vertices[15];
-	start_vertex = graph->GetVertexFromID(172);
-	end_vertex = graph->GetVertexFromID(20);
+	start_vertex = vertices[0];
+	end_vertex = vertices[15];
+//	start_vertex = graph->GetVertexFromID(172);
+//	end_vertex = graph->GetVertexFromID(20);
 
 	clock_t		exec_time;
 
@@ -103,7 +96,6 @@ int main(int argc, char** argv )
 	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 
 	Mat path_img;
-//	vis.DrawQTreeGraphPath(traj,image_graph,path_img);
 	vis.VisQTreeGraphPath(traj, image_graph, path_img);
 
 	image_disp = path_img;
@@ -114,9 +106,6 @@ int main(int argc, char** argv )
     imshow("Processed Image", image_disp);
 
     waitKey(0);
-
-    delete graph;
-    delete tree;
 
     return 0;
 }

@@ -48,22 +48,26 @@ private:
 
 public:
 	// quadtree visualization
-	void DrawQuadTree(QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst, TreeVisType vis_type);
-	void DrawQTreeWithDummies(QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst);
-	void DrawQTreeSingleNode(QuadTreeNode* node, cv::InputArray _src, cv::OutputArray _dst);
-	void DrawQTreeNodes(std::vector<QuadTreeNode*>& nodes, cv::InputArray _src, cv::OutputArray _dst);
+//	void DrawQuadTree(QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst, TreeVisType vis_type);
+//	void DrawQTreeWithDummies(QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst);
+//	void DrawQTreeSingleNode(QuadTreeNode* node, cv::InputArray _src, cv::OutputArray _dst);
+//	void DrawQTreeNodes(std::vector<QuadTreeNode*>& nodes, cv::InputArray _src, cv::OutputArray _dst);
+
+	void VisQuadTree(const QuadTree& tree, cv::InputArray _src, cv::OutputArray _dst, TreeVisType vis_type);
+	void VisQTreeWithDummies(const QuadTree& tree, cv::InputArray _src, cv::OutputArray _dst);
+	void VisQTreeSingleNode(const QuadTreeNode& node, cv::InputArray _src, cv::OutputArray _dst);
+	void VisQTreeNodes(const std::vector<QuadTreeNode*>& nodes, cv::InputArray _src, cv::OutputArray _dst);
 
 	// square grid visualization
-//	void DrawSquareGrid(SquareGrid* grid, cv::OutputArray _dst);
-	void VisSquareGrid(SquareGrid& grid, cv::OutputArray _dst);
-	void VisSquareGrid(SquareGrid& grid, cv::InputArray _src, cv::OutputArray _dst);
+	void VisSquareGrid(const SquareGrid& grid, cv::OutputArray _dst);
+	void VisSquareGrid(const SquareGrid& grid, cv::InputArray _src, cv::OutputArray _dst);
 
 	// graph visualization
-	void VisQTreeGraph(Graph<QuadTreeNode>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost);
-	void VisQTreeGraphPath(std::vector<Vertex<QuadTreeNode>*>& vertices, cv::InputArray _src, cv::OutputArray _dst);
+	void VisQTreeGraph(const Graph<QuadTreeNode>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost);
+	void VisQTreeGraphPath(const std::vector<Vertex<QuadTreeNode>*>& vertices, cv::InputArray _src, cv::OutputArray _dst);
 
-	void VisSquareGridGraph(Graph<SquareCell>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id);
-	void VisSquareGridPath(std::vector<Vertex<SquareCell>*>& path, cv::InputArray _src, cv::OutputArray _dst);
+	void VisSquareGridGraph(const Graph<SquareCell>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id);
+	void VisSquareGridPath(const std::vector<Vertex<SquareCell>*>& path, cv::InputArray _src, cv::OutputArray _dst);
 };
 
 }

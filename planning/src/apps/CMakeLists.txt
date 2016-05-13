@@ -19,21 +19,21 @@ find_package(OpenCV REQUIRED)
 #target_link_libraries(apps ${OpenCV_LIBS})
 
 # Add executables
-add_executable(test_graph test_graph.cpp)
-target_link_libraries(test_graph qtree vis map ${OpenCV_LIBS})
+add_executable(graph_example graph_example.cpp)
+target_link_libraries(graph_example vis ${OpenCV_LIBS})
 
-add_executable(test_grid test_squaregrid.cpp)
-target_link_libraries(test_grid squaregrid vis map ${OpenCV_LIBS})
+add_executable(simple_graph simple_graph.cpp)
+#target_link_libraries(simple_graph )
+
+add_executable(test_qtree test_quadtree.cpp)
+target_link_libraries(test_qtree qtree vis map ${OpenCV_LIBS})
+
+add_executable(test_sgrid test_squaregrid.cpp)
+target_link_libraries(test_sgrid squaregrid vis map ${OpenCV_LIBS})
 
 add_executable(test_image test_image.cpp)
 target_link_libraries(test_image vis ${OpenCV_LIBS})
 
-add_executable(run_example example.cpp)
-target_link_libraries(run_example vis ${OpenCV_LIBS})
-
 add_executable(test_traj test_traj.cpp)
 target_link_libraries(test_traj map vis ${OpenCV_LIBS})
-
-add_executable(simple_graph simple_graph.cpp)
-#target_link_libraries(simple_graph )
 
