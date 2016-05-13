@@ -23,8 +23,8 @@ public:
 	~GraphBuilder();
 
 public:
-	static std::shared_ptr<Graph<QuadTreeNode>> BuildFromQuadTree(std::shared_ptr<QuadTree>& tree);
-	static std::shared_ptr<Graph<SquareCell>> BuildFromSquareGrid(std::shared_ptr<SquareGrid>& grid, bool allow_diag_move);
+	static std::shared_ptr<Graph<QuadTreeNode>> BuildFromQuadTree(const std::shared_ptr<QuadTree>& tree);
+	static std::shared_ptr<Graph<SquareCell>> BuildFromSquareGrid(const std::shared_ptr<SquareGrid>& grid, bool allow_diag_move);
 };
 }
 

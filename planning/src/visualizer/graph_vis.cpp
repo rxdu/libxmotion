@@ -55,6 +55,13 @@ void GraphVis::DrawEdge(cv::Point pt1, cv::Point pt2, cv::Mat img)
 			lineType);
 }
 
+void GraphVis::FillSquareCellColor(BoundingBox bbox, cv::Scalar color, cv::Mat img)
+{
+	Range rngx(bbox.x.min, bbox.x.max);
+	Range rngy(bbox.y.min, bbox.y.max);
+	img(rngy,rngx) = color;
+}
+
 /*
  * @param &tree : reference to the tree to be visualized
  * @param _src : padded image from the tree builder
@@ -284,186 +291,6 @@ void GraphVis::VisQTreeNodes(const std::vector<QuadTreeNode*>& nodes, cv::InputA
 				lineType);
 	}
 }
-
-//void GraphVis::DrawQTreeGraph(Graph<QuadTreeNode> *graph, QuadTree *tree, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost)
-//{
-//	Mat src = _src.getMat();
-//	_dst.create(_src.size(), _src.type());
-//	Mat dst = _dst.getMat();
-//	src.copyTo(dst);
-//
-//	// draw all vertices
-//	std::vector<Vertex<QuadTreeNode>*> vertices;
-//	vertices = graph->GetGraphVertices();
-//	for(auto itv = vertices.begin(); itv != vertices.end(); itv++)
-//	{
-//		cv::Point center((*itv)->node_->location_.x, (*itv)->node_->location_.y);
-//		DrawNodeCenter(center, dst);
-//
-//		// current vertex center coordinate
-//		uint64_t x1,y1,x2,y2;
-//		x1 = (*itv)->node_->location_.x;
-//		y1 = (*itv)->node_->location_.y;
-//
-//		if(show_id)
-//		{
-//			std::string id = std::to_string((*itv)->node_->node_id_);
-//			putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
-//		}
-//
-//		// draw all edges from current vertex
-////		std::vector<Edge<Vertex<QuadTreeNode>>>::iterator ite;
-////		for(ite = (*itv)->edges_.begin(); ite != (*itv)->edges_.end(); ite++)
-////		{
-////			// neighbor vertices center coordinate
-////			const QuadTreeNode* n = (*ite).dst_->node_;
-////
-////			x2 = n->location_.x;
-////			y2 = n->location_.y;
-////
-////			DrawEdge(Point(x1,y1), Point(x2,y2), dst);
-////
-////			// draw cost
-////			std::string str = std::to_string(static_cast<int>((*ite).cost_));
-////			int tx = (x1 + x2)/2;
-////			int ty = (y1 + y2)/2;
-//////			putText(dst, str ,Point(tx,ty), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
-////		}
-//	}
-//
-//	// draw all edges
-//	std::vector<Edge<Vertex<QuadTreeNode>>> edges;
-//	edges = graph->GetGraphEdges();
-////	std::cout<<"number of edges "<< edges.size()<<std::endl;
-//	for(auto it = edges.begin(); it != edges.end(); it++)
-//	{
-//		uint64_t x1,y1,x2,y2;
-//		x1 = (*it).src_->node_->location_.x;
-//		y1 = (*it).src_->node_->location_.y;
-//		x2 = (*it).dst_->node_->location_.x;
-//		y2 = (*it).dst_->node_->location_.y;
-//
-//		DrawEdge(Point(x1,y1), Point(x2,y2), dst);
-//
-//		// draw cost
-//		if(show_cost)
-//		{
-//			std::string str = std::to_string(static_cast<int>((*it).cost_));
-//			int tx = (x1 + x2)/2;
-//			int ty = (y1 + y2)/2;
-//			putText(dst, str ,Point(tx,ty), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
-//		}
-//	}
-//
-////	std::cout<<"number of vertices "<< vertices.size()<<std::endl;
-//}
-//
-//void GraphVis::DrawQTreeGraphPath(std::vector<Vertex<QuadTreeNode>*>& vertices, cv::InputArray _src, cv::OutputArray _dst)
-//{
-//	Mat src = _src.getMat();
-//	_dst.create(_src.size(), _src.type());
-//	Mat dst = _dst.getMat();
-//	src.copyTo(dst);
-//
-//	std::vector<QuadTreeNode*> path_nodes;
-//	for(auto itn = vertices.begin(); itn != vertices.end(); itn++)
-//	{
-//		path_nodes.push_back((*itn)->node_);
-//	}
-//
-//	// draw vertices
-//	uint64_t x, y;
-//	Scalar vertex_color;
-//	int thickness = 3;
-//	int lineType = 8;
-//
-//	for(auto it = path_nodes.begin(); it != path_nodes.end(); it++)
-//	{
-//		Point center((*it)->location_.x,(*it)->location_.y);
-//
-//		if(it == path_nodes.begin())
-//			vertex_color = Scalar( 0, 0, 255 );
-//		else if(it == path_nodes.end() - 1)
-//			vertex_color = Scalar( 153, 0, 0 );
-//		else
-//			vertex_color = Scalar( 153, 153, 0 );
-//
-//		circle( dst,
-//				center,
-//				5,
-//				vertex_color,
-//				thickness,
-//				lineType);
-//	}
-//
-//	// draw edges
-//	uint64_t x1,y1,x2,y2;
-//	int pathline_thickness = 2;
-//	for(auto it = path_nodes.begin(); it != path_nodes.end()-1; it++)
-//	{
-//		// neighbor vertices center coordinate
-//		x1 = (*it)->location_.x;
-//		y1 = (*it)->location_.y;
-//
-//		x2 = (*(it+1))->location_.x;
-//		y2 = (*(it+1))->location_.y;
-//
-//		line( dst,
-//				Point(x1,y1),
-//				Point(x2,y2),
-//				//Scalar( 237, 149, 100 ),
-//				Scalar( 255, 153, 51 ),
-//				pathline_thickness,
-//				lineType);
-//	}
-//}
-
-void GraphVis::FillSquareCellColor(BoundingBox bbox, cv::Scalar color, cv::Mat img)
-{
-	Range rngx(bbox.x.min, bbox.x.max);
-	Range rngy(bbox.y.min, bbox.y.max);
-	img(rngy,rngx) = color;
-}
-
-//void GraphVis::DrawSquareGrid(SquareGrid* grid, cv::OutputArray _dst)
-//{
-//	_dst.create(Size(grid->col_size_*grid->cell_size_, grid->row_size_*grid->cell_size_), CV_8UC3);
-//	Mat dst = _dst.getMat();
-//	dst = bk_color_;
-//
-//	// fill cell color
-//	for(auto itc = grid->cells_.begin(); itc != grid->cells_.end(); itc++)
-//	{
-//		if((*itc).second->occu_ == OccupancyType::OCCUPIED)
-//			FillSquareCellColor((*itc).second->bbox_, obs_color_, dst);
-//		else if((*itc).second->occu_ == OccupancyType::INTERESTED)
-//			FillSquareCellColor((*itc).second->bbox_, aoi_color_, dst);
-//
-//		auto cell = (*itc);
-//		uint64_t x,y;
-//		x = cell.second->bbox_.x.min + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/2;
-//		x = x + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/6;
-//		y = cell.second->bbox_.y.min + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)/2;
-//		y = y + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)*3/7;
-//
-//		std::string id = std::to_string(cell.second->node_id_);
-//
-//		putText(dst, id ,Point(x,y), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
-//	}
-//
-//	// draw grid lines
-//	line(dst, Point(0,0),Point(0,grid->row_size_*grid->cell_size_-1),ln_color_, 1);
-//	for(int i = 1; i <= grid->col_size_; i++){
-//		line(dst, Point(i*grid->cell_size_-1,0),Point(i*grid->cell_size_-1,grid->row_size_*grid->cell_size_-1),ln_color_, 1);
-//	}
-//
-//	line(dst, Point(0,0),Point(grid->col_size_*grid->cell_size_-1,0),ln_color_, 1);
-//	for(int i = 1; i <= grid->row_size_; i++){
-//		line(dst, Point(0,i*grid->cell_size_-1),Point(grid->col_size_*grid->cell_size_-1,i*grid->cell_size_-1),ln_color_, 1);
-//	}
-//}
-
-/***---------------------------------------------------------------------------------------------------------------***/
 
 void GraphVis::VisQTreeGraph(const Graph<QuadTreeNode>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost)
 {

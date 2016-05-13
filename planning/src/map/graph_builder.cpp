@@ -21,7 +21,7 @@ GraphBuilder::~GraphBuilder()
 
 }
 
-std::shared_ptr<Graph<QuadTreeNode>> GraphBuilder::BuildFromQuadTree(std::shared_ptr<QuadTree>& tree)
+std::shared_ptr<Graph<QuadTreeNode>> GraphBuilder::BuildFromQuadTree(const std::shared_ptr<QuadTree>& tree)
 {
 	std::shared_ptr<Graph<QuadTreeNode>> graph = std::make_shared<Graph<QuadTreeNode>>();
 
@@ -58,7 +58,7 @@ std::shared_ptr<Graph<QuadTreeNode>> GraphBuilder::BuildFromQuadTree(std::shared
 	return graph;
 }
 
-std::shared_ptr<Graph<SquareCell>> GraphBuilder::BuildFromSquareGrid(std::shared_ptr<SquareGrid>& grid, bool allow_diag_move)
+std::shared_ptr<Graph<SquareCell>> GraphBuilder::BuildFromSquareGrid(const std::shared_ptr<SquareGrid>& grid, bool allow_diag_move)
 {
 	std::shared_ptr<Graph<SquareCell>> graph = std::make_shared<Graph<SquareCell>>();
 
