@@ -131,26 +131,6 @@ public:
 		return trajectory;
 	};
 
-private:
-	double CalcHeuristic(GraphVertexType* vertex_a, GraphVertexType* vertex_b)
-	{
-		double x1,x2,y1,y2;
-
-		x1 = vertex_a->bundled_data_.location_.x;
-		y1 = vertex_a->bundled_data_.location_.y;
-
-		x2 = vertex_b->bundled_data_.location_.x;
-		y2 = vertex_b->bundled_data_.location_.y;
-
-		// static_cast: can get wrong result to use "unsigned long" type for deduction
-		long x_error = static_cast<long>(x1) - static_cast<long>(x2);
-		long y_error = static_cast<long>(y1) - static_cast<long>(y2);
-
-		double cost = std::abs(x_error) + std::abs(y_error);
-//		std::cout<< "heuristic cost: " << cost << std::endl;
-
-		return cost;
-	};
 };
 
 }

@@ -133,9 +133,34 @@ public:
 		{
 			Vertex<BundledStructType>* vertex = it->second;
 			for(auto ite = vertex->edges_.begin(); ite != vertex->edges_.end(); ite++) {
-				auto itedge = std::find(edges.begin(), edges.end(), (*ite));
+				edges.push_back(*ite);
+			}
+		}
 
-				if(itedge == edges.end())
+		return edges;
+	};
+
+	/// This functions is used to access all edges of a graph
+	std::vector<Edge<Vertex<BundledStructType>>> GetGraphUndirectedEdges()
+	{
+		std::vector<Edge<Vertex<BundledStructType>>> edges;
+
+		for(auto it = vertex_map_.begin(); it != vertex_map_.end(); it++)
+		{
+			Vertex<BundledStructType>* vertex = it->second;
+
+			for(auto ite = vertex->edges_.begin(); ite != vertex->edges_.end(); ite++) {
+				bool edge_existed = false;
+
+				for(auto& itedge : edges)
+				{
+					if(itedge -= (*ite)) {
+						edge_existed = true;
+						break;
+					}
+				}
+
+				if(!edge_existed)
 					edges.push_back(*ite);
 			}
 		}

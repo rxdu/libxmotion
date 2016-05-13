@@ -535,7 +535,7 @@ void GraphVis::VisQTreeGraph(Graph<QuadTreeNode>& graph, cv::InputArray _src, cv
 
 	// draw all edges
 	std::vector<Edge<Vertex<QuadTreeNode>>> edges;
-	edges = graph.GetGraphEdges();
+	edges = graph.GetGraphUndirectedEdges();
 	for(auto it = edges.begin(); it != edges.end(); it++)
 	{
 		uint64_t x1,y1,x2,y2;
@@ -731,7 +731,7 @@ void GraphVis::VisSquareGridGraph(Graph<SquareCell>& graph, cv::InputArray _src,
 
 	// draw all edges
 	std::vector<Edge<Vertex<SquareCell>>> edges;
-	edges = graph.GetGraphEdges();
+	edges = graph.GetGraphUndirectedEdges();
 	for(auto it = edges.begin(); it != edges.end(); it++)
 	{
 		uint64_t x1,y1,x2,y2;

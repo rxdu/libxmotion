@@ -39,8 +39,20 @@ public:
 	 */
 	bool operator ==(const Edge<BundledVertexType> other)
 	{
+		if(src_->vertex_id_ == other.src_->vertex_id_ && dst_->vertex_id_ == other.dst_->vertex_id_)
+			return true;
+		else
+			return false;
+	}
+
+	/**
+	 * This operation checks if two edges connect the same vertex pair.
+	 * If two edges connect the same pair of vertices, return true, otherwise false.
+	 */
+	bool operator -=(const Edge<BundledVertexType> other)
+	{
 		if((src_->vertex_id_ == other.src_->vertex_id_ && dst_->vertex_id_ == other.dst_->vertex_id_)
-			|| (src_->vertex_id_ == other.dst_->vertex_id_ && dst_->vertex_id_ == other.src_->vertex_id_))
+				|| (src_->vertex_id_ == other.dst_->vertex_id_ && dst_->vertex_id_ == other.src_->vertex_id_))
 			return true;
 		else
 			return false;
