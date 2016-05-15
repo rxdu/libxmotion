@@ -15,7 +15,7 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="2">
+    <item row="0" column="1" rowspan="2" colspan="2">
      <widget class="QGroupBox" name="gbMap">
       <property name="title">
        <string>2D Map</string>
@@ -26,33 +26,49 @@
       <layout class="QGridLayout" name="gridLayout_3"/>
      </widget>
     </item>
-    <item row="1" column="0" colspan="2">
-     <widget class="QGroupBox" name="gbCtrl">
+    <item row="0" column="0">
+     <widget class="QGroupBox" name="gbWSpace">
       <property name="maximumSize">
        <size>
-        <width>16777215</width>
-        <height>100</height>
+        <width>200</width>
+        <height>16777215</height>
        </size>
       </property>
       <property name="title">
-       <string>Control</string>
+       <string>Workspace </string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="1">
-        <widget class="QRadioButton" name="radioButton">
-         <property name="text">
-          <string>Quad-Tree</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QRadioButton" name="radioButton_2">
+       <item row="0" column="0" colspan="3">
+        <widget class="QRadioButton" name="rbUseSGrid">
          <property name="text">
           <string>Square Grid</string>
          </property>
+         <attribute name="buttonGroup">
+          <string notr="true">rbGroupCellDecomp</string>
+         </attribute>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2">
+       <item row="3" column="2">
+        <widget class="QSpinBox" name="sbQTreeMaxDepth"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lbQTreeMaxDepth">
+         <property name="text">
+          <string>Max Depth:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="3">
+        <widget class="QRadioButton" name="rbUseQTree">
+         <property name="text">
+          <string>Quad-Tree</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">rbGroupCellDecomp</string>
+         </attribute>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="3">
         <widget class="QPushButton" name="btnSendTraj">
          <property name="text">
           <string>Send Trajectory</string>
@@ -99,4 +115,7 @@
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="rbGroupCellDecomp"/>
+ </buttongroups>
 </ui>

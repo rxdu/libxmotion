@@ -9,6 +9,7 @@
 // user
 #include "map/sgrid_builder.h"
 #include "map/graph_builder.h"
+#include "map/qtree_builder.h"
 #include "visualizer/graph_vis.h"
 #include "common/common_types.h"
 
@@ -18,7 +19,12 @@ using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    disp_once(false),
+    start_sgvertex_(nullptr),
+    end_sgvertex_(nullptr),
+    cell_decomp_method_(CellDecompMethod::SQUARE_GRID),
+    qtree_depth_(6)
 {
     ui->setupUi(this);
 
@@ -26,16 +32,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->gbMap->layout()->addWidget(image_label_);
 
     ui->actionOpenMap->setIcon(QIcon(":/icons/icons/open_map.ico"));
-
-    SetupMap();
+    ui->rbUseSGrid->setChecked(true);
+    ui->sbQTreeMaxDepth->setValue(6);
+    ui->sbQTreeMaxDepth->setMinimum(0);
 
     // connect image label with main window
 //    connect(image_label_,SIGNAL(NewImagePositionClicked(long, long, double)),this,SLOT(UpdateTargetPosition(long, long, double)));
 //    connect(ui->btnSendTraj, SIGNAL (clicked()), this, SLOT (BtnSendTrajectory()));
-
-    disp_once = false;
-    start_sgvertex_ = nullptr;
-    end_sgvertex_ = nullptr;
 }
 
 MainWindow::~MainWindow()
@@ -44,22 +47,30 @@ MainWindow::~MainWindow()
     delete image_label_;
 }
 
-void MainWindow::SetupMap()
+void MainWindow::UpdateDisplayMap(Mat map_img)
 {
-    // read map image
-    std::tuple<std::shared_ptr<SquareGrid> , Mat> sg_map;
+    if(map_img.data) {
+        Mat vis_img = this->DecomposeWorkspace(map_img, cell_decomp_method_);
 
-    raw_image_ = imread("/home/rdu/Workspace/srcl_robot_suite/srcl_ros/srcl_planning/data/path_repair_case1.png", IMREAD_GRAYSCALE);
-//    raw_image_ = imread("/home/rdu/Workspace/catkin_ws/src/srcl_ros/srcl_planning/data/new_map.png", IMREAD_GRAYSCALE);
+        QImage map_image = ConvertMatToQImage(vis_img);
+        QPixmap pix = QPixmap::fromImage(map_image);
 
-    // build square grid from image
-    if (!raw_image_.data) {
-        printf("No image data \n");
-//        ui->qLabelMap->setText("Failed to load map");
-        return;
+        image_label_->setPixmap(pix);
+        image_label_->update();
     }
-    else {
-        sg_map = SGridBuilder::BuildSquareGridMap(raw_image_, 32);
+}
+
+Mat MainWindow::DecomposeWorkspace(Mat map_image, CellDecompMethod method)
+{
+    Mat vis_img;
+
+    std::cout << "this function called" << std::endl;
+
+    if(method == CellDecompMethod::SQUARE_GRID)
+    {
+        std::tuple<std::shared_ptr<SquareGrid> , Mat> sg_map;
+
+        sg_map = SGridBuilder::BuildSquareGridMap(map_image, 32);
         sgrid_ = std::get<0>(sg_map);
         sgrid_map_ = std::get<1>(sg_map);
 
@@ -67,7 +78,6 @@ void MainWindow::SetupMap()
         sgrid_graph_ = GraphBuilder::BuildFromSquareGrid(sgrid_, true);
 
         GraphVis vis;
-        Mat vis_img;
 
         if (sgrid_map_.empty())
             vis.VisSquareGrid(*sgrid_, vis_img);
@@ -78,11 +88,29 @@ void MainWindow::SetupMap()
         vis.VisSquareGridGraph(*sgrid_graph_, vis_img, vis_img, true);
         sgrid_map_ = vis_img;
 
-        QImage map_image = ConvertMatToQImage(sgrid_map_);
-        QPixmap pix = QPixmap::fromImage(map_image);
-
-        image_label_->setPixmap(pix);
+        std::cout << "decomposed using square grid" << std::endl;
     }
+    else if(method == CellDecompMethod::QUAD_TREE)
+    {
+        std::tuple<std::shared_ptr<QuadTree> , Mat> qt_map;
+
+        qt_map = QTreeBuilder::BuildQuadTreeMap(map_image, qtree_depth_);
+        qtree_ = std::get<0>(qt_map);
+        qtree_map_ = std::get<1>(qt_map);
+
+        // build graph from square grid
+        qtree_graph_ = GraphBuilder::BuildFromQuadTree(qtree_);
+
+        GraphVis vis;
+        vis.VisQuadTree(*qtree_, qtree_map_, vis_img, TreeVisType::ALL_SPACE);
+        vis.VisQTreeGraph(*qtree_graph_, vis_img, vis_img, true, false);
+
+        qtree_map_ = vis_img;
+
+        std::cout << "decomposed using quadtree" << std::endl;
+    }
+
+    return vis_img;
 }
 
 //void MainWindow::UpdateMap()
@@ -249,46 +277,57 @@ QImage MainWindow::ConvertMatToQImage(const Mat& mat)
 
 void srcl_ctrl::MainWindow::on_actionOpenMap_triggered()
 {
-    std::cout << "clicked" << std::endl;
+//    std::cout << "clicked" << std::endl;
 
     QString map_file_name = QFileDialog::getOpenFileName(this,
         tr("Open Map File"), "/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/planning/data", tr("Map Images (*.png *.jpg)"));
 
     if(!map_file_name.isEmpty()) {
         // read map image
-        std::tuple<std::shared_ptr<SquareGrid>, Mat> sg_map;
-
         raw_image_ = imread(map_file_name.toStdString(), IMREAD_GRAYSCALE);
 
         if (!raw_image_.data) {
             printf("No image data \n");
-            //        ui->qLabelMap->setText("Failed to load map");
+            ui->statusBar->showMessage(tr("Failed to load map."));
+
             return;
         }
         else {
-            sg_map = SGridBuilder::BuildSquareGridMap(raw_image_, 32);
-            sgrid_ = std::get<0>(sg_map);
-            sgrid_map_ = std::get<1>(sg_map);
+            this->UpdateDisplayMap(raw_image_);
 
-            // build graph from square grid
-            sgrid_graph_ = GraphBuilder::BuildFromSquareGrid(sgrid_, true);
-
-            GraphVis vis;
-            Mat vis_img;
-
-            if (sgrid_map_.empty())
-                vis.VisSquareGrid(*sgrid_, vis_img);
-            else
-                vis.VisSquareGrid(*sgrid_, sgrid_map_, vis_img);
-
-            /*** put the graph on top of the square grid ***/
-            vis.VisSquareGridGraph(*sgrid_graph_, vis_img, vis_img, true);
-            sgrid_map_ = vis_img;
-
-            QImage map_image = ConvertMatToQImage(sgrid_map_);
-            QPixmap pix = QPixmap::fromImage(map_image);
-
-            image_label_->setPixmap(pix);
+            std::string stdmsg = "Successfully loaded map: " + map_file_name.toStdString();
+            QString msg = QString::fromStdString(stdmsg);
+            ui->statusBar->showMessage(msg);
         }
     }
+}
+
+void srcl_ctrl::MainWindow::on_rbUseQTree_clicked()
+{
+    cell_decomp_method_ = CellDecompMethod::QUAD_TREE;
+
+    ui->sbQTreeMaxDepth->setEnabled(true);
+    ui->lbQTreeMaxDepth->setEnabled(true);
+
+    this->UpdateDisplayMap(raw_image_);
+
+    std::cout << "seleted quad tree" << std::endl;
+}
+
+void srcl_ctrl::MainWindow::on_rbUseSGrid_clicked()
+{
+    cell_decomp_method_ = CellDecompMethod::SQUARE_GRID;
+
+    ui->sbQTreeMaxDepth->setEnabled(false);
+    ui->lbQTreeMaxDepth->setEnabled(false);
+
+    this->UpdateDisplayMap(raw_image_);
+    std::cout << "selected square grid" << std::endl;
+}
+
+void srcl_ctrl::MainWindow::on_sbQTreeMaxDepth_valueChanged(int val)
+{
+    qtree_depth_ = val;
+
+    this->UpdateDisplayMap(raw_image_);
 }
