@@ -13,7 +13,8 @@ using namespace srcl_ctrl;
 
 TrajectoryManager::TrajectoryManager()
 {
-	SetTestTrajectory();
+//	SetTestTrajectory();
+	SetTestStraigtTrajectory();
 }
 
 TrajectoryManager::~TrajectoryManager()
@@ -87,6 +88,54 @@ void TrajectoryManager::SetTestTrajectory()
 			pt.accelerations[2] = 0;
 
 			pt.yaw = angle;
+		}
+		else
+			pt.point_empty = true;
+
+		traj_.push_back(pt);
+	}
+}
+
+void TrajectoryManager::SetTestStraigtTrajectory()
+{
+	traj_.clear();
+
+	for(int i = 0; i < 1000; i++)
+	{
+		TrajectoryPoint pt;
+		pt.point_empty = false;
+
+		double height = 0.5;
+
+		if(i < 200)
+		{
+			pt.positions[0] = 0;
+			pt.positions[1] = 0;
+			pt.positions[2] = 0.5;
+			pt.velocities[0] = 0;
+			pt.velocities[1] = 0;
+			pt.velocities[2] = 0;
+			pt.accelerations[0] = 0;
+			pt.accelerations[1] = 0;
+			pt.accelerations[2] = 0;
+			pt.yaw = 0;
+		}
+		else if(i < 450)
+		{
+			double t = (i - 200) * 0.01;
+			pt.positions[0] = -1/6.0*(t*t*t) + 2.5/4.0*t*t;
+			pt.positions[1] = 0;
+			pt.positions[2] = height;
+
+			pt.velocities[0] = - 1/2.0*t*t + 2.5/2.0*t;
+			pt.velocities[1] = 0;
+			pt.velocities[2] = 0;
+
+			pt.accelerations[0] = - t + 2.5/2.0;
+			pt.accelerations[1] = 0;
+			pt.accelerations[2] = 0;
+
+			pt.yaw = 0;
 		}
 		else
 			pt.point_empty = true;

@@ -27,6 +27,7 @@ public:
 	void ClearTrajectory();
 	void SetTrajectory(std::vector<TrajectoryPoint>& traj);
 	void SetTestTrajectory();
+	void SetTestStraigtTrajectory();
 	TrajectoryPoint GetTrajectoryPoint(uint64_t t);
 };
 
