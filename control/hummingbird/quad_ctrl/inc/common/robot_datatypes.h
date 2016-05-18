@@ -56,6 +56,11 @@ typedef struct
 	float ang_vel[4];
 }QuadCmd;
 
+enum class QuadFlightType {
+	X_TYPE,
+	PLUS_TYPE,
+};
+
 #define IMG_RES_X 160
 #define IMG_RES_Y 90
 

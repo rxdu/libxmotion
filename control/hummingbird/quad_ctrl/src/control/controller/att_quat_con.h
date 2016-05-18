@@ -12,6 +12,7 @@
 #include "eigen3/Eigen/Geometry"
 
 #include "controller/controller_base.h"
+#include "common/robot_datatypes.h"
 
 namespace srcl_ctrl {
 
@@ -30,7 +31,8 @@ private:
 	float kd_psi;
 
 private:
-	Eigen::Matrix<double,4,1> CalcMotorCmd(Eigen::Matrix<float,4,1> force_toqure);
+//	Eigen::Matrix<double,4,1> CalcMotorCmd(Eigen::Matrix<float,4,1> force_toqure);
+	Eigen::Matrix<double,4,1> CalcMotorCmd(Eigen::Matrix<float,4,1> force_toqure, QuadFlightType type);
 
 public:
 	void Update(ControlInput *input, ControlOutput *cmd);

@@ -54,7 +54,7 @@ public:
 	virtual ~Controller(){};
 
 protected:
-	RobotState *rs_;
+	const RobotState *rs_;
 
 public:
 	virtual void Update(ControlInput *input, ControlOutput *cmd) = 0;

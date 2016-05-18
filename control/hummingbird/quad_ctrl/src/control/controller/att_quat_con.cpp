@@ -34,7 +34,54 @@ AttQuatCon::~AttQuatCon()
 
 }
 
-Eigen::Matrix<double,4,1> AttQuatCon::CalcMotorCmd(Eigen::Matrix<float,4,1> force_toqure)
+//Eigen::Matrix<double,4,1> AttQuatCon::CalcMotorCmd(Eigen::Matrix<float,4,1> force_toqure)
+//{
+//	Eigen::Matrix<double,4,4> trans;
+//	Eigen::Matrix<double,4,4> trans_inv;
+//	Eigen::Matrix<double,4,1> f_motor;
+//	Eigen::Matrix<double,4,1> ang_vel;
+//
+//	double d = rs_->arm_length_;
+//	double c = rs_->kM_/rs_->kF_;
+//
+////	trans << 1, 1, 1, 1,
+////			 0,-d, 0, d,
+////			-d, 0, d, 0,
+////			 c,-c, c,-c;
+//
+////	trans << 1, 1, 1, 1,
+////			std::sqrt(2.0)*d/2.0,-std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0, -std::sqrt(2.0)*d/2.0,
+////			-std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0, -std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0,
+////			c,-c, c,-c;
+//
+//	trans << 1, 1, 1, 1,
+//			std::sqrt(2.0)*d/2.0,-std::sqrt(2.0)*d/2.0, -std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0,
+//			-std::sqrt(2.0)*d/2.0, -std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0,
+//			c,-c, c,-c;
+//
+////	std::cout << "trans: "<< trans << std::endl;
+//
+//	trans_inv = trans.inverse();
+//
+////	std::cout << "trans inverse: "<< trans_inv << std::endl;
+//
+//	f_motor(0) = trans_inv(0,0) * force_toqure(0) + trans_inv(0,1) * force_toqure(1) + trans_inv(0,2) * force_toqure(2) + trans_inv(0,3) * force_toqure(3);
+//	f_motor(1) = trans_inv(1,0) * force_toqure(0) + trans_inv(1,1) * force_toqure(1) + trans_inv(1,2) * force_toqure(2) + trans_inv(1,3) * force_toqure(3);
+//	f_motor(2) = trans_inv(2,0) * force_toqure(0) + trans_inv(2,1) * force_toqure(1) + trans_inv(2,2) * force_toqure(2) + trans_inv(2,3) * force_toqure(3);
+//	f_motor(3) = trans_inv(3,0) * force_toqure(0) + trans_inv(3,1) * force_toqure(1) + trans_inv(3,2) * force_toqure(2) + trans_inv(3,3) * force_toqure(3);
+//
+//	ang_vel = f_motor/rs_->kF_;
+//
+//	for(int i = 0; i < 4; i++) {
+//		if(ang_vel(i) < 0)
+//			ang_vel(i) = 0;
+//		ang_vel(i) = std::sqrt(ang_vel(i));
+//	}
+//
+//	return ang_vel;
+//}
+
+Eigen::Matrix<double,4,1> AttQuatCon::CalcMotorCmd(Eigen::Matrix<float,4,1> force_toqure, QuadFlightType type)
 {
 	Eigen::Matrix<double,4,4> trans;
 	Eigen::Matrix<double,4,4> trans_inv;
@@ -44,26 +91,21 @@ Eigen::Matrix<double,4,1> AttQuatCon::CalcMotorCmd(Eigen::Matrix<float,4,1> forc
 	double d = rs_->arm_length_;
 	double c = rs_->kM_/rs_->kF_;
 
-//	trans << 1, 1, 1, 1,
-//			 0,-d, 0, d,
-//			-d, 0, d, 0,
-//			 c,-c, c,-c;
-
-//	trans << 1, 1, 1, 1,
-//			std::sqrt(2.0)*d/2.0,-std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0, -std::sqrt(2.0)*d/2.0,
-//			-std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0, -std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0,
-//			c,-c, c,-c;
+	if(type == QuadFlightType::PLUS_TYPE) {
+		trans << 1, 1, 1, 1,
+				 0,-d, 0, d,
+				-d, 0, d, 0,
+				 c,-c, c,-c;
+	}
+	else if(type == QuadFlightType::X_TYPE) {
 
 	trans << 1, 1, 1, 1,
 			std::sqrt(2.0)*d/2.0,-std::sqrt(2.0)*d/2.0, -std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0,
 			-std::sqrt(2.0)*d/2.0, -std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0,
 			c,-c, c,-c;
-
-//	std::cout << "trans: "<< trans << std::endl;
+	}
 
 	trans_inv = trans.inverse();
-
-//	std::cout << "trans inverse: "<< trans_inv << std::endl;
 
 	f_motor(0) = trans_inv(0,0) * force_toqure(0) + trans_inv(0,1) * force_toqure(1) + trans_inv(0,2) * force_toqure(2) + trans_inv(0,3) * force_toqure(3);
 	f_motor(1) = trans_inv(1,0) * force_toqure(0) + trans_inv(1,1) * force_toqure(1) + trans_inv(1,2) * force_toqure(2) + trans_inv(1,3) * force_toqure(3);
@@ -133,6 +175,7 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	axis_dot_product[0] = new_x_axis.dot(x_axis_v);
 	axis_dot_product[1] = new_y_axis.dot(y_axis_v);
 	axis_dot_product[2] = new_z_axis.dot(z_axis_v);
+
 //	if(axis_dot_product[0] < 0) {
 //		std::cout << "************ x direction dot product change ************" << std::endl;
 //		quat_e.x() = - quat_e.x();
@@ -163,7 +206,7 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 			desired_ft(i) = 0;
 
 	// calculate desired motor cmd from desired force and torque
-	Eigen::Matrix<double,4,1> motor_vel = CalcMotorCmd(desired_ft);
+	Eigen::Matrix<double,4,1> motor_vel = CalcMotorCmd(desired_ft, rs_->quad_flight_type_);
 
 	cmd->motor_ang_vel_d[0] = motor_vel(0);
 	cmd->motor_ang_vel_d[1] = motor_vel(1);

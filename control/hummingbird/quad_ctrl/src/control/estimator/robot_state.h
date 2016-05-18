@@ -27,6 +27,8 @@ public:
 	Eigen::Quaterniond quat_;
 	Point3 rotation_rate_;
 
+	QuadFlightType quad_flight_type_;
+
 private:
 	Eigen::Matrix<float,2,2> M_matrix_;
 	Eigen::Quaterniond last_quat_;

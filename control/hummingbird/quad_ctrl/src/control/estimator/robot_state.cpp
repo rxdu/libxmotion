@@ -26,7 +26,8 @@ RobotState::RobotState():
 		kF_(6.11e-8),
 		kM_(1.5e-9),
 		sim_step_(0.01),
-		invert_quat(false)
+		invert_quat(false),
+		quad_flight_type_(QuadFlightType::X_TYPE)
 {
 	w_h_ = sqrt(mass_ * g_ / 4 / kF_);
 

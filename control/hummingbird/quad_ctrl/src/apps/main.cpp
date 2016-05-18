@@ -109,9 +109,10 @@ int main(int argc,char* argv[])
 		simxInt ping_time = 0;
 		TrajectoryManager traj_manager;
 		last_state.point_empty = false;
-		last_state.positions[0] = 0;
-		last_state.positions[1] = 0;
-		last_state.positions[2] = 0;
+		last_state.positions[0] = -1.8;
+		last_state.positions[1] = 2.0;
+		last_state.positions[2] = 0.5;
+		last_state.yaw = -M_PI/4;
 
 		std::cout << "INFO: Created a simulation client." << std::endl;
 
