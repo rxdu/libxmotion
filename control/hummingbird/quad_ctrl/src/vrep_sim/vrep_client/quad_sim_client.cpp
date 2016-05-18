@@ -44,7 +44,7 @@ QuadSimClient::QuadSimClient(simxInt clientId):
 
 	// get simulation object handles
 	simxGetObjectHandle(client_id_, "asctec_hummingbird",&quad_handle_,simx_opmode_oneshot_wait);
-	simxGetObjectHandle(client_id_, "ctrl_ref",&ref_handle_,simx_opmode_oneshot_wait);
+	simxGetObjectHandle(client_id_, "ctrl_ref_x",&ref_handle_,simx_opmode_oneshot_wait);
 
 	// initialize communication between server and client
 	ConfigDataStreaming();

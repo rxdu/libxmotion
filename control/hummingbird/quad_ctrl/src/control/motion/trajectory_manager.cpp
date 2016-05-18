@@ -13,8 +13,8 @@ using namespace srcl_ctrl;
 
 TrajectoryManager::TrajectoryManager()
 {
-//	SetTestTrajectory();
-	SetTestStraigtTrajectory();
+	SetTestTrajectory();
+//	SetTestStraigtTrajectory();
 }
 
 TrajectoryManager::~TrajectoryManager()
