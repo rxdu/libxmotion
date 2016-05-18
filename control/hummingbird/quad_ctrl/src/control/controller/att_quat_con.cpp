@@ -55,15 +55,15 @@ Eigen::Matrix<double,4,1> AttQuatCon::CalcMotorCmd(Eigen::Matrix<float,4,1> forc
 //			c,-c, c,-c;
 
 	trans << 1, 1, 1, 1,
-			-std::sqrt(2.0)*d/2.0,-std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0,
-			-std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0, -std::sqrt(2.0)*d/2.0,
+			std::sqrt(2.0)*d/2.0,-std::sqrt(2.0)*d/2.0, -std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0,
+			-std::sqrt(2.0)*d/2.0, -std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0,
 			c,-c, c,-c;
 
-	std::cout << "trans: "<< trans << std::endl;
+//	std::cout << "trans: "<< trans << std::endl;
 
 	trans_inv = trans.inverse();
 
-	std::cout << "trans inverse: "<< trans_inv << std::endl;
+//	std::cout << "trans inverse: "<< trans_inv << std::endl;
 
 	f_motor(0) = trans_inv(0,0) * force_toqure(0) + trans_inv(0,1) * force_toqure(1) + trans_inv(0,2) * force_toqure(2) + trans_inv(0,3) * force_toqure(3);
 	f_motor(1) = trans_inv(1,0) * force_toqure(0) + trans_inv(1,1) * force_toqure(1) + trans_inv(1,2) * force_toqure(2) + trans_inv(1,3) * force_toqure(3);
