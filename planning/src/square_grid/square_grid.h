@@ -17,7 +17,8 @@
 
 namespace srcl_ctrl{
 
-struct SquareCell: public BDSBase<SquareCell>{
+class SquareCell: public BDSBase<SquareCell>{
+public:
 	SquareCell(uint64_t id, uint32_t row, uint32_t col, BoundingBox bbox, OccupancyType occupancy):
 		BDSBase<SquareCell>(id),
 		occu_(occupancy)
@@ -30,6 +31,7 @@ struct SquareCell: public BDSBase<SquareCell>{
 		location_.x = bbox_.x.min + (bbox_.x.max - bbox_.x.min)/2;
 		location_.y = bbox_.y.min + (bbox_.y.max - bbox_.y.min)/2;
 	}
+	~SquareCell(){};
 
 //	const uint64_t node_id_;
 	Position2D index_;

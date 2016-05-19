@@ -6,7 +6,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # Dependency libraries
 #find_package(OpenCV REQUIRED)
 #find_package(octomap REQUIRED)
-#include_directories(${OCTOMAP_INCLUDE_DIRS})
+#include_directories(${OCTOMAP_INCLUDE_DIRS}
 
 #message(STATUS "Found Octomap library at: ${OCTOMAP_INCLUDE_DIRS}")
 
