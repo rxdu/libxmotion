@@ -1,0 +1,80 @@
+\hypertarget{structsrcl__ctrl_1_1PriorityQueue}{\section{srcl\-\_\-ctrl\-:\-:Priority\-Queue$<$ T, Number $>$ Struct Template Reference}
+\label{structsrcl__ctrl_1_1PriorityQueue}\index{srcl\-\_\-ctrl\-::\-Priority\-Queue$<$ T, Number $>$@{srcl\-\_\-ctrl\-::\-Priority\-Queue$<$ T, Number $>$}}
+}
+
+
+A simple priority queue structure used as A$\ast$ open list.  
+
+
+
+
+{\ttfamily \#include $<$astar.\-h$>$}
+
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\-::pair$<$ Number, T $>$ \hyperlink{structsrcl__ctrl_1_1PriorityQueue_a13adb99a78e01b3fbf453e6bc5b8ce39}{P\-Q\-Element}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{structsrcl__ctrl_1_1PriorityQueue_ad36dcefb2ba7a31f1cd9c78353ac87e3}{empty} () const 
+\item 
+void \hyperlink{structsrcl__ctrl_1_1PriorityQueue_ac96327c955fa10e88699c8325817c892}{put} (T item, Number priority)
+\item 
+T \hyperlink{structsrcl__ctrl_1_1PriorityQueue_a51ebef251641f5f51768b7ec4ab94a51}{get} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\-::priority\-\_\-queue$<$ \hyperlink{structsrcl__ctrl_1_1PriorityQueue_a13adb99a78e01b3fbf453e6bc5b8ce39}{P\-Q\-Element}, \\*
+std\-::vector$<$ \hyperlink{structsrcl__ctrl_1_1PriorityQueue_a13adb99a78e01b3fbf453e6bc5b8ce39}{P\-Q\-Element} $>$\\*
+, std\-::greater$<$ \hyperlink{structsrcl__ctrl_1_1PriorityQueue_a13adb99a78e01b3fbf453e6bc5b8ce39}{P\-Q\-Element} $>$ $>$ \hyperlink{structsrcl__ctrl_1_1PriorityQueue_afd9907537d5a1df02f71e6e0a7806b8f}{elements}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$typename T, typename Number = double$>$struct srcl\-\_\-ctrl\-::\-Priority\-Queue$<$ T, Number $>$}
+
+A simple priority queue structure used as A$\ast$ open list. 
+
+\subsection{Member Typedef Documentation}
+\hypertarget{structsrcl__ctrl_1_1PriorityQueue_a13adb99a78e01b3fbf453e6bc5b8ce39}{\index{srcl\-\_\-ctrl\-::\-Priority\-Queue@{srcl\-\_\-ctrl\-::\-Priority\-Queue}!P\-Q\-Element@{P\-Q\-Element}}
+\index{P\-Q\-Element@{P\-Q\-Element}!srcl_ctrl::PriorityQueue@{srcl\-\_\-ctrl\-::\-Priority\-Queue}}
+\subsubsection[{P\-Q\-Element}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T, typename Number = double$>$ typedef std\-::pair$<$Number, T$>$ {\bf srcl\-\_\-ctrl\-::\-Priority\-Queue}$<$ T, Number $>$\-::{\bf P\-Q\-Element}}}\label{structsrcl__ctrl_1_1PriorityQueue_a13adb99a78e01b3fbf453e6bc5b8ce39}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{structsrcl__ctrl_1_1PriorityQueue_ad36dcefb2ba7a31f1cd9c78353ac87e3}{\index{srcl\-\_\-ctrl\-::\-Priority\-Queue@{srcl\-\_\-ctrl\-::\-Priority\-Queue}!empty@{empty}}
+\index{empty@{empty}!srcl_ctrl::PriorityQueue@{srcl\-\_\-ctrl\-::\-Priority\-Queue}}
+\subsubsection[{empty}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T, typename Number = double$>$ bool {\bf srcl\-\_\-ctrl\-::\-Priority\-Queue}$<$ T, Number $>$\-::empty (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}}\label{structsrcl__ctrl_1_1PriorityQueue_ad36dcefb2ba7a31f1cd9c78353ac87e3}
+\hypertarget{structsrcl__ctrl_1_1PriorityQueue_a51ebef251641f5f51768b7ec4ab94a51}{\index{srcl\-\_\-ctrl\-::\-Priority\-Queue@{srcl\-\_\-ctrl\-::\-Priority\-Queue}!get@{get}}
+\index{get@{get}!srcl_ctrl::PriorityQueue@{srcl\-\_\-ctrl\-::\-Priority\-Queue}}
+\subsubsection[{get}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T, typename Number = double$>$ T {\bf srcl\-\_\-ctrl\-::\-Priority\-Queue}$<$ T, Number $>$\-::get (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{structsrcl__ctrl_1_1PriorityQueue_a51ebef251641f5f51768b7ec4ab94a51}
+\hypertarget{structsrcl__ctrl_1_1PriorityQueue_ac96327c955fa10e88699c8325817c892}{\index{srcl\-\_\-ctrl\-::\-Priority\-Queue@{srcl\-\_\-ctrl\-::\-Priority\-Queue}!put@{put}}
+\index{put@{put}!srcl_ctrl::PriorityQueue@{srcl\-\_\-ctrl\-::\-Priority\-Queue}}
+\subsubsection[{put}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T, typename Number = double$>$ void {\bf srcl\-\_\-ctrl\-::\-Priority\-Queue}$<$ T, Number $>$\-::put (
+\begin{DoxyParamCaption}
+\item[{T}]{item, }
+\item[{Number}]{priority}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{structsrcl__ctrl_1_1PriorityQueue_ac96327c955fa10e88699c8325817c892}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{structsrcl__ctrl_1_1PriorityQueue_afd9907537d5a1df02f71e6e0a7806b8f}{\index{srcl\-\_\-ctrl\-::\-Priority\-Queue@{srcl\-\_\-ctrl\-::\-Priority\-Queue}!elements@{elements}}
+\index{elements@{elements}!srcl_ctrl::PriorityQueue@{srcl\-\_\-ctrl\-::\-Priority\-Queue}}
+\subsubsection[{elements}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T, typename Number = double$>$ std\-::priority\-\_\-queue$<${\bf P\-Q\-Element}, std\-::vector$<${\bf P\-Q\-Element}$>$, std\-::greater$<${\bf P\-Q\-Element}$>$ $>$ {\bf srcl\-\_\-ctrl\-::\-Priority\-Queue}$<$ T, Number $>$\-::elements}}\label{structsrcl__ctrl_1_1PriorityQueue_afd9907537d5a1df02f71e6e0a7806b8f}
+
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+/home/rdu/\-Workspace/srcl\-\_\-robot\-\_\-suite/srcl\-\_\-ctrl/planning/src/graph/\hyperlink{astar_8h}{astar.\-h}\end{DoxyCompactItemize}

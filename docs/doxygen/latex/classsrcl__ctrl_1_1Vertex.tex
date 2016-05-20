@@ -1,0 +1,170 @@
+\hypertarget{classsrcl__ctrl_1_1Vertex}{\section{srcl\-\_\-ctrl\-:\-:Vertex$<$ Bundled\-Struct\-Type $>$ Class Template Reference}
+\label{classsrcl__ctrl_1_1Vertex}\index{srcl\-\_\-ctrl\-::\-Vertex$<$ Bundled\-Struct\-Type $>$@{srcl\-\_\-ctrl\-::\-Vertex$<$ Bundled\-Struct\-Type $>$}}
+}
+
+
+A vertex data structure template.  
+
+
+
+
+{\ttfamily \#include $<$vertex.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classsrcl__ctrl_1_1Vertex_abf9a57e6ad113b3f47769e3032ff0174}{Vertex} (const Bundled\-Struct\-Type \&bundled\-\_\-data)
+\item 
+\hyperlink{classsrcl__ctrl_1_1Vertex_a527b04240dd50adaceee56b4a53e8d21}{$\sim$\-Vertex} ()
+\item 
+bool \hyperlink{classsrcl__ctrl_1_1Vertex_a57d276209a08fb6caebf8e549e236200}{operator==} (const \hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}$<$ Bundled\-Struct\-Type $>$ other)
+\begin{DoxyCompactList}\small\item\em == operator overloading. \end{DoxyCompactList}\item 
+void \hyperlink{classsrcl__ctrl_1_1Vertex_a80f55d28d64d214f6a84bbe4d9e293fc}{Clear\-Vertex\-Search\-Info} ()
+\item 
+double \hyperlink{classsrcl__ctrl_1_1Vertex_a465a453a589156beeda75723e64de493}{Get\-Edge\-Cost} (const \hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}$<$ Bundled\-Struct\-Type $>$ \&dst\-\_\-node)
+\item 
+std\-::vector$<$ \hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}\\*
+$<$ Bundled\-Struct\-Type $>$ $\ast$ $>$ \hyperlink{classsrcl__ctrl_1_1Vertex_acd593fd0c0d90ba2976817b054d7f888}{Get\-Neighbours} ()
+\item 
+bool \hyperlink{classsrcl__ctrl_1_1Vertex_a87e1900313a784ef2b041a6f29a7e758}{Check\-Neighbour} (\hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}$<$ Bundled\-Struct\-Type $>$ $\ast$dst\-\_\-node)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const Bundled\-Struct\-Type \& \hyperlink{classsrcl__ctrl_1_1Vertex_a94c4a1e06c0f4f013c01cb1bc9153b07}{bundled\-\_\-data\-\_\-}
+\item 
+uint64\-\_\-t \hyperlink{classsrcl__ctrl_1_1Vertex_abed4bbf25b9b223c24bc2e3a1cc2016a}{vertex\-\_\-id\-\_\-}
+\item 
+std\-::vector$<$ \hyperlink{classsrcl__ctrl_1_1Edge}{Edge}$<$ \hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}\\*
+$<$ Bundled\-Struct\-Type $>$ $>$ $>$ \hyperlink{classsrcl__ctrl_1_1Vertex_a932e06c0aecac6ab2cee0f428046fedd}{edges\-\_\-}
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{classsrcl__ctrl_1_1Vertex_a60a360ecaa196e365fca057dedc7a7f6}{is\-\_\-checked\-\_\-}
+\item 
+bool \hyperlink{classsrcl__ctrl_1_1Vertex_a5bafa9abce6e1bd65c6aa64094206f85}{is\-\_\-in\-\_\-openlist\-\_\-}
+\item 
+double \hyperlink{classsrcl__ctrl_1_1Vertex_ac43b465da0d5ecafce11cff22b1b5633}{f\-\_\-astar\-\_\-}
+\item 
+double \hyperlink{classsrcl__ctrl_1_1Vertex_a85d7b5498874822960ab30d6d3df3c60}{g\-\_\-astar\-\_\-}
+\item 
+double \hyperlink{classsrcl__ctrl_1_1Vertex_a83ac6cbf1e6c85477c1a4a05e1364811}{h\-\_\-astar\-\_\-}
+\item 
+\hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}$<$ Bundled\-Struct\-Type $>$ $\ast$ \hyperlink{classsrcl__ctrl_1_1Vertex_aab0a6786367f2e364b31cd1154fbdba2}{search\-\_\-parent\-\_\-}
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename Graph\-Vertex\-Type $>$ }\\class \hyperlink{classsrcl__ctrl_1_1Vertex_a1c1aa353d37668bc4c0e2ba34d1482ca}{A\-Star}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$typename Bundled\-Struct\-Type$>$class srcl\-\_\-ctrl\-::\-Vertex$<$ Bundled\-Struct\-Type $>$}
+
+A vertex data structure template. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classsrcl__ctrl_1_1Vertex_abf9a57e6ad113b3f47769e3032ff0174}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!Vertex@{Vertex}}
+\index{Vertex@{Vertex}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{Vertex}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Bundled\-Struct\-Type $>$\-::{\bf Vertex} (
+\begin{DoxyParamCaption}
+\item[{const Bundled\-Struct\-Type \&}]{bundled\-\_\-data}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Vertex_abf9a57e6ad113b3f47769e3032ff0174}
+
+\begin{DoxyParams}{Parameters}
+{\em bundled\-\_\-data} & a reference to the bundled data structure \\
+\hline
+\end{DoxyParams}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a527b04240dd50adaceee56b4a53e8d21}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!$\sim$\-Vertex@{$\sim$\-Vertex}}
+\index{$\sim$\-Vertex@{$\sim$\-Vertex}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{$\sim$\-Vertex}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Bundled\-Struct\-Type $>$\-::$\sim${\bf Vertex} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Vertex_a527b04240dd50adaceee56b4a53e8d21}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a87e1900313a784ef2b041a6f29a7e758}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!Check\-Neighbour@{Check\-Neighbour}}
+\index{Check\-Neighbour@{Check\-Neighbour}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{Check\-Neighbour}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ bool {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Bundled\-Struct\-Type $>$\-::Check\-Neighbour (
+\begin{DoxyParamCaption}
+\item[{{\bf Vertex}$<$ Bundled\-Struct\-Type $>$ $\ast$}]{dst\-\_\-node}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Vertex_a87e1900313a784ef2b041a6f29a7e758}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a80f55d28d64d214f6a84bbe4d9e293fc}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!Clear\-Vertex\-Search\-Info@{Clear\-Vertex\-Search\-Info}}
+\index{Clear\-Vertex\-Search\-Info@{Clear\-Vertex\-Search\-Info}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{Clear\-Vertex\-Search\-Info}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ void {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Bundled\-Struct\-Type $>$\-::Clear\-Vertex\-Search\-Info (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Vertex_a80f55d28d64d214f6a84bbe4d9e293fc}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a465a453a589156beeda75723e64de493}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!Get\-Edge\-Cost@{Get\-Edge\-Cost}}
+\index{Get\-Edge\-Cost@{Get\-Edge\-Cost}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{Get\-Edge\-Cost}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ double {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Bundled\-Struct\-Type $>$\-::Get\-Edge\-Cost (
+\begin{DoxyParamCaption}
+\item[{const {\bf Vertex}$<$ Bundled\-Struct\-Type $>$ \&}]{dst\-\_\-node}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Vertex_a465a453a589156beeda75723e64de493}
+\hypertarget{classsrcl__ctrl_1_1Vertex_acd593fd0c0d90ba2976817b054d7f888}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!Get\-Neighbours@{Get\-Neighbours}}
+\index{Get\-Neighbours@{Get\-Neighbours}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{Get\-Neighbours}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ std\-::vector$<${\bf Vertex}$<$Bundled\-Struct\-Type$>$$\ast$$>$ {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Bundled\-Struct\-Type $>$\-::Get\-Neighbours (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Vertex_acd593fd0c0d90ba2976817b054d7f888}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a57d276209a08fb6caebf8e549e236200}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!operator==@{operator==}}
+\index{operator==@{operator==}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{operator==}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ bool {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Bundled\-Struct\-Type $>$\-::operator== (
+\begin{DoxyParamCaption}
+\item[{const {\bf Vertex}$<$ Bundled\-Struct\-Type $>$}]{other}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Vertex_a57d276209a08fb6caebf8e549e236200}
+
+
+== operator overloading. 
+
+If two vertices have the same id, they're regarded as equal. 
+
+\subsection{Friends And Related Function Documentation}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a1c1aa353d37668bc4c0e2ba34d1482ca}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!A\-Star@{A\-Star}}
+\index{A\-Star@{A\-Star}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{A\-Star}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ template$<$typename Graph\-Vertex\-Type $>$ friend class {\bf A\-Star}\hspace{0.3cm}{\ttfamily [friend]}}}\label{classsrcl__ctrl_1_1Vertex_a1c1aa353d37668bc4c0e2ba34d1482ca}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a94c4a1e06c0f4f013c01cb1bc9153b07}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!bundled\-\_\-data\-\_\-@{bundled\-\_\-data\-\_\-}}
+\index{bundled\-\_\-data\-\_\-@{bundled\-\_\-data\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{bundled\-\_\-data\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ const Bundled\-Struct\-Type\& {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Bundled\-Struct\-Type $>$\-::bundled\-\_\-data\-\_\-}}\label{classsrcl__ctrl_1_1Vertex_a94c4a1e06c0f4f013c01cb1bc9153b07}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a932e06c0aecac6ab2cee0f428046fedd}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!edges\-\_\-@{edges\-\_\-}}
+\index{edges\-\_\-@{edges\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{edges\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ std\-::vector$<${\bf Edge}$<${\bf Vertex}$<$Bundled\-Struct\-Type$>$ $>$ $>$ {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Bundled\-Struct\-Type $>$\-::edges\-\_\-}}\label{classsrcl__ctrl_1_1Vertex_a932e06c0aecac6ab2cee0f428046fedd}
+\hypertarget{classsrcl__ctrl_1_1Vertex_ac43b465da0d5ecafce11cff22b1b5633}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!f\-\_\-astar\-\_\-@{f\-\_\-astar\-\_\-}}
+\index{f\-\_\-astar\-\_\-@{f\-\_\-astar\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{f\-\_\-astar\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ double {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Bundled\-Struct\-Type $>$\-::f\-\_\-astar\-\_\-\hspace{0.3cm}{\ttfamily [private]}}}\label{classsrcl__ctrl_1_1Vertex_ac43b465da0d5ecafce11cff22b1b5633}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a85d7b5498874822960ab30d6d3df3c60}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!g\-\_\-astar\-\_\-@{g\-\_\-astar\-\_\-}}
+\index{g\-\_\-astar\-\_\-@{g\-\_\-astar\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{g\-\_\-astar\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ double {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Bundled\-Struct\-Type $>$\-::g\-\_\-astar\-\_\-\hspace{0.3cm}{\ttfamily [private]}}}\label{classsrcl__ctrl_1_1Vertex_a85d7b5498874822960ab30d6d3df3c60}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a83ac6cbf1e6c85477c1a4a05e1364811}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!h\-\_\-astar\-\_\-@{h\-\_\-astar\-\_\-}}
+\index{h\-\_\-astar\-\_\-@{h\-\_\-astar\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{h\-\_\-astar\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ double {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Bundled\-Struct\-Type $>$\-::h\-\_\-astar\-\_\-\hspace{0.3cm}{\ttfamily [private]}}}\label{classsrcl__ctrl_1_1Vertex_a83ac6cbf1e6c85477c1a4a05e1364811}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a60a360ecaa196e365fca057dedc7a7f6}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!is\-\_\-checked\-\_\-@{is\-\_\-checked\-\_\-}}
+\index{is\-\_\-checked\-\_\-@{is\-\_\-checked\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{is\-\_\-checked\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ bool {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Bundled\-Struct\-Type $>$\-::is\-\_\-checked\-\_\-\hspace{0.3cm}{\ttfamily [private]}}}\label{classsrcl__ctrl_1_1Vertex_a60a360ecaa196e365fca057dedc7a7f6}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a5bafa9abce6e1bd65c6aa64094206f85}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!is\-\_\-in\-\_\-openlist\-\_\-@{is\-\_\-in\-\_\-openlist\-\_\-}}
+\index{is\-\_\-in\-\_\-openlist\-\_\-@{is\-\_\-in\-\_\-openlist\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{is\-\_\-in\-\_\-openlist\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ bool {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Bundled\-Struct\-Type $>$\-::is\-\_\-in\-\_\-openlist\-\_\-\hspace{0.3cm}{\ttfamily [private]}}}\label{classsrcl__ctrl_1_1Vertex_a5bafa9abce6e1bd65c6aa64094206f85}
+\hypertarget{classsrcl__ctrl_1_1Vertex_aab0a6786367f2e364b31cd1154fbdba2}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!search\-\_\-parent\-\_\-@{search\-\_\-parent\-\_\-}}
+\index{search\-\_\-parent\-\_\-@{search\-\_\-parent\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{search\-\_\-parent\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ {\bf Vertex}$<$Bundled\-Struct\-Type$>$$\ast$ {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Bundled\-Struct\-Type $>$\-::search\-\_\-parent\-\_\-\hspace{0.3cm}{\ttfamily [private]}}}\label{classsrcl__ctrl_1_1Vertex_aab0a6786367f2e364b31cd1154fbdba2}
+\hypertarget{classsrcl__ctrl_1_1Vertex_abed4bbf25b9b223c24bc2e3a1cc2016a}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!vertex\-\_\-id\-\_\-@{vertex\-\_\-id\-\_\-}}
+\index{vertex\-\_\-id\-\_\-@{vertex\-\_\-id\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{vertex\-\_\-id\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Struct\-Type$>$ uint64\-\_\-t {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Bundled\-Struct\-Type $>$\-::vertex\-\_\-id\-\_\-}}\label{classsrcl__ctrl_1_1Vertex_abed4bbf25b9b223c24bc2e3a1cc2016a}
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+/home/rdu/\-Workspace/srcl\-\_\-robot\-\_\-suite/srcl\-\_\-ctrl/planning/src/graph/\hyperlink{vertex_8h}{vertex.\-h}\end{DoxyCompactItemize}

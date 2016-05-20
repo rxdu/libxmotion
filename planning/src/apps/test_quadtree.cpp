@@ -15,11 +15,11 @@
 #include "opencv2/opencv.hpp"
 
 // quad_tree
-#include "qtree_builder.h"
-#include "graph_builder.h"
-#include "astar.h"
-#include "graph_vis.h"
-#include "image_utils.h"
+#include "map/qtree_builder.h"
+#include "map/graph_builder.h"
+#include "graph/astar.h"
+#include "visualizer/graph_vis.h"
+#include "map/image_utils.h"
 
 using namespace cv;
 using namespace srcl_ctrl;
@@ -109,6 +109,3 @@ int main(int argc, char** argv )
 
     return 0;
 }
-
-
-

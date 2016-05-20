@@ -13,7 +13,7 @@
 #include "opencv2/opencv.hpp"
 
 // user
-#include "image_utils.h"
+#include "map/image_utils.h"
 
 using namespace cv;
 using namespace srcl_ctrl;
@@ -53,5 +53,3 @@ int main(int argc, char** argv )
 
 	return 0;
 }
-
-

@@ -15,10 +15,10 @@
 #include "opencv2/opencv.hpp"
 
 // user
-#include "sgrid_builder.h"
-#include "graph.h"
-#include "graph_builder.h"
-#include "graph_vis.h"
+#include "map/sgrid_builder.h"
+#include "graph/graph.h"
+#include "map/graph_builder.h"
+#include "visualizer/graph_vis.h"
 #include "map/map_utils.h"
 
 using namespace cv;
