@@ -15,7 +15,7 @@ set(QUADCON_LIB_SRC
     controller/att_quat_con.cpp
     controller/pos_quat_con.cpp
     # motion management
-    motion/trajectory_manager.cpp
+    motion_server/trajectory_manager.cpp
 )
 add_library(quad_con STATIC ${QUADCON_LIB_SRC})
 if (ENABLE_G3LOG)

@@ -5,9 +5,9 @@
  *      Author: rdu
  */
 
+#include <motion_server/trajectory_manager.h>
 #include <cmath>
 
-#include <motion/trajectory_manager.h>
 
 using namespace srcl_ctrl;
 

@@ -14,7 +14,7 @@
 #endif
 
 #include "sim_process/quad_sim_process.h"
-#include "quad_ctrl/motion/trajectory_manager.h"
+#include "quad_ctrl/motion_server/trajectory_manager.h"
 
 using namespace srcl_ctrl;
 
