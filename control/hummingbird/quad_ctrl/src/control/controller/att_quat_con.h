@@ -30,8 +30,12 @@ private:
 	float kp_psi;
 	float kd_psi;
 
+	Eigen::Matrix<double,4,4> plus_type_trans_;
+	Eigen::Matrix<double,4,4> plus_type_trans_inv_;
+	Eigen::Matrix<double,4,4> x_type_trans_;
+	Eigen::Matrix<double,4,4> x_type_trans_inv_;
+
 private:
-//	Eigen::Matrix<double,4,1> CalcMotorCmd(Eigen::Matrix<float,4,1> force_toqure);
 	Eigen::Matrix<double,4,1> CalcMotorCmd(Eigen::Matrix<float,4,1> force_toqure, QuadFlightType type);
 
 public:

@@ -112,7 +112,7 @@ int main(int argc,char* argv[])
 		last_state.positions[0] = -1.8;
 		last_state.positions[1] = 2.0;
 		last_state.positions[2] = 0.5;
-		last_state.yaw = -M_PI/4;
+		last_state.yaw = 0;//-M_PI/4;
 
 		std::cout << "INFO: Created a simulation client." << std::endl;
 
@@ -149,7 +149,7 @@ int main(int argc,char* argv[])
 			sim_process.SendDataToSimulator();
 
 			//extApi_sleepMs(1); 		// use usleep(1750) to get shorter delay
-			usleep(50);
+//			usleep(50);
 
 			// send trigger to simulator
 			simxSynchronousTrigger(clientID);
