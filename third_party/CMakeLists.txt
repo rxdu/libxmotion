@@ -12,3 +12,4 @@ endif(ENABLE_G3LOG)
 
 ## Add sub source directories
 #add_subdirectory(eigen)
+add_subdirectory(octomap)

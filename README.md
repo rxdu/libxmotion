@@ -7,7 +7,7 @@ This repository contains a collection of software that are used to develop and t
 + **control** : control code for the robot/simulation
 + **planning** : planning algorithms
 
-## 2. Install Dependencies
+## 2. Install dependencies
 
 * OpenCV
 ```
@@ -42,13 +42,18 @@ Name: CMAKE Editor
 Location: http://cmakeed.sourceforge.net/eclipse/
 ```
 
-## 4. Build the Documentation
+## 4. Build the documentation
 
 ```
 $ cd srcl_ctrl/docs/doxygen
 $ doxygen Doxyfile
 ```
 
+## 5. Changes made to third-party libraries
+
+* eigen: unchanged
+* octomap: change default output directory from "CMAKE_SOURCE_DIR" to "CMAKE_BINARY_DIR" in the top-level CMakeLists
+* g3log_srcl: refer to "change_forl_srcl.txt" inside the library folder
 
 ## [Reference]
 
@@ -57,3 +62,4 @@ $ doxygen Doxyfile
 * https://gehrcke.de/2011/06/reading-files-in-c-using-ifstream-dealing-correctly-with-badbit-failbit-eofbit-and-perror/
 * http://stackoverflow.com/questions/7868936/read-file-line-by-line
 * http://www.cc.gatech.edu/classes/AY2015/cs4496_spring/Eigen.html
+* http://johnnado.com/cmake-directory-variables/
