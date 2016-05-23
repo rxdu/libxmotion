@@ -7,7 +7,7 @@
 
 #include "mainwindow.h"
 #include <QApplication>
-#include <ros/ros.h>
+//#include <ros/ros.h>
 
 using namespace srcl_ctrl;
 

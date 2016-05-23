@@ -14,6 +14,11 @@ This repository contains a collection of software that are used to develop and t
 $ sudo apt-get install libopencv-dev python-opencv
 ```
 
+* Qt5
+```
+$ sudo apt-get install qt5-default
+```
+
 * Boost (required by the Qt GUI)
 ```
 $ sudo apt-get install libboost-all-dev
