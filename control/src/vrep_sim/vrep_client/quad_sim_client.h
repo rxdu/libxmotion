@@ -13,7 +13,7 @@ extern "C" {
 /*	#include "extApiCustom.h" // custom remote API functions */
 }
 
-#include "common/robot_datatypes.h"
+#include <common/control_types.h>
 #include "vrep_sim/vrep_client/robot_sim_client.h"
 
 #define MAX_JOINT1_TORQUE 100
@@ -29,8 +29,8 @@ public:
 	~QuadSimClient();
 
 public:
-	bool ReceiveDataFromRobot(DataFromRobot *rstate);
-	void SendDataToRobot(const DataToRobot &rcmd);
+	bool ReceiveDataFromRobot(DataFromQuad *rstate);
+	void SendDataToRobot(const DataToQuad &rcmd);
 
 private:
 	void ConfigDataStreaming(void);
@@ -39,9 +39,9 @@ private:
 	bool ReceiveAccData(IMU_DataType *data);
 	bool GetVisionImage(simxUChar img[IMG_RES_Y][IMG_RES_X]);
 
-	bool ReceiveQuadPosition(Point3 *data);
-	bool ReceiveQuadVelocity(Point3 *data);
-	bool ReceiveQuadOrientation(Point3 *data);
+	bool ReceiveQuadPosition(Point3f *data);
+	bool ReceiveQuadVelocity(Point3f *data);
+	bool ReceiveQuadOrientation(Point3f *data);
 	bool ReceiveQuadQuaternion(Quaternion *data);
 
 	void SendPropellerCmd(QuadCmd cmd);

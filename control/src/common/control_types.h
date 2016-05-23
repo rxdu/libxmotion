@@ -1,14 +1,18 @@
 /*
- * quadsim_datatypes.h
+ * control_types.h
  *
  *  Created on: Jul 19, 2015
  *      Author: rdu
  */
 
-#ifndef QUADSIM_CLIENT_QUADSIM_DATATYPES_H_
-#define QUADSIM_CLIENT_QUADSIM_DATATYPES_H_
+#ifndef COMMON_CONTROL_TYPES_H_
+#define COMMON_CONTROL_TYPES_H_
+
+#include <cstdint>
 
 namespace srcl_ctrl{
+
+/****************************** Control Common ******************************/
 
 typedef struct
 {
@@ -22,7 +26,7 @@ typedef struct
 	float x;
 	float y;
 	float z;
-}Point3;
+}Point3f;
 
 typedef struct
 {
@@ -41,7 +45,7 @@ typedef struct
 
 typedef struct
 {
-	Point3 pos;
+	Point3f pos;
 	EulerAngle ori;
 }Pose;
 
@@ -53,8 +57,24 @@ typedef struct
 
 typedef struct
 {
+	bool point_empty;
+	float positions[3];
+	float velocities[3];
+	float accelerations[3];
+	float yaw;
+	uint64_t duration; // in milliseconds
+} UAVTrajectoryPoint;
+
+/******************************* Quadrotor Types ****************************/
+typedef struct
+{
 	float ang_vel[4];
 }QuadCmd;
+
+enum class QuadFlightType {
+	X_TYPE,
+	PLUS_TYPE,
+};
 
 #define IMG_RES_X 160
 #define IMG_RES_Y 90
@@ -66,27 +86,20 @@ typedef struct
 	IMUData imu_data;
 
 	// data only available in simulator
-	Point3 pos_i;
-	Point3 vel_i;
-	Point3 rot_i;
+	Point3f pos_i;
+	Point3f vel_i;
+	Point3f rot_i;
 	Quaternion quat_i;
-	Point3 rot_rate_b;
-} DataFromRobot;
+	Point3f rot_rate_b;
+} DataFromQuad;
 
 typedef struct
 {
 	QuadCmd motor_cmd;
-} DataToRobot;
+} DataToQuad;
 
-typedef struct
-{
-	bool point_empty;
-	float positions[3];
-	float velocities[3];
-	float accelerations[3];
-	float yaw;
-} TrajectoryPoint;
+/****************************************************************************/
 
 }
 
-#endif /* QUADSIM_CLIENT_QUADSIM_DATATYPES_H_ */
+#endif /* COMMON_CONTROL_TYPES_H_ */

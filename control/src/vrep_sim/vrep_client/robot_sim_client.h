@@ -13,7 +13,7 @@ extern "C" {
 /*	#include "extApiCustom.h" // custom remote API functions */
 }
 
-#include "common/robot_datatypes.h"
+#include <common/control_types.h>
 
 namespace srcl_ctrl
 {
@@ -24,8 +24,8 @@ public:
 	virtual ~RobotSimClient(){};
 
 public:
-	virtual bool ReceiveDataFromRobot(DataFromRobot *rstate) = 0;
-	virtual void SendDataToRobot(const DataToRobot &rcmd) = 0;
+	virtual bool ReceiveDataFromRobot(DataFromQuad *rstate) = 0;
+	virtual void SendDataToRobot(const DataToQuad &rcmd) = 0;
 
 protected:
 	virtual void ConfigDataStreaming(void) = 0;

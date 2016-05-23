@@ -19,7 +19,7 @@ MotionServer::~MotionServer()
 
 }
 
-void MotionServer::SetMotionGoal(std::vector<TrajectoryPoint>& goal)
+void MotionServer::SetMotionGoal(std::vector<UAVTrajectoryPoint>& goal)
 {
 
 }

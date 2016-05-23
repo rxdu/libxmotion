@@ -8,7 +8,7 @@
 #ifndef CONTROL_CONTROLLER_BASE_H_
 #define CONTROL_CONTROLLER_BASE_H_
 
-#include "common/robot_datatypes.h"
+#include <common/control_types.h>
 #include "quad_ctrl/estimator/robot_state.h"
 
 namespace srcl_ctrl

@@ -37,7 +37,7 @@ private:
 
 public:
 	void SimLoopUpdate();
-	void SimLoopUpdate(TrajectoryPoint pt);
+	void SimLoopUpdate(UAVTrajectoryPoint pt);
 };
 
 }

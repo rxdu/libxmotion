@@ -27,9 +27,9 @@ void TrajectoryManager::ClearTrajectory()
 	traj_.clear();
 }
 
-TrajectoryPoint TrajectoryManager::GetTrajectoryPoint(uint64_t t)
+UAVTrajectoryPoint TrajectoryManager::GetTrajectoryPoint(uint64_t t)
 {
-	TrajectoryPoint pt;
+	UAVTrajectoryPoint pt;
 	pt.point_empty = true;
 
 	if(!traj_.empty())
@@ -41,7 +41,7 @@ TrajectoryPoint TrajectoryManager::GetTrajectoryPoint(uint64_t t)
 	return pt;
 }
 
-void TrajectoryManager::SetTrajectory(std::vector<TrajectoryPoint>& traj)
+void TrajectoryManager::SetTrajectory(std::vector<UAVTrajectoryPoint>& traj)
 {
 	traj_ = traj;
 }
@@ -52,7 +52,7 @@ void TrajectoryManager::SetTestTrajectory()
 
 	for(int i = 0; i < 1000; i++)
 	{
-		TrajectoryPoint pt;
+		UAVTrajectoryPoint pt;
 		pt.point_empty = false;
 
 		double height = 0.5;
@@ -102,7 +102,7 @@ void TrajectoryManager::SetTestStraigtTrajectory()
 
 	for(int i = 0; i < 1000; i++)
 	{
-		TrajectoryPoint pt;
+		UAVTrajectoryPoint pt;
 		pt.point_empty = false;
 
 		double height = 0.5;

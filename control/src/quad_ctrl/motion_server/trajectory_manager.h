@@ -8,10 +8,10 @@
 #ifndef SRC_CONTROL_MOTION_TRAJECTORY_MANAGER_H_
 #define SRC_CONTROL_MOTION_TRAJECTORY_MANAGER_H_
 
+#include <common/control_types.h>
 #include <vector>
 #include <cstdint>
 
-#include "common/robot_datatypes.h"
 
 namespace srcl_ctrl {
 
@@ -21,14 +21,14 @@ public:
 	~TrajectoryManager();
 
 private:
-	std::vector<TrajectoryPoint> traj_;
+	std::vector<UAVTrajectoryPoint> traj_;
 
 public:
 	void ClearTrajectory();
-	void SetTrajectory(std::vector<TrajectoryPoint>& traj);
+	void SetTrajectory(std::vector<UAVTrajectoryPoint>& traj);
 	void SetTestTrajectory();
 	void SetTestStraigtTrajectory();
-	TrajectoryPoint GetTrajectoryPoint(uint64_t t);
+	UAVTrajectoryPoint GetTrajectoryPoint(uint64_t t);
 };
 
 

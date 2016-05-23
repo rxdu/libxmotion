@@ -8,9 +8,9 @@
 #ifndef CONTROL_SRC_QUAD_CTRL_MOTION_SERVER_MOTION_SERVER_H_
 #define CONTROL_SRC_QUAD_CTRL_MOTION_SERVER_MOTION_SERVER_H_
 
+#include <common/control_types.h>
 #include <vector>
 
-#include "common/robot_datatypes.h"
 
 namespace srcl_ctrl {
 
@@ -20,10 +20,10 @@ public:
 	~MotionServer();
 
 private:
-	std::vector<TrajectoryPoint> active_goal_;
+	std::vector<UAVTrajectoryPoint> active_goal_;
 
 public:
-	void SetMotionGoal(std::vector<TrajectoryPoint>& goal);
+	void SetMotionGoal(std::vector<UAVTrajectoryPoint>& goal);
 	void AbortActiveMotion();
 	double GetActiveMotionProgress();
 };

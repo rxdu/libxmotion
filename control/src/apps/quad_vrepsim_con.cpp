@@ -46,7 +46,7 @@ using namespace srcl_ctrl;
 #endif
 
 uint64_t sim_time = 0;
-TrajectoryPoint last_state;
+UAVTrajectoryPoint last_state;
 
 int main(int argc,char* argv[])
 {
@@ -130,7 +130,7 @@ int main(int argc,char* argv[])
 			if(sim_process.ReceiveDataFromSimulator())
 			{
 				// fetch the latest trajectory waypoint
-				TrajectoryPoint pt;
+				UAVTrajectoryPoint pt;
 				pt = traj_manager.GetTrajectoryPoint(sim_time);
 
 				// if no new point, stay where it was

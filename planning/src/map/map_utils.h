@@ -8,9 +8,9 @@
 #ifndef SRC_MAP_MAP_UTILS_H_
 #define SRC_MAP_MAP_UTILS_H_
 
+#include <common/planning_types.h>
 #include <vector>
 
-#include "common/common_types.h"
 #include "graph/graph.h"
 #include "square_grid/square_grid.h"
 #include "quadtree/quad_tree.h"

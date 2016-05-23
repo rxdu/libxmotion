@@ -133,7 +133,7 @@ bool QuadSimClient::ReceiveAccData(IMU_DataType *data)
 		return false;
 }
 
-bool QuadSimClient::ReceiveQuadPosition(Point3 *data)
+bool QuadSimClient::ReceiveQuadPosition(Point3f *data)
 {
 	if (simxGetObjectPosition(client_id_, ref_handle_, -1, quad_pos,simx_opmode_buffer) == simx_error_noerror)
 	{
@@ -147,7 +147,7 @@ bool QuadSimClient::ReceiveQuadPosition(Point3 *data)
 		return false;
 }
 
-bool QuadSimClient::ReceiveQuadVelocity(Point3 *data)
+bool QuadSimClient::ReceiveQuadVelocity(Point3f *data)
 {
 	if (simxGetObjectVelocity(client_id_, ref_handle_, quad_linear_vel, quad_angular_vel ,simx_opmode_buffer) == simx_error_noerror)
 	{
@@ -161,7 +161,7 @@ bool QuadSimClient::ReceiveQuadVelocity(Point3 *data)
 		return false;
 }
 
-bool QuadSimClient::ReceiveQuadOrientation(Point3 *data)
+bool QuadSimClient::ReceiveQuadOrientation(Point3f *data)
 {if (simxGetObjectOrientation(client_id_, ref_handle_, -1, quad_ori, simx_opmode_buffer) == simx_error_noerror)
 	{
 		(*data).x = quad_ori[0];
@@ -237,7 +237,7 @@ void QuadSimClient::SendPropellerCmd(QuadCmd cmd)
 //		std::cout << "ERROR: Failed to update one or more motor commands." << std::endl;
 }
 
-bool QuadSimClient::ReceiveDataFromRobot(DataFromRobot *rx_data)
+bool QuadSimClient::ReceiveDataFromRobot(DataFromQuad *rx_data)
 {
 //	std::cout << "receiving new data!"<<std::endl;
 
@@ -259,7 +259,7 @@ bool QuadSimClient::ReceiveDataFromRobot(DataFromRobot *rx_data)
 		return false;
 }
 
-void QuadSimClient::SendDataToRobot(const DataToRobot &rcmd)
+void QuadSimClient::SendDataToRobot(const DataToQuad &rcmd)
 {
 	SendPropellerCmd(rcmd.motor_cmd);
 }

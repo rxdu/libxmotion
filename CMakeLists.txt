@@ -16,8 +16,10 @@ endif (ENABLE_G3LOG)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap/include)
 set(Octomap_LIBS octomap octomath)
 
+include_directories(${CMAKE_SOURCE_DIR}/common/src)
+
 ## Add sub source directories
-add_subdirectory(comm)
-#add_subdirectory(control)
-#add_subdirectory(planning)
-#add_subdirectory(third_party)
+#add_subdirectory(comm)
+add_subdirectory(control)
+add_subdirectory(planning)
+add_subdirectory(third_party)

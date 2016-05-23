@@ -1,12 +1,12 @@
 #ifndef QUAD_TREE_
 #define QUAD_TREE_
 
+#include <common/planning_types.h>
 #include <cstdint>
 #include <vector>
 #include <cstdint>
 
 //#include "qtree_types.h"
-#include "common/common_types.h"
 #include "graph/bds_base.h"
 
 namespace srcl_ctrl {

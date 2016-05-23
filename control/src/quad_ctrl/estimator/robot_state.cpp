@@ -64,7 +64,7 @@ RobotState::~RobotState()
 
 }
 
-void RobotState::UpdateRobotState(const DataFromRobot & new_data)
+void RobotState::UpdateRobotState(const DataFromQuad & new_data)
 {
 	// get values directly from simulator, will be replaced by state estimator later
 	position_.x = new_data.pos_i.x;

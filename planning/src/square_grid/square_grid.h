@@ -8,11 +8,11 @@
 #ifndef SRC_MAP_SQUARE_GRID_H_
 #define SRC_MAP_SQUARE_GRID_H_
 
+#include <common/planning_types.h>
 #include <map>
 #include <vector>
 #include <cstdint>
 
-#include "common/common_types.h"
 #include "graph/bds_base.h"
 
 namespace srcl_ctrl{

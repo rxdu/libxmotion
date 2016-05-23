@@ -8,8 +8,8 @@
 #ifndef SIM_PROCESS_SIM_PROCESS_H_
 #define SIM_PROCESS_SIM_PROCESS_H_
 
+#include <common/control_types.h>
 #include "vrep_sim/vrep_client/robot_sim_client.h"
-#include "common/robot_datatypes.h"
 
 namespace srcl_ctrl
 {
@@ -27,8 +27,8 @@ public:
 
 protected:
 	RobotSimClient *sim_client_;
-	DataFromRobot rs_m_;
-	DataToRobot cmd_m_;
+	DataFromQuad rs_m_;
+	DataToQuad cmd_m_;
 };
 
 }

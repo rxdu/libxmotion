@@ -133,7 +133,7 @@ void QuadSimProcess::SimLoopUpdate(void)
 #endif
 }
 
-void QuadSimProcess::SimLoopUpdate(TrajectoryPoint pt)
+void QuadSimProcess::SimLoopUpdate(UAVTrajectoryPoint pt)
 {
 	/********* update robot state *********/
 	// Test without state estimator

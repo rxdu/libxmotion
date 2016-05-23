@@ -8,11 +8,11 @@
 #ifndef CONTROL_ATT_QUAT_CON_H_
 #define CONTROL_ATT_QUAT_CON_H_
 
+#include <common/control_types.h>
 #include "eigen3/Eigen/Core"
 #include "eigen3/Eigen/Geometry"
 
 #include "quad_ctrl/controller/controller_base.h"
-#include "common/robot_datatypes.h"
 
 namespace srcl_ctrl {
 

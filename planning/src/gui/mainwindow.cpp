@@ -1,3 +1,4 @@
+#include <common/planning_types.h>
 #include <iostream>
 #include <cstdint>
 
@@ -11,7 +12,6 @@
 #include "map/graph_builder.h"
 #include "map/qtree_builder.h"
 #include "visualizer/graph_vis.h"
-#include "common/common_types.h"
 
 using namespace cv;
 using namespace srcl_ctrl;

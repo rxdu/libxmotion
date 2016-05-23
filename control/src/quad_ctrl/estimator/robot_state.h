@@ -8,10 +8,10 @@
 #ifndef NAVIGATION_ROBOT_STATE_H_
 #define NAVIGATION_ROBOT_STATE_H_
 
+#include "common/control_types.h"
 #include "eigen3/Eigen/Core"
 #include "eigen3/Eigen/Geometry"
 
-#include "common/robot_datatypes.h"
 
 namespace srcl_ctrl{
 
@@ -21,18 +21,18 @@ public:
 	~RobotState();
 
 public:
-	Point3 position_;
-	Point3 velocity_;
-	Point3 orientation_;
+	Point3f position_;
+	Point3f velocity_;
+	Point3f orientation_;
 	Eigen::Quaterniond quat_;
-	Point3 rotation_rate_;
+	Point3f rotation_rate_;
 
 	QuadFlightType quad_flight_type_;
 
 private:
 	Eigen::Matrix<float,2,2> M_matrix_;
 	Eigen::Quaterniond last_quat_;
-	Point3 last_orientation_;
+	Point3f last_orientation_;
 
 public:
 	double w_h_;
@@ -51,7 +51,7 @@ private:
 	unsigned int invert_quat;
 
 public:
-	void UpdateRobotState(const DataFromRobot &new_data);
+	void UpdateRobotState(const DataFromQuad &new_data);
 	Eigen::Matrix<float,2,2> GetMMatrix(void);
 };
 
