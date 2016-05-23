@@ -90,6 +90,7 @@ typedef struct
 	float velocities[3];
 	float accelerations[3];
 	float yaw;
+	uint64_t duration; // in milliseconds
 } TrajectoryPoint;
 
 }

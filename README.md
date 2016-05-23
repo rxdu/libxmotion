@@ -14,6 +14,10 @@ This repository contains a collection of software that are used to develop and t
 $ sudo apt-get install libopencv-dev python-opencv
 ```
 
+* LCM
+
+Follow instructions on http://lcm-proj.github.io/build_instructions.html
+
 * Qt5
 ```
 $ sudo apt-get install qt5-default
@@ -57,7 +61,7 @@ $ doxygen Doxyfile
 ## 5. Changes made to third-party libraries
 
 * eigen: unchanged
-* octomap: change default output directory from "CMAKE_SOURCE_DIR" to "CMAKE_BINARY_DIR" in the top-level CMakeLists
+* octomap: changed default output directory from "CMAKE_SOURCE_DIR" to "CMAKE_BINARY_DIR" in the top-level CMakeLists
 * g3log_srcl: refer to "change_forl_srcl.txt" inside the library folder
 
 ## [Reference]
