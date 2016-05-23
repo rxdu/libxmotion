@@ -19,4 +19,4 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add executables
 add_executable(octree_example octomap_example.cpp)
-target_link_libraries(octree_example ${OCTOMAP_LIBRARIES})
+target_link_libraries(octree_example ${Octomap_LIBS})

@@ -1,0 +1,107 @@
+\hypertarget{classsrcl__ctrl_1_1Edge}{\section{srcl\-\_\-ctrl\-:\-:Edge$<$ Bundled\-Vertex\-Type $>$ Class Template Reference}
+\label{classsrcl__ctrl_1_1Edge}\index{srcl\-\_\-ctrl\-::\-Edge$<$ Bundled\-Vertex\-Type $>$@{srcl\-\_\-ctrl\-::\-Edge$<$ Bundled\-Vertex\-Type $>$}}
+}
+
+
+An edge data structure template.  
+
+
+
+
+{\ttfamily \#include $<$vertex.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classsrcl__ctrl_1_1Edge_ade0b87f7eca965e8a9bab20254a5011e}{Edge} (Bundled\-Vertex\-Type $\ast$src=nullptr, Bundled\-Vertex\-Type $\ast$dst=nullptr, double c=0.\-0)
+\item 
+\hyperlink{classsrcl__ctrl_1_1Edge_afba9527d44eab4e14a8e9198c567d1ff}{$\sim$\-Edge} ()
+\item 
+bool \hyperlink{classsrcl__ctrl_1_1Edge_aabb859828b19d780bdff0122e088795a}{operator==} (const \hyperlink{classsrcl__ctrl_1_1Edge}{Edge}$<$ Bundled\-Vertex\-Type $>$ other)
+\begin{DoxyCompactList}\small\item\em == operator overloading. \end{DoxyCompactList}\item 
+void \hyperlink{classsrcl__ctrl_1_1Edge_a41dbd6480882c572605a86e523e82fd5}{Print\-Edge} ()
+\begin{DoxyCompactList}\small\item\em Print edge information\-: start vertex id, destination vertex id, edge cost. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Bundled\-Vertex\-Type $\ast$ \hyperlink{classsrcl__ctrl_1_1Edge_a2403b33c073ea4730a897cd9d2cb5216}{src\-\_\-}
+\item 
+Bundled\-Vertex\-Type $\ast$ \hyperlink{classsrcl__ctrl_1_1Edge_a89a55fd037800ae1cfe32e0b4475500e}{dst\-\_\-}
+\item 
+double \hyperlink{classsrcl__ctrl_1_1Edge_a96acac663e9aad716e361510f4862a0b}{cost\-\_\-}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$typename Bundled\-Vertex\-Type$>$class srcl\-\_\-ctrl\-::\-Edge$<$ Bundled\-Vertex\-Type $>$}
+
+An edge data structure template. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classsrcl__ctrl_1_1Edge_ade0b87f7eca965e8a9bab20254a5011e}{\index{srcl\-\_\-ctrl\-::\-Edge@{srcl\-\_\-ctrl\-::\-Edge}!Edge@{Edge}}
+\index{Edge@{Edge}!srcl_ctrl::Edge@{srcl\-\_\-ctrl\-::\-Edge}}
+\subsubsection[{Edge}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Vertex\-Type$>$ {\bf srcl\-\_\-ctrl\-::\-Edge}$<$ Bundled\-Vertex\-Type $>$\-::{\bf Edge} (
+\begin{DoxyParamCaption}
+\item[{Bundled\-Vertex\-Type $\ast$}]{src = {\ttfamily nullptr}, }
+\item[{Bundled\-Vertex\-Type $\ast$}]{dst = {\ttfamily nullptr}, }
+\item[{double}]{c = {\ttfamily 0.0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Edge_ade0b87f7eca965e8a9bab20254a5011e}
+
+\begin{DoxyParams}{Parameters}
+{\em src} & a pointer to the source vertex of the edge \\
+\hline
+{\em dst} & a pointer to the destination vertex of the edge \\
+\hline
+{\em c} & cost associated with the edge \\
+\hline
+\end{DoxyParams}
+\hypertarget{classsrcl__ctrl_1_1Edge_afba9527d44eab4e14a8e9198c567d1ff}{\index{srcl\-\_\-ctrl\-::\-Edge@{srcl\-\_\-ctrl\-::\-Edge}!$\sim$\-Edge@{$\sim$\-Edge}}
+\index{$\sim$\-Edge@{$\sim$\-Edge}!srcl_ctrl::Edge@{srcl\-\_\-ctrl\-::\-Edge}}
+\subsubsection[{$\sim$\-Edge}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Vertex\-Type$>$ {\bf srcl\-\_\-ctrl\-::\-Edge}$<$ Bundled\-Vertex\-Type $>$\-::$\sim${\bf Edge} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Edge_afba9527d44eab4e14a8e9198c567d1ff}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classsrcl__ctrl_1_1Edge_aabb859828b19d780bdff0122e088795a}{\index{srcl\-\_\-ctrl\-::\-Edge@{srcl\-\_\-ctrl\-::\-Edge}!operator==@{operator==}}
+\index{operator==@{operator==}!srcl_ctrl::Edge@{srcl\-\_\-ctrl\-::\-Edge}}
+\subsubsection[{operator==}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Vertex\-Type$>$ bool {\bf srcl\-\_\-ctrl\-::\-Edge}$<$ Bundled\-Vertex\-Type $>$\-::operator== (
+\begin{DoxyParamCaption}
+\item[{const {\bf Edge}$<$ Bundled\-Vertex\-Type $>$}]{other}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Edge_aabb859828b19d780bdff0122e088795a}
+
+
+== operator overloading. 
+
+If two edges connect the same pair of vertices, they're regarded as equal. \hypertarget{classsrcl__ctrl_1_1Edge_a41dbd6480882c572605a86e523e82fd5}{\index{srcl\-\_\-ctrl\-::\-Edge@{srcl\-\_\-ctrl\-::\-Edge}!Print\-Edge@{Print\-Edge}}
+\index{Print\-Edge@{Print\-Edge}!srcl_ctrl::Edge@{srcl\-\_\-ctrl\-::\-Edge}}
+\subsubsection[{Print\-Edge}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Vertex\-Type$>$ void {\bf srcl\-\_\-ctrl\-::\-Edge}$<$ Bundled\-Vertex\-Type $>$\-::Print\-Edge (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Edge_a41dbd6480882c572605a86e523e82fd5}
+
+
+Print edge information\-: start vertex id, destination vertex id, edge cost. 
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classsrcl__ctrl_1_1Edge_a96acac663e9aad716e361510f4862a0b}{\index{srcl\-\_\-ctrl\-::\-Edge@{srcl\-\_\-ctrl\-::\-Edge}!cost\-\_\-@{cost\-\_\-}}
+\index{cost\-\_\-@{cost\-\_\-}!srcl_ctrl::Edge@{srcl\-\_\-ctrl\-::\-Edge}}
+\subsubsection[{cost\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Vertex\-Type$>$ double {\bf srcl\-\_\-ctrl\-::\-Edge}$<$ Bundled\-Vertex\-Type $>$\-::cost\-\_\-}}\label{classsrcl__ctrl_1_1Edge_a96acac663e9aad716e361510f4862a0b}
+\hypertarget{classsrcl__ctrl_1_1Edge_a89a55fd037800ae1cfe32e0b4475500e}{\index{srcl\-\_\-ctrl\-::\-Edge@{srcl\-\_\-ctrl\-::\-Edge}!dst\-\_\-@{dst\-\_\-}}
+\index{dst\-\_\-@{dst\-\_\-}!srcl_ctrl::Edge@{srcl\-\_\-ctrl\-::\-Edge}}
+\subsubsection[{dst\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Vertex\-Type$>$ Bundled\-Vertex\-Type$\ast$ {\bf srcl\-\_\-ctrl\-::\-Edge}$<$ Bundled\-Vertex\-Type $>$\-::dst\-\_\-}}\label{classsrcl__ctrl_1_1Edge_a89a55fd037800ae1cfe32e0b4475500e}
+\hypertarget{classsrcl__ctrl_1_1Edge_a2403b33c073ea4730a897cd9d2cb5216}{\index{srcl\-\_\-ctrl\-::\-Edge@{srcl\-\_\-ctrl\-::\-Edge}!src\-\_\-@{src\-\_\-}}
+\index{src\-\_\-@{src\-\_\-}!srcl_ctrl::Edge@{srcl\-\_\-ctrl\-::\-Edge}}
+\subsubsection[{src\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Bundled\-Vertex\-Type$>$ Bundled\-Vertex\-Type$\ast$ {\bf srcl\-\_\-ctrl\-::\-Edge}$<$ Bundled\-Vertex\-Type $>$\-::src\-\_\-}}\label{classsrcl__ctrl_1_1Edge_a2403b33c073ea4730a897cd9d2cb5216}
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+/home/rdu/\-Workspace/srcl\-\_\-robot\-\_\-suite/srcl\-\_\-ctrl/planning/src/graph/\hyperlink{vertex_8h}{vertex.\-h}\end{DoxyCompactItemize}

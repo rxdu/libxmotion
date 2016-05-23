@@ -15,12 +15,12 @@
 #include "opencv2/opencv.hpp"
 
 // user
-#include "map_manager.h"
-#include "sgrid_builder.h"
-#include "graph.h"
-#include "graph_builder.h"
-#include "graph_vis.h"
-#include "image_utils.h"
+#include "map/map_manager.h"
+#include "map/sgrid_builder.h"
+#include "graph/graph.h"
+#include "map/graph_builder.h"
+#include "visualizer/graph_vis.h"
+#include "map/image_utils.h"
 
 using namespace cv;
 using namespace srcl_ctrl;
@@ -149,9 +149,3 @@ int main(int argc, char** argv )
 
 	return 0;
 }
-
-
-
-
-
-
