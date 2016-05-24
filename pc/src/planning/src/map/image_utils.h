@@ -8,12 +8,12 @@
 #ifndef SRC_MAP_IMAGE_UTILS_H_
 #define SRC_MAP_IMAGE_UTILS_H_
 
-#include <common/planning_types.h>
 #include <cstdint>
 
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
 
+#include "common/planning_types.h"
 
 namespace srcl_ctrl
 {

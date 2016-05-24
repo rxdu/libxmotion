@@ -111,7 +111,7 @@ int main(int argc,char* argv[])
 		// initialize a simulation process
 		QuadSimProcess sim_process(clientID);
 		simxInt ping_time = 0;
-//		TrajectoryManager traj_manager;
+
 		MotionServer motion_server;
 		last_state.point_empty = false;
 		last_state.positions[0] = 0;
@@ -136,6 +136,8 @@ int main(int argc,char* argv[])
 
 		std::cout << "INFO: Enabled synchronous mode." << std::endl;
 
+		std::cout << "INFO: Quadrotor motion server standy." << std::endl;
+
 		while (simxGetConnectionId(clientID)!=-1)
 		{
 			if(loop_count == 0)
@@ -146,7 +148,6 @@ int main(int argc,char* argv[])
 			{
 				// fetch the latest trajectory waypoint
 				UAVTrajectoryPoint pt;
-//				pt = traj_manager.GetTrajectoryPoint(sim_time);
 				pt = motion_server.GetCurrentDesiredPose();
 
 				// if no new point, stay where it was
