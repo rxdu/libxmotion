@@ -5,12 +5,14 @@ This repository contains a collection of software that are used to develop and t
 ## 1. Repository structure
 
 * **pc** : contains software run on a general-purpose computer
-  + **control** : control code for the robot/simulation
-  + **planning** : planning algorithms
-  + **third_party** : third-party libraries
+    + control : control code for the robot/simulation
+    + planning : planning algorithms
+    + third_party : third-party libraries
+
 * **mcu** : contains code run on the flight control microcontroller
-  + **asctec_sdk** : sdk for asctec quadrotors
-  + **px4** : code for px4 compatible flight control boards
+    + asctec_sdk : sdk for asctec quadrotors
+    + px4 : code for px4 compatible flight control boards
+
 * **tools** : tool used for the development
 * **docs** : documentation of this project
 
