@@ -27,6 +27,12 @@ $ sudo apt-get install libopencv-dev python-opencv
 
 Follow instructions on http://lcm-proj.github.io/build_instructions.html
 
+You may need to add the following line to your ~/.bashrc so that the shared library of LCM can be found at runtime.
+
+```
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/
+```
+
 * Qt5
 ```
 $ sudo apt-get install qt5-default
