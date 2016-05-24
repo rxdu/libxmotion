@@ -17,9 +17,9 @@ MotionServer::MotionServer():
 		ms_count_(0),
 		waypoint_idx_(0)
 {
-	UAVTrajectory test_traj = GenerateTestTrajectory();
-
-	SetMotionGoal(test_traj);
+//	UAVTrajectory test_traj = GenerateTestTrajectory();
+//
+//	SetMotionGoal(test_traj);
 }
 
 MotionServer::~MotionServer()
@@ -85,6 +85,38 @@ UAVTrajectory MotionServer::GenerateTestTrajectory()
 	return test_traj;
 }
 
+void MotionServer::LcmGoalHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::UAVTrajectory_t* msg)
+{
+	std::cout << "motion service request received!" << std::endl;
+
+	UAVTrajectory traj;
+
+	for(int64_t i = 0; i < msg->waypoint_num; i++)
+	{
+		UAVTrajectoryPoint pt;
+
+		pt.point_empty = false;
+
+		for(int j = 0; j < 3; j++)
+		{
+			pt.positions[j] = msg->trajectory[i].positions[j];
+			pt.velocities[j] = msg->trajectory[i].velocities[j];
+			pt.accelerations[j] = msg->trajectory[i].accelerations[j];
+		}
+		pt.yaw = msg->trajectory[i].yaw;
+		pt.duration = msg->trajectory[i].duration;
+
+		traj.push_back(pt);
+	}
+
+	if(!active_goal_.empty())
+	{
+		AbortActiveMotion();
+		std::cout << "Old goal motion aborted!" << std::endl;
+	}
+	SetMotionGoal(traj);
+}
+
 void MotionServer::SetMotionGoal(UAVTrajectory& goal)
 {
 	active_goal_ = goal;
@@ -124,7 +156,7 @@ UAVTrajectoryPoint MotionServer::GetCurrentDesiredPose()
 
 	if(waypoint_idx_ < active_goal_.size())
 	{
-		if(ms_count_ <= active_goal_[waypoint_idx_].duration)
+		if(ms_count_ < active_goal_[waypoint_idx_].duration)
 		{
 			pt = active_goal_[waypoint_idx_];
 			ms_count_++;

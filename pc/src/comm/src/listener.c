@@ -6,6 +6,8 @@
 #include <inttypes.h>
 #include <lcm/lcm.h>
 #include <lcmtypes/exlcm_example_t.h>
+#include <lcmtypes/srcl_msgs_UAVTrajectoryPoint_t.h>
+#include <lcmtypes/srcl_msgs_UAVTrajectory_t.h>
 
 static void
 my_handler(const lcm_recv_buf_t *rbuf, const char * channel, 

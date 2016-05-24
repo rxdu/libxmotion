@@ -8,9 +8,12 @@
 #ifndef CONTROL_SRC_QUAD_CTRL_MOTION_SERVER_MOTION_SERVER_H_
 #define CONTROL_SRC_QUAD_CTRL_MOTION_SERVER_MOTION_SERVER_H_
 
-#include <common/control_types.h>
 #include <vector>
 
+#include <lcm/lcm-cpp.hpp>
+#include "lcmtypes/comm.hpp"
+
+#include "common/control_types.h"
 
 namespace srcl_ctrl {
 
@@ -29,6 +32,7 @@ private:
 	UAVTrajectory GenerateTestTrajectory();
 
 public:
+	void LcmGoalHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::UAVTrajectory_t* msg);
 	void SetMotionGoal(UAVTrajectory& goal);
 	void AbortActiveMotion();
 	double ReportActiveMotionProgress();

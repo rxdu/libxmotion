@@ -28,6 +28,9 @@ extern "C" {
 #include "g3log/std2_make_unique.hpp"
 #endif
 
+// headers for lcm
+#include <lcm/lcm-cpp.hpp>
+
 // headers for user code
 #include "vrep_sim/sim_process/quad_sim_process.h"
 //#include "quad_ctrl/motion_server/trajectory_manager.h"
@@ -116,6 +119,16 @@ int main(int argc,char* argv[])
 		last_state.positions[2] = 0.5;
 		last_state.yaw = 0;//-M_PI/4;
 
+		lcm::LCM lcm;
+
+		if(!lcm.good())
+		{
+			std::cout << "ERROR: Failed to initialize LCM." << std::endl;
+			return 1;
+		}
+
+		lcm.subscribe("quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server);
+
 		std::cout << "INFO: Created a simulation client." << std::endl;
 
 		simxSynchronous(clientID,true);
@@ -156,6 +169,8 @@ int main(int argc,char* argv[])
 
 			// send trigger to simulator
 			simxSynchronousTrigger(clientID);
+
+			lcm.handleTimeout(0);
 
 			// every time a trigger is sent, simulation time forwards 10ms
 			sim_time++;
