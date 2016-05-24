@@ -30,7 +30,8 @@ extern "C" {
 
 // headers for user code
 #include "vrep_sim/sim_process/quad_sim_process.h"
-#include "quad_ctrl/motion_server/trajectory_manager.h"
+//#include "quad_ctrl/motion_server/trajectory_manager.h"
+#include "quad_ctrl/motion_server/motion_server.h"
 #include "quad_vrepsim_con.h"
 
 #ifdef ENABLE_LOG
@@ -107,10 +108,11 @@ int main(int argc,char* argv[])
 		// initialize a simulation process
 		QuadSimProcess sim_process(clientID);
 		simxInt ping_time = 0;
-		TrajectoryManager traj_manager;
+//		TrajectoryManager traj_manager;
+		MotionServer motion_server;
 		last_state.point_empty = false;
-		last_state.positions[0] = -1.8;
-		last_state.positions[1] = 2.0;
+		last_state.positions[0] = 0;
+		last_state.positions[1] = 0;
 		last_state.positions[2] = 0.5;
 		last_state.yaw = 0;//-M_PI/4;
 
@@ -131,7 +133,8 @@ int main(int argc,char* argv[])
 			{
 				// fetch the latest trajectory waypoint
 				UAVTrajectoryPoint pt;
-				pt = traj_manager.GetTrajectoryPoint(sim_time);
+//				pt = traj_manager.GetTrajectoryPoint(sim_time);
+				pt = motion_server.GetCurrentDesiredPose();
 
 				// if no new point, stay where it was
 				if(!pt.point_empty)

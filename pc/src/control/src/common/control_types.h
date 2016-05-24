@@ -9,6 +9,7 @@
 #define COMMON_CONTROL_TYPES_H_
 
 #include <cstdint>
+#include <vector>
 
 namespace srcl_ctrl{
 
@@ -64,6 +65,8 @@ typedef struct
 	float yaw;
 	uint64_t duration; // in milliseconds
 } UAVTrajectoryPoint;
+
+typedef std::vector<UAVTrajectoryPoint> UAVTrajectory;
 
 /******************************* Quadrotor Types ****************************/
 typedef struct

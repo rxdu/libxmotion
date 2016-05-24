@@ -20,12 +20,21 @@ public:
 	~MotionServer();
 
 private:
-	std::vector<UAVTrajectoryPoint> active_goal_;
+	bool goal_completed_;
+	UAVTrajectory active_goal_;
+	uint64_t waypoint_idx_;
+	uint64_t ms_count_;
+
+private:
+	UAVTrajectory GenerateTestTrajectory();
 
 public:
-	void SetMotionGoal(std::vector<UAVTrajectoryPoint>& goal);
+	void SetMotionGoal(UAVTrajectory& goal);
 	void AbortActiveMotion();
-	double GetActiveMotionProgress();
+	double ReportActiveMotionProgress();
+	void SetGoalCompleted();
+
+	UAVTrajectoryPoint GetCurrentDesiredPose();
 };
 
 }

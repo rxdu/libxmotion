@@ -17,7 +17,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src/third_party/octomap/include)
 set(Octomap_LIBS octomap octomath)
 
 ## Add sub source directories
-#add_subdirectory(comm)
+add_subdirectory(src/comm)
 add_subdirectory(src/control)
 add_subdirectory(src/planning)
 add_subdirectory(src/third_party)
