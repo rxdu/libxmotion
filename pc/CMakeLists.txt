@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 2.8.11)
+project(srcl_ctrl)
+
+## Put all binary files into /bin and libraries into /lib
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
+set(ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
+
+# Choose to enable g3log or not: on/off
+set(ENABLE_G3LOG off)
+
+if (ENABLE_G3LOG)
+include_directories(${CMAKE_SOURCE_DIR}/src/third_party/g3log_srcl/src)
+endif (ENABLE_G3LOG)
+
+include_directories(${CMAKE_SOURCE_DIR}/src/third_party/octomap/include)
+set(Octomap_LIBS octomap octomath)
+
+## Add sub source directories
+#add_subdirectory(comm)
+add_subdirectory(src/control)
+add_subdirectory(src/planning)
+add_subdirectory(src/third_party)

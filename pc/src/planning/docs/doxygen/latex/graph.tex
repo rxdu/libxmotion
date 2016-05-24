@@ -1,0 +1,137 @@
+\subsubsection*{a. Design}
+
+Graph is a type of data structure that can be used to represent pairwise relations between objects. In this library, a graph is modeled as a collection of vertices and edges. The relations between those concepts are shown as follows.
+\begin{DoxyItemize}
+\item Graph
+\begin{DoxyItemize}
+\item Vertex 1
+\begin{DoxyItemize}
+\item Edge 1\-\_\-1
+\item Edge 1\-\_\-2
+\item ...
+\end{DoxyItemize}
+\item Vertex 2
+\begin{DoxyItemize}
+\item Edge 2\-\_\-1
+\item Edge 2\-\_\-2
+\item ...
+\end{DoxyItemize}
+\item ...
+\item Vertex n
+\begin{DoxyItemize}
+\item Edge n\-\_\-1
+\item Edge n\-\_\-2
+\item ...
+\item Edge n\-\_\-m
+\end{DoxyItemize}
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+A minimal implementation of Graph consists of a list of vertices, each of which has an unique I\-D and a list of edges. For path finding in the graph, we need to add extra attributes, such as edge cost in Edge and heuristics, flags in Vertex for A$\ast$ search. These attributes are generic for all graphs.
+
+In different contexts, we usually want to add non-\/generic attributes to the vertex so that it can be meaningful for the application. For example when we use a graph to represent a square grid, a square cell can be regarded as a vertex, and the connectivities of a cell with its neighbour cells can be represented as edges. In this case, a square cell (vertex) may have attributes such as its location in the grid and its occupancy type (cell filled with obstacle or not). Such attributes can be very different across different applications, thus they are not modeled directly in the \char`\"{}\-Vertex\char`\"{} data structure. Instead, the \char`\"{}additional information\char`\"{} is packed into a separate object (called a {\bfseries node} in this design) and we associate a node with a vertex uniquely.
+
+\subsubsection*{b. Implementation}
+
+There are 3 class templates defined\-: {\bfseries Graph}, {\bfseries Vertex}, {\bfseries Edge}. The use of template enables us to associate different types of \char`\"{}node\char`\"{} to a vertex, without modifying the code of the aforementioned 3 classes. In other words, the Graph, Vertex and Edge all have a \char`\"{}type\char`\"{}, which is determined by the type of node we want to associate with the vertex. With the current implementation, the node has to be defined as a class or struct. An unique I\-D must be assigned to each node before we use them to construct a graph. In the graph data structure, the vertex has the same I\-D with the node it's associated with. This is for solely for easy indexing to find one with the other.
+
+Here is an example to use the templates.
+
+I. We first define a node type we want to use for constructing the graph.
+
+
+\begin{DoxyCode}
+\textcolor{keyword}{struct }ExampleNode\{
+    ExampleNode(uint64\_t \textcolor{keywordtype}{id}):node\_id\_(id)\{\}
+
+    \textcolor{keyword}{const} uint64\_t node\_id\_;
+
+    \textcolor{comment}{// you can add more attributes here}
+\};
+\end{DoxyCode}
+
+
+I\-I. Then we can create a few objects of class Example\-Node
+
+
+\begin{DoxyCode}
+std::vector<ExampleNode*> nodes;
+
+\textcolor{comment}{// create nodes, with id from 0 to 3}
+\textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < 4; i++) \{
+    nodes.push\_back(\textcolor{keyword}{new} ExampleNode(i));
+\}
+\end{DoxyCode}
+
+
+I\-I\-I. Now use those nodes to construct a graph. Note that the graph is of type Example\-Node in this example.
+
+
+\begin{DoxyCode}
+\textcolor{comment}{// create a graph of type ExampleNode}
+Graph<ExampleNode> graph;
+
+graph.AddEdge(nodes[0], nodes[1], 1.0);
+graph.AddEdge(nodes[0], nodes[2], 1.5);
+graph.AddEdge(nodes[1], nodes[2], 2.0);
+graph.AddEdge(nodes[2], nodes[3], 2.5);
+\end{DoxyCode}
+
+
+I\-V. Now you've got a graph. You can print all edges of this graph in the following way
+
+
+\begin{DoxyCode}
+\textcolor{keyword}{auto} all\_edges = graph.GetGraphEdges();
+
+\textcolor{keywordflow}{for}(\textcolor{keyword}{auto} e : all\_edges)
+    e.PrintEdge();
+\end{DoxyCode}
+
+
+You will get the output
+
+
+\begin{DoxyCode}
+Edge: start - 0 , end - 1 , cost - 1
+Edge: start - 0 , end - 2 , cost - 1.5
+Edge: start - 1 , end - 2 , cost - 2
+Edge: start - 2 , end - 3 , cost - 2.5
+\end{DoxyCode}
+
+
+\subsubsection*{c. Memory Management}
+
+When a Graph object goes out of scope, its destructor function will recycle memory allocated for this its vertices and edges. However, {\bfseries the graph doesn't recycle memory allocated for the node that each vertex is associated with}. In the square grid example, the graph doesn't assume the square grid also becomes useless when the graph itself is destructed. The {\bfseries square grid} should be responsible for recycling the memory allocated for its square cells when it becomes of no use. Thus in the above simple example, we will need to do the following operation to free the memory at the end.
+
+
+\begin{DoxyCode}
+\textcolor{comment}{// delete objects of ExampleNode}
+\textcolor{keywordflow}{for}(\textcolor{keyword}{auto} e : nodes)
+        \textcolor{keyword}{delete} e;
+\end{DoxyCode}
+
+
+\subsubsection*{d. Notes on Graph}
+
+
+\begin{DoxyItemize}
+\item You may have noticed that when constructing a graph, you don't need to explicitly create objects of \char`\"{}\-Vertex\char`\"{}. By calling member function {\bfseries Add\-Edge(src\-\_\-node, dst\-\_\-node, cost)} of the graph, vertices are created and associated with the according node internally.
+\item There are two views of the graph data structure. When constructing the graph (bottom-\/up view), the nodes are manipulated directly and vertices are handled implicitly. When using the graph (top-\/down view) for path search, vertices are the the entities you're directly interacting with and the nodes they associate with are probably of less interest. Of course, you can access one from the other easily using their common I\-D.
+\item A$\ast$ performs search on Vertex objects, so the A$\ast$ algorithm also has a \char`\"{}type\char`\"{}. In this implementation, A$\ast$ search is provided as a member function of Graph. So you don't need to explicitly declare and initialize an A$\ast$ instance. You can simply perform search on a graph by calling the search function packed in the graph.
+\item An detailed example of using the graph for path search can be found in \char`\"{}apps/example.\-cpp\char`\"{}. The work flow is shown as follows.
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}
+\textcolor{comment}{// create a graph from square grid}
+Graph<SquareCell>* graph = GraphBuilder::BuildFromSquareGrid(grid,\textcolor{keyword}{true});
+
+\textcolor{comment}{// specify search start and finish vertex}
+Vertex<SquareCell>* start\_vertex = graph->GetVertexFromID(0);
+Vertex<SquareCell>* finish\_vertex = graph->GetVertexFromID(1);
+
+\textcolor{comment}{// perform A* search and get a vector of Vertics as the search result}
+std::vector<Vertex<SquareCell>*> path = graph->AStarSearch(start\_vertex,finish\_vertex);
+\end{DoxyCode}
+ 

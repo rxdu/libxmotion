@@ -4,8 +4,15 @@ This repository contains a collection of software that are used to develop and t
 
 ## 1. Repository structure
 
-+ **control** : control code for the robot/simulation
-+ **planning** : planning algorithms
+* **pc** : contains software run on a general-purpose computer
+  + **control** : control code for the robot/simulation
+  + **planning** : planning algorithms
+  + **third_party** : third-party libraries
+* **mcu** : contains code run on the flight control microcontroller
+  + **asctec_sdk** : sdk for asctec quadrotors
+  + **px4** : code for px4 compatible flight control boards
+* **tools** : tool used for the development
+* **docs** : documentation of this project
 
 ## 2. Install dependencies
 
@@ -33,14 +40,14 @@ $ sudo apt-get install libboost-all-dev
 * Create a new folder outside of the project root directory
 
 ```
-$ cd <your-preferred-workspace>
-$ mkdir srcl_ctrl_build
-$ cd srcl_ctrl_build
+$ cd srcl_ctrl
+$ mkdir build
+$ cd build
 ```
 * Run the command to generate eclipse project from cmake
 
 ```
-$ cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug ~/Workspace/srcl_robot_suite/srcl_ctrl/
+$ cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug ../pc
 ```
 * Import generated project located at build folder into eclipse
 
@@ -52,6 +59,13 @@ Location: http://cmakeed.sourceforge.net/eclipse/
 ```
 
 ## 4. Build the documentation
+
+Install doxygen if you do not have it on your computer.
+```
+$ sudo apt-get install doxygen
+```
+
+Then you can build the documentation from code.
 
 ```
 $ cd srcl_ctrl/docs/doxygen
