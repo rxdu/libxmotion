@@ -33,8 +33,7 @@ extern "C" {
 
 // headers for user code
 #include "vrep_sim/sim_process/quad_sim_process.h"
-//#include "quad_ctrl/motion_server/trajectory_manager.h"
-#include "quad_ctrl/motion_server/motion_server.h"
+#include "motion_server/motion_server.h"
 #include "quad_vrepsim_con.h"
 
 #ifdef ENABLE_LOG
@@ -136,7 +135,7 @@ int main(int argc,char* argv[])
 
 		std::cout << "INFO: Enabled synchronous mode." << std::endl;
 
-		std::cout << "INFO: Quadrotor motion server standy." << std::endl;
+		std::cout << "INFO: Quadrotor motion server standby." << std::endl;
 
 		while (simxGetConnectionId(clientID)!=-1)
 		{
@@ -158,6 +157,8 @@ int main(int argc,char* argv[])
 				}
 				else
 					sim_process.SimLoopUpdate(last_state);
+
+//				std::cout << "laser size: "<< sim_process.GetRobotState().laser_points_.size() << std::endl;
 			}
 //			else
 //				std::cout<<"failed to fetch data from simulator"<<std::endl;

@@ -82,10 +82,14 @@ enum class QuadFlightType {
 #define IMG_RES_X 160
 #define IMG_RES_Y 90
 
+#define LASER_SCAN_RES_X 64
+#define LASER_SCAN_RES_y 64
+
 typedef struct
 {
 	// sensor data
 	unsigned char mono_image[IMG_RES_Y][IMG_RES_X];
+	std::vector<Point3f> laser_points;
 	IMUData imu_data;
 
 	// data only available in simulator

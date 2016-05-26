@@ -9,7 +9,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <vector>
 #include <cmath>
+#include <cstdint>
 
 #include "vrep_client/quad_sim_client.h"
 //#include "g3log/g3log.hpp"
@@ -69,6 +71,7 @@ void QuadSimClient::ConfigDataStreaming(void)
 	simxGetStringSignal(client_id_,"hummingbird_gyro",&gyro_sig,&gyro_sig_size,simx_opmode_streaming);
 	simxGetStringSignal(client_id_,"hummingbird_quat",&quat_sig,&quat_sig_size,simx_opmode_streaming);
 	simxGetStringSignal(client_id_,"hummingbird_acc",&acc_sig,&acc_sig_size,simx_opmode_streaming);
+	simxGetStringSignal(client_id_,"3d_scanner_points",&scannerptr_sig,&scannerptr_sig_size,simx_opmode_streaming);
 
 	// initialize motor values
 	simxSetFloatSignal(client_id_, "propeller_cmd_front", 0.0, simx_opmode_oneshot);
@@ -92,6 +95,45 @@ bool QuadSimClient::GetVisionImage(simxUChar img[IMG_RES_Y][IMG_RES_X])
 	}
 	else
 		return false;
+}
+
+bool QuadSimClient::Get3DScanPoints(std::vector<Point3f>& points)
+{
+	bool result;
+
+	points.clear();
+
+	if (simxGetStringSignal(client_id_,"3d_scanner_points",&scannerptr_sig,&scannerptr_sig_size,simx_opmode_buffer) == simx_error_noerror)
+	{
+		uint64_t cnt = scannerptr_sig_size/sizeof(float);
+
+		for(uint64_t i = 0; i < cnt/3; i++)
+		{
+				Point3f pt;
+
+				uint64_t pixel_idx = i*3;
+				pt.x = ((float*)scannerptr_sig)[pixel_idx];
+				pt.y = ((float*)scannerptr_sig)[pixel_idx + 1];
+				pt.z = ((float*)scannerptr_sig)[pixel_idx + 2];
+
+				points.push_back(pt);
+		}
+
+//		std::cout << "3d scan ptr size: " << points.size() << std::endl;
+//
+//		for(uint64_t i = 0; i < 3; ++i)
+//		{
+//			std::cout << " ( " << points[i].x << "," << points[i].y << "," << points[i].z << " ) " << std::endl;
+//		}
+//		std::cout << " ------ " << std::endl;
+
+		result = true;
+	}
+	else
+		result = false;
+
+	// TODO laser data is not mandatory now
+	return true;
 }
 
 bool QuadSimClient::ReceiveGyroData(IMU_DataType *data)
@@ -246,7 +288,8 @@ bool QuadSimClient::ReceiveDataFromRobot(DataFromQuad *rx_data)
 			ReceiveQuadPosition(&(rx_data->pos_i)) &&
 			ReceiveQuadVelocity(&(rx_data->vel_i)) &&
 			ReceiveQuadOrientation(&rx_data->rot_i) &&
-			ReceiveQuadQuaternion(&rx_data->quat_i))
+			ReceiveQuadQuaternion(&rx_data->quat_i) &&
+			Get3DScanPoints(rx_data->laser_points))
 	{
 		rx_data->rot_rate_b.x = rx_data->imu_data.gyro.raw_x;
 		rx_data->rot_rate_b.y = rx_data->imu_data.gyro.raw_y;

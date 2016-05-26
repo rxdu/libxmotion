@@ -4,8 +4,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # Dependency libraries
 #find_package(OpenCV REQUIRED)
 
-find_package(PkgConfig REQUIRED)
-pkg_search_module(LCM REQUIRED lcm)
+#find_package(PkgConfig REQUIRED)
+#pkg_search_module(LCM REQUIRED lcm)
 
 # Add libraries
 set(QUADCON_LIB_SRC
@@ -19,15 +19,14 @@ set(QUADCON_LIB_SRC
     controller/pos_quat_con.cpp
     # motion management
     #motion_server/trajectory_manager.cpp
-    motion_server/motion_server.cpp
+    #motion_server/motion_server.cpp
 )
 add_library(quad_con STATIC ${QUADCON_LIB_SRC})
-target_link_libraries(quad_con ${LCM_LIBRARIES})
 if (ENABLE_G3LOG)
   add_definitions(-DENABLE_LOG)
-  target_link_libraries(quad_con ctrl_utils g3logger ${LCM_LIBRARIES})
+  target_link_libraries(quad_con ctrl_utils g3logger)
 endif (ENABLE_G3LOG)
 
 # Add executables
-add_executable(quad_motion_client motion_server/motion_client.cpp)
-target_link_libraries(quad_motion_client ${LCM_LIBRARIES})
+#add_executable(quad_motion_client motion_server/motion_client.cpp)
+#target_link_libraries(quad_motion_client ${LCM_LIBRARIES})

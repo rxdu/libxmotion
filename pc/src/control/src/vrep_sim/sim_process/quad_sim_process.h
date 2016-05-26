@@ -36,6 +36,9 @@ private:
 	PosQuatCon* pos_quat_con_;
 
 public:
+	const RobotState& GetRobotState(){return rs_;};
+
+public:
 	void SimLoopUpdate();
 	void SimLoopUpdate(UAVTrajectoryPoint pt);
 };

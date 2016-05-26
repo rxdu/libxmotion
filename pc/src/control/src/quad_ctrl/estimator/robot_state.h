@@ -26,6 +26,7 @@ public:
 	Point3f orientation_;
 	Eigen::Quaterniond quat_;
 	Point3f rotation_rate_;
+	std::vector<Point3f> laser_points_;
 
 	QuadFlightType quad_flight_type_;
 

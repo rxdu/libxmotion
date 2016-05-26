@@ -38,6 +38,7 @@ private:
 	bool ReceiveGyroData(IMU_DataType *data);
 	bool ReceiveAccData(IMU_DataType *data);
 	bool GetVisionImage(simxUChar img[IMG_RES_Y][IMG_RES_X]);
+	bool Get3DScanPoints(std::vector<Point3f>& points);
 
 	bool ReceiveQuadPosition(Point3f *data);
 	bool ReceiveQuadVelocity(Point3f *data);
@@ -63,6 +64,8 @@ private:
 	simxInt acc_sig_size;
 	simxUChar* quat_sig;
 	simxInt quat_sig_size;
+	simxUChar* scannerptr_sig;
+	simxInt scannerptr_sig_size;
 
 	// vision
 	simxInt camera_handle_;

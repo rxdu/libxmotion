@@ -90,6 +90,8 @@ void RobotState::UpdateRobotState(const DataFromQuad & new_data)
 	rotation_rate_.y = new_data.rot_rate_b.y;
 	rotation_rate_.z = new_data.rot_rate_b.z;
 
+	laser_points_ = new_data.laser_points;
+
 #ifdef ENABLE_LOG
 	UtilsLog::AppendLogMsgTuple3f(position_.x,position_.y,position_.z);
 	UtilsLog::AppendLogMsgTuple3f(velocity_.x,velocity_.y,velocity_.z);
