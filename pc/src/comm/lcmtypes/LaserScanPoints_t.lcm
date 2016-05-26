@@ -1,0 +1,7 @@
+package srcl_msgs;
+
+struct LaserScanPoints_t
+{    
+	int64_t point_num;
+	Point3Df_t points[point_num];
+}

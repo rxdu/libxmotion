@@ -14,6 +14,7 @@
 #include <math.h>
 #include <ctime>
 #include <pwd.h>
+#include <memory>
 
 // headers for vrep remote api
 extern "C" {
@@ -34,7 +35,8 @@ extern "C" {
 // headers for user code
 #include "vrep_sim/sim_process/quad_sim_process.h"
 #include "motion_server/motion_server.h"
-#include "quad_vrepsim_con.h"
+#include "apps/quad_vrepsim_con.h"
+#include "apps/vis_data_transmitter.h"
 
 #ifdef ENABLE_LOG
 using namespace g3;
@@ -113,20 +115,22 @@ int main(int argc,char* argv[])
 
 		MotionServer motion_server;
 		last_state.point_empty = false;
-		last_state.positions[0] = 0;
-		last_state.positions[1] = 0;
+		last_state.positions[0] = -1.8;
+		last_state.positions[1] = 2.0;
 		last_state.positions[2] = 0.5;
 		last_state.yaw = 0;//-M_PI/4;
 
-		lcm::LCM lcm;
+		std::shared_ptr<lcm::LCM> lcm = std::make_shared<lcm::LCM>();
 
-		if(!lcm.good())
+		if(!lcm->good())
 		{
 			std::cout << "ERROR: Failed to initialize LCM." << std::endl;
 			return 1;
 		}
 
-		lcm.subscribe("quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server);
+		lcm->subscribe("quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server);
+
+		VisDataTransmitter vis_trans(lcm);
 
 		std::cout << "INFO: Created a simulation client." << std::endl;
 
@@ -159,6 +163,10 @@ int main(int argc,char* argv[])
 					sim_process.SimLoopUpdate(last_state);
 
 //				std::cout << "laser size: "<< sim_process.GetRobotState().laser_points_.size() << std::endl;
+
+				// send data to ROS network
+				vis_trans.SendLaserPointsToROS(sim_process.GetRobotState().laser_points_);
+				vis_trans.SendQuadTransformToROS(sim_process.GetRobotState().position_, sim_process.GetRobotState().quat_);
 			}
 //			else
 //				std::cout<<"failed to fetch data from simulator"<<std::endl;
@@ -172,7 +180,7 @@ int main(int argc,char* argv[])
 			// send trigger to simulator
 			simxSynchronousTrigger(clientID);
 
-			lcm.handleTimeout(0);
+			lcm->handleTimeout(0);
 
 			// every time a trigger is sent, simulation time forwards 10ms
 			sim_time++;
