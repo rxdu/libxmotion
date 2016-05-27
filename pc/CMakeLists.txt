@@ -10,16 +10,16 @@ set(ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(ENABLE_G3LOG off)
 
 if (ENABLE_G3LOG)
-include_directories(${CMAKE_SOURCE_DIR}/src/third_party/g3log_srcl/src)
+include_directories(${CMAKE_SOURCE_DIR}/third_party/g3log_srcl/src)
 endif (ENABLE_G3LOG)
 
-include_directories(${CMAKE_SOURCE_DIR}/src/third_party/octomap/include)
+include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap/include)
 set(Octomap_LIBS octomap octomath)
 
 set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 
 ## Add sub source directories
-add_subdirectory(src/comm)
-add_subdirectory(src/control)
-add_subdirectory(src/planning)
-add_subdirectory(src/third_party)
+add_subdirectory(comm)
+add_subdirectory(control)
+add_subdirectory(planning)
+add_subdirectory(third_party)
