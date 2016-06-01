@@ -18,7 +18,7 @@ SET (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMakeModules")
 INCLUDE(CompilerSettings)
 
 # Set output directories for libraries and executables
-SET( BASE_DIR ${CMAKE_SOURCE_DIR} )
+#SET( BASE_DIR ${CMAKE_SOURCE_DIR} )
 SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${BASE_DIR}/lib )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${BASE_DIR}/lib )
 SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BASE_DIR}/bin )
@@ -37,8 +37,8 @@ endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 # Otherwise you need to export octomap_DIR to the directory containing
 # the file octomap-config.cmake
 find_package(octomap ${OCTOVIS_MAJOR_VERSION}.${OCTOVIS_MINOR_VERSION} REQUIRED
-HINTS ${CMAKE_SOURCE_DIR}/lib/cmake/octomap
-${CMAKE_SOURCE_DIR}/../octomap/lib/cmake/octomap
+HINTS ${CMAKE_BINARY_DIR}/lib/cmake/octomap
+${CMAKE_BINARY_DIR}/../octomap/lib/cmake/octomap
 )
 MESSAGE(STATUS "Found octomap version: " ${octomap_VERSION})
 

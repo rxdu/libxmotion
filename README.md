@@ -83,7 +83,7 @@ $ doxygen Doxyfile
 ## 5. Changes made to third-party libraries
 
 * eigen: unchanged
-* octomap: changed default output directory from "CMAKE_SOURCE_DIR" to "CMAKE_BINARY_DIR" in the top-level CMakeLists
+* octomap-1.8.0: a. changed default output directory from "CMAKE_SOURCE_DIR" to "CMAKE_BINARY_DIR" in the top-level CMakeLists; b. set "CMAKE_INSTALL_PREFIX" to be "CMAKE_BINARY_DIR"; c. commented out conditions for "add_dependencies()" for octovis and dynamicsEDT3D
 * g3log_srcl: refer to "change_forl_srcl.txt" inside the library folder
 
 ## [Reference]

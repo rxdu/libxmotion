@@ -13,7 +13,9 @@ if (ENABLE_G3LOG)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/g3log_srcl/src)
 endif (ENABLE_G3LOG)
 
-include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap/include)
+include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/octomap/include)
+include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/octovis/include)
+include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/dynamicEDT3D/include)
 set(Octomap_LIBS octomap octomath)
 
 set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)

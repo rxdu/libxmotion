@@ -9,10 +9,10 @@ find_package(PkgConfig REQUIRED)
 pkg_search_module(LCM REQUIRED lcm)
 
 # Add libraries
-set(OCTOMAP_LIB_SRC
+set(MAP3D_LIB_SRC
     octomap_server.cpp
 )
-add_library(octomap_utils STATIC ${OCTOMAP_LIB_SRC})
+add_library(octomap_utils STATIC ${MAP3D_LIB_SRC})
 target_link_libraries(octomap_utils ${Octomap_LIBS})
 
 # Add executables

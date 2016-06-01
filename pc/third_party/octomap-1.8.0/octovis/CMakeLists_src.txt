@@ -89,10 +89,10 @@ set_target_properties(octovis-shared PROPERTIES
 
 # directly depend on the octomap library target when building the
 # complete distribution, so it is recompiled as needed
-if (CMAKE_PROJECT_NAME STREQUAL "octomap-distribution")
+#if (CMAKE_PROJECT_NAME STREQUAL "octomap-distribution")
   ADD_DEPENDENCIES(octovis-static octomap-static)
   ADD_DEPENDENCIES(octovis-shared octomap)
-endif()
+#endif()
 
 
 # Now add these generated files to the ADD_EXECUTABLE step
