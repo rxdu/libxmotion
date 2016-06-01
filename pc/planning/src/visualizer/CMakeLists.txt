@@ -2,10 +2,6 @@
 #include_directories(${CMAKE_SOURCE_DIR}/inc)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/src)
-include_directories(${CMAKE_SOURCE_DIR}/src/map)
-include_directories(${CMAKE_SOURCE_DIR}/src/quadtree)
-include_directories(${CMAKE_SOURCE_DIR}/src/graph)
-include_directories(${CMAKE_SOURCE_DIR}/src/square_grid)
 
 # Dependency libraries
 find_package(OpenCV REQUIRED)
@@ -15,7 +11,7 @@ set(VIS_LIB_SRC
     graph_vis.cpp
 )
 add_library(vis STATIC ${VIS_LIB_SRC})
-target_link_libraries(vis map ${OpenCV_LIBS})
+target_link_libraries(vis map2d ${OpenCV_LIBS})
 
 # Add executables
 #add_executable(test_graph test_graph.cpp)

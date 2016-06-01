@@ -6,6 +6,8 @@
  */
 
 // standard libaray
+#include <map2d/graph_builder.h>
+#include <map2d/sgrid_builder.h>
 #include <stdio.h>
 #include <vector>
 #include <ctime>
@@ -15,9 +17,7 @@
 #include "opencv2/opencv.hpp"
 
 // user
-#include "map/sgrid_builder.h"
 #include "graph/graph.h"
-#include "map/graph_builder.h"
 #include "visualizer/graph_vis.h"
 
 using namespace cv;

@@ -10,7 +10,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src/square_grid)
 find_package(OpenCV REQUIRED)
 
 # Add libraries
-set(MAP_LIB_SRC
+set(MAP2D_LIB_SRC
 	image_utils.cpp
 	map_utils.cpp
     map_manager.cpp
@@ -18,8 +18,8 @@ set(MAP_LIB_SRC
     sgrid_builder.cpp
     graph_builder.cpp
 )
-add_library(map STATIC ${MAP_LIB_SRC})
-target_link_libraries(map squaregrid qtree ${OpenCV_LIBS})
+add_library(map2d STATIC ${MAP2D_LIB_SRC})
+target_link_libraries(map2d squaregrid qtree ${OpenCV_LIBS})
 
 # Add executables
 #add_executable(test_graph test_graph.cpp)

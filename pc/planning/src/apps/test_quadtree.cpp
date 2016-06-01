@@ -6,6 +6,9 @@
  */
 
 // standard libaray
+#include <map2d/graph_builder.h>
+#include <map2d/image_utils.h>
+#include <map2d/qtree_builder.h>
 #include <stdio.h>
 #include <vector>
 #include <ctime>
@@ -15,11 +18,8 @@
 #include "opencv2/opencv.hpp"
 
 // quad_tree
-#include "map/qtree_builder.h"
-#include "map/graph_builder.h"
 #include "graph/astar.h"
 #include "visualizer/graph_vis.h"
-#include "map/image_utils.h"
 
 using namespace cv;
 using namespace srcl_ctrl;

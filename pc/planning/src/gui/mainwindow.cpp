@@ -1,4 +1,7 @@
 #include <common/planning_types.h>
+#include <map2d/graph_builder.h>
+#include <map2d/qtree_builder.h>
+#include <map2d/sgrid_builder.h>
 #include <iostream>
 #include <cstdint>
 
@@ -8,9 +11,6 @@
 #include "ui_mainwindow.h"
 
 // user
-#include "map/sgrid_builder.h"
-#include "map/graph_builder.h"
-#include "map/qtree_builder.h"
 #include "visualizer/graph_vis.h"
 
 using namespace cv;
