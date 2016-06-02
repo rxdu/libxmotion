@@ -13,7 +13,8 @@
 #include "graph/graph.h"
 #include "square_grid/square_grid.h"
 #include "quadtree/quad_tree.h"
-#include "gui/image_label.h"
+
+#include "image_label.h"
 
 namespace Ui {
 class MainWindow;
