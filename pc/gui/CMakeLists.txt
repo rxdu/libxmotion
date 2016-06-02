@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
-project(srcl_planning)
+project(srcl_gui)
 
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
@@ -61,7 +61,7 @@ set(HEADER_FILES
 )
 
 set(SOURCE_FILES
-  planner_gui.cpp
+  gui_main.cpp
   mainwindow.cpp
   image_label.cpp
   ${MOC_FILES}
@@ -87,7 +87,7 @@ qt5_add_resources(MOC_RES_H
   ${RES_FILES}
 )
 
-qt5_generate_moc(planner_gui.cpp quad_gui.moc)
-add_executable(planner_gui ${SOURCE_FILES} ${MOC_SRC_H} ${MOC_GUI_H} ${MOC_RES_H})
-set_target_properties(planner_gui PROPERTIES COMPILE_FLAGS "-std=c++11 -g")
-target_link_libraries(planner_gui map2d squaregrid vis ${OpenCV_LIBS} ${Boost_LIBRARIES} Qt5::Widgets)
+qt5_generate_moc(gui_main.cpp gui_main.moc)
+add_executable(gui_main ${SOURCE_FILES} ${MOC_SRC_H} ${MOC_GUI_H} ${MOC_RES_H})
+set_target_properties(gui_main PROPERTIES COMPILE_FLAGS "-std=c++11 -g")
+target_link_libraries(gui_main map2d squaregrid vis ${OpenCV_LIBS} ${Boost_LIBRARIES} Qt5::Widgets)

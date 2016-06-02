@@ -6,8 +6,8 @@ ENABLE_TESTING()  # enable CTest environment of subprojects
 SET( BASE_DIR ${CMAKE_BINARY_DIR} )
 SET( CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR} )
 
-option(BUILD_OCTOVIS_SUBPROJECT "Build targets from subproject octovis" ON)
-option(BUILD_DYNAMICETD3D_SUBPROJECT  "Build targets from subproject dynamicEDT3D" ON)
+option(BUILD_OCTOVIS_SUBPROJECT "Build targets from subproject octovis" OFF)
+option(BUILD_DYNAMICETD3D_SUBPROJECT  "Build targets from subproject dynamicEDT3D" OFF)
 
 ADD_SUBDIRECTORY( octomap )
 
