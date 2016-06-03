@@ -29,7 +29,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     image_label_ = new ImageLabel(this);
-    ui->gbMap->layout()->addWidget(image_label_);
+//    ui->gbMap->layout()->addWidget(image_label_);
+    ui->tab2DScene->layout()->addWidget(image_label_);
+//    image_label_->layout()->setAlignment(Qt::AlignCenter);
 
     ui->actionOpenMap->setIcon(QIcon(":/icons/icons/open_map.ico"));
     ui->rbUseSGrid->setChecked(true);
@@ -49,7 +51,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::UpdateDisplayMap(Mat map_img)
 {
-    if(map_img.data) {
+    if(map_img.data)
+    {
         Mat vis_img = this->DecomposeWorkspace(map_img, cell_decomp_method_);
 
         QImage map_image = ConvertMatToQImage(vis_img);

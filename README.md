@@ -43,6 +43,15 @@ $ sudo apt-get install qt5-default
 $ sudo apt-get install libboost-all-dev
 ```
 
+* VTK
+
+Install dependencies first.
+
+```
+$ sudo apt-get install qttools5-dev
+```
+Then use cmake to configure the VTK source, then build and install the libraries. Refer to this [wiki](http://www.vtk.org/Wiki/VTK/Configure_and_Build).
+
 ## 3. Use Eclipse to build project
 
 * Create a new folder outside of the project root directory

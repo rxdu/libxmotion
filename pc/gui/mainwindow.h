@@ -74,7 +74,7 @@ private:
     void UpdateDisplayMap(cv::Mat map_image);
 //    void UpdateMap();
 
-public:
+private:
     QImage ConvertMatToQImage(const cv::Mat& mat);
 //    void UpdateQuadPositionOnMap(const geometry_msgs::PoseStampedConstPtr& msg);
 

@@ -34,9 +34,35 @@ void ImageLabel::paintEvent(QPaintEvent *event) {
                                    Qt::SmoothTransformation
                                    );
 
+    // adjust painting area to be at the center
+    /* reference: http://stackoverflow.com/questions/18959083/qpainter-drawimage-centeraligned */
+    double widgetWidth = this->width();
+    double widgetHeight = this->height();
+    QRectF target(0, 0, widgetWidth, widgetHeight);
+
+    double imageSizeWidth = static_cast<double>(scaledPix.width());
+    double imageSizeHeight = static_cast<double>(scaledPix.height());
+    QRectF source(0.0, 0.0, imageSizeWidth, imageSizeHeight);
+
+    int deltaX = 0;
+    int deltaY = 0;
+    if(source.width() < target.width())
+    	deltaX = target.width() - source.width();
+    else
+    	deltaX = source.width() - target.width();
+
+    if(source.height() < target.height())
+    	deltaY = target.height() - source.height();
+    else
+    	deltaY = source.height() - target.height();
+
+    painter.translate(deltaX / 2, deltaY / 2);
+
+    // store the scaled pixmap size
     scaled_height = scaledPix.height();
     scaled_width = scaledPix.width();
 
+    // paint the pixmap
     painter.drawPixmap(QPoint(), scaledPix);
 }
 

@@ -15,22 +15,11 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="1" rowspan="2" colspan="2">
-     <widget class="QGroupBox" name="gbMap">
-      <property name="title">
-       <string>2D Map</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignHCenter|Qt::AlignTop</set>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_3"/>
-     </widget>
-    </item>
     <item row="0" column="0">
      <widget class="QGroupBox" name="gbWSpace">
       <property name="maximumSize">
        <size>
-        <width>200</width>
+        <width>250</width>
         <height>16777215</height>
        </size>
       </property>
@@ -76,6 +65,30 @@
         </widget>
        </item>
       </layout>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="tabPosition">
+       <enum>QTabWidget::North</enum>
+      </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Rounded</enum>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab2DScene">
+       <attribute name="title">
+        <string>2D Scene</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_4"/>
+      </widget>
+      <widget class="QWidget" name="tab3DScene">
+       <attribute name="title">
+        <string>3D Scene</string>
+       </attribute>
+      </widget>
      </widget>
     </item>
    </layout>
