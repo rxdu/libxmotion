@@ -24,6 +24,13 @@ include_directories(${CMAKE_SOURCE_DIR}/planning/src)
 # Dependency libraries
 find_package(OpenCV REQUIRED)
 
+find_package(VTK 7.0 REQUIRED COMPONENTS
+  vtkCommonCore
+  vtkGUISupportQt
+  vtkIOInfovis
+  vtkViewsInfovis)
+include(${VTK_USE_FILE}) 
+
 # Add libraries
 #set(VIS_LIB_SRC
 #    graph_vis.cpp
@@ -90,4 +97,4 @@ qt5_add_resources(MOC_RES_H
 qt5_generate_moc(gui_main.cpp gui_main.moc)
 add_executable(gui_main ${SOURCE_FILES} ${MOC_SRC_H} ${MOC_GUI_H} ${MOC_RES_H})
 set_target_properties(gui_main PROPERTIES COMPILE_FLAGS "-std=c++11 -g")
-target_link_libraries(gui_main map2d squaregrid vis ${OpenCV_LIBS} ${Boost_LIBRARIES} Qt5::Widgets)
+target_link_libraries(gui_main map2d squaregrid vis ${OpenCV_LIBS} ${Boost_LIBRARIES} ${VTK_LIBRARIES} Qt5::Widgets)

@@ -28,15 +28,26 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // 2d visualization
     image_label_ = new ImageLabel(this);
-//    ui->gbMap->layout()->addWidget(image_label_);
     ui->tab2DScene->layout()->addWidget(image_label_);
-//    image_label_->layout()->setAlignment(Qt::AlignCenter);
+    ui->tab2DScene->layout()->update();
 
     ui->actionOpenMap->setIcon(QIcon(":/icons/icons/open_map.ico"));
     ui->rbUseSGrid->setChecked(true);
     ui->sbQTreeMaxDepth->setValue(6);
     ui->sbQTreeMaxDepth->setMinimum(0);
+
+    // 3d visualization - vtk
+    qvtk_widget_ = new QVTKWidget;
+    ui->tab3DScene->layout()->addWidget(qvtk_widget_);
+    ui->tab3DScene->layout()->update();
+//    vtk_renderer_ = vtkRenderer::New();
+//    vtk_render_win_ = vtkRenderWindow::New();
+//    qvtk_widget_->SetRenderWindow(vtk_render_win_);
+//    qvtk_widget_->GetRenderWindow()->AddRenderer(vtk_renderer_);
+//    vtk_renderer_->SetBackground(0,0,0);
+//    vtk_renderer_->Render();
 
     // connect image label with main window
 //    connect(image_label_,SIGNAL(NewImagePositionClicked(long, long, double)),this,SLOT(UpdateTargetPosition(long, long, double)));
@@ -47,6 +58,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete image_label_;
+    delete qvtk_widget_;
 }
 
 void MainWindow::UpdateDisplayMap(Mat map_img)

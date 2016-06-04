@@ -4,6 +4,10 @@
 #include <QMainWindow>
 #include <QMouseEvent>
 
+#include <QVTKWidget.h>
+#include <vtkRenderer.h>
+#include <vtkRenderWindow.h>
+
 #include <vector>
 #include <memory>
 #include <cstdint>
@@ -38,10 +42,9 @@ public:
 private:
     Ui::MainWindow *ui;
     ImageLabel* image_label_;
-
-//public slots:
-//    void UpdateTargetPosition(long x, long y, double raw2scale_ratio);
-//    void BtnSendTrajectory();
+    QVTKWidget* qvtk_widget_;
+    vtkRenderer* vtk_renderer_;
+    vtkRenderWindow* vtk_render_win_;
 
 private:
     // workspace decomposition
@@ -77,6 +80,10 @@ private:
 private:
     QImage ConvertMatToQImage(const cv::Mat& mat);
 //    void UpdateQuadPositionOnMap(const geometry_msgs::PoseStampedConstPtr& msg);
+
+//public slots:
+//	void UpdateTargetPosition(long x, long y, double raw2scale_ratio);
+//	void BtnSendTrajectory();
 
 private slots:
     void on_actionOpenMap_triggered();
