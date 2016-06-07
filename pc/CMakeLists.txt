@@ -18,11 +18,18 @@ include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/octovis/includ
 include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/dynamicEDT3D/include)
 set(Octomap_LIBS octomap octomath)
 
+# Check dependencies
+find_package(VTK 7.0)
+
 set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 
 ## Add sub source directories
 add_subdirectory(comm)
 add_subdirectory(control)
 add_subdirectory(planning)
-add_subdirectory(gui)
 add_subdirectory(third_party)
+
+if (VTK_FOUND)
+add_subdirectory(gui)
+endif(VTK_FOUND)
+

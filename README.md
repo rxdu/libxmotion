@@ -43,14 +43,16 @@ $ sudo apt-get install qt5-default
 $ sudo apt-get install libboost-all-dev
 ```
 
-* VTK
+* VTK >= 7.0 (Optional)
+
+Gui module will not be built if VTK is not installed.
 
 Install dependencies first.
 
 ```
 $ sudo apt-get install qttools5-dev
 ```
-Then use cmake to configure the VTK source, then build and install the libraries. Refer to this [wiki](http://www.vtk.org/Wiki/VTK/Configure_and_Build).
+Then use cmake to configure the VTK source with Qt5 support. Build and install the libraries. Refer to this [wiki](http://www.vtk.org/Wiki/VTK/Configure_and_Build).
 
 ## 3. Use Eclipse to build project
 

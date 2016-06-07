@@ -5,8 +5,15 @@
 #include <QMouseEvent>
 
 #include <QVTKWidget.h>
+#include <vtkPolyDataMapper.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
+#include <vtkSphereSource.h>
+#include <vtkCubeSource.h>
+#include <vtkSmartPointer.h>
+#include <vtkAxesActor.h>
+#include <vtkOrientationMarkerWidget.h>
+#include <vtkRenderWindowInteractor.h>
 
 #include <vector>
 #include <memory>
@@ -43,8 +50,6 @@ private:
     Ui::MainWindow *ui;
     ImageLabel* image_label_;
     QVTKWidget* qvtk_widget_;
-    vtkRenderer* vtk_renderer_;
-    vtkRenderWindow* vtk_render_win_;
 
 private:
     // workspace decomposition

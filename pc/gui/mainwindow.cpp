@@ -42,12 +42,51 @@ MainWindow::MainWindow(QWidget *parent) :
     qvtk_widget_ = new QVTKWidget;
     ui->tab3DScene->layout()->addWidget(qvtk_widget_);
     ui->tab3DScene->layout()->update();
-//    vtk_renderer_ = vtkRenderer::New();
-//    vtk_render_win_ = vtkRenderWindow::New();
-//    qvtk_widget_->SetRenderWindow(vtk_render_win_);
-//    qvtk_widget_->GetRenderWindow()->AddRenderer(vtk_renderer_);
-//    vtk_renderer_->SetBackground(0,0,0);
-//    vtk_renderer_->Render();
+
+    // Add shape to display for debugging
+//    vtkSmartPointer<vtkSphereSource> sphereSource =
+//    		vtkSmartPointer<vtkSphereSource>::New();
+//    sphereSource->Update();
+//    vtkSmartPointer<vtkPolyDataMapper> sphereMapper =
+//    		vtkSmartPointer<vtkPolyDataMapper>::New();
+//    sphereMapper->SetInputConnection(sphereSource->GetOutputPort());
+//    vtkSmartPointer<vtkActor> sphereActor =
+//    		vtkSmartPointer<vtkActor>::New();
+//    sphereActor->SetMapper(sphereMapper);
+
+    vtkSmartPointer<vtkCubeSource> cubeSource =
+    		vtkSmartPointer<vtkCubeSource>::New();
+    cubeSource->Update();
+    vtkSmartPointer<vtkPolyDataMapper> cubeMapper =
+    		vtkSmartPointer<vtkPolyDataMapper>::New();
+    cubeMapper->SetInputConnection(cubeSource->GetOutputPort());
+    vtkSmartPointer<vtkActor> cubeActor =
+    		vtkSmartPointer<vtkActor>::New();
+    cubeActor->SetMapper(cubeMapper);
+
+    // Set up the orientation widget
+    vtkSmartPointer<vtkAxesActor> ori_axes =
+    		vtkSmartPointer<vtkAxesActor>::New();
+
+    vtkSmartPointer<vtkOrientationMarkerWidget> widget =
+    		vtkSmartPointer<vtkOrientationMarkerWidget>::New();
+    widget->SetOutlineColor( 0.9300, 0.5700, 0.1300 );
+    widget->SetOrientationMarker( ori_axes );
+    widget->SetInteractor(qvtk_widget_->GetRenderWindow()->GetInteractor());
+    widget->SetViewport( 0.0, 0.0, 0.2, 0.2 );
+    widget->SetEnabled( 1 );
+    widget->InteractiveOn();
+
+    // VTK Renderer
+    vtkSmartPointer<vtkRenderer> renderer =
+    		vtkSmartPointer<vtkRenderer>::New();
+    renderer->GradientBackgroundOn();
+    renderer->SetBackground(0.1, 0.2, 0.4);
+    renderer->SetBackground2(0.0, 0.0, 0.0);
+    renderer->AddActor(cubeActor);
+
+    // VTK/Qt
+    qvtk_widget_->GetRenderWindow()->AddRenderer(renderer);
 
     // connect image label with main window
 //    connect(image_label_,SIGNAL(NewImagePositionClicked(long, long, double)),this,SLOT(UpdateTargetPosition(long, long, double)));
