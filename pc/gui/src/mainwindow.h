@@ -10,10 +10,14 @@
 #include <vtkRenderWindow.h>
 #include <vtkSphereSource.h>
 #include <vtkCubeSource.h>
+#include <vtkStructuredGrid.h>
+#include <vtkStructuredGridOutlineFilter.h>
+#include <vtkDataSetMapper.h>
 #include <vtkSmartPointer.h>
 #include <vtkAxesActor.h>
 #include <vtkOrientationMarkerWidget.h>
 #include <vtkRenderWindowInteractor.h>
+#include <vtkProperty.h>
 
 #include <vector>
 #include <memory>
@@ -49,7 +53,11 @@ public:
 private:
     Ui::MainWindow *ui;
     ImageLabel* image_label_;
+
     QVTKWidget* qvtk_widget_;
+    vtkSmartPointer<vtkRenderer> vtk_renderer_;
+    vtkSmartPointer<vtkAxesActor> ori_axes_actor_;
+    vtkSmartPointer<vtkOrientationMarkerWidget> vtk_ori_marker_widget_;
 
 private:
     // workspace decomposition
@@ -80,6 +88,8 @@ private:
     void SetupMap();
     cv::Mat DecomposeWorkspace(cv::Mat map_img, CellDecompMethod method);
     void UpdateDisplayMap(cv::Mat map_image);
+
+    void InitVTKView();
 //    void UpdateMap();
 
 private:
