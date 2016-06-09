@@ -1,17 +1,20 @@
-#include <common/planning_types.h>
-#include <map2d/graph_builder.h>
-#include <map2d/qtree_builder.h>
-#include <map2d/sgrid_builder.h>
 #include <iostream>
 #include <cstdint>
+#include <cmath>
 
 #include <QFileDialog>
+
+#include <vtkCamera.h>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 // user
 #include "visualizer/graph_vis.h"
+#include <common/planning_types.h>
+#include <map2d/graph_builder.h>
+#include <map2d/qtree_builder.h>
+#include <map2d/sgrid_builder.h>
 
 using namespace cv;
 using namespace srcl_ctrl;
@@ -34,7 +37,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tab2DScene->layout()->addWidget(image_label_);
     ui->tab2DScene->layout()->update();
 
-    ui->actionOpenMap->setIcon(QIcon(":/icons/icons/open_map.ico"));
+//    ui->actionOpenMap->setIcon(QIcon(":/icons/icons/open_map.ico"));
+//    ui->actionResetCamera->setIcon(QIcon(":/icons/icons/reset_cam.ico"));
+
     ui->rbUseSGrid->setChecked(true);
     ui->sbQTreeMaxDepth->setValue(6);
     ui->sbQTreeMaxDepth->setMinimum(0);
@@ -44,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tab3DScene->layout()->update();
 
     InitVTKView();
+    ResetView();
 
     // connect image label with main window
 //    connect(image_label_,SIGNAL(NewImagePositionClicked(long, long, double)),this,SLOT(UpdateTargetPosition(long, long, double)));
@@ -72,6 +78,8 @@ void MainWindow::InitVTKView()
 
 	vtkSmartPointer<vtkCubeSource> cubeSource =
 			vtkSmartPointer<vtkCubeSource>::New();
+	cubeSource->SetXLength(1.5);
+	cubeSource->SetYLength(2.5);
 	cubeSource->Update();
 	vtkSmartPointer<vtkPolyDataMapper> cubeMapper =
 			vtkSmartPointer<vtkPolyDataMapper>::New();
@@ -81,13 +89,65 @@ void MainWindow::InitVTKView()
 	cubeActor->SetMapper(cubeMapper);
 	cubeActor->GetProperty()->SetColor(0.8,0.2,0.3);
 
+	// Create a plane
+	vtkSmartPointer<vtkPlaneSource> planeSource =
+			vtkSmartPointer<vtkPlaneSource>::New();
+	double gridSize = 10.0;
+	double scale = 1.0;
+	double origin[3],normal[3];
+	int cellSize = 1.0;
+
+	origin[0] = 0.0;
+	origin[1] = 0.0;
+	origin[2] = 0.0;
+
+	normal[0] = 0.0;
+	normal[1] = 0.0;
+	normal[2] = 1.0;
+
+	planeSource->SetOrigin(-gridSize*scale, -gridSize*scale, 0.0);
+	planeSource->SetPoint1(gridSize*scale, -gridSize*scale, 0.0);
+	planeSource->SetPoint2(-gridSize*scale, gridSize*scale, 0.0);
+	planeSource->SetResolution(gridSize/cellSize, gridSize/cellSize);
+	planeSource->SetCenter(origin);
+	planeSource->SetNormal(normal);
+	planeSource->Update();
+
+	vtkPolyData* plane = planeSource->GetOutput();
+
+	// Create a mapper and actor
+	vtkSmartPointer<vtkPolyDataMapper> plane_mapper =
+			vtkSmartPointer<vtkPolyDataMapper>::New();
+	plane_mapper->SetInputData(plane);
+
+	vtkSmartPointer<vtkActor> plane_actor =
+			vtkSmartPointer<vtkActor>::New();
+	plane_actor->GetProperty()->SetRepresentationToWireframe();
+	plane_actor->SetMapper(plane_mapper);
+
+	// World frame
+	world_axes_actor_ = vtkSmartPointer<vtkAxesActor>::New();
+	world_axes_actor_->SetOrigin(0.0,0.0,0.0);
+	world_axes_actor_->SetXAxisLabelText("wx");
+	world_axes_actor_->SetYAxisLabelText("wy");
+	world_axes_actor_->SetZAxisLabelText("wz");
+	world_axes_actor_->AxisLabelsOff ();
+
+	// Camera
+	vtk_camera_ = vtkSmartPointer<vtkCamera>::New();
+
 	// VTK Renderer
 	vtk_renderer_ = vtkSmartPointer<vtkRenderer>::New();
 	vtk_renderer_->GradientBackgroundOn();
 	vtk_renderer_->SetBackground(0.0, 0.0, 0.0);
 	vtk_renderer_->SetBackground2(0.1, 0.2, 0.4);
-	vtk_renderer_->AddActor(sphereActor);
+	vtk_renderer_->SetActiveCamera(vtk_camera_);
+	vtk_renderer_->ResetCamera();
+
+//	vtk_renderer_->AddActor(sphereActor);
 	vtk_renderer_->AddActor(cubeActor);
+	vtk_renderer_->AddActor(plane_actor);
+	vtk_renderer_->AddActor(world_axes_actor_);
 
 	// Connect the VTK renderer and the QT widget
 	qvtk_widget_->GetRenderWindow()->AddRenderer(vtk_renderer_);
@@ -110,8 +170,19 @@ void MainWindow::InitVTKView()
 
 	qvtk_widget_->GetRenderWindow()->GetInteractor()->Enable();
 
-	// Resets camera
+	qvtk_widget_->update();
+}
+
+void MainWindow::ResetView()
+{
+	//set the camera position and orientation
+	vtk_renderer_->GetActiveCamera()->SetFocalPoint(0, 0, 0.0);
+	vtk_renderer_->GetActiveCamera()->SetViewUp(0, 0, 1);
+	vtk_renderer_->GetActiveCamera()->SetPosition(12.0, 12.0, 5 );
+
 	vtk_renderer_->ResetCamera();
+
+	qvtk_widget_->update();
 }
 
 void MainWindow::UpdateDisplayMap(Mat map_img)
@@ -398,4 +469,20 @@ void srcl_ctrl::MainWindow::on_sbQTreeMaxDepth_valueChanged(int val)
     qtree_depth_ = val;
 
     this->UpdateDisplayMap(raw_image_);
+}
+
+void srcl_ctrl::MainWindow::on_actionResetView_triggered()
+{
+	// issue: http://stackoverflow.com/questions/18097521/vtkactor-not-visible-after-render-but-visible-on-camera-resetview
+
+	this->ResetView();
+
+	qvtk_widget_->update();
+}
+
+void srcl_ctrl::MainWindow::on_actionFullView_triggered()
+{
+	vtk_renderer_->ResetCamera();
+
+    qvtk_widget_->update();
 }

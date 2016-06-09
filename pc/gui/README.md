@@ -5,6 +5,7 @@ Reference
 * https://www.youtube.com/watch?v=hO0u_pdTJKA
 * http://answers.ros.org/question/210231/how-to-run-rosspin-in-the-background/
 * http://stackoverflow.com/questions/18959083/qpainter-drawimage-centeraligned
+* http://www.vtk.org/pipermail/vtkusers/2011-May/067577.html
 
 Resource
 

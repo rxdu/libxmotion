@@ -3,7 +3,8 @@
 build
 */build
 /control/hummingbird/quad_ctrl/build
-~
+*~
+pc/gui/*~
 */~
 */*.*~
 *.m~

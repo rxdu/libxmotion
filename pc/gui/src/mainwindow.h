@@ -1,30 +1,39 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QMouseEvent>
-
-#include <QVTKWidget.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindow.h>
-#include <vtkSphereSource.h>
-#include <vtkCubeSource.h>
-#include <vtkStructuredGrid.h>
-#include <vtkStructuredGridOutlineFilter.h>
-#include <vtkDataSetMapper.h>
-#include <vtkSmartPointer.h>
-#include <vtkAxesActor.h>
-#include <vtkOrientationMarkerWidget.h>
-#include <vtkRenderWindowInteractor.h>
-#include <vtkProperty.h>
-
+// C++ standard headers
 #include <vector>
 #include <memory>
 #include <cstdint>
 
+// Qt headers
+#include <QMainWindow>
+#include <QMouseEvent>
+
+// VTK headers
+#include <vtkSmartPointer.h>
+#include <vtkProperty.h>
+
+#include <QVTKWidget.h>
+#include <vtkOrientationMarkerWidget.h>
+
+#include <vtkSphereSource.h>
+#include <vtkCubeSource.h>
+#include <vtkPlaneSource.h>
+
+#include <vtkDataSetMapper.h>
+#include <vtkPolyDataMapper.h>
+
+#include <vtkAxesActor.h>
+
+#include <vtkRenderer.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderWindowInteractor.h>
+
+// OpenCV headers
 #include "opencv2/opencv.hpp"
 
+// User headers
 #include "graph/graph.h"
 #include "square_grid/square_grid.h"
 #include "quadtree/quad_tree.h"
@@ -57,6 +66,8 @@ private:
     QVTKWidget* qvtk_widget_;
     vtkSmartPointer<vtkRenderer> vtk_renderer_;
     vtkSmartPointer<vtkAxesActor> ori_axes_actor_;
+    vtkSmartPointer<vtkAxesActor> world_axes_actor_;
+    vtkSmartPointer<vtkCamera> vtk_camera_;
     vtkSmartPointer<vtkOrientationMarkerWidget> vtk_ori_marker_widget_;
 
 private:
@@ -81,7 +92,6 @@ private:
     cv::Mat sgrid_map_;
 
     bool disp_once;
-
 //    QuadPlanner* planner_;
 
 private:
@@ -90,6 +100,7 @@ private:
     void UpdateDisplayMap(cv::Mat map_image);
 
     void InitVTKView();
+    void ResetView();
 //    void UpdateMap();
 
 private:
@@ -102,9 +113,11 @@ private:
 
 private slots:
     void on_actionOpenMap_triggered();
+    void on_actionResetView_triggered();
     void on_rbUseQTree_clicked();
     void on_rbUseSGrid_clicked();
     void on_sbQTreeMaxDepth_valueChanged(int val);
+    void on_actionFullView_triggered();
 };
 }
 

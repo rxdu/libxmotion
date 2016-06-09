@@ -24,19 +24,19 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
-      <widget class="QWidget" name="tab2DScene">
-       <attribute name="title">
-        <string>2D Scene</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_4"/>
-      </widget>
       <widget class="QWidget" name="tab3DScene">
        <attribute name="title">
         <string>3D Scene</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3"/>
+      </widget>
+      <widget class="QWidget" name="tab2DScene">
+       <attribute name="title">
+        <string>Map</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_4"/>
       </widget>
      </widget>
     </item>
@@ -129,8 +129,15 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionOpenMap"/>
+   <addaction name="separator"/>
+   <addaction name="actionFullView"/>
+   <addaction name="actionResetView"/>
   </widget>
   <action name="actionOpenMap">
+   <property name="icon">
+    <iconset resource="icon_res.qrc">
+     <normaloff>:/icons/icons/open_map.ico</normaloff>:/icons/icons/open_map.ico</iconset>
+   </property>
    <property name="text">
     <string>OpenMap</string>
    </property>
@@ -138,9 +145,35 @@
     <string>Open Map</string>
    </property>
   </action>
+  <action name="actionResetView">
+   <property name="icon">
+    <iconset resource="icon_res.qrc">
+     <normaloff>:/icons/icons/reset_cam.ico</normaloff>:/icons/icons/reset_cam.ico</iconset>
+   </property>
+   <property name="text">
+    <string>ResetView</string>
+   </property>
+   <property name="toolTip">
+    <string>Reset View</string>
+   </property>
+  </action>
+  <action name="actionFullView">
+   <property name="icon">
+    <iconset resource="icon_res.qrc">
+     <normaloff>:/icons/icons/full_view.ico</normaloff>:/icons/icons/full_view.ico</iconset>
+   </property>
+   <property name="text">
+    <string>FullView</string>
+   </property>
+   <property name="toolTip">
+    <string>Full View</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="icon_res.qrc"/>
+ </resources>
  <connections/>
  <buttongroups>
   <buttongroup name="rbGroupCellDecomp"/>
