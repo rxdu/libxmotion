@@ -33,6 +33,10 @@
 // OpenCV headers
 #include "opencv2/opencv.hpp"
 
+// Octomap headers
+#include <octomap/octomap.h>
+#include <octomap/OcTree.h>
+
 // User headers
 #include "graph/graph.h"
 #include "square_grid/square_grid.h"
@@ -112,12 +116,16 @@ private:
 //	void BtnSendTrajectory();
 
 private slots:
-    void on_actionOpenMap_triggered();
-    void on_actionResetView_triggered();
     void on_rbUseQTree_clicked();
     void on_rbUseSGrid_clicked();
     void on_sbQTreeMaxDepth_valueChanged(int val);
+    void on_pushButton_clicked();
+
+    void on_actionOpenMap_triggered();
+    void on_actionResetView_triggered();
     void on_actionFullView_triggered();
+    void on_actionOpenOctomap_triggered();
+
 };
 }
 

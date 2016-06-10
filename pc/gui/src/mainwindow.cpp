@@ -19,6 +19,7 @@
 using namespace cv;
 using namespace srcl_ctrl;
 using namespace std;
+using namespace octomap;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -37,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tab2DScene->layout()->addWidget(image_label_);
     ui->tab2DScene->layout()->update();
 
-//    ui->actionOpenMap->setIcon(QIcon(":/icons/icons/open_map.ico"));
+    ui->actionOpenMap->setIcon(QIcon(":/icons/icons/open_map.ico"));
 //    ui->actionResetCamera->setIcon(QIcon(":/icons/icons/reset_cam.ico"));
 
     ui->rbUseSGrid->setChecked(true);
@@ -416,10 +417,8 @@ QImage MainWindow::ConvertMatToQImage(const Mat& mat)
 
 void srcl_ctrl::MainWindow::on_actionOpenMap_triggered()
 {
-//    std::cout << "clicked" << std::endl;
-
     QString map_file_name = QFileDialog::getOpenFileName(this,
-        tr("Open Map File"), "/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/planning/data", tr("Map Images (*.png *.jpg)"));
+        tr("Open Map File"), "/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/pc/planning/data", tr("Map Images (*.png *.jpg)"));
 
     if(!map_file_name.isEmpty()) {
         // read map image
@@ -438,6 +437,9 @@ void srcl_ctrl::MainWindow::on_actionOpenMap_triggered()
             QString msg = QString::fromStdString(stdmsg);
             ui->statusBar->showMessage(msg);
         }
+
+        // set the map tab to be active
+        ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->tab2DScene));
     }
 }
 
@@ -485,4 +487,73 @@ void srcl_ctrl::MainWindow::on_actionFullView_triggered()
 	vtk_renderer_->ResetCamera();
 
     qvtk_widget_->update();
+}
+
+void srcl_ctrl::MainWindow::on_actionOpenOctomap_triggered()
+{
+    QString octomap_filename = QFileDialog::getOpenFileName(this,
+        tr("Open Map File"), "/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/planning/data", tr("Octomap (*.bt)"));
+
+    if(!octomap_filename.isEmpty()) {
+        // read octomap
+//    	OcTree* tree = new octomap::OcTree(octomap_filename);
+
+//    	std::cout << "octree size: " << tree->size() << std::endl;
+//        if (!raw_image_.data) {
+//            printf("No image data \n");
+//            ui->statusBar->showMessage(tr("Failed to load map."));
+
+//            return;
+//        }
+//        else {
+//            this->UpdateDisplayMap(raw_image_);
+
+//            std::string stdmsg = "Successfully loaded map: " + map_file_name.toStdString();
+//            QString msg = QString::fromStdString(stdmsg);
+//            ui->statusBar->showMessage(msg);
+//        }
+    }
+}
+
+void srcl_ctrl::MainWindow::on_pushButton_clicked()
+{
+    Mat image_to_save;
+
+    if(ui->rbUseQTree->isChecked())
+    {
+        if(!qtree_map_.empty())
+        {
+            qtree_map_.copyTo(image_to_save);
+        }
+        else
+        {
+            ui->statusBar->showMessage(tr("No avaialable map data to save."));
+            return;
+        }
+    }
+    else if(ui->rbUseSGrid->isChecked())
+    {
+        if(!sgrid_map_.empty())
+        {
+            sgrid_map_.copyTo(image_to_save);;
+        }
+        else
+        {
+            ui->statusBar->showMessage(tr("No avaialable map data to save."));
+            return;
+        }
+    }
+
+    QString new_filename = QFileDialog::getSaveFileName(this,
+    		tr("Save Map to File"),"/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/planning/data",tr("Map Images (*.png *.jpg)"));
+
+    if(!new_filename.contains(".jpg",Qt::CaseSensitivity::CaseInsensitive) &&
+    		!new_filename.contains(".png",Qt::CaseSensitivity::CaseInsensitive))
+    {
+    	new_filename.append(".jpg");
+    }
+
+    if(!new_filename.isEmpty()) {
+    	imwrite(new_filename.toStdString(), image_to_save);
+    }
 }

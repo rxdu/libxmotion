@@ -49,9 +49,19 @@
        </size>
       </property>
       <property name="title">
-       <string>Workspace </string>
+       <string>Map</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
+       <item row="1" column="0" colspan="3">
+        <widget class="QRadioButton" name="rbUseQTree">
+         <property name="text">
+          <string>Quad-Tree</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">rbGroupCellDecomp</string>
+         </attribute>
+        </widget>
+       </item>
        <item row="0" column="0" colspan="3">
         <widget class="QRadioButton" name="rbUseSGrid">
          <property name="text">
@@ -65,31 +75,7 @@
        <item row="3" column="2">
         <widget class="QSpinBox" name="sbQTreeMaxDepth"/>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lbQTreeMaxDepth">
-         <property name="text">
-          <string>Max Depth:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" colspan="3">
-        <widget class="QRadioButton" name="rbUseQTree">
-         <property name="text">
-          <string>Quad-Tree</string>
-         </property>
-         <attribute name="buttonGroup">
-          <string notr="true">rbGroupCellDecomp</string>
-         </attribute>
-        </widget>
-       </item>
-       <item row="4" column="0" colspan="3">
-        <widget class="QPushButton" name="btnSendTraj">
-         <property name="text">
-          <string>Send Trajectory</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
+       <item row="6" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -101,6 +87,27 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="5" column="0" colspan="3">
+        <widget class="QPushButton" name="btnSendTraj">
+         <property name="text">
+          <string>Send Trajectory</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lbQTreeMaxDepth">
+         <property name="text">
+          <string>Max Depth:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="3">
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>Save Map</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -129,6 +136,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionOpenMap"/>
+   <addaction name="actionOpenOctomap"/>
    <addaction name="separator"/>
    <addaction name="actionFullView"/>
    <addaction name="actionResetView"/>
@@ -167,6 +175,18 @@
    </property>
    <property name="toolTip">
     <string>Full View</string>
+   </property>
+  </action>
+  <action name="actionOpenOctomap">
+   <property name="icon">
+    <iconset resource="icon_res.qrc">
+     <normaloff>:/icons/icons/open_octomap.ico</normaloff>:/icons/icons/open_octomap.ico</iconset>
+   </property>
+   <property name="text">
+    <string>OpenOctomap</string>
+   </property>
+   <property name="toolTip">
+    <string>Open Octomap</string>
    </property>
   </action>
  </widget>
