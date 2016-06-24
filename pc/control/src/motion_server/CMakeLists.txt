@@ -4,9 +4,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # Dependency libraries
 #find_package(OpenCV REQUIRED)
 
-find_package(PkgConfig REQUIRED)
-pkg_search_module(LCM REQUIRED lcm)
-
 # Add libraries
 set(MOTION_SERVER_LIB_SRC
     motion_server.cpp

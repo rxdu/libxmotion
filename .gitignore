@@ -49,3 +49,9 @@ pc/src/comm/lcmtypes/python
 *.exe
 *.out
 *.app
+
+# Vim
+tags
+*/tags
+*.swp
+*/*.swp

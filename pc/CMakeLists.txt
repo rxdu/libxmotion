@@ -6,7 +6,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
-# Choose to enable g3log or not: on/off
+## Choose to enable g3log or not: on/off
 set(ENABLE_G3LOG off)
 
 if (ENABLE_G3LOG)
@@ -18,18 +18,31 @@ include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/octovis/includ
 include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/dynamicEDT3D/include)
 set(Octomap_LIBS octomap octomath)
 
-# Check dependencies
+## Check dependencies
 find_package(VTK 7.0)
 
-set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
+if(NOT VTK_FOUND)
+	message(STATUS "GUI module will not be built because VTK cannot be found.")
+endif(NOT VTK_FOUND)
+
+find_package(PkgConfig REQUIRED)
+pkg_search_module(LCM REQUIRED lcm)
+
+if(LCM_FOUND)
+	set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
+	include_directories(${LCM_GENERATED_HEADER_PATH})
+elseif(LCM_FOUND)
+	message(STATUS "IPC is not supported without LCM. The control module and part of the planning module will not be built.")
+endif(LCM_FOUND)
 
 ## Add sub source directories
-add_subdirectory(comm)
-add_subdirectory(control)
+if (LCM_FOUND)
+	add_subdirectory(comm)
+	add_subdirectory(control)
+endif (LCM_FOUND)
 add_subdirectory(planning)
 add_subdirectory(third_party)
 
 if (VTK_FOUND)
 add_subdirectory(gui)
 endif(VTK_FOUND)
-

@@ -17,7 +17,6 @@ else()
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
-include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add sub source directories
 add_subdirectory(src/ctrl_utils)

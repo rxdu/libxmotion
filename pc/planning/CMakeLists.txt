@@ -17,14 +17,14 @@ else()
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
-include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add sub source directories
 add_subdirectory(src/quadtree)
 add_subdirectory(src/square_grid)
 add_subdirectory(src/graph)
 add_subdirectory(src/map2d)
-add_subdirectory(src/map3d)
+if (LCM_FOUND)
+	add_subdirectory(src/map3d)
+endif (LCM_FOUND)
 add_subdirectory(src/visualizer)
 add_subdirectory(src/apps)
-#add_subdirectory(src/gui)

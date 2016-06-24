@@ -3,9 +3,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/src/vrep_sim/vrep_lib/include)
 include_directories(${PROJECT_SOURCE_DIR}/src/vrep_sim/vrep_lib/remoteApi)
 
-find_package(PkgConfig REQUIRED)
-pkg_search_module(LCM REQUIRED lcm)
-
 # Add libraries
 set(APPS_HELPER_LIB_SRC
     vis_data_transmitter.cpp
