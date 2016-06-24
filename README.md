@@ -63,12 +63,13 @@ $ cd srcl_ctrl
 $ mkdir build
 $ cd build
 ```
+
 * Run the command to generate eclipse project from cmake
 
 ```
 $ cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug ../pc
 ```
-* Import generated project located at build folder into eclipse
+* Import generated project located at build folder into eclipse. Make sure "Copy project into workspace" option is unchecked during the import process.
 
 You can install an Eclipse plugin from the following source to edit CMAKE files:
 
