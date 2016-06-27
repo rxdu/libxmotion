@@ -6,9 +6,9 @@
  */
 
 // standard libaray
-#include <map2d/graph_builder.h>
-#include <map2d/map_utils.h>
-#include <map2d/sgrid_builder.h>
+#include <map/graph_builder.h>
+#include <map/map_utils.h>
+#include <map/sgrid_builder.h>
 #include <stdio.h>
 #include <vector>
 #include <ctime>

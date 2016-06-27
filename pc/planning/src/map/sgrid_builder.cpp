@@ -5,8 +5,8 @@
  *      Author: rdu
  */
 
-#include <map2d/image_utils.h>
-#include <map2d/sgrid_builder.h>
+#include <map/image_utils.h>
+#include <map/sgrid_builder.h>
 
 using namespace srcl_ctrl;
 using namespace cv;

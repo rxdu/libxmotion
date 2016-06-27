@@ -26,11 +26,7 @@ set(Octomap_LIBS octomap octomath)
 ## Config ompl include directories
 include_directories(${CMAKE_SOURCE_DIR}/third_party/ompl-1.2.0/src)
 
-## Add sub source directories
-add_subdirectory(planning)
-add_subdirectory(third_party)
-
-## Addtional source directories
+## Conditionally add source directories
 ## Check dependencies for GUI module
 find_package(VTK 7.0)
 find_package(Boost 1.54)
@@ -54,3 +50,7 @@ if(LCM_FOUND)
 elseif(LCM_FOUND)
 	message(STATUS "IPC is not supported without LCM. The control module and part of the planning module will not be built.")
 endif(LCM_FOUND)
+
+## Add sub source directories
+add_subdirectory(planning)
+add_subdirectory(third_party)

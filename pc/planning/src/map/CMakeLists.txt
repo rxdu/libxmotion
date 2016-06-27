@@ -4,15 +4,26 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Dependency libraries
-#find_package(OpenCV REQUIRED)
+find_package(OpenCV REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_search_module(LCM REQUIRED lcm)
 
 # Add libraries
-set(MAP3D_LIB_SRC
+set(MAP_LIB_SRC
+	image_utils.cpp
+	map_utils.cpp
+	map_manager.cpp
+  qtree_builder.cpp
+  sgrid_builder.cpp
+  graph_builder.cpp
+)
+add_library(map STATIC ${MAP_LIB_SRC})
+target_link_libraries(map squaregrid qtree ${OpenCV_LIBS})
+
+set(OCTOMAP_UTILS_LIB_SRC
     octomap_server.cpp
 )
-add_library(octomap_utils STATIC ${MAP3D_LIB_SRC})
+add_library(octomap_utils STATIC ${OCTOMAP_UTILS_LIB_SRC})
 target_link_libraries(octomap_utils ${Octomap_LIBS})
 
 # Add executables

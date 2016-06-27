@@ -1,5 +1,5 @@
-#include <map2d/image_utils.h>
-#include <map2d/qtree_builder.h>
+#include <map/image_utils.h>
+#include <map/qtree_builder.h>
 #include <vector>
 #include <cmath>
 

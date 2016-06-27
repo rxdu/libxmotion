@@ -10,7 +10,7 @@
 
 #include <lcm/lcm-cpp.hpp>
 
-#include "map3d/octomap_server.h"
+#include "map/octomap_server.h"
 
 using namespace srcl_ctrl;
 
@@ -44,5 +44,3 @@ int main(int argc, char** argv)
 
 	return 0;
 }
-
-

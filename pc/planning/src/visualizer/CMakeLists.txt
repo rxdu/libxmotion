@@ -11,7 +11,7 @@ set(VIS_LIB_SRC
     graph_vis.cpp
 )
 add_library(vis STATIC ${VIS_LIB_SRC})
-target_link_libraries(vis map2d ${OpenCV_LIBS})
+target_link_libraries(vis map ${OpenCV_LIBS})
 
 # Add executables
 #add_executable(test_graph test_graph.cpp)

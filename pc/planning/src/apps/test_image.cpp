@@ -6,7 +6,7 @@
  */
 
 // standard libaray
-#include <map2d/image_utils.h>
+#include <map/image_utils.h>
 #include <stdio.h>
 #include <vector>
 

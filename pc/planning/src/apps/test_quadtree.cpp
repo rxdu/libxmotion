@@ -6,9 +6,9 @@
  */
 
 // standard libaray
-#include <map2d/graph_builder.h>
-#include <map2d/image_utils.h>
-#include <map2d/qtree_builder.h>
+#include <map/graph_builder.h>
+#include <map/image_utils.h>
+#include <map/qtree_builder.h>
 #include <stdio.h>
 #include <vector>
 #include <ctime>

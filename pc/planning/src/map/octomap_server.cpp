@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <sstream>
-#include "map3d/octomap_server.h"
+#include "map/octomap_server.h"
 
 using namespace srcl_ctrl;
 

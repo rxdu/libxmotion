@@ -5,7 +5,7 @@
  *      Author: rdu
  */
 
-#include <map2d/map_manager.h>
+#include <map/map_manager.h>
 
 using namespace srcl_ctrl;
 using namespace cv;

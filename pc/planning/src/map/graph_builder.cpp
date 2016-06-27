@@ -5,7 +5,7 @@
  *      Author: rdu
  */
 
-#include <map2d/graph_builder.h>
+#include <map/graph_builder.h>
 #include <iostream>
 #include <cmath>
 
