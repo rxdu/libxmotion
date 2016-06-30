@@ -1,3 +1,5 @@
+#include "../../visualization/src/mainwindow.h"
+
 #include <iostream>
 #include <cstdint>
 #include <cmath>
@@ -6,15 +8,14 @@
 
 #include <vtkCamera.h>
 
-#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 // user
 #include "visualizer/graph_vis.h"
 #include <common/planning_types.h>
-#include <map2d/graph_builder.h>
-#include <map2d/qtree_builder.h>
-#include <map2d/sgrid_builder.h>
+#include <map/graph_builder.h>
+#include <map/qtree_builder.h>
+#include <map/sgrid_builder.h>
 
 using namespace cv;
 using namespace srcl_ctrl;

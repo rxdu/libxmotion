@@ -42,7 +42,7 @@
 #include "square_grid/square_grid.h"
 #include "quadtree/quad_tree.h"
 
-#include "image_label.h"
+#include "../../visualization/src/image_label.h"
 
 namespace Ui {
 class MainWindow;

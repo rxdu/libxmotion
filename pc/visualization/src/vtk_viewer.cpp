@@ -5,7 +5,7 @@
  *      Author: rdu
  */
 
-#include "vtk_viewer.h"
+#include "../../visualization/src/vtk_viewer.h"
 
 using namespace srcl_ctrl;
 

@@ -5,8 +5,9 @@
  *      Author: rdu
  */
 
+#include "../../visualization/src/image_label.h"
+
 #include <iostream>
-#include "image_label.h"
 
 using namespace srcl_ctrl;
 

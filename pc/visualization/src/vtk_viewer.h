@@ -5,8 +5,8 @@
  *      Author: rdu
  */
 
-#ifndef GUI_SRC_VTK_VIEWER_H_
-#define GUI_SRC_VTK_VIEWER_H_
+#ifndef VISUALIZATION_SRC_VTK_VIEWER_H_
+#define VISUALIZATION_SRC_VTK_VIEWER_H_
 
 #include <QWidget>
 #include <QVTKWidget.h>
@@ -36,4 +36,4 @@ public:
 }
 
 
-#endif /* GUI_SRC_VTK_VIEWER_H_ */
+#endif /* VISUALIZATION_SRC_VTK_VIEWER_H_ */

@@ -5,8 +5,9 @@
  *      Author: rdu
  */
 
-#include "mainwindow.h"
 #include <QApplication>
+
+#include "../../visualization/src/mainwindow.h"
 //#include <ros/ros.h>
 
 using namespace srcl_ctrl;

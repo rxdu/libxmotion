@@ -32,7 +32,7 @@ find_package(VTK 7.0)
 find_package(Boost 1.54)
 
 if (VTK_FOUND AND Boost_FOUND)
-#	add_subdirectory(gui)
+	add_subdirectory(visualization)
 elseif(VTK_FOUND AND Boost_FOUND)
 	message(STATUS "GUI module will not be built because not all dependent libraries can be found.")
 endif(VTK_FOUND AND Boost_FOUND)
