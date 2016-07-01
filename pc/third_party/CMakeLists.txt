@@ -6,11 +6,10 @@ if(ENABLE_G3LOG)
 	add_subdirectory(g3log_srcl)
 endif(ENABLE_G3LOG)
 
-add_subdirectory(ompl-1.2.0)
 
 ## Check if OMPL can be built
 if(Boost_FOUND)
-	message(STATUS "OMPL will be built.")
+	#message(STATUS "OMPL will be built.")
 	#add_subdirectory(ompl-1.2.0)
 elseif(Boost_FOUND)
 	message(STATUS "Boost 1.54 or higher is not found. OMPL will not be built.")
