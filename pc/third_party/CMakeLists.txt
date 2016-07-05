@@ -18,3 +18,4 @@ endif(Boost_FOUND)
 ## Add sub source directories
 #add_subdirectory(eigen)
 add_subdirectory(octomap-1.8.0)
+add_subdirectory(smp_karaman)

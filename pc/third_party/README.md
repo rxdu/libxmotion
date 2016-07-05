@@ -18,3 +18,7 @@
 ### ompl-1.2.0
 
 * changed the library output directory from "${PROJECT_BINARY_DIR}/lib" to "${CMAKE_BINARY_DIR}/lib" in the ompl-1.2.0/CMakeLists.txt at line 43
+
+### SMP (Sertac Karaman)
+
+* Added CMakeLists.txt to build external libraries

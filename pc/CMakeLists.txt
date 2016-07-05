@@ -26,6 +26,11 @@ set(Octomap_LIBS octomap octomath)
 ## Config ompl include directories
 include_directories(${CMAKE_SOURCE_DIR}/third_party/ompl-1.2.0/src)
 
+## Config smp include directories
+include_directories(${CMAKE_SOURCE_DIR}/third_party/smp_karaman)
+# SMP is header only, but it depends on 3rd party libraries that needs to be linked against
+set(SMP_KARAMAN_LIB smp_karaman_dep_lib)
+
 ## Conditionally add source directories
 ## Check dependencies for GUI module
 find_package(VTK 7.0)
