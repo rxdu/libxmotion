@@ -5,7 +5,7 @@
  *      Author: rdu
  */
 
-#include "../../visualization/src/vtk_viewer.h"
+#include "vtk_viewer.h"
 
 using namespace srcl_ctrl;
 
@@ -72,5 +72,3 @@ VtkViewer::~VtkViewer()
 {
 
 }
-
-

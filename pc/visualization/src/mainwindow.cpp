@@ -1,4 +1,4 @@
-#include "../../visualization/src/mainwindow.h"
+#include "mainwindow.h"
 
 #include <iostream>
 #include <cstdint>

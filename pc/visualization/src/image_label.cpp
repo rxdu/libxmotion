@@ -5,7 +5,7 @@
  *      Author: rdu
  */
 
-#include "../../visualization/src/image_label.h"
+#include "image_label.h"
 
 #include <iostream>
 

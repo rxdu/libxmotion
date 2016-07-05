@@ -7,7 +7,7 @@
 
 #include <QApplication>
 
-#include "../../visualization/src/mainwindow.h"
+#include "mainwindow.h"
 //#include <ros/ros.h>
 
 using namespace srcl_ctrl;
@@ -21,5 +21,3 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
-
-
