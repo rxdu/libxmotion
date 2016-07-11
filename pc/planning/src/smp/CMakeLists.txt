@@ -13,7 +13,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 #target_link_libraries(smp ${OpenCV_LIBS})
 
 # Add executables
-add_executable(dubins_rrtstar standalone_rrtstar_dubins_car.cpp)
+add_executable(dubins_rrtstar dubins_rrtstar.cpp)
 target_link_libraries(dubins_rrtstar ${SMP_KARAMAN_LIB})
 
 #add_executable(test_ompl test_ompl.cpp)
