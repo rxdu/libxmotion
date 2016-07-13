@@ -53,6 +53,18 @@
 
 namespace srcl_ctrl {
 
+template<typename T>
+class Graph;
+
+template<typename T>
+using Graph_t = Graph<T>;
+
+template<typename T>
+using Vertex_t = Vertex<T>;
+
+template<typename T>
+using Edge_t = Edge<Vertex<T>>;
+
 /****************************************************************************/
 /*								 Graph										*/
 /****************************************************************************/

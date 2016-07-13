@@ -28,7 +28,7 @@ int main(int argc, char** argv )
 	}
 
 	// create a graph
-	Graph<BDSExample> graph;
+	Graph_t<BDSExample> graph;
 
 	graph.AddEdge(*(nodes[0]), *(nodes[1]), 1.0);
 	graph.AddEdge(*(nodes[0]), *(nodes[3]), 1.5);
@@ -50,10 +50,12 @@ int main(int argc, char** argv )
 	graph.AddEdge(*(nodes[8]), *(nodes[5]), 2.5);
 	graph.AddEdge(*(nodes[8]), *(nodes[7]), 2.5);
 
-	auto all_edges = graph.GetGraphEdges();
+	std::vector<Edge_t<BDSExample>> all_edges = graph.GetGraphEdges();
+//	auto all_edges = graph.GetGraphEdges();
 
-	for(auto& e : all_edges)
+	for(auto& e : all_edges) {
 		e.PrintEdge();
+	}
 
 	std::cout << "test a*" << std::endl;
 
