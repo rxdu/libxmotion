@@ -13,7 +13,8 @@ using namespace std;
 // SMP HEADER FILES ------
 #include <smp/components/samplers/uniform.hpp>
 #include <smp/components/distance_evaluators/kdtree.hpp>
-#include <smp/components/extenders/dubins.hpp>
+//#include <smp/components/extenders/dubins.hpp>
+#include "quadrotor.hpp"
 #include <smp/components/collision_checkers/standard.hpp>
 #include <smp/components/multipurpose/minimum_time_reachability.hpp>
 
@@ -44,7 +45,7 @@ typedef trajectory<typeparams> trajectory_t;
 // Define all planner component types
 typedef sampler_uniform<typeparams,3> sampler_t;
 typedef distance_evaluator_kdtree<typeparams,3> distance_evaluator_t;
-typedef extender_dubins<typeparams> extender_t;
+typedef extender_quadrotor<typeparams> extender_t;
 typedef collision_checker_standard<typeparams,2> collision_checker_t;
 typedef minimum_time_reachability<typeparams,2> min_time_reachability_t;
 
@@ -122,17 +123,17 @@ int main (int argc, char** argv) {
 	planner.initialize (state_initial);
 
 	// 3. RUN THE PLANNER
-	for (int i = 0; i < 2000; i++){
-		planner.iteration ();
-
-		if (i%100 == 0) {
-			cout << "Iteration: " << i << endl;
-		}
-	}
-
-	// 4. GET THE RESULTS
-	trajectory_t trajectory_final;
-	min_time_reachability.get_solution (trajectory_final);
+//	for (int i = 0; i < 2000; i++){
+//		planner.iteration ();
+//
+//		if (i%100 == 0) {
+//			cout << "Iteration: " << i << endl;
+//		}
+//	}
+//
+//	// 4. GET THE RESULTS
+//	trajectory_t trajectory_final;
+//	min_time_reachability.get_solution (trajectory_final);
 
 	return 1;
 }

@@ -72,11 +72,11 @@ int smp::extender_quadrotor<typeparams>
 	  list<state_t*> *intermediate_vertices_out) {
   
   
-  if (extend_dubins_all (state_from_in, state_towards_in, exact_connection_out,
-			 &(trajectory_out->list_states), &(trajectory_out->list_inputs)) < 0.0) {
-
-    return 0;
-  }
+//  if (extend_dubins_all (state_from_in, state_towards_in, exact_connection_out,
+//			 &(trajectory_out->list_states), &(trajectory_out->list_inputs)) < 0.0) {
+//
+//    return 0;
+//  }
   
   
 
