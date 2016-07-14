@@ -100,3 +100,12 @@ $ doxygen Doxyfile
 * http://stackoverflow.com/questions/7868936/read-file-line-by-line
 * http://www.cc.gatech.edu/classes/AY2015/cs4496_spring/Eigen.html
 * http://johnnado.com/cmake-directory-variables/
+
+C++ template
+
+* http://accu.org/index.php/journals/442
+* http://stackoverflow.com/questions/25119444/c-specialize-template-class-function-without-duplicating-code
+* http://en.cppreference.com/w/cpp/language/partial_specialization
+* http://stackoverflow.com/questions/7116610/avoiding-duplication-of-function-definitions-in-template-specializations
+* http://eli.thegreenplace.net/2014/sfinae-and-enable_if/
+* https://www.informit.com/guides/content.aspx?g=cplusplus&seqNum=50
