@@ -292,7 +292,7 @@ void GraphVis::VisQTreeNodes(const std::vector<QuadTreeNode*>& nodes, cv::InputA
 	}
 }
 
-void GraphVis::VisQTreeGraph(const Graph_t<QuadTreeNode>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost)
+void GraphVis::VisQTreeGraph(const Graph_t<QuadTreeNode*>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost)
 {
 	Mat src = _src.getMat();
 	_dst.create(_src.size(), _src.type());
@@ -300,35 +300,35 @@ void GraphVis::VisQTreeGraph(const Graph_t<QuadTreeNode>& graph, cv::InputArray 
 	src.copyTo(dst);
 
 	// draw all vertices
-	std::vector<Vertex<QuadTreeNode>*> vertices;
+	std::vector<Vertex<QuadTreeNode*>*> vertices;
 	vertices = graph.GetGraphVertices();
 	for(auto itv = vertices.begin(); itv != vertices.end(); itv++)
 	{
-		cv::Point center((*itv)->bundled_data_.location_.x, (*itv)->bundled_data_.location_.y);
+		cv::Point center((*itv)->bundled_data_->location_.x, (*itv)->bundled_data_->location_.y);
 		DrawNodeCenter(center, dst);
 
 		// current vertex center coordinate
 		uint64_t x1,y1,x2,y2;
-		x1 = (*itv)->bundled_data_.location_.x;
-		y1 = (*itv)->bundled_data_.location_.y;
+		x1 = (*itv)->bundled_data_->location_.x;
+		y1 = (*itv)->bundled_data_->location_.y;
 
 		if(show_id)
 		{
-			std::string id = std::to_string((*itv)->bundled_data_.data_id_);
+			std::string id = std::to_string((*itv)->bundled_data_->data_id_);
 			putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
 		}
 	}
 
 	// draw all edges
-	std::vector<Edge<Vertex<QuadTreeNode>>> edges;
+	std::vector<Edge<Vertex<QuadTreeNode*>>> edges;
 	edges = graph.GetGraphUndirectedEdges();
 	for(auto it = edges.begin(); it != edges.end(); it++)
 	{
 		uint64_t x1,y1,x2,y2;
-		x1 = (*it).src_->bundled_data_.location_.x;
-		y1 = (*it).src_->bundled_data_.location_.y;
-		x2 = (*it).dst_->bundled_data_.location_.x;
-		y2 = (*it).dst_->bundled_data_.location_.y;
+		x1 = (*it).src_->bundled_data_->location_.x;
+		y1 = (*it).src_->bundled_data_->location_.y;
+		x2 = (*it).dst_->bundled_data_->location_.x;
+		y2 = (*it).dst_->bundled_data_->location_.y;
 
 		DrawEdge(Point(x1,y1), Point(x2,y2), dst);
 
@@ -343,17 +343,17 @@ void GraphVis::VisQTreeGraph(const Graph_t<QuadTreeNode>& graph, cv::InputArray 
 	}
 }
 
-void GraphVis::VisQTreeGraphPath(const std::vector<Vertex_t<QuadTreeNode>*>& vertices, cv::InputArray _src, cv::OutputArray _dst)
+void GraphVis::VisQTreeGraphPath(const std::vector<Vertex_t<QuadTreeNode*>*>& vertices, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src = _src.getMat();
 	_dst.create(_src.size(), _src.type());
 	Mat dst = _dst.getMat();
 	src.copyTo(dst);
 
-	std::vector<const QuadTreeNode*> path_nodes;
+	std::vector<QuadTreeNode*> path_nodes;
 	for(auto itn = vertices.begin(); itn != vertices.end(); itn++)
 	{
-		path_nodes.push_back(&((*itn)->bundled_data_));
+		path_nodes.push_back((*itn)->bundled_data_);
 	}
 
 	// draw vertices
@@ -470,7 +470,7 @@ void GraphVis::VisSquareGrid(const SquareGrid& grid, cv::InputArray _src, cv::Ou
 	src_img_color.copyTo(dst);
 }
 
-void GraphVis::VisSquareGridGraph(const Graph_t<SquareCell>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
+void GraphVis::VisSquareGridGraph(const Graph_t<SquareCell*>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
 {
 //	Mat src = _src.getMat();
 //	_dst.create(_src.size(), _src.type());
@@ -494,44 +494,43 @@ void GraphVis::VisSquareGridGraph(const Graph_t<SquareCell>& graph, cv::InputArr
 	}
 
 	// draw all vertices
-	std::vector<Vertex<SquareCell>*> vertices;
+	std::vector<Vertex<SquareCell*>*> vertices;
 	vertices = graph.GetGraphVertices();
 	for(auto itv = vertices.begin(); itv != vertices.end(); itv++)
 	{
-		cv::Point center((*itv)->bundled_data_.location_.x, (*itv)->bundled_data_.location_.y);
+		cv::Point center((*itv)->bundled_data_->location_.x, (*itv)->bundled_data_->location_.y);
 		DrawNodeCenter(center,dst);
 
 		// current vertex center coordinate
 		uint64_t x1,y1,x2,y2;
-		x1 = (*itv)->bundled_data_.location_.x;
-		y1 = (*itv)->bundled_data_.location_.y;
+		x1 = (*itv)->bundled_data_->location_.x;
+		y1 = (*itv)->bundled_data_->location_.y;
 
 		if(show_id) {
-			if((*itv)->bundled_data_.data_id_ % 2 == 0)
+			if((*itv)->bundled_data_->data_id_ % 2 == 0)
 			{
-				std::string id = std::to_string((*itv)->bundled_data_.data_id_);
+				std::string id = std::to_string((*itv)->bundled_data_->data_id_);
 				putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
 			}
 		}
 	}
 
 	// draw all edges
-	std::vector<Edge<Vertex<SquareCell>>> edges;
-	edges = graph.GetGraphUndirectedEdges();
+	auto edges = graph.GetGraphUndirectedEdges();
 	for(auto it = edges.begin(); it != edges.end(); it++)
 	{
 		uint64_t x1,y1,x2,y2;
-		x1 = (*it).src_->bundled_data_.location_.x;
-		y1 = (*it).src_->bundled_data_.location_.y;
-		x2 = (*it).dst_->bundled_data_.location_.x;
-		y2 = (*it).dst_->bundled_data_.location_.y;
+		x1 = (*it).src_->bundled_data_->location_.x;
+		y1 = (*it).src_->bundled_data_->location_.y;
+		x2 = (*it).dst_->bundled_data_->location_.x;
+		y2 = (*it).dst_->bundled_data_->location_.y;
 
 		DrawEdge(Point(x1,y1), Point(x2,y2), dst);
 	}
 
 }
 
-void GraphVis::VisSquareGridPath(const std::vector<Vertex_t<SquareCell>*>& path, cv::InputArray _src, cv::OutputArray _dst)
+void GraphVis::VisSquareGridPath(const std::vector<Vertex_t<SquareCell*>*>& path, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src, dst;
 	int src_type = _src.getMat().type();
@@ -552,19 +551,19 @@ void GraphVis::VisSquareGridPath(const std::vector<Vertex_t<SquareCell>*>& path,
 	// draw starting and finishing cell
 	auto cell_s = path[0]->bundled_data_;
 	uint64_t x,y;
-	x = cell_s.location_.x;
-	x = x - (cell_s.bbox_.x.max - cell_s.bbox_.x.min)/8;
-	y = cell_s.location_.y;
-	y = y + (cell_s.bbox_.y.max - cell_s.bbox_.y.min)/8;
-	FillSquareCellColor(cell_s.bbox_, start_color_, dst);
+	x = cell_s->location_.x;
+	x = x - (cell_s->bbox_.x.max - cell_s->bbox_.x.min)/8;
+	y = cell_s->location_.y;
+	y = y + (cell_s->bbox_.y.max - cell_s->bbox_.y.min)/8;
+	FillSquareCellColor(cell_s->bbox_, start_color_, dst);
 	putText(dst, "S" ,Point(x,y), CV_FONT_NORMAL, 1, Scalar(0,0,0),1,1);
 
 	auto cell_f = (*(path.end()-1))->bundled_data_;
-	x = cell_f.location_.x;
-	x = x - (cell_f.bbox_.x.max - cell_f.bbox_.x.min)/8;
-	y = cell_f.location_.y;
-	y = y + (cell_f.bbox_.y.max - cell_f.bbox_.y.min)/8;
-	FillSquareCellColor(cell_f.bbox_, finish_color_, dst);
+	x = cell_f->location_.x;
+	x = x - (cell_f->bbox_.x.max - cell_f->bbox_.x.min)/8;
+	y = cell_f->location_.y;
+	y = y + (cell_f->bbox_.y.max - cell_f->bbox_.y.min)/8;
+	FillSquareCellColor(cell_f->bbox_, finish_color_, dst);
 	putText(dst, "F" ,Point(x,y), CV_FONT_NORMAL, 1, Scalar(0,0,0),1,1);
 
 	// draw path
@@ -580,11 +579,11 @@ void GraphVis::VisSquareGridPath(const std::vector<Vertex_t<SquareCell>*>& path,
 		auto cell2 = (*(it+1))->bundled_data_;
 
 		// center coordinates
-		x1 = cell1.location_.x;
-		y1 = cell1.location_.y;
+		x1 = cell1->location_.x;
+		y1 = cell1->location_.y;
 
-		x2 = cell2.location_.x;
-		y2 = cell2.location_.y;
+		x2 = cell2->location_.x;
+		y2 = cell2->location_.y;
 
 		line( dst,
 				Point(x1,y1),

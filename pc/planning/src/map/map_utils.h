@@ -23,8 +23,8 @@ public:
 	~MapUtils();
 
 public:
-	std::vector<Position2D> GetWaypointsFromSGridPath(std::vector<Vertex<SquareCell>*>& path);
-	std::vector<Position2D> GetWaypointsFromQTreePath(std::vector<Vertex<QuadTreeNode>*>& path);
+	std::vector<Position2D> GetWaypointsFromSGridPath(std::vector<Vertex<SquareCell*>*>& path);
+	std::vector<Position2D> GetWaypointsFromQTreePath(std::vector<Vertex<QuadTreeNode*>*>& path);
 };
 
 }

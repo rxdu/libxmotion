@@ -70,17 +70,17 @@ int main(int argc, char** argv )
 //    vis.DrawQTreeWithDummies(tree,builder.padded_img_, image_dummy);
 
     // build a graph from quadtree
-	std::shared_ptr<Graph<QuadTreeNode>> graph = GraphBuilder::BuildFromQuadTree(tree);
+	std::shared_ptr<Graph<QuadTreeNode*>> graph = GraphBuilder::BuildFromQuadTree(tree);
 	Mat image_graph;
 	vis.VisQTreeGraph(*graph, image_tree, image_graph, true,false);
 
 	// try a* search
-	std::vector<Vertex<QuadTreeNode>*> vertices = graph->GetGraphVertices();
+	std::vector<Vertex<QuadTreeNode*>*> vertices = graph->GetGraphVertices();
 	std::cout<<"vertex number: "<<vertices.size()<<std::endl;
 
-	Vertex<QuadTreeNode>* start_vertex;
-	Vertex<QuadTreeNode>* end_vertex;
-	std::vector<Vertex<QuadTreeNode>*> traj;
+	Vertex<QuadTreeNode*>* start_vertex;
+	Vertex<QuadTreeNode*>* end_vertex;
+	std::vector<Vertex<QuadTreeNode*>*> traj;
 
 	start_vertex = vertices[0];
 	end_vertex = vertices[15];

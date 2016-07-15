@@ -65,6 +65,9 @@ using Vertex_t = Vertex<T>;
 template<typename T>
 using Edge_t = Edge<Vertex<T>>;
 
+template<typename T>
+using Trajectory_t = std::vector<Vertex<T>*>;
+
 /****************************************************************************/
 /*								 Graph										*/
 /****************************************************************************/
@@ -295,7 +298,7 @@ public:
 
 		for(auto it = vertex_map_.begin(); it != vertex_map_.end(); it++)
 		{
-			Vertex<BundledStructType>* vertex = it->second;
+			Vertex<BundledStructType*>* vertex = it->second;
 
 			for(auto ite = vertex->edges_.begin(); ite != vertex->edges_.end(); ite++) {
 				bool edge_existed = false;

@@ -21,9 +21,9 @@ GraphBuilder::~GraphBuilder()
 
 }
 
-std::shared_ptr<Graph<QuadTreeNode>> GraphBuilder::BuildFromQuadTree(const std::shared_ptr<QuadTree>& tree)
+std::shared_ptr<Graph<QuadTreeNode*>> GraphBuilder::BuildFromQuadTree(const std::shared_ptr<QuadTree>& tree)
 {
-	std::shared_ptr<Graph<QuadTreeNode>> graph = std::make_shared<Graph<QuadTreeNode>>();
+	std::shared_ptr<Graph<QuadTreeNode*>> graph = std::make_shared<Graph<QuadTreeNode*>>();
 
 	std::vector<QuadTreeNode*> leaf_nodes;
 
@@ -50,7 +50,7 @@ std::shared_ptr<Graph<QuadTreeNode>> GraphBuilder::BuildFromQuadTree(const std::
 				double cost = sqrt(static_cast<double>(pow(x_error,2)
 						+ pow(y_error,2)));
 
-				graph->AddEdge(*(*it), *(*itn), cost);
+				graph->AddEdge((*it), (*itn), cost);
 			}
 		}
 	}
@@ -58,9 +58,9 @@ std::shared_ptr<Graph<QuadTreeNode>> GraphBuilder::BuildFromQuadTree(const std::
 	return graph;
 }
 
-std::shared_ptr<Graph<SquareCell>> GraphBuilder::BuildFromSquareGrid(const std::shared_ptr<SquareGrid>& grid, bool allow_diag_move)
+std::shared_ptr<Graph<SquareCell*>> GraphBuilder::BuildFromSquareGrid(const std::shared_ptr<SquareGrid>& grid, bool allow_diag_move)
 {
-	std::shared_ptr<Graph<SquareCell>> graph = std::make_shared<Graph<SquareCell>>();
+	std::shared_ptr<Graph<SquareCell*>> graph = std::make_shared<Graph<SquareCell*>>();
 
 	for(auto itc = grid->cells_.begin(); itc != grid->cells_.end(); itc++)
 	{
@@ -78,7 +78,7 @@ std::shared_ptr<Graph<SquareCell>> GraphBuilder::BuildFromSquareGrid(const std::
 					error_y = std::abs(static_cast<long>((*itn)->location_.y) - static_cast<long>((*itc).second->location_.y));
 					cost = std::sqrt(error_x*error_x + error_y*error_y);
 
-					graph->AddEdge(*((*itc).second), *(*itn), cost);
+					graph->AddEdge((*itc).second, *itn, cost);
 				}
 			}
 		}

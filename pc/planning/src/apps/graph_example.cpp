@@ -103,11 +103,11 @@ int main(int argc, char** argv )
 
 	/*** Construct a graph from the square grid ***/
 	/*** the second argument determines if move along diagonal is allowed ***/
-	std::shared_ptr<Graph_t<SquareCell>> graph = GraphBuilder::BuildFromSquareGrid(grid,true);
+	std::shared_ptr<Graph_t<SquareCell*>> graph = GraphBuilder::BuildFromSquareGrid(grid,true);
 
 	/*** Search path in the graph ***/
-	Vertex<SquareCell> * start_vertex;
-	Vertex<SquareCell> * finish_vertex;
+	Vertex_t<SquareCell*> * start_vertex;
+	Vertex_t<SquareCell*> * finish_vertex;
 	if(use_input_image)
 	{
 		start_vertex = graph->GetVertexFromID(160);
@@ -127,7 +127,7 @@ int main(int argc, char** argv )
 
 	clock_t		exec_time;
 	exec_time = clock();
-	std::vector<Vertex_t<SquareCell>*> path = graph->AStarSearch(start_vertex,finish_vertex);
+	Trajectory_t<SquareCell*> path = graph->AStarSearch(start_vertex,finish_vertex);
 	exec_time = clock() - exec_time;
 	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 
