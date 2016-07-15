@@ -28,7 +28,7 @@ int main(int argc, char** argv )
 	}
 
 	// create a graph
-	Graph<BDSExample> graph;
+	Graph_t<BDSExample> graph;
 
 	graph.AddEdge(*(nodes[0]), *(nodes[1]), 1.0);
 	graph.AddEdge(*(nodes[0]), *(nodes[3]), 1.5);

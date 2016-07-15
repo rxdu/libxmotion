@@ -58,11 +58,11 @@ public:
 	void VisSquareGrid(const SquareGrid& grid, cv::InputArray _src, cv::OutputArray _dst);
 
 	// graph visualization
-	void VisQTreeGraph(const Graph<QuadTreeNode>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost);
-	void VisQTreeGraphPath(const std::vector<Vertex<QuadTreeNode>*>& vertices, cv::InputArray _src, cv::OutputArray _dst);
+	void VisQTreeGraph(const Graph_t<QuadTreeNode>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost);
+	void VisQTreeGraphPath(const std::vector<Vertex_t<QuadTreeNode>*>& vertices, cv::InputArray _src, cv::OutputArray _dst);
 
-	void VisSquareGridGraph(const Graph<SquareCell>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id);
-	void VisSquareGridPath(const std::vector<Vertex<SquareCell>*>& path, cv::InputArray _src, cv::OutputArray _dst);
+	void VisSquareGridGraph(const Graph_t<SquareCell>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id);
+	void VisSquareGridPath(const std::vector<Vertex_t<SquareCell>*>& path, cv::InputArray _src, cv::OutputArray _dst);
 };
 
 }

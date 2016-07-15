@@ -67,6 +67,11 @@ private:
 		h_astar_ = 0.0;
 	}
 
+	double CalcHeuristic(Vertex<BundledStructType>* dst_vertex)
+	{
+		return this->bundled_data_.GetHeuristic(dst_vertex->bundled_data_);
+	}
+
 public:
 	/**
 	 * == operator overloading. If two vertices have the same id, they're
@@ -78,23 +83,6 @@ public:
 			return true;
 		else
 			return false;
-	}
-
-	/**
-	 * This functions returns a non-const reference to the bundled data struct
-	 * so that you can change properties of it.
-	 * Otherwise you're not allowed to change bundled data from the graph.
-	 *
-	 * @return Reference to bundled data structure associated with this vertex.
-	 */
-//	BundledStructType& GetBDSNonConstRef()
-//	{
-//		return const_cast<BundledStructType&>(bundled_data_);
-//	}
-
-	double CalcHeuristic(Vertex<BundledStructType>* dst_vertex)
-	{
-		return this->bundled_data_.GetHeuristic(dst_vertex->bundled_data_);
 	}
 
 	double GetEdgeCost(const Vertex<BundledStructType>& dst_node)
@@ -205,18 +193,6 @@ public:
 			return false;
 	}
 
-	/**
-	 * This functions returns a non-const reference to the bundled data struct
-	 * so that you can change properties of it.
-	 * Otherwise you're not allowed to change bundled data from the graph.
-	 *
-	 * @return Reference to bundled data structure associated with this vertex.
-	 */
-//	BundledStructType& GetBDSNonConstRef()
-//	{
-//		return const_cast<BundledStructType&>(bundled_data_);
-//	}
-
 	double CalcHeuristic(Vertex<BundledStructType*>* dst_vertex)
 	{
 		return this->bundled_data_->GetHeuristic(*(dst_vertex->bundled_data_));
@@ -263,10 +239,10 @@ public:
 
 /****************************************************************************/
 /*								 Vertex										*/
-/*					   ( Pointer Specialization )							*/
+/*					   ( Reference Specialization )							*/
 /****************************************************************************/
 
-/// A partially specialized vertex data structure template for pointer type bundled data struct.
+/// A partially specialized vertex data structure template for reference type bundled data struct.
 template<typename BundledStructType>
 class Vertex<const BundledStructType&>
 {
@@ -328,18 +304,6 @@ public:
 			return true;
 		else
 			return false;
-	}
-
-	/**
-	 * This functions returns a non-const reference to the bundled data struct
-	 * so that you can change properties of it.
-	 * Otherwise you're not allowed to change bundled data from the graph.
-	 *
-	 * @return Reference to bundled data structure associated with this vertex.
-	 */
-	BundledStructType& GetBDSNonConstRef()
-	{
-		return const_cast<BundledStructType&>(bundled_data_);
 	}
 
 	double CalcHeuristic(const Vertex<BundledStructType>& dst_vertex)

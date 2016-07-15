@@ -37,7 +37,7 @@ find_package(VTK 7.0)
 find_package(Boost 1.54)
 
 if (VTK_FOUND AND Boost_FOUND)
-	#add_subdirectory(visualization)    # <-----------------------------------
+	add_subdirectory(visualization)    # <-----------------------------------
 elseif(VTK_FOUND AND Boost_FOUND)
 	message(STATUS "GUI module will not be built because not all dependent libraries can be found.")
 endif(VTK_FOUND AND Boost_FOUND)
@@ -50,12 +50,12 @@ if(LCM_FOUND)
 	set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 	include_directories(${LCM_GENERATED_HEADER_PATH})
 	# add comm and control modules
-	#add_subdirectory(comm)            # <-----------------------------------
-	#add_subdirectory(control)         # <-----------------------------------
+	add_subdirectory(comm)            # <-----------------------------------
+	add_subdirectory(control)         # <-----------------------------------
 elseif(LCM_FOUND)
 	message(STATUS "IPC is not supported without LCM. The control module and part of the planning module will not be built.")
 endif(LCM_FOUND)
 
 ## Add sub source directories
 add_subdirectory(planning)
-#add_subdirectory(third_party)         # <-----------------------------------
+add_subdirectory(third_party)         # <-----------------------------------

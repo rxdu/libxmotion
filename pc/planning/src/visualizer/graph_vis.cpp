@@ -292,7 +292,7 @@ void GraphVis::VisQTreeNodes(const std::vector<QuadTreeNode*>& nodes, cv::InputA
 	}
 }
 
-void GraphVis::VisQTreeGraph(const Graph<QuadTreeNode>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost)
+void GraphVis::VisQTreeGraph(const Graph_t<QuadTreeNode>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost)
 {
 	Mat src = _src.getMat();
 	_dst.create(_src.size(), _src.type());
@@ -343,7 +343,7 @@ void GraphVis::VisQTreeGraph(const Graph<QuadTreeNode>& graph, cv::InputArray _s
 	}
 }
 
-void GraphVis::VisQTreeGraphPath(const std::vector<Vertex<QuadTreeNode>*>& vertices, cv::InputArray _src, cv::OutputArray _dst)
+void GraphVis::VisQTreeGraphPath(const std::vector<Vertex_t<QuadTreeNode>*>& vertices, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src = _src.getMat();
 	_dst.create(_src.size(), _src.type());
@@ -470,7 +470,7 @@ void GraphVis::VisSquareGrid(const SquareGrid& grid, cv::InputArray _src, cv::Ou
 	src_img_color.copyTo(dst);
 }
 
-void GraphVis::VisSquareGridGraph(const Graph<SquareCell>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
+void GraphVis::VisSquareGridGraph(const Graph_t<SquareCell>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
 {
 //	Mat src = _src.getMat();
 //	_dst.create(_src.size(), _src.type());
@@ -531,7 +531,7 @@ void GraphVis::VisSquareGridGraph(const Graph<SquareCell>& graph, cv::InputArray
 
 }
 
-void GraphVis::VisSquareGridPath(const std::vector<Vertex<SquareCell>*>& path, cv::InputArray _src, cv::OutputArray _dst)
+void GraphVis::VisSquareGridPath(const std::vector<Vertex_t<SquareCell>*>& path, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src, dst;
 	int src_type = _src.getMat().type();

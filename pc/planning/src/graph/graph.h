@@ -114,14 +114,6 @@ private:
 
 public:
 	/// This function is used to create a graph by adding edges connecting two nodes
-//	void AddEdge(const BundledStructType& src_node, const BundledStructType& dst_node, double cost)
-//	{
-//		Vertex<BundledStructType>* src_vertex = GetVertex(src_node);
-//		Vertex<BundledStructType>* dst_vertex = GetVertex(dst_node);
-//
-//		Edge<Vertex<BundledStructType>> new_edge(src_vertex, dst_vertex,cost);
-//		src_vertex->edges_.push_back(new_edge);
-//	};
 	void AddEdge(BundledStructType src_node, BundledStructType dst_node, double cost)
 	{
 		Vertex<BundledStructType>* src_vertex = GetVertex(src_node);
@@ -206,6 +198,11 @@ public:
 		return astar_.Search(start, goal);
 	}
 };
+
+/****************************************************************************/
+/*								 Graph										*/
+/*					  ( Pointer Specialization )							*/
+/****************************************************************************/
 
 /// A partially specialized graph data structure template for pointer type bundled data struct.
 template<typename BundledStructType>
@@ -338,7 +335,12 @@ public:
 	}
 };
 
-/// A partially specialized graph data structure template for pointer type bundled data struct.
+/****************************************************************************/
+/*								 Graph										*/
+/*					  ( Reference Specialization )							*/
+/****************************************************************************/
+
+/// A partially specialized graph data structure template for reference type bundled data struct.
 template<typename BundledStructType>
 class Graph<const BundledStructType&>
 {
