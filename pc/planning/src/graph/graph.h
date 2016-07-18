@@ -47,9 +47,11 @@
 #include <map>
 #include <vector>
 #include <cstdint>
+#include <type_traits>
 
 #include "graph/vertex.h"
 #include "graph/astar.h"
+#include "graph/bds_base.h"
 
 namespace srcl_ctrl {
 
@@ -63,7 +65,7 @@ template<typename T>
 using Vertex_t = Vertex<T>;
 
 template<typename T>
-using Edge_t = Edge<Vertex<T>>;
+using Edge_t = Edge<Vertex<T>*>;
 
 template<typename T>
 using Trajectory_t = std::vector<Vertex<T>*>;
@@ -94,6 +96,7 @@ private:
 	/// This function checks if a vertex already exists in the graph.
 	///	If yes, the functions returns the index of the existing vertex,
 	///	otherwise it creates a new vertex.
+	template<class T = BundledStructType, typename std::enable_if<!std::is_pointer<T>::value>::type* = nullptr>
 	Vertex<BundledStructType>* GetVertex(BundledStructType vertex_node)
 	{
 		auto it = vertex_map_.find((uint64_t)(vertex_node.data_id_));
@@ -102,6 +105,21 @@ private:
 		{
 			Vertex<BundledStructType>* new_vertex = new Vertex<BundledStructType>(vertex_node);
 			vertex_map_[vertex_node.data_id_] = new_vertex;
+			return new_vertex;
+		}
+
+		return it->second;
+	}
+
+	template<class T = BundledStructType, typename std::enable_if<std::is_pointer<T>::value>::type* = nullptr>
+	Vertex<BundledStructType>* GetVertex(BundledStructType vertex_node)
+	{
+		auto it = vertex_map_.find((uint64_t)(vertex_node->data_id_));
+
+		if(it == vertex_map_.end())
+		{
+			Vertex<BundledStructType>* new_vertex = new Vertex<BundledStructType>(vertex_node);
+			vertex_map_[vertex_node->data_id_] = new_vertex;
 			return new_vertex;
 		}
 
@@ -122,7 +140,7 @@ public:
 		Vertex<BundledStructType>* src_vertex = GetVertex(src_node);
 		Vertex<BundledStructType>* dst_vertex = GetVertex(dst_node);
 
-		Edge<Vertex<BundledStructType>> new_edge(src_vertex, dst_vertex,cost);
+		Edge<Vertex<BundledStructType>*> new_edge(src_vertex, dst_vertex,cost);
 		src_vertex->edges_.push_back(new_edge);
 	};
 
@@ -140,9 +158,9 @@ public:
 	};
 
 	/// This functions is used to access all edges of a graph
-	std::vector<Edge<Vertex<BundledStructType>>> GetGraphEdges() const
+	std::vector<Edge<Vertex<BundledStructType>*>> GetGraphEdges() const
 	{
-		std::vector<Edge<Vertex<BundledStructType>>> edges;
+		std::vector<Edge<Vertex<BundledStructType>*>> edges;
 
 		for(auto it = vertex_map_.begin(); it != vertex_map_.end(); it++)
 		{
@@ -156,9 +174,9 @@ public:
 	};
 
 	/// This functions is used to access all edges of a graph
-	std::vector<Edge<Vertex<BundledStructType>>> GetGraphUndirectedEdges() const
+	std::vector<Edge<Vertex<BundledStructType>*>> GetGraphUndirectedEdges() const
 	{
-		std::vector<Edge<Vertex<BundledStructType>>> edges;
+		std::vector<Edge<Vertex<BundledStructType>*>> edges;
 
 		for(auto it = vertex_map_.begin(); it != vertex_map_.end(); it++)
 		{
@@ -192,279 +210,7 @@ public:
 	}
 
 	/// Perform A* Search and return a path represented by a serious of vertices
-	std::vector<Vertex<BundledStructType>*> AStarSearch(Vertex<BundledStructType> *start, Vertex<BundledStructType> *goal)
-	{
-		// clear previous search information before new search
-		ResetGraphVertices();
-
-		// do a* search and return search result
-		return astar_.Search(start, goal);
-	}
-};
-
-/****************************************************************************/
-/*								 Graph										*/
-/*					  ( Pointer Specialization )							*/
-/****************************************************************************/
-
-/// A partially specialized graph data structure template for pointer type bundled data struct.
-template<typename BundledStructType>
-class Graph<BundledStructType*>
-{
-public:
-	/// Graph constructor.
-	Graph(){};
-	/// Graph destructor. Graph class is only responsible for the memory recycling of Vertex and Edge
-	/// objects. The node, such as a quadtree node or a square cell, which each vertex is associated
-	///  with needs to be recycled separately, for example by the quadtree/square_grid class.
-	~Graph(){
-		for(auto it = vertex_map_.begin(); it != vertex_map_.end(); it++)
-			delete it->second;
-	};
-
-private:
-	std::map<uint64_t, Vertex<BundledStructType*>*> vertex_map_;
-	AStar<Vertex<BundledStructType*>> astar_;
-
-private:
-	/// This function checks if a vertex already exists in the graph.
-	///	If yes, the functions returns the index of the existing vertex,
-	///	otherwise it creates a new vertex.
-	Vertex<BundledStructType*>* GetVertex(BundledStructType* vertex_node)
-	{
-		auto it = vertex_map_.find((uint64_t)(vertex_node->data_id_));
-
-		if(it == vertex_map_.end())
-		{
-			Vertex<BundledStructType*>* new_vertex = new Vertex<BundledStructType*>(vertex_node);
-			vertex_map_[vertex_node->data_id_] = new_vertex;
-			return new_vertex;
-		}
-
-		return it->second;
-	}
-
-	/// This function is used to reset the vertices for a new search
-	void ResetGraphVertices()
-	{
-		for(const auto& vertex_pair: vertex_map_)
-			vertex_pair.second->ClearVertexSearchInfo();
-	};
-
-public:
-	/// This function is used to create a graph by adding edges connecting two nodes
-	void AddEdge(BundledStructType* src_node, BundledStructType* dst_node, double cost)
-	{
-		Vertex<BundledStructType*>* src_vertex = GetVertex(src_node);
-		Vertex<BundledStructType*>* dst_vertex = GetVertex(dst_node);
-
-		Edge<Vertex<BundledStructType*>> new_edge(src_vertex, dst_vertex,cost);
-		src_vertex->edges_.push_back(new_edge);
-	};
-
-	/// This functions is used to access all vertices of a graph
-	std::vector<Vertex<BundledStructType*>*> GetGraphVertices() const
-	{
-		std::vector<Vertex<BundledStructType*>*> vertices;
-
-		for(auto it = vertex_map_.begin(); it != vertex_map_.end(); it++)
-		{
-			vertices.push_back(it->second);
-		}
-
-		return vertices;
-	};
-
-	/// This functions is used to access all edges of a graph
-	std::vector<Edge<Vertex<BundledStructType*>>> GetGraphEdges() const
-	{
-		std::vector<Edge<Vertex<BundledStructType*>>> edges;
-
-		for(auto it = vertex_map_.begin(); it != vertex_map_.end(); it++)
-		{
-			Vertex<BundledStructType*>* vertex = it->second;
-			for(auto ite = vertex->edges_.begin(); ite != vertex->edges_.end(); ite++) {
-				edges.push_back(*ite);
-			}
-		}
-
-		return edges;
-	};
-
-	/// This functions is used to access all edges of a graph
-	std::vector<Edge<Vertex<BundledStructType*>>> GetGraphUndirectedEdges() const
-	{
-		std::vector<Edge<Vertex<BundledStructType*>>> edges;
-
-		for(auto it = vertex_map_.begin(); it != vertex_map_.end(); it++)
-		{
-			Vertex<BundledStructType*>* vertex = it->second;
-
-			for(auto ite = vertex->edges_.begin(); ite != vertex->edges_.end(); ite++) {
-				bool edge_existed = false;
-
-				for(auto& itedge : edges)
-				{
-					if(itedge -= (*ite)) {
-						edge_existed = true;
-						break;
-					}
-				}
-
-				if(!edge_existed)
-					edges.push_back(*ite);
-			}
-		}
-
-		return edges;
-	};
-
-	/// This function return the vertex with specified id
-	Vertex<BundledStructType*>* GetVertexFromID(uint64_t vertex_id)
-	{
-		auto it = vertex_map_.find(vertex_id);
-
-		return (*it).second;
-	}
-
-	/// Perform A* Search and return a path represented by a serious of vertices
-	std::vector<Vertex<BundledStructType*>*> AStarSearch(Vertex<BundledStructType*> *start, Vertex<BundledStructType*> *goal)
-	{
-		// clear previous search information before new search
-		ResetGraphVertices();
-
-		// do a* search and return search result
-		return astar_.Search(start, goal);
-	}
-};
-
-/****************************************************************************/
-/*								 Graph										*/
-/*					  ( Reference Specialization )							*/
-/****************************************************************************/
-
-/// A partially specialized graph data structure template for reference type bundled data struct.
-template<typename BundledStructType>
-class Graph<const BundledStructType&>
-{
-public:
-	/// Graph constructor.
-	Graph(){};
-	/// Graph destructor. Graph class is only responsible for the memory recycling of Vertex and Edge
-	/// objects. The node, such as a quadtree node or a square cell, which each vertex is associated
-	///  with needs to be recycled separately, for example by the quadtree/square_grid class.
-	~Graph(){
-		for(auto it = vertex_map_.begin(); it != vertex_map_.end(); it++)
-			delete it->second;
-	};
-
-private:
-	std::map<uint64_t, Vertex<BundledStructType>*> vertex_map_;
-	AStar<Vertex<BundledStructType>> astar_;
-
-private:
-	/// This function checks if a vertex already exists in the graph.
-	///	If yes, the functions returns the index of the existing vertex,
-	///	otherwise it creates a new vertex.
-	Vertex<BundledStructType>* GetVertex(const BundledStructType& vertex_node)
-	{
-		auto it = vertex_map_.find((uint64_t)vertex_node.data_id_);
-
-		if(it == vertex_map_.end())
-		{
-			Vertex<BundledStructType>* new_vertex = new Vertex<BundledStructType>(vertex_node);
-			vertex_map_[vertex_node.data_id_] = new_vertex;
-			return new_vertex;
-		}
-
-		return it->second;
-	}
-
-	/// This function is used to reset the vertices for a new search
-	void ResetGraphVertices()
-	{
-		for(const auto& vertex_pair: vertex_map_)
-			vertex_pair.second->ClearVertexSearchInfo();
-	};
-
-public:
-	/// This function is used to create a graph by adding edges connecting two nodes
-	void AddEdge(const BundledStructType& src_node, const BundledStructType& dst_node, double cost)
-	{
-		Vertex<BundledStructType>* src_vertex = GetVertex(src_node);
-		Vertex<BundledStructType>* dst_vertex = GetVertex(dst_node);
-
-		Edge<Vertex<BundledStructType>> new_edge(src_vertex, dst_vertex,cost);
-		src_vertex->edges_.push_back(new_edge);
-	};
-
-	/// This functions is used to access all vertices of a graph
-	std::vector<Vertex<BundledStructType>*> GetGraphVertices() const
-	{
-		std::vector<Vertex<BundledStructType>*> vertices;
-
-		for(auto it = vertex_map_.begin(); it != vertex_map_.end(); it++)
-		{
-			vertices.push_back(it->second);
-		}
-
-		return vertices;
-	};
-
-	/// This functions is used to access all edges of a graph
-	std::vector<Edge<Vertex<BundledStructType>>> GetGraphEdges() const
-	{
-		std::vector<Edge<Vertex<BundledStructType>>> edges;
-
-		for(auto it = vertex_map_.begin(); it != vertex_map_.end(); it++)
-		{
-			Vertex<BundledStructType>* vertex = it->second;
-			for(auto ite = vertex->edges_.begin(); ite != vertex->edges_.end(); ite++) {
-				edges.push_back(*ite);
-			}
-		}
-
-		return edges;
-	};
-
-	/// This functions is used to access all edges of a graph
-	std::vector<Edge<Vertex<BundledStructType>>> GetGraphUndirectedEdges() const
-	{
-		std::vector<Edge<Vertex<BundledStructType>>> edges;
-
-		for(auto it = vertex_map_.begin(); it != vertex_map_.end(); it++)
-		{
-			Vertex<BundledStructType>* vertex = it->second;
-
-			for(auto ite = vertex->edges_.begin(); ite != vertex->edges_.end(); ite++) {
-				bool edge_existed = false;
-
-				for(auto& itedge : edges)
-				{
-					if(itedge -= (*ite)) {
-						edge_existed = true;
-						break;
-					}
-				}
-
-				if(!edge_existed)
-					edges.push_back(*ite);
-			}
-		}
-
-		return edges;
-	};
-
-	/// This function return the vertex with specified id
-	Vertex<BundledStructType>* GetVertexFromID(uint64_t vertex_id)
-	{
-		auto it = vertex_map_.find(vertex_id);
-
-		return (*it).second;
-	}
-
-	/// Perform A* Search and return a path represented by a serious of vertices
-	std::vector<Vertex<BundledStructType>*> AStarSearch(Vertex<BundledStructType> *start, Vertex<BundledStructType> *goal)
+	std::vector<Vertex<BundledStructType>*> AStarSearch(Vertex<BundledStructType>* start, Vertex<BundledStructType>* goal)
 	{
 		// clear previous search information before new search
 		ResetGraphVertices();

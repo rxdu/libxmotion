@@ -320,7 +320,7 @@ void GraphVis::VisQTreeGraph(const Graph_t<QuadTreeNode*>& graph, cv::InputArray
 	}
 
 	// draw all edges
-	std::vector<Edge<Vertex<QuadTreeNode*>>> edges;
+	std::vector<Edge_t<QuadTreeNode*>> edges;
 	edges = graph.GetGraphUndirectedEdges();
 	for(auto it = edges.begin(); it != edges.end(); it++)
 	{

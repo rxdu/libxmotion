@@ -43,6 +43,8 @@ int main(int argc, char** argv )
 	// create a graph
 	Graph_t<BDSExample> graph;
 
+	std::cout << "BDSExample node type: " << typeid(*(nodes[0])).name() << std::endl;
+
 	graph.AddEdge(*(nodes[0]), *(nodes[1]), 1.0);
 	graph.AddEdge(*(nodes[0]), *(nodes[3]), 1.5);
 	graph.AddEdge(*(nodes[1]), *(nodes[0]), 2.0);
@@ -159,8 +161,8 @@ int main(int argc, char** argv )
 	std::cout << "test a* of graph2" << std::endl;
 	auto path2 = graph2.AStarSearch(graph2.GetVertexFromID(0), graph2.GetVertexFromID(8));
 
-	std::cout << "test a* of graph3" << std::endl;
-	auto path3 = graph3.AStarSearch(graph3.GetVertexFromID(0), graph3.GetVertexFromID(8));
+//	std::cout << "test a* of graph3" << std::endl;
+//	auto path3 = graph3.AStarSearch(graph3.GetVertexFromID(0), graph3.GetVertexFromID(8));
 
 	std::cout << "test a* of graph4" << std::endl;
 	auto path4 = graph4.AStarSearch(graph4.GetVertexFromID(0), graph4.GetVertexFromID(2));
@@ -172,9 +174,9 @@ int main(int argc, char** argv )
 //	auto node_ptr = vtx->GetBDSNonConstRef();
 //
 //	std::cout << "id before change: " << node_ptr.data_id_ << std::endl;
-
+//
 //	node_ptr.data_id_ = 100;
-
+//
 //	std::cout << "id after change: " << node_ptr.data_id_ << std::endl;
 
 	// delete all nodes
