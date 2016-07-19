@@ -36,7 +36,7 @@ public:
 	template<class T = BundledStructType, typename std::enable_if<!std::is_pointer<T>::value>::type* = nullptr>
 	Vertex(BundledStructType bundled_data):
 		// attributes related to associated node
-		bundled_data_(bundled_data.data_id_), vertex_id_(bundled_data.data_id_),
+		bundled_data_(bundled_data), vertex_id_(bundled_data.data_id_),
 		// common attributes
 		search_parent_(nullptr),
 		is_checked_(false), is_in_openlist_(false),
@@ -83,7 +83,8 @@ private:
 		return this->bundled_data_->GetHeuristic(*(dst_vertex->bundled_data_));
 	}
 
-	template<class T = BundledStructType, typename std::enable_if<!std::is_pointer<T>::value>::type* = nullptr>
+	template<class T = BundledStructType,
+			typename std::enable_if<!std::is_pointer<T>::value>::type* = nullptr>
 	double CalcHeuristic(Vertex<T>* dst_vertex)
 	{
 		return this->bundled_data_.GetHeuristic(dst_vertex->bundled_data_);

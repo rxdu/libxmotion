@@ -155,29 +155,27 @@ int main(int argc, char** argv )
 		e.PrintEdge();
 	}
 
+	std::cout << "\n----------------------------------- A* on graph1 ----------------------------------- " << std::endl;
 	std::cout << "test a* of graph1" << std::endl;
 	auto path = graph.AStarSearch(graph.GetVertexFromID(0), graph.GetVertexFromID(8));
 
+	std::cout << "\n----------------------------------- A* on graph2 ----------------------------------- " << std::endl;
 	std::cout << "test a* of graph2" << std::endl;
 	auto path2 = graph2.AStarSearch(graph2.GetVertexFromID(0), graph2.GetVertexFromID(8));
 
-//	std::cout << "test a* of graph3" << std::endl;
-//	auto path3 = graph3.AStarSearch(graph3.GetVertexFromID(0), graph3.GetVertexFromID(8));
+	std::cout << "\n----------------------------------- A* on graph2 ----------------------------------- " << std::endl;
+	std::cout << "test a* of graph3" << std::endl;
+	auto v1 = graph3.GetVertexFromID(0);
+	auto v2 = graph3.GetVertexFromID(8);
+	std::cout << "id1: " << v1->bundled_data_.GetID() << " id2: " << v2->bundled_data_.GetID() << std::endl;
+	auto path3 = graph3.AStarSearch(graph3.GetVertexFromID(0), graph3.GetVertexFromID(8));
 
+	std::cout << "\n----------------------------------- A* on graph4 ----------------------------------- " << std::endl;
 	std::cout << "test a* of graph4" << std::endl;
 	auto path4 = graph4.AStarSearch(graph4.GetVertexFromID(0), graph4.GetVertexFromID(2));
 
 //	for(auto& e : path)
 //		std::cout << "id: " << e->vertex_id_ << std::endl;
-//
-//	auto vtx = graph3.GetVertexFromID(0);
-//	auto node_ptr = vtx->GetBDSNonConstRef();
-//
-//	std::cout << "id before change: " << node_ptr.data_id_ << std::endl;
-//
-//	node_ptr.data_id_ = 100;
-//
-//	std::cout << "id after change: " << node_ptr.data_id_ << std::endl;
 
 	// delete all nodes
 	for(auto e : nodes)
