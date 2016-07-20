@@ -17,6 +17,8 @@ else(ENABLE_G3LOG)
 	message( "-- Enable logging with g3log -- No" )
 endif(ENABLE_G3LOG)
 
+set(BUILD_TESTS on)
+
 ## Config octomap include directories
 include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/octomap/include)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/octovis/include)

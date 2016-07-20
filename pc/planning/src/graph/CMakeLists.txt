@@ -15,5 +15,5 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 #target_link_libraries(graph qtree)
 
 # Add executables
-add_executable(test_template test_template.cpp)
+#add_executable(test_template test_template.cpp)
 #target_link_libraries(test_template graph)
