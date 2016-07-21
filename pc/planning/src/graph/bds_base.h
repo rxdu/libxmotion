@@ -18,21 +18,25 @@ namespace srcl_ctrl {
 /// The base class of bundled data structure
 template<typename BundledDataStructType>
 class BDSBase {
-public:
-	// this enforces the derived class to initialize the id somehow, just to make
-	//	sure "data_id_" is used as the ID, not with any other names
+protected:
+	/// Only derived classes can call the constructor and destructor.
+	// Deleting default constructor enforces the derived class to
+	//	initialize the id somehow, just to make sure "data_id_" is
+	//	used as the ID, not with any other names
 	BDSBase() = delete;
 	BDSBase(uint64_t struct_id):data_id_(struct_id){};
-
-protected:
-	~BDSBase(){};
+	virtual ~BDSBase(){};
 
 public:
 	uint64_t data_id_;
+	uint64_t GetID() const {return data_id_;}
 
 public:
-	uint64_t GetID() const {return data_id_;}
-	double GetHeuristic(const BundledDataStructType& other_struct) const;
+	// You have to override this function if you want to use heuristics in A*
+	virtual double GetHeuristic(const BundledDataStructType& other_struct) const
+	{
+		return 0.0;
+	};
 };
 
 }

@@ -9,6 +9,8 @@
 #define SRC_GRAPH_VERTEX_H_
 
 #include <iostream>
+#include <cstdint>
+
 #include "graph/edge.h"
 
 namespace srcl_ctrl {
