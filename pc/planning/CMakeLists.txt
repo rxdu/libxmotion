@@ -26,6 +26,7 @@ add_subdirectory(src/map)
 add_subdirectory(src/visualizer)
 add_subdirectory(src/apps)
 add_subdirectory(src/smp)
+add_subdirectory(src/rrtstar)
 
 if(BUILD_TESTS)
     add_subdirectory(src/gtests)
