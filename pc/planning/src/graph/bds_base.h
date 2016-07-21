@@ -23,14 +23,16 @@ public:
 	//	sure "data_id_" is used as the ID, not with any other names
 	BDSBase() = delete;
 	BDSBase(uint64_t struct_id):data_id_(struct_id){};
-	virtual ~BDSBase(){};
+
+protected:
+	~BDSBase(){};
 
 public:
 	uint64_t data_id_;
 
 public:
 	uint64_t GetID() const {return data_id_;}
-	virtual double GetHeuristic(const BundledDataStructType& other_struct) const  = 0;
+	double GetHeuristic(const BundledDataStructType& other_struct) const;
 };
 
 }
