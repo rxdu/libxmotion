@@ -45,7 +45,7 @@ public:
 	/******************* RRT Star Algorithm *******************/
 public:
 	// A nearest-neighbors datastructure containing the tree of motions
-	std::shared_ptr< NearestNeighbors<Motion*> > nn_;
+	std::shared_ptr< NearestNeighbors<Motion*> > motion_tree_;
 
 	// sampling related
 	base::StateSamplerPtr sampler_;
@@ -61,17 +61,29 @@ public:
 	// search parameters
 	// The maximum length of a motion to be added to a tree
 	double maxDistance_;
-	// Option to use k-nearest search for rewiring
-	bool useKNearest_;
+	// The rewiring factor, s, so that r_rrg = s \times r_rrg* > r_rrg* (or k_rrg = s \times k_rrg* > k_rrg*)
+	double rewireFactor_;
 	// A constant for k-nearest rewiring calculations
 	double k_rrg_;
-	// A constant for r-disc rewiring calculations
-	double r_rrg_;
-	// Option to delay and reduce collision checking within iterations
-	bool delayCC_;
+	// A list of states in the tree that satisfy the goal condition
+	std::vector<Motion*> goalMotions_;
+	// Best cost found so far by algorithm
+	base::Cost bestCost_;
 
 protected:
+	// Compute distance between motions (actually distance between contained states)
+	double distanceFunction(const Motion *a, const Motion *b) const
+	{
+		return si_->distance(a->state, b->state);
+	}
+
+	/** \brief Calculate the k_RRG* and r_RRG* terms */
+	void calculateRewiringLowerBounds();
+	void freeMemory();
+
 	void getNeighbors(Motion *motion, std::vector<Motion*> &nbh) const;
+	void removeFromParent(Motion *m);
+	void updateChildCosts(Motion *m);
 
 	// For sorting a list of costs and getting only their sorted indices
 	struct CostIndexCompare
@@ -88,6 +100,12 @@ protected:
 		const std::vector<base::Cost>& costs_;
 		const base::OptimizationObjective &opt_;
 	};
+
+public:
+	void setRange(double distance)
+	{
+		maxDistance_ = distance;
+	}
 
 };
 
