@@ -65,6 +65,8 @@ public:
 	double rewireFactor_;
 	// A constant for k-nearest rewiring calculations
 	double k_rrg_;
+	// Option to delay and reduce collision checking within iterations
+	bool delayCC_;
 	// A list of states in the tree that satisfy the goal condition
 	std::vector<Motion*> goalMotions_;
 	// Best cost found so far by algorithm

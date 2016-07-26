@@ -18,7 +18,7 @@ namespace srcl_ctrl {
 /// The base class of bundled data structure
 template<typename BundledDataStructType>
 class BDSBase {
-public:
+protected:
 	// this enforces the derived class to initialize the id somehow, just to make
 	//	sure "data_id_" is used as the ID, not with any other names
 	BDSBase() = delete;

@@ -7,6 +7,8 @@
 
 #include <algorithm>
 
+#include <ompl/base/spaces/RealVectorStateSpace.h>
+
 #include "ompl/base/goals/GoalSampleableRegion.h"
 #include "ompl/base/objectives/PathLengthOptimizationObjective.h"
 
@@ -19,12 +21,13 @@ using namespace ompl::geometric;
 using namespace srcl_ctrl;
 
 RRTStarKD::RRTStarKD(const base::SpaceInformationPtr &si) :
-		base::Planner(si, "RRT_Star_Kinodynamic"),
-		lastGoalMotion_(nullptr),
-		iterations_(0),
-		maxDistance_(0.01),
-		rewireFactor_(1.1),
-		k_rrg_(0u)
+				base::Planner(si, "RRT_Star_Kinodynamic"),
+				lastGoalMotion_(nullptr),
+				iterations_(0),
+				maxDistance_(0.0),
+				rewireFactor_(1.1),
+				k_rrg_(0u),
+				delayCC_(true)
 {
 	sampler_ = si_->allocStateSampler();
 }
@@ -40,6 +43,7 @@ void RRTStarKD::setup()
 
 	tools::SelfConfig sc(si_, getName());
 	sc.configurePlannerRange(maxDistance_);
+
 	if (!si_->getStateSpace()->hasSymmetricDistance() || !si_->getStateSpace()->hasSymmetricInterpolate())
 	{
 		OMPL_WARN("%s requires a state space with symmetric distance and symmetric interpolation.", getName().c_str());
@@ -91,8 +95,8 @@ void RRTStarKD::clear()
 		motion_tree_->clear();
 
 	lastGoalMotion_ = nullptr;
-	goalMotions_.clear();
 	startMotions_.clear();
+	goalMotions_.clear();
 
 	iterations_ = 0;
 	bestCost_ = base::Cost(std::numeric_limits<double>::quiet_NaN());
@@ -129,7 +133,7 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 	/*							pre-search						*/
 	/*----------------------------------------------------------*/
 	base::Goal *goal = pdef_->getGoal().get();
-	base::GoalSampleableRegion *goal_s = dynamic_cast<base::GoalSampleableRegion*>(goal);
+	base::GoalSampleableRegion  *goal_s = dynamic_cast<base::GoalSampleableRegion*>(goal);
 
 	bool symCost = opt_->isSymmetric();
 
@@ -165,8 +169,6 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 
 	Motion *solution = lastGoalMotion_;
 	Motion *approx_solution = nullptr;
-
-	Motion *approximation  = nullptr;
 	double approx_dist = std::numeric_limits<double>::infinity();
 	bool sufficientlyShort = false;
 
@@ -194,7 +196,10 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 		iterations_++;
 
 		// sample a state
-		sampler_->sampleUniform(sampled_state);
+		if (goal_s && goalMotions_.size() < goal_s->maxSampleCount() && goal_s->canSample())
+			goal_s->sampleGoal(sampled_state);
+		else
+			sampler_->sampleUniform(sampled_state);
 
 		// find closest state in the tree
 		Motion *nearest_motion = motion_tree_->nearest(sampled_motion);
@@ -248,38 +253,87 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 			std::fill(valid.begin(), valid.begin() + nbh.size(), 0);
 
 			// Finding the nearest neighbor to connect to
-			new_motion->incCost = opt_->motionCost(nearest_motion->state, new_motion->state);
-			new_motion->cost = opt_->combineCosts(nearest_motion->cost, new_motion->incCost);
-
-			// find which one we connect the new state to
-			// evaluate each neighbour to find the one resulting in better cost
-			for (std::size_t i = 0 ; i < nbh.size(); ++i)
+			// By default, neighborhood states are sorted by cost, and collision checking
+			// is performed in increasing order of cost
+			if (delayCC_)
 			{
-				if (nbh[i] != nearest_motion)
+				// calculate all costs and distances
+				for (std::size_t i = 0 ; i < nbh.size(); ++i)
 				{
 					incCosts[i] = opt_->motionCost(nbh[i]->state, new_motion->state);
 					costs[i] = opt_->combineCosts(nbh[i]->cost, incCosts[i]);
-					if (opt_->isCostBetterThan(costs[i], new_motion->cost))
-					{
-						if (si_->checkMotion(nbh[i]->state, new_motion->state))
-						{
-							new_motion->incCost = incCosts[i];
-							new_motion->cost = costs[i];
-							new_motion->parent = nbh[i];
-							valid[i] = 1;
-						}
-						else valid[i] = -1;
-					}
 				}
-				else
+
+				// sort the nodes
+				//
+				// we're using index-value pairs so that we can get at
+				// original, unsorted indices
+				for (std::size_t i = 0; i < nbh.size(); ++i)
+					sortedCostIndices[i] = i;
+				std::sort(sortedCostIndices.begin(), sortedCostIndices.begin() + nbh.size(),
+						compareFn);
+
+				// collision check until a valid motion is found
+				//
+				// ASYMMETRIC CASE: it's possible that none of these
+				// neighbors are valid. This is fine, because motion
+				// already has a connection to the tree through
+				// nmotion (with populated cost fields!).
+				for (std::vector<std::size_t>::const_iterator i = sortedCostIndices.begin();
+						i != sortedCostIndices.begin() + nbh.size();
+						++i)
 				{
-					incCosts[i] = new_motion->incCost;
-					costs[i] = new_motion->cost;
-					valid[i] = 1;
+					if (nbh[*i] == nearest_motion || si_->checkMotion(nbh[*i]->state, new_motion->state))
+					{
+						new_motion->incCost = incCosts[*i];
+						new_motion->cost = costs[*i];
+						new_motion->parent = nbh[*i];
+						valid[*i] = 1;
+						break;
+					}
+					else valid[*i] = -1;
+				}
+			}
+			else
+			{
+				// Finding the nearest neighbor to connect to
+				new_motion->incCost = opt_->motionCost(nearest_motion->state, new_motion->state);
+				new_motion->cost = opt_->combineCosts(nearest_motion->cost, new_motion->incCost);
+
+				// find which one we connect the new state to
+				// evaluate each neighbour to find the one resulting in better cost
+				for (std::size_t i = 0 ; i < nbh.size(); ++i)
+				{
+					if (nbh[i] != nearest_motion)
+					{
+						incCosts[i] = opt_->motionCost(nbh[i]->state, new_motion->state);
+						costs[i] = opt_->combineCosts(nbh[i]->cost, incCosts[i]);
+						if (opt_->isCostBetterThan(costs[i], new_motion->cost))
+						{
+							if (si_->checkMotion(nbh[i]->state, new_motion->state))
+							{
+								new_motion->incCost = incCosts[i];
+								new_motion->cost = costs[i];
+								new_motion->parent = nbh[i];
+								valid[i] = 1;
+							}
+							else valid[i] = -1;
+						}
+					}
+					else
+					{
+						incCosts[i] = new_motion->incCost;
+						costs[i] = new_motion->cost;
+						valid[i] = 1;
+					}
 				}
 			}
 
-			//std::cout << "sampled state: " << new_motion->state->as<ompl::base::CompoundState>()[0].as<ompl::base::RealVectorStateSpace::StateType>() << std::endl;
+//			std::cout << "sampled state: "
+//				<< new_motion->state->as<ompl::base::RealVectorStateSpace::StateType>()->values[0]
+//				<< " , "
+//				<< new_motion->state->as<ompl::base::RealVectorStateSpace::StateType>()->values[1]
+//				<< std::endl;
 
 			// add motion to the tree
 			motion_tree_->add(new_motion);
@@ -343,7 +397,6 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 				bool updatedSolution = false;
 				for (size_t i = 0; i < goalMotions_.size(); ++i)
 				{
-					std::cout << "goal motion not zero" << std::endl;
 					if (opt_->isCostBetterThan(goalMotions_[i]->cost, bestCost_))
 					{
 						if (opt_->isFinite(bestCost_) == false)
@@ -390,7 +443,7 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 			// Checking for approximate solution (closest state found to the goal)
 			if (goalMotions_.size() == 0 && distanceFromGoal < approx_dist)
 			{
-				approximation = new_motion;
+				approx_solution = new_motion;
 				approx_dist = distanceFromGoal;
 			}
 		}
@@ -446,61 +499,61 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 		si_->freeState(sampled_motion->state);
 	delete sampled_motion;
 
-	//OMPL_INFORM("%s: Created %u new states. Checked %u rewire options. %u goal states in tree. Final solution cost %.3f", getName().c_str(), statesGenerated, rewireTest, goalMotions_.size(), bestCost_.value());
+	OMPL_INFORM("%s: Created %u new states. Checked %u rewire options. %u goal states in tree. Final solution cost %.3f", getName().c_str(), statesGenerated, rewireTest, goalMotions_.size(), bestCost_.value());
 
 	return base::PlannerStatus(found_solution, is_approximate);
 }
 
 void RRTStarKD::getNeighbors(Motion *motion, std::vector<Motion*> &nbh) const
 {
-    double cardDbl = static_cast<double>(motion_tree_->size() + 1u);
+	double cardDbl = static_cast<double>(motion_tree_->size() + 1u);
 
-    //- k-nearest RRT*
-    unsigned int k = std::ceil(k_rrg_ * log(cardDbl));
-    motion_tree_->nearestK(motion, k, nbh);
+	//- k-nearest RRT*
+	unsigned int k = std::ceil(k_rrg_ * log(cardDbl));
+	motion_tree_->nearestK(motion, k, nbh);
 }
 
 void RRTStarKD::removeFromParent(Motion *m)
 {
-    for (std::vector<Motion*>::iterator it = m->parent->children.begin ();
-        it != m->parent->children.end (); ++it)
-    {
-        if (*it == m)
-        {
-            m->parent->children.erase(it);
-            break;
-        }
-    }
+	for (std::vector<Motion*>::iterator it = m->parent->children.begin ();
+			it != m->parent->children.end (); ++it)
+	{
+		if (*it == m)
+		{
+			m->parent->children.erase(it);
+			break;
+		}
+	}
 }
 
 void RRTStarKD::updateChildCosts(Motion *m)
 {
-    for (std::size_t i = 0; i < m->children.size(); ++i)
-    {
-        m->children[i]->cost = opt_->combineCosts(m->cost, m->children[i]->incCost);
-        updateChildCosts(m->children[i]);
-    }
+	for (std::size_t i = 0; i < m->children.size(); ++i)
+	{
+		m->children[i]->cost = opt_->combineCosts(m->cost, m->children[i]->incCost);
+		updateChildCosts(m->children[i]);
+	}
 }
 
 void RRTStarKD::calculateRewiringLowerBounds()
 {
-    double dimDbl = static_cast<double>(si_->getStateDimension());
+	double dimDbl = static_cast<double>(si_->getStateDimension());
 
-    // k_rrg > e+e/d.  K-nearest RRT*
-    k_rrg_ = rewireFactor_ * (boost::math::constants::e<double>() + (boost::math::constants::e<double>() / dimDbl));
+	// k_rrg > e+e/d.  K-nearest RRT*
+	k_rrg_ = rewireFactor_ * (boost::math::constants::e<double>() + (boost::math::constants::e<double>() / dimDbl));
 }
 
 void RRTStarKD::freeMemory()
 {
-    if (motion_tree_)
-    {
-        std::vector<Motion*> motions;
-        motion_tree_->list(motions);
-        for (std::size_t i = 0 ; i < motions.size() ; ++i)
-        {
-            if (motions[i]->state)
-                si_->freeState(motions[i]->state);
-            delete motions[i];
-        }
-    }
+	if (motion_tree_)
+	{
+		std::vector<Motion*> motions;
+		motion_tree_->list(motions);
+		for (std::size_t i = 0 ; i < motions.size() ; ++i)
+		{
+			if (motions[i]->state)
+				si_->freeState(motions[i]->state);
+			delete motions[i];
+		}
+	}
 }

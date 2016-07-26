@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 	ompl::base::StateSpacePtr r2(new ompl::base::RealVectorStateSpace(2));
 	ompl::base::RealVectorBounds bounds2(2);
 	bounds2.setLow(0);
-	bounds2.setHigh(1);
+	bounds2.setHigh(1.5);
 	r2->as<ob::RealVectorStateSpace>()->setBounds(bounds2);
 
 	// add two spaces to get a R3*SO(2) space
@@ -51,7 +51,8 @@ int main(int argc, char** argv)
 	ob::SpaceInformationPtr si(new ob::SpaceInformation(flat_space));
 //	base::PlannerPtr planner(new RRTStarKD(si));
 //	base::PlannerPtr planner(new og::RRTstar(si));
-	auto rrt_planner = new RRTStarKD(si); // new og::RRTstar(si);
+	auto rrt_planner =  new RRTStarKD(si);
+	// auto rrt_planner =  new og::RRTstar(si);
 	rrt_planner->setRange(0.01);
 	base::PlannerPtr planner(rrt_planner);
 
@@ -59,9 +60,13 @@ int main(int argc, char** argv)
 	ob::ProblemDefinitionPtr pdef(new ob::ProblemDefinition(si));
 
 	ompl::base::ScopedState<> start(flat_space);
-	start.random();
+//	start.random();
+	start->as<ob::RealVectorStateSpace::StateType>()->values[0] = 0.0;
+	start->as<ob::RealVectorStateSpace::StateType>()->values[1] = 0.0;
 	ob::ScopedState<> goal(flat_space);
-	goal.random();
+//	goal.random();
+	goal->as<ob::RealVectorStateSpace::StateType>()->values[0] = 1.0;
+	goal->as<ob::RealVectorStateSpace::StateType>()->values[1] = 1.0;
 
 	std::cout << "\n Start: " << std::endl;
 	std::cout << start;
