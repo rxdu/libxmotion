@@ -27,7 +27,8 @@ RRTStarKD::RRTStarKD(const base::SpaceInformationPtr &si) :
 				maxDistance_(0.0),
 				rewireFactor_(1.1),
 				k_rrg_(0u),
-				delayCC_(true)
+				delayCC_(true),
+				send_iteration_data(false)
 {
 	sampler_ = si_->allocStateSampler();
 }
@@ -421,7 +422,7 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 					}
 				}
 
-				if (updatedSolution)
+				if (updatedSolution || send_iteration_data)
 				{
 					if (intermediateSolutionCallback)
 					{

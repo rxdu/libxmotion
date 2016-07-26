@@ -24,6 +24,15 @@ using namespace srcl_ctrl;
 namespace ob = ompl::base;
 namespace og = ompl::geometric;
 
+void test_callback(const ob::Planner* planner, const std::vector<const base::State*> & states, const ob::Cost cost)
+{
+	std::cout << "callback called" << std::endl;
+	ob::PlannerData status_data(planner->getSpaceInformation());
+	planner->getPlannerData(status_data);
+
+	std::cout << "number of vertices: " << status_data.numVertices() << std::endl;
+}
+
 int main(int argc, char** argv)
 {
 	// define the R3 space for (x,y,z)
@@ -44,8 +53,8 @@ int main(int argc, char** argv)
 	r2->as<ob::RealVectorStateSpace>()->setBounds(bounds2);
 
 	// add two spaces to get a R3*SO(2) space
-	//ompl::base::StateSpacePtr flat_space = r3 + so2;
-	ompl::base::StateSpacePtr flat_space = r2;
+	ompl::base::StateSpacePtr flat_space = r3 + so2;
+//	ompl::base::StateSpacePtr flat_space = r2;
 
 	// create an instance of planner
 	ob::SpaceInformationPtr si(new ob::SpaceInformation(flat_space));
@@ -58,15 +67,16 @@ int main(int argc, char** argv)
 
 	// define the problem to be solved
 	ob::ProblemDefinitionPtr pdef(new ob::ProblemDefinition(si));
+	pdef->setIntermediateSolutionCallback(test_callback);
 
 	ompl::base::ScopedState<> start(flat_space);
-//	start.random();
-	start->as<ob::RealVectorStateSpace::StateType>()->values[0] = 0.0;
-	start->as<ob::RealVectorStateSpace::StateType>()->values[1] = 0.0;
+	start.random();
+//	start->as<ob::RealVectorStateSpace::StateType>()->values[0] = 0.0;
+//	start->as<ob::RealVectorStateSpace::StateType>()->values[1] = 0.0;
 	ob::ScopedState<> goal(flat_space);
-//	goal.random();
-	goal->as<ob::RealVectorStateSpace::StateType>()->values[0] = 1.0;
-	goal->as<ob::RealVectorStateSpace::StateType>()->values[1] = 1.0;
+	goal.random();
+//	goal->as<ob::RealVectorStateSpace::StateType>()->values[0] = 1.0;
+//	goal->as<ob::RealVectorStateSpace::StateType>()->values[1] = 1.0;
 
 	std::cout << "\n Start: " << std::endl;
 	std::cout << start;
@@ -89,7 +99,7 @@ int main(int argc, char** argv)
 //	pdef->print(std::cout);
 
 	// attempt to solve the problem within one second of planning time
-	ob::PlannerStatus solved = planner->solve(30.0);
+	ob::PlannerStatus solved = planner->solve(10.0);
 	if (solved)
 	{
 		// get the goal representation from the problem definition (not the same as the goal state)

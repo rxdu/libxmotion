@@ -71,6 +71,7 @@ public:
 	std::vector<Motion*> goalMotions_;
 	// Best cost found so far by algorithm
 	base::Cost bestCost_;
+	bool send_iteration_data;
 
 protected:
 	// Compute distance between motions (actually distance between contained states)
