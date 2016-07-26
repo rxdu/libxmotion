@@ -82,10 +82,9 @@ void RRTStarKD::setup()
 
 void RRTStarKD::clear()
 {
-	Planner::clear();
-
 	setup_ = false;
 	Planner::clear();
+
 	sampler_.reset();
 	freeMemory();
 	if (motion_tree_)
@@ -280,6 +279,8 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 				}
 			}
 
+			//std::cout << "sampled state: " << new_motion->state->as<ompl::base::CompoundState>()[0].as<ompl::base::RealVectorStateSpace::StateType>() << std::endl;
+
 			// add motion to the tree
 			motion_tree_->add(new_motion);
 			new_motion->parent->children.push_back(new_motion);
@@ -342,6 +343,7 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 				bool updatedSolution = false;
 				for (size_t i = 0; i < goalMotions_.size(); ++i)
 				{
+					std::cout << "goal motion not zero" << std::endl;
 					if (opt_->isCostBetterThan(goalMotions_[i]->cost, bestCost_))
 					{
 						if (opt_->isFinite(bestCost_) == false)

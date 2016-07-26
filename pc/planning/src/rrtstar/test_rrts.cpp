@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 	ob::SpaceInformationPtr si(new ob::SpaceInformation(flat_space));
 //	base::PlannerPtr planner(new RRTStarKD(si));
 //	base::PlannerPtr planner(new og::RRTstar(si));
-	auto rrt_planner = new RRTStarKD(si);//new og::RRTstar(si);
+	auto rrt_planner = new RRTStarKD(si); // new og::RRTstar(si);
 	rrt_planner->setRange(0.01);
 	base::PlannerPtr planner(rrt_planner);
 
@@ -84,7 +84,7 @@ int main(int argc, char** argv)
 //	pdef->print(std::cout);
 
 	// attempt to solve the problem within one second of planning time
-	ob::PlannerStatus solved = planner->solve(60.0);
+	ob::PlannerStatus solved = planner->solve(30.0);
 	if (solved)
 	{
 		// get the goal representation from the problem definition (not the same as the goal state)
