@@ -99,16 +99,16 @@ int main(int argc, char** argv)
 //	pdef->print(std::cout);
 
 	// attempt to solve the problem within one second of planning time
-	ob::PlannerStatus solved = planner->solve(10.0);
+	ob::PlannerStatus solved = planner->solve(0.5);
 	if (solved)
 	{
 		// get the goal representation from the problem definition (not the same as the goal state)
 		// and inquire about the found path
 		ob::PathPtr path = pdef->getSolutionPath();
-		std::cout << "Found solution:" << std::endl;
+		std::cout << "Found solution" << std::endl;
 
 		// print the path to screen
-		path->print(std::cout);
+//		path->print(std::cout);
 
 //		std::ofstream outFile("output.txt");
 //		dynamic_cast<const og::PathGeometric&>(*path).printAsMatrix(std::cout);
