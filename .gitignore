@@ -17,7 +17,6 @@ docs/doxygen/html/
 docs/doxygen/latex
 
 # LCM
-pc/comm/lcmtypes
 pc/comm/lcmtypes/c
 pc/comm/lcmtypes/cpp
 pc/comm/lcmtypes/java
