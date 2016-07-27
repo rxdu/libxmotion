@@ -17,10 +17,10 @@ docs/doxygen/html/
 docs/doxygen/latex
 
 # LCM
-pc/src/comm/lcmtypes/c
-pc/src/comm/lcmtypes/cpp
-pc/src/comm/lcmtypes/java
-pc/src/comm/lcmtypes/python
+pc/comm/lcmtypes/c
+pc/comm/lcmtypes/cpp
+pc/comm/lcmtypes/java
+pc/comm/lcmtypes/python
 
 # Compiled Object files
 *.slo

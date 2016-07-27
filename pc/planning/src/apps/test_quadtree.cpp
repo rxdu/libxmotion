@@ -19,7 +19,7 @@
 
 // quad_tree
 #include "graph/astar.h"
-#include "visualizer/graph_vis.h"
+#include "graph_vis/graph_vis.h"
 
 using namespace cv;
 using namespace srcl_ctrl;
