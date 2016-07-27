@@ -15,6 +15,7 @@
 #include "ompl/base/SpaceInformation.h"
 #include "ompl/geometric/PathGeometric.h"
 #include "ompl/datastructures/NearestNeighbors.h"
+#include <ompl/base/OptimizationObjective.h>
 
 #include <ompl/util/RandomNumbers.h>
 #include <ompl/tools/config/SelfConfig.h>
@@ -22,8 +23,6 @@
 #include "rrtstar/motion.h"
 
 namespace ompl {
-
-namespace srcl_ctrl {
 
 class RRTStarKD : public base::Planner
 {
@@ -111,8 +110,6 @@ public:
 	}
 
 };
-
-}
 
 }
 

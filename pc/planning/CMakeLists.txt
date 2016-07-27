@@ -27,6 +27,7 @@ add_subdirectory(src/graph_vis)
 add_subdirectory(src/apps)
 add_subdirectory(src/smp)
 add_subdirectory(src/rrtstar)
+add_subdirectory(src/planner)
 
 if(BUILD_TESTS)
     add_subdirectory(src/gtests)

@@ -18,7 +18,6 @@
 
 using namespace ompl;
 using namespace ompl::geometric;
-using namespace srcl_ctrl;
 
 RRTStarKD::RRTStarKD(const base::SpaceInformationPtr &si) :
 				base::Planner(si, "RRT_Star_Kinodynamic"),

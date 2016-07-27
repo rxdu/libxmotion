@@ -13,7 +13,6 @@
 #include <ompl/base/Cost.h>
 
 namespace ompl {
-namespace srcl_ctrl {
 
 class Motion
 {
@@ -43,7 +42,6 @@ public:
 	std::vector<Motion*> children;
 };
 
-}
 }
 
 #endif /* PLANNING_SRC_RRTSTAR_MOTION_H_ */

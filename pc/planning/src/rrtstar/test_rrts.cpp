@@ -19,7 +19,6 @@
 #include "rrtstar/rrtstar_kd.h"
 
 using namespace ompl;
-using namespace srcl_ctrl;
 
 namespace ob = ompl::base;
 namespace og = ompl::geometric;
