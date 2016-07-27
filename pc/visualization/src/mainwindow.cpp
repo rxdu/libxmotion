@@ -18,8 +18,8 @@
 #include "mainwindow.h"
 
 using namespace cv;
-using namespace srcl_ctrl;
 using namespace std;
+using namespace srcl_ctrl;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -47,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->sbQTreeMaxDepth->setMaximum(8);
 
     decompose_config_.method = CellDecompMethod::SQUARE_GRID;
+    decompose_config_.show_padded_area = true;
     ui->sbQTreeMaxDepth->setEnabled(false);
     ui->lbQTreeMaxDepth->setEnabled(false);
 
@@ -65,6 +66,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::UpdateDisplayMap()
 {
+	std::cout << "update display map" << std::endl;
+
     if(map_viewer_->HasMapLoaded())
     {
         Mat vis_img = map_viewer_->DecomposeWorkspace(decompose_config_);
@@ -75,6 +78,8 @@ void MainWindow::UpdateDisplayMap()
         image_label_->setPixmap(pix);
         image_label_->update();
     }
+    else
+    	std::cerr << "No map loaded for display." << std::endl;
 }
 
 QImage MainWindow::ConvertMatToQImage(const Mat& mat)

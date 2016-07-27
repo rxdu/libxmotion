@@ -14,6 +14,7 @@
 #include "square_grid/square_grid.h"
 #include "quadtree/quad_tree.h"
 #include "common/planning_types.h"
+#include "map/map_info.h"
 
 namespace srcl_ctrl {
 
@@ -23,8 +24,11 @@ public:
 	~MapUtils();
 
 public:
-	std::vector<Position2D> GetWaypointsFromSGridPath(std::vector<Vertex<SquareCell*>*>& path);
-	std::vector<Position2D> GetWaypointsFromQTreePath(std::vector<Vertex<QuadTreeNode*>*>& path);
+	static std::vector<Position2D> GetWaypointsFromSGridPath(std::vector<Vertex<SquareCell*>*>& path);
+	static std::vector<Position2D> GetWaypointsFromQTreePath(std::vector<Vertex<QuadTreeNode*>*>& path);
+
+	static Position2Dd CooridnateFromMapToWorld(Position2D map_pos);
+	static Position2D CooridnateFromWorldToMap(Position2Dd map_pos);
 };
 
 }

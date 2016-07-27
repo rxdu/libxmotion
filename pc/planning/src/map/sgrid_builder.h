@@ -17,6 +17,7 @@
 #include "opencv2/core/core.hpp"
 
 #include "square_grid/square_grid.h"
+#include "map/map_type.h"
 
 namespace srcl_ctrl {
 
@@ -28,7 +29,7 @@ public:
 
 public:
 	static std::shared_ptr<SquareGrid> BuildSquareGrid(cv::InputArray _src, uint32_t cell_size);
-	static std::tuple<std::shared_ptr<SquareGrid>, cv::Mat> BuildSquareGridMap(cv::InputArray _src, uint32_t cell_size);
+	static Map_t<SquareGrid> BuildSquareGridMap(cv::InputArray _src, uint32_t cell_size);
 };
 
 }

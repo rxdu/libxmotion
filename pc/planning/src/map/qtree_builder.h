@@ -9,6 +9,7 @@
 #include "opencv2/core/core.hpp"
 
 #include "quadtree/quad_tree.h"
+#include "map/map_type.h"
 
 namespace srcl_ctrl{
 
@@ -22,7 +23,7 @@ private:
 
 public:
 	static std::shared_ptr<QuadTree> BuildQuadTree(cv::InputArray _src, unsigned int max_depth);
-	static std::tuple<std::shared_ptr<QuadTree>, cv::Mat> BuildQuadTreeMap(cv::InputArray _src, unsigned int max_depth);
+	static Map_t<QuadTree> BuildQuadTreeMap(cv::InputArray _src, unsigned int max_depth);
 };
 
 }

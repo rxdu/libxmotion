@@ -186,24 +186,6 @@ std::shared_ptr<QuadTree> QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsig
 	return tree;
 }
 
-std::tuple<std::shared_ptr<QuadTree>, cv::Mat> QTreeBuilder::BuildQuadTreeMap(cv::InputArray _src, unsigned int max_depth)
-{
-	Mat image_bin;
-	Mat image_map;
-	Mat src = _src.getMat();
-
-	// binarize grayscale image
-	ImageUtils::BinarizeImage(src, image_bin, 200);
-
-	// pad image to 2^n on each side so that we can calculate
-	//	the dimension of the grid more conveniently
-	ImageUtils::PadImageToSquared(image_bin, image_map);
-
-	std::shared_ptr<QuadTree> tree = QTreeBuilder::BuildQuadTree(_src, max_depth);
-
-	return std::make_tuple(tree, image_map);
-}
-
 std::vector<QuadTreeNode*> QTreeBuilder::GetAllLeafNodes(QuadTree *tree)
 {
 	std::vector<QuadTreeNode*> leaves;
@@ -267,4 +249,30 @@ std::vector<QuadTreeNode*> QTreeBuilder::GetAllLeafNodes(QuadTree *tree)
 	}
 
 	return leaves;
+}
+
+Map_t<QuadTree> QTreeBuilder::BuildQuadTreeMap(cv::InputArray _src, unsigned int max_depth)
+{
+	Mat src = _src.getMat();
+
+	Map_t<QuadTree> map;
+	map.input_image = src;
+
+	// binarize grayscale image
+	Mat image_bin;
+	ImageUtils::BinarizeImage(src, image_bin, 200);
+
+	// pad image to 2^n on each side so that we can calculate
+	//	the dimension of the grid more conveniently
+	ImageUtils::PadImageToSquared(image_bin, map.padded_image);
+
+	// generate map info
+	map.info.map_size_x = map.padded_image.cols;
+	map.info.map_size_y = map.padded_image.rows;
+	map.info.padded_size_x = map.padded_image.cols - image_bin.cols;
+	map.info.padded_size_y = map.padded_image.rows - image_bin.rows;
+
+	map.data_model = QTreeBuilder::BuildQuadTree(_src, max_depth);
+
+	return map;
 }

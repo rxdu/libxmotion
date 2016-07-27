@@ -10,9 +10,8 @@ pkg_search_module(LCM REQUIRED lcm)
 
 # Add libraries
 set(MAP_LIB_SRC
-	image_utils.cpp
-	map_utils.cpp
-	map_manager.cpp
+  image_utils.cpp
+  map_utils.cpp
   qtree_builder.cpp
   sgrid_builder.cpp
   graph_builder.cpp

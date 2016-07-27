@@ -19,16 +19,17 @@
 #include "graph_vis/graph_vis.h"
 #include "map/graph_builder.h"
 #include "map/sgrid_builder.h"
+#include "map/map_type.h"
 
 using namespace cv;
 using namespace srcl_ctrl;
 
 int main(int argc, char** argv )
 {
-	Mat input_image,map;
+	Mat input_image;
 	bool use_input_image = false;
 
-	std::shared_ptr<SquareGrid> grid;
+	Map_t<SquareGrid> sgrid_map;
 
 	/*** check if user specifies an image ***/
 	if ( argc == 2 )
@@ -48,11 +49,7 @@ int main(int argc, char** argv )
 			/***  with the original input image (after binarizing, padding). The     ***/
 			/***  square grid or the graph can be visualized over this image without ***/
 			/***  mis-placement. ***/
-			std::tuple<std::shared_ptr<SquareGrid>, Mat> sg_map;
-
-			sg_map = SGridBuilder::BuildSquareGridMap(input_image, 32);
-			grid = std::get<0>(sg_map);
-			map = std::get<1>(sg_map);
+			sgrid_map = SGridBuilder::BuildSquareGridMap(input_image, 32);
 
 			/*** BuildSquareGrid() only returns the square grid data structure ***/
 			//grid = SGridBuilder::BuildSquareGrid(input_image, 32);
@@ -63,7 +60,7 @@ int main(int argc, char** argv )
 	/*** otherwise, create a square grid map manually ***/
 	else{
 		// create a empty grid
-		grid = std::make_shared<SquareGrid>(12,12,95);
+		std::shared_ptr<SquareGrid> grid = std::make_shared<SquareGrid>(12,12,95);
 
 		// set occupancy for cells
 		for(int i = 52; i <= 57; i++)
@@ -95,6 +92,8 @@ int main(int argc, char** argv )
 
 		grid->SetCellOccupancy(66, OccupancyType::OCCUPIED);
 		grid->SetCellOccupancy(81, OccupancyType::OCCUPIED);
+
+		sgrid_map.data_model = grid;
 	}
 
 	/************************************************************************************/
@@ -103,7 +102,7 @@ int main(int argc, char** argv )
 
 	/*** Construct a graph from the square grid ***/
 	/*** the second argument determines if move along diagonal is allowed ***/
-	std::shared_ptr<Graph_t<SquareCell*>> graph = GraphBuilder::BuildFromSquareGrid(grid,true);
+	std::shared_ptr<Graph_t<SquareCell*>> graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);
 
 	/*** Search path in the graph ***/
 	Vertex_t<SquareCell*> * start_vertex;
@@ -137,10 +136,10 @@ int main(int argc, char** argv )
 
 	/*** Image Layouts: (map) -> square grid -> graph -> path ***/
 	/*** you can visualize the squre grid by itself or overlay it on the map image ***/
-	if(map.empty())
-		vis.VisSquareGrid(*grid, vis_img);
+	if(sgrid_map.padded_image.empty())
+		vis.VisSquareGrid(*sgrid_map.data_model, vis_img);
 	else
-		vis.VisSquareGrid(*grid, map, vis_img);
+		vis.VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
 	/*** put the graph on top of the square grid ***/
 	vis.VisSquareGridGraph(*graph, vis_img, vis_img, true);

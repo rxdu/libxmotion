@@ -39,3 +39,13 @@ std::vector<Position2D> MapUtils::GetWaypointsFromQTreePath(std::vector<Vertex<Q
 	return waypoints;
 }
 
+Position2Dd MapUtils::CooridnateFromMapToWorld(Position2D map_pos)
+{
+
+}
+
+Position2D MapUtils::CooridnateFromWorldToMap(Position2Dd map_pos)
+{
+
+}
+

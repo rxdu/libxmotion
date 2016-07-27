@@ -21,19 +21,21 @@
 #include "graph/astar.h"
 #include "graph_vis/graph_vis.h"
 
+#include "map/map_type.h"
+
 using namespace cv;
 using namespace srcl_ctrl;
 
 int main(int argc, char** argv )
 {
+	Map_t<QuadTree> qtree_map;
+	Mat image_raw,image_disp;
+
     if ( argc != 2 )
     {
         printf("usage: DisplayImage.out <Image_Path>\n");
         return -1;
     }
-
-    Mat map;
-    Mat image_raw,image_disp;
 
     image_raw = imread( argv[1], IMREAD_GRAYSCALE );
 
@@ -44,22 +46,18 @@ int main(int argc, char** argv )
     }
 
     // example to use quadtree builder
-    std::shared_ptr<QuadTree> tree;
-
     std::tuple<std::shared_ptr<QuadTree>, Mat> qt_map;
-    qt_map = QTreeBuilder::BuildQuadTreeMap(image_raw, 6);
-    tree = std::get<0>(qt_map);
-    map = std::get<1>(qt_map);
+    qtree_map = QTreeBuilder::BuildQuadTreeMap(image_raw, 6);
 
     Mat image_tree, image_nodes;
     GraphVis vis;
     Mat vis_map;
-    vis.VisQuadTree(*tree, map, image_tree, TreeVisType::ALL_SPACE);
+    vis.VisQuadTree(*qtree_map.data_model, qtree_map.padded_image, image_tree, TreeVisType::ALL_SPACE);
 //    TreeNode* node = tree->leaf_nodes_.at(0);
 //    vis.DrawQTreeSingleNode(node, image_tree, image_nodes);
     std::vector<QuadTreeNode*> free_leaves;
     std::vector<QuadTreeNode*>::iterator it;
-    for(it = tree->leaf_nodes_.begin(); it != tree->leaf_nodes_.end(); it++)
+    for(it = qtree_map.data_model->leaf_nodes_.begin(); it != qtree_map.data_model->leaf_nodes_.end(); it++)
     {
     	if((*it)->occupancy_ == OccupancyType::FREE)
     		free_leaves.push_back((*it));
@@ -70,7 +68,7 @@ int main(int argc, char** argv )
 //    vis.DrawQTreeWithDummies(tree,builder.padded_img_, image_dummy);
 
     // build a graph from quadtree
-	std::shared_ptr<Graph<QuadTreeNode*>> graph = GraphBuilder::BuildFromQuadTree(tree);
+	std::shared_ptr<Graph<QuadTreeNode*>> graph = GraphBuilder::BuildFromQuadTree(qtree_map.data_model);
 	Mat image_graph;
 	vis.VisQTreeGraph(*graph, image_tree, image_graph, true,false);
 

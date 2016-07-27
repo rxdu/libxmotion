@@ -31,6 +31,7 @@ typedef struct {
 	CellDecompMethod method;
 	uint8_t qtree_depth;
 	uint64_t square_cell_size;
+	bool show_padded_area;
 } DecomposeConfig;
 
 class MapViewer {

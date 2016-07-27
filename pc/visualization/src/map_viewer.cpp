@@ -11,6 +11,7 @@
 #include "map/qtree_builder.h"
 #include "map/sgrid_builder.h"
 #include "graph_vis/graph_vis.h"
+#include "map/map_type.h"
 
 using namespace srcl_ctrl;
 using namespace cv;
@@ -58,42 +59,61 @@ void MapViewer::SaveResultToFile(std::string file_name)
 
 Mat MapViewer::DecomposeWorkspace(DecomposeConfig config)
 {
-    Mat vis_img;
+    Mat vis_img, temp_img;
 
-    std::cout << "this function called" << std::endl;
+    std::cout << "trying to decompose workspace" << std::endl;
 
     if(config.method == CellDecompMethod::SQUARE_GRID)
     {
-    	std::tuple<std::shared_ptr<SquareGrid> , Mat> sg_map = SGridBuilder::BuildSquareGridMap(raw_image_, 32);
-        std::shared_ptr<SquareGrid> sgrid = std::get<0>(sg_map);
-        map_image_ = std::get<1>(sg_map);
+    	Map_t<SquareGrid> sg_map;
+
+    	sg_map = SGridBuilder::BuildSquareGridMap(raw_image_, 32);
 
         // build graph from square grid
-        std::shared_ptr<Graph_t<SquareCell*>> sgrid_graph = GraphBuilder::BuildFromSquareGrid(sgrid, true);
+        std::shared_ptr<Graph_t<SquareCell*>> sgrid_graph = GraphBuilder::BuildFromSquareGrid(sg_map.data_model, true);
 
         GraphVis vis;
-        vis.VisSquareGrid(*sgrid, map_image_, vis_img);
+        vis.VisSquareGrid(*sg_map.data_model, sg_map.padded_image, temp_img);
 
         /*** put the graph on top of the square grid ***/
-        vis.VisSquareGridGraph(*sgrid_graph, vis_img, vis_img, true);
-        map_image_ = vis_img;
+        vis.VisSquareGridGraph(*sgrid_graph, temp_img, temp_img, true);
+        map_image_ = temp_img;
+
+        if(config.show_padded_area)
+        	vis_img = map_image_;
+        else
+        {
+        	Range rngx(0 + sg_map.info.padded_size_x/2, temp_img.cols - sg_map.info.padded_size_x/2);
+        	Range rngy(0 + sg_map.info.padded_size_y/2, temp_img.rows - sg_map.info.padded_size_y/2);
+
+        	// Points and Size go (x,y); (width,height) ,- Mat has (row,col).
+        	vis_img = map_image_(rngy,rngx);
+        }
 
         std::cout << "decomposed using square grid" << std::endl;
     }
     else if(config.method == CellDecompMethod::QUAD_TREE)
     {
-    	std::tuple<std::shared_ptr<QuadTree> , Mat> qt_map = QTreeBuilder::BuildQuadTreeMap(raw_image_, config.qtree_depth);
-        std::shared_ptr<QuadTree> qtree = std::get<0>(qt_map);
-        map_image_ = std::get<1>(qt_map);
+    	Map_t<QuadTree> qt_map = QTreeBuilder::BuildQuadTreeMap(raw_image_, config.qtree_depth);
 
         // build graph from quad tree
-        std::shared_ptr<Graph_t<QuadTreeNode*>> qtree_graph = GraphBuilder::BuildFromQuadTree(qtree);
+        std::shared_ptr<Graph_t<QuadTreeNode*>> qtree_graph = GraphBuilder::BuildFromQuadTree(qt_map.data_model);
 
         GraphVis vis;
-        vis.VisQuadTree(*qtree, map_image_, vis_img, TreeVisType::ALL_SPACE);
-        vis.VisQTreeGraph(*qtree_graph, vis_img, vis_img, true, false);
+        vis.VisQuadTree(*qt_map.data_model, qt_map.padded_image, temp_img, TreeVisType::ALL_SPACE);
+        vis.VisQTreeGraph(*qtree_graph, temp_img, temp_img, true, false);
 
-        map_image_ = vis_img;
+        map_image_ = temp_img;
+
+        if(config.show_padded_area)
+        	vis_img = map_image_;
+        else
+        {
+        	Range rngx(0 + qt_map.info.padded_size_x/2, temp_img.cols - qt_map.info.padded_size_x/2);
+        	Range rngy(0 + qt_map.info.padded_size_y/2, temp_img.rows - qt_map.info.padded_size_y/2);
+
+        	vis_img = map_image_(rngy,rngx);
+        }
 
         std::cout << "decomposed using quadtree" << std::endl;
     }
