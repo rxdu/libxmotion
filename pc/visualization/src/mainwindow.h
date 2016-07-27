@@ -1,3 +1,10 @@
+/*
+ * main_window.cpp
+ *
+ *  Created on: Jul 26, 2016
+ *      Author: rdu
+ */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -10,26 +17,6 @@
 #include <QMainWindow>
 #include <QMouseEvent>
 
-// VTK headers
-#include <vtkSmartPointer.h>
-#include <vtkProperty.h>
-
-#include <QVTKWidget.h>
-#include <vtkOrientationMarkerWidget.h>
-
-#include <vtkSphereSource.h>
-#include <vtkCubeSource.h>
-#include <vtkPlaneSource.h>
-
-#include <vtkDataSetMapper.h>
-#include <vtkPolyDataMapper.h>
-
-#include <vtkAxesActor.h>
-
-#include <vtkRenderer.h>
-#include <vtkRenderWindow.h>
-#include <vtkRenderWindowInteractor.h>
-
 // OpenCV headers
 #include "opencv2/opencv.hpp"
 
@@ -38,22 +25,15 @@
 #include <octomap/OcTree.h>
 
 // User headers
-#include "graph/graph.h"
-#include "square_grid/square_grid.h"
-#include "quadtree/quad_tree.h"
-
 #include "image_label.h"
+#include "vtk_viewer.h"
+#include "map_viewer.h"
 
 namespace Ui {
 class MainWindow;
 }
 
 namespace srcl_ctrl {
-
-enum class CellDecompMethod {
-    SQUARE_GRID,
-    QUAD_TREE
-};
 
 class MainWindow : public QMainWindow
 {
@@ -66,45 +46,18 @@ public:
 private:
     Ui::MainWindow *ui;
     ImageLabel* image_label_;
-
-    QVTKWidget* qvtk_widget_;
-    vtkSmartPointer<vtkRenderer> vtk_renderer_;
-    vtkSmartPointer<vtkAxesActor> ori_axes_actor_;
-    vtkSmartPointer<vtkAxesActor> world_axes_actor_;
-    vtkSmartPointer<vtkCamera> vtk_camera_;
-    vtkSmartPointer<vtkOrientationMarkerWidget> vtk_ori_marker_widget_;
+    VtkViewer* vtk_viewer_;
+    MapViewer* map_viewer_;
 
 private:
     // workspace decomposition
-    CellDecompMethod cell_decomp_method_;
-    std::shared_ptr<SquareGrid> sgrid_;
-    std::shared_ptr<Graph<SquareCell*>> sgrid_graph_;
-
-    std::shared_ptr<QuadTree> qtree_;
-    std::shared_ptr<Graph<QuadTreeNode*>> qtree_graph_;
-    uint8_t qtree_depth_;
-
-    // workspace search
-    Vertex<SquareCell*>* start_sgvertex_;
-    Vertex<SquareCell*>* end_sgvertex_;
-
-    std::vector<Vertex<SquareCell*>*> sg_path_;
-    std::vector<Vertex<QuadTreeNode*>*> qt_path_;
-
-    cv::Mat raw_image_;
-    cv::Mat qtree_map_;
-    cv::Mat sgrid_map_;
-
-    bool disp_once;
-//    QuadPlanner* planner_;
+    DecomposeConfig decompose_config_;
 
 private:
     void SetupMap();
     cv::Mat DecomposeWorkspace(cv::Mat map_img, CellDecompMethod method);
-    void UpdateDisplayMap(cv::Mat map_image);
+    void UpdateDisplayMap();
 
-    void InitVTKView();
-    void ResetView();
 //    void UpdateMap();
 
 private:

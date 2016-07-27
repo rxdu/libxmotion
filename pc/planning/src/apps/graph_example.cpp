@@ -16,7 +16,7 @@
 
 // user
 #include "graph/graph.h"
-#include "visualizer/graph_vis.h"
+#include "graph_vis/graph_vis.h"
 #include "map/graph_builder.h"
 #include "map/sgrid_builder.h"
 

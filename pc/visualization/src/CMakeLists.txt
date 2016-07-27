@@ -42,12 +42,16 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 set(HEADER_FILES 
   mainwindow.h
   image_label.h
+  vtk_viewer.h
+  map_viewer.h
 )
 
 set(SOURCE_FILES
   gui_main.cpp
   mainwindow.cpp
   image_label.cpp
+  vtk_viewer.cpp
+  map_viewer.cpp
   ${MOC_FILES}
 )
 
