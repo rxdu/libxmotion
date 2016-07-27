@@ -29,20 +29,19 @@ set(Octomap_LIBS octomap octomath)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/ompl-1.2.0/src)
 
 ## Config smp include directories
-include_directories(${CMAKE_SOURCE_DIR}/third_party/smp_karaman)
+#include_directories(${CMAKE_SOURCE_DIR}/third_party/smp_karaman)
 # SMP is header only, but it depends on 3rd party libraries that needs to be linked against
-set(SMP_KARAMAN_LIB smp_karaman_dep_lib)
+#set(SMP_KARAMAN_LIB smp_karaman_dep_lib)
 
 ## Conditionally add source directories
 ## Check dependencies for GUI module
 find_package(VTK 7.0)
-find_package(Boost 1.54)
 
-if (VTK_FOUND AND Boost_FOUND)
+if (VTK_FOUND)
 	add_subdirectory(visualization)    # <-----------------------------------
-elseif(VTK_FOUND AND Boost_FOUND)
+elseif(VTK_FOUND)
 	message(STATUS "GUI module will not be built because not all dependent libraries can be found.")
-endif(VTK_FOUND AND Boost_FOUND)
+endif(VTK_FOUND)
 
 ## Check dependencies for Comm and Control module
 find_package(PkgConfig REQUIRED)

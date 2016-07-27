@@ -13,6 +13,7 @@ This repository contains a collection of software that are used to develop and t
     + asctec_sdk : sdk for asctec quadrotors
     + px4 : code for px4 compatible flight control boards
 
+* **sim** : simulation scene files (V-REP)
 * **tools** : tool used for the development
 * **docs** : documentation of this project
 
@@ -36,11 +37,6 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/
 * Qt5
 ```
 $ sudo apt-get install qt5-default
-```
-
-* Boost (required by the Qt GUI)
-```
-$ sudo apt-get install libboost-all-dev
 ```
 
 * VTK >= 7.0 (Optional)

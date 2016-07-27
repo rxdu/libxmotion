@@ -8,14 +8,14 @@ find_package(VTK 7.0 REQUIRED COMPONENTS
   vtkViewsInfovis)
 include(${VTK_USE_FILE}) 
 
-# Add libraries
+# Add non-Qt libraries
 #set(VIS_LIB_SRC
 #    graph_vis.cpp
 #)
 #add_library(vis STATIC ${VIS_LIB_SRC})
 #target_link_libraries(vis map ${OpenCV_LIBS})
 
-# Add executables
+# Add non-Qt executables
 #add_executable(test_graph test_graph.cpp)
 #target_link_libraries(test_graph qtree vis map ${OpenCV_LIBS})
 
@@ -25,12 +25,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Find the QtWidgets library
 find_package(Qt5Widgets)
-find_package(Boost REQUIRED COMPONENTS system)
 
 # Add the include directories for the Qt 5 Widgets module to
 # the compile lines.
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
-include_directories(${Boost_INCLUDE_DIRS})
 
 # Use the compile definitions defined in the Qt 5 Widgets module
 add_definitions(${Qt5Widgets_DEFINITIONS})
@@ -76,6 +74,8 @@ qt5_add_resources(MOC_RES_H
 )
 
 qt5_generate_moc(gui_main.cpp gui_main.moc)
+
+# Add Qt executables
 add_executable(srcl_gui ${SOURCE_FILES} ${MOC_SRC_H} ${MOC_GUI_H} ${MOC_RES_H})
 set_target_properties(srcl_gui PROPERTIES COMPILE_FLAGS "-std=c++11 -g")
-target_link_libraries(srcl_gui map squaregrid vis ${OpenCV_LIBS} ${Boost_LIBRARIES} ${VTK_LIBRARIES} Qt5::Widgets)
+target_link_libraries(srcl_gui map squaregrid vis ${OpenCV_LIBS} ${VTK_LIBRARIES} Qt5::Widgets)
