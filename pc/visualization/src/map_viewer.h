@@ -16,7 +16,7 @@
 #include "opencv2/opencv.hpp"
 
 // User headers
-#include "graph/graph.h"// Qt headers
+#include "graph/graph.h"
 #include "square_grid/square_grid.h"
 #include "quadtree/quad_tree.h"
 
@@ -41,21 +41,21 @@ public:
 private:
 	// images
 	cv::Mat raw_image_;
-	cv::Mat qtree_map_;
-	cv::Mat sgrid_map_;
+	cv::Mat map_image_;
 
 	// workspace decomposition
 	bool disp_once;
 	CellDecompMethod cell_decomp_method_;
-	std::shared_ptr<SquareGrid> sgrid_;
-	std::shared_ptr<Graph_t<SquareCell*>> sgrid_graph_;
-
-	std::shared_ptr<QuadTree> qtree_;
-	std::shared_ptr<Graph_t<QuadTreeNode*>> qtree_graph_;
 	uint8_t qtree_depth_;
 
 public:
-	cv::Mat GetLoadedMap() const {return raw_image_;}
+	//cv::Mat GetLoadedMap() const {return raw_image_;}
+	bool HasMapLoaded() const {
+		if(raw_image_.data)
+			return true;
+		else
+			return false;
+	}
 
 public:
 	bool ReadMapFromFile(std::string file_name);

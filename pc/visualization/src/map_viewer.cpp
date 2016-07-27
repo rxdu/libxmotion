@@ -47,45 +47,13 @@ bool MapViewer::ReadMapFromFile(std::string file_name)
 
 void MapViewer::SaveResultToFile(std::string file_name)
 {
-//	Mat image_to_save;
-//
-//	if(ui->rbUseQTree->isChecked())
-//	{
-//		if(!qtree_map_.empty())
-//		{
-//			qtree_map_.copyTo(image_to_save);
-//		}
-//		else
-//		{
-//			ui->statusBar->showMessage(tr("No avaialable map data to save."));
-//			return;
-//		}
-//	}
-//	else if(ui->rbUseSGrid->isChecked())
-//	{
-//		if(!sgrid_map_.empty())
-//		{
-//			sgrid_map_.copyTo(image_to_save);;
-//		}
-//		else
-//		{
-//			ui->statusBar->showMessage(tr("No avaialable map data to save."));
-//			return;
-//		}
-//	}
-//
-//	QString new_filename = QFileDialog::getSaveFileName(this,
-//			tr("Save Map to File"),"/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/planning/data",tr("Map Images (*.png *.jpg)"));
-//
-//	if(!new_filename.contains(".jpg",Qt::CaseSensitivity::CaseInsensitive) &&
-//			!new_filename.contains(".png",Qt::CaseSensitivity::CaseInsensitive))
-//	{
-//		new_filename.append(".jpg");
-//	}
-//
-//	if(!new_filename.isEmpty()) {
-//		imwrite(new_filename.toStdString(), image_to_save);
-//	}
+	Mat image_to_save;
+
+	map_image_.copyTo(image_to_save);
+
+	if(!file_name.empty()) {
+		imwrite(file_name, image_to_save);
+	}
 }
 
 Mat MapViewer::DecomposeWorkspace(DecomposeConfig config)
@@ -96,44 +64,36 @@ Mat MapViewer::DecomposeWorkspace(DecomposeConfig config)
 
     if(config.method == CellDecompMethod::SQUARE_GRID)
     {
-        std::tuple<std::shared_ptr<SquareGrid> , Mat> sg_map;
-
-        sg_map = SGridBuilder::BuildSquareGridMap(raw_image_, 32);
-        sgrid_ = std::get<0>(sg_map);
-        sgrid_map_ = std::get<1>(sg_map);
+    	std::tuple<std::shared_ptr<SquareGrid> , Mat> sg_map = SGridBuilder::BuildSquareGridMap(raw_image_, 32);
+        std::shared_ptr<SquareGrid> sgrid = std::get<0>(sg_map);
+        map_image_ = std::get<1>(sg_map);
 
         // build graph from square grid
-        sgrid_graph_ = GraphBuilder::BuildFromSquareGrid(sgrid_, true);
+        std::shared_ptr<Graph_t<SquareCell*>> sgrid_graph = GraphBuilder::BuildFromSquareGrid(sgrid, true);
 
         GraphVis vis;
-
-        if (sgrid_map_.empty())
-            vis.VisSquareGrid(*sgrid_, vis_img);
-        else
-            vis.VisSquareGrid(*sgrid_, sgrid_map_, vis_img);
+        vis.VisSquareGrid(*sgrid, map_image_, vis_img);
 
         /*** put the graph on top of the square grid ***/
-        vis.VisSquareGridGraph(*sgrid_graph_, vis_img, vis_img, true);
-        sgrid_map_ = vis_img;
+        vis.VisSquareGridGraph(*sgrid_graph, vis_img, vis_img, true);
+        map_image_ = vis_img;
 
         std::cout << "decomposed using square grid" << std::endl;
     }
     else if(config.method == CellDecompMethod::QUAD_TREE)
     {
-        std::tuple<std::shared_ptr<QuadTree> , Mat> qt_map;
+    	std::tuple<std::shared_ptr<QuadTree> , Mat> qt_map = QTreeBuilder::BuildQuadTreeMap(raw_image_, config.qtree_depth);
+        std::shared_ptr<QuadTree> qtree = std::get<0>(qt_map);
+        map_image_ = std::get<1>(qt_map);
 
-        qt_map = QTreeBuilder::BuildQuadTreeMap(raw_image_, config.qtree_depth);
-        qtree_ = std::get<0>(qt_map);
-        qtree_map_ = std::get<1>(qt_map);
-
-        // build graph from square grid
-        qtree_graph_ = GraphBuilder::BuildFromQuadTree(qtree_);
+        // build graph from quad tree
+        std::shared_ptr<Graph_t<QuadTreeNode*>> qtree_graph = GraphBuilder::BuildFromQuadTree(qtree);
 
         GraphVis vis;
-        vis.VisQuadTree(*qtree_, qtree_map_, vis_img, TreeVisType::ALL_SPACE);
-        vis.VisQTreeGraph(*qtree_graph_, vis_img, vis_img, true, false);
+        vis.VisQuadTree(*qtree, map_image_, vis_img, TreeVisType::ALL_SPACE);
+        vis.VisQTreeGraph(*qtree_graph, vis_img, vis_img, true, false);
 
-        qtree_map_ = vis_img;
+        map_image_ = vis_img;
 
         std::cout << "decomposed using quadtree" << std::endl;
     }

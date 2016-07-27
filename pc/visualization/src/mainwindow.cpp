@@ -20,35 +20,35 @@
 using namespace cv;
 using namespace srcl_ctrl;
 using namespace std;
-using namespace octomap;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
+	image_label_(new ImageLabel(this)),
 	vtk_viewer_(new VtkViewer(parent)),
 	map_viewer_(new MapViewer())
 {
     ui->setupUi(this);
+    //ui->actionOpenMap->setIcon(QIcon(":/icons/icons/open_map.ico"));
 
     // 2d visualization
-    image_label_ = new ImageLabel(this);
     ui->tab2DScene->layout()->addWidget(image_label_);
     ui->tab2DScene->layout()->update();
 
-    //ui->actionOpenMap->setIcon(QIcon(":/icons/icons/open_map.ico"));
+    // 3d visualization - vtk
+    ui->tab3DScene->layout()->addWidget(vtk_viewer_->GetQVTKWidget());
+    ui->tab3DScene->layout()->update();
+    vtk_viewer_->ResetView();
 
+    // default configurations
     ui->rbUseSGrid->setChecked(true);
     ui->sbQTreeMaxDepth->setValue(6);
     ui->sbQTreeMaxDepth->setMinimum(0);
+    ui->sbQTreeMaxDepth->setMaximum(8);
 
-    // 3d visualization - vtk
-    //ui->tab3DScene->layout()->addWidget(qvtk_widget_);
-    ui->tab3DScene->layout()->addWidget(vtk_viewer_->GetQVTKWidget());
-    ui->tab3DScene->layout()->update();
-
-    vtk_viewer_->ResetView();
-
-    decompose_config_.method = CellDecompMethod::QUAD_TREE;
+    decompose_config_.method = CellDecompMethod::SQUARE_GRID;
+    ui->sbQTreeMaxDepth->setEnabled(false);
+    ui->lbQTreeMaxDepth->setEnabled(false);
 
     // connect image label with main window
 //    connect(image_label_,SIGNAL(NewImagePositionClicked(long, long, double)),this,SLOT(UpdateTargetPosition(long, long, double)));
@@ -65,7 +65,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::UpdateDisplayMap()
 {
-    if(map_viewer_->GetLoadedMap().data)
+    if(map_viewer_->HasMapLoaded())
     {
         Mat vis_img = map_viewer_->DecomposeWorkspace(decompose_config_);
 
@@ -182,26 +182,19 @@ void srcl_ctrl::MainWindow::on_actionOpenOctomap_triggered()
 
     if(!octomap_filename.isEmpty()) {
         // read octomap
-//    	OcTree* tree = new octomap::OcTree(octomap_filename);
-
-//    	std::cout << "octree size: " << tree->size() << std::endl;
-//        if (!raw_image_.data) {
-//            printf("No image data \n");
-//            ui->statusBar->showMessage(tr("Failed to load map."));
-
-//            return;
-//        }
-//        else {
-//            this->UpdateDisplayMap(raw_image_);
-
-//            std::string stdmsg = "Successfully loaded map: " + map_file_name.toStdString();
-//            QString msg = QString::fromStdString(stdmsg);
-//            ui->statusBar->showMessage(msg);
-//        }
     }
 }
 
 void srcl_ctrl::MainWindow::on_pushButton_clicked()
 {
-	map_viewer_->SaveResultToFile("test_result");
+	QString new_filename = QFileDialog::getSaveFileName(this,
+				tr("Save Map to File"),"/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/planning/data",tr("Map Images (*.png *.jpg)"));
+
+	if(!new_filename.contains(".jpg",Qt::CaseSensitivity::CaseInsensitive) &&
+			!new_filename.contains(".png",Qt::CaseSensitivity::CaseInsensitive))
+	{
+		new_filename.append(".jpg");
+	}
+
+	map_viewer_->SaveResultToFile(new_filename.toStdString());
 }

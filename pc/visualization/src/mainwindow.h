@@ -20,10 +20,6 @@
 // OpenCV headers
 #include "opencv2/opencv.hpp"
 
-// Octomap headers
-#include <octomap/octomap.h>
-#include <octomap/OcTree.h>
-
 // User headers
 #include "image_label.h"
 #include "vtk_viewer.h"
@@ -44,25 +40,22 @@ public:
     ~MainWindow();
 
 private:
+    // GUI/Viewer objects
     Ui::MainWindow *ui;
     ImageLabel* image_label_;
     VtkViewer* vtk_viewer_;
     MapViewer* map_viewer_;
 
 private:
+    // GUI internal function
+    QImage ConvertMatToQImage(const cv::Mat& mat);
+
+private:
     // workspace decomposition
     DecomposeConfig decompose_config_;
 
 private:
-    void SetupMap();
-    cv::Mat DecomposeWorkspace(cv::Mat map_img, CellDecompMethod method);
     void UpdateDisplayMap();
-
-//    void UpdateMap();
-
-private:
-    QImage ConvertMatToQImage(const cv::Mat& mat);
-//    void UpdateQuadPositionOnMap(const geometry_msgs::PoseStampedConstPtr& msg);
 
 //public slots:
 //	void UpdateTargetPosition(long x, long y, double raw2scale_ratio);
