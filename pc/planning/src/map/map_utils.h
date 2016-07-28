@@ -27,8 +27,10 @@ public:
 	static std::vector<Position2D> GetWaypointsFromSGridPath(std::vector<Vertex<SquareCell*>*>& path);
 	static std::vector<Position2D> GetWaypointsFromQTreePath(std::vector<Vertex<QuadTreeNode*>*>& path);
 
-	static Position2Dd CooridnateFromMapToWorld(Position2D map_pos);
-	static Position2D CooridnateFromWorldToMap(Position2Dd map_pos);
+	static Position2Dd CoordinatesFromMapToWorld(Position2D map_pos, MapInfo info);
+	static Position2D CoordinatesFromWorldToMap(Position2Dd map_pos, MapInfo info);
+	static Position2D CoordinatesFromPaddedToOriginal(Position2D pad_pos, MapInfo info);
+	static Position2D CoordinatesFromOriginalToPadded(Position2D ori_pos, MapInfo info);
 };
 
 }

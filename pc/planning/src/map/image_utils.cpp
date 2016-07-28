@@ -53,7 +53,7 @@ PaddingSize ImageUtils::PadImageToSquared(cv::InputArray _src, cv::OutputArray _
 		return psize;
 	}
 
-	std::cout << "padded size:" << padded_size << std::endl;
+	//std::cout << "padded size:" << padded_size << std::endl;
 	_dst.create(padded_size, padded_size, CV_8UC1);
 	Mat dst = _dst.getMat();
 
@@ -109,8 +109,8 @@ PaddingSize ImageUtils::PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst
 	_dst.create(padded_size_y, padded_size_x, CV_8UC1);
 	Mat dst = _dst.getMat();
 
-	std::cout << "original size: ( " << src.cols << " , " << src.rows << " )" << std::endl;
-	std::cout << "padded size: ( " << dst.cols << " , " << dst.rows << " )" << std::endl;
+	//std::cout << "original size: ( " << src.cols << " , " << src.rows << " )" << std::endl;
+	//std::cout << "padded size: ( " << dst.cols << " , " << dst.rows << " )" << std::endl;
 
 	int left, right, top, bottom;
 

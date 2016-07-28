@@ -39,13 +39,43 @@ std::vector<Position2D> MapUtils::GetWaypointsFromQTreePath(std::vector<Vertex<Q
 	return waypoints;
 }
 
-Position2Dd MapUtils::CooridnateFromMapToWorld(Position2D map_pos)
+Position2Dd MapUtils::CoordinatesFromMapToWorld(Position2D map_pos, MapInfo info)
 {
+	Position2Dd rpos;
 
+	rpos.x = map_pos.x / info.scale_x;
+	rpos.y = map_pos.y / info.scale_y;
+
+	if(rpos.x > info.world_size_x)
+		rpos.x = info.world_size_x;
+	if(rpos.y > info.world_size_y)
+		rpos.y = info.world_size_y;
+
+	std::cout << std::endl;
+	std::cout << "map scale: " << info.scale_x << " , " << info.scale_y << std::endl;
+	std::cout << "input: " << map_pos.x << " , " << map_pos.y << std::endl;
+	std::cout << "convertion result: " << rpos.x << " , " << rpos.y << std::endl;
+
+	return rpos;
 }
 
-Position2D MapUtils::CooridnateFromWorldToMap(Position2Dd map_pos)
+Position2D MapUtils::CoordinatesFromWorldToMap(Position2Dd map_pos, MapInfo info)
 {
+	Position2D rpos;
 
+	return rpos;
 }
 
+Position2D MapUtils::CoordinatesFromPaddedToOriginal(Position2D pad_pos, MapInfo info)
+{
+	Position2D rpos;
+
+	return rpos;
+}
+
+Position2D MapUtils::CoordinatesFromOriginalToPadded(Position2D ori_pos, MapInfo info)
+{
+	Position2D rpos;
+
+	return rpos;
+}

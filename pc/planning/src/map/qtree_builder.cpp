@@ -267,12 +267,15 @@ Map_t<QuadTree> QTreeBuilder::BuildQuadTreeMap(cv::InputArray _src, unsigned int
 	PaddingSize psize = ImageUtils::PadImageToSquared(image_bin, map.padded_image);
 
 	// generate map info
-	map.info.map_size_x = map.padded_image.cols;
-	map.info.map_size_y = map.padded_image.rows;
+	map.info.map_size_x = map.input_image.cols;
+	map.info.map_size_y = map.input_image.rows;
 	map.info.padded_top = psize.top;
 	map.info.padded_bottom = psize.bottom;
 	map.info.padded_right = psize.right;
 	map.info.padded_left = psize.left;
+
+	map.info.scale_x = static_cast<double>(map.info.map_size_x)/map.info.world_size_x;
+	map.info.scale_y = static_cast<double>(map.info.map_size_y)/map.info.world_size_y;
 
 	map.data_model = QTreeBuilder::BuildQuadTree(_src, max_depth);
 

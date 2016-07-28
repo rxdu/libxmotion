@@ -68,12 +68,15 @@ Map_t<SquareGrid> SGridBuilder::BuildSquareGridMap(cv::InputArray _src, uint32_t
 	PaddingSize psize = ImageUtils::PadImageTo2Exp(image_bin, map.padded_image);
 
 	// generate map info
-	map.info.map_size_x = map.padded_image.cols;
-	map.info.map_size_y = map.padded_image.rows;
+	map.info.map_size_x = map.input_image.cols;
+	map.info.map_size_y = map.input_image.rows;
 	map.info.padded_top = psize.top;
 	map.info.padded_bottom = psize.bottom;
 	map.info.padded_right = psize.right;
 	map.info.padded_left = psize.left;
+
+	map.info.scale_x = 1; //static_cast<double>(map.info.map_size_x)/map.info.world_size_x;
+	map.info.scale_y = 1; //static_cast<double>(map.info.map_size_y)/map.info.world_size_y;
 
 	// create square grid
 	map.data_model = SGridBuilder::BuildSquareGrid(_src, cell_size);
