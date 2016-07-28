@@ -48,11 +48,6 @@ struct MapUtilsTest: testing::Test
 	}
 };
 
-//static Position2Dd CoordinatesFromMapToWorld(Position2D map_pos, MapInfo info);
-//static Position2D CoordinatesFromWorldToMap(Position2Dd map_pos, MapInfo info);
-//static Position2D CoordinatesFromPaddedToOriginal(Position2D pad_pos, MapInfo info);
-//static Position2D CoordinatesFromOriginalToPadded(Position2D ori_pos, MapInfo info);
-
 TEST_F(MapUtilsTest, MapToWorld)
 {
 	Position2D input;
@@ -93,6 +88,128 @@ TEST_F(MapUtilsTest, MapToWorld)
 	exp_value.y = minfo.world_size_y/2;
 	calc_value = MapUtils::CoordinatesFromMapToWorld(input, minfo);
 
+	//EXPECT_EQ(exp_value, calc_value);
+	EXPECT_LT(exp_value.x - calc_value.x , 0.1);
+	EXPECT_LT(exp_value.y - calc_value.y , 0.1);
+}
+
+TEST_F(MapUtilsTest, WorldToMap)
+{
+	Position2Dd input;
+	Position2D exp_value;
+	Position2D calc_value;
+
+	//  calculation 1
+	input.x = 0.0;
+	input.y = 0.0;
+	exp_value.x = 0;
+	exp_value.y = 0;
+	calc_value = MapUtils::CoordinatesFromWorldToMap(input, minfo);
+
+	EXPECT_EQ(exp_value, calc_value);
+
+	//  calculation 2
+	input.x = minfo.world_size_x;
+	input.y = minfo.world_size_y;
+	exp_value.x = minfo.map_size_x;
+	exp_value.y = minfo.map_size_y;
+	calc_value = MapUtils::CoordinatesFromWorldToMap(input, minfo);
+
+	EXPECT_EQ(exp_value, calc_value);
+
+	//  calculation 3
+	input.x = minfo.world_size_x+1;
+	input.y = minfo.world_size_y+1;
+	exp_value.x = minfo.map_size_x;
+	exp_value.y = minfo.map_size_y;
+	calc_value = MapUtils::CoordinatesFromWorldToMap(input, minfo);
+
+	EXPECT_EQ(exp_value, calc_value);
+
+	//  calculation 4
+	input.x = minfo.world_size_x/2;
+	input.y = minfo.world_size_y/2;
+	exp_value.x = minfo.map_size_x/2;
+	exp_value.y = minfo.map_size_y/2;
+	calc_value = MapUtils::CoordinatesFromWorldToMap(input, minfo);
+
+	EXPECT_EQ(exp_value, calc_value);
+}
+
+TEST_F(MapUtilsTest, PaddedToOriginal)
+{
+	Position2D input;
+	Position2D exp_value;
+	Position2D calc_value;
+
+	//  calculation 1
+	input.x = 0.0;
+	input.y = 0.0;
+	exp_value.x = 0;
+	exp_value.y = 0;
+	calc_value = MapUtils::CoordinatesFromPaddedToOriginal(input, minfo);
+
+	EXPECT_EQ(exp_value, calc_value);
+
+	//  calculation 2
+	input.x = minfo.padded_left;
+	input.y = minfo.padded_top;
+	exp_value.x = 0;
+	exp_value.y = 0;
+	calc_value = MapUtils::CoordinatesFromPaddedToOriginal(input, minfo);
+
+	EXPECT_EQ(exp_value, calc_value);
+
+	//  calculation 3
+	input.x = minfo.map_size_x + minfo.padded_left;
+	input.y = minfo.map_size_y + minfo.padded_top;
+	exp_value.x = minfo.map_size_x;
+	exp_value.y = minfo.map_size_y;
+	calc_value = MapUtils::CoordinatesFromPaddedToOriginal(input, minfo);
+
+	EXPECT_EQ(exp_value, calc_value);
+
+	//  calculation 4
+	input.x = minfo.map_size_x + minfo.padded_left + minfo.padded_right;
+	input.y = minfo.map_size_y + minfo.padded_top + minfo.padded_bottom;
+	exp_value.x = minfo.map_size_x;
+	exp_value.y = minfo.map_size_y;
+	calc_value = MapUtils::CoordinatesFromPaddedToOriginal(input, minfo);
+
+	EXPECT_EQ(exp_value, calc_value);
+}
+
+TEST_F(MapUtilsTest, OriginalToPadded)
+{
+	Position2D input;
+	Position2D exp_value;
+	Position2D calc_value;
+
+	//  calculation 1
+	input.x = 0.0;
+	input.y = 0.0;
+	exp_value.x = minfo.padded_left;
+	exp_value.y = minfo.padded_top;
+	calc_value = MapUtils::CoordinatesFromOriginalToPadded(input, minfo);
+
+	EXPECT_EQ(exp_value, calc_value);
+
+	//  calculation 2
+	input.x = minfo.map_size_x;
+	input.y = minfo.map_size_y;
+	exp_value.x = minfo.map_size_x + minfo.padded_left;
+	exp_value.y = minfo.map_size_y + minfo.padded_top;
+	calc_value = MapUtils::CoordinatesFromOriginalToPadded(input, minfo);
+
+	EXPECT_EQ(exp_value, calc_value);
+
+	//  calculation 3
+	input.x = minfo.map_size_x/2;
+	input.y = minfo.map_size_y/2;
+	exp_value.x = (minfo.map_size_x + minfo.padded_left + minfo.padded_right)/2;
+	exp_value.y = (minfo.map_size_y + minfo.padded_top + minfo.padded_bottom)/2 - 1; // -1 is to compensate the roundup error
+	calc_value = MapUtils::CoordinatesFromOriginalToPadded(input, minfo);
+	std::cout << "expected value: " << exp_value.x << " , " << exp_value.y << std::endl;
 	EXPECT_EQ(exp_value, calc_value);
 }
 

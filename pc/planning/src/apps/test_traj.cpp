@@ -122,7 +122,7 @@ int main(int argc, char** argv )
 	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 
 	/*** convert path to trajectory ***/
-	auto waypoints = MapUtils::GetWaypointsFromSGridPath(path);
+	auto waypoints = MapUtils::GetWaypointsFromVertexSequence(path);
 
 	for(auto& pt : waypoints)
 	{
