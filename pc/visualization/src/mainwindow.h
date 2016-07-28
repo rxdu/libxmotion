@@ -65,6 +65,7 @@ private slots:
     void on_rbUseQTree_clicked();
     void on_rbUseSGrid_clicked();
     void on_sbQTreeMaxDepth_valueChanged(int val);
+    void on_cbShowPadding_toggled(bool checked);
     void on_pushButton_clicked();
 
     void on_actionOpenMap_triggered();

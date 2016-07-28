@@ -83,8 +83,8 @@ Mat MapViewer::DecomposeWorkspace(DecomposeConfig config)
         	vis_img = map_image_;
         else
         {
-        	Range rngx(0 + sg_map.info.padded_size_x/2, temp_img.cols - sg_map.info.padded_size_x/2);
-        	Range rngy(0 + sg_map.info.padded_size_y/2, temp_img.rows - sg_map.info.padded_size_y/2);
+        	Range rngx(0 + sg_map.info.padded_left, temp_img.cols - sg_map.info.padded_right);
+        	Range rngy(0 + sg_map.info.padded_top, temp_img.rows - sg_map.info.padded_bottom);
 
         	// Points and Size go (x,y); (width,height) ,- Mat has (row,col).
         	vis_img = map_image_(rngy,rngx);
@@ -109,8 +109,8 @@ Mat MapViewer::DecomposeWorkspace(DecomposeConfig config)
         	vis_img = map_image_;
         else
         {
-        	Range rngx(0 + qt_map.info.padded_size_x/2, temp_img.cols - qt_map.info.padded_size_x/2);
-        	Range rngy(0 + qt_map.info.padded_size_y/2, temp_img.rows - qt_map.info.padded_size_y/2);
+        	Range rngx(0 + qt_map.info.padded_left, temp_img.cols - qt_map.info.padded_right);
+        	Range rngy(0 + qt_map.info.padded_top, temp_img.rows - qt_map.info.padded_bottom);
 
         	vis_img = map_image_(rngy,rngx);
         }

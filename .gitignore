@@ -16,6 +16,9 @@ pc/gui/CMakeLists.txt.user
 docs/doxygen/html/
 docs/doxygen/latex
 
+# Qt Creator
+pc/visualization/CMakeLists.txt.user
+
 # LCM
 pc/comm/lcmtypes/c
 pc/comm/lcmtypes/cpp

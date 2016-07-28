@@ -264,13 +264,15 @@ Map_t<QuadTree> QTreeBuilder::BuildQuadTreeMap(cv::InputArray _src, unsigned int
 
 	// pad image to 2^n on each side so that we can calculate
 	//	the dimension of the grid more conveniently
-	ImageUtils::PadImageToSquared(image_bin, map.padded_image);
+	PaddingSize psize = ImageUtils::PadImageToSquared(image_bin, map.padded_image);
 
 	// generate map info
 	map.info.map_size_x = map.padded_image.cols;
 	map.info.map_size_y = map.padded_image.rows;
-	map.info.padded_size_x = map.padded_image.cols - image_bin.cols;
-	map.info.padded_size_y = map.padded_image.rows - image_bin.rows;
+	map.info.padded_top = psize.top;
+	map.info.padded_bottom = psize.bottom;
+	map.info.padded_right = psize.right;
+	map.info.padded_left = psize.left;
 
 	map.data_model = QTreeBuilder::BuildQuadTree(_src, max_depth);
 

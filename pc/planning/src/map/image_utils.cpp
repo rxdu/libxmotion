@@ -21,13 +21,14 @@ void ImageUtils::BinarizeImage(cv::InputArray _src, cv::OutputArray _dst, uint8_
 	threshold(src, dst, thresh, 255, THRESH_BINARY);
 }
 
-bool ImageUtils::PadImageToSquared(cv::InputArray _src, cv::OutputArray _dst)
+PaddingSize ImageUtils::PadImageToSquared(cv::InputArray _src, cv::OutputArray _dst)
 {
 	// create a image with size of power of 2
 	Mat src = _src.getMat();
 
 	unsigned long img_max_side;
 	unsigned long padded_size = -1;
+	PaddingSize psize;
 
 	if(src.cols > src.rows)
 		img_max_side = src.cols;
@@ -44,8 +45,13 @@ bool ImageUtils::PadImageToSquared(cv::InputArray _src, cv::OutputArray _dst)
 		}
 	}
 
-	if(padded_size == -1)
-		return false;
+	if(padded_size == -1) {
+		psize.top = -1;
+		psize.bottom = -1;
+		psize.right = -1;
+		psize.left = -1;
+		return psize;
+	}
 
 	std::cout << "padded size:" << padded_size << std::endl;
 	_dst.create(padded_size, padded_size, CV_8UC1);
@@ -53,24 +59,25 @@ bool ImageUtils::PadImageToSquared(cv::InputArray _src, cv::OutputArray _dst)
 
 	int left, right, top, bottom;
 
-	left = (dst.cols - src.cols)/2;
-	right = dst.cols - src.cols - left;
-	top = (dst.rows - src.rows)/2;
-	bottom = dst.rows - src.rows - top;
+	psize.left = (dst.cols - src.cols)/2;
+	psize.right = dst.cols - src.cols - psize.left;
+	psize.top = (dst.rows - src.rows)/2;
+	psize.bottom = dst.rows - src.rows - psize.top;
 
 	Scalar value = Scalar(0);
-	copyMakeBorder(_src, dst, top, bottom, left, right, BORDER_CONSTANT,value);
+	copyMakeBorder(_src, dst, psize.top, psize.bottom, psize.left, psize.right, BORDER_CONSTANT,value);
 
-	return true;
+	return psize;
 }
 
-bool ImageUtils::PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst)
+PaddingSize ImageUtils::PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst)
 {
 	// create a image with size of power of 2
 	Mat src = _src.getMat();
 
 	unsigned long padded_size_x = -1;
 	unsigned long padded_size_y = -1;
+	PaddingSize psize;
 
 	// find the minimal size of the padded image
 	for(unsigned int i = 0; i <= 16; i++)
@@ -91,8 +98,13 @@ bool ImageUtils::PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst)
 		}
 	}
 
-	if(padded_size_x == -1 || padded_size_y == -1)
-		return false;
+	if(padded_size_x == -1 || padded_size_y == -1) {
+		psize.top = -1;
+		psize.bottom = -1;
+		psize.right = -1;
+		psize.left = -1;
+		return psize;
+	}
 
 	_dst.create(padded_size_y, padded_size_x, CV_8UC1);
 	Mat dst = _dst.getMat();
@@ -102,15 +114,15 @@ bool ImageUtils::PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst)
 
 	int left, right, top, bottom;
 
-	left = (dst.cols - src.cols)/2;
-	right = dst.cols - src.cols - left;
-	top = (dst.rows - src.rows)/2;
-	bottom = dst.rows - src.rows - top;
+	psize.left = (dst.cols - src.cols)/2;
+	psize.right = dst.cols - src.cols - psize.left;
+	psize.top = (dst.rows - src.rows)/2;
+	psize.bottom = dst.rows - src.rows - psize.top;
 
 	Scalar value = Scalar(0);
-	copyMakeBorder(_src, dst, top, bottom, left, right, BORDER_CONSTANT,value);
+	copyMakeBorder(_src, dst, psize.top, psize.bottom, psize.left, psize.right, BORDER_CONSTANT,value);
 
-	return true;
+	return psize;
 }
 
 OccupancyType ImageUtils::CheckAreaOccupancy(cv::InputArray _src, BoundingBox area)

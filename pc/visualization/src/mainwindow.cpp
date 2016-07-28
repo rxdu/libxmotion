@@ -45,11 +45,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->sbQTreeMaxDepth->setValue(6);
     ui->sbQTreeMaxDepth->setMinimum(0);
     ui->sbQTreeMaxDepth->setMaximum(8);
-
-    decompose_config_.method = CellDecompMethod::SQUARE_GRID;
-    decompose_config_.show_padded_area = true;
     ui->sbQTreeMaxDepth->setEnabled(false);
     ui->lbQTreeMaxDepth->setEnabled(false);
+    ui->cbShowPadding->setChecked(true);
+
+    decompose_config_.method = CellDecompMethod::SQUARE_GRID;
+    decompose_config_.show_padded_area = ui->cbShowPadding->isChecked();
+
 
     // connect image label with main window
 //    connect(image_label_,SIGNAL(NewImagePositionClicked(long, long, double)),this,SLOT(UpdateTargetPosition(long, long, double)));
@@ -202,4 +204,13 @@ void srcl_ctrl::MainWindow::on_pushButton_clicked()
 	}
 
 	map_viewer_->SaveResultToFile(new_filename.toStdString());
+}
+
+void srcl_ctrl::MainWindow::on_cbShowPadding_toggled(bool checked)
+{
+	if(decompose_config_.show_padded_area != checked)
+	{
+		decompose_config_.show_padded_area = checked;
+		this->UpdateDisplayMap();
+	}
 }

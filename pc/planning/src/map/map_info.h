@@ -19,8 +19,11 @@ typedef struct {
 	double world_size_y;
 	uint32_t map_size_x;	// in pixels
 	uint32_t map_size_y;
-	uint32_t padded_size_x;	// in pixels
-	uint32_t padded_size_y;
+
+	int16_t padded_top;	// in pixels
+	int16_t padded_bottom;
+	int16_t padded_right;
+	int16_t padded_left;
 	double scale;
 } MapInfo;
 

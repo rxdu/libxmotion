@@ -45,10 +45,10 @@ int main(int argc, char** argv )
 			sgrid_map = SGridBuilder::BuildSquareGridMap(input_map, 32);
 			use_input_image = true;
 
-			std::cout << "------------------" << std::endl;
-			std::cout << "map size: " << sgrid_map.info.map_size_x << " , " << sgrid_map.info.map_size_y << std::endl;
-			std::cout << "padded size: " << sgrid_map.info.padded_size_x << " , " << sgrid_map.info.padded_size_y << std::endl;
-			std::cout << "------------------" << std::endl;
+//			std::cout << "------------------" << std::endl;
+//			std::cout << "map size: " << sgrid_map.info.map_size_x << " , " << sgrid_map.info.map_size_y << std::endl;
+//			std::cout << "padded size: " << sgrid_map.info.padded_size_x << " , " << sgrid_map.info.padded_size_y << std::endl;
+//			std::cout << "------------------" << std::endl;
 		}
 	}
 	else{

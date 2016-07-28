@@ -18,6 +18,13 @@
 namespace srcl_ctrl
 {
 
+typedef struct {
+	int16_t top;
+	int16_t bottom;
+	int16_t left;
+	int16_t right;
+} PaddingSize;
+
 class ImageUtils{
 public:
 	ImageUtils(){};
@@ -25,8 +32,8 @@ public:
 
 public:
 	static void BinarizeImage(cv::InputArray _src, cv::OutputArray _dst, uint8_t thresh);
-	static bool PadImageToSquared(cv::InputArray _src, cv::OutputArray _dst);
-	static bool PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst);
+	static PaddingSize PadImageToSquared(cv::InputArray _src, cv::OutputArray _dst);
+	static PaddingSize PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst);
 
 	static OccupancyType CheckAreaOccupancy(cv::InputArray _src, BoundingBox area);
 };
