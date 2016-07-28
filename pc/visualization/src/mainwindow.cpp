@@ -192,7 +192,7 @@ void srcl_ctrl::MainWindow::on_actionOpenOctomap_triggered()
     }
 }
 
-void srcl_ctrl::MainWindow::on_pushButton_clicked()
+void srcl_ctrl::MainWindow::on_btnSaveMap_clicked()
 {
 	QString new_filename = QFileDialog::getSaveFileName(this,
 				tr("Save Map to File"),"/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/planning/data",tr("Map Images (*.png *.jpg)"));
