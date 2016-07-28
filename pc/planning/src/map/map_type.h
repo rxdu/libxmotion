@@ -16,11 +16,11 @@
 
 namespace srcl_ctrl {
 
-template<typename ImageType>
+template<typename DataModelType>
 struct Map{
 	MapInfo info;
 
-	std::shared_ptr<ImageType> data_model;
+	std::shared_ptr<DataModelType> data_model;
 	cv::Mat input_image;
 	cv::Mat padded_image;
 };

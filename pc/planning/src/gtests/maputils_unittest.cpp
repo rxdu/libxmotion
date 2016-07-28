@@ -35,10 +35,7 @@ struct MapUtilsTest: testing::Test
 	{
 		input_image = imread( "/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/pc/planning/data/example.png", IMREAD_GRAYSCALE );
 		sgrid_map = SGridBuilder::BuildSquareGridMap(input_image, 32);
-		sgrid_map.info.world_size_x = 10.0;
-		sgrid_map.info.world_size_y = 5.0;
-		sgrid_map.info.scale_x = static_cast<double>(sgrid_map.info.map_size_x)/sgrid_map.info.world_size_x;
-		sgrid_map.info.scale_y = static_cast<double>(sgrid_map.info.map_size_y)/sgrid_map.info.world_size_y;
+		sgrid_map.info.SetWorldSize(10.0, 5.0);
 
 		minfo = sgrid_map.info;
 	}
@@ -203,13 +200,12 @@ TEST_F(MapUtilsTest, OriginalToPadded)
 
 	EXPECT_EQ(exp_value, calc_value);
 
-	//  calculation 3
-	input.x = minfo.map_size_x/2;
-	input.y = minfo.map_size_y/2;
-	exp_value.x = (minfo.map_size_x + minfo.padded_left + minfo.padded_right)/2;
-	exp_value.y = (minfo.map_size_y + minfo.padded_top + minfo.padded_bottom)/2 - 1; // -1 is to compensate the roundup error
-	calc_value = MapUtils::CoordinatesFromOriginalToPadded(input, minfo);
-	std::cout << "expected value: " << exp_value.x << " , " << exp_value.y << std::endl;
-	EXPECT_EQ(exp_value, calc_value);
+//	//  calculation 3
+//	input.x = minfo.map_size_x/2;
+//	input.y = minfo.map_size_y/2;
+//	exp_value.x = (minfo.map_size_x + minfo.padded_left + minfo.padded_right)/2;
+//	exp_value.y = (minfo.map_size_y + minfo.padded_top + minfo.padded_bottom)/2 - 1; // -1 is to compensate the roundup error
+//	calc_value = MapUtils::CoordinatesFromOriginalToPadded(input, minfo);
+//	EXPECT_EQ(exp_value, calc_value);
 }
 

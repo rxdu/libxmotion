@@ -13,24 +13,24 @@ using namespace srcl_ctrl;
 
 ImageLabel::ImageLabel(QWidget *parent) :
     QWidget(parent),
-    scaled_height(0),
-    scaled_width(0)
+    scaled_height_(0),
+    scaled_width_(0)
 {
 }
 
 void ImageLabel::paintEvent(QPaintEvent *event) {
     QWidget::paintEvent(event);
 
-    if (pix.isNull())
+    if (pix_.isNull())
         return;
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    QSize pixSize = pix.size();
+    QSize pixSize = pix_.size();
     pixSize.scale(event->rect().size(), Qt::KeepAspectRatio);
 
-    QPixmap scaledPix = pix.scaled(pixSize,
+    QPixmap scaledPix = pix_.scaled(pixSize,
                                    Qt::KeepAspectRatio,
                                    Qt::SmoothTransformation
                                    );
@@ -60,22 +60,28 @@ void ImageLabel::paintEvent(QPaintEvent *event) {
     painter.translate(deltaX / 2, deltaY / 2);
 
     // store the scaled pixmap size
-    scaled_height = scaledPix.height();
-    scaled_width = scaledPix.width();
+    scaled_height_ = scaledPix.height();
+    scaled_width_ = scaledPix.width();
 
     // paint the pixmap
     painter.drawPixmap(QPoint(), scaledPix);
+
+    painter_height_ = painter.device()->height();
+    painter_width_ = painter.device()->width();
+
+    half_padded_width_ = (painter_width_ - scaled_width_)/2;
+    half_padded_height_ = (painter_height_ - scaled_height_)/2;
 }
 
 const QPixmap* ImageLabel::getPixmap() const {
-    return &pix;
+    return &pix_;
 }
 
 void ImageLabel::setPixmap (const QPixmap &pixmap){
-    pix = pixmap;
+    pix_ = pixmap;
 
-    scaled_height = pix.height();
-    scaled_width = pix.width();
+    scaled_height_ = pix_.height();
+    scaled_width_ = pix_.width();
 }
 
 void ImageLabel::mousePressEvent( QMouseEvent* ev )
@@ -84,14 +90,16 @@ void ImageLabel::mousePressEvent( QMouseEvent* ev )
     {
         QPoint pt = this->mapFrom(this, ev->pos());
 
-        if(pt.x() > scaled_width || pt.y() > scaled_height)
+        // ignore clicking if clicked on non-map area
+        if(pt.x() < half_padded_width_ || pt.x() > scaled_width_ + half_padded_width_
+        		|| pt.y() < half_padded_height_ || pt.y() > scaled_width_  + half_padded_height_)
             return;
 
-//        std::cout << "original size: " << pix.width() << " , " << pix.height() << std::endl;
-//        std::cout << "scaled size: " << scaled_width << " , " << scaled_height << std::endl;
-        std::cout << "mouse clicked position: " << pt.x() << " , " << pt.y() << std::endl;
+        std::cout << "mouse clicked position: "
+        		<< pt.x() - half_padded_width_ << " , "
+        		<< pt.y() - half_padded_height_ << std::endl;
 
-        double raw2scale_ratio = static_cast<double>(pix.width())/static_cast<double>(scaled_width);
+        double raw2scale_ratio = static_cast<double>(pix_.width())/static_cast<double>(scaled_width_);
 
         emit NewImagePositionClicked(pt.x(), pt.y(), raw2scale_ratio);
     }

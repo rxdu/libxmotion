@@ -27,6 +27,15 @@ typedef struct {
 
 	double scale_x;			// map/world
 	double scale_y;
+
+	void SetWorldSize(double x, double y)
+	{
+		this->world_size_x = x;
+		this->world_size_y = y;
+
+		this->scale_x = static_cast<double>(this->map_size_x)/this->world_size_x;
+		this->scale_y = static_cast<double>(this->map_size_y)/this->world_size_y;
+	}
 } MapInfo;
 
 }

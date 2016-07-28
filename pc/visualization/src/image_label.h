@@ -39,9 +39,13 @@ signals:
     void NewImagePositionClicked(long x, long y, double raw2scale_ratio);
 
 private:
-	QPixmap pix;
-    long scaled_height;
-    long scaled_width;
+	QPixmap pix_;
+    long scaled_height_;
+    long scaled_width_;
+    long painter_height_;
+    long painter_width_;
+    long half_padded_width_;
+    long half_padded_height_;
     void mousePressEvent(QMouseEvent* ev);
 };
 
