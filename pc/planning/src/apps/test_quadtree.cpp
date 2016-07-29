@@ -46,8 +46,11 @@ int main(int argc, char** argv )
     }
 
     // example to use quadtree builder
-    std::tuple<std::shared_ptr<QuadTree>, Mat> qt_map;
     qtree_map = QTreeBuilder::BuildQuadTreeMap(image_raw, 6);
+
+//    uint32_t test_id = qtree_map.data_model->GetIDFromPosition(0, 128);
+//    std::cout << "map size: " << qtree_map.padded_image.cols << "," << qtree_map.padded_image.rows << std::endl;
+//    std::cout << "tested id: " << test_id << std::endl;
 
     Mat image_tree, image_nodes;
     GraphVis vis;

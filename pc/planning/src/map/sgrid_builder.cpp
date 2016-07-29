@@ -43,7 +43,7 @@ std::shared_ptr<SquareGrid> SGridBuilder::BuildSquareGrid(cv::InputArray _src, u
 	for(uint32_t i = 0; i < row_num; i++)
 		for(uint32_t j = 0; j < col_num; j++)
 		{
-			uint32_t id = sgrid->GetIDFromPosition(i,j);
+			uint32_t id = sgrid->GetIDFromIndex(i,j);
 			if(ImageUtils::CheckAreaOccupancy(image_map, sgrid->cells_[id]->bbox_) == OccupancyType::OCCUPIED ||
 					ImageUtils::CheckAreaOccupancy(image_map, sgrid->cells_[id]->bbox_) == OccupancyType::MIXED)
 				sgrid->SetCellOccupancy(id, OccupancyType::OCCUPIED);

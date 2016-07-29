@@ -95,6 +95,9 @@ int main(int argc, char** argv )
 	/* Below this point, a SquareGrid object should be available for graph construction */
 	/************************************************************************************/
 
+//	uint32_t test_id = sgrid_map.data_model->GetIDFromPosition(95, 96);
+//	std::cout << "tested id: " << test_id << std::endl;
+
 	/*** Construct a graph from the square grid ***/
 	/*** the second argument determines if move along diagonal is allowed ***/
 	std::shared_ptr<Graph<SquareCell*>> graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);

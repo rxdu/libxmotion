@@ -10,16 +10,15 @@
 #include "map/graph_builder.h"
 #include "map/qtree_builder.h"
 #include "map/sgrid_builder.h"
-#include "graph_vis/graph_vis.h"
-#include "map/map_type.h"
 
 using namespace srcl_ctrl;
 using namespace cv;
 
 MapViewer::MapViewer():
-	disp_once(false),
-	cell_decomp_method_(CellDecompMethod::SQUARE_GRID),
-	qtree_depth_(6)
+	image_updated_(false),
+	squarecell_size_(0),
+	qtree_depth_(0),
+	active_decompose_(CellDecompMethod::NOT_SPECIFIED)
 {
 
 }
@@ -43,6 +42,12 @@ bool MapViewer::ReadMapFromFile(std::string file_name)
 	else
 		return false;
 
+	// reset flags if successfully read new image
+	image_updated_ = true;
+	qtree_depth_ = 0;
+	squarecell_size_ = 0;
+	active_decompose_ = CellDecompMethod::NOT_SPECIFIED;
+
 	return true;
 }
 
@@ -50,73 +55,126 @@ void MapViewer::SaveResultToFile(std::string file_name)
 {
 	Mat image_to_save;
 
-	map_image_.copyTo(image_to_save);
+	displayed_image_.copyTo(image_to_save);
 
 	if(!file_name.empty()) {
 		imwrite(file_name, image_to_save);
 	}
 }
 
-Mat MapViewer::DecomposeWorkspace(DecomposeConfig config)
+Mat MapViewer::DecomposeWorkspace(DecomposeConfig config, MapInfo &info)
 {
-    Mat vis_img, temp_img;
+    Mat vis_img;
 
-    std::cout << "trying to decompose workspace" << std::endl;
+    //std::cout << "trying to decompose workspace" << std::endl;
+
+    bool config_changed = false;
+    if((squarecell_size_ != config.square_cell_size) ||
+        		qtree_depth_ != config.qtree_depth)
+    	config_changed = true;
+
+    if(image_updated_ || config_changed) {
+    	image_updated_ = false;
+    	squarecell_size_ = config.square_cell_size;
+    	qtree_depth_ = config.qtree_depth;
+
+    	// build square grid map from image
+    	sg_map_ = SGridBuilder::BuildSquareGridMap(raw_image_, squarecell_size_);
+
+    	// build graph from square grid
+    	sgrid_graph_ = GraphBuilder::BuildFromSquareGrid(sg_map_.data_model, true);
+
+    	// build quad tree map from image
+    	qt_map_ = QTreeBuilder::BuildQuadTreeMap(raw_image_, qtree_depth_);
+
+    	// build graph from quad tree
+    	qtree_graph_ = GraphBuilder::BuildFromQuadTree(qt_map_.data_model);
+
+    	std::cout << "internal data structure updated" << std::endl;
+    }
 
     if(config.method == CellDecompMethod::SQUARE_GRID)
     {
-    	Map_t<SquareGrid> sg_map;
+    	info = sg_map_.info;
+    	active_decompose_ = CellDecompMethod::SQUARE_GRID;
 
-    	sg_map = SGridBuilder::BuildSquareGridMap(raw_image_, 32);
+    	graph_vis_.VisSquareGrid(*sg_map_.data_model, sg_map_.padded_image, vis_img);
 
-        // build graph from square grid
-        std::shared_ptr<Graph_t<SquareCell*>> sgrid_graph = GraphBuilder::BuildFromSquareGrid(sg_map.data_model, true);
+    	/*** put the graph on top of the square grid ***/
+    	graph_vis_.VisSquareGridGraph(*sgrid_graph_, vis_img, vis_img, true);
+    	displayed_image_ = vis_img;
 
-        GraphVis vis;
-        vis.VisSquareGrid(*sg_map.data_model, sg_map.padded_image, temp_img);
-
-        /*** put the graph on top of the square grid ***/
-        vis.VisSquareGridGraph(*sgrid_graph, temp_img, temp_img, true);
-        map_image_ = temp_img;
-
-        if(config.show_padded_area)
-        	vis_img = map_image_;
-        else
-        {
-        	Range rngx(0 + sg_map.info.padded_left, temp_img.cols - sg_map.info.padded_right);
-        	Range rngy(0 + sg_map.info.padded_top, temp_img.rows - sg_map.info.padded_bottom);
-
-        	// Points and Size go (x,y); (width,height) ,- Mat has (row,col).
-        	vis_img = map_image_(rngy,rngx);
-        }
-
-        std::cout << "decomposed using square grid" << std::endl;
+    	//std::cout << "decomposed using square grid" << std::endl;
     }
     else if(config.method == CellDecompMethod::QUAD_TREE)
     {
-    	Map_t<QuadTree> qt_map = QTreeBuilder::BuildQuadTreeMap(raw_image_, config.qtree_depth);
+    	info = qt_map_.info;
+    	active_decompose_ = CellDecompMethod::QUAD_TREE;
 
-        // build graph from quad tree
-        std::shared_ptr<Graph_t<QuadTreeNode*>> qtree_graph = GraphBuilder::BuildFromQuadTree(qt_map.data_model);
+    	graph_vis_.VisQuadTree(*qt_map_.data_model, qt_map_.padded_image, vis_img, TreeVisType::ALL_SPACE);
+    	graph_vis_.VisQTreeGraph(*qtree_graph_, vis_img, vis_img, true, false);
 
-        GraphVis vis;
-        vis.VisQuadTree(*qt_map.data_model, qt_map.padded_image, temp_img, TreeVisType::ALL_SPACE);
-        vis.VisQTreeGraph(*qtree_graph, temp_img, temp_img, true, false);
+    	displayed_image_ = vis_img;
 
-        map_image_ = temp_img;
-
-        if(config.show_padded_area)
-        	vis_img = map_image_;
-        else
-        {
-        	Range rngx(0 + qt_map.info.padded_left, temp_img.cols - qt_map.info.padded_right);
-        	Range rngy(0 + qt_map.info.padded_top, temp_img.rows - qt_map.info.padded_bottom);
-
-        	vis_img = map_image_(rngy,rngx);
-        }
-
-        std::cout << "decomposed using quadtree" << std::endl;
+    	//std::cout << "decomposed using quadtree" << std::endl;
     }
 
     return vis_img;
+}
+
+cv::Mat MapViewer::HighlightSelectedNode(uint32_t x, uint32_t y)
+{
+	cv::Mat vis_img;
+
+	if(active_decompose_ == CellDecompMethod::SQUARE_GRID)
+	{
+		uint64_t id = sg_map_.data_model->GetIDFromPosition(x, y);
+
+		auto node = sg_map_.data_model->cells_[id];
+
+//		std::cout << " ---- " << std::endl;
+//		std::cout << "cell size: " << sg_map_.data_model->cell_size_ << std::endl;
+//		std::cout << "selected id: " << id << " at position: " << x << " , " << y << std::endl;;
+
+		graph_vis_.VisSquareGrid(*sg_map_.data_model, sg_map_.padded_image, vis_img);
+		graph_vis_.VisSquareGridGraph(*sgrid_graph_, vis_img, vis_img, true);
+
+		if(node->occu_ == OccupancyType::FREE || node->occu_ == OccupancyType::INTERESTED)
+		{
+			Range rngx(sg_map_.data_model->cells_[id]->bbox_.x.min, sg_map_.data_model->cells_[id]->bbox_.x.max);
+			Range rngy(sg_map_.data_model->cells_[id]->bbox_.y.min, sg_map_.data_model->cells_[id]->bbox_.y.max);
+
+			vis_img(rngy,rngx) = Scalar(0,255,255);
+
+			displayed_image_ = vis_img;
+		}
+		else
+			displayed_image_ = vis_img;
+
+	}
+	else if(active_decompose_ == CellDecompMethod::QUAD_TREE)
+	{
+		uint64_t id = qt_map_.data_model->GetIDFromPosition(x, y);
+
+		auto node = qtree_graph_->GetVertexFromID(id)->bundled_data_;
+
+		graph_vis_.VisQuadTree(*qt_map_.data_model, qt_map_.padded_image, vis_img, TreeVisType::ALL_SPACE);
+		graph_vis_.VisQTreeGraph(*qtree_graph_, vis_img, vis_img, true, false);
+
+		if(id == 0)
+		{
+			displayed_image_ = vis_img;
+		}
+		else
+		{
+			Range rngx(node->bounding_box_.x.min, node->bounding_box_.x.max);
+			Range rngy(node->bounding_box_.y.min, node->bounding_box_.y.max);
+
+			vis_img(rngy,rngx) = Scalar(0,255,255);
+
+			displayed_image_ = vis_img;
+		}
+	}
+
+	return vis_img;
 }

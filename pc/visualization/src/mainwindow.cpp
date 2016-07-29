@@ -16,6 +16,7 @@
 
 // user
 #include "mainwindow.h"
+#include "map/map_utils.h"
 
 using namespace cv;
 using namespace std;
@@ -26,7 +27,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
 	image_label_(new ImageLabel(this)),
 	vtk_viewer_(new VtkViewer(parent)),
-	map_viewer_(new MapViewer())
+	map_viewer_(new MapViewer()),
+	show_padded_area_(true)
 {
     ui->setupUi(this);
     //ui->actionOpenMap->setIcon(QIcon(":/icons/icons/open_map.ico"));
@@ -50,11 +52,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbShowPadding->setChecked(true);
 
     decompose_config_.method = CellDecompMethod::SQUARE_GRID;
-    decompose_config_.show_padded_area = ui->cbShowPadding->isChecked();
+    decompose_config_.square_cell_size = 32;
+    show_padded_area_ = ui->cbShowPadding->isChecked();
 
 
     // connect image label with main window
-//    connect(image_label_,SIGNAL(NewImagePositionClicked(long, long, double)),this,SLOT(UpdateTargetPosition(long, long, double)));
+    connect(image_label_,SIGNAL(NewImagePositionClicked(long, long, double)),this,SLOT(UpdateTargetPosition(long, long, double)));
 //    connect(ui->btnSendTraj, SIGNAL (clicked()), this, SLOT (BtnSendTrajectory()));
 }
 
@@ -66,13 +69,22 @@ MainWindow::~MainWindow()
     delete map_viewer_;
 }
 
-void MainWindow::UpdateDisplayMap()
+void MainWindow::UpdateWorkspaceMap()
 {
-	std::cout << "update display map" << std::endl;
+	std::cout << "update workspace map" << std::endl;
 
     if(map_viewer_->HasMapLoaded())
     {
-        Mat vis_img = map_viewer_->DecomposeWorkspace(decompose_config_);
+        Mat vis_img = map_viewer_->DecomposeWorkspace(decompose_config_, map_info_);
+
+        if(!show_padded_area_)
+        {
+        	Range rngx(0 + map_info_.padded_left, vis_img.cols - map_info_.padded_right);
+        	Range rngy(0 + map_info_.padded_top, vis_img.rows - map_info_.padded_bottom);
+
+        	// Points and Size go (x,y); (width,height) ,- Mat has (row,col).
+        	vis_img = vis_img(rngy,rngx);
+        }
 
         QImage map_image = ConvertMatToQImage(vis_img);
         QPixmap pix = QPixmap::fromImage(map_image);
@@ -82,6 +94,39 @@ void MainWindow::UpdateDisplayMap()
     }
     else
     	std::cerr << "No map loaded for display." << std::endl;
+}
+
+void MainWindow::ColorCellOnMap(uint32_t x, uint32_t y)
+{
+	if(map_viewer_->HasMapLoaded())
+	{
+		Mat vis_img = map_viewer_->HighlightSelectedNode(x, y);
+
+		if(!show_padded_area_)
+		{
+			Range rngx(0 + map_info_.padded_left, vis_img.cols - map_info_.padded_right);
+			Range rngy(0 + map_info_.padded_top, vis_img.rows - map_info_.padded_bottom);
+
+			// Points and Size go (x,y); (width,height) ,- Mat has (row,col).
+			vis_img = vis_img(rngy,rngx);
+		}
+
+		QImage map_image = ConvertMatToQImage(vis_img);
+		QPixmap pix = QPixmap::fromImage(map_image);
+
+		image_label_->setPixmap(pix);
+		image_label_->update();
+	}
+}
+
+MapCooridnate MainWindow::CoordinatesFromDisplayToPadded(long x, long y, double raw2scale_ratio)
+{
+	MapCooridnate rpos;
+
+	rpos.x = x * raw2scale_ratio;
+	rpos.y = y * raw2scale_ratio;
+
+	return rpos;
 }
 
 QImage MainWindow::ConvertMatToQImage(const Mat& mat)
@@ -116,6 +161,45 @@ QImage MainWindow::ConvertMatToQImage(const Mat& mat)
     }
 }
 
+void srcl_ctrl::MainWindow::UpdateTargetPosition(long x, long y, double raw2scale_ratio)
+{
+	std::cout << "mouse clicked position: " << x << " , " << y << std::endl;
+
+	MapCooridnate map_pos;
+	MapCooridnate pos = CoordinatesFromDisplayToPadded(x,y,raw2scale_ratio);
+
+	std::cout << "image position: " << pos.x << " , " << pos.y << std::endl;
+
+	if(!show_padded_area_)
+	{
+		Position2D origin_pos, padded_pos;
+		origin_pos.x = pos.x;
+		origin_pos.y = pos.y;
+		padded_pos = MapUtils::CoordinatesFromOriginalToPadded(origin_pos, map_info_);
+
+//		std::cout << "map info:"
+//				<< map_info_.padded_left << " , "
+//				<< map_info_.padded_right << " , "
+//				<< map_info_.padded_top << " , "
+//				<< map_info_.padded_bottom << " , "
+//				<< std::endl;
+//		std::cout << "padded position: "
+//				<< padded_pos.x << " , "
+//				<< padded_pos.y << " , "
+//				<< std::endl;
+
+		map_pos.x = padded_pos.x;
+		map_pos.y = padded_pos.y;
+	}
+	else
+	{
+		map_pos.x = pos.x;
+		map_pos.y = pos.y;
+	}
+
+	ColorCellOnMap(map_pos.x, map_pos.y);
+}
+
 void srcl_ctrl::MainWindow::on_actionOpenMap_triggered()
 {
     QString map_file_name = QFileDialog::getOpenFileName(this,
@@ -132,7 +216,7 @@ void srcl_ctrl::MainWindow::on_actionOpenMap_triggered()
     	// set the map tab to be active
     	ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->tab2DScene));
 
-    	this->UpdateDisplayMap();
+    	this->UpdateWorkspaceMap();
     }
     else
     {
@@ -147,7 +231,7 @@ void srcl_ctrl::MainWindow::on_rbUseQTree_clicked()
     ui->sbQTreeMaxDepth->setEnabled(true);
     ui->lbQTreeMaxDepth->setEnabled(true);
 
-    this->UpdateDisplayMap();
+    this->UpdateWorkspaceMap();
 
     std::cout << "seleted quad tree" << std::endl;
 }
@@ -159,7 +243,7 @@ void srcl_ctrl::MainWindow::on_rbUseSGrid_clicked()
     ui->sbQTreeMaxDepth->setEnabled(false);
     ui->lbQTreeMaxDepth->setEnabled(false);
 
-    this->UpdateDisplayMap();
+    this->UpdateWorkspaceMap();
     std::cout << "selected square grid" << std::endl;
 }
 
@@ -168,7 +252,7 @@ void srcl_ctrl::MainWindow::on_sbQTreeMaxDepth_valueChanged(int val)
 	decompose_config_.method = CellDecompMethod::QUAD_TREE;
 	decompose_config_.qtree_depth = val;
 
-    this->UpdateDisplayMap();
+    this->UpdateWorkspaceMap();
 }
 
 void srcl_ctrl::MainWindow::on_actionResetView_triggered()
@@ -208,9 +292,9 @@ void srcl_ctrl::MainWindow::on_btnSaveMap_clicked()
 
 void srcl_ctrl::MainWindow::on_cbShowPadding_toggled(bool checked)
 {
-	if(decompose_config_.show_padded_area != checked)
+	if(show_padded_area_ != checked)
 	{
-		decompose_config_.show_padded_area = checked;
-		this->UpdateDisplayMap();
+		show_padded_area_ = checked;
+		this->UpdateWorkspaceMap();
 	}
 }

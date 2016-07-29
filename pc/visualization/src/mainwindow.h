@@ -25,11 +25,19 @@
 #include "vtk_viewer.h"
 #include "map_viewer.h"
 
+#include "map/map_info.h"
+
 namespace Ui {
 class MainWindow;
 }
 
 namespace srcl_ctrl {
+
+typedef struct
+{
+	uint32_t x;
+	uint32_t y;
+} MapCooridnate;
 
 class MainWindow : public QMainWindow
 {
@@ -53,12 +61,16 @@ private:
 private:
     // workspace decomposition
     DecomposeConfig decompose_config_;
+    bool show_padded_area_;
+    MapInfo map_info_;
 
 private:
-    void UpdateDisplayMap();
+    void UpdateWorkspaceMap();
+    void ColorCellOnMap(uint32_t x, uint32_t y);
+    MapCooridnate CoordinatesFromDisplayToPadded(long x, long y, double raw2scale_ratio);
 
-//public slots:
-//	void UpdateTargetPosition(long x, long y, double raw2scale_ratio);
+public slots:
+	void UpdateTargetPosition(long x, long y, double raw2scale_ratio);
 //	void BtnSendTrajectory();
 
 private slots:

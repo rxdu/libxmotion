@@ -78,7 +78,8 @@ private:
 public:
 	void SetCellOccupancy(uint32_t row, uint32_t col, OccupancyType occ);
 	void SetCellOccupancy(uint64_t id, OccupancyType occ);
-	uint32_t GetIDFromPosition(uint32_t row, uint32_t col);
+	uint64_t GetIDFromIndex(uint32_t row, uint32_t col);
+	uint64_t GetIDFromPosition(uint32_t x, uint32_t y);
 	std::vector<SquareCell*> GetNeighbours(uint64_t id);
 	std::vector<SquareCell*> GetNeighbours(uint64_t id, bool allow_diag);
 };

@@ -89,9 +89,10 @@ public:
 
 private:
 	std::vector<QuadTreeNode*> GetDummyNeighbours(QuadTreeNode* dummy_leaf);
+	QuadTreeNode* GetNodeAtPosition(uint32_t pixel_x, uint32_t pixel_y);
 
 public:
-	QuadTreeNode* GetNodeAtPosition(uint16_t pixel_x, uint16_t pixel_y);
+	uint64_t GetIDFromPosition(uint32_t x, uint32_t y);
 	std::vector<QuadTreeNode*> FindNeighbours(QuadTreeNode* node);
 };
 

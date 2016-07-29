@@ -14,7 +14,11 @@ using namespace srcl_ctrl;
 ImageLabel::ImageLabel(QWidget *parent) :
     QWidget(parent),
     scaled_height_(0),
-    scaled_width_(0)
+    scaled_width_(0),
+	painter_height_(0),
+	painter_width_(0),
+	half_padded_height_(0),
+	half_padded_width_(0)
 {
 }
 
@@ -95,12 +99,12 @@ void ImageLabel::mousePressEvent( QMouseEvent* ev )
         		|| pt.y() < half_padded_height_ || pt.y() > scaled_width_  + half_padded_height_)
             return;
 
-        std::cout << "mouse clicked position: "
-        		<< pt.x() - half_padded_width_ << " , "
-        		<< pt.y() - half_padded_height_ << std::endl;
+//        std::cout << "mouse clicked position: "
+//        		<< pt.x() - half_padded_width_ << " , "
+//        		<< pt.y() - half_padded_height_ << std::endl;
 
         double raw2scale_ratio = static_cast<double>(pix_.width())/static_cast<double>(scaled_width_);
 
-        emit NewImagePositionClicked(pt.x(), pt.y(), raw2scale_ratio);
+        emit NewImagePositionClicked(pt.x() - half_padded_width_, pt.y() - half_padded_height_, raw2scale_ratio);
     }
 }

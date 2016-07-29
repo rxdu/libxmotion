@@ -39,9 +39,19 @@ void SquareGrid::SetCellOccupancy(uint64_t id, OccupancyType occ)
 	cells_[id]->occu_ = occ;
 }
 
-uint32_t SquareGrid::GetIDFromPosition(uint32_t row, uint32_t col)
+uint64_t SquareGrid::GetIDFromIndex(uint32_t row, uint32_t col)
 {
 	return row * col_size_ + col;
+}
+
+uint64_t SquareGrid::GetIDFromPosition(uint32_t x, uint32_t y)
+{
+	uint32_t row, col;
+
+	col = x / cell_size_;
+	row = y / cell_size_;
+
+	return GetIDFromIndex(row, col);
 }
 
 BoundingBox SquareGrid::CalcBoundingBox(uint64_t id)

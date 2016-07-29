@@ -44,8 +44,9 @@ private:
     long scaled_width_;
     long painter_height_;
     long painter_width_;
-    long half_padded_width_;
     long half_padded_height_;
+    long half_padded_width_;
+
     void mousePressEvent(QMouseEvent* ev);
 };
 

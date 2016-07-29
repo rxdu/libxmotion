@@ -68,9 +68,9 @@ QuadTree::~QuadTree()
 	delete node_manager_;
 }
 
-QuadTreeNode* QuadTree::GetNodeAtPosition(uint16_t pixel_x, uint16_t pixel_y)
+QuadTreeNode* QuadTree::GetNodeAtPosition(uint32_t pixel_x, uint32_t pixel_y)
 {
-	uint16_t x,y;
+	uint32_t x,y;
 
 	if(node_manager_ != nullptr)
 	{
@@ -81,6 +81,13 @@ QuadTreeNode* QuadTree::GetNodeAtPosition(uint16_t pixel_x, uint16_t pixel_y)
 	}
 	else
 		return nullptr;
+}
+
+uint64_t QuadTree::GetIDFromPosition(uint32_t x, uint32_t y)
+{
+	auto node = GetNodeAtPosition(x, y);
+
+	return node->dummy_root_->data_id_;
 }
 
 std::vector<QuadTreeNode*> QuadTree::GetDummyNeighbours(QuadTreeNode* dummy_leaf)
