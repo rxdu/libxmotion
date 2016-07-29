@@ -105,7 +105,7 @@ public:
 			return false;
 	}
 
-	double GetEdgeCost(const Vertex<BundledStructType>& dst_node)
+	double GetEdgeCost(const Vertex<BundledStructType>& dst_node) const
 	{
 		double cost = -1;
 

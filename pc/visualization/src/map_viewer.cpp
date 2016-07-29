@@ -125,10 +125,11 @@ Mat MapViewer::DecomposeWorkspace(DecomposeConfig config, MapInfo &info)
 cv::Mat MapViewer::HighlightSelectedNode(uint32_t x, uint32_t y)
 {
 	cv::Mat vis_img;
+	uint64_t id;
 
 	if(active_decompose_ == CellDecompMethod::SQUARE_GRID)
 	{
-		uint64_t id = sg_map_.data_model->GetIDFromPosition(x, y);
+		id = sg_map_.data_model->GetIDFromPosition(x, y);
 
 		auto node = sg_map_.data_model->cells_[id];
 
@@ -154,7 +155,7 @@ cv::Mat MapViewer::HighlightSelectedNode(uint32_t x, uint32_t y)
 	}
 	else if(active_decompose_ == CellDecompMethod::QUAD_TREE)
 	{
-		uint64_t id = qt_map_.data_model->GetIDFromPosition(x, y);
+		id = qt_map_.data_model->GetIDFromPosition(x, y);
 
 		auto vtx = qtree_graph_->GetVertexFromID(id);
 
@@ -177,6 +178,8 @@ cv::Mat MapViewer::HighlightSelectedNode(uint32_t x, uint32_t y)
 			displayed_image_ = vis_img;
 		}
 	}
+
+	std::cout << "clicked node id: " << id << std::endl;
 
 	return vis_img;
 }
