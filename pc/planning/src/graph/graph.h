@@ -206,7 +206,10 @@ public:
 	{
 		auto it = vertex_map_.find(vertex_id);
 
-		return (*it).second;
+		if(it != vertex_map_.end())
+			return (*it).second;
+		else
+			return nullptr;
 	}
 
 	/// Perform A* Search and return a path represented by a serious of vertices

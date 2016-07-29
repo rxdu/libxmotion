@@ -156,17 +156,19 @@ cv::Mat MapViewer::HighlightSelectedNode(uint32_t x, uint32_t y)
 	{
 		uint64_t id = qt_map_.data_model->GetIDFromPosition(x, y);
 
-		auto node = qtree_graph_->GetVertexFromID(id)->bundled_data_;
+		auto vtx = qtree_graph_->GetVertexFromID(id);
 
 		graph_vis_.VisQuadTree(*qt_map_.data_model, qt_map_.padded_image, vis_img, TreeVisType::ALL_SPACE);
 		graph_vis_.VisQTreeGraph(*qtree_graph_, vis_img, vis_img, true, false);
 
-		if(id == 0)
+		if(id == 0 || vtx == nullptr)
 		{
 			displayed_image_ = vis_img;
 		}
 		else
 		{
+			auto node = vtx->bundled_data_;
+
 			Range rngx(node->bounding_box_.x.min, node->bounding_box_.x.max);
 			Range rngy(node->bounding_box_.y.min, node->bounding_box_.y.max);
 
