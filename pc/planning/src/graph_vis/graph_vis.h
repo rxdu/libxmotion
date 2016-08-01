@@ -55,6 +55,7 @@ public:
 
 	// square grid visualization
 	void VisSquareGrid(const SquareGrid& grid, cv::OutputArray _dst);
+	void VisAbstractSquareGrid(const SquareGrid& grid, cv::OutputArray _dst);
 	void VisSquareGrid(const SquareGrid& grid, cv::InputArray _src, cv::OutputArray _dst);
 
 	// graph visualization

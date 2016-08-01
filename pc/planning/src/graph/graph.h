@@ -221,6 +221,19 @@ public:
 		// do a* search and return search result
 		return astar_.Search(start, goal);
 	}
+
+	std::vector<Vertex<BundledStructType>*> AStarSearch(uint64_t start_id, uint64_t goal_id)
+	{
+		std::vector<Vertex<BundledStructType>*> path;
+		Vertex<BundledStructType> *start = this->GetVertexFromID(start_id);
+		Vertex<BundledStructType> *goal = this->GetVertexFromID(goal_id);
+
+		// do a* search and return search result
+		if(start != nullptr && goal != nullptr)
+			return this->AStarSearch(start, goal);
+		else
+			return path;
+	}
 };
 
 }

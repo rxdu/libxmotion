@@ -131,7 +131,8 @@ cv::Mat MapViewer::HighlightSelectedNode(uint32_t x, uint32_t y)
 	{
 		id = sg_map_.data_model->GetIDFromPosition(x, y);
 
-		auto node = sg_map_.data_model->cells_[id];
+//		auto node = sg_map_.data_model->cells_[id];
+		auto vtx = sgrid_graph_->GetVertexFromID(id);
 
 //		std::cout << " ---- " << std::endl;
 //		std::cout << "cell size: " << sg_map_.data_model->cell_size_ << std::endl;
@@ -140,12 +141,17 @@ cv::Mat MapViewer::HighlightSelectedNode(uint32_t x, uint32_t y)
 		graph_vis_.VisSquareGrid(*sg_map_.data_model, sg_map_.padded_image, vis_img);
 		graph_vis_.VisSquareGridGraph(*sgrid_graph_, vis_img, vis_img, true);
 
-		if(node->occu_ == OccupancyType::FREE || node->occu_ == OccupancyType::INTERESTED)
+		if(vtx != nullptr)
 		{
-			Range rngx(sg_map_.data_model->cells_[id]->bbox_.x.min, sg_map_.data_model->cells_[id]->bbox_.x.max);
-			Range rngy(sg_map_.data_model->cells_[id]->bbox_.y.min, sg_map_.data_model->cells_[id]->bbox_.y.max);
+			auto node = vtx->bundled_data_;
 
-			vis_img(rngy,rngx) = Scalar(0,255,255);
+			if(node->occu_ == OccupancyType::FREE || node->occu_ == OccupancyType::INTERESTED) {
+
+				Range rngx(sg_map_.data_model->cells_[id]->bbox_.x.min, sg_map_.data_model->cells_[id]->bbox_.x.max);
+				Range rngy(sg_map_.data_model->cells_[id]->bbox_.y.min, sg_map_.data_model->cells_[id]->bbox_.y.max);
+
+				vis_img(rngy,rngx) = Scalar(0,255,255);
+			}
 
 			displayed_image_ = vis_img;
 		}

@@ -4,15 +4,20 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Dependency libraries
-#find_package(OpenCV REQUIRED)
+find_package(OpenCV REQUIRED)
 
 # Add libraries
-set(LOCAL_PLANNER_LIB_SRC
-    local_planner.cpp
+set(PLANNER_LIB_SRC
+    rrts_planner.cpp
+    #graph_planner.cpp
+    quad_planner.cpp
 )
-add_library(local_planner STATIC ${LOCAL_PLANNER_LIB_SRC})
-target_link_libraries(local_planner ompl rrtstarkd)
+add_library(planner STATIC ${PLANNER_LIB_SRC})
+target_link_libraries(planner ompl rrtstarkd ${OpenCV_LIBS})
 
 # Add executables
 add_executable(test_local test_local.cpp)
-target_link_libraries(test_local local_planner)
+target_link_libraries(test_local planner)
+
+add_executable(test_global test_global.cpp)
+target_link_libraries(test_global map planner qtree)

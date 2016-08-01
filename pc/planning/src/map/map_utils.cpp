@@ -9,6 +9,33 @@
 
 using namespace srcl_ctrl;
 
+bool MapUtils::ReadImageFromFile(std::string map_path, cv::OutputArray _dst)
+{
+	cv::Mat image;
+
+	if(!map_path.empty()) {
+		// read map image
+		image = imread(map_path, cv::IMREAD_GRAYSCALE);
+
+		if (!image.data) {
+			printf("No image data \n");
+			return false;
+		}
+		else
+		{
+			image.copyTo(_dst);
+			return true;
+		}
+	}
+	else
+		return false;
+}
+
+std::shared_ptr<SquareGrid> MapUtils::CreateSquareGrid(uint32_t row_size, uint32_t col_size, uint32_t cell_size)
+{
+	return std::make_shared<SquareGrid>(row_size,col_size,cell_size);
+}
+
 Position2Dd MapUtils::CoordinatesFromMapToWorld(Position2D map_pos, MapInfo info)
 {
 	Position2Dd rpos;

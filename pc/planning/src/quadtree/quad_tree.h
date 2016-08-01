@@ -74,6 +74,8 @@ public:
 	QuadTree(uint16_t area_size, uint8_t depth);
 	~QuadTree();
 
+	typedef QuadTreeNode node_type;
+
 public:
 	// Basic tree information
 	QuadTreeNode* root_node_;

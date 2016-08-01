@@ -5,13 +5,13 @@
  *      Author: rdu
  */
 
-#include "planner/local_planner.h"
+#include <rrts_planner.h>
 
 using namespace srcl_ctrl;
 
 int main(int argc, char** argv)
 {
-	LocalPlanner planner;
+	RRTStarPlanner planner;
 
 	planner.ConfigLocalPlanner();
 	planner.SearchSolution();

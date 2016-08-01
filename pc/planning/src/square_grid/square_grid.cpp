@@ -54,6 +54,16 @@ uint64_t SquareGrid::GetIDFromPosition(uint32_t x, uint32_t y)
 	return GetIDFromIndex(row, col);
 }
 
+SquareCell* SquareGrid::GetCellFromID(uint64_t id)
+{
+	auto it = cells_.find(id);
+
+	if(it != cells_.end())
+		return (*it).second;
+	else
+		return nullptr;
+}
+
 BoundingBox SquareGrid::CalcBoundingBox(uint64_t id)
 {
 	BoundingBox bbox;
@@ -66,40 +76,6 @@ BoundingBox SquareGrid::CalcBoundingBox(uint64_t id)
 	bbox.y.max = bbox.y.min + cell_size_ - 1;
 
 	return bbox;
-}
-
-std::vector<SquareCell*> SquareGrid::GetNeighbours(uint64_t id)
-{
-	std::vector<SquareCell*> neighbours;
-
-	uint32_t x,y;
-	x = cells_[id]->index_.x;
-	y = cells_[id]->index_.y;
-
-//	std::cout << "(x, y) = "<< "( " << x << " , " << y << " )" <<std::endl;
-
-	// not consider diagonal cells
-	Position2D pos[4];
-
-	pos[0].x = x;
-	pos[0].y = y + 1;
-
-	pos[1].x = x;
-	pos[1].y = y - 1;
-
-	pos[2].x = x + 1;
-	pos[2].y = y;
-
-	pos[3].x = x - 1;
-	pos[3].y = y;
-
-	for(int i = 0; i < 4; i++)
-	{
-		if(pos[i].x < col_size_ && pos[i].y < row_size_)
-			neighbours.push_back(cells_[pos[i].y * col_size_ + pos[i].x]);
-	}
-
-	return neighbours;
 }
 
 std::vector<SquareCell*> SquareGrid::GetNeighbours(uint64_t id, bool allow_diag)

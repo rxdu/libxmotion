@@ -8,7 +8,13 @@
 #ifndef SRC_MAP_MAP_UTILS_H_
 #define SRC_MAP_MAP_UTILS_H_
 
+#include <cstdint>
 #include <vector>
+#include <string>
+#include <memory>
+
+// opencv
+#include "opencv2/opencv.hpp"
 
 #include "graph/graph.h"
 #include "square_grid/square_grid.h"
@@ -24,6 +30,9 @@ public:
 	~MapUtils(){};
 
 public:
+	static bool ReadImageFromFile(std::string map_path, cv::OutputArray _dst);
+	static std::shared_ptr<SquareGrid> CreateSquareGrid(uint32_t row_size, uint32_t col_size, uint32_t cell_size);
+
 	static std::vector<Position2D> GetWaypointsFromSGridPath(std::vector<Vertex<SquareCell*>*>& path);
 	static std::vector<Position2D> GetWaypointsFromQTreePath(std::vector<Vertex<QuadTreeNode*>*>& path);
 

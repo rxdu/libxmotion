@@ -64,6 +64,8 @@ public:
 	SquareGrid(uint32_t row_num, uint32_t col_num, uint32_t cell_size);
 	~SquareGrid();
 
+	typedef SquareCell node_type;
+
 public:
 	std::map<uint64_t, SquareCell*> cells_;
 
@@ -80,7 +82,7 @@ public:
 	void SetCellOccupancy(uint64_t id, OccupancyType occ);
 	uint64_t GetIDFromIndex(uint32_t row, uint32_t col);
 	uint64_t GetIDFromPosition(uint32_t x, uint32_t y);
-	std::vector<SquareCell*> GetNeighbours(uint64_t id);
+	SquareCell* GetCellFromID(uint64_t id);
 	std::vector<SquareCell*> GetNeighbours(uint64_t id, bool allow_diag);
 };
 

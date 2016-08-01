@@ -1,12 +1,12 @@
 /*
- * local_planner.h
+ * rrts_planner.h
  *
  *  Created on: Jul 27, 2016
  *      Author: rdu
  */
 
-#ifndef PLANNING_SRC_PLANNER_LOCAL_PLANNER_H_
-#define PLANNING_SRC_PLANNER_LOCAL_PLANNER_H_
+#ifndef PLANNING_SRC_PLANNER_RRTS_PLANNER_H_
+#define PLANNING_SRC_PLANNER_RRTS_PLANNER_H_
 
 #include <memory>
 
@@ -18,10 +18,10 @@
 
 namespace srcl_ctrl {
 
-class LocalPlanner {
+class RRTStarPlanner {
 public:
-	LocalPlanner();
-	~LocalPlanner();
+	RRTStarPlanner();
+	~RRTStarPlanner();
 
 private:
 	bool planner_ready_;
@@ -42,4 +42,4 @@ public:
 
 }
 
-#endif /* PLANNING_SRC_PLANNER_LOCAL_PLANNER_H_ */
+#endif /* PLANNING_SRC_PLANNER_RRTS_PLANNER_H_ */

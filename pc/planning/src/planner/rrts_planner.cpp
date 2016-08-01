@@ -1,5 +1,5 @@
 /*
- * local_planner.cpp
+ * rrts_planner.cpp
  *
  *  Created on: Jul 27, 2016
  *      Author: rdu
@@ -10,7 +10,7 @@
 #include <ompl/base/spaces/RealVectorStateSpace.h>
 #include <ompl/base/spaces/SO2StateSpace.h>
 
-#include "planner/local_planner.h"
+#include <rrts_planner.h>
 
 using namespace ompl;
 using namespace srcl_ctrl;
@@ -18,7 +18,7 @@ using namespace srcl_ctrl;
 namespace ob = ompl::base;
 namespace og = ompl::geometric;
 
-LocalPlanner::LocalPlanner():
+RRTStarPlanner::RRTStarPlanner():
 		planner_ready_(false),
 		state_space_(nullptr),
 		space_info_(nullptr)
@@ -26,13 +26,13 @@ LocalPlanner::LocalPlanner():
 
 }
 
-LocalPlanner::~LocalPlanner()
+RRTStarPlanner::~RRTStarPlanner()
 {
 
 
 }
 
-void LocalPlanner::ConstructStateSpace()
+void RRTStarPlanner::ConstructStateSpace()
 {
 	ompl::base::StateSpacePtr r3(new ompl::base::RealVectorStateSpace(3));
 	ompl::base::RealVectorBounds bounds(3);
@@ -55,7 +55,7 @@ void LocalPlanner::ConstructStateSpace()
 	space_info_ = std::make_shared<ompl::base::SpaceInformation>(state_space_);
 }
 
-void LocalPlanner::DefinePlanProblem()
+void RRTStarPlanner::DefinePlanProblem()
 {
 	problem_def_ = std::make_shared<ob::ProblemDefinition>(space_info_);
 
@@ -79,7 +79,7 @@ void LocalPlanner::DefinePlanProblem()
 	problem_def_->setStartAndGoalStates(start, goal);
 }
 
-void LocalPlanner::InitPlanner()
+void RRTStarPlanner::InitPlanner()
 {
 	auto rrt_planner =  new RRTStarKD(space_info_);
 	rrt_planner->setRange(0.01);
@@ -92,7 +92,7 @@ void LocalPlanner::InitPlanner()
 	planner_->setup();
 }
 
-void LocalPlanner::ConfigLocalPlanner()
+void RRTStarPlanner::ConfigLocalPlanner()
 {
 	ConstructStateSpace();
 	DefinePlanProblem();
@@ -101,7 +101,7 @@ void LocalPlanner::ConfigLocalPlanner()
 	planner_ready_ = true;
 }
 
-bool LocalPlanner::SearchSolution()
+bool RRTStarPlanner::SearchSolution()
 {
 	if(!planner_ready_) {
 		std::cerr << "You need to call ConfigLocalPlanner() to setup the local planner first." << std::endl;
