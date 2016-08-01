@@ -13,17 +13,28 @@
 
 namespace srcl_ctrl {
 
+enum class GraphPlannerType {
+	SQUARE_GRID_PLANNER,
+	QUADTREE_PLANNER,
+	NOT_SPECIFIED
+};
+
 class QuadPlanner{
 public:
 	QuadPlanner();
 	~QuadPlanner();
 
 private:
-	//GlobalPlanner global_planner_;
+	GraphPlanner<QuadTree> qtree_planner_;
+	GraphPlanner<SquareGrid> sgrid_planner_;
+
+	GraphPlannerType active_graph_planner_;
+
 	RRTStarPlanner local_planner_;
 
 public:
-	void ConfigQuadPlanner();
+	void ConfigGraphPlanner(MapConfig config);
+	std::vector<Position2D> SearchForGlobalPath();
 };
 
 }

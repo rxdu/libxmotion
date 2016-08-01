@@ -77,6 +77,17 @@ public:
 		return is_ready_;
 	}
 
+	template<class T = MapDataModel, typename std::enable_if<std::is_same<T, SquareGrid>::value>::type* = nullptr>
+	bool UpdateMapConfig(std::shared_ptr<T> grid)
+	{
+		cv::Mat input_image;
+
+		graph_ = GraphBuilder::BuildFromSquareGrid(grid,true);
+		is_ready_ = true;
+
+		return is_ready_;
+	}
+
 	Trajectory_t<MapDataModelNode*> Search(Vertex_t<MapDataModel*>* start, Vertex_t<MapDataModel*>* goal)
 	{
 		if(is_ready_)
