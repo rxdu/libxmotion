@@ -74,7 +74,8 @@ public:
 	bool ReadMapFromFile(std::string file_name);
 	void SaveResultToFile(std::string file_name);
 	cv::Mat DecomposeWorkspace(DecomposeConfig config, MapInfo &info);
-	cv::Mat HighlightSelectedNode(uint32_t x, uint32_t y);
+	cv::Mat HighlightSelectedNode(uint32_t x, uint32_t y, bool& updated);
+	cv::Mat DisplayTrajectory(std::vector<uint64_t>& traj);
 };
 
 }

@@ -12,7 +12,7 @@ namespace srcl_ctrl {
 
 enum class MapDataModel {
 	SQUARE_GRID,
-	QUADTREE,
+	QUAD_TREE,
 	NOT_SPECIFIED
 };
 

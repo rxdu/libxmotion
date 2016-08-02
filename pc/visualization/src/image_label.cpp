@@ -90,7 +90,7 @@ void ImageLabel::setPixmap (const QPixmap &pixmap){
 
 void ImageLabel::mousePressEvent( QMouseEvent* ev )
 {
-    if(ev->buttons() & Qt::LeftButton)
+    if(ev->buttons() & (Qt::LeftButton | Qt::RightButton))
     {
         QPoint pt = this->mapFrom(this, ev->pos());
 
@@ -105,6 +105,6 @@ void ImageLabel::mousePressEvent( QMouseEvent* ev )
 
         double raw2scale_ratio = static_cast<double>(pix_.width())/static_cast<double>(scaled_width_);
 
-        emit NewImagePositionClicked(pt.x() - half_padded_width_, pt.y() - half_padded_height_, raw2scale_ratio);
+        emit MapImageClicked(pt.x() - half_padded_width_, pt.y() - half_padded_height_, raw2scale_ratio, ev->buttons());
     }
 }

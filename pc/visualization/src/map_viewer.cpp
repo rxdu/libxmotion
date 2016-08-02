@@ -62,7 +62,7 @@ void MapViewer::SaveResultToFile(std::string file_name)
 	}
 }
 
-Mat MapViewer::DecomposeWorkspace(DecomposeConfig config, MapInfo &info)
+cv::Mat MapViewer::DecomposeWorkspace(DecomposeConfig config, MapInfo &info)
 {
     Mat vis_img;
 
@@ -122,16 +122,17 @@ Mat MapViewer::DecomposeWorkspace(DecomposeConfig config, MapInfo &info)
     return vis_img;
 }
 
-cv::Mat MapViewer::HighlightSelectedNode(uint32_t x, uint32_t y)
+cv::Mat MapViewer::HighlightSelectedNode(uint32_t x, uint32_t y, bool& updated)
 {
 	cv::Mat vis_img;
 	uint64_t id;
+
+	updated = false;
 
 	if(active_decompose_ == CellDecompMethod::SQUARE_GRID)
 	{
 		id = sg_map_.data_model->GetIDFromPosition(x, y);
 
-//		auto node = sg_map_.data_model->cells_[id];
 		auto vtx = sgrid_graph_->GetVertexFromID(id);
 
 //		std::cout << " ---- " << std::endl;
@@ -151,6 +152,8 @@ cv::Mat MapViewer::HighlightSelectedNode(uint32_t x, uint32_t y)
 				Range rngy(sg_map_.data_model->cells_[id]->bbox_.y.min, sg_map_.data_model->cells_[id]->bbox_.y.max);
 
 				vis_img(rngy,rngx) = Scalar(0,255,255);
+
+				updated = true;
 			}
 
 			displayed_image_ = vis_img;
@@ -182,7 +185,45 @@ cv::Mat MapViewer::HighlightSelectedNode(uint32_t x, uint32_t y)
 			vis_img(rngy,rngx) = Scalar(0,255,255);
 
 			displayed_image_ = vis_img;
+
+			updated = true;
 		}
+	}
+
+	std::cout << "clicked node id: " << id << std::endl;
+
+	return vis_img;
+}
+
+cv::Mat MapViewer::DisplayTrajectory(std::vector<uint64_t>& traj)
+{
+	cv::Mat vis_img;
+	uint64_t id;
+
+	if(active_decompose_ == CellDecompMethod::SQUARE_GRID)
+	{
+		std::vector<Vertex_t<SquareCell*>*> traj_vertices;
+		for(auto& wp_id : traj)
+			traj_vertices.push_back(sgrid_graph_->GetVertexFromID(wp_id));
+
+		graph_vis_.VisSquareGrid(*sg_map_.data_model, sg_map_.padded_image, vis_img);
+		graph_vis_.VisSquareGridGraph(*sgrid_graph_, vis_img, vis_img, true);
+		graph_vis_.VisSquareGridPath(traj_vertices, vis_img, vis_img);
+
+		displayed_image_ = vis_img;
+
+	}
+	else if(active_decompose_ == CellDecompMethod::QUAD_TREE)
+	{
+		std::vector<Vertex_t<QuadTreeNode*>*> traj_vertices;
+		for(auto& wp_id : traj)
+			traj_vertices.push_back(qtree_graph_->GetVertexFromID(wp_id));
+
+		graph_vis_.VisQuadTree(*qt_map_.data_model, qt_map_.padded_image, vis_img, TreeVisType::ALL_SPACE);
+		graph_vis_.VisQTreeGraph(*qtree_graph_, vis_img, vis_img, true, false);
+		graph_vis_.VisQTreeGraphPath(traj_vertices, vis_img, vis_img);
+
+		displayed_image_ = vis_img;
 	}
 
 	std::cout << "clicked node id: " << id << std::endl;

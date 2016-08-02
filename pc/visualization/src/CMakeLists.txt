@@ -78,4 +78,4 @@ qt5_generate_moc(gui_main.cpp gui_main.moc)
 # Add Qt executables
 add_executable(srcl_gui ${SOURCE_FILES} ${MOC_SRC_H} ${MOC_GUI_H} ${MOC_RES_H})
 set_target_properties(srcl_gui PROPERTIES COMPILE_FLAGS "-std=c++11 -g")
-target_link_libraries(srcl_gui map squaregrid vis ${OpenCV_LIBS} ${VTK_LIBRARIES} Qt5::Widgets)
+target_link_libraries(srcl_gui map squaregrid vis planner ${OpenCV_LIBS} ${VTK_LIBRARIES} Qt5::Widgets)

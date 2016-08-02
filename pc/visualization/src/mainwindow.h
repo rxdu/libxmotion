@@ -12,6 +12,7 @@
 #include <vector>
 #include <memory>
 #include <cstdint>
+#include <string>
 
 // Qt headers
 #include <QMainWindow>
@@ -26,6 +27,8 @@
 #include "map_viewer.h"
 
 #include "map/map_info.h"
+#include "map/map_config.h"
+#include "planner/quad_planner.h"
 
 namespace Ui {
 class MainWindow;
@@ -64,13 +67,23 @@ private:
     bool show_padded_area_;
     MapInfo map_info_;
 
+    // planner
+    QuadPlanner planner_;
+    MapConfig map_config_;
+    bool planner_ready_;
+    bool use_local_planner_;
+    bool start_specified_;
+    bool goal_specified_;
+
 private:
     void UpdateWorkspaceMap();
     void ColorCellOnMap(uint32_t x, uint32_t y);
+    void DisplayPathOnMap(std::vector<uint64_t>& path);
     MapCooridnate CoordinatesFromDisplayToPadded(long x, long y, double raw2scale_ratio);
+    void UpdateGraphPlannerConfig();
 
 public slots:
-	void UpdateTargetPosition(long x, long y, double raw2scale_ratio);
+	void UpdateClickedPosition(long x, long y, double raw2scale_ratio, uint8_t btn_flag);
 //	void BtnSendTrajectory();
 
 private slots:
@@ -85,6 +98,9 @@ private slots:
     void on_actionFullView_triggered();
     void on_actionOpenOctomap_triggered();
 
+    void on_rbLocalPlanner_clicked();
+    void on_rbRemotePlanner_clicked();
+    void on_sbSGridCellSize_valueChanged(int val);
 };
 }
 

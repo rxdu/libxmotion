@@ -13,6 +13,8 @@
 #ifndef SRCL_ROS_QUAD_NAV_INCLUDE_QUAD_NAV_IMAGE_LABEL_H_
 #define SRCL_ROS_QUAD_NAV_INCLUDE_QUAD_NAV_IMAGE_LABEL_H_
 
+#include <cstdint>
+
 #include <QWidget>
 #include <QPainter>
 #include <QPaintEvent>
@@ -36,7 +38,7 @@ protected:
 	void paintEvent(QPaintEvent *);
 
 signals:
-    void NewImagePositionClicked(long x, long y, double raw2scale_ratio);
+    void MapImageClicked(long x, long y, double raw2scale_ratio, uint8_t btn_flag);
 
 private:
 	QPixmap pix_;
