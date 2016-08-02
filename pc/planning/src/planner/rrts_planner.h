@@ -31,7 +31,8 @@ private:
 	ompl::base::ProblemDefinitionPtr problem_def_;
 
 private:
-	void ConstructStateSpace();
+	void ConstructFlatOutputSpace();
+	void Construct2DStateSpace();
 	void DefinePlanProblem();
 	void InitPlanner();
 

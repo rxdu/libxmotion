@@ -32,7 +32,7 @@ RRTStarPlanner::~RRTStarPlanner()
 
 }
 
-void RRTStarPlanner::ConstructStateSpace()
+void RRTStarPlanner::ConstructFlatOutputSpace()
 {
 	ompl::base::StateSpacePtr r3(new ompl::base::RealVectorStateSpace(3));
 	ompl::base::RealVectorBounds bounds(3);
@@ -43,6 +43,13 @@ void RRTStarPlanner::ConstructStateSpace()
 	// define the SO(2) space for (yaw)
 	ompl::base::StateSpacePtr so2(new ompl::base::SO2StateSpace());
 
+	state_space_ = r3 + so2;
+
+	space_info_ = std::make_shared<ompl::base::SpaceInformation>(state_space_);
+}
+
+void RRTStarPlanner::Construct2DStateSpace()
+{
 	// define the R2 space for testing (x,y)
 	ompl::base::StateSpacePtr r2(new ompl::base::RealVectorStateSpace(2));
 	ompl::base::RealVectorBounds bounds2(2);
@@ -50,7 +57,7 @@ void RRTStarPlanner::ConstructStateSpace()
 	bounds2.setHigh(1.5);
 	r2->as<ob::RealVectorStateSpace>()->setBounds(bounds2);
 
-	state_space_ = r3 + so2;
+	state_space_ = r2;
 
 	space_info_ = std::make_shared<ompl::base::SpaceInformation>(state_space_);
 }
@@ -94,7 +101,8 @@ void RRTStarPlanner::InitPlanner()
 
 void RRTStarPlanner::ConfigLocalPlanner()
 {
-	ConstructStateSpace();
+	//ConstructFlatOutputSpace();
+	Construct2DStateSpace();
 	DefinePlanProblem();
 	InitPlanner();
 
@@ -122,7 +130,7 @@ bool RRTStarPlanner::SearchSolution()
 			std::cout << "Found exact solution" << std::endl;
 
 		// print the path to screen
-		//		path->print(std::cout);
+		path->print(std::cout);
 
 		//		std::ofstream outFile("output.txt");
 		//		dynamic_cast<const og::PathGeometric&>(*path).printAsMatrix(std::cout);
