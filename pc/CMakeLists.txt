@@ -19,6 +19,9 @@ endif(ENABLE_G3LOG)
 
 set(BUILD_TESTS on)
 
+## Config eigen include directories
+include_directories(${CMAKE_SOURCE_DIR}/third_party/)
+
 ## Config octomap include directories
 include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/octomap/include)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/octovis/include)
