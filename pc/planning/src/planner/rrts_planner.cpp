@@ -32,6 +32,27 @@ RRTStarPlanner::~RRTStarPlanner()
 
 }
 
+std::vector<Position2Dd> RRTStarPlanner::PostProcess2DPath(std::vector<ompl::base::State*> path)
+{
+	std::vector<Position2Dd> waypoints;
+
+	for(auto& wp : path)
+	{
+		Position2Dd pos;
+		pos.x = wp->as<ompl::base::RealVectorStateSpace::StateType>()->values[0];
+		pos.y = wp->as<ompl::base::RealVectorStateSpace::StateType>()->values[1];
+		waypoints.push_back(pos);
+	}
+
+	std::cout << "2d path: " << std::endl;
+	for(auto& pt : waypoints)
+	{
+		std::cout << pt.x << " , " << pt.y << std::endl;
+	}
+
+	return waypoints;
+}
+
 void RRTStarPlanner::ConstructFlatOutputSpace()
 {
 	ompl::base::StateSpacePtr r3(new ompl::base::RealVectorStateSpace(3));
@@ -131,6 +152,8 @@ bool RRTStarPlanner::SearchSolution()
 
 		// print the path to screen
 		path->print(std::cout);
+
+		PostProcess2DPath(path->as<og::PathGeometric>()->getStates());
 
 		//		std::ofstream outFile("output.txt");
 		//		dynamic_cast<const og::PathGeometric&>(*path).printAsMatrix(std::cout);

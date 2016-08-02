@@ -112,6 +112,7 @@ int main(int argc, char** argv)
 //		std::ofstream outFile("output.txt");
 //		dynamic_cast<const og::PathGeometric&>(*path).printAsMatrix(std::cout);
 //		path->as<og::PathGeometric>()->printAsMatrix(outFile);
+		std::vector<base::State*> states = path->as<og::PathGeometric>()->getStates();
 	}
 	else
 		std::cout << "No solution found" << std::endl;

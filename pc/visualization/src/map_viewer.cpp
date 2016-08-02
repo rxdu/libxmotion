@@ -104,7 +104,6 @@ cv::Mat MapViewer::DecomposeWorkspace(DecomposeConfig config, MapInfo &info)
     	graph_vis_.VisSquareGridGraph(*sgrid_graph_, vis_img, vis_img, true);
 
     	displayed_image_ = vis_img;
-    	sgrid_graph_image_ = vis_img;
 
     	//std::cout << "decomposed using square grid" << std::endl;
     }
@@ -117,7 +116,6 @@ cv::Mat MapViewer::DecomposeWorkspace(DecomposeConfig config, MapInfo &info)
     	graph_vis_.VisQTreeGraph(*qtree_graph_, vis_img, vis_img, true, false);
 
     	displayed_image_ = vis_img;
-    	qtree_graph_image_ = vis_img;
 
     	//std::cout << "decomposed using quadtree" << std::endl;
     }

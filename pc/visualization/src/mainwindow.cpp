@@ -400,3 +400,11 @@ void srcl_ctrl::MainWindow::on_rbRemotePlanner_clicked()
 {
 	use_local_planner_ = false;
 }
+
+void srcl_ctrl::MainWindow::on_tabWidget_currentChanged(int index)
+{
+    if(index == ui->tabWidget->indexOf(ui->tab2DScene))
+        ui->gbWSpace->setVisible(true);
+    else
+        ui->gbWSpace->setVisible(false);
+}

@@ -45,8 +45,6 @@ public:
 private:
 	// images
 	cv::Mat raw_image_;
-	cv::Mat qtree_graph_image_;
-	cv::Mat sgrid_graph_image_;
 	cv::Mat displayed_image_;
 
 	Map_t<SquareGrid> sg_map_;

@@ -24,7 +24,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab3DScene">
        <attribute name="title">
@@ -247,7 +247,7 @@
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="rbGroupCellDecomp"/>
   <buttongroup name="rbGroupSelectPlanner"/>
+  <buttongroup name="rbGroupCellDecomp"/>
  </buttongroups>
 </ui>

@@ -101,6 +101,7 @@ private slots:
     void on_rbLocalPlanner_clicked();
     void on_rbRemotePlanner_clicked();
     void on_sbSGridCellSize_valueChanged(int val);
+    void on_tabWidget_currentChanged(int index);
 };
 }
 
