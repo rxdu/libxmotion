@@ -98,10 +98,10 @@ cv::Mat MapViewer::DecomposeWorkspace(DecomposeConfig config, MapInfo &info)
     	info = sg_map_.info;
     	active_decompose_ = CellDecompMethod::SQUARE_GRID;
 
-    	graph_vis_.VisSquareGrid(*sg_map_.data_model, sg_map_.padded_image, vis_img);
+    	GraphVis::VisSquareGrid(*sg_map_.data_model, sg_map_.padded_image, vis_img);
 
     	/*** put the graph on top of the square grid ***/
-    	graph_vis_.VisSquareGridGraph(*sgrid_graph_, vis_img, vis_img, true);
+    	GraphVis::VisSquareGridGraph(*sgrid_graph_, vis_img, vis_img, true);
 
     	displayed_image_ = vis_img;
 
@@ -112,8 +112,8 @@ cv::Mat MapViewer::DecomposeWorkspace(DecomposeConfig config, MapInfo &info)
     	info = qt_map_.info;
     	active_decompose_ = CellDecompMethod::QUAD_TREE;
 
-    	graph_vis_.VisQuadTree(*qt_map_.data_model, qt_map_.padded_image, vis_img, TreeVisType::ALL_SPACE);
-    	graph_vis_.VisQTreeGraph(*qtree_graph_, vis_img, vis_img, true, false);
+    	GraphVis::VisQuadTree(*qt_map_.data_model, qt_map_.padded_image, vis_img, TreeVisType::ALL_SPACE);
+    	GraphVis::VisQTreeGraph(*qtree_graph_, vis_img, vis_img, true, false);
 
     	displayed_image_ = vis_img;
 
@@ -140,8 +140,8 @@ cv::Mat MapViewer::HighlightSelectedNode(uint32_t x, uint32_t y, bool& updated)
 //		std::cout << "cell size: " << sg_map_.data_model->cell_size_ << std::endl;
 //		std::cout << "selected id: " << id << " at position: " << x << " , " << y << std::endl;;
 
-		graph_vis_.VisSquareGrid(*sg_map_.data_model, sg_map_.padded_image, vis_img);
-		graph_vis_.VisSquareGridGraph(*sgrid_graph_, vis_img, vis_img, true);
+		GraphVis::VisSquareGrid(*sg_map_.data_model, sg_map_.padded_image, vis_img);
+		GraphVis::VisSquareGridGraph(*sgrid_graph_, vis_img, vis_img, true);
 
 		if(vtx != nullptr)
 		{
@@ -169,8 +169,8 @@ cv::Mat MapViewer::HighlightSelectedNode(uint32_t x, uint32_t y, bool& updated)
 
 		auto vtx = qtree_graph_->GetVertexFromID(id);
 
-		graph_vis_.VisQuadTree(*qt_map_.data_model, qt_map_.padded_image, vis_img, TreeVisType::ALL_SPACE);
-		graph_vis_.VisQTreeGraph(*qtree_graph_, vis_img, vis_img, true, false);
+		GraphVis::VisQuadTree(*qt_map_.data_model, qt_map_.padded_image, vis_img, TreeVisType::ALL_SPACE);
+		GraphVis::VisQTreeGraph(*qtree_graph_, vis_img, vis_img, true, false);
 
 		if(id == 0 || vtx == nullptr)
 		{
@@ -207,9 +207,9 @@ cv::Mat MapViewer::DisplayTrajectory(std::vector<uint64_t>& traj)
 		for(auto& wp_id : traj)
 			traj_vertices.push_back(sgrid_graph_->GetVertexFromID(wp_id));
 
-		graph_vis_.VisSquareGrid(*sg_map_.data_model, sg_map_.padded_image, vis_img);
-		graph_vis_.VisSquareGridGraph(*sgrid_graph_, vis_img, vis_img, true);
-		graph_vis_.VisSquareGridPath(traj_vertices, vis_img, vis_img);
+		GraphVis::VisSquareGrid(*sg_map_.data_model, sg_map_.padded_image, vis_img);
+		GraphVis::VisSquareGridGraph(*sgrid_graph_, vis_img, vis_img, true);
+		GraphVis::VisSquareGridPath(traj_vertices, vis_img, vis_img);
 
 		displayed_image_ = vis_img;
 
@@ -220,9 +220,9 @@ cv::Mat MapViewer::DisplayTrajectory(std::vector<uint64_t>& traj)
 		for(auto& wp_id : traj)
 			traj_vertices.push_back(qtree_graph_->GetVertexFromID(wp_id));
 
-		graph_vis_.VisQuadTree(*qt_map_.data_model, qt_map_.padded_image, vis_img, TreeVisType::ALL_SPACE);
-		graph_vis_.VisQTreeGraph(*qtree_graph_, vis_img, vis_img, true, false);
-		graph_vis_.VisQTreeGraphPath(traj_vertices, vis_img, vis_img);
+		GraphVis::VisQuadTree(*qt_map_.data_model, qt_map_.padded_image, vis_img, TreeVisType::ALL_SPACE);
+		GraphVis::VisQTreeGraph(*qtree_graph_, vis_img, vis_img, true, false);
+		GraphVis::VisQTreeGraphPath(traj_vertices, vis_img, vis_img);
 
 		displayed_image_ = vis_img;
 	}

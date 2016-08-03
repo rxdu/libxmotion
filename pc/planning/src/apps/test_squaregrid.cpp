@@ -19,7 +19,7 @@
 
 // user
 #include "graph/graph.h"
-#include "graph_vis/graph_vis.h"
+#include "vis/graph_vis.h"
 
 using namespace cv;
 using namespace srcl_ctrl;
@@ -129,20 +129,19 @@ int main(int argc, char** argv )
 	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 
 	/*** Visualize the map and graph ***/
-	GraphVis vis;
 	Mat vis_img;
 
 	/*** Image Layouts: (map) -> square grid -> graph -> path ***/
 	/*** you can visualize the squre grid by itself or overlay it on the map image ***/
 	if(sgrid_map.padded_image.empty())
-		vis.VisSquareGrid(*sgrid_map.data_model, vis_img);
+		GraphVis::VisSquareGrid(*sgrid_map.data_model, vis_img);
 	else
-		vis.VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
+		GraphVis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
 	/*** put the graph on top of the square grid ***/
-	vis.VisSquareGridGraph(*graph, vis_img, vis_img, true);
+	GraphVis::VisSquareGridGraph(*graph, vis_img, vis_img, true);
 	/*** put the path on top of the graph ***/
-	vis.VisSquareGridPath(path, vis_img, vis_img);
+	GraphVis::VisSquareGridPath(path, vis_img, vis_img);
 
 	// display visualization result
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE

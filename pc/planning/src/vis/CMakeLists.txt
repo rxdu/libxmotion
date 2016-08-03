@@ -9,6 +9,8 @@ find_package(OpenCV REQUIRED)
 # Add libraries
 set(VIS_LIB_SRC
     graph_vis.cpp
+    rrt_vis.cpp
+    vis_utils.cpp
 )
 add_library(vis STATIC ${VIS_LIB_SRC})
 target_link_libraries(vis map ${OpenCV_LIBS})

@@ -36,6 +36,7 @@ public:
 	static PaddingSize PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst);
 
 	static OccupancyType CheckAreaOccupancy(cv::InputArray _src, BoundingBox area);
+	static bool IsPointOccupied(cv::InputArray _src, cv::Point pt);
 };
 
 }

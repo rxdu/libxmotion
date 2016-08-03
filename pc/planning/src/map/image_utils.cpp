@@ -162,3 +162,13 @@ OccupancyType ImageUtils::CheckAreaOccupancy(cv::InputArray _src, BoundingBox ar
 
 	return type;
 }
+
+bool ImageUtils::IsPointOccupied(cv::InputArray _src, cv::Point pt)
+{
+	Mat src = _src.getMat();
+
+	if(src.at<uchar>(pt) > 0)
+		return false;
+	else
+		return true;
+}

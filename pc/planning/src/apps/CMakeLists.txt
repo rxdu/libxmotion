@@ -27,3 +27,6 @@ target_link_libraries(test_image vis ${OpenCV_LIBS})
 
 add_executable(test_traj test_traj.cpp)
 target_link_libraries(test_traj map vis ${OpenCV_LIBS})
+
+add_executable(test_rrtvis test_rrtvis.cpp)
+target_link_libraries(test_rrtvis map vis planner ${OpenCV_LIBS})

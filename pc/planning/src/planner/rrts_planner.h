@@ -33,7 +33,7 @@ private:
 	ompl::base::ProblemDefinitionPtr problem_def_;
 
 private:
-	std::vector<Position2Dd> PostProcess2DPath(std::vector<ompl::base::State*> path);
+	void PostProcess2DPath(const std::vector<ompl::base::State*>& path, std::vector<Position2Dd>& waypoints);
 
 private:
 	void ConstructFlatOutputSpace();
@@ -44,6 +44,9 @@ private:
 public:
 	void ConfigLocalPlanner();
 	bool SearchSolution();
+
+	void SetStartAndGoal(Position2Dd start, Position2Dd goal);
+	bool SearchSolution(Position2Dd start, Position2Dd goal, std::vector<Position2Dd>& path2d);
 };
 
 }

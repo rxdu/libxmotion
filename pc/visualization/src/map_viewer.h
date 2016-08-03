@@ -17,7 +17,7 @@
 
 // User headers
 #include "graph/graph.h"
-#include "graph_vis/graph_vis.h"
+#include "vis/graph_vis.h"
 #include "square_grid/square_grid.h"
 #include "quadtree/quad_tree.h"
 #include "map/map_info.h"
@@ -52,8 +52,6 @@ private:
 
 	std::shared_ptr<Graph_t<SquareCell*>> sgrid_graph_;
 	std::shared_ptr<Graph_t<QuadTreeNode*>> qtree_graph_;
-
-	GraphVis graph_vis_;
 
 	// workspace decomposition
 	bool image_updated_;

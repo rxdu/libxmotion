@@ -17,6 +17,14 @@ typedef struct _postion2d
 	uint32_t x;
 	uint32_t y;
 
+	_postion2d():x(0),y(0){}
+	_postion2d(uint32_t _x, uint32_t _y):x(_x),y(_y){}
+	//_postion2d(const _postion2d& other): x(other.x), y(other.y){}
+//	_postion2d& operator=(_postion2d other)
+//	{
+//		return _postion2d(other.x, other.y);
+//	}
+
 	bool operator==(const struct _postion2d& other) const
 	{
 		if(this->x == other.x && this->y == other.y)

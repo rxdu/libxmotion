@@ -8,62 +8,21 @@
 #include <iostream>
 #include <string>
 
-#include "graph_vis.h"
+#include "vis/graph_vis.h"
+#include "vis/vis_utils.h"
 
 using namespace srcl_ctrl;
 using namespace cv;
 
-GraphVis::GraphVis():
-		bk_color_(Scalar(255,255,255)),
-		ln_color_(Scalar(0,0,0)),
-		obs_color_(Scalar(0,102,204)),
-		aoi_color_(Scalar(0,255,255)),
-		start_color_(0,0,255),
-		finish_color_(153,76,0)
-{
-
-}
-
-GraphVis::~GraphVis()
-{
-
-}
-
-void GraphVis::DrawNodeCenter(cv::Point pos, cv::Mat img)
-{
-	int thickness = -1;
-	int lineType = 8;
-	Point center(pos.x,pos.y);
-	circle( img,
-			center,
-			3,
-			Scalar( 0, 0, 255 ),
-			thickness,
-			lineType);
-}
-
-void GraphVis::DrawEdge(cv::Point pt1, cv::Point pt2, cv::Mat img)
-{
-	int thickness = 1;
-	int lineType = 8;
-
-	line( img,
-			pt1,
-			pt2,
-			Scalar( 237, 149, 100 ),
-			thickness,
-			lineType);
-}
-
-void GraphVis::FillSquareCellColor(BoundingBox bbox, cv::Scalar color, cv::Mat img)
-{
-	Range rngx(bbox.x.min, bbox.x.max);
-	Range rngy(bbox.y.min, bbox.y.max);
-	img(rngy,rngx) = color;
-}
+cv::Scalar GraphVis::bk_color_ = Scalar(255,255,255);
+cv::Scalar GraphVis::ln_color_ = Scalar(Scalar(0,0,0));
+cv::Scalar GraphVis::obs_color_ = Scalar(Scalar(0,102,204));
+cv::Scalar GraphVis::aoi_color_ = Scalar(Scalar(0,255,255));
+cv::Scalar GraphVis::start_color_ = Scalar(0,0,255);
+cv::Scalar GraphVis::finish_color_ = Scalar(153,76,0);
 
 /*
- * @param &tree : reference to the tree to be visualized
+ * @param tree : reference to the tree to be visualized
  * @param _src : padded image from the tree builder
  * @param _dst : result image to be shown
  * @param vis_type : visualization type - FREE_SPACE, OCCU_SPACE or ALL_SPACE
@@ -305,7 +264,8 @@ void GraphVis::VisQTreeGraph(const Graph_t<QuadTreeNode*>& graph, cv::InputArray
 	for(auto itv = vertices.begin(); itv != vertices.end(); itv++)
 	{
 		cv::Point center((*itv)->bundled_data_->location_.x, (*itv)->bundled_data_->location_.y);
-		DrawNodeCenter(center, dst);
+		//DrawNodeCenter(center, dst);
+		VisUtils::DrawPoint(dst, center);
 
 		// current vertex center coordinate
 		uint64_t x1,y1,x2,y2;
@@ -330,7 +290,8 @@ void GraphVis::VisQTreeGraph(const Graph_t<QuadTreeNode*>& graph, cv::InputArray
 		x2 = (*it).dst_->bundled_data_->location_.x;
 		y2 = (*it).dst_->bundled_data_->location_.y;
 
-		DrawEdge(Point(x1,y1), Point(x2,y2), dst);
+		//DrawEdge(Point(x1,y1), Point(x2,y2), dst);
+		VisUtils::DrawLine(dst, Point(x1,y1), Point(x2,y2));
 
 		// draw cost
 		if(show_cost)
@@ -413,9 +374,11 @@ void GraphVis::VisSquareGrid(const SquareGrid& grid, cv::OutputArray _dst)
 	for(auto itc = grid.cells_.begin(); itc != grid.cells_.end(); itc++)
 	{
 		if((*itc).second->occu_ == OccupancyType::OCCUPIED)
-			FillSquareCellColor((*itc).second->bbox_, obs_color_, dst);
+			//FillSquareCellColor((*itc).second->bbox_, obs_color_, dst);
+			VisUtils::FillRectangularArea(dst, (*itc).second->bbox_, obs_color_);
 		else if((*itc).second->occu_ == OccupancyType::INTERESTED)
-			FillSquareCellColor((*itc).second->bbox_, aoi_color_, dst);
+			//FillSquareCellColor((*itc).second->bbox_, aoi_color_, dst);
+			VisUtils::FillRectangularArea(dst, (*itc).second->bbox_, aoi_color_);
 
 		auto cell = (*itc);
 		uint64_t x,y;
@@ -472,11 +435,6 @@ void GraphVis::VisSquareGrid(const SquareGrid& grid, cv::InputArray _src, cv::Ou
 
 void GraphVis::VisSquareGridGraph(const Graph_t<SquareCell*>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
 {
-//	Mat src = _src.getMat();
-//	_dst.create(_src.size(), _src.type());
-//	Mat dst = _dst.getMat();
-//	src.copyTo(dst);
-
 	Mat src, dst;
 	int src_type = _src.getMat().type();
 	if(src_type == CV_8UC1)
@@ -499,7 +457,8 @@ void GraphVis::VisSquareGridGraph(const Graph_t<SquareCell*>& graph, cv::InputAr
 	for(auto itv = vertices.begin(); itv != vertices.end(); itv++)
 	{
 		cv::Point center((*itv)->bundled_data_->location_.x, (*itv)->bundled_data_->location_.y);
-		DrawNodeCenter(center,dst);
+		//DrawNodeCenter(center,dst);
+		VisUtils::DrawPoint(dst, center);
 
 		// current vertex center coordinate
 		uint64_t x1,y1,x2,y2;
@@ -525,7 +484,8 @@ void GraphVis::VisSquareGridGraph(const Graph_t<SquareCell*>& graph, cv::InputAr
 		x2 = (*it).dst_->bundled_data_->location_.x;
 		y2 = (*it).dst_->bundled_data_->location_.y;
 
-		DrawEdge(Point(x1,y1), Point(x2,y2), dst);
+		//DrawEdge(Point(x1,y1), Point(x2,y2), dst);
+		VisUtils::DrawLine(dst, Point(x1,y1), Point(x2,y2));
 	}
 
 }
@@ -555,7 +515,8 @@ void GraphVis::VisSquareGridPath(const std::vector<Vertex_t<SquareCell*>*>& path
 	x = x - (cell_s->bbox_.x.max - cell_s->bbox_.x.min)/8;
 	y = cell_s->location_.y;
 	y = y + (cell_s->bbox_.y.max - cell_s->bbox_.y.min)/8;
-	FillSquareCellColor(cell_s->bbox_, start_color_, dst);
+	//FillSquareCellColor(cell_s->bbox_, start_color_, dst);
+	VisUtils::FillRectangularArea(dst, cell_s->bbox_, start_color_);
 	putText(dst, "S" ,Point(x,y), CV_FONT_NORMAL, 1, Scalar(0,0,0),1,1);
 
 	auto cell_f = (*(path.end()-1))->bundled_data_;
@@ -563,7 +524,8 @@ void GraphVis::VisSquareGridPath(const std::vector<Vertex_t<SquareCell*>*>& path
 	x = x - (cell_f->bbox_.x.max - cell_f->bbox_.x.min)/8;
 	y = cell_f->location_.y;
 	y = y + (cell_f->bbox_.y.max - cell_f->bbox_.y.min)/8;
-	FillSquareCellColor(cell_f->bbox_, finish_color_, dst);
+	//FillSquareCellColor(cell_f->bbox_, finish_color_, dst);
+	VisUtils::FillRectangularArea(dst, cell_f->bbox_, finish_color_);
 	putText(dst, "F" ,Point(x,y), CV_FONT_NORMAL, 1, Scalar(0,0,0),1,1);
 
 	// draw path

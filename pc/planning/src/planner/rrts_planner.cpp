@@ -9,6 +9,7 @@
 
 #include <ompl/base/spaces/RealVectorStateSpace.h>
 #include <ompl/base/spaces/SO2StateSpace.h>
+#include <ompl/base/ScopedState.h>
 
 #include <rrts_planner.h>
 
@@ -32,10 +33,8 @@ RRTStarPlanner::~RRTStarPlanner()
 
 }
 
-std::vector<Position2Dd> RRTStarPlanner::PostProcess2DPath(std::vector<ompl::base::State*> path)
+void RRTStarPlanner::PostProcess2DPath(const std::vector<ompl::base::State*>& path, std::vector<Position2Dd>& waypoints)
 {
-	std::vector<Position2Dd> waypoints;
-
 	for(auto& wp : path)
 	{
 		Position2Dd pos;
@@ -49,8 +48,6 @@ std::vector<Position2Dd> RRTStarPlanner::PostProcess2DPath(std::vector<ompl::bas
 	{
 		std::cout << pt.x << " , " << pt.y << std::endl;
 	}
-
-	return waypoints;
 }
 
 void RRTStarPlanner::ConstructFlatOutputSpace()
@@ -153,7 +150,7 @@ bool RRTStarPlanner::SearchSolution()
 		// print the path to screen
 		path->print(std::cout);
 
-		PostProcess2DPath(path->as<og::PathGeometric>()->getStates());
+		//PostProcess2DPath(path->as<og::PathGeometric>()->getStates());
 
 		//		std::ofstream outFile("output.txt");
 		//		dynamic_cast<const og::PathGeometric&>(*path).printAsMatrix(std::cout);
@@ -168,4 +165,68 @@ bool RRTStarPlanner::SearchSolution()
 	else
 		return false;
 
+}
+
+void RRTStarPlanner::SetStartAndGoal(Position2Dd start, Position2Dd goal)
+{
+	ompl::base::ScopedState<> start_state(state_space_);
+	start_state->as<ob::RealVectorStateSpace::StateType>()->values[0] = start.x;
+	start_state->as<ob::RealVectorStateSpace::StateType>()->values[1] = start.y;
+	ob::ScopedState<> goal_state(state_space_);
+	goal_state->as<ob::RealVectorStateSpace::StateType>()->values[0] = goal.x;
+	goal_state->as<ob::RealVectorStateSpace::StateType>()->values[1] = goal.y;
+
+//	std::cout << "\n Start: " << std::endl;
+//	std::cout << start;
+//
+//	std::cout << "\n Goal: " << std::endl;
+//	std::cout << goal;
+
+	problem_def_->setStartAndGoalStates(start_state, goal_state);
+}
+
+bool RRTStarPlanner::SearchSolution(Position2Dd start, Position2Dd goal, std::vector<Position2Dd>& path2d)
+{
+	if(!planner_ready_) {
+		std::cerr << "You need to call ConfigLocalPlanner() to setup the local planner first." << std::endl;
+		return false;
+	}
+
+	ompl::base::ScopedState<> start_state(state_space_);
+	start_state->as<ob::RealVectorStateSpace::StateType>()->values[0] = start.x;
+	start_state->as<ob::RealVectorStateSpace::StateType>()->values[1] = start.y;
+	ob::ScopedState<> goal_state(state_space_);
+	goal_state->as<ob::RealVectorStateSpace::StateType>()->values[0] = goal.x;
+	goal_state->as<ob::RealVectorStateSpace::StateType>()->values[1] = goal.y;
+
+	ob::PlannerStatus solved = planner_->solve(1.5);
+
+	if (solved)
+	{
+		// get the goal representation from the problem definition (not the same as the goal state)
+		// and inquire about the found path
+		ob::PathPtr path = problem_def_->getSolutionPath();
+
+		if(solved == ob::PlannerStatus::APPROXIMATE_SOLUTION)
+			std::cout << "Found approximate solution" << std::endl;
+		else if(solved == ob::PlannerStatus::EXACT_SOLUTION)
+			std::cout << "Found exact solution" << std::endl;
+
+		// print the path to screen
+		path->print(std::cout);
+
+		PostProcess2DPath(path->as<og::PathGeometric>()->getStates(), path2d);
+
+		//		std::ofstream outFile("output.txt");
+		//		dynamic_cast<const og::PathGeometric&>(*path).printAsMatrix(std::cout);
+		//		path->as<og::PathGeometric>()->printAsMatrix(outFile);
+	}
+	else
+		std::cout << "No solution found" << std::endl;
+
+	if(solved == ob::PlannerStatus::APPROXIMATE_SOLUTION ||
+			solved == ob::PlannerStatus::EXACT_SOLUTION)
+		return true;
+	else
+		return false;
 }
