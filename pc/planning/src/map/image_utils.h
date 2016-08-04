@@ -35,6 +35,8 @@ public:
 	static PaddingSize PadImageToSquared(cv::InputArray _src, cv::OutputArray _dst);
 	static PaddingSize PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst);
 
+	static void CreateOccupancyMapForRRT(uint64_t width, uint64_t height, cv::OutputArray _dst);
+
 	static OccupancyType CheckAreaOccupancy(cv::InputArray _src, BoundingBox area);
 	static bool IsPointOccupied(cv::InputArray _src, cv::Point pt);
 };

@@ -19,27 +19,21 @@ cv::Scalar RRTVis::aoi_color_ = Scalar(Scalar(0,255,255));
 cv::Scalar RRTVis::start_color_ = Scalar(0,0,255);
 cv::Scalar RRTVis::finish_color_ = Scalar(153,76,0);
 
-void RRTVis::CreateRRTCanvas(uint64_t width, uint64_t height, cv::OutputArray _dst)
-{
-	_dst.create(Size(width, height), CV_8UC1);
-	Mat dst = _dst.getMat();
-
-	dst = Scalar(255);//bk_color_;
-}
-
 void RRTVis::VisRRTPath(const std::vector<Position2Dd>& path, MapInfo info, cv::InputArray _src, cv::OutputArray _dst)
 {
-	Mat src = _src.getMat();
-	_dst.create(_src.size(), _src.type());
+	Mat src_img_color;
+	cvtColor(_src, src_img_color, CV_GRAY2BGR);
+	_dst.create(src_img_color.size(), src_img_color.type());
 	Mat dst = _dst.getMat();
-	src.copyTo(dst);
 
 	for(auto& wp : path)
 	{
 		Position2D pos;
 		pos = MapUtils::CoordinatesFromWorldToMap(wp, info);
-		VisUtils::DrawPoint(dst, Point(pos.x, pos.y));
+		VisUtils::DrawPoint(src_img_color, Point(pos.x, pos.y));
 	}
+
+	src_img_color.copyTo(dst);
 }
 
 

@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <functional>
 
 #include <ompl/base/spaces/RealVectorStateSpace.h>
 #include <ompl/base/spaces/SO2StateSpace.h>
@@ -44,11 +45,11 @@ void RRTStarPlanner::PostProcess2DPath(const std::vector<ompl::base::State*>& pa
 		waypoints.push_back(pos);
 	}
 
-	std::cout << "2d path: " << std::endl;
-	for(auto& pt : waypoints)
-	{
-		std::cout << pt.x << " , " << pt.y << std::endl;
-	}
+//	std::cout << "2d path: " << std::endl;
+//	for(auto& pt : waypoints)
+//	{
+//		std::cout << pt.x << " , " << pt.y << std::endl;
+//	}
 }
 
 void RRTStarPlanner::ConstructFlatOutputSpace()
@@ -89,30 +90,15 @@ void RRTStarPlanner::DefinePlanProblem()
 {
 	problem_def_ = std::make_shared<ob::ProblemDefinition>(space_info_);
 
-	//problem_def_->setIntermediateSolutionCallback(test_callback);
-
-	ompl::base::ScopedState<> start(state_space_);
-	start.random();
-	//	start->as<ob::RealVectorStateSpace::StateType>()->values[0] = 0.0;
-	//	start->as<ob::RealVectorStateSpace::StateType>()->values[1] = 0.0;
-	ob::ScopedState<> goal(state_space_);
-	goal.random();
-	//	goal->as<ob::RealVectorStateSpace::StateType>()->values[0] = 1.0;
-	//	goal->as<ob::RealVectorStateSpace::StateType>()->values[1] = 1.0;
-
-	std::cout << "\n Start: " << std::endl;
-	std::cout << start;
-
-	std::cout << "\n Goal: " << std::endl;
-	std::cout << goal;
-
-	problem_def_->setStartAndGoalStates(start, goal);
+	problem_def_->setIntermediateSolutionCallback(std::bind(&RRTStarPlanner::RRTStatusCallback, this,
+			   std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 }
 
 void RRTStarPlanner::InitPlanner()
 {
 	auto rrt_planner =  new RRTStarKD(space_info_);
 	rrt_planner->setRange(0.01);
+	rrt_planner->EnableIterationData(true);
 
 	// auto rrt_planner =  new og::RRTstar(si);
 
@@ -137,6 +123,35 @@ void RRTStarPlanner::ConfigLocalPlanner()
 	planner_ready_ = true;
 }
 
+void RRTStarPlanner::RRTStatusCallback(const ompl::base::Planner* planner, const std::vector<const ompl::base::State*> & states, const ompl::base::Cost cost)
+{
+	std::cout << "callback called" << std::endl;
+	ob::PlannerData status_data(planner->getSpaceInformation());
+	planner->getPlannerData(status_data);
+
+	std::cout << "number of vertices: " << status_data.numVertices() << std::endl;
+}
+
+void RRTStarPlanner::SetStartAndGoal(Position2Dd start, Position2Dd goal)
+{
+	ompl::base::ScopedState<> start_state(state_space_);
+	start_state->as<ob::RealVectorStateSpace::StateType>()->values[0] = start.x;
+	start_state->as<ob::RealVectorStateSpace::StateType>()->values[1] = start.y;
+	ob::ScopedState<> goal_state(state_space_);
+	goal_state->as<ob::RealVectorStateSpace::StateType>()->values[0] = goal.x;
+	goal_state->as<ob::RealVectorStateSpace::StateType>()->values[1] = goal.y;
+
+	std::cout << " ------------------------------ " << std::endl;
+	std::cout << "Start: " << std::endl;
+	std::cout << start_state;
+
+	std::cout << "\n Goal: " << std::endl;
+	std::cout << goal_state;
+	std::cout << " ------------------------------ " << std::endl;
+
+	problem_def_->setStartAndGoalStates(start_state, goal_state);
+}
+
 bool RRTStarPlanner::SearchSolution()
 {
 	if(!planner_ready_) {
@@ -144,7 +159,7 @@ bool RRTStarPlanner::SearchSolution()
 		return false;
 	}
 
-	ob::PlannerStatus solved = planner_->solve(10.5);
+	ob::PlannerStatus solved = planner_->solve(1.5);
 
 	if (solved)
 	{
@@ -177,24 +192,6 @@ bool RRTStarPlanner::SearchSolution()
 
 }
 
-void RRTStarPlanner::SetStartAndGoal(Position2Dd start, Position2Dd goal)
-{
-	ompl::base::ScopedState<> start_state(state_space_);
-	start_state->as<ob::RealVectorStateSpace::StateType>()->values[0] = start.x;
-	start_state->as<ob::RealVectorStateSpace::StateType>()->values[1] = start.y;
-	ob::ScopedState<> goal_state(state_space_);
-	goal_state->as<ob::RealVectorStateSpace::StateType>()->values[0] = goal.x;
-	goal_state->as<ob::RealVectorStateSpace::StateType>()->values[1] = goal.y;
-
-//	std::cout << "\n Start: " << std::endl;
-//	std::cout << start;
-//
-//	std::cout << "\n Goal: " << std::endl;
-//	std::cout << goal;
-
-	problem_def_->setStartAndGoalStates(start_state, goal_state);
-}
-
 bool RRTStarPlanner::SearchSolution(Position2Dd start, Position2Dd goal, std::vector<Position2Dd>& path2d)
 {
 	if(!planner_ready_) {
@@ -202,14 +199,9 @@ bool RRTStarPlanner::SearchSolution(Position2Dd start, Position2Dd goal, std::ve
 		return false;
 	}
 
-	ompl::base::ScopedState<> start_state(state_space_);
-	start_state->as<ob::RealVectorStateSpace::StateType>()->values[0] = start.x;
-	start_state->as<ob::RealVectorStateSpace::StateType>()->values[1] = start.y;
-	ob::ScopedState<> goal_state(state_space_);
-	goal_state->as<ob::RealVectorStateSpace::StateType>()->values[0] = goal.x;
-	goal_state->as<ob::RealVectorStateSpace::StateType>()->values[1] = goal.y;
+	SetStartAndGoal(start, goal);
 
-	ob::PlannerStatus solved = planner_->solve(1.5);
+	ob::PlannerStatus solved = planner_->solve(1.5); // 1.5
 
 	if (solved)
 	{
@@ -223,13 +215,11 @@ bool RRTStarPlanner::SearchSolution(Position2Dd start, Position2Dd goal, std::ve
 			std::cout << "Found exact solution" << std::endl;
 
 		// print the path to screen
-		path->print(std::cout);
+		//path->print(std::cout);
+		//std::ofstream outFile("output.txt");
+		//path->as<og::PathGeometric>()->printAsMatrix(outFile);
 
 		PostProcess2DPath(path->as<og::PathGeometric>()->getStates(), path2d);
-
-		//		std::ofstream outFile("output.txt");
-		//		dynamic_cast<const og::PathGeometric&>(*path).printAsMatrix(std::cout);
-		//		path->as<og::PathGeometric>()->printAsMatrix(outFile);
 	}
 	else
 		std::cout << "No solution found" << std::endl;

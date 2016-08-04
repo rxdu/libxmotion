@@ -52,16 +52,15 @@ int main(int argc, char** argv)
 	r2->as<ob::RealVectorStateSpace>()->setBounds(bounds2);
 
 	// add two spaces to get a R3*SO(2) space
-	ompl::base::StateSpacePtr flat_space = r3 + so2;
-//	ompl::base::StateSpacePtr flat_space = r2;
+//	ompl::base::StateSpacePtr flat_space = r3 + so2;
+	ompl::base::StateSpacePtr flat_space = r2;
 
 	// create an instance of planner
 	ob::SpaceInformationPtr si(new ob::SpaceInformation(flat_space));
-//	base::PlannerPtr planner(new RRTStarKD(si));
-//	base::PlannerPtr planner(new og::RRTstar(si));
 	auto rrt_planner =  new RRTStarKD(si);
 	// auto rrt_planner =  new og::RRTstar(si);
 	rrt_planner->setRange(0.01);
+	rrt_planner->EnableIterationData(true);
 	base::PlannerPtr planner(rrt_planner);
 
 	// define the problem to be solved

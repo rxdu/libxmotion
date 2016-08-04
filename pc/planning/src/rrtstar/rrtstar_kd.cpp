@@ -196,6 +196,7 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 		iterations_++;
 
 		// sample a state
+		// TODO this part needs to be fixed in order to find exact solution
 		if (goal_s && goalMotions_.size() < goal_s->maxSampleCount() && goal_s->canSample())
 			goal_s->sampleGoal(sampled_state);
 		else
@@ -389,6 +390,7 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 			{
 				goalMotions_.push_back(new_motion);
 				checkForSolution = true;
+				//std::cout << "distance from goal: " << distanceFromGoal << std::endl;
 			}
 
 			// Checking for solution or iterative improvement
@@ -421,7 +423,8 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 					}
 				}
 
-				if (updatedSolution || send_iteration_data)
+//				if ((updatedSolution || send_iteration_data) && solution!=nullptr)
+				if (updatedSolution)
 				{
 					if (intermediateSolutionCallback)
 					{
@@ -437,6 +440,7 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 
 						intermediateSolutionCallback(this, spath, bestCost_);
 					}
+					//std::cout << "distance from goal: " << distanceFromGoal << std::endl;
 				}
 			}
 
@@ -445,6 +449,7 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 			{
 				approx_solution = new_motion;
 				approx_dist = distanceFromGoal;
+				//std::cout << "distance from goal: " << distanceFromGoal << std::endl;
 			}
 		}
 
@@ -452,7 +457,6 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 		if (solution && sufficientlyShort)
 			break;
 	}
-
 
 	/*----------------------------------------------------------*/
 	/* 						post - search						*/

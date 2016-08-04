@@ -23,14 +23,13 @@ int main(int argc, char** argv)
 	map_info.map_size_x = 1500;
 	map_info.map_size_y = 1500;
 	map_info.SetWorldSize(1.0, 1.0);
-	RRTVis::CreateRRTCanvas(map_info.map_size_x,map_info.map_size_y, vis_img);
+	ImageUtils::CreateOccupancyMapForRRT(map_info.map_size_x,map_info.map_size_y, vis_img);
 	BoundingBox bbox;
 	bbox.x.min = 500;
 	bbox.x.max = 1000;
 	bbox.y.min = 500;
 	bbox.y.max = 1000;
-	VisUtils::FillRectangularArea(vis_img, bbox, cv::Scalar(0));
-	ImageUtils::BinarizeImage(vis_img, vis_img, 100);
+	//VisUtils::FillRectangularArea(vis_img, bbox, cv::Scalar(0));
 
 	RRTStarPlanner planner;
 	std::vector<Position2Dd> path;
@@ -41,9 +40,8 @@ int main(int argc, char** argv)
 	Position2Dd start,goal;
 	start.x = 0;
 	start.y = 0;
-	goal.x = 1;
-	goal.y = 1;
-	planner.SetStartAndGoal(start, goal);
+	goal.x = 0.8;
+	goal.y = 0.9;
 	planner.SearchSolution(start, goal, path);
 
 	RRTVis::VisRRTPath(path, map_info, vis_img, vis_img);

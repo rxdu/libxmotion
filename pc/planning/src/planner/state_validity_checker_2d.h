@@ -49,21 +49,15 @@ public:
 			pos.y = state->as<ompl::base::RealVectorStateSpace::StateType>()->values[1];
 
 			Position2D pos_on_map;
-			Position2D pos_on_paddedmap;
+			//Position2D pos_on_paddedmap;
 			pos_on_map = MapUtils::CoordinatesFromWorldToMap(pos, map_info_);
 			//pos_on_paddedmap = MapUtils::CoordinatesFromOriginalToPadded(pos_on_map, map_info_);
 
-			std::cout << "check point: " << pos_on_map.x << " , " << pos_on_map.y << std::endl;
-			if(pos_on_map.x == 1500)
-				pos_on_map.x = 1499;
-			if(pos_on_map.y == 1500)
-				pos_on_map.y = 1499;
+			//std::cout << "check point: " << pos_on_map.x << " , " << pos_on_map.y << std::endl;
 			if(ImageUtils::IsPointOccupied(occupancy_map_, cv::Point(pos_on_map.x, pos_on_map.y)))
 				return false;
 			else
 				return true;
-
-			return false;
 		}
 		else
 			return true;

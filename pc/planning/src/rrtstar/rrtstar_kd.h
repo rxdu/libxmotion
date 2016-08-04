@@ -109,6 +109,7 @@ public:
 		maxDistance_ = distance;
 	}
 
+	void EnableIterationData(bool cmd) { send_iteration_data = cmd; }
 };
 
 }

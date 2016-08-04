@@ -125,6 +125,14 @@ PaddingSize ImageUtils::PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst
 	return psize;
 }
 
+void ImageUtils::CreateOccupancyMapForRRT(uint64_t width, uint64_t height, cv::OutputArray _dst)
+{
+	_dst.create(Size(width, height), CV_8UC1);
+	Mat dst = _dst.getMat();
+
+	dst = Scalar(255);
+}
+
 OccupancyType ImageUtils::CheckAreaOccupancy(cv::InputArray _src, BoundingBox area)
 {
 	Mat src = _src.getMat();

@@ -40,6 +40,8 @@ public:
 	StateValidityChecker2D* validity_checker_2d_;
 
 private:
+	void SetStartAndGoal(Position2Dd start, Position2Dd goal);
+	void RRTStatusCallback(const ompl::base::Planner* planner, const std::vector<const ompl::base::State*> & states, const ompl::base::Cost cost);
 	void PostProcess2DPath(const std::vector<ompl::base::State*>& path, std::vector<Position2Dd>& waypoints);
 
 private:
@@ -53,7 +55,6 @@ public:
 	void ConfigLocalPlanner();
 	bool SearchSolution();
 
-	void SetStartAndGoal(Position2Dd start, Position2Dd goal);
 	bool SearchSolution(Position2Dd start, Position2Dd goal, std::vector<Position2Dd>& path2d);
 };
 

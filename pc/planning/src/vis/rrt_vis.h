@@ -28,7 +28,6 @@ private:
 	static cv::Scalar finish_color_;	// finishing cell color
 
 public:
-	static void CreateRRTCanvas(uint64_t width, uint64_t height, cv::OutputArray _dst);
 	static void VisRRTPath(const std::vector<Position2Dd>& path, MapInfo info, cv::InputArray _src, cv::OutputArray _dst);
 };
 
