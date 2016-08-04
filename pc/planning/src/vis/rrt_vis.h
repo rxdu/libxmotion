@@ -15,6 +15,8 @@
 
 #include "common/planning_types.h"
 #include "map/map_info.h"
+#include "graph/graph.h"
+#include "rrtstar/rrt_node.h"
 
 namespace srcl_ctrl {
 
@@ -29,6 +31,7 @@ private:
 
 public:
 	static void VisRRTPath(const std::vector<Position2Dd>& path, MapInfo info, cv::InputArray _src, cv::OutputArray _dst);
+	static void VisRRTGraph(const Graph_t<RRTNode>& graph, MapInfo info, cv::InputArray _src, cv::OutputArray _dst);
 };
 
 }

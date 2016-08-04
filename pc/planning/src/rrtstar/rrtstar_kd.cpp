@@ -171,6 +171,7 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 	Motion *approx_solution = nullptr;
 	double approx_dist = std::numeric_limits<double>::infinity();
 	bool sufficientlyShort = false;
+	double distanceFromGoal = std::numeric_limits<double>::infinity();;
 
 	Motion *sampled_motion = new Motion(si_);
 	base::State *sampled_state = sampled_motion->state;
@@ -196,9 +197,11 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 		iterations_++;
 
 		// sample a state
-		// TODO this part needs to be fixed in order to find exact solution
-		if (goal_s && goalMotions_.size() < goal_s->maxSampleCount() && goal_s->canSample())
-			goal_s->sampleGoal(sampled_state);
+		// Note: updated the condition so that sampling in the state space doesn't stop too early,
+		//		now only sample the goal region when the distance from goal is smaller than max distance
+//		if (goal_s && goalMotions_.size() < goal_s->maxSampleCount() && goal_s->canSample())
+		if(goal_s && distanceFromGoal < maxDistance_ && goal_s->canSample())
+				goal_s->sampleGoal(sampled_state);
 		else
 			sampler_->sampleUniform(sampled_state);
 
@@ -385,7 +388,6 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 			}
 
 			// Add the new motion to the goalMotion_ list, if it satisfies the goal
-			double distanceFromGoal;
 			if (goal->isSatisfied(new_motion->state, &distanceFromGoal))
 			{
 				goalMotions_.push_back(new_motion);
@@ -493,6 +495,16 @@ base::PlannerStatus RRTStarKD::solve(const base::PlannerTerminationCondition &pt
 		// Does the solution satisfy the optimization objective?
 		psol.setOptimized(opt_, bestCost_, sufficientlyShort);
 		pdef_->addSolutionPath(psol);
+
+		if (intermediateSolutionCallback)
+		{
+			std::vector<const base::State *> spath;
+
+			for(auto& motion: mpath)
+				spath.push_back(motion->state);
+
+			intermediateSolutionCallback(this, spath, bestCost_);
+		}
 
 		found_solution = true;
 	}

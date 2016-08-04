@@ -487,7 +487,6 @@ void GraphVis::VisSquareGridGraph(const Graph_t<SquareCell*>& graph, cv::InputAr
 		//DrawEdge(Point(x1,y1), Point(x2,y2), dst);
 		VisUtils::DrawLine(dst, Point(x1,y1), Point(x2,y2));
 	}
-
 }
 
 void GraphVis::VisSquareGridPath(const std::vector<Vertex_t<SquareCell*>*>& path, cv::InputArray _src, cv::OutputArray _dst)

@@ -17,10 +17,12 @@
 #include <ompl/base/SpaceInformation.h>
 #include <ompl/base/ProblemDefinition.h>
 
-#include "rrtstar/rrtstar_kd.h"
 #include "common/planning_types.h"
 #include "planner/state_validity_checker_2d.h"
+#include "rrtstar/rrtstar_kd.h"
+#include "rrtstar/rrt_node.h"
 #include "map/map_info.h"
+#include "graph/graph.h"
 
 namespace srcl_ctrl {
 
@@ -38,10 +40,12 @@ private:
 
 public:
 	StateValidityChecker2D* validity_checker_2d_;
+	std::shared_ptr<Graph_t<RRTNode>> rrts_vis_graph_;
 
 private:
 	void SetStartAndGoal(Position2Dd start, Position2Dd goal);
 	void RRTStatusCallback(const ompl::base::Planner* planner, const std::vector<const ompl::base::State*> & states, const ompl::base::Cost cost);
+	void ProcessPlannerData(ompl::base::PlannerData& data);
 	void PostProcess2DPath(const std::vector<ompl::base::State*>& path, std::vector<Position2Dd>& waypoints);
 
 private:

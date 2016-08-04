@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <fstream>
 #include <functional>
 
 #include <ompl/base/spaces/RealVectorStateSpace.h>
@@ -123,13 +124,63 @@ void RRTStarPlanner::ConfigLocalPlanner()
 	planner_ready_ = true;
 }
 
+void RRTStarPlanner::ProcessPlannerData(ompl::base::PlannerData& status_data)
+{
+	std::cout << "number of vertices: " << status_data.numVertices() << std::endl;
+
+//	auto vtx = status_data.getVertex(0);
+//
+//	std::vector<unsigned int> edges;
+//	status_data.getEdges(0, edges);
+//
+//	for(auto& edge:edges)
+//		std::cout << "edge: " << edge << std::endl;
+
+	rrts_vis_graph_ = std::make_shared<Graph_t<RRTNode>>();
+
+	for(int i = 0; i < status_data.numVertices(); i++)
+	{
+		auto vtx = status_data.getVertex(i);
+
+		RRTNode node(i);
+		node.position.x = vtx.getState()->as<ompl::base::RealVectorStateSpace::StateType>()->values[0];
+		node.position.y = vtx.getState()->as<ompl::base::RealVectorStateSpace::StateType>()->values[1];
+
+		std::vector<unsigned int> edges;
+		status_data.getEdges(i, edges);
+		for(auto& edge : edges)
+		{
+			auto vtx2 = status_data.getVertex(edge);
+
+			RRTNode node2(edge);
+			node2.position.x = vtx2.getState()->as<ompl::base::RealVectorStateSpace::StateType>()->values[0];
+			node2.position.y = vtx2.getState()->as<ompl::base::RealVectorStateSpace::StateType>()->values[1];
+
+			rrts_vis_graph_->AddEdge(node, node2, 1);
+		}
+	}
+
+//	for(int i = 0; i < status_data.numVertices(); i++)
+//	{
+//		auto vtx = status_data.getVertex(i);
+//		if(status_data.isStartVertex(i))
+//			std::cout << "*** " << " start vertex" << std::endl;
+//		std::cout << i << " : " << vtx.getState()->as<ompl::base::RealVectorStateSpace::StateType>()->values[0]
+//						<< " , " << vtx.getState()->as<ompl::base::RealVectorStateSpace::StateType>()->values[1] << std::endl;
+//	}
+
+	//std::ofstream outFile("graph_output.graphml");
+	//status_data.printGraphviz(outFile);
+	//status_data.printGraphML(outFile);
+}
+
 void RRTStarPlanner::RRTStatusCallback(const ompl::base::Planner* planner, const std::vector<const ompl::base::State*> & states, const ompl::base::Cost cost)
 {
 	std::cout << "callback called" << std::endl;
 	ob::PlannerData status_data(planner->getSpaceInformation());
 	planner->getPlannerData(status_data);
 
-	std::cout << "number of vertices: " << status_data.numVertices() << std::endl;
+	ProcessPlannerData(status_data);
 }
 
 void RRTStarPlanner::SetStartAndGoal(Position2Dd start, Position2Dd goal)
@@ -201,7 +252,7 @@ bool RRTStarPlanner::SearchSolution(Position2Dd start, Position2Dd goal, std::ve
 
 	SetStartAndGoal(start, goal);
 
-	ob::PlannerStatus solved = planner_->solve(1.5); // 1.5
+	ob::PlannerStatus solved = planner_->solve(1.0); // 1.5
 
 	if (solved)
 	{
