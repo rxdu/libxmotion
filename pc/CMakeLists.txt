@@ -29,7 +29,7 @@ include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/dynamicEDT3D/i
 set(Octomap_LIBS octomap octomath)
 
 ## Config ompl include directories
-include_directories(${CMAKE_SOURCE_DIR}/third_party/ompl-1.2.0/src)
+include_directories(${CMAKE_SOURCE_DIR}/third_party/ompl-1.2.1/src)
 
 ## Config smp include directories
 #include_directories(${CMAKE_SOURCE_DIR}/third_party/smp_karaman)

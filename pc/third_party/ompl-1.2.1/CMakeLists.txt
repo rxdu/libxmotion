@@ -40,7 +40,7 @@ include(OMPLVersion)
 include(OMPLUtils)
 
 set(EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}/bin")
-set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/lib")
+set(LIBRARY_OUTPUT_PATH "${PROJECT_BINARY_DIR}/lib")
 
 set(OMPL_CMAKE_UTIL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules"
     CACHE FILEPATH "Path to directory with auxiliary CMake scripts for OMPL")
@@ -153,6 +153,10 @@ install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/doc/markdown/FindOMPL.cmake"
 install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/ompl.conf"
   DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/ompl${OMPL_INSTALL_SUFFIX}"
   COMPONENT ompl)
+
+# script to install ompl on Ubuntu
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/install-ompl-ubuntu.sh.in"
+  "${CMAKE_CURRENT_SOURCE_DIR}/install-ompl-ubuntu.sh" @ONLY)
 
 # uninstall target
 configure_file(
