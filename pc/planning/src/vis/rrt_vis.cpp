@@ -21,10 +21,10 @@ cv::Scalar RRTVis::finish_color_ = Scalar(153,76,0);
 
 void RRTVis::CreateRRTCanvas(uint64_t width, uint64_t height, cv::OutputArray _dst)
 {
-	_dst.create(Size(width, height), CV_8UC3);
+	_dst.create(Size(width, height), CV_8UC1);
 	Mat dst = _dst.getMat();
 
-	dst = bk_color_;
+	dst = Scalar(255);//bk_color_;
 }
 
 void RRTVis::VisRRTPath(const std::vector<Position2Dd>& path, MapInfo info, cv::InputArray _src, cv::OutputArray _dst)

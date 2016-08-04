@@ -30,6 +30,7 @@ void QuadPlanner::ConfigGraphPlanner(MapConfig config)
 		if(result)
 		{
 			std::cout << "quad tree planner activated" << std::endl;
+			ConfigRRTSOccupancyMap(qtree_planner_.map_.padded_image, qtree_planner_.map_.info);
 			active_graph_planner_ = GraphPlannerType::QUADTREE_PLANNER;
 		}
 	}
@@ -40,6 +41,7 @@ void QuadPlanner::ConfigGraphPlanner(MapConfig config)
 		if(result)
 		{
 			std::cout << "square grid planner activated" << std::endl;
+			ConfigRRTSOccupancyMap(sgrid_planner_.map_.padded_image, sgrid_planner_.map_.info);
 			active_graph_planner_ = GraphPlannerType::SQUAREGRID_PLANNER;
 		}
 	}
@@ -75,4 +77,9 @@ std::vector<uint64_t> QuadPlanner::SearchForPath()
 	}
 
 	return traj;
+}
+
+void QuadPlanner::ConfigRRTSOccupancyMap(cv::Mat map, MapInfo info)
+{
+	local_planner_.UpdateOccupancyMap(map, info);
 }

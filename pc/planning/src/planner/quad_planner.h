@@ -8,9 +8,12 @@
 #ifndef PLANNING_SRC_PLANNER_QUAD_PLANNER_H_
 #define PLANNING_SRC_PLANNER_QUAD_PLANNER_H_
 
+#include "opencv2/opencv.hpp"
+
 #include "common/planning_types.h"
 #include "planner/graph_planner.h"
 #include "planner/rrts_planner.h"
+#include "map/map_info.h"
 
 namespace srcl_ctrl {
 
@@ -43,6 +46,8 @@ public:
 	void ConfigGraphPlanner(MapConfig config);
 	void SetStartMapPosition(Position2D pos);
 	void SetGoalMapPosition(Position2D pos);
+
+	void ConfigRRTSOccupancyMap(cv::Mat map, MapInfo info);
 
 	std::vector<uint64_t> SearchForPath();
 };

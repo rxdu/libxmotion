@@ -11,12 +11,16 @@
 #include <vector>
 #include <memory>
 
+#include "opencv2/opencv.hpp"
+
 #include <ompl/base/StateSpace.h>
 #include <ompl/base/SpaceInformation.h>
 #include <ompl/base/ProblemDefinition.h>
 
 #include "rrtstar/rrtstar_kd.h"
 #include "common/planning_types.h"
+#include "planner/state_validity_checker_2d.h"
+#include "map/map_info.h"
 
 namespace srcl_ctrl {
 
@@ -32,6 +36,9 @@ private:
 	ompl::base::PlannerPtr planner_;
 	ompl::base::ProblemDefinitionPtr problem_def_;
 
+public:
+	StateValidityChecker2D* validity_checker_2d_;
+
 private:
 	void PostProcess2DPath(const std::vector<ompl::base::State*>& path, std::vector<Position2Dd>& waypoints);
 
@@ -42,6 +49,7 @@ private:
 	void InitPlanner();
 
 public:
+	void UpdateOccupancyMap(cv::Mat map, MapInfo info);
 	void ConfigLocalPlanner();
 	bool SearchSolution();
 

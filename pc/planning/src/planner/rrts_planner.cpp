@@ -22,7 +22,8 @@ namespace og = ompl::geometric;
 RRTStarPlanner::RRTStarPlanner():
 		planner_ready_(false),
 		state_space_(nullptr),
-		space_info_(nullptr)
+		space_info_(nullptr),
+		validity_checker_2d_(nullptr)
 {
 
 }
@@ -78,6 +79,10 @@ void RRTStarPlanner::Construct2DStateSpace()
 	state_space_ = r2;
 
 	space_info_ = std::make_shared<ompl::base::SpaceInformation>(state_space_);
+
+	// set state validity checker
+	validity_checker_2d_ = new StateValidityChecker2D(space_info_);
+	space_info_->setStateValidityChecker(base::StateValidityCheckerPtr(validity_checker_2d_));
 }
 
 void RRTStarPlanner::DefinePlanProblem()
@@ -117,6 +122,11 @@ void RRTStarPlanner::InitPlanner()
 	planner_->setup();
 }
 
+void RRTStarPlanner::UpdateOccupancyMap(cv::Mat map, MapInfo info)
+{
+	validity_checker_2d_->SetOccupancyMap(map, info);
+}
+
 void RRTStarPlanner::ConfigLocalPlanner()
 {
 	//ConstructFlatOutputSpace();
@@ -134,7 +144,7 @@ bool RRTStarPlanner::SearchSolution()
 		return false;
 	}
 
-	ob::PlannerStatus solved = planner_->solve(1.5);
+	ob::PlannerStatus solved = planner_->solve(10.5);
 
 	if (solved)
 	{

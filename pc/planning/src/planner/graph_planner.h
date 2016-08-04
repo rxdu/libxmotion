@@ -39,10 +39,11 @@ public:
 
 private:
 	bool is_ready_;
-	Map_t<MapDataModel> map_;
 	std::shared_ptr<Graph_t<MapDataModelNode*>> graph_;
-
 	Trajectory_t<MapDataModelNode*> empty_path_;
+
+public:
+	Map_t<MapDataModel> map_;
 
 public:
 	template<class T = MapDataModel, typename std::enable_if<std::is_same<T, QuadTree>::value>::type* = nullptr>
