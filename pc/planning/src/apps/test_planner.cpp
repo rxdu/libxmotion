@@ -104,7 +104,7 @@ int main(int argc, char** argv)
 
 		RRTVis::VisRRTGraph(*qplanner.GetLocalPlannerVisGraph(), info, rrt_vis, rrt_vis);
 
-		imwrite( "rrt_vis_tree.jpg", rrt_vis);
+		//imwrite( "rrt_vis_tree.jpg", rrt_vis);
 
 		namedWindow("RRTS Plan", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 		imshow("RRTS Plan", rrt_vis);
