@@ -30,7 +30,7 @@ void QuadPlanner::ConfigGraphPlanner(MapConfig config)
 		if(result)
 		{
 			std::cout << "quad tree planner activated" << std::endl;
-			//ConfigRRTSOccupancyMap(qtree_planner_.map_.padded_image, qtree_planner_.map_.info);
+			this->ConfigRRTSOccupancyMap(this->qtree_planner_.map_.padded_image, this->qtree_planner_.map_.info);
 			active_graph_planner_ = GraphPlannerType::QUADTREE_PLANNER;
 		}
 	}
@@ -41,7 +41,7 @@ void QuadPlanner::ConfigGraphPlanner(MapConfig config)
 		if(result)
 		{
 			std::cout << "square grid planner activated" << std::endl;
-			//ConfigRRTSOccupancyMap(sgrid_planner_.map_.padded_image, sgrid_planner_.map_.info);
+			this->ConfigRRTSOccupancyMap(this->sgrid_planner_.map_.padded_image, this->sgrid_planner_.map_.info);
 			active_graph_planner_ = GraphPlannerType::SQUAREGRID_PLANNER;
 		}
 	}
@@ -59,7 +59,7 @@ void QuadPlanner::SetGoalMapPosition(Position2D pos)
 	goal_pos_.y = pos.y;
 }
 
-std::vector<uint64_t> QuadPlanner::SearchForPath()
+std::vector<uint64_t> QuadPlanner::SearchForGlobalPath()
 {
 	std::vector<uint64_t> traj;
 
@@ -82,4 +82,34 @@ std::vector<uint64_t> QuadPlanner::SearchForPath()
 void QuadPlanner::ConfigRRTSOccupancyMap(cv::Mat map, MapInfo info)
 {
 	local_planner_.UpdateOccupancyMap(map, info);
+}
+
+void QuadPlanner::SetRealWorldSize(double x, double y)
+{
+	qtree_planner_.map_.info.SetWorldSize(x, y);
+	sgrid_planner_.map_.info.SetWorldSize(x, y);
+}
+
+cv::Mat QuadPlanner::GetActiveMap()
+{
+	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
+	{
+		return qtree_planner_.map_.padded_image;
+	}
+	else if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
+	{
+		return sgrid_planner_.map_.padded_image;
+	}
+}
+
+MapInfo QuadPlanner::GetActiveMapInfo()
+{
+	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
+	{
+		return qtree_planner_.map_.info;
+	}
+	else if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
+	{
+		return sgrid_planner_.map_.info;
+	}
 }

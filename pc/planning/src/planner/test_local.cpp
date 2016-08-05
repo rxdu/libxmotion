@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 {
 	RRTStarPlanner planner;
 
-	planner.ConfigLocalPlanner();
+	//planner.ConfigLocalPlanner();
 	planner.SearchSolution();
 }
 

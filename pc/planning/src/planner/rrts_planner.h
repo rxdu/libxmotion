@@ -51,15 +51,16 @@ private:
 private:
 	void ConstructFlatOutputSpace();
 	void Construct2DStateSpace();
+	void Set2DStateSpaceBound(double xmin, double xmax, double ymin, double ymax);
 	void DefinePlanProblem();
 	void InitPlanner();
+	void ConfigLocalPlanner();
 
 public:
 	void UpdateOccupancyMap(cv::Mat map, MapInfo info);
-	void ConfigLocalPlanner();
 	bool SearchSolution();
 
-	bool SearchSolution(Position2Dd start, Position2Dd goal, std::vector<Position2Dd>& path2d);
+	bool SearchSolution(Position2Dd start, Position2Dd goal, double time_limit, std::vector<Position2Dd>& path2d);
 };
 
 }

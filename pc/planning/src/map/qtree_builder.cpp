@@ -268,6 +268,7 @@ Map_t<QuadTree> QTreeBuilder::BuildQuadTreeMap(cv::InputArray _src, unsigned int
 	PaddingSize psize = ImageUtils::PadImageToSquared(image_bin, map.padded_image);
 
 	// generate map info
+	map.info.vector_map = false;
 	map.info.map_size_x = map.input_image.cols - 1;
 	map.info.map_size_y = map.input_image.rows - 1;
 	map.info.padded_top = psize.top;

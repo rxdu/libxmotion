@@ -20,6 +20,7 @@ int main(int argc, char** argv)
 	Mat vis_img;
 	MapInfo map_info;
 
+	map_info.vector_map = true;
 	map_info.map_size_x = 1000;
 	map_info.map_size_y = 1000;
 	map_info.SetWorldSize(1.0, 1.0);
@@ -34,15 +35,14 @@ int main(int argc, char** argv)
 	RRTStarPlanner planner;
 	std::vector<Position2Dd> path;
 
-	planner.ConfigLocalPlanner();
 	planner.UpdateOccupancyMap(vis_img, map_info);
-	// TODO abd
+
 	Position2Dd start,goal;
-	start.x = 0;
-	start.y = 0;
+	start.x = 0.1;
+	start.y = 0.1;
 	goal.x = 0.9;
 	goal.y = 0.9;
-	bool result = planner.SearchSolution(start, goal, path);
+	bool result = planner.SearchSolution(start, goal, 1.5, path);
 
 	if(result)
 	{

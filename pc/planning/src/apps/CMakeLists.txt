@@ -30,3 +30,6 @@ target_link_libraries(test_traj map vis ${OpenCV_LIBS})
 
 add_executable(test_rrtvis test_rrtvis.cpp)
 target_link_libraries(test_rrtvis map vis planner ${OpenCV_LIBS})
+
+add_executable(test_planner test_planner.cpp)
+target_link_libraries(test_planner map vis planner ${OpenCV_LIBS})

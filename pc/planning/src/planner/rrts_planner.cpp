@@ -27,7 +27,7 @@ RRTStarPlanner::RRTStarPlanner():
 		space_info_(nullptr),
 		validity_checker_2d_(nullptr)
 {
-
+	this->ConfigLocalPlanner();
 }
 
 RRTStarPlanner::~RRTStarPlanner()
@@ -73,10 +73,12 @@ void RRTStarPlanner::Construct2DStateSpace()
 {
 	// define the R2 space for testing (x,y)
 	ompl::base::StateSpacePtr r2(new ompl::base::RealVectorStateSpace(2));
-	ompl::base::RealVectorBounds bounds2(2);
-	bounds2.setLow(0);
-	bounds2.setHigh(1.5);
-	r2->as<ob::RealVectorStateSpace>()->setBounds(bounds2);
+	ompl::base::RealVectorBounds bounds(2);
+	bounds.setLow(0,0);
+	bounds.setHigh(0,1.0);
+	bounds.setLow(1,0);
+	bounds.setHigh(1,1.0);
+	r2->as<ob::RealVectorStateSpace>()->setBounds(bounds);
 
 	state_space_ = r2;
 
@@ -85,6 +87,16 @@ void RRTStarPlanner::Construct2DStateSpace()
 	// set state validity checker
 	validity_checker_2d_ = new StateValidityChecker2D(space_info_);
 	space_info_->setStateValidityChecker(base::StateValidityCheckerPtr(validity_checker_2d_));
+}
+
+void RRTStarPlanner::Set2DStateSpaceBound(double xmin, double xmax, double ymin, double ymax)
+{
+	ompl::base::RealVectorBounds bounds(2);
+	bounds.setLow(0,xmin);
+	bounds.setHigh(0,xmax*1.01);	// expand extra 1% space
+	bounds.setLow(1,ymin);
+	bounds.setHigh(1,ymax*1.01);
+	state_space_->as<ob::RealVectorStateSpace>()->setBounds(bounds);
 }
 
 void RRTStarPlanner::DefinePlanProblem()
@@ -112,6 +124,8 @@ void RRTStarPlanner::InitPlanner()
 void RRTStarPlanner::UpdateOccupancyMap(cv::Mat map, MapInfo info)
 {
 	validity_checker_2d_->SetOccupancyMap(map, info);
+
+	Set2DStateSpaceBound(0,info.world_size_x, 0, info.world_size_y);
 }
 
 void RRTStarPlanner::ConfigLocalPlanner()
@@ -243,7 +257,7 @@ bool RRTStarPlanner::SearchSolution()
 
 }
 
-bool RRTStarPlanner::SearchSolution(Position2Dd start, Position2Dd goal, std::vector<Position2Dd>& path2d)
+bool RRTStarPlanner::SearchSolution(Position2Dd start, Position2Dd goal, double time_limit, std::vector<Position2Dd>& path2d)
 {
 	if(!planner_ready_) {
 		std::cerr << "You need to call ConfigLocalPlanner() to setup the local planner first." << std::endl;
@@ -252,7 +266,7 @@ bool RRTStarPlanner::SearchSolution(Position2Dd start, Position2Dd goal, std::ve
 
 	SetStartAndGoal(start, goal);
 
-	ob::PlannerStatus solved = planner_->solve(1.0); // 1.5
+	ob::PlannerStatus solved = planner_->solve(time_limit); // 1.5
 
 	if (solved)
 	{

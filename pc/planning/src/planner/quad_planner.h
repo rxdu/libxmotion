@@ -28,7 +28,7 @@ public:
 	QuadPlanner();
 	~QuadPlanner();
 
-private:
+public:
 	// planners
 	GraphPlanner<QuadTree> qtree_planner_;
 	GraphPlanner<SquareGrid> sgrid_planner_;
@@ -48,8 +48,13 @@ public:
 	void SetGoalMapPosition(Position2D pos);
 
 	void ConfigRRTSOccupancyMap(cv::Mat map, MapInfo info);
+	void SetRealWorldSize(double x, double y);
 
-	std::vector<uint64_t> SearchForPath();
+	std::vector<uint64_t> SearchForGlobalPath();
+
+	// for visualization
+	cv::Mat GetActiveMap();
+	MapInfo GetActiveMapInfo();
 };
 
 }

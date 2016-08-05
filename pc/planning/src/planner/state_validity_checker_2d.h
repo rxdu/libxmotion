@@ -30,10 +30,11 @@ public:
 	bool occupancy_map_ready_;
 
 public:
-	void SetOccupancyMap(cv::InputArray _src, MapInfo info)
+	void SetOccupancyMap(cv::Mat _src, MapInfo info)
 	{
-		occupancy_map_.create(_src.size(), _src.type());
-		occupancy_map_ = _src.getMat();
+		//std::cout << "map size: " << _src.size().height << " , " << _src.size().width << std::endl;
+		occupancy_map_.create(_src.size(), CV_8UC1);
+		_src.copyTo(occupancy_map_);
 		map_info_ = info;
 
 		occupancy_map_ready_ = true;
@@ -49,15 +50,15 @@ public:
 			pos.y = state->as<ompl::base::RealVectorStateSpace::StateType>()->values[1];
 
 			Position2D pos_on_map;
-			//Position2D pos_on_paddedmap;
+			Position2D pos_on_paddedmap;
 			pos_on_map = MapUtils::CoordinatesFromWorldToMap(pos, map_info_);
-			//pos_on_paddedmap = MapUtils::CoordinatesFromOriginalToPadded(pos_on_map, map_info_);
+			pos_on_paddedmap = MapUtils::CoordinatesFromOriginalToPadded(pos_on_map, map_info_);
 
 			//std::cout << "check point: " << pos_on_map.x << " , " << pos_on_map.y << std::endl;
-			if(ImageUtils::IsPointOccupied(occupancy_map_, cv::Point(pos_on_map.x, pos_on_map.y)))
-				return false;
+			if(map_info_.vector_map)
+				return ImageUtils::IsPointNonObstacle(occupancy_map_, cv::Point(pos_on_map.x, pos_on_map.y));
 			else
-				return true;
+				return ImageUtils::IsPointNonObstacle(occupancy_map_, cv::Point(pos_on_paddedmap.x, pos_on_paddedmap.y));
 		}
 		else
 			return true;

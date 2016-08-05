@@ -265,7 +265,7 @@ void srcl_ctrl::MainWindow::UpdateClickedPosition(long x, long y, double raw2sca
 		}
 
 		if(start_specified_ && goal_specified_ && planner_ready_) {
-			auto traj = planner_.SearchForPath();
+			auto traj = planner_.SearchForGlobalPath();
 
 			std::cout << "path length: " << traj.size() << std::endl;
 			if(!traj.empty())
