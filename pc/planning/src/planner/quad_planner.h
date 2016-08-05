@@ -28,7 +28,7 @@ public:
 	QuadPlanner();
 	~QuadPlanner();
 
-public:
+private:
 	// planners
 	GraphPlanner<QuadTree> qtree_planner_;
 	GraphPlanner<SquareGrid> sgrid_planner_;
@@ -38,6 +38,8 @@ public:
 	// planning parameters
 	Position2D start_pos_;
 	Position2D goal_pos_;
+
+	bool world_size_set_;
 
 public:
 	GraphPlannerType active_graph_planner_;
@@ -51,10 +53,12 @@ public:
 	void SetRealWorldSize(double x, double y);
 
 	std::vector<uint64_t> SearchForGlobalPath();
+	bool SearchForLocalPath(Position2Dd start, Position2Dd goal, double time_limit, std::vector<Position2Dd>& path2d);
 
 	// for visualization
 	cv::Mat GetActiveMap();
 	MapInfo GetActiveMapInfo();
+	std::shared_ptr<Graph_t<RRTNode>> GetLocalPlannerVisGraph();
 };
 
 }

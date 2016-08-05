@@ -75,9 +75,9 @@ void RRTStarPlanner::Construct2DStateSpace()
 	ompl::base::StateSpacePtr r2(new ompl::base::RealVectorStateSpace(2));
 	ompl::base::RealVectorBounds bounds(2);
 	bounds.setLow(0,0);
-	bounds.setHigh(0,1.0);
+	bounds.setHigh(0,10.0);
 	bounds.setLow(1,0);
-	bounds.setHigh(1,1.0);
+	bounds.setHigh(1,5.0);
 	r2->as<ob::RealVectorStateSpace>()->setBounds(bounds);
 
 	state_space_ = r2;
@@ -93,9 +93,10 @@ void RRTStarPlanner::Set2DStateSpaceBound(double xmin, double xmax, double ymin,
 {
 	ompl::base::RealVectorBounds bounds(2);
 	bounds.setLow(0,xmin);
-	bounds.setHigh(0,xmax*1.01);	// expand extra 1% space
+	bounds.setHigh(0,xmax);
 	bounds.setLow(1,ymin);
-	bounds.setHigh(1,ymax*1.01);
+	bounds.setHigh(1,ymax);
+
 	state_space_->as<ob::RealVectorStateSpace>()->setBounds(bounds);
 }
 
@@ -124,6 +125,8 @@ void RRTStarPlanner::InitPlanner()
 void RRTStarPlanner::UpdateOccupancyMap(cv::Mat map, MapInfo info)
 {
 	validity_checker_2d_->SetOccupancyMap(map, info);
+
+	//std::cout << "------------->>>>>>>>>>>>>>>>" << info.world_size_x << " , " << info.world_size_y << std::endl;
 
 	Set2DStateSpaceBound(0,info.world_size_x, 0, info.world_size_y);
 }

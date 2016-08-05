@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 	start.y = 0.1;
 	goal.x = 0.9;
 	goal.y = 0.9;
-	bool result = planner.SearchSolution(start, goal, 1.5, path);
+	bool result = planner.SearchSolution(start, goal, 0.5, path);
 
 	if(result)
 	{

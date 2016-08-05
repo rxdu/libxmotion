@@ -28,20 +28,6 @@ int main(int argc, char** argv)
 {
 	std::string image_dir = "/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/pc/planning/data/example.png";
 
-//	Mat vis_img;
-//	MapInfo map_info;
-//
-//	map_info.map_size_x = 1000;
-//	map_info.map_size_y = 1000;
-//	map_info.SetWorldSize(1.0, 1.0);
-//	ImageUtils::CreateOccupancyMapForRRT(map_info.map_size_x,map_info.map_size_y, vis_img);
-//	BoundingBox bbox;
-//	bbox.x.min = 300;
-//	bbox.x.max = 600;
-//	bbox.y.min = 300;
-//	bbox.y.max = 600;
-//	VisUtils::FillRectangularArea(vis_img, bbox, cv::Scalar(0));
-
 	QuadPlanner qplanner;
 	MapConfig map_config;
 	map_config.SetMapPath(image_dir);
@@ -49,6 +35,7 @@ int main(int argc, char** argv)
 	//map_config.SetMapType(MapDataModel::QUAD_TREE, 6);
 
 	qplanner.ConfigGraphPlanner(map_config);
+	qplanner.SetRealWorldSize(10.0, 5.0);
 
 	if(qplanner.active_graph_planner_ == GraphPlannerType::NOT_SPECIFIED)
 	{
@@ -58,17 +45,19 @@ int main(int argc, char** argv)
 
 	// test global graph planner
 	Position2D start_pos, goal_pos;
-	start_pos.x = 25;
-	start_pos.y = 183;
-	goal_pos.x = 972;
-	goal_pos.y = 467;
+//	start_pos.x = 317;
+//	start_pos.y = 304;
+//	goal_pos.x = 638;
+//	goal_pos.y = 493;
+	start_pos.x = 18;
+	start_pos.y = 177;
+	goal_pos.x = 968;
+	goal_pos.y = 840;
 	qplanner.SetStartMapPosition(start_pos);
 	qplanner.SetGoalMapPosition(goal_pos);
 	auto global_solution = qplanner.SearchForGlobalPath();
 
 	// test local rrts planner
-	qplanner.SetRealWorldSize(10.0, 5.0);
-
 	Position2Dd start,goal;
 	Position2D start_ori, goal_ori;
 	MapInfo info = qplanner.GetActiveMapInfo();
@@ -76,11 +65,14 @@ int main(int argc, char** argv)
 	goal_ori = MapUtils::CoordinatesFromPaddedToOriginal(goal_pos, info);
 	start = MapUtils::CoordinatesFromMapToWorld(start_ori, info);
 	goal = MapUtils::CoordinatesFromMapToWorld(goal_ori, info);
-
 	std::vector<Position2Dd> path;
-	bool result = qplanner.local_planner_.SearchSolution(start, goal,10.5, path);
+	bool result = qplanner.SearchForLocalPath(start, goal,20, path);
 
 	/*--------------------- Visualization ----------------------*/
+	std::cout << "\n*********************************************************\n" << std::endl;
+	Mat graph_vis;
+	Mat rrt_vis;
+
 	if(!global_solution.empty()) {
 		Mat input_image;
 		MapUtils::ReadImageFromFile(image_dir, input_image);
@@ -91,28 +83,34 @@ int main(int argc, char** argv)
 		for(auto& wp:global_solution)
 			traj.push_back(graph->GetVertexFromID(wp));
 
-		Mat vis_img;
-		GraphVis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
-		GraphVis::VisSquareGridGraph(*graph, vis_img, vis_img, true);
-		GraphVis::VisSquareGridPath(traj, vis_img, vis_img);
+		GraphVis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, graph_vis);
+		GraphVis::VisSquareGridGraph(*graph, graph_vis, graph_vis, true);
+		GraphVis::VisSquareGridPath(traj, graph_vis, graph_vis);
+
+		//imwrite( "graph_vis.jpg", graph_vis);
 
 		// display visualization result
 		namedWindow("Graph Plan", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
-		imshow("Graph Plan", vis_img);
+		imshow("Graph Plan", graph_vis);
 	}
+	else
+		std::cout << "graph solution not found" << std::endl;
 
 	if(result) {
-		Mat rrt_vis;
-		if(result)
-		{
-			RRTVis::VisRRTPath(path, info, qplanner.GetActiveMap(), rrt_vis);
-			//RRTVis::VisRRTPath(path, info, vis_img, rrt_vis);
-			RRTVis::VisRRTGraph(*qplanner.local_planner_.rrts_vis_graph_, info, rrt_vis, rrt_vis);
-		}
+		RRTVis::VisRRTPath(path, info, qplanner.GetActiveMap(), rrt_vis);
+		//RRTVis::VisRRTPath(path, info, graph_vis, rrt_vis);
+
+		//imwrite( "rrt_vis_path.jpg", rrt_vis);
+
+		RRTVis::VisRRTGraph(*qplanner.GetLocalPlannerVisGraph(), info, rrt_vis, rrt_vis);
+
+		imwrite( "rrt_vis_tree.jpg", rrt_vis);
 
 		namedWindow("RRTS Plan", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 		imshow("RRTS Plan", rrt_vis);
 	}
+	else
+		std::cout << "rrts solution not found" << std::endl;
 
 	waitKey(0);
 }

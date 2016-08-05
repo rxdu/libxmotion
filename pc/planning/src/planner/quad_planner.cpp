@@ -11,7 +11,8 @@
 using namespace srcl_ctrl;
 
 QuadPlanner::QuadPlanner():
-		active_graph_planner_(GraphPlannerType::NOT_SPECIFIED)
+		active_graph_planner_(GraphPlannerType::NOT_SPECIFIED),
+		world_size_set_(false)
 {
 
 }
@@ -63,6 +64,9 @@ std::vector<uint64_t> QuadPlanner::SearchForGlobalPath()
 {
 	std::vector<uint64_t> traj;
 
+//	std::cout << "----> start: " << start_pos_.x << " , " << start_pos_.y << std::endl;
+//	std::cout << "----> goal: " << goal_pos_.x << " , " << goal_pos_.y << std::endl;
+
 	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
 	{
 		auto traj_vtx = qtree_planner_.Search(start_pos_, goal_pos_);
@@ -79,6 +83,17 @@ std::vector<uint64_t> QuadPlanner::SearchForGlobalPath()
 	return traj;
 }
 
+bool QuadPlanner::SearchForLocalPath(Position2Dd start, Position2Dd goal, double time_limit, std::vector<Position2Dd>& path2d)
+{
+	if(!world_size_set_)
+	{
+		std::cerr << "the size of the world needs to be specified" << std::endl;
+		return false;
+	}
+
+	return local_planner_.SearchSolution(start, goal, time_limit, path2d);
+}
+
 void QuadPlanner::ConfigRRTSOccupancyMap(cv::Mat map, MapInfo info)
 {
 	local_planner_.UpdateOccupancyMap(map, info);
@@ -88,6 +103,18 @@ void QuadPlanner::SetRealWorldSize(double x, double y)
 {
 	qtree_planner_.map_.info.SetWorldSize(x, y);
 	sgrid_planner_.map_.info.SetWorldSize(x, y);
+
+	// update the map info inside the rrts planner
+	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
+	{
+		this->ConfigRRTSOccupancyMap(this->qtree_planner_.map_.padded_image, this->qtree_planner_.map_.info);
+	}
+	else if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
+	{
+		this->ConfigRRTSOccupancyMap(this->sgrid_planner_.map_.padded_image, this->sgrid_planner_.map_.info);
+	}
+
+	world_size_set_ = true;
 }
 
 cv::Mat QuadPlanner::GetActiveMap()
@@ -100,10 +127,14 @@ cv::Mat QuadPlanner::GetActiveMap()
 	{
 		return sgrid_planner_.map_.padded_image;
 	}
+	else
+		return cv::Mat::zeros(10, 10, CV_8UC1);
 }
 
 MapInfo QuadPlanner::GetActiveMapInfo()
 {
+	MapInfo empty_info;
+
 	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
 	{
 		return qtree_planner_.map_.info;
@@ -112,4 +143,11 @@ MapInfo QuadPlanner::GetActiveMapInfo()
 	{
 		return sgrid_planner_.map_.info;
 	}
+	else
+		return empty_info;
+}
+
+std::shared_ptr<Graph_t<RRTNode>> QuadPlanner::GetLocalPlannerVisGraph()
+{
+	return local_planner_.rrts_vis_graph_;
 }

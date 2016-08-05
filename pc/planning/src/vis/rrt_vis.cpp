@@ -22,7 +22,12 @@ cv::Scalar RRTVis::finish_color_ = Scalar(153,76,0);
 void RRTVis::VisRRTPath(const std::vector<Position2Dd>& path, MapInfo info, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src_img_color;
-	cvtColor(_src, src_img_color, CV_GRAY2BGR);
+
+	int src_type = _src.getMat().type();
+	if(src_type == CV_8UC1)
+		cvtColor(_src, src_img_color, CV_GRAY2BGR);
+	else
+		src_img_color = _src.getMat();
 	_dst.create(src_img_color.size(), src_img_color.type());
 	Mat dst = _dst.getMat();
 
