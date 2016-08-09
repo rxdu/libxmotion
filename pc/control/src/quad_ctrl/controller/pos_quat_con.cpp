@@ -8,6 +8,9 @@
 #include <iostream>
 #include <cmath>
 
+#include "eigen3/Eigen/Core"
+#include "eigen3/Eigen/Geometry"
+
 #ifdef ENABLE_LOG
 #include "g3log/g3log.hpp"
 #endif

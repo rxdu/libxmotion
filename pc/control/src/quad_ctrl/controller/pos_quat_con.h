@@ -8,7 +8,8 @@
 #ifndef CONTROL_POS_QUAT_CON_H_
 #define CONTROL_POS_QUAT_CON_H_
 
-#include "quad_ctrl/controller/controller_base.h"
+#include "common/controller_base.h"
+#include "quad_ctrl/controller/quadcon_io.h"
 
 namespace srcl_ctrl {
 

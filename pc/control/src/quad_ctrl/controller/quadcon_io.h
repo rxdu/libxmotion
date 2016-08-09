@@ -1,12 +1,12 @@
 /*
- * controller.h
+ * quad_ctrl_io.h
  *
- *  Created on: Jul 28, 2015
+ *  Created on: Aug 9, 2016
  *      Author: rdu
  */
 
-#ifndef CONTROL_CONTROLLER_BASE_H_
-#define CONTROL_CONTROLLER_BASE_H_
+#ifndef CONTROL_SRC_QUAD_CTRL_CONTROLLER_QUADCON_IO_H_
+#define CONTROL_SRC_QUAD_CTRL_CONTROLLER_QUADCON_IO_H_
 
 #include <common/control_types.h>
 #include "quad_ctrl/estimator/robot_state.h"
@@ -46,20 +46,6 @@ typedef struct{
 	// output of attitude controller
 	float motor_ang_vel_d[3];
 }ControlOutput;
-
-class Controller
-{
-public:
-	Controller(RobotState* rs_ref):rs_(rs_ref){};
-	virtual ~Controller(){};
-
-protected:
-	const RobotState *rs_;
-
-public:
-	virtual void Update(ControlInput *input, ControlOutput *cmd) = 0;
-};
-
 }
 
-#endif /* CONTROL_CONTROLLER_BASE_H_ */
+#endif /* CONTROL_SRC_QUAD_CTRL_CONTROLLER_QUADCON_IO_H_ */

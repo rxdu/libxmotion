@@ -8,11 +8,12 @@
 #ifndef CONTROL_ATT_QUAT_CON_H_
 #define CONTROL_ATT_QUAT_CON_H_
 
-#include <common/control_types.h>
 #include "eigen3/Eigen/Core"
 #include "eigen3/Eigen/Geometry"
 
-#include "quad_ctrl/controller/controller_base.h"
+#include "common/control_types.h"
+#include "common/controller_base.h"
+#include "quad_ctrl/controller/quadcon_io.h"
 
 namespace srcl_ctrl {
 
