@@ -99,8 +99,8 @@ xT2 = zeros(n+1, m, d);
 xT3 = zeros(n+1, m, d); 
 for i = 1:d,
    xT(:, :, i) = findTraj(r, n, m, i, tDes, posDes);
-   [xT2(:, :, i), posDes_opt(:, :, i)] = findTrajJoint(r, n, m, i, tDes, posDes);
-   xT3(:, :, i) = findTrajJointConstrained(r, n, m, i, tDes, posDes);
+   %[xT2(:, :, i), posDes_opt(:, :, i)] = findTrajJoint(r, n, m, i, tDes, posDes);
+   %xT3(:, :, i) = findTrajJointConstrained(r, n, m, i, tDes, posDes);
 end
 
 %xT3 = findTrajCorr(r, n, m, d, tDes, posDes, ineqConst);
@@ -147,7 +147,7 @@ end
 % end
 
 %%%
-plot QP traj
+% plot QP traj
 dimLabels{1} = 'x (m)';
 dimLabels{2} = 'y (m)'; 
 dimLabels{3} = 'z (m)'; 
