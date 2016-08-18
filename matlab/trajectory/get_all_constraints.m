@@ -23,7 +23,7 @@
 %   A_eq, b_eq: matrices for Ax=b formulation of constraints
 %           b is NOT scaled for nondimensionalization, rather uses values in
 %           posDes as is
-function [A_eq, b_eq] = get_fixedvalue_constraints(r, n, m, dim, posDes, t0, t1, tDes)
+function [A_eq, b_eq] = get_all_constraints(r, n, m, dim, posDes, t0, t1, tDes)
 
 A_eq = [];
 b_eq = [];
@@ -75,10 +75,31 @@ for j = 0:m, %for each keyframe
                 b_temp = posDes(i+1, j+1, dim)*ones(2, 1);                
                 
             end
+        else
+            % construct and add constraint
+            A_temp = [];
+            b_temp = [];
             
-            A_eq = [A_eq; A_temp];
-            b_eq = [b_eq; b_temp];
+            if (j > 0 && j < m) % if constraint is at an intermediate keyframe
+                A_temp = zeros(1, (n+1)*m);
+                maxPower = nnz(derCoeff(i+1,:))-1;
+                
+                for k = 0:maxPower,
+                    
+                    A_temp(1, (j-1)*(n+1)+k+1) = tfin^(maxPower - k)*derCoeff(i+1, k+1);
+                    A_temp(1, (j-1)*(n+1)+k+1) = 1/((tDes(j+1, 1)-tDes(j, 1))^i)*A_temp(1, (j-1)*(n+1)+k+1); %nondimensionalize
+                    
+                    A_temp(1, j*(n+1)+k+1) = -tinit^(maxPower - k)*derCoeff(i+1, k+1);
+                    A_temp(1, j*(n+1)+k+1) = 1/((tDes(j+2, 1)-tDes(j+1, 1))^i)*A_temp(1, j*(n+1)+k+1); %nondimensionalize
+                                        
+                end
+                
+                b_temp = 0;
+            end                        
         end
+        
+        A_eq = [A_eq; A_temp];
+        b_eq = [b_eq; b_temp];
     end
 end
 

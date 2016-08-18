@@ -35,13 +35,15 @@ for i = 1:m,
     Q_joint = blkdiag(Q_joint, Q)%put in block diagonal matrix
 end
 
-% construct equality constraints 
-[A_fixed, b_fixed] = get_fixedvalue_constraints(r, n, m, dim, posDes, t0, t1, tDes)
-[A_cont, b_cont] = get_continuous_constraints(r, n, m, dim, posDes, t0, t1, tDes)
+% % construct equality constraints 
+% [A_fixed, b_fixed] = get_fixedvalue_constraints(r, n, m, dim, posDes, t0, t1, tDes)
+% [A_cont, b_cont] = get_continuous_constraints(r, n, m, dim, posDes, t0, t1, tDes)
+% 
+% % put each A_eq for each dimension into block diagonal matrix
+% A_eq = [A_fixed; A_cont];
+% b_eq = [b_fixed; b_cont];
 
-% put each A_eq for each dimension into block diagonal matrix
-A_eq = [A_fixed; A_cont];
-b_eq = [b_fixed; b_cont];
+[A_eq, b_eq] = get_all_constraints(r, n, m, dim, posDes, t0, t1, tDes);
 
 % find optimal trajectory through quadratic programming
 opts = optimoptions('quadprog','TolFun', 1e-30);

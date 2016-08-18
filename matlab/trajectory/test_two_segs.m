@@ -94,7 +94,7 @@ for i = 1:d,
    xT(:, :, i) = find_polynomial(r, n, m, i, tDes, posDes);
 end
 
-for i = 1:d,
+for i = 1:d
    fprintf('coefficients of dimension %i\n', i)
    xT(:, :, i)
 end
@@ -103,4 +103,4 @@ end
 dimLabels{1} = 'x (m)';
 dimLabels{2} = 'y (m)'; 
 dimLabels{3} = 'z (m)'; 
-plotTraj(0, tDes(m+1), xT, n, m, d, tDes, posDes, 0.01, dimLabels, [], 2*r);
+%plotTraj(0, tDes(m+1), xT, n, m, d, tDes, posDes, 0.01, dimLabels, [], 2*r);

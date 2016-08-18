@@ -103,4 +103,4 @@ end
 dimLabels{1} = 'x (m)';
 dimLabels{2} = 'y (m)'; 
 dimLabels{3} = 'z (m)'; 
-plotTraj(0, tDes(m+1), xT, n, m, d, tDes, posDes, 0.01, dimLabels, [], 2*r);
+%plotTraj(0, tDes(m+1), xT, n, m, d, tDes, posDes, 0.01, dimLabels, [], 2*r);
