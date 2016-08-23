@@ -11,38 +11,38 @@ if (GUROBI_INCLUDE_DIR)
   # in cache already
   set(GUROBI_FOUND TRUE)
   set(GUROBI_INCLUDE_DIRS "${GUROBI_INCLUDE_DIR}" )
-  set(GUROBI_LIBRARIES "${GUROBI_LIBRARY};${GUROBI_CXX_LIBRARY}" )
+  set(GUROBI_LIBRARIES "${GUROBI_CXX_LIBRARY};${GUROBI_LIBRARY}" )
 else (GUROBI_INCLUDE_DIR)
 
 find_path(GUROBI_INCLUDE_DIR
           NAMES gurobi_c++.h
           PATHS "$ENV{GUROBI_HOME}/include"
-                  "/Library/gurobi502/mac64/include"
-                 "C:\\libs\\gurobi502\\include"
-          )
+            "/Library/gurobi502/mac64/include"
+            "C:\\libs\\gurobi502\\include"
+         )
 
 find_library( GUROBI_LIBRARY
-              NAMES gurobi
+          NAMES gurobi
 		    gurobi45
 		    gurobi46
-        gurobi50
-        gurobi51
-        gurobi52
-        gurobi55
-        gurobi56
-        gurobi60
-        gurobi65
-              PATHS "$ENV{GUROBI_HOME}/lib"
-                    "/Library/gurobi502/mac64/lib"
-                    "C:\\libs\\gurobi502\\lib"
-              )
+            gurobi50
+            gurobi51
+            gurobi52
+            gurobi55
+            gurobi56
+            gurobi60
+            gurobi65
+          PATHS "$ENV{GUROBI_HOME}/lib"
+            "/Library/gurobi502/mac64/lib"
+            "C:\\libs\\gurobi502\\lib"
+          )
 
 find_library( GUROBI_CXX_LIBRARY
-              NAMES gurobi_c++
-              PATHS "$ENV{GUROBI_HOME}/lib"
-                    "/Library/gurobi502/mac64/lib"
-                    "C:\\libs\\gurobi502\\lib"
-              )
+          NAMES gurobi_c++
+          PATHS "$ENV{GUROBI_HOME}/lib"
+             "/Library/gurobi502/mac64/lib"
+             "C:\\libs\\gurobi502\\lib"
+          )
 
 set(GUROBI_INCLUDE_DIRS "${GUROBI_INCLUDE_DIR}" )
 set(GUROBI_LIBRARIES "${GUROBI_CXX_LIBRARY};${GUROBI_LIBRARY}" )

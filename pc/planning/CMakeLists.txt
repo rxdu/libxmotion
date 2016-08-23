@@ -27,7 +27,7 @@ add_subdirectory(src/vis)
 add_subdirectory(src/rrtstar)
 add_subdirectory(src/planner)
 add_subdirectory(src/apps)
-add_subdirectory(src/gurobi)
+add_subdirectory(src/polyopt)
 
 if(BUILD_TESTS)
     add_subdirectory(src/gtests)
