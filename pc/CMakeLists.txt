@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(srcl_ctrl)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+
 ## Put all binary files into /bin and libraries into /lib
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
