@@ -16,3 +16,6 @@ endif()
 # Add executables
 add_executable(test_qp qp_c++.cpp)
 target_link_libraries(test_qp ${GUROBI_LIBRARIES})
+
+add_executable(qp_traj qp_traj.cpp)
+target_link_libraries(qp_traj ${GUROBI_LIBRARIES})

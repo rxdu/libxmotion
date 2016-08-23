@@ -20,26 +20,8 @@ clc
 
 %%%
 % set up problem
-% r = 6; %derivative to minimize in cost function
-% n = 11; %order of desired trajectory
-% m = 3; %number of pieces in trajectory
-% d = 3; %dimensions
-% 
-% % specify the m+1 keyframes
-% tDes = [0; 2; 4; 6]; %specify desired arrival times at keyframes
-% % specify desired positions and/or derivatives at keyframes, 
-% % Inf represents unconstrained values
-% % r x (m+1) x d, where each row i is the value the (i-1)th derivative of keyframe j for dimensions k 
-% posDes = zeros(r, m+1, d);
-% posDes(:, :, 1) = [0 1 1 0; 0 Inf Inf 0; 0 Inf Inf 0; 0 Inf Inf 0; 0 Inf Inf 0; 0 Inf Inf 0]; 
-% posDes(:, :, 2) = [0 3 2 2; 0 Inf Inf 0; 0 Inf Inf 0; 0 Inf Inf 0; 0 Inf Inf 0; 0 Inf Inf 0];
-% posDes(:, :, 3) = [1 2 3 4; 0 Inf Inf 0; 0 Inf Inf 0; 0 Inf Inf 0; 0 Inf Inf 0; 0 Inf Inf 0];
-% [i, j, k] = size(posDes);
-% l = length(tDes);
-
 r = 4; %derivative to minimize in cost function
 n = 7; %order of desired trajectory
-%m = 4; %number of pieces in trajectory
 m = 1;
 d = 1; %dimensions
 
@@ -47,8 +29,7 @@ d = 1; %dimensions
 %tDes = [0;1.2; 3; 5; 6]; % %specify desired arrival times at keyframes
 tDes = [0;1.2];
 % specify desired positions and/or derivatives at keyframes
-%posDes(:, :, 1) = [-0.1653 0.2194 0.3734 1 1.4; 0 Inf Inf Inf 0; 0 Inf Inf Inf 0; 0 Inf Inf Inf 0; 0 Inf Inf Inf 0; 0 Inf Inf Inf 0];
-posDes(:, :, 1) = [-0.1653 0.2194; 0 0; 0 0; 0 0; 0 0; 0 0];
+posDes(:, :, 1) = [-0.15 0.25; 0 0; 0 0; 0 0; 0 0; 0 0];
 [i, j, k] = size(posDes);
 l = length(tDes);
 
