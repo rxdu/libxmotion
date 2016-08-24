@@ -24,8 +24,9 @@ end
 
 for i = 0:n,
     for j = 0:n,
-        if ((i >= r) && (j >= r)),
-        Q(i+1, j+1) = mul_coeffs(i+1, 1)*mul_coeffs(j+1, 1)*(t1^(i+j-2*r+1) - t0^(i+j-2*r+1))/(i+j-2*r+1);
+        if ((i >= r) && (j >= r))
+            %mul_coeffs(i+1, 1)*mul_coeffs(j+1, 1)
+            Q(i+1, j+1) = mul_coeffs(i+1, 1)*mul_coeffs(j+1, 1)*(t1^(i+j-2*r+1) - t0^(i+j-2*r+1))/(i+j-2*r+1);
         end
     end
 end

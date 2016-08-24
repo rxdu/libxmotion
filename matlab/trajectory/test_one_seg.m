@@ -20,8 +20,8 @@ clc
 
 %%%
 % set up problem
-r = 4; %derivative to minimize in cost function
-n = 7; %order of desired trajectory
+r = 2;%4; %derivative to minimize in cost function
+n = 3;%7; %order of desired trajectory
 m = 1;
 d = 1; %dimensions
 

@@ -30,9 +30,10 @@ t1 = 1;
 Q_joint = [];
 for i = 1:m,
     Q = get_hessian(n, r, t0, t1); % find cost matrix for each segment
-    Q = 1./((tDes(i+1, 1)-tDes(i, 1))^(2*r-1)).*Q;% multiply by time factor to nondimensionalize
+    %1/((tDes(i+1, 1)-tDes(i, 1))^(2*r-1))
+    Q = 1./((tDes(i+1, 1)-tDes(i, 1))^(2*r-1)).*Q% multiply by time factor to nondimensionalize
     
-    Q_joint = blkdiag(Q_joint, Q)%put in block diagonal matrix
+    Q_joint = blkdiag(Q_joint, Q);%put in block diagonal matrix
 end
 
 % % construct equality constraints 

@@ -34,10 +34,10 @@ tfin = t1;
 derCoeff = get_derivative_coefficients(n, r);
 
 for j = 0:m, %for each keyframe
-    for i = 0:r-1, % for all derivatives from 0 to r-1
+    for i = 0:r-1, % for all derivatives from 0 to r-1        
         if posDes(i+1, j+1, dim) ~= Inf, %if fixed
-            % construct and add constraint
-            
+            % fixed value constraints
+            % construct and add constraint            
             if (j == 0) % add one constraint to beginning of first piece
                 A_temp = zeros(1, (n+1)*m);
                 maxPower = nnz(derCoeff(i+1, :))-1;
@@ -76,6 +76,7 @@ for j = 0:m, %for each keyframe
                 
             end
         else
+            % continous constraints
             % construct and add constraint
             A_temp = [];
             b_temp = [];
