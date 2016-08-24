@@ -14,13 +14,15 @@
 
 namespace srcl_ctrl {
 
+using PolynomialCoeffs = Eigen::Array<float,1, Eigen::Dynamic>;
+
 class PolyOptUtils {
 public:
 	PolyOptUtils(){};
 	~PolyOptUtils(){};
 
 public:
-	void GetDerivativeCoeffs(uint32_t poly_order, uint32_t deriv_order, Eigen::Ref<Eigen::ArrayXXf>& coeffs);
+	void GetDerivativeCoeffs(uint32_t poly_order, uint32_t deriv_order, Eigen::Ref<PolynomialCoeffs> coeffs);
 };
 
 }

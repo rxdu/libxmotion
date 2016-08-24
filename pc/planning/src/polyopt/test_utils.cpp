@@ -5,6 +5,8 @@
  *      Author: rdu
  */
 
+#include <iostream>
+
 #include "gurobi_c++.h"
 
 #include "eigen3/Eigen/Core"
@@ -24,7 +26,16 @@ int main(int   argc, char *argv[])
 //	po_utils.GetDerivativeCoeffs(7, 2);
 //	po_utils.GetDerivativeCoeffs(7, 3);
 
-	ArrayXXf coeff;
-	//po_utils.GetDerivativeCoeffs(7, 4, coeff);
+	PolynomialCoeffs coeff(8);
+	po_utils.GetDerivativeCoeffs(7, 0, coeff);
+	std::cout << coeff << std::endl;
+	po_utils.GetDerivativeCoeffs(7, 1, coeff);
+	std::cout << coeff << std::endl;
+	po_utils.GetDerivativeCoeffs(7, 2, coeff);
+	std::cout << coeff << std::endl;
+	po_utils.GetDerivativeCoeffs(7, 3, coeff);
+	std::cout << coeff << std::endl;
+	po_utils.GetDerivativeCoeffs(7, 4, coeff);
+	std::cout << coeff << std::endl;
 }
 
