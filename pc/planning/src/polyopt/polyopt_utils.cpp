@@ -95,9 +95,6 @@ uint32_t PolyOptUtils::GetNonZeroCoeffNum(const Eigen::Ref<const PolynomialCoeff
 void PolyOptUtils::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_order, uint32_t keyframe_num,
 		const Eigen::Ref<const Eigen::MatrixXf> keyframe_vals, const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts)
 {
-//	std::cout << "key frames: \n" << keyframe_vals << std::endl;
-//	std::cout << "time stamps: \n" << keyframe_ts << std::endl;
-
 	// TODO check if size of keyframe values and that of keyframe time stamps match
 	// TODO check if keyframe_num is greater than 1
 
@@ -108,19 +105,36 @@ void PolyOptUtils::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_
 	MatrixXf A_eq = MatrixXf::Zero(2 * r, (keyframe_num - 1) * (N + 1));
 	MatrixXf b_eq = MatrixXf::Zero(2 * r, 1);
 
-	// check each key frame
-	for(int64_t j = 0; j <= last_keyframe_idx; j++)
+	// check each piece of trajectory
+	for(int64_t j = 0; j < last_keyframe_idx; j++)
 	{
 		// check each derivative of one key frame
 		for(int64_t i = 0; i <= r-1; i++)
 		{
+			PolynomialCoeffs coeff(N + 1);
+			GetDerivativeCoeffs(poly_order, i, coeff);
+
 			// only one constraint at the first and last key frame
 			if(j == 0)
 			{
+				double nondim_coeff = 1/(std::pow(keyframe_ts(0, j+1)-keyframe_ts(0, j),i));
+				for(int64_t k = 0; k < N + 1; k++)
+				{
+					A_eq(j*2*r + i, (j/2)*(N + 1) + k) = coeff(k);
+					//A_eq(j*2*r + r + i, j*(N + 1) + k) = keyframe_ts(0, j+1)-keyframe_ts(0, j) * coeff(k);
+				}
+
 				b_eq(j*2 + i,0) = keyframe_vals(i, j);
 			}
 			else if(j == last_keyframe_idx)
 			{
+				double nondim_coeff = 1/(std::pow(keyframe_ts(0, (j-1)+1)-keyframe_ts(0, (j-1)),i));
+				for(int64_t k = 0; k < N + 1; k++)
+				{
+					A_eq((j-1)*2*r + r + i, (j/2)*(N + 1) + k) = coeff(k);
+					//A_eq(j*2*r + r + i, j*(N + 1) + k) = coeff(k) * ;
+				}
+
 				b_eq(j*2 + i,0) = keyframe_vals(i, j);
 			}
 			// two constraints at the intermediate key frames

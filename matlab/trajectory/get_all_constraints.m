@@ -43,8 +43,8 @@ for j = 0:m, %for each keyframe
                 maxPower = nnz(derCoeff(i+1, :))-1;
                 
                 for k = 0:maxPower                    
-                    A_temp(1, j*(n+1)+k+1) = tinit^(maxPower - k)*derCoeff(i+1, k+1);
-                    A_temp(1, j*(n+1)+k+1) = 1/((tDes(j+2, 1)-tDes(j+1, 1))^i)*A_temp(1, j*(n+1)+k+1); %nondimensionalize
+                    A_temp(1, j*(n+1)+k+1) = tinit^(maxPower - k)*derCoeff(i+1, k+1)
+                    %A_temp(1, j*(n+1)+k+1) = 1/((tDes(j+2, 1)-tDes(j+1, 1))^i)*A_temp(1, j*(n+1)+k+1); %nondimensionalize
                 end
                 
                 b_temp = posDes(i+1, j+1, dim);                
@@ -54,8 +54,8 @@ for j = 0:m, %for each keyframe
                 maxPower = nnz(derCoeff(i+1, :))-1;
                 
                 for k = 0:maxPower                    
-                    A_temp(1, (j-1)*(n+1)+k+1) = tfin^(maxPower - k)*derCoeff(i+1, k+1);
-                    A_temp(1, (j-1)*(n+1)+k+1) = 1/((tDes(j+1, 1)-tDes(j, 1))^i)*A_temp(1, (j-1)*(n+1)+k+1); %nondimensionlize                    
+                    A_temp(1, (j-1)*(n+1)+k+1) = tfin^(maxPower - k)*derCoeff(i+1, k+1)
+                    %A_temp(1, (j-1)*(n+1)+k+1) = 1/((tDes(j+1, 1)-tDes(j, 1))^i)*A_temp(1, (j-1)*(n+1)+k+1); %nondimensionlize                    
                 end
                 
                 b_temp = posDes(i+1, j+1, dim);                
