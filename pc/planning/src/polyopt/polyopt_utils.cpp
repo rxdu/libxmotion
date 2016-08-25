@@ -108,33 +108,32 @@ void PolyOptUtils::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_
 	MatrixXf A_eq = MatrixXf::Zero(2 * r, (keyframe_num - 1) * (N + 1));
 	MatrixXf b_eq = MatrixXf::Zero(2 * r, 1);
 
-	// check each keyframe
+	// check each key frame
 	for(int64_t j = 0; j <= last_keyframe_idx; j++)
 	{
-		// check each derivative of one keyframe
+		// check each derivative of one key frame
 		for(int64_t i = 0; i <= r-1; i++)
 		{
-			// if no constraint is specified, just ensure continuity
-			if(keyframe_vals(i, j) == std::numeric_limits<float>::infinity())
+			// only one constraint at the first and last key frame
+			if(j == 0)
 			{
-				if(j > 0 && j < last_keyframe_idx)
+				b_eq(j*2 + i,0) = keyframe_vals(i, j);
+			}
+			else if(j == last_keyframe_idx)
+			{
+				b_eq(j*2 + i,0) = keyframe_vals(i, j);
+			}
+			// two constraints at the intermediate key frames
+			else
+			{
+				// special case: if no constraint is specified, just ensure continuity
+				if(keyframe_vals(i, j) == std::numeric_limits<float>::infinity())
 				{
 
 					b_eq(j*2 + i,0) = 0;
 				}
-			}
-			else
-			{
-				if(j == 0)
-				{
-					b_eq(j*2 + i,0) = keyframe_vals(i, j);
-				}
-				else if(j == last_keyframe_idx)
-				{
-					b_eq(j*2 + i,0) = keyframe_vals(i, j);
-				}
-				else
-				{
+				else {
+
 					b_eq(j*2 + i*2,0) = keyframe_vals(i, j);
 					b_eq(j*2 + i*2 + 1,0) = keyframe_vals(i, j);
 				}
