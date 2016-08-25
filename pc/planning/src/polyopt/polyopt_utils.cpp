@@ -125,6 +125,7 @@ void PolyOptUtils::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_
 				}
 
 				b_eq(j*2 + i,0) = keyframe_vals(i, j);
+				b_eq(j*2 + i,0) = keyframe_vals(i, j);
 			}
 			else if(j == last_keyframe_idx)
 			{
