@@ -100,45 +100,43 @@ void PolyOptUtils::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_
 
 	int64_t N = poly_order;
 	int64_t r = deriv_order;
-	int64_t last_keyframe_idx = keyframe_num - 1;
+	int64_t traj_seg_num = keyframe_num - 1;
 
 	MatrixXf A_eq = MatrixXf::Zero(2 * r, (keyframe_num - 1) * (N + 1));
 	MatrixXf b_eq = MatrixXf::Zero(2 * r, 1);
 
 	// check each piece of trajectory
-	for(int64_t j = 0; j < last_keyframe_idx; j++)
+	for(int64_t j = 0; j < traj_seg_num; j++)
 	{
-		// check each derivative of one key frame
+		// check each derivative
 		for(int64_t i = 0; i <= r-1; i++)
 		{
 			PolynomialCoeffs coeff(N + 1);
 			GetDerivativeCoeffs(poly_order, i, coeff);
 
-			// only one constraint at the first and last key frame
-			if(j == 0)
+			// if there is only 1 segment, no continuity needs to be considered
+			if(traj_seg_num == 1)
 			{
 				double nondim_coeff = 1/(std::pow(keyframe_ts(0, j+1)-keyframe_ts(0, j),i));
 				for(int64_t k = 0; k < N + 1; k++)
 				{
-					A_eq(j*2*r + i, (j/2)*(N + 1) + k) = coeff(k);
-					//A_eq(j*2*r + r + i, j*(N + 1) + k) = keyframe_ts(0, j+1)-keyframe_ts(0, j) * coeff(k);
+					// A(tau_0), A(tau_1)
+					if(N - k >= i)
+					{
+						A_eq(j*2*r + i, j*(N + 1) + k) = nondim_coeff * coeff(k)*std::pow(0, N - k - i );
+						A_eq(j*2*r + r + i, j*(N + 1) + k) = nondim_coeff * coeff(k)*std::pow(1, N - k - i );
+					}
+					else
+					{
+						A_eq(j*2*r + i, j*(N + 1) + k) = 0;
+						A_eq(j*2*r + r + i, j*(N + 1) + k) = 0;
+					}
 				}
 
-				b_eq(j*2 + i,0) = keyframe_vals(i, j);
-				b_eq(j*2 + i,0) = keyframe_vals(i, j);
+				b_eq(j*2*r + i,0) = keyframe_vals(i, j);
+				b_eq(j*2*r + r + i,0) = keyframe_vals(i, j + 1);
 			}
-			else if(j == last_keyframe_idx)
-			{
-				double nondim_coeff = 1/(std::pow(keyframe_ts(0, (j-1)+1)-keyframe_ts(0, (j-1)),i));
-				for(int64_t k = 0; k < N + 1; k++)
-				{
-					A_eq((j-1)*2*r + r + i, (j/2)*(N + 1) + k) = coeff(k);
-					//A_eq(j*2*r + r + i, j*(N + 1) + k) = coeff(k) * ;
-				}
-
-				b_eq(j*2 + i,0) = keyframe_vals(i, j);
-			}
-			// two constraints at the intermediate key frames
+			// if there are more segments, intermediate key frames need to be continuous
 			else
 			{
 				// special case: if no constraint is specified, just ensure continuity

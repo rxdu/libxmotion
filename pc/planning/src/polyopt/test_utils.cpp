@@ -37,7 +37,7 @@ int main(int   argc, char *argv[])
 //	std::cout << coeff << std::endl;
 //	std::cout << po_utils.GetNonZeroCoeffNum(coeff) << std::endl;
 
-	uint32_t r = 2;
+	uint32_t r = 4;
 	uint32_t N = 2 * r - 1;
 	MatrixXf q = MatrixXf::Zero(N+1, N+1);
 
@@ -66,5 +66,7 @@ int main(int   argc, char *argv[])
 	keyframe_ts(0,1) = 1.2;
 
 	po_utils.GetNonDimEqualityConstrs(N, r, 2, keyframe_vals, keyframe_ts);
+
+	//std::cout << "test: " << std::pow(0, 1) << std::endl;
 }
 
