@@ -41,9 +41,9 @@ int main(int   argc, char *argv[])
 
 	/* test Q matrix */
 	//po_utils.GetDimQMatrix(3,2,0,1.2,q);
-//	po_utils.GetNonDimQMatrix(N,r,0,1.2,q);
-//	std::cout << "matrix Q: " << std::endl;
-//	std::cout << q << std::endl;
+	PolyOptUtils::GetNonDimQMatrix(N,r,0,1.2,q);
+	std::cout << "matrix Q: " << std::endl;
+	std::cout << q << std::endl;
 
 	/* test infinity */
 //	float inf1 = std::numeric_limits<float>::infinity();
@@ -52,21 +52,21 @@ int main(int   argc, char *argv[])
 //		std::cout << "infinity can be compared" << std::endl;
 
 	/* test equality constraints */
-	MatrixXf keyframe_vals = MatrixXf::Zero(r, 2);
-	MatrixXf keyframe_ts = MatrixXf::Zero(1, 2);
-
-	keyframe_vals(0,0) = -0.15;
-	keyframe_vals(0,1) = 0.25;
-	keyframe_vals(1,0) = 0.1;
-	keyframe_vals(1,1) = 0.2;
-
-	keyframe_ts(0,0) = 0;
-	keyframe_ts(0,1) = 1.2;
-
-	MatrixXf A_eq = MatrixXf::Zero(2 * r, 1 * (N + 1));
-	MatrixXf b_eq = MatrixXf::Zero(2 * r, 1);
-
-	PolyOptUtils::GetNonDimEqualityConstrs(N, r, 2, keyframe_vals, keyframe_ts, A_eq, b_eq);
+//	MatrixXf keyframe_vals = MatrixXf::Zero(r, 2);
+//	MatrixXf keyframe_ts = MatrixXf::Zero(1, 2);
+//
+//	keyframe_vals(0,0) = -0.15;
+//	keyframe_vals(0,1) = 0.25;
+//	keyframe_vals(1,0) = 0.1;
+//	keyframe_vals(1,1) = 0.2;
+//
+//	keyframe_ts(0,0) = 0;
+//	keyframe_ts(0,1) = 1.2;
+//
+//	MatrixXf A_eq = MatrixXf::Zero(2 * r, 1 * (N + 1));
+//	MatrixXf b_eq = MatrixXf::Zero(2 * r, 1);
+//
+//	PolyOptUtils::GetNonDimEqualityConstrs(N, r, 2, keyframe_vals, keyframe_ts, A_eq, b_eq);
 
 	//std::cout << "test: " << std::pow(0, 1) << std::endl;
 }

@@ -50,6 +50,24 @@ void PolyOptUtils::GetNonDimQMatrix(uint32_t poly_order, uint32_t deriv_order, d
 	nondim_coeff = 1.0/(std::pow((t1 - t0), 2*deriv_order - 1));
 
 	q = nondim_coeff * q;
+
+	Eigen::MatrixXf q_flip = q;
+	uint64_t row_size = q_flip.cols();
+	uint64_t col_size = q_flip.rows();
+	q_flip = Eigen::MatrixXf::Zero(row_size, col_size);
+
+	//std::cout << "row: " << row_size << " col: " << col_size << std::endl;
+
+	for(int64_t i = 0; i < row_size; i++)
+		for(int64_t j = 0; j < col_size; j++)
+		{
+			q_flip(i,j) = q(i,j);//q(row_size - 1 - i, col_size - 1 - j);
+//			std::cout <<  "row: " << i << " col: " << j << " , "<< q(row_size - 1 - i, col_size - 1 - j) << std::endl;
+//			std::cout << " --- " << "row_size - 1 - i: " << row_size - 1 - i << " col_size - 1 - j: " << col_size - 1 - j << std::endl;
+		}
+
+//	std::cout << "q_flip: \n" << q_flip << std::endl;
+	q = q_flip;
 }
 
 void PolyOptUtils::GetDerivativeCoeffs(uint32_t poly_order, uint32_t deriv_order, Eigen::Ref<PolynomialCoeffs> coeffs)

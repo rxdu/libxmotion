@@ -8,6 +8,8 @@
 #include <iostream>
 #include <cstdint>
 #include <limits>
+#include <cstring>
+#include <vector>
 
 #include "gurobi_c++.h"
 
@@ -32,8 +34,10 @@ int main(int   argc, char *argv[])
 
 	keyframe_vals(0,0) = -0.15;
 	keyframe_vals(0,1) = 0.25;
-	keyframe_vals(1,0) = 0.1;
-	keyframe_vals(1,1) = 0.2;
+//	keyframe_vals(1,0) = 0.1;
+//	keyframe_vals(1,1) = 0.2;
+	keyframe_vals(1,0) = 0.0;
+	keyframe_vals(1,1) = 0.0;
 
 	keyframe_ts(0,0) = 0;
 	keyframe_ts(0,1) = 1.2;
@@ -50,37 +54,69 @@ int main(int   argc, char *argv[])
 		GRBModel model = GRBModel(env);
 
 		// Create variables
-		GRBVar sig0 = model.addVar(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), 0.0, GRB_CONTINUOUS, "sig0");
-		GRBVar sig1 = model.addVar(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), 0.0, GRB_CONTINUOUS, "sig1");
-		GRBVar sig2 = model.addVar(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), 0.0, GRB_CONTINUOUS, "sig2");
-		GRBVar sig3 = model.addVar(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), 0.0, GRB_CONTINUOUS, "sig3");
+//		GRBVar sig0 = model.addVar(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), 0.0, GRB_CONTINUOUS, "sig0");
+//		GRBVar sig1 = model.addVar(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), 0.0, GRB_CONTINUOUS, "sig1");
+//		GRBVar sig2 = model.addVar(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), 0.0, GRB_CONTINUOUS, "sig2");
+//		GRBVar sig3 = model.addVar(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), 0.0, GRB_CONTINUOUS, "sig3");
+
+		GRBVar sig[4];
+		for(int i = 0; i < 4; i++)
+		{
+			std::string var_name = "sig"+std::to_string(i);
+			sig[i] = model.addVar(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), 0.0, GRB_CONTINUOUS, var_name);
+		}
 
 		// Integrate new variables
 		model.update();
 
 		// Set objective
-		GRBQuadExpr obj = sig0*((125.0*sig0)/18.0 + (125.0*sig1)/36.0) + sig1*((125.0*sig0)/36.0 + (125.0*sig1)/54.0);
+		GRBQuadExpr obj = sig[0]*((125.0*sig[0])/18.0 + (125.0*sig[1])/36.0) + sig[1]*((125.0*sig[0])/36.0 + (125.0*sig[1])/54.0);
 		model.setObjective(obj);
+		//std::cout << obj << std::endl;
+
+//		GRBQuadExpr temp_expr;
+//		for(int i = 0; i < 4; i++)
+//		{
+//			for(int j = 0; j < 4; j++)
+//			{
+//				if(Q(i,j) != 0)
+//					temp_expr += (sig[j] * Q(i,j)) * sig[i];
+//			}
+//		}
+//		std::cout << temp_expr << std::endl;
+//		model.setObjective(temp_expr);
 
 		// Add constraints
-		model.addConstr(sig3 == -0.15, "c0");
-		model.addConstr((5.0*sig2)/6.0 == 0, "c1");
-		model.addConstr(sig0 + sig1 + sig2 + sig3 == 0.25, "c2");
-		model.addConstr((5.0*sig0)/2.0 + (5.0*sig1)/3.0 + (5.0*sig2)/6.0 == 0, "c3");
+//		model.addConstr(sig[3] == -0.15, "c0");
+//		model.addConstr((5.0*sig[2])/6.0 == 0, "c1");
+//		model.addConstr(sig[0] + sig[1] + sig[2] + sig[3] == 0.25, "c2");
+//		model.addConstr((5.0*sig[0])/2.0 + (5.0*sig[1])/3.0 + (5.0*sig[2])/6.0 == 0, "c3");
+
+		for(int i = 0; i < 4; i++)
+		{
+			GRBLinExpr constr;
+			for(int j = 0; j < 4; j++)
+			{
+				constr += sig[j] * A_eq(i,j);
+			}
+			std::cout << "constraint " << i << " : " << constr << " = " << b_eq(i,0) << std::endl;
+			std::string constr_name = "c"+std::to_string(i);
+			model.addConstr(constr == b_eq(i, 0), constr_name);
+		}
 
 		// Optimize model
 		model.optimize();
 
-		std::cout << sig0.get(GRB_StringAttr_VarName) << " "
-				<< sig0.get(GRB_DoubleAttr_X) << std::endl;
-		std::cout << sig1.get(GRB_StringAttr_VarName) << " "
-				<< sig1.get(GRB_DoubleAttr_X) << std::endl;
-		std::cout << sig2.get(GRB_StringAttr_VarName) << " "
-				<< sig2.get(GRB_DoubleAttr_X) << std::endl;
-		std::cout << sig3.get(GRB_StringAttr_VarName) << " "
-				<< sig3.get(GRB_DoubleAttr_X) << std::endl;
+		std::cout << sig[0].get(GRB_StringAttr_VarName) << " "
+				<< sig[0].get(GRB_DoubleAttr_X) << std::endl;
+		std::cout << sig[1].get(GRB_StringAttr_VarName) << " "
+				<< sig[1].get(GRB_DoubleAttr_X) << std::endl;
+		std::cout << sig[2].get(GRB_StringAttr_VarName) << " "
+				<< sig[2].get(GRB_DoubleAttr_X) << std::endl;
+		std::cout << sig[3].get(GRB_StringAttr_VarName) << " "
+				<< sig[3].get(GRB_DoubleAttr_X) << std::endl;
 
-		std::cout << "Obj: " << model.get(GRB_DoubleAttr_ObjVal) << std::endl;
+		std::cout << "\nObj: " << model.get(GRB_DoubleAttr_ObjVal) << std::endl;
 
 	} catch(GRBException e) {
 		cout << "Error code = " << e.getErrorCode() << endl;
