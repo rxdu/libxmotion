@@ -70,21 +70,23 @@ int main(int   argc, char *argv[])
 		model.update();
 
 		// Set objective
-		GRBQuadExpr obj = sig[0]*((125.0*sig[0])/18.0 + (125.0*sig[1])/36.0) + sig[1]*((125.0*sig[0])/36.0 + (125.0*sig[1])/54.0);
-		model.setObjective(obj);
-		//std::cout << obj << std::endl;
+//		GRBQuadExpr obj = sig[0]*((125.0*sig[0])/18.0 + (125.0*sig[1])/36.0) + sig[1]*((125.0*sig[0])/36.0 + (125.0*sig[1])/54.0);
+//		model.setObjective(obj);
 
-//		GRBQuadExpr temp_expr;
-//		for(int i = 0; i < 4; i++)
-//		{
-//			for(int j = 0; j < 4; j++)
-//			{
-//				if(Q(i,j) != 0)
-//					temp_expr += (sig[j] * Q(i,j)) * sig[i];
-//			}
-//		}
-//		std::cout << temp_expr << std::endl;
-//		model.setObjective(temp_expr);
+		std::vector<GRBQuadExpr> temp_expr;
+		temp_expr.resize(4);
+		GRBQuadExpr cost_fun;
+		for(int i = 0; i < 4; i++)
+		{
+			for(int j = 0; j < 4; j++)
+				if(Q(j,i)!=0)
+					temp_expr[i] += sig[j] * Q(j,i);
+			std::cout << "idx: " << i << " "<< temp_expr[i] << std::endl;
+		}
+		for(int i = 0; i < 4; i++)
+			cost_fun += temp_expr[i].getLinExpr() * sig[i];
+		std::cout << cost_fun << std::endl;
+		model.setObjective(cost_fun);
 
 		// Add constraints
 //		model.addConstr(sig[3] == -0.15, "c0");
@@ -96,10 +98,9 @@ int main(int   argc, char *argv[])
 		{
 			GRBLinExpr constr;
 			for(int j = 0; j < 4; j++)
-			{
 				constr += sig[j] * A_eq(i,j);
-			}
-			std::cout << "constraint " << i << " : " << constr << " = " << b_eq(i,0) << std::endl;
+
+			//std::cout << "constraint " << i << " : " << constr << " = " << b_eq(i,0) << std::endl;
 			std::string constr_name = "c"+std::to_string(i);
 			model.addConstr(constr == b_eq(i, 0), constr_name);
 		}
