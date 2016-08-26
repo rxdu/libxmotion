@@ -1,14 +1,17 @@
 clear;
 clc;
 
-r = 4;
+r = 2;
 n = 2 * r - 1;
 m = 1;
 dim = 1;
 tDes = [0;1.2];
-posDes(:, :, 1) = [-0.15 0.25; 0.1 0.2; 0 0; 0 0; 0 0; 0 0];
+posDes(:, :, 1) = [-0.15 0.25; 0.0 0.0; 0 0; 0 0; 0 0; 0 0];
 t0 = 0;
 t1 = 1;
+
+Q = get_hessian(n, r, t0, t1); 
+Q = 1./((tDes(2, 1)-tDes(1, 1))^(2*r-1)).*Q
 [A_eq, b_eq] = get_all_constraints(r, n, m, dim, posDes, t0, t1, tDes)
 
 % r = 2; %derivative to minimize in cost function
@@ -22,3 +25,10 @@ t1 = 1;
 % t0 = 0;
 % t1 = 1;
 % [A_eq, b_eq] = get_all_constraints(r, n, m, dim, posDes, t0, t1, tDes)
+
+syms sig0 sig1 sig2 sig3
+x = [ sig0, sig1, sig2, sig3];
+x * Q * transpose(x)
+
+A_eq * transpose(x)
+b_eq

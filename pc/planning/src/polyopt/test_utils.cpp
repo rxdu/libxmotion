@@ -21,8 +21,6 @@ using namespace Eigen;
 
 int main(int   argc, char *argv[])
 {
-	PolyOptUtils po_utils;
-
 	/* test coefficients */
 	PolynomialCoeffs coeff(8);
 //	po_utils.GetDerivativeCoeffs(7, 0, coeff);
@@ -37,7 +35,7 @@ int main(int   argc, char *argv[])
 //	std::cout << coeff << std::endl;
 //	std::cout << po_utils.GetNonZeroCoeffNum(coeff) << std::endl;
 
-	uint32_t r = 4;
+	uint32_t r = 2;
 	uint32_t N = 2 * r - 1;
 	MatrixXf q = MatrixXf::Zero(N+1, N+1);
 
@@ -65,7 +63,10 @@ int main(int   argc, char *argv[])
 	keyframe_ts(0,0) = 0;
 	keyframe_ts(0,1) = 1.2;
 
-	po_utils.GetNonDimEqualityConstrs(N, r, 2, keyframe_vals, keyframe_ts);
+	MatrixXf A_eq = MatrixXf::Zero(2 * r, 1 * (N + 1));
+	MatrixXf b_eq = MatrixXf::Zero(2 * r, 1);
+
+	PolyOptUtils::GetNonDimEqualityConstrs(N, r, 2, keyframe_vals, keyframe_ts, A_eq, b_eq);
 
 	//std::cout << "test: " << std::pow(0, 1) << std::endl;
 }

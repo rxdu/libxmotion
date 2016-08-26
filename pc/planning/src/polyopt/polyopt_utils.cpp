@@ -93,7 +93,8 @@ uint32_t PolyOptUtils::GetNonZeroCoeffNum(const Eigen::Ref<const PolynomialCoeff
 }
 
 void PolyOptUtils::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_order, uint32_t keyframe_num,
-		const Eigen::Ref<const Eigen::MatrixXf> keyframe_vals, const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts)
+		const Eigen::Ref<const Eigen::MatrixXf> keyframe_vals, const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts,
+		Eigen::Ref<Eigen::MatrixXf> A_eq, Eigen::Ref<Eigen::MatrixXf> b_eq)
 {
 	// TODO check if size of keyframe values and that of keyframe time stamps match
 	// TODO check if keyframe_num is greater than 1
@@ -102,8 +103,10 @@ void PolyOptUtils::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_
 	int64_t r = deriv_order;
 	int64_t traj_seg_num = keyframe_num - 1;
 
-	MatrixXf A_eq = MatrixXf::Zero(2 * r, (keyframe_num - 1) * (N + 1));
-	MatrixXf b_eq = MatrixXf::Zero(2 * r, 1);
+//	MatrixXf A_eq = MatrixXf::Zero(2 * r, (keyframe_num - 1) * (N + 1));
+//	MatrixXf b_eq = MatrixXf::Zero(2 * r, 1);
+	A_eq = MatrixXf::Zero(2 * r, (keyframe_num - 1) * (N + 1));
+	b_eq = MatrixXf::Zero(2 * r, 1);
 
 	// check each piece of trajectory
 	for(int64_t j = 0; j < traj_seg_num; j++)
@@ -154,6 +157,6 @@ void PolyOptUtils::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_
 		}
 	}
 
-	std::cout << "A_eq:\n" << A_eq << std::endl;
-	std::cout << "b_eq:\n" << b_eq << std::endl;
+//	std::cout << "A_eq:\n" << A_eq << std::endl;
+//	std::cout << "b_eq:\n" << b_eq << std::endl;
 }
