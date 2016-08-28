@@ -15,7 +15,8 @@
 
 #include "eigen3/Eigen/Core"
 
-#include "polyopt/polyopt_utils.h"
+#include "polyopt/polyopt_math.h"
+#include "polyopt/gurobi_utils.h"
 
 using namespace std;
 using namespace srcl_ctrl;
@@ -34,16 +35,14 @@ int main(int   argc, char *argv[])
 
 	keyframe_vals(0,0) = -0.15;
 	keyframe_vals(0,1) = 0.25;
-//	keyframe_vals(1,0) = 0.1;
-//	keyframe_vals(1,1) = 0.2;
 	keyframe_vals(1,0) = 0.0;
 	keyframe_vals(1,1) = 0.0;
 
 	keyframe_ts(0,0) = 0;
 	keyframe_ts(0,1) = 1.2;
 
-	PolyOptUtils::GetNonDimQMatrix(N,r,0,1.2,Q);
-	PolyOptUtils::GetNonDimEqualityConstrs(N, r, 2, keyframe_vals, keyframe_ts, A_eq, b_eq);
+	PolyOptMath::GetNonDimQMatrix(N,r,0,1.2,Q);
+	PolyOptMath::GetNonDimEqualityConstrs(N, r, 2, keyframe_vals, keyframe_ts, A_eq, b_eq);
 
 	std::cout << "\nQ: \n" << Q << std::endl;
 	std::cout << "\nA_eq:\n" << A_eq << std::endl;
@@ -59,7 +58,8 @@ int main(int   argc, char *argv[])
 //		GRBVar sig2 = model.addVar(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), 0.0, GRB_CONTINUOUS, "sig2");
 //		GRBVar sig3 = model.addVar(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), 0.0, GRB_CONTINUOUS, "sig3");
 
-		GRBVar sig[4];
+		std::vector<GRBVar> sig;
+		sig.resize(4);
 		for(int i = 0; i < 4; i++)
 		{
 			std::string var_name = "sig"+std::to_string(i);
@@ -73,19 +73,20 @@ int main(int   argc, char *argv[])
 //		GRBQuadExpr obj = sig[0]*((125.0*sig[0])/18.0 + (125.0*sig[1])/36.0) + sig[1]*((125.0*sig[0])/36.0 + (125.0*sig[1])/54.0);
 //		model.setObjective(obj);
 
-		std::vector<GRBQuadExpr> temp_expr;
-		temp_expr.resize(4);
 		GRBQuadExpr cost_fun;
-		for(int i = 0; i < 4; i++)
-		{
-			for(int j = 0; j < 4; j++)
-				if(Q(j,i)!=0)
-					temp_expr[i] += sig[j] * Q(j,i);
-			std::cout << "idx: " << i << " "<< temp_expr[i] << std::endl;
-		}
-		for(int i = 0; i < 4; i++)
-			cost_fun += temp_expr[i].getLinExpr() * sig[i];
-		std::cout << cost_fun << std::endl;
+//		std::vector<GRBQuadExpr> temp_expr;
+//		temp_expr.resize(4);
+//		for(int i = 0; i < 4; i++)
+//		{
+//			for(int j = 0; j < 4; j++)
+//				if(Q(j,i)!=0)
+//					temp_expr[i] += sig[j] * Q(j,i);
+//			std::cout << "idx: " << i << " "<< temp_expr[i] << std::endl;
+//		}
+//		for(int i = 0; i < 4; i++)
+//			cost_fun += temp_expr[i].getLinExpr() * sig[i];
+//		std::cout << cost_fun << std::endl;
+		GurobiUtils::GetQuadraticCostFuncExpr(sig, Q, 4, cost_fun);;
 		model.setObjective(cost_fun);
 
 		// Add constraints
@@ -94,16 +95,17 @@ int main(int   argc, char *argv[])
 //		model.addConstr(sig[0] + sig[1] + sig[2] + sig[3] == 0.25, "c2");
 //		model.addConstr((5.0*sig[0])/2.0 + (5.0*sig[1])/3.0 + (5.0*sig[2])/6.0 == 0, "c3");
 
-		for(int i = 0; i < 4; i++)
-		{
-			GRBLinExpr constr;
-			for(int j = 0; j < 4; j++)
-				constr += sig[j] * A_eq(i,j);
-
-			//std::cout << "constraint " << i << " : " << constr << " = " << b_eq(i,0) << std::endl;
-			std::string constr_name = "c"+std::to_string(i);
-			model.addConstr(constr == b_eq(i, 0), constr_name);
-		}
+//		for(int i = 0; i < 4; i++)
+//		{
+//			GRBLinExpr constr;
+//			for(int j = 0; j < 4; j++)
+//				constr += sig[j] * A_eq(i,j);
+//
+//			//std::cout << "constraint " << i << " : " << constr << " = " << b_eq(i,0) << std::endl;
+//			std::string constr_name = "c"+std::to_string(i);
+//			model.addConstr(constr == b_eq(i, 0), constr_name);
+//		}
+		GurobiUtils::AddLinEqualityConstrExpr(sig, A_eq, b_eq, 4, model);
 
 		// Optimize model
 		model.optimize();

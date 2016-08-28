@@ -31,7 +31,7 @@ Q_joint = [];
 for i = 1:m,
     Q = get_hessian(n, r, t0, t1); % find cost matrix for each segment
     %1/((tDes(i+1, 1)-tDes(i, 1))^(2*r-1))
-    Q = 1./((tDes(i+1, 1)-tDes(i, 1))^(2*r-1)).*Q% multiply by time factor to nondimensionalize
+    Q = 1./((tDes(i+1, 1)-tDes(i, 1))^(2*r-1)).*Q;% multiply by time factor to nondimensionalize
     
     Q_joint = blkdiag(Q_joint, Q);%put in block diagonal matrix
 end
@@ -44,7 +44,8 @@ end
 % A_eq = [A_fixed; A_cont];
 % b_eq = [b_fixed; b_cont];
 
-[A_eq, b_eq] = get_all_constraints(r, n, m, dim, posDes, t0, t1, tDes);
+Q_joint
+[A_eq, b_eq] = get_all_constraints(r, n, m, dim, posDes, t0, t1, tDes)
 
 % find optimal trajectory through quadratic programming
 opts = optimoptions('quadprog','TolFun', 1e-30);

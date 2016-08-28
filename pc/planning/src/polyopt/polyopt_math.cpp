@@ -9,12 +9,12 @@
 #include <cmath>
 #include <limits>
 
-#include "polyopt/polyopt_utils.h"
+#include "polyopt/polyopt_math.h"
 
 using namespace srcl_ctrl;
 using namespace Eigen;
 
-void PolyOptUtils::GetDimQMatrix(uint32_t poly_order, uint32_t deriv_order, double t0, double t1,
+void PolyOptMath::GetDimQMatrix(uint32_t poly_order, uint32_t deriv_order, double t0, double t1,
 		Eigen::Ref<Eigen::MatrixXf> q)
 {
 	int64_t N = poly_order;
@@ -41,7 +41,7 @@ void PolyOptUtils::GetDimQMatrix(uint32_t poly_order, uint32_t deriv_order, doub
 		}
 }
 
-void PolyOptUtils::GetNonDimQMatrix(uint32_t poly_order, uint32_t deriv_order, double t0, double t1,
+void PolyOptMath::GetNonDimQMatrix(uint32_t poly_order, uint32_t deriv_order, double t0, double t1,
 		Eigen::Ref<Eigen::MatrixXf> q)
 {
 	GetDimQMatrix(poly_order, deriv_order, 0.0, 1.0, q);
@@ -64,7 +64,7 @@ void PolyOptUtils::GetNonDimQMatrix(uint32_t poly_order, uint32_t deriv_order, d
 	q = q_flip;
 }
 
-void PolyOptUtils::GetNonDimQMatrices(uint32_t poly_order, uint32_t deriv_order, uint32_t keyframe_num,
+void PolyOptMath::GetNonDimQMatrices(uint32_t poly_order, uint32_t deriv_order, uint32_t keyframe_num,
 		const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts, Eigen::Ref<Eigen::MatrixXf> q)
 {
 	int64_t N = poly_order;
@@ -84,7 +84,7 @@ void PolyOptUtils::GetNonDimQMatrices(uint32_t poly_order, uint32_t deriv_order,
 	}
 }
 
-void PolyOptUtils::GetDerivativeCoeffs(uint32_t poly_order, uint32_t deriv_order, Eigen::Ref<PolynomialCoeffs> coeffs)
+void PolyOptMath::GetDerivativeCoeffs(uint32_t poly_order, uint32_t deriv_order, Eigen::Ref<PolynomialCoeffs> coeffs)
 {
 	int64_t N = poly_order;
 	int64_t r = deriv_order;
@@ -113,7 +113,7 @@ void PolyOptUtils::GetDerivativeCoeffs(uint32_t poly_order, uint32_t deriv_order
 	}
 }
 
-uint32_t PolyOptUtils::GetNonZeroCoeffNum(const Eigen::Ref<const PolynomialCoeffs> coeffs)
+uint32_t PolyOptMath::GetNonZeroCoeffNum(const Eigen::Ref<const PolynomialCoeffs> coeffs)
 {
 	uint32_t order = 0;
 
@@ -124,7 +124,7 @@ uint32_t PolyOptUtils::GetNonZeroCoeffNum(const Eigen::Ref<const PolynomialCoeff
 	return order;
 }
 
-void PolyOptUtils::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_order, uint32_t keyframe_num,
+void PolyOptMath::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_order, uint32_t keyframe_num,
 		const Eigen::Ref<const Eigen::MatrixXf> keyframe_vals, const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts,
 		Eigen::Ref<Eigen::MatrixXf> A_eq, Eigen::Ref<Eigen::MatrixXf> b_eq)
 {
@@ -219,6 +219,6 @@ void PolyOptUtils::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_
 		}
 	}
 
-	std::cout << "A_eq:\n" << A_eq << std::endl;
-	std::cout << "b_eq:\n" << b_eq << std::endl;
+//	std::cout << "A_eq:\n" << A_eq << std::endl;
+//	std::cout << "b_eq:\n" << b_eq << std::endl;
 }

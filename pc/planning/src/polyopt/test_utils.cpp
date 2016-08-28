@@ -13,7 +13,7 @@
 
 #include "eigen3/Eigen/Core"
 
-#include "polyopt/polyopt_utils.h"
+#include "polyopt/polyopt_math.h"
 
 using namespace std;
 using namespace srcl_ctrl;
@@ -96,6 +96,6 @@ int main(int   argc, char *argv[])
 	MatrixXf A_eq = MatrixXf::Zero((kf_num - 1) * 2 * r, (kf_num - 1) * (N + 1));
 	MatrixXf b_eq = MatrixXf::Zero((kf_num - 1) * 2 * r, 1);
 
-	PolyOptUtils::GetNonDimEqualityConstrs(N, r, kf_num, keyframe_vals, keyframe_ts, A_eq, b_eq);
+	PolyOptMath::GetNonDimEqualityConstrs(N, r, kf_num, keyframe_vals, keyframe_ts, A_eq, b_eq);
 }
 

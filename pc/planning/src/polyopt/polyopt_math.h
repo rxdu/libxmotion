@@ -5,8 +5,8 @@
  *      Author: rdu
  */
 
-#ifndef PLANNING_SRC_POLYOPT_POLYOPT_UTILS_H_
-#define PLANNING_SRC_POLYOPT_POLYOPT_UTILS_H_
+#ifndef PLANNING_SRC_POLYOPT_POLYOPT_MATH_H_
+#define PLANNING_SRC_POLYOPT_POLYOPT_MATH_H_
 
 #include <cstdint>
 
@@ -16,7 +16,7 @@ namespace srcl_ctrl {
 
 using PolynomialCoeffs = Eigen::Array<float,1, Eigen::Dynamic>;
 
-namespace PolyOptUtils {
+namespace PolyOptMath {
 
 void GetDimQMatrix(uint32_t poly_order, uint32_t deriv_order, double t0, double t1, Eigen::Ref<Eigen::MatrixXf> q);
 void GetNonDimQMatrix(uint32_t poly_order, uint32_t deriv_order, double t0, double t1, Eigen::Ref<Eigen::MatrixXf> q);
@@ -31,4 +31,4 @@ void GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_order, uint32_
 }
 }
 
-#endif /* PLANNING_SRC_POLYOPT_POLYOPT_UTILS_H_ */
+#endif /* PLANNING_SRC_POLYOPT_POLYOPT_MATH_H_ */

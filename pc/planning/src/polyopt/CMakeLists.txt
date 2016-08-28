@@ -10,7 +10,10 @@ else()
 endif()
 
 # Add libraries
-set(POLYOPT_LIB_SRC polyopt_utils.cpp)
+set(POLYOPT_LIB_SRC 
+    polyopt_math.cpp
+    gurobi_utils.cpp
+)
 add_library(polyopt STATIC ${POLYOPT_LIB_SRC})
 
 # Add executables
@@ -25,3 +28,6 @@ target_link_libraries(test_utils polyopt ${GUROBI_LIBRARIES})
 
 add_executable(test_qp test_qp.cpp)
 target_link_libraries(test_qp polyopt ${GUROBI_LIBRARIES})
+
+add_executable(test_qp2 test_qp2.cpp)
+target_link_libraries(test_qp2 polyopt ${GUROBI_LIBRARIES})
