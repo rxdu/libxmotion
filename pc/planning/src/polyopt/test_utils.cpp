@@ -79,18 +79,23 @@ int main(int   argc, char *argv[])
 
 	keyframe_vals(0,0) = -0.15;
 	keyframe_vals(0,1) = 0.25;
-	keyframe_vals(0,2) = 0.35;
+	keyframe_vals(0,2) = 0.3;
 
 	keyframe_vals(1,0) = 0;
-	keyframe_vals(1,1) = 0;
+	keyframe_vals(1,1) = std::numeric_limits<float>::infinity();
 	keyframe_vals(1,2) = 0;
 
 	keyframe_ts(0,0) = 0;
 	keyframe_ts(0,1) = 1.2;
 	keyframe_ts(0,2) = 3;
 
-	PolyOptUtils::GetNonDimQMatrices(N,r,kf_num, keyframe_ts,q);
-	std::cout << "matrix Q: " << std::endl;
-	std::cout << q << std::endl;
+//	PolyOptUtils::GetNonDimQMatrices(N,r,kf_num, keyframe_ts,q);
+//	std::cout << "matrix Q: " << std::endl;
+//	std::cout << q << std::endl;
+
+	MatrixXf A_eq = MatrixXf::Zero((kf_num - 1) * 2 * r, (kf_num - 1) * (N + 1));
+	MatrixXf b_eq = MatrixXf::Zero((kf_num - 1) * 2 * r, 1);
+
+	PolyOptUtils::GetNonDimEqualityConstrs(N, r, kf_num, keyframe_vals, keyframe_ts, A_eq, b_eq);
 }
 

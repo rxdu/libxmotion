@@ -135,10 +135,8 @@ void PolyOptUtils::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_
 	int64_t r = deriv_order;
 	int64_t traj_seg_num = keyframe_num - 1;
 
-//	MatrixXf A_eq = MatrixXf::Zero(2 * r, (keyframe_num - 1) * (N + 1));
-//	MatrixXf b_eq = MatrixXf::Zero(2 * r, 1);
-	A_eq = MatrixXf::Zero(2 * r, (keyframe_num - 1) * (N + 1));
-	b_eq = MatrixXf::Zero(2 * r, 1);
+	A_eq = MatrixXf::Zero((keyframe_num - 1) * 2 * r, (keyframe_num - 1) * (N + 1));
+	b_eq = MatrixXf::Zero((keyframe_num - 1) * 2 * r, 1);
 
 	// check each piece of trajectory
 	for(int64_t j = 0; j < traj_seg_num; j++)
@@ -174,21 +172,53 @@ void PolyOptUtils::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_
 			// if there are more segments, intermediate key frames need to be continuous
 			else
 			{
+				double nondim_coeff = 1/(std::pow(keyframe_ts(0, j+1)-keyframe_ts(0, j),i));
+
 				// special case: if no constraint is specified, just ensure continuity
 				if(keyframe_vals(i, j) == std::numeric_limits<float>::infinity())
 				{
+					double nondim_coeff_prev = 1/(std::pow(keyframe_ts(0, j)-keyframe_ts(0, j - 1),i));
 
-					b_eq(j*2 + i,0) = 0;
+					for(int64_t k = 0; k < N + 1; k++)
+					{
+						// A(tau_0), A(tau_1)
+						if(N - k >= i)
+						{
+							A_eq(j*2*r + i, j*(N + 1) + k) = nondim_coeff * coeff(k)*std::pow(1, N - k);
+							A_eq(j*2*r + r + i, j*(N + 1) + k) = -nondim_coeff * coeff(k)*std::pow(0, N - k);
+						}
+						else
+						{
+							A_eq(j*2*r + i, j*(N + 1) + k) = 0;
+							A_eq(j*2*r + r + i, j*(N + 1) + k) = 0;
+						}
+					}
+
+					b_eq(j*2*r + i,0) = 0;
 				}
 				else {
+					for(int64_t k = 0; k < N + 1; k++)
+					{
+						// A(tau_0), A(tau_1)
+						if(N - k >= i)
+						{
+							A_eq(j*2*r + i, j*(N + 1) + k) = nondim_coeff * coeff(k)*std::pow(0, N - k - i );
+							A_eq(j*2*r + r + i, j*(N + 1) + k) = nondim_coeff * coeff(k)*std::pow(1, N - k - i );
+						}
+						else
+						{
+							A_eq(j*2*r + i, j*(N + 1) + k) = 0;
+							A_eq(j*2*r + r + i, j*(N + 1) + k) = 0;
+						}
+					}
 
-					b_eq(j*2 + i*2,0) = keyframe_vals(i, j);
-					b_eq(j*2 + i*2 + 1,0) = keyframe_vals(i, j);
+					b_eq(j*2*r + i,0) = keyframe_vals(i, j);
+					b_eq(j*2*r + r + i,0) = keyframe_vals(i, j+1);
 				}
 			}
 		}
 	}
 
-//	std::cout << "A_eq:\n" << A_eq << std::endl;
-//	std::cout << "b_eq:\n" << b_eq << std::endl;
+	std::cout << "A_eq:\n" << A_eq << std::endl;
+	std::cout << "b_eq:\n" << b_eq << std::endl;
 }
