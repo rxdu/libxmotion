@@ -20,6 +20,8 @@ namespace PolyOptUtils {
 
 void GetDimQMatrix(uint32_t poly_order, uint32_t deriv_order, double t0, double t1, Eigen::Ref<Eigen::MatrixXf> q);
 void GetNonDimQMatrix(uint32_t poly_order, uint32_t deriv_order, double t0, double t1, Eigen::Ref<Eigen::MatrixXf> q);
+void GetNonDimQMatrices(uint32_t poly_order, uint32_t deriv_order, uint32_t keyframe_num,
+		const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts, Eigen::Ref<Eigen::MatrixXf> q);
 
 void GetDerivativeCoeffs(uint32_t poly_order, uint32_t deriv_order, Eigen::Ref<PolynomialCoeffs> coeffs);
 uint32_t GetNonZeroCoeffNum(const Eigen::Ref<const PolynomialCoeffs> coeffs);

@@ -37,13 +37,13 @@ int main(int   argc, char *argv[])
 
 	uint32_t r = 2;
 	uint32_t N = 2 * r - 1;
-	MatrixXf q = MatrixXf::Zero(N+1, N+1);
 
 	/* test Q matrix */
+//	MatrixXf q = MatrixXf::Zero(N+1, N+1);
 	//po_utils.GetDimQMatrix(3,2,0,1.2,q);
-	PolyOptUtils::GetNonDimQMatrix(N,r,0,1.2,q);
-	std::cout << "matrix Q: " << std::endl;
-	std::cout << q << std::endl;
+//	PolyOptUtils::GetNonDimQMatrix(N,r,0,1.2,q);
+//	std::cout << "matrix Q: " << std::endl;
+//	std::cout << q << std::endl;
 
 	/* test infinity */
 //	float inf1 = std::numeric_limits<float>::infinity();
@@ -69,5 +69,28 @@ int main(int   argc, char *argv[])
 //	PolyOptUtils::GetNonDimEqualityConstrs(N, r, 2, keyframe_vals, keyframe_ts, A_eq, b_eq);
 
 	//std::cout << "test: " << std::pow(0, 1) << std::endl;
+
+	/* test multiple key frames */
+	uint8_t kf_num = 3;
+	MatrixXf q = MatrixXf::Zero(2*(N+1), 2*(N+1));
+
+	MatrixXf keyframe_vals = MatrixXf::Zero(r, 3);
+	MatrixXf keyframe_ts = MatrixXf::Zero(1, 3);
+
+	keyframe_vals(0,0) = -0.15;
+	keyframe_vals(0,1) = 0.25;
+	keyframe_vals(0,2) = 0.35;
+
+	keyframe_vals(1,0) = 0;
+	keyframe_vals(1,1) = 0;
+	keyframe_vals(1,2) = 0;
+
+	keyframe_ts(0,0) = 0;
+	keyframe_ts(0,1) = 1.2;
+	keyframe_ts(0,2) = 3;
+
+	PolyOptUtils::GetNonDimQMatrices(N,r,kf_num, keyframe_ts,q);
+	std::cout << "matrix Q: " << std::endl;
+	std::cout << q << std::endl;
 }
 

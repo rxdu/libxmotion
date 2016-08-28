@@ -64,6 +64,26 @@ void PolyOptUtils::GetNonDimQMatrix(uint32_t poly_order, uint32_t deriv_order, d
 	q = q_flip;
 }
 
+void PolyOptUtils::GetNonDimQMatrices(uint32_t poly_order, uint32_t deriv_order, uint32_t keyframe_num,
+		const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts, Eigen::Ref<Eigen::MatrixXf> q)
+{
+	int64_t N = poly_order;
+	int64_t r = deriv_order;
+	int64_t seg_num = keyframe_num - 1;
+
+	q = MatrixXf::Zero(seg_num*(N+1), seg_num*(N+1));
+
+	for(uint64_t i = 0; i < seg_num; i++)
+	{
+		Eigen::MatrixXf sub_q = MatrixXf::Zero(N+1, N+1);
+		GetNonDimQMatrix(N, r, keyframe_ts(0, i), keyframe_ts(0, i+1), sub_q);
+
+		for(uint64_t row = 0; row < sub_q.rows(); row++)
+			for(uint64_t col = 0; col < sub_q.cols(); col++)
+				q(i*(N+1) + row, i*(N+1) + col) = sub_q(row,col);
+	}
+}
+
 void PolyOptUtils::GetDerivativeCoeffs(uint32_t poly_order, uint32_t deriv_order, Eigen::Ref<PolynomialCoeffs> coeffs)
 {
 	int64_t N = poly_order;
