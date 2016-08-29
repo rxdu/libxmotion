@@ -51,8 +51,6 @@ int main(int   argc, char *argv[])
 	PolyOptMath::GetNonDimQMatrices(N,r,kf_num, keyframe_ts,Q);
 	PolyOptMath::GetNonDimEqualityConstrs(N, r, kf_num, keyframe_vals, keyframe_ts, A_eq, b_eq);
 
-	//A_eq(5,6) = -0.5556;
-
 	std::cout << "\nQ: \n" << Q << std::endl;
 	std::cout << "\nA_eq:\n" << A_eq << std::endl;
 	std::cout << "\nb_eq:\n" << b_eq << std::endl;

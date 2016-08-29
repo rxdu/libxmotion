@@ -185,57 +185,56 @@ void PolyOptMath::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_o
 						if(N - k >= i)
 						{
 							A_eq(j*2*r + i, (j-1)*(N + 1) + k) = nondim_coeff_prev * coeff(k)*std::pow(1, N - k);
-							A_eq(j*2*r + i, j*(N + 1) + k) = - nondim_coeff * coeff(k)*std::pow(0, N - k);
-
-							A_eq(j*2*r + r + i, j*(N + 1) + k) = nondim_coeff * coeff(k)*std::pow(1, N - k - i );
+							A_eq(j*2*r + i, j*(N + 1) + k) = - nondim_coeff * coeff(k)*std::pow(0, N - k - i);
 						}
 						else
-						{
 							A_eq(j*2*r + i, j*(N + 1) + k) = 0;
-							A_eq(j*2*r + r + i, j*(N + 1) + k) = 0;
-						}
 					}
 
 					b_eq(j*2*r + i,0) = 0;
-					b_eq(j*2*r + r + i,0) = keyframe_vals(i, j+1);
 				}
-				else if(keyframe_vals(i, j+1) == std::numeric_limits<float>::infinity())
+				else
 				{
 					for(int64_t k = 0; k < N + 1; k++)
 					{
 						// A(tau_0), A(tau_1)
 						if(N - k >= i)
 						{
-							A_eq(j*2*r + i, j*(N + 1) + k) = nondim_coeff * coeff(k)*std::pow(0, N - k - i );
-							A_eq(j*2*r + r + i, j*(N + 1) + k) = 0;//nondim_coeff * coeff(k)*std::pow(1, N - k - i );
+							A_eq(j*2*r + i, j*(N + 1) + k) = nondim_coeff * coeff(k)*std::pow(0, N - k - i);
 						}
 						else
 						{
 							A_eq(j*2*r + i, j*(N + 1) + k) = 0;
-							A_eq(j*2*r + r + i, j*(N + 1) + k) = 0;
 						}
 					}
 
 					b_eq(j*2*r + i,0) = keyframe_vals(i, j);
-					b_eq(j*2*r + r + i,0) = 0;//keyframe_vals(i, j+1);
 				}
-				else {
+
+				if(keyframe_vals(i, j+1) == std::numeric_limits<float>::infinity())
+				{
+					for(int64_t k = 0; k < N + 1; k++)
+					{
+						// A(tau_0), A(tau_1)
+						A_eq(j*2*r + r + i, j*(N + 1) + k) = 0;
+					}
+					b_eq(j*2*r + r + i,0) = 0;
+				}
+				else
+				{
 					for(int64_t k = 0; k < N + 1; k++)
 					{
 						// A(tau_0), A(tau_1)
 						if(N - k >= i)
 						{
-							A_eq(j*2*r + i, j*(N + 1) + k) = nondim_coeff * coeff(k)*std::pow(0, N - k - i );
-							A_eq(j*2*r + r + i, j*(N + 1) + k) = nondim_coeff * coeff(k)*std::pow(1, N - k - i );
+							A_eq(j*2*r + r + i, j*(N + 1) + k) = nondim_coeff * coeff(k)*std::pow(1, N - k - i);
 						}
 						else
 						{
-							A_eq(j*2*r + i, j*(N + 1) + k) = 0;
 							A_eq(j*2*r + r + i, j*(N + 1) + k) = 0;
 						}
 					}
 
-					b_eq(j*2*r + i,0) = keyframe_vals(i, j);
 					b_eq(j*2*r + r + i,0) = keyframe_vals(i, j+1);
 				}
 			}
