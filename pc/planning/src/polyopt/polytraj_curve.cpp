@@ -12,6 +12,12 @@
 
 using namespace srcl_ctrl;
 
+PolyTrajCurve::PolyTrajCurve():
+		is_nondim_(false), t_start_(0.0), t_end_(0.0)
+{
+
+}
+
 PolyTrajCurve::PolyTrajCurve(const std::vector<double>& coefficients, bool coeff_nondim, double start_t, double end_t):
 		is_nondim_(coeff_nondim), t_start_(start_t), t_end_(end_t)
 {

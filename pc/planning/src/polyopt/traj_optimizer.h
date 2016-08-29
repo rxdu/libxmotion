@@ -4,8 +4,8 @@
  *  Created on: Aug 29, 2016
  *      Author: rdu
  *
- *  Description: this configuration tries to find the coefficients
- *  	of a polynomial of order N to minimize snap (4th derivative).
+ *  Description: this configuration tries to minimize r'th derivative of
+ *  	a N-order polynomial.
  */
 
 #ifndef PLANNING_SRC_POLYOPT_TRAJ_OPTIMIZER_H_
@@ -24,10 +24,11 @@ public:
 	~TrajOptimizer();
 
 private:
-	GRBEnv grb_env_;
+	// only one environment needed
+	static GRBEnv grb_env_;
 
 	// derivative to optimize
-	const uint32_t r_;
+	uint32_t r_;
 	// highest order of polynomial
 	uint32_t N_;
 	// number of key frames
@@ -42,8 +43,7 @@ private:
 
 public:
 	void OptimizeTrajectory(const Eigen::Ref<const Eigen::MatrixXf> keyframe_vals,
-			const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts, uint32_t keyframe_num, uint32_t poly_order);
-
+			const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts, uint32_t keyframe_num, uint32_t poly_order, uint32_t deriv_order);
 };
 
 }

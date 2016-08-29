@@ -16,8 +16,9 @@
 using namespace srcl_ctrl;
 using namespace Eigen;
 
+GRBEnv TrajOptimizer::grb_env_ = GRBEnv();
+
 TrajOptimizer::TrajOptimizer():
-		grb_env_ (GRBEnv()),
 		r_(4), N_(7),
 		kf_num_(2)
 {
@@ -39,9 +40,10 @@ void TrajOptimizer::InitCalcVars()
 }
 
 void TrajOptimizer::OptimizeTrajectory(const Eigen::Ref<const Eigen::MatrixXf> keyframe_vals,
-			const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts, uint32_t keyframe_num, uint32_t poly_order)
+			const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts, uint32_t keyframe_num, uint32_t poly_order, uint32_t deriv_order)
 {
 	kf_num_ = keyframe_num;
+	r_ = deriv_order;
 	N_ = poly_order;
 
 	if(N_ < 2*r_ - 1)

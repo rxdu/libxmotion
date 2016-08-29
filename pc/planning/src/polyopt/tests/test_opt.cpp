@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 	keyframe_ts(0,3) = 4.5;
 
 	TrajOptimizer traj_opt;
-	traj_opt.OptimizeTrajectory(keyframe_vals, keyframe_ts, kf_num, N);
+	traj_opt.OptimizeTrajectory(keyframe_vals, keyframe_ts, kf_num, N, r);
 }
 
 

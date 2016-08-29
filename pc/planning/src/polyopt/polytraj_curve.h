@@ -16,6 +16,7 @@ namespace srcl_ctrl {
 
 class PolyTrajCurve {
 public:
+	PolyTrajCurve();
 	PolyTrajCurve(const std::vector<double>& coefficients, bool coeff_nondim, double start_t, double end_t);
 	~PolyTrajCurve(){};
 

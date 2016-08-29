@@ -11,11 +11,14 @@ endif()
 
 # Add libraries
 set(POLYOPT_LIB_SRC 
+	# optimization solver
     polyopt_math.cpp
     gurobi_utils.cpp
     traj_optimizer.cpp
+    # quadrotor
     polytraj_curve.cpp
     quad_flattraj.cpp
+    quad_polyopt.cpp
 )
 add_library(polyopt STATIC ${POLYOPT_LIB_SRC})
 target_link_libraries(polyopt ${GUROBI_LIBRARIES})
@@ -36,8 +39,11 @@ target_link_libraries(test_qp2 polyopt ${GUROBI_LIBRARIES})
 add_executable(test_qp3 tests/test_qp3.cpp)
 target_link_libraries(test_qp3 polyopt ${GUROBI_LIBRARIES})
 
-add_executable(test_opt test_opt.cpp)
+add_executable(test_opt tests/test_opt.cpp)
 target_link_libraries(test_opt polyopt ${GUROBI_LIBRARIES})
 
-add_executable(test_trajdef test_trajdef.cpp)
+add_executable(test_trajdef tests/test_trajdef.cpp)
 target_link_libraries(test_trajdef polyopt ${GUROBI_LIBRARIES})
+
+add_executable(test_quadopt test_quadopt.cpp)
+target_link_libraries(test_quadopt polyopt ${GUROBI_LIBRARIES})

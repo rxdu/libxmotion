@@ -26,6 +26,9 @@ typedef struct {
 	PolyTrajCurve seg_y;
 	PolyTrajCurve seg_z;
 	PolyTrajCurve seg_yaw;
+
+	double t_start;
+	double t_end;
 }QuadFlatOutputSeg;
 
 class QuadFlatTraj {
@@ -37,7 +40,9 @@ private:
 	std::vector<QuadFlatOutputSeg> traj_segs_;
 
 public:
-	void AddTrajSeg(const std::vector<std::vector<double>>& seg_coeffs, bool coeff_nondim, std::vector<double> ts, std::vector<double> tf);
+	void AddTrajSeg(const std::vector<std::vector<double>>& seg_coeffs, double ts, double te);
+
+	QuadFlatOutput GetTrajPointPos(double t);
 };
 
 }
