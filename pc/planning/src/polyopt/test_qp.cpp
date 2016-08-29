@@ -15,12 +15,18 @@
 
 #include "eigen3/Eigen/Core"
 
+// opencv
+#include "opencv2/opencv.hpp"
+
 #include "polyopt/polyopt_math.h"
 #include "polyopt/gurobi_utils.h"
+
+#include "vis/curve_vis.h"
 
 using namespace std;
 using namespace srcl_ctrl;
 using namespace Eigen;
+using namespace cv;
 
 int main(int   argc, char *argv[])
 {
@@ -35,8 +41,8 @@ int main(int   argc, char *argv[])
 
 	keyframe_vals(0,0) = -0.15;
 	keyframe_vals(0,1) = 0.25;
-	keyframe_vals(1,0) = 0.0;
-	keyframe_vals(1,1) = 0.0;
+	keyframe_vals(1,0) = 0.1;
+	keyframe_vals(1,1) = 0.1;
 
 	keyframe_ts(0,0) = 0;
 	keyframe_ts(0,1) = 1.2;
@@ -120,6 +126,24 @@ int main(int   argc, char *argv[])
 				<< sig[3].get(GRB_DoubleAttr_X) << std::endl;
 
 		std::cout << "\nObj: " << model.get(GRB_DoubleAttr_ObjVal) << std::endl;
+
+		std::vector<double> result_coeffs;
+		for(auto& s:sig)
+		{
+			result_coeffs.push_back(s.get(GRB_DoubleAttr_X));
+		}
+//		cv::Mat vis_img;
+//		CurveVis::VisPolynomialCurve(result_coeffs, 0, 1.2, 0.1, vis_img);
+//
+//		// display visualization result
+//		namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
+//		imshow("Processed Image", vis_img);
+//
+//		waitKey(0);
+		std::cout << PolyOptMath::GetPolynomialValue(result_coeffs, 0, 0) << std::endl;
+		std::cout << PolyOptMath::GetPolynomialValue(result_coeffs, 0, 1.0) << std::endl;
+		std::cout << PolyOptMath::GetPolynomialValue(result_coeffs, 1, 0) << std::endl;
+		std::cout << PolyOptMath::GetPolynomialValue(result_coeffs, 1, 1.0) << std::endl;
 
 	} catch(GRBException e) {
 		cout << "Error code = " << e.getErrorCode() << endl;

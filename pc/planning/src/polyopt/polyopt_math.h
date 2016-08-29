@@ -28,6 +28,8 @@ uint32_t GetNonZeroCoeffNum(const Eigen::Ref<const PolynomialCoeffs> coeffs);
 void GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_order, uint32_t keyframe_num,
 		const Eigen::Ref<const Eigen::MatrixXf> keyframe_vals, const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts,
 		Eigen::Ref<Eigen::MatrixXf> A_eq, Eigen::Ref<Eigen::MatrixXf> b_eq);
+
+double GetPolynomialValue(std::vector<double> coeffs, uint32_t deriv_order, double tau);
 }
 }
 

@@ -24,7 +24,7 @@ using namespace Eigen;
 
 int main(int   argc, char *argv[])
 {
-	uint32_t r = 4;
+	uint32_t r = 2;
 	uint32_t N = 2 * r - 1;
 
 	uint8_t kf_num = 3;
@@ -41,7 +41,7 @@ int main(int   argc, char *argv[])
 	keyframe_vals(0,2) = 0.3;
 
 	keyframe_vals(1,0) = 0;
-	keyframe_vals(1,1) = 0;//std::numeric_limits<float>::infinity();
+	keyframe_vals(1,1) = std::numeric_limits<float>::infinity();
 	keyframe_vals(1,2) = 0;
 
 	keyframe_ts(0,0) = 0;
@@ -50,6 +50,8 @@ int main(int   argc, char *argv[])
 
 	PolyOptMath::GetNonDimQMatrices(N,r,kf_num, keyframe_ts,Q);
 	PolyOptMath::GetNonDimEqualityConstrs(N, r, kf_num, keyframe_vals, keyframe_ts, A_eq, b_eq);
+
+	//A_eq(5,6) = -0.5556;
 
 	std::cout << "\nQ: \n" << Q << std::endl;
 	std::cout << "\nA_eq:\n" << A_eq << std::endl;
@@ -75,7 +77,8 @@ int main(int   argc, char *argv[])
 
 		// Set objective
 		GRBQuadExpr cost_fun;
-		GurobiUtils::GetQuadraticCostFuncExpr(sig, Q, var_num, cost_fun);;
+		//GurobiUtils::GetQuadraticCostFuncExpr(sig, Q, var_num, cost_fun);;
+		cost_fun = sig[0]*((125*sig[0])/18 + (125*sig[1])/36) + sig[1]*((125*sig[0])/36 + (125*sig[1])/54) + sig[4]*((500*sig[4])/243 + (250*sig[5])/243) + sig[5]*((250*sig[4])/243 + (500*sig[5])/729);
 		model.setObjective(cost_fun);
 
 		// Add constraints

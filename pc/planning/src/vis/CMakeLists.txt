@@ -9,6 +9,7 @@ find_package(OpenCV REQUIRED)
 # Add libraries
 set(VIS_LIB_SRC
     graph_vis.cpp
+    curve_vis.cpp
     rrt_vis.cpp
     vis_utils.cpp
 )

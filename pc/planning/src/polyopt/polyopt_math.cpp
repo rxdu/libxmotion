@@ -177,15 +177,17 @@ void PolyOptMath::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_o
 				// special case: if no constraint is specified, just ensure continuity
 				if(keyframe_vals(i, j) == std::numeric_limits<float>::infinity())
 				{
-					double nondim_coeff_prev = 1/(std::pow(keyframe_ts(0, j)-keyframe_ts(0, j - 1),i));
+					double nondim_coeff_prev = 1/(std::pow(keyframe_ts(0, j)-keyframe_ts(0, j-1),i));
 
 					for(int64_t k = 0; k < N + 1; k++)
 					{
 						// A(tau_0), A(tau_1)
 						if(N - k >= i)
 						{
-							A_eq(j*2*r + i, j*(N + 1) + k) = nondim_coeff * coeff(k)*std::pow(1, N - k);
-							A_eq(j*2*r + r + i, j*(N + 1) + k) = -nondim_coeff * coeff(k)*std::pow(0, N - k);
+							A_eq(j*2*r + i, (j-1)*(N + 1) + k) = nondim_coeff_prev * coeff(k)*std::pow(1, N - k);
+							A_eq(j*2*r + i, j*(N + 1) + k) = - nondim_coeff * coeff(k)*std::pow(0, N - k);
+
+							A_eq(j*2*r + r + i, j*(N + 1) + k) = nondim_coeff * coeff(k)*std::pow(1, N - k - i );
 						}
 						else
 						{
@@ -195,6 +197,27 @@ void PolyOptMath::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_o
 					}
 
 					b_eq(j*2*r + i,0) = 0;
+					b_eq(j*2*r + r + i,0) = keyframe_vals(i, j+1);
+				}
+				else if(keyframe_vals(i, j+1) == std::numeric_limits<float>::infinity())
+				{
+					for(int64_t k = 0; k < N + 1; k++)
+					{
+						// A(tau_0), A(tau_1)
+						if(N - k >= i)
+						{
+							A_eq(j*2*r + i, j*(N + 1) + k) = nondim_coeff * coeff(k)*std::pow(0, N - k - i );
+							A_eq(j*2*r + r + i, j*(N + 1) + k) = 0;//nondim_coeff * coeff(k)*std::pow(1, N - k - i );
+						}
+						else
+						{
+							A_eq(j*2*r + i, j*(N + 1) + k) = 0;
+							A_eq(j*2*r + r + i, j*(N + 1) + k) = 0;
+						}
+					}
+
+					b_eq(j*2*r + i,0) = keyframe_vals(i, j);
+					b_eq(j*2*r + r + i,0) = 0;//keyframe_vals(i, j+1);
 				}
 				else {
 					for(int64_t k = 0; k < N + 1; k++)
@@ -221,4 +244,32 @@ void PolyOptMath::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_o
 
 //	std::cout << "A_eq:\n" << A_eq << std::endl;
 //	std::cout << "b_eq:\n" << b_eq << std::endl;
+}
+
+double PolyOptMath::GetPolynomialValue(std::vector<double> coeffs, uint32_t deriv_order, double tau)
+{
+	double val = 0;
+	int64_t N = coeffs.size() - 1;
+	int64_t r = deriv_order;
+
+	PolynomialCoeffs deriv_coeff(N + 1);
+	GetDerivativeCoeffs(N, r, deriv_coeff);
+
+	uint32_t coeff_size = coeffs.size();
+	for(int i = 0; i <= N; i++)
+	{
+		double item_val;
+
+		if(N - i >= r) {
+			item_val =  deriv_coeff[i] * coeffs[i] * std::pow(tau, N - i - r);
+
+			std::cout << "deriv_coeff: " << deriv_coeff[i] << " ; coeff: " << coeffs[i] << " ; power: " << N-i-r << " ; val: " << item_val << std::endl;
+		}
+		else
+			item_val = 0;
+
+		val += item_val;
+	}
+
+	return val;
 }
