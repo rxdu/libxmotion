@@ -24,12 +24,12 @@ using namespace Eigen;
 
 int main(int   argc, char *argv[])
 {
-	uint32_t r = 4;
+	uint32_t r = 2;
 	uint32_t N = 2 * r - 1;
 
-	uint8_t kf_num = 3;
+	uint8_t kf_num = 4;
 
-	MatrixXf Q = MatrixXf::Zero(2*(N+1), 2*(N+1));
+	MatrixXf Q = MatrixXf::Zero((kf_num - 1) * (N+1), (kf_num - 1) * (N+1));
 	MatrixXf A_eq = MatrixXf::Zero((kf_num - 1) * 2 * r, (kf_num - 1) * (N + 1));
 	MatrixXf b_eq = MatrixXf::Zero((kf_num - 1) * 2 * r, 1);
 
@@ -39,14 +39,17 @@ int main(int   argc, char *argv[])
 	keyframe_vals(0,0) = -0.15;
 	keyframe_vals(0,1) = 0.25;
 	keyframe_vals(0,2) = 0.3;
+	keyframe_vals(0,3) = 0.35;
 
 	keyframe_vals(1,0) = 0;
 	keyframe_vals(1,1) = std::numeric_limits<float>::infinity();
-	keyframe_vals(1,2) = 0;
+	keyframe_vals(1,2) = std::numeric_limits<float>::infinity();
+	keyframe_vals(1,3) = 0;
 
 	keyframe_ts(0,0) = 0;
 	keyframe_ts(0,1) = 1.2;
 	keyframe_ts(0,2) = 3;
+	keyframe_ts(0,3) = 4.5;
 
 	PolyOptMath::GetNonDimQMatrices(N,r,kf_num, keyframe_ts,Q);
 	PolyOptMath::GetNonDimEqualityConstrs(N, r, kf_num, keyframe_vals, keyframe_ts, A_eq, b_eq);
@@ -60,9 +63,8 @@ int main(int   argc, char *argv[])
 		GRBModel model = GRBModel(env);
 
 		// Create variables
-		//GRBVar sig[8];
 		std::vector<GRBVar> sig;
-		uint32_t var_num = (N + 1)*2;
+		uint32_t var_num = (N + 1)*(kf_num-1);
 		sig.resize(var_num);
 		for(int i = 0; i < var_num; i++)
 		{
@@ -76,7 +78,6 @@ int main(int   argc, char *argv[])
 		// Set objective
 		GRBQuadExpr cost_fun;
 		GurobiUtils::GetQuadraticCostFuncExpr(sig, Q, var_num, cost_fun);;
-		//cost_fun = sig[0]*((125*sig[0])/18 + (125*sig[1])/36) + sig[1]*((125*sig[0])/36 + (125*sig[1])/54) + sig[4]*((500*sig[4])/243 + (250*sig[5])/243) + sig[5]*((250*sig[4])/243 + (500*sig[5])/729);
 		model.setObjective(cost_fun);
 
 		// Add constraints

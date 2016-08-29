@@ -31,3 +31,6 @@ target_link_libraries(test_qp polyopt vis ${GUROBI_LIBRARIES})
 
 add_executable(test_qp2 test_qp2.cpp)
 target_link_libraries(test_qp2 polyopt ${GUROBI_LIBRARIES})
+
+add_executable(test_qp3 test_qp3.cpp)
+target_link_libraries(test_qp3 polyopt ${GUROBI_LIBRARIES})
