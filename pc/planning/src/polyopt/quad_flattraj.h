@@ -1,0 +1,46 @@
+/*
+ * quad_flattraj.h
+ *
+ *  Created on: Aug 29, 2016
+ *      Author: rdu
+ */
+
+#ifndef PLANNING_SRC_POLYOPT_QUAD_FLATTRAJ_H_
+#define PLANNING_SRC_POLYOPT_QUAD_FLATTRAJ_H_
+
+#include <cstdint>
+
+#include "polyopt/polytraj_curve.h"
+
+namespace srcl_ctrl {
+
+typedef struct {
+	double x;
+	double y;
+	double z;
+	double yaw;
+}QuadFlatOutput;
+
+typedef struct {
+	PolyTrajCurve seg_x;
+	PolyTrajCurve seg_y;
+	PolyTrajCurve seg_z;
+	PolyTrajCurve seg_yaw;
+}QuadFlatOutputSeg;
+
+class QuadFlatTraj {
+public:
+	QuadFlatTraj();
+	~QuadFlatTraj();
+
+private:
+	std::vector<QuadFlatOutputSeg> traj_segs_;
+
+public:
+	void AddTrajSeg(const std::vector<std::vector<double>>& seg_coeffs, bool coeff_nondim, std::vector<double> ts, std::vector<double> tf);
+};
+
+}
+
+
+#endif /* PLANNING_SRC_POLYOPT_QUAD_FLATTRAJ_H_ */

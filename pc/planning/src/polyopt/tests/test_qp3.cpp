@@ -10,6 +10,7 @@
 #include <limits>
 #include <cstring>
 #include <vector>
+#include <ctime>
 
 #include "gurobi_c++.h"
 
@@ -24,6 +25,9 @@ using namespace Eigen;
 
 int main(int   argc, char *argv[])
 {
+	clock_t exec_time;
+	exec_time = clock();
+
 	uint32_t r = 2;
 	uint32_t N = 2 * r - 1;
 
@@ -54,9 +58,9 @@ int main(int   argc, char *argv[])
 	PolyOptMath::GetNonDimQMatrices(N,r,kf_num, keyframe_ts,Q);
 	PolyOptMath::GetNonDimEqualityConstrs(N, r, kf_num, keyframe_vals, keyframe_ts, A_eq, b_eq);
 
-	std::cout << "\nQ: \n" << Q << std::endl;
-	std::cout << "\nA_eq:\n" << A_eq << std::endl;
-	std::cout << "\nb_eq:\n" << b_eq << std::endl;
+//	std::cout << "\nQ: \n" << Q << std::endl;
+//	std::cout << "\nA_eq:\n" << A_eq << std::endl;
+//	std::cout << "\nb_eq:\n" << b_eq << std::endl;
 
 	try {
 		GRBEnv env = GRBEnv();
@@ -85,6 +89,9 @@ int main(int   argc, char *argv[])
 
 		// Optimize model
 		model.optimize();
+
+		exec_time = clock() - exec_time;
+		std::cout << "Optimization finished in " << double(exec_time)/CLOCKS_PER_SEC << " s.\n" << std::endl;
 
 		for(int i = 0; i < var_num; i++)
 		{

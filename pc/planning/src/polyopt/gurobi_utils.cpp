@@ -27,9 +27,9 @@ void GurobiUtils::GetQuadraticCostFuncExpr(const std::vector<GRBVar>& x, const E
 	for(int i = 0; i < x_size; i++)
 		expr += temp_expr[i].getLinExpr() * x[i];
 
-	std::cout << "\nCost function: " << std::endl;
-	std::cout << expr << std::endl;
-	std::cout << "\n--------------------------------------------\n" << std::endl;
+//	std::cout << "\nCost function: " << std::endl;
+//	std::cout << expr << std::endl;
+//	std::cout << "\n--------------------------------------------\n" << std::endl;
 }
 
 void GurobiUtils::AddLinEqualityConstrExpr(const std::vector<GRBVar>& x, const Eigen::Ref<const Eigen::MatrixXf> A_eq, const Eigen::Ref<const Eigen::MatrixXf> b_eq,
