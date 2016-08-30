@@ -29,10 +29,10 @@ void QuadFlatTraj::AddTrajSeg(const std::vector<std::vector<double>>& seg_coeffs
 	}
 
 	QuadFlatOutputSeg seg;
-	seg.seg_x = PolyTrajCurve(seg_coeffs[0], true, ts, te);
-	seg.seg_y = PolyTrajCurve(seg_coeffs[1], true, ts, te);
-	seg.seg_z = PolyTrajCurve(seg_coeffs[2], true, ts, te);
-	seg.seg_yaw = PolyTrajCurve(seg_coeffs[3], true, ts, te);
+	seg.seg_x = PolyTrajCurve(seg_coeffs[0], true, ts, te, "x");
+	seg.seg_y = PolyTrajCurve(seg_coeffs[1], true, ts, te, "y");
+	seg.seg_z = PolyTrajCurve(seg_coeffs[2], true, ts, te, "z");
+	seg.seg_yaw = PolyTrajCurve(seg_coeffs[3], true, ts, te, "yaw");
 
 	seg.t_start = ts;
 	seg.t_end = te;
@@ -76,4 +76,15 @@ QuadFlatOutput QuadFlatTraj::GetTrajPointPos(double t)
 	}
 
 	return state;
+}
+
+void QuadFlatTraj::print()
+{
+	std::cout << "\n######################################################################"<< std::endl;
+	uint32_t idx = 0;
+	for(auto& seg:traj_segs_)
+	{
+		std::cout << "\n-----> segment " << idx++ << std::endl;
+		seg.print();
+	}
 }

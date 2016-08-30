@@ -13,34 +13,46 @@
 using namespace srcl_ctrl;
 
 PolyTrajCurve::PolyTrajCurve():
-		is_nondim_(false), t_start_(0.0), t_end_(0.0)
+		is_nondim_(false)
 {
 
 }
 
 PolyTrajCurve::PolyTrajCurve(const std::vector<double>& coefficients, bool coeff_nondim, double start_t, double end_t):
-		is_nondim_(coeff_nondim), t_start_(start_t), t_end_(end_t)
+		is_nondim_(coeff_nondim)
 {
 	for(auto& coeff:coefficients)
-		coeffs_.push_back(coeff);
+		param_.coeffs.push_back(coeff);
+	param_.ts = start_t;
+	param_.te = end_t;
+}
+
+PolyTrajCurve::PolyTrajCurve(const std::vector<double>& coefficients, bool coeff_nondim, double start_t, double end_t, std::string str):
+		is_nondim_(coeff_nondim)
+{
+	for(auto& coeff:coefficients)
+		param_.coeffs.push_back(coeff);
+	param_.ts = start_t;
+	param_.te = end_t;
+	name_ = str;
 }
 
 double PolyTrajCurve::GetRefactoredTime(double t)
 {
-	if(t < t_start_)
-		t = t_start_;
-	if(t > t_end_)
-		t = t_end_;
+	if(t < param_.ts)
+		t = param_.ts;
+	if(t > param_.te)
+		t = param_.te;
 
 	if(is_nondim_)
-		return (t - t_start_) * (t_end_ - t_start_);
+		return (t - param_.ts) * (param_.te - param_.ts);
 	else
 		return t;
 }
 
 double PolyTrajCurve::GetCurvePointDerivVal(uint32_t deriv, double t)
 {
-	int64_t N = coeffs_.size() - 1;
+	int64_t N = param_.coeffs.size() - 1;
 	int64_t r = deriv;
 	double ts = GetRefactoredTime(t);
 	PolynomialCoeffs deriv_coeff(N + 1);
@@ -52,7 +64,7 @@ double PolyTrajCurve::GetCurvePointDerivVal(uint32_t deriv, double t)
 		double item_val;
 
 		if(N - i >= r) {
-			item_val =  deriv_coeff[i] * coeffs_[i] * std::pow(ts, N - i - r);
+			item_val =  deriv_coeff[i] * param_.coeffs[i] * std::pow(ts, N - i - r);
 			//std::cout << "deriv_coeff: " << deriv_coeff[i] << " ; coeff: " << coeffs_[i] << " ; power: " << N-i-r << " ; val: " << item_val << std::endl;
 		}
 		else
@@ -83,4 +95,13 @@ double PolyTrajCurve::GetCurvePointAcc(double t)
 	double ts = GetRefactoredTime(t);
 
 	return GetCurvePointDerivVal(2, ts);
+}
+
+void PolyTrajCurve::print()
+{
+	uint32_t coeff_idx = 0;
+	std::cout << "\ncurve " << name_ << std::endl;
+	for(auto& coef:param_.coeffs)
+		std::cout << coeff_idx++ << " : " << coef << std::endl;
+	std::cout << "start time: " << param_.ts << " , end time: " << param_.te << std::endl;
 }

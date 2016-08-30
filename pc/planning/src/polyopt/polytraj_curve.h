@@ -14,19 +14,24 @@
 
 namespace srcl_ctrl {
 
+typedef struct {
+	// coefficients arranged from high order to low order
+	std::vector<double> coeffs;
+	double ts;
+	double te;
+} CurveParameter;
+
 class PolyTrajCurve {
 public:
 	PolyTrajCurve();
 	PolyTrajCurve(const std::vector<double>& coefficients, bool coeff_nondim, double start_t, double end_t);
+	PolyTrajCurve(const std::vector<double>& coefficients, bool coeff_nondim, double start_t, double end_t, std::string str);
 	~PolyTrajCurve(){};
 
 private:
 	bool is_nondim_;
 
-	// coefficients arranged from high order to low order
-	std::vector<double> coeffs_;
-	double t_start_;
-	double t_end_;
+	CurveParameter param_;
 
 	std::string name_;
 
@@ -36,9 +41,13 @@ private:
 
 public:
 	void SetCurveName(std::string str){ name_ = str; };
+	std::string SetCurveName(){ return name_; };
+
 	double GetCurvePointPos(double t);
 	double GetCurvePointVel(double t);
 	double GetCurvePointAcc(double t);
+
+	void print();
 };
 
 }

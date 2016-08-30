@@ -16,6 +16,7 @@
 #include "gurobi_c++.h"
 #include "eigen3/Eigen/Core"
 
+#include "polyopt/quad_flattraj.h"
 #include "polyopt/traj_optimizer.h"
 
 namespace srcl_ctrl {
@@ -33,6 +34,11 @@ private:
 
 	const uint32_t r_yaw_;
 	uint32_t N_yaw_;
+
+	TrajOptResult traj_[4];
+
+public:
+	QuadFlatTraj flat_traj_;
 
 public:
 	void OptimizeFlatTraj(const Eigen::Ref<const Eigen::MatrixXf> keyframe_x_vals,

@@ -29,6 +29,14 @@ typedef struct {
 
 	double t_start;
 	double t_end;
+
+	void print()
+	{
+		seg_x.print();
+		seg_y.print();
+		seg_z.print();
+		seg_yaw.print();
+	}
 }QuadFlatOutputSeg;
 
 class QuadFlatTraj {
@@ -43,6 +51,9 @@ public:
 	void AddTrajSeg(const std::vector<std::vector<double>>& seg_coeffs, double ts, double te);
 
 	QuadFlatOutput GetTrajPointPos(double t);
+
+	void clear() { traj_segs_.clear(); };
+	void print();
 };
 
 }
