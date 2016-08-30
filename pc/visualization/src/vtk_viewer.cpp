@@ -9,6 +9,12 @@
 
 #include "vtk_viewer.h"
 
+#include <vtkPNGReader.h>
+#include <vtkImageActor.h>
+#include <vtkImageMapper.h>
+#include <vtkImageSliceMapper.h>
+#include <vtkImageSlice.h>
+
 using namespace srcl_ctrl;
 
 VtkViewer::VtkViewer(QWidget* parent):
@@ -120,6 +126,8 @@ VtkViewer::VtkViewer(QWidget* parent):
 	qvtk_widget_->GetRenderWindow()->GetInteractor()->Enable();
 
 	qvtk_widget_->update();
+
+	DisplayMap();
 }
 
 VtkViewer::~VtkViewer()
@@ -151,3 +159,21 @@ void VtkViewer::UpdateViewer()
 	qvtk_widget_->update();
 }
 
+void VtkViewer::DisplayMap()
+{
+	// Read the image
+	vtkSmartPointer<vtkPNGReader> reader =
+			vtkSmartPointer<vtkPNGReader>::New();
+	reader->SetFileName("/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/path_repair_case1.png");
+
+	vtkSmartPointer<vtkImageSliceMapper> imageSliceMapper = vtkSmartPointer<vtkImageSliceMapper>::New();
+	//imageSliceMapper->SetInputData(reader.);
+	imageSliceMapper->SetInputConnection(reader->GetOutputPort());
+
+	vtkSmartPointer<vtkImageSlice> imageSlice = vtkSmartPointer<vtkImageSlice>::New();
+	imageSlice->SetMapper(imageSliceMapper);
+
+	vtk_renderer_->AddViewProp(imageSlice);
+
+	qvtk_widget_->update();
+}

@@ -40,6 +40,7 @@ private:
 
 public:
 	QVTKWidget* GetQVTKWidget(){return qvtk_widget_;};
+	void DisplayMap();
 
 	void ResetView();
 	void ResetCamera();
