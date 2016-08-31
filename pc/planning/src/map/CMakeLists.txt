@@ -19,15 +19,6 @@ set(MAP_LIB_SRC
 add_library(map STATIC ${MAP_LIB_SRC})
 target_link_libraries(map squaregrid qtree ${OpenCV_LIBS})
 
-set(OCTOMAP_UTILS_LIB_SRC
-    octomap_server.cpp
-)
-add_library(octomap_utils STATIC ${OCTOMAP_UTILS_LIB_SRC})
-target_link_libraries(octomap_utils ${Octomap_LIBS})
-
 # Add executables
-add_executable(octree_example octomap_example.cpp)
-target_link_libraries(octree_example ${Octomap_LIBS})
-
-add_executable(octomap_server_node octomap_server_node.cpp)
-target_link_libraries(octomap_server_node octomap_utils ${Octomap_LIBS} ${LCM_LIBRARIES})
+#add_executable(octomap_server_node octomap_server_node.cpp)
+#target_link_libraries(octomap_server_node octomap_utils ${Octomap_LIBS} ${LCM_LIBRARIES})

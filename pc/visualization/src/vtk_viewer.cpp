@@ -140,7 +140,7 @@ void VtkViewer::ResetView()
 	//set the camera position and orientation
 	vtk_renderer_->GetActiveCamera()->SetFocalPoint(0, 0, 0.0);
 	vtk_renderer_->GetActiveCamera()->SetViewUp(0, 0, 1);
-	vtk_renderer_->GetActiveCamera()->SetPosition(12.0, 12.0, 5 );
+	vtk_renderer_->GetActiveCamera()->SetPosition(-12.0, -12.0, 5 );
 
 	vtk_renderer_->ResetCamera();
 
@@ -172,8 +172,8 @@ void VtkViewer::DisplayMap()
 
 	vtkSmartPointer<vtkImageSlice> imageSlice = vtkSmartPointer<vtkImageSlice>::New();
 	imageSlice->SetMapper(imageSliceMapper);
+	//imageSlice->SetPosition(-100,-100,50);
 
 	vtk_renderer_->AddViewProp(imageSlice);
-
 	qvtk_widget_->update();
 }
