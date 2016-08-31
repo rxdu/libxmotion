@@ -34,8 +34,8 @@ srcl_msgs::UAVTrajectory_t GenerateTestTrajectory()
 
 		if(i < time_stamp1)
 		{
-			pt.positions[0] = 0;
-			pt.positions[1] = 0;
+			pt.positions[0] = 0.0;
+			pt.positions[1] = -1.0;
 			pt.positions[2] = 0.5;
 			pt.velocities[0] = 0;
 			pt.velocities[1] = 0;
@@ -49,16 +49,16 @@ srcl_msgs::UAVTrajectory_t GenerateTestTrajectory()
 		else if(i < time_stamp2)
 		{
 			double angle = (i - time_stamp1)*0.01*circle_ang_vel;
-			pt.positions[0] = radius * cos(angle - M_PI/2);
-			pt.positions[1] = radius * sin(angle - M_PI/2);
+			pt.positions[0] = radius * sin(angle);
+			pt.positions[1] = -radius * cos(angle);
 			pt.positions[2] = height;
 
-			pt.velocities[0] = - radius * sin(angle - M_PI/2) * 0.01*circle_ang_vel;
-			pt.velocities[1] = radius * cos(angle - M_PI/2) * 0.01*circle_ang_vel;
+			pt.velocities[0] = radius * cos(angle) * 0.01*circle_ang_vel;
+			pt.velocities[1] = radius * sin(angle) * 0.01*circle_ang_vel;
 			pt.velocities[2] = 0;
 
-			pt.accelerations[0] = - radius * cos(angle - M_PI/2) * 0.01*circle_ang_vel * 0.01*circle_ang_vel;
-			pt.accelerations[1] = - radius * sin(angle - M_PI/2) * 0.01*circle_ang_vel * 0.01*circle_ang_vel;
+			pt.accelerations[0] = - radius * sin(angle) * 0.01*circle_ang_vel * 0.01*circle_ang_vel;
+			pt.accelerations[1] = radius * cos(angle) * 0.01*circle_ang_vel * 0.01*circle_ang_vel;
 			pt.accelerations[2] = 0;
 
 			pt.yaw = angle;

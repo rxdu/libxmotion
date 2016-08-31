@@ -115,10 +115,10 @@ int main(int argc,char* argv[])
 
 		MotionServer motion_server;
 		last_state.point_empty = false;
-		last_state.positions[0] = -1.8;
-		last_state.positions[1] = 0.5;
+		last_state.positions[0] = 0.0;
+		last_state.positions[1] = -1.0;
 		last_state.positions[2] = 0.5;
-		last_state.yaw = 0;//-M_PI/4;
+		last_state.yaw = 0;
 
 		std::shared_ptr<lcm::LCM> lcm = std::make_shared<lcm::LCM>();
 
