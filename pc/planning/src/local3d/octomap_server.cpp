@@ -14,7 +14,8 @@ using namespace srcl_ctrl;
 
 OctomapServer::OctomapServer(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
-		octree_(new octomap::OcTree(0.01))
+		octree_(new octomap::OcTree(0.01)),
+		save_tree_(false)
 {
 	lcm_->subscribe("vis_data_laser_scan_points",&OctomapServer::LcmLaserScanPointsHandler, this);
 }
@@ -26,7 +27,8 @@ OctomapServer::~OctomapServer()
 
 void OctomapServer::SaveTreeToFile()
 {
-	octree_->writeBinary("test_tree.bt");
+	//octree_->writeBinary("test_tree.bt");
+	save_tree_ = true;
 }
 
 void OctomapServer::LcmLaserScanPointsHandler(
@@ -70,4 +72,10 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	}
 
 	lcm_->publish("hummingbird_laser_octomap", &octomap_msg);
+
+	if(save_tree_)
+	{
+		octree.writeBinary("test_tree.bt");
+		save_tree_ = false;
+	}
 }

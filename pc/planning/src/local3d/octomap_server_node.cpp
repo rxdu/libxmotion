@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <memory>
+#include <ctime>
 
 #include <lcm/lcm-cpp.hpp>
 
@@ -28,18 +29,19 @@ int main(int argc, char** argv)
 
 	std::cout << "INFO: Octomap server started." << std::endl;
 
-//	uint64_t i = 0;
+	bool tree_saved = false;
+	clock_t start_time;
+	start_time = clock();
 
 	while(true)
 	{
-//		if(i == 5000000) {
-//			server.SaveTreeToFile();
-//			return 0;
-//		}
-//
-//		i++;
-
 		lcm->handleTimeout(0);
+
+		double duration =  double(clock() - start_time)/CLOCKS_PER_SEC;
+		if(duration > 10 && !tree_saved) {
+			server.SaveTreeToFile();
+			tree_saved = true;
+		}
 	}
 
 	return 0;

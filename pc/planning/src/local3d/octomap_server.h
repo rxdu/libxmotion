@@ -29,6 +29,7 @@ private:
 	std::shared_ptr<lcm::LCM> lcm_;
 
 	octomap::OcTree* octree_;
+	bool save_tree_;
 
 public:
 	void LcmLaserScanPointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::LaserScanPoints_t* msg);

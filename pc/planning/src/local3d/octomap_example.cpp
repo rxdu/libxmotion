@@ -98,6 +98,19 @@ int main(int argc, char** argv) {
   result = tree.search (query);
   print_query_info(query, result);
 
+  std::cout << "\n---------------------------------------------------------\n" << std::endl;
+  std::cout << "num of leaf nodes: " << tree.getNumLeafNodes() << std::endl;
+  std::cout << "tree depth: " <<  tree.getTreeDepth() << std::endl;
+
+  uint32_t idx = 0;
+  for(auto it = tree.begin_leafs(tree.getTreeDepth()); it != tree.end_leafs(); it++)
+  {
+	  std::cout << (*it).getOccupancy() << std::endl;
+	  idx++;
+  }
+  std::cout << "leaf checked: " << idx << std::endl;
+
+  std::cout << "\n---------------------------------------------------------\n" << std::endl;
 
   cout << endl;
   tree.writeBinary("simple_tree.bt");

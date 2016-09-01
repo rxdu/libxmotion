@@ -15,7 +15,6 @@ octomap
 
 octovis 
 
-* changed binary output directory from "${BASE_DIR}/bin" to "${PROJECT_BINARY_DIR}/bin" in the octomap-1.8.0/octovis/CMakeLists.txt
 * changed the HINTS location in octomap-1.8.0/octovis/CMakeLists.txt at line 40,41
 
 ### g3log_srcl
