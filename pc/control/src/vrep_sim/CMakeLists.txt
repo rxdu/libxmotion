@@ -12,8 +12,8 @@ set(VREPSIM_LIB_SRC
   vrep_lib/remoteApi/extApi.c
   vrep_lib/remoteApi/extApiPlatform.c
   # vrep quad simulation
-  vrep_client/quad_sim_client.cpp
-  sim_process/quad_sim_process.cpp
+  #vrep_client/quad_sim_client.cpp
+  #sim_process/quad_sim_process.cpp
 )
 
 add_library(vrep_sim STATIC ${VREPSIM_LIB_SRC})
