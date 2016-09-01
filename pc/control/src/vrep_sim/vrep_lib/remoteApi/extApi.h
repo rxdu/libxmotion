@@ -24,31 +24,31 @@
 // along with the REMOTE API.  If not, see <http://www.gnu.org/licenses/>.
 // -------------------------------------------------------------------
 //
-// This file was automatically created for V-REP release V3.3.0 on February 19th 2016
+// This file was automatically created for V-REP release V3.3.2 on August 29th 2016
 
 #ifndef _EXTAPI__
 #define _EXTAPI__
 
 #ifdef NON_MATLAB_PARSING /* when compiling, make sure NON_MATLAB_PARSING is always defined! */
-	#include "extApiPlatform.h"
-	#include "v_repConst.h"
+    #include "extApiPlatform.h"
+    #include "v_repConst.h"
 #else 
-	typedef char simxChar;
-	typedef unsigned char simxUChar;
-	typedef short simxShort;
-	typedef unsigned short simxUShort;	
-	typedef int simxInt;
-	typedef unsigned int simxUInt;
-	typedef float simxFloat;
-	typedef void simxVoid;
-	typedef double simxDouble;
+    typedef char simxChar;
+    typedef unsigned char simxUChar;
+    typedef short simxShort;
+    typedef unsigned short simxUShort;  
+    typedef int simxInt;
+    typedef unsigned int simxUInt;
+    typedef float simxFloat;
+    typedef void simxVoid;
+    typedef double simxDouble;
 #endif /* else NON_MATLAB_PARSING */
 
 #ifdef _WIN32
-	#define EXTAPI_DLLEXPORT extern __declspec(dllexport)
+    #define EXTAPI_DLLEXPORT extern __declspec(dllexport)
 #endif
 #if defined (__linux) || defined (__APPLE__)
-	#define EXTAPI_DLLEXPORT extern
+    #define EXTAPI_DLLEXPORT extern
 #endif
 
 /* Use following to test endianness detection on little endian machines (endianness of the client is handled on the server side)
@@ -259,4 +259,4 @@ EXTAPI_DLLEXPORT simxInt mtlb_simxCallScriptFunction_a(const simxInt* variousInt
 EXTAPI_DLLEXPORT simxInt mtlb_simxCallScriptFunction_b(simxInt clientID,simxInt* variousIntsOut,simxInt** outInt,simxFloat** outFloat,simxChar** outString,simxUChar** outBuffer);
 
 
-#endif /* _EXTAPI__ */		
+#endif /* _EXTAPI__ */      

@@ -24,7 +24,7 @@
 // along with the REMOTE API.  If not, see <http://www.gnu.org/licenses/>.
 // -------------------------------------------------------------------
 //
-// This file was automatically created for V-REP release V3.3.0 on February 19th 2016
+// This file was automatically created for V-REP release V3.3.2 on August 29th 2016
 
 #ifndef __EXTAPIINTERNAL_
 #define __EXTAPIINTERNAL_
