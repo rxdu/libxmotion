@@ -4,12 +4,19 @@
 
 ### octomap-1.8.0
 
-* set "CMAKE_INSTALL_PREFIX" to be "${CMAKE_BINARY_DIR}" in octomap-1.8.0/CMakeLists.txt
-* set "BASE_DIR" to be ${CMAKE_BINARY_DIR} in octomap-1.8.0/CMakeLists.txt
+octomap 
+
+* set "CMAKE_INSTALL_PREFIX" to be "${CMAKE_BINARY_DIR}" in octomap-1.8.0/octomap/CMakeLists.txt
+* set "BASE_DIR" to be ${CMAKE_BINARY_DIR} in octomap-1.8.0/octomap/CMakeLists.txt
 * commented out the original define of "BASE_DIR" in octomap-1.8.0/octomap/CMakeLists.txt at line 34
-* changed binary output directory from "${BASE_DIR}/bin" to "${PROJECT_BINARY_DIR}/bin" in the octomap/CMakeLists.txt
+* changed binary output directory from "${BASE_DIR}/bin" to "${PROJECT_BINARY_DIR}/bin" in the octomap-1.8.0/octomap/CMakeLists.txt
 * commented out conditions for "add_dependencies()" for octovis and dynamicsEDT3D (because same target is defined in ompl)
-* commented out the target "uninstall" in octomap/CMakeLists.txt at line 76-77
+* commented out the target "uninstall" in octomap-1.8.0/octomap/CMakeLists.txt at line 76-77
+
+octovis 
+
+* changed binary output directory from "${BASE_DIR}/bin" to "${PROJECT_BINARY_DIR}/bin" in the octomap-1.8.0/octovis/CMakeLists.txt
+* changed the HINTS location in octomap-1.8.0/octovis/CMakeLists.txt at line 40,41
 
 ### g3log_srcl
 
