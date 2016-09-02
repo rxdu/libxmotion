@@ -31,6 +31,7 @@ public:
 			RobotSimController<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>* controller):
 		server_port_(29999),
 		server_connected_(false),
+		sync_mode_(true),
 		sim_client_(client),
 		robot_controller_(controller),
 		loop_count_(0){};
@@ -39,6 +40,7 @@ public:
 private:
 	const uint64_t server_port_;
 	bool server_connected_;
+	bool sync_mode_;
 	DataFromSimType data_from_sim_;
 	DataToSimType data_to_sim_;
 
@@ -65,13 +67,27 @@ public:
 	}
 
 	void StartSimLoop_Synchronous(){
+		sync_mode_ = true;
+		StartSimLoop();
+	}
 
+	void StartSimLoop_ASynchronous()
+	{
+		sync_mode_ = false;
+		StartSimLoop();
+	}
+
+private:
+	void StartSimLoop()
+	{
 		sim_client_->ConfigDataStreaming();
 
-		simxSynchronous(sim_client_->client_id_,true);
+		if(sync_mode_)
+		{
+			simxSynchronous(sim_client_->client_id_,true);
+			std::cout << "INFO: Enabled synchronous mode." << std::endl;
+		}
 		simxStartSimulation(sim_client_->client_id_, simx_opmode_oneshot_wait);
-
-		std::cout << "INFO: Enabled synchronous mode." << std::endl;
 
 		simxInt ping_time = 0;
 
@@ -101,13 +117,14 @@ public:
 			// usleep(50);
 
 			// send trigger to simulator
-			simxSynchronousTrigger(sim_client_->client_id_);
+			if(sync_mode_) {
+				simxSynchronousTrigger(sim_client_->client_id_);
+				// after this call, the first simulation step is finished (Blocking function call)
+				simxGetPingTime(sim_client_->client_id_, &ping_time);
+			}
 
 			// every time a trigger is sent, simulation time forwards 10ms
 			loop_count_++;
-
-			// after this call, the first simulation step is finished (Blocking function call)
-			simxGetPingTime(sim_client_->client_id_, &ping_time);
 		}
 
 		std::cout << "INFO: Exited control loop." << std::endl;
