@@ -17,8 +17,8 @@ if (ENABLE_G3LOG)
 else (ENABLE_G3LOG)
 	add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255)
 endif (ENABLE_G3LOG)
-target_link_libraries(quadsim vrep_sim motion_server ${LCM_LIBRARIES})
+target_link_libraries(quadsim vrep_sim quad_ctrl ${LCM_LIBRARIES})
 
 # Add executables
-add_executable(quadsim_demo quadsim_demo.cpp)
-target_link_libraries(quadsim_demo quadsim quad_con)
+#add_executable(quadsim_demo quadsim_demo.cpp)
+#target_link_libraries(quadsim_demo quadsim quad_ctrl)

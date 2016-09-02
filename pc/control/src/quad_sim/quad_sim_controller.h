@@ -20,7 +20,7 @@
 #include "quad_ctrl/controller/quad_types.h"
 #include "quad_ctrl/controller/att_quat_con.h"
 #include "quad_ctrl/controller/pos_quat_con.h"
-#include "motion_server/motion_server.h"
+#include "quad_ctrl/motion_server/motion_server.h"
 
 namespace srcl_ctrl {
 
