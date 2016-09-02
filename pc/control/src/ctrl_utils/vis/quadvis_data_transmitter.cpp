@@ -16,7 +16,7 @@ QuadVisDataTransmitter::QuadVisDataTransmitter(std::shared_ptr<lcm::LCM> lcm_ptr
 		lcm_(lcm_ptr)
 {
 	if(!lcm_->good())
-		std::cout << "LCM instance is not initialized properly. Visual data transmitter is not going to work." << std::endl;
+		std::cerr << "LCM instance is not initialized properly. Visual data transmitter is not going to work." << std::endl;
 }
 
 QuadVisDataTransmitter::~QuadVisDataTransmitter()

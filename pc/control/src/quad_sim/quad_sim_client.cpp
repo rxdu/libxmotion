@@ -115,6 +115,7 @@ bool QuadSimClient::ReceiveDataFromRobot(QuadDataFromSim *rx_data)
 			ReceiveQuadQuaternion(&rx_data->quat_i))
 		//&& Get3DScanPoints(rx_data->laser_points))
 	{
+		// TODO laser data is not mandatory now
 		Get3DScanPoints(rx_data->laser_points);
 
 		rx_data->rot_rate_b.x = rx_data->imu_data.gyro.raw_x;
@@ -172,7 +173,7 @@ bool QuadSimClient::Get3DScanPoints(std::vector<Point3f>& points)
 				points.push_back(pt);
 		}
 
-//		std::cout << "3d scan ptr size: " << points.size() << std::endl;
+		std::cout << "3d scan ptr size: " << points.size() << std::endl;
 //
 //		for(uint64_t i = 0; i < 3; ++i)
 //		{
@@ -185,7 +186,6 @@ bool QuadSimClient::Get3DScanPoints(std::vector<Point3f>& points)
 	else
 		result = false;
 
-	// TODO laser data is not mandatory now
 	return true;
 }
 

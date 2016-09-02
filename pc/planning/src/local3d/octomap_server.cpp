@@ -38,7 +38,12 @@ void OctomapServer::LcmLaserScanPointsHandler(
 {
 	std::cout << "points received " << std::endl;
 
-	octomap::OcTree octree(0.01);
+	double resolution = 0.05;
+	octomap::OcTree octree(resolution);
+	octree.setProbHit(0.7);
+	octree.setProbMiss(0.4);
+	octree.setClampingThresMin(0.12);
+	octree.setClampingThresMax(0.97);
 
 	for(auto& pt : msg->points)
 	{
@@ -58,7 +63,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	srcl_msgs::Octomap_t octomap_msg;
 
 	octomap_msg.binary = true;
-	octomap_msg.resolution = 0.01;
+	octomap_msg.resolution = resolution;
 	octomap_msg.id = octree.getTreeType();
 
 	octree.prune();
