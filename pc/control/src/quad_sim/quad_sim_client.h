@@ -24,6 +24,7 @@ namespace srcl_ctrl {
 class QuadSimClient : public RobotSimClient<QuadDataFromSim, QuadDataToSim>
 {
 public:
+	QuadSimClient();
 	QuadSimClient(simxInt clientId);
 	~QuadSimClient();
 

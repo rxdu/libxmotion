@@ -11,6 +11,41 @@
 
 using namespace srcl_ctrl;
 
+QuadSimClient::QuadSimClient():
+		RobotSimClient<QuadDataFromSim, QuadDataToSim>(),
+		max_motor_speed_(10000)
+{
+	// initialize variables
+	image_raw_ = new simxUChar[IMG_RES_Y * IMG_RES_X];
+
+	img_res[0] = IMG_RES_X;
+	img_res[1] = IMG_RES_Y;
+
+	gyro_sig = nullptr;
+	gyro_sig_size = 0;
+	acc_sig = nullptr;
+	acc_sig_size = 0;
+	quat_sig = nullptr;
+	quat_sig_size = 0;
+
+	for(int i = 0; i < 3; i++)
+	{
+		quad_pos[i] = 0;
+		quad_linear_vel[i] = 0;
+		quad_angular_vel[i] = 0;
+		quad_ori[i] = 0;
+	}
+
+	// get simulation object handles
+	simxGetObjectHandle(client_id_, "asctec_hummingbird",&quad_handle_,simx_opmode_oneshot_wait);
+	simxGetObjectHandle(client_id_, "ctrl_ref",&ref_handle_,simx_opmode_oneshot_wait);
+
+	// initialize communication between server and client
+	ConfigDataStreaming();
+
+	std::cout << "INFO: Quadrotor simulation client initialized successfully." << std::endl;
+}
+
 QuadSimClient::QuadSimClient(simxInt clientId):
 		RobotSimClient<QuadDataFromSim, QuadDataToSim>(clientId),
 		max_motor_speed_(10000)

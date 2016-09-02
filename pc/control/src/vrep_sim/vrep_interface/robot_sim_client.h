@@ -21,12 +21,12 @@ class RobotSimClient
 {
 protected:
 	RobotSimClient(simxInt id):client_id_(id){};
-	RobotSimClient() = delete;
+	RobotSimClient():client_id_(-1){};
 	virtual ~RobotSimClient(){};
 
-protected:
 	simxInt client_id_;
 
+protected:
 	// the following functions need to be defined for a specific robot
 	virtual void ConfigDataStreaming(void) = 0;
 	virtual bool ReceiveDataFromRobot(DataFromSimType *state) = 0;
