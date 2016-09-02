@@ -8,7 +8,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 set(QUADCON_LIB_SRC
     # state estimator
     estimator/att_estimator.cpp
-    estimator/robot_state.cpp
+    estimator/quad_state.cpp
     # controller
     controller/att_euler_con.cpp
     controller/pos_euler_con.cpp

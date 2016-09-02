@@ -10,7 +10,7 @@
 
 using namespace srcl_ctrl;
 
-AttEulerCon::AttEulerCon(RobotState *_rs):
+AttEulerCon::AttEulerCon(QuadState *_rs):
 		Controller(_rs)
 {
 	kp_phi = 135;

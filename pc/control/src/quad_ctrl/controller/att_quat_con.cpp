@@ -18,7 +18,7 @@
 
 using namespace srcl_ctrl;
 
-AttQuatCon::AttQuatCon(RobotState* _rs):
+AttQuatCon::AttQuatCon(QuadState* _rs):
 	Controller(_rs)
 {
 	kp_phi = 1;
@@ -126,30 +126,30 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 			rate_error[i] = 0;
 	}
 
-	Eigen::Vector3d x_axis_v(1.0, 0.0, 0.0);
-	Eigen::Vector3d y_axis_v(0.0, 1.0, 0.0);
-	Eigen::Vector3d z_axis_v(0.0, 0.0, 1.0);
-
-	Eigen::Vector3d v(1, 2, -1);
-	Eigen::Quaterniond p_x,p_y,p_z;
-	Eigen::Quaterniond quad_rot = rs_->quat_;
-	p_x.w() = 0;
-	p_x.vec() = x_axis_v;
-	p_y.w() = 0;
-	p_y.vec() = y_axis_v;
-	p_z.w() = 0;
-	p_z.vec() = z_axis_v;
-	Eigen::Quaterniond rotatedPx = quad_rot * p_x * quad_rot.inverse();
-	Eigen::Quaterniond rotatedPy = quad_rot * p_y * quad_rot.inverse();
-	Eigen::Quaterniond rotatedPz = quad_rot * p_z * quad_rot.inverse();
-	Eigen::Vector3d new_x_axis = rotatedPx.vec();
-	Eigen::Vector3d new_y_axis = rotatedPy.vec();
-	Eigen::Vector3d new_z_axis = rotatedPz.vec();
-
-	double axis_dot_product[3];
-	axis_dot_product[0] = new_x_axis.dot(x_axis_v);
-	axis_dot_product[1] = new_y_axis.dot(y_axis_v);
-	axis_dot_product[2] = new_z_axis.dot(z_axis_v);
+//	Eigen::Vector3d x_axis_v(1.0, 0.0, 0.0);
+//	Eigen::Vector3d y_axis_v(0.0, 1.0, 0.0);
+//	Eigen::Vector3d z_axis_v(0.0, 0.0, 1.0);
+//
+//	Eigen::Vector3d v(1, 2, -1);
+//	Eigen::Quaterniond p_x,p_y,p_z;
+//	Eigen::Quaterniond quad_rot = rs_->quat_;
+//	p_x.w() = 0;
+//	p_x.vec() = x_axis_v;
+//	p_y.w() = 0;
+//	p_y.vec() = y_axis_v;
+//	p_z.w() = 0;
+//	p_z.vec() = z_axis_v;
+//	Eigen::Quaterniond rotatedPx = quad_rot * p_x * quad_rot.inverse();
+//	Eigen::Quaterniond rotatedPy = quad_rot * p_y * quad_rot.inverse();
+//	Eigen::Quaterniond rotatedPz = quad_rot * p_z * quad_rot.inverse();
+//	Eigen::Vector3d new_x_axis = rotatedPx.vec();
+//	Eigen::Vector3d new_y_axis = rotatedPy.vec();
+//	Eigen::Vector3d new_z_axis = rotatedPz.vec();
+//
+//	double axis_dot_product[3];
+//	axis_dot_product[0] = new_x_axis.dot(x_axis_v);
+//	axis_dot_product[1] = new_y_axis.dot(y_axis_v);
+//	axis_dot_product[2] = new_z_axis.dot(z_axis_v);
 
 //	if(axis_dot_product[0] < 0) {
 //		std::cout << "************ x direction dot product change ************" << std::endl;

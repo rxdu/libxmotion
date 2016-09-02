@@ -9,19 +9,20 @@
 #define CONTROL_CONTROLLER_BASE_H_
 
 #include "common/control_types.h"
-#include "quad_ctrl/controller/quadcon_io.h"
-#include "quad_ctrl/estimator/robot_state.h"
+
+#include "quad_ctrl/controller/quad_types.h"
+#include "quad_ctrl/estimator/quad_state.h"
 
 namespace srcl_ctrl
 {
 class Controller
 {
 public:
-	Controller(RobotState* rs_ref):rs_(rs_ref){};
+	Controller(QuadState* rs_ref):rs_(rs_ref){};
 	virtual ~Controller(){};
 
 protected:
-	const RobotState *rs_;
+	const QuadState *rs_;
 
 public:
 	virtual void Update(ControlInput *input, ControlOutput *cmd) = 0;

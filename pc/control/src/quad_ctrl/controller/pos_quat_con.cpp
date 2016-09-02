@@ -19,7 +19,7 @@
 
 using namespace srcl_ctrl;
 
-PosQuatCon::PosQuatCon(RobotState* _rs):
+PosQuatCon::PosQuatCon(QuadState* _rs):
 		Controller(_rs),zint_uppper_limit(0.1),zint_lower_limit(-1.0),
 		xyint_uppper_limit(0.8), xyint_lower_limit(-0.8)
 {

@@ -9,6 +9,8 @@
 #define CONTROL_SRC_VREP_SIM_VREP_INTERFACE_ROBOT_SIM_PROCESS_H_
 
 #include <cstdint>
+#include <memory>
+#include <vector>
 
 // headers for vrep remote api
 extern "C" {
@@ -17,36 +19,33 @@ extern "C" {
 }
 
 #include "vrep_sim/vrep_interface/robot_sim_client.h"
+#include "vrep_sim/vrep_interface/robot_sim_controller.h"
 
 namespace srcl_ctrl {
 
-template<typename DataFromSimType, typename DataToSimType>
+template<typename DataFromSimType, typename DataToSimType, typename RobotStateType, typename RobotCmdType>
 class RobotSimProcess
 {
 public:
-	RobotSimProcess(RobotSimClient<DataFromSimType, DataToSimType>* client):
+	RobotSimProcess(RobotSimClient<DataFromSimType, DataToSimType>* client,
+			RobotSimController<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>* controller):
 		server_port_(29999),
-		sim_client_(client),
 		server_connected_(false),
+		sim_client_(client),
+		robot_controller_(controller),
 		loop_count_(0){};
 	virtual ~RobotSimProcess(){};
 
 private:
 	const uint64_t server_port_;
-	RobotSimClient<DataFromSimType, DataToSimType>* sim_client_;
 	bool server_connected_;
+	DataFromSimType data_from_sim_;
+	DataToSimType data_to_sim_;
+
+	RobotSimClient<DataFromSimType, DataToSimType>* sim_client_;
+	RobotSimController<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>* robot_controller_;
 
 	uint64_t loop_count_;
-
-//public:
-//	virtual void SimLoopUpdate() = 0;
-//	bool ReceiveDataFromSimulator(){return sim_client_->ReceiveDataFromRobot(&rs_m_);};
-//	void SendDataToSimulator(){sim_client_->SendDataToRobot(cmd_m_);};
-//
-//protected:
-//	RobotSimClient *sim_client_;
-//	DataFromQuad rs_m_;
-//	DataToQuad cmd_m_;
 
 public:
 	bool ConnectToServer(uint64_t port = -1)
@@ -56,8 +55,9 @@ public:
 
 		sim_client_->client_id_ = simxStart((simxChar*)"127.0.0.1",port,true,true,2000,5);
 
-		if (sim_client_->client_id_!=-1)
+		if (sim_client_->client_id_ != -1) {
 			server_connected_ = true;
+		}
 		else
 			server_connected_ = false;
 
@@ -65,6 +65,9 @@ public:
 	}
 
 	void StartSimLoop_Synchronous(){
+
+		sim_client_->ConfigDataStreaming();
+
 		simxSynchronous(sim_client_->client_id_,true);
 		simxStartSimulation(sim_client_->client_id_, simx_opmode_oneshot_wait);
 
@@ -72,33 +75,28 @@ public:
 
 		simxInt ping_time = 0;
 
-		while (simxGetConnectionId(sim_client_->client_id_)!=-1)
+		while (simxGetConnectionId(sim_client_->client_id_) != -1)
 		{
 			if(loop_count_ == 0)
-				std::cout << "INFO: Entered control loop." << std::endl;
+				std::cout << "INFO: Entered control loop, client id: " << sim_client_->client_id_ << std::endl;
 
-//			// update simulated control loop
-//			if(sim_process.ReceiveDataFromSimulator())
-//			{
-//				// fetch the latest trajectory waypoint
-//				UAVTrajectoryPoint pt;
-//				pt = motion_server.GetCurrentDesiredPose();
-//
-//				// if no new point, stay where it was
-//				if(!pt.point_empty)
-//				{
-//					sim_process.SimLoopUpdate(pt);
-//					last_state = pt;
-//				}
-//				else
-//					sim_process.SimLoopUpdate(last_state);
-//			}
-//			//			else
-//			//				std::cout<<"failed to fetch data from simulator"<<std::endl;
-//
-//			// send command to robot
-//			sim_process.SendDataToSimulator();
+			// update simulated control loop
+			if(sim_client_->ReceiveDataFromRobot(&data_from_sim_))
+			{
+				RobotCmdType rcmd;
+				robot_controller_->UpdateRobotState(&data_from_sim_);
 
+				rcmd = robot_controller_->UpdateCtrlLoop();
+
+				data_to_sim_ = robot_controller_->ConvertRobotCmdToSimCmd(rcmd);
+			}
+			else
+				std::cout << "failed to fetch new data" << std::endl;
+
+			// send command to robot
+			sim_client_->SendDataToRobot(data_to_sim_);
+
+			// delay to slow down the simulation
 			// extApi_sleepMs(1);
 			// usleep(50);
 

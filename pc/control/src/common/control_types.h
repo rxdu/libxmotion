@@ -13,8 +13,6 @@
 
 namespace srcl_ctrl{
 
-/****************************** Control Common ******************************/
-
 typedef struct
 {
 	float raw_x;
@@ -67,45 +65,6 @@ typedef struct
 } UAVTrajectoryPoint;
 
 typedef std::vector<UAVTrajectoryPoint> UAVTrajectory;
-
-/******************************* Quadrotor Types ****************************/
-typedef struct
-{
-	float ang_vel[4];
-}QuadCmd;
-
-enum class QuadFlightType {
-	X_TYPE,
-	PLUS_TYPE,
-};
-
-#define IMG_RES_X 160
-#define IMG_RES_Y 90
-
-#define LASER_SCAN_RES_X 64
-#define LASER_SCAN_RES_y 64
-
-typedef struct
-{
-	// sensor data
-	unsigned char mono_image[IMG_RES_Y][IMG_RES_X];
-	std::vector<Point3f> laser_points;
-	IMUData imu_data;
-
-	// data only available in simulator
-	Point3f pos_i;
-	Point3f vel_i;
-	Point3f rot_i;
-	Quaternion quat_i;
-	Point3f rot_rate_b;
-} DataFromQuad;
-
-typedef struct
-{
-	QuadCmd motor_cmd;
-} DataToQuad;
-
-/****************************************************************************/
 
 }
 

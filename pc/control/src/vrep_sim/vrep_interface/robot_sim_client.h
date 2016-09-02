@@ -24,14 +24,15 @@ protected:
 	RobotSimClient():client_id_(-1){};
 	virtual ~RobotSimClient(){};
 
+public:
 	simxInt client_id_;
 
-protected:
 	// the following functions need to be defined for a specific robot
 	virtual void ConfigDataStreaming(void) = 0;
 	virtual bool ReceiveDataFromRobot(DataFromSimType *state) = 0;
 	virtual void SendDataToRobot(const DataToSimType &rcmd) = 0;
 };
+
 }
 
 #endif /* VREP_CLIENT_ROBOT_SIM_CLIENT_H_ */

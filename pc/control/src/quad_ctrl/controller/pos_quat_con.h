@@ -8,15 +8,15 @@
 #ifndef CONTROL_POS_QUAT_CON_H_
 #define CONTROL_POS_QUAT_CON_H_
 
-#include "common/controller_base.h"
-#include "quad_ctrl/controller/quadcon_io.h"
+#include "quad_ctrl/controller/quad_types.h"
+#include "quad_ctrl/controller/controller_base.h"
 
 namespace srcl_ctrl {
 
 class PosQuatCon: public Controller
 {
 public:
-	PosQuatCon(RobotState *_rs);
+	PosQuatCon(QuadState *_rs);
 	~PosQuatCon();
 
 private:

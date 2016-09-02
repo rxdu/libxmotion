@@ -24,7 +24,7 @@ VisDataTransmitter::~VisDataTransmitter()
 
 }
 
-void VisDataTransmitter::SendRobotStateDataToROS(const RobotState& rs)
+void VisDataTransmitter::SendRobotStateDataToROS(const QuadState& rs)
 {
 	SendLaserPointsToROS(rs.laser_points_);
 	SendQuadTransformToROS(rs.position_, rs.quat_);

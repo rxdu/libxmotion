@@ -12,12 +12,15 @@
 #include "eigen3/Eigen/Core"
 #include "eigen3/Eigen/Geometry"
 
+#include "quad_sim/quad_sim_data.h"
+#include "quad_ctrl/controller/quad_types.h"
+
 namespace srcl_ctrl{
 
-class RobotState {
+class QuadState {
 public:
-	RobotState();
-	~RobotState();
+	QuadState();
+	~QuadState();
 
 public:
 	Point3f position_;
@@ -29,15 +32,9 @@ public:
 
 	QuadFlightType quad_flight_type_;
 
-private:
-	Eigen::Matrix<float,2,2> M_matrix_;
-	Eigen::Quaterniond last_quat_;
-	Point3f last_orientation_;
-
 public:
 	double w_h_;
 	const float g_;
-	const float max_euler_change_;
 
 	// quadrotor parameters
 	const double mass_;
@@ -47,12 +44,9 @@ public:
 
 	double sim_step_;
 
-private:
-	unsigned int invert_quat;
-
 public:
 	void UpdateRobotState(const DataFromQuad &new_data);
-	Eigen::Matrix<float,2,2> GetMMatrix(void);
+	void UpdateRobotState(const QuadDataFromSim &new_data);
 };
 
 }

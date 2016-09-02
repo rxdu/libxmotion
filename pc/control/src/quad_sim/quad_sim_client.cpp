@@ -36,10 +36,6 @@ QuadSimClient::QuadSimClient():
 		quad_ori[i] = 0;
 	}
 
-	// get simulation object handles
-	simxGetObjectHandle(client_id_, "asctec_hummingbird",&quad_handle_,simx_opmode_oneshot_wait);
-	simxGetObjectHandle(client_id_, "ctrl_ref",&ref_handle_,simx_opmode_oneshot_wait);
-
 	// initialize communication between server and client
 	ConfigDataStreaming();
 
@@ -71,10 +67,6 @@ QuadSimClient::QuadSimClient(simxInt clientId):
 		quad_ori[i] = 0;
 	}
 
-	// get simulation object handles
-	simxGetObjectHandle(client_id_, "asctec_hummingbird",&quad_handle_,simx_opmode_oneshot_wait);
-	simxGetObjectHandle(client_id_, "ctrl_ref",&ref_handle_,simx_opmode_oneshot_wait);
-
 	// initialize communication between server and client
 	ConfigDataStreaming();
 
@@ -90,6 +82,10 @@ QuadSimClient::~QuadSimClient()
 
 void QuadSimClient::ConfigDataStreaming(void)
 {
+	// get simulation object handles
+	simxGetObjectHandle(client_id_, "asctec_hummingbird",&quad_handle_,simx_opmode_oneshot_wait);
+	simxGetObjectHandle(client_id_, "ctrl_ref",&ref_handle_,simx_opmode_oneshot_wait);
+
 	// initialize robot status data streaming
 	simxGetObjectPosition(client_id_, ref_handle_, -1, quad_pos,simx_opmode_streaming);
 	simxGetObjectVelocity(client_id_, ref_handle_, quad_linear_vel, quad_angular_vel,simx_opmode_streaming);
@@ -109,15 +105,15 @@ void QuadSimClient::ConfigDataStreaming(void)
 
 bool QuadSimClient::ReceiveDataFromRobot(QuadDataFromSim *rx_data)
 {
-//	std::cout << "receiving new data!"<<std::endl;
+	//std::cout << "fetching new data"<<std::endl;
 
 	if(ReceiveGyroData(&(rx_data->imu_data.gyro)) &&
 			ReceiveAccData(&(rx_data->imu_data.acc)) &&
 			ReceiveQuadPosition(&(rx_data->pos_i)) &&
 			ReceiveQuadVelocity(&(rx_data->vel_i)) &&
 			ReceiveQuadOrientation(&rx_data->rot_i) &&
-			ReceiveQuadQuaternion(&rx_data->quat_i) &&
-			Get3DScanPoints(rx_data->laser_points))
+			ReceiveQuadQuaternion(&rx_data->quat_i))
+		//&& Get3DScanPoints(rx_data->laser_points))
 	{
 		rx_data->rot_rate_b.x = rx_data->imu_data.gyro.raw_x;
 		rx_data->rot_rate_b.y = rx_data->imu_data.gyro.raw_y;

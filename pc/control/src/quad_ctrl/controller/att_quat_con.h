@@ -12,15 +12,15 @@
 #include "eigen3/Eigen/Geometry"
 
 #include "common/control_types.h"
-#include "common/controller_base.h"
-#include "quad_ctrl/controller/quadcon_io.h"
+#include "quad_ctrl/controller/quad_types.h"
+#include "quad_ctrl/controller/controller_base.h"
 
 namespace srcl_ctrl {
 
 class AttQuatCon: public Controller
 {
 public:
-	AttQuatCon(RobotState *_rs);
+	AttQuatCon(QuadState *_rs);
 	~AttQuatCon();
 
 private:

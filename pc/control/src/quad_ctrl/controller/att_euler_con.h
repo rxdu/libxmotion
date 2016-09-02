@@ -8,15 +8,15 @@
 #ifndef CONTROL_ATT_EULER_CON_H_
 #define CONTROL_ATT_EULER_CON_H_
 
-#include "common/controller_base.h"
-#include "quad_ctrl/controller/quadcon_io.h"
+#include <controller/quad_types.h>
+#include "quad_ctrl/controller/controller_base.h"
 
 namespace srcl_ctrl {
 
 class AttEulerCon: public Controller
 {
 public:
-	AttEulerCon(RobotState *_rs);
+	AttEulerCon(QuadState *_rs);
 	~AttEulerCon();
 
 private:

@@ -9,6 +9,7 @@
 #define CONTROL_SRC_QUAD_SIM_QUAD_SIM_DATA_H_
 
 #include "common/control_types.h"
+#include "quad_ctrl/controller/quad_types.h"
 
 namespace srcl_ctrl {
 

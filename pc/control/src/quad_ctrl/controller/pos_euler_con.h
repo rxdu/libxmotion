@@ -8,14 +8,14 @@
 #ifndef CONTROL_POS_EULER_CON_H_
 #define CONTROL_POS_EULER_CON_H_
 
-#include "common/controller_base.h"
-#include "quad_ctrl/controller/quadcon_io.h"
+#include <controller/quad_types.h>
+#include "quad_ctrl/controller/controller_base.h"
 
 namespace srcl_ctrl{
 
 class PosEulerCon: public Controller {
 public:
-	PosEulerCon(RobotState *_rs);
+	PosEulerCon(QuadState *_rs);
 	~PosEulerCon();
 
 private:

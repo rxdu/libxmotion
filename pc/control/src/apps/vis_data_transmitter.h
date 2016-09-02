@@ -8,6 +8,7 @@
 #ifndef SRC_CONTROL_SRC_APPS_VIS_DATA_TRANSMITTER_H_
 #define SRC_CONTROL_SRC_APPS_VIS_DATA_TRANSMITTER_H_
 
+#include <estimator/quad_state.h>
 #include <memory>
 #include <vector>
 
@@ -15,7 +16,6 @@
 #include <lcm/lcm-cpp.hpp>
 
 #include "common/control_types.h"
-#include "quad_ctrl/estimator/robot_state.h"
 
 namespace srcl_ctrl {
 
@@ -28,7 +28,7 @@ private:
 	std::shared_ptr<lcm::LCM> lcm_;
 
 public:
-	void SendRobotStateDataToROS(const RobotState& rs);
+	void SendRobotStateDataToROS(const QuadState& rs);
 	void SendPoseToROS(Point3f pos, Eigen::Quaterniond quat);
 	void SendQuadTransformToROS(Point3f pos, Eigen::Quaterniond quat);
 	void SendLaserPointsToROS(const std::vector<Point3f>& pts);

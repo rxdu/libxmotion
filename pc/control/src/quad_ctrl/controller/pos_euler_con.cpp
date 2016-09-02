@@ -11,7 +11,7 @@
 
 using namespace srcl_ctrl;
 
-PosEulerCon::PosEulerCon(RobotState *_rs):
+PosEulerCon::PosEulerCon(QuadState *_rs):
 		Controller(_rs)
 {
 //	kp_0 = 0.75;
