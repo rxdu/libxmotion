@@ -12,7 +12,8 @@ using namespace srcl_ctrl;
 
 QuadSimController::QuadSimController():
 		pos_quat_con_(new PosQuatCon(&rs_)),
-		att_quat_con_(new AttQuatCon(&rs_))
+		att_quat_con_(new AttQuatCon(&rs_)),
+		send_to_ros_(false)
 {
 	previous_state_.point_empty = false;
 	previous_state_.positions[0] = 0;
@@ -24,14 +25,25 @@ QuadSimController::QuadSimController():
 
 	if(!lcm_->good())
 		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
-	else
+	else {
 		lcm_->subscribe("quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server_);
+
+		vis_trans_ = std::make_shared<QuadVisDataTransmitter>(lcm_);
+	}
 }
 
 QuadSimController::~QuadSimController()
 {
 	delete att_quat_con_;
 	delete pos_quat_con_;
+}
+
+void QuadSimController::SetInitPose(float x, float y, float z, float yaw)
+{
+	previous_state_.positions[0] = x;
+	previous_state_.positions[1] = y;
+	previous_state_.positions[2] = z;
+	previous_state_.yaw = yaw;
 }
 
 const QuadDataToSim QuadSimController::ConvertRobotCmdToSimCmd(const QuadCmd& cmd)
@@ -53,6 +65,9 @@ void QuadSimController::UpdateRobotState(QuadDataFromSim* data)
 	/********* update robot state *********/
 	// Test without state estimator
 	rs_.UpdateRobotState(*data);
+
+	if(send_to_ros_)
+		vis_trans_->SendRobotStateDataToROS(rs_);
 }
 
 QuadCmd QuadSimController::UpdateCtrlLoop()

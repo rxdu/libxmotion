@@ -4,11 +4,11 @@ include_directories(${PROJECT_SOURCE_DIR}/src/vrep_sim/vrep_lib/include)
 include_directories(${PROJECT_SOURCE_DIR}/src/vrep_sim/vrep_lib/remoteApi)
 
 # Add libraries
-set(APPS_HELPER_LIB_SRC
-    vis_data_transmitter.cpp
-)
-add_library(apps_helper STATIC ${APPS_HELPER_LIB_SRC})
-target_link_libraries(apps_helper ${LCM_LIBRARIES})
+#set(APPS_HELPER_LIB_SRC
+#    vis_data_transmitter.cpp
+#)
+#add_library(apps_helper STATIC ${APPS_HELPER_LIB_SRC})
+#target_link_libraries(apps_helper ${LCM_LIBRARIES})
 
 # Add executables
 #add_executable(quad_vrepsim_con quad_vrepsim_con.cpp)
@@ -22,3 +22,6 @@ target_link_libraries(apps_helper ${LCM_LIBRARIES})
 
 add_executable(quadsim_demo quadsim_demo.cpp)
 target_link_libraries(quadsim_demo quadsim quad_ctrl)
+
+add_executable(quadsim_path_repair quadsim_path_repair.cpp)
+target_link_libraries(quadsim_path_repair quadsim quad_ctrl)

@@ -27,8 +27,8 @@ template<typename DataFromSimType, typename DataToSimType, typename RobotStateTy
 class RobotSimProcess
 {
 public:
-	RobotSimProcess(RobotSimClient<DataFromSimType, DataToSimType>* client,
-			RobotSimController<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>* controller):
+	RobotSimProcess(std::shared_ptr<RobotSimClient<DataFromSimType, DataToSimType>> client,
+			std::shared_ptr<RobotSimController<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>> controller):
 		server_port_(29999),
 		server_connected_(false),
 		sync_mode_(true),
@@ -44,8 +44,8 @@ private:
 	DataFromSimType data_from_sim_;
 	DataToSimType data_to_sim_;
 
-	RobotSimClient<DataFromSimType, DataToSimType>* sim_client_;
-	RobotSimController<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>* robot_controller_;
+	std::shared_ptr<RobotSimClient<DataFromSimType, DataToSimType>> sim_client_;
+	std::shared_ptr<RobotSimController<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>> robot_controller_;
 
 	uint64_t loop_count_;
 

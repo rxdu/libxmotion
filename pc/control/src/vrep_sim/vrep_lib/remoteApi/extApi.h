@@ -29,6 +29,8 @@
 #ifndef _EXTAPI__
 #define _EXTAPI__
 
+#define NON_MATLAB_PARSING 1
+
 #ifdef NON_MATLAB_PARSING /* when compiling, make sure NON_MATLAB_PARSING is always defined! */
     #include "extApiPlatform.h"
     #include "v_repConst.h"

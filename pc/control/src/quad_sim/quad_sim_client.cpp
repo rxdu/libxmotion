@@ -115,6 +115,8 @@ bool QuadSimClient::ReceiveDataFromRobot(QuadDataFromSim *rx_data)
 			ReceiveQuadQuaternion(&rx_data->quat_i))
 		//&& Get3DScanPoints(rx_data->laser_points))
 	{
+		Get3DScanPoints(rx_data->laser_points);
+
 		rx_data->rot_rate_b.x = rx_data->imu_data.gyro.raw_x;
 		rx_data->rot_rate_b.y = rx_data->imu_data.gyro.raw_y;
 		rx_data->rot_rate_b.z = rx_data->imu_data.gyro.raw_z;

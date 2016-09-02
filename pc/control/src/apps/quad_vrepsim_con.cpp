@@ -130,7 +130,7 @@ int main(int argc,char* argv[])
 
 		lcm->subscribe("quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server);
 
-		VisDataTransmitter vis_trans(lcm);
+		QuadVisDataTransmitter vis_trans(lcm);
 
 		std::cout << "INFO: Created a simulation client." << std::endl;
 

@@ -22,6 +22,8 @@
 #include "quad_ctrl/controller/pos_quat_con.h"
 #include "quad_ctrl/motion_server/motion_server.h"
 
+#include "ctrl_utils/vis/quadvis_data_transmitter.h"
+
 namespace srcl_ctrl {
 
 class QuadSimController : public RobotSimController<QuadDataFromSim, QuadDataToSim,QuadState, QuadCmd>
@@ -43,6 +45,9 @@ private:
 
 	MotionServer motion_server_;
 
+	bool send_to_ros_;
+	std::shared_ptr<QuadVisDataTransmitter> vis_trans_;
+
 public:
 	virtual const QuadDataToSim ConvertRobotCmdToSimCmd(const QuadCmd& cmd);
 
@@ -50,6 +55,10 @@ public:
 
 	virtual QuadCmd UpdateCtrlLoop();
 	virtual QuadCmd UpdateCtrlLoop(const QuadState& desired);
+
+public:
+	void SetInitPose(float x, float y, float z, float yaw);
+	void SendRobotStateToROS(bool cmd) { send_to_ros_ = cmd; };
 };
 
 }

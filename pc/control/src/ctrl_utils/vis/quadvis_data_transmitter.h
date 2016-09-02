@@ -8,7 +8,6 @@
 #ifndef SRC_CONTROL_SRC_APPS_VIS_DATA_TRANSMITTER_H_
 #define SRC_CONTROL_SRC_APPS_VIS_DATA_TRANSMITTER_H_
 
-#include <estimator/quad_state.h>
 #include <memory>
 #include <vector>
 
@@ -16,13 +15,14 @@
 #include <lcm/lcm-cpp.hpp>
 
 #include "common/control_types.h"
+#include "quad_ctrl/estimator/quad_state.h"
 
 namespace srcl_ctrl {
 
-class VisDataTransmitter {
+class QuadVisDataTransmitter {
 public:
-	VisDataTransmitter(std::shared_ptr<lcm::LCM> lcm_ptr);
-	~VisDataTransmitter();
+	QuadVisDataTransmitter(std::shared_ptr<lcm::LCM> lcm_ptr);
+	~QuadVisDataTransmitter();
 
 private:
 	std::shared_ptr<lcm::LCM> lcm_;

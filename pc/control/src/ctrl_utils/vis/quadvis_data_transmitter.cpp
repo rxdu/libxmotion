@@ -6,31 +6,31 @@
  */
 
 #include <iostream>
-#include "apps/vis_data_transmitter.h"
+#include "ctrl_utils/vis/quadvis_data_transmitter.h"
 
 #include "lcmtypes/comm.hpp"
 
 using namespace srcl_ctrl;
 
-VisDataTransmitter::VisDataTransmitter(std::shared_ptr<lcm::LCM> lcm_ptr):
+QuadVisDataTransmitter::QuadVisDataTransmitter(std::shared_ptr<lcm::LCM> lcm_ptr):
 		lcm_(lcm_ptr)
 {
 	if(!lcm_->good())
 		std::cout << "LCM instance is not initialized properly. Visual data transmitter is not going to work." << std::endl;
 }
 
-VisDataTransmitter::~VisDataTransmitter()
+QuadVisDataTransmitter::~QuadVisDataTransmitter()
 {
 
 }
 
-void VisDataTransmitter::SendRobotStateDataToROS(const QuadState& rs)
+void QuadVisDataTransmitter::SendRobotStateDataToROS(const QuadState& rs)
 {
 	SendLaserPointsToROS(rs.laser_points_);
 	SendQuadTransformToROS(rs.position_, rs.quat_);
 }
 
-void VisDataTransmitter::SendPoseToROS(Point3f pos, Eigen::Quaterniond quat)
+void QuadVisDataTransmitter::SendPoseToROS(Point3f pos, Eigen::Quaterniond quat)
 {
 	srcl_msgs::Pose_t pose_msg;
 
@@ -46,7 +46,7 @@ void VisDataTransmitter::SendPoseToROS(Point3f pos, Eigen::Quaterniond quat)
 	lcm_->publish("vis_data_pose", &pose_msg);
 }
 
-void VisDataTransmitter::SendQuadTransformToROS(Point3f pos, Eigen::Quaterniond quat)
+void QuadVisDataTransmitter::SendQuadTransformToROS(Point3f pos, Eigen::Quaterniond quat)
 {
 	srcl_msgs::QuadrotorTransform trans_msg;
 	srcl_msgs::Pose_t trans_base2world;
@@ -76,7 +76,7 @@ void VisDataTransmitter::SendQuadTransformToROS(Point3f pos, Eigen::Quaterniond 
 	lcm_->publish("vis_data_quad_transform", &trans_msg);
 }
 
-void VisDataTransmitter::SendLaserPointsToROS(const std::vector<Point3f>& pts)
+void QuadVisDataTransmitter::SendLaserPointsToROS(const std::vector<Point3f>& pts)
 {
 	srcl_msgs::LaserScanPoints_t pts_msg;
 	srcl_msgs::Point3Df_t point;
