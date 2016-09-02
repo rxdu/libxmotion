@@ -21,7 +21,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 ## Add sub source directories
 add_subdirectory(src/ctrl_utils)
 add_subdirectory(src/quad_ctrl)
-#add_subdirectory(src/motion_server)
+add_subdirectory(src/motion_server)
 add_subdirectory(src/vrep_sim)
 add_subdirectory(src/quad_sim)
 #add_subdirectory(src/apps)

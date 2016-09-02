@@ -36,8 +36,8 @@ public:
 	virtual const DataToSimType ConvertRobotCmdToSimCmd(const RobotCmdType& cmd) = 0;
 
 	virtual void UpdateRobotState(DataFromSimType* data) = 0;
-	virtual RobotCmdType UpdateCtrlLoop(){};
-	virtual RobotCmdType UpdateCtrlLoop(const RobotStateType& desired) = 0;
+	virtual RobotCmdType UpdateCtrlLoop() = 0;
+	virtual RobotCmdType UpdateCtrlLoop(const RobotStateType& desired){};
 };
 
 }
