@@ -49,7 +49,7 @@ private:
 	std::shared_ptr<QuadVisDataTransmitter> vis_trans_;
 
 public:
-	virtual const QuadDataToSim ConvertRobotCmdToSimCmd(const QuadCmd& cmd);
+	virtual QuadDataToSim ConvertRobotCmdToSimCmd(const QuadCmd& cmd);
 
 	virtual void UpdateRobotState(QuadDataFromSim* data);
 

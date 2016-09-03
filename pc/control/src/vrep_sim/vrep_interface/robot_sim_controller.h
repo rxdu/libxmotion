@@ -33,7 +33,7 @@ protected:
 
 public:
 	virtual const RobotStateType& GetRobotState() { return rs_;};
-	virtual const DataToSimType ConvertRobotCmdToSimCmd(const RobotCmdType& cmd) = 0;
+	virtual DataToSimType ConvertRobotCmdToSimCmd(const RobotCmdType& cmd) = 0;
 
 	virtual void UpdateRobotState(DataFromSimType* data) = 0;
 	virtual RobotCmdType UpdateCtrlLoop() = 0;

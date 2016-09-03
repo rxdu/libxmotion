@@ -46,7 +46,7 @@ void QuadSimController::SetInitPose(float x, float y, float z, float yaw)
 	previous_state_.yaw = yaw;
 }
 
-const QuadDataToSim QuadSimController::ConvertRobotCmdToSimCmd(const QuadCmd& cmd)
+QuadDataToSim QuadSimController::ConvertRobotCmdToSimCmd(const QuadCmd& cmd)
 {
 	QuadDataToSim sim_cmd;
 
