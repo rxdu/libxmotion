@@ -9,11 +9,12 @@ find_package(OpenCV REQUIRED)
 # Add libraries
 set(PLANNER_LIB_SRC
     rrts_planner.cpp
+    rrts_planner_local.cpp
     #graph_planner.cpp
     quad_planner.cpp
 )
 add_library(planner STATIC ${PLANNER_LIB_SRC})
-target_link_libraries(planner map ompl rrtstarkd ${OpenCV_LIBS})
+target_link_libraries(planner map ompl rrtstarkd ${OpenCV_LIBS} ${Octomap_LIBS})
 
 # Add executables
 add_executable(test_local test_local.cpp)

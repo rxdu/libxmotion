@@ -21,3 +21,6 @@ target_link_libraries(octree_example ${Octomap_LIBS})
 
 add_executable(octomap_server_node octomap_server_node.cpp)
 target_link_libraries(octomap_server_node octomap_utils ${Octomap_LIBS} ${LCM_LIBRARIES})
+
+add_executable(test_octomap test_octomap.cpp)
+target_link_libraries(test_octomap octomap_utils ${Octomap_LIBS})

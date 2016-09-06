@@ -37,11 +37,11 @@ int main(int argc, char** argv)
 	{
 		lcm->handleTimeout(0);
 
-		double duration =  double(clock() - start_time)/CLOCKS_PER_SEC;
-		if(duration > 10 && !tree_saved) {
-			server.SaveTreeToFile();
-			tree_saved = true;
-		}
+//		double duration =  double(clock() - start_time)/CLOCKS_PER_SEC;
+//		if(duration > 10 && !tree_saved) {
+//			server.SaveTreeToFile();
+//			tree_saved = true;
+//		}
 	}
 
 	return 0;

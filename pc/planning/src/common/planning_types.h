@@ -48,6 +48,21 @@ typedef struct _position2dd
 	}
 }Position2Dd;
 
+typedef struct _position3dd
+{
+	double x;
+	double y;
+	double z;
+
+	bool operator==(const struct _position3dd& other) const
+	{
+		if(this->x == other.x && this->y == other.y && this->z == other.z)
+			return true;
+		else
+			return false;
+	}
+}Position3Dd;
+
 typedef struct _position3d
 {
 	uint32_t x;
