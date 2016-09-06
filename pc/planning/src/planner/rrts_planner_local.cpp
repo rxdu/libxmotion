@@ -291,8 +291,8 @@ bool RRTStarPlannerLocal::SearchSolution(Position3Dd start, Position3Dd goal, do
 
 		// print the path to screen
 		path->print(std::cout);
-		//std::ofstream outFile("output.txt");
-		//path->as<og::PathGeometric>()->printAsMatrix(outFile);
+		std::ofstream outFile("output.txt");
+		path->as<og::PathGeometric>()->printAsMatrix(outFile);
 
 		PostProcess3DPath(path->as<og::PathGeometric>()->getStates(), path3d);
 	}

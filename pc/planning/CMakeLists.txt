@@ -29,7 +29,6 @@ add_subdirectory(src/rrtstar)
 add_subdirectory(src/planner)
 add_subdirectory(src/apps)
 add_subdirectory(src/polyopt)
-#add_subdirectory(src/planning_server)
 
 if(BUILD_TESTS)
     add_subdirectory(src/gtests)
