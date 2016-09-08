@@ -21,6 +21,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 ## Add sub source directories
 add_subdirectory(src/quadtree)
 add_subdirectory(src/square_grid)
+add_subdirectory(src/cube_array)
 #add_subdirectory(src/graph)
 add_subdirectory(src/map)
 add_subdirectory(src/local3d)

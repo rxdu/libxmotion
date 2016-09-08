@@ -17,7 +17,7 @@ set(MAP_LIB_SRC
   graph_builder.cpp
 )
 add_library(map STATIC ${MAP_LIB_SRC})
-target_link_libraries(map squaregrid qtree ${OpenCV_LIBS})
+target_link_libraries(map squaregrid qtree cubearray ${OpenCV_LIBS})
 
 # Add executables
 #add_executable(octomap_server_node octomap_server_node.cpp)

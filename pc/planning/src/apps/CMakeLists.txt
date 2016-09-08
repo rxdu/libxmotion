@@ -38,3 +38,6 @@ target_link_libraries(test_rrtvis map vis planner ${OpenCV_LIBS})
 
 add_executable(test_planner test_planner.cpp)
 target_link_libraries(test_planner map vis planner ${OpenCV_LIBS})
+
+add_executable(test_cubearray test_cubearray.cpp)
+target_link_libraries(test_cubearray cubearray)

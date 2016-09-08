@@ -87,3 +87,27 @@ std::shared_ptr<Graph<SquareCell*>> GraphBuilder::BuildFromSquareGrid(const std:
 	return graph;
 }
 
+std::shared_ptr<Graph<const CubeCell&>> GraphBuilder::BuildFromCubeArray(const std::shared_ptr<CubeArray>& cube_array)
+{
+	std::shared_ptr<Graph<const CubeCell&>> graph = std::make_shared<Graph<const CubeCell&>>();
+
+	for(auto& cube:cube_array->cubes_)
+	{
+		uint64_t current_nodeid = cube.data_id_;
+
+		if(cube_array->cubes_[current_nodeid].occu_ != OccupancyType::OCCUPIED) {
+			std::vector<uint64_t> neighbour_list = cube_array->GetNeighbours(current_nodeid);
+
+			for(auto& nid : neighbour_list)
+			{
+				if(cube_array->cubes_[nid].occu_ != OccupancyType::OCCUPIED)
+				{
+					graph->AddEdge(cube_array->cubes_[current_nodeid], cube_array->cubes_[nid], 1);
+				}
+			}
+		}
+	}
+
+	return graph;
+}
+
