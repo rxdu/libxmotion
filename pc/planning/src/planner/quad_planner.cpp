@@ -6,13 +6,16 @@
  */
 
 #include <iostream>
+
 #include "planner/quad_planner.h"
+#include "map/map_utils.h"
 
 using namespace srcl_ctrl;
 
 QuadPlanner::QuadPlanner():
 		active_graph_planner_(GraphPlannerType::NOT_SPECIFIED),
-		world_size_set_(false)
+		world_size_set_(false),
+		auto_update_pos_(true)
 {
 
 }
@@ -20,7 +23,8 @@ QuadPlanner::QuadPlanner():
 QuadPlanner::QuadPlanner(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
 		active_graph_planner_(GraphPlannerType::NOT_SPECIFIED),
-		world_size_set_(false)
+		world_size_set_(false),
+		auto_update_pos_(true)
 {
 	if(!lcm_->good())
 		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
@@ -70,6 +74,38 @@ void QuadPlanner::SetGoalMapPosition(Position2D pos)
 {
 	goal_pos_.x = pos.x;
 	goal_pos_.y = pos.y;
+}
+
+void QuadPlanner::SetStartMapWorldPosition(Position2Dd pos)
+{
+	Position2D mpos;
+	mpos = MapUtils::CoordinatesFromMapWorldToMap(pos, GetActiveMapInfo());
+	start_pos_.x = mpos.x;
+	start_pos_.y = mpos.y;
+}
+
+void QuadPlanner::SetGoalMapWorldPosition(Position2Dd pos)
+{
+	Position2D mpos;
+	mpos = MapUtils::CoordinatesFromMapWorldToMap(pos, GetActiveMapInfo());
+	goal_pos_.x = mpos.x;
+	goal_pos_.y = mpos.y;
+}
+
+void QuadPlanner::SetStartRefWorldPosition(Position2Dd pos)
+{
+	Position2Dd mpos;
+	mpos = MapUtils::CoordinatesFromRefWorldToMapWorld(pos, GetActiveMapInfo());
+
+	SetStartMapWorldPosition(mpos);
+}
+
+void QuadPlanner::SetGoalRefWorldPosition(Position2Dd pos)
+{
+	Position2Dd mpos;
+	mpos = MapUtils::CoordinatesFromRefWorldToMapWorld(pos, GetActiveMapInfo());
+
+	SetGoalMapWorldPosition(mpos);
 }
 
 std::vector<uint64_t> QuadPlanner::SearchForGlobalPath()
@@ -127,6 +163,9 @@ void QuadPlanner::SetRealWorldSize(double x, double y)
 	}
 
 	world_size_set_ = true;
+
+	srcl_msgs::Graph_t graph_msg = GenerateLcmGraphMsg();
+	lcm_->publish("quadsim/quad_planner_graph", &graph_msg);
 }
 
 cv::Mat QuadPlanner::GetActiveMap()
@@ -169,7 +208,79 @@ void QuadPlanner::LcmTransformHandler(
 		const std::string& chan,
 		const srcl_msgs::QuadrotorTransform* msg)
 {
-	std::cout << "quadrotor position: " << msg->base_to_world.position[0] << " , "
-			<< msg->base_to_world.position[1] << " , "
-			<< msg->base_to_world.position[2] << std::endl;
+	Position2Dd rpos;
+	rpos.x = msg->base_to_world.position[0];
+	rpos.y = msg->base_to_world.position[1];
+
+//	Position2Dd mpos;
+//	mpos = MapUtils::CoordinatesFromRefWorldToMapWorld(rpos, GetActiveMapInfo());
+//
+//	std::cout << "quadrotor position in sim: " << msg->base_to_world.position[0] << " , "
+//			<< msg->base_to_world.position[1] << " , "
+//			<< msg->base_to_world.position[2] << std::endl;
+//	std::cout << "quadrotor position in image world: " << mpos.x << " , "
+//				<< mpos.y << std::endl;
+
+	if(auto_update_pos_)
+	{
+		SetStartRefWorldPosition(rpos);
+	}
+}
+
+srcl_msgs::Graph_t QuadPlanner::GenerateLcmGraphMsg()
+{
+	srcl_msgs::Graph_t graph_msg;
+
+	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
+	{
+		graph_msg.vertex_num = this->qtree_planner_.graph_->GetGraphVertices().size();
+		for(auto& vtx : this->qtree_planner_.graph_->GetGraphVertices())
+		{
+			srcl_msgs::Vertex_t vertex;
+			vertex.id = vtx->vertex_id_;
+
+			Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapToRefWorld(vtx->bundled_data_->location_, qtree_planner_.map_.info);
+			vertex.position[0] = ref_world_pos.x;
+			vertex.position[1] = ref_world_pos.y;
+
+			graph_msg.vertices.push_back(vertex);
+		}
+
+		graph_msg.edge_num = this->qtree_planner_.graph_->GetGraphUndirectedEdges().size();
+		for(auto& eg : this->qtree_planner_.graph_->GetGraphUndirectedEdges())
+		{
+			srcl_msgs::Edge_t edge;
+			edge.id_start = eg.src_->vertex_id_;
+			edge.id_end = eg.dst_->vertex_id_;
+
+			graph_msg.edges.push_back(edge);
+		}
+	}
+	else if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
+	{
+		graph_msg.vertex_num = this->sgrid_planner_.graph_->GetGraphVertices().size();
+		for(auto& vtx : this->sgrid_planner_.graph_->GetGraphVertices())
+		{
+			srcl_msgs::Vertex_t vertex;
+			vertex.id = vtx->vertex_id_;
+
+			Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapToRefWorld(vtx->bundled_data_->location_, sgrid_planner_.map_.info);
+			vertex.position[0] = ref_world_pos.x;
+			vertex.position[1] = ref_world_pos.y;
+
+			graph_msg.vertices.push_back(vertex);
+		}
+
+		graph_msg.edge_num = this->sgrid_planner_.graph_->GetGraphUndirectedEdges().size();
+		for(auto& eg : this->sgrid_planner_.graph_->GetGraphUndirectedEdges())
+		{
+			srcl_msgs::Edge_t edge;
+			edge.id_start = eg.src_->vertex_id_;
+			edge.id_end = eg.dst_->vertex_id_;
+
+			graph_msg.edges.push_back(edge);
+		}
+	}
+
+	return graph_msg;
 }

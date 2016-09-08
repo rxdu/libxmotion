@@ -63,8 +63,8 @@ int main(int argc, char** argv)
 	MapInfo info = qplanner.GetActiveMapInfo();
 	start_ori = MapUtils::CoordinatesFromPaddedToOriginal(start_pos, info);
 	goal_ori = MapUtils::CoordinatesFromPaddedToOriginal(goal_pos, info);
-	start = MapUtils::CoordinatesFromMapToWorld(start_ori, info);
-	goal = MapUtils::CoordinatesFromMapToWorld(goal_ori, info);
+	start = MapUtils::CoordinatesFromMapToMapWorld(start_ori, info);
+	goal = MapUtils::CoordinatesFromMapToMapWorld(goal_ori, info);
 	std::vector<Position2Dd> path;
 	bool result = qplanner.SearchForLocalPath(start, goal,20, path);
 

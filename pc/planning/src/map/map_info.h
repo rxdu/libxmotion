@@ -20,9 +20,8 @@ typedef struct {
 	uint32_t map_size_x;	// in pixels
 	uint32_t map_size_y;
 
-	uint32_t origin_offset_x; // offset relative to left top corner
-	uint32_t origin_offset_y;
-	double map_rotation;	// position: conter-clockwise
+	double origin_offset_x; // in meters, offset relative to left top corner
+	double origin_offset_y;
 
 	int16_t padded_top;		// in pixels
 	int16_t padded_bottom;

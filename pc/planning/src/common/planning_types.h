@@ -36,6 +36,9 @@ typedef struct _postion2d
 
 typedef struct _position2dd
 {
+	_position2dd():x(0),y(0){}
+	_position2dd(double _x, double _y):x(_x),y(_y){}
+
 	double x;
 	double y;
 

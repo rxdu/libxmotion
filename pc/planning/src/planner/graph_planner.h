@@ -39,11 +39,11 @@ public:
 
 private:
 	bool is_ready_;
-	std::shared_ptr<Graph_t<MapDataModelNode*>> graph_;
 	Trajectory_t<MapDataModelNode*> empty_path_;
 
 public:
 	Map_t<MapDataModel> map_;
+	std::shared_ptr<Graph_t<MapDataModelNode*>> graph_;
 
 public:
 	template<class T = MapDataModel, typename std::enable_if<std::is_same<T, QuadTree>::value>::type* = nullptr>
@@ -54,6 +54,10 @@ public:
 		if(MapUtils::ReadImageFromFile(config.GetMapPath(), input_image)) {
 			map_ = QTreeBuilder::BuildQuadTreeMap(input_image, config.GetMapType().data_param);
 			graph_ = GraphBuilder::BuildFromQuadTree(map_.data_model);
+
+			map_.info.origin_offset_x = config.GetOriginOffsetX();
+			map_.info.origin_offset_y = config.GetOriginOffsetY();
+
 			is_ready_ = true;
 		}
 		else
@@ -70,6 +74,10 @@ public:
 		if(MapUtils::ReadImageFromFile(config.GetMapPath(), input_image)) {
 			map_ = SGridBuilder::BuildSquareGridMap(input_image, config.GetMapType().data_param);
 			graph_ = GraphBuilder::BuildFromSquareGrid(map_.data_model,true);
+
+			map_.info.origin_offset_x = config.GetOriginOffsetX();
+			map_.info.origin_offset_y = config.GetOriginOffsetY();
+
 			is_ready_ = true;
 		}
 		else

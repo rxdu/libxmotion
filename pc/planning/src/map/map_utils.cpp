@@ -36,7 +36,7 @@ std::shared_ptr<SquareGrid> MapUtils::CreateSquareGrid(uint32_t row_size, uint32
 	return std::make_shared<SquareGrid>(row_size,col_size,cell_size);
 }
 
-Position2Dd MapUtils::CoordinatesFromMapToWorld(Position2D map_pos, MapInfo info)
+Position2Dd MapUtils::CoordinatesFromMapToMapWorld(Position2D map_pos, MapInfo info)
 {
 	Position2Dd rpos;
 
@@ -56,7 +56,7 @@ Position2Dd MapUtils::CoordinatesFromMapToWorld(Position2D map_pos, MapInfo info
 	return rpos;
 }
 
-Position2D MapUtils::CoordinatesFromWorldToMap(Position2Dd world_pos, MapInfo info)
+Position2D MapUtils::CoordinatesFromMapWorldToMap(Position2Dd world_pos, MapInfo info)
 {
 	Position2D rpos;
 
@@ -114,12 +114,48 @@ Position2D MapUtils::CoordinatesFromOriginalToPadded(Position2D ori_pos, MapInfo
 	return rpos;
 }
 
-Position2Dd MapUtils::CoordinatesFromMapWorldToRealWorld(Position2Dd map_world_pos, MapInfo info)
+Position2Dd MapUtils::CoordinatesFromMapWorldToRefWorld(Position2Dd map_world_pos, MapInfo info)
 {
+	Position2Dd rpos;
 
+	rpos.x = - (map_world_pos.y - info.origin_offset_y);
+	rpos.y = - (map_world_pos.x - info.origin_offset_x);
+
+	return rpos;
 }
 
-Position2Dd MapUtils::CoordinatesFromRealWorldToMapWorld(Position2Dd world_pos, MapInfo info)
+Position2Dd MapUtils::CoordinatesFromRefWorldToMapWorld(Position2Dd ref_world_pos, MapInfo info)
 {
+	Position2Dd mpos;
 
+	mpos.x = - (ref_world_pos.y - info.origin_offset_y);
+	mpos.y = - (ref_world_pos.x - info.origin_offset_x);
+
+	return mpos;
+}
+
+Position2Dd MapUtils::CoordinatesFromMapToRefWorld(Position2D map_pos, MapInfo info)
+{
+	Position2D original_map_pos;
+	Position2Dd mapw_pos, refw_pos;
+
+	original_map_pos = MapUtils::CoordinatesFromPaddedToOriginal(map_pos, info);
+	//std::cout << "conversion input: " << map_pos.x << " , " << map_pos.y << std::endl;
+	mapw_pos = MapUtils::CoordinatesFromMapToMapWorld(original_map_pos, info);
+	//std::cout << "conversion intermediate: " << mapw_pos.x << " , " << mapw_pos.y << std::endl;
+	refw_pos = MapUtils::CoordinatesFromMapWorldToRefWorld(mapw_pos, info);
+	//std::cout << "conversion output: " << refw_pos.x << " , " << refw_pos.y << std::endl;
+
+	return refw_pos;
+}
+
+Position2D MapUtils::CoordinatesFromRefWorldToMap(Position2Dd world_pos, MapInfo info)
+{
+	Position2Dd mapw_pos;
+	Position2D map_pos;
+
+	mapw_pos = MapUtils::CoordinatesFromRefWorldToMapWorld(world_pos, info);
+	map_pos = MapUtils::CoordinatesFromMapWorldToMap(mapw_pos, info);
+
+	return map_pos;
 }

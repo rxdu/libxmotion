@@ -37,10 +37,10 @@ void RRTVis::VisRRTPath(const std::vector<Position2Dd>& path, MapInfo info, cv::
 	for(auto it = path.begin(); it != path.end() - 1; it++)
 	{
 		Position2D pos, pos_next;
-		pos = MapUtils::CoordinatesFromWorldToMap(*it, info);
+		pos = MapUtils::CoordinatesFromMapWorldToMap(*it, info);
 		if(!info.vector_map)
 			pos = MapUtils::CoordinatesFromOriginalToPadded(pos, info);
-		pos_next = MapUtils::CoordinatesFromWorldToMap(*(it+1), info);
+		pos_next = MapUtils::CoordinatesFromMapWorldToMap(*(it+1), info);
 		if(!info.vector_map)
 			pos_next = MapUtils::CoordinatesFromOriginalToPadded(pos_next, info);
 
@@ -55,7 +55,7 @@ void RRTVis::VisRRTPath(const std::vector<Position2Dd>& path, MapInfo info, cv::
 	}
 
 	Position2D pos;
-	pos = MapUtils::CoordinatesFromWorldToMap(*(path.end() - 1), info);
+	pos = MapUtils::CoordinatesFromMapWorldToMap(*(path.end() - 1), info);
 	if(!info.vector_map)
 		pos = MapUtils::CoordinatesFromOriginalToPadded(pos, info);
 	VisUtils::DrawPoint(src_img_color, Point(pos.x, pos.y));
@@ -88,7 +88,7 @@ void RRTVis::VisRRTGraph(const Graph_t<RRTNode>& graph, MapInfo info, cv::InputA
 	{
 		// current vertex center coordinate
 		Position2D center_pos;
-		center_pos = MapUtils::CoordinatesFromWorldToMap((*itv)->bundled_data_.position, info);
+		center_pos = MapUtils::CoordinatesFromMapWorldToMap((*itv)->bundled_data_.position, info);
 		if(!info.vector_map)
 			center_pos = MapUtils::CoordinatesFromOriginalToPadded(center_pos, info);
 		cv::Point center(center_pos.x, center_pos.y);
@@ -101,10 +101,10 @@ void RRTVis::VisRRTGraph(const Graph_t<RRTNode>& graph, MapInfo info, cv::InputA
 	{
 		Position2D pos1, pos2;
 
-		pos1 = MapUtils::CoordinatesFromWorldToMap((*it).src_->bundled_data_.position, info);
+		pos1 = MapUtils::CoordinatesFromMapWorldToMap((*it).src_->bundled_data_.position, info);
 		if(!info.vector_map)
 			pos1 = MapUtils::CoordinatesFromOriginalToPadded(pos1, info);
-		pos2 = MapUtils::CoordinatesFromWorldToMap((*it).dst_->bundled_data_.position, info);
+		pos2 = MapUtils::CoordinatesFromMapWorldToMap((*it).dst_->bundled_data_.position, info);
 		if(!info.vector_map)
 			pos2 = MapUtils::CoordinatesFromOriginalToPadded(pos2, info);
 

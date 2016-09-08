@@ -41,9 +41,13 @@ int main(int argc, char* argv[])
 	map_config.SetMapPath(image_dir);
 	map_config.SetMapType(MapDataModel::SQUARE_GRID, 32);
 	//map_config.SetMapType(MapDataModel::QUAD_TREE, 6);
+	map_config.SetOriginOffset(2.5, 2.5);
 
 	qplanner.ConfigGraphPlanner(map_config);
 	qplanner.SetRealWorldSize(5.0, 5.0);
+	qplanner.EnablePositionAutoUpdate(true);
+
+	qplanner.SetGoalRefWorldPosition(Position2Dd(1.8, -2.0));
 
 	if(qplanner.active_graph_planner_ == GraphPlannerType::NOT_SPECIFIED)
 	{

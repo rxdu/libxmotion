@@ -13,7 +13,6 @@
 
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
-
 #include "lcmtypes/comm.hpp"
 
 #include "common/planning_types.h"
@@ -50,28 +49,46 @@ private:
 	Position2D goal_pos_;
 
 	bool world_size_set_;
+	bool auto_update_pos_;
 
 public:
 	GraphPlannerType active_graph_planner_;
 
+private:
+	void SetStartMapWorldPosition(Position2Dd pos);
+	void SetGoalMapWorldPosition(Position2Dd pos);
+
 public:
+	// graph planner configuration
 	void ConfigGraphPlanner(MapConfig config);
+
+	// set start and goal
 	void SetStartMapPosition(Position2D pos);
 	void SetGoalMapPosition(Position2D pos);
 
+	void SetStartRefWorldPosition(Position2Dd pos);
+	void SetGoalRefWorldPosition(Position2Dd pos);
+
+	// RRT* configuration
 	void ConfigRRTSOccupancyMap(cv::Mat map, MapInfo info);
 	void SetRealWorldSize(double x, double y);
 
+	// general planner configuration
+	void EnablePositionAutoUpdate(bool cmd) { auto_update_pos_ = cmd; };
+
+	// search functions
 	std::vector<uint64_t> SearchForGlobalPath();
 	bool SearchForLocalPath(Position2Dd start, Position2Dd goal, double time_limit, std::vector<Position2Dd>& path2d);
 
-	// for visualization
+	// lcm
+	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::QuadrotorTransform* msg);
+
+	// helper functions
 	cv::Mat GetActiveMap();
 	MapInfo GetActiveMapInfo();
 	std::shared_ptr<Graph_t<RRTNode>> GetLocalPlannerVisGraph();
+	srcl_msgs::Graph_t GenerateLcmGraphMsg();
 
-	// lcm
-	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::QuadrotorTransform* msg);
 };
 
 }

@@ -51,7 +51,7 @@ public:
 
 			Position2D pos_on_map;
 			Position2D pos_on_paddedmap;
-			pos_on_map = MapUtils::CoordinatesFromWorldToMap(pos, map_info_);
+			pos_on_map = MapUtils::CoordinatesFromMapWorldToMap(pos, map_info_);
 			pos_on_paddedmap = MapUtils::CoordinatesFromOriginalToPadded(pos_on_map, map_info_);
 
 			//std::cout << "check point: " << pos_on_map.x << " , " << pos_on_map.y << std::endl;

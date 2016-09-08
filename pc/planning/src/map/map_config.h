@@ -31,7 +31,9 @@ struct MapType {
 
 class MapConfig{
 public:
-	MapConfig(){};
+	MapConfig():
+		origin_offset_x(0),
+		origin_offset_y(0){};
 	~MapConfig()
 	{
 	};
@@ -39,6 +41,8 @@ public:
 private:
 	std::string map_path_;
 	MapType map_type_;
+	double origin_offset_x;
+	double origin_offset_y;
 
 public:
 	void SetMapPath(std::string path)
@@ -55,6 +59,14 @@ public:
 
 	MapType GetMapType() { return map_type_;}
 
+	void SetOriginOffset(double x, double y)
+	{
+		origin_offset_x = x;
+		origin_offset_y = y;
+	}
+
+	double GetOriginOffsetX() { return origin_offset_x; }
+	double GetOriginOffsetY() { return origin_offset_y; }
 };
 
 }

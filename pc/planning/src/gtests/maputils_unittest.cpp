@@ -56,7 +56,7 @@ TEST_F(MapUtilsTest, MapToWorld)
 	input.y = 0;
 	exp_value.x = 0.0;
 	exp_value.y = 0.0;
-	calc_value = MapUtils::CoordinatesFromMapToWorld(input, minfo);
+	calc_value = MapUtils::CoordinatesFromMapToMapWorld(input, minfo);
 
 	EXPECT_EQ(exp_value, calc_value);
 
@@ -65,7 +65,7 @@ TEST_F(MapUtilsTest, MapToWorld)
 	input.y = minfo.map_size_y;
 	exp_value.x = minfo.world_size_x;
 	exp_value.y = minfo.world_size_y;
-	calc_value = MapUtils::CoordinatesFromMapToWorld(input, minfo);
+	calc_value = MapUtils::CoordinatesFromMapToMapWorld(input, minfo);
 
 	EXPECT_EQ(exp_value, calc_value);
 
@@ -74,7 +74,7 @@ TEST_F(MapUtilsTest, MapToWorld)
 	input.y = minfo.map_size_y + 1;
 	exp_value.x = minfo.world_size_x;
 	exp_value.y = minfo.world_size_y;
-	calc_value = MapUtils::CoordinatesFromMapToWorld(input, minfo);
+	calc_value = MapUtils::CoordinatesFromMapToMapWorld(input, minfo);
 
 	EXPECT_EQ(exp_value, calc_value);
 
@@ -83,7 +83,7 @@ TEST_F(MapUtilsTest, MapToWorld)
 	input.y = minfo.map_size_y/2;
 	exp_value.x = minfo.world_size_x/2;
 	exp_value.y = minfo.world_size_y/2;
-	calc_value = MapUtils::CoordinatesFromMapToWorld(input, minfo);
+	calc_value = MapUtils::CoordinatesFromMapToMapWorld(input, minfo);
 
 	//EXPECT_EQ(exp_value, calc_value);
 	EXPECT_LT(exp_value.x - calc_value.x , 0.1);
@@ -101,7 +101,7 @@ TEST_F(MapUtilsTest, WorldToMap)
 	input.y = 0.0;
 	exp_value.x = 0;
 	exp_value.y = 0;
-	calc_value = MapUtils::CoordinatesFromWorldToMap(input, minfo);
+	calc_value = MapUtils::CoordinatesFromMapWorldToMap(input, minfo);
 
 	EXPECT_EQ(exp_value, calc_value);
 
@@ -110,7 +110,7 @@ TEST_F(MapUtilsTest, WorldToMap)
 	input.y = minfo.world_size_y;
 	exp_value.x = minfo.map_size_x;
 	exp_value.y = minfo.map_size_y;
-	calc_value = MapUtils::CoordinatesFromWorldToMap(input, minfo);
+	calc_value = MapUtils::CoordinatesFromMapWorldToMap(input, minfo);
 
 	EXPECT_EQ(exp_value, calc_value);
 
@@ -119,7 +119,7 @@ TEST_F(MapUtilsTest, WorldToMap)
 	input.y = minfo.world_size_y+1;
 	exp_value.x = minfo.map_size_x;
 	exp_value.y = minfo.map_size_y;
-	calc_value = MapUtils::CoordinatesFromWorldToMap(input, minfo);
+	calc_value = MapUtils::CoordinatesFromMapWorldToMap(input, minfo);
 
 	EXPECT_EQ(exp_value, calc_value);
 
@@ -128,7 +128,7 @@ TEST_F(MapUtilsTest, WorldToMap)
 	input.y = minfo.world_size_y/2;
 	exp_value.x = minfo.map_size_x/2;
 	exp_value.y = minfo.map_size_y/2;
-	calc_value = MapUtils::CoordinatesFromWorldToMap(input, minfo);
+	calc_value = MapUtils::CoordinatesFromMapWorldToMap(input, minfo);
 
 	EXPECT_EQ(exp_value, calc_value);
 }
