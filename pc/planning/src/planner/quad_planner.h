@@ -57,6 +57,8 @@ public:
 private:
 	void SetStartMapWorldPosition(Position2Dd pos);
 	void SetGoalMapWorldPosition(Position2Dd pos);
+	template<typename PlannerType>
+	srcl_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner);
 
 public:
 	// graph planner configuration
@@ -88,7 +90,6 @@ public:
 	MapInfo GetActiveMapInfo();
 	std::shared_ptr<Graph_t<RRTNode>> GetLocalPlannerVisGraph();
 	srcl_msgs::Graph_t GenerateLcmGraphMsg();
-
 };
 
 }

@@ -227,59 +227,48 @@ void QuadPlanner::LcmTransformHandler(
 	}
 }
 
+template<typename PlannerType>
+srcl_msgs::Graph_t QuadPlanner::GetLcmGraphFromPlanner(const PlannerType& planner)
+{
+	srcl_msgs::Graph_t graph_msg;
+
+	graph_msg.vertex_num = planner.graph_->GetGraphVertices().size();
+	for(auto& vtx : planner.graph_->GetGraphVertices())
+	{
+		srcl_msgs::Vertex_t vertex;
+		vertex.id = vtx->vertex_id_;
+
+		Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapToRefWorld(vtx->bundled_data_->location_, planner.map_.info);
+		vertex.position[0] = ref_world_pos.x;
+		vertex.position[1] = ref_world_pos.y;
+
+		graph_msg.vertices.push_back(vertex);
+	}
+
+	graph_msg.edge_num = planner.graph_->GetGraphUndirectedEdges().size();
+	for(auto& eg : planner.graph_->GetGraphUndirectedEdges())
+	{
+		srcl_msgs::Edge_t edge;
+		edge.id_start = eg.src_->vertex_id_;
+		edge.id_end = eg.dst_->vertex_id_;
+
+		graph_msg.edges.push_back(edge);
+	}
+
+	return graph_msg;
+}
+
 srcl_msgs::Graph_t QuadPlanner::GenerateLcmGraphMsg()
 {
 	srcl_msgs::Graph_t graph_msg;
 
 	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
 	{
-		graph_msg.vertex_num = this->qtree_planner_.graph_->GetGraphVertices().size();
-		for(auto& vtx : this->qtree_planner_.graph_->GetGraphVertices())
-		{
-			srcl_msgs::Vertex_t vertex;
-			vertex.id = vtx->vertex_id_;
-
-			Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapToRefWorld(vtx->bundled_data_->location_, qtree_planner_.map_.info);
-			vertex.position[0] = ref_world_pos.x;
-			vertex.position[1] = ref_world_pos.y;
-
-			graph_msg.vertices.push_back(vertex);
-		}
-
-		graph_msg.edge_num = this->qtree_planner_.graph_->GetGraphUndirectedEdges().size();
-		for(auto& eg : this->qtree_planner_.graph_->GetGraphUndirectedEdges())
-		{
-			srcl_msgs::Edge_t edge;
-			edge.id_start = eg.src_->vertex_id_;
-			edge.id_end = eg.dst_->vertex_id_;
-
-			graph_msg.edges.push_back(edge);
-		}
+		graph_msg = GetLcmGraphFromPlanner(this->qtree_planner_);
 	}
 	else if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
 	{
-		graph_msg.vertex_num = this->sgrid_planner_.graph_->GetGraphVertices().size();
-		for(auto& vtx : this->sgrid_planner_.graph_->GetGraphVertices())
-		{
-			srcl_msgs::Vertex_t vertex;
-			vertex.id = vtx->vertex_id_;
-
-			Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapToRefWorld(vtx->bundled_data_->location_, sgrid_planner_.map_.info);
-			vertex.position[0] = ref_world_pos.x;
-			vertex.position[1] = ref_world_pos.y;
-
-			graph_msg.vertices.push_back(vertex);
-		}
-
-		graph_msg.edge_num = this->sgrid_planner_.graph_->GetGraphUndirectedEdges().size();
-		for(auto& eg : this->sgrid_planner_.graph_->GetGraphUndirectedEdges())
-		{
-			srcl_msgs::Edge_t edge;
-			edge.id_start = eg.src_->vertex_id_;
-			edge.id_end = eg.dst_->vertex_id_;
-
-			graph_msg.edges.push_back(edge);
-		}
+		graph_msg = GetLcmGraphFromPlanner(this->sgrid_planner_);
 	}
 
 	return graph_msg;
