@@ -72,6 +72,9 @@ void QuadPlanner::ConfigGraphPlanner(MapConfig config)
 
 void QuadPlanner::SetStartMapPosition(Position2D pos)
 {
+	if(pos == start_pos_)
+		return;
+
 	start_pos_.x = pos.x;
 	start_pos_.y = pos.y;
 
