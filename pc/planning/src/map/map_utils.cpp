@@ -113,3 +113,13 @@ Position2D MapUtils::CoordinatesFromOriginalToPadded(Position2D ori_pos, MapInfo
 
 	return rpos;
 }
+
+Position2Dd MapUtils::CoordinatesFromMapWorldToRealWorld(Position2Dd map_world_pos, MapInfo info)
+{
+
+}
+
+Position2Dd MapUtils::CoordinatesFromRealWorldToMapWorld(Position2Dd world_pos, MapInfo info)
+{
+
+}

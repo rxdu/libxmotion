@@ -17,6 +17,18 @@ QuadPlanner::QuadPlanner():
 
 }
 
+QuadPlanner::QuadPlanner(std::shared_ptr<lcm::LCM> lcm):
+		lcm_(lcm),
+		active_graph_planner_(GraphPlannerType::NOT_SPECIFIED),
+		world_size_set_(false)
+{
+	if(!lcm_->good())
+		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
+	else {
+		lcm_->subscribe("vis_data_quad_transform",&QuadPlanner::LcmTransformHandler, this);
+	}
+}
+
 QuadPlanner::~QuadPlanner()
 {
 
@@ -150,4 +162,14 @@ MapInfo QuadPlanner::GetActiveMapInfo()
 std::shared_ptr<Graph_t<RRTNode>> QuadPlanner::GetLocalPlannerVisGraph()
 {
 	return local_planner_.rrts_vis_graph_;
+}
+
+void QuadPlanner::LcmTransformHandler(
+		const lcm::ReceiveBuffer* rbuf,
+		const std::string& chan,
+		const srcl_msgs::QuadrotorTransform* msg)
+{
+	std::cout << "quadrotor position: " << msg->base_to_world.position[0] << " , "
+			<< msg->base_to_world.position[1] << " , "
+			<< msg->base_to_world.position[2] << std::endl;
 }

@@ -8,7 +8,13 @@
 #ifndef PLANNING_SRC_PLANNER_QUAD_PLANNER_H_
 #define PLANNING_SRC_PLANNER_QUAD_PLANNER_H_
 
+#include <memory>
 #include "opencv2/opencv.hpp"
+
+// headers for lcm
+#include <lcm/lcm-cpp.hpp>
+
+#include "lcmtypes/comm.hpp"
 
 #include "common/planning_types.h"
 #include "planner/graph_planner.h"
@@ -26,9 +32,13 @@ enum class GraphPlannerType {
 class QuadPlanner{
 public:
 	QuadPlanner();
+	QuadPlanner(std::shared_ptr<lcm::LCM> lcm);
 	~QuadPlanner();
 
 private:
+	// lcm
+	std::shared_ptr<lcm::LCM> lcm_;
+
 	// planners
 	GraphPlanner<QuadTree> qtree_planner_;
 	GraphPlanner<SquareGrid> sgrid_planner_;
@@ -59,6 +69,9 @@ public:
 	cv::Mat GetActiveMap();
 	MapInfo GetActiveMapInfo();
 	std::shared_ptr<Graph_t<RRTNode>> GetLocalPlannerVisGraph();
+
+	// lcm
+	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::QuadrotorTransform* msg);
 };
 
 }

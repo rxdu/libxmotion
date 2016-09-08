@@ -49,8 +49,12 @@ public:
 
 	static Position2Dd CoordinatesFromMapToWorld(Position2D map_pos, MapInfo info);
 	static Position2D CoordinatesFromWorldToMap(Position2Dd world_pos, MapInfo info);
+
 	static Position2D CoordinatesFromPaddedToOriginal(Position2D pad_pos, MapInfo info);
 	static Position2D CoordinatesFromOriginalToPadded(Position2D ori_pos, MapInfo info);
+
+	static Position2Dd CoordinatesFromMapWorldToRealWorld(Position2Dd map_world_pos, MapInfo info);
+	static Position2Dd CoordinatesFromRealWorldToMapWorld(Position2Dd world_pos, MapInfo info);
 };
 
 }

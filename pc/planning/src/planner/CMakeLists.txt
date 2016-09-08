@@ -14,7 +14,7 @@ set(PLANNER_LIB_SRC
     quad_planner.cpp
 )
 add_library(planner STATIC ${PLANNER_LIB_SRC})
-target_link_libraries(planner map ompl rrtstarkd ${OpenCV_LIBS} ${Octomap_LIBS})
+target_link_libraries(planner map ompl rrtstarkd ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 # Add executables
 add_executable(test_local test_local.cpp)

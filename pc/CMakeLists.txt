@@ -21,6 +21,9 @@ endif(ENABLE_G3LOG)
 
 set(BUILD_TESTS on)
 
+## Include files for LCM
+include_directories(${CMAKE_BINARY_DIR}/include)
+
 ## Config eigen include directories
 include_directories(${CMAKE_SOURCE_DIR}/third_party/)
 
