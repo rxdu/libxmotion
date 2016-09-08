@@ -55,7 +55,7 @@ int main(int argc, char** argv)
 	goal_pos.y = 840;
 	qplanner.SetStartMapPosition(start_pos);
 	qplanner.SetGoalMapPosition(goal_pos);
-	auto global_solution = qplanner.SearchForGlobalPath();
+	auto global_solution = qplanner.SearchForGlobalPathID();
 
 	// test local rrts planner
 	Position2Dd start,goal;

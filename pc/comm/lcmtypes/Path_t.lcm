@@ -1,0 +1,7 @@
+package srcl_msgs;
+
+struct Path_t 
+{
+	int64_t waypoint_num;
+	WayPoint_t waypoints[waypoint_num];
+}

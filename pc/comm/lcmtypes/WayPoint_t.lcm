@@ -1,0 +1,6 @@
+package srcl_msgs;
+
+struct WayPoint_t 
+{
+	float positions[3];
+}

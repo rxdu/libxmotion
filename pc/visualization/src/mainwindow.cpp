@@ -267,7 +267,7 @@ void srcl_ctrl::MainWindow::UpdateClickedPosition(long x, long y, double raw2sca
 		if(start_specified_ && goal_specified_ && planner_ready_) {
 //			std::cout << "----> start: " << planner_.start_pos_.x << " , " << planner_.start_pos_.y << std::endl;
 //			std::cout << "----> goal: " << planner_.goal_pos_.x << " , " << planner_.goal_pos_.y << std::endl;
-			auto traj = planner_.SearchForGlobalPath();
+			auto traj = planner_.SearchForGlobalPathID();
 
 			std::cout << "path length: " << traj.size() << std::endl;
 			if(!traj.empty())

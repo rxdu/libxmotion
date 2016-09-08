@@ -48,15 +48,17 @@ private:
 	Position2D start_pos_;
 	Position2D goal_pos_;
 
+	bool gstart_set_;
+	bool ggoal_set_;
+
 	bool world_size_set_;
 	bool auto_update_pos_;
 
 public:
+	bool update_global_plan_;
 	GraphPlannerType active_graph_planner_;
 
 private:
-	void SetStartMapWorldPosition(Position2Dd pos);
-	void SetGoalMapWorldPosition(Position2Dd pos);
 	template<typename PlannerType>
 	srcl_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner);
 
@@ -79,7 +81,8 @@ public:
 	void EnablePositionAutoUpdate(bool cmd) { auto_update_pos_ = cmd; };
 
 	// search functions
-	std::vector<uint64_t> SearchForGlobalPath();
+	std::vector<Position2D> SearchForGlobalPath();
+	std::vector<uint64_t> SearchForGlobalPathID();
 	bool SearchForLocalPath(Position2Dd start, Position2Dd goal, double time_limit, std::vector<Position2Dd>& path2d);
 
 	// lcm
@@ -90,6 +93,7 @@ public:
 	MapInfo GetActiveMapInfo();
 	std::shared_ptr<Graph_t<RRTNode>> GetLocalPlannerVisGraph();
 	srcl_msgs::Graph_t GenerateLcmGraphMsg();
+	srcl_msgs::Path_t GenerateLcmPathMsg(std::vector<Position2D> waypoints);
 };
 
 }

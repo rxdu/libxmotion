@@ -14,8 +14,11 @@ using namespace srcl_ctrl;
 
 QuadPlanner::QuadPlanner():
 		active_graph_planner_(GraphPlannerType::NOT_SPECIFIED),
+		gstart_set_(false),
+		ggoal_set_(false),
 		world_size_set_(false),
-		auto_update_pos_(true)
+		auto_update_pos_(true),
+		update_global_plan_(false)
 {
 
 }
@@ -23,8 +26,11 @@ QuadPlanner::QuadPlanner():
 QuadPlanner::QuadPlanner(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
 		active_graph_planner_(GraphPlannerType::NOT_SPECIFIED),
+		gstart_set_(false),
+		ggoal_set_(false),
 		world_size_set_(false),
-		auto_update_pos_(true)
+		auto_update_pos_(true),
+		update_global_plan_(false)
 {
 	if(!lcm_->good())
 		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
@@ -68,28 +74,22 @@ void QuadPlanner::SetStartMapPosition(Position2D pos)
 {
 	start_pos_.x = pos.x;
 	start_pos_.y = pos.y;
+
+	gstart_set_ = true;
+
+	if(gstart_set_ && ggoal_set_)
+		update_global_plan_ = true;
 }
 
 void QuadPlanner::SetGoalMapPosition(Position2D pos)
 {
 	goal_pos_.x = pos.x;
 	goal_pos_.y = pos.y;
-}
 
-void QuadPlanner::SetStartMapWorldPosition(Position2Dd pos)
-{
-	Position2D mpos;
-	mpos = MapUtils::CoordinatesFromMapWorldToMap(pos, GetActiveMapInfo());
-	start_pos_.x = mpos.x;
-	start_pos_.y = mpos.y;
-}
+	ggoal_set_ = true;
 
-void QuadPlanner::SetGoalMapWorldPosition(Position2Dd pos)
-{
-	Position2D mpos;
-	mpos = MapUtils::CoordinatesFromMapWorldToMap(pos, GetActiveMapInfo());
-	goal_pos_.x = mpos.x;
-	goal_pos_.y = mpos.y;
+	if(gstart_set_ && ggoal_set_)
+		update_global_plan_ = true;
 }
 
 void QuadPlanner::SetStartRefWorldPosition(Position2Dd pos)
@@ -97,7 +97,13 @@ void QuadPlanner::SetStartRefWorldPosition(Position2Dd pos)
 	Position2Dd mpos;
 	mpos = MapUtils::CoordinatesFromRefWorldToMapWorld(pos, GetActiveMapInfo());
 
-	SetStartMapWorldPosition(mpos);
+	Position2D map_pos;
+	map_pos = MapUtils::CoordinatesFromMapWorldToMap(mpos, GetActiveMapInfo());
+
+	Position2D map_padded_pos;
+	map_padded_pos = MapUtils::CoordinatesFromOriginalToPadded(map_pos, GetActiveMapInfo());
+
+	SetStartMapPosition(map_padded_pos);
 }
 
 void QuadPlanner::SetGoalRefWorldPosition(Position2Dd pos)
@@ -105,12 +111,18 @@ void QuadPlanner::SetGoalRefWorldPosition(Position2Dd pos)
 	Position2Dd mpos;
 	mpos = MapUtils::CoordinatesFromRefWorldToMapWorld(pos, GetActiveMapInfo());
 
-	SetGoalMapWorldPosition(mpos);
+	Position2D map_pos;
+	map_pos = MapUtils::CoordinatesFromMapWorldToMap(mpos, GetActiveMapInfo());
+
+	Position2D map_padded_pos;
+	map_padded_pos = MapUtils::CoordinatesFromOriginalToPadded(map_pos, GetActiveMapInfo());
+
+	SetGoalMapPosition(map_padded_pos);
 }
 
-std::vector<uint64_t> QuadPlanner::SearchForGlobalPath()
+std::vector<Position2D> QuadPlanner::SearchForGlobalPath()
 {
-	std::vector<uint64_t> traj;
+	std::vector<Position2D> waypoints;
 
 //	std::cout << "----> start: " << start_pos_.x << " , " << start_pos_.y << std::endl;
 //	std::cout << "----> goal: " << goal_pos_.x << " , " << goal_pos_.y << std::endl;
@@ -119,16 +131,46 @@ std::vector<uint64_t> QuadPlanner::SearchForGlobalPath()
 	{
 		auto traj_vtx = qtree_planner_.Search(start_pos_, goal_pos_);
 		for(auto& wp:traj_vtx)
-			traj.push_back(wp->vertex_id_);
+			waypoints.push_back(wp->bundled_data_->location_);
 	}
 	else if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
 	{
 		auto traj_vtx = sgrid_planner_.Search(start_pos_, goal_pos_);
 		for(auto& wp:traj_vtx)
-			traj.push_back(wp->vertex_id_);
+			waypoints.push_back(wp->bundled_data_->location_);
 	}
 
-	return traj;
+	srcl_msgs::Path_t path_msg = GenerateLcmPathMsg(waypoints);
+	lcm_->publish("quad/quad_planner_graph_path", &path_msg);
+
+	update_global_plan_ = false;
+
+	return waypoints;
+}
+
+std::vector<uint64_t> QuadPlanner::SearchForGlobalPathID()
+{
+	std::vector<uint64_t> waypoints;
+
+	//	std::cout << "----> start: " << start_pos_.x << " , " << start_pos_.y << std::endl;
+	//	std::cout << "----> goal: " << goal_pos_.x << " , " << goal_pos_.y << std::endl;
+
+	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
+	{
+		auto traj_vtx = qtree_planner_.Search(start_pos_, goal_pos_);
+		for(auto& wp:traj_vtx)
+			waypoints.push_back(wp->vertex_id_);
+	}
+	else if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
+	{
+		auto traj_vtx = sgrid_planner_.Search(start_pos_, goal_pos_);
+		for(auto& wp:traj_vtx)
+			waypoints.push_back(wp->vertex_id_);
+	}
+
+	update_global_plan_ = false;
+
+	return waypoints;
 }
 
 bool QuadPlanner::SearchForLocalPath(Position2Dd start, Position2Dd goal, double time_limit, std::vector<Position2Dd>& path2d)
@@ -165,7 +207,7 @@ void QuadPlanner::SetRealWorldSize(double x, double y)
 	world_size_set_ = true;
 
 	srcl_msgs::Graph_t graph_msg = GenerateLcmGraphMsg();
-	lcm_->publish("quadsim/quad_planner_graph", &graph_msg);
+	lcm_->publish("quad/quad_planner_graph", &graph_msg);
 }
 
 cv::Mat QuadPlanner::GetActiveMap()
@@ -212,9 +254,15 @@ void QuadPlanner::LcmTransformHandler(
 	rpos.x = msg->base_to_world.position[0];
 	rpos.y = msg->base_to_world.position[1];
 
-//	Position2Dd mpos;
-//	mpos = MapUtils::CoordinatesFromRefWorldToMapWorld(rpos, GetActiveMapInfo());
+//	Position2Dd mapw_pos;
+//	mapw_pos = MapUtils::CoordinatesFromRefWorldToMapWorld(rpos, GetActiveMapInfo());
 //
+//	Position2D map_pos;
+//	map_pos = MapUtils::CoordinatesFromMapWorldToMap(mapw_pos, GetActiveMapInfo());
+//
+//	Position2D map_padded_pos;
+//	map_padded_pos = MapUtils::CoordinatesFromOriginalToPadded(map_pos, GetActiveMapInfo());
+
 //	std::cout << "quadrotor position in sim: " << msg->base_to_world.position[0] << " , "
 //			<< msg->base_to_world.position[1] << " , "
 //			<< msg->base_to_world.position[2] << std::endl;
@@ -272,4 +320,38 @@ srcl_msgs::Graph_t QuadPlanner::GenerateLcmGraphMsg()
 	}
 
 	return graph_msg;
+}
+
+srcl_msgs::Path_t QuadPlanner::GenerateLcmPathMsg(std::vector<Position2D> waypoints)
+{
+	srcl_msgs::Path_t path_msg;
+
+	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
+	{
+		path_msg.waypoint_num = waypoints.size();
+		for(auto& wp : waypoints)
+		{
+			Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapToRefWorld(wp, this->qtree_planner_.map_.info);
+			srcl_msgs::WayPoint_t waypoint;
+			waypoint.positions[0] = ref_world_pos.x;
+			waypoint.positions[1] = ref_world_pos.y;
+
+			path_msg.waypoints.push_back(waypoint);
+		}
+	}
+	else if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
+	{
+		path_msg.waypoint_num = waypoints.size();
+		for(auto& wp : waypoints)
+		{
+			Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapToRefWorld(wp, this->sgrid_planner_.map_.info);
+			srcl_msgs::WayPoint_t waypoint;
+			waypoint.positions[0] = ref_world_pos.x;
+			waypoint.positions[1] = ref_world_pos.y;
+
+			path_msg.waypoints.push_back(waypoint);
+		}
+	}
+
+	return path_msg;
 }
