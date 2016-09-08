@@ -42,8 +42,8 @@ public:
 	double GetHeuristic(const SquareCell& other_struct) const{
 		double x1,x2,y1,y2;
 
-		x1 = other_struct.location_.x;
-		y1 = other_struct.location_.y;
+		x1 = this->location_.x;
+		y1 = this->location_.y;
 
 		x2 = other_struct.location_.x;
 		y2 = other_struct.location_.y;

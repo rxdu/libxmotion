@@ -283,7 +283,7 @@ void srcl_ctrl::MainWindow::UpdateClickedPosition(long x, long y, double raw2sca
 void srcl_ctrl::MainWindow::on_actionOpenMap_triggered()
 {
     QString map_file_name = QFileDialog::getOpenFileName(this,
-        tr("Open Map File"), "/home/rdu/Workspace/srcl_robot_suite/srcl_ctrl/pc/planning/data", tr("Map Images (*.png *.jpg)"));
+        tr("Open Map File"), "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data", tr("Map Images (*.png *.jpg)"));
 
     bool read_result = map_viewer_->ReadMapFromFile(map_file_name.toStdString());
 
