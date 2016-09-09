@@ -12,22 +12,39 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/comm.hpp"
 
+// octomap
 #include <octomap/octomap.h>
 #include <octomap/OcTree.h>
 
+// opencv
+#include "opencv2/opencv.hpp"
+
+// user
+#include "map/sgrid_builder.h"
+#include "map/map_type.h"
+#include "map/map_utils.h"
+#include "map/graph_builder.h"
+#include "graph/graph.h"
+#include "vis/graph_vis.h"
 #include "cube_array/cube_array.h"
 #include "local3d/cube_array_builder.h"
-#include "map/graph_builder.h"
 
 using namespace srcl_ctrl;
 using namespace octomap;
+using namespace cv;
 
 int main(int argc, char* argv[])
 {
 	std::shared_ptr<octomap::OcTree> tree = std::make_shared<octomap::OcTree>(0.1);
 
-	std::string tree_path_ = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/experiments/set1/local_octree.bt";
-	tree->readBinary(tree_path_);
+	std::string tree_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/experiments/set1/local_octree.bt";
+	tree->readBinary(tree_path);
+
+	Mat input_image;
+	std::string image_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/experiments/set1/map_path_repair.png";
+	MapUtils::ReadImageFromFile(image_path, input_image);
+	Map_t<SquareGrid> sgrid_map = SGridBuilder::BuildSquareGridMap(input_image, 32);
+	std::shared_ptr<Graph_t<SquareCell*>> graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);
 
 	std::cout << "\n*********************************************************\n" << std::endl;
 
@@ -39,12 +56,14 @@ int main(int argc, char* argv[])
 	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(tree);
 	std::shared_ptr<Graph<const CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
 
+	/*-------------------------------------------------------------------------------------*/
+	// send data for visualization
 	std::shared_ptr<lcm::LCM> lcm = std::make_shared<lcm::LCM>();
 
 	if(!lcm->good())
 	{
 		std::cout << "ERROR: Failed to initialize LCM." << std::endl;
-		return 1;
+		return -1;
 	}
 
 	srcl_msgs::Graph_t graph_msg;
@@ -72,7 +91,7 @@ int main(int argc, char* argv[])
 		graph_msg.edges.push_back(edge);
 	}
 
-	lcm->publish("quad/cube_graph", &graph_msg);
+	//lcm->publish("quad/cube_graph", &graph_msg);
 }
 
 
