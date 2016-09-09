@@ -32,13 +32,17 @@ namespace srcl_ctrl {
 template<typename MapDataModel>
 class GraphPlanner {
 public:
-	GraphPlanner():is_ready_(false){};
+	GraphPlanner():is_ready_(false),
+		prev_start_id_(0), prev_goal_id_(0){};
 	~GraphPlanner(){};
 
 	typedef typename MapDataModel::node_type MapDataModelNode;
 
 private:
 	bool is_ready_;
+	uint64_t prev_start_id_;
+	uint64_t prev_goal_id_;
+	Trajectory_t<MapDataModelNode*> prev_result_;
 	Trajectory_t<MapDataModelNode*> empty_path_;
 
 public:
@@ -124,11 +128,19 @@ public:
 			uint64_t start_id = map_.data_model->GetIDFromPosition(start.x, start.y);
 			uint64_t goal_id = map_.data_model->GetIDFromPosition(goal.x, goal.y);
 
+			if(start_id == prev_start_id_ && goal_id == prev_goal_id_)
+				return prev_result_;
+
 			auto start_vtx = graph_->GetVertexFromID(start_id);
 			auto goal_vtx = graph_->GetVertexFromID(goal_id);
 
+			prev_result_.clear();
+			prev_result_ = graph_->AStarSearch(start_vtx, goal_vtx);
+			prev_start_id_ = start_id;
+			prev_goal_id_ = goal_id;
+
 			if(start_vtx != nullptr && goal_vtx != nullptr)
-				return graph_->AStarSearch(start_vtx, goal_vtx);
+				return prev_result_;
 			else
 				return empty_path_;
 		}

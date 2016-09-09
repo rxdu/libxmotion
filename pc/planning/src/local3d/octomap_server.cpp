@@ -17,7 +17,7 @@ using namespace srcl_ctrl;
 
 OctomapServer::OctomapServer(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
-		octree_res_(0.3),
+		octree_res_(0.55),
 		save_tree_(false),
 		loop_count_(0)
 {
