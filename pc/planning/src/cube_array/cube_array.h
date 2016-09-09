@@ -82,7 +82,7 @@ public:
 	std::vector<CubeCell> cubes_;
 
 public:
-	void SetOriginOffset(uint32_t row_offset, uint32_t col_offset, uint32_t hei_offset);
+	void SetOriginOffset(int32_t row_offset, int32_t col_offset, int32_t hei_offset);
 	uint64_t GetIDFromIndex(uint32_t row, uint32_t col, uint32_t hei);
 	uint64_t GetIDFromPosition(double x, double y, double z);
 	void UpdateCubeOccupancy(double x, double y, double z, OccupancyType oc_type);

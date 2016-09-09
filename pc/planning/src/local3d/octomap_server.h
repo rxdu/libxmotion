@@ -29,7 +29,7 @@ public:
 private:
 	std::shared_ptr<lcm::LCM> lcm_;
 
-	octomap::OcTree* octree_;
+	double octree_res_;
 	bool save_tree_;
 	uint64_t loop_count_;
 

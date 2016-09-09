@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 
 	//	std::string tree_path_ = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/octomap/local_3dmap.bt";
 	//std::string tree_path_ = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/build/bin/test_tree.bt";
-	std::string tree_path_ = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/build/bin/simple_tree.bt";
+	std::string tree_path_ = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/build/bin/local_octree.bt";
 	tree->readBinary(tree_path_);
 
 	//tree.writeBinary("test_octomap_tree.bt");

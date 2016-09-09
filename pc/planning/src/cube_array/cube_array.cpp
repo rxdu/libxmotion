@@ -31,18 +31,24 @@ CubeArray::CubeArray(uint32_t row_num, uint32_t col_num, uint32_t height_num, do
 				cubes_[id].index_.x = row;
 				cubes_[id].index_.y = col;
 				cubes_[id].index_.z = hei;
-				cubes_[id].location_.x = cube_size_/2.0 + row * cube_size_;
-				cubes_[id].location_.y = cube_size_/2.0 + col * cube_size_;
-				cubes_[id].location_.z = cube_size_/2.0 + hei * cube_size_;
+				cubes_[id].location_.x = cube_size_/2.0 + static_cast<int32_t>(row) * cube_size_;
+				cubes_[id].location_.y = cube_size_/2.0 + static_cast<int32_t>(col) * cube_size_;
+				cubes_[id].location_.z = cube_size_/2.0 + static_cast<int32_t>(hei) * cube_size_;
 				cubes_[id].occu_ = OccupancyType::OCCUPIED;
 
-//				std::cout << "id: " << id << ", coordinate: " << cubes_[id].location_.x << " , "
-//						<< cubes_[id].location_.y << " , "
-//						<< cubes_[id].location_.z << std::endl;
+				std::cout << "id: " << id <<
+						", coordinate: "
+						<< cubes_[id].location_.x << " , "
+						<< cubes_[id].location_.y << " , "
+						<< cubes_[id].location_.z<<
+						", index: "
+						<< cubes_[id].index_.x << " , "
+						<< cubes_[id].index_.y << " , "
+						<< cubes_[id].index_.z << std::endl;
 			}
 }
 
-void CubeArray::SetOriginOffset(uint32_t row_offset, uint32_t col_offset, uint32_t hei_offset)
+void CubeArray::SetOriginOffset(int32_t row_offset, int32_t col_offset, int32_t hei_offset)
 {
 	row_offset_ = row_offset;
 	col_offset_ = col_offset;
@@ -57,9 +63,15 @@ void CubeArray::SetOriginOffset(uint32_t row_offset, uint32_t col_offset, uint32
 				cubes_[id].location_.y = cube_size_/2.0 + (static_cast<int32_t>(col) - col_offset_) * cube_size_;
 				cubes_[id].location_.z = cube_size_/2.0 + (static_cast<int32_t>(hei) - col_offset_) * cube_size_;
 
-//				std::cout << "id: " << id << ", coordinate: " << cubes_[id].location_.x << " , "
+//				std::cout << "id: " << id <<
+//						", coordinate: "
+//						<< cubes_[id].location_.x << " , "
 //						<< cubes_[id].location_.y << " , "
-//						<< cubes_[id].location_.z << std::endl;
+//						<< cubes_[id].location_.z<<
+//						", index: "
+//						<< cubes_[id].index_.x << " , "
+//						<< cubes_[id].index_.y << " , "
+//						<< cubes_[id].index_.z << std::endl;
 			}
 }
 
@@ -67,7 +79,7 @@ uint64_t CubeArray::GetIDFromIndex(uint32_t row, uint32_t col, uint32_t hei)
 {
 	uint64_t id = 0;
 
-	id = hei * (row_size_*col_size_) + col*col_size_ + row;
+	id = hei * (row_size_*col_size_) + col*row_size_ + row;
 
 	return id;
 }
@@ -112,7 +124,7 @@ std::vector<uint64_t> CubeArray::GetNeighbours(uint64_t id)
 {
 	std::vector<uint64_t> neighbours;
 
-	int32_t row, col, hei;
+	int64_t row, col, hei;
 	row = cubes_[id].index_.x;
 	col = cubes_[id].index_.y;
 	hei = cubes_[id].index_.z;

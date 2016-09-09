@@ -17,7 +17,7 @@ using namespace srcl_ctrl;
 
 OctomapServer::OctomapServer(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
-		octree_(new octomap::OcTree(0.01)),
+		octree_res_(0.3),
 		save_tree_(false),
 		loop_count_(0)
 {
@@ -26,7 +26,6 @@ OctomapServer::OctomapServer(std::shared_ptr<lcm::LCM> lcm):
 
 OctomapServer::~OctomapServer()
 {
-	delete octree_;
 }
 
 void OctomapServer::SaveTreeToFile()
@@ -43,8 +42,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	std::cout << "points received " << std::endl;
 	loop_count_++;
 
-	double resolution = 0.3;
-	std::shared_ptr<octomap::OcTree> octree = std::make_shared<octomap::OcTree>(resolution);
+	std::shared_ptr<octomap::OcTree> octree = std::make_shared<octomap::OcTree>(octree_res_);
 	octree->setProbHit(0.7);
 	octree->setProbMiss(0.4);
 	octree->setClampingThresMin(0.12);
@@ -68,7 +66,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	srcl_msgs::Octomap_t octomap_msg;
 
 	octomap_msg.binary = true;
-	octomap_msg.resolution = resolution;
+	octomap_msg.resolution = octree_res_;
 	octomap_msg.id = octree->getTreeType();
 
 	octree->prune();
@@ -120,7 +118,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 
 	if(save_tree_)
 	{
-		octree->writeBinary("test_tree.bt");
+		octree->writeBinary("local_octree.bt");
 		save_tree_ = false;
 	}
 }

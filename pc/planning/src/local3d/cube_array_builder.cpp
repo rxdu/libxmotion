@@ -6,6 +6,7 @@
  */
 
 #include <cmath>
+//#include <iomanip>
 
 #include <octomap/octomap.h>
 #include <octomap/OcTree.h>
@@ -18,34 +19,42 @@ using namespace octomap;
 std::shared_ptr<CubeArray> CubeArrayBuilder::BuildCubeArrayFromOctree(std::shared_ptr<octomap::OcTree> tree)
 {
 	double mmin[3],mmax[3];
+	double res = tree->getResolution();
 
 	tree->getMetricMin(mmin[0],mmin[1],mmin[2]);
 	tree->getMetricMax(mmax[0],mmax[1],mmax[2]);
 
 	std::cout << "tree bound - min: \n" << mmin[0] << " , " << mmin[1] << " , " << mmin[2] << std::endl;
 	std::cout << "tree bound - max: \n" << mmax[0] << " , " << mmax[1] << " , " << mmax[2] << std::endl;
+	std::cout << "tree resolution: " << res << std::endl;
 
-	uint32_t col_size = (std::abs(mmin[0]) + std::abs(mmax[0]))/tree->getResolution();
-	uint32_t row_size = (std::abs(mmin[1]) + std::abs(mmax[1]))/tree->getResolution();
-	uint32_t hei_size = (std::abs(mmin[2]) + std::abs(mmax[2]))/tree->getResolution();
+	int32_t row_size = (std::abs(mmin[0]) + std::abs(mmax[0]))/res;
+	int32_t col_size = (std::abs(mmin[1]) + std::abs(mmax[1]))/res;
+	int32_t hei_size = (std::abs(mmin[2]) + std::abs(mmax[2]))/res;
 
-	int32_t col_offset = - mmin[0]/tree->getResolution();
-	int32_t row_offset = - mmin[1]/tree->getResolution();
-	int32_t hei_offset = - mmin[2]/tree->getResolution();
-	std::cout << "size: " << col_size << " , " << row_size << " , " << hei_size << std::endl;
-	std::cout << "offset: " << col_offset << " , " << row_offset << " , " << hei_offset << std::endl;
+	int32_t row_offset = std::round(-mmin[0]/res);
+	int32_t col_offset = std::round(-mmin[1]/res);
+	int32_t hei_offset = std::round(-mmin[2]/res);
+	//std::cout << std::setprecision(20) << -mmin[1]/res << '\n';
+	//std::cout << "calc: " << -1.5/0.3 << " , col: " << - mmin[1]/res << " val: " << col_offset << std::endl;
 
-	std::shared_ptr<CubeArray> cube_array = std::make_shared<CubeArray>(col_size,row_size,hei_size,tree->getResolution());
-	cube_array->SetOriginOffset(col_offset, row_offset, hei_offset);
+	std::cout << "\nsize: " << row_size << " , " << col_size << " , " << hei_size << std::endl;
+	std::cout << "offset: " << row_offset << " , " << col_offset << " , " << hei_offset << std::endl << std::endl;
+
+	std::shared_ptr<CubeArray> cube_array = std::make_shared<CubeArray>(row_size,col_size,hei_size,tree->getResolution());
+	cube_array->SetOriginOffset(row_offset, col_offset, hei_offset);
 
 	for(auto& cube : cube_array->cubes_)
 	{
 		if(cube.location_.x < mmin[0] || cube.location_.x > mmax[0] ||
 				cube.location_.y < mmin[1] || cube.location_.y > mmax[1] ||
-				cube.location_.z < mmin[2] || cube.location_.y > mmax[2])
+				cube.location_.z < mmin[2] || cube.location_.z > mmax[2])
 			continue;
 
 		point3d query (cube.location_.x, cube.location_.y, cube.location_.z);
+
+//		std::cout << "cube " << cube.data_id_ << " at ( "<< cube.index_.x << " , " << cube.index_.y << " , " << cube.index_.z << " ) : "
+//				<< cube.location_.x << " , " << cube.location_.y << " , " << cube.location_.z << std::endl;
 
 		OcTreeNode* result = tree->search (query);
 
