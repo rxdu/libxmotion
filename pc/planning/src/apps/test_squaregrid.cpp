@@ -6,9 +6,6 @@
  */
 
 // standard libaray
-#include <map/graph_builder.h>
-#include <map/image_utils.h>
-#include <map/sgrid_builder.h>
 #include <stdio.h>
 #include <vector>
 #include <ctime>
@@ -20,6 +17,9 @@
 // user
 #include "graph/graph.h"
 #include "vis/graph_vis.h"
+#include "geometry/graph_builder.h"
+#include "map/image_utils.h"
+#include "geometry/sgrid_builder.h"
 
 using namespace cv;
 using namespace srcl_ctrl;

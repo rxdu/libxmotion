@@ -13,19 +13,19 @@ find_package(OpenCV REQUIRED)
 
 ## tests
 add_executable(graph_example graph_example.cpp)
-target_link_libraries(graph_example vis map ${OpenCV_LIBS})
+target_link_libraries(graph_example vis map geometry ${OpenCV_LIBS})
 
 add_executable(simple_graph simple_graph.cpp)
 #target_link_libraries(simple_graph )
 
 add_executable(test_qtree test_quadtree.cpp)
-target_link_libraries(test_qtree qtree vis map ${OpenCV_LIBS})
+target_link_libraries(test_qtree geometry vis map ${OpenCV_LIBS})
 
 add_executable(test_sgrid test_squaregrid.cpp)
-target_link_libraries(test_sgrid squaregrid vis map ${OpenCV_LIBS})
+target_link_libraries(test_sgrid geometry vis map ${OpenCV_LIBS})
 
 add_executable(test_graphvis test_graphvis.cpp)
-target_link_libraries(test_graphvis squaregrid vis map ${OpenCV_LIBS})
+target_link_libraries(test_graphvis geometry vis map ${OpenCV_LIBS})
 
 add_executable(test_image test_image.cpp)
 target_link_libraries(test_image vis ${OpenCV_LIBS})
@@ -40,4 +40,4 @@ add_executable(test_planner test_planner.cpp)
 target_link_libraries(test_planner map vis planner ${OpenCV_LIBS})
 
 add_executable(test_cubearray test_cubearray.cpp)
-target_link_libraries(test_cubearray cubearray)
+target_link_libraries(test_cubearray geometry)

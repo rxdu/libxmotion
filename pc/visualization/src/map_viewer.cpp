@@ -7,9 +7,9 @@
 
 #include "map_viewer.h"
 
-#include "map/graph_builder.h"
-#include "map/qtree_builder.h"
-#include "map/sgrid_builder.h"
+#include "geometry/graph_builder.h"
+#include "geometry/qtree_builder.h"
+#include "geometry/sgrid_builder.h"
 
 using namespace srcl_ctrl;
 using namespace cv;

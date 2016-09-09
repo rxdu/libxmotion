@@ -17,8 +17,8 @@
 #include "opencv2/opencv.hpp"
 
 #include "graph/graph.h"
-#include "square_grid/square_grid.h"
-#include "quadtree/quad_tree.h"
+#include "geometry/square_grid/square_grid.h"
+#include "geometry/quadtree/quad_tree.h"
 #include "common/planning_types.h"
 #include "map/map_info.h"
 

@@ -1,10 +1,11 @@
 #include <cmath>
 #include <algorithm>
-#include "quadtree/quad_tree.h"
 
 //#ifdef DEBUG
 #include <iostream>
 //#endif
+
+#include "quadtree/quad_tree.h"
 
 using namespace srcl_ctrl;
 

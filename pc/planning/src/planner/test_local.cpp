@@ -6,7 +6,7 @@
  */
 
 //#include <rrts_planner.h>
-#include <rrts_planner_local.h>
+#include "planner/rrts_planner_local.h"
 
 using namespace srcl_ctrl;
 

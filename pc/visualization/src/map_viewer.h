@@ -18,8 +18,8 @@
 // User headers
 #include "graph/graph.h"
 #include "vis/graph_vis.h"
-#include "square_grid/square_grid.h"
-#include "quadtree/quad_tree.h"
+#include "geometry/square_grid/square_grid.h"
+#include "geometry/quadtree/quad_tree.h"
 #include "map/map_info.h"
 #include "map/map_type.h"
 

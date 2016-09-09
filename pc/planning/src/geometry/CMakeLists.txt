@@ -7,12 +7,19 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 find_package(OpenCV REQUIRED)
 
 # Add libraries
-set(MAP_LIB_SRC
-  image_utils.cpp
-  map_utils.cpp
+set(GEOMETRY_LIB_SRC
+  # data structures
+  square_grid/square_grid.cpp
+  quadtree/quad_tree.cpp
+  cube_array/cube_array.cpp
+  # builders
+  qtree_builder.cpp
+  sgrid_builder.cpp
+  cube_array_builder.cpp
+  graph_builder.cpp
 )
-add_library(map STATIC ${MAP_LIB_SRC})
-target_link_libraries(map geometry ${OpenCV_LIBS})
+add_library(geometry STATIC ${GEOMETRY_LIB_SRC})
+target_link_libraries(geometry map ${OpenCV_LIBS} ${Octomap_LIBS})
 
 # Add executables
 #add_executable(octomap_server_node octomap_server_node.cpp)

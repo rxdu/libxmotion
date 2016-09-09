@@ -6,9 +6,6 @@
  */
 
 // standard libaray
-#include <map/graph_builder.h>
-#include <map/image_utils.h>
-#include <map/qtree_builder.h>
 #include <stdio.h>
 #include <vector>
 #include <ctime>
@@ -22,6 +19,9 @@
 #include "vis/graph_vis.h"
 
 #include "map/map_type.h"
+#include "geometry/graph_builder.h"
+#include "map/image_utils.h"
+#include "geometry/qtree_builder.h"
 
 using namespace cv;
 using namespace srcl_ctrl;

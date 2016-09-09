@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "cube_array/cube_array.h"
+#include "geometry/cube_array/cube_array.h"
 
 using namespace srcl_ctrl;
 

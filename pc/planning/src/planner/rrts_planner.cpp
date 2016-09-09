@@ -13,7 +13,7 @@
 #include <ompl/base/spaces/SO2StateSpace.h>
 #include <ompl/base/ScopedState.h>
 
-#include <rrts_planner.h>
+#include "planner/rrts_planner.h"
 
 using namespace ompl;
 using namespace srcl_ctrl;

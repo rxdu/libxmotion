@@ -18,13 +18,13 @@
 
 // User headers
 #include "graph/graph.h"
-#include "square_grid/square_grid.h"
-#include "quadtree/quad_tree.h"
+#include "geometry/square_grid/square_grid.h"
+#include "geometry/quadtree/quad_tree.h"
 #include "map/map_type.h"
 #include "map/map_config.h"
-#include "map/sgrid_builder.h"
-#include "map/qtree_builder.h"
-#include "map/graph_builder.h"
+#include "geometry/sgrid_builder.h"
+#include "geometry/qtree_builder.h"
+#include "geometry/graph_builder.h"
 #include "map/map_utils.h"
 
 namespace srcl_ctrl {

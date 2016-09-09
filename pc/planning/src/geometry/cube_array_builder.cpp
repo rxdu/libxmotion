@@ -11,7 +11,7 @@
 #include <octomap/octomap.h>
 #include <octomap/OcTree.h>
 
-#include "local3d/cube_array_builder.h"
+#include "geometry/cube_array_builder.h"
 
 using namespace srcl_ctrl;
 using namespace octomap;

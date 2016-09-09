@@ -5,10 +5,10 @@
  *      Author: rdu
  */
 
-#include <map/graph_builder.h>
 #include <iostream>
 #include <cmath>
 
+#include "geometry/graph_builder.h"
 
 using namespace srcl_ctrl;
 
