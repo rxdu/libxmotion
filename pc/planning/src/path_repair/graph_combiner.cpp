@@ -44,7 +44,10 @@ int main(int argc, char* argv[])
 	std::string image_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/experiments/set1/map_path_repair.png";
 	MapUtils::ReadImageFromFile(image_path, input_image);
 	Map_t<SquareGrid> sgrid_map = SGridBuilder::BuildSquareGridMap(input_image, 32);
-	std::shared_ptr<Graph_t<SquareCell*>> graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);
+	sgrid_map.info.SetWorldSize(5.0, 5.0);
+	sgrid_map.info.origin_offset_x = 2.5;
+	sgrid_map.info.origin_offset_y = 2.5;
+	std::shared_ptr<Graph_t<SquareCell*>> map_graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);
 
 	std::cout << "\n*********************************************************\n" << std::endl;
 
@@ -91,7 +94,34 @@ int main(int argc, char* argv[])
 		graph_msg.edges.push_back(edge);
 	}
 
-	//lcm->publish("quad/cube_graph", &graph_msg);
+	lcm->publish("quad/cube_graph", &graph_msg);
+
+	srcl_msgs::Graph_t graph_msg2;
+
+	graph_msg2.vertex_num = map_graph->GetGraphVertices().size();
+	for(auto& vtx : map_graph->GetGraphVertices())
+	{
+		srcl_msgs::Vertex_t vertex;
+		vertex.id = vtx->vertex_id_;
+
+		Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapToRefWorld(vtx->bundled_data_->location_, sgrid_map.info);
+		vertex.position[0] = ref_world_pos.x;
+		vertex.position[1] = ref_world_pos.y;
+
+		graph_msg2.vertices.push_back(vertex);
+	}
+
+	graph_msg2.edge_num = map_graph->GetGraphUndirectedEdges().size();
+	for(auto& eg : map_graph->GetGraphUndirectedEdges())
+	{
+		srcl_msgs::Edge_t edge;
+		edge.id_start = eg.src_->vertex_id_;
+		edge.id_end = eg.dst_->vertex_id_;
+
+		graph_msg2.edges.push_back(edge);
+	}
+
+	lcm->publish("quad/quad_planner_graph", &graph_msg2);
 }
 
 
