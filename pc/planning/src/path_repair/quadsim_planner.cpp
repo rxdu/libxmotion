@@ -17,7 +17,7 @@
 #include "map/map_config.h"
 #include "map/map_info.h"
 #include "planner/rrts_planner.h"
-#include "planner/quad_planner.h"
+#include "path_repair/quad_path_repair.h"
 #include "common/planning_types.h"
 
 using namespace srcl_ctrl;
@@ -29,13 +29,13 @@ int main(int argc, char* argv[])
 	if(!lcm->good())
 	{
 		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
-		return 0;
+		return -1;
 	}
 
 	// init quadrotor planner
-	std::string image_dir = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/map_path_repair.png";
+	std::string image_dir = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/experiments/map_path_repair.png";
 
-	QuadPlanner qplanner(lcm);
+	QuadPathRepair qplanner(lcm);
 	MapConfig map_config;
 
 	map_config.SetMapPath(image_dir);

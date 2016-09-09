@@ -28,6 +28,7 @@ add_subdirectory(src/local3d)
 add_subdirectory(src/vis)
 add_subdirectory(src/rrtstar)
 add_subdirectory(src/planner)
+add_subdirectory(src/path_repair)
 add_subdirectory(src/apps)
 add_subdirectory(src/polyopt)
 

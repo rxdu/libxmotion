@@ -29,6 +29,12 @@
 
 namespace srcl_ctrl {
 
+enum class GraphPlannerType {
+	SQUAREGRID_PLANNER,
+	QUADTREE_PLANNER,
+	NOT_SPECIFIED
+};
+
 template<typename MapDataModel>
 class GraphPlanner {
 public:

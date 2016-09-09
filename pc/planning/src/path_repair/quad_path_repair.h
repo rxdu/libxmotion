@@ -1,12 +1,12 @@
 /*
- * quad_planner.h
+ * quad_path_repair.h
  *
- *  Created on: Aug 1, 2016
+ *  Created on: Sep 9, 2016
  *      Author: rdu
  */
 
-#ifndef PLANNING_SRC_PLANNER_QUAD_PLANNER_H_
-#define PLANNING_SRC_PLANNER_QUAD_PLANNER_H_
+#ifndef PLANNING_SRC_PATH_REPAIR_QUAD_PATH_REPAIR_H_
+#define PLANNING_SRC_PATH_REPAIR_QUAD_PATH_REPAIR_H_
 
 #include <memory>
 #include "opencv2/opencv.hpp"
@@ -17,16 +17,15 @@
 
 #include "common/planning_types.h"
 #include "planner/graph_planner.h"
-#include "planner/rrts_planner.h"
 #include "map/map_info.h"
 
 namespace srcl_ctrl {
 
-class QuadPlanner{
+class QuadPathRepair{
 public:
-	QuadPlanner();
-	QuadPlanner(std::shared_ptr<lcm::LCM> lcm);
-	~QuadPlanner();
+	QuadPathRepair();
+	QuadPathRepair(std::shared_ptr<lcm::LCM> lcm);
+	~QuadPathRepair();
 
 private:
 	// lcm
@@ -35,8 +34,6 @@ private:
 	// planners
 	GraphPlanner<QuadTree> qtree_planner_;
 	GraphPlanner<SquareGrid> sgrid_planner_;
-
-	RRTStarPlanner local_planner_;
 
 	// planning parameters
 	Position2D start_pos_;
@@ -59,6 +56,7 @@ private:
 public:
 	// graph planner configuration
 	void ConfigGraphPlanner(MapConfig config);
+	void SetRealWorldSize(double x, double y);
 
 	// set start and goal
 	void SetStartMapPosition(Position2D pos);
@@ -67,17 +65,12 @@ public:
 	void SetStartRefWorldPosition(Position2Dd pos);
 	void SetGoalRefWorldPosition(Position2Dd pos);
 
-	// RRT* configuration
-	void ConfigRRTSOccupancyMap(cv::Mat map, MapInfo info);
-	void SetRealWorldSize(double x, double y);
-
 	// general planner configuration
 	void EnablePositionAutoUpdate(bool cmd) { auto_update_pos_ = cmd; };
 
 	// search functions
 	std::vector<Position2D> SearchForGlobalPath();
 	std::vector<uint64_t> SearchForGlobalPathID();
-	bool SearchForLocalPath(Position2Dd start, Position2Dd goal, double time_limit, std::vector<Position2Dd>& path2d);
 
 	// lcm
 	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::QuadrotorTransform* msg);
@@ -85,7 +78,6 @@ public:
 	// helper functions
 	cv::Mat GetActiveMap();
 	MapInfo GetActiveMapInfo();
-	std::shared_ptr<Graph_t<RRTNode>> GetLocalPlannerVisGraph();
 	srcl_msgs::Graph_t GenerateLcmGraphMsg();
 	srcl_msgs::Path_t GenerateLcmPathMsg(std::vector<Position2D> waypoints);
 };
@@ -93,4 +85,4 @@ public:
 }
 
 
-#endif /* PLANNING_SRC_PLANNER_QUAD_PLANNER_H_ */
+#endif /* PLANNING_SRC_PATH_REPAIR_QUAD_PATH_REPAIR_H_ */

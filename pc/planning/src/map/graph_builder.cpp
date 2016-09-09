@@ -91,6 +91,8 @@ std::shared_ptr<Graph<const CubeCell&>> GraphBuilder::BuildFromCubeArray(const s
 {
 	std::shared_ptr<Graph<const CubeCell&>> graph = std::make_shared<Graph<const CubeCell&>>();
 
+	double size = cube_array->cube_size_;
+
 	for(auto& cube:cube_array->cubes_)
 	{
 		uint64_t current_nodeid = cube.data_id_;
@@ -102,7 +104,7 @@ std::shared_ptr<Graph<const CubeCell&>> GraphBuilder::BuildFromCubeArray(const s
 			{
 				if(cube_array->cubes_[nid].occu_ != OccupancyType::OCCUPIED)
 				{
-					graph->AddEdge(cube_array->cubes_[current_nodeid], cube_array->cubes_[nid], 1);
+					graph->AddEdge(cube_array->cubes_[current_nodeid], cube_array->cubes_[nid], size);
 				}
 			}
 		}
