@@ -12,12 +12,11 @@
 #include <cstdint>
 
 #include <lcm/lcm-cpp.hpp>
+#include "lcmtypes/comm.hpp"
 
 #include <octomap/octomap.h>
 #include <octomap/OcTree.h>
 #include <octomap/ColorOcTree.h>
-
-#include "lcmtypes/comm.hpp"
 
 namespace srcl_ctrl {
 

@@ -11,14 +11,13 @@
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
 
-#include "geometry/graph_builder.h"
-#include "geometry/sgrid_builder.h"
+#include "common/planning_types.h"
 #include "map/map_utils.h"
 #include "map/map_config.h"
 #include "map/map_info.h"
-#include "planner/rrts_planner.h"
+#include "geometry/graph_builder.h"
+#include "geometry/sgrid_builder.h"
 #include "path_repair/quad_path_repair.h"
-#include "common/planning_types.h"
 
 using namespace srcl_ctrl;
 

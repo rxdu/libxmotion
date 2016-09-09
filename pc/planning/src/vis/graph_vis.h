@@ -12,9 +12,9 @@
 
 #include "opencv2/opencv.hpp"
 
+#include "graph/graph.h"
 #include "geometry/quadtree/quad_tree.h"
 #include "geometry/square_grid/square_grid.h"
-#include "graph/graph.h"
 
 namespace srcl_ctrl {
 

@@ -9,9 +9,9 @@
 #include <sstream>
 
 #include "geometry/cube_array/cube_array.h"
-#include "local3d/octomap_server.h"
 #include "geometry/cube_array_builder.h"
 #include "geometry/graph_builder.h"
+#include "local3d/octomap_server.h"
 
 using namespace srcl_ctrl;
 

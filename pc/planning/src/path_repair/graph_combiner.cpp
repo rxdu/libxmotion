@@ -20,14 +20,14 @@
 #include "opencv2/opencv.hpp"
 
 // user
-#include "geometry/sgrid_builder.h"
 #include "map/map_type.h"
 #include "map/map_utils.h"
-#include "geometry/graph_builder.h"
 #include "graph/graph.h"
-#include "vis/graph_vis.h"
+#include "geometry/graph_builder.h"
+#include "geometry/sgrid_builder.h"
 #include "geometry/cube_array/cube_array.h"
 #include "geometry/cube_array_builder.h"
+#include "vis/graph_vis.h"
 
 using namespace srcl_ctrl;
 using namespace octomap;
