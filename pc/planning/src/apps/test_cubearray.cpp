@@ -14,12 +14,17 @@ using namespace srcl_ctrl;
 int main(int argc, char* argv[])
 {
 	CubeArray ca(3,3,3,0.5);
+	ca.SetOriginOffset(1,1,0);
 
 	std::cout << "\n----------------------------\n" << std::endl;
 	std::cout << "id: " << ca.GetIDFromPosition(1.2, 1.2, 0.3) << std::endl;
+	std::cout << "id: " << ca.GetIDFromPosition(0.45, 0.45, 0.3) << std::endl;
+	std::cout << "id: " << ca.GetIDFromPosition(-0.2, 0.2, 0.3) << std::endl;
+	std::cout << "id: " << ca.GetIDFromPosition(0.2, -0.2, 0.3) << std::endl;
+	std::cout << "id: " << ca.GetIDFromPosition(0.2, 0.8, 0.3) << std::endl;
 
-	for(auto& nd : ca.GetNeighbours(13))
-		std::cout << "neighbour: " << nd << std::endl;
+//	for(auto& nd : ca.GetNeighbours(13))
+//		std::cout << "neighbour: " << nd << std::endl;
 }
 
 

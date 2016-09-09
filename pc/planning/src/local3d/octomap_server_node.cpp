@@ -8,6 +8,8 @@
 #include <iostream>
 #include <memory>
 #include <ctime>
+#include <chrono>
+#include <thread>
 
 #include <lcm/lcm-cpp.hpp>
 
@@ -42,6 +44,8 @@ int main(int argc, char** argv)
 //			server.SaveTreeToFile();
 //			tree_saved = true;
 //		}
+//		std::chrono::seconds timespan(10); // or whatever
+//		std::this_thread::sleep_for(timespan);
 	}
 
 	return 0;

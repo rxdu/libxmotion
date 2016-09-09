@@ -9,11 +9,12 @@ find_package(PkgConfig REQUIRED)
 pkg_search_module(LCM REQUIRED lcm)
 
 # Add libraries
-set(OCTOMAP_UTILS_LIB_SRC
+set(LOCAL3DMAP_LIB_SRC
     octomap_server.cpp
+    cube_array_builder.cpp
 )
-add_library(octomap_utils STATIC ${OCTOMAP_UTILS_LIB_SRC})
-target_link_libraries(octomap_utils ${Octomap_LIBS})
+add_library(octomap_utils STATIC ${LOCAL3DMAP_LIB_SRC})
+target_link_libraries(octomap_utils map cubearray ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 # Add executables
 add_executable(octree_example octomap_example.cpp)
@@ -24,3 +25,6 @@ target_link_libraries(octomap_server_node octomap_utils ${Octomap_LIBS} ${LCM_LI
 
 add_executable(test_octomap test_octomap.cpp)
 target_link_libraries(test_octomap octomap_utils ${Octomap_LIBS})
+
+add_executable(test_cubebuilder test_cubebuilder.cpp)
+target_link_libraries(test_cubebuilder map octomap_utils ${Octomap_LIBS} ${LCM_LIBRARIES})

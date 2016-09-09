@@ -9,6 +9,7 @@
 #define SRC_PLANNING_SRC_MAP_OCTOMAP_SERVER_H_
 
 #include <memory>
+#include <cstdint>
 
 #include <lcm/lcm-cpp.hpp>
 
@@ -30,6 +31,7 @@ private:
 
 	octomap::OcTree* octree_;
 	bool save_tree_;
+	uint64_t loop_count_;
 
 public:
 	void LcmLaserScanPointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::LaserScanPoints_t* msg);

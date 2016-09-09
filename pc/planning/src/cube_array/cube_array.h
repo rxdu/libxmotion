@@ -64,18 +64,25 @@ class CubeArray {
 public:
 	// row, col, hei : x, y , z
 	CubeArray(uint32_t row_num, uint32_t col_num, uint32_t height_num, double cube_size);
-	~CubeArray();
+	~CubeArray(){};
 
 public:
 	uint32_t row_size_;
 	uint32_t col_size_;
 	uint32_t hei_size_;
+
+	// cube numbers on the negative side of axes
+	int32_t row_offset_;
+	int32_t col_offset_;
+	int32_t hei_offset_;
+
 	double cube_size_;
 
 public:
 	std::vector<CubeCell> cubes_;
 
 public:
+	void SetOriginOffset(uint32_t row_offset, uint32_t col_offset, uint32_t hei_offset);
 	uint64_t GetIDFromIndex(uint32_t row, uint32_t col, uint32_t hei);
 	uint64_t GetIDFromPosition(double x, double y, double z);
 	void UpdateCubeOccupancy(double x, double y, double z, OccupancyType oc_type);

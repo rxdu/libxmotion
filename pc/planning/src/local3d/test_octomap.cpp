@@ -22,19 +22,20 @@ void print_query_info(point3d query, OcTreeNode* node) {
 int main(int argc, char* argv[])
 {
 	OcTree tree (0.1);
+	//std::shared_ptr<octomap::OcTree> tree = std::make_shared<octomap::OcTree>(0.1);
 
-	point3d endpoint ((float) 0.05f, (float) 0.05f, (float) 0.05f);
-	tree.updateNode(endpoint, true); // integrate 'occupied' measurement
-
-	point3d endpoint2 (0.05f, 0.05f, 0.15f);
-	tree.updateNode(endpoint2, false);  // integrate 'free' measurement
+//	point3d endpoint ((float) 0.05f, (float) 0.05f, (float) 0.05f);
+//	tree.updateNode(endpoint, true); // integrate 'occupied' measurement
+//
+//	point3d endpoint2 (0.05f, 0.05f, 0.15f);
+//	tree.updateNode(endpoint2, false);  // integrate 'free' measurement
 
 	//	std::string tree_path_ = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/octomap/local_3dmap.bt";
 	//std::string tree_path_ = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/build/bin/test_tree.bt";
-//	std::string tree_path_ = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/build/bin/simple_tree.bt";
-//	tree.readBinary(tree_path_);
+	std::string tree_path_ = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/build/bin/simple_tree.bt";
+	tree.readBinary(tree_path_);
 
-	tree.writeBinary("test_octomap_tree.bt");
+	//tree.writeBinary("test_octomap_tree.bt");
 
 //	point3d query (0., 0., 0.);
 //	OcTreeNode* result = tree.search (query);
@@ -64,16 +65,16 @@ int main(int argc, char* argv[])
 	uint32_t idx = 0;
 	for(auto it = tree.begin_leafs(tree.getTreeDepth()); it != tree.end_leafs(); it++)
 	{
-		std::cout << (*it).getOccupancy() << std::endl;
-//		if((*it).getOccupancy() < 0.95) {
-			std::cout << "size: " << it.getSize() << std::endl;
-			std::cout << "coordinate: " << it.getCoordinate() << std::endl;
-			idx++;
-//		}
+//		std::cout << (*it).getOccupancy() << std::endl;
+		//		if((*it).getOccupancy() < 0.95) {
+//		std::cout << "size: " << it.getSize() << std::endl;
+//		std::cout << "coordinate: " << it.getCoordinate() << std::endl;
+		idx++;
+		//		}
 
-//		if(it.getSize() == 0.2)
-//			idx++;
-		std::cout << std::endl;
+		//		if(it.getSize() == 0.2)
+		//			idx++;
+//		std::cout << std::endl;
 	}
 	std::cout << "leaf checked: " << idx << std::endl;
 }
