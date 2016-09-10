@@ -53,6 +53,9 @@ typedef struct _position2dd
 
 typedef struct _position3dd
 {
+	_position3dd():x(0),y(0),z(0){}
+	_position3dd(double _x, double _y, double _z):x(_x),y(_y),z(_z){}
+
 	double x;
 	double y;
 	double z;
@@ -68,6 +71,9 @@ typedef struct _position3dd
 
 typedef struct _position3d
 {
+	_position3d():x(0),y(0),z(0){}
+	_position3d(uint32_t _x, uint32_t _y, uint32_t _z):x(_x),y(_y),z(_z){}
+
 	uint32_t x;
 	uint32_t y;
 	uint32_t z;

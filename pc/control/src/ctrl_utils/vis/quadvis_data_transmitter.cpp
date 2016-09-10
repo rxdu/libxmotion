@@ -73,6 +73,12 @@ void QuadVisDataTransmitter::SendQuadTransformToROS(Point3f pos, Eigen::Quaterni
 	trans_msg.base_to_world = trans_base2world;
 	trans_msg.laser_to_base = trans_laser2base;
 
+//	std::cout << "pos: " << pos.x << " , " << pos.y << " , " << pos.z << std::endl;
+//	std::cout << "quat (w, x, y ,z): " << quat.w() << " , "
+//			<< quat.x() << " , "
+//			<< quat.y() << " , "
+//			<< quat.z() << std::endl;
+
 	lcm_->publish("vis_data_quad_transform", &trans_msg);
 }
 

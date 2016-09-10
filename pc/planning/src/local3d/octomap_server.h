@@ -10,6 +10,7 @@
 
 #include <memory>
 #include <cstdint>
+#include <string>
 
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/comm.hpp"
@@ -31,12 +32,13 @@ private:
 	double octree_res_;
 	bool save_tree_;
 	uint64_t loop_count_;
+	std::string save_tree_name_;
 
 public:
 	void LcmLaserScanPointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::LaserScanPoints_t* msg);
 	void SetOctreeResolution(double new_res) { octree_res_ = new_res; };
 	double GetOctreeResolution() { return octree_res_; };
-	void SaveTreeToFile();
+	void SaveTreeToFile(std::string file_name);
 };
 
 }

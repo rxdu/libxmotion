@@ -36,15 +36,15 @@ CubeArray::CubeArray(uint32_t row_num, uint32_t col_num, uint32_t height_num, do
 				cubes_[id].location_.z = cube_size_/2.0 + static_cast<int32_t>(hei) * cube_size_;
 				cubes_[id].occu_ = OccupancyType::OCCUPIED;
 
-				std::cout << "id: " << id <<
-						", coordinate: "
-						<< cubes_[id].location_.x << " , "
-						<< cubes_[id].location_.y << " , "
-						<< cubes_[id].location_.z<<
-						", index: "
-						<< cubes_[id].index_.x << " , "
-						<< cubes_[id].index_.y << " , "
-						<< cubes_[id].index_.z << std::endl;
+//				std::cout << "id: " << id <<
+//						", coordinate: "
+//						<< cubes_[id].location_.x << " , "
+//						<< cubes_[id].location_.y << " , "
+//						<< cubes_[id].location_.z<<
+//						", index: "
+//						<< cubes_[id].index_.x << " , "
+//						<< cubes_[id].index_.y << " , "
+//						<< cubes_[id].index_.z << std::endl;
 			}
 }
 
