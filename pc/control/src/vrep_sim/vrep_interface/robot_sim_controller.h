@@ -29,6 +29,7 @@ protected:
 
 protected:
 	RobotStateType rs_;
+	RobotStateType est_rs_;
 	uint64_t ctrl_loop_count_;
 
 public:

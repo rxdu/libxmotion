@@ -28,6 +28,7 @@
 #include "geometry/cube_array/cube_array.h"
 #include "geometry/cube_array_builder.h"
 #include "vis/graph_vis.h"
+#include "path_repair/geo_mark.h"
 
 using namespace srcl_ctrl;
 using namespace octomap;
@@ -58,6 +59,25 @@ int main(int argc, char* argv[])
 
 	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(tree);
 	std::shared_ptr<Graph<const CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
+
+	Graph_t<GeoMark> comb_graph;
+
+	GeoMark mark1, mark2;
+	uint64_t comb_graph_idx = 0;
+	for(auto& edge:cubegraph->GetGraphEdges())
+	{
+		mark1.data_id_ = comb_graph_idx++;
+		mark1.position = edge.src_->bundled_data_.location_;
+		mark1.source = GeoMarkSource::LASER_OCTOMAP;
+		mark1.source_id = edge.src_->bundled_data_.data_id_;
+
+		mark2.data_id_ = comb_graph_idx++;
+		mark2.position = edge.dst_->bundled_data_.location_;
+		mark2.source = GeoMarkSource::LASER_OCTOMAP;
+		mark2.source_id = edge.dst_->bundled_data_.data_id_;
+
+		comb_graph.AddEdge(mark1, mark2, edge.cost_);
+	}
 
 	/*-------------------------------------------------------------------------------------*/
 	// send data for visualization
@@ -122,6 +142,31 @@ int main(int argc, char* argv[])
 	}
 
 	lcm->publish("quad/quad_planner_graph", &graph_msg2);
+
+	srcl_msgs::Graph_t graph_msg3;
+
+	graph_msg2.vertex_num = map_graph->GetGraphVertices().size();
+	for(auto& vtx : map_graph->GetGraphVertices())
+	{
+		srcl_msgs::Vertex_t vertex;
+		vertex.id = vtx->vertex_id_;
+
+		Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapToRefWorld(vtx->bundled_data_->location_, sgrid_map.info);
+		vertex.position[0] = ref_world_pos.x;
+		vertex.position[1] = ref_world_pos.y;
+
+		graph_msg2.vertices.push_back(vertex);
+	}
+
+	graph_msg2.edge_num = map_graph->GetGraphUndirectedEdges().size();
+	for(auto& eg : map_graph->GetGraphUndirectedEdges())
+	{
+		srcl_msgs::Edge_t edge;
+		edge.id_start = eg.src_->vertex_id_;
+		edge.id_end = eg.dst_->vertex_id_;
+
+		graph_msg2.edges.push_back(edge);
+	}
 }
 
 

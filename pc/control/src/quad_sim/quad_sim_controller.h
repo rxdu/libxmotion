@@ -33,8 +33,8 @@ public:
 	~QuadSimController();
 
 private:
-	QuadState rs_;
-	QuadState est_rs_;
+//	QuadState rs_;
+//	QuadState est_rs_;
 
 	UAVTrajectoryPoint previous_state_;
 
