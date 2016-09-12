@@ -95,7 +95,7 @@ int main(int argc, char* argv[])
 		comb_graph.AddEdge(mark1, mark2, edge.cost_);
 	}
 
-	uint64_t existing_node_num = 10000;// comb_graph.GetGraphVertices().size();
+	uint64_t existing_node_num = sgrid_map.data_model->cells_.size();
 	for(auto& edge:map_graph->GetGraphEdges())
 	{
 		mark1.data_id_ = existing_node_num + edge.src_->vertex_id_;
