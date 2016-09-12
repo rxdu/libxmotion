@@ -33,6 +33,9 @@ include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/octovis/includ
 include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/dynamicEDT3D/include)
 set(Octomap_LIBS octomap octomath)
 
+## Other include directories
+include_directories(${CMAKE_SOURCE_DIR})
+
 ## Config ompl include directories
 include_directories(${CMAKE_SOURCE_DIR}/third_party/ompl-1.2.1/src)
 
@@ -66,5 +69,6 @@ elseif(LCM_FOUND)
 endif(LCM_FOUND)
 
 ## Add sub source directories
+add_subdirectory(utils)
 add_subdirectory(planning)
 add_subdirectory(third_party)         # <-----------------------------------

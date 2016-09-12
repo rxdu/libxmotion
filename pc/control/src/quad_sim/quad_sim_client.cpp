@@ -173,7 +173,7 @@ bool QuadSimClient::Get3DScanPoints(std::vector<Point3f>& points)
 				points.push_back(pt);
 		}
 
-		std::cout << "3d scan ptr size: " << points.size() << std::endl;
+		//std::cout << "3d scan ptr size: " << points.size() << std::endl;
 //
 //		for(uint64_t i = 0; i < 3; ++i)
 //		{

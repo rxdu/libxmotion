@@ -27,6 +27,7 @@ std::shared_ptr<CubeArray> CubeArrayBuilder::BuildCubeArrayFromOctree(std::share
 	std::cout << "tree bound - min: \n" << mmin[0] << " , " << mmin[1] << " , " << mmin[2] << std::endl;
 	std::cout << "tree bound - max: \n" << mmax[0] << " , " << mmax[1] << " , " << mmax[2] << std::endl;
 	std::cout << "tree resolution: " << res << std::endl;
+	std::cout << "measurement miss prob: " << tree->getProbMiss() << std::endl;
 
 	int32_t row_size = (std::abs(mmin[0]) + std::abs(mmax[0]))/res;
 	int32_t col_size = (std::abs(mmin[1]) + std::abs(mmax[1]))/res;
@@ -44,12 +45,19 @@ std::shared_ptr<CubeArray> CubeArrayBuilder::BuildCubeArrayFromOctree(std::share
 	std::shared_ptr<CubeArray> cube_array = std::make_shared<CubeArray>(row_size,col_size,hei_size,tree->getResolution());
 	cube_array->SetOriginOffset(row_offset, col_offset, hei_offset);
 
+	//std::cout << "cube array size: " << cube_array->cubes_.size() << std::endl;
+
+//	point3d queryt (res/2, res/2, res/2);
+//	OcTreeNode* resultt = tree->search (queryt);
+//	if (resultt != NULL)
+//		std::cout << "occupancy probability at " << queryt << ":\t " << resultt->getOccupancy() << std::endl;
+
 	for(auto& cube : cube_array->cubes_)
 	{
-		if(cube.location_.x < mmin[0] || cube.location_.x > mmax[0] ||
-				cube.location_.y < mmin[1] || cube.location_.y > mmax[1] ||
-				cube.location_.z < mmin[2] || cube.location_.z > mmax[2])
-			continue;
+//		if(cube.location_.x < mmin[0] || cube.location_.x > mmax[0] ||
+//				cube.location_.y < mmin[1] || cube.location_.y > mmax[1] ||
+//				cube.location_.z < mmin[2] || cube.location_.z > mmax[2])
+//			continue;
 
 		point3d query (cube.location_.x, cube.location_.y, cube.location_.z);
 
@@ -60,8 +68,10 @@ std::shared_ptr<CubeArray> CubeArrayBuilder::BuildCubeArrayFromOctree(std::share
 
 		if (result != NULL) {
 			//std::cout << "occupancy probability at " << query << ":\t " << result->getOccupancy() << std::endl;
-			if(result->getOccupancy() < 0.4)
+			if(result->getOccupancy() < tree->getProbMiss())
 				cube.occu_ = OccupancyType::FREE;
+//			else if(result->getOccupancy() > tree->getProbHit())
+//				cube.occu_ = OccupancyType::OCCUPIED;
 		}
 	}
 

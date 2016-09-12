@@ -110,6 +110,9 @@ std::shared_ptr<Graph<const CubeCell&>> GraphBuilder::BuildFromCubeArray(const s
 		}
 	}
 
+//	for(auto& vtx:graph->GetGraphVertices())
+//		std::cout << "vtx id: " << vtx->bundled_data_.data_id_ << std::endl;
+
 	return graph;
 }
 

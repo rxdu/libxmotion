@@ -19,7 +19,8 @@ OctomapServer::OctomapServer(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
 		octree_res_(0.35),
 		save_tree_(false),
-		loop_count_(0)
+		loop_count_(0),
+		save_tree_name_("saved_octree.bt")
 {
 	lcm_->subscribe("vis_data_laser_scan_points",&OctomapServer::LcmLaserScanPointsHandler, this);
 }
@@ -28,9 +29,9 @@ OctomapServer::~OctomapServer()
 {
 }
 
-void OctomapServer::SaveTreeToFile()
+void OctomapServer::SaveTreeToFile(std::string file_name)
 {
-	//octree_->writeBinary("test_tree.bt");
+	save_tree_name_ = file_name;
 	save_tree_ = true;
 }
 
@@ -118,7 +119,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 
 	if(save_tree_)
 	{
-		octree->writeBinary("local_octree.bt");
+		octree->writeBinary(save_tree_name_);
 		save_tree_ = false;
 	}
 }

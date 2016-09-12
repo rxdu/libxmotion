@@ -36,15 +36,15 @@ CubeArray::CubeArray(uint32_t row_num, uint32_t col_num, uint32_t height_num, do
 				cubes_[id].location_.z = cube_size_/2.0 + static_cast<int32_t>(hei) * cube_size_;
 				cubes_[id].occu_ = OccupancyType::OCCUPIED;
 
-				std::cout << "id: " << id <<
-						", coordinate: "
-						<< cubes_[id].location_.x << " , "
-						<< cubes_[id].location_.y << " , "
-						<< cubes_[id].location_.z<<
-						", index: "
-						<< cubes_[id].index_.x << " , "
-						<< cubes_[id].index_.y << " , "
-						<< cubes_[id].index_.z << std::endl;
+//				std::cout << "id: " << id <<
+//						", coordinate: "
+//						<< cubes_[id].location_.x << " , "
+//						<< cubes_[id].location_.y << " , "
+//						<< cubes_[id].location_.z<<
+//						", index: "
+//						<< cubes_[id].index_.x << " , "
+//						<< cubes_[id].index_.y << " , "
+//						<< cubes_[id].index_.z << std::endl;
 			}
 }
 
@@ -61,7 +61,7 @@ void CubeArray::SetOriginOffset(int32_t row_offset, int32_t col_offset, int32_t 
 				uint64_t id = GetIDFromIndex(row, col, hei);
 				cubes_[id].location_.x = cube_size_/2.0 + (static_cast<int32_t>(row) - row_offset_) * cube_size_;
 				cubes_[id].location_.y = cube_size_/2.0 + (static_cast<int32_t>(col) - col_offset_) * cube_size_;
-				cubes_[id].location_.z = cube_size_/2.0 + (static_cast<int32_t>(hei) - col_offset_) * cube_size_;
+				cubes_[id].location_.z = cube_size_/2.0 + (static_cast<int32_t>(hei) - hei_offset_) * cube_size_;
 
 //				std::cout << "id: " << id <<
 //						", coordinate: "
@@ -133,7 +133,7 @@ std::vector<uint64_t> CubeArray::GetNeighbours(uint64_t id)
 	if(row - 1 >= 0)
 		neighbours.push_back(GetIDFromIndex(row - 1, col, hei));
 	if(row + 1 < row_size_)
-			neighbours.push_back(GetIDFromIndex(row + 1, col, hei));
+		neighbours.push_back(GetIDFromIndex(row + 1, col, hei));
 	if(col - 1 >= 0)
 		neighbours.push_back(GetIDFromIndex(row, col - 1, hei));
 	if(col + 1 < col_size_)
