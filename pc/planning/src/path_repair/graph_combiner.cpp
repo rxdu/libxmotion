@@ -8,6 +8,7 @@
 #include <memory>
 #include <iostream>
 #include <ctime>
+#include <cmath>
 
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
@@ -73,7 +74,7 @@ int main(int argc, char* argv[])
 	uint64_t comb_graph_idx = 0;
 
 	utils::Transformation::Transform3D transf;
-	transf.trans = utils::Transformation::Translation3D(-1.8,0.6,0.8+0.11);
+	transf.trans = utils::Transformation::Translation3D(-1.8,0.6,0.8);
 	transf.quat = Eigen::Quaterniond(0.923868 , 3.68874e-05 , 9.55242e-06 , -0.382712);
 
 	for(auto& edge:cubegraph->GetGraphEdges())
@@ -94,22 +95,46 @@ int main(int argc, char* argv[])
 	for(auto& edge:map_graph->GetGraphEdges())
 	{
 		mark1.data_id_ = comb_graph_idx++;
-		Position2Dd ref_world_pos1 = MapUtils::CoordinatesFromMapToRefWorld(edge.src_->bundled_data_->location_, sgrid_map.info);
+		Position2Dd ref_world_pos1 = MapUtils::CoordinatesFromMapPaddedToRefWorld(edge.src_->bundled_data_->location_, sgrid_map.info);
 		mark1.position.x = ref_world_pos1.x;
 		mark1.position.y = ref_world_pos1.y;
-		mark1.position.z = 0;
+		mark1.position.z = 0.8;
 		mark1.source = GeoMarkSource::PLANAR_MAP;
 		mark1.source_id = edge.src_->bundled_data_->data_id_;
 
 		mark2.data_id_ = comb_graph_idx++;
-		Position2Dd ref_world_pos2 = MapUtils::CoordinatesFromMapToRefWorld(edge.dst_->bundled_data_->location_, sgrid_map.info);
+		Position2Dd ref_world_pos2 = MapUtils::CoordinatesFromMapPaddedToRefWorld(edge.dst_->bundled_data_->location_, sgrid_map.info);
 		mark2.position.x = ref_world_pos2.x;
 		mark2.position.y = ref_world_pos2.y;
-		mark2.position.z = 0;
+		mark2.position.z = 0.8;
 		mark2.source = GeoMarkSource::PLANAR_MAP;
 		mark2.source_id = edge.dst_->bundled_data_->data_id_;
 
 		comb_graph.AddEdge(mark1, mark2, edge.cost_);
+	}
+
+	// connect starting points
+	mark1.data_id_ =  comb_graph_idx++;
+	Position2D map_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(-1.8,0.6), sgrid_map.info);
+	std::cout << "map_pos: " << map_pos.x << " , " << map_pos.y << std::endl;
+	uint64_t start_id = sgrid_map.data_model->GetIDFromPosition(map_pos.x, map_pos.y);
+	std::cout << " found id : " << start_id << std::endl;
+	Position2Dd ref_start_pos2d = MapUtils::CoordinatesFromMapPaddedToRefWorld(map_graph->GetVertexFromID(start_id)->bundled_data_->location_, sgrid_map.info);
+	mark1.position.x = ref_start_pos2d.x;
+	mark1.position.y = ref_start_pos2d.y;
+	mark1.position.z = 0.8;
+
+	for(auto& st_cube : cubearray->GetStartingCubes())
+	{
+		mark2.data_id_ = comb_graph_idx++;
+		mark2.position =  utils::Transformation::TransformPosition3D(transf, cubearray->cubes_[st_cube].location_);// edge.dst_->bundled_data_.location_;
+		mark2.source = GeoMarkSource::LASER_OCTOMAP;
+		mark2.source_id = cubearray->cubes_[st_cube].data_id_;
+
+		double cost = std::sqrt(std::pow(mark1.position.x - mark2.position.x, 2) +
+				std::pow(mark1.position.y - mark2.position.y, 2) +
+				std::pow(mark1.position.z - mark2.position.z, 2));
+		comb_graph.AddEdge(mark1, mark2, cost);
 	}
 
 	exec_time = clock() - exec_time;
@@ -169,7 +194,7 @@ int main(int argc, char* argv[])
 		srcl_msgs::Vertex_t vertex;
 		vertex.id = vtx->vertex_id_;
 
-		Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapToRefWorld(vtx->bundled_data_->location_, sgrid_map.info);
+		Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(vtx->bundled_data_->location_, sgrid_map.info);
 		vertex.position[0] = ref_world_pos.x;
 		vertex.position[1] = ref_world_pos.y;
 

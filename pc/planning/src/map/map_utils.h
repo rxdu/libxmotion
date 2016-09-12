@@ -57,8 +57,8 @@ public:
 	static Position2Dd CoordinatesFromMapWorldToRefWorld(Position2Dd map_world_pos, MapInfo info);
 	static Position2Dd CoordinatesFromRefWorldToMapWorld(Position2Dd ref_world_pos, MapInfo info);
 
-	static Position2Dd CoordinatesFromMapToRefWorld(Position2D map_pos, MapInfo info);
-	static Position2D CoordinatesFromRefWorldToMap(Position2Dd world_pos, MapInfo info);
+	static Position2Dd CoordinatesFromMapPaddedToRefWorld(Position2D map_pos, MapInfo info);
+	static Position2D CoordinatesFromRefWorldToMapPadded(Position2Dd world_pos, MapInfo info);
 };
 
 }

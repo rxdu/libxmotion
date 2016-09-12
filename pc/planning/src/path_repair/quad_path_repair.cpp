@@ -153,8 +153,8 @@ std::vector<uint64_t> QuadPathRepair::SearchForGlobalPathID()
 {
 	std::vector<uint64_t> waypoints;
 
-	//	std::cout << "----> start: " << start_pos_.x << " , " << start_pos_.y << std::endl;
-	//	std::cout << "----> goal: " << goal_pos_.x << " , " << goal_pos_.y << std::endl;
+//		std::cout << "----> start: " << start_pos_.x << " , " << start_pos_.y << std::endl;
+//		std::cout << "----> goal: " << goal_pos_.x << " , " << goal_pos_.y << std::endl;
 
 	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
 	{
@@ -256,7 +256,7 @@ srcl_msgs::Graph_t QuadPathRepair::GetLcmGraphFromPlanner(const PlannerType& pla
 		srcl_msgs::Vertex_t vertex;
 		vertex.id = vtx->vertex_id_;
 
-		Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapToRefWorld(vtx->bundled_data_->location_, planner.map_.info);
+		Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(vtx->bundled_data_->location_, planner.map_.info);
 		vertex.position[0] = ref_world_pos.x;
 		vertex.position[1] = ref_world_pos.y;
 
@@ -301,7 +301,7 @@ srcl_msgs::Path_t QuadPathRepair::GenerateLcmPathMsg(std::vector<Position2D> way
 		path_msg.waypoint_num = waypoints.size();
 		for(auto& wp : waypoints)
 		{
-			Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapToRefWorld(wp, this->qtree_planner_.map_.info);
+			Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(wp, this->qtree_planner_.map_.info);
 			srcl_msgs::WayPoint_t waypoint;
 			waypoint.positions[0] = ref_world_pos.x;
 			waypoint.positions[1] = ref_world_pos.y;
@@ -314,7 +314,7 @@ srcl_msgs::Path_t QuadPathRepair::GenerateLcmPathMsg(std::vector<Position2D> way
 		path_msg.waypoint_num = waypoints.size();
 		for(auto& wp : waypoints)
 		{
-			Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapToRefWorld(wp, this->sgrid_planner_.map_.info);
+			Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(wp, this->sgrid_planner_.map_.info);
 			srcl_msgs::WayPoint_t waypoint;
 			waypoint.positions[0] = ref_world_pos.x;
 			waypoint.positions[1] = ref_world_pos.y;

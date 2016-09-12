@@ -134,7 +134,7 @@ Position2Dd MapUtils::CoordinatesFromRefWorldToMapWorld(Position2Dd ref_world_po
 	return mpos;
 }
 
-Position2Dd MapUtils::CoordinatesFromMapToRefWorld(Position2D map_pos, MapInfo info)
+Position2Dd MapUtils::CoordinatesFromMapPaddedToRefWorld(Position2D map_pos, MapInfo info)
 {
 	Position2D original_map_pos;
 	Position2Dd mapw_pos, refw_pos;
@@ -149,13 +149,16 @@ Position2Dd MapUtils::CoordinatesFromMapToRefWorld(Position2D map_pos, MapInfo i
 	return refw_pos;
 }
 
-Position2D MapUtils::CoordinatesFromRefWorldToMap(Position2Dd world_pos, MapInfo info)
+Position2D MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd world_pos, MapInfo info)
 {
 	Position2Dd mapw_pos;
 	Position2D map_pos;
+	Position2D map_padded_pos;
 
 	mapw_pos = MapUtils::CoordinatesFromRefWorldToMapWorld(world_pos, info);
 	map_pos = MapUtils::CoordinatesFromMapWorldToMap(mapw_pos, info);
 
-	return map_pos;
+	map_padded_pos = MapUtils::CoordinatesFromOriginalToPadded(map_pos, info);
+
+	return map_padded_pos;
 }
