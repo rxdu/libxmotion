@@ -27,7 +27,7 @@ public:
 	static std::shared_ptr<Graph<QuadTreeNode*>> BuildFromQuadTree(const std::shared_ptr<QuadTree>& tree);
 	static std::shared_ptr<Graph<SquareCell*>> BuildFromSquareGrid(const std::shared_ptr<SquareGrid>& grid, bool allow_diag_move);
 
-	static std::shared_ptr<Graph<const CubeCell&>> BuildFromCubeArray(const std::shared_ptr<CubeArray>& cube_array);
+	static std::shared_ptr<Graph<CubeCell&>> BuildFromCubeArray(const std::shared_ptr<CubeArray>& cube_array);
 };
 }
 

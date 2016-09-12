@@ -85,7 +85,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	if(loop_count_ > 15)
 	{
 		std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octree);
-		std::shared_ptr<Graph<const CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
+		std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
 
 		srcl_msgs::Graph_t graph_msg;
 

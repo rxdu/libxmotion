@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 	std::cout << "\n---------------------------------------------------------\n" << std::endl;
 
 	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(tree);
-	std::shared_ptr<Graph<const CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
+	std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
 
 	std::shared_ptr<lcm::LCM> lcm = std::make_shared<lcm::LCM>();
 

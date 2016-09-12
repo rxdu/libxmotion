@@ -20,14 +20,16 @@ class CubeCell: public BDSBase<CubeCell>{
 public:
 	CubeCell():
 		BDSBase<CubeCell>(0),
-		occu_(OccupancyType::OCCUPIED)
+		occu_(OccupancyType::OCCUPIED),
+		geo_mark_id_(0)
 		{
 
 		}
 
 	CubeCell(uint64_t id, OccupancyType occupancy):
 		BDSBase<CubeCell>(id),
-		occu_(occupancy)
+		occu_(occupancy),
+		geo_mark_id_(0)
 		{
 
 		}
@@ -35,6 +37,7 @@ public:
 	Position3D index_;
 	Position3Dd location_;
 	OccupancyType occu_;
+	uint64_t geo_mark_id_;
 
 	double GetHeuristic(const CubeCell& other_struct) const{
 		double x1,y1,z1;

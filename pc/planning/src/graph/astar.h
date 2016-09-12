@@ -126,6 +126,7 @@ public:
 			std::cout << "starting vertex id: " << (*traj_s)->vertex_id_ << std::endl;
 			std::cout << "finishing vertex id: " << (*traj_e)->vertex_id_ << std::endl;
 			std::cout << "path length: " << trajectory.size() << std::endl;
+			std::cout << "total cost: " << trajectory.back()->g_astar_ << std::endl;
 		}
 		else
 			std::cout << "failed to find a path" << std::endl;

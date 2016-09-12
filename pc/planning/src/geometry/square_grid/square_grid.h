@@ -21,7 +21,8 @@ class SquareCell: public BDSBase<SquareCell>{
 public:
 	SquareCell(uint64_t id, uint32_t row, uint32_t col, BoundingBox bbox, OccupancyType occupancy):
 		BDSBase<SquareCell>(id),
-		occu_(occupancy)
+		occu_(occupancy),
+		geo_mark_id_(0)
 	{
 		index_.x = col;
 		index_.y = row;
@@ -38,6 +39,7 @@ public:
 	Position2D location_;
 	OccupancyType occu_;
 	BoundingBox bbox_;
+	uint64_t geo_mark_id_;
 
 	double GetHeuristic(const SquareCell& other_struct) const{
 		double x1,x2,y1,y2;

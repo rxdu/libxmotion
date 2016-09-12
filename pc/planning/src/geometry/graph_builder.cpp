@@ -87,9 +87,9 @@ std::shared_ptr<Graph<SquareCell*>> GraphBuilder::BuildFromSquareGrid(const std:
 	return graph;
 }
 
-std::shared_ptr<Graph<const CubeCell&>> GraphBuilder::BuildFromCubeArray(const std::shared_ptr<CubeArray>& cube_array)
+std::shared_ptr<Graph<CubeCell&>> GraphBuilder::BuildFromCubeArray(const std::shared_ptr<CubeArray>& cube_array)
 {
-	std::shared_ptr<Graph<const CubeCell&>> graph = std::make_shared<Graph<const CubeCell&>>();
+	std::shared_ptr<Graph<CubeCell&>> graph = std::make_shared<Graph<CubeCell&>>();
 
 	double size = cube_array->cube_size_;
 
