@@ -22,7 +22,7 @@
 #include "quad_ctrl/controller/pos_quat_con.h"
 #include "quad_ctrl/motion_server/motion_server.h"
 
-#include "ctrl_utils/vis/quadvis_data_transmitter.h"
+#include "quad_ctrl/data_trans/quad_data_transmitter.h"
 
 namespace srcl_ctrl {
 
@@ -46,7 +46,7 @@ private:
 	MotionServer motion_server_;
 
 	bool send_to_ros_;
-	std::shared_ptr<QuadVisDataTransmitter> vis_trans_;
+	std::shared_ptr<QuadDataTransmitter> vis_trans_;
 
 public:
 	virtual QuadDataToSim ConvertRobotCmdToSimCmd(const QuadCmd& cmd);

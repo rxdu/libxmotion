@@ -28,7 +28,7 @@ QuadSimController::QuadSimController():
 	else {
 		lcm_->subscribe("quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server_);
 
-		vis_trans_ = std::make_shared<QuadVisDataTransmitter>(lcm_);
+		vis_trans_ = std::make_shared<QuadDataTransmitter>(lcm_);
 	}
 }
 

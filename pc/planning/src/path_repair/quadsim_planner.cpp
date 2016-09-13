@@ -42,8 +42,7 @@ int main(int argc, char* argv[])
 	//map_config.SetMapType(MapDataModel::QUAD_TREE, 6);
 	map_config.SetOriginOffset(2.5, 2.5);
 
-	qplanner.ConfigGraphPlanner(map_config);
-	qplanner.SetRealWorldSize(5.0, 5.0);
+	qplanner.ConfigGraphPlanner(map_config, 5.0, 5.0);
 	qplanner.EnablePositionAutoUpdate(true);
 
 	qplanner.SetGoalRefWorldPosition(Position2Dd(1.8, -2.0));

@@ -19,6 +19,7 @@
 #include "planner/graph_planner.h"
 #include "map/map_info.h"
 #include "path_repair/geo_mark.h"
+#include "path_repair/graph_combiner.h"
 
 namespace srcl_ctrl {
 
@@ -35,6 +36,7 @@ private:
 	// planners
 	GraphPlanner<QuadTree> qtree_planner_;
 	GraphPlanner<SquareGrid> sgrid_planner_;
+	GraphCombiner<SquareCell*, SquareGrid> gcombiner_;
 
 	// planning parameters
 	Position2D start_pos_;
@@ -56,8 +58,7 @@ private:
 
 public:
 	// graph planner configuration
-	void ConfigGraphPlanner(MapConfig config);
-	void SetRealWorldSize(double x, double y);
+	void ConfigGraphPlanner(MapConfig config, double world_size_x, double world_size_y);
 
 	// set start and goal
 	void SetStartMapPosition(Position2D pos);

@@ -9,7 +9,7 @@ set(CTRL_UTILS_LIB_SRC
     # logging
     logging/utils_log.cpp
     # vis
-    vis/quadvis_data_transmitter.cpp
+    #vis/quadvis_data_transmitter.cpp
 )
 add_library(ctrl_utils STATIC ${CTRL_UTILS_LIB_SRC})
 #add_definitions(-DENABLE_LOG)

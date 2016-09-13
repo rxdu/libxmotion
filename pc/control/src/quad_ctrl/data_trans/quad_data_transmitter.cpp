@@ -6,31 +6,32 @@
  */
 
 #include <iostream>
-#include "ctrl_utils/vis/quadvis_data_transmitter.h"
 
 #include "lcmtypes/comm.hpp"
 
+#include "data_trans/quad_data_transmitter.h"
+
 using namespace srcl_ctrl;
 
-QuadVisDataTransmitter::QuadVisDataTransmitter(std::shared_ptr<lcm::LCM> lcm_ptr):
+QuadDataTransmitter::QuadDataTransmitter(std::shared_ptr<lcm::LCM> lcm_ptr):
 		lcm_(lcm_ptr)
 {
 	if(!lcm_->good())
-		std::cerr << "LCM instance is not initialized properly. Visual data transmitter is not going to work." << std::endl;
+		std::cerr << "LCM instance is not initialized properly. Quad data transmitter is not going to work." << std::endl;
 }
 
-QuadVisDataTransmitter::~QuadVisDataTransmitter()
+QuadDataTransmitter::~QuadDataTransmitter()
 {
 
 }
 
-void QuadVisDataTransmitter::SendRobotStateDataToROS(const QuadState& rs)
+void QuadDataTransmitter::SendQuadStateData(const QuadState& rs)
 {
-	SendLaserPointsToROS(rs.laser_points_);
-	SendQuadTransformToROS(rs.position_, rs.quat_);
+	SendLaserPoints(rs.laser_points_);
+	SendQuadTransform(rs.position_, rs.quat_);
 }
 
-void QuadVisDataTransmitter::SendPoseToROS(Point3f pos, Eigen::Quaterniond quat)
+void QuadDataTransmitter::SendQuadPose(Point3f pos, Eigen::Quaterniond quat)
 {
 	srcl_msgs::Pose_t pose_msg;
 
@@ -46,7 +47,7 @@ void QuadVisDataTransmitter::SendPoseToROS(Point3f pos, Eigen::Quaterniond quat)
 	lcm_->publish("vis_data_pose", &pose_msg);
 }
 
-void QuadVisDataTransmitter::SendQuadTransformToROS(Point3f pos, Eigen::Quaterniond quat)
+void QuadDataTransmitter::SendQuadTransform(Point3f pos, Eigen::Quaterniond quat)
 {
 	srcl_msgs::QuadrotorTransform trans_msg;
 	srcl_msgs::Pose_t trans_base2world;
@@ -82,7 +83,7 @@ void QuadVisDataTransmitter::SendQuadTransformToROS(Point3f pos, Eigen::Quaterni
 	lcm_->publish("vis_data_quad_transform", &trans_msg);
 }
 
-void QuadVisDataTransmitter::SendLaserPointsToROS(const std::vector<Point3f>& pts)
+void QuadDataTransmitter::SendLaserPoints(const std::vector<Point3f>& pts)
 {
 	srcl_msgs::LaserScanPoints_t pts_msg;
 	srcl_msgs::Point3Df_t point;

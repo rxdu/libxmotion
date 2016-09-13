@@ -44,8 +44,12 @@ QuadPathRepair::~QuadPathRepair()
 
 }
 
-void QuadPathRepair::ConfigGraphPlanner(MapConfig config)
+void QuadPathRepair::ConfigGraphPlanner(MapConfig config, double world_size_x, double world_size_y)
 {
+	qtree_planner_.map_.info.SetWorldSize(world_size_x, world_size_y);
+	sgrid_planner_.map_.info.SetWorldSize(world_size_x, world_size_y);
+	world_size_set_ = true;
+
 	if(config.GetMapType().data_model == MapDataModel::QUAD_TREE)
 	{
 		bool result = qtree_planner_.UpdateMapConfig(config);
@@ -54,6 +58,8 @@ void QuadPathRepair::ConfigGraphPlanner(MapConfig config)
 		{
 			std::cout << "quad tree planner activated" << std::endl;
 			active_graph_planner_ = GraphPlannerType::QUADTREE_PLANNER;
+
+			//gcombiner_.SetBaseGraph(qtree_planner_.graph_, qtree_planner_.map_.data_model, qtree_planner_.map_.data_model->leaf_nodes_.size(), qtree_planner_.map_.info);
 		}
 	}
 	else if(config.GetMapType().data_model == MapDataModel::SQUARE_GRID)
@@ -64,8 +70,13 @@ void QuadPathRepair::ConfigGraphPlanner(MapConfig config)
 		{
 			std::cout << "square grid planner activated" << std::endl;
 			active_graph_planner_ = GraphPlannerType::SQUAREGRID_PLANNER;
+
+			gcombiner_.SetBaseGraph(sgrid_planner_.graph_, sgrid_planner_.map_.data_model, sgrid_planner_.map_.data_model->cells_.size(), sgrid_planner_.map_.info);
 		}
 	}
+
+	srcl_msgs::Graph_t graph_msg = GenerateLcmGraphMsg();
+	lcm_->publish("quad/quad_planner_graph", &graph_msg);
 }
 
 void QuadPathRepair::SetStartMapPosition(Position2D pos)
@@ -174,17 +185,6 @@ std::vector<uint64_t> QuadPathRepair::SearchForGlobalPathID()
 	return waypoints;
 }
 
-void QuadPathRepair::SetRealWorldSize(double x, double y)
-{
-	qtree_planner_.map_.info.SetWorldSize(x, y);
-	sgrid_planner_.map_.info.SetWorldSize(x, y);
-
-	world_size_set_ = true;
-
-	srcl_msgs::Graph_t graph_msg = GenerateLcmGraphMsg();
-	lcm_->publish("quad/quad_planner_graph", &graph_msg);
-}
-
 cv::Mat QuadPathRepair::GetActiveMap()
 {
 	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
@@ -242,6 +242,8 @@ void QuadPathRepair::LcmTransformHandler(
 	if(auto_update_pos_)
 	{
 		SetStartRefWorldPosition(rpos);
+		gcombiner_.UpdateFlightHeight(Position3Dd(msg->base_to_world.position[0],msg->base_to_world.position[1],msg->base_to_world.position[2]),
+				Eigen::Quaterniond(msg->base_to_world.quaternion[0] , msg->base_to_world.quaternion[1] , msg->base_to_world.quaternion[2] , msg->base_to_world.quaternion[3]));
 	}
 }
 

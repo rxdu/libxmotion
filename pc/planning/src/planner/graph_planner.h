@@ -140,6 +140,9 @@ public:
 			auto start_vtx = graph_->GetVertexFromID(start_id);
 			auto goal_vtx = graph_->GetVertexFromID(goal_id);
 
+			if(start_vtx == nullptr || goal_vtx == nullptr)
+				return prev_result_;
+
 			prev_result_.clear();
 			prev_result_ = graph_->AStarSearch(start_vtx, goal_vtx);
 			prev_start_id_ = start_id;
