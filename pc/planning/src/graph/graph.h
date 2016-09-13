@@ -134,6 +134,12 @@ private:
 	};
 
 public:
+	/// This function removes all edges and vertices in the graph
+	void ClearGraph()
+	{
+		vertex_map_.clear();
+	}
+
 	/// This function is used to create a graph by adding edges connecting two nodes
 	void AddEdge(BundledStructType src_node, BundledStructType dst_node, double cost)
 	{

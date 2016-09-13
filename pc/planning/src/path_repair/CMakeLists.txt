@@ -19,3 +19,6 @@ target_link_libraries(quadsim_pr_planner map path_repair ${OpenCV_LIBS} ${LCM_LI
 
 add_executable(graph_combiner graph_combiner.cpp)
 target_link_libraries(graph_combiner map local3d utils ${Octomap_LIBS} ${LCM_LIBRARIES})
+
+add_executable(test_combiner test_combiner.cpp)
+target_link_libraries(test_combiner map geometry local3d utils ${Octomap_LIBS} ${LCM_LIBRARIES})
