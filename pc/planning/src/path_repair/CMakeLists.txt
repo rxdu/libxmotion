@@ -11,7 +11,7 @@ set(PATH_REPAIR_LIB_SRC
     quad_path_repair.cpp
 )
 add_library(path_repair STATIC ${PATH_REPAIR_LIB_SRC})
-target_link_libraries(path_repair map planner ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(path_repair map local3d planner utils ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 # Add executables
 add_executable(quadsim_pr_planner quadsim_planner.cpp)

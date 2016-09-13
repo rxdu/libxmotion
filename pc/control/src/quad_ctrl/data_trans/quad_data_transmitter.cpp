@@ -80,7 +80,7 @@ void QuadDataTransmitter::SendQuadTransform(Point3f pos, Eigen::Quaterniond quat
 //			<< quat.y() << " , "
 //			<< quat.z() << std::endl;
 
-	lcm_->publish("vis_data_quad_transform", &trans_msg);
+	lcm_->publish("quad_data/quad_transform", &trans_msg);
 }
 
 void QuadDataTransmitter::SendLaserPoints(const std::vector<Point3f>& pts)
@@ -107,7 +107,7 @@ void QuadDataTransmitter::SendLaserPoints(const std::vector<Point3f>& pts)
 //	std::cout << "--------" << std::endl;
 //	}
 
-	lcm_->publish("vis_data_laser_scan_points", &pts_msg);
+	lcm_->publish("quad_data/laser_scan_points", &pts_msg);
 
 //	std::cout << "points sent" << std::endl;
 }

@@ -90,11 +90,14 @@ public:
 		}
 	};
 
-	void CombineBaseWithCubeArrayGraph(std::shared_ptr<CubeArray> ca, std::shared_ptr<Graph<CubeCell&>> cg)
+	bool CombineBaseWithCubeArrayGraph(std::shared_ptr<CubeArray> ca, std::shared_ptr<Graph<CubeCell&>> cg)
 	{
 		combined_graph_.ClearGraph();
-		for(auto& edge : combined_graph_base_.GetGraphEdges())
+		for(auto& edge : combined_graph_base_.GetGraphEdges()) {
+			edge.src_->bundled_data_.position.z = pos_.z;
+			edge.dst_->bundled_data_.position.z = pos_.z;
 			combined_graph_.AddEdge(edge.src_->bundled_data_, edge.dst_->bundled_data_, edge.cost_);
+		}
 
 		GeoMark mark1, mark2;
 		for(auto& edge:cg->GetGraphEdges())
@@ -119,6 +122,10 @@ public:
 
 		Position2D map2d_start_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(pos_.x,pos_.y), base_map_info_);
 		uint64_t map2d_start_id = base_ds_->GetIDFromPosition(map2d_start_pos.x, map2d_start_pos.y);
+
+		if(base_graph_->GetVertexFromID(map2d_start_id) == nullptr)
+			return false;
+
 		uint64_t geo_start_id = base_graph_->GetVertexFromID(map2d_start_id)->bundled_data_->geo_mark_id_;
 		map2d_start_mark = combined_graph_.GetVertexFromID(geo_start_id)->bundled_data_;
 
@@ -167,6 +174,8 @@ public:
 					std::pow(mark3d.position.z - mark2d.position.z, 2));
 			combined_graph_.AddEdge(mark3d, mark2d, cost);
 		}
+
+		return true;
 	}
 };
 }

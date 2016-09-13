@@ -28,7 +28,7 @@ QuadSimController::QuadSimController():
 	else {
 		lcm_->subscribe("quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server_);
 
-		vis_trans_ = std::make_shared<QuadDataTransmitter>(lcm_);
+		data_trans_ = std::make_shared<QuadDataTransmitter>(lcm_);
 	}
 }
 
@@ -67,7 +67,7 @@ void QuadSimController::UpdateRobotState(QuadDataFromSim* data)
 	rs_.UpdateRobotState(*data);
 
 	if(send_to_ros_)
-		vis_trans_->SendRobotStateDataToROS(rs_);
+		data_trans_->SendQuadStateData(rs_);
 }
 
 QuadCmd QuadSimController::UpdateCtrlLoop()

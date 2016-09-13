@@ -46,7 +46,7 @@ private:
 	MotionServer motion_server_;
 
 	bool send_to_ros_;
-	std::shared_ptr<QuadDataTransmitter> vis_trans_;
+	std::shared_ptr<QuadDataTransmitter> data_trans_;
 
 public:
 	virtual QuadDataToSim ConvertRobotCmdToSimCmd(const QuadCmd& cmd);

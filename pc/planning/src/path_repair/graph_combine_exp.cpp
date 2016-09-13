@@ -234,7 +234,7 @@ int main(int argc, char* argv[])
 		graph_msg.edges.push_back(edge);
 	}
 
-	//lcm->publish("quad/cube_graph", &graph_msg);
+	//lcm->publish("quad_planner/cube_graph", &graph_msg);
 
 	srcl_msgs::Graph_t graph_msg2;
 
@@ -261,7 +261,7 @@ int main(int argc, char* argv[])
 		graph_msg2.edges.push_back(edge);
 	}
 
-	//lcm->publish("quad/quad_planner_graph", &graph_msg2);
+	//lcm->publish("quad_planner/quad_planner_graph", &graph_msg2);
 
 	//////////////////////////////////////////////////////
 	srcl_msgs::Path_t path_msg;
@@ -276,7 +276,7 @@ int main(int argc, char* argv[])
 
 		path_msg.waypoints.push_back(waypoint);
 	}
-	lcm->publish("quad/geo_mark_graph_path", &path_msg);
+	lcm->publish("quad_planner/geo_mark_graph_path", &path_msg);
 
 	srcl_msgs::Graph_t graph_msg3;
 
@@ -303,7 +303,7 @@ int main(int argc, char* argv[])
 		graph_msg3.edges.push_back(edge);
 	}
 
-	lcm->publish("quad/cube_graph", &graph_msg3);
+	lcm->publish("quad_planner/cube_graph", &graph_msg3);
 }
 
 

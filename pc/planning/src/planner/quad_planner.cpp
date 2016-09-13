@@ -35,7 +35,7 @@ QuadPlanner::QuadPlanner(std::shared_ptr<lcm::LCM> lcm):
 	if(!lcm_->good())
 		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
 	else {
-		lcm_->subscribe("vis_data_quad_transform",&QuadPlanner::LcmTransformHandler, this);
+		lcm_->subscribe("quad_data/quad_transform",&QuadPlanner::LcmTransformHandler, this);
 	}
 }
 

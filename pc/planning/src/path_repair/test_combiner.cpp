@@ -121,7 +121,7 @@ int main(int argc, char* argv[])
 		graph_msg3.edges.push_back(edge);
 	}
 
-	lcm->publish("quad/cube_graph", &graph_msg3);
+	lcm->publish("quad_planner/cube_graph", &graph_msg3);
 
 	srcl_msgs::Path_t path_msg;
 
@@ -136,7 +136,7 @@ int main(int argc, char* argv[])
 		path_msg.waypoints.push_back(waypoint);
 	}
 
-	lcm->publish("quad/geo_mark_graph_path", &path_msg);
+	lcm->publish("quad_planner/geo_mark_graph_path", &path_msg);
 
 	return 0;
 }

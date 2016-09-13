@@ -9,22 +9,15 @@
 
 #include "path_repair/quad_path_repair.h"
 #include "map/map_utils.h"
+#include "geometry/cube_array/cube_array.h"
+#include "geometry/cube_array_builder.h"
+#include "geometry/graph_builder.h"
 
 using namespace srcl_ctrl;
 
-QuadPathRepair::QuadPathRepair():
-		active_graph_planner_(GraphPlannerType::NOT_SPECIFIED),
-		gstart_set_(false),
-		ggoal_set_(false),
-		world_size_set_(false),
-		auto_update_pos_(true),
-		update_global_plan_(false)
-{
-
-}
-
 QuadPathRepair::QuadPathRepair(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
+		octomap_server_(OctomapServer(lcm_)),
 		active_graph_planner_(GraphPlannerType::NOT_SPECIFIED),
 		gstart_set_(false),
 		ggoal_set_(false),
@@ -35,7 +28,8 @@ QuadPathRepair::QuadPathRepair(std::shared_ptr<lcm::LCM> lcm):
 	if(!lcm_->good())
 		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
 	else {
-		lcm_->subscribe("vis_data_quad_transform",&QuadPathRepair::LcmTransformHandler, this);
+		lcm_->subscribe("quad_data/quad_transform",&QuadPathRepair::LcmTransformHandler, this);
+		lcm_->subscribe("quad_planner/new_octomap_ready",&QuadPathRepair::LcmOctomapHandler, this);
 	}
 }
 
@@ -46,10 +40,6 @@ QuadPathRepair::~QuadPathRepair()
 
 void QuadPathRepair::ConfigGraphPlanner(MapConfig config, double world_size_x, double world_size_y)
 {
-	qtree_planner_.map_.info.SetWorldSize(world_size_x, world_size_y);
-	sgrid_planner_.map_.info.SetWorldSize(world_size_x, world_size_y);
-	world_size_set_ = true;
-
 	if(config.GetMapType().data_model == MapDataModel::QUAD_TREE)
 	{
 		bool result = qtree_planner_.UpdateMapConfig(config);
@@ -70,13 +60,19 @@ void QuadPathRepair::ConfigGraphPlanner(MapConfig config, double world_size_x, d
 		{
 			std::cout << "square grid planner activated" << std::endl;
 			active_graph_planner_ = GraphPlannerType::SQUAREGRID_PLANNER;
-
-			gcombiner_.SetBaseGraph(sgrid_planner_.graph_, sgrid_planner_.map_.data_model, sgrid_planner_.map_.data_model->cells_.size(), sgrid_planner_.map_.info);
 		}
 	}
 
+	// the world size must be set after the planner is updated, otherwise the configuration will be override
+	qtree_planner_.map_.info.SetWorldSize(world_size_x, world_size_y);
+	sgrid_planner_.map_.info.SetWorldSize(world_size_x, world_size_y);
+	world_size_set_ = true;
+
+	if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
+		gcombiner_.SetBaseGraph(sgrid_planner_.graph_, sgrid_planner_.map_.data_model, sgrid_planner_.map_.data_model->cells_.size(), sgrid_planner_.map_.info);
+
 	srcl_msgs::Graph_t graph_msg = GenerateLcmGraphMsg();
-	lcm_->publish("quad/quad_planner_graph", &graph_msg);
+	lcm_->publish("quad_planner/quad_planner_graph", &graph_msg);
 }
 
 void QuadPathRepair::SetStartMapPosition(Position2D pos)
@@ -153,7 +149,7 @@ std::vector<Position2D> QuadPathRepair::SearchForGlobalPath()
 	}
 
 	srcl_msgs::Path_t path_msg = GenerateLcmPathMsg(waypoints);
-	lcm_->publish("quad/quad_planner_graph_path", &path_msg);
+	lcm_->publish("quad_planner/quad_planner_graph_path", &path_msg);
 
 	update_global_plan_ = false;
 
@@ -240,11 +236,85 @@ void QuadPathRepair::LcmTransformHandler(
 //				<< mpos.y << std::endl;
 
 	if(auto_update_pos_)
-	{
 		SetStartRefWorldPosition(rpos);
-		gcombiner_.UpdateFlightHeight(Position3Dd(msg->base_to_world.position[0],msg->base_to_world.position[1],msg->base_to_world.position[2]),
-				Eigen::Quaterniond(msg->base_to_world.quaternion[0] , msg->base_to_world.quaternion[1] , msg->base_to_world.quaternion[2] , msg->base_to_world.quaternion[3]));
+
+	gcombiner_.UpdateFlightHeight(Position3Dd(msg->base_to_world.position[0],msg->base_to_world.position[1],msg->base_to_world.position[2]),
+					Eigen::Quaterniond(msg->base_to_world.quaternion[0] , msg->base_to_world.quaternion[1] , msg->base_to_world.quaternion[2] , msg->base_to_world.quaternion[3]));
+}
+
+void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::NewDataReady_t* msg)
+{
+	static int count = 0;
+	std::cout << " test reading: " << octomap_server_.octree_->getResolution() << std::endl;
+
+	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
+	std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
+
+	bool combine_success = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);
+
+	if(!combine_success)
+		return;
+
+	uint64_t map_start_id = sgrid_planner_.map_.data_model->GetIDFromPosition(start_pos_.x, start_pos_.y);
+	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);;
+
+	uint64_t geo_start_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_start_id)->bundled_data_->geo_mark_id_;
+	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
+
+//	exec_time = clock();
+	auto comb_path = gcombiner_.combined_graph_.AStarSearch(geo_start_id_astar, geo_goal_id_astar);
+//	exec_time = clock() - exec_time;
+//	std::cout << "Search finished in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
+
+	std::vector<Position3Dd> comb_path_pos;
+	for(auto& wp:comb_path)
+		comb_path_pos.push_back(wp->bundled_data_.position);
+
+	if(count++ == 20)
+	{
+		count = 0;
+		srcl_msgs::Graph_t graph_msg;
+
+		graph_msg.vertex_num = gcombiner_.combined_graph_.GetGraphVertices().size();
+		for(auto& vtx : gcombiner_.combined_graph_.GetGraphVertices())
+		{
+			srcl_msgs::Vertex_t vertex;
+			vertex.id = vtx->vertex_id_;
+
+			vertex.position[0] = vtx->bundled_data_.position.x;
+			vertex.position[1] = vtx->bundled_data_.position.y;
+			vertex.position[2] = vtx->bundled_data_.position.z;
+
+			graph_msg.vertices.push_back(vertex);
+		}
+
+		graph_msg.edge_num = gcombiner_.combined_graph_.GetGraphUndirectedEdges().size();
+		for(auto& eg : gcombiner_.combined_graph_.GetGraphUndirectedEdges())
+		{
+			srcl_msgs::Edge_t edge;
+			edge.id_start = eg.src_->vertex_id_;
+			edge.id_end = eg.dst_->vertex_id_;
+
+			graph_msg.edges.push_back(edge);
+		}
+
+		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
 	}
+
+	srcl_msgs::Path_t path_msg;
+
+	path_msg.waypoint_num = comb_path.size();
+	for(auto& wp : comb_path_pos)
+	{
+		srcl_msgs::WayPoint_t waypoint;
+		waypoint.positions[0] = wp.x;
+		waypoint.positions[1] = wp.y;
+		waypoint.positions[2] = wp.z;
+
+		path_msg.waypoints.push_back(waypoint);
+	}
+
+	lcm_->publish("quad_planner/geo_mark_graph_path", &path_msg);
 }
 
 template<typename PlannerType>

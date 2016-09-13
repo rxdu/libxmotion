@@ -20,12 +20,12 @@
 #include "map/map_info.h"
 #include "path_repair/geo_mark.h"
 #include "path_repair/graph_combiner.h"
+#include "local3d/octomap_server.h"
 
 namespace srcl_ctrl {
 
 class QuadPathRepair{
 public:
-	QuadPathRepair();
 	QuadPathRepair(std::shared_ptr<lcm::LCM> lcm);
 	~QuadPathRepair();
 
@@ -37,6 +37,7 @@ private:
 	GraphPlanner<QuadTree> qtree_planner_;
 	GraphPlanner<SquareGrid> sgrid_planner_;
 	GraphCombiner<SquareCell*, SquareGrid> gcombiner_;
+	OctomapServer octomap_server_;
 
 	// planning parameters
 	Position2D start_pos_;
@@ -76,6 +77,7 @@ public:
 
 	// lcm
 	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::QuadrotorTransform* msg);
+	void LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::NewDataReady_t* msg);
 
 	// helper functions
 	cv::Mat GetActiveMap();

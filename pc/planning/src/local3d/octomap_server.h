@@ -35,6 +35,9 @@ private:
 	std::string save_tree_name_;
 
 public:
+	std::shared_ptr<octomap::OcTree> octree_;
+
+public:
 	void LcmLaserScanPointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::LaserScanPoints_t* msg);
 	void SetOctreeResolution(double new_res) { octree_res_ = new_res; };
 	double GetOctreeResolution() { return octree_res_; };

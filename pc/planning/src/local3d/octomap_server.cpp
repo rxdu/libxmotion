@@ -22,7 +22,7 @@ OctomapServer::OctomapServer(std::shared_ptr<lcm::LCM> lcm):
 		loop_count_(0),
 		save_tree_name_("saved_octree.bt")
 {
-	lcm_->subscribe("vis_data_laser_scan_points",&OctomapServer::LcmLaserScanPointsHandler, this);
+	lcm_->subscribe("quad_data/laser_scan_points",&OctomapServer::LcmLaserScanPointsHandler, this);
 }
 
 OctomapServer::~OctomapServer()
@@ -80,42 +80,52 @@ void OctomapServer::LcmLaserScanPointsHandler(
 		octomap_msg.data_size = octomap_msg.data.size();
 	}
 
-	lcm_->publish("hummingbird_laser_octomap", &octomap_msg);
-
-	if(loop_count_ > 15)
+	if(loop_count_ % 20)
 	{
-		std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octree);
-		std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
+		octree_ = octree;
 
-		srcl_msgs::Graph_t graph_msg;
+		srcl_msgs::NewDataReady_t notice_msg;
+		notice_msg.new_data_ready_ = 1;
+		lcm_->publish("quad_planner/new_octomap_ready", &notice_msg);
 
-		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
-		for(auto& vtx : cubegraph->GetGraphVertices())
-		{
-			srcl_msgs::Vertex_t vertex;
-			vertex.id = vtx->vertex_id_;
-
-			vertex.position[0] = vtx->bundled_data_.location_.x;
-			vertex.position[1] = vtx->bundled_data_.location_.y;
-			vertex.position[2] = vtx->bundled_data_.location_.z;
-
-			if(vtx->bundled_data_.occu_ != OccupancyType::OCCUPIED)
-				graph_msg.vertices.push_back(vertex);
-		}
-
-		graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
-		for(auto& eg : cubegraph->GetGraphUndirectedEdges())
-		{
-			srcl_msgs::Edge_t edge;
-			edge.id_start = eg.src_->vertex_id_;
-			edge.id_end = eg.dst_->vertex_id_;
-
-			graph_msg.edges.push_back(edge);
-		}
-
-		lcm_->publish("quad/cube_graph", &graph_msg);
-		loop_count_ = 0;
+		lcm_->publish("quad_planner/hummingbird_laser_octomap", &octomap_msg);
 	}
+
+//	// %10 : 10ms * 10 - 10 Hz update rate
+//	if(loop_count_ % 100)
+//	{
+//		std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octree);
+//		std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
+//
+//		srcl_msgs::Graph_t graph_msg;
+//
+//		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
+//		for(auto& vtx : cubegraph->GetGraphVertices())
+//		{
+//			srcl_msgs::Vertex_t vertex;
+//			vertex.id = vtx->vertex_id_;
+//
+//			vertex.position[0] = vtx->bundled_data_.location_.x;
+//			vertex.position[1] = vtx->bundled_data_.location_.y;
+//			vertex.position[2] = vtx->bundled_data_.location_.z;
+//
+//			if(vtx->bundled_data_.occu_ != OccupancyType::OCCUPIED)
+//				graph_msg.vertices.push_back(vertex);
+//		}
+//
+//		graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
+//		for(auto& eg : cubegraph->GetGraphUndirectedEdges())
+//		{
+//			srcl_msgs::Edge_t edge;
+//			edge.id_start = eg.src_->vertex_id_;
+//			edge.id_end = eg.dst_->vertex_id_;
+//
+//			graph_msg.edges.push_back(edge);
+//		}
+//
+//		lcm_->publish("quad_planner/cube_graph", &graph_msg);
+//		loop_count_ = 0;
+//	}
 
 	if(save_tree_)
 	{

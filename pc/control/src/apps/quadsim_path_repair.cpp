@@ -22,7 +22,7 @@ int main(int arc, char* argv[])
 
 	// set quadrotor init pose
 //	controller->SetInitPose(-1.8,1,0.5,-M_PI/4);
-	controller->SetInitPose(-1.8,0.6,0.8,-M_PI/4);
+	controller->SetInitPose(-1.8,0.6,1.0,0);
 	controller->SendRobotStateToROS(true);
 
 	// create a simulation process
