@@ -80,7 +80,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 		octomap_msg.data_size = octomap_msg.data.size();
 	}
 
-	if(loop_count_ % 20)
+	if(loop_count_ % 10 == 0)
 	{
 		octree_ = octree;
 
