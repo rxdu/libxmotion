@@ -21,11 +21,11 @@ add_library(path_repair STATIC ${PATH_REPAIR_LIB_SRC})
 target_link_libraries(path_repair map local3d planner utils polyopt quadflat ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 # Add executables
-add_executable(quadsim_pr_planner quadsim_planner.cpp)
-target_link_libraries(quadsim_pr_planner map path_repair ${OpenCV_LIBS} ${LCM_LIBRARIES})
-
-add_executable(graph_combine_exp graph_combine_exp.cpp)
+add_executable(graph_combine_exp tests/graph_combine_exp.cpp)
 target_link_libraries(graph_combine_exp map local3d utils ${Octomap_LIBS} ${LCM_LIBRARIES})
 
-add_executable(test_combiner test_combiner.cpp)
+add_executable(test_combiner tests/test_combiner.cpp)
 target_link_libraries(test_combiner map geometry local3d utils ${Octomap_LIBS} ${LCM_LIBRARIES})
+
+add_executable(test_cubearray tests/test_cubearray.cpp)
+target_link_libraries(test_cubearray geometry)

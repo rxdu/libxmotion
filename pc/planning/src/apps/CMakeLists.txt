@@ -5,39 +5,15 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 
 # Dependency libraries
 find_package(OpenCV REQUIRED)
+find_package(GUROBI)
 
 # Add executables
-## applications
-#add_executable(quadsim_planner quadsim_planner.cpp)
-#target_link_libraries(quadsim_planner map planner ${OpenCV_LIBS} ${LCM_LIBRARIES})
+if (NOT GUROBI_FOUND)
+  message("Gurobi not found. If you want to use Gurobi, set the GUROBI_HOME variable")
+else()
+  add_executable(quadsim_pr_planner quadsim_planner.cpp)
+  target_link_libraries(quadsim_pr_planner map path_repair ${OpenCV_LIBS} ${LCM_LIBRARIES})
+endif()
 
-## tests
-add_executable(graph_example graph_example.cpp)
-target_link_libraries(graph_example vis map geometry ${OpenCV_LIBS})
 
-add_executable(simple_graph simple_graph.cpp)
-#target_link_libraries(simple_graph )
 
-add_executable(test_qtree test_quadtree.cpp)
-target_link_libraries(test_qtree geometry vis map ${OpenCV_LIBS})
-
-add_executable(test_sgrid test_squaregrid.cpp)
-target_link_libraries(test_sgrid geometry vis map ${OpenCV_LIBS})
-
-add_executable(test_graphvis test_graphvis.cpp)
-target_link_libraries(test_graphvis geometry vis map ${OpenCV_LIBS})
-
-add_executable(test_image test_image.cpp)
-target_link_libraries(test_image vis ${OpenCV_LIBS})
-
-add_executable(test_traj test_traj.cpp)
-target_link_libraries(test_traj map vis ${OpenCV_LIBS})
-
-add_executable(test_rrtvis test_rrtvis.cpp)
-target_link_libraries(test_rrtvis map vis planner ${OpenCV_LIBS})
-
-add_executable(test_planner test_planner.cpp)
-target_link_libraries(test_planner map vis planner ${OpenCV_LIBS})
-
-add_executable(test_cubearray test_cubearray.cpp)
-target_link_libraries(test_cubearray geometry)

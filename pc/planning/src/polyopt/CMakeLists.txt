@@ -16,9 +16,6 @@ set(POLYOPT_LIB_SRC
     gurobi_utils.cpp
     traj_optimizer.cpp
     polytraj_curve.cpp
-    # quadrotor
-    #quad_flattraj.cpp
-    #quad_polyopt.cpp
 )
 add_library(polyopt STATIC ${POLYOPT_LIB_SRC})
 target_link_libraries(polyopt ${GUROBI_LIBRARIES})
@@ -41,9 +38,3 @@ target_link_libraries(test_qp3 polyopt ${GUROBI_LIBRARIES})
 
 add_executable(test_opt tests/test_opt.cpp)
 target_link_libraries(test_opt polyopt ${GUROBI_LIBRARIES})
-
-#add_executable(test_trajdef tests/test_trajdef.cpp)
-#target_link_libraries(test_trajdef polyopt ${GUROBI_LIBRARIES})
-
-#add_executable(test_quadopt test_quadopt.cpp)
-#target_link_libraries(test_quadopt polyopt ${GUROBI_LIBRARIES})

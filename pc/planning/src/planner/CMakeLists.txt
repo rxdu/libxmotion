@@ -17,8 +17,14 @@ add_library(planner STATIC ${PLANNER_LIB_SRC})
 target_link_libraries(planner geometry map ompl rrtstarkd ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 # Add executables
-add_executable(test_local test_local.cpp)
+add_executable(test_local tests/test_local.cpp)
 target_link_libraries(test_local planner)
 
-add_executable(test_global test_global.cpp)
+add_executable(test_global tests/test_global.cpp)
 target_link_libraries(test_global map planner geometry)
+
+add_executable(test_rrtvis tests/test_rrtvis.cpp)
+target_link_libraries(test_rrtvis map vis planner ${OpenCV_LIBS})
+
+add_executable(test_planner tests/test_planner.cpp)
+target_link_libraries(test_planner map vis planner ${OpenCV_LIBS})

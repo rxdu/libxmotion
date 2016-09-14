@@ -15,5 +15,17 @@ add_library(map STATIC ${MAP_LIB_SRC})
 target_link_libraries(map geometry ${OpenCV_LIBS})
 
 # Add executables
-#add_executable(octomap_server_node octomap_server_node.cpp)
-#target_link_libraries(octomap_server_node octomap_utils ${Octomap_LIBS} ${LCM_LIBRARIES})
+add_executable(test_qtree tests/test_quadtree.cpp)
+target_link_libraries(test_qtree geometry vis map ${OpenCV_LIBS})
+
+add_executable(test_sgrid tests/test_squaregrid.cpp)
+target_link_libraries(test_sgrid geometry vis map ${OpenCV_LIBS})
+
+add_executable(test_graphvis tests/test_graphvis.cpp)
+target_link_libraries(test_graphvis geometry vis map ${OpenCV_LIBS})
+
+add_executable(test_image tests/test_image.cpp)
+target_link_libraries(test_image vis ${OpenCV_LIBS})
+
+add_executable(test_traj tests/test_traj.cpp)
+target_link_libraries(test_traj map vis ${OpenCV_LIBS})
