@@ -92,6 +92,7 @@ public:
 
 	bool CombineBaseWithCubeArrayGraph(std::shared_ptr<CubeArray> ca, std::shared_ptr<Graph<CubeCell&>> cg)
 	{
+		// TODO possible improvement: only erase newly added vertices in the last iteration
 		combined_graph_.ClearGraph();
 		for(auto& edge : combined_graph_base_.GetGraphEdges()) {
 			edge.src_->bundled_data_.position.z = pos_.z;
