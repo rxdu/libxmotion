@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "polyopt/quad_flattraj.h"
+#include "quad_flat/quad_flattraj.h"
 
 using namespace srcl_ctrl;
 

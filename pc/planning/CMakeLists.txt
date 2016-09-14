@@ -32,6 +32,7 @@ add_subdirectory(src/planner)
 add_subdirectory(src/path_repair)
 add_subdirectory(src/apps)
 add_subdirectory(src/polyopt)
+add_subdirectory(src/quad_flat)
 
 if(BUILD_TESTS)
     add_subdirectory(src/gtests)

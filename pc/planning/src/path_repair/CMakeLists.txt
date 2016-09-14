@@ -5,13 +5,20 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Dependency libraries
 find_package(OpenCV REQUIRED)
+find_package(GUROBI REQUIRED)
+if (NOT GUROBI_FOUND)
+  message("Gurobi not found. If you want to use Gurobi, set the GUROBI_HOME variable")
+else()
+  message("Gurobi found")
+  include_directories(${GUROBI_INCLUDE_DIRS})
+endif()
 
 # Add libraries
 set(PATH_REPAIR_LIB_SRC
     quad_path_repair.cpp
 )
 add_library(path_repair STATIC ${PATH_REPAIR_LIB_SRC})
-target_link_libraries(path_repair map local3d planner utils ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(path_repair map local3d planner utils polyopt quadflat ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 # Add executables
 add_executable(quadsim_pr_planner quadsim_planner.cpp)

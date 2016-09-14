@@ -10,7 +10,7 @@
 
 #include "eigen3/Eigen/Core"
 
-#include "polyopt/quad_polyopt.h"
+#include "quad_flat/quad_polyopt.h"
 
 using namespace srcl_ctrl;
 using namespace Eigen;
@@ -61,7 +61,36 @@ int main(int argc, char* argv[])
 	keyframe_ts(0,3) = 4.5;
 
 	QuadPolyOpt opt;
-	opt.OptimizeFlatTraj(keyframe_x_vals, keyframe_y_vals, keyframe_z_vals, keyframe_yaw_vals, keyframe_ts, kf_num);
+	//opt.OptimizeFlatTraj(keyframe_x_vals, keyframe_y_vals, keyframe_z_vals, keyframe_yaw_vals, keyframe_ts, kf_num);
+
+	opt.InitOptMatrices(kf_num);
+	opt.keyframe_x_vals_(0,0) = -0.15;
+	opt.keyframe_x_vals_(0,1) = 0.25;
+	opt.keyframe_x_vals_(0,2) = 0.3;
+	opt.keyframe_x_vals_(0,3) = 0.35;
+
+	opt.keyframe_y_vals_(0,0) = -0.2;
+	opt.keyframe_y_vals_(0,1) = 0.3;
+	opt.keyframe_y_vals_(0,2) = 0.35;
+	opt.keyframe_y_vals_(0,3) = 0.45;
+
+	opt.keyframe_z_vals_(0,0) = -0.0;
+	opt.keyframe_z_vals_(0,1) = 0.15;
+	opt.keyframe_z_vals_(0,2) = 0.2;
+	opt.keyframe_z_vals_(0,3) = 0.15;
+
+	opt.keyframe_yaw_vals_(0,0) = 0;
+	opt.keyframe_yaw_vals_(0,1) = M_PI/18.0;
+	opt.keyframe_yaw_vals_(0,2) = M_PI/18.0*1.5;
+	opt.keyframe_yaw_vals_(0,3) = M_PI/18.0*2.0;
+
+	opt.keyframe_ts_(0,0) = 0;
+	opt.keyframe_ts_(0,1) = 1.2;
+	opt.keyframe_ts_(0,2) = 3;
+	opt.keyframe_ts_(0,3) = 4.5;
+
+	opt.OptimizeFlatTraj();
+
 	opt.flat_traj_.print();
 }
 

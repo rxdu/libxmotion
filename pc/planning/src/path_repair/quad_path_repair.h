@@ -21,6 +21,7 @@
 #include "path_repair/geo_mark.h"
 #include "path_repair/graph_combiner.h"
 #include "local3d/octomap_server.h"
+#include "quad_flat/quad_polyopt.h"
 
 namespace srcl_ctrl {
 
@@ -38,6 +39,9 @@ private:
 	GraphPlanner<SquareGrid> sgrid_planner_;
 	GraphCombiner<SquareCell*, SquareGrid> gcombiner_;
 	OctomapServer octomap_server_;
+
+	// trajectory optimization
+	QuadPolyOpt traj_opt_;
 
 	// planning parameters
 	Position2D start_pos_;

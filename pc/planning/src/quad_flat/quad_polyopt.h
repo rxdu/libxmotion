@@ -16,7 +16,7 @@
 #include "gurobi_c++.h"
 #include "eigen3/Eigen/Core"
 
-#include "polyopt/quad_flattraj.h"
+#include "quad_flat/quad_flattraj.h"
 #include "polyopt/traj_optimizer.h"
 
 namespace srcl_ctrl {
@@ -35,12 +35,27 @@ private:
 	const uint32_t r_yaw_;
 	uint32_t N_yaw_;
 
+	uint32_t keyframe_num_;
+
 	TrajOptResult traj_[4];
 
 public:
+	Eigen::MatrixXf keyframe_x_vals_;
+	Eigen::MatrixXf keyframe_y_vals_;
+	Eigen::MatrixXf keyframe_z_vals_;
+	Eigen::MatrixXf keyframe_yaw_vals_;
+	Eigen::MatrixXf keyframe_ts_;
+
 	QuadFlatTraj flat_traj_;
 
+	void SetPositionPolynomialOrder(uint32_t N) { N_pos_ = N; };
+	uint32_t GetPositionPolynomialOrder() { return N_pos_; };
+	void SetYawPolynomialOrder(uint32_t N) { N_yaw_ = N; };
+	uint32_t GetYawPolynomialOrder() { return N_yaw_; };
+
 public:
+	void InitOptMatrices(uint32_t keyframe_num);
+	void OptimizeFlatTraj();
 	void OptimizeFlatTraj(const Eigen::Ref<const Eigen::MatrixXf> keyframe_x_vals,
 			const Eigen::Ref<const Eigen::MatrixXf> keyframe_y_vals,
 			const Eigen::Ref<const Eigen::MatrixXf> keyframe_z_vals,
