@@ -69,6 +69,7 @@ int main(int argc, char* argv[])
 	//opt.OptimizeFlatTraj(keyframe_x_vals, keyframe_y_vals, keyframe_z_vals, keyframe_yaw_vals, keyframe_ts, kf_num);
 
 	opt.InitOptMatrices(kf_num);
+
 	// position
 	opt.keyframe_x_vals_(0,0) = 0;
 	opt.keyframe_x_vals_(0,1) = 0.5;
@@ -82,30 +83,30 @@ int main(int argc, char* argv[])
 
 	opt.keyframe_z_vals_(0,0) = 0;
 	opt.keyframe_z_vals_(0,1) = 0.2;
-	opt.keyframe_z_vals_(0,2) = 0.35;
-	opt.keyframe_z_vals_(0,3) = 0.6;
+	opt.keyframe_z_vals_(0,2) = 0.65;
+	opt.keyframe_z_vals_(0,3) = 1.0;
 
 	// velocity
 	opt.keyframe_x_vals_(1,0) = 0;
-	opt.keyframe_x_vals_(1,1) = 0.5;
-	opt.keyframe_x_vals_(1,2) = 0.3;
+	opt.keyframe_x_vals_(1,1) = std::numeric_limits<float>::infinity();
+	opt.keyframe_x_vals_(1,2) = std::numeric_limits<float>::infinity();
 	opt.keyframe_x_vals_(1,3) = 0.2;
 
 	opt.keyframe_y_vals_(1,0) = 0;
-	opt.keyframe_y_vals_(1,1) = 0.1;
-	opt.keyframe_y_vals_(1,2) = 0.2;
+	opt.keyframe_y_vals_(1,1) = std::numeric_limits<float>::infinity();
+	opt.keyframe_y_vals_(1,2) = std::numeric_limits<float>::infinity();
 	opt.keyframe_y_vals_(1,3) = 0.15;
 
 	opt.keyframe_z_vals_(1,0) = 0;
-	opt.keyframe_z_vals_(1,1) = 0.3;
+	opt.keyframe_z_vals_(1,1) = 0.1;
 	opt.keyframe_z_vals_(1,2) = 0.2;
 	opt.keyframe_z_vals_(1,3) = 0.3;
 
 	// yaw
 	opt.keyframe_yaw_vals_(0,0) = 0;
-	opt.keyframe_yaw_vals_(0,1) = M_PI/18.0;
-	opt.keyframe_yaw_vals_(0,2) = M_PI/18.0*1.5;
-	opt.keyframe_yaw_vals_(0,3) = M_PI/18.0*2.0;
+	opt.keyframe_yaw_vals_(0,1) = 0;//M_PI/18.0;
+	opt.keyframe_yaw_vals_(0,2) = 0;//M_PI/18.0*1.5;
+	opt.keyframe_yaw_vals_(0,3) = 0;//M_PI/18.0*2.0;
 
 	opt.keyframe_ts_(0,0) = 0;
 	opt.keyframe_ts_(0,1) = 1.2;
