@@ -10,6 +10,8 @@
 
 #include <cstdint>
 
+#include "lcmtypes/comm.hpp"
+
 #include "polyopt/polytraj_curve.h"
 
 namespace srcl_ctrl {
@@ -44,13 +46,36 @@ public:
 	QuadFlatTraj();
 	~QuadFlatTraj();
 
-private:
+public:
 	std::vector<QuadFlatOutputSeg> traj_segs_;
 
 public:
 	void AddTrajSeg(const std::vector<std::vector<double>>& seg_coeffs, double ts, double te);
 
 	QuadFlatOutput GetTrajPointPos(double t);
+
+	srcl_msgs::PolynomialCurve_t GenerateNonDimPolyCurveLCMMsg()
+	{
+		srcl_msgs::PolynomialCurve_t msg;
+
+		msg.seg_num = traj_segs_.size();
+		uint32_t seg_idx = 0;
+		for(auto& seg : traj_segs_)
+		{
+			srcl_msgs::PolyCurveSegment_t seg_msg;
+
+			seg_msg.coeffs_x = seg.seg_x.param_.coeffs;
+			seg_msg.coeffs_y = seg.seg_y.param_.coeffs;
+			seg_msg.coeffs_z = seg.seg_z.param_.coeffs;
+
+			seg_msg.t_start = 0;
+			seg_msg.t_end = 1.0;
+
+			msg.segments.push_back(seg_msg);
+		}
+
+		return msg;
+	}
 
 	void clear() { traj_segs_.clear(); };
 	void print();

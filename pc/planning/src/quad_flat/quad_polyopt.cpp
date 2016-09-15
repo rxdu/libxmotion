@@ -69,6 +69,8 @@ void QuadPolyOpt::OptimizeFlatTraj()
 		te = traj_[0].segments[i].te;
 		flat_traj_.AddTrajSeg(segcoeffs, ts, te);
 	}
+
+	std::cout << "Optimization result copied to flat_traj_.\n" << std::endl;
 }
 
 void QuadPolyOpt::OptimizeFlatTraj(const Eigen::Ref<const Eigen::MatrixXf> keyframe_x_vals,
@@ -105,5 +107,7 @@ void QuadPolyOpt::OptimizeFlatTraj(const Eigen::Ref<const Eigen::MatrixXf> keyfr
 		te = traj_[0].segments[i].te;
 		flat_traj_.AddTrajSeg(segcoeffs, ts, te);
 	}
+
+	std::cout << "Optimization result copied to flat_traj_.\n" << std::endl;
 }
 

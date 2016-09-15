@@ -1,0 +1,14 @@
+package srcl_msgs;
+
+struct PolyCurveSegment_t
+{    
+	int64_t coffsize_x;
+	int64_t coffsize_y;
+	int64_t coffsize_z;
+	
+	double coeffs_x[coffsize_x];
+	double coeffs_y[coffsize_y];
+	double coeffs_z[coffsize_z];
+	double   t_start;
+	double   t_end;
+}

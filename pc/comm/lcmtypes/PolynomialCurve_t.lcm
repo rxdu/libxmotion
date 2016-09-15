@@ -1,0 +1,7 @@
+package srcl_msgs;
+
+struct PolynomialCurve_t
+{    
+	int64_t seg_num;
+	PolyCurveSegment_t segments[seg_num];
+}

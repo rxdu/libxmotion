@@ -6,9 +6,14 @@
  */
 
 #include <iostream>
+#include <memory>
 #include <cmath>
 
 #include "eigen3/Eigen/Core"
+
+// headers for lcm
+#include <lcm/lcm-cpp.hpp>
+#include "lcmtypes/comm.hpp"
 
 #include "quad_flat/quad_polyopt.h"
 
@@ -64,21 +69,39 @@ int main(int argc, char* argv[])
 	//opt.OptimizeFlatTraj(keyframe_x_vals, keyframe_y_vals, keyframe_z_vals, keyframe_yaw_vals, keyframe_ts, kf_num);
 
 	opt.InitOptMatrices(kf_num);
-	opt.keyframe_x_vals_(0,0) = -0.15;
-	opt.keyframe_x_vals_(0,1) = 0.25;
-	opt.keyframe_x_vals_(0,2) = 0.3;
-	opt.keyframe_x_vals_(0,3) = 0.35;
+	// position
+	opt.keyframe_x_vals_(0,0) = 0;
+	opt.keyframe_x_vals_(0,1) = 0.5;
+	opt.keyframe_x_vals_(0,2) = 1.2;
+	opt.keyframe_x_vals_(0,3) = 2.5;
 
-	opt.keyframe_y_vals_(0,0) = -0.2;
-	opt.keyframe_y_vals_(0,1) = 0.3;
-	opt.keyframe_y_vals_(0,2) = 0.35;
-	opt.keyframe_y_vals_(0,3) = 0.45;
+	opt.keyframe_y_vals_(0,0) = -1;
+	opt.keyframe_y_vals_(0,1) = -0.2;
+	opt.keyframe_y_vals_(0,2) = 0.5;
+	opt.keyframe_y_vals_(0,3) = 1.2;
 
-	opt.keyframe_z_vals_(0,0) = -0.0;
-	opt.keyframe_z_vals_(0,1) = 0.15;
-	opt.keyframe_z_vals_(0,2) = 0.2;
-	opt.keyframe_z_vals_(0,3) = 0.15;
+	opt.keyframe_z_vals_(0,0) = 0;
+	opt.keyframe_z_vals_(0,1) = 0.2;
+	opt.keyframe_z_vals_(0,2) = 0.35;
+	opt.keyframe_z_vals_(0,3) = 0.6;
 
+	// velocity
+	opt.keyframe_x_vals_(1,0) = 0;
+	opt.keyframe_x_vals_(1,1) = 0.5;
+	opt.keyframe_x_vals_(1,2) = 0.3;
+	opt.keyframe_x_vals_(1,3) = 0.2;
+
+	opt.keyframe_y_vals_(1,0) = 0;
+	opt.keyframe_y_vals_(1,1) = 0.1;
+	opt.keyframe_y_vals_(1,2) = 0.2;
+	opt.keyframe_y_vals_(1,3) = 0.15;
+
+	opt.keyframe_z_vals_(1,0) = 0;
+	opt.keyframe_z_vals_(1,1) = 0.3;
+	opt.keyframe_z_vals_(1,2) = 0.2;
+	opt.keyframe_z_vals_(1,3) = 0.3;
+
+	// yaw
 	opt.keyframe_yaw_vals_(0,0) = 0;
 	opt.keyframe_yaw_vals_(0,1) = M_PI/18.0;
 	opt.keyframe_yaw_vals_(0,2) = M_PI/18.0*1.5;
@@ -91,6 +114,44 @@ int main(int argc, char* argv[])
 
 	opt.OptimizeFlatTraj();
 
-	opt.flat_traj_.print();
+//	opt.flat_traj_.print();
+
+	// send data for visualization
+	std::shared_ptr<lcm::LCM> lcm = std::make_shared<lcm::LCM>();
+
+	if(!lcm->good())
+	{
+		std::cout << "ERROR: Failed to initialize LCM." << std::endl;
+		return -1;
+	}
+
+	srcl_msgs::PolynomialCurve_t poly_msg;
+	//poly_msg = opt.flat_traj_.GenerateNonDimPolyCurveLCMMsg();
+
+	poly_msg.seg_num = opt.flat_traj_.traj_segs_.size();
+	for(auto& seg : opt.flat_traj_.traj_segs_)
+	{
+		srcl_msgs::PolyCurveSegment_t seg_msg;
+
+		seg_msg.coffsize_x = seg.seg_x.param_.coeffs.size();
+		seg_msg.coffsize_y = seg.seg_y.param_.coeffs.size();
+		seg_msg.coffsize_z = seg.seg_z.param_.coeffs.size();
+		for(auto& coeff:seg.seg_x.param_.coeffs)
+			seg_msg.coeffs_x.push_back(coeff);
+		for(auto& coeff:seg.seg_y.param_.coeffs)
+			seg_msg.coeffs_y.push_back(coeff);
+		for(auto& coeff:seg.seg_z.param_.coeffs)
+			seg_msg.coeffs_z.push_back(coeff);
+
+		seg_msg.t_start = 0;
+		seg_msg.t_end = 1.0;
+
+		poly_msg.segments.push_back(seg_msg);
+	}
+
+	lcm->publish("quad_planner/polynomial_curve", &poly_msg);
+
+	std::cout << "traj sent to lcm" << std::endl;
+
 }
 

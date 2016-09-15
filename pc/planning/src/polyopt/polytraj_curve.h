@@ -31,13 +31,12 @@ public:
 private:
 	bool is_nondim_;
 
+public:
 	CurveParameter param_;
-
 	std::string name_;
 
 private:
 	double GetCurvePointDerivVal(uint32_t deriv, double t);
-	double GetRefactoredTime(double t);
 
 public:
 	void SetCurveName(std::string str){ name_ = str; };
@@ -46,6 +45,8 @@ public:
 	double GetCurvePointPos(double t);
 	double GetCurvePointVel(double t);
 	double GetCurvePointAcc(double t);
+
+	double GetRefactoredTime(double t);
 
 	void print();
 };

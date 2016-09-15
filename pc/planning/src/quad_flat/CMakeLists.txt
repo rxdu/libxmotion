@@ -19,7 +19,7 @@ target_link_libraries(quadflat polyopt ${GUROBI_LIBRARIES})
 
 # Add executables
 add_executable(test_quadopt tests/test_quadopt.cpp)
-target_link_libraries(test_quadopt polyopt quadflat ${GUROBI_LIBRARIES})
+target_link_libraries(test_quadopt polyopt quadflat ${GUROBI_LIBRARIES} ${LCM_LIBRARIES})
 
 add_executable(test_trajdef tests/test_trajdef.cpp)
 target_link_libraries(test_trajdef polyopt quadflat ${GUROBI_LIBRARIES})
