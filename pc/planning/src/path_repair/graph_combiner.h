@@ -18,6 +18,7 @@
 #include "map/map_info.h"
 #include "map/map_utils.h"
 #include "geometry/cube_array/cube_array.h"
+#include "quad_flat/quad_polyopt.h"
 
 #include "utils/src/frame/transformation.h"
 

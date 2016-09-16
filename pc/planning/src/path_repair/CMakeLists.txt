@@ -25,7 +25,7 @@ add_executable(graph_combine_exp tests/graph_combine_exp.cpp)
 target_link_libraries(graph_combine_exp map local3d utils ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 add_executable(test_combiner tests/test_combiner.cpp)
-target_link_libraries(test_combiner map geometry local3d utils ${Octomap_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(test_combiner map geometry local3d polyopt quadflat utils ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 add_executable(test_cubearray tests/test_cubearray.cpp)
 target_link_libraries(test_cubearray geometry)
