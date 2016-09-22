@@ -44,8 +44,8 @@ end
 % A_eq = [A_fixed; A_cont];
 % b_eq = [b_fixed; b_cont];
 
-Q_joint
-[A_eq, b_eq] = get_all_constraints(r, n, m, dim, posDes, t0, t1, tDes)
+%Q_joint
+[A_eq, b_eq] = get_all_constraints(r, n, m, dim, posDes, t0, t1, tDes);
 
 % find optimal trajectory through quadratic programming
 opts = optimoptions('quadprog','TolFun', 1e-30);

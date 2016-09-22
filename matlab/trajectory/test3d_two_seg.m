@@ -20,16 +20,18 @@ clc
 
 %%%
 % set up problem
-r = 2;%4; %derivative to minimize in cost function
-n = 3;%7; %order of desired trajectory
-m = 1;
-d = 1; %dimensions
+r = 4; %derivative to minimize in cost function
+n = 7; %order of desired trajectory
+m = 2;
+d = 3; %dimensions
 
 % specify the m+1 keyframes
 %tDes = [0;1.2; 3; 5; 6]; % %specify desired arrival times at keyframes
-tDes = [0;1.2];
+tDes = [0;3;5];
 % specify desired positions and/or derivatives at keyframes
-posDes(:, :, 1) = [-0.15 1.25; 0 0; 0 0; 0 0; 0 0; 0 0];
+posDes(:, :, 1) = [-0.15 0.5 1.25; 0 Inf 0; 0 Inf 0; 0 Inf 0; 0 Inf 0; 0 Inf 0];
+posDes(:, :, 2) = [0.15 1 2.25; 0 Inf 0; 0 Inf 0; 0 Inf 0; 0 Inf 0; 0 Inf 0];
+posDes(:, :, 3) = [1 1.5 2.5; 0 Inf 0; 0 Inf 0; 0 Inf 0; 0 Inf 0; 0 Inf 0];
 [i, j, k] = size(posDes);
 l = length(tDes);
 
@@ -37,7 +39,7 @@ l = length(tDes);
 ineqConst.numConst = 1; %integer, number of constraints 
 ineqConst.start = 1; %sx1 matrix of keyframes where constraints begin
 ineqConst.nc = 20; %sx1 matrix of numbers of intermediate points
-ineqConst.delta = 0.001; %sx1 matrix of maximum distnaces
+ineqConst.delta = 0.1; %sx1 matrix of maximum distnaces
 ineqConst.dim = [1]; %sxd matrix of dimensions that each constraint applies to
 
 %%%

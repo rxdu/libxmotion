@@ -47,7 +47,8 @@ end
 [kmax, ~, ~] = size(posDes);
 
 for i = 1:d,
-    for k = 0:numDer,
+    %for k = 0:numDer,
+        k = 0;
         vals(:, 1) = pos(k+1, i, :);
         
         if k == 0,
@@ -59,15 +60,19 @@ for i = 1:d,
         plot(t, vals);
         
         if (k+1<=kmax)
-        plot(tDes, posDes(k+1, :, i), 'k^');
+            plot(tDes, posDes(k+1, :, i), 'k^');
         end
         
         xlabel('time (s)');
         ylabel(dimLabels{i});
         title(['derivative ' num2str(k)])
-    end
+    %end
 end
 
+figure
+if d == 3
+    plot3(posDes(1, :, 1), posDes(1, :, 2), posDes(1, :, 3));
+end
 
 [extraPlots, ~] = size(plotDim);
 for i = 1:extraPlots,
