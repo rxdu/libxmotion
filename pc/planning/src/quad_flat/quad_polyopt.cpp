@@ -156,6 +156,13 @@ void QuadPolyOpt::OptimizeFlatTrajJoint()
 	exec_time = clock() - exec_time;
 	std::cout << "All optimization finished in " << double(exec_time)/CLOCKS_PER_SEC << " s.\n" << std::endl;
 
+	if(result.params.empty())
+	{
+		std::cerr << "Bad optimization result." << std::endl;
+
+		return;
+	}
+
 	// clear results from last optimization call
 	for(int dim = 0; dim < 4; dim++)
 		traj_[dim].segments.clear();
@@ -168,7 +175,7 @@ void QuadPolyOpt::OptimizeFlatTrajJoint()
 			CurveParameter seg_param;
 
 			for(int i = 0; i < N_pos_ + 1; i++)
-				seg_param.coeffs.push_back(result.params[dim*(keyframe_num_ - 1)*(N_pos_ + 1) + seg * (N_pos_ + 1) + i]);
+				seg_param.coeffs.push_back(result.params[dim*seg*(N_pos_ + 1) + seg * (N_pos_ + 1) + i]);
 
 			seg_param.ts = keyframe_ts_(0, seg);
 			seg_param.te = keyframe_ts_(0, seg+1);

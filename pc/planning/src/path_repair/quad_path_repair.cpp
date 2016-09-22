@@ -272,15 +272,24 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 	for(auto& wp:comb_path)
 		comb_path_pos.push_back(wp->bundled_data_.position);
 
-	uint8_t kf_num = comb_path_pos.size();
+	std::vector<Position3Dd> octomap_waypoints;
+	for(auto& wp:comb_path)
+	{
+		if(wp->bundled_data_.source == GeoMarkSource::LASER_OCTOMAP)
+			octomap_waypoints.push_back(wp->bundled_data_.position);
+	}
+	uint8_t kf_num = octomap_waypoints.size();
+
+	if(kf_num < 2)
+		return;
 
 	traj_opt_.InitOptJointMatrices(kf_num);
 
-	for(int i = 0; i < comb_path_pos.size(); i++)
+	for(int i = 0; i < octomap_waypoints.size(); i++)
 	{
-		traj_opt_.keyframe_x_vals_(0,i) = comb_path_pos[i].x;
-		traj_opt_.keyframe_y_vals_(0,i) = comb_path_pos[i].y;
-		traj_opt_.keyframe_z_vals_(0,i) = comb_path_pos[i].z;
+		traj_opt_.keyframe_x_vals_(0,i) = octomap_waypoints[i].x;
+		traj_opt_.keyframe_y_vals_(0,i) = octomap_waypoints[i].y;
+		traj_opt_.keyframe_z_vals_(0,i) = octomap_waypoints[i].z;
 		traj_opt_.keyframe_yaw_vals_(0,i) = 0;
 
 		traj_opt_.keyframe_x_vals_(1,i) = std::numeric_limits<float>::infinity();
@@ -331,20 +340,20 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 //		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
 //	}
 
-//	srcl_msgs::Path_t path_msg;
-//
-//	path_msg.waypoint_num = comb_path.size();
-//	for(auto& wp : comb_path_pos)
-//	{
-//		srcl_msgs::WayPoint_t waypoint;
-//		waypoint.positions[0] = wp.x;
-//		waypoint.positions[1] = wp.y;
-//		waypoint.positions[2] = wp.z;
-//
-//		path_msg.waypoints.push_back(waypoint);
-//	}
-//
-//	lcm_->publish("quad_planner/geo_mark_graph_path", &path_msg);
+	srcl_msgs::Path_t path_msg;
+
+	path_msg.waypoint_num = comb_path.size();
+	for(auto& wp : comb_path_pos)
+	{
+		srcl_msgs::WayPoint_t waypoint;
+		waypoint.positions[0] = wp.x;
+		waypoint.positions[1] = wp.y;
+		waypoint.positions[2] = wp.z;
+
+		path_msg.waypoints.push_back(waypoint);
+	}
+
+	lcm_->publish("quad_planner/geo_mark_graph_path", &path_msg);
 
 	srcl_msgs::PolynomialCurve_t poly_msg;
 	//poly_msg = opt.flat_traj_.GenerateNonDimPolyCurveLCMMsg();
