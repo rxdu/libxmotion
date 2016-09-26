@@ -363,9 +363,9 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 	{
 		srcl_msgs::PolyCurveSegment_t seg_msg;
 
-		seg_msg.coffsize_x = seg.seg_x.param_.coeffs.size();
-		seg_msg.coffsize_y = seg.seg_y.param_.coeffs.size();
-		seg_msg.coffsize_z = seg.seg_z.param_.coeffs.size();
+		seg_msg.coeffsize_x = seg.seg_x.param_.coeffs.size();
+		seg_msg.coeffsize_y = seg.seg_y.param_.coeffs.size();
+		seg_msg.coeffsize_z = seg.seg_z.param_.coeffs.size();
 		for(auto& coeff:seg.seg_x.param_.coeffs)
 			seg_msg.coeffs_x.push_back(coeff);
 		for(auto& coeff:seg.seg_y.param_.coeffs)

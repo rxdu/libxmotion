@@ -86,7 +86,7 @@ int main(int argc, char ** argv)
 
     std::cout << "sending request" << std::endl;
 
-    lcm.publish("quad_motion_service", &traj);
+    lcm.publish("quad_controller/quad_motion_service", &traj);
 
     std::cout << "finished sending request" << std::endl;
 

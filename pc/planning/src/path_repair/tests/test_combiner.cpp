@@ -91,68 +91,31 @@ int main(int argc, char* argv[])
 	for(auto& wp:comb_path)
 		comb_path_pos.push_back(wp->bundled_data_.position);
 
-	std::cout << "path lenght: " << comb_path_pos.size() << std::endl;
-
-	Position3Dd mid_point1,mid_point2;
-
-	mid_point1 = Position3Dd((comb_path_pos[0].x + comb_path_pos[1].x)/2,
-			(comb_path_pos[0].y + comb_path_pos[1].y)/2,
-			(comb_path_pos[0].z + comb_path_pos[1].z)/2);
-	mid_point2 = Position3Dd((comb_path_pos[1].x + comb_path_pos[2].x)/2,
-			(comb_path_pos[1].y + comb_path_pos[2].y)/2,
-			(comb_path_pos[1].z + comb_path_pos[2].z)/2);
-
 	std::vector<Position3Dd> octomap_waypoints;
+	uint32_t select_num = 0;
 	for(auto& wp:comb_path)
 	{
-		if(wp->bundled_data_.source == GeoMarkSource::LASER_OCTOMAP)
+		if(wp->bundled_data_.source == GeoMarkSource::LASER_OCTOMAP) {
 			octomap_waypoints.push_back(wp->bundled_data_.position);
+
+			if(select_num++ == 2)
+				break;
+		}
 	}
 
-	std::vector<Position3Dd> path_selected_pos;
-	path_selected_pos.push_back(comb_path_pos[0]);
-	path_selected_pos.push_back(octomap_waypoints[0]);
-	path_selected_pos.push_back(octomap_waypoints[4]);
-	path_selected_pos.push_back(octomap_waypoints[6]);
-
-//	path_selected_pos.push_back(comb_path_pos[0]);
-//	path_selected_pos.push_back(mid_point1);
-//	path_selected_pos.push_back(mid_point2);
-//	//path_selected_pos.push_back(comb_path_pos[1]);
-//
-////	mid_point1 = Position3Dd((comb_path_pos[4].x + comb_path_pos[5].x)/2,
-////			(comb_path_pos[4].y + comb_path_pos[5].y)/2,
-////			(comb_path_pos[4].z + comb_path_pos[5].z)/2);
-////	mid_point2 = Position3Dd((comb_path_pos[5].x + comb_path_pos[6].x)/2,
-////			(comb_path_pos[5].y + comb_path_pos[6].y)/2,
-////			(comb_path_pos[5].z + comb_path_pos[6].z)/2);
-////	path_selected_pos.push_back(mid_point1);
-////	path_selected_pos.push_back(mid_point2);
-//	path_selected_pos.push_back(comb_path_pos[4]);
-//	//path_selected_pos.push_back(comb_path_pos[6]);
-//	path_selected_pos.push_back(comb_path_pos[7]);
-////	path_selected_pos.push_back(comb_path_pos[10]);
-//	path_selected_pos.push_back(comb_path_pos[13]);
-//	path_selected_pos.push_back(comb_path_pos[19]);
-//	path_selected_pos.push_back(comb_path_pos[23]);
-////	path_selected_pos.push_back(comb_path_pos[15]);
-////	path_selected_pos.push_back(comb_path_pos[16]);
-////	path_selected_pos.push_back(comb_path_pos[22]);
-////	path_selected_pos.push_back(comb_path_pos[23]);
-////	path_selected_pos.push_back(comb_path_pos[28]);
-////	path_selected_pos.push_back(comb_path_pos[31]);
-
-	//-----------------------------
-	uint8_t kf_num = path_selected_pos.size();
+	uint8_t kf_num = octomap_waypoints.size();
 
 	QuadPolyOpt opt;
+	if(kf_num < 2)
+		return -1;
+
 	opt.InitOptJointMatrices(kf_num);
 
-	for(int i = 0; i < path_selected_pos.size(); i++)
+	for(int i = 0; i < octomap_waypoints.size(); i++)
 	{
-		opt.keyframe_x_vals_(0,i) = path_selected_pos[i].x;
-		opt.keyframe_y_vals_(0,i) = path_selected_pos[i].y;
-		opt.keyframe_z_vals_(0,i) = path_selected_pos[i].z;
+		opt.keyframe_x_vals_(0,i) = octomap_waypoints[i].x;
+		opt.keyframe_y_vals_(0,i) = octomap_waypoints[i].y;
+		opt.keyframe_z_vals_(0,i) = octomap_waypoints[i].z;
 		opt.keyframe_yaw_vals_(0,i) = 0;
 
 		opt.keyframe_x_vals_(1,i) = std::numeric_limits<float>::infinity();
@@ -162,15 +125,16 @@ int main(int argc, char* argv[])
 		opt.keyframe_ts_(0,i) = i * 1.0;
 	}
 
-	opt.keyframe_x_vals_(1,0) = 0.1;
-	opt.keyframe_y_vals_(1,0) = -0.01;
-	opt.keyframe_z_vals_(1,0) = 0;
+	opt.keyframe_x_vals_(1,0) = 0.0;
+	opt.keyframe_y_vals_(1,0) = 0.0;
+	opt.keyframe_z_vals_(1,0) = 0.0;
 
-	opt.keyframe_x_vals_(1,0) = 0;
-	opt.keyframe_y_vals_(1,0) = 0;
-	opt.keyframe_z_vals_(1,0) = 0;
+	opt.keyframe_x_vals_(1,kf_num - 1) = 0;
+	opt.keyframe_y_vals_(1,kf_num - 1) = 0;
+	opt.keyframe_z_vals_(1,kf_num - 1) = 0;
 
 	opt.OptimizeFlatTrajJoint();
+	std::cout << "octomap_waypoints length: " << octomap_waypoints.size() << std::endl;
 
 	////////////////////////////////////////////////////////////////////////////////////////////
 	// send data for visualization
@@ -207,7 +171,7 @@ int main(int argc, char* argv[])
 		graph_msg3.edges.push_back(edge);
 	}
 
-	lcm->publish("quad_planner/cube_graph", &graph_msg3);
+	//lcm->publish("quad_planner/cube_graph", &graph_msg3);
 
 	srcl_msgs::Path_t path_msg;
 
@@ -225,16 +189,17 @@ int main(int argc, char* argv[])
 	lcm->publish("quad_planner/geo_mark_graph_path", &path_msg);
 
 	srcl_msgs::PolynomialCurve_t poly_msg;
-	//poly_msg = opt.flat_traj_.GenerateNonDimPolyCurveLCMMsg();
 
 	poly_msg.seg_num = opt.flat_traj_.traj_segs_.size();
+
+	std::cout << "seg num: " << poly_msg.seg_num << std::endl;
 	for(auto& seg : opt.flat_traj_.traj_segs_)
 	{
 		srcl_msgs::PolyCurveSegment_t seg_msg;
 
-		seg_msg.coffsize_x = seg.seg_x.param_.coeffs.size();
-		seg_msg.coffsize_y = seg.seg_y.param_.coeffs.size();
-		seg_msg.coffsize_z = seg.seg_z.param_.coeffs.size();
+		seg_msg.coeffsize_x = seg.seg_x.param_.coeffs.size();
+		seg_msg.coeffsize_y = seg.seg_y.param_.coeffs.size();
+		seg_msg.coeffsize_z = seg.seg_z.param_.coeffs.size();
 		for(auto& coeff:seg.seg_x.param_.coeffs)
 			seg_msg.coeffs_x.push_back(coeff);
 		for(auto& coeff:seg.seg_y.param_.coeffs)

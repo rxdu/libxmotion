@@ -41,6 +41,7 @@ add_subdirectory(src/local3d)
 add_subdirectory(src/vis)
 add_subdirectory(src/rrtstar)
 add_subdirectory(src/planner)
+add_subdirectory(src/motion_client)
 add_subdirectory(src/examples)
 add_subdirectory(src/apps)
 

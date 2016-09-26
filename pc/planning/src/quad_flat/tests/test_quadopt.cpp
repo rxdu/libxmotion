@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
 
 	opt.OptimizeFlatTraj();
 
-//	opt.flat_traj_.print();
+	opt.flat_traj_.print();
 
 	// send data for visualization
 	std::shared_ptr<lcm::LCM> lcm = std::make_shared<lcm::LCM>();
@@ -134,9 +134,9 @@ int main(int argc, char* argv[])
 	{
 		srcl_msgs::PolyCurveSegment_t seg_msg;
 
-		seg_msg.coffsize_x = seg.seg_x.param_.coeffs.size();
-		seg_msg.coffsize_y = seg.seg_y.param_.coeffs.size();
-		seg_msg.coffsize_z = seg.seg_z.param_.coeffs.size();
+		seg_msg.coeffsize_x = seg.seg_x.param_.coeffs.size();
+		seg_msg.coeffsize_y = seg.seg_y.param_.coeffs.size();
+		seg_msg.coeffsize_z = seg.seg_z.param_.coeffs.size();
 		for(auto& coeff:seg.seg_x.param_.coeffs)
 			seg_msg.coeffs_x.push_back(coeff);
 		for(auto& coeff:seg.seg_y.param_.coeffs)

@@ -26,7 +26,7 @@ QuadSimController::QuadSimController():
 	if(!lcm_->good())
 		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
 	else {
-		lcm_->subscribe("quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server_);
+		lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server_);
 
 		data_trans_ = std::make_shared<QuadDataTransmitter>(lcm_);
 	}

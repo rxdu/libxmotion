@@ -262,7 +262,7 @@ double PolyOptMath::GetPolynomialValue(std::vector<double> coeffs, uint32_t deri
 		if(N - i >= r) {
 			item_val =  deriv_coeff[i] * coeffs[i] * std::pow(tau, N - i - r);
 
-			std::cout << "deriv_coeff: " << deriv_coeff[i] << " ; coeff: " << coeffs[i] << " ; power: " << N-i-r << " ; val: " << item_val << std::endl;
+			//std::cout << "deriv_coeff: " << deriv_coeff[i] << " ; coeff: " << coeffs[i] << " ; power: " << N-i-r << " ; val: " << item_val << std::endl;
 		}
 		else
 			item_val = 0;

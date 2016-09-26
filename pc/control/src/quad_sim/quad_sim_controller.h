@@ -33,9 +33,6 @@ public:
 	~QuadSimController();
 
 private:
-//	QuadState rs_;
-//	QuadState est_rs_;
-
 	UAVTrajectoryPoint previous_state_;
 
 	AttQuatCon* att_quat_con_;

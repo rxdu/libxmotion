@@ -156,6 +156,9 @@ void QuadPolyOpt::OptimizeFlatTrajJoint()
 	exec_time = clock() - exec_time;
 	std::cout << "All optimization finished in " << double(exec_time)/CLOCKS_PER_SEC << " s.\n" << std::endl;
 
+//	for(auto& param:result.params)
+//		std::cout << param << std::endl;
+
 	if(result.params.empty())
 	{
 		std::cerr << "Bad optimization result." << std::endl;
