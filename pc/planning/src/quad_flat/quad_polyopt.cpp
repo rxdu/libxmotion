@@ -178,10 +178,11 @@ void QuadPolyOpt::OptimizeFlatTrajJoint()
 			CurveParameter seg_param;
 
 			for(int i = 0; i < N_pos_ + 1; i++)
-				seg_param.coeffs.push_back(result.params[dim*seg*(N_pos_ + 1) + seg * (N_pos_ + 1) + i]);
+				seg_param.coeffs.push_back(result.params[dim*(keyframe_num_ - 1)*(N_pos_ + 1) + seg * (N_pos_ + 1) + i]);
 
 			seg_param.ts = keyframe_ts_(0, seg);
 			seg_param.te = keyframe_ts_(0, seg+1);
+
 			traj_[dim].segments.push_back(seg_param);
 		}
 	}

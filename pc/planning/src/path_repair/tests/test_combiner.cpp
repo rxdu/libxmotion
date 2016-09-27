@@ -93,13 +93,14 @@ int main(int argc, char* argv[])
 
 	std::vector<Position3Dd> octomap_waypoints;
 	uint32_t select_num = 0;
+	octomap_waypoints.push_back(comb_path_pos[0]);
 	for(auto& wp:comb_path)
 	{
 		if(wp->bundled_data_.source == GeoMarkSource::LASER_OCTOMAP) {
 			octomap_waypoints.push_back(wp->bundled_data_.position);
 
-			if(select_num++ == 2)
-				break;
+//			if(select_num++ == 2)
+//				break;
 		}
 	}
 
@@ -134,7 +135,7 @@ int main(int argc, char* argv[])
 	opt.keyframe_z_vals_(1,kf_num - 1) = 0;
 
 	opt.OptimizeFlatTrajJoint();
-	std::cout << "octomap_waypoints length: " << octomap_waypoints.size() << std::endl;
+	//std::cout << "octomap_waypoints length: " << octomap_waypoints.size() << std::endl;
 
 	////////////////////////////////////////////////////////////////////////////////////////////
 	// send data for visualization
@@ -200,12 +201,16 @@ int main(int argc, char* argv[])
 		seg_msg.coeffsize_x = seg.seg_x.param_.coeffs.size();
 		seg_msg.coeffsize_y = seg.seg_y.param_.coeffs.size();
 		seg_msg.coeffsize_z = seg.seg_z.param_.coeffs.size();
+		seg_msg.coeffsize_yaw = seg.seg_yaw.param_.coeffs.size();
+
 		for(auto& coeff:seg.seg_x.param_.coeffs)
 			seg_msg.coeffs_x.push_back(coeff);
 		for(auto& coeff:seg.seg_y.param_.coeffs)
 			seg_msg.coeffs_y.push_back(coeff);
 		for(auto& coeff:seg.seg_z.param_.coeffs)
 			seg_msg.coeffs_z.push_back(coeff);
+		for(auto& coeff:seg.seg_yaw.param_.coeffs)
+			seg_msg.coeffs_yaw.push_back(coeff);
 
 		seg_msg.t_start = 0;
 		seg_msg.t_end = 1.0;
