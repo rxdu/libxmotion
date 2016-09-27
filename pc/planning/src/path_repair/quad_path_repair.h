@@ -22,6 +22,7 @@
 #include "path_repair/graph_combiner.h"
 #include "local3d/octomap_server.h"
 #include "quad_flat/quad_polyopt.h"
+#include "motion_client/poly_motion_client.h"
 
 namespace srcl_ctrl {
 
@@ -42,6 +43,7 @@ private:
 
 	// trajectory optimization
 	QuadPolyOpt traj_opt_;
+	PolyMotionClient motion_client_;
 
 	// planning parameters
 	Position2D start_pos_;

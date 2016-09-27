@@ -19,6 +19,7 @@ using namespace srcl_ctrl;
 QuadPathRepair::QuadPathRepair(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
 		octomap_server_(OctomapServer(lcm_)),
+		motion_client_(PolyMotionClient(lcm,"quad_planner/polynomial_curve", "quad_controller/quad_motion_service")),
 		active_graph_planner_(GraphPlannerType::NOT_SPECIFIED),
 		gstart_set_(false),
 		ggoal_set_(false),
@@ -273,11 +274,18 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 		comb_path_pos.push_back(wp->bundled_data_.position);
 
 	std::vector<Position3Dd> octomap_waypoints;
+	//octomap_waypoints.push_back(comb_path_pos.front());
+	uint16_t wp_idx = 0;
 	for(auto& wp:comb_path)
 	{
-		if(wp->bundled_data_.source == GeoMarkSource::LASER_OCTOMAP)
-			octomap_waypoints.push_back(wp->bundled_data_.position);
+//		if(wp->bundled_data_.source == GeoMarkSource::LASER_OCTOMAP)
+//			octomap_waypoints.push_back(wp->bundled_data_.position);
+		octomap_waypoints.push_back(wp->bundled_data_.position);
+
+		if(wp_idx++ > 5)
+			break;
 	}
+
 	uint8_t kf_num = octomap_waypoints.size();
 
 	if(kf_num < 2)
@@ -299,13 +307,13 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 		traj_opt_.keyframe_ts_(0,i) = i * 1.0;
 	}
 
-	traj_opt_.keyframe_x_vals_(1,0) = 0.1;
-	traj_opt_.keyframe_y_vals_(1,0) = 0.1;
-	traj_opt_.keyframe_z_vals_(1,0) = 0;
+	traj_opt_.keyframe_x_vals_(1,0) = 0.0;
+	traj_opt_.keyframe_y_vals_(1,0) = 0.0;
+	traj_opt_.keyframe_z_vals_(1,0) = 0.0;
 
-	traj_opt_.keyframe_x_vals_(1,0) = 0.15;
-	traj_opt_.keyframe_y_vals_(1,0) = 0.15;
-	traj_opt_.keyframe_z_vals_(1,0) = 0;
+	traj_opt_.keyframe_x_vals_(1,kf_num - 1) = 0.0;
+	traj_opt_.keyframe_y_vals_(1,kf_num - 1) = 0.0;
+	traj_opt_.keyframe_z_vals_(1,kf_num - 1) = 0.0;
 
 	traj_opt_.OptimizeFlatTrajJoint();
 
@@ -356,7 +364,6 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 	lcm_->publish("quad_planner/geo_mark_graph_path", &path_msg);
 
 	srcl_msgs::PolynomialCurve_t poly_msg;
-	//poly_msg = opt.flat_traj_.GenerateNonDimPolyCurveLCMMsg();
 
 	poly_msg.seg_num = traj_opt_.flat_traj_.traj_segs_.size();
 	for(auto& seg : traj_opt_.flat_traj_.traj_segs_)
@@ -366,12 +373,15 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 		seg_msg.coeffsize_x = seg.seg_x.param_.coeffs.size();
 		seg_msg.coeffsize_y = seg.seg_y.param_.coeffs.size();
 		seg_msg.coeffsize_z = seg.seg_z.param_.coeffs.size();
+		seg_msg.coeffsize_yaw = seg.seg_yaw.param_.coeffs.size();
 		for(auto& coeff:seg.seg_x.param_.coeffs)
 			seg_msg.coeffs_x.push_back(coeff);
 		for(auto& coeff:seg.seg_y.param_.coeffs)
 			seg_msg.coeffs_y.push_back(coeff);
 		for(auto& coeff:seg.seg_z.param_.coeffs)
 			seg_msg.coeffs_z.push_back(coeff);
+		for(auto& coeff:seg.seg_yaw.param_.coeffs)
+			seg_msg.coeffs_yaw.push_back(coeff);
 
 		seg_msg.t_start = 0;
 		seg_msg.t_end = 1.0;
