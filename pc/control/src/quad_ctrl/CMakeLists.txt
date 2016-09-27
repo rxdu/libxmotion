@@ -16,6 +16,8 @@ set(QUADCON_LIB_SRC
     controller/pos_quat_con.cpp
     # motion management
     motion_server/motion_server.cpp
+    # data transmitter
+    data_trans/quad_data_transmitter.cpp
 )
 add_library(quad_ctrl STATIC ${QUADCON_LIB_SRC})
 if (ENABLE_G3LOG)
