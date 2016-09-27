@@ -32,19 +32,19 @@ private:
 	virtual void ConfigDataStreaming(void);
 
 public:
-	virtual bool ReceiveDataFromRobot(QuadDataFromSim *rstate);
-	virtual void SendDataToRobot(const QuadDataToSim &rcmd);
+	virtual bool ReceiveDataFromRobot(QuadDataFromSim& rstate);
+	virtual void SendDataToRobot(const QuadDataToSim& rcmd);
 
 private:
-	bool ReceiveGyroData(IMU_DataType *data);
-	bool ReceiveAccData(IMU_DataType *data);
+	bool ReceiveGyroData(IMU_DataType& data);
+	bool ReceiveAccData(IMU_DataType& data);
 	bool GetVisionImage(simxUChar img[IMG_RES_Y][IMG_RES_X]);
 	bool Get3DScanPoints(std::vector<Point3f>& points);
 
-	bool ReceiveQuadPosition(Point3f *data);
-	bool ReceiveQuadVelocity(Point3f *data);
-	bool ReceiveQuadOrientation(Point3f *data);
-	bool ReceiveQuadQuaternion(Quaternion *data);
+	bool ReceiveQuadPosition(Point3f& data);
+	bool ReceiveQuadVelocity(Point3f& data);
+	bool ReceiveQuadOrientation(Point3f& data);
+	bool ReceiveQuadQuaternion(Quaternion& data);
 
 	void SendPropellerCmd(QuadCmd cmd);
 

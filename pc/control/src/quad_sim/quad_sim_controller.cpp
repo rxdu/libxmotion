@@ -26,7 +26,7 @@ QuadSimController::QuadSimController():
 	if(!lcm_->good())
 		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
 	else {
-		lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server_);
+		lcm_->subscribe("quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server_);
 
 		data_trans_ = std::make_shared<QuadDataTransmitter>(lcm_);
 	}
@@ -60,11 +60,11 @@ QuadDataToSim QuadSimController::ConvertRobotCmdToSimCmd(const QuadCmd& cmd)
 	return sim_cmd;
 }
 
-void QuadSimController::UpdateRobotState(QuadDataFromSim* data)
+void QuadSimController::UpdateRobotState(const QuadDataFromSim& data)
 {
 	/********* update robot state *********/
 	// Test without state estimator
-	rs_.UpdateRobotState(*data);
+	rs_.UpdateRobotState(data);
 
 	if(send_to_ros_)
 		data_trans_->SendQuadStateData(rs_);

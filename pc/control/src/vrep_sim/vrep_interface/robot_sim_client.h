@@ -29,8 +29,8 @@ public:
 
 	// the following functions need to be defined for a specific robot
 	virtual void ConfigDataStreaming(void) = 0;
-	virtual bool ReceiveDataFromRobot(DataFromSimType *state) = 0;
-	virtual void SendDataToRobot(const DataToSimType &rcmd) = 0;
+	virtual bool ReceiveDataFromRobot(DataFromSimType& state) = 0;
+	virtual void SendDataToRobot(const DataToSimType& rcmd) = 0;
 };
 
 }

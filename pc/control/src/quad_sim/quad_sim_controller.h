@@ -21,7 +21,6 @@
 #include "quad_ctrl/controller/att_quat_con.h"
 #include "quad_ctrl/controller/pos_quat_con.h"
 #include "quad_ctrl/motion_server/motion_server.h"
-
 #include "quad_ctrl/data_trans/quad_data_transmitter.h"
 
 namespace srcl_ctrl {
@@ -48,7 +47,7 @@ private:
 public:
 	virtual QuadDataToSim ConvertRobotCmdToSimCmd(const QuadCmd& cmd);
 
-	virtual void UpdateRobotState(QuadDataFromSim* data);
+	virtual void UpdateRobotState(const QuadDataFromSim& data);
 
 	virtual QuadCmd UpdateCtrlLoop();
 	virtual QuadCmd UpdateCtrlLoop(const QuadState& desired);

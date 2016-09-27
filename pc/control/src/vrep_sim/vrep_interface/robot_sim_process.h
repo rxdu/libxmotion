@@ -97,10 +97,10 @@ private:
 				std::cout << "INFO: Entered control loop, client id: " << sim_client_->client_id_ << std::endl;
 
 			// update simulated control loop
-			if(sim_client_->ReceiveDataFromRobot(&data_from_sim_))
+			if(sim_client_->ReceiveDataFromRobot(data_from_sim_))
 			{
 				RobotCmdType rcmd;
-				robot_controller_->UpdateRobotState(&data_from_sim_);
+				robot_controller_->UpdateRobotState(data_from_sim_);
 
 				rcmd = robot_controller_->UpdateCtrlLoop();
 

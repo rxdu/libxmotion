@@ -103,24 +103,21 @@ void QuadSimClient::ConfigDataStreaming(void)
 	simxSetFloatSignal(client_id_, "propeller_cmd_left", 0.0, simx_opmode_oneshot);
 }
 
-bool QuadSimClient::ReceiveDataFromRobot(QuadDataFromSim *rx_data)
+bool QuadSimClient::ReceiveDataFromRobot(QuadDataFromSim& rx_data)
 {
 	//std::cout << "fetching new data"<<std::endl;
 
-	if(ReceiveGyroData(&(rx_data->imu_data.gyro)) &&
-			ReceiveAccData(&(rx_data->imu_data.acc)) &&
-			ReceiveQuadPosition(&(rx_data->pos_i)) &&
-			ReceiveQuadVelocity(&(rx_data->vel_i)) &&
-			ReceiveQuadOrientation(&rx_data->rot_i) &&
-			ReceiveQuadQuaternion(&rx_data->quat_i))
+	if(ReceiveGyroData(rx_data.imu_data.gyro) &&
+			ReceiveAccData(rx_data.imu_data.acc) &&
+			ReceiveQuadPosition(rx_data.pos_i) &&
+			ReceiveQuadVelocity(rx_data.vel_i) &&
+			ReceiveQuadOrientation(rx_data.rot_i) &&
+			ReceiveQuadQuaternion(rx_data.quat_i))
 		//&& Get3DScanPoints(rx_data->laser_points))
 	{
-		// TODO laser data is not mandatory now
-		Get3DScanPoints(rx_data->laser_points);
-
-		rx_data->rot_rate_b.x = rx_data->imu_data.gyro.raw_x;
-		rx_data->rot_rate_b.y = rx_data->imu_data.gyro.raw_y;
-		rx_data->rot_rate_b.z = rx_data->imu_data.gyro.raw_z;
+		rx_data.rot_rate_b.x = rx_data.imu_data.gyro.raw_x;
+		rx_data.rot_rate_b.y = rx_data.imu_data.gyro.raw_y;
+		rx_data.rot_rate_b.z = rx_data.imu_data.gyro.raw_z;
 
 //		std::cout << "got it!"<<std::endl;
 		return true;
@@ -129,7 +126,7 @@ bool QuadSimClient::ReceiveDataFromRobot(QuadDataFromSim *rx_data)
 		return false;
 }
 
-void QuadSimClient::SendDataToRobot(const QuadDataToSim &rcmd)
+void QuadSimClient::SendDataToRobot(const QuadDataToSim& rcmd)
 {
 	SendPropellerCmd(rcmd.motor_cmd);
 }
@@ -173,7 +170,7 @@ bool QuadSimClient::Get3DScanPoints(std::vector<Point3f>& points)
 				points.push_back(pt);
 		}
 
-		//std::cout << "3d scan ptr size: " << points.size() << std::endl;
+//		std::cout << "3d scan ptr size: " << points.size() << std::endl;
 //
 //		for(uint64_t i = 0; i < 3; ++i)
 //		{
@@ -186,10 +183,11 @@ bool QuadSimClient::Get3DScanPoints(std::vector<Point3f>& points)
 	else
 		result = false;
 
+	// TODO laser data is not mandatory now
 	return true;
 }
 
-bool QuadSimClient::ReceiveGyroData(IMU_DataType *data)
+bool QuadSimClient::ReceiveGyroData(IMU_DataType& data)
 {
 	if (simxGetStringSignal(client_id_,"hummingbird_gyro",&gyro_sig,&gyro_sig_size,simx_opmode_buffer) == simx_error_noerror)
 	{
@@ -197,9 +195,9 @@ bool QuadSimClient::ReceiveGyroData(IMU_DataType *data)
 
 		if(cnt == 3)
 		{
-			data->raw_x=((float*)gyro_sig)[0];
-			data->raw_y=((float*)gyro_sig)[1];
-			data->raw_z=((float*)gyro_sig)[2];
+			data.raw_x=((float*)gyro_sig)[0];
+			data.raw_y=((float*)gyro_sig)[1];
+			data.raw_z=((float*)gyro_sig)[2];
 		}
 //		std::cout << "gyro (x, y, z) = " << "( " << data->raw_x <<" , " << data->raw_y << " , " << data->raw_z << " )" << std::endl;
 		return true;
@@ -208,7 +206,7 @@ bool QuadSimClient::ReceiveGyroData(IMU_DataType *data)
 		return false;
 }
 
-bool QuadSimClient::ReceiveAccData(IMU_DataType *data)
+bool QuadSimClient::ReceiveAccData(IMU_DataType& data)
 {
 	if (simxGetStringSignal(client_id_,"hummingbird_acc",&acc_sig,&acc_sig_size,simx_opmode_buffer) == simx_error_noerror)
 	{
@@ -216,9 +214,9 @@ bool QuadSimClient::ReceiveAccData(IMU_DataType *data)
 
 		if(cnt == 3)
 		{
-			data->raw_x=((float*)acc_sig)[0];
-			data->raw_y=((float*)acc_sig)[1];
-			data->raw_z=((float*)acc_sig)[2];
+			data.raw_x=((float*)acc_sig)[0];
+			data.raw_y=((float*)acc_sig)[1];
+			data.raw_z=((float*)acc_sig)[2];
 		}
 //		std::cout << "acc (x, y, z) = " << "( " << data->raw_x <<" , " << data->raw_y << " , " << data->raw_z << " )" << std::endl;
 
@@ -228,13 +226,13 @@ bool QuadSimClient::ReceiveAccData(IMU_DataType *data)
 		return false;
 }
 
-bool QuadSimClient::ReceiveQuadPosition(Point3f *data)
+bool QuadSimClient::ReceiveQuadPosition(Point3f& data)
 {
 	if (simxGetObjectPosition(client_id_, ref_handle_, -1, quad_pos,simx_opmode_buffer) == simx_error_noerror)
 	{
-		(*data).x = quad_pos[0];
-		(*data).y = quad_pos[1];
-		(*data).z = quad_pos[2];
+		data.x = quad_pos[0];
+		data.y = quad_pos[1];
+		data.z = quad_pos[2];
 //		std::cout << "pos (x, y, z) = " << "( " << (*data).x <<" , " << (*data).y << " , " << (*data).z << " )" << std::endl;
 		return true;
 	}
@@ -242,13 +240,13 @@ bool QuadSimClient::ReceiveQuadPosition(Point3f *data)
 		return false;
 }
 
-bool QuadSimClient::ReceiveQuadVelocity(Point3f *data)
+bool QuadSimClient::ReceiveQuadVelocity(Point3f& data)
 {
 	if (simxGetObjectVelocity(client_id_, ref_handle_, quad_linear_vel, quad_angular_vel ,simx_opmode_buffer) == simx_error_noerror)
 	{
-		(*data).x = quad_linear_vel[0];
-		(*data).y = quad_linear_vel[1];
-		(*data).z = quad_linear_vel[2];
+		data.x = quad_linear_vel[0];
+		data.y = quad_linear_vel[1];
+		data.z = quad_linear_vel[2];
 //		std::cout << "vel (x, y, z) = " << "( " << (*data).x <<" , " << (*data).y << " , " << (*data).z << " )" << std::endl;
 		return true;
 	}
@@ -256,12 +254,12 @@ bool QuadSimClient::ReceiveQuadVelocity(Point3f *data)
 		return false;
 }
 
-bool QuadSimClient::ReceiveQuadOrientation(Point3f *data)
+bool QuadSimClient::ReceiveQuadOrientation(Point3f& data)
 {if (simxGetObjectOrientation(client_id_, ref_handle_, -1, quad_ori, simx_opmode_buffer) == simx_error_noerror)
 	{
-		(*data).x = quad_ori[0];
-		(*data).y = quad_ori[1];
-		(*data).z = quad_ori[2];
+		data.x = quad_ori[0];
+		data.y = quad_ori[1];
+		data.z = quad_ori[2];
 //		std::cout << "ori (x, y, z) = " << "( " << (*data).x <<" , " << (*data).y << " , " << (*data).z << " )" << std::endl;
 		return true;
 	}
@@ -269,7 +267,7 @@ bool QuadSimClient::ReceiveQuadOrientation(Point3f *data)
 		return false;
 }
 
-bool QuadSimClient::ReceiveQuadQuaternion(Quaternion *data)
+bool QuadSimClient::ReceiveQuadQuaternion(Quaternion& data)
 {
 	if (simxGetStringSignal(client_id_,"hummingbird_quat",&quat_sig,&quat_sig_size,simx_opmode_buffer) == simx_error_noerror)
 	{
@@ -277,10 +275,10 @@ bool QuadSimClient::ReceiveQuadQuaternion(Quaternion *data)
 
 		if(cnt == 3)
 		{
-			data->x=((float*)quat_sig)[0];
-			data->y=((float*)quat_sig)[1];
-			data->z=((float*)quat_sig)[2];
-			data->w=((float*)quat_sig)[3];
+			data.x=((float*)quat_sig)[0];
+			data.y=((float*)quat_sig)[1];
+			data.z=((float*)quat_sig)[2];
+			data.w=((float*)quat_sig)[3];
 
 //			std::cout << "new quaternion: "<< data->w << " , "
 //					<< data->x << " , " << data->y << " , "
