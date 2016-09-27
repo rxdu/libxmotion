@@ -280,6 +280,9 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 	{
 //		if(wp->bundled_data_.source == GeoMarkSource::LASER_OCTOMAP)
 //			octomap_waypoints.push_back(wp->bundled_data_.position);
+		if(wp_idx++ == 0)
+			continue;
+
 		octomap_waypoints.push_back(wp->bundled_data_.position);
 
 		if(wp_idx++ > 5)
