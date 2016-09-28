@@ -67,7 +67,9 @@ function [xT] = find_corridor_poly(r, n, m, d, tDes, posDes, ineqConst)
     end
 
     % construct any inequality constraints
-    [A_ineq, b_ineq] = constructCorrConstraints(n, m, d, posDes, ineqConst, t0, t1)
+    [A_ineq, b_ineq] = constructCorrConstraints(n, m, d, posDes, ineqConst, t0, t1);
+    %size(A_ineq)
+    %size(b_ineq)
 
     % find optimal trajectory through quadratic programming
     xT_all = quadprog(Q_opt,[],A_ineq, b_ineq,A_opt,b_opt);
@@ -148,6 +150,7 @@ function [A_ineq, b_ineq] = constructCorrConstraints(n, m, d, posDes, ineqConst,
                         /R^2;
                 end
             end
+            coeff
 
             % find 2 constraints for each intermediate point
             A_temp = zeros(2*ineqConst.nc, (n+1)*m*d);
@@ -162,8 +165,7 @@ function [A_ineq, b_ineq] = constructCorrConstraints(n, m, d, posDes, ineqConst,
                     for l = 0:n,
                         terms(k, l+1) = intT^(n-l)*coeff(k, 1);
                     end
-
-
+                    
                     A_temp((j-1)*2+1, ...
                         (ineqConst.dim(s, k)-1)*m*(n+1) + (ineqConst.start(s, 1)-1)*(n+1) + 1 ...
                         : (ineqConst.dim(s, k)-1)*m*(n+1) + (ineqConst.start(s, 1)-1)*(n+1) + 1+n) ...

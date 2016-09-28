@@ -43,7 +43,6 @@ for i = 1:length(t),
     end
 end
 
-
 [kmax, ~, ~] = size(posDes);
 
 for i = 1:d,
@@ -69,9 +68,19 @@ for i = 1:d,
     %end
 end
 
-figure
+size(pos)
 if d == 3
-    plot3(posDes(1, :, 1), posDes(1, :, 2), posDes(1, :, 3));
+    figure
+    plot3(squeeze(pos(1, 1, :)), squeeze(pos(1, 2, :)), squeeze(pos(1, 3, :)));
+    hold on;
+    plot3(posDes(1, :, 1), posDes(1, :, 2), posDes(1, :, 3), 'k^');
+end
+
+if d == 2
+    figure
+    plot(squeeze(pos(1, 1, :)), squeeze(pos(1, 2, :)));
+    hold on;
+    plot(posDes(1, :, 1), posDes(1, :, 2), 'k^');
 end
 
 [extraPlots, ~] = size(plotDim);
