@@ -3,6 +3,14 @@
  *
  *  Created on: Aug 23, 2016
  *      Author: rdu
+ *
+ *  Reference:
+ *  [1] https://github.com/MUNEEBABBASI/2DQuadSim
+ *  [2] Mellinger, D., and V. Kumar. 2011. “Minimum Snap Trajectory Generation and Control for Quadrotors.”
+ *  	In Robotics and Automation (ICRA), 2011 IEEE International Conference on, 2520–25.
+ *  [3] Richter, Charles, Adam Bry, and Nicholas Roy. 2013/5. “Polynomial Trajectory Planning for Quadrotor Flight.”
+ *  	In. http://rss2013_uav.visual-navigation.com/pdf/richter_rss13_workshop.pdf.
+ *
  */
 
 #include <iostream>
@@ -13,6 +21,74 @@
 
 using namespace srcl_ctrl;
 using namespace Eigen;
+
+void PolyOptMath::GetDerivativeCoeffs(uint32_t poly_order, uint32_t deriv_order, Eigen::Ref<PolynomialCoeffs> coeffs)
+{
+	int64_t N = poly_order;
+	int64_t r = deriv_order;
+
+	coeffs = ArrayXXf::Ones(1, N+1);
+
+	/* if deriv_order == 0, no derivative is taken */
+	if(r == 0)
+		return;
+
+	/* otherwise calculate derivative coefficients */
+	int64_t n;
+	for(n = 0; n <= N; n++)
+	{
+		if(n < r)
+			coeffs(0, N - n) = 0;
+		else
+		{
+			uint64_t multiply = 1;
+			for(uint64_t m = 0; m <= r - 1; m++)
+			{
+				multiply *= (n - m);
+			}
+			coeffs(0,N - n) = multiply;
+		}
+	}
+}
+
+uint32_t PolyOptMath::GetNonZeroCoeffNum(const Eigen::Ref<const PolynomialCoeffs> coeffs)
+{
+	uint32_t order = 0;
+
+	PolynomialCoeffs data = coeffs;
+	for(int32_t i = 0; i < data.cols(); i++)
+		if(data(i) != 0) order++;
+
+	return order;
+}
+
+double PolyOptMath::GetPolynomialValue(std::vector<double> coeffs, uint32_t deriv_order, double tau)
+{
+	double val = 0;
+	int64_t N = coeffs.size() - 1;
+	int64_t r = deriv_order;
+
+	PolynomialCoeffs deriv_coeff(N + 1);
+	GetDerivativeCoeffs(N, r, deriv_coeff);
+
+	uint32_t coeff_size = coeffs.size();
+	for(int i = 0; i <= N; i++)
+	{
+		double item_val;
+
+		if(N - i >= r) {
+			item_val =  deriv_coeff[i] * coeffs[i] * std::pow(tau, N - i - r);
+
+			//std::cout << "deriv_coeff: " << deriv_coeff[i] << " ; coeff: " << coeffs[i] << " ; power: " << N-i-r << " ; val: " << item_val << std::endl;
+		}
+		else
+			item_val = 0;
+
+		val += item_val;
+	}
+
+	return val;
+}
 
 void PolyOptMath::GetDimQMatrix(uint32_t poly_order, uint32_t deriv_order, double t0, double t1,
 		Eigen::Ref<Eigen::MatrixXf> q)
@@ -84,46 +160,6 @@ void PolyOptMath::GetNonDimQMatrices(uint32_t poly_order, uint32_t deriv_order, 
 	}
 }
 
-void PolyOptMath::GetDerivativeCoeffs(uint32_t poly_order, uint32_t deriv_order, Eigen::Ref<PolynomialCoeffs> coeffs)
-{
-	int64_t N = poly_order;
-	int64_t r = deriv_order;
-
-	coeffs = ArrayXXf::Ones(1, N+1);
-
-	/* if deriv_order == 0, no derivative is taken */
-	if(r == 0)
-		return;
-
-	/* otherwise calculate derivative coefficients */
-	int64_t n;
-	for(n = 0; n <= N; n++)
-	{
-		if(n < r)
-			coeffs(0, N - n) = 0;
-		else
-		{
-			uint64_t multiply = 1;
-			for(uint64_t m = 0; m <= r - 1; m++)
-			{
-				multiply *= (n - m);
-			}
-			coeffs(0,N - n) = multiply;
-		}
-	}
-}
-
-uint32_t PolyOptMath::GetNonZeroCoeffNum(const Eigen::Ref<const PolynomialCoeffs> coeffs)
-{
-	uint32_t order = 0;
-
-	PolynomialCoeffs data = coeffs;
-	for(int32_t i = 0; i < data.cols(); i++)
-		if(data(i) != 0) order++;
-
-	return order;
-}
-
 void PolyOptMath::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_order, uint32_t keyframe_num,
 		const Eigen::Ref<const Eigen::MatrixXf> keyframe_vals, const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts,
 		Eigen::Ref<Eigen::MatrixXf> A_eq, Eigen::Ref<Eigen::MatrixXf> b_eq)
@@ -135,8 +171,8 @@ void PolyOptMath::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_o
 	int64_t r = deriv_order;
 	int64_t traj_seg_num = keyframe_num - 1;
 
-	A_eq = MatrixXf::Zero((keyframe_num - 1) * 2 * r, (keyframe_num - 1) * (N + 1));
-	b_eq = MatrixXf::Zero((keyframe_num - 1) * 2 * r, 1);
+	A_eq = MatrixXf::Zero(traj_seg_num * 2 * r, traj_seg_num * (N + 1));
+	b_eq = MatrixXf::Zero(traj_seg_num * 2 * r, 1);
 
 	// check each piece of trajectory
 	for(int64_t j = 0; j < traj_seg_num; j++)
@@ -245,30 +281,84 @@ void PolyOptMath::GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_o
 //	std::cout << "b_eq:\n" << b_eq << std::endl;
 }
 
-double PolyOptMath::GetPolynomialValue(std::vector<double> coeffs, uint32_t deriv_order, double tau)
+void PolyOptMath::GetNonDimCorridorConstrs(uint32_t poly_order, uint32_t deriv_order, uint32_t keyframe_num, uint32_t midpoint_num, double max_dist,
+		const std::vector<Eigen::MatrixXf>& keyframe_vals, const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts,
+		Eigen::Ref<Eigen::MatrixXf> A_cor, Eigen::Ref<Eigen::MatrixXf> b_cor)
 {
-	double val = 0;
-	int64_t N = coeffs.size() - 1;
+	uint8_t dim = keyframe_vals.size();
+	int64_t N = poly_order;
 	int64_t r = deriv_order;
+	int64_t nc = midpoint_num;
+	int64_t traj_seg_num = keyframe_num - 1;
 
-	PolynomialCoeffs deriv_coeff(N + 1);
-	GetDerivativeCoeffs(N, r, deriv_coeff);
+	A_cor = MatrixXf::Zero(nc * 2 * dim, (N + 1) * dim * traj_seg_num);
+	b_cor = MatrixXf::Zero(nc * 2 * dim * traj_seg_num, 1);
 
-	uint32_t coeff_size = coeffs.size();
-	for(int i = 0; i <= N; i++)
+	// calculate distance between each two keyframes
+	std::vector<double> dist;
+	dist.reserve(keyframe_num - 1);
+
+	for(int i = 0; i < traj_seg_num; i++)
 	{
-		double item_val;
+		std::vector<double> dist_error;
+		double sum = 0;
 
-		if(N - i >= r) {
-			item_val =  deriv_coeff[i] * coeffs[i] * std::pow(tau, N - i - r);
+		for(int j = 0; j < dim; j++)
+			dist_error.push_back(keyframe_vals[j](0, i) - keyframe_vals[j](0, i + 1));
 
-			//std::cout << "deriv_coeff: " << deriv_coeff[i] << " ; coeff: " << coeffs[i] << " ; power: " << N-i-r << " ; val: " << item_val << std::endl;
-		}
-		else
-			item_val = 0;
+		for(auto& error:dist_error)
+			sum += std::pow(error,2);
 
-		val += item_val;
+		dist.push_back(std::sqrt(sum));
 	}
 
-	return val;
+//	for(auto& d : dist)
+//		std::cout << "distantce: " << d << std::endl;
+
+	// check each segment
+	for(int i = 0; i < traj_seg_num; i++)
+	{
+		// check each dimension
+		for(int p = 0; p < dim; p++)
+		{
+			// calculate const
+			double const_sum = 0;
+			double const_dim = 0;
+			for(int j = 0; j < dim; j++)
+				const_sum += keyframe_vals[j](0, i) * (keyframe_vals[j](0, i + 1) - keyframe_vals[j](0, i));
+
+			const_dim = keyframe_vals[p](0, i) - const_sum * (keyframe_vals[p](0, i + 1) - keyframe_vals[p](0, i))/std::pow(dist[i],2);
+			//std::cout << "const: " << const_dim << std::endl;
+
+			// calculate coefficients for each dimension
+			double coeff_sum = 0;
+			MatrixXf const_coeff = MatrixXf::Zero(dim, 1);
+			for(int j = 0; j < dim; j++)
+			{
+				if(j == p)
+					const_coeff(j,0) = 1 - std::pow(keyframe_vals[j](0, i + 1) - keyframe_vals[j](0, i), 2)/std::pow(dist[i],2);
+				else
+					const_coeff(j,0) = - (keyframe_vals[j](0, i + 1) - keyframe_vals[j](0, i))
+						*(keyframe_vals[p](0, i + 1) - keyframe_vals[p](0, i))/std::pow(dist[i], 2);
+			}
+
+//			for(int i = 0; i < dim; i++)
+//				std::cout << "coeff const: " << coeff(i,0) << std::endl;
+//			std::cout << std::endl;
+
+			// add nc middle points
+			for(int n = 0; n < nc ; n++)
+			{
+				//double tau =
+//				A_cor = MatrixXf::Zero(nc * 2 * dim, (N + 1) * dim * traj_seg_num);
+//				b_cor = MatrixXf::Zero(nc * 2 * dim, 1);
+
+				b_cor(nc*2*dim*i + nc*2*p + 2*n, 0) = max_dist + const_dim;
+				b_cor(nc*2*dim*i + nc*2*p + 2*n + 1, 0) = max_dist - const_dim;
+			}
+		}
+	}
+
+	std::cout << "b_cor: \n" << b_cor << std::endl;
+	std::cout << "size b_cor: " << nc * 2 * dim * traj_seg_num << std::endl;
 }

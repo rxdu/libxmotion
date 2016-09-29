@@ -67,7 +67,9 @@ function [xT] = find_corridor_poly(r, n, m, d, tDes, posDes, ineqConst)
     end
 
     % construct any inequality constraints
-    [A_ineq, b_ineq] = constructCorrConstraints(n, m, d, posDes, ineqConst, t0, t1);
+    [A_ineq, b_ineq] = constructCorrConstraints(n, m, d, posDes, ineqConst, t0, t1)
+    size(A_ineq)
+    size(b_ineq)
     %size(A_ineq)
     %size(b_ineq)
 
@@ -137,6 +139,7 @@ function [A_ineq, b_ineq] = constructCorrConstraints(n, m, d, posDes, ineqConst,
                         (posDes(1, ineqConst.start(s, 1)+1, ineqConst.dim(s, i))-posDes(1, ineqConst.start(s, 1), ineqConst.dim(s, i)))/R^2;
                 end
             end
+            %const
 
             % find coefficients for constraint equation
             coeff = zeros(length(ineqConst.dim(s, :)), 1);
@@ -150,7 +153,7 @@ function [A_ineq, b_ineq] = constructCorrConstraints(n, m, d, posDes, ineqConst,
                         /R^2;
                 end
             end
-            coeff
+            %coeff
 
             % find 2 constraints for each intermediate point
             A_temp = zeros(2*ineqConst.nc, (n+1)*m*d);
