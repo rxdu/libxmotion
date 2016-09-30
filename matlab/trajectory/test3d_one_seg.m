@@ -30,10 +30,10 @@ d = 2; %dimensions
 
 % specify the m+1 keyframes
 %tDes = [0;1.2; 3; 5; 6]; % %specify desired arrival times at keyframes
-tDes = [0;3;5];
+tDes = [0;1.2;3];
 % specify desired positions and/or derivatives at keyframes
-posDes(:, :, 1) = [-0.3 0.5 1.05; 0 Inf 0; 0 Inf 0; 0 Inf 0; 0 Inf 0; 0 Inf 0];
-posDes(:, :, 2) = [1.15 1 1.5; 0 Inf 0; 0 Inf 0; 0 Inf 0; 0 Inf 0; 0 Inf 0];
+posDes(:, :, 1) = [-0.3 0.5 1.05; 0 Inf 0; 0 Inf 0; 0 0 0; 0 0 0; 0 0 0];
+posDes(:, :, 2) = [1.15 1 1.5; 0 Inf 0; 0 Inf 0; 0 0 0; 0 0 0; 0 0 0];
 %posDes(:, :, 3) = [2.25 2.25 2.25; 0 Inf 0; 0 Inf 0; 0 Inf 0; 0 Inf 0; 0 Inf 0];
 [i, j, k] = size(posDes);
 l = length(tDes);
@@ -41,7 +41,7 @@ l = length(tDes);
 % specify s corridor constraints
 ineqConst.numConst = 2; %integer, number of constraints 
 ineqConst.start = [1; 2]; %sx1 matrix of keyframes where constraints begin
-ineqConst.dim = [1, 2;1, 2]; %sxd matrix of dimensions that each constraint applies to
+ineqConst.dim = [1 2; 1 2]; %sxd matrix of dimensions that each constraint applies to
 
 ineqConst.nc = 20; %sx1 matrix of numbers of intermediate points
 ineqConst.delta = 0.05; %sx1 matrix of maximum distnaces
@@ -81,7 +81,12 @@ xT3 = zeros(n+1, m, d);
 %   xT(:, :, i) = find_polynomial(r, n, m, i, tDes, posDes);
 % end
 
+global A_ineq
+global b_ineq
+
 xT = find_corridor_poly(r, n, m, d, tDes, posDes, ineqConst);
+
+fprintf([repmat('%f\t', 1, size(A_ineq, 2)) '\n'], A_ineq')
 
 for i = 1:d,
    fprintf('coefficients of dimension %i\n', i)
