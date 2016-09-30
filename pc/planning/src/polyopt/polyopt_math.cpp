@@ -311,9 +311,6 @@ void PolyOptMath::GetNonDimCorridorConstrs(uint32_t poly_order, uint32_t keyfram
 		dist.push_back(std::sqrt(sum));
 	}
 
-//	for(auto& d : dist)
-//		std::cout << "distantce: " << d << std::endl;
-
 	// check each segment
 	for(int i = 0; i < traj_seg_num; i++)
 	{
@@ -327,7 +324,6 @@ void PolyOptMath::GetNonDimCorridorConstrs(uint32_t poly_order, uint32_t keyfram
 				const_sum += keyframe_vals[j](0, i) * (keyframe_vals[j](0, i + 1) - keyframe_vals[j](0, i));
 
 			const_dim = keyframe_vals[p](0, i) - const_sum * (keyframe_vals[p](0, i + 1) - keyframe_vals[p](0, i))/std::pow(dist[i],2);
-			//std::cout << "const: " << const_dim << std::endl;
 
 			// calculate coefficients for each dimension
 			double coeff_sum = 0;
@@ -341,45 +337,26 @@ void PolyOptMath::GetNonDimCorridorConstrs(uint32_t poly_order, uint32_t keyfram
 						*(keyframe_vals[p](0, i + 1) - keyframe_vals[p](0, i))/std::pow(dist[i], 2);
 			}
 
-//			for(int i = 0; i < dim; i++)
-//				std::cout << "coeff const: " << const_coeff(i,0) << std::endl;
-//			std::cout << std::endl;
-
 			// add nc middle points
 			for(int n = 0; n < nc ; n++)
 			{
 				double tau = (n + 1)/(1.0 + nc);
 
-				//std::cout << "tau: " << tau << std::endl;
-
 				MatrixXf coeffs = MatrixXf::Zero(dim, N + 1);
 
-				//std::cout << " ------------------- "<< std::endl;
 				for(int k = 0; k < dim; k++) {
 					for(int l = 0; l <= N; l++) {
 						// round values to 0.0001
 						coeffs(k, l) = std::round(std::pow(tau, N - l) * const_coeff(k, 0) * 10000.0)/10000.0;
-						//coeffs(k, l) = std::pow(tau, N - l) * const_coeff(k, 0);
-						//std::cout << coeffs(k, l) << " , ";
 					}
-					//std::cout << std::endl;
 
 					// A_cor = MatrixXf::Zero(nc * 2 * dim * traj_seg_num, (N + 1) * dim * traj_seg_num);
 					for(int idx = 0; idx < N + 1; idx++)
 					{
-//						A_cor(nc*2*dim*i + nc*2*p + 2*n, (N+1)*dim*i + (N+1)*p + idx) = coeffs(i, idx);
-//						A_cor(nc*2*dim*i + nc*2*p + 2*n + 1, (N+1)*dim*i + (N+1)*p + idx) = -coeffs(i, idx);
-//						A_cor(nc*2*dim*i + nc*2*k + 2*n, (N+1)*traj_seg_num*k + (N+1)*i + idx) = coeffs(k, idx);
-//						A_cor(nc*2*dim*i + nc*2*k + 2*n + 1, (N+1)*traj_seg_num*k + (N+1)*i + idx) = -coeffs(k, idx);
-						// row is correct
-//						A_cor(nc*2*dim*i + nc*2*k + 2*n, (N+1)*dim*i + (N+1)*p + idx) = coeffs(k, idx);
-//						A_cor(nc*2*dim*i + nc*2*k + 2*n + 1, (N+1)*dim*i + (N+1)*p + idx) = -coeffs(k, idx);
 						A_cor(nc*2*dim*i + nc*2*p + 2*n, (N+1)*traj_seg_num*k + (N+1)*i + idx) = coeffs(k, idx);
 						A_cor(nc*2*dim*i + nc*2*p + 2*n + 1, (N+1)*traj_seg_num*k + (N+1)*i + idx) = -coeffs(k, idx);
 					}
 				}
-
-				// A_cor = MatrixXf::Zero(nc * 2 * dim * traj_seg_num, (N + 1) * dim * traj_seg_num);
 
 				b_cor(nc*2*dim*i + nc*2*p + 2*n, 0) = max_dist + const_dim;
 				b_cor(nc*2*dim*i + nc*2*p + 2*n + 1, 0) = max_dist - const_dim;
