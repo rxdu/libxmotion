@@ -25,7 +25,7 @@ protected:
 	//	used as the ID, not with any other names
 	BDSBase() = delete;
 	BDSBase(uint64_t struct_id):data_id_(struct_id){};
-	virtual ~BDSBase(){};
+	~BDSBase(){};
 
 public:
 	uint64_t data_id_;
@@ -33,9 +33,9 @@ public:
 
 public:
 	// You have to override this function if you want to use heuristics in A*
-	virtual double GetHeuristic(const BundledDataStructType& other_struct) const
+	double GetHeuristic(const BundledDataStructType& other_struct) const
 	{
-		return 0.0;
+		return static_cast<BundledDataStructType*>(this)->GetHeuristic(other_struct);
 	};
 };
 
