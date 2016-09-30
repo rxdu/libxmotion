@@ -85,6 +85,7 @@ int main(int argc, char* argv[])
 	//keyframe_vals.push_back(keyframe_z_vals);
 
 	int nc = 20;
+	double max_dist = 0.05;
 	Eigen::MatrixXf A_cor, b_cor;
 
 	A_cor = MatrixXf::Zero(nc * 2 * dim * (kf_num - 1), (N + 1) * dim * (kf_num - 1));
@@ -110,7 +111,7 @@ int main(int argc, char* argv[])
 	beq_joint.block((kf_num - 1) * 2 * r, 0, (kf_num - 1) * 2 * r, 1) = beq_y;
 	//beq_joint.block((kf_num - 1) * 2 * r * 2 , 0, (kf_num - 1) * 2 * r, 1) = beq_z;
 
-	PolyOptMath::GetNonDimCorridorConstrs(N, kf_num , nc , 0.05, keyframe_vals, keyframe_ts, A_cor, b_cor);
+	PolyOptMath::GetNonDimCorridorConstrs(N, kf_num , nc , max_dist, keyframe_vals, keyframe_ts, A_cor, b_cor);
 
 	try {
 		GRBEnv env = GRBEnv();
@@ -141,23 +142,13 @@ int main(int argc, char* argv[])
 
 		for(int i = 0; i < var_size; i++)
 		{
-			if(i != 0 && i%8 == 0)
+			if(i != 0 && i%(N+1) == 0)
 				std::cout << std::endl;
 			std::cout << sig[i].get(GRB_StringAttr_VarName) << " "
 			<< sig[i].get(GRB_DoubleAttr_X) << std::endl;
 		}
 
 		std::cout << "\nObj: " << model.get(GRB_DoubleAttr_ObjVal) << std::endl;
-
-//		std::vector<double> result_coeffs;
-//		for(auto& s:sig)
-//		{
-//			result_coeffs.push_back(s.get(GRB_DoubleAttr_X));
-//		}
-//		std::cout << PolyOptMath::GetPolynomialValue(result_coeffs, 0, 0) << std::endl;
-//		std::cout << PolyOptMath::GetPolynomialValue(result_coeffs, 0, 1.0) << std::endl;
-//		std::cout << PolyOptMath::GetPolynomialValue(result_coeffs, 1, 0) << std::endl;
-//		std::cout << PolyOptMath::GetPolynomialValue(result_coeffs, 1, 1.0) << std::endl;
 
 	} catch(GRBException e) {
 		std::cout << "Error code = " << e.getErrorCode() << std::endl;

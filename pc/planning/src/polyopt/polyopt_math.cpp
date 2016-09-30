@@ -359,6 +359,7 @@ void PolyOptMath::GetNonDimCorridorConstrs(uint32_t poly_order, uint32_t keyfram
 					for(int l = 0; l <= N; l++) {
 						// round values to 0.0001
 						coeffs(k, l) = std::round(std::pow(tau, N - l) * const_coeff(k, 0) * 10000.0)/10000.0;
+						//coeffs(k, l) = std::pow(tau, N - l) * const_coeff(k, 0);
 						//std::cout << coeffs(k, l) << " , ";
 					}
 					//std::cout << std::endl;
@@ -373,8 +374,8 @@ void PolyOptMath::GetNonDimCorridorConstrs(uint32_t poly_order, uint32_t keyfram
 						// row is correct
 //						A_cor(nc*2*dim*i + nc*2*k + 2*n, (N+1)*dim*i + (N+1)*p + idx) = coeffs(k, idx);
 //						A_cor(nc*2*dim*i + nc*2*k + 2*n + 1, (N+1)*dim*i + (N+1)*p + idx) = -coeffs(k, idx);
-						A_cor(nc*2*traj_seg_num*p + nc*2*i + 2*n, (N+1)*traj_seg_num*k + (N+1)*i + idx) = coeffs(k, idx);
-						A_cor(nc*2*traj_seg_num*p + nc*2*i + 2*n + 1, (N+1)*traj_seg_num*k + (N+1)*i + idx) = -coeffs(k, idx);
+						A_cor(nc*2*dim*i + nc*2*p + 2*n, (N+1)*traj_seg_num*k + (N+1)*i + idx) = coeffs(k, idx);
+						A_cor(nc*2*dim*i + nc*2*p + 2*n + 1, (N+1)*traj_seg_num*k + (N+1)*i + idx) = -coeffs(k, idx);
 					}
 				}
 

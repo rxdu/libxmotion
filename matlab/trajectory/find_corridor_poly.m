@@ -69,12 +69,12 @@ function [xT] = find_corridor_poly(r, n, m, d, tDes, posDes, ineqConst)
     % construct any inequality constraints
     global A_ineq
     global b_ineq
-    [A_ineq, b_ineq] = constructCorrConstraints(n, m, d, posDes, ineqConst, t0, t1)
-    size(A_ineq)
-    size(b_ineq)
+    [A_ineq, b_ineq] = constructCorrConstraints(n, m, d, posDes, ineqConst, t0, t1);
+    %size(A_ineq)
+    %size(b_ineq)
 
     % find optimal trajectory through quadratic programming
-    xT_all = quadprog(Q_opt,[],A_ineq, b_ineq,A_opt,b_opt);
+    xT_all = quadprog(Q_opt,[],A_ineq, b_ineq,A_opt,b_opt)
 
     % explicitly break trajectory into its piecewise parts and dimensions for output
     xT = zeros((n+1), m, d);

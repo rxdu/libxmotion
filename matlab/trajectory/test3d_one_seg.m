@@ -86,7 +86,7 @@ global b_ineq
 
 xT = find_corridor_poly(r, n, m, d, tDes, posDes, ineqConst);
 
-fprintf([repmat('%f\t', 1, size(A_ineq, 2)) '\n'], A_ineq')
+%fprintf([repmat('%f\t', 1, size(A_ineq, 2)) '\n'], A_ineq')
 
 for i = 1:d,
    fprintf('coefficients of dimension %i\n', i)
