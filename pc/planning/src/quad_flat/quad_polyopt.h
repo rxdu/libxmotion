@@ -34,6 +34,13 @@ typedef struct {
 	uint64_t beq_yaw_size;
 
 	uint64_t var_size;
+
+	// corridor
+	uint64_t midpoint_num;
+	double corridor_size;
+	uint64_t var_cor_pos_size;
+	uint64_t var_cor_yaw_size;
+	uint64_t cor_constr_size;
 } OptMatrixSize;
 
 class QuadPolyOpt{
@@ -83,6 +90,12 @@ public:
 	Eigen::MatrixXf Aeq_joint_;
 	Eigen::MatrixXf beq_joint_;
 
+	// corridor constraints
+	std::vector<Eigen::MatrixXf> corridor_frames_;
+
+	Eigen::MatrixXf A_cor_;
+	Eigen::MatrixXf b_cor_;
+
 	QuadFlatTraj flat_traj_;
 
 	void SetPositionPolynomialOrder(uint32_t N) { N_pos_ = N; };
@@ -102,10 +115,11 @@ public:
 			uint32_t keyframe_num);
 
 	// jointly optimize all dimensions of the trajectory
-	void OptimizeFlatTrajJoint();
 	void InitOptJointMatrices(uint32_t keyframe_num);
+	void OptimizeFlatTrajJoint();
 
-
+	void InitOptWithCorridorJointMatrices(uint32_t keyframe_num, uint32_t midpoint_num, double cor_size);
+	void OptimizeFlatTrajWithCorridorJoint();
 };
 
 }

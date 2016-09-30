@@ -84,7 +84,7 @@ OptResultCurve TrajOptimizer::OptimizeTrajectory(const Eigen::Ref<const Eigen::M
 
 		// add constraints
 		PolyOptMath::GetNonDimEqualityConstrs(N_, r_, kf_num_, keyframe_vals, keyframe_ts, A_eq_, b_eq_);
-		GurobiUtils::AddLinEqualityConstrExpr(x, A_eq_, b_eq_, var_num, model);
+		GurobiUtils::AddLinEqualityConstrExpr(x, A_eq_, b_eq_, var_num, var_num, model);
 
 		// optimize model
 		model.optimize();
@@ -173,7 +173,7 @@ OptResultParam TrajOptimizer::OptimizeTrajectory(const Eigen::Ref<const Eigen::M
 		model.setObjective(cost_fun);
 
 		// add constraints
-		GurobiUtils::AddLinEqualityConstrExpr(x, Aeq_m, beq_m, var_size, model);
+		GurobiUtils::AddLinEqualityConstrExpr(x, Aeq_m, beq_m, var_size, var_size, model);
 
 		// optimize model
 		model.optimize();
@@ -190,6 +190,76 @@ OptResultParam TrajOptimizer::OptimizeTrajectory(const Eigen::Ref<const Eigen::M
 			result.params.push_back(x[i].get(GRB_DoubleAttr_X));
 //			std::cout << x[i].get(GRB_StringAttr_VarName) << " : "
 //					<< x[i].get(GRB_DoubleAttr_X) << std::endl;
+		}
+		result.cost = model.get(GRB_DoubleAttr_ObjVal);
+		std::cout << "\nObj: " << model.get(GRB_DoubleAttr_ObjVal) << std::endl;
+
+		return result;
+
+	} catch(GRBException& e) {
+		std::cout << "Error code = " << e.getErrorCode() << std::endl;
+		std::cout << e.getMessage() << std::endl;
+	} catch(...) {
+		std::cout << "Exception during optimization" << std::endl;
+	}
+
+	return result;
+}
+
+OptResultParam TrajOptimizer::OptimizeTrajectory(const Eigen::Ref<const Eigen::MatrixXf> Q_m,
+		const Eigen::Ref<const Eigen::MatrixXf> Aeq_m, const Eigen::Ref<const Eigen::MatrixXf> beq_m,
+		const Eigen::Ref<const Eigen::MatrixXf> Aineq_m, const Eigen::Ref<const Eigen::MatrixXf> bineq_m,
+		const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts,
+		uint32_t keyframe_num, uint32_t var_size, uint32_t constr_size)
+{
+	OptResultParam result;
+	result.cost = -1;
+
+	kf_num_ = keyframe_num;
+	InitCalcVars();
+
+	try {
+		// record start time
+		clock_t exec_time;
+		exec_time = clock();
+
+		// create a optimization model
+		GRBModel model = GRBModel(grb_env_);
+
+		// add variables to model
+		std::vector<GRBVar> x;
+		x.resize(var_size);
+		for(int i = 0; i < var_size; i++)
+		{
+			std::string var_name = "sigma"+std::to_string(i);
+			x[i] = model.addVar(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), 0.0, GRB_CONTINUOUS, var_name);
+		}
+		model.update();
+
+		// set objective
+		GRBQuadExpr cost_fun;
+		GurobiUtils::GetQuadraticCostFuncExpr(x, Q_m, var_size, cost_fun);;
+		model.setObjective(cost_fun);
+
+		// add constraints
+		GurobiUtils::AddLinEqualityConstrExpr(x, Aeq_m, beq_m, var_size, var_size, model);
+		GurobiUtils::AddLinInequalityConstrExpr(x, Aineq_m, bineq_m, var_size, constr_size, model);
+
+		// optimize model
+		model.optimize();
+
+		exec_time = clock() - exec_time;
+		std::cout << "Optimization finished in " << double(exec_time)/CLOCKS_PER_SEC << " s.\n" << std::endl;
+
+		// display and pack optimization result data
+		for(int i = 0; i < var_size; i++)
+		{
+			//			if(i!=0 && i%(var_size/(keyframe_num-1)) == 0) {
+			//				std::cout << std::endl;
+			//			}
+			result.params.push_back(x[i].get(GRB_DoubleAttr_X));
+			//			std::cout << x[i].get(GRB_StringAttr_VarName) << " : "
+			//					<< x[i].get(GRB_DoubleAttr_X) << std::endl;
 		}
 		result.cost = model.get(GRB_DoubleAttr_ObjVal);
 		std::cout << "\nObj: " << model.get(GRB_DoubleAttr_ObjVal) << std::endl;

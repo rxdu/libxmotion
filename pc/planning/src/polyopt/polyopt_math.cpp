@@ -387,8 +387,8 @@ void PolyOptMath::GetNonDimCorridorConstrs(uint32_t poly_order, uint32_t keyfram
 		}
 	}
 
-	std::cout << "A_cor: \n" << A_cor << std::endl;
-	std::cout << "size A_cor: " << nc * 2 * dim * traj_seg_num << " , " << (N + 1) * dim * traj_seg_num << std::endl;
-	std::cout << "b_cor: \n" << b_cor << std::endl;
-	std::cout << "size b_cor: " << nc * 2 * dim * traj_seg_num << std::endl;
+//	std::cout << "A_cor: \n" << A_cor << std::endl;
+//	std::cout << "size A_cor: " << nc * 2 * dim * traj_seg_num << " , " << (N + 1) * dim * traj_seg_num << std::endl;
+//	std::cout << "b_cor: \n" << b_cor << std::endl;
+//	std::cout << "size b_cor: " << nc * 2 * dim * traj_seg_num << std::endl;
 }

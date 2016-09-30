@@ -10,13 +10,19 @@
 #include <limits>
 #include <cstring>
 #include <vector>
+#include <memory>
 
 #include "gurobi_c++.h"
+
+// headers for lcm
+#include <lcm/lcm-cpp.hpp>
+#include "lcmtypes/comm.hpp"
 
 #include "eigen3/Eigen/Core"
 
 #include "polyopt/polyopt_math.h"
 #include "polyopt/gurobi_utils.h"
+#include "polyopt/polytraj_curve.h"
 
 using namespace srcl_ctrl;
 using namespace Eigen;
@@ -85,11 +91,10 @@ int main(int argc, char* argv[])
 	//keyframe_vals.push_back(keyframe_z_vals);
 
 	int nc = 20;
-	double max_dist = 0.05;
-	Eigen::MatrixXf A_cor, b_cor;
+	double max_dist = 0.01;
 
-	A_cor = MatrixXf::Zero(nc * 2 * dim * (kf_num - 1), (N + 1) * dim * (kf_num - 1));
-	b_cor = MatrixXf::Zero(nc * 2 * dim * (kf_num - 1), 1);
+	Eigen::MatrixXf A_cor = MatrixXf::Zero(nc * 2 * dim * (kf_num - 1), (N + 1) * dim * (kf_num - 1));
+	Eigen::MatrixXf b_cor = MatrixXf::Zero(nc * 2 * dim * (kf_num - 1), 1);
 
 	PolyOptMath::GetNonDimQMatrices(N,r,kf_num, keyframe_ts, Q_x);
 	PolyOptMath::GetNonDimQMatrices(N,r,kf_num, keyframe_ts, Q_y);
@@ -113,6 +118,12 @@ int main(int argc, char* argv[])
 
 	PolyOptMath::GetNonDimCorridorConstrs(N, kf_num , nc , max_dist, keyframe_vals, keyframe_ts, A_cor, b_cor);
 
+//	std::cout << "Q_joint: \n" << Q_joint << std::endl;
+//	std::cout << "Aeq_joint: \n" << Aeq_joint << std::endl;
+//	std::cout << "beq_joint: \n" << beq_joint << std::endl;
+//	std::cout << "A_cor: \n" << A_cor << std::endl;
+//	std::cout << "b_cor: \n" << b_cor << std::endl;
+
 	try {
 		GRBEnv env = GRBEnv();
 		GRBModel model = GRBModel(env);
@@ -134,21 +145,85 @@ int main(int argc, char* argv[])
 		model.setObjective(cost_fun);
 
 		// Add constraints
-		GurobiUtils::AddLinEqualityConstrExpr(sig, Aeq_joint, beq_joint, var_size, model);
-		GurobiUtils::AddLinInequalityConstrExpr(sig, A_cor, b_cor, var_size, model);
+		GurobiUtils::AddLinEqualityConstrExpr(sig, Aeq_joint, beq_joint, var_size, var_size, model);
+		GurobiUtils::AddLinInequalityConstrExpr(sig, A_cor, b_cor, var_size, nc * 2 * dim * (kf_num - 1), model);
 
 		// Optimize model
 		model.optimize();
 
+		std::vector<double> params;
 		for(int i = 0; i < var_size; i++)
 		{
 			if(i != 0 && i%(N+1) == 0)
 				std::cout << std::endl;
 			std::cout << sig[i].get(GRB_StringAttr_VarName) << " "
 			<< sig[i].get(GRB_DoubleAttr_X) << std::endl;
+
+			params.push_back(sig[i].get(GRB_DoubleAttr_X));
 		}
 
 		std::cout << "\nObj: " << model.get(GRB_DoubleAttr_ObjVal) << std::endl;
+
+		std::vector<std::vector<CurveParameter>> traj;
+		traj.reserve(2);
+		for(int dim = 0; dim < 2; dim++)
+		{
+			std::vector<CurveParameter> segs;
+			for(int seg = 0; seg < kf_num - 1; seg++)
+			{
+				CurveParameter seg_param;
+
+				for(int i = 0; i < N + 1; i++) {
+					//std::cout << "index: " << dim*(kf_num - 1)*(N + 1) + seg * (N + 1) + i << std::endl;
+					seg_param.coeffs.push_back(params[dim*(kf_num - 1)*(N + 1) + seg * (N + 1) + i]);
+				}
+
+				seg_param.ts = keyframe_ts(0, seg);
+				seg_param.te = keyframe_ts(0, seg+1);
+
+				segs.push_back(seg_param);
+			}
+			traj.push_back(segs);
+		}
+
+		// send data for visualization
+		std::shared_ptr<lcm::LCM> lcm = std::make_shared<lcm::LCM>();
+
+		if(!lcm->good())
+		{
+			std::cout << "ERROR: Failed to initialize LCM." << std::endl;
+			return -1;
+		}
+
+		srcl_msgs::PolynomialCurve_t poly_msg;
+		poly_msg.seg_num = 2;
+		for(int i = 0; i < 2; i++)
+		{
+			srcl_msgs::PolyCurveSegment_t seg_msg;
+
+			seg_msg.coeffsize_x = traj[0][i].coeffs.size();
+			seg_msg.coeffsize_y = traj[1][i].coeffs.size();
+			seg_msg.coeffsize_z = traj[1][i].coeffs.size();
+			seg_msg.coeffsize_yaw = traj[1][i].coeffs.size();
+
+			for(auto& coeff:traj[0][i].coeffs)
+				seg_msg.coeffs_x.push_back(coeff);
+			for(auto& coeff:traj[1][i].coeffs)
+				seg_msg.coeffs_y.push_back(coeff);
+			for(auto& coeff:traj[1][i].coeffs)
+				seg_msg.coeffs_z.push_back(0);
+			for(auto& coeff:traj[1][i].coeffs)
+				seg_msg.coeffs_yaw.push_back(0);
+
+			seg_msg.t_start = 0;
+			seg_msg.t_end = 1.0;
+
+			poly_msg.segments.push_back(seg_msg);
+		}
+
+		lcm->publish("quad_planner/polynomial_curve", &poly_msg);
+
+		std::cout << "traj sent to lcm" << std::endl;
 
 	} catch(GRBException e) {
 		std::cout << "Error code = " << e.getErrorCode() << std::endl;

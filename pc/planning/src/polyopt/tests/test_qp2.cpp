@@ -80,7 +80,7 @@ int main(int   argc, char *argv[])
 		model.setObjective(cost_fun);
 
 		// Add constraints
-		GurobiUtils::AddLinEqualityConstrExpr(sig, A_eq, b_eq, var_num, model);
+		GurobiUtils::AddLinEqualityConstrExpr(sig, A_eq, b_eq, var_num, var_num, model);
 
 		// Optimize model
 		model.optimize();

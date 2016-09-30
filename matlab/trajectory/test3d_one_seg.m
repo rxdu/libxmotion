@@ -44,7 +44,7 @@ ineqConst.start = [1; 2]; %sx1 matrix of keyframes where constraints begin
 ineqConst.dim = [1 2; 1 2]; %sxd matrix of dimensions that each constraint applies to
 
 ineqConst.nc = 20; %sx1 matrix of numbers of intermediate points
-ineqConst.delta = 0.05; %sx1 matrix of maximum distnaces
+ineqConst.delta = 0.01; %sx1 matrix of maximum distnaces
 
 %%%
 % verify that the problem is well-formed

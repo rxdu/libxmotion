@@ -24,5 +24,8 @@ target_link_libraries(test_quadopt polyopt quadflat ${GUROBI_LIBRARIES} ${LCM_LI
 add_executable(test_jointopt tests/test_jointopt.cpp)
 target_link_libraries(test_jointopt polyopt quadflat ${GUROBI_LIBRARIES} ${LCM_LIBRARIES})
 
+add_executable(test_jointcorridor tests/test_jointcorridor.cpp)
+target_link_libraries(test_jointcorridor polyopt quadflat ${GUROBI_LIBRARIES} ${LCM_LIBRARIES})
+
 add_executable(test_trajdef tests/test_trajdef.cpp)
 target_link_libraries(test_trajdef polyopt quadflat ${GUROBI_LIBRARIES})

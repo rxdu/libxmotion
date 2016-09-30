@@ -111,7 +111,7 @@ int main(int   argc, char *argv[])
 //			std::string constr_name = "c"+std::to_string(i);
 //			model.addConstr(constr == b_eq(i, 0), constr_name);
 //		}
-		GurobiUtils::AddLinEqualityConstrExpr(sig, A_eq, b_eq, 4, model);
+		GurobiUtils::AddLinEqualityConstrExpr(sig, A_eq, b_eq, 4, 4, model);
 
 		// Optimize model
 		model.optimize();

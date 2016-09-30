@@ -110,7 +110,8 @@ int main(int argc, char* argv[])
 	if(kf_num < 2)
 		return -1;
 
-	opt.InitOptJointMatrices(kf_num);
+	//opt.InitOptJointMatrices(kf_num);
+	opt.InitOptWithCorridorJointMatrices(kf_num, 20, 0.01);
 
 	for(int i = 0; i < octomap_waypoints.size(); i++)
 	{
@@ -134,7 +135,8 @@ int main(int argc, char* argv[])
 	opt.keyframe_y_vals_(1,kf_num - 1) = 0;
 	opt.keyframe_z_vals_(1,kf_num - 1) = 0;
 
-	opt.OptimizeFlatTrajJoint();
+	//opt.OptimizeFlatTrajJoint();
+	opt.OptimizeFlatTrajWithCorridorJoint();
 	//std::cout << "octomap_waypoints length: " << octomap_waypoints.size() << std::endl;
 
 	////////////////////////////////////////////////////////////////////////////////////////////

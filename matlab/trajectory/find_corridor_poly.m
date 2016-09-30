@@ -48,7 +48,7 @@ function [xT] = find_corridor_poly(r, n, m, d, tDes, posDes, ineqConst)
 
         % put each dimension's Q_joint into a block diagonal matrix
         Q_opt = blkdiag(Q_opt, Q_joint);
-    end
+    end    
 
     %%%
     % construct equality constraints
@@ -72,7 +72,13 @@ function [xT] = find_corridor_poly(r, n, m, d, tDes, posDes, ineqConst)
     [A_ineq, b_ineq] = constructCorrConstraints(n, m, d, posDes, ineqConst, t0, t1);
     %size(A_ineq)
     %size(b_ineq)
-
+    
+    Q_opt
+    A_opt
+    b_opt
+    A_ineq
+    b_ineq
+    
     % find optimal trajectory through quadratic programming
     xT_all = quadprog(Q_opt,[],A_ineq, b_ineq,A_opt,b_opt)
 

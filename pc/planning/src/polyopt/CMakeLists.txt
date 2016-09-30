@@ -40,4 +40,4 @@ add_executable(test_opt tests/test_opt.cpp)
 target_link_libraries(test_opt polyopt ${GUROBI_LIBRARIES})
 
 add_executable(test_corridor tests/test_corridor.cpp)
-target_link_libraries(test_corridor polyopt ${GUROBI_LIBRARIES})
+target_link_libraries(test_corridor polyopt ${GUROBI_LIBRARIES} ${LCM_LIBRARIES})
