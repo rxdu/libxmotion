@@ -40,7 +40,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 		const std::string& chan,
 		const srcl_msgs::LaserScanPoints_t* msg)
 {
-	std::cout << "points received " << std::endl;
+	std::cout << msg->points.size() << " points received " << std::endl;
 	loop_count_++;
 
 	std::shared_ptr<octomap::OcTree> octree = std::make_shared<octomap::OcTree>(octree_res_);
@@ -73,15 +73,15 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	octree->prune();
 	std::stringstream datastream;
 
-	if (octree->writeBinaryData(datastream))
+	if(loop_count_ % 500 == 0)
 	{
-		std::string datastring = datastream.str();
-		octomap_msg.data = std::vector<int8_t>(datastring.begin(), datastring.end());
-		octomap_msg.data_size = octomap_msg.data.size();
-	}
+		if (octree->writeBinaryData(datastream))
+		{
+			std::string datastring = datastream.str();
+			octomap_msg.data = std::vector<int8_t>(datastring.begin(), datastring.end());
+			octomap_msg.data_size = octomap_msg.data.size();
+		}
 
-	if(loop_count_ % 10 == 0)
-	{
 		octree_ = octree;
 
 		srcl_msgs::NewDataReady_t notice_msg;

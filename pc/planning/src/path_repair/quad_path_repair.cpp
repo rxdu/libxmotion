@@ -274,7 +274,7 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 		comb_path_pos.push_back(wp->bundled_data_.position);
 
 	std::vector<Position3Dd> octomap_waypoints;
-	//octomap_waypoints.push_back(comb_path_pos.front());
+	//octomap_waypoints.push_back(gcombiner_.pos_);
 	uint16_t wp_idx = 0;
 	for(auto& wp:comb_path)
 	{
@@ -294,7 +294,8 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 	if(kf_num < 2)
 		return;
 
-	traj_opt_.InitOptJointMatrices(kf_num);
+//	traj_opt_.InitOptJointMatrices(kf_num);
+	traj_opt_.InitOptWithCorridorJointMatrices(kf_num, 20, 0.01);
 
 	for(int i = 0; i < octomap_waypoints.size(); i++)
 	{
@@ -307,7 +308,7 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 		traj_opt_.keyframe_y_vals_(1,i) = std::numeric_limits<float>::infinity();
 		traj_opt_.keyframe_z_vals_(1,i) = std::numeric_limits<float>::infinity();
 
-		traj_opt_.keyframe_ts_(0,i) = i * 1.0;
+		traj_opt_.keyframe_ts_(0,i) = i * 2.0;
 	}
 
 	traj_opt_.keyframe_x_vals_(1,0) = 0.0;
@@ -318,7 +319,8 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 	traj_opt_.keyframe_y_vals_(1,kf_num - 1) = 0.0;
 	traj_opt_.keyframe_z_vals_(1,kf_num - 1) = 0.0;
 
-	traj_opt_.OptimizeFlatTrajJoint();
+	//traj_opt_.OptimizeFlatTrajJoint();
+	traj_opt_.OptimizeFlatTrajWithCorridorJoint();
 
 //	if(count++ == 20)
 //	{

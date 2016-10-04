@@ -119,6 +119,8 @@ bool QuadSimClient::ReceiveDataFromRobot(QuadDataFromSim& rx_data)
 		rx_data.rot_rate_b.y = rx_data.imu_data.gyro.raw_y;
 		rx_data.rot_rate_b.z = rx_data.imu_data.gyro.raw_z;
 
+		Get3DScanPoints(rx_data.laser_points);
+
 //		std::cout << "got it!"<<std::endl;
 		return true;
 	}

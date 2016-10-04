@@ -38,11 +38,12 @@ private:
 	Graph_t<GeoMark> base_mark_graph_;
 	MapInfo base_map_info_;
 
-	Position3Dd pos_;
-	Eigen::Quaterniond quat_;
 	uint64_t max_id_val_;
 
 	utils::Transformation::Transform3D transf_;
+public:
+	Position3Dd pos_;
+	Eigen::Quaterniond quat_;
 
 public:
 	Graph_t<GeoMark> combined_graph_base_;
