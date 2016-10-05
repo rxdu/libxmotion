@@ -308,7 +308,7 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 		traj_opt_.keyframe_y_vals_(1,i) = std::numeric_limits<float>::infinity();
 		traj_opt_.keyframe_z_vals_(1,i) = std::numeric_limits<float>::infinity();
 
-		traj_opt_.keyframe_ts_(0,i) = i * 2.0;
+		traj_opt_.keyframe_ts_(0,i) = i * 1.0;
 	}
 
 	traj_opt_.keyframe_x_vals_(1,0) = 0.0;

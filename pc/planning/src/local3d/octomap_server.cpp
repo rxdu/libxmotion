@@ -73,7 +73,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	octree->prune();
 	std::stringstream datastream;
 
-	if(loop_count_ % 500 == 0)
+	if(loop_count_ % 100 == 0)
 	{
 		if (octree->writeBinaryData(datastream))
 		{

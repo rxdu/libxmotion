@@ -5,9 +5,6 @@
  *      Author: rdu
  */
 
-#ifndef PLANNING_SRC_PATH_REPAIR_TEST_COMBINER_CPP_
-#define PLANNING_SRC_PATH_REPAIR_TEST_COMBINER_CPP_
-
 #include <memory>
 #include <ctime>
 #include <cmath>
@@ -224,5 +221,3 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-
-#endif /* PLANNING_SRC_PATH_REPAIR_TEST_COMBINER_CPP_ */
