@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
 		opt.keyframe_y_vals_(2,i) = std::numeric_limits<float>::infinity();
 		opt.keyframe_z_vals_(2,i) = std::numeric_limits<float>::infinity();
 
-		opt.keyframe_ts_(0,i) = i * 5.0;
+		opt.keyframe_ts_(0,i) = i * 15.0;
 	}
 
 	opt.keyframe_x_vals_(1,0) = 0.0;

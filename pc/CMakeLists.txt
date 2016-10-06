@@ -7,7 +7,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Choose to enable g3log or not: on/off
-set(ENABLE_G3LOG off)
+set(ENABLE_G3LOG on)
 
 if(ENABLE_G3LOG)
 	message( "-- Enable logging with g3log -- Yes" )

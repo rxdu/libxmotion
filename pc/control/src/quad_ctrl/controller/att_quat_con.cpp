@@ -189,11 +189,11 @@ void AttQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	cmd->motor_ang_vel_d[3] = motor_vel(3);
 
 #ifdef ENABLE_LOG
-	UtilsLog::AppendLogMsgTuple4f(input->quat_d.w(), input->quat_d.x(), input->quat_d.y(), input->quat_d.z());
-	UtilsLog::AppendLogMsgTuple3f(axis_dot_product[0],axis_dot_product[1],axis_dot_product[2]);
-	UtilsLog::AppendLogMsgTuple4f(quat_e.w(), quat_e.x(), quat_e.y(), quat_e.z());
-	UtilsLog::AppendLogMsgTuple3f(M_sign * quat_e.x(), M_sign * quat_e.y(), M_sign * quat_e.z());
-	UtilsLog::AppendLogMsgTuple3f(rate_error[0],rate_error[1],rate_error[2]);
-	UtilsLog::AppendLogMsgTuple4f(desired_ft(0),desired_ft(1),desired_ft(2),desired_ft(3));
+//	UtilsLog::AppendLogMsgTuple4f(input->quat_d.w(), input->quat_d.x(), input->quat_d.y(), input->quat_d.z());
+//	UtilsLog::AppendLogMsgTuple3f(axis_dot_product[0],axis_dot_product[1],axis_dot_product[2]);
+//	UtilsLog::AppendLogMsgTuple4f(quat_e.w(), quat_e.x(), quat_e.y(), quat_e.z());
+//	UtilsLog::AppendLogMsgTuple3f(M_sign * quat_e.x(), M_sign * quat_e.y(), M_sign * quat_e.z());
+//	UtilsLog::AppendLogMsgTuple3f(rate_error[0],rate_error[1],rate_error[2]);
+//	UtilsLog::AppendLogMsgTuple4f(desired_ft(0),desired_ft(1),desired_ft(2),desired_ft(3));
 #endif
 }

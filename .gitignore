@@ -12,6 +12,9 @@ pc/gui/*~
 utils/log_analyzer/build-log_analyzer-Desktop_Qt_5_5_1_GCC_64bit-Debug/
 pc/gui/CMakeLists.txt.user
 
+# log
+*.log
+
 # Doxygen
 docs/doxygen/html/
 docs/doxygen/latex

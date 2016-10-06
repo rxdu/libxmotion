@@ -13,7 +13,8 @@ using namespace srcl_ctrl;
 QuadSimController::QuadSimController():
 		pos_quat_con_(new PosQuatCon(&rs_)),
 		att_quat_con_(new AttQuatCon(&rs_)),
-		send_to_ros_(false)
+		broadcast_rs_(false),
+		logging_helper_(std::make_shared<LoggingHelper>("quadsim", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/control/log/quad"))
 {
 	previous_state_.point_empty = false;
 	previous_state_.positions[0] = 0;
@@ -30,6 +31,22 @@ QuadSimController::QuadSimController():
 
 		data_trans_ = std::make_shared<QuadDataTransmitter>(lcm_);
 	}
+
+	logging_helper_->AddItemNameToEntryHead("pos_x");
+	logging_helper_->AddItemNameToEntryHead("pos_y");
+	logging_helper_->AddItemNameToEntryHead("pos_z");
+	logging_helper_->AddItemNameToEntryHead("pos_d_x");
+	logging_helper_->AddItemNameToEntryHead("pos_d_y");
+	logging_helper_->AddItemNameToEntryHead("pos_d_z");
+
+	logging_helper_->AddItemNameToEntryHead("vel_x");
+	logging_helper_->AddItemNameToEntryHead("vel_y");
+	logging_helper_->AddItemNameToEntryHead("vel_z");
+	logging_helper_->AddItemNameToEntryHead("vel_d_x");
+	logging_helper_->AddItemNameToEntryHead("vel_d_y");
+	logging_helper_->AddItemNameToEntryHead("vel_d_z");
+
+	logging_helper_->PassEntryHeaderToLogger();
 }
 
 QuadSimController::~QuadSimController()
@@ -66,7 +83,7 @@ void QuadSimController::UpdateRobotState(const QuadDataFromSim& data)
 	// Test without state estimator
 	rs_.UpdateRobotState(data);
 
-	if(send_to_ros_)
+	if(broadcast_rs_)
 		data_trans_->SendQuadStateData(rs_);
 }
 
@@ -125,15 +142,28 @@ QuadCmd QuadSimController::UpdateCtrlLoop()
 	cmd_m.ang_vel[2] = att_con_output.motor_ang_vel_d[2];
 	cmd_m.ang_vel[3] = att_con_output.motor_ang_vel_d[3];
 
+	//std::cout << "pos x desired: " << previous_state_.positions[0] << std::endl;
+
 #ifdef ENABLE_LOG
 	/* log data */
-	UtilsLog::AppendLogMsgTuple4f(cmd_m_.motor_cmd.ang_vel[0],cmd_m_.motor_cmd.ang_vel[1],
-			cmd_m_.motor_cmd.ang_vel[2],cmd_m_.motor_cmd.ang_vel[3]);
+	logging_helper_->AddItemDataToEntry("pos_x", rs_.position_.x);
+	logging_helper_->AddItemDataToEntry("pos_y", rs_.position_.y);
+	logging_helper_->AddItemDataToEntry("pos_z", rs_.position_.z);
+
+	logging_helper_->AddItemDataToEntry("vel_x", rs_.velocity_.x);
+	logging_helper_->AddItemDataToEntry("vel_y", rs_.velocity_.y);
+	logging_helper_->AddItemDataToEntry("vel_z", rs_.velocity_.z);
+
+	logging_helper_->AddItemDataToEntry("pos_d_x", previous_state_.positions[0]);
+	logging_helper_->AddItemDataToEntry("pos_d_y", previous_state_.positions[1]);
+	logging_helper_->AddItemDataToEntry("pos_d_z", previous_state_.positions[2]);
+
+	logging_helper_->AddItemDataToEntry("vel_d_x", previous_state_.velocities[0]);
+	logging_helper_->AddItemDataToEntry("vel_d_y", previous_state_.velocities[1]);
+	logging_helper_->AddItemDataToEntry("vel_d_z", previous_state_.velocities[2]);
 
 	// write all data from current iteration into log file
-	LOG(INFO) << UtilsLog::GetLogEntry();
-	// empty data before a new iteration starts
-	UtilsLog::EmptyLogMsgEntry();
+	logging_helper_->PassEntryDataToLogger();
 #endif
 
 	ctrl_loop_count_++;
@@ -225,8 +255,8 @@ QuadCmd QuadSimController::UpdateCtrlLoop(const QuadState& desired)
 	cmd_m.ang_vel[3] = att_con_output.motor_ang_vel_d[3];
 
 #ifdef ENABLE_LOG
-	UtilsLog::AppendLogMsgTuple4f(cmd_m_.motor_cmd.ang_vel[0],cmd_m_.motor_cmd.ang_vel[1],
-			cmd_m_.motor_cmd.ang_vel[2],cmd_m_.motor_cmd.ang_vel[3]);
+//	UtilsLog::AppendLogMsgTuple4f(cmd_m_.motor_cmd.ang_vel[0],cmd_m_.motor_cmd.ang_vel[1],
+//			cmd_m_.motor_cmd.ang_vel[2],cmd_m_.motor_cmd.ang_vel[3]);
 #endif
 
 	// code below is used for debugging
@@ -235,11 +265,11 @@ QuadCmd QuadSimController::UpdateCtrlLoop(const QuadState& desired)
 	return cmd_m;
 
 #ifdef ENABLE_LOG
-	/* log data */
-	// write all data from current iteration into log file
-	LOG(INFO) << UtilsLog::GetLogEntry();
-	// empty data before a new iteration starts
-	UtilsLog::EmptyLogMsgEntry();
+//	/* log data */
+//	// write all data from current iteration into log file
+//	LOG(INFO) << UtilsLog::GetLogEntry();
+//	// empty data before a new iteration starts
+//	UtilsLog::EmptyLogMsgEntry();
 #endif
 }
 
