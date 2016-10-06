@@ -19,7 +19,7 @@ using namespace Eigen;
 GRBEnv TrajOptimizer::grb_env_ = GRBEnv();
 
 TrajOptimizer::TrajOptimizer():
-		r_(4), N_(7),
+		r_(4), N_(10),
 		kf_num_(2)
 {
 }
@@ -210,7 +210,7 @@ OptResultParam TrajOptimizer::OptimizeTrajectory(const Eigen::Ref<const Eigen::M
 		const Eigen::Ref<const Eigen::MatrixXf> Aeq_m, const Eigen::Ref<const Eigen::MatrixXf> beq_m,
 		const Eigen::Ref<const Eigen::MatrixXf> Aineq_m, const Eigen::Ref<const Eigen::MatrixXf> bineq_m,
 		const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts,
-		uint32_t keyframe_num, uint32_t var_size, uint32_t constr_size)
+		uint32_t keyframe_num, uint32_t var_size)
 {
 	OptResultParam result;
 	result.cost = -1;
@@ -242,8 +242,8 @@ OptResultParam TrajOptimizer::OptimizeTrajectory(const Eigen::Ref<const Eigen::M
 		model.setObjective(cost_fun);
 
 		// add constraints
-		GurobiUtils::AddLinEqualityConstrExpr(x, Aeq_m, beq_m, var_size, var_size, model);
-		GurobiUtils::AddLinInequalityConstrExpr(x, Aineq_m, bineq_m, var_size, constr_size, model);
+		GurobiUtils::AddLinEqualityConstrExpr(x, Aeq_m, beq_m, var_size, beq_m.rows(), model);
+		GurobiUtils::AddLinInequalityConstrExpr(x, Aineq_m, bineq_m, var_size, bineq_m.rows(), model);
 
 		// optimize model
 		model.optimize();

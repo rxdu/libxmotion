@@ -35,6 +35,7 @@ void GurobiUtils::GetQuadraticCostFuncExpr(const std::vector<GRBVar>& x, const E
 void GurobiUtils::AddLinEqualityConstrExpr(const std::vector<GRBVar>& x, const Eigen::Ref<const Eigen::MatrixXf> A_eq, const Eigen::Ref<const Eigen::MatrixXf> b_eq,
 				uint32_t x_size, uint32_t constr_size, GRBModel& model)
 {
+	std::cout << "equality constraint size: " << constr_size << std::endl;
 	for(int i = 0; i < constr_size; i++)
 	{
 		GRBLinExpr constr;

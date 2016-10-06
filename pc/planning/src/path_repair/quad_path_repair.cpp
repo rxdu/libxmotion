@@ -285,7 +285,7 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 
 		octomap_waypoints.push_back(wp->bundled_data_.position);
 
-		if(wp_idx++ > 5)
+		if(wp_idx++ > 10)
 			break;
 	}
 
@@ -308,16 +308,28 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 		traj_opt_.keyframe_y_vals_(1,i) = std::numeric_limits<float>::infinity();
 		traj_opt_.keyframe_z_vals_(1,i) = std::numeric_limits<float>::infinity();
 
-		traj_opt_.keyframe_ts_(0,i) = i * 1.0;
+		traj_opt_.keyframe_x_vals_(2,i) = std::numeric_limits<float>::infinity();
+		traj_opt_.keyframe_y_vals_(2,i) = std::numeric_limits<float>::infinity();
+		traj_opt_.keyframe_z_vals_(2,i) = std::numeric_limits<float>::infinity();
+
+		traj_opt_.keyframe_ts_(0,i) = i * 3.0;
 	}
 
 	traj_opt_.keyframe_x_vals_(1,0) = 0.0;
 	traj_opt_.keyframe_y_vals_(1,0) = 0.0;
 	traj_opt_.keyframe_z_vals_(1,0) = 0.0;
 
+	traj_opt_.keyframe_x_vals_(2,0) = 0.0;
+	traj_opt_.keyframe_y_vals_(2,0) = 0.0;
+	traj_opt_.keyframe_z_vals_(2,0) = 0.0;
+
 	traj_opt_.keyframe_x_vals_(1,kf_num - 1) = 0.0;
 	traj_opt_.keyframe_y_vals_(1,kf_num - 1) = 0.0;
 	traj_opt_.keyframe_z_vals_(1,kf_num - 1) = 0.0;
+
+	traj_opt_.keyframe_x_vals_(2,kf_num - 1) = 0.0;
+	traj_opt_.keyframe_y_vals_(2,kf_num - 1) = 0.0;
+	traj_opt_.keyframe_z_vals_(2,kf_num - 1) = 0.0;
 
 	//traj_opt_.OptimizeFlatTrajJoint();
 	traj_opt_.OptimizeFlatTrajWithCorridorJoint();

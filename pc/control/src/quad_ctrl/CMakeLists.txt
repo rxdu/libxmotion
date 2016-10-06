@@ -13,7 +13,7 @@ set(QUADCON_LIB_SRC
     controller/att_euler_con.cpp
     controller/pos_euler_con.cpp
     controller/att_quat_con.cpp
-    controller/pos_quat_con.cpp
+    controller/pos_quat_con.cpp   
     # motion management
     motion_server/motion_server.cpp
     # data transmitter
@@ -30,3 +30,6 @@ endif (ENABLE_G3LOG)
 # Add executables
 add_executable(quad_motion_client motion_server/motion_client.cpp)
 target_link_libraries(quad_motion_client ${LCM_LIBRARIES})
+
+add_executable(pos_step controller/tests/pos_step_response.cpp)
+target_link_libraries(pos_step ${LCM_LIBRARIES}) 

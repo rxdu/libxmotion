@@ -13,7 +13,7 @@
 using namespace srcl_ctrl;
 
 QuadPolyOpt::QuadPolyOpt():
-		r_pos_(4), N_pos_(7),
+		r_pos_(4), N_pos_(10),
 		r_yaw_(2), N_yaw_(3),
 		keyframe_num_(2)
 {
@@ -257,6 +257,7 @@ void QuadPolyOpt::OptimizeFlatTrajJoint()
 
 void QuadPolyOpt::InitOptWithCorridorJointMatrices(uint32_t keyframe_num, uint32_t midpoint_num, double cor_size)
 {
+	std::cout << "started init" << std::endl;
 	keyframe_num_ = keyframe_num;
 
 	// position constraints
@@ -310,6 +311,8 @@ void QuadPolyOpt::InitOptWithCorridorJointMatrices(uint32_t keyframe_num, uint32
 	opt_size_.corridor_size = cor_size;
 	opt_size_.var_cor_pos_size = (N_pos_ + 1)*(keyframe_num - 1)*3;
 	opt_size_.var_cor_yaw_size = (N_yaw_ + 1)*(keyframe_num - 1);
+
+	std::cout << "ended init" << std::endl;
 }
 
 void QuadPolyOpt::OptimizeFlatTrajWithCorridorJoint()
@@ -348,7 +351,7 @@ void QuadPolyOpt::OptimizeFlatTrajWithCorridorJoint()
 	beq_joint_.block(opt_size_.beq_pos_size , 0, opt_size_.beq_pos_size, 1) = beq_y_;
 	beq_joint_.block(opt_size_.beq_pos_size*2 , 0, opt_size_.beq_pos_size, 1) = beq_z_;
 
-	OptResultParam pos_result = optimizer_.OptimizeTrajectory(Q_joint_, Aeq_joint_, beq_joint_, A_cor_, b_cor_, keyframe_ts_, keyframe_num_, opt_size_.var_cor_pos_size, opt_size_.cor_constr_size);
+	OptResultParam pos_result = optimizer_.OptimizeTrajectory(Q_joint_, Aeq_joint_, beq_joint_, A_cor_, b_cor_, keyframe_ts_, keyframe_num_, opt_size_.var_cor_pos_size);
 	OptResultParam yaw_result = optimizer_.OptimizeTrajectory(Q_yaw_, Aeq_yaw_, beq_yaw_, keyframe_ts_, keyframe_num_, opt_size_.var_cor_yaw_size);
 
 	exec_time = clock() - exec_time;

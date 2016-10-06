@@ -86,7 +86,7 @@ public:
 			const Eigen::Ref<const Eigen::MatrixXf> Aeq_m, const Eigen::Ref<const Eigen::MatrixXf> beq_m,
 			const Eigen::Ref<const Eigen::MatrixXf> Aineq_m, const Eigen::Ref<const Eigen::MatrixXf> bineq_m,
 			const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts,
-			uint32_t keyframe_num, uint32_t var_size, uint32_t constr_size);
+			uint32_t keyframe_num, uint32_t var_size);
 };
 
 }
