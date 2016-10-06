@@ -43,6 +43,16 @@ PolyMotionClient::~PolyMotionClient()
 
 }
 
+double PolyMotionClient::GetRefactoredTime(double ts, double te, double t)
+{
+	if(t < ts)
+		t = ts;
+	if(t > te)
+		t = te;
+
+	return (t - ts) / (te - ts);
+}
+
 void PolyMotionClient::LcmPolynomialHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::PolynomialCurve_t* msg)
 {
 	srcl_msgs::UAVTrajectory_t traj_msg;
@@ -55,21 +65,22 @@ void PolyMotionClient::LcmPolynomialHandler(const lcm::ReceiveBuffer* rbuf, cons
 
 		for(t = seg.t_start; t < seg.t_end; t += step_size_)
 		{
+			double t_factor = GetRefactoredTime(seg.t_start, seg.t_end, t);
 			srcl_msgs::UAVTrajectoryPoint_t pt;
 
 			pt.point_empty = false;
 
-			pt.positions[0] = PolyOptMath::GetPolynomialValue(seg.coeffs_x, 0, t);
-			pt.positions[1] = PolyOptMath::GetPolynomialValue(seg.coeffs_y, 0, t);
-			pt.positions[2] = PolyOptMath::GetPolynomialValue(seg.coeffs_z, 0, t);
+			pt.positions[0] = PolyOptMath::GetPolynomialValue(seg.coeffs_x, 0, t_factor);
+			pt.positions[1] = PolyOptMath::GetPolynomialValue(seg.coeffs_y, 0, t_factor);
+			pt.positions[2] = PolyOptMath::GetPolynomialValue(seg.coeffs_z, 0, t_factor);
 
-			pt.velocities[0] = PolyOptMath::GetPolynomialValue(seg.coeffs_x, 1, t);
-			pt.velocities[1] = PolyOptMath::GetPolynomialValue(seg.coeffs_y, 1, t);
-			pt.velocities[2] = PolyOptMath::GetPolynomialValue(seg.coeffs_z, 1, t);
+			pt.velocities[0] = PolyOptMath::GetPolynomialValue(seg.coeffs_x, 1, t_factor);
+			pt.velocities[1] = PolyOptMath::GetPolynomialValue(seg.coeffs_y, 1, t_factor);
+			pt.velocities[2] = PolyOptMath::GetPolynomialValue(seg.coeffs_z, 1, t_factor);
 
-			pt.accelerations[0] = PolyOptMath::GetPolynomialValue(seg.coeffs_x, 2, t);
-			pt.accelerations[1] = PolyOptMath::GetPolynomialValue(seg.coeffs_y, 2, t);
-			pt.accelerations[2] = PolyOptMath::GetPolynomialValue(seg.coeffs_z, 2, t);
+			pt.accelerations[0] = PolyOptMath::GetPolynomialValue(seg.coeffs_x, 2, t_factor);
+			pt.accelerations[1] = PolyOptMath::GetPolynomialValue(seg.coeffs_y, 2, t_factor);
+			pt.accelerations[2] = PolyOptMath::GetPolynomialValue(seg.coeffs_z, 2, t_factor);
 
 			pt.yaw = -M_PI/4;//PolyOptMath::GetPolynomialValue(seg.coeffs_yaw, 0, t);
 			pt.duration = step_size_;

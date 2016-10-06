@@ -23,6 +23,7 @@ int main(int arc, char* argv[])
 	// set quadrotor init pose
 	//controller->SetInitPose(-1.8,2,0.5,-M_PI/4);
 	controller->SetInitPose(0,0,0.5,0);
+	controller->BroadcastRobotState(true);
 
 	// create a simulation process
 	RobotSimProcess<QuadDataFromSim, QuadDataToSim,QuadState, QuadCmd> process(client,controller);

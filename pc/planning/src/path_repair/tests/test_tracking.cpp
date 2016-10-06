@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 		return -1;
 
 	//opt.InitOptJointMatrices(kf_num);
-	opt.InitOptWithCorridorJointMatrices(kf_num, 20, 0.01);
+	opt.InitOptWithCorridorJointMatrices(kf_num, 20, 0.05);
 
 	for(int i = 0; i < waypoints.size(); i++)
 	{
@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
 		opt.keyframe_y_vals_(1,i) = std::numeric_limits<float>::infinity();
 		opt.keyframe_z_vals_(1,i) = std::numeric_limits<float>::infinity();
 
-		opt.keyframe_ts_(0,i) = i * 1.0;
+		opt.keyframe_ts_(0,i) = i * 5.0;
 	}
 
 	opt.keyframe_x_vals_(1,0) = 0.0;

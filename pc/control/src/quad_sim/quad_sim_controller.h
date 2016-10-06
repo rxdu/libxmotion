@@ -54,7 +54,7 @@ public:
 
 public:
 	void SetInitPose(float x, float y, float z, float yaw);
-	void SendRobotStateToROS(bool cmd) { send_to_ros_ = cmd; };
+	void BroadcastRobotState(bool cmd) { send_to_ros_ = cmd; };
 };
 
 }

@@ -25,7 +25,7 @@ int main(int arc, char* argv[])
 //	controller->SetInitPose(-1.8,1.2,0.6,-M_PI/4); // demo for dynamic replanning from origin to fixed point
 //	controller->SetInitPose(-1.8,0.6,0.8,-M_PI/4);
 	controller->SetInitPose(-1.8,2,0.6,-M_PI/4);
-	controller->SendRobotStateToROS(true);
+	controller->BroadcastRobotState(true);
 
 	// create a simulation process
 	RobotSimProcess<QuadDataFromSim, QuadDataToSim,QuadState, QuadCmd> process(client,controller);

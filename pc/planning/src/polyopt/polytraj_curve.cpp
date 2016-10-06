@@ -45,7 +45,7 @@ double PolyTrajCurve::GetRefactoredTime(double t)
 		t = param_.te;
 
 	if(is_nondim_)
-		return (t - param_.ts) * (param_.te - param_.ts);
+		return (t - param_.ts) / (param_.te - param_.ts);
 	else
 		return t;
 }

@@ -30,6 +30,8 @@ private:
 	std::string server_topic_;
 	double step_size_;
 
+	double GetRefactoredTime(double ts, double te, double t);
+
 public:
 	void LcmPolynomialHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::PolynomialCurve_t* msg);
 };
