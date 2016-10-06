@@ -13,8 +13,7 @@ using namespace srcl_ctrl;
 QuadSimController::QuadSimController():
 		pos_quat_con_(new PosQuatCon(&rs_)),
 		att_quat_con_(new AttQuatCon(&rs_)),
-		broadcast_rs_(false),
-		logging_helper_(std::make_shared<LoggingHelper>("quadsim", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/control/log/quad"))
+		broadcast_rs_(false)
 {
 	previous_state_.point_empty = false;
 	previous_state_.positions[0] = 0;
@@ -32,6 +31,9 @@ QuadSimController::QuadSimController():
 		data_trans_ = std::make_shared<QuadDataTransmitter>(lcm_);
 	}
 
+#ifdef ENABLE_LOG
+	logging_helper_ = std::make_shared<LoggingHelper>("quadsim", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/control/log/quad");
+
 	logging_helper_->AddItemNameToEntryHead("pos_x");
 	logging_helper_->AddItemNameToEntryHead("pos_y");
 	logging_helper_->AddItemNameToEntryHead("pos_z");
@@ -47,6 +49,7 @@ QuadSimController::QuadSimController():
 	logging_helper_->AddItemNameToEntryHead("vel_d_z");
 
 	logging_helper_->PassEntryHeaderToLogger();
+#endif
 }
 
 QuadSimController::~QuadSimController()
