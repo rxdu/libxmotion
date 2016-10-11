@@ -15,7 +15,7 @@ def main():
 
     # Connect to the Vehicle.
     #print("Connecting to vehicle on: %s" % (connection_string,))
-    vehicle = connect('/dev/ttyUSB0', baud = 57600)
+    vehicle = connect('/dev/ttyUSB0', baud = 57600, rate=6)
 
     # Get some vehicle attributes (state)
     print "\nGet some vehicle attribute values:"
