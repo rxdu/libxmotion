@@ -9,6 +9,68 @@ import droneapi
 import socket
 import sys
 
+#arm the vehicle if armable
+def checkArm(vehicle):
+    #uncomment for real world test
+##    while not vehicle.is_armable:
+##        print "waiting for vehicle to become armable"
+##        time.sleep(1)
+    print "Contact!"
+    vehicle.armed = True
+    while not vehicle.armed:
+        print " Waiting for arming..."
+        time.sleep(1)
+    return
+
+#wait until the vehicle is in guided mode
+def wait4guided(vehicle):
+    while (vehicle.mode.name != 'GUIDED'):
+        time.sleep(2)
+    return
+
+    #takeoff
+def TakeoffandClimb (vehicle, alt):
+    print "rotate!"
+    vehicle.simple_takeoff(alt)
+    while not (vehicle.location.global_frame.alt>=alt*0.95):
+        print " Altitude: ", vehicle.location.global_frame.alt
+        time.sleep(1)
+    return
+
+def arm_and_takeoff(vehicle, aTargetAltitude):
+    """
+    Arms vehicle and fly to aTargetAltitude.
+    """
+
+    print "Basic pre-arm checks"
+    # Don't try to arm until autopilot is ready
+    while not vehicle.is_armable:
+        print " Waiting for vehicle to initialise..."
+        time.sleep(1)
+
+    print "Arming motors"
+    # Copter should arm in GUIDED mode
+    vehicle.mode    = VehicleMode("GUIDED")
+    vehicle.armed   = True
+
+    # Confirm vehicle armed before attempting to take off
+    while not vehicle.armed:
+        print " Waiting for arming..."
+        time.sleep(1)
+
+    print "Taking off!"
+    vehicle.simple_takeoff(aTargetAltitude) # Take off to target altitude
+
+    # Wait until the vehicle reaches a safe height before processing the goto (otherwise the command
+    #  after Vehicle.simple_takeoff will execute immediately).
+    #while True:
+    #    print " Altitude: ", vehicle.location.global_relative_frame.alt
+        #Break and return from function just below target altitude.
+    #    if vehicle.location.global_relative_frame.alt>=aTargetAltitude*0.95:
+    #        print "Reached target altitude"
+    #        break
+    #    time.sleep(1)
+
 def main():
     # Import DroneKit-Python
     from dronekit import connect, VehicleMode
@@ -44,6 +106,13 @@ def main():
     print " Airspeed: %s" % vehicle.airspeed    # settable
     print " Mode: %s" % vehicle.mode.name    # settable
     print " Armed: %s" % vehicle.armed    # settable
+
+    wait4guided(vehicle)
+    checkArm(vehicle)
+    TakeoffandClimb(vehicle, 1.0)
+    #arm_and_takeoff(vehicle, 1.0)
+
+    #time.sleep(10)
 
     # Close vehicle object before exiting script
     vehicle.close()
