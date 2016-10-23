@@ -17,8 +17,8 @@
 #include "quad_ctrl/data_types/quad_sim_types.h"
 #include "quad_ctrl/data_types/quad_state.h"
 
-#include "quad_ctrl/controller/att_euler_con.h"
-#include "quad_ctrl/controller/pos_euler_con.h"
+#include "quad_ctrl/controller/att_quat_con.h"
+#include "quad_ctrl/controller/pos_quat_con.h"
 
 #include "quad_ctrl/motion_server/motion_server.h"
 #include "quad_ctrl/data_trans/quad_data_transmitter.h"
@@ -36,8 +36,8 @@ public:
 private:
 	UAVTrajectoryPoint previous_state_;
 
-	AttEulerCon att_euler_con_;
-	PosEulerCon pos_euler_con_;
+	std::unique_ptr<AttQuatCon> att_con_;
+	std::unique_ptr<PosQuatCon> pos_con_;
 
 	std::shared_ptr<lcm::LCM> lcm_;
 

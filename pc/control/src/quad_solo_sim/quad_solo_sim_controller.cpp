@@ -11,11 +11,22 @@
 using namespace srcl_ctrl;
 
 QuadSoloSimController::QuadSoloSimController():
+		att_con_(new AttQuatCon(rs_)),
+		pos_con_(new PosQuatCon(rs_)),
 		broadcast_rs_(false)
 {
 	rs_.arm_length_ = 0.205;
 	rs_.mass_ = 1.2 + 0.02465 * 4;
 	rs_.w_h_ = sqrt(rs_.mass_ * rs_.g_ / 4 / rs_.kF_);
+
+//	kp_phi = 1;
+//	kd_phi = 0.1;
+//	kp_theta = 1;
+//	kd_theta = 0.1;
+//	kp_psi = 1.2;
+//	kd_psi = 0.15;
+
+	att_con_->SetControlGains(1.0, 0.1, 1.0, 0.1, 0.01, 0);
 
 	previous_state_.point_empty = false;
 	previous_state_.positions[0] = 0;
@@ -107,8 +118,8 @@ QuadCmd QuadSoloSimController::UpdateCtrlLoop()
 
 	/********* update position control *********/
 	// invoke position controller update
-	PosEulerConInput pos_con_input;
-	PosEulerConOutput pos_con_output;
+	PosQuatConInput pos_con_input;
+	PosQuatConOutput pos_con_output;
 
 //	pos_con_input.pos_d[0] = previous_state_.positions[0];
 //	pos_con_input.pos_d[1] = previous_state_.positions[1];
@@ -121,8 +132,8 @@ QuadCmd QuadSoloSimController::UpdateCtrlLoop()
 //	pos_con_input.acc_d[2] = previous_state_.accelerations[2];
 //	pos_con_input.yaw_d = previous_state_.yaw;
 
-	pos_con_input.pos_d[0] = 0.1;
-	pos_con_input.pos_d[1] = 0.1;
+	pos_con_input.pos_d[0] = 0;
+	pos_con_input.pos_d[1] = 0;
 	pos_con_input.pos_d[2] = 0.5;
 	pos_con_input.vel_d[0] = 0;
 	pos_con_input.vel_d[1] = 0;
@@ -132,20 +143,18 @@ QuadCmd QuadSoloSimController::UpdateCtrlLoop()
 	pos_con_input.acc_d[2] = 0;
 	pos_con_input.yaw_d = 0;
 
-	pos_euler_con_.Update(rs_, pos_con_input, pos_con_output);
+	pos_con_->Update(pos_con_input, pos_con_output);
 
 	/********* update attitude control *********/
-	AttEulerConInput att_con_input;
-	AttEulerConOutput att_con_output;
+	AttQuatConInput att_con_input;
+	AttQuatConOutput att_con_output;
 
-	att_con_input.delta_w_F = pos_con_output.delta_w_F;
-	att_con_input.euler_d[0] = pos_con_output.euler_d[0];
-	att_con_input.euler_d[1] = pos_con_output.euler_d[1];
-	att_con_input.euler_d[2] = pos_con_output.euler_d[2];
+	att_con_input.quat_d = pos_con_output.quat_d;
+	att_con_input.ftotal_d = pos_con_output.ftotal_d;
 	att_con_input.rot_rate_d[0] = 0;
 	att_con_input.rot_rate_d[1] = 0;
 	att_con_input.rot_rate_d[2] = 0;
-	att_euler_con_.Update(rs_, att_con_input, att_con_output);
+	att_con_->Update(att_con_input, att_con_output);
 
 	// set control variables
 	cmd_m.ang_vel[0] = att_con_output.motor_ang_vel_d[0];

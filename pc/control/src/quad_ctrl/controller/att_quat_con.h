@@ -75,7 +75,16 @@ private:
 	Eigen::Matrix<double,4,1> CalcMotorCmd(Eigen::Matrix<float,4,1> force_toqure, QuadFlightType type);
 
 public:
-	//void Update(ControlInput *input, ControlOutput *cmd);
+	void SetControlGains(float _kp_phi, float _kd_phi, float _kp_theta, float _kd_theta, float _kp_psi, float _kd_psi)
+	{
+		kp_phi = _kp_phi;
+		kd_phi = _kd_phi;
+		kp_theta = _kp_theta;
+		kd_theta = _kd_theta;
+		kp_psi = _kp_psi;
+		kd_psi = _kd_psi;
+	};
+
 	void Update(const AttQuatConInput& input, AttQuatConOutput& output);
 };
 
