@@ -1,15 +1,15 @@
 /*
- * quad_sim_data.h
+ * quad_sim_types.h
  *
  *  Created on: Sep 1, 2016
  *      Author: rdu
  */
 
-#ifndef CONTROL_SRC_QUAD_SIM_QUAD_SIM_DATA_H_
-#define CONTROL_SRC_QUAD_SIM_QUAD_SIM_DATA_H_
+#ifndef CONTROL_SRC_QUAD_SIM_QUAD_SIM_TYPES_H_
+#define CONTROL_SRC_QUAD_SIM_QUAD_SIM_TYPES_H_
 
 #include "common/control_types.h"
-#include "quad_ctrl/controller/quad_types.h"
+#include "quad_ctrl/data_types/quad_config.h"
 
 namespace srcl_ctrl {
 
@@ -26,14 +26,13 @@ typedef struct
 	Point3f rot_i;
 	Quaternion quat_i;
 	Point3f rot_rate_b;
-} QuadDataFromSim;
+} DataFromQuadSim;
 
 typedef struct
 {
-	QuadCmd motor_cmd;
-} QuadDataToSim;
-
+	float ang_vel[4];
+} DataToQuadSim;
 
 }
 
-#endif /* CONTROL_SRC_QUAD_SIM_QUAD_SIM_DATA_H_ */
+#endif /* CONTROL_SRC_QUAD_SIM_QUAD_SIM_TYPES_H_ */

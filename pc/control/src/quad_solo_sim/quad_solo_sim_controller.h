@@ -14,12 +14,12 @@
 #include <lcm/lcm-cpp.hpp>
 
 #include "vrep_sim/vrep_interface/robot_sim_controller.h"
-#include "quad_sim/quad_sim_data.h"
+#include "quad_ctrl/data_types/quad_sim_types.h"
+#include "quad_ctrl/data_types/quad_state.h"
 
-#include "quad_ctrl/estimator/quad_state.h"
-#include "quad_ctrl/controller/quad_types.h"
-#include "quad_ctrl/controller/att_quat_con.h"
-#include "quad_ctrl/controller/pos_quat_con.h"
+#include "quad_ctrl/controller/att_euler_con.h"
+#include "quad_ctrl/controller/pos_euler_con.h"
+
 #include "quad_ctrl/motion_server/motion_server.h"
 #include "quad_ctrl/data_trans/quad_data_transmitter.h"
 
@@ -27,7 +27,7 @@
 
 namespace srcl_ctrl {
 
-class QuadSoloSimController : public RobotSimController<QuadDataFromSim, QuadDataToSim,QuadState, QuadCmd>
+class QuadSoloSimController : public RobotSimController<DataFromQuadSim, DataToQuadSim, QuadState, QuadCmd>
 {
 public:
 	QuadSoloSimController();
@@ -36,8 +36,8 @@ public:
 private:
 	UAVTrajectoryPoint previous_state_;
 
-	AttQuatCon* att_quat_con_;
-	PosQuatCon* pos_quat_con_;
+	AttEulerCon att_euler_con_;
+	PosEulerCon pos_euler_con_;
 
 	std::shared_ptr<lcm::LCM> lcm_;
 
@@ -48,12 +48,9 @@ private:
 	std::shared_ptr<LoggingHelper> logging_helper_;
 
 public:
-	virtual QuadDataToSim ConvertRobotCmdToSimCmd(const QuadCmd& cmd);
-
-	virtual void UpdateRobotState(const QuadDataFromSim& data);
-
+	virtual DataToQuadSim ConvertRobotCmdToSimCmd(const QuadCmd& cmd);
+	virtual void UpdateRobotState(const DataFromQuadSim& data);
 	virtual QuadCmd UpdateCtrlLoop();
-	virtual QuadCmd UpdateCtrlLoop(const QuadState& desired);
 
 public:
 	void SetInitPose(float x, float y, float z, float yaw);

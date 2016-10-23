@@ -14,20 +14,18 @@
 #include <lcm/lcm-cpp.hpp>
 
 #include "vrep_sim/vrep_interface/robot_sim_controller.h"
-#include "quad_sim/quad_sim_data.h"
-
-#include "quad_ctrl/estimator/quad_state.h"
-#include "quad_ctrl/controller/quad_types.h"
 #include "quad_ctrl/controller/att_quat_con.h"
 #include "quad_ctrl/controller/pos_quat_con.h"
 #include "quad_ctrl/motion_server/motion_server.h"
 #include "quad_ctrl/data_trans/quad_data_transmitter.h"
+#include "quad_ctrl/data_types/quad_sim_types.h"
+#include "quad_ctrl/data_types/quad_state.h"
 
 #include "ctrl_utils/logging/logging_helper.h"
 
 namespace srcl_ctrl {
 
-class QuadSimController : public RobotSimController<QuadDataFromSim, QuadDataToSim,QuadState, QuadCmd>
+class QuadSimController : public RobotSimController<DataFromQuadSim, DataToQuadSim,QuadState, QuadCmd>
 {
 public:
 	QuadSimController();
@@ -48,12 +46,9 @@ private:
 	std::shared_ptr<LoggingHelper> logging_helper_;
 
 public:
-	virtual QuadDataToSim ConvertRobotCmdToSimCmd(const QuadCmd& cmd);
-
-	virtual void UpdateRobotState(const QuadDataFromSim& data);
-
+	virtual DataToQuadSim ConvertRobotCmdToSimCmd(const QuadCmd& cmd);
+	virtual void UpdateRobotState(const DataFromQuadSim& data);
 	virtual QuadCmd UpdateCtrlLoop();
-	virtual QuadCmd UpdateCtrlLoop(const QuadState& desired);
 
 public:
 	void SetInitPose(float x, float y, float z, float yaw);

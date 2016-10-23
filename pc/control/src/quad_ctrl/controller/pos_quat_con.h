@@ -8,15 +8,30 @@
 #ifndef CONTROL_POS_QUAT_CON_H_
 #define CONTROL_POS_QUAT_CON_H_
 
-#include "quad_ctrl/controller/quad_types.h"
-#include "quad_ctrl/controller/controller_base.h"
+#include "quad_ctrl/data_types/quad_state.h"
 
 namespace srcl_ctrl {
 
-class PosQuatCon: public Controller
+typedef struct
+{
+	// input of position controller
+	float pos_d[3];
+	float vel_d[3];
+	float acc_d[3];
+	float yaw_d;
+	float yaw_rate_d;
+}PosQuatConInput;
+
+typedef struct{
+	// output of position controller (using Quaternion)
+	Eigen::Quaterniond quat_d;
+	float ftotal_d;
+}PosQuatConOutput;
+
+class PosQuatCon
 {
 public:
-	PosQuatCon(QuadState *_rs);
+	PosQuatCon(const QuadState& _rs);
 	~PosQuatCon();
 
 private:
@@ -30,6 +45,9 @@ private:
 	float ki_2;
 	float kd_2;
 
+private:
+	const QuadState& rs_;
+
 	double pos_e_integral[3];
 	double zint_uppper_limit;
 	double zint_lower_limit;
@@ -37,7 +55,7 @@ private:
 	double xyint_lower_limit;
 
 public:
-	void Update(ControlInput *input, ControlOutput *cmd);
+	void Update(const PosQuatConInput& input, PosQuatConOutput& output);
 };
 
 }

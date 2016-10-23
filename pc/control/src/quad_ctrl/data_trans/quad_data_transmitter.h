@@ -15,7 +15,7 @@
 #include <lcm/lcm-cpp.hpp>
 
 #include "common/control_types.h"
-#include "quad_ctrl/estimator/quad_state.h"
+#include "quad_ctrl/data_types/quad_state.h"
 
 namespace srcl_ctrl {
 

@@ -12,15 +12,47 @@
 #include "eigen3/Eigen/Geometry"
 
 #include "common/control_types.h"
-#include "quad_ctrl/controller/quad_types.h"
-#include "quad_ctrl/controller/controller_base.h"
+#include "quad_ctrl/data_types/quad_state.h"
 
 namespace srcl_ctrl {
 
-class AttQuatCon: public Controller
+typedef struct
+{
+	// input of position controller
+	float pos_d[3];
+	float vel_d[3];
+	float acc_d[3];
+	float yaw_d;
+	float yaw_rate_d;
+
+	// input of attitude controller (using Euler)
+	float euler_d[3];
+	float rot_rate_d[3];
+	float delta_w_F;
+
+	// input of attitude controller (using Quaternion)
+	Eigen::Quaterniond quat_d;
+	float ftotal_d;
+
+}AttQuatConInput;
+
+typedef struct{
+	// output of position controller (using Euler)
+	float euler_d[3];
+	float delta_w_F;
+
+	// output of position controller (using Quaternion)
+	Eigen::Quaterniond quat_d;
+	float ftotal_d;
+
+	// output of attitude controller
+	float motor_ang_vel_d[3];
+}AttQuatConOutput;
+
+class AttQuatCon
 {
 public:
-	AttQuatCon(QuadState *_rs);
+	AttQuatCon(const QuadState& _rs);
 	~AttQuatCon();
 
 private:
@@ -31,16 +63,20 @@ private:
 	float kp_psi;
 	float kd_psi;
 
+private:
+	const QuadState& rs_;
+
+	// internal variables
 	Eigen::Matrix<double,4,4> plus_type_trans_;
 	Eigen::Matrix<double,4,4> plus_type_trans_inv_;
 	Eigen::Matrix<double,4,4> x_type_trans_;
 	Eigen::Matrix<double,4,4> x_type_trans_inv_;
 
-private:
 	Eigen::Matrix<double,4,1> CalcMotorCmd(Eigen::Matrix<float,4,1> force_toqure, QuadFlightType type);
 
 public:
-	void Update(ControlInput *input, ControlOutput *cmd);
+	//void Update(ControlInput *input, ControlOutput *cmd);
+	void Update(const AttQuatConInput& input, AttQuatConOutput& output);
 };
 
 }

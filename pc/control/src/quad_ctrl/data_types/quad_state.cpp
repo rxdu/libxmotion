@@ -13,7 +13,7 @@
 #include "g3log/g3log.hpp"
 #endif
 
-#include <estimator/quad_state.h>
+#include "quad_ctrl/data_types/quad_state.h"
 #include "ctrl_utils/logging/utils_log.h"
 
 using namespace srcl_ctrl;
@@ -58,7 +58,7 @@ QuadState::~QuadState()
 
 }
 
-void QuadState::UpdateRobotState(const DataFromQuad & new_data)
+void QuadState::UpdateRobotState(const DataFromQuad& new_data)
 {
 	// get values directly from simulator, will be replaced by state estimator later
 	position_.x = new_data.pos_i.x;
@@ -85,17 +85,9 @@ void QuadState::UpdateRobotState(const DataFromQuad & new_data)
 	rotation_rate_.z = new_data.rot_rate_b.z;
 
 	laser_points_ = new_data.laser_points;
-
-#ifdef ENABLE_LOG
-	UtilsLog::AppendLogMsgTuple3f(position_.x,position_.y,position_.z);
-	UtilsLog::AppendLogMsgTuple3f(velocity_.x,velocity_.y,velocity_.z);
-	UtilsLog::AppendLogMsgTuple3f(orientation_.x,orientation_.y,orientation_.z);
-	UtilsLog::AppendLogMsgTuple4f(quat_.w(), quat_.x(), quat_.y(), quat_.z());
-	UtilsLog::AppendLogMsgTuple3f(rotation_rate_.x,rotation_rate_.y,rotation_rate_.z);
-#endif
 }
 
-void QuadState::UpdateRobotState(const QuadDataFromSim & new_data)
+void QuadState::UpdateRobotState(const DataFromQuadSim& new_data)
 {
 	// get values directly from simulator, will be replaced by state estimator later
 	position_.x = new_data.pos_i.x;
@@ -122,12 +114,4 @@ void QuadState::UpdateRobotState(const QuadDataFromSim & new_data)
 	rotation_rate_.z = new_data.rot_rate_b.z;
 
 	laser_points_ = new_data.laser_points;
-
-#ifdef ENABLE_LOG
-	UtilsLog::AppendLogMsgTuple3f(position_.x,position_.y,position_.z);
-	UtilsLog::AppendLogMsgTuple3f(velocity_.x,velocity_.y,velocity_.z);
-	UtilsLog::AppendLogMsgTuple3f(orientation_.x,orientation_.y,orientation_.z);
-	UtilsLog::AppendLogMsgTuple4f(quat_.w(), quat_.x(), quat_.y(), quat_.z());
-	UtilsLog::AppendLogMsgTuple3f(rotation_rate_.x,rotation_rate_.y,rotation_rate_.z);
-#endif
 }
