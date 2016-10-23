@@ -23,5 +23,8 @@ include_directories(${PROJECT_SOURCE_DIR}/src/vrep_sim/vrep_lib/remoteApi)
 add_executable(quadsim_demo quadsim_demo.cpp)
 target_link_libraries(quadsim_demo quadsim quad_ctrl)
 
+add_executable(quadsolo_sim_demo quadsolo_sim_demo.cpp)
+target_link_libraries(quadsolo_sim_demo quadsolosim quad_ctrl)
+
 add_executable(quadsim_path_repair quadsim_path_repair.cpp)
 target_link_libraries(quadsim_path_repair quadsim quad_ctrl)
