@@ -2,10 +2,9 @@ cmake_minimum_required(VERSION 2.8.11)
 project(srcl_3rd_party_lib)
 
 ## Check if g3log needs to be built
-if(ENABLE_G3LOG)
-	add_subdirectory(g3log_srcl)
-endif(ENABLE_G3LOG)
-
+if(ENABLE_LOGGING)
+	add_subdirectory(g3log)
+endif(ENABLE_LOGGING)
 
 ## Check if OMPL can be built
 if(Boost_FOUND)

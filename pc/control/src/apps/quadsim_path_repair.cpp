@@ -28,7 +28,7 @@ int main(int arc, char* argv[])
 	controller->BroadcastRobotState(true);
 
 	// create a simulation process
-	RobotSimProcess<QuadDataFromSim, QuadDataToSim,QuadState, QuadCmd> process(client,controller);
+	RobotSimProcess<DataFromQuadSim, DataToQuadSim,QuadState, QuadCmd> process(client,controller);
 
 	// run the simulation in synchronous mode
 	if(process.ConnectToServer())

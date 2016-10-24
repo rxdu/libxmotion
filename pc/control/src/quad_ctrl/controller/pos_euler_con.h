@@ -8,14 +8,32 @@
 #ifndef CONTROL_POS_EULER_CON_H_
 #define CONTROL_POS_EULER_CON_H_
 
-#include <controller/quad_types.h>
-#include "quad_ctrl/controller/controller_base.h"
+#include "quad_ctrl/data_types/quad_state.h"
 
 namespace srcl_ctrl{
 
-class PosEulerCon: public Controller {
+typedef struct
+{
+	// input of position controller
+	float pos_d[3];
+	float vel_d[3];
+	float acc_d[3];
+	float yaw_d;
+	float yaw_rate_d;
+
+	// input of attitude controller (using Euler)
+	float euler_d[3];
+}PosEulerConInput;
+
+typedef struct{
+	// output of position controller (using Euler)
+	float euler_d[3];
+	float delta_w_F;
+}PosEulerConOutput;
+
+class PosEulerCon{
 public:
-	PosEulerCon(QuadState *_rs);
+	PosEulerCon();
 	~PosEulerCon();
 
 private:
@@ -27,7 +45,7 @@ private:
 	float kd_2;
 
 public:
-	void Update(ControlInput *input, ControlOutput *cmd);
+	void Update(const QuadState& rs, const PosEulerConInput& input, PosEulerConOutput& output);
 };
 
 }

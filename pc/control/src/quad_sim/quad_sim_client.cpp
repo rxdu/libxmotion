@@ -12,7 +12,7 @@
 using namespace srcl_ctrl;
 
 QuadSimClient::QuadSimClient():
-		RobotSimClient<QuadDataFromSim, QuadDataToSim>(),
+		RobotSimClient<DataFromQuadSim, DataToQuadSim>(),
 		max_motor_speed_(10000)
 {
 	// initialize variables
@@ -43,7 +43,7 @@ QuadSimClient::QuadSimClient():
 }
 
 QuadSimClient::QuadSimClient(simxInt clientId):
-		RobotSimClient<QuadDataFromSim, QuadDataToSim>(clientId),
+		RobotSimClient<DataFromQuadSim, DataToQuadSim>(clientId),
 		max_motor_speed_(10000)
 {
 	// initialize variables
@@ -103,7 +103,7 @@ void QuadSimClient::ConfigDataStreaming(void)
 	simxSetFloatSignal(client_id_, "propeller_cmd_left", 0.0, simx_opmode_oneshot);
 }
 
-bool QuadSimClient::ReceiveDataFromRobot(QuadDataFromSim& rx_data)
+bool QuadSimClient::ReceiveDataFromRobot(DataFromQuadSim& rx_data)
 {
 	//std::cout << "fetching new data"<<std::endl;
 
@@ -128,9 +128,44 @@ bool QuadSimClient::ReceiveDataFromRobot(QuadDataFromSim& rx_data)
 		return false;
 }
 
-void QuadSimClient::SendDataToRobot(const QuadDataToSim& rcmd)
+void QuadSimClient::SendDataToRobot(const DataToQuadSim& rcmd)
 {
-	SendPropellerCmd(rcmd.motor_cmd);
+	float front_prop, rear_prop, left_prop, right_prop;
+
+	front_prop = rcmd.ang_vel[0];
+	right_prop = rcmd.ang_vel[1];
+	rear_prop = rcmd.ang_vel[2];
+	left_prop = rcmd.ang_vel[3];
+
+	// add limits
+	if(front_prop > max_motor_speed_)
+		front_prop = max_motor_speed_;
+	if(rear_prop > max_motor_speed_)
+		rear_prop = max_motor_speed_;
+	if(left_prop > max_motor_speed_)
+		left_prop = max_motor_speed_;
+	if(right_prop > max_motor_speed_)
+		right_prop = max_motor_speed_;
+
+	if(front_prop < 0)
+		front_prop = 0;
+	if(rear_prop < 0)
+		rear_prop = 0;
+	if(left_prop < 0)
+		left_prop = 0;
+	if(right_prop < 0)
+		right_prop = 0;
+
+	//	std::cout << "prop cmd 0-4: "<<cmd.ang_vel[0] << " , "<< cmd.ang_vel[1] << " , " << cmd.ang_vel[2] << " , " << cmd.ang_vel[3] << std::endl;
+
+	// send commands to simulator
+	simxSetFloatSignal(client_id_, "propeller_cmd_front", front_prop, simx_opmode_oneshot);
+	simxSetFloatSignal(client_id_, "propeller_cmd_rear", rear_prop, simx_opmode_oneshot);
+	simxSetFloatSignal(client_id_, "propeller_cmd_left", left_prop, simx_opmode_oneshot);
+	simxSetFloatSignal(client_id_, "propeller_cmd_right", right_prop, simx_opmode_oneshot);
+
+	//	if(motor_update_result != 0)
+	//		std::cout << "ERROR: Failed to update one or more motor commands." << std::endl;
 }
 
 bool QuadSimClient::GetVisionImage(simxUChar img[IMG_RES_Y][IMG_RES_X])
@@ -291,44 +326,3 @@ bool QuadSimClient::ReceiveQuadQuaternion(Quaternion& data)
 	else
 		return false;
 }
-
-void QuadSimClient::SendPropellerCmd(QuadCmd cmd)
-{
-	float front_prop, rear_prop, left_prop, right_prop;
-
-	front_prop = cmd.ang_vel[0];
-	right_prop = cmd.ang_vel[1];
-	rear_prop = cmd.ang_vel[2];
-	left_prop = cmd.ang_vel[3];
-
-	// add limits
-	if(front_prop > max_motor_speed_)
-		front_prop = max_motor_speed_;
-	if(rear_prop > max_motor_speed_)
-		rear_prop = max_motor_speed_;
-	if(left_prop > max_motor_speed_)
-		left_prop = max_motor_speed_;
-	if(right_prop > max_motor_speed_)
-		right_prop = max_motor_speed_;
-
-	if(front_prop < 0)
-		front_prop = 0;
-	if(rear_prop < 0)
-		rear_prop = 0;
-	if(left_prop < 0)
-		left_prop = 0;
-	if(right_prop < 0)
-		right_prop = 0;
-
-//	std::cout << "prop cmd 0-4: "<<cmd.ang_vel[0] << " , "<< cmd.ang_vel[1] << " , " << cmd.ang_vel[2] << " , " << cmd.ang_vel[3] << std::endl;
-
-	// send commands to simulator
-	simxSetFloatSignal(client_id_, "propeller_cmd_front", front_prop, simx_opmode_oneshot);
-	simxSetFloatSignal(client_id_, "propeller_cmd_rear", rear_prop, simx_opmode_oneshot);
-	simxSetFloatSignal(client_id_, "propeller_cmd_left", left_prop, simx_opmode_oneshot);
-	simxSetFloatSignal(client_id_, "propeller_cmd_right", right_prop, simx_opmode_oneshot);
-
-//	if(motor_update_result != 0)
-//		std::cout << "ERROR: Failed to update one or more motor commands." << std::endl;
-}
-

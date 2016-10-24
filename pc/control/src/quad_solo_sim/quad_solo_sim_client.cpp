@@ -12,9 +12,9 @@
 using namespace srcl_ctrl;
 
 QuadSoloSimClient::QuadSoloSimClient():
-		RobotSimClient<QuadDataFromSim, QuadDataToSim>(),
-		max_motor_speed_(10000)
-{
+				RobotSimClient<DataFromQuadSim, DataToQuadSim>(),
+				max_motor_speed_(10000)
+				{
 	// initialize variables
 	image_raw_ = new simxUChar[IMG_RES_Y * IMG_RES_X];
 
@@ -40,12 +40,12 @@ QuadSoloSimClient::QuadSoloSimClient():
 	ConfigDataStreaming();
 
 	std::cout << "INFO: Quadrotor simulation client initialized successfully." << std::endl;
-}
+				}
 
 QuadSoloSimClient::QuadSoloSimClient(simxInt clientId):
-		RobotSimClient<QuadDataFromSim, QuadDataToSim>(clientId),
-		max_motor_speed_(10000)
-{
+				RobotSimClient<DataFromQuadSim, DataToQuadSim>(clientId),
+				max_motor_speed_(10000)
+				{
 	// initialize variables
 	image_raw_ = new simxUChar[IMG_RES_Y * IMG_RES_X];
 
@@ -71,7 +71,7 @@ QuadSoloSimClient::QuadSoloSimClient(simxInt clientId):
 	ConfigDataStreaming();
 
 	std::cout << "INFO: Quadrotor simulation client initialized successfully." << std::endl;
-}
+				}
 
 QuadSoloSimClient::~QuadSoloSimClient()
 {
@@ -103,7 +103,7 @@ void QuadSoloSimClient::ConfigDataStreaming(void)
 	simxSetFloatSignal(client_id_, "propeller_cmd_rear_left", 0.0, simx_opmode_oneshot);
 }
 
-bool QuadSoloSimClient::ReceiveDataFromRobot(QuadDataFromSim& rx_data)
+bool QuadSoloSimClient::ReceiveDataFromRobot(DataFromQuadSim& rx_data)
 {
 	//std::cout << "fetching new data"<<std::endl;
 
@@ -121,16 +121,51 @@ bool QuadSoloSimClient::ReceiveDataFromRobot(QuadDataFromSim& rx_data)
 
 		//Get3DScanPoints(rx_data.laser_points);
 
-//		std::cout << "got it!"<<std::endl;
+		//		std::cout << "got it!"<<std::endl;
 		return true;
 	}
 	else
 		return false;
 }
 
-void QuadSoloSimClient::SendDataToRobot(const QuadDataToSim& rcmd)
+void QuadSoloSimClient::SendDataToRobot(const DataToQuadSim& rcmd)
 {
-	SendPropellerCmd(rcmd.motor_cmd);
+	float front_left_prop, rear_right_prop, rear_left_prop, front_right_prop;
+
+	front_left_prop = rcmd.ang_vel[0];
+	front_right_prop = rcmd.ang_vel[1];
+	rear_right_prop = rcmd.ang_vel[2];
+	rear_left_prop = rcmd.ang_vel[3];
+
+	// add limits
+	if(front_left_prop > max_motor_speed_)
+		front_left_prop = max_motor_speed_;
+	if(rear_right_prop > max_motor_speed_)
+		rear_right_prop = max_motor_speed_;
+	if(rear_left_prop > max_motor_speed_)
+		rear_left_prop = max_motor_speed_;
+	if(front_right_prop > max_motor_speed_)
+		front_right_prop = max_motor_speed_;
+
+	if(front_left_prop < 0)
+		front_left_prop = 0;
+	if(rear_right_prop < 0)
+		rear_right_prop = 0;
+	if(rear_left_prop < 0)
+		rear_left_prop = 0;
+	if(front_right_prop < 0)
+		front_right_prop = 0;
+
+	//	std::cout << "prop cmd 0-4: "<<cmd.ang_vel[0] << " , "<< cmd.ang_vel[1] << " , " << cmd.ang_vel[2] << " , " << cmd.ang_vel[3] << std::endl;
+
+	// send commands to simulator
+	simxSetFloatSignal(client_id_, "propeller_cmd_front_left", front_left_prop, simx_opmode_oneshot);
+	simxSetFloatSignal(client_id_, "propeller_cmd_rear_right", rear_right_prop, simx_opmode_oneshot);
+	simxSetFloatSignal(client_id_, "propeller_cmd_rear_left", rear_left_prop, simx_opmode_oneshot);
+	simxSetFloatSignal(client_id_, "propeller_cmd_front_right", front_right_prop, simx_opmode_oneshot);
+
+	//	if(motor_update_result != 0)
+	//		std::cout << "ERROR: Failed to update one or more motor commands." << std::endl;
 }
 
 bool QuadSoloSimClient::GetVisionImage(simxUChar img[IMG_RES_Y][IMG_RES_X])
@@ -162,23 +197,23 @@ bool QuadSoloSimClient::Get3DScanPoints(std::vector<Point3f>& points)
 
 		for(uint64_t i = 0; i < cnt/3; i++)
 		{
-				Point3f pt;
+			Point3f pt;
 
-				uint64_t pixel_idx = i*3;
-				pt.x = ((float*)scannerptr_sig)[pixel_idx];
-				pt.y = ((float*)scannerptr_sig)[pixel_idx + 1];
-				pt.z = ((float*)scannerptr_sig)[pixel_idx + 2];
+			uint64_t pixel_idx = i*3;
+			pt.x = ((float*)scannerptr_sig)[pixel_idx];
+			pt.y = ((float*)scannerptr_sig)[pixel_idx + 1];
+			pt.z = ((float*)scannerptr_sig)[pixel_idx + 2];
 
-				points.push_back(pt);
+			points.push_back(pt);
 		}
 
-//		std::cout << "3d scan ptr size: " << points.size() << std::endl;
-//
-//		for(uint64_t i = 0; i < 3; ++i)
-//		{
-//			std::cout << " ( " << points[i].x << "," << points[i].y << "," << points[i].z << " ) " << std::endl;
-//		}
-//		std::cout << " ------ " << std::endl;
+		//		std::cout << "3d scan ptr size: " << points.size() << std::endl;
+		//
+		//		for(uint64_t i = 0; i < 3; ++i)
+		//		{
+		//			std::cout << " ( " << points[i].x << "," << points[i].y << "," << points[i].z << " ) " << std::endl;
+		//		}
+		//		std::cout << " ------ " << std::endl;
 
 		result = true;
 	}
@@ -202,8 +237,8 @@ bool QuadSoloSimClient::ReceiveGyroData(IMU_DataType& data)
 			data.raw_z=((float*)gyro_sig)[2];
 		}
 
-//		std::cout << "gyro data received" << std::endl;
-//		std::cout << "gyro (x, y, z) = " << "( " << data->raw_x <<" , " << data->raw_y << " , " << data->raw_z << " )" << std::endl;
+		//		std::cout << "gyro data received" << std::endl;
+		//		std::cout << "gyro (x, y, z) = " << "( " << data->raw_x <<" , " << data->raw_y << " , " << data->raw_z << " )" << std::endl;
 		return true;
 	}
 	else
@@ -223,8 +258,8 @@ bool QuadSoloSimClient::ReceiveAccData(IMU_DataType& data)
 			data.raw_z=((float*)acc_sig)[2];
 		}
 
-//		std::cout << "acc data received" << std::endl;
-//		std::cout << "acc (x, y, z) = " << "( " << data->raw_x <<" , " << data->raw_y << " , " << data->raw_z << " )" << std::endl;
+		//		std::cout << "acc data received" << std::endl;
+		//		std::cout << "acc (x, y, z) = " << "( " << data->raw_x <<" , " << data->raw_y << " , " << data->raw_z << " )" << std::endl;
 
 		return true;
 	}
@@ -240,8 +275,8 @@ bool QuadSoloSimClient::ReceiveQuadPosition(Point3f& data)
 		data.y = quad_pos[1];
 		data.z = quad_pos[2];
 
-//		std::cout << "pos data received" << std::endl;
-//		std::cout << "pos (x, y, z) = " << "( " << (*data).x <<" , " << (*data).y << " , " << (*data).z << " )" << std::endl;
+		//		std::cout << "pos data received" << std::endl;
+		//		std::cout << "pos (x, y, z) = " << "( " << (*data).x <<" , " << (*data).y << " , " << (*data).z << " )" << std::endl;
 		return true;
 	}
 	else
@@ -256,8 +291,8 @@ bool QuadSoloSimClient::ReceiveQuadVelocity(Point3f& data)
 		data.y = quad_linear_vel[1];
 		data.z = quad_linear_vel[2];
 
-//		std::cout << "vel data received" << std::endl;
-//		std::cout << "vel (x, y, z) = " << "( " << (*data).x <<" , " << (*data).y << " , " << (*data).z << " )" << std::endl;
+		//		std::cout << "vel data received" << std::endl;
+		//		std::cout << "vel (x, y, z) = " << "( " << (*data).x <<" , " << (*data).y << " , " << (*data).z << " )" << std::endl;
 		return true;
 	}
 	else
@@ -266,17 +301,17 @@ bool QuadSoloSimClient::ReceiveQuadVelocity(Point3f& data)
 
 bool QuadSoloSimClient::ReceiveQuadOrientation(Point3f& data)
 {if (simxGetObjectOrientation(client_id_, ref_handle_, -1, quad_ori, simx_opmode_buffer) == simx_error_noerror)
-	{
-		data.x = quad_ori[0];
-		data.y = quad_ori[1];
-		data.z = quad_ori[2];
+{
+	data.x = quad_ori[0];
+	data.y = quad_ori[1];
+	data.z = quad_ori[2];
 
-//		std::cout << "ori data received" << std::endl;
-//		std::cout << "ori (x, y, z) = " << "( " << (*data).x <<" , " << (*data).y << " , " << (*data).z << " )" << std::endl;
-		return true;
-	}
-	else
-		return false;
+	//		std::cout << "ori data received" << std::endl;
+	//		std::cout << "ori (x, y, z) = " << "( " << (*data).x <<" , " << (*data).y << " , " << (*data).z << " )" << std::endl;
+	return true;
+}
+else
+	return false;
 }
 
 bool QuadSoloSimClient::ReceiveQuadQuaternion(Quaternion& data)
@@ -292,54 +327,13 @@ bool QuadSoloSimClient::ReceiveQuadQuaternion(Quaternion& data)
 			data.z=((float*)quat_sig)[2];
 			data.w=((float*)quat_sig)[3];
 
-//			std::cout << "quat data received" << std::endl;
-//			std::cout << "new quaternion: "<< data->w << " , "
-//					<< data->x << " , " << data->y << " , "
-//					<< data->z << std::endl;
+			//			std::cout << "quat data received" << std::endl;
+			//			std::cout << "new quaternion: "<< data->w << " , "
+			//					<< data->x << " , " << data->y << " , "
+			//					<< data->z << std::endl;
 		}
 		return true;
 	}
 	else
 		return false;
 }
-
-void QuadSoloSimClient::SendPropellerCmd(QuadCmd cmd)
-{
-	float front_left_prop, rear_right_prop, rear_left_prop, front_right_prop;
-
-	front_left_prop = cmd.ang_vel[0];
-	front_right_prop = cmd.ang_vel[1];
-	rear_right_prop = cmd.ang_vel[2];
-	rear_left_prop = cmd.ang_vel[3];
-
-	// add limits
-	if(front_left_prop > max_motor_speed_)
-		front_left_prop = max_motor_speed_;
-	if(rear_right_prop > max_motor_speed_)
-		rear_right_prop = max_motor_speed_;
-	if(rear_left_prop > max_motor_speed_)
-		rear_left_prop = max_motor_speed_;
-	if(front_right_prop > max_motor_speed_)
-		front_right_prop = max_motor_speed_;
-
-	if(front_left_prop < 0)
-		front_left_prop = 0;
-	if(rear_right_prop < 0)
-		rear_right_prop = 0;
-	if(rear_left_prop < 0)
-		rear_left_prop = 0;
-	if(front_right_prop < 0)
-		front_right_prop = 0;
-
-//	std::cout << "prop cmd 0-4: "<<cmd.ang_vel[0] << " , "<< cmd.ang_vel[1] << " , " << cmd.ang_vel[2] << " , " << cmd.ang_vel[3] << std::endl;
-
-	// send commands to simulator
-	simxSetFloatSignal(client_id_, "propeller_cmd_front_left", front_left_prop, simx_opmode_oneshot);
-	simxSetFloatSignal(client_id_, "propeller_cmd_rear_right", rear_right_prop, simx_opmode_oneshot);
-	simxSetFloatSignal(client_id_, "propeller_cmd_rear_left", rear_left_prop, simx_opmode_oneshot);
-	simxSetFloatSignal(client_id_, "propeller_cmd_front_right", front_right_prop, simx_opmode_oneshot);
-
-//	if(motor_update_result != 0)
-//		std::cout << "ERROR: Failed to update one or more motor commands." << std::endl;
-}
-

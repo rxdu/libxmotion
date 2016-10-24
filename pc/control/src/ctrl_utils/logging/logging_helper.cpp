@@ -6,7 +6,7 @@
  */
 
 #include <iostream>
-#include <logging/logging_helper.h>
+#include "logging/logging_helper.h"
 
 using namespace srcl_ctrl;
 using namespace g3;
@@ -35,9 +35,15 @@ LoggingHelper::LoggingHelper(std::string log_name_prefix, std::string log_save_p
 	g3::initializeLogging(log_worker_.get());
 }
 
+LoggingHelper& LoggingHelper::GetInstance(std::string log_name_prefix , std::string log_save_path)
+{
+	static LoggingHelper instance(log_name_prefix, log_save_path);
+
+	return instance;
+}
+
 LoggingHelper::~LoggingHelper()
 {
-
 }
 
 void LoggingHelper::AddItemNameToEntryHead(std::string name)
@@ -65,7 +71,7 @@ void LoggingHelper::AddItemDataToEntry(std::string item_name, std::string data_s
 }
 
 // adding data using id is faster than using the name, validity of id is not checked
-//	in this functions.
+//	in this function.
 void LoggingHelper::AddItemDataToEntry(uint64_t item_id, std::string data_str)
 {
 	if(!head_added_)
@@ -97,7 +103,7 @@ void LoggingHelper::PassEntryHeaderToLogger()
 	if (found != std::string::npos)
 		head_str.erase(found);
 
-	LOG(INFO) << head_str;
+	LOG(DATA) << head_str;
 
 	item_data_.resize(item_counter_);
 	head_added_ = true;
@@ -117,7 +123,7 @@ void LoggingHelper::PassEntryDataToLogger()
 		log_entry_.erase(found);
 
 	if(!log_entry_.empty())
-		LOG(INFO) << log_entry_;
+		LOG(DATA) << log_entry_;
 
 	log_entry_.clear();
 }

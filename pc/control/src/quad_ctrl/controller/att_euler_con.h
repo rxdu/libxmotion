@@ -8,15 +8,27 @@
 #ifndef CONTROL_ATT_EULER_CON_H_
 #define CONTROL_ATT_EULER_CON_H_
 
-#include <controller/quad_types.h>
-#include "quad_ctrl/controller/controller_base.h"
+#include "quad_ctrl/data_types/quad_state.h"
 
 namespace srcl_ctrl {
 
-class AttEulerCon: public Controller
+// input of attitude controller (using Euler)
+typedef struct
+{
+	float euler_d[3];
+	float rot_rate_d[3];
+	float delta_w_F;
+}AttEulerConInput;
+
+// output of attitude controller
+typedef struct{
+	float motor_ang_vel_d[3];
+}AttEulerConOutput;
+
+class AttEulerCon
 {
 public:
-	AttEulerCon(QuadState *_rs);
+	AttEulerCon();
 	~AttEulerCon();
 
 private:
@@ -28,7 +40,7 @@ private:
 	float kd_psi;
 
 public:
-	void Update(ControlInput *input, ControlOutput *cmd);
+	void Update(const QuadState& rs, const AttEulerConInput& input, AttEulerConOutput& output);
 };
 
 }

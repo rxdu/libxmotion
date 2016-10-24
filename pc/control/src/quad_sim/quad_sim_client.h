@@ -16,12 +16,13 @@ extern "C" {
 }
 
 #include "common/control_types.h"
-#include "quad_sim/quad_sim_data.h"
+
+#include "quad_ctrl/data_types/quad_sim_types.h"
 #include "vrep_sim/vrep_interface/robot_sim_client.h"
 
 namespace srcl_ctrl {
 
-class QuadSimClient : public RobotSimClient<QuadDataFromSim, QuadDataToSim>
+class QuadSimClient : public RobotSimClient<DataFromQuadSim, DataToQuadSim>
 {
 public:
 	QuadSimClient();
@@ -32,8 +33,8 @@ private:
 	virtual void ConfigDataStreaming(void);
 
 public:
-	virtual bool ReceiveDataFromRobot(QuadDataFromSim& rstate);
-	virtual void SendDataToRobot(const QuadDataToSim& rcmd);
+	virtual bool ReceiveDataFromRobot(DataFromQuadSim& rstate);
+	virtual void SendDataToRobot(const DataToQuadSim& rcmd);
 
 private:
 	bool ReceiveGyroData(IMU_DataType& data);
@@ -45,8 +46,6 @@ private:
 	bool ReceiveQuadVelocity(Point3f& data);
 	bool ReceiveQuadOrientation(Point3f& data);
 	bool ReceiveQuadQuaternion(Quaternion& data);
-
-	void SendPropellerCmd(QuadCmd cmd);
 
 private:
 	const uint64_t max_motor_speed_;

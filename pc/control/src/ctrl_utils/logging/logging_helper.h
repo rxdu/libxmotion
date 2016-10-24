@@ -5,8 +5,8 @@
  *      Author: rdu
  */
 
-#ifndef CONTROL_SRC_CTRL_UTILS_LOGGING_LOGGING_HELPER_H_
-#define CONTROL_SRC_CTRL_UTILS_LOGGING_LOGGING_HELPER_H_
+#ifndef CONTROL_SRC_LOGGING_LOGGING_HELPER_H_
+#define CONTROL_SRC_LOGGING_LOGGING_HELPER_H_
 
 #include <cstdint>
 #include <string>
@@ -23,9 +23,17 @@
 namespace srcl_ctrl {
 
 class LoggingHelper {
-public:
+private:
 	LoggingHelper();
 	LoggingHelper(std::string log_name_prefix, std::string log_save_path);
+
+	// prevent copy or assignment
+	LoggingHelper(const LoggingHelper&) = delete;
+	LoggingHelper& operator= (const LoggingHelper &) = delete;
+
+public:
+	static LoggingHelper& GetInstance(std::string log_name_prefix = "", std::string log_save_path = "");
+
 	~LoggingHelper();
 
 private:
@@ -57,4 +65,4 @@ public:
 
 }
 
-#endif /* CONTROL_SRC_CTRL_UTILS_LOGGING_LOGGING_HELPER_H_ */
+#endif /* CONTROL_SRC_LOGGING_LOGGING_HELPER_H_ */

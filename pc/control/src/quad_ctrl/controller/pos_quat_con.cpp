@@ -15,12 +15,13 @@
 #include "g3log/g3log.hpp"
 #endif
 
-#include "controller/pos_quat_con.h"
+#include "quad_ctrl/controller/pos_quat_con.h"
 
 using namespace srcl_ctrl;
 
-PosQuatCon::PosQuatCon(QuadState* _rs):
-		Controller(_rs),zint_uppper_limit(0.1),zint_lower_limit(-1.0),
+PosQuatCon::PosQuatCon(const QuadState& _rs):
+		rs_(_rs),
+		zint_uppper_limit(0.1),zint_lower_limit(-1.0),
 		xyint_uppper_limit(0.8), xyint_lower_limit(-0.8)
 {
 	// 0-1: 3.8, 0.08, 3.2
@@ -51,22 +52,17 @@ PosQuatCon::~PosQuatCon()
 
 }
 
-void PosQuatCon::Update(ControlInput *input, ControlOutput *cmd)
+void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 {
 	float pos_error[3],vel_error[3];
-	float acc_desired[3];
 
-	pos_error[0] = input->pos_d[0] - rs_->position_.x;
-	pos_error[1] = input->pos_d[1] - rs_->position_.y;
-	pos_error[2] = input->pos_d[2] - rs_->position_.z;
+	pos_error[0] = input.pos_d[0] - rs_.position_.x;
+	pos_error[1] = input.pos_d[1] - rs_.position_.y;
+	pos_error[2] = input.pos_d[2] - rs_.position_.z;
 
-//	std::cout << "pos error (x, y, z): " << pos_error[0] << " , " << pos_error[1] << " , " << pos_error[2] << std::endl;
-
-	vel_error[0] = input->vel_d[0] - rs_->velocity_.x;
-	vel_error[1] = input->vel_d[1] - rs_->velocity_.y;
-	vel_error[2] = input->vel_d[2] - rs_->velocity_.z;
-
-//	std::cout << "vel error (x, y, z): " << vel_error[0] << " , " << vel_error[1] << " , " << vel_error[2] << std::endl;
+	vel_error[0] = input.vel_d[0] - rs_.velocity_.x;
+	vel_error[1] = input.vel_d[1] - rs_.velocity_.y;
+	vel_error[2] = input.vel_d[2] - rs_.velocity_.z;
 
 	for(int i = 0; i < 3; i++)
 	{
@@ -76,11 +72,11 @@ void PosQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 			vel_error[i] = 0;
 	}
 
+	float acc_desired[3];
+
 	acc_desired[0] = kp_0 * pos_error[0] + ki_0 * pos_e_integral[0] + kd_0 * vel_error[0];
 	acc_desired[1] = kp_1 * pos_error[1] + ki_1 * pos_e_integral[1] + kd_1 * vel_error[1];
 	acc_desired[2] = kp_2 * pos_error[2] + ki_2 * pos_e_integral[2] + kd_2 * vel_error[2];
-
-//	std::cout << "desired acc - z: "<< acc_desired[2] << std::endl;
 
 	pos_e_integral[0] = pos_e_integral[0] + pos_error[0];
 	pos_e_integral[1] = pos_e_integral[1] + pos_error[1];
@@ -101,10 +97,7 @@ void PosQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 	if(pos_e_integral[2] < zint_lower_limit)
 		pos_e_integral[2] = zint_lower_limit;
 
-
-//	std::cout << "pos error integral (x, y, z): " << pos_e_integral[0] << " , " << pos_e_integral[1] << " , " << pos_e_integral[2] << std::endl;
-
-	Eigen::Vector3d Fi(acc_desired[0]+input->acc_d[0], acc_desired[1]+input->acc_d[1], acc_desired[2] + input->acc_d[2] + rs_->g_);
+	Eigen::Vector3d Fi(acc_desired[0]+input.acc_d[0], acc_desired[1]+input.acc_d[1], acc_desired[2] + input.acc_d[2] + rs_.g_);
 //	Eigen::Vector3d Fi(acc_desired[0], acc_desired[1], acc_desired[2] + rs_->g_);
 	Eigen::Vector3d Fi_n;
 	Eigen::Vector3d Fb_n(0,0,1);
@@ -144,22 +137,18 @@ void PosQuatCon::Update(ControlInput *input, ControlOutput *cmd)
 //	quat_y.z() = sin(input->yaw_d/2);
 
 	quat_pr.normalize();
-	Eigen::Quaterniond quat_y(Eigen::AngleAxisd(input->yaw_d, quat_pr.matrix().col(2)));
+	Eigen::Quaterniond quat_y(Eigen::AngleAxisd(input.yaw_d, quat_pr.matrix().col(2)));
 	Eigen::Quaterniond quat_result = quat_y * quat_pr;
 
-	cmd->quat_d = quat_result.normalized();
-	cmd->ftotal_d = Fi.norm() * rs_->mass_;
+	output.quat_d = quat_result.normalized();
+	output.ftotal_d = Fi.norm() * rs_.mass_;
 
-	if(cmd->quat_d.x() < 10e-6 && cmd->quat_d.x() > -10e-6)
-		cmd->quat_d.x() = 0;
-	if(cmd->quat_d.y() < 10e-6 && cmd->quat_d.y() > -10e-6)
-		cmd->quat_d.y() = 0;
-	if(cmd->quat_d.z() < 10e-6 && cmd->quat_d.z() > -10e-6)
-		cmd->quat_d.z() = 0;
-	if(cmd->quat_d.w() < 10e-6 && cmd->quat_d.w() > -10e-6)
-		cmd->quat_d.w() = 0;
-
-//#ifdef ENABLE_LOG
-//	UtilsLog::AppendLogMsgTuple4f(cmd->quat_d.w(), cmd->quat_d.x(), cmd->quat_d.y(), cmd->quat_d.z());
-//#endif
+	if(output.quat_d.x() < 10e-6 && output.quat_d.x() > -10e-6)
+		output.quat_d.x() = 0;
+	if(output.quat_d.y() < 10e-6 && output.quat_d.y() > -10e-6)
+		output.quat_d.y() = 0;
+	if(output.quat_d.z() < 10e-6 && output.quat_d.z() > -10e-6)
+		output.quat_d.z() = 0;
+	if(output.quat_d.w() < 10e-6 && output.quat_d.w() > -10e-6)
+		output.quat_d.w() = 0;
 }
