@@ -7,15 +7,15 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Choose to enable g3log or not: on/off
-set(ENABLE_G3LOG on)
+set(ENABLE_LOGGING off)
 
-if(ENABLE_G3LOG)
+if(ENABLE_LOGGING)
 	message( "-- Enable logging with g3log -- Yes" )
 	message( "-- Deafult log directory: srcl_ctrl/control/log " )
 	include_directories(${CMAKE_SOURCE_DIR}/third_party/g3log/src)
-else(ENABLE_G3LOG)
+else(ENABLE_LOGGING)
 	message( "-- Enable logging with g3log -- No" )
-endif(ENABLE_G3LOG)
+endif(ENABLE_LOGGING)
 
 set(BUILD_TESTS on)
 

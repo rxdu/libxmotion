@@ -23,8 +23,6 @@
 #include "quad_ctrl/motion_server/motion_server.h"
 #include "quad_ctrl/data_trans/quad_data_transmitter.h"
 
-#include "ctrl_utils/logging/logging_helper.h"
-
 namespace srcl_ctrl {
 
 class QuadSoloSimController : public RobotSimController<DataFromQuadSim, DataToQuadSim, QuadState, QuadCmd>
@@ -45,7 +43,6 @@ private:
 
 	bool broadcast_rs_;
 	std::shared_ptr<QuadDataTransmitter> data_trans_;
-	std::shared_ptr<LoggingHelper> logging_helper_;
 
 public:
 	virtual DataToQuadSim ConvertRobotCmdToSimCmd(const QuadCmd& cmd);

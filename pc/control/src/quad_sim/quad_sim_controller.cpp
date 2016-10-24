@@ -9,7 +9,7 @@
 
 #include "quad_sim/quad_sim_controller.h"
 
-#ifdef ENABLE_LOG
+#ifdef ENABLE_G3LOG
 #include "ctrl_utils/logging/logging_helper.h"
 #endif
 
@@ -43,7 +43,7 @@ QuadSimController::~QuadSimController()
 
 void  QuadSimController::InitLogger(std::string log_name_prefix, std::string log_save_path)
 {
-#ifdef ENABLE_LOG
+#ifdef ENABLE_G3LOG
 	LoggingHelper& logging_helper = LoggingHelper::GetInstance(log_name_prefix, log_save_path);
 
 	logging_helper.AddItemNameToEntryHead("pos_x");
@@ -153,7 +153,7 @@ QuadCmd QuadSimController::UpdateCtrlLoop()
 
 	//std::cout << "pos x desired: " << previous_state_.positions[0] << std::endl;
 
-#ifdef ENABLE_LOG
+#ifdef ENABLE_G3LOG
 	/* log data */
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_x", rs_.position_.x);
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_y", rs_.position_.y);

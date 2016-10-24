@@ -7,6 +7,9 @@
 
 #include <iostream>
 #include "quad_solo_sim/quad_solo_sim_controller.h"
+#ifdef ENABLE_G3LOG
+#include "ctrl_utils/logging/logging_helper.h"
+#endif
 
 using namespace srcl_ctrl;
 
@@ -44,7 +47,7 @@ QuadSoloSimController::QuadSoloSimController():
 		data_trans_ = std::make_shared<QuadDataTransmitter>(lcm_);
 	}
 
-#ifdef ENABLE_LOG
+#ifdef ENABLE_G3LOG
 //	logging_helper_ = std::make_shared<LoggingHelper>("quadsolosim", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/control/log/quad");
 //
 //	logging_helper_->AddItemNameToEntryHead("pos_x");
@@ -162,7 +165,7 @@ QuadCmd QuadSoloSimController::UpdateCtrlLoop()
 	cmd_m.ang_vel[2] = att_con_output.motor_ang_vel_d[2];
 	cmd_m.ang_vel[3] = att_con_output.motor_ang_vel_d[3];
 
-//#ifdef ENABLE_LOG
+//#ifdef ENABLE_G3LOG
 //	/* log data */
 //	logging_helper_->AddItemDataToEntry("pos_x", rs_.position_.x);
 //	logging_helper_->AddItemDataToEntry("pos_y", rs_.position_.y);

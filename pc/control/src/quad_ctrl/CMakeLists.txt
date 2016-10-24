@@ -21,12 +21,12 @@ set(QUADCON_LIB_SRC
     data_trans/quad_data_transmitter.cpp
 )
 add_library(quad_ctrl STATIC ${QUADCON_LIB_SRC})
-if (ENABLE_G3LOG)
+if (ENABLE_LOGGING)
   add_definitions(-DENABLE_LOG)
   target_link_libraries(quad_ctrl ctrl_utils g3logger ${LCM_LIBRARIES})
-else(ENABLE_G3LOG)
-  target_link_libraries(quad_ctrl ctrl_utils ${LCM_LIBRARIES})
-endif (ENABLE_G3LOG)
+else(ENABLE_LOGGING)
+  target_link_libraries(quad_ctrl ${LCM_LIBRARIES})
+endif (ENABLE_LOGGING)
 
 # Add executables
 add_executable(quad_motion_client motion_server/motion_client.cpp)
