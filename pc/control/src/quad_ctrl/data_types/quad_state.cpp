@@ -14,7 +14,6 @@
 #endif
 
 #include "quad_ctrl/data_types/quad_state.h"
-#include "ctrl_utils/logging/utils_log.h"
 
 using namespace srcl_ctrl;
 

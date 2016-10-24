@@ -21,8 +21,6 @@
 #include "quad_ctrl/data_types/quad_sim_types.h"
 #include "quad_ctrl/data_types/quad_state.h"
 
-#include "ctrl_utils/logging/logging_helper.h"
-
 namespace srcl_ctrl {
 
 class QuadSimController : public RobotSimController<DataFromQuadSim, DataToQuadSim,QuadState, QuadCmd>
@@ -34,8 +32,8 @@ public:
 private:
 	UAVTrajectoryPoint previous_state_;
 
-	AttQuatCon* att_quat_con_;
-	PosQuatCon* pos_quat_con_;
+	std::unique_ptr<AttQuatCon> att_quat_con_;
+	std::unique_ptr<PosQuatCon> pos_quat_con_;
 
 	std::shared_ptr<lcm::LCM> lcm_;
 
@@ -43,7 +41,6 @@ private:
 
 	bool broadcast_rs_;
 	std::shared_ptr<QuadDataTransmitter> data_trans_;
-	std::shared_ptr<LoggingHelper> logging_helper_;
 
 public:
 	virtual DataToQuadSim ConvertRobotCmdToSimCmd(const QuadCmd& cmd);
@@ -53,6 +50,7 @@ public:
 public:
 	void SetInitPose(float x, float y, float z, float yaw);
 	void BroadcastRobotState(bool cmd) { broadcast_rs_ = cmd; };
+	void InitLogger(std::string log_name_prefix, std::string log_save_path);
 };
 
 }

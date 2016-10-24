@@ -3,7 +3,7 @@ project(srcl_3rd_party_lib)
 
 ## Check if g3log needs to be built
 if(ENABLE_G3LOG)
-	add_subdirectory(g3log_srcl)
+	add_subdirectory(g3log)
 endif(ENABLE_G3LOG)
 
 

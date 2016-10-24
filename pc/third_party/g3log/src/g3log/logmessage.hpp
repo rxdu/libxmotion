@@ -46,7 +46,8 @@ namespace g3 {
 
       /// use a different format string to get a different look on the time.
       //  default look is Y/M/D H:M:S
-      std::string timestamp(const std::string& time_format = {internal::date_formatted + " " + internal::time_formatted}) const;
+      //std::string timestamp(const std::string& time_format = {internal::date_formatted + " " + internal::time_formatted}) const;
+      std::string timestamp(const std::string& time_format = {internal::time_formatted}) const;
 
       std::string message() const  {
          return _message;

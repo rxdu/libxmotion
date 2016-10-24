@@ -45,23 +45,23 @@ QuadSoloSimController::QuadSoloSimController():
 	}
 
 #ifdef ENABLE_LOG
-	logging_helper_ = std::make_shared<LoggingHelper>("quadsolosim", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/control/log/quad");
-
-	logging_helper_->AddItemNameToEntryHead("pos_x");
-	logging_helper_->AddItemNameToEntryHead("pos_y");
-	logging_helper_->AddItemNameToEntryHead("pos_z");
-	logging_helper_->AddItemNameToEntryHead("pos_d_x");
-	logging_helper_->AddItemNameToEntryHead("pos_d_y");
-	logging_helper_->AddItemNameToEntryHead("pos_d_z");
-
-	logging_helper_->AddItemNameToEntryHead("vel_x");
-	logging_helper_->AddItemNameToEntryHead("vel_y");
-	logging_helper_->AddItemNameToEntryHead("vel_z");
-	logging_helper_->AddItemNameToEntryHead("vel_d_x");
-	logging_helper_->AddItemNameToEntryHead("vel_d_y");
-	logging_helper_->AddItemNameToEntryHead("vel_d_z");
-
-	logging_helper_->PassEntryHeaderToLogger();
+//	logging_helper_ = std::make_shared<LoggingHelper>("quadsolosim", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/control/log/quad");
+//
+//	logging_helper_->AddItemNameToEntryHead("pos_x");
+//	logging_helper_->AddItemNameToEntryHead("pos_y");
+//	logging_helper_->AddItemNameToEntryHead("pos_z");
+//	logging_helper_->AddItemNameToEntryHead("pos_d_x");
+//	logging_helper_->AddItemNameToEntryHead("pos_d_y");
+//	logging_helper_->AddItemNameToEntryHead("pos_d_z");
+//
+//	logging_helper_->AddItemNameToEntryHead("vel_x");
+//	logging_helper_->AddItemNameToEntryHead("vel_y");
+//	logging_helper_->AddItemNameToEntryHead("vel_z");
+//	logging_helper_->AddItemNameToEntryHead("vel_d_x");
+//	logging_helper_->AddItemNameToEntryHead("vel_d_y");
+//	logging_helper_->AddItemNameToEntryHead("vel_d_z");
+//
+//	logging_helper_->PassEntryHeaderToLogger();
 #endif
 }
 

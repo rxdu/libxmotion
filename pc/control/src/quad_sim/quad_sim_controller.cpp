@@ -6,7 +6,12 @@
  */
 
 #include <iostream>
+
 #include "quad_sim/quad_sim_controller.h"
+
+#ifdef ENABLE_LOG
+#include "ctrl_utils/logging/logging_helper.h"
+#endif
 
 using namespace srcl_ctrl;
 
@@ -30,32 +35,33 @@ QuadSimController::QuadSimController():
 
 		data_trans_ = std::make_shared<QuadDataTransmitter>(lcm_);
 	}
-
-#ifdef ENABLE_LOG
-	logging_helper_ = std::make_shared<LoggingHelper>("quadsim", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/control/log/quad");
-
-	logging_helper_->AddItemNameToEntryHead("pos_x");
-	logging_helper_->AddItemNameToEntryHead("pos_y");
-	logging_helper_->AddItemNameToEntryHead("pos_z");
-	logging_helper_->AddItemNameToEntryHead("pos_d_x");
-	logging_helper_->AddItemNameToEntryHead("pos_d_y");
-	logging_helper_->AddItemNameToEntryHead("pos_d_z");
-
-	logging_helper_->AddItemNameToEntryHead("vel_x");
-	logging_helper_->AddItemNameToEntryHead("vel_y");
-	logging_helper_->AddItemNameToEntryHead("vel_z");
-	logging_helper_->AddItemNameToEntryHead("vel_d_x");
-	logging_helper_->AddItemNameToEntryHead("vel_d_y");
-	logging_helper_->AddItemNameToEntryHead("vel_d_z");
-
-	logging_helper_->PassEntryHeaderToLogger();
-#endif
 }
 
 QuadSimController::~QuadSimController()
 {
-	delete att_quat_con_;
-	delete pos_quat_con_;
+}
+
+void  QuadSimController::InitLogger(std::string log_name_prefix, std::string log_save_path)
+{
+#ifdef ENABLE_LOG
+	LoggingHelper& logging_helper = LoggingHelper::GetInstance(log_name_prefix, log_save_path);
+
+	logging_helper.AddItemNameToEntryHead("pos_x");
+	logging_helper.AddItemNameToEntryHead("pos_y");
+	logging_helper.AddItemNameToEntryHead("pos_z");
+	logging_helper.AddItemNameToEntryHead("pos_d_x");
+	logging_helper.AddItemNameToEntryHead("pos_d_y");
+	logging_helper.AddItemNameToEntryHead("pos_d_z");
+
+	logging_helper.AddItemNameToEntryHead("vel_x");
+	logging_helper.AddItemNameToEntryHead("vel_y");
+	logging_helper.AddItemNameToEntryHead("vel_z");
+	logging_helper.AddItemNameToEntryHead("vel_d_x");
+	logging_helper.AddItemNameToEntryHead("vel_d_y");
+	logging_helper.AddItemNameToEntryHead("vel_d_z");
+
+	logging_helper.PassEntryHeaderToLogger();
+#endif
 }
 
 void QuadSimController::SetInitPose(float x, float y, float z, float yaw)
@@ -149,24 +155,24 @@ QuadCmd QuadSimController::UpdateCtrlLoop()
 
 #ifdef ENABLE_LOG
 	/* log data */
-	logging_helper_->AddItemDataToEntry("pos_x", rs_.position_.x);
-	logging_helper_->AddItemDataToEntry("pos_y", rs_.position_.y);
-	logging_helper_->AddItemDataToEntry("pos_z", rs_.position_.z);
+	LoggingHelper::GetInstance().AddItemDataToEntry("pos_x", rs_.position_.x);
+	LoggingHelper::GetInstance().AddItemDataToEntry("pos_y", rs_.position_.y);
+	LoggingHelper::GetInstance().AddItemDataToEntry("pos_z", rs_.position_.z);
 
-	logging_helper_->AddItemDataToEntry("vel_x", rs_.velocity_.x);
-	logging_helper_->AddItemDataToEntry("vel_y", rs_.velocity_.y);
-	logging_helper_->AddItemDataToEntry("vel_z", rs_.velocity_.z);
+	LoggingHelper::GetInstance().AddItemDataToEntry("vel_x", rs_.velocity_.x);
+	LoggingHelper::GetInstance().AddItemDataToEntry("vel_y", rs_.velocity_.y);
+	LoggingHelper::GetInstance().AddItemDataToEntry("vel_z", rs_.velocity_.z);
 
-	logging_helper_->AddItemDataToEntry("pos_d_x", previous_state_.positions[0]);
-	logging_helper_->AddItemDataToEntry("pos_d_y", previous_state_.positions[1]);
-	logging_helper_->AddItemDataToEntry("pos_d_z", previous_state_.positions[2]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("pos_d_x", previous_state_.positions[0]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("pos_d_y", previous_state_.positions[1]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("pos_d_z", previous_state_.positions[2]);
 
-	logging_helper_->AddItemDataToEntry("vel_d_x", previous_state_.velocities[0]);
-	logging_helper_->AddItemDataToEntry("vel_d_y", previous_state_.velocities[1]);
-	logging_helper_->AddItemDataToEntry("vel_d_z", previous_state_.velocities[2]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("vel_d_x", previous_state_.velocities[0]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("vel_d_y", previous_state_.velocities[1]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("vel_d_z", previous_state_.velocities[2]);
 
 	// write all data from current iteration into log file
-	logging_helper_->PassEntryDataToLogger();
+	LoggingHelper::GetInstance().PassEntryDataToLogger();
 #endif
 
 	ctrl_loop_count_++;

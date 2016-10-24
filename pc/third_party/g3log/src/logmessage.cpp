@@ -43,8 +43,8 @@ namespace g3 {
    // helper for normal (minimal)
    std::string normalToStringMinimal(const LogMessage& msg) {
 	   std::string out;
-	   out.append("\n" + msg.timestamp() +  "\t"
-			   + msg.level() + "\t");
+	   out.append("\n" + msg.timestamp() +  ",\t"
+			   + msg.level() + ",\t");
 	   out.append(msg.message());
 	   return out;
    }

@@ -14,7 +14,6 @@
 #endif
 
 #include "quad_ctrl/controller/att_quat_con.h"
-#include "ctrl_utils/logging/utils_log.h"
 
 using namespace srcl_ctrl;
 

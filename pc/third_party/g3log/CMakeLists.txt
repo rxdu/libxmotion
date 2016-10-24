@@ -90,7 +90,7 @@ endif()
    # EXAMPLE OPTIONS: By defauls is ON. This will create 'g3log-FATAL-* examples'
    # ============================================================================
    # DISABLE WITH:  -DADD_FATAL_EXAMPLE=OFF
-   #INCLUDE (${g3log_SOURCE_DIR}/example/Example.cmake)
+   INCLUDE (${g3log_SOURCE_DIR}/example/Example.cmake)
 
 
 

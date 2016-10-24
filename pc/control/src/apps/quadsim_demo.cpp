@@ -24,6 +24,7 @@ int main(int arc, char* argv[])
 	//controller->SetInitPose(-1.8,2,0.5,-M_PI/4);
 	controller->SetInitPose(0,0,0.5,0);
 	controller->BroadcastRobotState(true);
+	controller->InitLogger("quadsim_test", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/control/log/quad");
 
 	// create a simulation process
 	RobotSimProcess<DataFromQuadSim, DataToQuadSim,QuadState, QuadCmd> process(client,controller);
