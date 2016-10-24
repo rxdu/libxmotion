@@ -23,23 +23,6 @@ QuadSoloSimController::QuadSoloSimController():
 	rs_.w_h_ = sqrt(rs_.mass_ * rs_.g_ / 4 / rs_.kF_);
 	att_con_->UpdateQuadParams();
 
-//	kp_phi = 1;
-//	kd_phi = 0.1;
-//	kp_theta = 1;
-//	kd_theta = 0.1;
-//	kp_psi = 1.2;
-//	kd_psi = 0.15;
-
-//	kp_0 = 3.8;
-//	ki_0 = 0.08;
-//	kd_0 = 3.2;
-//	kp_1 = 3.8;
-//	ki_1 = 0.08;
-//	kd_1 = 3.2;
-//	kp_2 = 1.8;
-//	ki_2 = 0.05;
-//	kd_2 = 1.85;
-
 	att_con_->SetControlGains(1.0, 0.1, 1.0, 0.1, 1.2, 0.15);
 	pos_con_->SetControlGains(3.8, 0.08, 3.2, 3.8, 0.08, 3.2, 1.8, 0.05, 1.85);
 
@@ -162,27 +145,13 @@ QuadCmd QuadSoloSimController::UpdateCtrlLoop()
 	pos_con_input.acc_d[2] = previous_state_.accelerations[2];
 	pos_con_input.yaw_d = previous_state_.yaw;
 
-//	pos_con_input.pos_d[0] = 0;
-//	pos_con_input.pos_d[1] = 0;
-//	pos_con_input.pos_d[2] = 0.5;
-//	pos_con_input.vel_d[0] = 0;
-//	pos_con_input.vel_d[1] = 0;
-//	pos_con_input.vel_d[2] = 0;
-//	pos_con_input.acc_d[0] = 0;
-//	pos_con_input.acc_d[1] = 0;
-//	pos_con_input.acc_d[2] = 0;
-//	pos_con_input.yaw_d = 0;
-
 	pos_con_->Update(pos_con_input, pos_con_output);
 
 	/********* update attitude control *********/
 	AttQuatConInput att_con_input;
 	AttQuatConOutput att_con_output;
 
-	Eigen::Quaterniond qd = Eigen::Quaterniond(Eigen::AngleAxisd(M_PI/4, Eigen::Vector3d::UnitZ()));
-
 	att_con_input.quat_d = pos_con_output.quat_d;
-//	att_con_input.quat_d = qd;
 	att_con_input.ftotal_d = pos_con_output.ftotal_d;
 	att_con_input.rot_rate_d[0] = 0;
 	att_con_input.rot_rate_d[1] = 0;
@@ -195,26 +164,21 @@ QuadCmd QuadSoloSimController::UpdateCtrlLoop()
 	cmd_m.ang_vel[2] = att_con_output.motor_ang_vel_d[2];
 	cmd_m.ang_vel[3] = att_con_output.motor_ang_vel_d[3];
 
-//	std::cout << "motor: " << cmd_m.ang_vel[0] << " , "
-//			<< cmd_m.ang_vel[1] << " , "
-//			<< cmd_m.ang_vel[2] << " , "
-//			<< cmd_m.ang_vel[3] << std::endl;
-
 #ifdef ENABLE_G3LOG
 	/* log data */
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_x", rs_.position_.x);
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_y", rs_.position_.y);
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_z", rs_.position_.z);
-	LoggingHelper::GetInstance().AddItemDataToEntry("pos_d_x", 0);
-	LoggingHelper::GetInstance().AddItemDataToEntry("pos_d_y", 0);
-	LoggingHelper::GetInstance().AddItemDataToEntry("pos_d_z", 0.5);
+	LoggingHelper::GetInstance().AddItemDataToEntry("pos_d_x", previous_state_.positions[0]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("pos_d_y", previous_state_.positions[1]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("pos_d_z", previous_state_.positions[2]);
 
 	LoggingHelper::GetInstance().AddItemDataToEntry("vel_x", rs_.velocity_.x);
 	LoggingHelper::GetInstance().AddItemDataToEntry("vel_y", rs_.velocity_.y);
 	LoggingHelper::GetInstance().AddItemDataToEntry("vel_z", rs_.velocity_.z);
-	LoggingHelper::GetInstance().AddItemDataToEntry("vel_d_x", 0);
-	LoggingHelper::GetInstance().AddItemDataToEntry("vel_d_y", 0);
-	LoggingHelper::GetInstance().AddItemDataToEntry("vel_d_z", 0);
+	LoggingHelper::GetInstance().AddItemDataToEntry("vel_d_x", previous_state_.velocities[0]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("vel_d_y", previous_state_.velocities[1]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("vel_d_z", previous_state_.velocities[2]);
 
 	LoggingHelper::GetInstance().AddItemDataToEntry("quat_x", rs_.quat_.x());
 	LoggingHelper::GetInstance().AddItemDataToEntry("quat_y", rs_.quat_.y());
@@ -226,14 +190,6 @@ QuadCmd QuadSoloSimController::UpdateCtrlLoop()
 	LoggingHelper::GetInstance().AddItemDataToEntry("quat_d_w", att_con_input.quat_d.w());
 
 	LoggingHelper::GetInstance().AddItemDataToEntry("force", att_con_input.ftotal_d);
-
-//	LoggingHelper::GetInstance().AddItemDataToEntry("pos_d_x", previous_state_.positions[0]);
-//	LoggingHelper::GetInstance().AddItemDataToEntry("pos_d_y", previous_state_.positions[1]);
-//	LoggingHelper::GetInstance().AddItemDataToEntry("pos_d_z", previous_state_.positions[2]);
-//
-//	LoggingHelper::GetInstance().AddItemDataToEntry("vel_d_x", previous_state_.velocities[0]);
-//	LoggingHelper::GetInstance().AddItemDataToEntry("vel_d_y", previous_state_.velocities[1]);
-//	LoggingHelper::GetInstance().AddItemDataToEntry("vel_d_z", previous_state_.velocities[2]);
 
 	// write all data from current iteration into log file
 	LoggingHelper::GetInstance().PassEntryDataToLogger();
