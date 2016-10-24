@@ -55,6 +55,21 @@ private:
 	double xyint_lower_limit;
 
 public:
+	void SetControlGains(float _kp_0, float _ki_0, float _kd_0,
+			float _kp_1, float _ki_1, float _kd_1,
+			float _kp_2, float _ki_2, float _kd_2)
+	{
+		kp_0 = _kp_0;
+		ki_0 = _ki_0;
+		kd_0 = _kd_0;
+		kp_1 = _kp_1;
+		kd_1 = _kd_1;
+		ki_1 = _ki_1;
+		kp_2 = _kp_2;
+		ki_2 = _ki_2;
+		kd_2 = _kd_2;
+	};
+
 	void Update(const PosQuatConInput& input, PosQuatConOutput& output);
 };
 

@@ -85,6 +85,7 @@ public:
 		kd_psi = _kd_psi;
 	};
 
+	void UpdateQuadParams();
 	void Update(const AttQuatConInput& input, AttQuatConOutput& output);
 };
 

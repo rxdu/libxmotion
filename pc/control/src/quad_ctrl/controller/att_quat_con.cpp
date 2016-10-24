@@ -48,6 +48,24 @@ AttQuatCon::~AttQuatCon()
 
 }
 
+void AttQuatCon::UpdateQuadParams()
+{
+	double d = rs_.arm_length_;
+	double c = rs_.kM_/rs_.kF_;
+
+	plus_type_trans_ << 1, 1, 1, 1,
+			0,-d, 0, d,
+			-d, 0, d, 0,
+			c,-c, c,-c;
+	plus_type_trans_inv_ = plus_type_trans_.inverse();
+
+	x_type_trans_ << 1, 1, 1, 1,
+			std::sqrt(2.0)*d/2.0,-std::sqrt(2.0)*d/2.0, -std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0,
+			-std::sqrt(2.0)*d/2.0, -std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0, std::sqrt(2.0)*d/2.0,
+			c,-c, c,-c;
+	x_type_trans_inv_ = x_type_trans_.inverse();
+}
+
 Eigen::Matrix<double,4,1> AttQuatCon::CalcMotorCmd(Eigen::Matrix<float,4,1> force_toqure, QuadFlightType type)
 {
 	Eigen::Matrix<double,4,4> trans_inv;
