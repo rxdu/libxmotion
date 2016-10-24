@@ -15,3 +15,8 @@ logmessage.cpp
 
 * std::string LogMessage::toString() const: changed return normalToString(*this); to return normalToStringMinimal(*this);
 * added function: std::string normalToStringMinimal(const LogMessage& msg){}
+
+custom_loglevels.hpp
+
+* added DATA level: const LEVELS DATA {INFO.value + 1, {"DATA"}};
+* added header "custom_loglevels.hpp" to "g3log/g3log.hpp"

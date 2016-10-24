@@ -103,7 +103,7 @@ void LoggingHelper::PassEntryHeaderToLogger()
 	if (found != std::string::npos)
 		head_str.erase(found);
 
-	LOG(INFO) << head_str;
+	LOG(DATA) << head_str;
 
 	item_data_.resize(item_counter_);
 	head_added_ = true;
@@ -123,7 +123,7 @@ void LoggingHelper::PassEntryDataToLogger()
 		log_entry_.erase(found);
 
 	if(!log_entry_.empty())
-		LOG(INFO) << log_entry_;
+		LOG(DATA) << log_entry_;
 
 	log_entry_.clear();
 }

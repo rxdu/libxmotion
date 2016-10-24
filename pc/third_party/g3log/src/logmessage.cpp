@@ -12,6 +12,17 @@
 #include <mutex>
 
 namespace {
+   std::once_flag g_start_time_flag;
+   std::chrono::steady_clock::time_point g_start_time;
+
+   int64_t  microsecondsCounter() {
+      std::call_once(g_start_time_flag, []() {
+         g_start_time = std::chrono::steady_clock::now();
+      });
+      auto  now = std::chrono::steady_clock::now();
+      return std::chrono::duration_cast<std::chrono::microseconds>(now - g_start_time).count();
+   }
+
    std::string splitFileName(const std::string& str) {
       size_t found;
       found = str.find_last_of("(/\\");
@@ -43,7 +54,7 @@ namespace g3 {
    // helper for normal (minimal)
    std::string normalToStringMinimal(const LogMessage& msg) {
 	   std::string out;
-	   out.append("\n" + msg.timestamp() +  ",\t"
+	   out.append("\n" + msg.microseconds() +  ",\t"
 			   + msg.level() + ",\t");
 	   out.append(msg.message());
 	   return out;
@@ -136,6 +147,7 @@ namespace g3 {
    LogMessage::LogMessage(const std::string& file, const int line,
                           const std::string& function, const LEVELS& level)
       : _call_thread_id(std::this_thread::get_id())
+   	  , _microseconds(microsecondsCounter())
       , _file(splitFileName(file))
       , _line(line)
       , _function(function)
@@ -156,6 +168,7 @@ namespace g3 {
    LogMessage::LogMessage(const LogMessage& other)
       : _timestamp(other._timestamp)
       , _call_thread_id(other._call_thread_id)
+   	  , _microseconds(other._microseconds)
       , _file(other._file)
       , _line(other._line)
       , _function(other._function)
@@ -167,6 +180,7 @@ namespace g3 {
    LogMessage::LogMessage(LogMessage &&other)
       : _timestamp(other._timestamp)
       , _call_thread_id(other._call_thread_id)
+   	  , _microseconds(other._microseconds)
       , _file(std::move(other._file))
       , _line(other._line)
       , _function(std::move(other._function))
