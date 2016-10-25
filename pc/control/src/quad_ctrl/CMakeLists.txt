@@ -11,8 +11,9 @@ set(QUADCON_LIB_SRC
     # data types
     data_types/quad_state.cpp
     # controller
-    controller/att_euler_con.cpp
-    controller/pos_euler_con.cpp
+    # deprecated due to long-time lack of maintenance
+    #controller/att_euler_con.cpp
+    #controller/pos_euler_con.cpp
     controller/att_quat_con.cpp
     controller/pos_quat_con.cpp   
     # motion management
