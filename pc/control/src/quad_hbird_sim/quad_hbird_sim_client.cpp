@@ -5,13 +5,13 @@
  *      Author: rdu
  */
 
+#include <quad_hbird_sim/quad_hbird_sim_client.h>
 #include <iostream>
 
-#include "quad_sim/quad_sim_client.h"
 
 using namespace srcl_ctrl;
 
-QuadSimClient::QuadSimClient():
+QuadHbirdSimClient::QuadHbirdSimClient():
 		RobotSimClient<DataFromQuadSim, DataToQuadSim>(),
 		max_motor_speed_(10000)
 {
@@ -42,7 +42,7 @@ QuadSimClient::QuadSimClient():
 	std::cout << "INFO: Quadrotor simulation client initialized successfully." << std::endl;
 }
 
-QuadSimClient::QuadSimClient(simxInt clientId):
+QuadHbirdSimClient::QuadHbirdSimClient(simxInt clientId):
 		RobotSimClient<DataFromQuadSim, DataToQuadSim>(clientId),
 		max_motor_speed_(10000)
 {
@@ -73,14 +73,14 @@ QuadSimClient::QuadSimClient(simxInt clientId):
 	std::cout << "INFO: Quadrotor simulation client initialized successfully." << std::endl;
 }
 
-QuadSimClient::~QuadSimClient()
+QuadHbirdSimClient::~QuadHbirdSimClient()
 {
 	delete[] image_raw_;
 	delete gyro_sig;
 	delete acc_sig;
 }
 
-void QuadSimClient::ConfigDataStreaming(void)
+void QuadHbirdSimClient::ConfigDataStreaming(void)
 {
 	// get simulation object handles
 	simxGetObjectHandle(client_id_, "asctec_hummingbird",&quad_handle_,simx_opmode_oneshot_wait);
@@ -103,7 +103,7 @@ void QuadSimClient::ConfigDataStreaming(void)
 	simxSetFloatSignal(client_id_, "propeller_cmd_left", 0.0, simx_opmode_oneshot);
 }
 
-bool QuadSimClient::ReceiveDataFromRobot(DataFromQuadSim& rx_data)
+bool QuadHbirdSimClient::ReceiveDataFromRobot(DataFromQuadSim& rx_data)
 {
 	//std::cout << "fetching new data"<<std::endl;
 
@@ -128,7 +128,7 @@ bool QuadSimClient::ReceiveDataFromRobot(DataFromQuadSim& rx_data)
 		return false;
 }
 
-void QuadSimClient::SendDataToRobot(const DataToQuadSim& rcmd)
+void QuadHbirdSimClient::SendDataToRobot(const DataToQuadSim& rcmd)
 {
 	float front_prop, rear_prop, left_prop, right_prop;
 
@@ -168,7 +168,7 @@ void QuadSimClient::SendDataToRobot(const DataToQuadSim& rcmd)
 	//		std::cout << "ERROR: Failed to update one or more motor commands." << std::endl;
 }
 
-bool QuadSimClient::GetVisionImage(simxUChar img[IMG_RES_Y][IMG_RES_X])
+bool QuadHbirdSimClient::GetVisionImage(simxUChar img[IMG_RES_Y][IMG_RES_X])
 {
 	if(simxGetVisionSensorImage(client_id_,camera_handle_,img_res, &image_raw_, 1, simx_opmode_buffer) == simx_error_noerror)
 	{
@@ -185,7 +185,7 @@ bool QuadSimClient::GetVisionImage(simxUChar img[IMG_RES_Y][IMG_RES_X])
 		return false;
 }
 
-bool QuadSimClient::Get3DScanPoints(std::vector<Point3f>& points)
+bool QuadHbirdSimClient::Get3DScanPoints(std::vector<Point3f>& points)
 {
 	bool result;
 
@@ -224,7 +224,7 @@ bool QuadSimClient::Get3DScanPoints(std::vector<Point3f>& points)
 	return true;
 }
 
-bool QuadSimClient::ReceiveGyroData(IMU_DataType& data)
+bool QuadHbirdSimClient::ReceiveGyroData(IMU_DataType& data)
 {
 	if (simxGetStringSignal(client_id_,"hummingbird_gyro",&gyro_sig,&gyro_sig_size,simx_opmode_buffer) == simx_error_noerror)
 	{
@@ -243,7 +243,7 @@ bool QuadSimClient::ReceiveGyroData(IMU_DataType& data)
 		return false;
 }
 
-bool QuadSimClient::ReceiveAccData(IMU_DataType& data)
+bool QuadHbirdSimClient::ReceiveAccData(IMU_DataType& data)
 {
 	if (simxGetStringSignal(client_id_,"hummingbird_acc",&acc_sig,&acc_sig_size,simx_opmode_buffer) == simx_error_noerror)
 	{
@@ -263,7 +263,7 @@ bool QuadSimClient::ReceiveAccData(IMU_DataType& data)
 		return false;
 }
 
-bool QuadSimClient::ReceiveQuadPosition(Point3f& data)
+bool QuadHbirdSimClient::ReceiveQuadPosition(Point3f& data)
 {
 	if (simxGetObjectPosition(client_id_, ref_handle_, -1, quad_pos,simx_opmode_buffer) == simx_error_noerror)
 	{
@@ -277,7 +277,7 @@ bool QuadSimClient::ReceiveQuadPosition(Point3f& data)
 		return false;
 }
 
-bool QuadSimClient::ReceiveQuadVelocity(Point3f& data)
+bool QuadHbirdSimClient::ReceiveQuadVelocity(Point3f& data)
 {
 	if (simxGetObjectVelocity(client_id_, ref_handle_, quad_linear_vel, quad_angular_vel ,simx_opmode_buffer) == simx_error_noerror)
 	{
@@ -291,7 +291,7 @@ bool QuadSimClient::ReceiveQuadVelocity(Point3f& data)
 		return false;
 }
 
-bool QuadSimClient::ReceiveQuadOrientation(Point3f& data)
+bool QuadHbirdSimClient::ReceiveQuadOrientation(Point3f& data)
 {if (simxGetObjectOrientation(client_id_, ref_handle_, -1, quad_ori, simx_opmode_buffer) == simx_error_noerror)
 	{
 		data.x = quad_ori[0];
@@ -304,7 +304,7 @@ bool QuadSimClient::ReceiveQuadOrientation(Point3f& data)
 		return false;
 }
 
-bool QuadSimClient::ReceiveQuadQuaternion(Quaternion& data)
+bool QuadHbirdSimClient::ReceiveQuadQuaternion(Quaternion& data)
 {
 	if (simxGetStringSignal(client_id_,"hummingbird_quat",&quat_sig,&quat_sig_size,simx_opmode_buffer) == simx_error_noerror)
 	{

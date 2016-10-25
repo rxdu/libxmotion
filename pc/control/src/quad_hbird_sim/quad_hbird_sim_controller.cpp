@@ -5,9 +5,9 @@
  *      Author: rdu
  */
 
+#include <quad_hbird_sim/quad_hbird_sim_controller.h>
 #include <iostream>
 
-#include "quad_sim/quad_sim_controller.h"
 
 #ifdef ENABLE_G3LOG
 #include "ctrl_utils/logging/logging_helper.h"
@@ -15,7 +15,7 @@
 
 using namespace srcl_ctrl;
 
-QuadSimController::QuadSimController():
+QuadHbirdSimController::QuadHbirdSimController():
 		pos_quat_con_(new PosQuatCon(rs_)),
 		att_quat_con_(new AttQuatCon(rs_)),
 		broadcast_rs_(false)
@@ -37,11 +37,11 @@ QuadSimController::QuadSimController():
 	}
 }
 
-QuadSimController::~QuadSimController()
+QuadHbirdSimController::~QuadHbirdSimController()
 {
 }
 
-void  QuadSimController::InitLogger(std::string log_name_prefix, std::string log_save_path)
+void  QuadHbirdSimController::InitLogger(std::string log_name_prefix, std::string log_save_path)
 {
 #ifdef ENABLE_G3LOG
 	LoggingHelper& logging_helper = LoggingHelper::GetInstance(log_name_prefix, log_save_path);
@@ -64,7 +64,7 @@ void  QuadSimController::InitLogger(std::string log_name_prefix, std::string log
 #endif
 }
 
-void QuadSimController::SetInitPose(float x, float y, float z, float yaw)
+void QuadHbirdSimController::SetInitPose(float x, float y, float z, float yaw)
 {
 	previous_state_.positions[0] = x;
 	previous_state_.positions[1] = y;
@@ -72,7 +72,7 @@ void QuadSimController::SetInitPose(float x, float y, float z, float yaw)
 	previous_state_.yaw = yaw;
 }
 
-DataToQuadSim QuadSimController::ConvertRobotCmdToSimCmd(const QuadCmd& cmd)
+DataToQuadSim QuadHbirdSimController::ConvertRobotCmdToSimCmd(const QuadCmd& cmd)
 {
 	DataToQuadSim sim_cmd;
 
@@ -86,7 +86,7 @@ DataToQuadSim QuadSimController::ConvertRobotCmdToSimCmd(const QuadCmd& cmd)
 	return sim_cmd;
 }
 
-void QuadSimController::UpdateRobotState(const DataFromQuadSim& data)
+void QuadHbirdSimController::UpdateRobotState(const DataFromQuadSim& data)
 {
 	/********* update robot state *********/
 	// Test without state estimator
@@ -96,7 +96,7 @@ void QuadSimController::UpdateRobotState(const DataFromQuadSim& data)
 		data_trans_->SendQuadStateData(rs_);
 }
 
-QuadCmd QuadSimController::UpdateCtrlLoop()
+QuadCmd QuadHbirdSimController::UpdateCtrlLoop()
 {
 	QuadCmd cmd_m;
 

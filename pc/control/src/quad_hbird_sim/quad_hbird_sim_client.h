@@ -5,8 +5,8 @@
  *      Author: rdu
  */
 
-#ifndef CONTROL_SRC_QUAD_SIM_QUAD_SIM_CLIENT_H_
-#define CONTROL_SRC_QUAD_SIM_QUAD_SIM_CLIENT_H_
+#ifndef CONTROL_SRC_QUAD_HBIRD_SIM_QUAD_HBIRD_SIM_CLIENT_H_
+#define CONTROL_SRC_QUAD_HBIRD_SIM_QUAD_HBIRD_SIM_CLIENT_H_
 
 #include <cstdint>
 
@@ -22,12 +22,12 @@ extern "C" {
 
 namespace srcl_ctrl {
 
-class QuadSimClient : public RobotSimClient<DataFromQuadSim, DataToQuadSim>
+class QuadHbirdSimClient : public RobotSimClient<DataFromQuadSim, DataToQuadSim>
 {
 public:
-	QuadSimClient();
-	QuadSimClient(simxInt clientId);
-	~QuadSimClient();
+	QuadHbirdSimClient();
+	QuadHbirdSimClient(simxInt clientId);
+	~QuadHbirdSimClient();
 
 private:
 	virtual void ConfigDataStreaming(void);
@@ -78,4 +78,4 @@ private:
 
 }
 
-#endif /* CONTROL_SRC_QUAD_SIM_QUAD_SIM_CLIENT_H_ */
+#endif /* CONTROL_SRC_QUAD_HBIRD_SIM_QUAD_HBIRD_SIM_CLIENT_H_ */

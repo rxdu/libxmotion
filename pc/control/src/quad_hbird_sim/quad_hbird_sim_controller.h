@@ -5,8 +5,8 @@
  *      Author: rdu
  */
 
-#ifndef CONTROL_SRC_QUAD_SIM_QUAD_SIM_CONTROLLER_H_
-#define CONTROL_SRC_QUAD_SIM_QUAD_SIM_CONTROLLER_H_
+#ifndef CONTROL_SRC_QUAD_HBIRD_SIM_QUAD_HBIRD_SIM_CONTROLLER_H_
+#define CONTROL_SRC_QUAD_HBIRD_SIM_QUAD_HBIRD_SIM_CONTROLLER_H_
 
 #include <memory>
 
@@ -23,11 +23,11 @@
 
 namespace srcl_ctrl {
 
-class QuadSimController : public RobotSimController<DataFromQuadSim, DataToQuadSim,QuadState, QuadCmd>
+class QuadHbirdSimController : public RobotSimController<DataFromQuadSim, DataToQuadSim,QuadState, QuadCmd>
 {
 public:
-	QuadSimController();
-	~QuadSimController();
+	QuadHbirdSimController();
+	~QuadHbirdSimController();
 
 private:
 	UAVTrajectoryPoint previous_state_;
@@ -55,4 +55,4 @@ public:
 
 }
 
-#endif /* CONTROL_SRC_QUAD_SIM_QUAD_SIM_CONTROLLER_H_ */
+#endif /* CONTROL_SRC_QUAD_HBIRD_SIM_QUAD_HBIRD_SIM_CONTROLLER_H_ */
