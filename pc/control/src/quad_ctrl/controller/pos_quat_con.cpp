@@ -72,15 +72,15 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 			vel_error[i] = 0;
 	}
 
+	pos_e_integral[0] = pos_e_integral[0] + pos_error[0];
+	pos_e_integral[1] = pos_e_integral[1] + pos_error[1];
+	pos_e_integral[2] = pos_e_integral[2] + pos_error[2];
+
 	float acc_desired[3];
 
 	acc_desired[0] = kp_0 * pos_error[0] + ki_0 * pos_e_integral[0] + kd_0 * vel_error[0];
 	acc_desired[1] = kp_1 * pos_error[1] + ki_1 * pos_e_integral[1] + kd_1 * vel_error[1];
 	acc_desired[2] = kp_2 * pos_error[2] + ki_2 * pos_e_integral[2] + kd_2 * vel_error[2];
-
-	pos_e_integral[0] = pos_e_integral[0] + pos_error[0];
-	pos_e_integral[1] = pos_e_integral[1] + pos_error[1];
-	pos_e_integral[2] = pos_e_integral[2] + pos_error[2];
 
 	if(pos_e_integral[0] > xyint_uppper_limit)
 		pos_e_integral[0] = xyint_uppper_limit;
@@ -98,14 +98,11 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 		pos_e_integral[2] = zint_lower_limit;
 
 	Eigen::Vector3d Fi(acc_desired[0]+input.acc_d[0], acc_desired[1]+input.acc_d[1], acc_desired[2] + input.acc_d[2] + rs_.g_);
-//	Eigen::Vector3d Fi(acc_desired[0], acc_desired[1], acc_desired[2] + rs_->g_);
+	//	Eigen::Vector3d Fi(acc_desired[0], acc_desired[1], acc_desired[2] + rs_->g_);
 	Eigen::Vector3d Fi_n;
 	Eigen::Vector3d Fb_n(0,0,1);
 
 	Fi_n = Fi.normalized();
-
-//	std::cout<< "Fi: \n"<<Fi<<std::endl;
-//	std::cout<< "Fi_n: \n"<<Fi_n<<std::endl;
 
 	Eigen::Vector4d qd_n;
 	Eigen::Vector3d FbFi_cross;
