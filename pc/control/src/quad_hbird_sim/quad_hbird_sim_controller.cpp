@@ -8,7 +8,6 @@
 #include <quad_hbird_sim/quad_hbird_sim_controller.h>
 #include <iostream>
 
-
 #ifdef ENABLE_G3LOG
 #include "ctrl_utils/logging/logging_helper.h"
 #endif
@@ -59,6 +58,10 @@ void  QuadHbirdSimController::InitLogger(std::string log_name_prefix, std::strin
 	logging_helper.AddItemNameToEntryHead("vel_d_x");
 	logging_helper.AddItemNameToEntryHead("vel_d_y");
 	logging_helper.AddItemNameToEntryHead("vel_d_z");
+
+	logging_helper.AddItemNameToEntryHead("omega_d_x");
+	logging_helper.AddItemNameToEntryHead("omega_d_y");
+	logging_helper.AddItemNameToEntryHead("omega_d_z");
 
 	logging_helper.PassEntryHeaderToLogger();
 #endif
@@ -125,7 +128,11 @@ QuadCmd QuadHbirdSimController::UpdateCtrlLoop()
 	pos_con_input.acc_d[0] = previous_state_.accelerations[0];
 	pos_con_input.acc_d[1] = previous_state_.accelerations[1];
 	pos_con_input.acc_d[2] = previous_state_.accelerations[2];
+	pos_con_input.jerk_d[0] = 0;
+	pos_con_input.jerk_d[1] = 0;
+	pos_con_input.jerk_d[2] = 0;
 	pos_con_input.yaw_d = previous_state_.yaw;
+	pos_con_input.yaw_rate_d = 0;
 
 	pos_quat_con_->Update(pos_con_input, pos_con_output);
 
@@ -140,9 +147,12 @@ QuadCmd QuadHbirdSimController::UpdateCtrlLoop()
 
 	quat_con_input.quat_d = pos_con_output.quat_d;
 	quat_con_input.ftotal_d = pos_con_output.ftotal_d;
-	quat_con_input.rot_rate_d[0] = 0;
-	quat_con_input.rot_rate_d[1] = 0;
-	quat_con_input.rot_rate_d[2] = 0;
+//	quat_con_input.rot_rate_d[0] = 0;
+//	quat_con_input.rot_rate_d[1] = 0;
+//	quat_con_input.rot_rate_d[2] = 0;
+	quat_con_input.rot_rate_d[0] = pos_con_output.rot_rate_d[0];
+	quat_con_input.rot_rate_d[1] = pos_con_output.rot_rate_d[1];
+	quat_con_input.rot_rate_d[2] = pos_con_output.rot_rate_d[2];
 	att_quat_con_->Update(quat_con_input, att_con_output);
 
 	// set control variables

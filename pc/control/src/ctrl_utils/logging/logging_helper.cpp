@@ -68,6 +68,8 @@ void LoggingHelper::AddItemDataToEntry(std::string item_name, std::string data_s
 
 	if(it != entry_indexes_.end())
 		item_data_[(*it).second] = data_str;
+	else
+		std::cerr << "Failed to find data entry!" << std::endl;
 }
 
 // adding data using id is faster than using the name, validity of id is not checked

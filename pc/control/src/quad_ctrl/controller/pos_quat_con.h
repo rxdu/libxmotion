@@ -18,6 +18,7 @@ typedef struct
 	float pos_d[3];
 	float vel_d[3];
 	float acc_d[3];
+	float jerk_d[3];
 	float yaw_d;
 	float yaw_rate_d;
 }PosQuatConInput;
@@ -25,6 +26,7 @@ typedef struct
 typedef struct{
 	// output of position controller (using Quaternion)
 	Eigen::Quaterniond quat_d;
+	float rot_rate_d[3];
 	float ftotal_d;
 }PosQuatConOutput;
 
@@ -54,6 +56,9 @@ private:
 	double xyint_uppper_limit;
 	double xyint_lower_limit;
 
+	double ts_;
+	double last_acc_desired_[3];
+
 public:
 	void SetControlGains(float _kp_0, float _ki_0, float _kd_0,
 			float _kp_1, float _ki_1, float _kd_1,
@@ -71,6 +76,7 @@ public:
 	};
 
 	void Update(const PosQuatConInput& input, PosQuatConOutput& output);
+	void SetControlPeriod(double ts) { ts_ = ts; };
 };
 
 }
