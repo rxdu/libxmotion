@@ -143,15 +143,6 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 	output.quat_d = quat_result.normalized();
 	output.ftotal_d = Fi.norm();
 
-	if(output.quat_d.x() < 10e-6 && output.quat_d.x() > -10e-6)
-		output.quat_d.x() = 0;
-	if(output.quat_d.y() < 10e-6 && output.quat_d.y() > -10e-6)
-		output.quat_d.y() = 0;
-	if(output.quat_d.z() < 10e-6 && output.quat_d.z() > -10e-6)
-		output.quat_d.z() = 0;
-	if(output.quat_d.w() < 10e-6 && output.quat_d.w() > -10e-6)
-		output.quat_d.w() = 0;
-
 	float omega_d[3];
 	Eigen::Vector3d Fidot;
 	Eigen::Vector3d ri_jerk_d(input.jerk_d[0], input.jerk_d[1], input.jerk_d[2]);
@@ -168,36 +159,42 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 
 	omega_dxy = Fi_n.cross(Fidot_n);
 
-	omega_d[0] = omega_dxy(0);
-	omega_d[1] = omega_dxy(1);
+	// convert omega_dxy from inertial frame to body frame
+	Eigen::Vector3d omega_dxy_b;
+	Eigen::Quaterniond p, rotated_p;
+	p.w() = 0;
+	p.vec() = omega_dxy;
+	rotated_p = rs_.quat_ * p * rs_.quat_.inverse();
+	omega_dxy_b = rotated_p.vec();
+
+	omega_d[0] = omega_dxy_b(0);
+	omega_d[1] = omega_dxy_b(1);
 	omega_d[2] = input.yaw_rate_d;
 
 //	std::cout << "Fidot_n: " << Fidot_n(0) << " , "
 //			<< Fidot_n(1) << " , "
 //			<< Fidot_n(2) << std::endl;
 
-	Eigen::Vector3d omega_i(omega_d[0], omega_d[1], omega_d[2]);
-	Eigen::Vector3d omega_b;
-	Eigen::Quaterniond p, rotated_p;
-	p.w() = 0;
-	p.vec() = omega_i;
-
-//	rotated_p = output.quat_d * p * output.quat_d.inverse();
-	rotated_p = rs_.quat_ * p * rs_.quat_.inverse();
-	omega_b = rotated_p.vec();
-
-//	output.rot_rate_d[0] = omega_b(0);
-//	output.rot_rate_d[1] = omega_b(1);
-//	output.rot_rate_d[2] = omega_b(2);
-
 	output.rot_rate_d[0] = omega_d[0];
 	output.rot_rate_d[1] = omega_d[1];
 	output.rot_rate_d[2] = omega_d[2];
+
+	// set control values to be zero if too small
+	if(output.quat_d.x() < 10e-6 && output.quat_d.x() > -10e-6)
+		output.quat_d.x() = 0;
+	if(output.quat_d.y() < 10e-6 && output.quat_d.y() > -10e-6)
+		output.quat_d.y() = 0;
+	if(output.quat_d.z() < 10e-6 && output.quat_d.z() > -10e-6)
+		output.quat_d.z() = 0;
+	if(output.quat_d.w() < 10e-6 && output.quat_d.w() > -10e-6)
+		output.quat_d.w() = 0;
 
 	for(int i = 0; i < 3; i++)
 	{
 		if(output.rot_rate_d[i] < 10e-6 && output.rot_rate_d[i] > -10e-6)
 			output.rot_rate_d[i] = 0;
+
+		// save values for next iteration
 		last_acc_desired_[i] = ri_acc_fb[i];
 	}
 
@@ -207,7 +204,7 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 	LoggingHelper::GetInstance().AddItemDataToEntry("omega_d_z", output.rot_rate_d[2]);
 #endif
 
-	std::cout << "omega_d: " << output.rot_rate_d[0] << " , "
-				<< output.rot_rate_d[1] << " , "
-				<< output.rot_rate_d[2] << std::endl;
+//	std::cout << "omega_d: " << output.rot_rate_d[0] << " , "
+//				<< output.rot_rate_d[1] << " , "
+//				<< output.rot_rate_d[2] << std::endl;
 }

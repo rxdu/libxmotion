@@ -12,6 +12,7 @@
 
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
+#include "lcmtypes/comm.hpp"
 
 #include "vrep_sim/vrep_interface/robot_sim_controller.h"
 #include "quad_ctrl/controller/att_quat_con.h"

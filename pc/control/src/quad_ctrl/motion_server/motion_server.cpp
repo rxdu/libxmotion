@@ -102,8 +102,10 @@ void MotionServer::LcmGoalHandler(const lcm::ReceiveBuffer* rbuf, const std::str
 			pt.positions[j] = msg->trajectory[i].positions[j];
 			pt.velocities[j] = msg->trajectory[i].velocities[j];
 			pt.accelerations[j] = msg->trajectory[i].accelerations[j];
+			pt.jerks[j] = msg->trajectory[i].jerks[j];
 		}
 		pt.yaw = msg->trajectory[i].yaw;
+		pt.yaw_rate = msg->trajectory[i].yaw_rate;
 		pt.duration = msg->trajectory[i].duration;
 
 		traj.push_back(pt);

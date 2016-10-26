@@ -5,9 +5,9 @@
  *      Author: rdu
  */
 
-#include <quad_hbird_sim/quad_hbird_sim_controller.h>
 #include <iostream>
 
+#include "quad_hbird_sim/quad_hbird_sim_controller.h"
 #ifdef ENABLE_G3LOG
 #include "ctrl_utils/logging/logging_helper.h"
 #endif
@@ -128,11 +128,11 @@ QuadCmd QuadHbirdSimController::UpdateCtrlLoop()
 	pos_con_input.acc_d[0] = previous_state_.accelerations[0];
 	pos_con_input.acc_d[1] = previous_state_.accelerations[1];
 	pos_con_input.acc_d[2] = previous_state_.accelerations[2];
-	pos_con_input.jerk_d[0] = 0;
-	pos_con_input.jerk_d[1] = 0;
-	pos_con_input.jerk_d[2] = 0;
+	pos_con_input.jerk_d[0] = previous_state_.jerks[0];
+	pos_con_input.jerk_d[1] = previous_state_.jerks[1];
+	pos_con_input.jerk_d[2] = previous_state_.jerks[2];
 	pos_con_input.yaw_d = previous_state_.yaw;
-	pos_con_input.yaw_rate_d = 0;
+	pos_con_input.yaw_rate_d = previous_state_.yaw_rate;
 
 	pos_quat_con_->Update(pos_con_input, pos_con_output);
 
@@ -147,12 +147,12 @@ QuadCmd QuadHbirdSimController::UpdateCtrlLoop()
 
 	quat_con_input.quat_d = pos_con_output.quat_d;
 	quat_con_input.ftotal_d = pos_con_output.ftotal_d;
-//	quat_con_input.rot_rate_d[0] = 0;
-//	quat_con_input.rot_rate_d[1] = 0;
-//	quat_con_input.rot_rate_d[2] = 0;
-	quat_con_input.rot_rate_d[0] = pos_con_output.rot_rate_d[0];
-	quat_con_input.rot_rate_d[1] = pos_con_output.rot_rate_d[1];
-	quat_con_input.rot_rate_d[2] = pos_con_output.rot_rate_d[2];
+	quat_con_input.rot_rate_d[0] = 0;
+	quat_con_input.rot_rate_d[1] = 0;
+	quat_con_input.rot_rate_d[2] = 0;
+//	quat_con_input.rot_rate_d[0] = pos_con_output.rot_rate_d[0];
+//	quat_con_input.rot_rate_d[1] = pos_con_output.rot_rate_d[1];
+//	quat_con_input.rot_rate_d[2] = pos_con_output.rot_rate_d[2];
 	att_quat_con_->Update(quat_con_input, att_con_output);
 
 	// set control variables
