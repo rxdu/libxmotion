@@ -60,7 +60,9 @@ typedef struct
 	float positions[3];
 	float velocities[3];
 	float accelerations[3];
+	float jerks[3];
 	float yaw;
+	float yaw_rate;
 	uint64_t duration; // in milliseconds
 } UAVTrajectoryPoint;
 

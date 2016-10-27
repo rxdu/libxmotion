@@ -12,6 +12,7 @@
 
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
+#include "lcmtypes/comm.hpp"
 
 #include "vrep_sim/vrep_interface/robot_sim_controller.h"
 #include "quad_ctrl/controller/att_quat_con.h"
@@ -20,6 +21,8 @@
 #include "quad_ctrl/data_trans/quad_data_transmitter.h"
 #include "quad_ctrl/data_types/quad_sim_types.h"
 #include "quad_ctrl/data_types/quad_state.h"
+
+#include "planning/src/motion_client/poly_motion_client.h"
 
 namespace srcl_ctrl {
 
@@ -38,6 +41,7 @@ private:
 	std::shared_ptr<lcm::LCM> lcm_;
 
 	MotionServer motion_server_;
+	std::shared_ptr<PolyMotionClient> poly_motion_client_;;
 
 	bool broadcast_rs_;
 	std::shared_ptr<QuadDataTransmitter> data_trans_;

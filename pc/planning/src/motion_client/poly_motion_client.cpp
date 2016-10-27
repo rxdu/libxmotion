@@ -82,7 +82,13 @@ void PolyMotionClient::LcmPolynomialHandler(const lcm::ReceiveBuffer* rbuf, cons
 			pt.accelerations[1] = PolyOptMath::GetPolynomialValue(seg.coeffs_y, 2, t_factor);
 			pt.accelerations[2] = PolyOptMath::GetPolynomialValue(seg.coeffs_z, 2, t_factor);
 
-			pt.yaw = -M_PI/4;//PolyOptMath::GetPolynomialValue(seg.coeffs_yaw, 0, t);
+			pt.jerks[0] = PolyOptMath::GetPolynomialValue(seg.coeffs_x, 3, t_factor);
+			pt.jerks[1] = PolyOptMath::GetPolynomialValue(seg.coeffs_y, 3, t_factor);
+			pt.jerks[2] = PolyOptMath::GetPolynomialValue(seg.coeffs_z, 3, t_factor);
+
+			pt.yaw = PolyOptMath::GetPolynomialValue(seg.coeffs_yaw, 0, t_factor);
+			pt.yaw_rate = PolyOptMath::GetPolynomialValue(seg.coeffs_yaw, 1, t_factor);
+
 			pt.duration = step_size_;
 
 			traj_msg.trajectory.push_back(pt);

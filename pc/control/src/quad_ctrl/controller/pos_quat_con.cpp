@@ -11,8 +11,8 @@
 #include "eigen3/Eigen/Core"
 #include "eigen3/Eigen/Geometry"
 
-#ifdef ENABLE_LOG
-#include "g3log/g3log.hpp"
+#ifdef ENABLE_G3LOG
+#include "ctrl_utils/logging/logging_helper.h"
 #endif
 
 #include "quad_ctrl/controller/pos_quat_con.h"
@@ -22,7 +22,8 @@ using namespace srcl_ctrl;
 PosQuatCon::PosQuatCon(const QuadState& _rs):
 		rs_(_rs),
 		zint_uppper_limit(0.1),zint_lower_limit(-1.0),
-		xyint_uppper_limit(0.8), xyint_lower_limit(-0.8)
+		xyint_uppper_limit(0.8), xyint_lower_limit(-0.8),
+		ts_(0.01)
 {
 	// 0-1: 3.8, 0.08, 3.2
 	kp_0 = 3.8;
@@ -42,9 +43,11 @@ PosQuatCon::PosQuatCon(const QuadState& _rs):
 	ki_2 = 0.05;
 	kd_2 = 1.85;
 
-	pos_e_integral[0] = 0.0;
-	pos_e_integral[1] = 0.0;
-	pos_e_integral[2] = 0.0;
+	for(int i = 0; i < 3; i++)
+	{
+		pos_e_integral[i] = 0.0;
+		last_acc_desired_[i] = 0.0;
+	}
 }
 
 PosQuatCon::~PosQuatCon()
@@ -76,11 +79,11 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 	pos_e_integral[1] = pos_e_integral[1] + pos_error[1];
 	pos_e_integral[2] = pos_e_integral[2] + pos_error[2];
 
-	float acc_desired[3];
+	double ri_acc_fb[3];
 
-	acc_desired[0] = kp_0 * pos_error[0] + ki_0 * pos_e_integral[0] + kd_0 * vel_error[0];
-	acc_desired[1] = kp_1 * pos_error[1] + ki_1 * pos_e_integral[1] + kd_1 * vel_error[1];
-	acc_desired[2] = kp_2 * pos_error[2] + ki_2 * pos_e_integral[2] + kd_2 * vel_error[2];
+	ri_acc_fb[0] = kp_0 * pos_error[0] + ki_0 * pos_e_integral[0] + kd_0 * vel_error[0];
+	ri_acc_fb[1] = kp_1 * pos_error[1] + ki_1 * pos_e_integral[1] + kd_1 * vel_error[1];
+	ri_acc_fb[2] = kp_2 * pos_error[2] + ki_2 * pos_e_integral[2] + kd_2 * vel_error[2];
 
 	if(pos_e_integral[0] > xyint_uppper_limit)
 		pos_e_integral[0] = xyint_uppper_limit;
@@ -97,11 +100,11 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 	if(pos_e_integral[2] < zint_lower_limit)
 		pos_e_integral[2] = zint_lower_limit;
 
-	Eigen::Vector3d Fi(acc_desired[0]+input.acc_d[0], acc_desired[1]+input.acc_d[1], acc_desired[2] + input.acc_d[2] + rs_.g_);
-	//	Eigen::Vector3d Fi(acc_desired[0], acc_desired[1], acc_desired[2] + rs_->g_);
+	Eigen::Vector3d Fi;
 	Eigen::Vector3d Fi_n;
 	Eigen::Vector3d Fb_n(0,0,1);
 
+	Fi = rs_.mass_ * Eigen::Vector3d(ri_acc_fb[0]+input.acc_d[0], ri_acc_fb[1]+input.acc_d[1], ri_acc_fb[2] + input.acc_d[2] + rs_.g_);
 	Fi_n = Fi.normalized();
 
 	Eigen::Vector4d qd_n;
@@ -138,8 +141,41 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 	Eigen::Quaterniond quat_result = quat_y * quat_pr;
 
 	output.quat_d = quat_result.normalized();
-	output.ftotal_d = Fi.norm() * rs_.mass_;
+	output.ftotal_d = Fi.norm();
 
+	float omega_d[3];
+	Eigen::Vector3d Fidot;
+	Eigen::Vector3d ri_jerk_d(input.jerk_d[0], input.jerk_d[1], input.jerk_d[2]);
+	Eigen::Vector3d ri_jerk_fb;
+
+	ri_jerk_fb = Eigen::Vector3d(ri_acc_fb[0]-last_acc_desired_[0],
+			ri_acc_fb[1]-last_acc_desired_[1], ri_acc_fb[2]-last_acc_desired_[2]) / ts_;
+	Fidot = rs_.mass_ * (ri_jerk_d + ri_jerk_fb);
+
+	Eigen::Vector3d Fidot_n;
+	Fidot_n = Fidot / Fi.norm() - Fi * (Fi.transpose() * Fidot)/std::pow(Fi.norm(), 3);
+
+	Eigen::Vector3d omega_dxy;
+
+	omega_dxy = Fi_n.cross(Fidot_n);
+
+	// convert omega_dxy from inertia frame to body frame
+	Eigen::Vector3d omega_dxy_b;
+	Eigen::Quaterniond p, rotated_p;
+	p.w() = 0;
+	p.vec() = omega_dxy;
+	rotated_p = rs_.quat_ * p * rs_.quat_.inverse();
+	omega_dxy_b = rotated_p.vec();
+
+	omega_d[0] = omega_dxy_b(0);
+	omega_d[1] = omega_dxy_b(1);
+	omega_d[2] = input.yaw_rate_d;
+
+	output.rot_rate_d[0] = omega_d[0];
+	output.rot_rate_d[1] = omega_d[1];
+	output.rot_rate_d[2] = omega_d[2];
+
+	// set control values to be zero if too small
 	if(output.quat_d.x() < 10e-6 && output.quat_d.x() > -10e-6)
 		output.quat_d.x() = 0;
 	if(output.quat_d.y() < 10e-6 && output.quat_d.y() > -10e-6)
@@ -148,4 +184,19 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 		output.quat_d.z() = 0;
 	if(output.quat_d.w() < 10e-6 && output.quat_d.w() > -10e-6)
 		output.quat_d.w() = 0;
+
+	for(int i = 0; i < 3; i++)
+	{
+		if(output.rot_rate_d[i] < 10e-6 && output.rot_rate_d[i] > -10e-6)
+			output.rot_rate_d[i] = 0;
+
+		// save values for next iteration
+		last_acc_desired_[i] = ri_acc_fb[i];
+	}
+
+#ifdef ENABLE_G3LOG
+	LoggingHelper::GetInstance().AddItemDataToEntry("omega_d_x", output.rot_rate_d[0]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("omega_d_y", output.rot_rate_d[1]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("omega_d_z", output.rot_rate_d[2]);
+#endif
 }
