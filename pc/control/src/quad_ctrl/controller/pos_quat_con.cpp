@@ -159,7 +159,7 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 
 	omega_dxy = Fi_n.cross(Fidot_n);
 
-	// convert omega_dxy from inertial frame to body frame
+	// convert omega_dxy from inertia frame to body frame
 	Eigen::Vector3d omega_dxy_b;
 	Eigen::Quaterniond p, rotated_p;
 	p.w() = 0;
@@ -170,10 +170,6 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 	omega_d[0] = omega_dxy_b(0);
 	omega_d[1] = omega_dxy_b(1);
 	omega_d[2] = input.yaw_rate_d;
-
-//	std::cout << "Fidot_n: " << Fidot_n(0) << " , "
-//			<< Fidot_n(1) << " , "
-//			<< Fidot_n(2) << std::endl;
 
 	output.rot_rate_d[0] = omega_d[0];
 	output.rot_rate_d[1] = omega_d[1];

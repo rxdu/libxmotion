@@ -33,6 +33,7 @@ QuadHbirdSimController::QuadHbirdSimController():
 		lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server_);
 
 		data_trans_ = std::make_shared<QuadDataTransmitter>(lcm_);
+		poly_motion_client_ = std::make_shared<PolyMotionClient>(lcm_,"quad_planner/polynomial_curve", "quad_controller/quad_motion_service");
 	}
 }
 

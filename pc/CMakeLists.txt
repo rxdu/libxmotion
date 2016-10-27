@@ -38,6 +38,10 @@ include_directories(${CMAKE_SOURCE_DIR}/third_party/ompl-1.2.1/src)
 
 ## Other include directories
 include_directories(${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/control/src)
+include_directories(${CMAKE_SOURCE_DIR}/planning/src)
+include_directories(${CMAKE_SOURCE_DIR}/utils/src)
+include_directories(${CMAKE_SOURCE_DIR}/visualization/src)
 
 ## Conditionally add source directories
 ## Check dependencies for Comm and Control/Planning module

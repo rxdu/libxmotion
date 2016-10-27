@@ -69,7 +69,11 @@ int main(int argc, char* argv[])
 		opt.keyframe_y_vals_(2,i) = std::numeric_limits<float>::infinity();
 		opt.keyframe_z_vals_(2,i) = std::numeric_limits<float>::infinity();
 
-		opt.keyframe_ts_(0,i) = i * 15.0;
+		opt.keyframe_x_vals_(3,i) = std::numeric_limits<float>::infinity();
+		opt.keyframe_y_vals_(3,i) = std::numeric_limits<float>::infinity();
+		opt.keyframe_z_vals_(3,i) = std::numeric_limits<float>::infinity();
+
+		opt.keyframe_ts_(0,i) = i * 1.0;
 	}
 
 	opt.keyframe_x_vals_(1,0) = 0.0;
@@ -80,6 +84,10 @@ int main(int argc, char* argv[])
 	opt.keyframe_y_vals_(2,0) = 0.0;
 	opt.keyframe_z_vals_(2,0) = 0.0;
 
+	opt.keyframe_x_vals_(3,0) = 0.0;
+	opt.keyframe_y_vals_(3,0) = 0.0;
+	opt.keyframe_z_vals_(3,0) = 0.0;
+
 	opt.keyframe_x_vals_(1,kf_num - 1) = 0;
 	opt.keyframe_y_vals_(1,kf_num - 1) = 0;
 	opt.keyframe_z_vals_(1,kf_num - 1) = 0;
@@ -87,6 +95,10 @@ int main(int argc, char* argv[])
 	opt.keyframe_x_vals_(2,kf_num - 1) = 0;
 	opt.keyframe_y_vals_(2,kf_num - 1) = 0;
 	opt.keyframe_z_vals_(2,kf_num - 1) = 0;
+
+	opt.keyframe_x_vals_(3,kf_num - 1) = 0;
+	opt.keyframe_y_vals_(3,kf_num - 1) = 0;
+	opt.keyframe_z_vals_(3,kf_num - 1) = 0;
 
 	//opt.OptimizeFlatTrajJoint();
 	opt.OptimizeFlatTrajWithCorridorJoint();
@@ -136,8 +148,8 @@ int main(int argc, char* argv[])
 		for(auto& coeff:seg.seg_yaw.param_.coeffs)
 			seg_msg.coeffs_yaw.push_back(coeff);
 
-		seg_msg.t_start = 0;
-		seg_msg.t_end = 1.0;
+		seg_msg.t_start = seg.t_start;
+		seg_msg.t_end = seg.t_end;
 
 		poly_msg.segments.push_back(seg_msg);
 	}
