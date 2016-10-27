@@ -59,6 +59,17 @@ void  QuadHbirdSimController::InitLogger(std::string log_name_prefix, std::strin
 	logging_helper.AddItemNameToEntryHead("vel_d_y");
 	logging_helper.AddItemNameToEntryHead("vel_d_z");
 
+//	logging_helper.AddItemNameToEntryHead("acc_x");
+//	logging_helper.AddItemNameToEntryHead("acc_y");
+//	logging_helper.AddItemNameToEntryHead("acc_z");
+	logging_helper.AddItemNameToEntryHead("acc_d_x");
+	logging_helper.AddItemNameToEntryHead("acc_d_y");
+	logging_helper.AddItemNameToEntryHead("acc_d_z");
+
+	logging_helper.AddItemNameToEntryHead("jerk_d_x");
+	logging_helper.AddItemNameToEntryHead("jerk_d_y");
+	logging_helper.AddItemNameToEntryHead("jerk_d_z");
+
 	logging_helper.AddItemNameToEntryHead("omega_d_x");
 	logging_helper.AddItemNameToEntryHead("omega_d_y");
 	logging_helper.AddItemNameToEntryHead("omega_d_z");
@@ -147,12 +158,12 @@ QuadCmd QuadHbirdSimController::UpdateCtrlLoop()
 
 	quat_con_input.quat_d = pos_con_output.quat_d;
 	quat_con_input.ftotal_d = pos_con_output.ftotal_d;
-	quat_con_input.rot_rate_d[0] = 0;
-	quat_con_input.rot_rate_d[1] = 0;
-	quat_con_input.rot_rate_d[2] = 0;
-//	quat_con_input.rot_rate_d[0] = pos_con_output.rot_rate_d[0];
-//	quat_con_input.rot_rate_d[1] = pos_con_output.rot_rate_d[1];
-//	quat_con_input.rot_rate_d[2] = pos_con_output.rot_rate_d[2];
+//	quat_con_input.rot_rate_d[0] = 0;
+//	quat_con_input.rot_rate_d[1] = 0;
+//	quat_con_input.rot_rate_d[2] = 0;
+	quat_con_input.rot_rate_d[0] = pos_con_output.rot_rate_d[0];
+	quat_con_input.rot_rate_d[1] = pos_con_output.rot_rate_d[1];
+	quat_con_input.rot_rate_d[2] = pos_con_output.rot_rate_d[2];
 	att_quat_con_->Update(quat_con_input, att_con_output);
 
 	// set control variables
@@ -168,18 +179,27 @@ QuadCmd QuadHbirdSimController::UpdateCtrlLoop()
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_x", rs_.position_.x);
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_y", rs_.position_.y);
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_z", rs_.position_.z);
-
-	LoggingHelper::GetInstance().AddItemDataToEntry("vel_x", rs_.velocity_.x);
-	LoggingHelper::GetInstance().AddItemDataToEntry("vel_y", rs_.velocity_.y);
-	LoggingHelper::GetInstance().AddItemDataToEntry("vel_z", rs_.velocity_.z);
-
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_d_x", previous_state_.positions[0]);
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_d_y", previous_state_.positions[1]);
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_d_z", previous_state_.positions[2]);
 
+	LoggingHelper::GetInstance().AddItemDataToEntry("vel_x", rs_.velocity_.x);
+	LoggingHelper::GetInstance().AddItemDataToEntry("vel_y", rs_.velocity_.y);
+	LoggingHelper::GetInstance().AddItemDataToEntry("vel_z", rs_.velocity_.z);
 	LoggingHelper::GetInstance().AddItemDataToEntry("vel_d_x", previous_state_.velocities[0]);
 	LoggingHelper::GetInstance().AddItemDataToEntry("vel_d_y", previous_state_.velocities[1]);
 	LoggingHelper::GetInstance().AddItemDataToEntry("vel_d_z", previous_state_.velocities[2]);
+
+//	LoggingHelper::GetInstance().AddItemDataToEntry("acc_x", rs_.);
+//	LoggingHelper::GetInstance().AddItemDataToEntry("acc_y", rs_.velocity_.y);
+//	LoggingHelper::GetInstance().AddItemDataToEntry("acc_z", rs_.velocity_.z);
+	LoggingHelper::GetInstance().AddItemDataToEntry("acc_d_x", previous_state_.accelerations[0]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("acc_d_y", previous_state_.accelerations[1]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("acc_d_z", previous_state_.accelerations[2]);
+
+	LoggingHelper::GetInstance().AddItemDataToEntry("jerk_d_x", previous_state_.jerks[0]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("jerk_d_y", previous_state_.jerks[1]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("jerk_d_z", previous_state_.jerks[2]);
 
 	// write all data from current iteration into log file
 	LoggingHelper::GetInstance().PassEntryDataToLogger();

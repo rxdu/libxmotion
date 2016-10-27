@@ -48,11 +48,11 @@ LoggingHelper::~LoggingHelper()
 
 void LoggingHelper::AddItemNameToEntryHead(std::string name)
 {
-	auto it = entry_indexes_.find(name);
+	auto it = entry_ids_.find(name);
 
-	if(it == entry_indexes_.end()) {
+	if(it == entry_ids_.end()) {
 		entry_names_[item_counter_] = name;
-		entry_indexes_[name] = item_counter_++;
+		entry_ids_[name] = item_counter_++;
 	}
 }
 
@@ -64,9 +64,9 @@ void LoggingHelper::AddItemDataToEntry(std::string item_name, std::string data_s
 		return;
 	}
 
-	auto it = entry_indexes_.find(item_name);
+	auto it = entry_ids_.find(item_name);
 
-	if(it != entry_indexes_.end())
+	if(it != entry_ids_.end())
 		item_data_[(*it).second] = data_str;
 	else
 		std::cerr << "Failed to find data entry!" << std::endl;
@@ -113,19 +113,35 @@ void LoggingHelper::PassEntryHeaderToLogger()
 
 void LoggingHelper::PassEntryDataToLogger()
 {
-	for(const auto& dt:item_data_)
+	std::string log_entry;
+
+//	for(const auto& dt:item_data_)
+//	{
+//		if(dt.empty())
+//			log_entry += " 0 , ";
+//		else
+//			log_entry += dt + " , ";
+//	}
+//
+//	std::size_t found = log_entry.rfind(", ");
+//	if (found != std::string::npos)
+//		log_entry.erase(found);
+
+	for(auto it = item_data_.begin(); it != item_data_.end(); it++)
 	{
-		if(dt.empty())
-			log_entry_ += " 0 , ";
+		std::string str;
+
+		if((*it).empty())
+			str = "0";
 		else
-			log_entry_ += dt + " , ";
+			str = *it;
+
+		if(it != item_data_.end() - 1)
+			log_entry += str + " , ";
+		else
+			log_entry += str;
 	}
-	std::size_t found = log_entry_.rfind(", ");
-	if (found != std::string::npos)
-		log_entry_.erase(found);
 
-	if(!log_entry_.empty())
-		LOG(DATA) << log_entry_;
-
-	log_entry_.clear();
+	if(!log_entry.empty())
+		LOG(DATA) << log_entry;
 }

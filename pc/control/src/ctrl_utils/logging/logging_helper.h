@@ -43,10 +43,10 @@ private:
 
 	std::unique_ptr<g3::LogWorker> log_worker_;
 	std::unique_ptr<g3::FileSinkHandle> file_sink_hd_;
-	std::map<std::string, uint64_t> entry_indexes_;
+
 	std::map<uint64_t, std::string> entry_names_;
+	std::map<std::string, uint64_t> entry_ids_;
 	std::atomic<uint64_t> item_counter_;
-	std::string log_entry_;
 	std::vector<std::string> item_data_;
 
 public:

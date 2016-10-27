@@ -203,8 +203,4 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 	LoggingHelper::GetInstance().AddItemDataToEntry("omega_d_y", output.rot_rate_d[1]);
 	LoggingHelper::GetInstance().AddItemDataToEntry("omega_d_z", output.rot_rate_d[2]);
 #endif
-
-//	std::cout << "omega_d: " << output.rot_rate_d[0] << " , "
-//				<< output.rot_rate_d[1] << " , "
-//				<< output.rot_rate_d[2] << std::endl;
 }
