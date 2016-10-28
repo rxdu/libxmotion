@@ -68,6 +68,9 @@ typedef struct
 
 typedef std::vector<UAVTrajectoryPoint> UAVTrajectory;
 
+// time_stamp starts from 0 when system initialized, increases at step 1 ms
+typedef uint64_t time_stamp;
+
 }
 
 #endif /* COMMON_CONTROL_TYPES_H_ */

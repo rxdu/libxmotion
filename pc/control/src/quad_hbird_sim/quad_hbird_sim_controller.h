@@ -40,7 +40,7 @@ private:
 
 	std::shared_ptr<lcm::LCM> lcm_;
 
-	MotionServer motion_server_;
+	std::shared_ptr<MotionServer> motion_server_;
 	std::shared_ptr<PolyMotionClient> poly_motion_client_;;
 
 	bool broadcast_rs_;

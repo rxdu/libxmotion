@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	PolyMotionClient client(lcm,"quad_planner/polynomial_curve", "quad_controller/quad_motion_service");
+	PolyMotionClient client(lcm,"quad_planner/trajectory_polynomial", "quad_controller/quad_motion_service");
 
 	while(true)
 	{

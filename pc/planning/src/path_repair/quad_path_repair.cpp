@@ -302,7 +302,7 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 		traj_opt_.keyframe_x_vals_(0,i) = octomap_waypoints[i].x;
 		traj_opt_.keyframe_y_vals_(0,i) = octomap_waypoints[i].y;
 		traj_opt_.keyframe_z_vals_(0,i) = octomap_waypoints[i].z;
-		traj_opt_.keyframe_yaw_vals_(0,i) = 0;
+		//traj_opt_.keyframe_yaw_vals_(0,i) = 0;
 
 		traj_opt_.keyframe_x_vals_(1,i) = std::numeric_limits<float>::infinity();
 		traj_opt_.keyframe_y_vals_(1,i) = std::numeric_limits<float>::infinity();
@@ -312,7 +312,11 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 		traj_opt_.keyframe_y_vals_(2,i) = std::numeric_limits<float>::infinity();
 		traj_opt_.keyframe_z_vals_(2,i) = std::numeric_limits<float>::infinity();
 
-		traj_opt_.keyframe_ts_(0,i) = i * 3.0;
+		traj_opt_.keyframe_x_vals_(3,i) = std::numeric_limits<float>::infinity();
+		traj_opt_.keyframe_y_vals_(3,i) = std::numeric_limits<float>::infinity();
+		traj_opt_.keyframe_z_vals_(3,i) = std::numeric_limits<float>::infinity();
+
+		traj_opt_.keyframe_ts_(0,i) = i * 0.5;
 	}
 
 	traj_opt_.keyframe_x_vals_(1,0) = 0.0;
@@ -323,6 +327,10 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 	traj_opt_.keyframe_y_vals_(2,0) = 0.0;
 	traj_opt_.keyframe_z_vals_(2,0) = 0.0;
 
+	traj_opt_.keyframe_x_vals_(3,0) = 0.0;
+	traj_opt_.keyframe_y_vals_(3,0) = 0.0;
+	traj_opt_.keyframe_z_vals_(3,0) = 0.0;
+
 	traj_opt_.keyframe_x_vals_(1,kf_num - 1) = 0.0;
 	traj_opt_.keyframe_y_vals_(1,kf_num - 1) = 0.0;
 	traj_opt_.keyframe_z_vals_(1,kf_num - 1) = 0.0;
@@ -330,6 +338,10 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 	traj_opt_.keyframe_x_vals_(2,kf_num - 1) = 0.0;
 	traj_opt_.keyframe_y_vals_(2,kf_num - 1) = 0.0;
 	traj_opt_.keyframe_z_vals_(2,kf_num - 1) = 0.0;
+
+	traj_opt_.keyframe_x_vals_(3,kf_num - 1) = 0;
+	traj_opt_.keyframe_y_vals_(3,kf_num - 1) = 0;
+	traj_opt_.keyframe_z_vals_(3,kf_num - 1) = 0;
 
 	//traj_opt_.OptimizeFlatTrajJoint();
 	traj_opt_.OptimizeFlatTrajWithCorridorJoint();
@@ -406,7 +418,7 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 		poly_msg.segments.push_back(seg_msg);
 	}
 
-	lcm_->publish("quad_planner/polynomial_curve", &poly_msg);
+	lcm_->publish("quad_planner/trajectory_polynomial", &poly_msg);
 }
 
 template<typename PlannerType>

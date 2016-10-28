@@ -30,10 +30,11 @@ QuadHbirdSimController::QuadHbirdSimController():
 	if(!lcm_->good())
 		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
 	else {
-		lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server_);
+		//lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server_);
+		motion_server_ = std::make_shared<MotionServer>(lcm_);
 
 		data_trans_ = std::make_shared<QuadDataTransmitter>(lcm_);
-		poly_motion_client_ = std::make_shared<PolyMotionClient>(lcm_,"quad_planner/polynomial_curve", "quad_controller/quad_motion_service");
+		//poly_motion_client_ = std::make_shared<PolyMotionClient>(lcm_,"quad_planner/polynomial_curve", "quad_controller/quad_motion_service");
 	}
 }
 
@@ -52,6 +53,9 @@ void  QuadHbirdSimController::InitLogger(std::string log_name_prefix, std::strin
 	logging_helper.AddItemNameToEntryHead("pos_d_x");
 	logging_helper.AddItemNameToEntryHead("pos_d_y");
 	logging_helper.AddItemNameToEntryHead("pos_d_z");
+	logging_helper.AddItemNameToEntryHead("pos_e_x");
+	logging_helper.AddItemNameToEntryHead("pos_e_y");
+	logging_helper.AddItemNameToEntryHead("pos_e_z");
 
 	logging_helper.AddItemNameToEntryHead("vel_x");
 	logging_helper.AddItemNameToEntryHead("vel_y");
@@ -59,6 +63,9 @@ void  QuadHbirdSimController::InitLogger(std::string log_name_prefix, std::strin
 	logging_helper.AddItemNameToEntryHead("vel_d_x");
 	logging_helper.AddItemNameToEntryHead("vel_d_y");
 	logging_helper.AddItemNameToEntryHead("vel_d_z");
+	logging_helper.AddItemNameToEntryHead("vel_e_x");
+	logging_helper.AddItemNameToEntryHead("vel_e_y");
+	logging_helper.AddItemNameToEntryHead("vel_e_z");
 
 //	logging_helper.AddItemNameToEntryHead("acc_x");
 //	logging_helper.AddItemNameToEntryHead("acc_y");
@@ -113,10 +120,18 @@ void QuadHbirdSimController::UpdateRobotState(const DataFromQuadSim& data)
 
 QuadCmd QuadHbirdSimController::UpdateCtrlLoop()
 {
+	// send system time first
+	// this sim runs at 100 Hz, so system time increase at a step of 10 ms
+	data_trans_->SendSystemTime(ctrl_loop_count_*10);
+
+	// start doing control work
 	QuadCmd cmd_m;
 
 	UAVTrajectoryPoint pt;
-	pt = motion_server_.GetCurrentDesiredPose();
+	pt.point_empty = true;
+//	pt = motion_server_->GetCurrentDesiredPose();
+	//pt = motion_server_->GetCurrentDesiredState(ctrl_loop_count_*10);
+	pt = motion_server_->GetCurrentDesiredState(ctrl_loop_count_ *10);
 
 	// if no new point, stay where it was
 	if(!pt.point_empty)

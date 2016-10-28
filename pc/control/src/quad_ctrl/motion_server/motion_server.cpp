@@ -15,11 +15,24 @@ using namespace srcl_ctrl;
 MotionServer::MotionServer():
 		goal_completed_(false),
 		ms_count_(0),
-		waypoint_idx_(0)
+		waypoint_idx_(0),
+		current_sys_time_(0)
 {
 //	UAVTrajectory test_traj = GenerateTestTrajectory();
 //
 //	SetMotionGoal(test_traj);
+}
+
+MotionServer::MotionServer(std::shared_ptr<lcm::LCM> lcm):
+		lcm_(lcm),
+		polytraj_handler_(new QuadPolyTrajHandler(lcm_)),
+		goal_completed_(false),
+		ms_count_(0),
+		waypoint_idx_(0),
+		current_sys_time_(0)
+{
+	lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmGoalHandler, this);
+	lcm_->subscribe("quad_data/system_time", &MotionServer::LcmSysTimeHandler, this);
 }
 
 MotionServer::~MotionServer()
@@ -83,6 +96,12 @@ UAVTrajectory MotionServer::GenerateTestTrajectory()
 	}
 
 	return test_traj;
+}
+
+void MotionServer::LcmSysTimeHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::TimeStamp_t* msg)
+{
+	current_sys_time_ = msg->time_stamp;
+	polytraj_handler_->UpdateSystemTime(current_sys_time_);
 }
 
 void MotionServer::LcmGoalHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::UAVTrajectory_t* msg)
@@ -181,4 +200,9 @@ UAVTrajectoryPoint MotionServer::GetCurrentDesiredPose()
 	}
 
 	return pt;
+}
+
+UAVTrajectoryPoint MotionServer::GetCurrentDesiredState(time_stamp t)
+{
+	return polytraj_handler_->GetDesiredTrajectoryPoint(t);
 }

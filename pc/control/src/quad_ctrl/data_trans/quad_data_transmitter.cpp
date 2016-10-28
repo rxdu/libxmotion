@@ -111,3 +111,12 @@ void QuadDataTransmitter::SendLaserPoints(const std::vector<Point3f>& pts)
 
 //	std::cout << "points sent" << std::endl;
 }
+
+void QuadDataTransmitter::SendSystemTime(uint64_t sys_t)
+{
+	srcl_msgs::TimeStamp_t t_msg;
+
+	t_msg.time_stamp = sys_t;
+
+	lcm_->publish("quad_data/system_time", &t_msg);
+}

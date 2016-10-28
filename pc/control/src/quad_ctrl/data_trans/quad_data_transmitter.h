@@ -33,6 +33,7 @@ private:
 
 public:
 	void SendQuadStateData(const QuadState& rs);
+	void SendSystemTime(uint64_t sys_t);
 };
 
 }

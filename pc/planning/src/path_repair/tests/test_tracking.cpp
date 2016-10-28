@@ -44,6 +44,10 @@ int main(int argc, char* argv[])
 	waypoints.push_back(Position3Dd(0.8, 0.8, 0.6));
 	waypoints.push_back(Position3Dd(2.0, 1.2, 0.7));
 	waypoints.push_back(Position3Dd(2.8, 2.0, 0.8));
+//	waypoints.push_back(Position3Dd(0.0, 0.0, 0.5));
+//	waypoints.push_back(Position3Dd(1.6, 1.6, 0.6));
+//	waypoints.push_back(Position3Dd(4.0, 2.5, 0.7));
+//	waypoints.push_back(Position3Dd(6.0, 5.0, 0.8));
 
 	uint8_t kf_num = waypoints.size();
 
@@ -52,6 +56,7 @@ int main(int argc, char* argv[])
 		return -1;
 
 	//opt.InitOptJointMatrices(kf_num);
+	opt.SetPositionPolynomialOrder(10);
 	opt.InitOptWithCorridorJointMatrices(kf_num, 20, 0.05);
 
 	for(int i = 0; i < waypoints.size(); i++)
@@ -59,7 +64,6 @@ int main(int argc, char* argv[])
 		opt.keyframe_x_vals_(0,i) = waypoints[i].x;
 		opt.keyframe_y_vals_(0,i) = waypoints[i].y;
 		opt.keyframe_z_vals_(0,i) = waypoints[i].z;
-		opt.keyframe_yaw_vals_(0,i) = 0;
 
 		opt.keyframe_x_vals_(1,i) = std::numeric_limits<float>::infinity();
 		opt.keyframe_y_vals_(1,i) = std::numeric_limits<float>::infinity();
@@ -73,7 +77,10 @@ int main(int argc, char* argv[])
 		opt.keyframe_y_vals_(3,i) = std::numeric_limits<float>::infinity();
 		opt.keyframe_z_vals_(3,i) = std::numeric_limits<float>::infinity();
 
-		opt.keyframe_ts_(0,i) = i * 0.5;
+//		opt.keyframe_yaw_vals_(0,i) = std::numeric_limits<float>::infinity();
+//		opt.keyframe_yaw_vals_(1,i) = std::numeric_limits<float>::infinity();
+
+		opt.keyframe_ts_(0,i) = i * 1.0;
 	}
 
 	opt.keyframe_x_vals_(1,0) = 0.0;
@@ -99,6 +106,12 @@ int main(int argc, char* argv[])
 	opt.keyframe_x_vals_(3,kf_num - 1) = 0;
 	opt.keyframe_y_vals_(3,kf_num - 1) = 0;
 	opt.keyframe_z_vals_(3,kf_num - 1) = 0;
+
+//	opt.keyframe_yaw_vals_(0,0) = 0;
+//	opt.keyframe_yaw_vals_(0,kf_num - 1) = M_PI/4.0;
+//
+//	opt.keyframe_yaw_vals_(1,0) = 0;
+//	opt.keyframe_yaw_vals_(1,kf_num - 1) = 0;
 
 	//opt.OptimizeFlatTrajJoint();
 	opt.OptimizeFlatTrajWithCorridorJoint();
@@ -154,7 +167,7 @@ int main(int argc, char* argv[])
 		poly_msg.segments.push_back(seg_msg);
 	}
 
-	lcm->publish("quad_planner/polynomial_curve", &poly_msg);
+	lcm->publish("quad_planner/trajectory_polynomial", &poly_msg);
 
 	return 0;
 }

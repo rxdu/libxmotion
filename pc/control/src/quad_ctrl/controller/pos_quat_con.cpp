@@ -198,5 +198,13 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 	LoggingHelper::GetInstance().AddItemDataToEntry("omega_d_x", output.rot_rate_d[0]);
 	LoggingHelper::GetInstance().AddItemDataToEntry("omega_d_y", output.rot_rate_d[1]);
 	LoggingHelper::GetInstance().AddItemDataToEntry("omega_d_z", output.rot_rate_d[2]);
+
+	LoggingHelper::GetInstance().AddItemDataToEntry("pos_e_x", pos_error[0]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("pos_e_y", pos_error[1]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("pos_e_z", pos_error[2]);
+
+	LoggingHelper::GetInstance().AddItemDataToEntry("vel_e_x", vel_error[0]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("vel_e_y", vel_error[1]);
+	LoggingHelper::GetInstance().AddItemDataToEntry("vel_e_z", vel_error[2]);
 #endif
 }
