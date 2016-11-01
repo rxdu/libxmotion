@@ -57,6 +57,17 @@ void  QuadHbirdSimController::InitLogger(std::string log_name_prefix, std::strin
 	logging_helper.AddItemNameToEntryHead("pos_e_y");
 	logging_helper.AddItemNameToEntryHead("pos_e_z");
 
+	logging_helper.AddItemNameToEntryHead("quat_x");
+	logging_helper.AddItemNameToEntryHead("quat_y");
+	logging_helper.AddItemNameToEntryHead("quat_z");
+	logging_helper.AddItemNameToEntryHead("quat_w");
+	logging_helper.AddItemNameToEntryHead("quat_d_x");
+	logging_helper.AddItemNameToEntryHead("quat_d_y");
+	logging_helper.AddItemNameToEntryHead("quat_d_z");
+	logging_helper.AddItemNameToEntryHead("quat_d_w");
+	logging_helper.AddItemNameToEntryHead("yaw");
+	logging_helper.AddItemNameToEntryHead("yaw_d");
+
 	logging_helper.AddItemNameToEntryHead("vel_x");
 	logging_helper.AddItemNameToEntryHead("vel_y");
 	logging_helper.AddItemNameToEntryHead("vel_z");
@@ -216,6 +227,17 @@ QuadCmd QuadHbirdSimController::UpdateCtrlLoop()
 	LoggingHelper::GetInstance().AddItemDataToEntry("jerk_d_x", previous_state_.jerks[0]);
 	LoggingHelper::GetInstance().AddItemDataToEntry("jerk_d_y", previous_state_.jerks[1]);
 	LoggingHelper::GetInstance().AddItemDataToEntry("jerk_d_z", previous_state_.jerks[2]);
+
+	LoggingHelper::GetInstance().AddItemDataToEntry("yaw", rs_.orientation_.z);
+	LoggingHelper::GetInstance().AddItemDataToEntry("yaw_d", previous_state_.yaw);
+	LoggingHelper::GetInstance().AddItemDataToEntry("quat_x", rs_.quat_.x());
+	LoggingHelper::GetInstance().AddItemDataToEntry("quat_y", rs_.quat_.y());
+	LoggingHelper::GetInstance().AddItemDataToEntry("quat_z", rs_.quat_.z());
+	LoggingHelper::GetInstance().AddItemDataToEntry("quat_w", rs_.quat_.w());
+	LoggingHelper::GetInstance().AddItemDataToEntry("quat_d_x", quat_con_input.quat_d.x());
+	LoggingHelper::GetInstance().AddItemDataToEntry("quat_d_y", quat_con_input.quat_d.y());
+	LoggingHelper::GetInstance().AddItemDataToEntry("quat_d_z", quat_con_input.quat_d.z());
+	LoggingHelper::GetInstance().AddItemDataToEntry("quat_d_w", quat_con_input.quat_d.w());
 
 	// write all data from current iteration into log file
 	LoggingHelper::GetInstance().PassEntryDataToLogger();

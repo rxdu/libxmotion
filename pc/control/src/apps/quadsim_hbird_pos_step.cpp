@@ -24,10 +24,10 @@ int main(int arc, char* argv[])
 
 	// set quadrotor init pose
 	//controller->SetInitPose(-1.8,2,0.5,-M_PI/4);
-	controller->SetInitPose(0,0,0.5,0);
+	controller->SetInitPose(-1.8,1.8,0.8,M_PI/4);
 	controller->BroadcastRobotState(true);
 	controller->InitLogger("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/control/log/quad");
-	controller->SetMotionMode(MotionMode::POS_STEP_RESPONSE);
+	//controller->SetMotionMode(MotionMode::POS_STEP_RESPONSE);
 
 	// create a simulation process
 	RobotSimProcess<DataFromQuadSim, DataToQuadSim,QuadState, QuadCmd> process(client,controller);

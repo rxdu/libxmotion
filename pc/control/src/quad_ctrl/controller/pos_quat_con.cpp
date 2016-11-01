@@ -27,11 +27,11 @@ PosQuatCon::PosQuatCon(const QuadState& _rs):
 {
 	// 0-1: 3.8, 0.08, 3.2
 	kp_0 = 3.8;
-	ki_0 = 0.08;
+	ki_0 = 0.1;
 	kd_0 = 3.2;
 
 	kp_1 = 3.8;
-	ki_1 = 0.08;
+	ki_1 = 0.1;
 	kd_1 = 3.2;
 
 	// kp kd 1.8 2.45
@@ -39,6 +39,7 @@ PosQuatCon::PosQuatCon(const QuadState& _rs):
 //	ki_2 = 0.08;
 //	kd_2 = 1.85;
 	// 1.25, 0.145, 1.65
+	// 1.8, 0.05, 1.85
 	kp_2 = 1.8;
 	ki_2 = 0.05;
 	kd_2 = 1.85;

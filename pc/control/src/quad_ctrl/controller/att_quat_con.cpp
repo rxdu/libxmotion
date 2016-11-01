@@ -24,8 +24,10 @@ AttQuatCon::AttQuatCon(const QuadState& _rs):
 	kd_phi = 0.1;
 	kp_theta = 1;
 	kd_theta = 0.1;
-	kp_psi = 1.2;
-	kd_psi = 0.15;
+//	kp_psi = 1.2;
+//	kd_psi = 0.15;
+	kp_psi = 0.08;
+	kd_psi = 0.05;
 
 	double d = rs_.arm_length_;
 	double c = rs_.kM_/rs_.kF_;
