@@ -22,8 +22,6 @@
 #include "quad_ctrl/data_types/quad_sim_types.h"
 #include "quad_ctrl/data_types/quad_state.h"
 
-#include "planning/src/motion_client/poly_motion_client.h"
-
 namespace srcl_ctrl {
 
 class QuadHbirdSimController : public RobotSimController<DataFromQuadSim, DataToQuadSim,QuadState, QuadCmd>
@@ -41,7 +39,6 @@ private:
 	std::shared_ptr<lcm::LCM> lcm_;
 
 	std::shared_ptr<MotionServer> motion_server_;
-	std::shared_ptr<PolyMotionClient> poly_motion_client_;;
 
 	bool broadcast_rs_;
 	std::shared_ptr<QuadDataTransmitter> data_trans_;

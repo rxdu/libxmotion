@@ -14,10 +14,10 @@ set(QUADSIM_LIB_SRC
 add_library(quadsim STATIC ${QUADSIM_LIB_SRC})
 if (ENABLE_LOGGING)
 	add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255 -DENABLE_G3LOG)
-	target_link_libraries(quadsim vrep_sim quad_ctrl motion_client ctrl_utils ${LCM_LIBRARIES})
+	target_link_libraries(quadsim vrep_sim quad_ctrl ctrl_utils ${LCM_LIBRARIES})
 else (ENABLE_LOGGING)
 	add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255)
-	target_link_libraries(quadsim vrep_sim quad_ctrl motion_client ${LCM_LIBRARIES})
+	target_link_libraries(quadsim vrep_sim quad_ctrl ${LCM_LIBRARIES})
 endif (ENABLE_LOGGING)
 
 # Add executables

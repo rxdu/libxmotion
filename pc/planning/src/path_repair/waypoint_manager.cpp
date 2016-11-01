@@ -59,7 +59,7 @@ std::vector<Position3Dd> WaypointManager::WaypointSelector(std::vector<Position3
 			smoothed_points.push_back(pt2);
 	}
 
-//	std::cout << "selected points: " << smoothed_points.size() << std::endl;
+	// std::cout << "selected points: " << smoothed_points.size() << std::endl;
 
 	// then remove intermediate points in a straight line
 	std::vector<Position3Dd> minimum_points;
@@ -93,7 +93,7 @@ std::vector<Position3Dd> WaypointManager::WaypointSelector(std::vector<Position3
 		minimum_points.push_back(smoothed_points.back());
 	}
 
-	std::cout << "minimum waypoints: " << minimum_points.size() << std::endl;
+	// std::cout << "minimum waypoints: " << minimum_points.size() << std::endl;
 
 	srcl_msgs::Path_t path_msg;
 
@@ -117,19 +117,17 @@ void WaypointManager::LcmWaypointsHandler(const lcm::ReceiveBuffer* rbuf, const 
 {
 	std::cout << "waypoints received: " << msg->waypoint_num << std::endl;
 
-	std::vector<Position3Dd> waypoints;
-
+	//std::vector<Position3Dd> waypoints;
+	last_path_.clear();
 	for(int i = 0; i < msg->waypoint_num; i++)
-		waypoints.push_back(Position3Dd(msg->waypoints[i].positions[0],msg->waypoints[i].positions[1],msg->waypoints[i].positions[2]));
+		last_path_.push_back(Position3Dd(msg->waypoints[i].positions[0],msg->waypoints[i].positions[1],msg->waypoints[i].positions[2]));
 
-	std::vector<Position3Dd> opt_wps = WaypointSelector(waypoints);
+	std::vector<Position3Dd> opt_wps = WaypointSelector(last_path_);
 	CalcTrajFromWaypoints(opt_wps);
 }
 
 void WaypointManager::CalcTrajFromWaypoints(std::vector<Position3Dd>& wps)
 {
-	//std::vector<Position3Dd> opt_wps = WaypointSelector(wps);
-
 	uint8_t kf_num = wps.size();
 
 	if(kf_num < 2)
@@ -188,20 +186,20 @@ void WaypointManager::CalcTrajFromWaypoints(std::vector<Position3Dd>& wps)
 	traj_opt_.OptimizeFlatTrajWithCorridorJoint();
 
 	// send results to LCM network
-	srcl_msgs::Path_t path_msg;
-
-	path_msg.waypoint_num = wps.size();
-	for(auto& wp : wps)
-	{
-		srcl_msgs::WayPoint_t waypoint;
-		waypoint.positions[0] = wp.x;
-		waypoint.positions[1] = wp.y;
-		waypoint.positions[2] = wp.z;
-
-		path_msg.waypoints.push_back(waypoint);
-	}
-
-	lcm_->publish("quad_planner/geomark_wp_selected", &path_msg);
+//	srcl_msgs::Path_t path_msg;
+//
+//	path_msg.waypoint_num = wps.size();
+//	for(auto& wp : wps)
+//	{
+//		srcl_msgs::WayPoint_t waypoint;
+//		waypoint.positions[0] = wp.x;
+//		waypoint.positions[1] = wp.y;
+//		waypoint.positions[2] = wp.z;
+//
+//		path_msg.waypoints.push_back(waypoint);
+//	}
+//
+//	lcm_->publish("quad_planner/geomark_wp_selected", &path_msg);
 
 	srcl_msgs::PolynomialCurve_t poly_msg;
 

@@ -28,6 +28,7 @@ public:
 private:
 	std::shared_ptr<lcm::LCM> lcm_;
 	QuadPolyOpt traj_opt_;
+	std::vector<Position3Dd> last_path_;
 
 	std::vector<Position3Dd> WaypointSelector(std::vector<Position3Dd>& wps);
 

@@ -19,7 +19,6 @@ using namespace srcl_ctrl;
 QuadPathRepair::QuadPathRepair(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
 		octomap_server_(OctomapServer(lcm_)),
-		motion_client_(PolyMotionClient(lcm,"quad_planner/polynomial_curve", "quad_controller/quad_motion_service")),
 		active_graph_planner_(GraphPlannerType::NOT_SPECIFIED),
 		gstart_set_(false),
 		ggoal_set_(false),
