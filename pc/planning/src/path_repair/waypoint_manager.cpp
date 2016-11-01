@@ -29,7 +29,6 @@ WaypointManager::~WaypointManager()
 std::vector<Position3Dd> WaypointManager::WaypointSelector(std::vector<Position3Dd>& wps)
 {
 	std::vector<Position3Dd> smoothed_points;
-	//int check_point = 0;
 
 	// first remove undesired points at the connections between 2d/3d geomarks
 	for(auto it = wps.begin(); it != wps.end() - 1; ++it)
@@ -42,11 +41,6 @@ std::vector<Position3Dd> WaypointManager::WaypointSelector(std::vector<Position3
 		// fix the connections between 2d and 3d vertices
 		if(std::abs(pt1.z - pt2.z) > 0.05)
 		{
-//			check_point++;
-//			std::cout << "point 1: " << pt1.x << " , " << pt1.y << " , " << pt1.z << std::endl;
-//			std::cout << "point 2: " << pt2.x << " , " << pt2.y << " , " << pt2.z << std::endl;
-//			std::cout << " ------------------- " << std::endl;
-
 			// ignore the last point if there is a 2d/3d connection
 			//	between the last two points
 			if(it + 2 != wps.end())
@@ -56,22 +50,18 @@ std::vector<Position3Dd> WaypointManager::WaypointSelector(std::vector<Position3
 				Eigen::Vector3d v1(pt2.x - pt1.x, pt2.y - pt1.y, pt2.z - pt1.z);
 				Eigen::Vector3d v2(pt3.x - pt2.x, pt3.y - pt2.y, pt3.z - pt2.z);
 
+				// skip next point if direction is opposite
 				if(v1.dot(v2) <= 0)
-				{
-//					std::cout << "point skipped" << std::endl;
 					it++;
-				}
 			}
 		}
 		else if(it + 2 == wps.end())
 			smoothed_points.push_back(pt2);
 	}
 
-//	std::cout << "check point num: " << check_point << std::endl;
-//	std::cout << "selected points: " << selected.size() << std::endl;
-//	std::cout << " ********************** " << std::endl;
+//	std::cout << "selected points: " << smoothed_points.size() << std::endl;
 
-	// then remove intermediate points in a staight line
+	// then remove intermediate points in a straight line
 	std::vector<Position3Dd> minimum_points;
 
 	if(smoothed_points.size() <= 2)
@@ -80,29 +70,23 @@ std::vector<Position3Dd> WaypointManager::WaypointSelector(std::vector<Position3
 	}
 	else
 	{
-		int start_wp_idx = 0;
-
 		// add first waypoint
 		minimum_points.push_back(smoothed_points.front());
 		// check intermediate waypoints
-		while(start_wp_idx < smoothed_points.size() - 1)
+		for(int cid = 1; cid < smoothed_points.size() - 1; cid++)
 		{
-			Position3Dd pt1 = smoothed_points[start_wp_idx];
+			Position3Dd pt1 = smoothed_points[cid - 1];
+			Position3Dd pt2 = smoothed_points[cid];
+			Position3Dd pt3 = smoothed_points[cid + 1];
 
-			for(int id = start_wp_idx + 1; id < smoothed_points.size() - 1; ++id)
+			Eigen::Vector3d v1 = Eigen::Vector3d(pt2.x - pt1.x, pt2.y - pt1.y, pt2.z - pt1.z).normalized();
+			Eigen::Vector3d v2 = Eigen::Vector3d(pt3.x - pt2.x, pt3.y - pt2.y, pt3.z - pt2.z).normalized();
+			Eigen::Vector3d e = v1 - v2;
+
+			// |e| = sqrt[sin(theta)^2 + (1 - cos(theta))^2], |e| ~= 0.082 when theta = 5 degree
+			if(e.norm() > 0.082)
 			{
-				Position3Dd pt2 = smoothed_points[id];
-				Position3Dd pt3 = smoothed_points[id+1];
-
-				Eigen::Vector3d v1(pt2.x - pt1.x, pt2.y - pt1.y, pt2.z - pt1.z);
-				Eigen::Vector3d v2(pt3.x - pt2.x, pt3.y - pt2.y, pt3.z - pt2.z);
-
-				if(v1.cross(v2).norm() != 0)
-				{
-					minimum_points.push_back(smoothed_points[id]);
-					start_wp_idx = id;
-					break;
-				}
+				minimum_points.push_back(smoothed_points[cid]);
 			}
 		}
 		// add last waypoint
@@ -126,7 +110,7 @@ std::vector<Position3Dd> WaypointManager::WaypointSelector(std::vector<Position3
 
 	lcm_->publish("quad_planner/geomark_wp_selected", &path_msg);
 
-	return smoothed_points;
+	return minimum_points;
 }
 
 void WaypointManager::LcmWaypointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::Path_t* msg)
@@ -139,7 +123,7 @@ void WaypointManager::LcmWaypointsHandler(const lcm::ReceiveBuffer* rbuf, const 
 		waypoints.push_back(Position3Dd(msg->waypoints[i].positions[0],msg->waypoints[i].positions[1],msg->waypoints[i].positions[2]));
 
 	std::vector<Position3Dd> opt_wps = WaypointSelector(waypoints);
-	//CalcTrajFromWaypoints(opt_wps);
+	CalcTrajFromWaypoints(opt_wps);
 }
 
 void WaypointManager::CalcTrajFromWaypoints(std::vector<Position3Dd>& wps)
