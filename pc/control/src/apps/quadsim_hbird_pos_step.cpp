@@ -1,10 +1,11 @@
 /*
- * quadsim_path_repair.cpp
+ * quadsim_hbird_pos_step.cpp
  *
- *  Created on: Sep 2, 2016
+ *  Created on: Nov 1, 2016
  *      Author: rdu
  */
 
+#include <quad_hbird_sim/quad_hbird_sim_controller.h>
 #include <iostream>
 #include <memory>
 #include <cmath>
@@ -22,13 +23,11 @@ int main(int arc, char* argv[])
 	std::shared_ptr<QuadHbirdSimController> controller = std::make_shared<QuadHbirdSimController>();
 
 	// set quadrotor init pose
-//	controller->SetInitPose(-1.8,1,0.5,-M_PI/4);
-//	controller->SetInitPose(-1.8,1.2,0.6,-M_PI/4); // demo for dynamic replanning from origin to fixed point
-	controller->SetInitPose(-1.8,0.6,0.8,-M_PI/4);
-//	controller->SetInitPose(-1.8,2,0.6,-M_PI/4);
+	//controller->SetInitPose(-1.8,2,0.5,-M_PI/4);
+	controller->SetInitPose(0,0,0.5,0);
 	controller->BroadcastRobotState(true);
 	controller->InitLogger("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/control/log/quad");
-	controller->SetMotionMode(MotionMode::POLYNOMIAL);
+	controller->SetMotionMode(MotionMode::POS_STEP_RESPONSE);
 
 	// create a simulation process
 	RobotSimProcess<DataFromQuadSim, DataToQuadSim,QuadState, QuadCmd> process(client,controller);

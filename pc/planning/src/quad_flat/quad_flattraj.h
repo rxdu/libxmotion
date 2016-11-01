@@ -54,29 +54,6 @@ public:
 
 	QuadFlatOutput GetTrajPointPos(double t);
 
-	srcl_lcm_msgs::PolynomialCurve_t GenerateNonDimPolyCurveLCMMsg()
-	{
-		srcl_lcm_msgs::PolynomialCurve_t msg;
-
-		msg.seg_num = traj_segs_.size();
-		uint32_t seg_idx = 0;
-		for(auto& seg : traj_segs_)
-		{
-			srcl_lcm_msgs::PolyCurveSegment_t seg_msg;
-
-			seg_msg.coeffs_x = seg.seg_x.param_.coeffs;
-			seg_msg.coeffs_y = seg.seg_y.param_.coeffs;
-			seg_msg.coeffs_z = seg.seg_z.param_.coeffs;
-
-			seg_msg.t_start = 0;
-			seg_msg.t_end = 1.0;
-
-			msg.segments.push_back(seg_msg);
-		}
-
-		return msg;
-	}
-
 	void clear() { traj_segs_.clear(); };
 	void print();
 };

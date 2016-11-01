@@ -16,7 +16,8 @@ MotionServer::MotionServer():
 		goal_completed_(false),
 		ms_count_(0),
 		waypoint_idx_(0),
-		current_sys_time_(0)
+		current_sys_time_(0),
+		mode_(MotionMode::USER_CMDS)
 {
 //	UAVTrajectory test_traj = GenerateTestTrajectory();
 //
@@ -26,13 +27,16 @@ MotionServer::MotionServer():
 MotionServer::MotionServer(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
 		polytraj_handler_(new QuadPolyTrajHandler(lcm_)),
+		wppath_handler_(new WaypointPathHandler(lcm_)),
 		goal_completed_(false),
 		ms_count_(0),
 		waypoint_idx_(0),
-		current_sys_time_(0)
+		current_sys_time_(0),
+		mode_(MotionMode::USER_CMDS)
 {
-	lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmGoalHandler, this);
+	//lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmGoalHandler, this);
 	lcm_->subscribe("quad_data/system_time", &MotionServer::LcmSysTimeHandler, this);
+	lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmUserGoalHandler, this);
 }
 
 MotionServer::~MotionServer()
@@ -104,7 +108,7 @@ void MotionServer::LcmSysTimeHandler(const lcm::ReceiveBuffer* rbuf, const std::
 	polytraj_handler_->UpdateSystemTime(current_sys_time_);
 }
 
-void MotionServer::LcmGoalHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::UAVTrajectory_t* msg)
+void MotionServer::LcmUserGoalHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::UAVTrajectory_t* msg)
 {
 	std::cout << "motion service request received!" << std::endl;
 
@@ -170,7 +174,7 @@ double MotionServer::ReportActiveMotionProgress()
 	return percentage;
 }
 
-UAVTrajectoryPoint MotionServer::GetCurrentDesiredPose()
+UAVTrajectoryPoint MotionServer::GetCurrentUserDefinedPose()
 {
 	UAVTrajectoryPoint pt;
 	pt.point_empty = true;
@@ -204,5 +208,36 @@ UAVTrajectoryPoint MotionServer::GetCurrentDesiredPose()
 
 UAVTrajectoryPoint MotionServer::GetCurrentDesiredState(time_stamp t)
 {
-	return polytraj_handler_->GetDesiredTrajectoryPoint(t);
+	UAVTrajectoryPoint pt;
+	pt.point_empty = true;
+
+	switch(mode_)
+	{
+	case MotionMode::POLYNOMIAL:
+		return polytraj_handler_->GetDesiredTrajectoryPoint(t);
+	case MotionMode::WAYPOINTS:
+		return wppath_handler_->GetDesiredTrajectoryPoint(t);
+	case MotionMode::USER_CMDS:
+		return GetCurrentUserDefinedPose();
+	case MotionMode::POS_STEP_RESPONSE:
+	{
+		if(t < 1200)
+		{
+			pt.point_empty = false;
+			pt.positions[0] = 0;
+			pt.positions[1] = 0;
+			pt.positions[2] = 0.5;
+		}
+		else
+		{
+			pt.point_empty = false;
+			pt.positions[0] = 1;
+			pt.positions[1] = 1;
+			pt.positions[2] = 0.5;
+		}
+		return pt;
+	}
+	default:
+		return pt;
+	}
 }

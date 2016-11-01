@@ -135,13 +135,13 @@ void WaypointManager::CalcTrajFromWaypoints(std::vector<Position3Dd>& wps)
 
 	//	traj_opt_.InitOptJointMatrices(kf_num);
 	traj_opt_.InitOptWithCorridorJointMatrices(kf_num, 20, 0.01);
+	Eigen::Vector3d goal_vec(wps.back().x, wps.back().y, 0);
 
 	for(int i = 0; i < wps.size(); i++)
 	{
 		traj_opt_.keyframe_x_vals_(0,i) = wps[i].x;
 		traj_opt_.keyframe_y_vals_(0,i) = wps[i].y;
 		traj_opt_.keyframe_z_vals_(0,i) = wps[i].z;
-		//traj_opt_.keyframe_yaw_vals_(0,i) = 0;
 
 		traj_opt_.keyframe_x_vals_(1,i) = std::numeric_limits<float>::infinity();
 		traj_opt_.keyframe_y_vals_(1,i) = std::numeric_limits<float>::infinity();
@@ -154,6 +154,21 @@ void WaypointManager::CalcTrajFromWaypoints(std::vector<Position3Dd>& wps)
 		traj_opt_.keyframe_x_vals_(3,i) = std::numeric_limits<float>::infinity();
 		traj_opt_.keyframe_y_vals_(3,i) = std::numeric_limits<float>::infinity();
 		traj_opt_.keyframe_z_vals_(3,i) = std::numeric_limits<float>::infinity();
+
+		if((i == 0) || (i == wps.size() - 1))
+			traj_opt_.keyframe_yaw_vals_(0,i) = 0;
+		else {
+			Eigen::Vector3d pos_vec(wps[i].x, wps[i].y, 0);
+			Eigen::Vector3d dir_vec = goal_vec - pos_vec;
+			Eigen::Vector3d x_vec(1,0,0);
+			double angle = - std::acos(dir_vec.normalized().dot(x_vec));
+//			std::cout << "angle: " << angle << std::endl;
+//			std::cout << "goal vector: " << goal_vec(0) << " , " << goal_vec(1) << " , " << goal_vec(2) << std::endl;
+//			std::cout << "pos vector: " << pos_vec(0) << " , " << pos_vec(1) << " , " << pos_vec(2) << std::endl;
+//			std::cout << "dir vector: " << dir_vec(0) << " , " << dir_vec(1) << " , " << dir_vec(2) << std::endl;
+			traj_opt_.keyframe_yaw_vals_(0,i) = angle;
+		}
+		traj_opt_.keyframe_yaw_vals_(1,i) = std::numeric_limits<float>::infinity();
 
 		traj_opt_.keyframe_ts_(0,i) = i * 0.5;
 	}
@@ -170,6 +185,8 @@ void WaypointManager::CalcTrajFromWaypoints(std::vector<Position3Dd>& wps)
 	traj_opt_.keyframe_y_vals_(3,0) = 0.0;
 	traj_opt_.keyframe_z_vals_(3,0) = 0.0;
 
+	traj_opt_.keyframe_yaw_vals_(1,0) = 0;
+
 	traj_opt_.keyframe_x_vals_(1,kf_num - 1) = 0.0;
 	traj_opt_.keyframe_y_vals_(1,kf_num - 1) = 0.0;
 	traj_opt_.keyframe_z_vals_(1,kf_num - 1) = 0.0;
@@ -181,6 +198,8 @@ void WaypointManager::CalcTrajFromWaypoints(std::vector<Position3Dd>& wps)
 	traj_opt_.keyframe_x_vals_(3,kf_num - 1) = 0;
 	traj_opt_.keyframe_y_vals_(3,kf_num - 1) = 0;
 	traj_opt_.keyframe_z_vals_(3,kf_num - 1) = 0;
+
+	traj_opt_.keyframe_yaw_vals_(1,kf_num - 1) = 0;
 
 	//traj_opt_.OptimizeFlatTrajJoint();
 	traj_opt_.OptimizeFlatTrajWithCorridorJoint();

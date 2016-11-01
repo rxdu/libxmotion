@@ -37,8 +37,8 @@ QuadSoloSimController::QuadSoloSimController():
 	if(!lcm_->good())
 		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
 	else {
-		lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server_);
-
+		//lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server_);
+		motion_server_ = std::make_shared<MotionServer>(lcm_);
 		data_trans_ = std::make_shared<QuadDataTransmitter>(lcm_);
 	}
 }
@@ -116,10 +116,13 @@ void QuadSoloSimController::UpdateRobotState(const DataFromQuadSim& data)
 
 QuadCmd QuadSoloSimController::UpdateCtrlLoop()
 {
+	// this sim runs at 100 Hz, so system time increase at a step of 10 ms
+	data_trans_->SendSystemTime(ctrl_loop_count_*10);
+
 	QuadCmd cmd_m;
 
 	UAVTrajectoryPoint pt;
-	pt = motion_server_.GetCurrentDesiredPose();
+	pt = motion_server_->GetCurrentDesiredState(ctrl_loop_count_ *10);
 
 	// if no new point, stay where it was
 	if(!pt.point_empty)

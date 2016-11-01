@@ -39,7 +39,7 @@ private:
 
 	std::shared_ptr<lcm::LCM> lcm_;
 
-	MotionServer motion_server_;
+	std::shared_ptr<MotionServer> motion_server_;
 
 	bool broadcast_rs_;
 	std::shared_ptr<QuadDataTransmitter> data_trans_;
@@ -53,6 +53,7 @@ public:
 	void SetInitPose(float x, float y, float z, float yaw);
 	void BroadcastRobotState(bool cmd) { broadcast_rs_ = cmd; };
 	void InitLogger(std::string log_name_prefix, std::string log_save_path);
+	void SetMotionMode(MotionMode mode) { motion_server_->SetMotionMode(mode); };
 };
 
 }

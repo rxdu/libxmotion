@@ -4,4 +4,5 @@ struct Path_t
 {
 	int64_t waypoint_num;
 	WayPoint_t waypoints[waypoint_num];
+	float const_velocity;
 }

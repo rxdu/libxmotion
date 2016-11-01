@@ -43,7 +43,11 @@ srcl_lcm_msgs::UAVTrajectory_t GenerateTestTrajectory()
 			pt.accelerations[0] = 0;
 			pt.accelerations[1] = 0;
 			pt.accelerations[2] = 0;
+			pt.jerks[0] = 0;
+			pt.jerks[1] = 0;
+			pt.jerks[2] = 0;
 			pt.yaw = 0;
+			pt.yaw_rate = 0;
 			pt.duration = 1;
 		}
 		else if(i < time_stamp2)
@@ -61,7 +65,12 @@ srcl_lcm_msgs::UAVTrajectory_t GenerateTestTrajectory()
 			pt.accelerations[1] = radius * cos(angle) * 0.01*circle_ang_vel * 0.01*circle_ang_vel;
 			pt.accelerations[2] = 0;
 
-			pt.yaw = angle;
+			pt.jerks[0] = - radius * cos(angle) * 0.01*circle_ang_vel * 0.01*circle_ang_vel * 0.01*circle_ang_vel;
+			pt.jerks[1] = - radius * sin(angle) * 0.01*circle_ang_vel * 0.01*circle_ang_vel * 0.01*circle_ang_vel;
+			pt.jerks[2] = 0;
+
+			pt.yaw = 0;//angle;
+			pt.yaw_rate = 0;//circle_ang_vel;
 			pt.duration = 1;
 		}
 		else
