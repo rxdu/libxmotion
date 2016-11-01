@@ -64,12 +64,12 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	srcl_msgs::Graph_t graph_msg;
+	srcl_lcm_msgs::Graph_t graph_msg;
 
 	graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
 	for(auto& vtx : cubegraph->GetGraphVertices())
 	{
-		srcl_msgs::Vertex_t vertex;
+		srcl_lcm_msgs::Vertex_t vertex;
 		vertex.id = vtx->vertex_id_;
 
 		vertex.position[0] = vtx->bundled_data_.location_.x;
@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
 	graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
 	for(auto& eg : cubegraph->GetGraphUndirectedEdges())
 	{
-		srcl_msgs::Edge_t edge;
+		srcl_lcm_msgs::Edge_t edge;
 		edge.id_start = eg.src_->vertex_id_;
 		edge.id_end = eg.dst_->vertex_id_;
 

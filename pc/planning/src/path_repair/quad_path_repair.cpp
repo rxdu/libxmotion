@@ -72,7 +72,7 @@ void QuadPathRepair::ConfigGraphPlanner(MapConfig config, double world_size_x, d
 	if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
 		gcombiner_.SetBaseGraph(sgrid_planner_.graph_, sgrid_planner_.map_.data_model, sgrid_planner_.map_.data_model->cells_.size(), sgrid_planner_.map_.info);
 
-	srcl_msgs::Graph_t graph_msg = GenerateLcmGraphMsg();
+	srcl_lcm_msgs::Graph_t graph_msg = GenerateLcmGraphMsg();
 	lcm_->publish("quad_planner/quad_planner_graph", &graph_msg);
 }
 
@@ -149,7 +149,7 @@ std::vector<Position2D> QuadPathRepair::SearchForGlobalPath()
 			waypoints.push_back(wp->bundled_data_->location_);
 	}
 
-	srcl_msgs::Path_t path_msg = GenerateLcmPathMsg(waypoints);
+	srcl_lcm_msgs::Path_t path_msg = GenerateLcmPathMsg(waypoints);
 	lcm_->publish("quad_planner/quad_planner_graph_path", &path_msg);
 
 	update_global_plan_ = false;
@@ -215,7 +215,7 @@ MapInfo QuadPathRepair::GetActiveMapInfo()
 void QuadPathRepair::LcmTransformHandler(
 		const lcm::ReceiveBuffer* rbuf,
 		const std::string& chan,
-		const srcl_msgs::QuadrotorTransform* msg)
+		const srcl_lcm_msgs::QuadrotorTransform* msg)
 {
 	Position2Dd rpos;
 	rpos.x = msg->base_to_world.position[0];
@@ -243,7 +243,7 @@ void QuadPathRepair::LcmTransformHandler(
 					Eigen::Quaterniond(msg->base_to_world.quaternion[0] , msg->base_to_world.quaternion[1] , msg->base_to_world.quaternion[2] , msg->base_to_world.quaternion[3]));
 }
 
-void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::NewDataReady_t* msg)
+void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::NewDataReady_t* msg)
 {
 	static int count = 0;
 	std::cout << " test reading: " << octomap_server_.octree_->getResolution() << std::endl;
@@ -376,12 +376,12 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 //		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
 //	}
 
-	srcl_msgs::Path_t path_msg;
+	srcl_lcm_msgs::Path_t path_msg;
 
 	path_msg.waypoint_num = comb_path.size();
 	for(auto& wp : comb_path_pos)
 	{
-		srcl_msgs::WayPoint_t waypoint;
+		srcl_lcm_msgs::WayPoint_t waypoint;
 		waypoint.positions[0] = wp.x;
 		waypoint.positions[1] = wp.y;
 		waypoint.positions[2] = wp.z;
@@ -391,12 +391,12 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 
 	lcm_->publish("quad_planner/geo_mark_graph_path", &path_msg);
 
-	srcl_msgs::PolynomialCurve_t poly_msg;
+	srcl_lcm_msgs::PolynomialCurve_t poly_msg;
 
 	poly_msg.seg_num = traj_opt_.flat_traj_.traj_segs_.size();
 	for(auto& seg : traj_opt_.flat_traj_.traj_segs_)
 	{
-		srcl_msgs::PolyCurveSegment_t seg_msg;
+		srcl_lcm_msgs::PolyCurveSegment_t seg_msg;
 
 		seg_msg.coeffsize_x = seg.seg_x.param_.coeffs.size();
 		seg_msg.coeffsize_y = seg.seg_y.param_.coeffs.size();
@@ -421,14 +421,14 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 }
 
 template<typename PlannerType>
-srcl_msgs::Graph_t QuadPathRepair::GetLcmGraphFromPlanner(const PlannerType& planner)
+srcl_lcm_msgs::Graph_t QuadPathRepair::GetLcmGraphFromPlanner(const PlannerType& planner)
 {
-	srcl_msgs::Graph_t graph_msg;
+	srcl_lcm_msgs::Graph_t graph_msg;
 
 	graph_msg.vertex_num = planner.graph_->GetGraphVertices().size();
 	for(auto& vtx : planner.graph_->GetGraphVertices())
 	{
-		srcl_msgs::Vertex_t vertex;
+		srcl_lcm_msgs::Vertex_t vertex;
 		vertex.id = vtx->vertex_id_;
 
 		Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(vtx->bundled_data_->location_, planner.map_.info);
@@ -441,7 +441,7 @@ srcl_msgs::Graph_t QuadPathRepair::GetLcmGraphFromPlanner(const PlannerType& pla
 	graph_msg.edge_num = planner.graph_->GetGraphUndirectedEdges().size();
 	for(auto& eg : planner.graph_->GetGraphUndirectedEdges())
 	{
-		srcl_msgs::Edge_t edge;
+		srcl_lcm_msgs::Edge_t edge;
 		edge.id_start = eg.src_->vertex_id_;
 		edge.id_end = eg.dst_->vertex_id_;
 
@@ -451,9 +451,9 @@ srcl_msgs::Graph_t QuadPathRepair::GetLcmGraphFromPlanner(const PlannerType& pla
 	return graph_msg;
 }
 
-srcl_msgs::Graph_t QuadPathRepair::GenerateLcmGraphMsg()
+srcl_lcm_msgs::Graph_t QuadPathRepair::GenerateLcmGraphMsg()
 {
-	srcl_msgs::Graph_t graph_msg;
+	srcl_lcm_msgs::Graph_t graph_msg;
 
 	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
 	{
@@ -467,9 +467,9 @@ srcl_msgs::Graph_t QuadPathRepair::GenerateLcmGraphMsg()
 	return graph_msg;
 }
 
-srcl_msgs::Path_t QuadPathRepair::GenerateLcmPathMsg(std::vector<Position2D> waypoints)
+srcl_lcm_msgs::Path_t QuadPathRepair::GenerateLcmPathMsg(std::vector<Position2D> waypoints)
 {
-	srcl_msgs::Path_t path_msg;
+	srcl_lcm_msgs::Path_t path_msg;
 
 	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
 	{
@@ -477,7 +477,7 @@ srcl_msgs::Path_t QuadPathRepair::GenerateLcmPathMsg(std::vector<Position2D> way
 		for(auto& wp : waypoints)
 		{
 			Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(wp, this->qtree_planner_.map_.info);
-			srcl_msgs::WayPoint_t waypoint;
+			srcl_lcm_msgs::WayPoint_t waypoint;
 			waypoint.positions[0] = ref_world_pos.x;
 			waypoint.positions[1] = ref_world_pos.y;
 
@@ -490,7 +490,7 @@ srcl_msgs::Path_t QuadPathRepair::GenerateLcmPathMsg(std::vector<Position2D> way
 		for(auto& wp : waypoints)
 		{
 			Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(wp, this->sgrid_planner_.map_.info);
-			srcl_msgs::WayPoint_t waypoint;
+			srcl_lcm_msgs::WayPoint_t waypoint;
 			waypoint.positions[0] = ref_world_pos.x;
 			waypoint.positions[1] = ref_world_pos.y;
 

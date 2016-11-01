@@ -15,9 +15,9 @@
 
 using namespace srcl_ctrl;
 
-srcl_msgs::UAVTrajectory_t GenerateTestTrajectory()
+srcl_lcm_msgs::UAVTrajectory_t GenerateTestTrajectory()
 {
-	srcl_msgs::UAVTrajectory_t test_traj;
+	srcl_lcm_msgs::UAVTrajectory_t test_traj;
 
 	int time_stamp1 = 50;
 	int time_stamp2 = time_stamp1 + 150;
@@ -25,7 +25,7 @@ srcl_msgs::UAVTrajectory_t GenerateTestTrajectory()
 
 	for(int i = 0; i < final_time_stamp; i++)
 	{
-		srcl_msgs::UAVTrajectoryPoint_t pt;
+		srcl_lcm_msgs::UAVTrajectoryPoint_t pt;
 		pt.point_empty = false;
 
 		double height = 0.5;
@@ -82,7 +82,7 @@ int main(int argc, char ** argv)
     if(!lcm.good())
         return 1;
 
-    srcl_msgs::UAVTrajectory_t traj = GenerateTestTrajectory();
+    srcl_lcm_msgs::UAVTrajectory_t traj = GenerateTestTrajectory();
 
     std::cout << "sending request" << std::endl;
 

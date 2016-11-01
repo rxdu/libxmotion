@@ -95,12 +95,12 @@ std::vector<Position3Dd> WaypointManager::WaypointSelector(std::vector<Position3
 
 	// std::cout << "minimum waypoints: " << minimum_points.size() << std::endl;
 
-	srcl_msgs::Path_t path_msg;
+	srcl_lcm_msgs::Path_t path_msg;
 
 	path_msg.waypoint_num = minimum_points.size();
 	for(auto& wp : minimum_points)
 	{
-		srcl_msgs::WayPoint_t waypoint;
+		srcl_lcm_msgs::WayPoint_t waypoint;
 		waypoint.positions[0] = wp.x;
 		waypoint.positions[1] = wp.y;
 		waypoint.positions[2] = wp.z;
@@ -113,7 +113,7 @@ std::vector<Position3Dd> WaypointManager::WaypointSelector(std::vector<Position3
 	return minimum_points;
 }
 
-void WaypointManager::LcmWaypointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::Path_t* msg)
+void WaypointManager::LcmWaypointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::Path_t* msg)
 {
 	std::cout << "waypoints received: " << msg->waypoint_num << std::endl;
 
@@ -201,12 +201,12 @@ void WaypointManager::CalcTrajFromWaypoints(std::vector<Position3Dd>& wps)
 //
 //	lcm_->publish("quad_planner/geomark_wp_selected", &path_msg);
 
-	srcl_msgs::PolynomialCurve_t poly_msg;
+	srcl_lcm_msgs::PolynomialCurve_t poly_msg;
 
 	poly_msg.seg_num = traj_opt_.flat_traj_.traj_segs_.size();
 	for(auto& seg : traj_opt_.flat_traj_.traj_segs_)
 	{
-		srcl_msgs::PolyCurveSegment_t seg_msg;
+		srcl_lcm_msgs::PolyCurveSegment_t seg_msg;
 
 		seg_msg.coeffsize_x = seg.seg_x.param_.coeffs.size();
 		seg_msg.coeffsize_y = seg.seg_y.param_.coeffs.size();

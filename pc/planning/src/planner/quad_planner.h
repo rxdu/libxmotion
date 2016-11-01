@@ -54,7 +54,7 @@ public:
 
 private:
 	template<typename PlannerType>
-	srcl_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner);
+	srcl_lcm_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner);
 
 public:
 	// graph planner configuration
@@ -80,14 +80,14 @@ public:
 	bool SearchForLocalPath(Position2Dd start, Position2Dd goal, double time_limit, std::vector<Position2Dd>& path2d);
 
 	// lcm
-	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::QuadrotorTransform* msg);
+	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::QuadrotorTransform* msg);
 
 	// helper functions
 	cv::Mat GetActiveMap();
 	MapInfo GetActiveMapInfo();
 	std::shared_ptr<Graph_t<RRTNode>> GetLocalPlannerVisGraph();
-	srcl_msgs::Graph_t GenerateLcmGraphMsg();
-	srcl_msgs::Path_t GenerateLcmPathMsg(std::vector<Position2D> waypoints);
+	srcl_lcm_msgs::Graph_t GenerateLcmGraphMsg();
+	srcl_lcm_msgs::Path_t GenerateLcmPathMsg(std::vector<Position2D> waypoints);
 };
 
 }

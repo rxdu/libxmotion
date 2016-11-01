@@ -126,12 +126,12 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	srcl_msgs::Path_t path_msg;
+	srcl_lcm_msgs::Path_t path_msg;
 
 	path_msg.waypoint_num = waypoints.size();
 	for(auto& wp : waypoints)
 	{
-		srcl_msgs::WayPoint_t waypoint;
+		srcl_lcm_msgs::WayPoint_t waypoint;
 		waypoint.positions[0] = wp.x;
 		waypoint.positions[1] = wp.y;
 		waypoint.positions[2] = wp.z;
@@ -141,12 +141,12 @@ int main(int argc, char* argv[])
 
 	lcm->publish("quad_planner/geo_mark_graph_path", &path_msg);
 
-	srcl_msgs::PolynomialCurve_t poly_msg;
+	srcl_lcm_msgs::PolynomialCurve_t poly_msg;
 
 	poly_msg.seg_num = opt.flat_traj_.traj_segs_.size();
 	for(auto& seg : opt.flat_traj_.traj_segs_)
 	{
-		srcl_msgs::PolyCurveSegment_t seg_msg;
+		srcl_lcm_msgs::PolyCurveSegment_t seg_msg;
 
 		seg_msg.coeffsize_x = seg.seg_x.param_.coeffs.size();
 		seg_msg.coeffsize_y = seg.seg_y.param_.coeffs.size();

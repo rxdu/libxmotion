@@ -1,4 +1,4 @@
-package srcl_msgs;
+package srcl_lcm_msgs;
 
 struct UAVTrajectoryPoint_t
 {    

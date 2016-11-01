@@ -143,7 +143,7 @@ std::vector<Position2D> QuadPlanner::SearchForGlobalPath()
 			waypoints.push_back(wp->bundled_data_->location_);
 	}
 
-	srcl_msgs::Path_t path_msg = GenerateLcmPathMsg(waypoints);
+	srcl_lcm_msgs::Path_t path_msg = GenerateLcmPathMsg(waypoints);
 	lcm_->publish("quad/quad_planner_graph_path", &path_msg);
 
 	update_global_plan_ = false;
@@ -209,7 +209,7 @@ void QuadPlanner::SetRealWorldSize(double x, double y)
 
 	world_size_set_ = true;
 
-	srcl_msgs::Graph_t graph_msg = GenerateLcmGraphMsg();
+	srcl_lcm_msgs::Graph_t graph_msg = GenerateLcmGraphMsg();
 	lcm_->publish("quad/quad_planner_graph", &graph_msg);
 }
 
@@ -251,7 +251,7 @@ std::shared_ptr<Graph_t<RRTNode>> QuadPlanner::GetLocalPlannerVisGraph()
 void QuadPlanner::LcmTransformHandler(
 		const lcm::ReceiveBuffer* rbuf,
 		const std::string& chan,
-		const srcl_msgs::QuadrotorTransform* msg)
+		const srcl_lcm_msgs::QuadrotorTransform* msg)
 {
 	Position2Dd rpos;
 	rpos.x = msg->base_to_world.position[0];
@@ -279,14 +279,14 @@ void QuadPlanner::LcmTransformHandler(
 }
 
 template<typename PlannerType>
-srcl_msgs::Graph_t QuadPlanner::GetLcmGraphFromPlanner(const PlannerType& planner)
+srcl_lcm_msgs::Graph_t QuadPlanner::GetLcmGraphFromPlanner(const PlannerType& planner)
 {
-	srcl_msgs::Graph_t graph_msg;
+	srcl_lcm_msgs::Graph_t graph_msg;
 
 	graph_msg.vertex_num = planner.graph_->GetGraphVertices().size();
 	for(auto& vtx : planner.graph_->GetGraphVertices())
 	{
-		srcl_msgs::Vertex_t vertex;
+		srcl_lcm_msgs::Vertex_t vertex;
 		vertex.id = vtx->vertex_id_;
 
 		Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(vtx->bundled_data_->location_, planner.map_.info);
@@ -299,7 +299,7 @@ srcl_msgs::Graph_t QuadPlanner::GetLcmGraphFromPlanner(const PlannerType& planne
 	graph_msg.edge_num = planner.graph_->GetGraphUndirectedEdges().size();
 	for(auto& eg : planner.graph_->GetGraphUndirectedEdges())
 	{
-		srcl_msgs::Edge_t edge;
+		srcl_lcm_msgs::Edge_t edge;
 		edge.id_start = eg.src_->vertex_id_;
 		edge.id_end = eg.dst_->vertex_id_;
 
@@ -309,9 +309,9 @@ srcl_msgs::Graph_t QuadPlanner::GetLcmGraphFromPlanner(const PlannerType& planne
 	return graph_msg;
 }
 
-srcl_msgs::Graph_t QuadPlanner::GenerateLcmGraphMsg()
+srcl_lcm_msgs::Graph_t QuadPlanner::GenerateLcmGraphMsg()
 {
-	srcl_msgs::Graph_t graph_msg;
+	srcl_lcm_msgs::Graph_t graph_msg;
 
 	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
 	{
@@ -325,9 +325,9 @@ srcl_msgs::Graph_t QuadPlanner::GenerateLcmGraphMsg()
 	return graph_msg;
 }
 
-srcl_msgs::Path_t QuadPlanner::GenerateLcmPathMsg(std::vector<Position2D> waypoints)
+srcl_lcm_msgs::Path_t QuadPlanner::GenerateLcmPathMsg(std::vector<Position2D> waypoints)
 {
-	srcl_msgs::Path_t path_msg;
+	srcl_lcm_msgs::Path_t path_msg;
 
 	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
 	{
@@ -335,7 +335,7 @@ srcl_msgs::Path_t QuadPlanner::GenerateLcmPathMsg(std::vector<Position2D> waypoi
 		for(auto& wp : waypoints)
 		{
 			Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(wp, this->qtree_planner_.map_.info);
-			srcl_msgs::WayPoint_t waypoint;
+			srcl_lcm_msgs::WayPoint_t waypoint;
 			waypoint.positions[0] = ref_world_pos.x;
 			waypoint.positions[1] = ref_world_pos.y;
 
@@ -348,7 +348,7 @@ srcl_msgs::Path_t QuadPlanner::GenerateLcmPathMsg(std::vector<Position2D> waypoi
 		for(auto& wp : waypoints)
 		{
 			Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(wp, this->sgrid_planner_.map_.info);
-			srcl_msgs::WayPoint_t waypoint;
+			srcl_lcm_msgs::WayPoint_t waypoint;
 			waypoint.positions[0] = ref_world_pos.x;
 			waypoint.positions[1] = ref_world_pos.y;
 

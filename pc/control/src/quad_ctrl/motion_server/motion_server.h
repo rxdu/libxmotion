@@ -40,9 +40,9 @@ private:
 	UAVTrajectory GenerateTestTrajectory();
 
 public:
-	void LcmSysTimeHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::TimeStamp_t* msg);
+	void LcmSysTimeHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::TimeStamp_t* msg);
 
-	void LcmGoalHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::UAVTrajectory_t* msg);
+	void LcmGoalHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::UAVTrajectory_t* msg);
 	void SetMotionGoal(UAVTrajectory& goal);
 	void AbortActiveMotion();
 	double ReportActiveMotionProgress();

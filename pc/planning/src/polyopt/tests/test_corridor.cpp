@@ -195,11 +195,11 @@ int main(int argc, char* argv[])
 			return -1;
 		}
 
-		srcl_msgs::PolynomialCurve_t poly_msg;
+		srcl_lcm_msgs::PolynomialCurve_t poly_msg;
 		poly_msg.seg_num = 2;
 		for(int i = 0; i < 2; i++)
 		{
-			srcl_msgs::PolyCurveSegment_t seg_msg;
+			srcl_lcm_msgs::PolyCurveSegment_t seg_msg;
 
 			seg_msg.coeffsize_x = traj[0][i].coeffs.size();
 			seg_msg.coeffsize_y = traj[1][i].coeffs.size();

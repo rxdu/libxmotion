@@ -24,16 +24,15 @@ namespace srcl_ctrl {
 class QuadPolyTrajHandler {
 public:
 	QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm);
-	QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm, std::string planner_topic, std::string server_topic);
+	QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm, std::string poly_traj_topic);
 	~QuadPolyTrajHandler();
 
 	friend class MotionServer;
 
 private:
 	std::shared_ptr<lcm::LCM> lcm_;
-	std::string planner_topic_;
-	std::string server_topic_;
-	double step_size_;
+	std::string poly_traj_topic_;
+
 	std::atomic<bool> traj_available_;
 	std::atomic<time_stamp> current_sys_time_;
 	time_stamp traj_start_time_;
@@ -44,7 +43,7 @@ private:
 	void UpdateSystemTime(double t) { current_sys_time_ = t; };
 
 public:
-	void LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::PolynomialCurve_t* msg);
+	void LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::PolynomialCurve_t* msg);
 	UAVTrajectoryPoint GetDesiredTrajectoryPoint(time_t tstamp);
 };
 

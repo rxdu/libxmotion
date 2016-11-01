@@ -38,7 +38,7 @@ void OctomapServer::SaveTreeToFile(std::string file_name)
 void OctomapServer::LcmLaserScanPointsHandler(
 		const lcm::ReceiveBuffer* rbuf,
 		const std::string& chan,
-		const srcl_msgs::LaserScanPoints_t* msg)
+		const srcl_lcm_msgs::LaserScanPoints_t* msg)
 {
 	std::cout << msg->points.size() << " points received " << std::endl;
 	loop_count_++;
@@ -64,7 +64,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 		octree->insertRay(origin, end);
 	}
 
-	srcl_msgs::Octomap_t octomap_msg;
+	srcl_lcm_msgs::Octomap_t octomap_msg;
 
 	octomap_msg.binary = true;
 	octomap_msg.resolution = octree_res_;
@@ -84,7 +84,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 
 		octree_ = octree;
 
-		srcl_msgs::NewDataReady_t notice_msg;
+		srcl_lcm_msgs::NewDataReady_t notice_msg;
 		notice_msg.new_data_ready_ = 1;
 		lcm_->publish("quad_planner/new_octomap_ready", &notice_msg);
 

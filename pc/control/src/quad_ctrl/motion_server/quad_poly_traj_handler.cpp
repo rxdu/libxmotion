@@ -14,26 +14,22 @@ using namespace srcl_ctrl;
 
 QuadPolyTrajHandler::QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
-		planner_topic_("quad_planner/trajectory_polynomial"),
-		server_topic_("quad_controller/quad_motion_service"),
-		step_size_(0.01),
+		poly_traj_topic_("quad_planner/trajectory_polynomial"),
 		traj_available_(false),
 		current_sys_time_(0),
 		traj_start_time_(0)
 {
-	lcm_->subscribe(planner_topic_,&QuadPolyTrajHandler::LcmPolyTrajMsgHandler, this);
+	lcm_->subscribe(poly_traj_topic_,&QuadPolyTrajHandler::LcmPolyTrajMsgHandler, this);
 }
 
-QuadPolyTrajHandler::QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm, std::string planner_topic, std::string server_topic):
+QuadPolyTrajHandler::QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm, std::string poly_traj_topic):
 		lcm_(lcm),
-		planner_topic_(planner_topic),
-		server_topic_(server_topic),
-		step_size_(0.01),
+		poly_traj_topic_(poly_traj_topic),
 		traj_available_(false),
 		current_sys_time_(0),
 		traj_start_time_(0)
 {
-	lcm_->subscribe(planner_topic_,&QuadPolyTrajHandler::LcmPolyTrajMsgHandler, this);
+	lcm_->subscribe(poly_traj_topic_,&QuadPolyTrajHandler::LcmPolyTrajMsgHandler, this);
 }
 
 QuadPolyTrajHandler::~QuadPolyTrajHandler()
@@ -51,7 +47,7 @@ double QuadPolyTrajHandler::GetRefactoredTime(double ts, double te, double t)
 	return (t - ts) / (te - ts);
 }
 
-void QuadPolyTrajHandler::LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::PolynomialCurve_t* msg)
+void QuadPolyTrajHandler::LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::PolynomialCurve_t* msg)
 {
 	//std::cout << "polynomial msg received" << std::endl;
 	//std::cout << "current time: " << current_sys_time_ << std::endl;

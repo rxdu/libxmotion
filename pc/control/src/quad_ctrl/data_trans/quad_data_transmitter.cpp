@@ -33,7 +33,7 @@ void QuadDataTransmitter::SendQuadStateData(const QuadState& rs)
 
 void QuadDataTransmitter::SendQuadPose(Point3f pos, Eigen::Quaterniond quat)
 {
-	srcl_msgs::Pose_t pose_msg;
+	srcl_lcm_msgs::Pose_t pose_msg;
 
 	pose_msg.position[0] = pos.x;
 	pose_msg.position[1] = pos.y;
@@ -49,9 +49,9 @@ void QuadDataTransmitter::SendQuadPose(Point3f pos, Eigen::Quaterniond quat)
 
 void QuadDataTransmitter::SendQuadTransform(Point3f pos, Eigen::Quaterniond quat)
 {
-	srcl_msgs::QuadrotorTransform trans_msg;
-	srcl_msgs::Pose_t trans_base2world;
-	srcl_msgs::Pose_t trans_laser2base;
+	srcl_lcm_msgs::QuadrotorTransform trans_msg;
+	srcl_lcm_msgs::Pose_t trans_base2world;
+	srcl_lcm_msgs::Pose_t trans_laser2base;
 
 	trans_base2world.position[0] = pos.x;
 	trans_base2world.position[1] = pos.y;
@@ -85,8 +85,8 @@ void QuadDataTransmitter::SendQuadTransform(Point3f pos, Eigen::Quaterniond quat
 
 void QuadDataTransmitter::SendLaserPoints(const std::vector<Point3f>& pts)
 {
-	srcl_msgs::LaserScanPoints_t pts_msg;
-	srcl_msgs::Point3Df_t point;
+	srcl_lcm_msgs::LaserScanPoints_t pts_msg;
+	srcl_lcm_msgs::Point3Df_t point;
 
 	// assign values to msg
 	for(auto& pt:pts)
@@ -114,7 +114,7 @@ void QuadDataTransmitter::SendLaserPoints(const std::vector<Point3f>& pts)
 
 void QuadDataTransmitter::SendSystemTime(uint64_t sys_t)
 {
-	srcl_msgs::TimeStamp_t t_msg;
+	srcl_lcm_msgs::TimeStamp_t t_msg;
 
 	t_msg.time_stamp = sys_t;
 

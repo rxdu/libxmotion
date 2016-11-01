@@ -59,7 +59,7 @@ public:
 
 private:
 	template<typename PlannerType>
-	srcl_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner);
+	srcl_lcm_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner);
 
 public:
 	// graph planner configuration
@@ -80,14 +80,14 @@ public:
 	std::vector<uint64_t> SearchForGlobalPathID();
 
 	// lcm
-	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::QuadrotorTransform* msg);
-	void LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_msgs::NewDataReady_t* msg);
+	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::QuadrotorTransform* msg);
+	void LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::NewDataReady_t* msg);
 
 	// helper functions
 	cv::Mat GetActiveMap();
 	MapInfo GetActiveMapInfo();
-	srcl_msgs::Graph_t GenerateLcmGraphMsg();
-	srcl_msgs::Path_t GenerateLcmPathMsg(std::vector<Position2D> waypoints);
+	srcl_lcm_msgs::Graph_t GenerateLcmGraphMsg();
+	srcl_lcm_msgs::Path_t GenerateLcmPathMsg(std::vector<Position2D> waypoints);
 };
 
 }
