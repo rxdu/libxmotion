@@ -19,7 +19,7 @@ set(QUADCON_LIB_SRC
     # motion management
     motion_server/motion_server.cpp
     motion_server/quad_poly_traj_handler.cpp
-    motion_server/waypoint_path_handler.cpp
+    #motion_server/waypoint_path_handler.cpp
     # data transmitter
     data_trans/quad_data_transmitter.cpp
 )

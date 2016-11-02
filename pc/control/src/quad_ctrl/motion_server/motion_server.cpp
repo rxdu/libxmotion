@@ -27,7 +27,6 @@ MotionServer::MotionServer():
 MotionServer::MotionServer(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
 		polytraj_handler_(new QuadPolyTrajHandler(lcm_)),
-		wppath_handler_(new WaypointPathHandler(lcm_)),
 		goal_completed_(false),
 		ms_count_(0),
 		waypoint_idx_(0),
@@ -216,7 +215,7 @@ UAVTrajectoryPoint MotionServer::GetCurrentDesiredState(time_stamp t)
 	case MotionMode::POLYNOMIAL:
 		return polytraj_handler_->GetDesiredTrajectoryPoint(t);
 	case MotionMode::WAYPOINTS:
-		return wppath_handler_->GetDesiredTrajectoryPoint(t);
+		return pt;
 	case MotionMode::USER_CMDS:
 		return GetCurrentUserDefinedPose();
 	case MotionMode::POS_STEP_RESPONSE:

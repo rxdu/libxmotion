@@ -16,7 +16,6 @@
 
 #include "common/control_types.h"
 #include "quad_ctrl/motion_server/quad_poly_traj_handler.h"
-#include "quad_ctrl/motion_server/waypoint_path_handler.h"
 
 namespace srcl_ctrl {
 
@@ -36,7 +35,6 @@ public:
 private:
 	std::shared_ptr<lcm::LCM> lcm_;
 	std::unique_ptr<QuadPolyTrajHandler> polytraj_handler_;
-	std::unique_ptr<WaypointPathHandler> wppath_handler_;
 
 private:
 	bool goal_completed_;
