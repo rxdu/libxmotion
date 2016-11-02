@@ -20,14 +20,19 @@ using namespace srcl_ctrl;
 AttQuatCon::AttQuatCon(const QuadState& _rs):
 		rs_(_rs)
 {
-	kp_phi = 1;
-	kd_phi = 0.1;
-	kp_theta = 1;
-	kd_theta = 0.1;
+//	kp_phi = 1;
+//	kd_phi = 0.1;
+//	kp_theta = 1;
+//	kd_theta = 0.1;
+	kp_phi = 1.25;
+	kd_phi = 0.06;
+	kp_theta = 1.25;
+	kd_theta = 0.06;
 //	kp_psi = 1.2;
 //	kd_psi = 0.15;
+	// 0.08, 0.05
 	kp_psi = 0.08;
-	kd_psi = 0.05;
+	kd_psi = 0.03;
 
 	double d = rs_.arm_length_;
 	double c = rs_.kM_/rs_.kF_;

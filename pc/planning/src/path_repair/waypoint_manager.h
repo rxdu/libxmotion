@@ -36,7 +36,7 @@ private:
 	void LcmWaypointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::Path_t* msg);
 
 public:
-	void CalcTrajFromWaypoints(std::vector<Position3Dd>& wps);
+	void CalcTrajFromWaypoints(std::vector<Position3Dd>& wps, double init_yaw, double final_yaw);
 };
 
 }

@@ -123,10 +123,10 @@ void WaypointManager::LcmWaypointsHandler(const lcm::ReceiveBuffer* rbuf, const 
 		last_path_.push_back(Position3Dd(msg->waypoints[i].positions[0],msg->waypoints[i].positions[1],msg->waypoints[i].positions[2]));
 
 	std::vector<Position3Dd> opt_wps = WaypointSelector(last_path_);
-	CalcTrajFromWaypoints(opt_wps);
+	CalcTrajFromWaypoints(opt_wps, 0, -M_PI/4);
 }
 
-void WaypointManager::CalcTrajFromWaypoints(std::vector<Position3Dd>& wps)
+void WaypointManager::CalcTrajFromWaypoints(std::vector<Position3Dd>& wps, double init_yaw, double final_yaw)
 {
 	uint8_t kf_num = wps.size();
 
@@ -155,8 +155,10 @@ void WaypointManager::CalcTrajFromWaypoints(std::vector<Position3Dd>& wps)
 		traj_opt_.keyframe_y_vals_(3,i) = std::numeric_limits<float>::infinity();
 		traj_opt_.keyframe_z_vals_(3,i) = std::numeric_limits<float>::infinity();
 
-		if((i == 0) || (i == wps.size() - 1))
-			traj_opt_.keyframe_yaw_vals_(0,i) = 0;
+		if(i == 0)
+			traj_opt_.keyframe_yaw_vals_(0,i) = init_yaw;
+		else if(i == wps.size() - 1)
+			traj_opt_.keyframe_yaw_vals_(0,i) = final_yaw;
 		else {
 			Eigen::Vector3d pos_vec(wps[i].x, wps[i].y, 0);
 			Eigen::Vector3d dir_vec = goal_vec - pos_vec;
