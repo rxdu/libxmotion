@@ -48,8 +48,8 @@ private:
 	bool is_ready_;
 	uint64_t prev_start_id_;
 	uint64_t prev_goal_id_;
-	Trajectory_t<MapDataModelNode*> prev_result_;
-	Trajectory_t<MapDataModelNode*> empty_path_;
+	Path_t<MapDataModelNode*> prev_result_;
+	Path_t<MapDataModelNode*> empty_path_;
 
 public:
 	Map_t<MapDataModel> map_;
@@ -107,7 +107,7 @@ public:
 		return is_ready_;
 	}
 
-	Trajectory_t<MapDataModelNode*> Search(Vertex_t<MapDataModel*>* start, Vertex_t<MapDataModel*>* goal)
+	Path_t<MapDataModelNode*> Search(Vertex_t<MapDataModel*>* start, Vertex_t<MapDataModel*>* goal)
 	{
 		if(is_ready_)
 		{
@@ -117,7 +117,7 @@ public:
 		return empty_path_;
 	}
 
-	Trajectory_t<MapDataModelNode*> Search(uint64_t start, uint64_t goal)
+	Path_t<MapDataModelNode*> Search(uint64_t start, uint64_t goal)
 	{
 		if(is_ready_)
 		{
@@ -127,7 +127,7 @@ public:
 		return empty_path_;
 	}
 
-	Trajectory_t<MapDataModelNode*> Search(Position2D start, Position2D goal)
+	Path_t<MapDataModelNode*> Search(Position2D start, Position2D goal)
 	{
 		if(is_ready_)
 		{

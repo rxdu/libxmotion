@@ -68,7 +68,7 @@ template<typename T>
 using Edge_t = Edge<Vertex<T>*>;
 
 template<typename T>
-using Trajectory_t = std::vector<Vertex<T>*>;
+using Path_t = std::vector<Vertex<T>*>;
 
 /****************************************************************************/
 /*								 Graph										*/

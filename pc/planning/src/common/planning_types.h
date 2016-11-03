@@ -10,6 +10,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <iostream>
 
 namespace srcl_ctrl{
 
@@ -33,6 +34,13 @@ typedef struct _postion2d
 		else
 			return false;
 	}
+
+	// http://stackoverflow.com/questions/236801/should-operator-be-implemented-as-a-friend-or-as-a-member-function
+	friend std::ostream& operator<<(std::ostream& os, const struct _postion2d& pos)
+	{
+		os << pos.x << " , " << pos.y;
+		return os;
+	}
 }Position2D;
 
 typedef struct _position2dd
@@ -49,6 +57,12 @@ typedef struct _position2dd
 			return true;
 		else
 			return false;
+	}
+
+	friend std::ostream& operator<<(std::ostream& os, const struct _position2dd& pos)
+	{
+		os << pos.x << " , " << pos.y;
+		return os;
 	}
 }Position2Dd;
 
@@ -68,6 +82,12 @@ typedef struct _position3dd
 		else
 			return false;
 	}
+
+	friend std::ostream& operator<<(std::ostream& os, const struct _position3dd& pos)
+	{
+	    os << pos.x << " , " << pos.y << " , " << pos.z;
+	    return os;
+	}
 }Position3Dd;
 
 typedef struct _position3d
@@ -85,6 +105,12 @@ typedef struct _position3d
 			return true;
 		else
 			return false;
+	}
+
+	friend std::ostream& operator<<(std::ostream& os, const struct _position3d& pos)
+	{
+		os << pos.x << " , " << pos.y << " , " << pos.z;
+		return os;
 	}
 }Position3D;
 

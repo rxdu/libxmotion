@@ -14,7 +14,7 @@
 
 #include "graph/graph.h"
 #include "common/planning_types.h"
-#include "path_repair/geo_mark.h"
+#include "geometry/geo_mark.h"
 #include "map/map_info.h"
 #include "map/map_utils.h"
 #include "geometry/cube_array/cube_array.h"
@@ -50,7 +50,7 @@ public:
 	Graph_t<GeoMark> combined_graph_;
 
 public:
-	void UpdateFlightHeight(Position3Dd pos, Eigen::Quaterniond quat)
+	void UpdateVehiclePose(Position3Dd pos, Eigen::Quaterniond quat)
 	{
 		pos_ = pos;
 		quat_ = quat;

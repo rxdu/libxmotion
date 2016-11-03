@@ -81,6 +81,14 @@ public:
 
 	double cube_size_;
 
+private:
+	bool isIDValid(uint64_t id) {
+		if(id >= cubes_.size())
+			return false;
+		else
+			return true;
+	};
+
 public:
 	std::vector<CubeCell> cubes_;
 

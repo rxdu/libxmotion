@@ -129,7 +129,7 @@ void QuadPathRepair::SetGoalRefWorldPosition(Position2Dd pos)
 	SetGoalMapPosition(map_padded_pos);
 }
 
-std::vector<Position2D> QuadPathRepair::SearchForGlobalPath()
+std::vector<Position2D> QuadPathRepair::UpdateGlobalPath()
 {
 	std::vector<Position2D> waypoints;
 
@@ -157,7 +157,7 @@ std::vector<Position2D> QuadPathRepair::SearchForGlobalPath()
 	return waypoints;
 }
 
-std::vector<uint64_t> QuadPathRepair::SearchForGlobalPathID()
+std::vector<uint64_t> QuadPathRepair::UpdateGlobalPathID()
 {
 	std::vector<uint64_t> waypoints;
 
@@ -221,26 +221,12 @@ void QuadPathRepair::LcmTransformHandler(
 	rpos.x = msg->base_to_world.position[0];
 	rpos.y = msg->base_to_world.position[1];
 
-//	Position2Dd mapw_pos;
-//	mapw_pos = MapUtils::CoordinatesFromRefWorldToMapWorld(rpos, GetActiveMapInfo());
-//
-//	Position2D map_pos;
-//	map_pos = MapUtils::CoordinatesFromMapWorldToMap(mapw_pos, GetActiveMapInfo());
-//
-//	Position2D map_padded_pos;
-//	map_padded_pos = MapUtils::CoordinatesFromOriginalToPadded(map_pos, GetActiveMapInfo());
-
-//	std::cout << "quadrotor position in sim: " << msg->base_to_world.position[0] << " , "
-//			<< msg->base_to_world.position[1] << " , "
-//			<< msg->base_to_world.position[2] << std::endl;
-//	std::cout << "quadrotor position in image world: " << mpos.x << " , "
-//				<< mpos.y << std::endl;
-
 	if(auto_update_pos_)
 		SetStartRefWorldPosition(rpos);
 
-	gcombiner_.UpdateFlightHeight(Position3Dd(msg->base_to_world.position[0],msg->base_to_world.position[1],msg->base_to_world.position[2]),
+	gcombiner_.UpdateVehiclePose(Position3Dd(msg->base_to_world.position[0],msg->base_to_world.position[1],msg->base_to_world.position[2]),
 					Eigen::Quaterniond(msg->base_to_world.quaternion[0] , msg->base_to_world.quaternion[1] , msg->base_to_world.quaternion[2] , msg->base_to_world.quaternion[3]));
+	mission_tracker_.UpdateCurrentPosition(Position3Dd(msg->base_to_world.position[0],msg->base_to_world.position[1],msg->base_to_world.position[2]));
 }
 
 void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::NewDataReady_t* msg)
@@ -268,113 +254,117 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 	exec_time = clock() - exec_time;
 	std::cout << "Search in 3D finished in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 
+	if(!mission_tracker_.mission_started_) {
+		mission_tracker_.UpdateActivePathWaypoints(comb_path);
+	}
+
 	std::vector<Position3Dd> comb_path_pos;
 	for(auto& wp:comb_path)
 		comb_path_pos.push_back(wp->bundled_data_.position);
 
-	std::vector<Position3Dd> octomap_waypoints;
-	//octomap_waypoints.push_back(gcombiner_.pos_);
-	uint16_t wp_idx = 0;
-	for(auto& wp:comb_path)
-	{
-//		if(wp->bundled_data_.source == GeoMarkSource::LASER_OCTOMAP)
-//			octomap_waypoints.push_back(wp->bundled_data_.position);
-		if(wp_idx++ == 0)
-			continue;
-
-		octomap_waypoints.push_back(wp->bundled_data_.position);
-
-		if(wp_idx++ > 10)
-			break;
-	}
-
-	uint8_t kf_num = octomap_waypoints.size();
-
-	if(kf_num < 2)
-		return;
-
-//	traj_opt_.InitOptJointMatrices(kf_num);
-	traj_opt_.InitOptWithCorridorJointMatrices(kf_num, 20, 0.01);
-
-	for(int i = 0; i < octomap_waypoints.size(); i++)
-	{
-		traj_opt_.keyframe_x_vals_(0,i) = octomap_waypoints[i].x;
-		traj_opt_.keyframe_y_vals_(0,i) = octomap_waypoints[i].y;
-		traj_opt_.keyframe_z_vals_(0,i) = octomap_waypoints[i].z;
-		//traj_opt_.keyframe_yaw_vals_(0,i) = 0;
-
-		traj_opt_.keyframe_x_vals_(1,i) = std::numeric_limits<float>::infinity();
-		traj_opt_.keyframe_y_vals_(1,i) = std::numeric_limits<float>::infinity();
-		traj_opt_.keyframe_z_vals_(1,i) = std::numeric_limits<float>::infinity();
-
-		traj_opt_.keyframe_x_vals_(2,i) = std::numeric_limits<float>::infinity();
-		traj_opt_.keyframe_y_vals_(2,i) = std::numeric_limits<float>::infinity();
-		traj_opt_.keyframe_z_vals_(2,i) = std::numeric_limits<float>::infinity();
-
-		traj_opt_.keyframe_x_vals_(3,i) = std::numeric_limits<float>::infinity();
-		traj_opt_.keyframe_y_vals_(3,i) = std::numeric_limits<float>::infinity();
-		traj_opt_.keyframe_z_vals_(3,i) = std::numeric_limits<float>::infinity();
-
-		traj_opt_.keyframe_ts_(0,i) = i * 0.5;
-	}
-
-	traj_opt_.keyframe_x_vals_(1,0) = 0.0;
-	traj_opt_.keyframe_y_vals_(1,0) = 0.0;
-	traj_opt_.keyframe_z_vals_(1,0) = 0.0;
-
-	traj_opt_.keyframe_x_vals_(2,0) = 0.0;
-	traj_opt_.keyframe_y_vals_(2,0) = 0.0;
-	traj_opt_.keyframe_z_vals_(2,0) = 0.0;
-
-	traj_opt_.keyframe_x_vals_(3,0) = 0.0;
-	traj_opt_.keyframe_y_vals_(3,0) = 0.0;
-	traj_opt_.keyframe_z_vals_(3,0) = 0.0;
-
-	traj_opt_.keyframe_x_vals_(1,kf_num - 1) = 0.0;
-	traj_opt_.keyframe_y_vals_(1,kf_num - 1) = 0.0;
-	traj_opt_.keyframe_z_vals_(1,kf_num - 1) = 0.0;
-
-	traj_opt_.keyframe_x_vals_(2,kf_num - 1) = 0.0;
-	traj_opt_.keyframe_y_vals_(2,kf_num - 1) = 0.0;
-	traj_opt_.keyframe_z_vals_(2,kf_num - 1) = 0.0;
-
-	traj_opt_.keyframe_x_vals_(3,kf_num - 1) = 0;
-	traj_opt_.keyframe_y_vals_(3,kf_num - 1) = 0;
-	traj_opt_.keyframe_z_vals_(3,kf_num - 1) = 0;
-
-	//traj_opt_.OptimizeFlatTrajJoint();
-	traj_opt_.OptimizeFlatTrajWithCorridorJoint();
-
-//	if(count++ == 20)
+//	std::vector<Position3Dd> octomap_waypoints;
+//	//octomap_waypoints.push_back(gcombiner_.pos_);
+//	uint16_t wp_idx = 0;
+//	for(auto& wp:comb_path)
 //	{
-//		count = 0;
-//		srcl_msgs::Graph_t graph_msg;
+////		if(wp->bundled_data_.source == GeoMarkSource::LASER_OCTOMAP)
+////			octomap_waypoints.push_back(wp->bundled_data_.position);
+//		if(wp_idx++ == 0)
+//			continue;
 //
-//		graph_msg.vertex_num = gcombiner_.combined_graph_.GetGraphVertices().size();
-//		for(auto& vtx : gcombiner_.combined_graph_.GetGraphVertices())
-//		{
-//			srcl_msgs::Vertex_t vertex;
-//			vertex.id = vtx->vertex_id_;
+//		octomap_waypoints.push_back(wp->bundled_data_.position);
 //
-//			vertex.position[0] = vtx->bundled_data_.position.x;
-//			vertex.position[1] = vtx->bundled_data_.position.y;
-//			vertex.position[2] = vtx->bundled_data_.position.z;
-//
-//			graph_msg.vertices.push_back(vertex);
-//		}
-//
-//		graph_msg.edge_num = gcombiner_.combined_graph_.GetGraphUndirectedEdges().size();
-//		for(auto& eg : gcombiner_.combined_graph_.GetGraphUndirectedEdges())
-//		{
-//			srcl_msgs::Edge_t edge;
-//			edge.id_start = eg.src_->vertex_id_;
-//			edge.id_end = eg.dst_->vertex_id_;
-//
-//			graph_msg.edges.push_back(edge);
-//		}
-//
-//		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
+//		if(wp_idx++ > 10)
+//			break;
 //	}
+//
+//	uint8_t kf_num = octomap_waypoints.size();
+//
+//	if(kf_num < 2)
+//		return;
+//
+////	traj_opt_.InitOptJointMatrices(kf_num);
+//	traj_opt_.InitOptWithCorridorJointMatrices(kf_num, 20, 0.01);
+//
+//	for(int i = 0; i < octomap_waypoints.size(); i++)
+//	{
+//		traj_opt_.keyframe_x_vals_(0,i) = octomap_waypoints[i].x;
+//		traj_opt_.keyframe_y_vals_(0,i) = octomap_waypoints[i].y;
+//		traj_opt_.keyframe_z_vals_(0,i) = octomap_waypoints[i].z;
+//		//traj_opt_.keyframe_yaw_vals_(0,i) = 0;
+//
+//		traj_opt_.keyframe_x_vals_(1,i) = std::numeric_limits<float>::infinity();
+//		traj_opt_.keyframe_y_vals_(1,i) = std::numeric_limits<float>::infinity();
+//		traj_opt_.keyframe_z_vals_(1,i) = std::numeric_limits<float>::infinity();
+//
+//		traj_opt_.keyframe_x_vals_(2,i) = std::numeric_limits<float>::infinity();
+//		traj_opt_.keyframe_y_vals_(2,i) = std::numeric_limits<float>::infinity();
+//		traj_opt_.keyframe_z_vals_(2,i) = std::numeric_limits<float>::infinity();
+//
+//		traj_opt_.keyframe_x_vals_(3,i) = std::numeric_limits<float>::infinity();
+//		traj_opt_.keyframe_y_vals_(3,i) = std::numeric_limits<float>::infinity();
+//		traj_opt_.keyframe_z_vals_(3,i) = std::numeric_limits<float>::infinity();
+//
+//		traj_opt_.keyframe_ts_(0,i) = i * 0.5;
+//	}
+//
+//	traj_opt_.keyframe_x_vals_(1,0) = 0.0;
+//	traj_opt_.keyframe_y_vals_(1,0) = 0.0;
+//	traj_opt_.keyframe_z_vals_(1,0) = 0.0;
+//
+//	traj_opt_.keyframe_x_vals_(2,0) = 0.0;
+//	traj_opt_.keyframe_y_vals_(2,0) = 0.0;
+//	traj_opt_.keyframe_z_vals_(2,0) = 0.0;
+//
+//	traj_opt_.keyframe_x_vals_(3,0) = 0.0;
+//	traj_opt_.keyframe_y_vals_(3,0) = 0.0;
+//	traj_opt_.keyframe_z_vals_(3,0) = 0.0;
+//
+//	traj_opt_.keyframe_x_vals_(1,kf_num - 1) = 0.0;
+//	traj_opt_.keyframe_y_vals_(1,kf_num - 1) = 0.0;
+//	traj_opt_.keyframe_z_vals_(1,kf_num - 1) = 0.0;
+//
+//	traj_opt_.keyframe_x_vals_(2,kf_num - 1) = 0.0;
+//	traj_opt_.keyframe_y_vals_(2,kf_num - 1) = 0.0;
+//	traj_opt_.keyframe_z_vals_(2,kf_num - 1) = 0.0;
+//
+//	traj_opt_.keyframe_x_vals_(3,kf_num - 1) = 0;
+//	traj_opt_.keyframe_y_vals_(3,kf_num - 1) = 0;
+//	traj_opt_.keyframe_z_vals_(3,kf_num - 1) = 0;
+//
+//	//traj_opt_.OptimizeFlatTrajJoint();
+//	traj_opt_.OptimizeFlatTrajWithCorridorJoint();
+//
+////	if(count++ == 20)
+////	{
+////		count = 0;
+////		srcl_msgs::Graph_t graph_msg;
+////
+////		graph_msg.vertex_num = gcombiner_.combined_graph_.GetGraphVertices().size();
+////		for(auto& vtx : gcombiner_.combined_graph_.GetGraphVertices())
+////		{
+////			srcl_msgs::Vertex_t vertex;
+////			vertex.id = vtx->vertex_id_;
+////
+////			vertex.position[0] = vtx->bundled_data_.position.x;
+////			vertex.position[1] = vtx->bundled_data_.position.y;
+////			vertex.position[2] = vtx->bundled_data_.position.z;
+////
+////			graph_msg.vertices.push_back(vertex);
+////		}
+////
+////		graph_msg.edge_num = gcombiner_.combined_graph_.GetGraphUndirectedEdges().size();
+////		for(auto& eg : gcombiner_.combined_graph_.GetGraphUndirectedEdges())
+////		{
+////			srcl_msgs::Edge_t edge;
+////			edge.id_start = eg.src_->vertex_id_;
+////			edge.id_end = eg.dst_->vertex_id_;
+////
+////			graph_msg.edges.push_back(edge);
+////		}
+////
+////		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
+////	}
 
 	srcl_lcm_msgs::Path_t path_msg;
 
@@ -391,33 +381,33 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 
 	lcm_->publish("quad_planner/geo_mark_graph_path", &path_msg);
 
-	srcl_lcm_msgs::PolynomialCurve_t poly_msg;
-
-	poly_msg.seg_num = traj_opt_.flat_traj_.traj_segs_.size();
-	for(auto& seg : traj_opt_.flat_traj_.traj_segs_)
-	{
-		srcl_lcm_msgs::PolyCurveSegment_t seg_msg;
-
-		seg_msg.coeffsize_x = seg.seg_x.param_.coeffs.size();
-		seg_msg.coeffsize_y = seg.seg_y.param_.coeffs.size();
-		seg_msg.coeffsize_z = seg.seg_z.param_.coeffs.size();
-		seg_msg.coeffsize_yaw = seg.seg_yaw.param_.coeffs.size();
-		for(auto& coeff:seg.seg_x.param_.coeffs)
-			seg_msg.coeffs_x.push_back(coeff);
-		for(auto& coeff:seg.seg_y.param_.coeffs)
-			seg_msg.coeffs_y.push_back(coeff);
-		for(auto& coeff:seg.seg_z.param_.coeffs)
-			seg_msg.coeffs_z.push_back(coeff);
-		for(auto& coeff:seg.seg_yaw.param_.coeffs)
-			seg_msg.coeffs_yaw.push_back(coeff);
-
-		seg_msg.t_start = 0;
-		seg_msg.t_end = 1.0;
-
-		poly_msg.segments.push_back(seg_msg);
-	}
-
-	lcm_->publish("quad_planner/trajectory_polynomial", &poly_msg);
+//	srcl_lcm_msgs::PolynomialCurve_t poly_msg;
+//
+//	poly_msg.seg_num = traj_opt_.flat_traj_.traj_segs_.size();
+//	for(auto& seg : traj_opt_.flat_traj_.traj_segs_)
+//	{
+//		srcl_lcm_msgs::PolyCurveSegment_t seg_msg;
+//
+//		seg_msg.coeffsize_x = seg.seg_x.param_.coeffs.size();
+//		seg_msg.coeffsize_y = seg.seg_y.param_.coeffs.size();
+//		seg_msg.coeffsize_z = seg.seg_z.param_.coeffs.size();
+//		seg_msg.coeffsize_yaw = seg.seg_yaw.param_.coeffs.size();
+//		for(auto& coeff:seg.seg_x.param_.coeffs)
+//			seg_msg.coeffs_x.push_back(coeff);
+//		for(auto& coeff:seg.seg_y.param_.coeffs)
+//			seg_msg.coeffs_y.push_back(coeff);
+//		for(auto& coeff:seg.seg_z.param_.coeffs)
+//			seg_msg.coeffs_z.push_back(coeff);
+//		for(auto& coeff:seg.seg_yaw.param_.coeffs)
+//			seg_msg.coeffs_yaw.push_back(coeff);
+//
+//		seg_msg.t_start = 0;
+//		seg_msg.t_end = 1.0;
+//
+//		poly_msg.segments.push_back(seg_msg);
+//	}
+//
+//	lcm_->publish("quad_planner/trajectory_polynomial", &poly_msg);
 }
 
 template<typename PlannerType>

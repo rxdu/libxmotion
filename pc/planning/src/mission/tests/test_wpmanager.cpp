@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
 
 	// combine graphs
 	GraphCombiner<SquareCell*, SquareGrid> combiner;
-	combiner.UpdateFlightHeight(Position3Dd(-1.8,0.6,0.8), Eigen::Quaterniond(0.923868 , 3.68874e-05 , 9.55242e-06 , -0.382712));
+	combiner.UpdateVehiclePose(Position3Dd(-1.8,0.6,0.8), Eigen::Quaterniond(0.923868 , 3.68874e-05 , 9.55242e-06 , -0.382712));
 	combiner.SetBaseGraph(map_graph, sgrid_map.data_model, sgrid_map.data_model->cells_.size(), sgrid_map.info);
 
 	clock_t		exec_time;

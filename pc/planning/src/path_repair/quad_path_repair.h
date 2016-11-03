@@ -18,10 +18,11 @@
 #include "common/planning_types.h"
 #include "planner/graph_planner.h"
 #include "map/map_info.h"
-#include "path_repair/geo_mark.h"
+#include "geometry/geo_mark.h"
 #include "path_repair/graph_combiner.h"
 #include "local3d/octomap_server.h"
 #include "quad_flat/quad_polyopt.h"
+#include "mission/mission_tracker.h"
 
 namespace srcl_ctrl {
 
@@ -39,6 +40,8 @@ private:
 	GraphPlanner<SquareGrid> sgrid_planner_;
 	GraphCombiner<SquareCell*, SquareGrid> gcombiner_;
 	OctomapServer octomap_server_;
+
+	MissionTracker mission_tracker_;
 
 	// trajectory optimization
 	QuadPolyOpt traj_opt_;
@@ -65,23 +68,24 @@ public:
 	// graph planner configuration
 	void ConfigGraphPlanner(MapConfig config, double world_size_x, double world_size_y);
 
-	// set start and goal
-	void SetStartMapPosition(Position2D pos);
-	void SetGoalMapPosition(Position2D pos);
+	// general planner configuration
+	void EnablePositionAutoUpdate(bool cmd) { auto_update_pos_ = cmd; };
 
 	void SetStartRefWorldPosition(Position2Dd pos);
 	void SetGoalRefWorldPosition(Position2Dd pos);
 
-	// general planner configuration
-	void EnablePositionAutoUpdate(bool cmd) { auto_update_pos_ = cmd; };
-
 	// search functions
-	std::vector<Position2D> SearchForGlobalPath();
-	std::vector<uint64_t> SearchForGlobalPathID();
+	std::vector<Position2D> UpdateGlobalPath();
+	std::vector<uint64_t> UpdateGlobalPathID();
 
+private:
 	// lcm
 	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::QuadrotorTransform* msg);
 	void LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::NewDataReady_t* msg);
+
+	// set start and goal on map (internal use)
+	void SetStartMapPosition(Position2D pos);
+	void SetGoalMapPosition(Position2D pos);
 
 	// helper functions
 	cv::Mat GetActiveMap();
@@ -91,6 +95,5 @@ public:
 };
 
 }
-
 
 #endif /* PLANNING_SRC_PATH_REPAIR_QUAD_PATH_REPAIR_H_ */

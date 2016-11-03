@@ -152,16 +152,16 @@ std::vector<uint64_t> CubeArray::GetStartingCubes()
 
 	uint64_t test_id;
 	test_id = GetIDFromPosition(cube_size_/2, cube_size_/2, cube_size_/2);
-	if(cubes_[test_id].occu_ == OccupancyType::FREE)
+	if(isIDValid(test_id) && cubes_[test_id].occu_ == OccupancyType::FREE)
 		start_cubes.push_back(test_id);
 	test_id = GetIDFromPosition(cube_size_/2, -cube_size_/2, cube_size_/2);
-	if(cubes_[test_id].occu_ == OccupancyType::FREE)
+	if(isIDValid(test_id) && cubes_[test_id].occu_ == OccupancyType::FREE)
 		start_cubes.push_back(test_id);
 	test_id = GetIDFromPosition(cube_size_/2, cube_size_/2, -cube_size_/2);
-	if(cubes_[test_id].occu_ == OccupancyType::FREE)
+	if(isIDValid(test_id) && cubes_[test_id].occu_ == OccupancyType::FREE)
 		start_cubes.push_back(test_id);
 	test_id = GetIDFromPosition(cube_size_/2, -cube_size_/2, -cube_size_/2);
-	if(cubes_[test_id].occu_ == OccupancyType::FREE)
+	if(isIDValid(test_id) && cubes_[test_id].occu_ == OccupancyType::FREE)
 		start_cubes.push_back(test_id);
 
 	return start_cubes;

@@ -73,8 +73,8 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	octree->prune();
 	std::stringstream datastream;
 
-	if(loop_count_ % 100 == 0)
-	{
+//	if(loop_count_ % 100 == 0)
+//	{
 		if (octree->writeBinaryData(datastream))
 		{
 			std::string datastring = datastream.str();
@@ -89,7 +89,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 		lcm_->publish("quad_planner/new_octomap_ready", &notice_msg);
 
 		lcm_->publish("quad_planner/hummingbird_laser_octomap", &octomap_msg);
-	}
+//	}
 
 //	// %10 : 10ms * 10 - 10 Hz update rate
 //	if(loop_count_ % 100)

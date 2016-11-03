@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 	while(true)
 	{
 		if(qplanner.update_global_plan_)
-			qplanner.SearchForGlobalPath();
+			qplanner.UpdateGlobalPath();
 
 		lcm->handleTimeout(0);
 	}
