@@ -9,9 +9,9 @@
 
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
+#include <mission/trajectory_generator.h>
 #include "lcmtypes/comm.hpp"
 
-#include "path_repair/waypoint_manager.h"
 
 using namespace srcl_ctrl;
 
@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	std::shared_ptr<WaypointManager> wp_m = std::make_shared<WaypointManager>(lcm);
+	std::shared_ptr<TrajectoryGenerator> wp_m = std::make_shared<TrajectoryGenerator>(lcm);
 
 	while(true)
 	{

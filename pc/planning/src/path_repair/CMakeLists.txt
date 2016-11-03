@@ -16,7 +16,7 @@ endif()
 # Add libraries
 set(PATH_REPAIR_LIB_SRC
     quad_path_repair.cpp
-    waypoint_manager.cpp
+    #waypoint_manager.cpp
 )
 add_library(path_repair STATIC ${PATH_REPAIR_LIB_SRC})
 target_link_libraries(path_repair map local3d planner utils polyopt quadflat ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
@@ -27,12 +27,6 @@ target_link_libraries(path_repair map local3d planner utils polyopt quadflat ${O
 
 add_executable(test_combiner tests/test_combiner.cpp)
 target_link_libraries(test_combiner map geometry local3d polyopt quadflat utils ${Octomap_LIBS} ${LCM_LIBRARIES})
-
-add_executable(wp_manager tests/wp_manager.cpp)
-target_link_libraries(wp_manager path_repair ${LCM_LIBRARIES})
-
-add_executable(test_waypoints tests/test_wpmanager.cpp)
-target_link_libraries(test_waypoints map geometry local3d polyopt quadflat utils ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 add_executable(test_tracking tests/test_tracking.cpp)
 target_link_libraries(test_tracking polyopt quadflat utils ${LCM_LIBRARIES})

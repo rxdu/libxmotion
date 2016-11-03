@@ -9,6 +9,7 @@
 #define SRC_MAP_COMMON_TYPES_H_
 
 #include <cstdint>
+#include <vector>
 
 namespace srcl_ctrl{
 
@@ -106,6 +107,20 @@ typedef struct
 	Range2D x;
 	Range2D y;
 }BoundingBox;
+
+typedef struct {
+	float positions[3];
+	float velocity[3];
+	float yaw;
+
+	bool pos_constr;
+	bool vel_constr;
+	bool yaw_constr;
+} Keyframe;
+
+typedef struct {
+	std::vector<Keyframe> keyframes;
+} KeyframeSet;
 
 }
 

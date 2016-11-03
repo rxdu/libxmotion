@@ -43,6 +43,7 @@ add_subdirectory(src/rrtstar)
 add_subdirectory(src/planner)
 #add_subdirectory(src/motion_client)
 add_subdirectory(src/examples)
+add_subdirectory(src/mission)
 add_subdirectory(src/apps)
 
 if(BUILD_TESTS)
