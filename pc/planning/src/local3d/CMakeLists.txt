@@ -13,7 +13,7 @@ set(LOCAL3DMAP_LIB_SRC
     octomap_server.cpp
 )
 add_library(local3d STATIC ${LOCAL3DMAP_LIB_SRC})
-target_link_libraries(local3d map geometry ${Octomap_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(local3d utils map geometry ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 # Add executables
 add_executable(octree_example octomap_example.cpp)
