@@ -43,6 +43,8 @@ private:
 	octomath::Vector3 sensor_origin_;
 
 	std::vector<octomap::Pointcloud> point_cloud_;
+	octomap::Pointcloud current_pc_;
+	octomap::ScanNode scan_node_;
 	const int scan_buffer_size_;
 
 public:

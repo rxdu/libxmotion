@@ -5,4 +5,6 @@ struct LaserScanPoints_t
 	Pose_t trans_sensor2world;
 	int64_t point_num;
 	Point3Df_t points[point_num];
+	
+	QuadrotorTransform pose;
 }

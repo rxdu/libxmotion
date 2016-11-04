@@ -67,8 +67,8 @@ std::shared_ptr<CubeArray> CubeArrayBuilder::BuildCubeArrayFromOctree(std::share
 		OcTreeNode* result = tree->search (query);
 
 		if (result != NULL) {
-			//std::cout << "occupancy probability at " << query << ":\t " << result->getOccupancy() << std::endl;
-			if(result->getOccupancy() < tree->getProbMiss())
+//			std::cout << "occupancy probability at " << query << ":\t " << result->getOccupancy() << std::endl;
+			if(result->getOccupancy() <= tree->getProbMiss())
 				cube.occu_ = OccupancyType::FREE;
 //			else if(result->getOccupancy() > tree->getProbHit())
 //				cube.occu_ = OccupancyType::OCCUPIED;

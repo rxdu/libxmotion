@@ -23,6 +23,9 @@ OctomapServer::OctomapServer(std::shared_ptr<lcm::LCM> lcm):
 		save_tree_name_("saved_octree.bt"),
 		scan_buffer_size_(10)
 {
+//	sensor_origin_.x() = -1.8;
+//	sensor_origin_.y() = 0.6;
+//	sensor_origin_.z() = 0.8;//0.11;
 	sensor_origin_.x() = 0;
 	sensor_origin_.y() = 0;
 	sensor_origin_.z() = 0.11;
@@ -75,14 +78,28 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	for(auto& pt : msg->points)
 	{
 		octomap::point3d end_point;
-		Position3Dd end_w = utils::Transformation::TransformPosition3D(transf_, Position3Dd(pt.x, pt.y, pt.z));
-
-		end_point.x() = end_w.x;
-		end_point.y() = end_w.y;
-		end_point.z() = end_w.z;
+//		Position3Dd end_w = utils::Transformation::TransformPosition3D(transf_, Position3Dd(pt.x, pt.y, pt.z));
+//
+//		end_point.x() = end_w.x;
+//		end_point.y() = end_w.y;
+//		end_point.z() = end_w.z;
+		end_point.x() = pt.x;
+		end_point.y() = pt.y;
+		end_point.z() = pt.z;
 
 		pc.push_back(end_point);
 	}
+	base_pose_.trans() = octomath::Vector3(msg->pose.base_to_world.position[0],
+			msg->pose.base_to_world.position[1],
+			msg->pose.base_to_world.position[2] + 0.11);
+//	base_pose_.trans() = octomath::Vector3(-1.8,0.6,0.91);
+	base_pose_.rot() = octomath::Quaternion(msg->pose.base_to_world.quaternion[0],
+			msg->pose.base_to_world.quaternion[1],
+			msg->pose.base_to_world.quaternion[2],
+			msg->pose.base_to_world.quaternion[3]);
+	//pc.transform(base_pose_);
+//	current_pc_ = pc;
+//	scan_node_ = octomap::ScanNode(&current_pc_, base_pose_, loop_count_);
 
 	if(point_cloud_.size() < scan_buffer_size_)
 		point_cloud_.push_back(pc);
@@ -97,8 +114,17 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	for(auto& p : point_cloud_)
 		accumulated_pc.push_back(p);
 
-	octree->insertPointCloud(accumulated_pc, sensor_origin_);
-	//	octree->insertPointCloud(pc, sensor_origin_, base_pose_);
+//	octree->insertPointCloud(scan_node_);
+	//octree->insertPointCloud(pc, sensor_origin_);
+	octree->insertPointCloud(pc, sensor_origin_, base_pose_);
+
+//	std::cout << "current pose: " << base_pose_.trans().x() << " , "
+//			<< base_pose_.trans().y() << " , "
+//			<< base_pose_.trans().z() << std::endl;
+
+	octree->prune();
+
+	octree_ = octree;
 
 	srcl_lcm_msgs::Octomap_t octomap_msg;
 
@@ -106,7 +132,6 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	octomap_msg.resolution = octree_res_;
 	octomap_msg.id = octree->getTreeType();
 
-	octree->prune();
 	std::stringstream datastream;
 
 	if (octree->writeBinaryData(datastream))
@@ -116,8 +141,6 @@ void OctomapServer::LcmLaserScanPointsHandler(
 		octomap_msg.data_size = octomap_msg.data.size();
 	}
 
-	octree_ = octree;
-
 	srcl_lcm_msgs::NewDataReady_t notice_msg;
 	notice_msg.new_data_ready_ = 1;
 	lcm_->publish("quad_planner/new_octomap_ready", &notice_msg);
@@ -125,17 +148,21 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	lcm_->publish("quad_planner/hummingbird_laser_octomap", &octomap_msg);
 
 //	// %10 : 10ms * 10 - 10 Hz update rate
-//	if(loop_count_ % 100)
+//	if(loop_count_ % 10)
 //	{
 //		std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octree);
 //		std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
 //
-//		srcl_msgs::Graph_t graph_msg;
+////		std::cout << "tree size: " << octree_->size() << std::endl;
+////		std::cout << "tree cube array size: " << cubearray->cubes_.size() << std::endl;
+////		std::cout << "tree graph size: " << cubegraph->GetGraphVertices().size() << std::endl;
+//
+//		srcl_lcm_msgs::Graph_t graph_msg;
 //
 //		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
 //		for(auto& vtx : cubegraph->GetGraphVertices())
 //		{
-//			srcl_msgs::Vertex_t vertex;
+//			srcl_lcm_msgs::Vertex_t vertex;
 //			vertex.id = vtx->vertex_id_;
 //
 //			vertex.position[0] = vtx->bundled_data_.location_.x;
@@ -149,7 +176,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 //		graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
 //		for(auto& eg : cubegraph->GetGraphUndirectedEdges())
 //		{
-//			srcl_msgs::Edge_t edge;
+//			srcl_lcm_msgs::Edge_t edge;
 //			edge.id_start = eg.src_->vertex_id_;
 //			edge.id_end = eg.dst_->vertex_id_;
 //
@@ -157,6 +184,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 //		}
 //
 //		lcm_->publish("quad_planner/cube_graph", &graph_msg);
+//
 //		loop_count_ = 0;
 //	}
 

@@ -27,9 +27,9 @@ public:
 private:
 	std::shared_ptr<lcm::LCM> lcm_;
 
-	void SendQuadPose(Point3f pos, Eigen::Quaterniond quat);
 	void SendQuadTransform(Point3f pos, Eigen::Quaterniond quat);
 	void SendLaserPoints(const std::vector<Point3f>& pts);
+	void SendLaserPoints(const std::vector<Point3f>& pts, Point3f pos, Eigen::Quaterniond quat);
 
 public:
 	void SendQuadStateData(const QuadState& rs);

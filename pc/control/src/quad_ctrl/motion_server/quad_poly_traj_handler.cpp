@@ -91,7 +91,7 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 			return pt;
 		}
 
-		std::cout << "request traj time: " << t << std::endl;
+		//std::cout << "request traj time: " << t << std::endl;
 
 		// search for the right segment
 		int seg_idx;
@@ -104,7 +104,7 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 		if(seg_idx >= flat_traj_.traj_segs_.size())
 			return pt;
 
-		std::cout << "active segment index: " << seg_idx << std::endl;
+		//std::cout << "active segment index: " << seg_idx << std::endl;
 
 		double seg_t_start = flat_traj_.traj_segs_[seg_idx].t_start;
 		double seg_t_end = flat_traj_.traj_segs_[seg_idx].t_end;

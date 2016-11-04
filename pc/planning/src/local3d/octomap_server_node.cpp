@@ -44,6 +44,8 @@ int main(int argc, char** argv)
 //			server.SaveTreeToFile("octree_set2.bt");
 //			tree_saved = true;
 //		}
+
+//		 delay for some time
 //		std::chrono::seconds timespan(10); // or whatever
 //		std::this_thread::sleep_for(timespan);
 	}
