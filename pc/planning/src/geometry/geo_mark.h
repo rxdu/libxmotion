@@ -18,7 +18,8 @@ namespace srcl_ctrl {
 enum class GeoMarkSource {
 	NOT_SPECIFIED,
 	LASER_OCTOMAP,
-	PLANAR_MAP
+	PLANAR_MAP,
+	VIRTUAL_POINT
 };
 
 struct GeoMark: public BDSBase<GeoMark>

@@ -176,50 +176,50 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	lcm_->publish("quad_planner/hummingbird_laser_octomap", &octomap_msg);
 
 //	// %10 : 10ms * 10 - 10 Hz update rate
-	if(loop_count_ % 10)
-	{
-		std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octree);
-		std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
-
-//		std::cout << "tree size: " << octree_->size() << std::endl;
-//		std::cout << "tree cube array size: " << cubearray->cubes_.size() << std::endl;
-//		std::cout << "tree graph size: " << cubegraph->GetGraphVertices().size() << std::endl;
-
-		srcl_lcm_msgs::Graph_t graph_msg;
-
-		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
-		for(auto& vtx : cubegraph->GetGraphVertices())
-		{
-			srcl_lcm_msgs::Vertex_t vertex;
-			vertex.id = vtx->vertex_id_;
-
-			Position3Dd start_w = utils::Transformation::TransformPosition3D(transf_, Position3Dd(vtx->bundled_data_.location_.x,
-					vtx->bundled_data_.location_.y, vtx->bundled_data_.location_.z));
-//			vertex.position[0] = vtx->bundled_data_.location_.x;
-//			vertex.position[1] = vtx->bundled_data_.location_.y;
-//			vertex.position[2] = vtx->bundled_data_.location_.z;
-			vertex.position[0] = start_w.x;
-			vertex.position[1] = start_w.y;
-			vertex.position[2] = start_w.z;
-
-			if(vtx->bundled_data_.occu_ != OccupancyType::OCCUPIED)
-				graph_msg.vertices.push_back(vertex);
-		}
-
-		graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
-		for(auto& eg : cubegraph->GetGraphUndirectedEdges())
-		{
-			srcl_lcm_msgs::Edge_t edge;
-			edge.id_start = eg.src_->vertex_id_;
-			edge.id_end = eg.dst_->vertex_id_;
-
-			graph_msg.edges.push_back(edge);
-		}
-
-		lcm_->publish("quad_planner/cube_graph", &graph_msg);
-
-		loop_count_ = 0;
-	}
+//	if(loop_count_ % 10)
+//	{
+//		std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octree);
+//		std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
+//
+////		std::cout << "tree size: " << octree_->size() << std::endl;
+////		std::cout << "tree cube array size: " << cubearray->cubes_.size() << std::endl;
+////		std::cout << "tree graph size: " << cubegraph->GetGraphVertices().size() << std::endl;
+//
+//		srcl_lcm_msgs::Graph_t graph_msg;
+//
+//		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
+//		for(auto& vtx : cubegraph->GetGraphVertices())
+//		{
+//			srcl_lcm_msgs::Vertex_t vertex;
+//			vertex.id = vtx->vertex_id_;
+//
+//			Position3Dd start_w = utils::Transformation::TransformPosition3D(transf_, Position3Dd(vtx->bundled_data_.location_.x,
+//					vtx->bundled_data_.location_.y, vtx->bundled_data_.location_.z));
+////			vertex.position[0] = vtx->bundled_data_.location_.x;
+////			vertex.position[1] = vtx->bundled_data_.location_.y;
+////			vertex.position[2] = vtx->bundled_data_.location_.z;
+//			vertex.position[0] = start_w.x;
+//			vertex.position[1] = start_w.y;
+//			vertex.position[2] = start_w.z;
+//
+//			if(vtx->bundled_data_.occu_ != OccupancyType::OCCUPIED)
+//				graph_msg.vertices.push_back(vertex);
+//		}
+//
+//		graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
+//		for(auto& eg : cubegraph->GetGraphUndirectedEdges())
+//		{
+//			srcl_lcm_msgs::Edge_t edge;
+//			edge.id_start = eg.src_->vertex_id_;
+//			edge.id_end = eg.dst_->vertex_id_;
+//
+//			graph_msg.edges.push_back(edge);
+//		}
+//
+//		lcm_->publish("quad_planner/cube_graph", &graph_msg);
+//
+//		loop_count_ = 0;
+//	}
 
 	if(save_tree_)
 	{

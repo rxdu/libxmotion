@@ -240,15 +240,16 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 
 	std::cout << "cube graph size: " << cubegraph->GetGraphVertices().size() << std::endl;
 
-	bool combine_success = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);
+//	bool combine_success = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);
+//	if(!combine_success)
+//		return;
 
-	if(!combine_success)
-		return;
+	uint64_t geo_start_id_astar = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);
 
-	uint64_t map_start_id = sgrid_planner_.map_.data_model->GetIDFromPosition(start_pos_.x, start_pos_.y);
+	//uint64_t map_start_id = sgrid_planner_.map_.data_model->GetIDFromPosition(start_pos_.x, start_pos_.y);
+	//uint64_t geo_start_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_start_id)->bundled_data_->geo_mark_id_;
+
 	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);;
-
-	uint64_t geo_start_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_start_id)->bundled_data_->geo_mark_id_;
 	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
 
 	clock_t exec_time;
@@ -265,8 +266,8 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 	for(auto& wp:comb_path)
 		comb_path_pos.push_back(wp->bundled_data_.position);
 
-//	if(count++ == 20)
-//	{
+	if(count++ == 20)
+	{
 //		count = 0;
 //		srcl_lcm_msgs::Graph_t graph_msg;
 //
@@ -294,7 +295,7 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 //		}
 //
 //		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
-//	}
+	}
 
 	if(comb_path.size() > 0)
 	{

@@ -92,8 +92,10 @@ public:
 		}
 	};
 
-	bool CombineBaseWithCubeArrayGraph(std::shared_ptr<CubeArray> ca, std::shared_ptr<Graph<CubeCell&>> cg)
+	uint64_t CombineBaseWithCubeArrayGraph(std::shared_ptr<CubeArray> ca, std::shared_ptr<Graph<CubeCell&>> cg)
 	{
+		uint64_t start_id;
+
 		// TODO possible improvement: only erase newly added vertices in the last iteration
 		combined_graph_.ClearGraph();
 		for(auto& edge : combined_graph_base_.GetGraphEdges()) {
@@ -128,11 +130,26 @@ public:
 		Position2D map2d_start_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(pos_.x,pos_.y), base_map_info_);
 		uint64_t map2d_start_id = base_ds_->GetIDFromPosition(map2d_start_pos.x, map2d_start_pos.y);
 
-		if(base_graph_->GetVertexFromID(map2d_start_id) == nullptr)
-			return false;
+		// old policy
+		//if(base_graph_->GetVertexFromID(map2d_start_id) == nullptr)
+		//	return false;
+		// new policy
+		if(base_graph_->GetVertexFromID(map2d_start_id) != nullptr)
+		{
+			uint64_t geo_start_id = base_graph_->GetVertexFromID(map2d_start_id)->bundled_data_->geo_mark_id_;
+			map2d_start_mark = combined_graph_.GetVertexFromID(geo_start_id)->bundled_data_;
 
-		uint64_t geo_start_id = base_graph_->GetVertexFromID(map2d_start_id)->bundled_data_->geo_mark_id_;
-		map2d_start_mark = combined_graph_.GetVertexFromID(geo_start_id)->bundled_data_;
+			start_id = geo_start_id;
+		}
+		else
+		{
+			map2d_start_mark.data_id_ = max_id_val_ + cg->GetGraphVertices().size() + 1;
+			map2d_start_mark.position = pos_;
+			map2d_start_mark.source = GeoMarkSource::VIRTUAL_POINT;
+			map2d_start_mark.source_id = 0;
+
+			start_id = max_id_val_ + cg->GetGraphVertices().size() + 1;
+		}
 
 		std::set<uint32_t> hei_set;
 		for(auto& st_cube : ca->GetStartingCubes())
@@ -180,7 +197,7 @@ public:
 			combined_graph_.AddEdge(mark3d, mark2d, cost);
 		}
 
-		return true;
+		return start_id;
 	}
 };
 }
