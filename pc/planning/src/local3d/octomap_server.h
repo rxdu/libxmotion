@@ -23,6 +23,12 @@
 
 namespace srcl_ctrl {
 
+typedef struct
+{
+	octomap::Pointcloud pc;
+	octomath::Pose6D trans;
+} PointCloudSnap;
+
 class OctomapServer {
 public:
 	OctomapServer(std::shared_ptr<lcm::LCM> lcm);
@@ -41,6 +47,8 @@ private:
 	utils::Transformation::Transform3D transf_;
 	octomath::Pose6D base_pose_;
 	octomath::Vector3 sensor_origin_;
+
+	std::vector<PointCloudSnap> pc_snaps_;
 
 	std::vector<octomap::Pointcloud> point_cloud_;
 	octomap::Pointcloud current_pc_;

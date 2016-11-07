@@ -106,15 +106,15 @@ public:
 		for(auto& edge:cg->GetGraphEdges())
 		{
 			mark1.data_id_ = max_id_val_ + edge.src_->vertex_id_;
-//			mark1.position = utils::Transformation::TransformPosition3D(transf_, edge.src_->bundled_data_.location_);
-			mark1.position = edge.src_->bundled_data_.location_;
+			mark1.position = utils::Transformation::TransformPosition3D(transf_, edge.src_->bundled_data_.location_);
+//			mark1.position = edge.src_->bundled_data_.location_;
 			mark1.source = GeoMarkSource::LASER_OCTOMAP;
 			mark1.source_id = edge.src_->bundled_data_.data_id_;
 			edge.src_->bundled_data_.geo_mark_id_ = mark1.data_id_;
 
 			mark2.data_id_ = max_id_val_ + edge.dst_->vertex_id_;
-//			mark2.position =  utils::Transformation::TransformPosition3D(transf_, edge.dst_->bundled_data_.location_);
-			mark2.position =  edge.dst_->bundled_data_.location_;
+			mark2.position =  utils::Transformation::TransformPosition3D(transf_, edge.dst_->bundled_data_.location_);
+//			mark2.position =  edge.dst_->bundled_data_.location_;
 			mark2.source = GeoMarkSource::LASER_OCTOMAP;
 			mark2.source_id = edge.dst_->bundled_data_.data_id_;
 			edge.dst_->bundled_data_.geo_mark_id_ = mark2.data_id_;

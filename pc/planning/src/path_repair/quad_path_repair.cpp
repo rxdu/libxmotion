@@ -233,6 +233,7 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 {
 	static int count = 0;
 	//std::cout << " test reading: " << octomap_server_.octree_->getResolution() << std::endl;
+	bool virtual_start = false;
 
 	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
 	std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
@@ -264,51 +265,54 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 	for(auto& wp:comb_path)
 		comb_path_pos.push_back(wp->bundled_data_.position);
 
-	if(count++ == 20)
+//	if(count++ == 20)
+//	{
+//		count = 0;
+//		srcl_lcm_msgs::Graph_t graph_msg;
+//
+//		graph_msg.vertex_num = gcombiner_.combined_graph_.GetGraphVertices().size();
+//		for(auto& vtx : gcombiner_.combined_graph_.GetGraphVertices())
+//		{
+//			srcl_lcm_msgs::Vertex_t vertex;
+//			vertex.id = vtx->vertex_id_;
+//
+//			vertex.position[0] = vtx->bundled_data_.position.x;
+//			vertex.position[1] = vtx->bundled_data_.position.y;
+//			vertex.position[2] = vtx->bundled_data_.position.z;
+//
+//			graph_msg.vertices.push_back(vertex);
+//		}
+//
+//		graph_msg.edge_num = gcombiner_.combined_graph_.GetGraphUndirectedEdges().size();
+//		for(auto& eg : gcombiner_.combined_graph_.GetGraphUndirectedEdges())
+//		{
+//			srcl_lcm_msgs::Edge_t edge;
+//			edge.id_start = eg.src_->vertex_id_;
+//			edge.id_end = eg.dst_->vertex_id_;
+//
+//			graph_msg.edges.push_back(edge);
+//		}
+//
+//		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
+//	}
+
+	if(comb_path.size() > 0)
 	{
-		count = 0;
-		srcl_lcm_msgs::Graph_t graph_msg;
+		srcl_lcm_msgs::Path_t path_msg;
 
-		graph_msg.vertex_num = gcombiner_.combined_graph_.GetGraphVertices().size();
-		for(auto& vtx : gcombiner_.combined_graph_.GetGraphVertices())
+		path_msg.waypoint_num = comb_path.size();
+		for(auto& wp : comb_path_pos)
 		{
-			srcl_lcm_msgs::Vertex_t vertex;
-			vertex.id = vtx->vertex_id_;
+			srcl_lcm_msgs::WayPoint_t waypoint;
+			waypoint.positions[0] = wp.x;
+			waypoint.positions[1] = wp.y;
+			waypoint.positions[2] = wp.z;
 
-			vertex.position[0] = vtx->bundled_data_.position.x;
-			vertex.position[1] = vtx->bundled_data_.position.y;
-			vertex.position[2] = vtx->bundled_data_.position.z;
-
-			graph_msg.vertices.push_back(vertex);
+			path_msg.waypoints.push_back(waypoint);
 		}
 
-		graph_msg.edge_num = gcombiner_.combined_graph_.GetGraphUndirectedEdges().size();
-		for(auto& eg : gcombiner_.combined_graph_.GetGraphUndirectedEdges())
-		{
-			srcl_lcm_msgs::Edge_t edge;
-			edge.id_start = eg.src_->vertex_id_;
-			edge.id_end = eg.dst_->vertex_id_;
-
-			graph_msg.edges.push_back(edge);
-		}
-
-		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
+		lcm_->publish("quad_planner/geo_mark_graph_path", &path_msg);
 	}
-
-	srcl_lcm_msgs::Path_t path_msg;
-
-	path_msg.waypoint_num = comb_path.size();
-	for(auto& wp : comb_path_pos)
-	{
-		srcl_lcm_msgs::WayPoint_t waypoint;
-		waypoint.positions[0] = wp.x;
-		waypoint.positions[1] = wp.y;
-		waypoint.positions[2] = wp.z;
-
-		path_msg.waypoints.push_back(waypoint);
-	}
-
-	lcm_->publish("quad_planner/geo_mark_graph_path", &path_msg);
 }
 
 template<typename PlannerType>
