@@ -38,19 +38,20 @@ int main(int argc, char** argv )
 	Mat image_bin;
 	ImageUtils::BinarizeImage(image_raw, image_bin,200);
 //	ImageUtils::PadImageToSquared(image_bin, image_disp);
-	ImageUtils::PadImageTo2Exp(image_bin, image_disp);
-
-	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
-	imshow("Processed Image", image_bin);
-
 	Mat image_exp;
 	ImageUtils::ExpandObstacleAreaOnImage(image_bin, image_exp, 20);
+
+//	ImageUtils::PadImageTo2Exp(image_bin, image_disp);
+//
+//	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
+//	imshow("Processed Image", image_disp);
+
 	namedWindow("Processed Image 2", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 	imshow("Processed Image 2", image_exp);
 
 	waitKey(0);
 
-	imwrite( "test_image.jpg", image_disp);
+	//imwrite( "test_image.jpg", image_disp);
 
 	return 0;
 }

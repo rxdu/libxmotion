@@ -16,6 +16,7 @@
 #include "lcmtypes/comm.hpp"
 
 #include "common/planning_types.h"
+#include "common/control_types.h"
 #include "planner/graph_planner.h"
 #include "map/map_info.h"
 #include "geometry/geo_mark.h"
@@ -44,6 +45,7 @@ private:
 	OctomapServer octomap_server_;
 
 	MissionTracker mission_tracker_;
+	time_stamp current_sys_time_;
 
 	// trajectory optimization
 	QuadPolyOpt traj_opt_;
@@ -89,6 +91,7 @@ private:
 	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::QuadrotorTransform* msg);
 	void LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::NewDataReady_t* msg);
 	void LcmMissionInfoHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::MissionInfo_t* msg);
+	void LcmSysTimeHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::TimeStamp_t* msg);
 
 	// set start and goal on map (internal use)
 	void SetStartMapPosition(Position2D pos);

@@ -15,5 +15,7 @@ else()
   target_link_libraries(quadsim_pr_planner map path_repair ${OpenCV_LIBS} ${LCM_LIBRARIES})
 endif()
 
+add_executable(map_gen map_gen.cpp)
+target_link_libraries(map_gen map vis ${OpenCV_LIBS})
 
 

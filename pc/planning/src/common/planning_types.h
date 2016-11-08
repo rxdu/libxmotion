@@ -146,6 +146,7 @@ typedef struct {
 
 typedef struct {
 	std::vector<Keyframe> keyframes;
+	uint64_t start_time;
 } KeyframeSet;
 
 }

@@ -23,16 +23,19 @@ SGridBuilder::~SGridBuilder()
 
 std::shared_ptr<SquareGrid> SGridBuilder::BuildSquareGrid(cv::InputArray _src, uint32_t cell_size)
 {
-	Mat image_bin;
-	Mat image_map;
-	Mat src = _src.getMat();
+//	Mat image_bin;
+//	Mat image_map;
+//	Mat src = _src.getMat();
+//
+//	// binarize grayscale image
+//	ImageUtils::BinarizeImage(src, image_bin, 200);
+//	//ImageUtils::ExpandObstacleAreaOnImage(image_bin, image_bin, 5);
+//
+//	// pad image to 2^n on each side so that we can calculate
+//	//	the dimension of the grid more conveniently
+//	ImageUtils::PadImageTo2Exp(image_bin, image_map);
 
-	// binarize grayscale image
-	ImageUtils::BinarizeImage(src, image_bin, 200);
-
-	// pad image to 2^n on each side so that we can calculate
-	//	the dimension of the grid more conveniently
-	ImageUtils::PadImageTo2Exp(image_bin, image_map);
+	Mat image_map = _src.getMat();
 
 	// create square grid
 	uint32_t row_num = image_map.rows / cell_size;
@@ -61,11 +64,13 @@ Map_t<SquareGrid> SGridBuilder::BuildSquareGridMap(cv::InputArray _src, uint32_t
 
 	// binarize grayscale image
 	Mat image_bin;
+	Mat image_bin_expand;
 	ImageUtils::BinarizeImage(src, image_bin, 200);
+	ImageUtils::ExpandObstacleAreaOnImage(image_bin, image_bin_expand, 50);
 
 	// pad image to 2^n on each side so that we can calculate
 	//	the dimension of the grid more conveniently
-	PaddingSize psize = ImageUtils::PadImageTo2Exp(image_bin, map.padded_image);
+	PaddingSize psize = ImageUtils::PadImageTo2Exp(image_bin_expand, map.padded_image);
 
 	// generate map info
 	map.info.vector_map = false;
@@ -80,7 +85,7 @@ Map_t<SquareGrid> SGridBuilder::BuildSquareGridMap(cv::InputArray _src, uint32_t
 	map.info.scale_y = 1; //static_cast<double>(map.info.map_size_y)/map.info.world_size_y;
 
 	// create square grid
-	map.data_model = SGridBuilder::BuildSquareGrid(_src, cell_size);
+	map.data_model = SGridBuilder::BuildSquareGrid(map.padded_image, cell_size);
 
 	return map;
 }

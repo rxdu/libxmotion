@@ -25,8 +25,10 @@ void ImageUtils::ExpandObstacleAreaOnImage(cv::InputArray _src, cv::OutputArray 
 {
 	// Prepare data structures
 	Mat src = _src.getMat();
+
 	_dst.create(src.size(), CV_8UC1);
 	Mat dst = _dst.getMat();
+	//dst = Scalar(255);
 	src.copyTo(dst);
 
 	// Expand obstacle
@@ -56,8 +58,9 @@ void ImageUtils::ExpandObstacleAreaOnImage(cv::InputArray _src, cv::OutputArray 
 
 //				std::cout<< "size(x,y): ( " << rngx.start << " ~ " << rngx.end << " ; "
 //						<< rngy.start << " ~ " << rngy.end << " )" << std::endl;
-				Mat exp_area = dst(rngy,rngx);
-				exp_area = Scalar(0);//Scalar( 0, 0, 0 );
+//				Mat exp_area = dst(rngy,rngx);
+//				exp_area = Scalar(0);//Scalar( 0, 0, 0 );
+				dst(rngy,rngx) = Scalar(0);
 			}
 		}
 }

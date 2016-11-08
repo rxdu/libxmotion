@@ -75,7 +75,8 @@ void QuadPolyTrajHandler::LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, 
 	for(auto& wp:msg->waypoints)
 		waypoints_.push_back(Position3Dd(wp.positions[0], wp.positions[1], wp.positions[2]));
 
-	traj_start_time_ = current_sys_time_;
+//	traj_start_time_ = current_sys_time_;
+	traj_start_time_ = msg->start_time.time_stamp;
 	traj_available_ = true;
 }
 

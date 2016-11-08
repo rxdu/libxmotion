@@ -7,4 +7,6 @@ struct PolynomialCurve_t
 	
 	int32_t wp_num;
 	WayPoint_t waypoints[wp_num]; 
+	
+	TimeStamp_t start_time;
 }

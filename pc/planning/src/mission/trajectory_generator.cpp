@@ -68,6 +68,7 @@ void TrajectoryGenerator::LcmKeyframeSetHandler(const lcm::ReceiveBuffer* rbuf, 
 
 		new_kfs.keyframes.push_back(kf);
 	}
+	new_kfs.start_time = msg->sys_time.time_stamp;
 
 	GenerateTrajectory(new_kfs);
 }
@@ -179,6 +180,7 @@ void TrajectoryGenerator::GenerateTrajectory(KeyframeSet& kfs)
 
 		poly_msg.segments.push_back(seg_msg);
 	}
+	poly_msg.start_time.time_stamp = kfs.start_time;
 
 	lcm_->publish("quad_planner/trajectory_polynomial", &poly_msg);
 }

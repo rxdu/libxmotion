@@ -22,6 +22,7 @@ QuadPathRepair::QuadPathRepair(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
 		octomap_server_(OctomapServer(lcm_)),
 		active_graph_planner_(GraphPlannerType::NOT_SPECIFIED),
+		current_sys_time_(0),
 		gstart_set_(false),
 		ggoal_set_(false),
 		world_size_set_(false),
@@ -38,6 +39,7 @@ QuadPathRepair::QuadPathRepair(std::shared_ptr<lcm::LCM> lcm):
 		lcm_->subscribe("quad_data/quad_transform",&QuadPathRepair::LcmTransformHandler, this);
 		lcm_->subscribe("quad_planner/new_octomap_ready",&QuadPathRepair::LcmOctomapHandler, this);
 		lcm_->subscribe("quad_ctrl/mission_info",&QuadPathRepair::LcmMissionInfoHandler, this);
+		lcm_->subscribe("quad_data/system_time", &QuadPathRepair::LcmSysTimeHandler, this);
 	}
 }
 
@@ -247,6 +249,14 @@ void QuadPathRepair::LcmMissionInfoHandler(
 	est_dist2goal_ = msg->dist_to_goal;
 }
 
+void QuadPathRepair::LcmSysTimeHandler(
+		const lcm::ReceiveBuffer* rbuf,
+		const std::string& chan,
+		const srcl_lcm_msgs::TimeStamp_t* msg)
+{
+	current_sys_time_ = msg->time_stamp;
+}
+
 void QuadPathRepair::LcmOctomapHandler(
 		const lcm::ReceiveBuffer* rbuf,
 		const std::string& chan,
@@ -254,7 +264,10 @@ void QuadPathRepair::LcmOctomapHandler(
 {
 	static int count = 0;
 	//std::cout << " test reading: " << octomap_server_.octree_->getResolution() << std::endl;
-	bool virtual_start = false;
+	srcl_lcm_msgs::KeyframeSet_t kf_cmd;
+
+	// record the planning time
+	kf_cmd.sys_time.time_stamp = current_sys_time_;
 
 	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
 	std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
@@ -305,8 +318,6 @@ void QuadPathRepair::LcmOctomapHandler(
 			init_plan_found_ = true;
 
 		Send3DSearchPathToVis(selected_wps);
-
-		srcl_lcm_msgs::KeyframeSet_t kf_cmd;
 
 		Eigen::Vector3d goal_vec(selected_wps.back().x, selected_wps.back().y, 0);
 
