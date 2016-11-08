@@ -5,9 +5,10 @@
  *      Author: rdu
  */
 
-#include <motion_server/quad_poly_traj_handler.h>
 #include <iostream>
+#include <cmath>
 
+#include "motion_server/quad_poly_traj_handler.h"
 #include "polyopt/polyopt_math.h"
 
 using namespace srcl_ctrl;
@@ -54,6 +55,9 @@ void QuadPolyTrajHandler::LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, 
 
 	traj_available_ = false;
 	flat_traj_.clear();
+	waypoints_.clear();
+
+	// copy data from msg
 	for(auto& seg:msg->segments)
 	{
 		std::vector<std::vector<double>> segcoeffs;
@@ -67,6 +71,9 @@ void QuadPolyTrajHandler::LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, 
 
 		flat_traj_.AddTrajSeg(segcoeffs, seg.t_start, seg.t_end);
 	}
+
+	for(auto& wp:msg->waypoints)
+		waypoints_.push_back(Position3Dd(wp.positions[0], wp.positions[1], wp.positions[2]));
 
 	traj_start_time_ = current_sys_time_;
 	traj_available_ = true;
@@ -104,7 +111,7 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 		if(seg_idx >= flat_traj_.traj_segs_.size())
 			return pt;
 
-		//std::cout << "active segment index: " << seg_idx << std::endl;
+		std::cout << "active segment index: " << seg_idx << std::endl;
 
 		double seg_t_start = flat_traj_.traj_segs_[seg_idx].t_start;
 		double seg_t_end = flat_traj_.traj_segs_[seg_idx].t_end;
@@ -130,6 +137,35 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 
 		pt.yaw = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 0, t_factor);
 		pt.yaw_rate = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 1, t_factor);
+
+		// calculate remaining distance to goal
+		double dist = 0;
+		// if active segment is the last segment
+		if(seg_idx == flat_traj_.traj_segs_.size() - 1)
+		{
+			dist = std::sqrt(std::pow(pt.positions[0] - waypoints_.back().x,2) +
+					std::pow(pt.positions[1] - waypoints_.back().y,2) + std::pow(pt.positions[2] - waypoints_.back().z,2));
+		}
+		else
+		{
+			// calc remaining distance of the current segment
+			dist += std::sqrt(std::pow(pt.positions[0] - waypoints_[seg_idx + 1].x,2) +
+					std::pow(pt.positions[1] - waypoints_[seg_idx + 1].y,2) + std::pow(pt.positions[2] - waypoints_[seg_idx + 1].z,2));
+			for(int i = seg_idx + 1; i < flat_traj_.traj_segs_.size() - 1; i++)
+			{
+				dist += std::sqrt(std::pow(waypoints_[i].x - waypoints_[i + 1].x,2) +
+									std::pow(waypoints_[i].y - waypoints_[i + 1].y,2) +
+									std::pow(waypoints_[i].z - waypoints_[i + 1].z,2));
+			}
+		}
+
+		if(dist < 0.01)
+			dist = 0;
+
+//		std::cout << "estimated distance to goal: " << dist << std::endl;
+		srcl_lcm_msgs::MissionInfo_t info_msg;
+		info_msg.dist_to_goal = dist;
+		lcm_->publish("quad_ctrl/mission_info", &info_msg);
 	}
 
 	return pt;

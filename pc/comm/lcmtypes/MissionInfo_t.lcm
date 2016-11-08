@@ -1,0 +1,6 @@
+package srcl_lcm_msgs;
+
+struct MissionInfo_t
+{    
+	double dist_to_goal;
+}

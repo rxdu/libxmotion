@@ -74,10 +74,13 @@ void TrajectoryGenerator::LcmKeyframeSetHandler(const lcm::ReceiveBuffer* rbuf, 
 
 void TrajectoryGenerator::GenerateTrajectory(KeyframeSet& kfs)
 {
+	srcl_lcm_msgs::PolynomialCurve_t poly_msg;
 	uint8_t kf_num = kfs.keyframes.size();
 
 	if(kf_num < 2)
 		return;
+
+	poly_msg.wp_num = kfs.keyframes.size();
 
 	//	traj_opt_.InitOptJointMatrices(kf_num);
 	traj_opt_.InitOptWithCorridorJointMatrices(kf_num, 20, 0.01);
@@ -113,6 +116,12 @@ void TrajectoryGenerator::GenerateTrajectory(KeyframeSet& kfs)
 		traj_opt_.keyframe_yaw_vals_(1,i) = std::numeric_limits<float>::infinity();
 
 		traj_opt_.keyframe_ts_(0,i) = i * 0.5;
+
+		srcl_lcm_msgs::WayPoint_t wpoint;
+		wpoint.positions[0] = kfs.keyframes[i].positions[0];
+		wpoint.positions[1] = kfs.keyframes[i].positions[1];
+		wpoint.positions[2] = kfs.keyframes[i].positions[2];
+		poly_msg.waypoints.push_back(wpoint);
 	}
 
 	traj_opt_.keyframe_x_vals_(1,0) = 0.0;
@@ -147,8 +156,6 @@ void TrajectoryGenerator::GenerateTrajectory(KeyframeSet& kfs)
 	traj_opt_.OptimizeFlatTrajWithCorridorJoint();
 
 	// send results to LCM network
-	srcl_lcm_msgs::PolynomialCurve_t poly_msg;
-
 	poly_msg.seg_num = traj_opt_.flat_traj_.traj_segs_.size();
 	for(auto& seg : traj_opt_.flat_traj_.traj_segs_)
 	{

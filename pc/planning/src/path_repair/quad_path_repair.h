@@ -56,6 +56,9 @@ private:
 	bool world_size_set_;
 	bool auto_update_pos_;
 
+	bool init_plan_found_;
+	double est_dist2goal_;
+
 public:
 	bool update_global_plan_;
 	GraphPlannerType active_graph_planner_;
@@ -82,6 +85,7 @@ private:
 	// lcm
 	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::QuadrotorTransform* msg);
 	void LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::NewDataReady_t* msg);
+	void LcmMissionInfoHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::MissionInfo_t* msg);
 
 	// set start and goal on map (internal use)
 	void SetStartMapPosition(Position2D pos);

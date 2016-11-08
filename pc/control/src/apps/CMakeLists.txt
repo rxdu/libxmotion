@@ -10,6 +10,9 @@ target_link_libraries(quadsim_hbird_demo quadsim quad_ctrl)
 add_executable(quadsim_path_repair quadsim_path_repair.cpp)
 target_link_libraries(quadsim_path_repair quadsim quad_ctrl)
 
+add_executable(quadsim_path_repair_test quadsim_path_repair_test.cpp)
+target_link_libraries(quadsim_path_repair_test quadsim quad_ctrl)
+
 add_executable(quadsim_hbird_pos_step quadsim_hbird_pos_step.cpp)
 target_link_libraries(quadsim_hbird_pos_step quadsim quad_ctrl)
 

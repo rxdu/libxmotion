@@ -7,6 +7,8 @@
 
 #include <iostream>
 #include <ctime>
+#include <cmath>
+#include <limits>
 
 #include "path_repair/quad_path_repair.h"
 #include "map/map_utils.h"
@@ -24,13 +26,16 @@ QuadPathRepair::QuadPathRepair(std::shared_ptr<lcm::LCM> lcm):
 		ggoal_set_(false),
 		world_size_set_(false),
 		auto_update_pos_(true),
-		update_global_plan_(false)
+		update_global_plan_(false),
+		init_plan_found_(false),
+		est_dist2goal_(0)
 {
 	if(!lcm_->good())
 		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
 	else {
 		lcm_->subscribe("quad_data/quad_transform",&QuadPathRepair::LcmTransformHandler, this);
 		lcm_->subscribe("quad_planner/new_octomap_ready",&QuadPathRepair::LcmOctomapHandler, this);
+		lcm_->subscribe("quad_ctrl/mission_info",&QuadPathRepair::LcmMissionInfoHandler, this);
 	}
 }
 
@@ -85,6 +90,9 @@ void QuadPathRepair::SetStartMapPosition(Position2D pos)
 	start_pos_.y = pos.y;
 
 	gstart_set_ = true;
+
+	est_dist2goal_ = std::numeric_limits<double>::infinity();
+	init_plan_found_ = false;
 
 	if(gstart_set_ && ggoal_set_)
 		update_global_plan_ = true;
@@ -229,7 +237,18 @@ void QuadPathRepair::LcmTransformHandler(
 	mission_tracker_.UpdateCurrentPosition(Position3Dd(msg->base_to_world.position[0],msg->base_to_world.position[1],msg->base_to_world.position[2]));
 }
 
-void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::NewDataReady_t* msg)
+void QuadPathRepair::LcmMissionInfoHandler(
+		const lcm::ReceiveBuffer* rbuf,
+		const std::string& chan,
+		const srcl_lcm_msgs::MissionInfo_t* msg)
+{
+	est_dist2goal_ = msg->dist_to_goal;
+}
+
+void QuadPathRepair::LcmOctomapHandler(
+		const lcm::ReceiveBuffer* rbuf,
+		const std::string& chan,
+		const srcl_lcm_msgs::NewDataReady_t* msg)
 {
 	static int count = 0;
 	//std::cout << " test reading: " << octomap_server_.octree_->getResolution() << std::endl;
@@ -258,13 +277,69 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 	exec_time = clock() - exec_time;
 	std::cout << "Search in 3D finished in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 
-	if(!mission_tracker_.mission_started_) {
-		mission_tracker_.UpdateActivePathWaypoints(comb_path);
-	}
+//	if(!mission_tracker_.mission_started_) {
+//		mission_tracker_.UpdateActivePathWaypoints(comb_path);
+//	}
 
 	std::vector<Position3Dd> comb_path_pos;
 	for(auto& wp:comb_path)
 		comb_path_pos.push_back(wp->bundled_data_.position);
+
+	double est_dist = 0;
+	for(int i = 0; i < comb_path_pos.size() - 1; i++)
+		est_dist += std::sqrt(std::pow(comb_path_pos[i].x - comb_path_pos[i + 1].x,2) +
+				std::pow(comb_path_pos[i].y - comb_path_pos[i + 1].y,2) +
+				std::pow(comb_path_pos[i].z - comb_path_pos[i + 1].z,2));
+
+	if(!init_plan_found_ || (comb_path_pos.size()>0 && est_dist2goal_ - est_dist > est_dist2goal_ * 0.2))
+	{
+		if(init_plan_found_)
+			std::cout << "found better solution" << std::endl;
+		else
+			init_plan_found_ = true;
+
+		srcl_lcm_msgs::Path_t path_msg;
+
+		path_msg.waypoint_num = comb_path.size();
+		for(auto& wp : comb_path_pos)
+		{
+			srcl_lcm_msgs::WayPoint_t waypoint;
+			waypoint.positions[0] = wp.x;
+			waypoint.positions[1] = wp.y;
+			waypoint.positions[2] = wp.z;
+
+			path_msg.waypoints.push_back(waypoint);
+		}
+
+		lcm_->publish("quad_planner/geo_mark_graph_path", &path_msg);
+
+		srcl_lcm_msgs::KeyframeSet_t kf_cmd;
+
+		Eigen::Vector3d goal_vec(comb_path_pos.back().x, comb_path_pos.back().y, 0);
+
+		kf_cmd.kf_num = comb_path_pos.size();
+		for(auto& wp:comb_path_pos)
+		{
+			srcl_lcm_msgs::Keyframe_t kf;
+			kf.vel_constr = false;
+
+			kf.positions[0] = wp.x;
+			kf.positions[1] = wp.y;
+			kf.positions[2] = wp.z;
+
+			Eigen::Vector3d pos_vec(wp.x, wp.y, 0);
+			Eigen::Vector3d dir_vec = goal_vec - pos_vec;
+			Eigen::Vector3d x_vec(1,0,0);
+			double angle = - std::acos(dir_vec.normalized().dot(x_vec));
+			kf.yaw = angle;
+
+			kf_cmd.kfs.push_back(kf);
+		}
+		kf_cmd.kfs.front().yaw = 0;
+		kf_cmd.kfs.back().yaw = -M_PI/4;
+
+		lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
+	}
 
 	if(count++ == 20)
 	{
@@ -297,23 +372,23 @@ void QuadPathRepair::LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std
 //		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
 	}
 
-	if(comb_path.size() > 0)
-	{
-		srcl_lcm_msgs::Path_t path_msg;
-
-		path_msg.waypoint_num = comb_path.size();
-		for(auto& wp : comb_path_pos)
-		{
-			srcl_lcm_msgs::WayPoint_t waypoint;
-			waypoint.positions[0] = wp.x;
-			waypoint.positions[1] = wp.y;
-			waypoint.positions[2] = wp.z;
-
-			path_msg.waypoints.push_back(waypoint);
-		}
-
-		lcm_->publish("quad_planner/geo_mark_graph_path", &path_msg);
-	}
+//	if(comb_path.size() > 0)
+//	{
+//		srcl_lcm_msgs::Path_t path_msg;
+//
+//		path_msg.waypoint_num = comb_path.size();
+//		for(auto& wp : comb_path_pos)
+//		{
+//			srcl_lcm_msgs::WayPoint_t waypoint;
+//			waypoint.positions[0] = wp.x;
+//			waypoint.positions[1] = wp.y;
+//			waypoint.positions[2] = wp.z;
+//
+//			path_msg.waypoints.push_back(waypoint);
+//		}
+//
+//		lcm_->publish("quad_planner/geo_mark_graph_path", &path_msg);
+//	}
 }
 
 template<typename PlannerType>

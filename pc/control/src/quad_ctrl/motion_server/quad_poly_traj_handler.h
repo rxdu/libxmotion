@@ -17,6 +17,7 @@
 #include "lcmtypes/comm.hpp"
 
 #include "common/control_types.h"
+#include "common/planning_types.h"
 #include "quad_flat/quad_flattraj.h"
 
 namespace srcl_ctrl {
@@ -35,6 +36,7 @@ private:
 
 	std::atomic<bool> traj_available_;
 	std::atomic<time_stamp> current_sys_time_;
+	std::vector<Position3Dd> waypoints_;
 	time_stamp traj_start_time_;
 
 	QuadFlatTraj flat_traj_;
