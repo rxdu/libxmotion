@@ -21,6 +21,47 @@ void ImageUtils::BinarizeImage(cv::InputArray _src, cv::OutputArray _dst, uint8_
 	threshold(src, dst, thresh, 255, THRESH_BINARY);
 }
 
+void ImageUtils::ExpandObstacleAreaOnImage(cv::InputArray _src, cv::OutputArray _dst, int16_t expand_size)
+{
+	// Prepare data structures
+	Mat src = _src.getMat();
+	_dst.create(src.size(), CV_8UC1);
+	Mat dst = _dst.getMat();
+	src.copyTo(dst);
+
+	// Expand obstacle
+	for(int64_t c = 0; c < src.cols; c++)
+		for(int64_t r = 0; r < src.rows; r++)
+		{
+			if(src.at<uchar>(Point(c,r)) == 0)
+			{
+				int64_t minx,miny,maxx,maxy;
+
+				minx = c - expand_size;
+				maxx = c + expand_size;
+				miny = r - expand_size;
+				maxy = r + expand_size;
+
+				if(minx < 0)
+					minx = 0;
+				if(miny < 0)
+					miny = 0;
+				if(maxx >= dst.cols)
+					maxx = dst.cols - 1;
+				if(maxy >= dst.rows)
+					maxy = dst.rows - 1;
+
+				Range rngx(minx, maxx);
+				Range rngy(miny, maxy);
+
+//				std::cout<< "size(x,y): ( " << rngx.start << " ~ " << rngx.end << " ; "
+//						<< rngy.start << " ~ " << rngy.end << " )" << std::endl;
+				Mat exp_area = dst(rngy,rngx);
+				exp_area = Scalar(0);//Scalar( 0, 0, 0 );
+			}
+		}
+}
+
 PaddingSize ImageUtils::PadImageToSquared(cv::InputArray _src, cv::OutputArray _dst)
 {
 	// create a image with size of power of 2

@@ -25,20 +25,34 @@ typedef struct {
 	int16_t right;
 } PaddingSize;
 
-class ImageUtils{
-public:
-	ImageUtils(){};
-	~ImageUtils(){};
+//class ImageUtils{
+//public:
+//	ImageUtils(){};
+//	~ImageUtils(){};
+//
+//public:
+//	static void BinarizeImage(cv::InputArray _src, cv::OutputArray _dst, uint8_t thresh);
+//	static PaddingSize PadImageToSquared(cv::InputArray _src, cv::OutputArray _dst);
+//	static PaddingSize PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst);
+//
+//	static void CreateOccupancyMapForRRT(uint64_t width, uint64_t height, cv::OutputArray _dst);
+//
+//	static OccupancyType CheckAreaOccupancy(cv::InputArray _src, BoundingBox area);
+//	static bool IsPointNonObstacle(cv::InputArray _src, cv::Point pt);
+//};
 
-public:
-	static void BinarizeImage(cv::InputArray _src, cv::OutputArray _dst, uint8_t thresh);
-	static PaddingSize PadImageToSquared(cv::InputArray _src, cv::OutputArray _dst);
-	static PaddingSize PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst);
+namespace ImageUtils{
 
-	static void CreateOccupancyMapForRRT(uint64_t width, uint64_t height, cv::OutputArray _dst);
+	void BinarizeImage(cv::InputArray _src, cv::OutputArray _dst, uint8_t thresh);
+	PaddingSize PadImageToSquared(cv::InputArray _src, cv::OutputArray _dst);
+	PaddingSize PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst);
+	void ExpandObstacleAreaOnImage(cv::InputArray _src, cv::OutputArray _dst, int16_t expand_size);
 
-	static OccupancyType CheckAreaOccupancy(cv::InputArray _src, BoundingBox area);
-	static bool IsPointNonObstacle(cv::InputArray _src, cv::Point pt);
+	void CreateOccupancyMapForRRT(uint64_t width, uint64_t height, cv::OutputArray _dst);
+
+	OccupancyType CheckAreaOccupancy(cv::InputArray _src, BoundingBox area);
+	bool IsPointNonObstacle(cv::InputArray _src, cv::Point pt);
+
 };
 
 }

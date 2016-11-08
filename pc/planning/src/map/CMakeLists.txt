@@ -25,7 +25,10 @@ add_executable(test_graphvis tests/test_graphvis.cpp)
 target_link_libraries(test_graphvis geometry vis map ${OpenCV_LIBS})
 
 add_executable(test_image tests/test_image.cpp)
-target_link_libraries(test_image vis ${OpenCV_LIBS})
+target_link_libraries(test_image map vis ${OpenCV_LIBS})
+
+add_executable(test_expansion tests/test_expansion.cpp)
+target_link_libraries(test_expansion map vis ${OpenCV_LIBS})
 
 add_executable(test_traj tests/test_traj.cpp)
 target_link_libraries(test_traj map vis ${OpenCV_LIBS})
