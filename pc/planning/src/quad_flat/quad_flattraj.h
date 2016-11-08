@@ -54,7 +54,7 @@ public:
 
 	QuadFlatOutput GetTrajPointPos(double t);
 
-	void clear() { traj_segs_.clear(); };
+	void clear() { traj_segs_.clear(); traj_segs_.resize(0); };
 	void print();
 };
 

@@ -10,6 +10,10 @@
 #include <cmath>
 #include <limits>
 
+#ifdef ENABLE_G3LOG
+#include "ctrl_utils/logging/logging_helper.h"
+#endif
+
 #include "path_repair/quad_path_repair.h"
 #include "map/map_utils.h"
 #include "geometry/cube_array/cube_array.h"
@@ -29,7 +33,7 @@ QuadPathRepair::QuadPathRepair(std::shared_ptr<lcm::LCM> lcm):
 		auto_update_pos_(true),
 		update_global_plan_(false),
 		init_plan_found_(false),
-		est_dist2goal_(0)
+		est_dist2goal_(std::numeric_limits<double>::infinity())
 {
 	if(!lcm_->good())
 		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
@@ -95,7 +99,7 @@ void QuadPathRepair::SetStartMapPosition(Position2D pos)
 
 	gstart_set_ = true;
 
-	est_dist2goal_ = std::numeric_limits<double>::infinity();
+	//est_dist2goal_ = std::numeric_limits<double>::infinity();
 	init_plan_found_ = false;
 
 	if(gstart_set_ && ggoal_set_)
@@ -314,6 +318,11 @@ void QuadPathRepair::LcmOctomapHandler(
 				std::pow(selected_wps[i].y - selected_wps[i + 1].y,2) +
 				std::pow(selected_wps[i].z - selected_wps[i + 1].z,2));
 
+#ifdef ENABLE_G3LOG
+	LOG(INFO) << "current path: " << est_dist2goal_ << " , new path: " <<  est_dist << std::endl;
+//	LoggingHelper::GetInstance().LogStringMsg("test");
+#endif
+
 	if(!init_plan_found_ || (selected_wps.size()>0 && est_dist < est_dist2goal_ * (1 - 0.3)))
 	{
 		if(init_plan_found_) {
@@ -322,10 +331,11 @@ void QuadPathRepair::LcmOctomapHandler(
 		}
 		else {
 			init_plan_found_ = true;
+			//est_dist2goal_ = est_dist;
 		}
 
 		// TODO this line is only for debugging, should be removed later !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		est_dist2goal_ = est_dist;
+		//est_dist2goal_ = est_dist;
 
 		// send data for visualization
 		Send3DSearchPathToVis(selected_wps);
@@ -353,11 +363,11 @@ void QuadPathRepair::LcmOctomapHandler(
 		kf_cmd.kfs.front().yaw = 0;
 		kf_cmd.kfs.back().yaw = -M_PI/4;
 
-		//lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
+		lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
 	}
 
-	if(count++ == 20)
-	{
+//	if(count++ == 20)
+//	{
 //		count = 0;
 //		srcl_lcm_msgs::Graph_t graph_msg;
 //
@@ -385,7 +395,7 @@ void QuadPathRepair::LcmOctomapHandler(
 //		}
 //
 //		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
-	}
+//	}
 }
 
 template<typename PlannerType>

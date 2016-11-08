@@ -77,6 +77,10 @@ void QuadPolyTrajHandler::LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, 
 	for(auto& wp:msg->waypoints)
 		waypoints_.push_back(Position3Dd(wp.positions[0], wp.positions[1], wp.positions[2]));
 
+//	std::cout << "msg seg size: " << msg->segments.size() << std::endl;
+//	std::cout << "flat traj seg size: " << flat_traj_.traj_segs_.size() << std::endl;
+//	std::cout << "way point size: " << waypoints_.size() << std::endl;
+
 //	traj_start_time_ = current_sys_time_;
 	traj_start_time_ = msg->start_time.time_stamp;
 	traj_available_ = true;
@@ -148,18 +152,30 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 		{
 			dist = std::sqrt(std::pow(pt.positions[0] - waypoints_.back().x,2) +
 					std::pow(pt.positions[1] - waypoints_.back().y,2) + std::pow(pt.positions[2] - waypoints_.back().z,2));
+			std::cout << "estimated distance to goal - last: " << dist << std::endl;
 		}
 		else
 		{
 			// calc remaining distance of the current segment
 			dist += std::sqrt(std::pow(pt.positions[0] - waypoints_[seg_idx + 1].x,2) +
 					std::pow(pt.positions[1] - waypoints_[seg_idx + 1].y,2) + std::pow(pt.positions[2] - waypoints_[seg_idx + 1].z,2));
+
+			//std::cout << "estimated distance to goal - 1: " << dist << std::endl;
+
+			//std::cout << "idx: " << seg_idx + 1 << " , " << flat_traj_.traj_segs_.size() - 1 << std::endl;
+
+			// calc other waypoints
 			for(int i = seg_idx + 1; i < flat_traj_.traj_segs_.size() - 1; i++)
 			{
 				dist += std::sqrt(std::pow(waypoints_[i].x - waypoints_[i + 1].x,2) +
 									std::pow(waypoints_[i].y - waypoints_[i + 1].y,2) +
 									std::pow(waypoints_[i].z - waypoints_[i + 1].z,2));
+
+//				std::cout << "error : " << waypoints_[i].x - waypoints_[i + 1].x << " , "
+//						<< waypoints_[i].y - waypoints_[i + 1].y << " , "
+//						<< waypoints_[i].z - waypoints_[i + 1].z << std::endl;
 			}
+			//std::cout << "estimated distance to goal - 2: " << dist << std::endl;
 		}
 
 		if(dist < 0.01)
@@ -168,9 +184,6 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 		remaining_dist_ = dist;
 
 //		std::cout << "estimated distance to goal: " << dist << std::endl;
-//		srcl_lcm_msgs::MissionInfo_t info_msg;
-//		info_msg.dist_to_goal = dist;
-//		lcm_->publish("quad_ctrl/mission_info", &info_msg);
 	}
 
 	return pt;

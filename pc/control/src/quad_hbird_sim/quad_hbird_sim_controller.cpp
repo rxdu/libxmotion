@@ -142,7 +142,7 @@ QuadCmd QuadHbirdSimController::UpdateCtrlLoop()
 	pt.point_empty = true;
 //	pt = motion_server_->GetCurrentDesiredPose();
 	pt = motion_server_->GetCurrentDesiredState(ctrl_loop_count_ *10);
-	pt.point_empty = true;
+	//pt.point_empty = true;
 	motion_server_->ReportProgress();
 
 	// if no new point, stay where it was

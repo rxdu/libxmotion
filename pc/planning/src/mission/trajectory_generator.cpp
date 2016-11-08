@@ -84,6 +84,7 @@ void TrajectoryGenerator::GenerateTrajectory(KeyframeSet& kfs)
 	poly_msg.wp_num = kfs.keyframes.size();
 
 	//	traj_opt_.InitOptJointMatrices(kf_num);
+	QuadPolyOpt traj_opt_;
 	traj_opt_.InitOptWithCorridorJointMatrices(kf_num, 20, 0.01);
 
 	for(int i = 0; i < kfs.keyframes.size(); i++)

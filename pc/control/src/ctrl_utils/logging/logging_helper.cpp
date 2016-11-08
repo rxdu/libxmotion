@@ -145,3 +145,8 @@ void LoggingHelper::PassEntryDataToLogger()
 	if(!log_entry.empty())
 		LOG(DATA) << log_entry;
 }
+
+void LoggingHelper::LogStringMsg(std::string msg)
+{
+	LOG(INFO) << msg;
+}

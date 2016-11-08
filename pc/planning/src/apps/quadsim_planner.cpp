@@ -11,6 +11,10 @@
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
 
+#ifdef ENABLE_G3LOG
+#include "ctrl_utils/logging/logging_helper.h"
+#endif
+
 #include "common/planning_types.h"
 #include "map/map_utils.h"
 #include "map/map_config.h"
@@ -46,6 +50,8 @@ int main(int argc, char* argv[])
 	qplanner.EnablePositionAutoUpdate(true);
 
 	qplanner.SetGoalRefWorldPosition(Position2Dd(1.8, -2.0));
+
+	LoggingHelper& logging_helper = LoggingHelper::GetInstance("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/log");
 
 	if(qplanner.active_graph_planner_ == GraphPlannerType::NOT_SPECIFIED)
 	{

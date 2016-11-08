@@ -19,7 +19,12 @@ set(PATH_REPAIR_LIB_SRC
     #waypoint_manager.cpp
 )
 add_library(path_repair STATIC ${PATH_REPAIR_LIB_SRC})
-target_link_libraries(path_repair map local3d planner utils polyopt quadflat mission ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
+if (ENABLE_LOGGING)
+  add_definitions(-DENABLE_G3LOG)
+  target_link_libraries(path_repair map local3d planner utils polyopt quadflat mission ctrl_utils g3logger ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
+else(ENABLE_LOGGING)
+  target_link_libraries(path_repair map local3d planner utils polyopt quadflat mission ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
+endif (ENABLE_LOGGING)
 
 # Add executables
 #add_executable(graph_combine_exp tests/graph_combine_exp.cpp)

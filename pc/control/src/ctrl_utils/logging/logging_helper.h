@@ -58,6 +58,8 @@ public:
 	void PassEntryHeaderToLogger();
 	void PassEntryDataToLogger();
 
+	void LogStringMsg(std::string msg);
+
 	// extra helper functions
 	void AddItemDataToEntry(std::string item_name, double data);
 	void AddItemDataToEntry(uint64_t item_id, double data);

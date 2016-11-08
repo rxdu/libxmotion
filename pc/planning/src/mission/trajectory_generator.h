@@ -28,7 +28,7 @@ public:
 
 private:
 	std::shared_ptr<lcm::LCM> lcm_;
-	QuadPolyOpt traj_opt_;
+//	QuadPolyOpt traj_opt_;
 
 private:
 	void LcmWaypointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::Path_t* msg);
