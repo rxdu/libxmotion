@@ -9,9 +9,9 @@
 
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
-#include <mission/trajectory_generator.h>
 #include "lcmtypes/comm.hpp"
 
+#include "mission/trajectory_generator.h"
 
 using namespace srcl_ctrl;
 

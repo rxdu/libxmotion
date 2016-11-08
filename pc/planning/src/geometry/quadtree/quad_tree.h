@@ -96,6 +96,7 @@ private:
 public:
 	uint64_t GetIDFromPosition(uint32_t x, uint32_t y);
 	std::vector<QuadTreeNode*> FindNeighbours(QuadTreeNode* node);
+	std::vector<QuadTreeNode*> FindNeighbours(QuadTreeNode* node, bool allow_diag);
 };
 
 }

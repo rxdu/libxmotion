@@ -23,6 +23,7 @@
 #include "local3d/octomap_server.h"
 #include "quad_flat/quad_polyopt.h"
 #include "mission/mission_tracker.h"
+#include "mission/trajectory_generator.h"
 
 namespace srcl_ctrl {
 
@@ -39,12 +40,14 @@ private:
 	GraphPlanner<QuadTree> qtree_planner_;
 	GraphPlanner<SquareGrid> sgrid_planner_;
 	GraphCombiner<SquareCell*, SquareGrid> gcombiner_;
+//	GraphCombiner<QuadTreeNode*, QuadTree> gcombiner_;
 	OctomapServer octomap_server_;
 
 	MissionTracker mission_tracker_;
 
 	// trajectory optimization
 	QuadPolyOpt traj_opt_;
+	std::shared_ptr<TrajectoryGenerator> traj_gen_;
 
 	// planning parameters
 	Position2D start_pos_;
@@ -96,6 +99,7 @@ private:
 	MapInfo GetActiveMapInfo();
 	srcl_lcm_msgs::Graph_t GenerateLcmGraphMsg();
 	srcl_lcm_msgs::Path_t GenerateLcmPathMsg(std::vector<Position2D> waypoints);
+	void Send3DSearchPathToVis(std::vector<Position3Dd> path);
 };
 
 }

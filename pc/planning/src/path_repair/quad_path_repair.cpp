@@ -33,6 +33,8 @@ QuadPathRepair::QuadPathRepair(std::shared_ptr<lcm::LCM> lcm):
 	if(!lcm_->good())
 		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
 	else {
+		traj_gen_ = std::make_shared<TrajectoryGenerator>(lcm_);
+
 		lcm_->subscribe("quad_data/quad_transform",&QuadPathRepair::LcmTransformHandler, this);
 		lcm_->subscribe("quad_planner/new_octomap_ready",&QuadPathRepair::LcmOctomapHandler, this);
 		lcm_->subscribe("quad_ctrl/mission_info",&QuadPathRepair::LcmMissionInfoHandler, this);
@@ -270,6 +272,8 @@ void QuadPathRepair::LcmOctomapHandler(
 
 	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);;
 	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
+//	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);;
+//	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
 
 	clock_t exec_time;
 	exec_time = clock();
@@ -281,44 +285,33 @@ void QuadPathRepair::LcmOctomapHandler(
 //		mission_tracker_.UpdateActivePathWaypoints(comb_path);
 //	}
 
-	std::vector<Position3Dd> comb_path_pos;
+	std::vector<Position3Dd> raw_wps;
 	for(auto& wp:comb_path)
-		comb_path_pos.push_back(wp->bundled_data_.position);
+		raw_wps.push_back(wp->bundled_data_.position);
+
+	std::vector<Position3Dd> selected_wps = MissionUtils::GetKeyTurningWaypoints(raw_wps);
 
 	double est_dist = 0;
-	for(int i = 0; i < comb_path_pos.size() - 1; i++)
-		est_dist += std::sqrt(std::pow(comb_path_pos[i].x - comb_path_pos[i + 1].x,2) +
-				std::pow(comb_path_pos[i].y - comb_path_pos[i + 1].y,2) +
-				std::pow(comb_path_pos[i].z - comb_path_pos[i + 1].z,2));
+	for(int i = 0; i < selected_wps.size() - 1; i++)
+		est_dist += std::sqrt(std::pow(selected_wps[i].x - selected_wps[i + 1].x,2) +
+				std::pow(selected_wps[i].y - selected_wps[i + 1].y,2) +
+				std::pow(selected_wps[i].z - selected_wps[i + 1].z,2));
 
-	if(!init_plan_found_ || (comb_path_pos.size()>0 && est_dist2goal_ - est_dist > est_dist2goal_ * 0.2))
+	if(!init_plan_found_ || (selected_wps.size()>0 && est_dist2goal_ - est_dist > est_dist2goal_ * 0.35))
 	{
 		if(init_plan_found_)
-			std::cout << "found better solution" << std::endl;
+			std::cout << "-------- found better solution ---------" << std::endl;
 		else
 			init_plan_found_ = true;
 
-		srcl_lcm_msgs::Path_t path_msg;
-
-		path_msg.waypoint_num = comb_path.size();
-		for(auto& wp : comb_path_pos)
-		{
-			srcl_lcm_msgs::WayPoint_t waypoint;
-			waypoint.positions[0] = wp.x;
-			waypoint.positions[1] = wp.y;
-			waypoint.positions[2] = wp.z;
-
-			path_msg.waypoints.push_back(waypoint);
-		}
-
-		lcm_->publish("quad_planner/geo_mark_graph_path", &path_msg);
+		Send3DSearchPathToVis(selected_wps);
 
 		srcl_lcm_msgs::KeyframeSet_t kf_cmd;
 
-		Eigen::Vector3d goal_vec(comb_path_pos.back().x, comb_path_pos.back().y, 0);
+		Eigen::Vector3d goal_vec(selected_wps.back().x, selected_wps.back().y, 0);
 
-		kf_cmd.kf_num = comb_path_pos.size();
-		for(auto& wp:comb_path_pos)
+		kf_cmd.kf_num = selected_wps.size();
+		for(auto& wp:selected_wps)
 		{
 			srcl_lcm_msgs::Keyframe_t kf;
 			kf.vel_constr = false;
@@ -371,24 +364,6 @@ void QuadPathRepair::LcmOctomapHandler(
 //
 //		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
 	}
-
-//	if(comb_path.size() > 0)
-//	{
-//		srcl_lcm_msgs::Path_t path_msg;
-//
-//		path_msg.waypoint_num = comb_path.size();
-//		for(auto& wp : comb_path_pos)
-//		{
-//			srcl_lcm_msgs::WayPoint_t waypoint;
-//			waypoint.positions[0] = wp.x;
-//			waypoint.positions[1] = wp.y;
-//			waypoint.positions[2] = wp.z;
-//
-//			path_msg.waypoints.push_back(waypoint);
-//		}
-//
-//		lcm_->publish("quad_planner/geo_mark_graph_path", &path_msg);
-//	}
 }
 
 template<typename PlannerType>
@@ -470,4 +445,25 @@ srcl_lcm_msgs::Path_t QuadPathRepair::GenerateLcmPathMsg(std::vector<Position2D>
 	}
 
 	return path_msg;
+}
+
+void QuadPathRepair::Send3DSearchPathToVis(std::vector<Position3Dd> path)
+{
+	if(path.size() > 0)
+	{
+		srcl_lcm_msgs::Path_t path_msg;
+
+		path_msg.waypoint_num = path.size();
+		for(auto& wp : path)
+		{
+			srcl_lcm_msgs::WayPoint_t waypoint;
+			waypoint.positions[0] = wp.x;
+			waypoint.positions[1] = wp.y;
+			waypoint.positions[2] = wp.z;
+
+			path_msg.waypoints.push_back(waypoint);
+		}
+
+		lcm_->publish("quad_planner/geo_mark_graph_path", &path_msg);
+	}
 }

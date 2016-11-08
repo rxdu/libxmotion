@@ -67,7 +67,6 @@ void OctomapServer::LcmLaserScanPointsHandler(
 		const srcl_lcm_msgs::LaserScanPoints_t* msg)
 {
 	std::cout << msg->points.size() << " points received " << std::endl;
-	loop_count_++;
 
 	std::shared_ptr<octomap::OcTree> octree = std::make_shared<octomap::OcTree>(octree_res_);
 	octree->setProbHit(0.7);
@@ -154,30 +153,30 @@ void OctomapServer::LcmLaserScanPointsHandler(
 
 	octree_ = octree;
 
-	srcl_lcm_msgs::Octomap_t octomap_msg;
-
-	octomap_msg.binary = true;
-	octomap_msg.resolution = octree_res_;
-	octomap_msg.id = octree->getTreeType();
-
-	std::stringstream datastream;
-
-	if (octree->writeBinaryData(datastream))
+	// %10 : 10ms * 10 - 10 Hz update rate
+	if(loop_count_++ % 10)
 	{
-		std::string datastring = datastream.str();
-		octomap_msg.data = std::vector<int8_t>(datastring.begin(), datastring.end());
-		octomap_msg.data_size = octomap_msg.data.size();
-	}
+		srcl_lcm_msgs::Octomap_t octomap_msg;
 
-	srcl_lcm_msgs::NewDataReady_t notice_msg;
-	notice_msg.new_data_ready_ = 1;
-	lcm_->publish("quad_planner/new_octomap_ready", &notice_msg);
+		octomap_msg.binary = true;
+		octomap_msg.resolution = octree_res_;
+		octomap_msg.id = octree->getTreeType();
 
-	lcm_->publish("quad_planner/hummingbird_laser_octomap", &octomap_msg);
+		std::stringstream datastream;
 
-//	// %10 : 10ms * 10 - 10 Hz update rate
-//	if(loop_count_ % 10)
-//	{
+		if (octree->writeBinaryData(datastream))
+		{
+			std::string datastring = datastream.str();
+			octomap_msg.data = std::vector<int8_t>(datastring.begin(), datastring.end());
+			octomap_msg.data_size = octomap_msg.data.size();
+		}
+
+		srcl_lcm_msgs::NewDataReady_t notice_msg;
+		notice_msg.new_data_ready_ = 1;
+		lcm_->publish("quad_planner/new_octomap_ready", &notice_msg);
+
+		lcm_->publish("quad_planner/hummingbird_laser_octomap", &octomap_msg);
+
 //		std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octree);
 //		std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
 //
@@ -217,9 +216,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 //		}
 //
 //		lcm_->publish("quad_planner/cube_graph", &graph_msg);
-//
-//		loop_count_ = 0;
-//	}
+	}
 
 	if(save_tree_)
 	{

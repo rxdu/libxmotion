@@ -247,6 +247,117 @@ std::vector<QuadTreeNode*> QuadTree::FindNeighbours(QuadTreeNode* node)
 //	return dummy_neighbours;
 }
 
+std::vector<QuadTreeNode*> QuadTree::FindNeighbours(QuadTreeNode* node, bool allow_diag)
+{
+	std::vector<QuadTreeNode*> dummy_neighbours;
+	std::vector<QuadTreeNode*> neighbours;
+
+	// if the node is not at the highest resolution, find
+	//	all its dummy leaf nodes
+	int dummy_depth = 0;
+	if(node->has_dummy_)
+	{
+		QuadTreeNode* node_index = node;
+
+		// check how many levels of dummy nodes the node has
+		while(node_index->node_type_!=NodeType::DUMMY_LEAF)
+		{
+			dummy_depth++;
+			node_index = node_index->child_nodes_[0];
+		}
+	}
+
+	// find neighbour dummies around the leaf dummies
+	if(dummy_depth == 0)
+	{
+		dummy_neighbours = GetDummyNeighbours(node);
+	}
+	else
+	{
+		// first find the coordinates of top left corner neighbour leaf dummy
+		uint16_t x,y;
+		x = (node->bounding_box_.x.min - 1)/cell_res_;
+		y = (node->bounding_box_.y.min - 1)/cell_res_;
+
+		uint16_t neighbour_side_num;
+		neighbour_side_num = pow(2,dummy_depth)+2;
+
+		// add first row
+		for(int i = 0; i < neighbour_side_num; i++)
+		{
+			uint16_t x_loc, y_loc;
+			x_loc = x + i;
+			y_loc = y;
+
+			if(x_loc >= 0 && x_loc < node_manager_->side_node_num_
+					&& y_loc >= 0 && y_loc < node_manager_->side_node_num_)
+				dummy_neighbours.push_back(node_manager_->GetNodeReference(x_loc,y_loc));
+		}
+
+		// add last row
+		for(int i = 0; i < neighbour_side_num; i++)
+		{
+			uint16_t x_loc, y_loc;
+			x_loc = x + i;
+			y_loc = y + neighbour_side_num - 1;
+
+			if(x_loc >= 0 && x_loc < node_manager_->side_node_num_
+					&& y_loc >= 0 && y_loc < node_manager_->side_node_num_)
+				dummy_neighbours.push_back(node_manager_->GetNodeReference(x_loc,y_loc));
+		}
+
+		// add left column
+		for(int i = 0; i < neighbour_side_num - 2; i++)
+		{
+			uint16_t x_loc, y_loc;
+			x_loc = x;
+			y_loc = y + 1 + i;
+
+			if(x_loc >= 0 && x_loc < node_manager_->side_node_num_
+					&& y_loc >= 0 && y_loc < node_manager_->side_node_num_)
+				dummy_neighbours.push_back(node_manager_->GetNodeReference(x_loc, y_loc));
+		}
+
+		// add right column
+		for(int i = 0; i < neighbour_side_num - 2; i++)
+		{
+			uint16_t x_loc, y_loc;
+			x_loc = x + neighbour_side_num - 1;
+			y_loc = y + 1 + i;
+
+			if(x_loc >= 0 && x_loc < node_manager_->side_node_num_
+					&& y_loc >= 0 && y_loc < node_manager_->side_node_num_)
+				dummy_neighbours.push_back(node_manager_->GetNodeReference(x_loc,y_loc));
+		}
+	}
+
+//	std::cout << "number of dummy neighbours: "<< dummy_neighbours.size() <<std::endl;
+
+	// now find all dummy roots as neighbours in the quadtree
+	neighbours.clear();
+	std::vector<QuadTreeNode*>::iterator it;
+	for(it = dummy_neighbours.begin(); it != dummy_neighbours.end(); ++it)
+	{
+		QuadTreeNode* qt_neighbour = (*it)->dummy_root_;
+
+		bool existed = false;
+		for(std::vector<QuadTreeNode*>::iterator it_qt = neighbours.begin(); it_qt != neighbours.end(); it_qt++)
+		{
+			if(*(it_qt) == qt_neighbour)
+			{
+				existed = true;
+				break;
+			}
+		}
+
+		if(!existed)
+			neighbours.push_back(qt_neighbour);
+	}
+
+	return neighbours;
+//	return dummy_neighbours;
+}
+
 /*********************************************************/
 /*          Data Structure for Neighbor Finding          */
 /*********************************************************/
