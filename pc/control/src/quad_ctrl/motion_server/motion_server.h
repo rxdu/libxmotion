@@ -59,6 +59,8 @@ public:
 	double ReportActiveMotionProgress();
 	void SetGoalCompleted();
 	UAVTrajectoryPoint GetCurrentUserDefinedPose();
+
+	void ReportProgress(void);
 };
 
 }

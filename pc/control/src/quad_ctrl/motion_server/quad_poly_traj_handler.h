@@ -38,6 +38,7 @@ private:
 	std::atomic<time_stamp> current_sys_time_;
 	std::vector<Position3Dd> waypoints_;
 	time_stamp traj_start_time_;
+	double remaining_dist_;
 
 	QuadFlatTraj flat_traj_;
 
@@ -47,6 +48,8 @@ private:
 public:
 	void LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::PolynomialCurve_t* msg);
 	UAVTrajectoryPoint GetDesiredTrajectoryPoint(time_t tstamp);
+
+	void ReportProgress(void);
 };
 
 }

@@ -18,7 +18,8 @@ QuadPolyTrajHandler::QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm):
 		poly_traj_topic_("quad_planner/trajectory_polynomial"),
 		traj_available_(false),
 		current_sys_time_(0),
-		traj_start_time_(0)
+		traj_start_time_(0),
+		remaining_dist_(0)
 {
 	lcm_->subscribe(poly_traj_topic_,&QuadPolyTrajHandler::LcmPolyTrajMsgHandler, this);
 }
@@ -28,7 +29,8 @@ QuadPolyTrajHandler::QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm, std::str
 		poly_traj_topic_(poly_traj_topic),
 		traj_available_(false),
 		current_sys_time_(0),
-		traj_start_time_(0)
+		traj_start_time_(0),
+		remaining_dist_(0)
 {
 	lcm_->subscribe(poly_traj_topic_,&QuadPolyTrajHandler::LcmPolyTrajMsgHandler, this);
 }
@@ -163,14 +165,25 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 		if(dist < 0.01)
 			dist = 0;
 
+		remaining_dist_ = dist;
+
 //		std::cout << "estimated distance to goal: " << dist << std::endl;
-		srcl_lcm_msgs::MissionInfo_t info_msg;
-		info_msg.dist_to_goal = dist;
-		lcm_->publish("quad_ctrl/mission_info", &info_msg);
+//		srcl_lcm_msgs::MissionInfo_t info_msg;
+//		info_msg.dist_to_goal = dist;
+//		lcm_->publish("quad_ctrl/mission_info", &info_msg);
 	}
 
 	return pt;
 }
 
+void QuadPolyTrajHandler::ReportProgress(void)
+{
+	if(traj_available_)
+	{
+		srcl_lcm_msgs::MissionInfo_t info_msg;
+		info_msg.dist_to_goal = remaining_dist_;
+		lcm_->publish("quad_ctrl/mission_info", &info_msg);
+	}
+}
 
 

@@ -283,9 +283,9 @@ void QuadPathRepair::LcmOctomapHandler(
 	//uint64_t map_start_id = sgrid_planner_.map_.data_model->GetIDFromPosition(start_pos_.x, start_pos_.y);
 	//uint64_t geo_start_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_start_id)->bundled_data_->geo_mark_id_;
 
-	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);;
+	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
 	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
-//	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);;
+//	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
 //	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
 
 	clock_t exec_time;
@@ -302,6 +302,10 @@ void QuadPathRepair::LcmOctomapHandler(
 	for(auto& wp:comb_path)
 		raw_wps.push_back(wp->bundled_data_.position);
 
+	// if failed to find a 3d path, terminate this iteration
+	if(raw_wps.size() <= 1)
+		return;
+
 	std::vector<Position3Dd> selected_wps = MissionUtils::GetKeyTurningWaypoints(raw_wps);
 
 	double est_dist = 0;
@@ -310,13 +314,20 @@ void QuadPathRepair::LcmOctomapHandler(
 				std::pow(selected_wps[i].y - selected_wps[i + 1].y,2) +
 				std::pow(selected_wps[i].z - selected_wps[i + 1].z,2));
 
-	if(!init_plan_found_ || (selected_wps.size()>0 && est_dist2goal_ - est_dist > est_dist2goal_ * 0.35))
+	if(!init_plan_found_ || (selected_wps.size()>0 && est_dist < est_dist2goal_ * (1 - 0.3)))
 	{
-		if(init_plan_found_)
+		if(init_plan_found_) {
 			std::cout << "-------- found better solution ---------" << std::endl;
-		else
+			std::cout << "current path: " << est_dist2goal_ << " , new path: " <<  est_dist << std::endl;
+		}
+		else {
 			init_plan_found_ = true;
+		}
 
+		// TODO this line is only for debugging, should be removed later !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		est_dist2goal_ = est_dist;
+
+		// send data for visualization
 		Send3DSearchPathToVis(selected_wps);
 
 		Eigen::Vector3d goal_vec(selected_wps.back().x, selected_wps.back().y, 0);
@@ -342,7 +353,7 @@ void QuadPathRepair::LcmOctomapHandler(
 		kf_cmd.kfs.front().yaw = 0;
 		kf_cmd.kfs.back().yaw = -M_PI/4;
 
-		lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
+		//lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
 	}
 
 	if(count++ == 20)

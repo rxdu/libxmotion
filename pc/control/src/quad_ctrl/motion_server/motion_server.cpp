@@ -17,7 +17,7 @@ MotionServer::MotionServer():
 		ms_count_(0),
 		waypoint_idx_(0),
 		current_sys_time_(0),
-		mode_(MotionMode::USER_CMDS)
+		mode_(MotionMode::POLYNOMIAL)
 {
 //	UAVTrajectory test_traj = GenerateTestTrajectory();
 //
@@ -171,6 +171,21 @@ double MotionServer::ReportActiveMotionProgress()
 	std::cout << "task completion: " << percentage << std::endl;
 
 	return percentage;
+}
+
+void MotionServer::ReportProgress(void)
+{
+	switch(mode_)
+	{
+	case MotionMode::POLYNOMIAL:
+		polytraj_handler_->ReportProgress();
+		break;
+	case MotionMode::WAYPOINTS:
+	case MotionMode::USER_CMDS:
+	case MotionMode::POS_STEP_RESPONSE:
+	default:
+		break;
+	}
 }
 
 UAVTrajectoryPoint MotionServer::GetCurrentUserDefinedPose()
