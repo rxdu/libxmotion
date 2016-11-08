@@ -266,6 +266,9 @@ void QuadPathRepair::LcmOctomapHandler(
 		const std::string& chan,
 		const srcl_lcm_msgs::NewDataReady_t* msg)
 {
+	if(est_dist2goal_ < 0.2)
+		return;
+
 	static int count = 0;
 	//std::cout << " test reading: " << octomap_server_.octree_->getResolution() << std::endl;
 	srcl_lcm_msgs::KeyframeSet_t kf_cmd;
@@ -319,23 +322,26 @@ void QuadPathRepair::LcmOctomapHandler(
 				std::pow(selected_wps[i].z - selected_wps[i + 1].z,2));
 
 #ifdef ENABLE_G3LOG
-	LOG(INFO) << "current path: " << est_dist2goal_ << " , new path: " <<  est_dist << std::endl;
+	LOG(INFO) << "current path: " << est_dist2goal_ << " , new path: " <<  est_dist;
 //	LoggingHelper::GetInstance().LogStringMsg("test");
 #endif
 
 	if(!init_plan_found_ || (selected_wps.size()>0 && est_dist < est_dist2goal_ * (1 - 0.3)))
 	{
 		if(init_plan_found_) {
-			std::cout << "-------- found better solution ---------" << std::endl;
+			std::cout << "-------- found better solution ---------";
+#ifdef ENABLE_G3LOG
+	LOG(INFO) << "-------- found better solution ---------"  << std::endl;
+//	LoggingHelper::GetInstance().LogStringMsg("test");
+#endif
 			std::cout << "current path: " << est_dist2goal_ << " , new path: " <<  est_dist << std::endl;
 		}
 		else {
 			init_plan_found_ = true;
-			//est_dist2goal_ = est_dist;
 		}
 
 		// TODO this line is only for debugging, should be removed later !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		//est_dist2goal_ = est_dist;
+		est_dist2goal_ = est_dist;
 
 		// send data for visualization
 		Send3DSearchPathToVis(selected_wps);
