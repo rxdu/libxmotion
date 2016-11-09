@@ -53,24 +53,10 @@ void MissionTracker::UpdateActivePathWaypoints(Path_t<GeoMark>& path)
 	std::cout << "remaining path length: " << cost << std::endl;
 };
 
-//void MissionTracker::UpdateCurrentPosition(Position3Dd pos)
-//{
-//	current_position_ = pos;
-//
-//	if(mission_started_)
-//	{
-//		//uint32_t vtx_idx = FindNearestNextWaypoint();
-////		if(vtx_idx == active_path_.size() - 1)
-////		{
-////			replan_needed_ = false;
-////			remaining_path_length_ = 0;
-////		}
-////		else
-////		{
-////			UpdateRemainingPathLenght(vtx_idx);
-////		}
-//	}
-//}
+void MissionTracker::UpdateCurrentPosition(Position3Dd pos)
+{
+	current_position_ = pos;
+}
 
 void MissionTracker::LcmMissionInfoHandler(
 		const lcm::ReceiveBuffer* rbuf,

@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 	qplanner.EnablePositionAutoUpdate(true);
 
 	qplanner.SetGoalRefWorldPosition(Position2Dd(1.8, -2.0));
-	qplanner.SetDesiredHeight(0.65);
+	qplanner.SetDesiredHeight(0.80);
 
 	LoggingHelper& logging_helper = LoggingHelper::GetInstance("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/log");
 

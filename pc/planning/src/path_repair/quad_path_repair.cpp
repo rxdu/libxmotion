@@ -240,7 +240,7 @@ void QuadPathRepair::LcmTransformHandler(
 
 	gcombiner_.UpdateVehiclePose(Position3Dd(msg->base_to_world.position[0],msg->base_to_world.position[1],msg->base_to_world.position[2]),
 					Eigen::Quaterniond(msg->base_to_world.quaternion[0] , msg->base_to_world.quaternion[1] , msg->base_to_world.quaternion[2] , msg->base_to_world.quaternion[3]));
-	//mission_tracker_->UpdateCurrentPosition(Position3Dd(msg->base_to_world.position[0],msg->base_to_world.position[1],msg->base_to_world.position[2]));
+	mission_tracker_->UpdateCurrentPosition(Position3Dd(msg->base_to_world.position[0],msg->base_to_world.position[1],msg->base_to_world.position[2]));
 }
 
 void QuadPathRepair::LcmSysTimeHandler(
@@ -288,18 +288,12 @@ void QuadPathRepair::LcmOctomapHandler(
 
 	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
 	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
-//	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
-//	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
 
 	clock_t exec_time;
 	exec_time = clock();
 	auto comb_path = gcombiner_.combined_graph_.AStarSearch(geo_start_id_astar, geo_goal_id_astar);
 	exec_time = clock() - exec_time;
 	std::cout << "Search in 3D finished in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
-
-//	if(!mission_tracker_.mission_started_) {
-//		mission_tracker_.UpdateActivePathWaypoints(comb_path);
-//	}
 
 	std::vector<Position3Dd> raw_wps;
 	for(auto& wp:comb_path)
@@ -310,6 +304,15 @@ void QuadPathRepair::LcmOctomapHandler(
 		return;
 
 	std::vector<Position3Dd> selected_wps = MissionUtils::GetKeyTurningWaypoints(raw_wps);
+
+	// reject replan if starting point is too far away from known current position
+	if(std::sqrt(std::pow(selected_wps.front().x - mission_tracker_->current_position_.x, 2) +
+					std::pow(selected_wps.front().y - mission_tracker_->current_position_.y, 2) +
+					std::pow(selected_wps.front().z - mission_tracker_->current_position_.z, 2)) > 0.35)
+	{
+		std::cout << "rejected plan due to wrong starting point" << std::endl;
+		return;
+	}
 
 	double est_dist = 0;
 	for(int i = 0; i < selected_wps.size() - 1; i++)

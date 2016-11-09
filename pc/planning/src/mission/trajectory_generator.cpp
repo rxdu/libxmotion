@@ -118,7 +118,7 @@ void TrajectoryGenerator::GenerateTrajectory(KeyframeSet& kfs, uint64_t traj_id)
 		traj_opt_.keyframe_yaw_vals_(0,i) = kfs.keyframes[i].yaw;
 		traj_opt_.keyframe_yaw_vals_(1,i) = std::numeric_limits<float>::infinity();
 
-		traj_opt_.keyframe_ts_(0,i) = i * 0.5;
+		traj_opt_.keyframe_ts_(0,i) = i * 0.1;
 
 		srcl_lcm_msgs::WayPoint_t wpoint;
 		wpoint.positions[0] = kfs.keyframes[i].positions[0];
