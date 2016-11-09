@@ -269,6 +269,12 @@ void QuadPathRepair::LcmOctomapHandler(
 	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
 	std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
 
+	std::cout << "3d info size: " << cubearray->cubes_.size() << " , " << cubegraph->GetGraphVertices().size() << std::endl;
+
+	// don't replan if 3d information is too limited
+	if(mission_tracker_->mission_started_ && (cubearray->cubes_.size() == 0 || cubegraph->GetGraphVertices().size() < 5))
+		return;
+
 	std::cout << "cube graph size: " << cubegraph->GetGraphVertices().size() << std::endl;
 
 //	bool combine_success = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);

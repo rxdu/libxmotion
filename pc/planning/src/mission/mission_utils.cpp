@@ -81,7 +81,8 @@ std::vector<Position3Dd> MissionUtils::GetKeyTurningWaypoints(std::vector<Positi
 		minimum_points.push_back(smoothed_points.back());
 	}
 
-	return minimum_points;
+	//return minimum_points;
+	return smoothed_points;
 }
 
 
