@@ -33,6 +33,7 @@ QuadPathRepair::QuadPathRepair(std::shared_ptr<lcm::LCM> lcm):
 		world_size_set_(false),
 		auto_update_pos_(true),
 		desired_height_(0.0),
+		est_new_dist_(std::numeric_limits<double>::infinity()),
 		update_global_plan_(false)
 {
 	if(!lcm_->good())
@@ -251,6 +252,28 @@ void QuadPathRepair::LcmSysTimeHandler(
 	current_sys_time_ = msg->time_stamp;
 }
 
+bool QuadPathRepair::EvaluateNewPath(std::vector<Position3Dd>& new_path)
+{
+	if(std::sqrt(std::pow(new_path.front().x - mission_tracker_->current_position_.x, 2) +
+			std::pow(new_path.front().y - mission_tracker_->current_position_.y, 2) +
+			std::pow(new_path.front().z - mission_tracker_->current_position_.z, 2)) > 0.35)
+	{
+		std::cout << "rejected plan due to wrong starting point" << std::endl;
+		return false;
+	}
+
+	est_new_dist_ = 0;
+	for(int i = 0; i < new_path.size() - 1; i++)
+		est_new_dist_ += std::sqrt(std::pow(new_path[i].x - new_path[i + 1].x,2) +
+				std::pow(new_path[i].y - new_path[i + 1].y,2) +
+				std::pow(new_path[i].z - new_path[i + 1].z,2));
+
+	if(new_path.size()>0 && est_new_dist_ < mission_tracker_->remaining_path_length_ * (1 - 0.3))
+		return true;
+	else
+		return false;
+}
+
 void QuadPathRepair::LcmOctomapHandler(
 		const lcm::ReceiveBuffer* rbuf,
 		const std::string& chan,
@@ -260,7 +283,6 @@ void QuadPathRepair::LcmOctomapHandler(
 		return;
 
 	static int count = 0;
-	//std::cout << " test reading: " << octomap_server_.octree_->getResolution() << std::endl;
 	srcl_lcm_msgs::KeyframeSet_t kf_cmd;
 
 	// record the planning time
@@ -277,14 +299,7 @@ void QuadPathRepair::LcmOctomapHandler(
 
 	std::cout << "cube graph size: " << cubegraph->GetGraphVertices().size() << std::endl;
 
-//	bool combine_success = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);
-//	if(!combine_success)
-//		return;
-
 	uint64_t geo_start_id_astar = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);
-
-	//uint64_t map_start_id = sgrid_planner_.map_.data_model->GetIDFromPosition(start_pos_.x, start_pos_.y);
-	//uint64_t geo_start_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_start_id)->bundled_data_->geo_mark_id_;
 
 	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
 	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
@@ -305,35 +320,36 @@ void QuadPathRepair::LcmOctomapHandler(
 
 	std::vector<Position3Dd> selected_wps = MissionUtils::GetKeyTurningWaypoints(raw_wps);
 
-	// reject replan if starting point is too far away from known current position
-	if(std::sqrt(std::pow(selected_wps.front().x - mission_tracker_->current_position_.x, 2) +
-					std::pow(selected_wps.front().y - mission_tracker_->current_position_.y, 2) +
-					std::pow(selected_wps.front().z - mission_tracker_->current_position_.z, 2)) > 0.35)
-	{
-		std::cout << "rejected plan due to wrong starting point" << std::endl;
-		return;
-	}
+//	// reject replan if starting point is too far away from known current position
+//	if(std::sqrt(std::pow(selected_wps.front().x - mission_tracker_->current_position_.x, 2) +
+//					std::pow(selected_wps.front().y - mission_tracker_->current_position_.y, 2) +
+//					std::pow(selected_wps.front().z - mission_tracker_->current_position_.z, 2)) > 0.35)
+//	{
+//		std::cout << "rejected plan due to wrong starting point" << std::endl;
+//		return;
+//	}
+//
+//	double est_dist = 0;
+//	for(int i = 0; i < selected_wps.size() - 1; i++)
+//		est_dist += std::sqrt(std::pow(selected_wps[i].x - selected_wps[i + 1].x,2) +
+//				std::pow(selected_wps[i].y - selected_wps[i + 1].y,2) +
+//				std::pow(selected_wps[i].z - selected_wps[i + 1].z,2));
 
-	double est_dist = 0;
-	for(int i = 0; i < selected_wps.size() - 1; i++)
-		est_dist += std::sqrt(std::pow(selected_wps[i].x - selected_wps[i + 1].x,2) +
-				std::pow(selected_wps[i].y - selected_wps[i + 1].y,2) +
-				std::pow(selected_wps[i].z - selected_wps[i + 1].z,2));
+//#ifdef ENABLE_G3LOG
+//	LOG(INFO) << "current path: " << mission_tracker_->remaining_path_length_ << " , new path: " <<  est_dist;
+////	LoggingHelper::GetInstance().LogStringMsg("test");
+//#endif
 
-#ifdef ENABLE_G3LOG
-	LOG(INFO) << "current path: " << mission_tracker_->remaining_path_length_ << " , new path: " <<  est_dist;
-//	LoggingHelper::GetInstance().LogStringMsg("test");
-#endif
-
-	if(!mission_tracker_->mission_started_ || (selected_wps.size()>0 && est_dist < mission_tracker_->remaining_path_length_ * (1 - 0.3)))
+//	if(!mission_tracker_->mission_started_ || (selected_wps.size()>0 && est_dist < mission_tracker_->remaining_path_length_ * (1 - 0.3)))
+	if(!mission_tracker_->mission_started_ || EvaluateNewPath(selected_wps))
 	{
 		if(mission_tracker_->mission_started_) {
 			std::cout << "-------- found better solution ---------";
-#ifdef ENABLE_G3LOG
-	LOG(INFO) << "-------- found better solution ---------"  << std::endl;
-//	LoggingHelper::GetInstance().LogStringMsg("test");
-#endif
-			std::cout << "current path: " << mission_tracker_->remaining_path_length_ << " , new path: " <<  est_dist << std::endl;
+//#ifdef ENABLE_G3LOG
+//	LOG(INFO) << "-------- found better solution ---------"  << std::endl;
+////	LoggingHelper::GetInstance().LogStringMsg("test");
+//#endif
+			//std::cout << "current path: " << mission_tracker_->remaining_path_length_ << " , new path: " <<  est_dist << std::endl;
 		}
 		else {
 			mission_tracker_->mission_started_ = true;
@@ -341,7 +357,7 @@ void QuadPathRepair::LcmOctomapHandler(
 
 		// update mission tracking information
 		mission_tracker_->UpdateActivePathWaypoints(comb_path);
-		mission_tracker_->remaining_path_length_ = est_dist;
+		mission_tracker_->remaining_path_length_ = est_new_dist_;
 
 		kf_cmd.path_id = mission_tracker_->path_id_;
 

@@ -62,6 +62,7 @@ private:
 	bool auto_update_pos_;
 
 	double desired_height_;
+	double est_new_dist_;	// temporary calculation result, internal use only
 
 public:
 	bool update_global_plan_;
@@ -70,6 +71,7 @@ public:
 private:
 	template<typename PlannerType>
 	srcl_lcm_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner);
+	bool EvaluateNewPath(std::vector<Position3Dd>& new_path);
 
 public:
 	// graph planner configuration
