@@ -44,12 +44,15 @@ private:
 public:
 	Position3Dd pos_;
 	Eigen::Quaterniond quat_;
+	double desired_height_;
 
 public:
 	Graph_t<GeoMark> combined_graph_base_;
 	Graph_t<GeoMark> combined_graph_;
 
 public:
+	void SetDesiredHeight(double height) { desired_height_ = height; };
+
 	void UpdateVehiclePose(Position3Dd pos, Eigen::Quaterniond quat)
 	{
 		pos_ = pos;
@@ -74,7 +77,7 @@ public:
 			Position2Dd ref_world_pos1 = MapUtils::CoordinatesFromMapPaddedToRefWorld(edge.src_->bundled_data_->location_, info);
 			mark1.position.x = ref_world_pos1.x;
 			mark1.position.y = ref_world_pos1.y;
-			mark1.position.z = pos_.z;
+			mark1.position.z = desired_height_;//pos_.z;
 			mark1.source = GeoMarkSource::PLANAR_MAP;
 			mark1.source_id = edge.src_->bundled_data_->data_id_;
 			edge.src_->bundled_data_->geo_mark_id_ = mark1.data_id_;
@@ -83,7 +86,7 @@ public:
 			Position2Dd ref_world_pos2 = MapUtils::CoordinatesFromMapPaddedToRefWorld(edge.dst_->bundled_data_->location_, info);
 			mark2.position.x = ref_world_pos2.x;
 			mark2.position.y = ref_world_pos2.y;
-			mark2.position.z = pos_.z;
+			mark2.position.z = desired_height_;//pos_.z;
 			mark2.source = GeoMarkSource::PLANAR_MAP;
 			mark2.source_id = edge.dst_->bundled_data_->data_id_;
 			edge.dst_->bundled_data_->geo_mark_id_ = mark2.data_id_;
@@ -99,8 +102,8 @@ public:
 		// TODO possible improvement: only erase newly added vertices in the last iteration
 		combined_graph_.ClearGraph();
 		for(auto& edge : combined_graph_base_.GetGraphEdges()) {
-			edge.src_->bundled_data_.position.z = pos_.z;
-			edge.dst_->bundled_data_.position.z = pos_.z;
+			edge.src_->bundled_data_.position.z = desired_height_;//pos_.z;
+			edge.dst_->bundled_data_.position.z = desired_height_;//pos_.z;
 			combined_graph_.AddEdge(edge.src_->bundled_data_, edge.dst_->bundled_data_, edge.cost_);
 		}
 

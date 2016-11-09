@@ -9,4 +9,5 @@ struct PolynomialCurve_t
 	WayPoint_t waypoints[wp_num]; 
 	
 	TimeStamp_t start_time;
+	int64_t trajectory_id;
 }

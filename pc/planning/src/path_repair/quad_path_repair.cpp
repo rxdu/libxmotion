@@ -25,15 +25,15 @@ using namespace srcl_ctrl;
 QuadPathRepair::QuadPathRepair(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
 		octomap_server_(OctomapServer(lcm_)),
+		mission_tracker_(new MissionTracker(lcm_)),
 		active_graph_planner_(GraphPlannerType::NOT_SPECIFIED),
 		current_sys_time_(0),
 		gstart_set_(false),
 		ggoal_set_(false),
 		world_size_set_(false),
 		auto_update_pos_(true),
-		update_global_plan_(false),
-		init_plan_found_(false),
-		est_dist2goal_(std::numeric_limits<double>::infinity())
+		desired_height_(0.0),
+		update_global_plan_(false)
 {
 	if(!lcm_->good())
 		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
@@ -42,7 +42,6 @@ QuadPathRepair::QuadPathRepair(std::shared_ptr<lcm::LCM> lcm):
 
 		lcm_->subscribe("quad_data/quad_transform",&QuadPathRepair::LcmTransformHandler, this);
 		lcm_->subscribe("quad_planner/new_octomap_ready",&QuadPathRepair::LcmOctomapHandler, this);
-		lcm_->subscribe("quad_ctrl/mission_info",&QuadPathRepair::LcmMissionInfoHandler, this);
 		lcm_->subscribe("quad_data/system_time", &QuadPathRepair::LcmSysTimeHandler, this);
 	}
 }
@@ -100,7 +99,6 @@ void QuadPathRepair::SetStartMapPosition(Position2D pos)
 	gstart_set_ = true;
 
 	//est_dist2goal_ = std::numeric_limits<double>::infinity();
-	init_plan_found_ = false;
 
 	if(gstart_set_ && ggoal_set_)
 		update_global_plan_ = true;
@@ -242,15 +240,7 @@ void QuadPathRepair::LcmTransformHandler(
 
 	gcombiner_.UpdateVehiclePose(Position3Dd(msg->base_to_world.position[0],msg->base_to_world.position[1],msg->base_to_world.position[2]),
 					Eigen::Quaterniond(msg->base_to_world.quaternion[0] , msg->base_to_world.quaternion[1] , msg->base_to_world.quaternion[2] , msg->base_to_world.quaternion[3]));
-	mission_tracker_.UpdateCurrentPosition(Position3Dd(msg->base_to_world.position[0],msg->base_to_world.position[1],msg->base_to_world.position[2]));
-}
-
-void QuadPathRepair::LcmMissionInfoHandler(
-		const lcm::ReceiveBuffer* rbuf,
-		const std::string& chan,
-		const srcl_lcm_msgs::MissionInfo_t* msg)
-{
-	est_dist2goal_ = msg->dist_to_goal;
+	//mission_tracker_->UpdateCurrentPosition(Position3Dd(msg->base_to_world.position[0],msg->base_to_world.position[1],msg->base_to_world.position[2]));
 }
 
 void QuadPathRepair::LcmSysTimeHandler(
@@ -266,7 +256,7 @@ void QuadPathRepair::LcmOctomapHandler(
 		const std::string& chan,
 		const srcl_lcm_msgs::NewDataReady_t* msg)
 {
-	if(est_dist2goal_ < 0.2)
+	if(mission_tracker_->remaining_path_length_ < 0.2)
 		return;
 
 	static int count = 0;
@@ -322,26 +312,29 @@ void QuadPathRepair::LcmOctomapHandler(
 				std::pow(selected_wps[i].z - selected_wps[i + 1].z,2));
 
 #ifdef ENABLE_G3LOG
-	LOG(INFO) << "current path: " << est_dist2goal_ << " , new path: " <<  est_dist;
+	LOG(INFO) << "current path: " << mission_tracker_->remaining_path_length_ << " , new path: " <<  est_dist;
 //	LoggingHelper::GetInstance().LogStringMsg("test");
 #endif
 
-	if(!init_plan_found_ || (selected_wps.size()>0 && est_dist < est_dist2goal_ * (1 - 0.3)))
+	if(!mission_tracker_->mission_started_ || (selected_wps.size()>0 && est_dist < mission_tracker_->remaining_path_length_ * (1 - 0.3)))
 	{
-		if(init_plan_found_) {
+		if(mission_tracker_->mission_started_) {
 			std::cout << "-------- found better solution ---------";
 #ifdef ENABLE_G3LOG
 	LOG(INFO) << "-------- found better solution ---------"  << std::endl;
 //	LoggingHelper::GetInstance().LogStringMsg("test");
 #endif
-			std::cout << "current path: " << est_dist2goal_ << " , new path: " <<  est_dist << std::endl;
+			std::cout << "current path: " << mission_tracker_->remaining_path_length_ << " , new path: " <<  est_dist << std::endl;
 		}
 		else {
-			init_plan_found_ = true;
+			mission_tracker_->mission_started_ = true;
 		}
 
-		// TODO this line is only for debugging, should be removed later !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		est_dist2goal_ = est_dist;
+		// update mission tracking information
+		mission_tracker_->UpdateActivePathWaypoints(comb_path);
+		mission_tracker_->remaining_path_length_ = est_dist;
+
+		kf_cmd.path_id = mission_tracker_->path_id_;
 
 		// send data for visualization
 		Send3DSearchPathToVis(selected_wps);

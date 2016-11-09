@@ -39,6 +39,7 @@ private:
 	std::vector<Position3Dd> waypoints_;
 	time_stamp traj_start_time_;
 	double remaining_dist_;
+	int next_wp_idx_;
 
 	QuadFlatTraj flat_traj_;
 

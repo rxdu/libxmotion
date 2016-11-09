@@ -16,6 +16,7 @@ endif()
 # Add libraries
 set(MISSION_LIB_SRC
     mission_utils.cpp
+    mission_tracker.cpp
     trajectory_generator.cpp
 )
 add_library(mission STATIC ${MISSION_LIB_SRC})

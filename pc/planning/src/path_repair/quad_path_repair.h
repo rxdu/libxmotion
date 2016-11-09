@@ -44,7 +44,7 @@ private:
 //	GraphCombiner<QuadTreeNode*, QuadTree> gcombiner_;
 	OctomapServer octomap_server_;
 
-	MissionTracker mission_tracker_;
+	std::unique_ptr<MissionTracker> mission_tracker_;
 	time_stamp current_sys_time_;
 
 	// trajectory optimization
@@ -61,8 +61,7 @@ private:
 	bool world_size_set_;
 	bool auto_update_pos_;
 
-	bool init_plan_found_;
-	double est_dist2goal_;
+	double desired_height_;
 
 public:
 	bool update_global_plan_;
@@ -81,6 +80,10 @@ public:
 
 	void SetStartRefWorldPosition(Position2Dd pos);
 	void SetGoalRefWorldPosition(Position2Dd pos);
+	void SetDesiredHeight(double height) {
+		desired_height_ = height;
+		gcombiner_.SetDesiredHeight(height);
+	};
 
 	// search functions
 	std::vector<Position2D> UpdateGlobalPath();
@@ -90,7 +93,6 @@ private:
 	// lcm
 	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::QuadrotorTransform* msg);
 	void LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::NewDataReady_t* msg);
-	void LcmMissionInfoHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::MissionInfo_t* msg);
 	void LcmSysTimeHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::TimeStamp_t* msg);
 
 	// set start and goal on map (internal use)

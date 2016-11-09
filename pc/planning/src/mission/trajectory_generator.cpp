@@ -16,9 +16,10 @@
 using namespace srcl_ctrl;
 
 TrajectoryGenerator::TrajectoryGenerator(std::shared_ptr<lcm::LCM> lcm):
-		lcm_(lcm)
+		lcm_(lcm),
+		user_path_id_(0)
 {
-	lcm_->subscribe("quad_planner/goal_waypoints",&TrajectoryGenerator::LcmWaypointsHandler, this);
+	//lcm_->subscribe("quad_planner/goal_waypoints",&TrajectoryGenerator::LcmWaypointsHandler, this);
 	lcm_->subscribe("quad_planner/goal_keyframe_set",&TrajectoryGenerator::LcmKeyframeSetHandler, this);
 }
 
@@ -45,7 +46,7 @@ void TrajectoryGenerator::LcmWaypointsHandler(const lcm::ReceiveBuffer* rbuf, co
 		new_kfs.keyframes.push_back(kf);
 	}
 
-	GenerateTrajectory(new_kfs);
+	GenerateTrajectory(new_kfs, user_path_id_++);
 }
 
 void TrajectoryGenerator::LcmKeyframeSetHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::KeyframeSet_t* msg)
@@ -70,10 +71,10 @@ void TrajectoryGenerator::LcmKeyframeSetHandler(const lcm::ReceiveBuffer* rbuf, 
 	}
 	new_kfs.start_time = msg->sys_time.time_stamp;
 
-	GenerateTrajectory(new_kfs);
+	GenerateTrajectory(new_kfs, msg->path_id);
 }
 
-void TrajectoryGenerator::GenerateTrajectory(KeyframeSet& kfs)
+void TrajectoryGenerator::GenerateTrajectory(KeyframeSet& kfs, uint64_t traj_id)
 {
 	srcl_lcm_msgs::PolynomialCurve_t poly_msg;
 	uint8_t kf_num = kfs.keyframes.size();
@@ -182,6 +183,7 @@ void TrajectoryGenerator::GenerateTrajectory(KeyframeSet& kfs)
 		poly_msg.segments.push_back(seg_msg);
 	}
 	poly_msg.start_time.time_stamp = kfs.start_time;
+	poly_msg.trajectory_id = traj_id;
 
 	lcm_->publish("quad_planner/trajectory_polynomial", &poly_msg);
 }

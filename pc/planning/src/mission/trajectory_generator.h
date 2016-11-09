@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <memory>
+#include <cstdint>
 
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
@@ -28,14 +29,14 @@ public:
 
 private:
 	std::shared_ptr<lcm::LCM> lcm_;
-//	QuadPolyOpt traj_opt_;
+	uint64_t user_path_id_;
 
 private:
 	void LcmWaypointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::Path_t* msg);
 	void LcmKeyframeSetHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::KeyframeSet_t* msg);
 
 public:
-	void GenerateTrajectory(KeyframeSet& kfs);
+	void GenerateTrajectory(KeyframeSet& kfs, uint64_t traj_id);
 };
 
 }
