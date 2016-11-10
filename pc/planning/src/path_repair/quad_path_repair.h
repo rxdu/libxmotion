@@ -72,6 +72,7 @@ private:
 	template<typename PlannerType>
 	srcl_lcm_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner);
 	bool EvaluateNewPath(std::vector<Position3Dd>& new_path);
+	bool CheckPathSafety(std::shared_ptr<CubeArray> cube_array);
 
 public:
 	// graph planner configuration

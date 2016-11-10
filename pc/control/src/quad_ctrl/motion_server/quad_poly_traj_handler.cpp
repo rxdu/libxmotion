@@ -120,7 +120,7 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 		if(seg_idx >= flat_traj_.traj_segs_.size())
 			return pt;
 
-		//std::cout << "active segment index: " << seg_idx << std::endl;
+		std::cout << "active segment index: " << seg_idx << " of " << flat_traj_.traj_segs_.size() << std::endl;
 		next_wp_idx_ = seg_idx + 1;
 
 		double seg_t_start = flat_traj_.traj_segs_[seg_idx].t_start;

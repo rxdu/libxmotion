@@ -81,7 +81,7 @@ public:
 
 	double cube_size_;
 
-private:
+public:
 	bool isIDValid(uint64_t id) {
 		if(id >= cubes_.size())
 			return false;

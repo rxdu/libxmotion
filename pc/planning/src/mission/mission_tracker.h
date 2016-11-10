@@ -36,7 +36,6 @@ public:
 private:
 	std::shared_ptr<lcm::LCM> lcm_;
 
-	Path_t<GeoMark> active_path_;
 	uint64_t trajectory_id_;
 
 	double CalcRemainingPathLenght(uint32_t current_idx);
@@ -46,6 +45,7 @@ public:
 	uint64_t path_id_;
 	bool mission_started_;
 	bool replan_needed_;
+	Path_t<GeoMark> active_path_;
 
 	double remaining_path_length_;
 	Position3Dd current_position_;

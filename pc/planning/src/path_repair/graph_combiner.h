@@ -28,7 +28,8 @@ template<typename BaseGraphType, typename BaseDataStructType>
 class GraphCombiner {
 public:
 	GraphCombiner():
-		max_id_val_(0){};
+		max_id_val_(0),
+		desired_height_(0){};
 	~GraphCombiner(){};
 
 private:
