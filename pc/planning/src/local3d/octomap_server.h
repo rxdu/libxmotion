@@ -26,7 +26,8 @@ namespace srcl_ctrl {
 typedef struct
 {
 	octomap::Pointcloud pc;
-	octomath::Pose6D trans;
+	octomath::Pose6D transf;
+	octomap::point3d sensor_origin;
 } PointCloudSnap;
 
 class OctomapServer {
@@ -42,9 +43,6 @@ private:
 	uint64_t loop_count_;
 	std::string save_tree_name_;
 
-	Position3Dd pos_;
-	Eigen::Quaterniond quat_;
-	utils::Transformation::Transform3D transf_;
 	octomath::Pose6D base_pose_;
 	octomath::Vector3 sensor_origin_;
 
@@ -66,6 +64,19 @@ public:
 
 	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::QuadrotorTransform* msg);
 	void LcmLaserScanPointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::LaserScanPoints_t* msg);
+
+protected:
+	inline static void updateMinKey(const octomap::OcTreeKey& in, octomap::OcTreeKey& min) {
+		for (unsigned i = 0; i < 3; ++i)
+			min[i] = std::min(in[i], min[i]);
+	};
+
+	inline static void updateMaxKey(const octomap::OcTreeKey& in, octomap::OcTreeKey& max) {
+		for (unsigned i = 0; i < 3; ++i)
+			max[i] = std::max(in[i], max[i]);
+	};
+
+	void insertScan(const PointCloudSnap& pcs, std::shared_ptr<octomap::OcTree> m_octree);
 };
 
 }

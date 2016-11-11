@@ -324,7 +324,7 @@ void QuadPathRepair::LcmOctomapHandler(
 
 	std::cout << "cube graph size: " << cubegraph->GetGraphVertices().size() << std::endl;
 
-	uint64_t geo_start_id_astar = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph, octomap_server_.octree_transf_);
+	uint64_t geo_start_id_astar = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);//, octomap_server_.octree_transf_);
 
 	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
 	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
@@ -345,27 +345,6 @@ void QuadPathRepair::LcmOctomapHandler(
 
 	std::vector<Position3Dd> selected_wps = MissionUtils::GetKeyTurningWaypoints(raw_wps);
 
-//	// reject replan if starting point is too far away from known current position
-//	if(std::sqrt(std::pow(selected_wps.front().x - mission_tracker_->current_position_.x, 2) +
-//					std::pow(selected_wps.front().y - mission_tracker_->current_position_.y, 2) +
-//					std::pow(selected_wps.front().z - mission_tracker_->current_position_.z, 2)) > 0.35)
-//	{
-//		std::cout << "rejected plan due to wrong starting point" << std::endl;
-//		return;
-//	}
-//
-//	double est_dist = 0;
-//	for(int i = 0; i < selected_wps.size() - 1; i++)
-//		est_dist += std::sqrt(std::pow(selected_wps[i].x - selected_wps[i + 1].x,2) +
-//				std::pow(selected_wps[i].y - selected_wps[i + 1].y,2) +
-//				std::pow(selected_wps[i].z - selected_wps[i + 1].z,2));
-
-//#ifdef ENABLE_G3LOG
-//	LOG(INFO) << "current path: " << mission_tracker_->remaining_path_length_ << " , new path: " <<  est_dist;
-////	LoggingHelper::GetInstance().LogStringMsg("test");
-//#endif
-
-//	if(!mission_tracker_->mission_started_ || (selected_wps.size()>0 && est_dist < mission_tracker_->remaining_path_length_ * (1 - 0.3)))
 	if(!mission_tracker_->mission_started_ || EvaluateNewPath(selected_wps))
 	{
 		if(mission_tracker_->mission_started_) {
@@ -412,14 +391,16 @@ void QuadPathRepair::LcmOctomapHandler(
 		kf_cmd.kfs.front().yaw = 0;
 		kf_cmd.kfs.back().yaw = -M_PI/4;
 
-		lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
+		//lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
 	}
 
-//	if(count++ == 20)
-//	{
-//		count = 0;
-//		srcl_lcm_msgs::Graph_t graph_msg;
-//
+	if(count++ == 20)
+	{
+		count = 0;
+		srcl_lcm_msgs::Graph_t graph_msg;
+
+		std::cout << "------------------------------------------------" << std::endl;
+
 //		graph_msg.vertex_num = gcombiner_.combined_graph_.GetGraphVertices().size();
 //		for(auto& vtx : gcombiner_.combined_graph_.GetGraphVertices())
 //		{
@@ -442,9 +423,31 @@ void QuadPathRepair::LcmOctomapHandler(
 //
 //			graph_msg.edges.push_back(edge);
 //		}
-//
-//		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
-//	}
+		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
+		for(auto& vtx : cubegraph->GetGraphVertices())
+		{
+			srcl_lcm_msgs::Vertex_t vertex;
+			vertex.id = vtx->vertex_id_;
+
+			vertex.position[0] = vtx->bundled_data_.location_.x;
+			vertex.position[1] = vtx->bundled_data_.location_.y;
+			vertex.position[2] = vtx->bundled_data_.location_.z;
+
+			graph_msg.vertices.push_back(vertex);
+		}
+
+		graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
+		for(auto& eg : cubegraph->GetGraphUndirectedEdges())
+		{
+			srcl_lcm_msgs::Edge_t edge;
+			edge.id_start = eg.src_->vertex_id_;
+			edge.id_end = eg.dst_->vertex_id_;
+
+			graph_msg.edges.push_back(edge);
+		}
+
+		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
+	}
 }
 
 template<typename PlannerType>
