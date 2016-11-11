@@ -57,6 +57,7 @@ private:
 
 public:
 	std::shared_ptr<octomap::OcTree> octree_;
+	utils::Transformation::Transform3D octree_transf_;
 
 public:
 	void SetOctreeResolution(double new_res) { octree_res_ = new_res; };

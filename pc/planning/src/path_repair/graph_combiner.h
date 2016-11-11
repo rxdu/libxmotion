@@ -96,6 +96,116 @@ public:
 		}
 	};
 
+	uint64_t CombineBaseWithCubeArrayGraph(std::shared_ptr<CubeArray> ca, std::shared_ptr<Graph<CubeCell&>> cg, utils::Transformation::Transform3D trans)
+	{
+		uint64_t start_id;
+
+		// TODO possible improvement: only erase newly added vertices in the last iteration
+		combined_graph_.ClearGraph();
+		for(auto& edge : combined_graph_base_.GetGraphEdges()) {
+			edge.src_->bundled_data_.position.z = desired_height_;//pos_.z;
+			edge.dst_->bundled_data_.position.z = desired_height_;//pos_.z;
+			combined_graph_.AddEdge(edge.src_->bundled_data_, edge.dst_->bundled_data_, edge.cost_);
+		}
+
+		GeoMark mark1, mark2;
+		for(auto& edge:cg->GetGraphEdges())
+		{
+			mark1.data_id_ = max_id_val_ + edge.src_->vertex_id_;
+//			mark1.position = utils::Transformation::TransformPosition3D(transf_, edge.src_->bundled_data_.location_);
+			mark1.position = utils::Transformation::TransformPosition3D(trans, edge.src_->bundled_data_.location_);
+//			mark1.position = edge.src_->bundled_data_.location_;
+			mark1.source = GeoMarkSource::LASER_OCTOMAP;
+			mark1.source_id = edge.src_->bundled_data_.data_id_;
+			edge.src_->bundled_data_.geo_mark_id_ = mark1.data_id_;
+
+			mark2.data_id_ = max_id_val_ + edge.dst_->vertex_id_;
+//			mark2.position =  utils::Transformation::TransformPosition3D(transf_, edge.dst_->bundled_data_.location_);
+			mark2.position =  utils::Transformation::TransformPosition3D(trans, edge.dst_->bundled_data_.location_);
+//			mark2.position =  edge.dst_->bundled_data_.location_;
+			mark2.source = GeoMarkSource::LASER_OCTOMAP;
+			mark2.source_id = edge.dst_->bundled_data_.data_id_;
+			edge.dst_->bundled_data_.geo_mark_id_ = mark2.data_id_;
+
+			combined_graph_.AddEdge(mark1, mark2, edge.cost_);
+		}
+
+		// connect starting points
+		GeoMark map2d_start_mark, cube_start_mark;
+
+		Position2D map2d_start_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(pos_.x,pos_.y), base_map_info_);
+		uint64_t map2d_start_id = base_ds_->GetIDFromPosition(map2d_start_pos.x, map2d_start_pos.y);
+
+		// old policy
+		//if(base_graph_->GetVertexFromID(map2d_start_id) == nullptr)
+		//	return false;
+		// new policy
+		if(base_graph_->GetVertexFromID(map2d_start_id) != nullptr)
+		{
+			uint64_t geo_start_id = base_graph_->GetVertexFromID(map2d_start_id)->bundled_data_->geo_mark_id_;
+			map2d_start_mark = combined_graph_.GetVertexFromID(geo_start_id)->bundled_data_;
+
+			start_id = geo_start_id;
+		}
+		else
+		{
+			map2d_start_mark.data_id_ = max_id_val_ + cg->GetGraphVertices().size() + 1;
+			map2d_start_mark.position = pos_;
+			map2d_start_mark.source = GeoMarkSource::VIRTUAL_POINT;
+			map2d_start_mark.source_id = 0;
+
+			start_id = max_id_val_ + cg->GetGraphVertices().size() + 1;
+		}
+
+		std::set<uint32_t> hei_set;
+		for(auto& st_cube : ca->GetStartingCubes())
+		{
+			uint64_t cube_start_id = ca->cubes_[st_cube].geo_mark_id_;
+			cube_start_mark = combined_graph_.GetVertexFromID(cube_start_id)->bundled_data_;
+
+			double cost = std::sqrt(std::pow(map2d_start_mark.position.x - cube_start_mark.position.x, 2) +
+					std::pow(map2d_start_mark.position.y - cube_start_mark.position.y, 2) +
+					std::pow(map2d_start_mark.position.z - cube_start_mark.position.z, 2));
+			combined_graph_.AddEdge(map2d_start_mark, cube_start_mark, cost);
+
+			hei_set.insert(ca->cubes_[st_cube].index_.z);
+		}
+
+		// get all vertices of the cube graph around the current flight height
+		std::vector<uint64_t> hei_vertices;
+		for(auto& vtx:cg->GetGraphVertices())
+		{
+			for(auto& hei_ele:hei_set)
+			{
+				if(vtx->bundled_data_.index_.z == hei_ele)
+				{
+					hei_vertices.push_back(vtx->bundled_data_.geo_mark_id_);
+					break;
+				}
+			}
+		}
+
+		for(auto& v:hei_vertices)
+		{
+			GeoMark mark2d, mark3d;
+			mark3d = combined_graph_.GetVertexFromID(v)->bundled_data_;
+
+			Position2D map_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(mark3d.position.x,mark3d.position.y), base_map_info_);
+			uint64_t map2d_id = base_ds_->GetIDFromPosition(map_pos.x, map_pos.y);
+			if(base_graph_->GetVertexFromID(map2d_id) == nullptr)
+				continue;
+			uint64_t geo2d_id = base_graph_->GetVertexFromID(map2d_id)->bundled_data_->geo_mark_id_;
+			mark2d = combined_graph_.GetVertexFromID(geo2d_id)->bundled_data_;
+
+			double cost = std::sqrt(std::pow(mark3d.position.x - mark2d.position.x, 2) +
+					std::pow(mark3d.position.y - mark2d.position.y, 2) +
+					std::pow(mark3d.position.z - mark2d.position.z, 2));
+			combined_graph_.AddEdge(mark3d, mark2d, cost);
+		}
+
+		return start_id;
+	}
+
 	uint64_t CombineBaseWithCubeArrayGraph(std::shared_ptr<CubeArray> ca, std::shared_ptr<Graph<CubeCell&>> cg)
 	{
 		uint64_t start_id;
@@ -113,14 +223,14 @@ public:
 		{
 			mark1.data_id_ = max_id_val_ + edge.src_->vertex_id_;
 			mark1.position = utils::Transformation::TransformPosition3D(transf_, edge.src_->bundled_data_.location_);
-//			mark1.position = edge.src_->bundled_data_.location_;
+			//			mark1.position = edge.src_->bundled_data_.location_;
 			mark1.source = GeoMarkSource::LASER_OCTOMAP;
 			mark1.source_id = edge.src_->bundled_data_.data_id_;
 			edge.src_->bundled_data_.geo_mark_id_ = mark1.data_id_;
 
 			mark2.data_id_ = max_id_val_ + edge.dst_->vertex_id_;
 			mark2.position =  utils::Transformation::TransformPosition3D(transf_, edge.dst_->bundled_data_.location_);
-//			mark2.position =  edge.dst_->bundled_data_.location_;
+			//			mark2.position =  edge.dst_->bundled_data_.location_;
 			mark2.source = GeoMarkSource::LASER_OCTOMAP;
 			mark2.source_id = edge.dst_->bundled_data_.data_id_;
 			edge.dst_->bundled_data_.geo_mark_id_ = mark2.data_id_;

@@ -84,6 +84,12 @@ void OctomapServer::LcmLaserScanPointsHandler(
 			msg->pose.base_to_world.quaternion[2],
 			msg->pose.base_to_world.quaternion[3]);
 
+	octree_transf_.trans = utils::Transformation::Translation3D(msg->pose.base_to_world.position[0],
+			msg->pose.base_to_world.position[1], msg->pose.base_to_world.position[2]);
+	octree_transf_.quat = Eigen::Quaterniond(msg->pose.base_to_world.quaternion[0],
+			msg->pose.base_to_world.quaternion[1], msg->pose.base_to_world.quaternion[2],
+			msg->pose.base_to_world.quaternion[3]);
+
 	// octomap::Pointcloud pc;
 	octomap::point3d start_point;
 

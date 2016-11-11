@@ -324,7 +324,7 @@ void QuadPathRepair::LcmOctomapHandler(
 
 	std::cout << "cube graph size: " << cubegraph->GetGraphVertices().size() << std::endl;
 
-	uint64_t geo_start_id_astar = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);
+	uint64_t geo_start_id_astar = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph, octomap_server_.octree_transf_);
 
 	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
 	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
