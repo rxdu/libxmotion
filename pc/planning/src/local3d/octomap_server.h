@@ -61,6 +61,7 @@ public:
 	void SetOctreeResolution(double new_res) { octree_res_ = new_res; };
 	double GetOctreeResolution() { return octree_res_; };
 	void SaveTreeToFile(std::string file_name);
+	bool IsPositionOccupied(Position3Dd pos);
 
 	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::QuadrotorTransform* msg);
 	void LcmLaserScanPointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::LaserScanPoints_t* msg);

@@ -259,21 +259,11 @@ bool QuadPathRepair::CheckPathSafety(std::shared_ptr<CubeArray> cube_array)
 	for(auto& wp : mission_tracker_->active_path_)
 	{
 		Position3Dd pt_pos_w = wp->bundled_data_.position;
-		Position3Dd quad_pos_w = mission_tracker_->current_position_;
-		Eigen::Vector3d pt_vec(pt_pos_w.x, pt_pos_w.y, pt_pos_w.z);
-		Eigen::Vector3d quad_vec(quad_pos_w.x, quad_pos_w.y, quad_pos_w.z);
-		Eigen::Vector3d pt_pos_q = pt_vec - quad_vec;
-		uint64_t cell_id = cube_array->GetIDFromPosition(pt_pos_q(0), pt_pos_q(1), pt_pos_q(2));
 
-		if(cube_array->isIDValid(cell_id))
-		{
-			if(cube_array->cubes_[cell_id].occu_ != OccupancyType::FREE)
-			{
-				std::cout << "unsafe waypoint found" << std::endl;
-				return false;
-			}
-		}
+		if(octomap_server_.IsPositionOccupied(pt_pos_w))
+			return false;
 	}
+
 	return true;
 }
 

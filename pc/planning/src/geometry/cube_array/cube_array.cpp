@@ -146,6 +146,7 @@ std::vector<uint64_t> CubeArray::GetNeighbours(uint64_t id)
 	return neighbours;
 }
 
+// this function can only be used when octree is built in vehicle frame
 std::vector<uint64_t> CubeArray::GetStartingCubes()
 {
 	std::vector<uint64_t> start_cubes;

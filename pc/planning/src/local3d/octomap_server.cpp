@@ -40,6 +40,20 @@ void OctomapServer::SaveTreeToFile(std::string file_name)
 	save_tree_ = true;
 }
 
+bool OctomapServer::IsPositionOccupied(Position3Dd pos)
+{
+	point3d query (pos.x, pos.y, pos.z);
+
+	OcTreeNode* result = octree_->search (query);
+
+	if (result != NULL) {
+		if(result->getOccupancy() <= octree_->getProbMiss() && result->getOccupancy() > octree_->getClampingThresMin())
+			return false;
+	}
+
+	return true;
+}
+
 void OctomapServer::insertScan(const PointCloudSnap& pcs, std::shared_ptr<octomap::OcTree> m_octree)
 {
 	octomap::OcTreeKey m_updateBBXMin;
