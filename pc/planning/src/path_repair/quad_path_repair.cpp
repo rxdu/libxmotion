@@ -256,6 +256,7 @@ void QuadPathRepair::LcmSysTimeHandler(
 
 bool QuadPathRepair::CheckPathSafety(std::shared_ptr<CubeArray> cube_array)
 {
+	// only check waypoints that is from 3D graph
 	for(auto& wp : mission_tracker_->active_path_)
 	{
 		Position3Dd pt_pos_w = wp->bundled_data_.position;
@@ -271,7 +272,7 @@ bool QuadPathRepair::EvaluateNewPath(std::vector<Position3Dd>& new_path)
 {
 	if(std::sqrt(std::pow(new_path.front().x - mission_tracker_->current_position_.x, 2) +
 			std::pow(new_path.front().y - mission_tracker_->current_position_.y, 2) +
-			std::pow(new_path.front().z - mission_tracker_->current_position_.z, 2)) > 0.35)
+			std::pow(new_path.front().z - mission_tracker_->current_position_.z, 2)) > 0.5)
 	{
 		std::cout << "rejected plan due to wrong starting point" << std::endl;
 		return false;
@@ -283,7 +284,7 @@ bool QuadPathRepair::EvaluateNewPath(std::vector<Position3Dd>& new_path)
 				std::pow(new_path[i].y - new_path[i + 1].y,2) +
 				std::pow(new_path[i].z - new_path[i + 1].z,2));
 
-	if(new_path.size()>0 && est_new_dist_ < mission_tracker_->remaining_path_length_ * (1 - 0.3))
+	if(new_path.size() > 0 && est_new_dist_ < mission_tracker_->remaining_path_length_ * 0.85)
 		return true;
 	else
 		return false;
@@ -306,15 +307,17 @@ void QuadPathRepair::LcmOctomapHandler(
 	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
 	std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
 
-	std::cout << "3d info size: " << cubearray->cubes_.size() << " , " << cubegraph->GetGraphVertices().size() << std::endl;
+	std::cout << "3d info size (cube num, vertex num): " << cubearray->cubes_.size() << " , " << cubegraph->GetGraphVertices().size() << std::endl;
 
 	// don't replan if 3d information is too limited
 	if(mission_tracker_->mission_started_ && (cubearray->cubes_.size() == 0 || cubegraph->GetGraphVertices().size() < 5))
 		return;
 
-	std::cout << "cube graph size: " << cubegraph->GetGraphVertices().size() << std::endl;
+	int64_t geo_start_id_astar = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);//, octomap_server_.octree_transf_);
 
-	uint64_t geo_start_id_astar = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);//, octomap_server_.octree_transf_);
+	// don't replan if failed to combine graphs
+	if(geo_start_id_astar == -1)
+		return;
 
 	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
 	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
@@ -338,7 +341,7 @@ void QuadPathRepair::LcmOctomapHandler(
 	if(!mission_tracker_->mission_started_ || EvaluateNewPath(selected_wps))
 	{
 		if(mission_tracker_->mission_started_) {
-			std::cout << "-------- found better solution ---------";
+			std::cout << "-------- found better solution ---------" << std::endl;
 //#ifdef ENABLE_G3LOG
 //	LOG(INFO) << "-------- found better solution ---------"  << std::endl;
 ////	LoggingHelper::GetInstance().LogStringMsg("test");
@@ -381,16 +384,16 @@ void QuadPathRepair::LcmOctomapHandler(
 		kf_cmd.kfs.front().yaw = 0;
 		kf_cmd.kfs.back().yaw = -M_PI/4;
 
-		//lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
+		lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
 	}
 
 	if(count++ == 20)
 	{
-		count = 0;
-		srcl_lcm_msgs::Graph_t graph_msg;
-
-		std::cout << "------------------------------------------------" << std::endl;
-
+//		count = 0;
+//		srcl_lcm_msgs::Graph_t graph_msg;
+//
+//		std::cout << "------------------------------------------------" << std::endl;
+//
 //		graph_msg.vertex_num = gcombiner_.combined_graph_.GetGraphVertices().size();
 //		for(auto& vtx : gcombiner_.combined_graph_.GetGraphVertices())
 //		{
@@ -413,30 +416,31 @@ void QuadPathRepair::LcmOctomapHandler(
 //
 //			graph_msg.edges.push_back(edge);
 //		}
-		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
-		for(auto& vtx : cubegraph->GetGraphVertices())
-		{
-			srcl_lcm_msgs::Vertex_t vertex;
-			vertex.id = vtx->vertex_id_;
 
-			vertex.position[0] = vtx->bundled_data_.location_.x;
-			vertex.position[1] = vtx->bundled_data_.location_.y;
-			vertex.position[2] = vtx->bundled_data_.location_.z;
+//		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
+//		for(auto& vtx : cubegraph->GetGraphVertices())
+//		{
+//			srcl_lcm_msgs::Vertex_t vertex;
+//			vertex.id = vtx->vertex_id_;
+//
+//			vertex.position[0] = vtx->bundled_data_.location_.x;
+//			vertex.position[1] = vtx->bundled_data_.location_.y;
+//			vertex.position[2] = vtx->bundled_data_.location_.z;
+//
+//			graph_msg.vertices.push_back(vertex);
+//		}
+//
+//		graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
+//		for(auto& eg : cubegraph->GetGraphUndirectedEdges())
+//		{
+//			srcl_lcm_msgs::Edge_t edge;
+//			edge.id_start = eg.src_->vertex_id_;
+//			edge.id_end = eg.dst_->vertex_id_;
+//
+//			graph_msg.edges.push_back(edge);
+//		}
 
-			graph_msg.vertices.push_back(vertex);
-		}
-
-		graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
-		for(auto& eg : cubegraph->GetGraphUndirectedEdges())
-		{
-			srcl_lcm_msgs::Edge_t edge;
-			edge.id_start = eg.src_->vertex_id_;
-			edge.id_end = eg.dst_->vertex_id_;
-
-			graph_msg.edges.push_back(edge);
-		}
-
-		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
+//		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
 	}
 }
 

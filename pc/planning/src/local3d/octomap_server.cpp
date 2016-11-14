@@ -18,7 +18,7 @@ using namespace octomap;
 
 OctomapServer::OctomapServer(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
-		octree_res_(0.45),	// 0.35
+		octree_res_(0.35),	// 0.35
 		save_tree_(false),
 		loop_count_(0),
 		save_tree_name_("saved_octree.bt"),
@@ -226,45 +226,61 @@ void OctomapServer::LcmLaserScanPointsHandler(
 
 		lcm_->publish("quad_planner/hummingbird_laser_octomap", &octomap_msg);
 
-		std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octree);
-		std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
+//		std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octree);
+//		std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
 
 //		std::cout << "tree size: " << octree_->size() << std::endl;
 //		std::cout << "tree cube array size: " << cubearray->cubes_.size() << std::endl;
 //		std::cout << "tree graph size: " << cubegraph->GetGraphVertices().size() << std::endl;
 
-		srcl_lcm_msgs::Graph_t graph_msg;
+//		std::cout << "quad position: " << msg->pose.base_to_world.position[0] << " , "
+//				<< msg->pose.base_to_world.position[1] << " , "
+//				<< msg->pose.base_to_world.position[2] << std::endl;
+//		uint64_t cid = cubearray->GetIDFromPosition(msg->pose.base_to_world.position[0],
+//				msg->pose.base_to_world.position[1], msg->pose.base_to_world.position[2]);
+//
+//		if(cubearray->isIDValid(cid))
+//		{
+//			std::cout << "cube id: " << cid << std::endl;
+//			std::cout << "cube info: " << cubearray->cubes_[cid].location_.x << " , "
+//						<< cubearray->cubes_[cid].location_.y << " , "
+//						<< cubearray->cubes_[cid].location_.z << std::endl;
+//		}
+//		else
+//			std::cout << "****************************** error ******************************" << std::endl;
 
-		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
-		for(auto& vtx : cubegraph->GetGraphVertices())
-		{
-			srcl_lcm_msgs::Vertex_t vertex;
-			vertex.id = vtx->vertex_id_;
-
-//			Position3Dd start_w = utils::Transformation::TransformPosition3D(transf_, Position3Dd(vtx->bundled_data_.location_.x,
-//					vtx->bundled_data_.location_.y, vtx->bundled_data_.location_.z));
-//			vertex.position[0] = start_w.x;
-//			vertex.position[1] = start_w.y;
-//			vertex.position[2] = start_w.z;
-			vertex.position[0] = vtx->bundled_data_.location_.x;
-			vertex.position[1] = vtx->bundled_data_.location_.y;
-			vertex.position[2] = vtx->bundled_data_.location_.z;
-
-			if(vtx->bundled_data_.occu_ != OccupancyType::OCCUPIED)
-				graph_msg.vertices.push_back(vertex);
-		}
-
-		graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
-		for(auto& eg : cubegraph->GetGraphUndirectedEdges())
-		{
-			srcl_lcm_msgs::Edge_t edge;
-			edge.id_start = eg.src_->vertex_id_;
-			edge.id_end = eg.dst_->vertex_id_;
-
-			graph_msg.edges.push_back(edge);
-		}
-
-		lcm_->publish("quad_planner/cube_graph", &graph_msg);
+//		srcl_lcm_msgs::Graph_t graph_msg;
+//
+//		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
+//		for(auto& vtx : cubegraph->GetGraphVertices())
+//		{
+//			srcl_lcm_msgs::Vertex_t vertex;
+//			vertex.id = vtx->vertex_id_;
+//
+////			Position3Dd start_w = utils::Transformation::TransformPosition3D(transf_, Position3Dd(vtx->bundled_data_.location_.x,
+////					vtx->bundled_data_.location_.y, vtx->bundled_data_.location_.z));
+////			vertex.position[0] = start_w.x;
+////			vertex.position[1] = start_w.y;
+////			vertex.position[2] = start_w.z;
+//			vertex.position[0] = vtx->bundled_data_.location_.x;
+//			vertex.position[1] = vtx->bundled_data_.location_.y;
+//			vertex.position[2] = vtx->bundled_data_.location_.z;
+//
+//			if(vtx->bundled_data_.occu_ != OccupancyType::OCCUPIED)
+//				graph_msg.vertices.push_back(vertex);
+//		}
+//
+//		graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
+//		for(auto& eg : cubegraph->GetGraphUndirectedEdges())
+//		{
+//			srcl_lcm_msgs::Edge_t edge;
+//			edge.id_start = eg.src_->vertex_id_;
+//			edge.id_end = eg.dst_->vertex_id_;
+//
+//			graph_msg.edges.push_back(edge);
+//		}
+//
+//		lcm_->publish("quad_planner/cube_graph", &graph_msg);
 	}
 
 	if(save_tree_)

@@ -167,3 +167,14 @@ std::vector<uint64_t> CubeArray::GetStartingCubes()
 
 	return start_cubes;
 }
+
+bool CubeArray::GetCubeIDAtPosition(double x, double y, double z, uint64_t& id)
+{
+	id = this->GetIDFromPosition(x,y,z);
+
+	if(this->isIDValid(id) && this->cubes_[id].occu_ == OccupancyType::FREE)
+		return true;
+	else
+		return false;
+
+}
