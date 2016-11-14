@@ -100,6 +100,8 @@ public:
 	std::vector<uint64_t> GetNeighbours(uint64_t id);
 	std::vector<uint64_t> GetStartingCubes();
 	bool GetCubeIDAtPosition(double x, double y, double z, uint64_t& id);
+
+	bool GetCubeHeightIndexAtHeight(double z, std::vector<uint32_t>& hei_set);
 };
 
 }

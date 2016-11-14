@@ -118,7 +118,7 @@ void TrajectoryGenerator::GenerateTrajectory(KeyframeSet& kfs, uint64_t traj_id)
 		traj_opt_.keyframe_yaw_vals_(0,i) = kfs.keyframes[i].yaw;
 		traj_opt_.keyframe_yaw_vals_(1,i) = std::numeric_limits<float>::infinity();
 
-		traj_opt_.keyframe_ts_(0,i) = i * 0.5;
+		traj_opt_.keyframe_ts_(0,i) = i * 1.0;
 
 		srcl_lcm_msgs::WayPoint_t wpoint;
 		wpoint.positions[0] = kfs.keyframes[i].positions[0];
@@ -156,36 +156,41 @@ void TrajectoryGenerator::GenerateTrajectory(KeyframeSet& kfs, uint64_t traj_id)
 	traj_opt_.keyframe_yaw_vals_(1,kf_num - 1) = 0;
 
 	//traj_opt_.OptimizeFlatTrajJoint();
-	traj_opt_.OptimizeFlatTrajWithCorridorJoint();
+	bool result = traj_opt_.OptimizeFlatTrajWithCorridorJoint();
 
 	// send results to LCM network
-	poly_msg.seg_num = traj_opt_.flat_traj_.traj_segs_.size();
-	for(auto& seg : traj_opt_.flat_traj_.traj_segs_)
+	if(result)
 	{
-		srcl_lcm_msgs::PolyCurveSegment_t seg_msg;
+		poly_msg.seg_num = traj_opt_.flat_traj_.traj_segs_.size();
+		for(auto& seg : traj_opt_.flat_traj_.traj_segs_)
+		{
+			srcl_lcm_msgs::PolyCurveSegment_t seg_msg;
 
-		seg_msg.coeffsize_x = seg.seg_x.param_.coeffs.size();
-		seg_msg.coeffsize_y = seg.seg_y.param_.coeffs.size();
-		seg_msg.coeffsize_z = seg.seg_z.param_.coeffs.size();
-		seg_msg.coeffsize_yaw = seg.seg_yaw.param_.coeffs.size();
-		for(auto& coeff:seg.seg_x.param_.coeffs)
-			seg_msg.coeffs_x.push_back(coeff);
-		for(auto& coeff:seg.seg_y.param_.coeffs)
-			seg_msg.coeffs_y.push_back(coeff);
-		for(auto& coeff:seg.seg_z.param_.coeffs)
-			seg_msg.coeffs_z.push_back(coeff);
-		for(auto& coeff:seg.seg_yaw.param_.coeffs)
-			seg_msg.coeffs_yaw.push_back(coeff);
+			seg_msg.coeffsize_x = seg.seg_x.param_.coeffs.size();
+			seg_msg.coeffsize_y = seg.seg_y.param_.coeffs.size();
+			seg_msg.coeffsize_z = seg.seg_z.param_.coeffs.size();
+			seg_msg.coeffsize_yaw = seg.seg_yaw.param_.coeffs.size();
+			for(auto& coeff:seg.seg_x.param_.coeffs)
+				seg_msg.coeffs_x.push_back(coeff);
+			for(auto& coeff:seg.seg_y.param_.coeffs)
+				seg_msg.coeffs_y.push_back(coeff);
+			for(auto& coeff:seg.seg_z.param_.coeffs)
+				seg_msg.coeffs_z.push_back(coeff);
+			for(auto& coeff:seg.seg_yaw.param_.coeffs)
+				seg_msg.coeffs_yaw.push_back(coeff);
 
-		seg_msg.t_start = seg.t_start;
-		seg_msg.t_end = seg.t_end;
+			seg_msg.t_start = seg.t_start;
+			seg_msg.t_end = seg.t_end;
 
-		poly_msg.segments.push_back(seg_msg);
+			poly_msg.segments.push_back(seg_msg);
+		}
+		poly_msg.start_time.time_stamp = kfs.start_time;
+		poly_msg.trajectory_id = traj_id;
+
+		poly_msg.scaling_factor = 0.5;
+
+		lcm_->publish("quad_planner/trajectory_polynomial", &poly_msg);
 	}
-	poly_msg.start_time.time_stamp = kfs.start_time;
-	poly_msg.trajectory_id = traj_id;
-
-	lcm_->publish("quad_planner/trajectory_polynomial", &poly_msg);
 }
 
 

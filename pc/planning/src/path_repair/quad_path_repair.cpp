@@ -284,6 +284,9 @@ bool QuadPathRepair::EvaluateNewPath(std::vector<Position3Dd>& new_path)
 				std::pow(new_path[i].y - new_path[i + 1].y,2) +
 				std::pow(new_path[i].z - new_path[i + 1].z,2));
 
+	std::cout << "new path dist: " << est_new_dist_ << " , remaining dist of current path: "
+			<< mission_tracker_->remaining_path_length_ << std::endl;
+
 	if(new_path.size() > 0 && est_new_dist_ < mission_tracker_->remaining_path_length_ * 0.85)
 		return true;
 	else
@@ -295,8 +298,13 @@ void QuadPathRepair::LcmOctomapHandler(
 		const std::string& chan,
 		const srcl_lcm_msgs::NewDataReady_t* msg)
 {
-	if(mission_tracker_->remaining_path_length_ < 0.2)
+	std::cout << "\n---------------------- New Iteration -------------------------" << std::endl;
+
+	if(mission_tracker_->remaining_path_length_ < 0.5)
+	{
+		std::cout << "Getting close to goal, no need to replan" << std::endl;
 		return;
+	}
 
 	static int count = 0;
 	srcl_lcm_msgs::KeyframeSet_t kf_cmd;
@@ -307,17 +315,23 @@ void QuadPathRepair::LcmOctomapHandler(
 	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
 	std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
 
-	std::cout << "3d info size (cube num, vertex num): " << cubearray->cubes_.size() << " , " << cubegraph->GetGraphVertices().size() << std::endl;
+	//std::cout << "3d info size (cube num, vertex num): " << cubearray->cubes_.size() << " , " << cubegraph->GetGraphVertices().size() << std::endl;
 
 	// don't replan if 3d information is too limited
 	if(mission_tracker_->mission_started_ && (cubearray->cubes_.size() == 0 || cubegraph->GetGraphVertices().size() < 5))
+	{
+		std::cerr << "Too limited 3D information collected" << std::endl;
 		return;
+	}
 
 	int64_t geo_start_id_astar = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);//, octomap_server_.octree_transf_);
 
 	// don't replan if failed to combine graphs
 	if(geo_start_id_astar == -1)
+	{
+		std::cerr << "Failed to combine graphs" << std::endl;
 		return;
+	}
 
 	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
 	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
@@ -342,11 +356,6 @@ void QuadPathRepair::LcmOctomapHandler(
 	{
 		if(mission_tracker_->mission_started_) {
 			std::cout << "-------- found better solution ---------" << std::endl;
-//#ifdef ENABLE_G3LOG
-//	LOG(INFO) << "-------- found better solution ---------"  << std::endl;
-////	LoggingHelper::GetInstance().LogStringMsg("test");
-//#endif
-			//std::cout << "current path: " << mission_tracker_->remaining_path_length_ << " , new path: " <<  est_dist << std::endl;
 		}
 		else {
 			mission_tracker_->mission_started_ = true;
@@ -387,9 +396,8 @@ void QuadPathRepair::LcmOctomapHandler(
 		lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
 	}
 
-	if(count++ == 20)
-	{
-//		count = 0;
+//	if(count++ % 20 == 0)
+//	{
 //		srcl_lcm_msgs::Graph_t graph_msg;
 //
 //		std::cout << "------------------------------------------------" << std::endl;
@@ -439,9 +447,9 @@ void QuadPathRepair::LcmOctomapHandler(
 //
 //			graph_msg.edges.push_back(edge);
 //		}
-
+//
 //		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
-	}
+//	}
 }
 
 template<typename PlannerType>

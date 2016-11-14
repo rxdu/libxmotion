@@ -31,7 +31,7 @@ MotionServer::MotionServer(std::shared_ptr<lcm::LCM> lcm):
 		ms_count_(0),
 		waypoint_idx_(0),
 		current_sys_time_(0),
-		mode_(MotionMode::USER_CMDS)
+		mode_(MotionMode::POLYNOMIAL)
 {
 	//lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmGoalHandler, this);
 	lcm_->subscribe("quad_data/system_time", &MotionServer::LcmSysTimeHandler, this);

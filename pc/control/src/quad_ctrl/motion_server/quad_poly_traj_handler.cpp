@@ -20,7 +20,8 @@ QuadPolyTrajHandler::QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm):
 		current_sys_time_(0),
 		traj_start_time_(0),
 		remaining_dist_(0),
-		next_wp_idx_(0)
+		next_wp_idx_(0),
+		scaling_factor_(1.0)
 {
 	lcm_->subscribe(poly_traj_topic_,&QuadPolyTrajHandler::LcmPolyTrajMsgHandler, this);
 }
@@ -32,7 +33,8 @@ QuadPolyTrajHandler::QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm, std::str
 		current_sys_time_(0),
 		traj_start_time_(0),
 		remaining_dist_(0),
-		next_wp_idx_(0)
+		next_wp_idx_(0),
+		scaling_factor_(1.0)
 {
 	lcm_->subscribe(poly_traj_topic_,&QuadPolyTrajHandler::LcmPolyTrajMsgHandler, this);
 }
@@ -85,6 +87,7 @@ void QuadPolyTrajHandler::LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, 
 
 //	traj_start_time_ = current_sys_time_;
 	traj_start_time_ = msg->start_time.time_stamp;
+	scaling_factor_ = msg->scaling_factor;
 	traj_available_ = true;
 }
 
@@ -98,7 +101,7 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 	{
 		// get current time
 		time_stamp time = tstamp - traj_start_time_;
-		double t = time / 1000.0;
+		double t = time / 1000.0 / scaling_factor_;
 
 		// check if traj is defined for the given time
 		if(flat_traj_.traj_segs_.size() == 0 || t > flat_traj_.traj_segs_.back().t_end)
@@ -155,7 +158,7 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 		{
 			dist = std::sqrt(std::pow(pt.positions[0] - waypoints_.back().x,2) +
 					std::pow(pt.positions[1] - waypoints_.back().y,2) + std::pow(pt.positions[2] - waypoints_.back().z,2));
-			std::cout << "estimated distance to goal - last: " << dist << std::endl;
+			//std::cout << "estimated distance to goal - last: " << dist << std::endl;
 		}
 		else
 		{

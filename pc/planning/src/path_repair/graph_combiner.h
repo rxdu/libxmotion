@@ -218,6 +218,7 @@ public:
 			combined_graph_.AddEdge(edge.src_->bundled_data_, edge.dst_->bundled_data_, edge.cost_);
 		}
 
+		// first add all vertices from cube array graph to geomark graph
 		GeoMark mark1, mark2;
 		for(auto& edge:cg->GetGraphEdges())
 		{
@@ -235,86 +236,66 @@ public:
 			mark2.source_id = edge.dst_->bundled_data_.data_id_;
 			edge.dst_->bundled_data_.geo_mark_id_ = mark2.data_id_;
 
+//			std::cout << "3d graph edge cost: " << edge.cost_ << std::endl;
+
 			combined_graph_.AddEdge(mark1, mark2, edge.cost_);
 		}
 
-		// connect starting points
+		// then try to connect points between 2d and 3d
 		GeoMark vehicle_2dstart_mark, vehicle_3dstart_mark;
 
 		Position2D map2d_start_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(pos_.x,pos_.y), base_map_info_);
 		uint64_t map2d_start_id = base_ds_->GetIDFromPosition(map2d_start_pos.x, map2d_start_pos.y);
 
-		uint64_t cube_id_vehicle;
-		if(!ca->GetCubeIDAtPosition(pos_.x, pos_.y, pos_.y, cube_id_vehicle))
+		uint64_t map3d_start_id;
+		bool found_start_in2d = false;
+		if(base_graph_->GetVertexFromID(map2d_start_id) != nullptr)
+			found_start_in2d = true;
+		bool found_start_in3d = ca->GetCubeIDAtPosition(pos_.x, pos_.y, pos_.y, map3d_start_id);
+
+		if(!found_start_in3d && !found_start_in2d)
 		{
-			if(base_graph_->GetVertexFromID(map2d_start_id) == nullptr)
+			std::cerr << "Failed to find any path from both 2d and 3d graph" << std::endl;
+			return -1;
+		}
+		else
+		{
+			uint64_t geo2d_start_id;
+			uint64_t geo3d_start_id;
+
+			if(found_start_in2d)
+				geo2d_start_id = base_graph_->GetVertexFromID(map2d_start_id)->bundled_data_->geo_mark_id_;
+			if(found_start_in3d)
+				geo3d_start_id = ca->cubes_[map3d_start_id].geo_mark_id_;
+
+			// if vehicle is above valid 2d map, connect 2d vertex and 3d vertex
+			if(found_start_in2d)
 			{
-				std::cerr << "failed to find any path from both 2d and 3d graph" << std::endl;
-				return -1;
+				if(found_start_in3d)
+				{
+					vehicle_2dstart_mark = combined_graph_.GetVertexFromID(geo2d_start_id)->bundled_data_;
+					vehicle_3dstart_mark = combined_graph_.GetVertexFromID(geo3d_start_id)->bundled_data_;
+
+					double cost = std::sqrt(std::pow(vehicle_2dstart_mark.position.x - vehicle_3dstart_mark.position.x, 2) +
+							std::pow(vehicle_2dstart_mark.position.y - vehicle_3dstart_mark.position.y, 2) +
+							std::pow(vehicle_2dstart_mark.position.z - vehicle_3dstart_mark.position.z, 2));
+					combined_graph_.AddEdge(vehicle_2dstart_mark, vehicle_3dstart_mark, cost);
+				}
+
+				start_id = geo2d_start_id;
 			}
 			else
 			{
-				std::cout << "plan with only 2d graph" << std::endl;
-				return base_graph_->GetVertexFromID(map2d_start_id)->bundled_data_->geo_mark_id_;
+				start_id = geo3d_start_id;
 			}
 		}
 
-		// old policy
-		//if(base_graph_->GetVertexFromID(map2d_start_id) == nullptr)
-		//	return false;
-		// new policy
-		// if vehicle is above valid 2d map, connect 2d vertex and 3d vertex
-		if(base_graph_->GetVertexFromID(map2d_start_id) != nullptr)
-		{
-			uint64_t geo_start_id = base_graph_->GetVertexFromID(map2d_start_id)->bundled_data_->geo_mark_id_;
-			vehicle_2dstart_mark = combined_graph_.GetVertexFromID(geo_start_id)->bundled_data_;
-
-			// connect two points
-			uint64_t cube_start_id = ca->cubes_[cube_id_vehicle].geo_mark_id_;
-			vehicle_3dstart_mark = combined_graph_.GetVertexFromID(cube_start_id)->bundled_data_;
-
-			double cost = std::sqrt(std::pow(vehicle_2dstart_mark.position.x - vehicle_3dstart_mark.position.x, 2) +
-					std::pow(vehicle_2dstart_mark.position.y - vehicle_3dstart_mark.position.y, 2) +
-					std::pow(vehicle_2dstart_mark.position.z - vehicle_3dstart_mark.position.z, 2));
-			combined_graph_.AddEdge(vehicle_2dstart_mark, vehicle_3dstart_mark, cost);
-
-			start_id = geo_start_id;
-		}
-		// if vehicle is above obstacle, not connecting
-		else
-		{
-//			vehicle_start_mark.data_id_ = max_id_val_ + cg->GetGraphVertices().size() + 1;
-//			vehicle_start_mark.position = pos_;
-//			vehicle_start_mark.source = GeoMarkSource::VIRTUAL_POINT;
-//			vehicle_start_mark.source_id = 0;
-//
-//			start_id = max_id_val_ + cg->GetGraphVertices().size() + 1;
-			start_id = cube_id_vehicle;
-		}
-
-		std::set<uint32_t> hei_set;
 		// find the nearest two heights in octomap
-		double height_to_center = pos_.z - vehicle_3dstart_mark.position.z;
-
-		hei_set.insert(ca->cubes_[start_id].index_.z);
-		if(height_to_center > 0)
-			hei_set.insert(ca->cubes_[start_id].index_.z + 1);
-		else
-			hei_set.insert(ca->cubes_[start_id].index_.z - 1);
-
-//		std::set<uint32_t> hei_set;
-//		for(auto& st_cube : ca->GetStartingCubes())
-//		{
-//			uint64_t cube_start_id = ca->cubes_[st_cube].geo_mark_id_;
-//			cube_start_mark = combined_graph_.GetVertexFromID(cube_start_id)->bundled_data_;
-//
-//			double cost = std::sqrt(std::pow(vehicle_start_mark.position.x - cube_start_mark.position.x, 2) +
-//					std::pow(vehicle_start_mark.position.y - cube_start_mark.position.y, 2) +
-//					std::pow(vehicle_start_mark.position.z - cube_start_mark.position.z, 2));
-//			combined_graph_.AddEdge(vehicle_start_mark, cube_start_mark, cost);
-//
-//			hei_set.insert(ca->cubes_[st_cube].index_.z);
-//		}
+		std::vector<uint32_t> hei_set;
+//		if(!ca->GetCubeHeightIndexAtHeight(pos_.z, hei_set))
+//			return -1;
+		if(!ca->GetCubeHeightIndexAtHeight(desired_height_, hei_set))
+			return -1;
 
 		// get all vertices of the cube graph around the current flight height
 		std::vector<uint64_t> hei_vertices;
@@ -345,6 +326,7 @@ public:
 			double cost = std::sqrt(std::pow(mark3d.position.x - mark2d.position.x, 2) +
 					std::pow(mark3d.position.y - mark2d.position.y, 2) +
 					std::pow(mark3d.position.z - mark2d.position.z, 2));
+//			std::cout << "connection cost: " << cost << std::endl;
 			combined_graph_.AddEdge(mark3d, mark2d, cost);
 		}
 

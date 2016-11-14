@@ -100,6 +100,9 @@ std::shared_ptr<Graph<CubeCell&>> GraphBuilder::BuildFromCubeArray(const std::sh
 		if(cube_array->cubes_[current_nodeid].occu_ != OccupancyType::OCCUPIED) {
 			std::vector<uint64_t> neighbour_list = cube_array->GetNeighbours(current_nodeid);
 
+//			if(neighbour_list.size() < 6)
+//				continue;
+
 			for(auto& nid : neighbour_list)
 			{
 				if(cube_array->cubes_[nid].occu_ != OccupancyType::OCCUPIED)

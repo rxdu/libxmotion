@@ -119,7 +119,7 @@ public:
 	void OptimizeFlatTrajJoint();
 
 	void InitOptWithCorridorJointMatrices(uint32_t keyframe_num, uint32_t midpoint_num, double cor_size);
-	void OptimizeFlatTrajWithCorridorJoint();
+	bool OptimizeFlatTrajWithCorridorJoint();
 };
 
 }

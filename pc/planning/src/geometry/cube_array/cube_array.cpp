@@ -113,6 +113,41 @@ uint64_t CubeArray::GetIDFromPosition(double x, double y, double z)
 	return GetIDFromIndex(row, col, hei);
 }
 
+bool CubeArray::GetCubeHeightIndexAtHeight(double z, std::vector<uint32_t>& hei_set)
+{
+	int32_t hei;
+
+	if(z < -hei_offset_ * cube_size_)
+		z = -hei_offset_ * cube_size_;
+
+	// avoid the top right corner
+	if(z > (static_cast<int32_t>(hei_size_)-hei_offset_) * cube_size_)
+		z = (static_cast<int32_t>(hei_size_)-hei_offset_) * cube_size_ - cube_size_/10.0;
+
+	hei = static_cast<int32_t>((z + hei_offset_*cube_size_)/cube_size_);
+
+	if(hei >=0 && hei < hei_size_)
+		hei_set.push_back(hei);
+	else
+		return false;
+
+//	std::cout << "hei: " << hei << std::endl;
+//	std::cout << "current height: " << z << " , nearest cube height: " << (hei + 1) * cube_size_ - hei_offset_*cube_size_ << std::endl;
+
+	if(z - ((hei + 1) * cube_size_ - hei_offset_*cube_size_) > 0)
+	{
+		if((hei + 1) < hei_size_)
+			hei_set.push_back(hei + 1);
+	}
+	else
+	{
+		if(hei - 1 >=0)
+			hei_set.push_back(hei - 1);
+	}
+
+	return true;
+}
+
 void CubeArray::UpdateCubeOccupancy(double x, double y, double z, OccupancyType oc_type)
 {
 	uint64_t id = GetIDFromPosition(x,y,z);

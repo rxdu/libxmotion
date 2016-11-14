@@ -315,7 +315,7 @@ void QuadPolyOpt::InitOptWithCorridorJointMatrices(uint32_t keyframe_num, uint32
 	std::cout << "ended init" << std::endl;
 }
 
-void QuadPolyOpt::OptimizeFlatTrajWithCorridorJoint()
+bool QuadPolyOpt::OptimizeFlatTrajWithCorridorJoint()
 {
 	std::cout << "optimization called" << std::endl;
 
@@ -365,7 +365,7 @@ void QuadPolyOpt::OptimizeFlatTrajWithCorridorJoint()
 	{
 		std::cerr << "Bad optimization result." << std::endl;
 
-		return;
+		return false;
 	}
 
 	// clear results from last optimization call
@@ -417,5 +417,7 @@ void QuadPolyOpt::OptimizeFlatTrajWithCorridorJoint()
 	}
 
 	std::cout << "Optimization result copied to flat_traj_.\n" << std::endl;
+
+	return true;
 }
 
