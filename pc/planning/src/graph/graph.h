@@ -28,15 +28,17 @@
 #include <cstdint>
 #include <type_traits>
 
-#include "graph/vertex.h"
-#include "graph/astar.h"
 #include "graph/bds_base.h"
+#include "graph/vertex.h"
 
 namespace srcl_ctrl {
 
 // Graph, Edge, Vertex are supposed to be used only internally
 template<typename T>
 class Graph;
+
+template<typename T>
+class Vertex;
 
 // Alias ended with "_t" should be used in user applications
 template<typename T>
@@ -72,6 +74,8 @@ public:
 private:
 	std::map<uint64_t, Vertex<BundledStructType>*> vertex_map_;
 
+	friend class AStar;
+
 private:
 	/// This function checks if a vertex already exists in the graph.
 	///	If yes, the functions returns the pointer of the existing vertex,
@@ -104,6 +108,24 @@ private:
 		}
 
 		return it->second;
+	}
+
+	/// This function creates a vertex in the graph that associates with the given node.
+	/// The set of functions AddVertex() are only supposed to be used with incremental a* search.
+	template<class T = BundledStructType, typename std::enable_if<!std::is_pointer<T>::value>::type* = nullptr>
+	Vertex<BundledStructType>* AddVertex(BundledStructType vertex_node)
+	{
+		Vertex<BundledStructType>* new_vertex = new Vertex<BundledStructType>(vertex_node);
+		vertex_map_[vertex_node.data_id_] = new_vertex;
+		return new_vertex;
+	}
+
+	template<class T = BundledStructType, typename std::enable_if<std::is_pointer<T>::value>::type* = nullptr>
+	Vertex<BundledStructType>* AddVertex(BundledStructType vertex_node)
+	{
+		Vertex<BundledStructType>* new_vertex = new Vertex<BundledStructType>(vertex_node);
+		vertex_map_[vertex_node->data_id_] = new_vertex;
+		return new_vertex;
 	}
 
 	/// This function checks if a vertex exists in the graph.
@@ -152,6 +174,9 @@ public:
 	{
 		Vertex<BundledStructType>* src_vertex = GetVertex(src_node);
 		Vertex<BundledStructType>* dst_vertex = GetVertex(dst_node);
+
+		if(src_vertex->CheckNeighbour(dst_vertex))
+			return;
 
 		Edge<Vertex<BundledStructType>*> new_edge(src_vertex, dst_vertex,cost);
 		src_vertex->edges_.push_back(new_edge);
@@ -254,28 +279,28 @@ public:
 			return nullptr;
 	}
 
-	/// Perform A* Search and return a path represented by a serious of vertices
-	std::vector<Vertex<BundledStructType>*> AStarSearch(Vertex<BundledStructType>* start, Vertex<BundledStructType>* goal)
-	{
-		// clear previous search information before new search
-		ResetGraphVertices();
-
-		// do a* search and return search result
-		return AStar::Search(start, goal);
-	}
-
-	std::vector<Vertex<BundledStructType>*> AStarSearch(uint64_t start_id, uint64_t goal_id)
-	{
-		std::vector<Vertex<BundledStructType>*> path;
-		Vertex<BundledStructType> *start = this->GetVertexFromID(start_id);
-		Vertex<BundledStructType> *goal = this->GetVertexFromID(goal_id);
-
-		// do a* search and return search result
-		if(start != nullptr && goal != nullptr)
-			return this->AStarSearch(start, goal);
-		else
-			return path;
-	}
+//	/// Perform A* Search and return a path represented by a serious of vertices
+//	std::vector<Vertex<BundledStructType>*> AStarSearch(Vertex<BundledStructType>* start, Vertex<BundledStructType>* goal)
+//	{
+//		// clear previous search information before new search
+//		ResetGraphVertices();
+//
+//		// do a* search and return search result
+//		return AStar::Search(start, goal);
+//	}
+//
+//	std::vector<Vertex<BundledStructType>*> AStarSearch(uint64_t start_id, uint64_t goal_id)
+//	{
+//		std::vector<Vertex<BundledStructType>*> path;
+//		Vertex<BundledStructType> *start = this->GetVertexFromID(start_id);
+//		Vertex<BundledStructType> *goal = this->GetVertexFromID(goal_id);
+//
+//		// do a* search and return search result
+//		if(start != nullptr && goal != nullptr)
+//			return this->AStarSearch(start, goal);
+//		else
+//			return path;
+//	}
 };
 
 }

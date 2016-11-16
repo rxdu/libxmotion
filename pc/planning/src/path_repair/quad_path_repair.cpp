@@ -338,7 +338,7 @@ void QuadPathRepair::LcmOctomapHandler(
 
 	clock_t exec_time;
 	exec_time = clock();
-	auto comb_path = gcombiner_.combined_graph_.AStarSearch(geo_start_id_astar, geo_goal_id_astar);
+	auto comb_path = AStar::Search(gcombiner_.combined_graph_, geo_start_id_astar, geo_goal_id_astar);
 	exec_time = clock() - exec_time;
 	std::cout << "Search in 3D finished in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 

@@ -23,6 +23,7 @@
 // opencv
 #include "opencv2/opencv.hpp"
 
+#include "graph/astar.h"
 #include "path_repair/graph_combiner.h"
 #include "geometry/square_grid/square_grid.h"
 #include "geometry/cube_array/cube_array.h"
@@ -90,7 +91,7 @@ int main(int argc, char* argv[])
 	uint64_t geo_goal_id_astar = map_graph->GetVertexFromID(187)->bundled_data_->geo_mark_id_;
 
 	exec_time = clock();
-	auto comb_path = combiner.combined_graph_.AStarSearch(geo_start_id_astar, geo_goal_id_astar);
+	auto comb_path = AStar::Search(combiner.combined_graph_, geo_start_id_astar, geo_goal_id_astar);
 	exec_time = clock() - exec_time;
 	std::cout << "Search finished in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 

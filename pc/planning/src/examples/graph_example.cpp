@@ -17,6 +17,7 @@
 
 // user
 #include "graph/graph.h"
+#include "graph/astar.h"
 #include "vis/graph_vis.h"
 #include "geometry/graph_builder.h"
 #include "geometry/sgrid_builder.h"
@@ -131,7 +132,7 @@ int main(int argc, char** argv )
 
 	clock_t		exec_time;
 	exec_time = clock();
-	Path_t<SquareCell*> path = graph->AStarSearch(start_vertex,finish_vertex);
+	Path_t<SquareCell*> path = AStar::Search(graph,start_vertex,finish_vertex);
 	exec_time = clock() - exec_time;
 	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 

@@ -91,7 +91,7 @@ int main(int argc, char** argv )
 
 	std::cout<<"Start from "<< start_vertex->vertex_id_<<" and finish at "<< end_vertex->vertex_id_<< std::endl;
 	exec_time = clock();
-	traj = graph->AStarSearch(start_vertex, end_vertex);
+	traj = AStar::Search(graph, start_vertex, end_vertex);
 	exec_time = clock() - exec_time;
 	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 

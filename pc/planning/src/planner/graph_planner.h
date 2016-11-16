@@ -18,6 +18,7 @@
 
 // User headers
 #include "graph/graph.h"
+#include "graph/astar.h"
 #include "map/map_type.h"
 #include "map/map_config.h"
 #include "map/map_utils.h"
@@ -121,7 +122,7 @@ public:
 	{
 		if(is_ready_)
 		{
-			return graph_->AStarSearch(start, goal);
+			return AStar::Search(graph_, start, goal);
 		}
 
 		return empty_path_;
@@ -144,7 +145,7 @@ public:
 				return prev_result_;
 
 			prev_result_.clear();
-			prev_result_ = graph_->AStarSearch(start_vtx, goal_vtx);
+			prev_result_ = AStar::Search(graph_, start_vtx, goal_vtx);
 			prev_start_id_ = start_id;
 			prev_goal_id_ = goal_id;
 

@@ -14,6 +14,7 @@
 
 // user
 #include "graph/graph.h"
+#include "graph/astar.h"
 #include "graph/bds_example.h"
 
 using namespace srcl_ctrl;
@@ -57,7 +58,7 @@ int main(int argc, char** argv )
 
 	std::cout << "test a*" << std::endl;
 
-	auto path = graph.AStarSearch(graph.GetVertexFromID(0), graph.GetVertexFromID(8));
+	auto path = AStar::Search(graph, graph.GetVertexFromID(0), graph.GetVertexFromID(8));
 
 	for(auto& e : path)
 		std::cout << "id: " << e->vertex_id_ << std::endl;

@@ -11,6 +11,7 @@
 #include "gtest/gtest.h"
 
 #include "graph/graph.h"
+#include "graph/astar.h"
 #include "graph/bds_example.h"
 
 using namespace srcl_ctrl;
@@ -73,7 +74,7 @@ TEST_F(GraphTemplateTest, ValueType)
 
 	ASSERT_NE(graph.GetGraphVertices().size(), 0) << "Failed to add a vertex of value type to the graph";
 
-	auto path = graph.AStarSearch(graph.GetVertexFromID(0), graph.GetVertexFromID(8));
+	auto path = AStar::Search(graph, graph.GetVertexFromID(0), graph.GetVertexFromID(8));
 	ASSERT_NE(path.size(), 0) << "Failed to find a path of value type with A* while there exists one";
 }
 
@@ -103,7 +104,7 @@ TEST_F(GraphTemplateTest, PointerType)
 
 	ASSERT_NE(graph.GetGraphVertices().size(), 0) << "Failed to add a vertex of pointer type to the graph";
 
-	auto path = graph.AStarSearch(graph.GetVertexFromID(0), graph.GetVertexFromID(8));
+	auto path = AStar::Search(graph, graph.GetVertexFromID(0), graph.GetVertexFromID(8));
 	ASSERT_NE(path.size(), 0) << "Failed to find a path of pointer type with A* while there exists one";
 }
 
@@ -133,7 +134,7 @@ TEST_F(GraphTemplateTest, ConstRefType)
 
 	ASSERT_NE(graph.GetGraphVertices().size(), 0) << "Failed to add a vertex of const reference type to the graph";
 
-	auto path = graph.AStarSearch(graph.GetVertexFromID(0), graph.GetVertexFromID(8));
+	auto path = AStar::Search(graph, graph.GetVertexFromID(0), graph.GetVertexFromID(8));
 	ASSERT_NE(path.size(), 0) << "Failed to find a path of const reference type with A* while there exists one";
 }
 
@@ -165,6 +166,6 @@ TEST_F(GraphTemplateTest, LiftedGraphTest)
 
 	ASSERT_NE(graph.GetGraphVertices().size(), 0) << "Failed to add a lifted vertex to the graph";
 
-	auto path = graph.AStarSearch(graph.GetVertexFromID(0), graph.GetVertexFromID(2));
+	auto path = AStar::Search(graph, graph.GetVertexFromID(0), graph.GetVertexFromID(2));
 	ASSERT_NE(path.size(), 0) << "Failed to find a path in the lifted graph with A* while there exists one";
 }
