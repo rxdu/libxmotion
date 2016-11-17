@@ -20,6 +20,7 @@ namespace srcl_ctrl {
 namespace CubeArrayBuilder {
 
 std::shared_ptr<CubeArray> BuildCubeArrayFromOctree(std::shared_ptr<octomap::OcTree> tree);
+std::shared_ptr<CubeArray> BuildCubeArrayFromOctreeWithExtObstacle(std::shared_ptr<octomap::OcTree> tree);
 
 }
 

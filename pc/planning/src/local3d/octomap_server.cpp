@@ -286,6 +286,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	if(save_tree_)
 	{
 		octree->writeBinary(save_tree_name_);
+		std::cout << "************************ octomap saved ************************" << std::endl;
 		save_tree_ = false;
 	}
 }

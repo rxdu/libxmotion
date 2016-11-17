@@ -97,7 +97,7 @@ std::shared_ptr<Graph<CubeCell&>> GraphBuilder::BuildFromCubeArray(const std::sh
 	{
 		uint64_t current_nodeid = cube.data_id_;
 
-		if(cube_array->cubes_[current_nodeid].occu_ != OccupancyType::OCCUPIED) {
+		if(cube_array->cubes_[current_nodeid].occu_ == OccupancyType::FREE) {
 			std::vector<uint64_t> neighbour_list = cube_array->GetNeighbours(current_nodeid);
 
 //			if(neighbour_list.size() < 6)
@@ -105,7 +105,7 @@ std::shared_ptr<Graph<CubeCell&>> GraphBuilder::BuildFromCubeArray(const std::sh
 
 			for(auto& nid : neighbour_list)
 			{
-				if(cube_array->cubes_[nid].occu_ != OccupancyType::OCCUPIED)
+				if(cube_array->cubes_[nid].occu_ == OccupancyType::FREE)
 				{
 					graph->AddEdge(cube_array->cubes_[current_nodeid], cube_array->cubes_[nid], size);
 				}

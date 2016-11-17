@@ -11,16 +11,6 @@
 using namespace srcl_ctrl;
 using namespace cv;
 
-SGridBuilder::SGridBuilder()
-{
-
-}
-
-SGridBuilder::~SGridBuilder()
-{
-
-}
-
 std::shared_ptr<SquareGrid> SGridBuilder::BuildSquareGrid(cv::InputArray _src, uint32_t cell_size)
 {
 //	Mat image_bin;

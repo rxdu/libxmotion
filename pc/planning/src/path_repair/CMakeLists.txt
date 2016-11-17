@@ -38,3 +38,6 @@ target_link_libraries(test_tracking polyopt quadflat utils ${LCM_LIBRARIES})
 
 add_executable(test_cubearray tests/test_cubearray.cpp)
 target_link_libraries(test_cubearray geometry)
+
+add_executable(test_cubearray_builder tests/test_cubearray_builder.cpp)
+target_link_libraries(test_cubearray_builder geometry  ${LCM_LIBRARIES})

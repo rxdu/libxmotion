@@ -118,8 +118,10 @@ enum class OccupancyType
 {
 	FREE,
 	OCCUPIED,
+	// only above two are used for a graph
 	MIXED,
 	INTERESTED,
+	UNKONWN,
 	EXPANDED_OBS
 };
 
