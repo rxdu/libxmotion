@@ -119,7 +119,8 @@ enum class OccupancyType
 	FREE,
 	OCCUPIED,
 	MIXED,
-	INTERESTED
+	INTERESTED,
+	EXPANDED_OBS
 };
 
 typedef struct

@@ -66,12 +66,12 @@ std::shared_ptr<Graph<SquareCell*>> GraphBuilder::BuildFromSquareGrid(const std:
 	{
 		uint64_t current_nodeid = (*itc).second->data_id_;
 
-		if(grid->cells_[current_nodeid]->occu_ != OccupancyType::OCCUPIED) {
+		if(grid->cells_[current_nodeid]->occu_ == OccupancyType::FREE) {
 			std::vector<SquareCell*> neighbour_list = grid->GetNeighbours(current_nodeid,allow_diag_move);
 
 			for(auto itn = neighbour_list.begin(); itn != neighbour_list.end(); itn++)
 			{
-				if(grid->cells_[(*itn)->data_id_]->occu_ != OccupancyType::OCCUPIED)
+				if(grid->cells_[(*itn)->data_id_]->occu_ == OccupancyType::FREE)
 				{
 					double error_x,error_y, cost = 0;
 					error_x = std::abs(static_cast<long>((*itn)->location_.x) - static_cast<long>((*itc).second->location_.x));

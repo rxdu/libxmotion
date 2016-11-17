@@ -29,7 +29,10 @@ public:
 
 public:
 	static std::shared_ptr<SquareGrid> BuildSquareGrid(cv::InputArray _src, uint32_t cell_size);
+	static std::shared_ptr<SquareGrid> BuildExtSquareGrid(cv::InputArray _src, uint32_t cell_size, uint8_t expand_num);
+
 	static Map_t<SquareGrid> BuildSquareGridMap(cv::InputArray _src, uint32_t cell_size);
+	static Map_t<SquareGrid> BuildSquareGridMapWithExtObstacle(cv::InputArray _src, uint32_t cell_size, uint8_t expand_num);
 };
 
 }

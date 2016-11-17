@@ -6,10 +6,9 @@
  */
 
 // standard libaray
-#include <stdio.h>
+#include <iostream>
 #include <vector>
 #include <ctime>
-#include <tuple>
 
 // opencv
 #include "opencv2/opencv.hpp"
@@ -18,8 +17,8 @@
 #include "graph/graph.h"
 #include "graph/astar.h"
 #include "vis/graph_vis.h"
-#include "geometry/graph_builder.h"
 #include "map/image_utils.h"
+#include "geometry/graph_builder.h"
 #include "geometry/sgrid_builder.h"
 
 using namespace cv;
@@ -43,13 +42,8 @@ int main(int argc, char** argv )
 		}
 		else
 		{
-			sgrid_map = SGridBuilder::BuildSquareGridMap(input_map, 32);
+			sgrid_map = SGridBuilder::BuildSquareGridMapWithExtObstacle(input_map, 16, 2);
 			use_input_image = true;
-
-//			std::cout << "------------------" << std::endl;
-//			std::cout << "map size: " << sgrid_map.info.map_size_x << " , " << sgrid_map.info.map_size_y << std::endl;
-//			std::cout << "padded size: " << sgrid_map.info.padded_size_x << " , " << sgrid_map.info.padded_size_y << std::endl;
-//			std::cout << "------------------" << std::endl;
 		}
 	}
 	else{
@@ -96,38 +90,35 @@ int main(int argc, char** argv )
 	/* Below this point, a SquareGrid object should be available for graph construction */
 	/************************************************************************************/
 
-//	uint32_t test_id = sgrid_map.data_model->GetIDFromPosition(95, 96);
-//	std::cout << "tested id: " << test_id << std::endl;
-
 	/*** Construct a graph from the square grid ***/
 	/*** the second argument determines if move along diagonal is allowed ***/
 	std::shared_ptr<Graph<SquareCell*>> graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);
 
 	/*** Search path in the graph ***/
-	Vertex<SquareCell*> * start_vertex;
-	Vertex<SquareCell*> * finish_vertex;
-	if(use_input_image)
-	{
-		start_vertex = graph->GetVertexFromID(160);
-		finish_vertex = graph->GetVertexFromID(830);
-	}
-	else
-	{
-		start_vertex = graph->GetVertexFromID(0);
-		finish_vertex = graph->GetVertexFromID(143);
-	}
-
-	if(start_vertex == nullptr || finish_vertex == nullptr) {
-		std::cerr << "Invalid starting and finishing vertices, please choose two vertices in free space!" << std::endl;
-		std::cerr << "Use image \"example.png\" inside \\planning\\data folder for this demo." << std::endl;
-		return 0;
-	}
-
-	clock_t		exec_time;
-	exec_time = clock();
-	std::vector<Vertex<SquareCell*>*> path = AStar::Search(graph,start_vertex,finish_vertex);
-	exec_time = clock() - exec_time;
-	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
+//	Vertex<SquareCell*> * start_vertex;
+//	Vertex<SquareCell*> * finish_vertex;
+//	if(use_input_image)
+//	{
+//		start_vertex = graph->GetVertexFromID(160);
+//		finish_vertex = graph->GetVertexFromID(830);
+//	}
+//	else
+//	{
+//		start_vertex = graph->GetVertexFromID(0);
+//		finish_vertex = graph->GetVertexFromID(143);
+//	}
+//
+//	if(start_vertex == nullptr || finish_vertex == nullptr) {
+//		std::cerr << "Invalid starting and finishing vertices, please choose two vertices in free space!" << std::endl;
+//		std::cerr << "Use image \"example.png\" inside \\planning\\data folder for this demo." << std::endl;
+//		return 0;
+//	}
+//
+//	clock_t		exec_time;
+//	exec_time = clock();
+//	std::vector<Vertex<SquareCell*>*> path = AStar::Search(graph,start_vertex,finish_vertex);
+//	exec_time = clock() - exec_time;
+//	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 
 	/*** Visualize the map and graph ***/
 	Mat vis_img;
@@ -142,7 +133,7 @@ int main(int argc, char** argv )
 	/*** put the graph on top of the square grid ***/
 	GraphVis::VisSquareGridGraph(*graph, vis_img, vis_img, true);
 	/*** put the path on top of the graph ***/
-	GraphVis::VisSquareGridPath(path, vis_img, vis_img);
+//	GraphVis::VisSquareGridPath(path, vis_img, vis_img);
 
 	// display visualization result
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
