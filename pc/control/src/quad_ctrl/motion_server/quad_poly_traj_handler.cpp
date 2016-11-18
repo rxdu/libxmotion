@@ -21,7 +21,8 @@ QuadPolyTrajHandler::QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm):
 		traj_start_time_(0),
 		remaining_dist_(0),
 		next_wp_idx_(0),
-		scaling_factor_(1.0)
+		scaling_factor_(1.0),
+		traj_id_(0)
 {
 	lcm_->subscribe(poly_traj_topic_,&QuadPolyTrajHandler::LcmPolyTrajMsgHandler, this);
 }
@@ -34,7 +35,8 @@ QuadPolyTrajHandler::QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm, std::str
 		traj_start_time_(0),
 		remaining_dist_(0),
 		next_wp_idx_(0),
-		scaling_factor_(1.0)
+		scaling_factor_(1.0),
+		traj_id_(0)
 {
 	lcm_->subscribe(poly_traj_topic_,&QuadPolyTrajHandler::LcmPolyTrajMsgHandler, this);
 }
@@ -88,6 +90,8 @@ void QuadPolyTrajHandler::LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, 
 //	traj_start_time_ = current_sys_time_;
 	traj_start_time_ = msg->start_time.time_stamp;
 	scaling_factor_ = msg->scaling_factor;
+	traj_id_ = msg->trajectory_id;
+
 	traj_available_ = true;
 }
 
@@ -200,8 +204,11 @@ void QuadPolyTrajHandler::ReportProgress(void)
 	if(traj_available_)
 	{
 		srcl_lcm_msgs::MissionInfo_t info_msg;
+
+		info_msg.trajectory_id = traj_id_;
 		info_msg.dist_to_goal = remaining_dist_;
 		info_msg.next_wp_id = next_wp_idx_;
+
 		lcm_->publish("quad_ctrl/mission_info", &info_msg);
 	}
 }

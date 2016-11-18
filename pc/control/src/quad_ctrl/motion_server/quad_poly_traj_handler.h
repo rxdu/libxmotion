@@ -41,6 +41,7 @@ private:
 	double remaining_dist_;
 	int next_wp_idx_;
 	double scaling_factor_;
+	int64_t traj_id_;
 
 	QuadFlatTraj flat_traj_;
 

@@ -26,5 +26,5 @@ target_link_libraries(mission map local3d planner utils polyopt quadflat ${OpenC
 add_executable(wp_manager tests/wp_manager.cpp)
 target_link_libraries(wp_manager mission ${LCM_LIBRARIES})
 
-add_executable(test_waypoints tests/test_wpmanager.cpp)
-target_link_libraries(test_waypoints mission map geometry local3d polyopt quadflat utils ${Octomap_LIBS} ${LCM_LIBRARIES})
+#add_executable(test_waypoints tests/test_wpmanager.cpp)
+#target_link_libraries(test_waypoints mission map geometry local3d polyopt quadflat utils ${Octomap_LIBS} ${LCM_LIBRARIES})

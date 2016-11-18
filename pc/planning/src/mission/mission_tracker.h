@@ -36,13 +36,13 @@ public:
 private:
 	std::shared_ptr<lcm::LCM> lcm_;
 
-	uint64_t trajectory_id_;
+	int64_t trajectory_id_;
 
 	double CalcRemainingPathLenght(uint32_t current_idx);
 	void LcmMissionInfoHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::MissionInfo_t* msg);
 
 public:
-	uint64_t path_id_;
+	int64_t path_id_;
 	bool mission_started_;
 	bool replan_needed_;
 	Path_t<GeoMark> active_path_;

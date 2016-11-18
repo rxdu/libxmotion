@@ -181,6 +181,50 @@ std::vector<uint64_t> CubeArray::GetNeighbours(uint64_t id)
 	return neighbours;
 }
 
+std::vector<uint64_t> CubeArray::GetNeighbours(uint64_t id, bool allow_diag)
+{
+	std::vector<uint64_t> neighbours;
+
+	int64_t row, col, hei;
+	row = cubes_[id].index_.x;
+	col = cubes_[id].index_.y;
+	hei = cubes_[id].index_.z;
+
+	// do not allow diagonal movement
+	if(!allow_diag)
+	{
+		if(row - 1 >= 0)
+			neighbours.push_back(GetIDFromIndex(row - 1, col, hei));
+		if(row + 1 < row_size_)
+			neighbours.push_back(GetIDFromIndex(row + 1, col, hei));
+		if(col - 1 >= 0)
+			neighbours.push_back(GetIDFromIndex(row, col - 1, hei));
+		if(col + 1 < col_size_)
+			neighbours.push_back(GetIDFromIndex(row, col + 1, hei));
+		if(hei - 1 >= 0)
+			neighbours.push_back(GetIDFromIndex(row, col, hei - 1));
+		if(hei + 1 < hei_size_)
+			neighbours.push_back(GetIDFromIndex(row, col, hei + 1));
+	}
+	else
+	{
+		for(int i = row - 1; i <= row + 1; i++ )
+			for(int j = col - 1; j <= col + 1; j++ )
+				for(int k = hei - 1; k <= hei + 1; k++ )
+				{
+					if(i >= 0 && i < row_size_ &&
+							j >= 0 && j < col_size_ &&
+							k >= 0 && k < hei_size_)
+					{
+						if(!(i == row && j == col && k == hei))
+							neighbours.push_back(GetIDFromIndex(i, j, k));
+					}
+				}
+	}
+
+	return neighbours;
+}
+
 // this function can only be used when octree is built in vehicle frame
 std::vector<uint64_t> CubeArray::GetStartingCubes()
 {

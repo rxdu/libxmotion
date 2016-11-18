@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 
 		double duration =  double(clock() - start_time)/CLOCKS_PER_SEC;
 		if(duration > 10 && !tree_saved) {
-			server.SaveTreeToFile("octree_obstacle_test_0.bt");
+			server.SaveTreeToFile("octree_obstacle_test_36.bt");
 			tree_saved = true;
 		}
 

@@ -98,7 +98,7 @@ std::shared_ptr<Graph<CubeCell&>> GraphBuilder::BuildFromCubeArray(const std::sh
 		uint64_t current_nodeid = cube.data_id_;
 
 		if(cube_array->cubes_[current_nodeid].occu_ == OccupancyType::FREE) {
-			std::vector<uint64_t> neighbour_list = cube_array->GetNeighbours(current_nodeid);
+			std::vector<uint64_t> neighbour_list = cube_array->GetNeighbours(current_nodeid, true);
 
 //			if(neighbour_list.size() < 6)
 //				continue;

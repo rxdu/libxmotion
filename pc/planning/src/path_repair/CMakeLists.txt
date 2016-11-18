@@ -31,7 +31,8 @@ endif (ENABLE_LOGGING)
 #target_link_libraries(graph_combine_exp map local3d utils ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 add_executable(test_combiner tests/test_combiner.cpp)
-target_link_libraries(test_combiner map geometry local3d polyopt quadflat utils ${Octomap_LIBS} ${LCM_LIBRARIES})
+add_definitions(-DENABLE_G3LOG)
+target_link_libraries(test_combiner map geometry local3d polyopt quadflat utils g3logger ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 add_executable(test_tracking tests/test_tracking.cpp)
 target_link_libraries(test_tracking polyopt quadflat utils ${LCM_LIBRARIES})

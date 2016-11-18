@@ -272,7 +272,7 @@ bool QuadPathRepair::EvaluateNewPath(std::vector<Position3Dd>& new_path)
 {
 	if(std::sqrt(std::pow(new_path.front().x - mission_tracker_->current_position_.x, 2) +
 			std::pow(new_path.front().y - mission_tracker_->current_position_.y, 2) +
-			std::pow(new_path.front().z - mission_tracker_->current_position_.z, 2)) > 0.5)
+			std::pow(new_path.front().z - mission_tracker_->current_position_.z, 2)) > 0.35)
 	{
 		std::cout << "rejected plan due to wrong starting point" << std::endl;
 		return false;
@@ -287,8 +287,14 @@ bool QuadPathRepair::EvaluateNewPath(std::vector<Position3Dd>& new_path)
 	std::cout << "new path dist: " << est_new_dist_ << " , remaining dist of current path: "
 			<< mission_tracker_->remaining_path_length_ << std::endl;
 
-	if(new_path.size() > 0 && est_new_dist_ < mission_tracker_->remaining_path_length_ * 0.85)
+	LOG(INFO) << "old_dist = " <<  mission_tracker_->remaining_path_length_
+					<< " , new_dist = " << est_new_dist_;
+
+	if(new_path.size() > 0 && est_new_dist_ < mission_tracker_->remaining_path_length_ * 0.9)
+	{
+		LOG(INFO) << " --------> new plan found <-------- ";
 		return true;
+	}
 	else
 		return false;
 }
@@ -300,9 +306,12 @@ void QuadPathRepair::LcmOctomapHandler(
 {
 	std::cout << "\n---------------------- New Iteration -------------------------" << std::endl;
 
+	LOG(INFO) << "----------- New iteration -----------";
+
 	if(mission_tracker_->remaining_path_length_ < 0.5)
 	{
 		std::cout << "Getting close to goal, no need to replan" << std::endl;
+		LOG(INFO) << "Getting close to goal, no need to replan";
 		return;
 	}
 
@@ -312,36 +321,48 @@ void QuadPathRepair::LcmOctomapHandler(
 	// record the planning time
 	kf_cmd.sys_time.time_stamp = current_sys_time_;
 
+	LOG(INFO) << "Before build cube array and cube graph";
+
 //	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
 	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctreeWithExtObstacle(octomap_server_.octree_);
 	std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
 
-	//std::cout << "3d info size (cube num, vertex num): " << cubearray->cubes_.size() << " , " << cubegraph->GetGraphVertices().size() << std::endl;
+	LOG(INFO) << "After build cube array and cube graph";
 
 	// don't replan if 3d information is too limited
 	if(mission_tracker_->mission_started_ && (cubearray->cubes_.size() == 0 || cubegraph->GetGraphVertices().size() < 5))
 	{
 		std::cerr << "Too limited 3D information collected" << std::endl;
+		LOG(INFO) << "Too limited 3D information collected";
 		return;
 	}
 
+	LOG(INFO) << "Before combining graphs";
+
 	int64_t geo_start_id_astar = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);//, octomap_server_.octree_transf_);
+
+	LOG(INFO) << "After combining graphs";
 
 	// don't replan if failed to combine graphs
 	if(geo_start_id_astar == -1)
 	{
 		std::cerr << "Failed to combine graphs" << std::endl;
+		LOG(INFO) << "Failed to combine graphs";
 		return;
 	}
 
 	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
 	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
 
+	LOG(INFO) << "Before a* search";
+
 	clock_t exec_time;
 	exec_time = clock();
 	auto comb_path = AStar::Search(gcombiner_.combined_graph_, geo_start_id_astar, geo_goal_id_astar);
 	exec_time = clock() - exec_time;
 	std::cout << "Search in 3D finished in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
+
+	LOG(INFO) << "After a* search";
 
 	std::vector<Position3Dd> raw_wps;
 	for(auto& wp:comb_path)
@@ -355,12 +376,10 @@ void QuadPathRepair::LcmOctomapHandler(
 
 	if(!mission_tracker_->mission_started_ || EvaluateNewPath(selected_wps))
 	{
-		if(mission_tracker_->mission_started_) {
+		if(mission_tracker_->mission_started_)
 			std::cout << "-------- found better solution ---------" << std::endl;
-		}
-		else {
+		else
 			mission_tracker_->mission_started_ = true;
-		}
 
 		// update mission tracking information
 		mission_tracker_->UpdateActivePathWaypoints(comb_path);

@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 	qplanner.SetGoalRefWorldPosition(Position2Dd(1.8, -2.0));
 	qplanner.SetDesiredHeight(0.80);
 
-	//LoggingHelper& logging_helper = LoggingHelper::GetInstance("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/log");
+	LoggingHelper& logging_helper = LoggingHelper::GetInstance("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/log");
 
 	if(qplanner.active_graph_planner_ == GraphPlannerType::NOT_SPECIFIED)
 	{

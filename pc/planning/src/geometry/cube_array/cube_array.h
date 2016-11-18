@@ -98,6 +98,7 @@ public:
 	uint64_t GetIDFromPosition(double x, double y, double z);
 	void UpdateCubeOccupancy(double x, double y, double z, OccupancyType oc_type);
 	std::vector<uint64_t> GetNeighbours(uint64_t id);
+	std::vector<uint64_t> GetNeighbours(uint64_t id, bool allow_diag);
 	std::vector<uint64_t> GetStartingCubes();
 	bool GetCubeIDAtPosition(double x, double y, double z, uint64_t& id);
 

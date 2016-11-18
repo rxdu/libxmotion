@@ -86,9 +86,9 @@ std::shared_ptr<CubeArray> CubeArrayBuilder::BuildCubeArrayFromOctreeWithExtObst
 	tree->getMetricMin(mmin[0],mmin[1],mmin[2]);
 	tree->getMetricMax(mmax[0],mmax[1],mmax[2]);
 
-	std::cout << "tree bound - min: \n" << mmin[0] << " , " << mmin[1] << " , " << mmin[2] << std::endl;
-	std::cout << "tree bound - max: \n" << mmax[0] << " , " << mmax[1] << " , " << mmax[2] << std::endl;
-	std::cout << "tree resolution: " << res << std::endl;
+//	std::cout << "tree bound - min: \n" << mmin[0] << " , " << mmin[1] << " , " << mmin[2] << std::endl;
+//	std::cout << "tree bound - max: \n" << mmax[0] << " , " << mmax[1] << " , " << mmax[2] << std::endl;
+//	std::cout << "tree resolution: " << res << std::endl;
 //	std::cout << "measurement miss prob: " << tree->getProbMiss() << std::endl;
 
 	int32_t row_size = (std::abs(mmin[0]) + std::abs(mmax[0]))/res;

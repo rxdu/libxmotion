@@ -63,8 +63,14 @@ void MissionTracker::LcmMissionInfoHandler(
 		const std::string& chan,
 		const srcl_lcm_msgs::MissionInfo_t* msg)
 {
+	std::cout << "mission info received" << std::endl;
 	if(msg->trajectory_id == path_id_)
 	{
-		remaining_path_length_ = CalcRemainingPathLenght(msg->next_wp_id);//msg->dist_to_goal;
+//		remaining_path_length_ = CalcRemainingPathLenght(msg->next_wp_id);
+		remaining_path_length_ = msg->dist_to_goal;
+	}
+	else
+	{
+		std::cout << "trajectory id doesn't match: " << msg->trajectory_id << " , path id: " << path_id_ << std::endl;
 	}
 }

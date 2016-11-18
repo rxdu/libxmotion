@@ -43,21 +43,24 @@ int main(int argc, char* argv[])
 
 	// read octomap data
 	std::shared_ptr<octomap::OcTree> tree = std::make_shared<octomap::OcTree>(0.35);
-	std::string tree_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/experiments/set3/octree_from_server_node_eset3.bt";
+	std::string tree_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/build/bin/octree_obstacle_test_36.bt";
+	//"/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/experiments/set3/octree_from_server_node_eset3.bt";
 	tree->readBinary(tree_path);
 
 	// read 2d map data
 	Mat input_image;
 	std::string image_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/experiments/set3/map_path_repair.png";
 	MapUtils::ReadImageFromFile(image_path, input_image);
-	Map_t<SquareGrid> sgrid_map = SGridBuilder::BuildSquareGridMap(input_image, 32);
+//	Map_t<SquareGrid> sgrid_map = SGridBuilder::BuildSquareGridMap(input_image, 32);
+	Map_t<SquareGrid> sgrid_map = SGridBuilder::BuildSquareGridMapWithExtObstacle(input_image, 32,1);
 	sgrid_map.info.SetWorldSize(5.0, 5.0);
 	sgrid_map.info.origin_offset_x = 2.5;
 	sgrid_map.info.origin_offset_y = 2.5;
 
 	std::shared_ptr<Graph_t<SquareCell*>> map_graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);
 
-	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(tree);
+	//std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(tree);
+	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctreeWithExtObstacle(tree);
 	std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
 
 	////////////////////////////////////////////////////////////////////////////////////////////
