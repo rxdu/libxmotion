@@ -312,7 +312,8 @@ void QuadPathRepair::LcmOctomapHandler(
 	// record the planning time
 	kf_cmd.sys_time.time_stamp = current_sys_time_;
 
-	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
+//	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
+	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctreeWithExtObstacle(octomap_server_.octree_);
 	std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
 
 	//std::cout << "3d info size (cube num, vertex num): " << cubearray->cubes_.size() << " , " << cubegraph->GetGraphVertices().size() << std::endl;

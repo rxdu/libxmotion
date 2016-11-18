@@ -139,24 +139,24 @@ std::shared_ptr<CubeArray> CubeArrayBuilder::BuildCubeArrayFromOctreeWithExtObst
 			edge_obs_cells.push_back(id);
 	}
 
-//	int expand_num = 1;
-//	for(auto& cid : edge_obs_cells)
-//	{
-//		for(int i = cube_array->cubes_[cid].index_.x - expand_num; i <= cube_array->cubes_[cid].index_.x + expand_num; i++ )
-//			for(int j = cube_array->cubes_[cid].index_.y - expand_num; j <= cube_array->cubes_[cid].index_.y + expand_num; j++ )
-//				for(int k = cube_array->cubes_[cid].index_.z - expand_num; k <= cube_array->cubes_[cid].index_.z + expand_num; k++ )
-//			{
-//				if(i >= 0 && i < cube_array->row_size_ &&
-//						j >= 0 && j < cube_array->col_size_ &&
-//						k >= 0 && k < cube_array->hei_size_)
-//				{
-//					uint32_t checked_id = cube_array->GetIDFromIndex(i,j,k);
-//
-//					if(checked_id != cid && cube_array->cubes_[checked_id].occu_ != OccupancyType::OCCUPIED)
-//						cube_array->cubes_[checked_id].occu_ = OccupancyType::EXPANDED_OBS;
-//				}
-//			}
-//	}
+	int expand_num = 1;
+	for(auto& cid : edge_obs_cells)
+	{
+		for(int i = cube_array->cubes_[cid].index_.x - expand_num; i <= cube_array->cubes_[cid].index_.x + expand_num; i++ )
+			for(int j = cube_array->cubes_[cid].index_.y - expand_num; j <= cube_array->cubes_[cid].index_.y + expand_num; j++ )
+				for(int k = cube_array->cubes_[cid].index_.z - expand_num; k <= cube_array->cubes_[cid].index_.z + expand_num; k++ )
+			{
+				if(i >= 0 && i < cube_array->row_size_ &&
+						j >= 0 && j < cube_array->col_size_ &&
+						k >= 0 && k < cube_array->hei_size_)
+				{
+					uint32_t checked_id = cube_array->GetIDFromIndex(i,j,k);
+
+					if(checked_id != cid && cube_array->cubes_[checked_id].occu_ != OccupancyType::OCCUPIED)
+						cube_array->cubes_[checked_id].occu_ = OccupancyType::EXPANDED_OBS;
+				}
+			}
+	}
 
 	return cube_array;
 }

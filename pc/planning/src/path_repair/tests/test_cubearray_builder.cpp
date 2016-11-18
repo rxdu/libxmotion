@@ -44,7 +44,8 @@ int main(int argc, char* argv[])
 	// read octomap data
 	std::shared_ptr<octomap::OcTree> tree = std::make_shared<octomap::OcTree>(0.35);
 //	std::string tree_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/experiments/set3/octree_from_server_node_eset3.bt";
-	std::string tree_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/octomap/octree_obstacle_test.bt";
+//	std::string tree_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/octomap/octree_obstacle_test.bt";
+	std::string tree_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/build/bin/octree_obstacle_test_0.bt";
 	tree->readBinary(tree_path);
 
 	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctreeWithExtObstacle(tree);
