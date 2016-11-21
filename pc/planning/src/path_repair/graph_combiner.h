@@ -181,9 +181,21 @@ public:
 							std::pow(vehicle_2dstart_mark.position.y - vehicle_3dstart_mark.position.y, 2) +
 							std::pow(vehicle_2dstart_mark.position.z - vehicle_3dstart_mark.position.z, 2));
 					combined_graph_.AddEdge(vehicle_2dstart_mark, vehicle_3dstart_mark, cost);
-				}
 
-				start_id = geo2d_start_id;
+					double dist_2d = std::sqrt(std::pow(vehicle_2dstart_mark.position.x - pos_.x, 2) +
+							std::pow(vehicle_2dstart_mark.position.y - pos_.y, 2) +
+							std::pow(vehicle_2dstart_mark.position.z - pos_.z, 2));
+					double dist_3d = std::sqrt(std::pow(vehicle_3dstart_mark.position.x - pos_.x, 2) +
+							std::pow(vehicle_3dstart_mark.position.y - pos_.y, 2) +
+							std::pow(vehicle_3dstart_mark.position.z - pos_.z, 2));
+
+					if(dist_2d <= dist_3d)
+						start_id = geo2d_start_id;
+					else
+						start_id = geo3d_start_id;
+				}
+				else
+					start_id = geo2d_start_id;
 			}
 			else
 			{
