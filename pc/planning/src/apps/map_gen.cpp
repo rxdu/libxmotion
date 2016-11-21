@@ -28,7 +28,7 @@ int main(int argc, char** argv )
 {
 	Mat input_map;
 	bool use_input_image = false;
-	bool show_padding = false;
+	bool show_padding = true;
 
 	Map_t<SquareGrid> sgrid_map;
 
@@ -43,7 +43,7 @@ int main(int argc, char** argv )
 		}
 		else
 		{
-			sgrid_map = SGridBuilder::BuildSquareGridMap(input_map, 32);
+			sgrid_map = SGridBuilder::BuildSquareGridMap(input_map, 16);
 			use_input_image = true;
 		}
 	}
@@ -106,7 +106,8 @@ int main(int argc, char** argv )
 
 	waitKey(0);
 
-	imwrite( "map_gen_path_repair.jpg", vis_img);
+	//imwrite( "map_gen_result.jpg", vis_img);
+	imwrite( "map_gen_result_padded.jpg", vis_img);
 
 	return 0;
 }

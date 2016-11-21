@@ -135,6 +135,9 @@ public:
 		Position2D map2d_start_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(pos_.x,pos_.y), base_map_info_);
 		uint64_t map2d_start_id = base_ds_->GetIDFromPosition(map2d_start_pos.x, map2d_start_pos.y);
 
+		std::cout << "quad pos: " << pos_.x << " , " << pos_.y << std::endl;
+		std::cout << "calc quad pos: " << map2d_start_pos.x << " , " << map2d_start_pos.y << std::endl;
+
 		uint64_t map3d_start_id;
 		bool found_start_in2d = false;
 		if(base_graph_->GetVertexFromID(map2d_start_id) != nullptr)

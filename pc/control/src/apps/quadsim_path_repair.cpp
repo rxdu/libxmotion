@@ -22,10 +22,8 @@ int main(int arc, char* argv[])
 	std::shared_ptr<QuadHbirdSimController> controller = std::make_shared<QuadHbirdSimController>();
 
 	// set quadrotor init pose
-//	controller->SetInitPose(-1.8,1,0.5,-M_PI/4);
-//	controller->SetInitPose(-1.8,1.2,0.6,-M_PI/4);
-//	controller->SetInitPose(-1.8,0.6,0.8, 0);
-	controller->SetInitPose(-1.8,2,0.8,-M_PI/5); // demo for dynamic replanning from origin to fixed point
+	//controller->SetInitPose(-1.8,2,0.8,-M_PI/5); // demo for dynamic replanning from origin to a fixed point, case 1
+	controller->SetInitPose(-11.0,8.5,1.5,-M_PI/5); // demo for dynamic replanning from origin to a fixed point, case 2
 	controller->BroadcastRobotState(true);
 	controller->InitLogger("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/control/log/quad");
 	controller->SetMotionMode(MotionMode::POLYNOMIAL);

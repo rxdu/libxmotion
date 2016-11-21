@@ -24,9 +24,9 @@ std::shared_ptr<CubeArray> CubeArrayBuilder::BuildCubeArrayFromOctree(std::share
 	tree->getMetricMin(mmin[0],mmin[1],mmin[2]);
 	tree->getMetricMax(mmax[0],mmax[1],mmax[2]);
 
-	std::cout << "tree bound - min: \n" << mmin[0] << " , " << mmin[1] << " , " << mmin[2] << std::endl;
-	std::cout << "tree bound - max: \n" << mmax[0] << " , " << mmax[1] << " , " << mmax[2] << std::endl;
-	std::cout << "tree resolution: " << res << std::endl;
+//	std::cout << "tree bound - min: \n" << mmin[0] << " , " << mmin[1] << " , " << mmin[2] << std::endl;
+//	std::cout << "tree bound - max: \n" << mmax[0] << " , " << mmax[1] << " , " << mmax[2] << std::endl;
+//	std::cout << "tree resolution: " << res << std::endl;
 //	std::cout << "measurement miss prob: " << tree->getProbMiss() << std::endl;
 
 	int32_t row_size = (std::abs(mmin[0]) + std::abs(mmax[0]))/res;
@@ -39,8 +39,8 @@ std::shared_ptr<CubeArray> CubeArrayBuilder::BuildCubeArrayFromOctree(std::share
 	//std::cout << std::setprecision(20) << -mmin[1]/res << '\n';
 	//std::cout << "calc: " << -1.5/0.3 << " , col: " << - mmin[1]/res << " val: " << col_offset << std::endl;
 
-	std::cout << "\nsize: " << row_size << " , " << col_size << " , " << hei_size << std::endl;
-	std::cout << "offset: " << row_offset << " , " << col_offset << " , " << hei_offset << std::endl << std::endl;
+//	std::cout << "\nsize: " << row_size << " , " << col_size << " , " << hei_size << std::endl;
+//	std::cout << "offset: " << row_offset << " , " << col_offset << " , " << hei_offset << std::endl << std::endl;
 
 	std::shared_ptr<CubeArray> cube_array = std::make_shared<CubeArray>(row_size,col_size,hei_size,tree->getResolution());
 	cube_array->SetOriginOffset(row_offset, col_offset, hei_offset);
@@ -99,8 +99,8 @@ std::shared_ptr<CubeArray> CubeArrayBuilder::BuildCubeArrayFromOctreeWithExtObst
 	int32_t col_offset = std::round(-mmin[1]/res);
 	int32_t hei_offset = std::round(-mmin[2]/res);
 
-	std::cout << "\nsize: " << row_size << " , " << col_size << " , " << hei_size << std::endl;
-	std::cout << "offset: " << row_offset << " , " << col_offset << " , " << hei_offset << std::endl << std::endl;
+//	std::cout << "\nsize: " << row_size << " , " << col_size << " , " << hei_size << std::endl;
+//	std::cout << "offset: " << row_offset << " , " << col_offset << " , " << hei_offset << std::endl << std::endl;
 
 	std::shared_ptr<CubeArray> cube_array = std::make_shared<CubeArray>(row_size,col_size,hei_size,tree->getResolution());
 	cube_array->SetOriginOffset(row_offset, col_offset, hei_offset);

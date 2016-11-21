@@ -120,14 +120,19 @@ void QuadPathRepair::SetGoalMapPosition(Position2D pos)
 
 void QuadPathRepair::SetStartRefWorldPosition(Position2Dd pos)
 {
+	std::cout << "\nposition in ref world: " << pos.x << " , " << pos.y << std::endl;
+
 	Position2Dd mpos;
 	mpos = MapUtils::CoordinatesFromRefWorldToMapWorld(pos, GetActiveMapInfo());
+	std::cout << "position in map world: " << mpos.x << " , " << mpos.y << std::endl;
 
 	Position2D map_pos;
 	map_pos = MapUtils::CoordinatesFromMapWorldToMap(mpos, GetActiveMapInfo());
+	std::cout << "position in map: " << map_pos.x << " , " << map_pos.y << std::endl;
 
 	Position2D map_padded_pos;
 	map_padded_pos = MapUtils::CoordinatesFromOriginalToPadded(map_pos, GetActiveMapInfo());
+	std::cout << "position in padded map: " << map_padded_pos.x << " , " << map_padded_pos.y << std::endl;
 
 	SetStartMapPosition(map_padded_pos);
 }
