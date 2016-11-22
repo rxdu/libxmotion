@@ -59,7 +59,7 @@ void TestCase2_Config(QuadPathRepair& qplanner)
 	qplanner.EnablePositionAutoUpdate(true);
 
 	qplanner.SetGoalRefWorldPosition(Position2Dd(11.0, -8.5));
-	qplanner.SetDesiredHeight(1.5);
+	qplanner.SetDesiredHeight(1.8);
 }
 
 int main(int argc, char* argv[])

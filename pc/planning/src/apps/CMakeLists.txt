@@ -24,6 +24,6 @@ add_executable(map_gen map_gen.cpp)
 target_link_libraries(map_gen map vis ${OpenCV_LIBS})
 
 add_executable(map_param map_param.cpp)
-target_link_libraries(map_param geometry vis ${OpenCV_LIBS})
+target_link_libraries(map_param geometry vis ${OpenCV_LIBS} ${LCM_LIBRARIES})
 
 

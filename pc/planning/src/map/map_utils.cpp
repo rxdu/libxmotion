@@ -118,6 +118,7 @@ Position2Dd MapUtils::CoordinatesFromMapWorldToRefWorld(Position2Dd map_world_po
 {
 	Position2Dd rpos;
 
+	// origin_offset_x/y defined relative to map world
 	rpos.x = - (map_world_pos.y - info.origin_offset_y);
 	rpos.y = - (map_world_pos.x - info.origin_offset_x);
 
@@ -128,8 +129,10 @@ Position2Dd MapUtils::CoordinatesFromRefWorldToMapWorld(Position2Dd ref_world_po
 {
 	Position2Dd mpos;
 
-	mpos.x = - (ref_world_pos.y - info.origin_offset_y);
-	mpos.y = - (ref_world_pos.x - info.origin_offset_x);
+	// origin_offset_x/y defined relative to map world, so exchange x and y values
+	//	when calculating with ref world position
+	mpos.x = - (ref_world_pos.y - info.origin_offset_x);
+	mpos.y = - (ref_world_pos.x - info.origin_offset_y);
 
 	return mpos;
 }
@@ -155,10 +158,16 @@ Position2D MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd world_pos, M
 	Position2D map_pos;
 	Position2D map_padded_pos;
 
+	std::cout << "conversion input: " << world_pos.x << " , " << world_pos.y << std::endl;
+
 	mapw_pos = MapUtils::CoordinatesFromRefWorldToMapWorld(world_pos, info);
+	std::cout << "map world: " << mapw_pos.x << " , " << mapw_pos.y << std::endl;
+
 	map_pos = MapUtils::CoordinatesFromMapWorldToMap(mapw_pos, info);
+	std::cout << "map: " << map_pos.x << " , " << map_pos.y << std::endl;
 
 	map_padded_pos = MapUtils::CoordinatesFromOriginalToPadded(map_pos, info);
+	std::cout << "padded map: " << map_padded_pos.x << " , " << map_padded_pos.y << std::endl;
 
 	return map_padded_pos;
 }

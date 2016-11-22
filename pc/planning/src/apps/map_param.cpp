@@ -13,6 +13,10 @@
 // opencv
 #include "opencv2/opencv.hpp"
 
+// headers for lcm
+#include <lcm/lcm-cpp.hpp>
+#include "lcmtypes/comm.hpp"
+
 // user
 #include "graph/graph.h"
 #include "graph/astar.h"
@@ -26,23 +30,35 @@
 using namespace cv;
 using namespace srcl_ctrl;
 
-Position2D ConvertGoalRefWorldPositionToMapPosition(Position2Dd pos, MapInfo info)
+template<typename PlannerType>
+srcl_lcm_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner)
 {
-	std::cout << "\nposition in ref world: " << pos.x << " , " << pos.y << std::endl;
+	srcl_lcm_msgs::Graph_t graph_msg;
 
-	Position2Dd mpos;
-	mpos = MapUtils::CoordinatesFromRefWorldToMapWorld(pos, info);
-	std::cout << "position in map world: " << mpos.x << " , " << mpos.y << std::endl;
+	graph_msg.vertex_num = planner.graph_->GetGraphVertices().size();
+	for(auto& vtx : planner.graph_->GetGraphVertices())
+	{
+		srcl_lcm_msgs::Vertex_t vertex;
+		vertex.id = vtx->vertex_id_;
 
-	Position2D map_pos;
-	map_pos = MapUtils::CoordinatesFromMapWorldToMap(mpos, info);
-	std::cout << "position in map: " << map_pos.x << " , " << map_pos.y << std::endl;
+		Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(vtx->bundled_data_->location_, planner.map_.info);
+		vertex.position[0] = ref_world_pos.x;
+		vertex.position[1] = ref_world_pos.y;
 
-	Position2D map_padded_pos;
-	map_padded_pos = MapUtils::CoordinatesFromOriginalToPadded(map_pos, info);
-	std::cout << "position in padded map: " << map_padded_pos.x << " , " << map_padded_pos.y << std::endl;
+		graph_msg.vertices.push_back(vertex);
+	}
 
-	return map_padded_pos;
+	graph_msg.edge_num = planner.graph_->GetGraphUndirectedEdges().size();
+	for(auto& eg : planner.graph_->GetGraphUndirectedEdges())
+	{
+		srcl_lcm_msgs::Edge_t edge;
+		edge.id_start = eg.src_->vertex_id_;
+		edge.id_end = eg.dst_->vertex_id_;
+
+		graph_msg.edges.push_back(edge);
+	}
+
+	return graph_msg;
 }
 
 int main(int argc, char** argv )
@@ -56,7 +72,7 @@ int main(int argc, char** argv )
 
 	map_config.SetMapPath(image_dir);
 	map_config.SetMapType(MapDataModel::SQUARE_GRID, 16);
-	map_config.SetOriginOffset(12.5, 10.0);
+	map_config.SetOriginOffset(10.0, 12.5);
 
 	sgrid_planner.UpdateMapConfig(map_config);
 	sgrid_planner.map_.info.SetWorldSize(20.0, 25.0);
@@ -65,7 +81,6 @@ int main(int argc, char** argv )
 	Position2Dd start_w(-11.0,8.5);
 	Position2Dd goal_w(11.0, -8.5);
 
-	//Position2D start_m = ConvertGoalRefWorldPositionToMapPosition(start_w, sgrid_planner.map_.info);
 	Position2D start_m = MapUtils::CoordinatesFromRefWorldToMapPadded(start_w, sgrid_planner.map_.info);
 	Position2D goal_m = MapUtils::CoordinatesFromRefWorldToMapPadded(goal_w, sgrid_planner.map_.info);
 
@@ -91,6 +106,36 @@ int main(int argc, char** argv )
 		path = sgrid_planner.Search(start_vertex_id, goal_vertex_id);
 		exec_time = clock() - exec_time;
 		std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
+	}
+
+	/*** Send data to Rviz ***/
+	std::shared_ptr<lcm::LCM> lcm = std::make_shared<lcm::LCM>();
+
+	if(!lcm->good())
+	{
+		std::cout << "ERROR: Failed to initialize LCM." << std::endl;
+		return -1;
+	}
+
+	srcl_lcm_msgs::Graph_t graph_msg = GetLcmGraphFromPlanner(sgrid_planner);
+	lcm->publish("quad_planner/quad_planner_graph", &graph_msg);
+
+	if(!path.empty())
+	{
+		srcl_lcm_msgs::Path_t path_msg;
+
+		path_msg.waypoint_num = path.size();
+		for(auto& wp : path)
+		{
+			srcl_lcm_msgs::WayPoint_t waypoint;
+			waypoint.positions[0] = wp->bundled_data_->location_.x;
+			waypoint.positions[1] = wp->bundled_data_->location_.y;
+			waypoint.positions[2] = 0.1;
+
+			path_msg.waypoints.push_back(waypoint);
+		}
+
+		lcm->publish("quad_planner/quad_planner_graph_path", &path_msg);
 	}
 
 	/*** Visualize the map and graph ***/
