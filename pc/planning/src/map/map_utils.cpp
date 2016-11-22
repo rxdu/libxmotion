@@ -158,16 +158,16 @@ Position2D MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd world_pos, M
 	Position2D map_pos;
 	Position2D map_padded_pos;
 
-	std::cout << "conversion input: " << world_pos.x << " , " << world_pos.y << std::endl;
+	//std::cout << "conversion input: " << world_pos.x << " , " << world_pos.y << std::endl;
 
 	mapw_pos = MapUtils::CoordinatesFromRefWorldToMapWorld(world_pos, info);
-	std::cout << "map world: " << mapw_pos.x << " , " << mapw_pos.y << std::endl;
+	//std::cout << "map world: " << mapw_pos.x << " , " << mapw_pos.y << std::endl;
 
 	map_pos = MapUtils::CoordinatesFromMapWorldToMap(mapw_pos, info);
-	std::cout << "map: " << map_pos.x << " , " << map_pos.y << std::endl;
+	//std::cout << "map: " << map_pos.x << " , " << map_pos.y << std::endl;
 
 	map_padded_pos = MapUtils::CoordinatesFromOriginalToPadded(map_pos, info);
-	std::cout << "padded map: " << map_padded_pos.x << " , " << map_padded_pos.y << std::endl;
+	//std::cout << "padded map: " << map_padded_pos.x << " , " << map_padded_pos.y << std::endl;
 
 	return map_padded_pos;
 }

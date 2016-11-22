@@ -92,21 +92,22 @@ int main(int argc, char** argv )
 	else
 		GraphVis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
-	if(!show_padding)
-	{
-		Range rngx(0 + sgrid_map.info.padded_left, vis_img.cols - sgrid_map.info.padded_right);
-		Range rngy(0 + sgrid_map.info.padded_top, vis_img.rows - sgrid_map.info.padded_bottom);
+	Range rngx(0 + sgrid_map.info.padded_left, vis_img.cols - sgrid_map.info.padded_right);
+	Range rngy(0 + sgrid_map.info.padded_top, vis_img.rows - sgrid_map.info.padded_bottom);
 
-		// Points and Size go (x,y); (width,height) ,- Mat has (row,col).
-		vis_img = vis_img(rngy,rngx);
-	}
+	// Points and Size go (x,y); (width,height) ,- Mat has (row,col).
+	Mat vis_img_no_padding = vis_img(rngy,rngx);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
-	imshow("Processed Image", vis_img);
+
+	if(show_padding)
+		imshow("Processed Image", vis_img);
+	else
+		imshow("Processed Image", vis_img_no_padding);
 
 	waitKey(0);
 
-	//imwrite( "map_gen_result.jpg", vis_img);
+	imwrite( "map_gen_result.jpg", vis_img_no_padding);
 	imwrite( "map_gen_result_padded.jpg", vis_img);
 
 	return 0;
