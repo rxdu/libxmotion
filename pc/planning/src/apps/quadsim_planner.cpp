@@ -95,7 +95,7 @@ int main(int argc, char* argv[])
 	QuadPathRepair qplanner(lcm);
 
 	//TestCase1_Config(qplanner);
-	TestCase1_Config(qplanner);
+	TestCase3_Config(qplanner);
 
 #ifdef ENABLE_G3LOG
 	LoggingHelper& logging_helper = LoggingHelper::GetInstance("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/log");
