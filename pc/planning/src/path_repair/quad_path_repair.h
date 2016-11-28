@@ -73,6 +73,7 @@ private:
 	srcl_lcm_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner);
 	bool EvaluateNewPath(std::vector<Position3Dd>& new_path);
 	bool CheckPathSafety(std::shared_ptr<CubeArray> cube_array);
+	int32_t FindFurthestPointWithinRadius(std::vector<Position3Dd>& new_path, double radius) const;
 
 public:
 	// graph planner configuration

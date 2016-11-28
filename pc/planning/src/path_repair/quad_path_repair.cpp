@@ -120,19 +120,19 @@ void QuadPathRepair::SetGoalMapPosition(Position2D pos)
 
 void QuadPathRepair::SetStartRefWorldPosition(Position2Dd pos)
 {
-	std::cout << "\nposition in ref world: " << pos.x << " , " << pos.y << std::endl;
+//	std::cout << "\nposition in ref world: " << pos.x << " , " << pos.y << std::endl;
 
 	Position2Dd mpos;
 	mpos = MapUtils::CoordinatesFromRefWorldToMapWorld(pos, GetActiveMapInfo());
-	std::cout << "position in map world: " << mpos.x << " , " << mpos.y << std::endl;
+//	std::cout << "position in map world: " << mpos.x << " , " << mpos.y << std::endl;
 
 	Position2D map_pos;
 	map_pos = MapUtils::CoordinatesFromMapWorldToMap(mpos, GetActiveMapInfo());
-	std::cout << "position in map: " << map_pos.x << " , " << map_pos.y << std::endl;
+//	std::cout << "position in map: " << map_pos.x << " , " << map_pos.y << std::endl;
 
 	Position2D map_padded_pos;
 	map_padded_pos = MapUtils::CoordinatesFromOriginalToPadded(map_pos, GetActiveMapInfo());
-	std::cout << "position in padded map: " << map_padded_pos.x << " , " << map_padded_pos.y << std::endl;
+//	std::cout << "position in padded map: " << map_padded_pos.x << " , " << map_padded_pos.y << std::endl;
 
 	SetStartMapPosition(map_padded_pos);
 }
@@ -304,6 +304,31 @@ bool QuadPathRepair::EvaluateNewPath(std::vector<Position3Dd>& new_path)
 		return false;
 }
 
+int32_t QuadPathRepair::FindFurthestPointWithinRadius(std::vector<Position3Dd>& new_path, double radius) const
+{
+	Position3Dd start = new_path.front();
+	int32_t goal_idx = new_path.size() - 1;
+
+	int32_t idx = 0;
+	for(auto it = new_path.begin(); it != new_path.end() - 1; it++)
+	{
+		double dist1 = std::sqrt(std::pow((*it).x - start.x,2) +
+				std::pow((*it).y - start.y,2) +
+				std::pow((*it).z - start.z,2));
+		double dist2 = std::sqrt(std::pow((*(it+1)).x - start.x,2) +
+				std::pow((*(it+1)).y - start.y,2) +
+				std::pow((*(it+1)).z - start.z,2));
+
+		if(dist1 <= radius && dist2 > radius) {
+			goal_idx = idx;
+		}
+
+		idx++;
+	}
+
+	return goal_idx;
+}
+
 void QuadPathRepair::LcmOctomapHandler(
 		const lcm::ReceiveBuffer* rbuf,
 		const std::string& chan,
@@ -392,12 +417,14 @@ void QuadPathRepair::LcmOctomapHandler(
 
 		kf_cmd.path_id = mission_tracker_->path_id_;
 
-		// send data for visualization
-		Send3DSearchPathToVis(selected_wps);
-
+		//**** Strategy Change ****//
+		//Eigen::Vector3d goal_vec(selected_wps.back().x, selected_wps.back().y, 0);
+		int32_t fpt_idx = FindFurthestPointWithinRadius(selected_wps, 5.0);
+		Eigen::Vector3d furthest_pt_vec(selected_wps[fpt_idx].x, selected_wps[fpt_idx].y, 0);
 		Eigen::Vector3d goal_vec(selected_wps.back().x, selected_wps.back().y, 0);
 
 		kf_cmd.kf_num = selected_wps.size();
+		int32_t wp_cnt = 0;
 		for(auto& wp:selected_wps)
 		{
 			srcl_lcm_msgs::Keyframe_t kf;
@@ -408,17 +435,26 @@ void QuadPathRepair::LcmOctomapHandler(
 			kf.positions[2] = wp.z;
 
 			Eigen::Vector3d pos_vec(wp.x, wp.y, 0);
-			Eigen::Vector3d dir_vec = goal_vec - pos_vec;
+			Eigen::Vector3d dir_vec;
+			if(wp_cnt < fpt_idx)
+				dir_vec = furthest_pt_vec - pos_vec;
+			else
+				dir_vec = goal_vec - pos_vec;
 			Eigen::Vector3d x_vec(1,0,0);
 			double angle = - std::acos(dir_vec.normalized().dot(x_vec));
+			//std::cout<<"angle: " << angle << " , vec: " << dir_vec << std::endl;
 			kf.yaw = angle;
 
 			kf_cmd.kfs.push_back(kf);
+			wp_cnt++;
 		}
 		kf_cmd.kfs.front().yaw = 0;
 		kf_cmd.kfs.back().yaw = -M_PI/4;
 
 		lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
+
+		// send data for visualization
+		Send3DSearchPathToVis(selected_wps);
 	}
 
 //	if(count++ % 20 == 0)
