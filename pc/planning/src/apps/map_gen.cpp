@@ -16,6 +16,7 @@
 
 // user
 #include "graph/graph.h"
+#include "graph/astar.h"
 #include "vis/graph_vis.h"
 #include "geometry/graph_builder.h"
 #include "map/image_utils.h"
@@ -43,7 +44,8 @@ int main(int argc, char** argv )
 		}
 		else
 		{
-			sgrid_map = SGridBuilder::BuildSquareGridMap(input_map, 16);
+			//sgrid_map = SGridBuilder::BuildSquareGridMap(input_map, 16);
+			sgrid_map = SGridBuilder::BuildSquareGridMapWithExtObstacle(input_map, 32, 1);
 			use_input_image = true;
 		}
 	}
@@ -85,18 +87,35 @@ int main(int argc, char** argv )
 		sgrid_map.data_model = grid;
 	}
 
-	Mat vis_img;
+	std::shared_ptr<Graph_t<SquareCell*>> graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);
+	Vertex_t<SquareCell*> * start_vertex;
+	Vertex_t<SquareCell*> * finish_vertex;
+	start_vertex = graph->GetVertexFromID(836);
+	finish_vertex = graph->GetVertexFromID(186);
+
+	if(start_vertex == nullptr || finish_vertex == nullptr) {
+		std::cerr << "Invalid starting and finishing vertices, please choose two vertices in free space!" << std::endl;
+		return 0;
+	}
+
+	Path_t<SquareCell*> path = AStar::Search(graph,start_vertex,finish_vertex);
+
+	Mat vis_img, vis_graph;
 
 	if(sgrid_map.padded_image.empty())
 		GraphVis::VisSquareGrid(*sgrid_map.data_model, vis_img);
 	else
 		GraphVis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
+	GraphVis::VisSquareGridGraph(*graph, vis_img, vis_graph, true);
+	GraphVis::VisSquareGridPath(path, vis_graph, vis_graph);
+
 	Range rngx(0 + sgrid_map.info.padded_left, vis_img.cols - sgrid_map.info.padded_right);
 	Range rngy(0 + sgrid_map.info.padded_top, vis_img.rows - sgrid_map.info.padded_bottom);
 
 	// Points and Size go (x,y); (width,height) ,- Mat has (row,col).
 	Mat vis_img_no_padding = vis_img(rngy,rngx);
+	Mat vis_graph_no_padding = vis_graph(rngy,rngx);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 
@@ -109,6 +128,7 @@ int main(int argc, char** argv )
 
 	imwrite( "map_gen_result.jpg", vis_img_no_padding);
 	imwrite( "map_gen_result_padded.jpg", vis_img);
+	imwrite( "map_gen_result_graph_path.jpg", vis_graph_no_padding);
 
 	return 0;
 }
