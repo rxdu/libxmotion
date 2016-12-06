@@ -32,7 +32,7 @@ void TestCase1_Config(QuadPathRepair& qplanner)
 	MapConfig map_config;
 
 	map_config.SetMapPath(image_dir);
-	map_config.SetMapType(MapDataModel::SQUARE_GRID, 16);
+	map_config.SetMapType(MapDataModel::SQUARE_GRID, 32);
 	//	map_config.SetMapType(MapDataModel::QUAD_TREE, 6);
 	map_config.SetOriginOffset(2.5, 2.5);
 

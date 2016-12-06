@@ -84,6 +84,12 @@ $ sudo make install
 
 For more information, refer to this official [wiki](http://www.vtk.org/Wiki/VTK/Configure_and_Build).
 
+* Boost (Required by dependent libraries)
+
+```
+$ sudo apt-get install libboost-all-dev
+```
+
 ## 3. Use Eclipse to build project
 
 * Create a new folder outside of the project root directory
