@@ -369,11 +369,11 @@ void QuadPathRepair::LcmOctomapHandler(
 		return;
 	}
 
-	LOG(INFO) << "Before combining graphs";
+	//LOG(INFO) << "Before combining graphs";
 
 	int64_t geo_start_id_astar = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);//, octomap_server_.octree_transf_);
 
-	LOG(INFO) << "After combining graphs";
+	//LOG(INFO) << "After combining graphs";
 
 	// don't replan if failed to combine graphs
 	if(geo_start_id_astar == -1)
@@ -386,7 +386,7 @@ void QuadPathRepair::LcmOctomapHandler(
 	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
 	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
 
-	LOG(INFO) << "Before a* search";
+	//LOG(INFO) << "Before a* search";
 
 	clock_t exec_time;
 	exec_time = clock();
@@ -394,7 +394,7 @@ void QuadPathRepair::LcmOctomapHandler(
 	exec_time = clock() - exec_time;
 	std::cout << "Search in 3D finished in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 
-	LOG(INFO) << "After a* search";
+	//LOG(INFO) << "After a* search";
 
 	std::vector<Position3Dd> raw_wps;
 	for(auto& wp:comb_path)
