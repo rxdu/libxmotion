@@ -298,6 +298,8 @@ bool QuadPathRepair::EvaluateNewPath(std::vector<Position3Dd>& new_path)
 	if(new_path.size() > 0 && est_new_dist_ < mission_tracker_->remaining_path_length_ * 0.95)
 	{
 		LOG(INFO) << " --------> new plan found <-------- ";
+		LOG(INFO) << "remaining path length: " <<  mission_tracker_->remaining_path_length_
+							<< " , new path length: " << est_new_dist_;
 		return true;
 	}
 	else
@@ -351,13 +353,13 @@ void QuadPathRepair::LcmOctomapHandler(
 	// record the planning time
 	kf_cmd.sys_time.time_stamp = current_sys_time_;
 
-	LOG(INFO) << "Before build cube array and cube graph";
+	//LOG(INFO) << "Before build cube array and cube graph";
 
-//	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
+	//std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
 	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctreeWithExtObstacle(octomap_server_.octree_);
 	std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
 
-	LOG(INFO) << "After build cube array and cube graph";
+	//LOG(INFO) << "After build cube array and cube graph";
 
 	// don't replan if 3d information is too limited
 	if(mission_tracker_->mission_started_ && (cubearray->cubes_.size() == 0 || cubegraph->GetGraphVertices().size() < 5))
