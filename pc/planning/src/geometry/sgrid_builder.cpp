@@ -115,7 +115,7 @@ Map_t<SquareGrid> SGridBuilder::BuildSquareGridMap(cv::InputArray _src, uint32_t
 	// binarize grayscale image
 	Mat image_bin;
 	Mat image_bin_expand;
-	ImageUtils::BinarizeImage(src, image_bin, 200);
+	ImageUtils::BinarizeImage(src, image_bin, 230);
 	//ImageUtils::ExpandObstacleAreaOnImage(image_bin, image_bin_expand, 50);
 
 	// pad image to 2^n on each side so that we can calculate

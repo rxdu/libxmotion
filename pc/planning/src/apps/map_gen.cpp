@@ -28,7 +28,7 @@ int main(int argc, char** argv )
 {
 	Mat input_map;
 	bool use_input_image = false;
-	bool show_padding = true;
+	bool show_padding = false;
 
 	Map_t<SquareGrid> sgrid_map;
 
@@ -43,7 +43,7 @@ int main(int argc, char** argv )
 		}
 		else
 		{
-			sgrid_map = SGridBuilder::BuildSquareGridMap(input_map, 16);
+			sgrid_map = SGridBuilder::BuildSquareGridMap(input_map, 32);
 			use_input_image = true;
 		}
 	}

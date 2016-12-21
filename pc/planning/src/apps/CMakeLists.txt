@@ -20,6 +20,9 @@ else()
     endif (ENABLE_LOGGING)  
 endif()
 
+add_executable(planar_search planar_search.cpp)
+target_link_libraries(planar_search map vis ${OpenCV_LIBS})
+
 add_executable(map_gen map_gen.cpp)
 target_link_libraries(map_gen map vis ${OpenCV_LIBS})
 
