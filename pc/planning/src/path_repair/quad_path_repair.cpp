@@ -295,7 +295,7 @@ bool QuadPathRepair::EvaluateNewPath(std::vector<Position3Dd>& new_path)
 	LOG(INFO) << "old_dist = " <<  mission_tracker_->remaining_path_length_
 					<< " , new_dist = " << est_new_dist_;
 
-	if(new_path.size() > 0 && est_new_dist_ < mission_tracker_->remaining_path_length_ * 0.95)
+	if(new_path.size() > 0 && est_new_dist_ < mission_tracker_->remaining_path_length_ * 0.9)
 	{
 		LOG(INFO) << " --------> new plan found <-------- ";
 		LOG(INFO) << "remaining path length: " <<  mission_tracker_->remaining_path_length_

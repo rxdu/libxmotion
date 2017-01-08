@@ -60,6 +60,7 @@ std::vector<Position3Dd> MissionUtils::GetKeyTurningWaypoints(std::vector<Positi
 	{
 		// add first waypoint
 		minimum_points.push_back(smoothed_points.front());
+		Position3Dd last_wp = smoothed_points.front();
 		// check intermediate waypoints
 		for(int cid = 1; cid < smoothed_points.size() - 1; cid++)
 		{
@@ -71,18 +72,23 @@ std::vector<Position3Dd> MissionUtils::GetKeyTurningWaypoints(std::vector<Positi
 			Eigen::Vector3d v2 = Eigen::Vector3d(pt3.x - pt2.x, pt3.y - pt2.y, pt3.z - pt2.z).normalized();
 			Eigen::Vector3d e = v1 - v2;
 
+			double dist = std::sqrt(std::pow(smoothed_points[cid].x - last_wp.x,2) +
+					std::pow(smoothed_points[cid].y - last_wp.y,2) +
+					std::pow(smoothed_points[cid].z - last_wp.z,2));
+
 			// |e| = sqrt[sin(theta)^2 + (1 - cos(theta))^2], |e| ~= 0.082 when theta = 5 degree
-			if(e.norm() > 0.082)
+			if(e.norm() > 0.082 || dist > 0.5)
 			{
 				minimum_points.push_back(smoothed_points[cid]);
+				last_wp = smoothed_points[cid];
 			}
 		}
 		// add last waypoint
 		minimum_points.push_back(smoothed_points.back());
 	}
 
-	//return minimum_points;
-	return smoothed_points;
+	return minimum_points;
+	//return smoothed_points;
 }
 
 

@@ -58,26 +58,42 @@ double QuadPolyTrajHandler::GetRefactoredTime(double ts, double te, double t)
 
 int32_t QuadPolyTrajHandler::FindFurthestPointWithinRadius(std::vector<Position3Dd>& path, int32_t current_idx,  double radius) const
 {
+//	Position3Dd start = path[current_idx];
+//	int32_t goal_idx = path.size() - 1;
+//
+//	int32_t idx = 0;
+//	for(int32_t idx = current_idx; idx < path.size(); idx++)
+//	{
+//		double dist1 = std::sqrt(std::pow(path[idx].x - start.x,2) +
+//				std::pow(path[idx].y - start.y,2) +
+//				std::pow(path[idx].z - start.z,2));
+////		double dist2 = std::sqrt(std::pow(path[idx+1].x - start.x,2) +
+////				std::pow(path[idx+1].y - start.y,2) +
+////				std::pow(path[idx+1].z - start.z,2));
+//
+//		if(dist1 >= radius) {
+////		if(dist1 <= radius && dist2 > radius) {
+//			goal_idx = idx;
+//			break;
+//		}
+//
+//		//idx++;
+//	}
+
 	Position3Dd start = path[current_idx];
 	int32_t goal_idx = path.size() - 1;
 
 	int32_t idx = 0;
-	for(int32_t idx = current_idx; idx < path.size(); idx++)
+	for(int32_t idx = path.size() - 1; idx > current_idx; --idx)
 	{
 		double dist1 = std::sqrt(std::pow(path[idx].x - start.x,2) +
 				std::pow(path[idx].y - start.y,2) +
 				std::pow(path[idx].z - start.z,2));
-//		double dist2 = std::sqrt(std::pow(path[idx+1].x - start.x,2) +
-//				std::pow(path[idx+1].y - start.y,2) +
-//				std::pow(path[idx+1].z - start.z,2));
 
-		if(dist1 >= radius) {
-//		if(dist1 <= radius && dist2 > radius) {
+		if(dist1 <= radius) {
 			goal_idx = idx;
 			break;
 		}
-
-		idx++;
 	}
 
 	return goal_idx;
