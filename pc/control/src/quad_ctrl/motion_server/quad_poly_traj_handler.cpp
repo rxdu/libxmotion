@@ -188,7 +188,8 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 		std::cout << "start id: " << seg_idx << ", furthest id: " << fpt_idx << std::endl;
 
 		double angle;
-		if(fpt_idx == waypoints_.size() - 1)
+		if(seg_idx == waypoints_.size() - 1)
+		//if(fpt_idx == waypoints_.size() - 1)
 			angle = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 0, t_factor);
 		else {
 			Position3Dd wp(pt.positions[0], pt.positions[1], pt.positions[2]);
@@ -197,8 +198,6 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 			dir_vec = furthest_pt_vec - pos_vec;
 			Eigen::Vector3d x_vec(1,0,0);
 			Eigen::Vector3d y_vec(0,1,0);
-
-
 
 			double x_dir_vec = dir_vec.dot(x_vec);
 			double y_dir_vec = dir_vec.dot(y_vec);
@@ -227,7 +226,6 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 		{
 			dist = std::sqrt(std::pow(pt.positions[0] - waypoints_.back().x,2) +
 					std::pow(pt.positions[1] - waypoints_.back().y,2) + std::pow(pt.positions[2] - waypoints_.back().z,2));
-			//std::cout << "estimated distance to goal - last: " << dist << std::endl;
 		}
 		else
 		{
@@ -235,22 +233,13 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 			dist += std::sqrt(std::pow(pt.positions[0] - waypoints_[seg_idx + 1].x,2) +
 					std::pow(pt.positions[1] - waypoints_[seg_idx + 1].y,2) + std::pow(pt.positions[2] - waypoints_[seg_idx + 1].z,2));
 
-			//std::cout << "estimated distance to goal - 1: " << dist << std::endl;
-
-			//std::cout << "idx: " << seg_idx + 1 << " , " << flat_traj_.traj_segs_.size() - 1 << std::endl;
-
 			// calc other waypoints
 			for(int i = seg_idx + 1; i < flat_traj_.traj_segs_.size() - 1; i++)
 			{
 				dist += std::sqrt(std::pow(waypoints_[i].x - waypoints_[i + 1].x,2) +
 									std::pow(waypoints_[i].y - waypoints_[i + 1].y,2) +
 									std::pow(waypoints_[i].z - waypoints_[i + 1].z,2));
-
-//				std::cout << "error : " << waypoints_[i].x - waypoints_[i + 1].x << " , "
-//						<< waypoints_[i].y - waypoints_[i + 1].y << " , "
-//						<< waypoints_[i].z - waypoints_[i + 1].z << std::endl;
 			}
-			//std::cout << "estimated distance to goal - 2: " << dist << std::endl;
 		}
 
 		if(dist < 0.01)
