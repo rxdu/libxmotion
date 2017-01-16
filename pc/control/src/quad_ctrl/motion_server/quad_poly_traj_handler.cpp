@@ -246,15 +246,16 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 		else
 		{
 			// calc remaining distance of the current segment
-			dist += std::sqrt(std::pow(pt.positions[0] - waypoints_[seg_idx + 1].x,2) +
-					std::pow(pt.positions[1] - waypoints_[seg_idx + 1].y,2) + std::pow(pt.positions[2] - waypoints_[seg_idx + 1].z,2));
+			//dist += std::sqrt(std::pow(pt.positions[0] - waypoints_[seg_idx + 1].x,2) +
+			//		std::pow(pt.positions[1] - waypoints_[seg_idx + 1].y,2) + std::pow(pt.positions[2] - waypoints_[seg_idx + 1].z,2));
 
 			// calc other waypoints
-			for(int i = seg_idx + 1; i < flat_traj_.traj_segs_.size() - 1; i++)
+			//for(int i = seg_idx + 1; i < flat_traj_.traj_segs_.size() - 1; i++)
+			for(int i = seg_idx; i < flat_traj_.traj_segs_.size() - 1; i++)
 			{
 				dist += std::sqrt(std::pow(waypoints_[i].x - waypoints_[i + 1].x,2) +
-									std::pow(waypoints_[i].y - waypoints_[i + 1].y,2) +
-									std::pow(waypoints_[i].z - waypoints_[i + 1].z,2));
+									std::pow(waypoints_[i].y - waypoints_[i + 1].y,2));
+									//+ std::pow(waypoints_[i].z - waypoints_[i + 1].z,2));
 			}
 		}
 
@@ -282,5 +283,3 @@ void QuadPolyTrajHandler::ReportProgress(void)
 		lcm_->publish("quad_ctrl/mission_info", &info_msg);
 	}
 }
-
-

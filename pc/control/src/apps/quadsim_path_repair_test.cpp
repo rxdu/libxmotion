@@ -24,7 +24,7 @@ int main(int arc, char* argv[])
 	// set quadrotor init pose
 //	controller->SetInitPose(-1.8,1,0.5,-M_PI/4);
 //	controller->SetInitPose(-1.8,1.2,0.6,-M_PI/4); // demo for dynamic replanning from origin to fixed point
-	controller->SetInitPose(-1.8,0.6,0.8, -M_PI/5);
+	controller->SetInitPose(-6.5,0,1.5, -M_PI/5);
 //	controller->SetInitPose(-1.8,2,0.6,-M_PI/4);
 	controller->BroadcastRobotState(true);
 	controller->InitLogger("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/control/log/quad");
@@ -39,5 +39,3 @@ int main(int arc, char* argv[])
 
 	return 1;
 }
-
-

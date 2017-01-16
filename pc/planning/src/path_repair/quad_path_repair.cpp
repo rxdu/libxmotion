@@ -286,8 +286,8 @@ bool QuadPathRepair::EvaluateNewPath(std::vector<Position3Dd>& new_path)
 	est_new_dist_ = 0;
 	for(int i = 0; i < new_path.size() - 1; i++)
 		est_new_dist_ += std::sqrt(std::pow(new_path[i].x - new_path[i + 1].x,2) +
-				std::pow(new_path[i].y - new_path[i + 1].y,2) +
-				std::pow(new_path[i].z - new_path[i + 1].z,2));
+				std::pow(new_path[i].y - new_path[i + 1].y,2));// +
+				//std::pow(new_path[i].z - new_path[i + 1].z,2));
 
 	std::cout << "new path dist: " << est_new_dist_ << " , remaining dist of current path: "
 			<< mission_tracker_->remaining_path_length_ << std::endl;
@@ -384,6 +384,7 @@ void QuadPathRepair::LcmOctomapHandler(
 	}
 
 	LOG(INFO) << "Combined graph size: " << sgrid_planner_.graph_->GetGraphVertices().size();
+	std::cout << "Graph size (combined, 3d): " << sgrid_planner_.graph_->GetGraphVertices().size() << " , " << cubegraph->GetGraphVertices().size() << std::endl;
 
 	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
 	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
@@ -408,88 +409,90 @@ void QuadPathRepair::LcmOctomapHandler(
 
 	std::vector<Position3Dd> selected_wps = MissionUtils::GetKeyTurningWaypoints(raw_wps);
 
-	if(!mission_tracker_->mission_started_ || EvaluateNewPath(selected_wps))
+	// if(!mission_tracker_->mission_started_ || EvaluateNewPath(selected_wps))
+	// {
+	// 	if(mission_tracker_->mission_started_)
+	// 		std::cout << "-------- found better solution ---------" << std::endl;
+	// 	else
+	// 		mission_tracker_->mission_started_ = true;
+	//
+	// 	// update mission tracking information
+	// 	mission_tracker_->UpdateActivePathWaypoints(comb_path);
+	// 	mission_tracker_->remaining_path_length_ = est_new_dist_;
+	//
+	// 	kf_cmd.path_id = mission_tracker_->path_id_;
+	//
+	// 	//**** Strategy Change ****//
+	// 	//Eigen::Vector3d goal_vec(selected_wps.back().x, selected_wps.back().y, 0);
+	// 	int32_t fpt_idx = FindFurthestPointWithinRadius(selected_wps, 5.0);
+	// 	Eigen::Vector3d furthest_pt_vec(selected_wps[fpt_idx].x, selected_wps[fpt_idx].y, 0);
+	// 	Eigen::Vector3d goal_vec(selected_wps.back().x, selected_wps.back().y, 0);
+	//
+	// 	kf_cmd.kf_num = selected_wps.size();
+	// 	int32_t wp_cnt = 0;
+	// 	for(auto& wp:selected_wps)
+	// 	{
+	// 		srcl_lcm_msgs::Keyframe_t kf;
+	// 		kf.vel_constr = false;
+	//
+	// 		kf.positions[0] = wp.x;
+	// 		kf.positions[1] = wp.y;
+	// 		kf.positions[2] = wp.z;
+	//
+	// 		Eigen::Vector3d pos_vec(wp.x, wp.y, 0);
+	// 		Eigen::Vector3d dir_vec;
+	// 		if(wp_cnt < fpt_idx)
+	// 			dir_vec = furthest_pt_vec - pos_vec;
+	// 		else
+	// 			dir_vec = goal_vec - pos_vec;
+	// 		Eigen::Vector3d x_vec(1,0,0);
+	// 		double angle = - std::acos(dir_vec.normalized().dot(x_vec));
+	// 		//std::cout<<"angle: " << angle << " , vec: " << dir_vec << std::endl;
+	// 		kf.yaw = angle;
+	//
+	// 		kf_cmd.kfs.push_back(kf);
+	// 		wp_cnt++;
+	// 	}
+	// 	kf_cmd.kfs.front().yaw = 0;
+	// 	kf_cmd.kfs.back().yaw = -M_PI/4;
+	//
+	// 	lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
+	//
+	// 	// send data for visualization
+	// 	Send3DSearchPathToVis(selected_wps);
+	// }
+
+	if(count++ % 20 == 0)
 	{
-		if(mission_tracker_->mission_started_)
-			std::cout << "-------- found better solution ---------" << std::endl;
-		else
-			mission_tracker_->mission_started_ = true;
-
-		// update mission tracking information
-		mission_tracker_->UpdateActivePathWaypoints(comb_path);
-		mission_tracker_->remaining_path_length_ = est_new_dist_;
-
-		kf_cmd.path_id = mission_tracker_->path_id_;
-
-		//**** Strategy Change ****//
-		//Eigen::Vector3d goal_vec(selected_wps.back().x, selected_wps.back().y, 0);
-		int32_t fpt_idx = FindFurthestPointWithinRadius(selected_wps, 5.0);
-		Eigen::Vector3d furthest_pt_vec(selected_wps[fpt_idx].x, selected_wps[fpt_idx].y, 0);
-		Eigen::Vector3d goal_vec(selected_wps.back().x, selected_wps.back().y, 0);
-
-		kf_cmd.kf_num = selected_wps.size();
-		int32_t wp_cnt = 0;
-		for(auto& wp:selected_wps)
-		{
-			srcl_lcm_msgs::Keyframe_t kf;
-			kf.vel_constr = false;
-
-			kf.positions[0] = wp.x;
-			kf.positions[1] = wp.y;
-			kf.positions[2] = wp.z;
-
-			Eigen::Vector3d pos_vec(wp.x, wp.y, 0);
-			Eigen::Vector3d dir_vec;
-			if(wp_cnt < fpt_idx)
-				dir_vec = furthest_pt_vec - pos_vec;
-			else
-				dir_vec = goal_vec - pos_vec;
-			Eigen::Vector3d x_vec(1,0,0);
-			double angle = - std::acos(dir_vec.normalized().dot(x_vec));
-			//std::cout<<"angle: " << angle << " , vec: " << dir_vec << std::endl;
-			kf.yaw = angle;
-
-			kf_cmd.kfs.push_back(kf);
-			wp_cnt++;
-		}
-		kf_cmd.kfs.front().yaw = 0;
-		kf_cmd.kfs.back().yaw = -M_PI/4;
-
-		lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
-
-		// send data for visualization
 		Send3DSearchPathToVis(selected_wps);
-	}
 
-//	if(count++ % 20 == 0)
-//	{
-//		srcl_lcm_msgs::Graph_t graph_msg;
-//
-//		std::cout << "------------------------------------------------" << std::endl;
-//
-//		graph_msg.vertex_num = gcombiner_.combined_graph_.GetGraphVertices().size();
-//		for(auto& vtx : gcombiner_.combined_graph_.GetGraphVertices())
-//		{
-//			srcl_lcm_msgs::Vertex_t vertex;
-//			vertex.id = vtx->vertex_id_;
-//
-//			vertex.position[0] = vtx->bundled_data_.position.x;
-//			vertex.position[1] = vtx->bundled_data_.position.y;
-//			vertex.position[2] = vtx->bundled_data_.position.z;
-//
-//			graph_msg.vertices.push_back(vertex);
-//		}
-//
-//		graph_msg.edge_num = gcombiner_.combined_graph_.GetGraphUndirectedEdges().size();
-//		for(auto& eg : gcombiner_.combined_graph_.GetGraphUndirectedEdges())
-//		{
-//			srcl_lcm_msgs::Edge_t edge;
-//			edge.id_start = eg.src_->vertex_id_;
-//			edge.id_end = eg.dst_->vertex_id_;
-//
-//			graph_msg.edges.push_back(edge);
-//		}
+		srcl_lcm_msgs::Graph_t graph_msg;
 
+		// combined graph
+		graph_msg.vertex_num = gcombiner_.combined_graph_.GetGraphVertices().size();
+		for(auto& vtx : gcombiner_.combined_graph_.GetGraphVertices())
+		{
+			srcl_lcm_msgs::Vertex_t vertex;
+			vertex.id = vtx->vertex_id_;
+
+			vertex.position[0] = vtx->bundled_data_.position.x;
+			vertex.position[1] = vtx->bundled_data_.position.y;
+			vertex.position[2] = vtx->bundled_data_.position.z;
+
+			graph_msg.vertices.push_back(vertex);
+		}
+
+		graph_msg.edge_num = gcombiner_.combined_graph_.GetGraphUndirectedEdges().size();
+		for(auto& eg : gcombiner_.combined_graph_.GetGraphUndirectedEdges())
+		{
+			srcl_lcm_msgs::Edge_t edge;
+			edge.id_start = eg.src_->vertex_id_;
+			edge.id_end = eg.dst_->vertex_id_;
+
+			graph_msg.edges.push_back(edge);
+		}
+
+		// cube graph
 //		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
 //		for(auto& vtx : cubegraph->GetGraphVertices())
 //		{
@@ -512,9 +515,11 @@ void QuadPathRepair::LcmOctomapHandler(
 //
 //			graph_msg.edges.push_back(edge);
 //		}
-//
-//		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
-//	}
+
+		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
+
+		std::cout << "######################## graph sent ########################" << std::endl;
+	}
 }
 
 template<typename PlannerType>

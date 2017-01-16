@@ -43,13 +43,13 @@ public:
 		double x1,y1,z1;
 		double x2,y2,z2;
 
-		x1 = this->location_.x;
-		y1 = this->location_.y;
-		z1 = this->location_.z;
+		x1 = this->index_.x;
+		y1 = this->index_.y;
+		z1 = this->index_.z;
 
-		x2 = other_struct.location_.x;
-		y2 = other_struct.location_.y;
-		z2 = other_struct.location_.z;
+		x2 = other_struct.index_.x;
+		y2 = other_struct.index_.y;
+		z2 = other_struct.index_.z;
 
 		// static_cast: can get wrong result to use "unsigned long" type for deduction
 		long x_error = static_cast<long>(x1) - static_cast<long>(x2);
