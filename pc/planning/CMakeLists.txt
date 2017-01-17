@@ -45,6 +45,7 @@ add_subdirectory(src/planner)
 add_subdirectory(src/examples)
 add_subdirectory(src/mission)
 add_subdirectory(src/apps)
+add_subdirectory(src/nav_field)
 
 if(BUILD_TESTS)
     add_subdirectory(src/gtests)
