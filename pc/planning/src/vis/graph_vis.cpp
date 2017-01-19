@@ -428,6 +428,17 @@ void GraphVis::VisSquareGrid(const SquareGrid& grid, cv::InputArray _src, cv::Ou
 		line(src_img_color, top_right, bot_right, Scalar(0,255,0));
 		line(src_img_color, bot_right, bot_left, Scalar(0,255,0));
 		line(src_img_color, bot_left, top_left, Scalar(0,255,0));
+
+		/*auto cell = (*itc);
+		uint64_t x,y;
+		x = cell->bbox_.x.min + (cell->bbox_.x.max - cell->bbox_.x.min)/2;
+		x = x + (cell->bbox_.x.max - cell->bbox_.x.min)/6;
+		y = cell->bbox_.y.min + (cell->bbox_.y.max - cell->bbox_.y.min)/2;
+		y = y + (cell->bbox_.y.max - cell->bbox_.y.min)*3/7;
+		std::string id = std::to_string(cell->data_id_);
+
+		putText(src_img_color, id ,Point(x,y), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
+		*/
 	}
 
 	src_img_color.copyTo(dst);
@@ -472,6 +483,7 @@ void GraphVis::VisSquareGridGraph(const Graph_t<SquareCell*>& graph, cv::InputAr
 				putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
 			}
 		}
+		putText(dst, std::to_string((int)(*itv)->potential_) ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
 	}
 
 	// draw all edges

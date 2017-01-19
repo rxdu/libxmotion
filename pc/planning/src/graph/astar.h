@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "graph/graph.h"
+#include "graph/priority_queue.h"
 
 #define MINIMAL_PRINTOUT 1
 
@@ -31,28 +32,6 @@ namespace srcl_ctrl {
 
 template<typename GraphBDSType>
 using GetNeighbourBDSFunc_t = std::function<std::vector<std::tuple<GraphBDSType, double>>(GraphBDSType)>;
-
-/// A simple priority queue structure used as A* open list.
-// Source: http://www.redblobgames.com/pathfinding/a-star/implementation.html
-template<typename T, typename Number=double>
-struct PriorityQueue {
-	typedef std::pair<Number, T> PQElement;
-
-	std::priority_queue<PQElement, std::vector<PQElement>,
-	std::greater<PQElement>> elements;
-
-	inline bool empty() const { return elements.empty(); }
-
-	inline void put(T item, Number priority) {
-		elements.emplace(priority, item);
-	}
-
-	inline T get() {
-		T best_item = elements.top().second;
-		elements.pop();
-		return best_item;
-	}
-};
 
 /// A* search algorithm.
 class AStar{

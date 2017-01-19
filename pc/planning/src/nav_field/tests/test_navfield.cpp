@@ -104,21 +104,26 @@ int main(int argc, char* argv[])
 	///////////////////////////////////////////////////////////////
 
 	NavField<SquareCell*> nav_field(graph);
+	nav_field.UpdateNavField(185);
 
 	///////////////////////////////////////////////////////////////
 
 	Mat vis_img;
 
-	if(sgrid_map.padded_image.empty())
+	if(!use_input_image)
 		GraphVis::VisSquareGrid(*sgrid_map.data_model, vis_img);
 	else
 		GraphVis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
+
+	GraphVis::VisSquareGridGraph(*graph, vis_img, vis_img, false);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 
 	imshow("Processed Image", vis_img);
 
 	waitKey(0);
+
+//	imwrite("potential.jpg", vis_img);
 
 	return 0;
 }

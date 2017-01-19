@@ -28,6 +28,8 @@ public:
 		// attributes related to associated node
 		bundled_data_(bundled_data),vertex_id_(bundled_data->data_id_),
 		// common attributes
+		potential_(0),
+		potential_parent_(nullptr),
 		search_parent_(nullptr),
 		is_checked_(false), is_in_openlist_(false),
 		f_astar_(0),g_astar_(0),h_astar_(0){};
@@ -37,6 +39,8 @@ public:
 		// attributes related to associated node
 		bundled_data_(bundled_data), vertex_id_(bundled_data.data_id_),
 		// common attributes
+		potential_(0),
+		potential_parent_(nullptr),
 		search_parent_(nullptr),
 		is_checked_(false), is_in_openlist_(false),
 		f_astar_(0),g_astar_(0),h_astar_(0){};
@@ -49,11 +53,17 @@ public:
 	template<typename BDSType>
 	friend class Graph;
 	friend class AStar;
+	template<typename BDSType>
+	friend class NavField;
 
 	// generic attributes
 	BundledStructType bundled_data_;
 	uint64_t vertex_id_;
 	std::vector<Edge<Vertex<BundledStructType>*>> edges_;
+
+	// attributes for discrete potential field
+	double potential_;
+	Vertex<BundledStructType>* potential_parent_;
 
 private:
     // attributes for A* search
