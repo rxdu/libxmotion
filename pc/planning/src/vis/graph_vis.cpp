@@ -483,11 +483,124 @@ void GraphVis::VisSquareGridGraph(const Graph_t<SquareCell*>& graph, cv::InputAr
 				putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
 			}
 		}
-		putText(dst, std::to_string((int)(*itv)->potential_) ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+		//putText(dst, std::to_string((int)(*itv)->potential_) ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
 	}
 
 	// draw all edges
 	auto edges = graph.GetGraphUndirectedEdges();
+	for(auto it = edges.begin(); it != edges.end(); it++)
+	{
+		uint64_t x1,y1,x2,y2;
+		x1 = (*it).src_->bundled_data_->location_.x;
+		y1 = (*it).src_->bundled_data_->location_.y;
+		x2 = (*it).dst_->bundled_data_->location_.x;
+		y2 = (*it).dst_->bundled_data_->location_.y;
+
+		//DrawEdge(Point(x1,y1), Point(x2,y2), dst);
+		VisUtils::DrawLine(dst, Point(x1,y1), Point(x2,y2));
+	}
+}
+
+void GraphVis::VisSquareGridNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
+{
+//	Mat src, dst;
+//	int src_type = _src.getMat().type();
+//	if(src_type == CV_8UC1)
+//	{
+//		cvtColor(_src, src, CV_GRAY2BGR);
+//		_dst.create(src.size(), src.type());
+//		dst = _dst.getMat();
+//	}
+//	else
+//	{
+//		src = _src.getMat();
+//		_dst.create(_src.size(), _src.type());
+//		dst = _dst.getMat();
+//		src.copyTo(dst);
+//	}
+	_dst.create(Size(grid.col_size_*grid.cell_size_, grid.row_size_*grid.cell_size_), CV_8UC3);
+	Mat dst = _dst.getMat();
+	dst = bk_color_;
+
+	// draw potential filed
+	int thickness = 2;
+	int lineType = 8;
+
+	for(int i = 1; i <= 30; ++i) {
+		circle( dst,
+				Point(nav_field.field_center_->bundled_data_->location_.x, nav_field.field_center_->bundled_data_->location_.y),
+				95*i,
+				Scalar(rand() % 255,rand() % 255,rand() % 255),
+				thickness,
+				lineType );
+//		circle( dst,
+//				Point(nav_field.field_center_->bundled_data_->location_.x, nav_field.field_center_->bundled_data_->location_.y),
+//				95*std::sqrt(2)*i,
+//				Scalar(rand() % 255,rand() % 255,rand() % 255),
+//				thickness,
+//				lineType );
+	}
+
+	// fill cell color
+	for(auto itc = grid.cells_.begin(); itc != grid.cells_.end(); itc++)
+	{
+		if((*itc).second->occu_ == OccupancyType::OCCUPIED)
+			//FillSquareCellColor((*itc).second->bbox_, obs_color_, dst);
+			VisUtils::FillRectangularArea(dst, (*itc).second->bbox_, obs_color_);
+		else if((*itc).second->occu_ == OccupancyType::INTERESTED)
+			//FillSquareCellColor((*itc).second->bbox_, aoi_color_, dst);
+			VisUtils::FillRectangularArea(dst, (*itc).second->bbox_, aoi_color_);
+
+		auto cell = (*itc);
+		uint64_t x,y;
+		x = cell.second->bbox_.x.min + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/2;
+		x = x + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/6;
+		y = cell.second->bbox_.y.min + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)/2;
+		y = y + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)*3/7;
+
+		std::string id = std::to_string(cell.second->data_id_);
+
+		putText(dst, id ,Point(x,y), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
+	}
+
+	// draw grid lines
+	line(dst, Point(0,0),Point(0,grid.row_size_*grid.cell_size_-1),ln_color_, 1);
+	for(int i = 1; i <= grid.col_size_; i++){
+		line(dst, Point(i*grid.cell_size_-1,0),Point(i*grid.cell_size_-1,grid.row_size_*grid.cell_size_-1),ln_color_, 1);
+	}
+
+	line(dst, Point(0,0),Point(grid.col_size_*grid.cell_size_-1,0),ln_color_, 1);
+	for(int i = 1; i <= grid.row_size_; i++){
+		line(dst, Point(0,i*grid.cell_size_-1),Point(grid.col_size_*grid.cell_size_-1,i*grid.cell_size_-1),ln_color_, 1);
+	}
+
+	// draw all vertices
+	std::vector<Vertex<SquareCell*>*> vertices;
+	vertices = nav_field.field_graph_->GetGraphVertices();
+	for(auto itv = vertices.begin(); itv != vertices.end(); itv++)
+	{
+		cv::Point center((*itv)->bundled_data_->location_.x, (*itv)->bundled_data_->location_.y);
+		//DrawNodeCenter(center,dst);
+		VisUtils::DrawPoint(dst, center);
+
+		// current vertex center coordinate
+		uint64_t x1,y1,x2,y2;
+		x1 = (*itv)->bundled_data_->location_.x;
+		y1 = (*itv)->bundled_data_->location_.y;
+
+		if(show_id) {
+			if((*itv)->bundled_data_->data_id_ % 2 == 0)
+			{
+				std::string id = std::to_string((*itv)->bundled_data_->data_id_);
+				putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+			}
+		}
+		// display potential value
+		putText(dst, std::to_string((int)(*itv)->potential_) ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+	}
+
+	// draw all edges
+	auto edges = nav_field.field_graph_->GetGraphUndirectedEdges();
 	for(auto it = edges.begin(); it != edges.end(); it++)
 	{
 		uint64_t x1,y1,x2,y2;

@@ -16,6 +16,9 @@
  * =====================================================================================
  */
 
+#ifndef SRC_NAV_FIELD_H_
+#define SRC_NAV_FIELD_H_
+
 #include <cstdint>
 #include <memory>
 
@@ -28,14 +31,17 @@ namespace srcl_ctrl {
 		public:
 			NavField()= delete;
 			NavField(std::shared_ptr<Graph_t<GraphNodeType>> graph):
-				nav_field_(graph){};
+				field_graph_(graph),
+				field_center_(nullptr){};
 			~NavField(){};
 
-		private:
-			std::shared_ptr<Graph_t<GraphNodeType>> nav_field_;
+			std::shared_ptr<Graph_t<GraphNodeType>> field_graph_;
+			Vertex_t<GraphNodeType>* field_center_;
 
+		private:
 			void ConstructNavField(Vertex_t<GraphNodeType>* goal_vtx) {
-				nav_field_->ResetGraphVertices();
+				field_center_ = goal_vtx;
+				field_graph_->ResetGraphVertices();
 
 				bool found_path = false;
 				Vertex_t<GraphNodeType>* current_vertex;
@@ -89,9 +95,11 @@ namespace srcl_ctrl {
 
 		public:
 			void UpdateNavField(uint64_t goal_id) {
-				auto goal_vtx = nav_field_->GetVertexFromID(goal_id);
+				auto goal_vtx = field_graph_->GetVertexFromID(goal_id);
 
 				ConstructNavField(goal_vtx);	
 			};
 	};
 }
+
+#endif /* SRC_NAV_FIELD_H_ */

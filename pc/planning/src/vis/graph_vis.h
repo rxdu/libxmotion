@@ -15,6 +15,7 @@
 #include "graph/graph.h"
 #include "geometry/quadtree/quad_tree.h"
 #include "geometry/square_grid/square_grid.h"
+#include "nav_field/nav_field.h"
 
 namespace srcl_ctrl {
 
@@ -53,6 +54,8 @@ public:
 
 	static void VisSquareGridGraph(const Graph_t<SquareCell*>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id);
 	static void VisSquareGridPath(const std::vector<Vertex_t<SquareCell*>*>& path, cv::InputArray _src, cv::OutputArray _dst);
+
+	static void VisSquareGridNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, cv::InputArray _src, cv::OutputArray _dst, bool show_id);
 };
 
 }

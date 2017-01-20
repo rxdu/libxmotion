@@ -19,3 +19,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(test_navfield tests/test_navfield.cpp)
 target_link_libraries(test_navfield map vis ${OpenCV_LIBS})
+
+add_executable(test_navfield2 tests/test_navfield2.cpp)
+target_link_libraries(test_navfield2 map vis ${OpenCV_LIBS})
