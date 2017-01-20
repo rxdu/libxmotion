@@ -35,6 +35,8 @@ namespace srcl_ctrl {
 			std::shared_ptr<Graph_t<GraphNodeType>> nav_field_;
 
 			void ConstructNavField(Vertex_t<GraphNodeType>* goal_vtx) {
+				nav_field_->ResetGraphVertices();
+
 				bool found_path = false;
 				Vertex_t<GraphNodeType>* current_vertex;
 

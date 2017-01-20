@@ -75,6 +75,8 @@ private:
 	std::map<uint64_t, Vertex<BundledStructType>*> vertex_map_;
 
 	friend class AStar;
+	template<class GraphNodeType>
+	friend class NavField;
 
 private:
 	/// This function checks if a vertex already exists in the graph.
