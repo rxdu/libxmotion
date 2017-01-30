@@ -102,6 +102,10 @@ int main(int argc, char* argv[])
 		std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 	}
 
+	auto nbs = sgrid_map.data_model->GetNeighboursWithinRange(603, 1);
+	for(const auto& n : nbs)
+		std::cout << n->data_id_ << std::endl;
+
 	///////////////////////////////////////////////////////////////
 
 	NavField<SquareCell*> nav_field(graph);
@@ -118,10 +122,11 @@ int main(int argc, char* argv[])
 //	else
 //		GraphVis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
-	GraphVis::VisSquareGridNavField(*sgrid_map.data_model, nav_field, vis_img, vis_img, false);
+	GraphVis::VisSquareGridNavField(*sgrid_map.data_model, nav_field, start_vertex, vis_img, vis_img, true);
+	GraphVis::VisSquareGridLocalNavField(*sgrid_map.data_model, nav_field, start_vertex, vis_img, vis_img, true);
 
-	if(!path.empty())
-		GraphVis::VisSquareGridPath(path, vis_img, vis_img);
+//	if(!path.empty())
+//		GraphVis::VisSquareGridPath(path, vis_img, vis_img);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 
@@ -129,7 +134,7 @@ int main(int argc, char* argv[])
 
 	waitKey(0);
 
-	imwrite("potential_field.jpg", vis_img);
+	//imwrite("potential_field.jpg", vis_img);
 
 	return 0;
 }

@@ -501,66 +501,45 @@ void GraphVis::VisSquareGridGraph(const Graph_t<SquareCell*>& graph, cv::InputAr
 	}
 }
 
-void GraphVis::VisSquareGridNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
+void GraphVis::VisSquareGridNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, Vertex_t<SquareCell*>* start_vtx, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
 {
-//	Mat src, dst;
-//	int src_type = _src.getMat().type();
-//	if(src_type == CV_8UC1)
-//	{
-//		cvtColor(_src, src, CV_GRAY2BGR);
-//		_dst.create(src.size(), src.type());
-//		dst = _dst.getMat();
-//	}
-//	else
-//	{
-//		src = _src.getMat();
-//		_dst.create(_src.size(), _src.type());
-//		dst = _dst.getMat();
-//		src.copyTo(dst);
-//	}
 	_dst.create(Size(grid.col_size_*grid.cell_size_, grid.row_size_*grid.cell_size_), CV_8UC3);
 	Mat dst = _dst.getMat();
 	dst = bk_color_;
 
 	// draw potential filed
-	int thickness = 2;
-	int lineType = 8;
-
-	for(int i = 1; i <= 30; ++i) {
-		circle( dst,
-				Point(nav_field.field_center_->bundled_data_->location_.x, nav_field.field_center_->bundled_data_->location_.y),
-				95*i,
-				Scalar(rand() % 255,rand() % 255,rand() % 255),
-				thickness,
-				lineType );
+//	int thickness = 2;
+//	int lineType = 8;
+//
+//	for(int i = 1; i <= 30; ++i) {
 //		circle( dst,
 //				Point(nav_field.field_center_->bundled_data_->location_.x, nav_field.field_center_->bundled_data_->location_.y),
-//				95*std::sqrt(2)*i,
+//				95*i,
 //				Scalar(rand() % 255,rand() % 255,rand() % 255),
 //				thickness,
 //				lineType );
-	}
+//	}
 
 	// fill cell color
 	for(auto itc = grid.cells_.begin(); itc != grid.cells_.end(); itc++)
 	{
 		if((*itc).second->occu_ == OccupancyType::OCCUPIED)
-			//FillSquareCellColor((*itc).second->bbox_, obs_color_, dst);
 			VisUtils::FillRectangularArea(dst, (*itc).second->bbox_, obs_color_);
-		else if((*itc).second->occu_ == OccupancyType::INTERESTED)
-			//FillSquareCellColor((*itc).second->bbox_, aoi_color_, dst);
-			VisUtils::FillRectangularArea(dst, (*itc).second->bbox_, aoi_color_);
+		//		else if((*itc).second->occu_ == OccupancyType::INTERESTED)
+		//			VisUtils::FillRectangularArea(dst, (*itc).second->bbox_, aoi_color_);
 
-		auto cell = (*itc);
-		uint64_t x,y;
-		x = cell.second->bbox_.x.min + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/2;
-		x = x + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/6;
-		y = cell.second->bbox_.y.min + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)/2;
-		y = y + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)*3/7;
+		if(show_id) {
+			auto cell = (*itc);
+			uint64_t x,y;
+			x = cell.second->bbox_.x.min + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/2;
+			x = x + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/6;
+			y = cell.second->bbox_.y.min + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)/2;
+			y = y + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)*3/7;
 
-		std::string id = std::to_string(cell.second->data_id_);
+			std::string id = std::to_string(cell.second->data_id_);
 
-		putText(dst, id ,Point(x,y), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
+			putText(dst, id ,Point(x,y), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
+		}
 	}
 
 	// draw grid lines
@@ -580,7 +559,6 @@ void GraphVis::VisSquareGridNavField(const SquareGrid& grid, const NavField<Squa
 	for(auto itv = vertices.begin(); itv != vertices.end(); itv++)
 	{
 		cv::Point center((*itv)->bundled_data_->location_.x, (*itv)->bundled_data_->location_.y);
-		//DrawNodeCenter(center,dst);
 		VisUtils::DrawPoint(dst, center);
 
 		// current vertex center coordinate
@@ -588,15 +566,19 @@ void GraphVis::VisSquareGridNavField(const SquareGrid& grid, const NavField<Squa
 		x1 = (*itv)->bundled_data_->location_.x;
 		y1 = (*itv)->bundled_data_->location_.y;
 
-		if(show_id) {
-			if((*itv)->bundled_data_->data_id_ % 2 == 0)
-			{
-				std::string id = std::to_string((*itv)->bundled_data_->data_id_);
-				putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
-			}
-		}
+//		if(show_id) {
+//			if((*itv)->bundled_data_->data_id_ % 2 == 0)
+//			{
+//				std::string id = std::to_string((*itv)->bundled_data_->data_id_);
+//				putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+//			}
+//		}
+
 		// display potential value
 		putText(dst, std::to_string((int)(*itv)->potential_) ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+
+//		if((*itv)->potential_ > start_vtx->potential_)
+//			VisUtils::FillRectangularArea(dst, (*itv)->bundled_data_->bbox_, Scalar(211,211,211));
 	}
 
 	// draw all edges
@@ -609,9 +591,36 @@ void GraphVis::VisSquareGridNavField(const SquareGrid& grid, const NavField<Squa
 		x2 = (*it).dst_->bundled_data_->location_.x;
 		y2 = (*it).dst_->bundled_data_->location_.y;
 
-		//DrawEdge(Point(x1,y1), Point(x2,y2), dst);
 		VisUtils::DrawLine(dst, Point(x1,y1), Point(x2,y2));
 	}
+}
+
+void GraphVis::VisSquareGridLocalNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, Vertex_t<SquareCell*>* center_vtx, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
+{
+	Mat src, dst;
+	int src_type = _src.getMat().type();
+	if(src_type == CV_8UC1)
+	{
+		cvtColor(_src, src, CV_GRAY2BGR);
+		_dst.create(src.size(), src.type());
+		dst = _dst.getMat();
+	}
+	else
+	{
+		src = _src.getMat();
+		_dst.create(_src.size(), _src.type());
+		dst = _dst.getMat();
+		src.copyTo(dst);
+	}
+
+	auto nbs = const_cast<SquareGrid&>(grid).GetNeighboursWithinRange(center_vtx->bundled_data_->data_id_,2);
+	for(auto& n : nbs) {
+		auto vtx = nav_field.field_graph_->GetVertexFromID(n->data_id_);
+		if(vtx->potential_ > center_vtx->potential_)
+			VisUtils::FillRectangularArea(dst, vtx->bundled_data_->bbox_, Scalar(211,211,211));
+	}
+//	if((*itv)->potential_ > start_vtx->potential_)
+//		VisUtils::FillRectangularArea(dst, (*itv)->bundled_data_->bbox_, Scalar(211,211,211));
 }
 
 void GraphVis::VisSquareGridPath(const std::vector<Vertex_t<SquareCell*>*>& path, cv::InputArray _src, cv::OutputArray _dst)

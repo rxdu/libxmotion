@@ -86,6 +86,7 @@ public:
 	uint64_t GetIDFromPosition(uint32_t x, uint32_t y);
 	SquareCell* GetCellFromID(uint64_t id);
 	std::vector<SquareCell*> GetNeighbours(uint64_t id, bool allow_diag);
+	std::vector<SquareCell*> GetNeighboursWithinRange(uint64_t id, uint32_t cell_range);
 };
 
 }

@@ -147,3 +147,42 @@ std::vector<SquareCell*> SquareGrid::GetNeighbours(uint64_t id, bool allow_diag)
 	return neighbours;
 }
 
+std::vector<SquareCell*> SquareGrid::GetNeighboursWithinRange(uint64_t id, uint32_t cell_range)
+{
+	std::vector<SquareCell*> neighbours;
+
+	uint32_t x,y;
+	x = cells_[id]->index_.x;
+	y = cells_[id]->index_.y;
+
+	uint32_t xmin,xmax,ymin,ymax;
+
+	if(x < cell_range)
+		xmin = 0;
+	else
+		xmin = x - cell_range;
+	if(x + cell_range >= col_size_)
+		xmax = col_size_ - 1;
+	else
+		xmax = x + cell_range;
+
+	if(y < cell_range)
+		ymin = 0;
+	else
+		ymin = y - cell_range;
+	if(y + cell_range >= row_size_)
+		ymax = row_size_ - 1;
+	else
+		ymax = y + cell_range;
+
+	for(int64_t i = xmin; i <= xmax; i++)
+		for(int64_t j = ymin; j <= ymax; j++) {
+			if(i == x && j == y)
+				continue;
+
+			neighbours.push_back(cells_[j * col_size_ + i]);
+		}
+
+	return neighbours;
+}
+
