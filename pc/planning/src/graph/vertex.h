@@ -30,6 +30,7 @@ public:
 		// common attributes
 		potential_(0),
 		potential_parent_(nullptr),
+		shortcut_rewards_(0),
 		search_parent_(nullptr),
 		is_checked_(false), is_in_openlist_(false),
 		f_astar_(0),g_astar_(0),h_astar_(0){};
@@ -41,6 +42,7 @@ public:
 		// common attributes
 		potential_(0),
 		potential_parent_(nullptr),
+		shortcut_rewards_(0),
 		search_parent_(nullptr),
 		is_checked_(false), is_in_openlist_(false),
 		f_astar_(0),g_astar_(0),h_astar_(0){};
@@ -53,8 +55,11 @@ public:
 	template<typename BDSType>
 	friend class Graph;
 	friend class AStar;
+
+	// additional friends (for specific applications)
 	template<typename BDSType>
 	friend class NavField;
+	friend class ShortcutEval;
 
 	// generic attributes
 	BundledStructType bundled_data_;
@@ -64,6 +69,8 @@ public:
 	// attributes for discrete potential field
 	double potential_;
 	Vertex<BundledStructType>* potential_parent_;
+
+	double shortcut_rewards_;
 
 private:
     // attributes for A* search

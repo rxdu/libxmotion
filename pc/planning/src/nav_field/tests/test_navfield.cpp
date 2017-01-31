@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
 	NavField<SquareCell*> nav_field(graph);
 	//nav_field.UpdateNavField(185); // 32
 	//nav_field.UpdateNavField(60); // 64
-	auto nav_path = nav_field.SearchInNavField(start_vertex, finish_vertex);
+	//auto nav_path = nav_field.SearchInNavField(start_vertex, finish_vertex);
 
 	///////////////////////////////////////////////////////////////
 
@@ -135,8 +135,8 @@ int main(int argc, char* argv[])
 
 	GraphVis::VisSquareGridGraph(*graph, vis_img, vis_img, false);
 
-	if(!nav_path.empty())
-		GraphVis::VisSquareGridPath(nav_path, vis_img, vis_img);
+//	if(!nav_path.empty())
+//		GraphVis::VisSquareGridPath(nav_path, vis_img, vis_img);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 
