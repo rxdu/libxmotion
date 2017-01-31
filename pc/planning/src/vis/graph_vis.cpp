@@ -595,7 +595,7 @@ void GraphVis::VisSquareGridNavField(const SquareGrid& grid, const NavField<Squa
 	}
 }
 
-void GraphVis::VisSquareGridLocalNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, Vertex_t<SquareCell*>* center_vtx, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
+void GraphVis::VisSquareGridLocalNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, Vertex_t<SquareCell*>* center_vtx, cv::InputArray _src, cv::OutputArray _dst, uint16_t sensor_range)
 {
 	Mat src, dst;
 	int src_type = _src.getMat().type();
@@ -613,11 +613,24 @@ void GraphVis::VisSquareGridLocalNavField(const SquareGrid& grid, const NavField
 		src.copyTo(dst);
 	}
 
-	auto nbs = const_cast<SquareGrid&>(grid).GetNeighboursWithinRange(center_vtx->bundled_data_->data_id_,2);
+	auto nbs = const_cast<SquareGrid&>(grid).GetNeighboursWithinRange(center_vtx->bundled_data_->data_id_,sensor_range);
 	for(auto& n : nbs) {
 		auto vtx = nav_field.field_graph_->GetVertexFromID(n->data_id_);
+		if(vtx == nullptr)
+			continue;
 		if(vtx->potential_ > center_vtx->potential_)
 			VisUtils::FillRectangularArea(dst, vtx->bundled_data_->bbox_, Scalar(211,211,211));
+		else {
+			VisUtils::FillRectangularArea(dst, vtx->bundled_data_->bbox_, aoi_color_);
+
+			uint64_t x1,y1,x2,y2;
+			x1 = vtx->bundled_data_->location_.x;
+			y1 = vtx->bundled_data_->location_.y;
+
+			// display potential value
+			putText(dst, std::to_string((int)(center_vtx->potential_-vtx->potential_)) ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+		}
+
 	}
 //	if((*itv)->potential_ > start_vtx->potential_)
 //		VisUtils::FillRectangularArea(dst, (*itv)->bundled_data_->bbox_, Scalar(211,211,211));

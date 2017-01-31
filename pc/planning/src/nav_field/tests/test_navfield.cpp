@@ -105,23 +105,24 @@ int main(int argc, char* argv[])
 	Vertex_t<SquareCell*> * start_vertex = graph->GetVertexFromID(225);
 	Vertex_t<SquareCell*> * finish_vertex = graph->GetVertexFromID(60);
 
-	Path_t<SquareCell*> path;
-	if(start_vertex == nullptr || finish_vertex == nullptr) {
-		std::cerr << "Invalid starting and finishing vertices, please choose two vertices in free space!" << std::endl;
-	}
-	else {
-		clock_t		exec_time;
-		exec_time = clock();
-		path = AStar::Search(graph,start_vertex,finish_vertex);
-		exec_time = clock() - exec_time;
-		std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
-	}
+//	Path_t<SquareCell*> path;
+//	if(start_vertex == nullptr || finish_vertex == nullptr) {
+//		std::cerr << "Invalid starting and finishing vertices, please choose two vertices in free space!" << std::endl;
+//	}
+//	else {
+//		clock_t		exec_time;
+//		exec_time = clock();
+//		path = AStar::Search(graph,start_vertex,finish_vertex);
+//		exec_time = clock() - exec_time;
+//		std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
+//	}
 
 	///////////////////////////////////////////////////////////////
 
 	NavField<SquareCell*> nav_field(graph);
 	//nav_field.UpdateNavField(185); // 32
-	nav_field.UpdateNavField(60); // 64
+	//nav_field.UpdateNavField(60); // 64
+	auto nav_path = nav_field.SearchInNavField(start_vertex, finish_vertex);
 
 	///////////////////////////////////////////////////////////////
 
@@ -134,8 +135,8 @@ int main(int argc, char* argv[])
 
 	GraphVis::VisSquareGridGraph(*graph, vis_img, vis_img, false);
 
-	if(!path.empty())
-		GraphVis::VisSquareGridPath(path, vis_img, vis_img);
+	if(!nav_path.empty())
+		GraphVis::VisSquareGridPath(nav_path, vis_img, vis_img);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 

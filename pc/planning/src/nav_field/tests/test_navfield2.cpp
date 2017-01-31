@@ -87,46 +87,49 @@ int main(int argc, char* argv[])
 
 	std::shared_ptr<Graph_t<SquareCell*>> graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);
 	
-	Vertex_t<SquareCell*> * start_vertex = graph->GetVertexFromID(552);
+	Vertex_t<SquareCell*> * start_vertex = graph->GetVertexFromID(508);//552
 	Vertex_t<SquareCell*> * finish_vertex = graph->GetVertexFromID(95);
 
-	Path_t<SquareCell*> path;
-	if(start_vertex == nullptr || finish_vertex == nullptr) {
-		std::cerr << "Invalid starting and finishing vertices, please choose two vertices in free space!" << std::endl;
-	}
-	else {
-		clock_t		exec_time;
-		exec_time = clock();
-		path = AStar::Search(graph,start_vertex,finish_vertex);
-		exec_time = clock() - exec_time;
-		std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
-	}
+//	Path_t<SquareCell*> path;
+//	if(start_vertex == nullptr || finish_vertex == nullptr) {
+//		std::cerr << "Invalid starting and finishing vertices, please choose two vertices in free space!" << std::endl;
+//	}
+//	else {
+//		clock_t		exec_time;
+//		exec_time = clock();
+//		path = AStar::Search(graph,start_vertex,finish_vertex);
+//		exec_time = clock() - exec_time;
+//		std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
+//	}
 
-	auto nbs = sgrid_map.data_model->GetNeighboursWithinRange(603, 1);
-	for(const auto& n : nbs)
-		std::cout << n->data_id_ << std::endl;
+//	auto nbs = sgrid_map.data_model->GetNeighboursWithinRange(603, 1);
+//	for(const auto& n : nbs)
+//		std::cout << n->data_id_ << std::endl;
 
 	///////////////////////////////////////////////////////////////
 
 	NavField<SquareCell*> nav_field(graph);
 	//nav_field.UpdateNavField(185); // 32
 	//nav_field.UpdateNavField(60); // 64
-	nav_field.UpdateNavField(95);
+	//nav_field.UpdateNavField(95);
+	auto nav_path = nav_field.SearchInNavField(start_vertex, finish_vertex);
 
 	///////////////////////////////////////////////////////////////
 
 	Mat vis_img;
 
-//	if(!use_input_image)
-//		GraphVis::VisSquareGrid(*sgrid_map.data_model, vis_img);
-//	else
-//		GraphVis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
+	if(!use_input_image)
+		GraphVis::VisSquareGrid(*sgrid_map.data_model, vis_img);
+	else
+		GraphVis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
-	GraphVis::VisSquareGridNavField(*sgrid_map.data_model, nav_field, start_vertex, vis_img, vis_img, true);
-	GraphVis::VisSquareGridLocalNavField(*sgrid_map.data_model, nav_field, start_vertex, vis_img, vis_img, true);
+//	GraphVis::VisSquareGridNavField(*sgrid_map.data_model, nav_field, start_vertex, vis_img, vis_img, true);
+	GraphVis::VisSquareGridLocalNavField(*sgrid_map.data_model, nav_field, start_vertex, vis_img, vis_img, 6);
 
 //	if(!path.empty())
 //		GraphVis::VisSquareGridPath(path, vis_img, vis_img);
+	if(!nav_path.empty())
+		GraphVis::VisSquareGridPath(nav_path, vis_img, vis_img);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 
@@ -134,7 +137,7 @@ int main(int argc, char* argv[])
 
 	waitKey(0);
 
-	//imwrite("potential_field.jpg", vis_img);
+	imwrite("potential_field.jpg", vis_img);
 
 	return 0;
 }
