@@ -109,17 +109,19 @@ int main(int argc, char* argv[])
 	std::shared_ptr<NavField<SquareCell*>> nav_field = std::make_shared<NavField<SquareCell*>>(graph);
 	//nav_field.UpdateNavField(185); // 32
 	//nav_field.UpdateNavField(60); // 64
-//	nav_field->UpdateNavField(95);
+	nav_field->UpdateNavField(95);
 //	nav_field->UpdateNavField(406); // lab map
-	nav_field->UpdateNavField(536); // case 3
+//	nav_field->UpdateNavField(536); // case 3
 
 	ShortcutEval sc_eval(sgrid_map.data_model, nav_field);
 	//auto nav_path = nav_field.SearchInNavField(start_vertex, finish_vertex);
 //	sc_eval.EvaluateCellShortcutPotential(start_vertex);
 	sc_eval.EvaluateGridShortcutPotential();
 
-	Vertex_t<SquareCell*> * start_vertex = graph->GetVertexFromID(930);// 552, 508
-	Vertex_t<SquareCell*> * finish_vertex = graph->GetVertexFromID(536); //95
+	// abstract: 552, 95
+	// case 3: 930, 536
+	Vertex_t<SquareCell*> * start_vertex = graph->GetVertexFromID(552);// 552, 508
+	Vertex_t<SquareCell*> * finish_vertex = graph->GetVertexFromID(95); //95
 
 	auto nav_path = sc_eval.SearchInNavField(start_vertex, finish_vertex);
 

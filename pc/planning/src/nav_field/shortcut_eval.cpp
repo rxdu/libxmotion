@@ -16,7 +16,7 @@ using namespace srcl_ctrl;
 ShortcutEval::ShortcutEval(std::shared_ptr<SquareGrid> sgrid, std::shared_ptr<NavField<SquareCell*>> nav_field):
 			sgrid_(sgrid),
 			nav_field_(nav_field),
-			dist_weight(0.2)
+			dist_weight(1.0)
 {
 
 }
