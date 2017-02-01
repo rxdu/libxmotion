@@ -25,10 +25,13 @@ private:
 	std::shared_ptr<SquareGrid> sgrid_;
 	std::shared_ptr<NavField<SquareCell*>> nav_field_;
 
-public:
-	void EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_vtx);
-	void EvaluateGridShortcutPotential();
+	double dist_weight;
+
+	double EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_vtx);
 	double CalcDirectDistance(Position2D start, Position2D goal, double cell_size, bool allow_diag);
+
+public:
+	void EvaluateGridShortcutPotential();
 	Path_t<SquareCell*> SearchInNavField(Vertex_t<SquareCell*>* start_vtx, Vertex_t<SquareCell*>* goal_vtx);
 };
 

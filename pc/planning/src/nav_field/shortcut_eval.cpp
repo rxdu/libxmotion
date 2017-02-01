@@ -15,7 +15,8 @@ using namespace srcl_ctrl;
 
 ShortcutEval::ShortcutEval(std::shared_ptr<SquareGrid> sgrid, std::shared_ptr<NavField<SquareCell*>> nav_field):
 			sgrid_(sgrid),
-			nav_field_(nav_field)
+			nav_field_(nav_field),
+			dist_weight(0.2)
 {
 
 }
@@ -58,7 +59,7 @@ double ShortcutEval::CalcDirectDistance(Position2D start, Position2D goal, doubl
 	return dist;
 }
 
-void ShortcutEval::EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_vtx)
+double ShortcutEval::EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_vtx)
 {
 	auto nbs = sgrid_->GetNeighboursWithinRange(eval_vtx->bundled_data_->data_id_, 5);
 
@@ -69,22 +70,27 @@ void ShortcutEval::EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_vtx
 
 		auto vtx = nav_field_->field_graph_->GetVertexFromID(n->data_id_);
 
-//		vtx->shortcut_rewards_ = eval_vtx->potential_ - vtx->potential_
-//				- CalcDirectDistance(vtx->bundled_data_->index_, eval_vtx->bundled_data_->index_,sgrid_->cell_size_,true);
 		rewards_queue.push(eval_vtx->potential_ - vtx->potential_
 				- CalcDirectDistance(vtx->bundled_data_->index_, eval_vtx->bundled_data_->index_,sgrid_->cell_size_,true));
 	}
 
-	eval_vtx->shortcut_rewards_ = rewards_queue.top();
-	//std::cout << "rewards: " << eval_vtx->shortcut_rewards_ << std::endl;
+	//eval_vtx->shortcut_rewards_ = rewards_queue.top();
+	return rewards_queue.top();
 }
 
 void ShortcutEval::EvaluateGridShortcutPotential()
 {
+	std::priority_queue<double> all_rewards;
 	auto vertices = nav_field_->field_graph_->GetGraphVertices();
 
-	for(auto& vtx : vertices)
-		EvaluateCellShortcutPotential(vtx);
+	for(auto& vtx : vertices) {
+		vtx->shortcut_rewards_ = EvaluateCellShortcutPotential(vtx);
+		all_rewards.push(vtx->shortcut_rewards_);
+	}
+
+	nav_field_->max_rewards_ = all_rewards.top();
+
+	std::cout << "max possible rewards: " << nav_field_->max_rewards_ << std::endl;
 }
 
 Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_vtx, Vertex_t<SquareCell*>* goal_vtx)
@@ -102,6 +108,7 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 
 	//start->search_parent_ = start;
 	start_vtx->g_astar_ = 0;
+	start_vtx->g_rewards_ = 0;
 
 	while(!openlist.empty() && found_path != true)
 	{
@@ -122,16 +129,18 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 			if(successor->is_checked_ == false)
 			{
 				// first set the parent of the adjacent vertex to be the current vertex
-				double new_cost = current_vertex->g_astar_ + (*ite).cost_;
+				double new_cost = current_vertex->g_rewards_ + ((*ite).cost_*dist_weight + (nav_field_->max_rewards_ - successor->shortcut_rewards_)*0.5*(1-dist_weight));
+				double new_dist = current_vertex->g_astar_ + (*ite).cost_;
 
 				// if the vertex is not in open list
 				// or if the vertex is in open list but has a higher cost
-				if(successor->is_in_openlist_ == false || new_cost < successor->g_astar_)
+				if(successor->is_in_openlist_ == false || new_cost < successor->g_rewards_)
 				{
 					successor->search_parent_ = current_vertex;
-					successor->g_astar_ = new_cost;
+					successor->g_rewards_ = new_cost;
+					successor->g_astar_ = new_dist;
 
-					openlist.put(successor, successor->g_astar_);
+					openlist.put(successor, successor->g_rewards_);
 					successor->is_in_openlist_ = true;
 
 					if(successor == goal_vtx){
@@ -157,11 +166,12 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 
 		auto traj_s = path.begin();
 		auto traj_e = path.end() - 1;
-#ifdef MINIMAL_PRINTOUT
+#ifndef MINIMAL_PRINTOUT
 		std::cout << "starting vertex id: " << (*traj_s)->vertex_id_ << std::endl;
 		std::cout << "finishing vertex id: " << (*traj_e)->vertex_id_ << std::endl;
 		std::cout << "path length: " << path.size() << std::endl;
-		std::cout << "total cost: " << path.back()->g_astar_ << std::endl;
+		std::cout << "total dist cost: " << path.back()->g_astar_ << std::endl;
+		std::cout << "total cost with rewards: " << path.back()->g_rewards_ << std::endl;
 #endif
 	}
 	else

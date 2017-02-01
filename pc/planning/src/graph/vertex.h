@@ -31,6 +31,7 @@ public:
 		potential_(0),
 		potential_parent_(nullptr),
 		shortcut_rewards_(0),
+		g_rewards_(0),
 		search_parent_(nullptr),
 		is_checked_(false), is_in_openlist_(false),
 		f_astar_(0),g_astar_(0),h_astar_(0){};
@@ -43,6 +44,7 @@ public:
 		potential_(0),
 		potential_parent_(nullptr),
 		shortcut_rewards_(0),
+		g_rewards_(0),
 		search_parent_(nullptr),
 		is_checked_(false), is_in_openlist_(false),
 		f_astar_(0),g_astar_(0),h_astar_(0){};
@@ -71,6 +73,7 @@ public:
 	Vertex<BundledStructType>* potential_parent_;
 
 	double shortcut_rewards_;
+	double g_rewards_;
 
 private:
     // attributes for A* search

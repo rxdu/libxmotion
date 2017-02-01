@@ -32,11 +32,13 @@ namespace srcl_ctrl {
 			NavField()= delete;
 			NavField(std::shared_ptr<Graph_t<GraphNodeType>> graph):
 				field_graph_(graph),
-				field_center_(nullptr){};
+				field_center_(nullptr),
+				max_rewards_(0){};
 			~NavField(){};
 
 			std::shared_ptr<Graph_t<GraphNodeType>> field_graph_;
 			Vertex_t<GraphNodeType>* field_center_;
+			double max_rewards_;
 
 		private:
 			void ConstructNavField(Vertex_t<GraphNodeType>* goal_vtx) {

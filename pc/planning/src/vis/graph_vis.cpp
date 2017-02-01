@@ -653,12 +653,13 @@ void GraphVis::VisSquareGridShortcutPotential(const NavField<SquareCell*>& nav_f
 		//DrawNodeCenter(center, dst);
 		VisUtils::DrawPoint(dst, center);
 
+		const double max_s = 0.9;
 		HSVColor hsvc;
 		hsvc.h = 40;
 		hsvc.v = 1;
-		hsvc.s = (*itv)->shortcut_rewards_/2500.0 * 0.8;
-		if(hsvc.s > 0.8)
-			hsvc.s = 0.8;
+		hsvc.s = (*itv)->shortcut_rewards_/nav_field.max_rewards_ * max_s;
+		if(hsvc.s > max_s)
+			hsvc.s = max_s;
 		RGBColor rgbc = VisUtils::HSV2RGB(hsvc);
 
 		if((*itv)->shortcut_rewards_ > 1)
