@@ -31,7 +31,9 @@ public:
 		potential_(0),
 		potential_parent_(nullptr),
 		shortcut_rewards_(0),
-		g_rewards_(0),
+		weighted_cost_(0),
+		shortcut_cost_(0),
+		reward_num_(0),
 		search_parent_(nullptr),
 		is_checked_(false), is_in_openlist_(false),
 		f_astar_(0),g_astar_(0),h_astar_(0){};
@@ -44,7 +46,9 @@ public:
 		potential_(0),
 		potential_parent_(nullptr),
 		shortcut_rewards_(0),
-		g_rewards_(0),
+		weighted_cost_(0),
+		shortcut_cost_(0),
+		reward_num_(0),
 		search_parent_(nullptr),
 		is_checked_(false), is_in_openlist_(false),
 		f_astar_(0),g_astar_(0),h_astar_(0){};
@@ -71,9 +75,12 @@ public:
 	// attributes for discrete potential field
 	double potential_;
 	Vertex<BundledStructType>* potential_parent_;
-
 	double shortcut_rewards_;
-	double g_rewards_;
+
+	// Dijkstra search with shortcut rewards
+	double shortcut_cost_;
+	uint16_t reward_num_;
+	double weighted_cost_;
 
 private:
     // attributes for A* search

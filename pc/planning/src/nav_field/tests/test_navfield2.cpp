@@ -134,7 +134,7 @@ int main(int argc, char* argv[])
 	else
 		GraphVis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
-//	GraphVis::VisSquareGridGraph(*graph, vis_img, vis_img, true);
+	//GraphVis::VisSquareGridGraph(*graph, vis_img, vis_img, true);
 
 	//GraphVis::VisSquareGridNavField(*sgrid_map.data_model, *nav_field, start_vertex, vis_img, vis_img, true);
 	//GraphVis::VisSquareGridLocalNavField(*sgrid_map.data_model, *nav_field, start_vertex, vis_img, vis_img, 5);
