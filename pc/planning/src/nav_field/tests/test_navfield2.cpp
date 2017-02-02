@@ -124,6 +124,7 @@ int main(int argc, char* argv[])
 	Vertex_t<SquareCell*> * finish_vertex = graph->GetVertexFromID(95); //95
 
 	auto nav_path = sc_eval.SearchInNavField(start_vertex, finish_vertex);
+//	auto nav_path = sc_eval.SearchInNavFieldbyStep(start_vertex, finish_vertex);
 
 	///////////////////////////////////////////////////////////////
 

@@ -33,6 +33,7 @@ private:
 public:
 	void EvaluateGridShortcutPotential();
 	Path_t<SquareCell*> SearchInNavField(Vertex_t<SquareCell*>* start_vtx, Vertex_t<SquareCell*>* goal_vtx);
+	Path_t<SquareCell*> SearchInNavFieldbyStep(Vertex_t<SquareCell*>* start_vtx, Vertex_t<SquareCell*>* goal_vtx);
 };
 
 }

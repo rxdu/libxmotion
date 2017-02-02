@@ -11,7 +11,7 @@ set(NAV_FIELD_LIB_SRC
     shortcut_eval.cpp
 )
 add_library(nav_field STATIC ${NAV_FIELD_LIB_SRC})
-target_link_libraries(nav_field geometry)# ${OpenCV_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(nav_field geometry vis)# ${OpenCV_LIBS} ${LCM_LIBRARIES})
 
 # Add executables
 #add_executable(graph_combine_exp tests/graph_combine_exp.cpp)

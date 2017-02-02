@@ -33,6 +33,7 @@ public:
 		shortcut_rewards_(0),
 		weighted_cost_(0),
 		shortcut_cost_(0),
+		shortcut_avg_(0),
 		reward_num_(0),
 		search_parent_(nullptr),
 		is_checked_(false), is_in_openlist_(false),
@@ -48,6 +49,7 @@ public:
 		shortcut_rewards_(0),
 		weighted_cost_(0),
 		shortcut_cost_(0),
+		shortcut_avg_(0),
 		reward_num_(0),
 		search_parent_(nullptr),
 		is_checked_(false), is_in_openlist_(false),
@@ -79,6 +81,7 @@ public:
 
 	// Dijkstra search with shortcut rewards
 	double shortcut_cost_;
+	double shortcut_avg_;
 	uint16_t reward_num_;
 	double weighted_cost_;
 

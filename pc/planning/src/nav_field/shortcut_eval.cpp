@@ -8,7 +8,13 @@
 #include <cmath>
 #include <queue>
 #include <algorithm>
+#include <unistd.h>
 
+// opencv
+#include "opencv2/opencv.hpp"
+
+#include "vis/graph_vis.h"
+#include "vis/vis_utils.h"
 #include "graph/priority_queue.h"
 #include "nav_field/shortcut_eval.h"
 
@@ -17,7 +23,7 @@ using namespace srcl_ctrl;
 ShortcutEval::ShortcutEval(std::shared_ptr<SquareGrid> sgrid, std::shared_ptr<NavField<SquareCell*>> nav_field):
 			sgrid_(sgrid),
 			nav_field_(nav_field),
-			dist_weight(0.2)
+			dist_weight(0.1)
 {
 
 }
@@ -131,17 +137,18 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 			if(successor->is_checked_ == false)
 			{
 				// first set the parent of the adjacent vertex to be the current vertex
-				double new_rewards = 0;
+//				double avg_rewards = 0;
 //				if(successor->shortcut_rewards_ != 0)
-//					new_rewards = nav_field_->max_rewards_ - (successor->shortcut_rewards_ + current_vertex->shortcut_cost_*current_vertex->reward_num_)/(current_vertex->reward_num_ + 1);
+//					avg_rewards = nav_field_->max_rewards_ - (successor->shortcut_rewards_ + current_vertex->shortcut_avg_*current_vertex->reward_num_)/(current_vertex->reward_num_ + 1);
 //				else
-//					new_rewards = nav_field_->max_rewards_ - current_vertex->shortcut_cost_;
-				//new_rewards = nav_field_->max_rewards_ - std::max(current_vertex->shortcut_cost_, (successor->shortcut_rewards_ + current_vertex->shortcut_cost_*current_vertex->reward_num_)/(current_vertex->reward_num_ + 1));
-				new_rewards = (nav_field_->max_rewards_ - successor->shortcut_rewards_) + current_vertex->shortcut_cost_;
+//					avg_rewards = nav_field_->max_rewards_ - current_vertex->shortcut_avg_;
+				//double avg_rewards = nav_field_->max_rewards_ - std::max(current_vertex->shortcut_rewards_, successor->shortcut_rewards_);
+				double avg_rewards = nav_field_->max_rewards_ - (successor->shortcut_rewards_ + current_vertex->shortcut_avg_*current_vertex->reward_num_)/(current_vertex->reward_num_ + 1);
+				double new_rewards = current_vertex->shortcut_cost_ + (nav_field_->max_rewards_ - successor->shortcut_rewards_)/nav_field_->max_rewards_*sgrid_->cell_size_;
 				double new_dist = current_vertex->g_astar_ + (*ite).cost_;
 
 				//double new_cost = current_vertex->weighted_cost_ + (new_dist*dist_weight + new_rewards*(1-dist_weight));
-				double new_cost = new_dist*dist_weight + new_rewards*(1-dist_weight);
+				double new_cost = new_dist*dist_weight + (new_rewards + avg_rewards)*(1-dist_weight);// + avg_rewards; // avg_rewards*(1-dist_weight);
 
 				// if the vertex is not in open list
 				// or if the vertex is in open list but has a higher cost
@@ -152,12 +159,12 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 
 //					if(successor->shortcut_rewards_ != 0)
 //					{
-//						successor->shortcut_cost_ = new_rewards;
-//						successor->reward_num_ = current_vertex->reward_num_ + 1;
+						successor->shortcut_avg_ = avg_rewards;
+						successor->reward_num_ = current_vertex->reward_num_ + 1;
 //					}
 //					else
 //					{
-//						successor->shortcut_cost_ = current_vertex->shortcut_cost_;
+//						successor->shortcut_avg_ = current_vertex->shortcut_avg_;
 //						successor->reward_num_ = current_vertex->reward_num_;
 //					}
 					successor->shortcut_cost_ = new_rewards;
@@ -194,6 +201,7 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 		std::cout << "finishing vertex id: " << (*traj_e)->vertex_id_ << std::endl;
 		std::cout << "path length: " << path.size() << std::endl;
 		std::cout << "total dist cost: " << path.back()->g_astar_ << std::endl;
+		std::cout << "total shortcut cost: " << path.back()->shortcut_cost_ << std::endl;
 		std::cout << "total cost with rewards: " << path.back()->weighted_cost_ << std::endl;
 #endif
 	}
@@ -203,3 +211,122 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 	return path;
 }
 
+Path_t<SquareCell*> ShortcutEval::SearchInNavFieldbyStep(Vertex_t<SquareCell*>* start_vtx, Vertex_t<SquareCell*>* goal_vtx)
+{
+	cv::Mat vis_img;
+
+	GraphVis::VisSquareGrid(*sgrid_, vis_img);
+	cv::namedWindow("Search Process", cv::WINDOW_NORMAL ); // WINDOW_AUTOSIZE
+	GraphVis::VisSquareGridShortcutPotential(*(this->nav_field_), vis_img, vis_img);
+
+	nav_field_->field_graph_->ResetGraphVertices();
+
+	bool found_path = false;
+	Path_t<SquareCell*> path;
+	Vertex_t<SquareCell*>* current_vertex;
+	// open list - a list of vertices that need to be checked out
+	PriorityQueue<Vertex_t<SquareCell*>*> openlist;
+
+	openlist.put(start_vtx, 0);
+	start_vtx->is_in_openlist_ = true;
+
+	start_vtx->g_astar_ = 0;
+	start_vtx->shortcut_rewards_ = 0;
+	start_vtx->reward_num_ = 0;
+	start_vtx->weighted_cost_ = 0;//nav_field_->max_rewards_;// 0;
+
+	while(!openlist.empty() && found_path != true)
+	{
+		current_vertex = openlist.get();
+		if(current_vertex->is_checked_)
+			continue;
+
+		current_vertex->is_in_openlist_ = false;
+		current_vertex->is_checked_ = true;
+
+		VisUtils::FillRectangularArea(vis_img, current_vertex->bundled_data_->bbox_, cv::Scalar(204,204,102));
+
+		// check all adjacent vertices (successors of current vertex)
+		for(auto ite = current_vertex->edges_.begin(); ite != current_vertex->edges_.end(); ite++)
+		{
+			Vertex_t<SquareCell*>* successor;
+			successor = (*ite).dst_;
+
+			// check if the vertex has been checked (in closed list)
+			if(successor->is_checked_ == false)
+			{
+				// first set the parent of the adjacent vertex to be the current vertex
+				double avg_rewards = 0;
+				avg_rewards = nav_field_->max_rewards_ - std::max(successor->shortcut_rewards_, current_vertex->shortcut_avg_);
+				//(successor->shortcut_rewards_ + current_vertex->shortcut_avg_*current_vertex->reward_num_)/(current_vertex->reward_num_ + 1);
+				//new_rewards = nav_field_->max_rewards_ - std::max(current_vertex->shortcut_cost_, (successor->shortcut_rewards_ + current_vertex->shortcut_cost_*current_vertex->reward_num_)/(current_vertex->reward_num_ + 1));
+				double new_rewards = current_vertex->shortcut_cost_ + (nav_field_->max_rewards_ - successor->shortcut_rewards_);///nav_field_->max_rewards_*sgrid_->cell_size_;
+				double new_dist = current_vertex->g_astar_ + (*ite).cost_;
+
+				//double new_cost = current_vertex->weighted_cost_ + (new_dist*dist_weight + new_rewards*(1-dist_weight));
+				double new_cost = new_dist*dist_weight + new_rewards*(1-dist_weight);
+
+				// if the vertex is not in open list
+				// or if the vertex is in open list but has a higher cost
+				if(successor->is_in_openlist_ == false || new_cost < successor->weighted_cost_)
+				{
+					successor->search_parent_ = current_vertex;
+					successor->weighted_cost_ = new_cost;
+
+//					if(successor->shortcut_rewards_ != 0)
+//					{
+						successor->shortcut_avg_ = avg_rewards;
+//						successor->reward_num_ = current_vertex->reward_num_ + 1;
+//					}
+//					else
+//					{
+//						successor->shortcut_avg_ = current_vertex->shortcut_avg_;
+//						successor->reward_num_ = current_vertex->reward_num_;
+//					}
+					successor->shortcut_cost_ = new_rewards;
+					successor->g_astar_ = new_dist;
+
+					openlist.put(successor, successor->weighted_cost_);
+					successor->is_in_openlist_ = true;
+
+					if(successor == goal_vtx){
+						found_path = true;
+					}
+				}
+
+				// visualization
+				cv::imshow("Search Process", vis_img);
+				cv::waitKey(10);
+			}
+		}
+	}
+
+	if(found_path)
+	{
+		std::cout << "path found in nav field" << std::endl;
+		Vertex_t<SquareCell*>* waypoint = goal_vtx;
+		while(waypoint != start_vtx)
+		{
+			path.push_back(waypoint);
+			waypoint = waypoint->search_parent_;
+		}
+		// add the start node
+		path.push_back(waypoint);
+		std::reverse(path.begin(), path.end());
+
+		auto traj_s = path.begin();
+		auto traj_e = path.end() - 1;
+#ifndef MINIMAL_PRINTOUT
+		std::cout << "starting vertex id: " << (*traj_s)->vertex_id_ << std::endl;
+		std::cout << "finishing vertex id: " << (*traj_e)->vertex_id_ << std::endl;
+		std::cout << "path length: " << path.size() << std::endl;
+		std::cout << "total dist cost: " << path.back()->g_astar_ << std::endl;
+		std::cout << "total shortcut cost: " << path.back()->shortcut_cost_ << std::endl;
+		std::cout << "total cost with rewards: " << path.back()->weighted_cost_ << std::endl;
+#endif
+	}
+	else
+		std::cout << "failed to find a path in nav field" << std::endl;
+
+	return path;
+}
