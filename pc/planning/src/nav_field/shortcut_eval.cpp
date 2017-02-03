@@ -23,7 +23,7 @@ using namespace srcl_ctrl;
 ShortcutEval::ShortcutEval(std::shared_ptr<SquareGrid> sgrid, std::shared_ptr<NavField<SquareCell*>> nav_field):
 			sgrid_(sgrid),
 			nav_field_(nav_field),
-			dist_weight(0.1)
+			dist_weight(0.5)
 {
 
 }
@@ -144,7 +144,13 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 //					avg_rewards = nav_field_->max_rewards_ - current_vertex->shortcut_avg_;
 				//double avg_rewards = nav_field_->max_rewards_ - std::max(current_vertex->shortcut_rewards_, successor->shortcut_rewards_);
 //				double avg_rewards = nav_field_->max_rewards_ - (successor->shortcut_rewards_ + current_vertex->shortcut_avg_*current_vertex->reward_num_)/(current_vertex->reward_num_ + 1);
-				double new_rewards = current_vertex->shortcut_cost_ + (current_vertex->shortcut_rewards_ - successor->shortcut_rewards_) + (1-successor->shortcut_rewards_/nav_field_->max_rewards_)*sgrid_->cell_size_;
+				// no penalty for leaving shortcut regions
+				// rewards for entering shortcut regions
+				// rewards for staying in high-reward cells
+//				double region_rewards = current_vertex->shortcut_rewards_ - successor->shortcut_rewards_;
+//				if(region_rewards > 0)
+//					region_rewards = 0;
+				double new_rewards = current_vertex->shortcut_cost_ + (current_vertex->shortcut_rewards_ - successor->shortcut_rewards_ ) + (1-successor->shortcut_rewards_/nav_field_->max_rewards_)*sgrid_->cell_size_;
 				double new_dist = current_vertex->g_astar_ + (*ite).cost_;
 
 				//double new_cost = current_vertex->weighted_cost_ + (new_dist*dist_weight + new_rewards*(1-dist_weight));
