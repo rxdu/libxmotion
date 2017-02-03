@@ -27,11 +27,11 @@ private:
 
 	double dist_weight;
 
-	double EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_vtx);
+	double EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_vtx, uint16_t sensor_range);
 	double CalcDirectDistance(Position2D start, Position2D goal, double cell_size, bool allow_diag);
 
 public:
-	void EvaluateGridShortcutPotential();
+	void EvaluateGridShortcutPotential(uint16_t sensor_range);
 	Path_t<SquareCell*> SearchInNavField(Vertex_t<SquareCell*>* start_vtx, Vertex_t<SquareCell*>* goal_vtx);
 	Path_t<SquareCell*> SearchInNavFieldbyStep(Vertex_t<SquareCell*>* start_vtx, Vertex_t<SquareCell*>* goal_vtx);
 };

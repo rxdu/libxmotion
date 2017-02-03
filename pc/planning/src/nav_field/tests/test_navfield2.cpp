@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
 	ShortcutEval sc_eval(sgrid_map.data_model, nav_field);
 	//auto nav_path = nav_field.SearchInNavField(start_vertex, finish_vertex);
 //	sc_eval.EvaluateCellShortcutPotential(start_vertex);
-	sc_eval.EvaluateGridShortcutPotential();
+	sc_eval.EvaluateGridShortcutPotential(6);
 
 	// abstract: 552, 95
 	// case 3: 930, 536

@@ -66,9 +66,9 @@ double ShortcutEval::CalcDirectDistance(Position2D start, Position2D goal, doubl
 	return dist;
 }
 
-double ShortcutEval::EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_vtx)
+double ShortcutEval::EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_vtx, uint16_t sensor_range)
 {
-	auto nbs = sgrid_->GetNeighboursWithinRange(eval_vtx->bundled_data_->data_id_, 5);
+	auto nbs = sgrid_->GetNeighboursWithinRange(eval_vtx->bundled_data_->data_id_, sensor_range);
 
 	std::priority_queue<double> rewards_queue;
 	for(auto& n : nbs) {
@@ -85,13 +85,13 @@ double ShortcutEval::EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_v
 	return rewards_queue.top();
 }
 
-void ShortcutEval::EvaluateGridShortcutPotential()
+void ShortcutEval::EvaluateGridShortcutPotential(uint16_t sensor_range)
 {
 	std::priority_queue<double> all_rewards;
 	auto vertices = nav_field_->field_graph_->GetGraphVertices();
 
 	for(auto& vtx : vertices) {
-		vtx->shortcut_rewards_ = EvaluateCellShortcutPotential(vtx);
+		vtx->shortcut_rewards_ = EvaluateCellShortcutPotential(vtx, sensor_range);
 		all_rewards.push(vtx->shortcut_rewards_);
 	}
 
@@ -116,7 +116,7 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 	start_vtx->g_astar_ = 0;
 	start_vtx->shortcut_rewards_ = 0;
 	start_vtx->reward_num_ = 0;
-	start_vtx->weighted_cost_ = 0;//nav_field_->max_rewards_;// 0;
+	start_vtx->weighted_cost_ = nav_field_->max_rewards_;// 0;
 
 	while(!openlist.empty() && found_path != true)
 	{
@@ -143,12 +143,12 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 //				else
 //					avg_rewards = nav_field_->max_rewards_ - current_vertex->shortcut_avg_;
 				//double avg_rewards = nav_field_->max_rewards_ - std::max(current_vertex->shortcut_rewards_, successor->shortcut_rewards_);
-				double avg_rewards = nav_field_->max_rewards_ - (successor->shortcut_rewards_ + current_vertex->shortcut_avg_*current_vertex->reward_num_)/(current_vertex->reward_num_ + 1);
-				double new_rewards = current_vertex->shortcut_cost_ + (nav_field_->max_rewards_ - successor->shortcut_rewards_)/nav_field_->max_rewards_*sgrid_->cell_size_;
+//				double avg_rewards = nav_field_->max_rewards_ - (successor->shortcut_rewards_ + current_vertex->shortcut_avg_*current_vertex->reward_num_)/(current_vertex->reward_num_ + 1);
+				double new_rewards = current_vertex->shortcut_cost_ + (current_vertex->shortcut_rewards_ - successor->shortcut_rewards_) + (1-successor->shortcut_rewards_/nav_field_->max_rewards_)*sgrid_->cell_size_;
 				double new_dist = current_vertex->g_astar_ + (*ite).cost_;
 
 				//double new_cost = current_vertex->weighted_cost_ + (new_dist*dist_weight + new_rewards*(1-dist_weight));
-				double new_cost = new_dist*dist_weight + (new_rewards + avg_rewards)*(1-dist_weight);// + avg_rewards; // avg_rewards*(1-dist_weight);
+				double new_cost = new_dist*dist_weight + new_rewards*(1-dist_weight);// + avg_rewards; // avg_rewards*(1-dist_weight);
 
 				// if the vertex is not in open list
 				// or if the vertex is in open list but has a higher cost
@@ -159,8 +159,8 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 
 //					if(successor->shortcut_rewards_ != 0)
 //					{
-						successor->shortcut_avg_ = avg_rewards;
-						successor->reward_num_ = current_vertex->reward_num_ + 1;
+//						successor->shortcut_avg_ = avg_rewards;
+//						successor->reward_num_ = current_vertex->reward_num_ + 1;
 //					}
 //					else
 //					{
