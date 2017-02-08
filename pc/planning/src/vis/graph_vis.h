@@ -57,6 +57,7 @@ public:
 
 	static void VisSquareGridNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, Vertex_t<SquareCell*>* start_vtx, cv::InputArray _src, cv::OutputArray _dst, bool show_id);
 	static void VisSquareGridLocalNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, Vertex_t<SquareCell*>* center_vtx, cv::InputArray _src, cv::OutputArray _dst, uint16_t sensor_range);
+	static void VisSquareGridShortcutPotential(const NavField<SquareCell*>& nav_field, cv::InputArray _src, cv::OutputArray _dst);
 };
 
 }

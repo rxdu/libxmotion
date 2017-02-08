@@ -75,8 +75,11 @@ private:
 	std::map<uint64_t, Vertex<BundledStructType>*> vertex_map_;
 
 	friend class AStar;
+
+	// additiona friends
 	template<class GraphNodeType>
 	friend class NavField;
+	friend class ShortcutEval;
 
 private:
 	/// This function checks if a vertex already exists in the graph.

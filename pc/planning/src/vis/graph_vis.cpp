@@ -618,7 +618,8 @@ void GraphVis::VisSquareGridLocalNavField(const SquareGrid& grid, const NavField
 		auto vtx = nav_field.field_graph_->GetVertexFromID(n->data_id_);
 		if(vtx == nullptr)
 			continue;
-		if(vtx->potential_ > center_vtx->potential_)
+		//if(vtx->potential_ > center_vtx->potential_)
+		if(vtx->shortcut_rewards_ <= 0)
 			VisUtils::FillRectangularArea(dst, vtx->bundled_data_->bbox_, Scalar(211,211,211));
 		else {
 			VisUtils::FillRectangularArea(dst, vtx->bundled_data_->bbox_, aoi_color_);
@@ -628,12 +629,64 @@ void GraphVis::VisSquareGridLocalNavField(const SquareGrid& grid, const NavField
 			y1 = vtx->bundled_data_->location_.y;
 
 			// display potential value
-			putText(dst, std::to_string((int)(center_vtx->potential_-vtx->potential_)) ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+//			putText(dst, std::to_string((int)(center_vtx->potential_-vtx->potential_)) ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+			putText(dst, std::to_string((int)(vtx->shortcut_rewards_)) ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
 		}
 
 	}
 //	if((*itv)->potential_ > start_vtx->potential_)
 //		VisUtils::FillRectangularArea(dst, (*itv)->bundled_data_->bbox_, Scalar(211,211,211));
+}
+
+void GraphVis::VisSquareGridShortcutPotential(const NavField<SquareCell*>& nav_field, cv::InputArray _src, cv::OutputArray _dst)
+{
+	Mat src = _src.getMat();
+	_dst.create(_src.size(), _src.type());
+	Mat dst = _dst.getMat();
+	src.copyTo(dst);
+
+	// draw all vertices
+	auto vertices = nav_field.field_graph_->GetGraphVertices();
+	for(auto itv = vertices.begin(); itv != vertices.end(); itv++)
+	{
+		cv::Point center((*itv)->bundled_data_->location_.x, (*itv)->bundled_data_->location_.y);
+		//DrawNodeCenter(center, dst);
+		VisUtils::DrawPoint(dst, center);
+
+		const double max_s = 0.9;
+		HSVColor hsvc;
+		hsvc.h = 40;
+		hsvc.v = 1;
+		hsvc.s = (*itv)->shortcut_rewards_/nav_field.max_rewards_ * max_s;
+		if(hsvc.s > max_s)
+			hsvc.s = max_s;
+		RGBColor rgbc = VisUtils::HSV2RGB(hsvc);
+
+		if((*itv)->shortcut_rewards_ > 1)
+			VisUtils::FillRectangularArea(dst, (*itv)->bundled_data_->bbox_, Scalar(rgbc.b,rgbc.g,rgbc.r));//aoi_color_);
+
+		// current vertex center coordinate
+		uint64_t x1,y1,x2,y2;
+		x1 = (*itv)->bundled_data_->location_.x;
+		y1 = (*itv)->bundled_data_->location_.y;
+
+		std::string id = std::to_string((int)(*itv)->shortcut_rewards_);
+		putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+
+		// draw all edges
+		auto edges = nav_field.field_graph_->GetGraphUndirectedEdges();
+		for(auto it = edges.begin(); it != edges.end(); it++)
+		{
+			uint64_t x1,y1,x2,y2;
+			x1 = (*it).src_->bundled_data_->location_.x;
+			y1 = (*it).src_->bundled_data_->location_.y;
+			x2 = (*it).dst_->bundled_data_->location_.x;
+			y2 = (*it).dst_->bundled_data_->location_.y;
+
+			//DrawEdge(Point(x1,y1), Point(x2,y2), dst);
+			VisUtils::DrawLine(dst, Point(x1,y1), Point(x2,y2));
+		}
+	}
 }
 
 void GraphVis::VisSquareGridPath(const std::vector<Vertex_t<SquareCell*>*>& path, cv::InputArray _src, cv::OutputArray _dst)

@@ -37,6 +37,7 @@ using namespace cv;
 using namespace srcl_ctrl;
 
 #include "nav_field/nav_field.h"
+#include "nav_field/shortcut_eval.h"
 #include "geometry/square_grid/square_grid.h"
 
 int main(int argc, char* argv[])
@@ -58,7 +59,7 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
-			sgrid_map = SGridBuilder::BuildSquareGridMap(input_map, 64);
+			sgrid_map = SGridBuilder::BuildSquareGridMap(input_map, 32);
 			use_input_image = true;
 		}
 	}
@@ -86,9 +87,6 @@ int main(int argc, char* argv[])
 	}
 
 	std::shared_ptr<Graph_t<SquareCell*>> graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);
-	
-	Vertex_t<SquareCell*> * start_vertex = graph->GetVertexFromID(508);//552
-	Vertex_t<SquareCell*> * finish_vertex = graph->GetVertexFromID(95);
 
 //	Path_t<SquareCell*> path;
 //	if(start_vertex == nullptr || finish_vertex == nullptr) {
@@ -108,11 +106,25 @@ int main(int argc, char* argv[])
 
 	///////////////////////////////////////////////////////////////
 
-	NavField<SquareCell*> nav_field(graph);
+	std::shared_ptr<NavField<SquareCell*>> nav_field = std::make_shared<NavField<SquareCell*>>(graph);
 	//nav_field.UpdateNavField(185); // 32
 	//nav_field.UpdateNavField(60); // 64
-	//nav_field.UpdateNavField(95);
-	auto nav_path = nav_field.SearchInNavField(start_vertex, finish_vertex);
+	nav_field->UpdateNavField(95);
+//	nav_field->UpdateNavField(406); // lab map
+//	nav_field->UpdateNavField(536); // case 3
+
+	ShortcutEval sc_eval(sgrid_map.data_model, nav_field);
+	//auto nav_path = nav_field.SearchInNavField(start_vertex, finish_vertex);
+//	sc_eval.EvaluateCellShortcutPotential(start_vertex);
+	sc_eval.EvaluateGridShortcutPotential(6);
+
+	// abstract: 552, 95
+	// case 3: 930, 536
+	Vertex_t<SquareCell*> * start_vertex = graph->GetVertexFromID(372);// 552, 508
+	Vertex_t<SquareCell*> * finish_vertex = graph->GetVertexFromID(95); //95
+
+	auto nav_path = sc_eval.SearchInNavField(start_vertex, finish_vertex);
+//	auto nav_path = sc_eval.SearchInNavFieldbyStep(start_vertex, finish_vertex);
 
 	///////////////////////////////////////////////////////////////
 
@@ -123,8 +135,12 @@ int main(int argc, char* argv[])
 	else
 		GraphVis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
-//	GraphVis::VisSquareGridNavField(*sgrid_map.data_model, nav_field, start_vertex, vis_img, vis_img, true);
-	GraphVis::VisSquareGridLocalNavField(*sgrid_map.data_model, nav_field, start_vertex, vis_img, vis_img, 6);
+	//GraphVis::VisSquareGridGraph(*graph, vis_img, vis_img, true);
+
+	//GraphVis::VisSquareGridNavField(*sgrid_map.data_model, *nav_field, start_vertex, vis_img, vis_img, true);
+	//GraphVis::VisSquareGridLocalNavField(*sgrid_map.data_model, *nav_field, start_vertex, vis_img, vis_img, 5);
+
+	GraphVis::VisSquareGridShortcutPotential(*nav_field, vis_img, vis_img);
 
 //	if(!path.empty())
 //		GraphVis::VisSquareGridPath(path, vis_img, vis_img);
