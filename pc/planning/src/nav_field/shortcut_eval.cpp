@@ -14,6 +14,7 @@
 #include "opencv2/opencv.hpp"
 
 #include "vis/graph_vis.h"
+#include "vis/sgrid_vis.h"
 #include "vis/vis_utils.h"
 #include "graph/priority_queue.h"
 #include "nav_field/shortcut_eval.h"
@@ -221,9 +222,9 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavFieldbyStep(Vertex_t<SquareCell*>* 
 {
 	cv::Mat vis_img;
 
-	GraphVis::VisSquareGrid(*sgrid_, vis_img);
+	Vis::VisSquareGrid(*sgrid_, vis_img);
 	cv::namedWindow("Search Process", cv::WINDOW_NORMAL ); // WINDOW_AUTOSIZE
-	GraphVis::VisSquareGridShortcutPotential(*(this->nav_field_), vis_img, vis_img);
+	Vis::VisSquareGridShortcutPotential(*(this->nav_field_), vis_img, vis_img);
 
 	nav_field_->field_graph_->ResetGraphVertices();
 

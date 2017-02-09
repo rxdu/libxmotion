@@ -10,9 +10,17 @@
 using namespace srcl_ctrl;
 using namespace cv;
 
-cv::Scalar VisUtils::pt_color_ = Scalar( 0, 0, 255 );
+// frequently used colors
+cv::Scalar VisUtils::default_pt_color_ = Scalar( 0, 0, 255 );
+cv::Scalar VisUtils::default_ln_color_ = Scalar(Scalar(0,0,0));
+cv::Scalar VisUtils::default_area_color_ = Scalar(0,255,255);
+
+cv::Scalar VisUtils::bk_color_ = Scalar(255,255,255);
 cv::Scalar VisUtils::ln_color_ = Scalar(Scalar(0,0,0));
-cv::Scalar VisUtils::area_color_ = Scalar(0,255,255);
+cv::Scalar VisUtils::obs_color_ = Scalar(Scalar(0,102,204));
+cv::Scalar VisUtils::aoi_color_ = Scalar(Scalar(0,255,255));
+cv::Scalar VisUtils::start_color_ = Scalar(0,0,255);
+cv::Scalar VisUtils::finish_color_ = Scalar(153,76,0);
 
 void VisUtils::DrawPoint(cv::Mat img, cv::Point pos, const cv::Scalar& color)
 {

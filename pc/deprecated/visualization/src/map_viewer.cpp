@@ -180,8 +180,8 @@ cv::Mat MapViewer::HighlightSelectedNode(uint32_t x, uint32_t y, bool& updated)
 		{
 			auto node = vtx->bundled_data_;
 
-			Range rngx(node->bounding_box_.x.min, node->bounding_box_.x.max);
-			Range rngy(node->bounding_box_.y.min, node->bounding_box_.y.max);
+			Range rngx(node->bbox_.x.min, node->bbox_.x.max);
+			Range rngy(node->bbox_.y.min, node->bbox_.y.max);
 
 			vis_img(rngy,rngx) = Scalar(0,255,255);
 

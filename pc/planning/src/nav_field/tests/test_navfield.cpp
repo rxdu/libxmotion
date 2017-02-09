@@ -29,6 +29,7 @@
 #include "graph/graph.h"
 #include "graph/astar.h"
 #include "vis/graph_vis.h"
+#include "vis/sgrid_vis.h"
 #include "geometry/graph_builder.h"
 #include "map/image_utils.h"
 #include "geometry/sgrid_builder.h"
@@ -129,11 +130,11 @@ int main(int argc, char* argv[])
 	Mat vis_img;
 
 	if(!use_input_image)
-		GraphVis::VisSquareGrid(*sgrid_map.data_model, vis_img);
+		Vis::VisSquareGrid(*sgrid_map.data_model, vis_img);
 	else
-		GraphVis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
+		Vis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
-	GraphVis::VisSquareGridGraph(*graph, vis_img, vis_img, false);
+	Vis::VisGraph(*graph, vis_img, vis_img, false);
 
 //	if(!nav_path.empty())
 //		GraphVis::VisSquareGridPath(nav_path, vis_img, vis_img);

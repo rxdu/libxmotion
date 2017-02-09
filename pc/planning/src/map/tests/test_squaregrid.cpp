@@ -17,6 +17,7 @@
 #include "graph/graph.h"
 #include "graph/astar.h"
 #include "vis/graph_vis.h"
+#include "vis/sgrid_vis.h"
 #include "map/image_utils.h"
 #include "geometry/graph_builder.h"
 #include "geometry/sgrid_builder.h"
@@ -126,12 +127,12 @@ int main(int argc, char** argv )
 	/*** Image Layouts: (map) -> square grid -> graph -> path ***/
 	/*** you can visualize the squre grid by itself or overlay it on the map image ***/
 	if(sgrid_map.padded_image.empty())
-		GraphVis::VisSquareGrid(*sgrid_map.data_model, vis_img);
+		Vis::VisSquareGrid(*sgrid_map.data_model, vis_img);
 	else
-		GraphVis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
+		Vis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
 	/*** put the graph on top of the square grid ***/
-	GraphVis::VisSquareGridGraph(*graph, vis_img, vis_img, true);
+	Vis::VisGraph(*graph, vis_img, vis_img, true);
 	/*** put the path on top of the graph ***/
 //	GraphVis::VisSquareGridPath(path, vis_img, vis_img);
 

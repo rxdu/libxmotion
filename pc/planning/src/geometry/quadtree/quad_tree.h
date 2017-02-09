@@ -37,7 +37,7 @@ public:
 	NodeType node_type_;
 	OccupancyType occupancy_;
 	Position2D location_;
-	BoundingBox bounding_box_;
+	BoundingBox bbox_;
 
 	// Pointers to child nodes
 	QuadTreeNode* child_nodes_[4];
