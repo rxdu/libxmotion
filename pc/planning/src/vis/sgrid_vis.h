@@ -23,7 +23,7 @@ namespace Vis
 	void VisAbstractSquareGrid(const SquareGrid& grid, cv::OutputArray _dst);
 	void VisSquareGrid(const SquareGrid& grid, cv::InputArray _src, cv::OutputArray _dst);
 
-	void VisSquareGridNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, Vertex_t<SquareCell*>* start_vtx, cv::InputArray _src, cv::OutputArray _dst, bool show_id);
+	void VisSquareGridNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, cv::InputArray _src, cv::OutputArray _dst, bool show_id);
 	void VisSquareGridLocalNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, Vertex_t<SquareCell*>* center_vtx, cv::InputArray _src, cv::OutputArray _dst, uint16_t sensor_range);
 	void VisSquareGridShortcutPotential(const NavField<SquareCell*>& nav_field, cv::InputArray _src, cv::OutputArray _dst);
 };

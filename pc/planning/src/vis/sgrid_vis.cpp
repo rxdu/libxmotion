@@ -23,10 +23,8 @@ void Vis::VisSquareGrid(const SquareGrid& grid, cv::OutputArray _dst)
 	for(auto itc = grid.cells_.begin(); itc != grid.cells_.end(); itc++)
 	{
 		if((*itc).second->occu_ == OccupancyType::OCCUPIED)
-			//FillSquareCellColor((*itc).second->bbox_, obs_color_, dst);
 			VisUtils::FillRectangularArea(dst, (*itc).second->bbox_, obs_color_);
 		else if((*itc).second->occu_ == OccupancyType::INTERESTED)
-			//FillSquareCellColor((*itc).second->bbox_, aoi_color_, dst);
 			VisUtils::FillRectangularArea(dst, (*itc).second->bbox_, aoi_color_);
 
 		auto cell = (*itc);
@@ -93,7 +91,7 @@ void Vis::VisSquareGrid(const SquareGrid& grid, cv::InputArray _src, cv::OutputA
 	src_img_color.copyTo(dst);
 }
 
-void Vis::VisSquareGridNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, Vertex_t<SquareCell*>* start_vtx, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
+void Vis::VisSquareGridNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
 {
 	_dst.create(Size(grid.col_size_*grid.cell_size_, grid.row_size_*grid.cell_size_), CV_8UC3);
 	Mat dst = _dst.getMat();
@@ -210,24 +208,54 @@ void Vis::VisSquareGridLocalNavField(const SquareGrid& grid, const NavField<Squa
 		auto vtx = nav_field.field_graph_->GetVertexFromID(n->data_id_);
 		if(vtx == nullptr)
 			continue;
-		//if(vtx->potential_ > center_vtx->potential_)
-		if(vtx->shortcut_rewards_ <= 0)
+
+		// calc shortcut rewards
+		double dist = 0;
+		Position2D start = center_vtx->bundled_data_->index_;
+		Position2D goal = vtx->bundled_data_->index_;
+
+		uint32_t x_error, y_error;
+
+		if(start.x > goal.x)
+			x_error = start.x - goal.x;
+		else
+			x_error = goal.x - start.x;
+
+		if(start.y > goal.y)
+			y_error = start.y - goal.y;
+		else
+			y_error = goal.y - start.y;
+
+		uint32_t diag_steps = 0;
+		uint32_t straight_steps = 0;
+
+		if(x_error > y_error) {
+			diag_steps = y_error;
+			straight_steps = x_error - y_error;
+		}
+		else {
+			diag_steps = x_error;
+			straight_steps = y_error - x_error;
+		}
+
+		dist = diag_steps * std::sqrt(2) * grid.cell_size_ + straight_steps * grid.cell_size_;
+
+		double rewards = center_vtx->potential_-vtx->potential_ - dist;
+
+		if(rewards <= 0)
 			VisUtils::FillRectangularArea(dst, vtx->bundled_data_->bbox_, Scalar(211,211,211));
 		else {
 			VisUtils::FillRectangularArea(dst, vtx->bundled_data_->bbox_, aoi_color_);
-
-			uint64_t x1,y1,x2,y2;
-			x1 = vtx->bundled_data_->location_.x;
-			y1 = vtx->bundled_data_->location_.y;
-
-			// display potential value
-//			putText(dst, std::to_string((int)(center_vtx->potential_-vtx->potential_)) ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
-			putText(dst, std::to_string((int)(vtx->shortcut_rewards_)) ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
 		}
 
+		uint64_t x1,y1,x2,y2;
+		x1 = vtx->bundled_data_->location_.x;
+		y1 = vtx->bundled_data_->location_.y;
+
+		// display potential value
+		putText(dst, std::to_string((int)(rewards)) ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+
 	}
-//	if((*itv)->potential_ > start_vtx->potential_)
-//		VisUtils::FillRectangularArea(dst, (*itv)->bundled_data_->bbox_, Scalar(211,211,211));
 }
 
 void Vis::VisSquareGridShortcutPotential(const NavField<SquareCell*>& nav_field, cv::InputArray _src, cv::OutputArray _dst)

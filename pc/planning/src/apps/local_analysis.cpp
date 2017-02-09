@@ -1,19 +1,8 @@
 /*
- * =====================================================================================
+ * local_analysis.cpp
  *
- *       Filename:  test_navfield.cpp
- *
- *    Description:  :
- *
- *        Version:  1.0
- *        Created:  01/17/2017 03:25:40 PM
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  Ruixiang Du (rdu), ruixiang.du@gmail.com
- *   Organization:  Worcester Polytechnic Institute
- *
- * =====================================================================================
+ *  Created on: Feb 9, 2017
+ *      Author: rdu
  */
 
 // standard libaray
@@ -89,43 +78,16 @@ int main(int argc, char* argv[])
 
 	std::shared_ptr<Graph_t<SquareCell*>> graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);
 
-//	Path_t<SquareCell*> path;
-//	if(start_vertex == nullptr || finish_vertex == nullptr) {
-//		std::cerr << "Invalid starting and finishing vertices, please choose two vertices in free space!" << std::endl;
-//	}
-//	else {
-//		clock_t		exec_time;
-//		exec_time = clock();
-//		path = AStar::Search(graph,start_vertex,finish_vertex);
-//		exec_time = clock() - exec_time;
-//		std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
-//	}
-
-//	auto nbs = sgrid_map.data_model->GetNeighboursWithinRange(603, 1);
-//	for(const auto& n : nbs)
-//		std::cout << n->data_id_ << std::endl;
-
 	///////////////////////////////////////////////////////////////
 
 	std::shared_ptr<NavField<SquareCell*>> nav_field = std::make_shared<NavField<SquareCell*>>(graph);
-	//nav_field.UpdateNavField(185); // 32
-	//nav_field.UpdateNavField(60); // 64
 	nav_field->UpdateNavField(95);
-//	nav_field->UpdateNavField(406); // lab map
-//	nav_field->UpdateNavField(536); // case 3
 
-	ShortcutEval sc_eval(sgrid_map.data_model, nav_field);
-	//auto nav_path = nav_field.SearchInNavField(start_vertex, finish_vertex);
-//	sc_eval.EvaluateCellShortcutPotential(start_vertex);
-	sc_eval.EvaluateGridShortcutPotential(6);
-
-	// abstract: 552, 95
-	// case 3: 930, 536
-	Vertex_t<SquareCell*> * start_vertex = graph->GetVertexFromID(372);// 552, 508
-	Vertex_t<SquareCell*> * finish_vertex = graph->GetVertexFromID(95); //95
-
-	auto nav_path = sc_eval.SearchInNavField(start_vertex, finish_vertex);
-//	auto nav_path = sc_eval.SearchInNavFieldbyStep(start_vertex, finish_vertex);
+	Vertex_t<SquareCell*> * checked_vertex = graph->GetVertexFromID(516);
+	if(checked_vertex->bundled_data_->occu_ == OccupancyType::OCCUPIED) {
+		std::cout << "Checked cell is occupied." << std::endl;
+		return -1;
+	}
 
 	///////////////////////////////////////////////////////////////
 
@@ -137,16 +99,8 @@ int main(int argc, char* argv[])
 		Vis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
 	//GraphVis::VisSquareGridGraph(*graph, vis_img, vis_img, true);
-
-	//Vis::VisSquareGridNavField(*sgrid_map.data_model, *nav_field, start_vertex, vis_img, vis_img, true);
-	//GraphVis::VisSquareGridLocalNavField(*sgrid_map.data_model, *nav_field, start_vertex, vis_img, vis_img, 5);
-
-	Vis::VisSquareGridShortcutPotential(*nav_field, vis_img, vis_img);
-
-//	if(!path.empty())
-//		GraphVis::VisSquareGridPath(path, vis_img, vis_img);
-	if(!nav_path.empty())
-		Vis::VisGraphPath(nav_path, vis_img, vis_img);
+	//Vis::VisSquareGridNavField(*sgrid_map.data_model, *nav_field, vis_img, vis_img, true);
+	Vis::VisSquareGridLocalNavField(*sgrid_map.data_model, *nav_field, checked_vertex, vis_img, vis_img, 5);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 
@@ -158,3 +112,6 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
+
+
+
