@@ -121,11 +121,11 @@ int main(int argc, char* argv[])
 
 	// abstract: 552, 95
 	// case 3: 930, 536
-	Vertex_t<SquareCell*> * start_vertex = graph->GetVertexFromID(372);// 552, 508
+	Vertex_t<SquareCell*> * start_vertex = graph->GetVertexFromID(552);// 552, 508
 	Vertex_t<SquareCell*> * finish_vertex = graph->GetVertexFromID(95); //95
 
-	auto nav_path = sc_eval.SearchInNavField(start_vertex, finish_vertex);
-//	auto nav_path = sc_eval.SearchInNavFieldbyStep(start_vertex, finish_vertex);
+//	auto nav_path = sc_eval.SearchInNavField(start_vertex, finish_vertex);
+	auto nav_path = sc_eval.SearchInNavFieldbyStep(start_vertex, finish_vertex);
 
 	///////////////////////////////////////////////////////////////
 
