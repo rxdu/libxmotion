@@ -34,7 +34,6 @@ public:
 	}
 	~SquareCell(){};
 
-//	const uint64_t node_id_;
 	Position2D index_;
 	Position2D location_;
 	OccupancyType occu_;
@@ -64,9 +63,14 @@ public:
 class SquareGrid{
 public:
 	SquareGrid(uint32_t row_num, uint32_t col_num, uint32_t cell_size);
+	SquareGrid(uint32_t row_num, uint32_t col_num, uint32_t cell_size, int64_t img_offset_x, int64_t img_offset_y);
 	~SquareGrid();
 
 	typedef SquareCell node_type;
+
+private:
+	int64_t img_offset_x_;
+	int64_t img_offset_y_;
 
 public:
 	std::map<uint64_t, SquareCell*> cells_;
@@ -78,6 +82,7 @@ public:
 
 private:
 	BoundingBox CalcBoundingBox(uint64_t id);
+	BoundingBox CalcBoundingBox(uint64_t id, int64_t img_offset_x, int64_t img_offset_y);
 
 public:
 	void SetCellOccupancy(uint32_t row, uint32_t col, OccupancyType occ);
