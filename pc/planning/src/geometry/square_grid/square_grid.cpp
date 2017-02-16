@@ -59,8 +59,8 @@ uint64_t SquareGrid::GetIDFromPosition(uint32_t x, uint32_t y)
 {
 	uint32_t row, col;
 
-	col = x / cell_size_;
-	row = y / cell_size_;
+	col = (x - img_offset_x_) / cell_size_;
+	row = (y - img_offset_y_) / cell_size_;
 
 	return GetIDFromIndex(row, col);
 }

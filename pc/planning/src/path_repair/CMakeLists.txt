@@ -34,6 +34,10 @@ add_executable(test_combiner tests/test_combiner.cpp)
 add_definitions(-DENABLE_G3LOG)
 target_link_libraries(test_combiner map geometry local3d polyopt quadflat utils g3logger ${Octomap_LIBS} ${LCM_LIBRARIES})
 
+add_executable(test_combinerv2 tests/test_combiner_v2.cpp)
+add_definitions(-DENABLE_G3LOG)
+target_link_libraries(test_combinerv2 map geometry local3d polyopt quadflat utils g3logger ${Octomap_LIBS} ${LCM_LIBRARIES})
+
 add_executable(test_tracking tests/test_tracking.cpp)
 target_link_libraries(test_tracking polyopt quadflat utils ${LCM_LIBRARIES})
 

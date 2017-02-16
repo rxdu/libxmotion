@@ -18,7 +18,7 @@ using namespace octomap;
 
 OctomapServer::OctomapServer(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
-		octree_res_(0.179),	// 0.3 -> 0.5
+		octree_res_(0.179*2),	// 0.3 -> 0.5
 		save_tree_(false),
 		loop_count_(0),
 		save_tree_name_("saved_octree.bt"),
