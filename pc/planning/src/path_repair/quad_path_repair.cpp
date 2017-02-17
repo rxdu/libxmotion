@@ -55,19 +55,7 @@ QuadPathRepair::~QuadPathRepair()
 
 void QuadPathRepair::ConfigGraphPlanner(MapConfig config, double world_size_x, double world_size_y)
 {
-	if(config.GetMapType().data_model == MapDataModel::QUAD_TREE)
-	{
-		bool result = qtree_planner_.UpdateMapConfig(config);
-
-		if(result)
-		{
-			std::cout << "quad tree planner activated" << std::endl;
-			active_graph_planner_ = GraphPlannerType::QUADTREE_PLANNER;
-
-			//gcombiner_.SetBaseGraph(qtree_planner_.graph_, qtree_planner_.map_.data_model, qtree_planner_.map_.data_model->leaf_nodes_.size(), qtree_planner_.map_.info);
-		}
-	}
-	else if(config.GetMapType().data_model == MapDataModel::SQUARE_GRID)
+	if(config.GetMapType().data_model == MapDataModel::SQUARE_GRID)
 	{
 		bool result = sgrid_planner_.UpdateMapConfig(config);
 
@@ -77,18 +65,18 @@ void QuadPathRepair::ConfigGraphPlanner(MapConfig config, double world_size_x, d
 			active_graph_planner_ = GraphPlannerType::SQUAREGRID_PLANNER;
 		}
 	}
+	else
+		return;
 
 	// the world size must be set after the planner is updated, otherwise the configuration will be override
-	qtree_planner_.map_.info.SetWorldSize(world_size_x, world_size_y);
 	sgrid_planner_.map_.info.SetWorldSize(world_size_x, world_size_y);
 	world_size_set_ = true;
 
-	if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER) {
-		sgrid_planner_.map_.info.resolution = sgrid_planner_.map_.info.world_size_x/sgrid_planner_.map_.info.map_size_x*sgrid_planner_.map_.data_model->cell_size_;
-		std::cout << "sgrid map reso: " << sgrid_planner_.map_.info.resolution << std::endl;
-		geomark_graph_.UpdateSquareGridInfo(sgrid_planner_.graph_, sgrid_planner_.map_);
-		octomap_server_.SetOctreeResolution(sgrid_planner_.map_.info.resolution);
-	}
+	sgrid_planner_.map_.info.resolution = sgrid_planner_.map_.info.world_size_x/sgrid_planner_.map_.info.map_size_x*sgrid_planner_.map_.data_model->cell_size_;
+	std::cout << "sgrid map reso: " << sgrid_planner_.map_.info.resolution << std::endl;
+	geomark_graph_.UpdateSquareGridInfo(sgrid_planner_.graph_, sgrid_planner_.map_);
+	octomap_server_.SetOctreeResolution(sgrid_planner_.map_.info.resolution);
+
 	srcl_lcm_msgs::Graph_t graph_msg = GenerateLcmGraphMsg();
 	lcm_->publish("quad_planner/quad_planner_graph", &graph_msg);
 }
@@ -160,18 +148,9 @@ std::vector<Position2D> QuadPathRepair::UpdateGlobalPath()
 //	std::cout << "----> start: " << start_pos_.x << " , " << start_pos_.y << std::endl;
 //	std::cout << "----> goal: " << goal_pos_.x << " , " << goal_pos_.y << std::endl;
 
-	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
-	{
-		auto traj_vtx = qtree_planner_.Search(start_pos_, goal_pos_);
-		for(auto& wp:traj_vtx)
-			waypoints.push_back(wp->bundled_data_->location_);
-	}
-	else if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
-	{
-		auto traj_vtx = sgrid_planner_.Search(start_pos_, goal_pos_);
-		for(auto& wp:traj_vtx)
-			waypoints.push_back(wp->bundled_data_->location_);
-	}
+	auto traj_vtx = sgrid_planner_.Search(start_pos_, goal_pos_);
+	for(auto& wp:traj_vtx)
+		waypoints.push_back(wp->bundled_data_->location_);
 
 	srcl_lcm_msgs::Path_t path_msg = GenerateLcmPathMsg(waypoints);
 	lcm_->publish("quad_planner/quad_planner_graph_path", &path_msg);
@@ -188,18 +167,9 @@ std::vector<uint64_t> QuadPathRepair::UpdateGlobalPathID()
 //		std::cout << "----> start: " << start_pos_.x << " , " << start_pos_.y << std::endl;
 //		std::cout << "----> goal: " << goal_pos_.x << " , " << goal_pos_.y << std::endl;
 
-	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
-	{
-		auto traj_vtx = qtree_planner_.Search(start_pos_, goal_pos_);
-		for(auto& wp:traj_vtx)
-			waypoints.push_back(wp->vertex_id_);
-	}
-	else if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
-	{
-		auto traj_vtx = sgrid_planner_.Search(start_pos_, goal_pos_);
-		for(auto& wp:traj_vtx)
-			waypoints.push_back(wp->vertex_id_);
-	}
+	auto traj_vtx = sgrid_planner_.Search(start_pos_, goal_pos_);
+	for(auto& wp:traj_vtx)
+		waypoints.push_back(wp->vertex_id_);
 
 	update_global_plan_ = false;
 
@@ -208,32 +178,14 @@ std::vector<uint64_t> QuadPathRepair::UpdateGlobalPathID()
 
 cv::Mat QuadPathRepair::GetActiveMap()
 {
-	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
-	{
-		return qtree_planner_.map_.padded_image;
-	}
-	else if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
-	{
-		return sgrid_planner_.map_.padded_image;
-	}
-	else
-		return cv::Mat::zeros(10, 10, CV_8UC1);
+	return sgrid_planner_.map_.padded_image;
 }
 
 MapInfo QuadPathRepair::GetActiveMapInfo()
 {
 	MapInfo empty_info;
 
-	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
-	{
-		return qtree_planner_.map_.info;
-	}
-	else if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
-	{
-		return sgrid_planner_.map_.info;
-	}
-	else
-		return empty_info;
+	return sgrid_planner_.map_.info;
 }
 
 void QuadPathRepair::LcmTransformHandler(
@@ -559,14 +511,7 @@ srcl_lcm_msgs::Graph_t QuadPathRepair::GenerateLcmGraphMsg()
 {
 	srcl_lcm_msgs::Graph_t graph_msg;
 
-	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
-	{
-		graph_msg = GetLcmGraphFromPlanner(this->qtree_planner_);
-	}
-	else if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
-	{
-		graph_msg = GetLcmGraphFromPlanner(this->sgrid_planner_);
-	}
+	graph_msg = GetLcmGraphFromPlanner(this->sgrid_planner_);
 
 	return graph_msg;
 }
@@ -575,31 +520,15 @@ srcl_lcm_msgs::Path_t QuadPathRepair::GenerateLcmPathMsg(std::vector<Position2D>
 {
 	srcl_lcm_msgs::Path_t path_msg;
 
-	if(active_graph_planner_ == GraphPlannerType::QUADTREE_PLANNER)
+	path_msg.waypoint_num = waypoints.size();
+	for(auto& wp : waypoints)
 	{
-		path_msg.waypoint_num = waypoints.size();
-		for(auto& wp : waypoints)
-		{
-			Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(wp, this->qtree_planner_.map_.info);
-			srcl_lcm_msgs::WayPoint_t waypoint;
-			waypoint.positions[0] = ref_world_pos.x;
-			waypoint.positions[1] = ref_world_pos.y;
+		Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(wp, this->sgrid_planner_.map_.info);
+		srcl_lcm_msgs::WayPoint_t waypoint;
+		waypoint.positions[0] = ref_world_pos.x;
+		waypoint.positions[1] = ref_world_pos.y;
 
-			path_msg.waypoints.push_back(waypoint);
-		}
-	}
-	else if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
-	{
-		path_msg.waypoint_num = waypoints.size();
-		for(auto& wp : waypoints)
-		{
-			Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(wp, this->sgrid_planner_.map_.info);
-			srcl_lcm_msgs::WayPoint_t waypoint;
-			waypoint.positions[0] = ref_world_pos.x;
-			waypoint.positions[1] = ref_world_pos.y;
-
-			path_msg.waypoints.push_back(waypoint);
-		}
+		path_msg.waypoints.push_back(waypoint);
 	}
 
 	return path_msg;

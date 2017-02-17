@@ -38,7 +38,6 @@ private:
 	std::shared_ptr<lcm::LCM> lcm_;
 
 	// planners
-	GraphPlanner<QuadTree> qtree_planner_;
 	GraphPlanner<SquareGrid> sgrid_planner_;
 	GeoMarkGraph geomark_graph_;
 	OctomapServer octomap_server_;
