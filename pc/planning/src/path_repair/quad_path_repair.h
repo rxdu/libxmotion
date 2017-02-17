@@ -20,7 +20,7 @@
 #include "planner/graph_planner.h"
 #include "map/map_info.h"
 #include "geometry/geo_mark.h"
-#include "path_repair/graph_combiner.h"
+#include "path_repair/geo_mark_graph.h"
 #include "local3d/octomap_server.h"
 #include "quad_flat/quad_polyopt.h"
 #include "mission/mission_tracker.h"
@@ -40,8 +40,7 @@ private:
 	// planners
 	GraphPlanner<QuadTree> qtree_planner_;
 	GraphPlanner<SquareGrid> sgrid_planner_;
-	GraphCombiner<SquareCell*, SquareGrid> gcombiner_;
-//	GraphCombiner<QuadTreeNode*, QuadTree> gcombiner_;
+	GeoMarkGraph geomark_graph_;
 	OctomapServer octomap_server_;
 
 	std::unique_ptr<MissionTracker> mission_tracker_;
@@ -61,7 +60,7 @@ private:
 	bool world_size_set_;
 	bool auto_update_pos_;
 
-	double desired_height_;
+	//double desired_height_;
 	double est_new_dist_;	// temporary calculation result, internal use only
 
 public:
@@ -84,9 +83,8 @@ public:
 
 	void SetStartRefWorldPosition(Position2Dd pos);
 	void SetGoalRefWorldPosition(Position2Dd pos);
-	void SetDesiredHeight(double height) {
-		desired_height_ = height;
-		gcombiner_.SetDesiredHeight(height);
+	void SetGoalHeightRange(double height_min, double height_max) {
+		geomark_graph_.SetGoalHeightRange(height_min, height_max);
 	};
 
 	// search functions

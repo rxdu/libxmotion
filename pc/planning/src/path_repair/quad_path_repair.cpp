@@ -34,7 +34,6 @@ QuadPathRepair::QuadPathRepair(std::shared_ptr<lcm::LCM> lcm):
 		ggoal_set_(false),
 		world_size_set_(false),
 		auto_update_pos_(true),
-		desired_height_(0.0),
 		est_new_dist_(std::numeric_limits<double>::infinity()),
 		update_global_plan_(false)
 {
@@ -84,9 +83,12 @@ void QuadPathRepair::ConfigGraphPlanner(MapConfig config, double world_size_x, d
 	sgrid_planner_.map_.info.SetWorldSize(world_size_x, world_size_y);
 	world_size_set_ = true;
 
-	if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER)
-		gcombiner_.SetBaseGraph(sgrid_planner_.graph_, sgrid_planner_.map_.data_model, sgrid_planner_.map_.data_model->cells_.size(), sgrid_planner_.map_.info);
-
+	if(active_graph_planner_ == GraphPlannerType::SQUAREGRID_PLANNER) {
+		sgrid_planner_.map_.info.resolution = sgrid_planner_.map_.info.world_size_x/sgrid_planner_.map_.info.map_size_x*sgrid_planner_.map_.data_model->cell_size_;
+		std::cout << "sgrid map reso: " << sgrid_planner_.map_.info.resolution << std::endl;
+		geomark_graph_.UpdateSquareGridInfo(sgrid_planner_.graph_, sgrid_planner_.map_);
+		octomap_server_.SetOctreeResolution(sgrid_planner_.map_.info.resolution);
+	}
 	srcl_lcm_msgs::Graph_t graph_msg = GenerateLcmGraphMsg();
 	lcm_->publish("quad_planner/quad_planner_graph", &graph_msg);
 }
@@ -246,7 +248,7 @@ void QuadPathRepair::LcmTransformHandler(
 	if(auto_update_pos_)
 		SetStartRefWorldPosition(rpos);
 
-	gcombiner_.UpdateVehiclePose(Position3Dd(msg->base_to_world.position[0],msg->base_to_world.position[1],msg->base_to_world.position[2]),
+	geomark_graph_.UpdateVehiclePose(Position3Dd(msg->base_to_world.position[0],msg->base_to_world.position[1],msg->base_to_world.position[2]),
 					Eigen::Quaterniond(msg->base_to_world.quaternion[0] , msg->base_to_world.quaternion[1] , msg->base_to_world.quaternion[2] , msg->base_to_world.quaternion[3]));
 	mission_tracker_->UpdateCurrentPosition(Position3Dd(msg->base_to_world.position[0],msg->base_to_world.position[1],msg->base_to_world.position[2]));
 }
@@ -371,8 +373,8 @@ void QuadPathRepair::LcmOctomapHandler(
 
 	//LOG(INFO) << "Before combining graphs";
 
-	int64_t geo_start_id_astar = gcombiner_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);//, octomap_server_.octree_transf_);
-
+	//int64_t geo_start_id_astar = geomark_graph_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);//, octomap_server_.octree_transf_);
+	int64_t geo_start_id_astar = geomark_graph_.MergeCubeArrayInfo(cubegraph, cubearray);
 	//LOG(INFO) << "After combining graphs";
 
 	// don't replan if failed to combine graphs
@@ -393,7 +395,7 @@ void QuadPathRepair::LcmOctomapHandler(
 
 	clock_t exec_time;
 	exec_time = clock();
-	auto comb_path = AStar::Search(gcombiner_.combined_graph_, geo_start_id_astar, geo_goal_id_astar);
+	auto comb_path = AStar::Search(geomark_graph_.combined_graph_, geo_start_id_astar, geo_goal_id_astar);
 	exec_time = clock() - exec_time;
 	std::cout << "Search in 3D finished in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 

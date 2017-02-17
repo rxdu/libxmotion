@@ -102,6 +102,9 @@ Map_t<SquareGrid> SGridBuilderV2::BuildSquareGridMap(cv::InputArray _src, uint32
 	map.info.scale_x = 1; //static_cast<double>(map.info.map_size_x)/map.info.world_size_x;
 	map.info.scale_y = 1; //static_cast<double>(map.info.map_size_y)/map.info.world_size_y;
 
+	// to be updated by specific data structure (square grid/quadtree)
+	map.info.resolution = 0;
+
 	// create square grid
 	map.data_model = SGridBuilderV2::BuildSquareGrid(map.padded_image, cell_size, obj_expand_num, img_offset_x, img_offset_y);
 

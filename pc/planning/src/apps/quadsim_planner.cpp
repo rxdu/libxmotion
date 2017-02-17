@@ -32,7 +32,7 @@ void TestCase1_Config(QuadPathRepair& qplanner)
 	MapConfig map_config;
 
 	map_config.SetMapPath(image_dir);
-	map_config.SetMapType(MapDataModel::SQUARE_GRID, 64);
+	map_config.SetMapType(MapDataModel::SQUARE_GRID, 32);
 	//	map_config.SetMapType(MapDataModel::QUAD_TREE, 6);
 	map_config.SetOriginOffset(2.5, 2.5);
 
@@ -40,7 +40,7 @@ void TestCase1_Config(QuadPathRepair& qplanner)
 	qplanner.EnablePositionAutoUpdate(true);
 
 	qplanner.SetGoalRefWorldPosition(Position2Dd(1.8, -2.0));
-	qplanner.SetDesiredHeight(0.80);
+	qplanner.SetGoalHeightRange(0.5, 2.5);
 }
 
 void TestCase2_Config(QuadPathRepair& qplanner)
@@ -59,7 +59,7 @@ void TestCase2_Config(QuadPathRepair& qplanner)
 	qplanner.EnablePositionAutoUpdate(true);
 
 	qplanner.SetGoalRefWorldPosition(Position2Dd(11.0, -8.5));
-	qplanner.SetDesiredHeight(1.8);
+	qplanner.SetGoalHeightRange(0.5, 2.5);
 }
 
 void TestCase3_Config(QuadPathRepair& qplanner)
@@ -78,7 +78,7 @@ void TestCase3_Config(QuadPathRepair& qplanner)
 	qplanner.EnablePositionAutoUpdate(true);
 
 	qplanner.SetGoalRefWorldPosition(Position2Dd(11.0, -8.5));
-	qplanner.SetDesiredHeight(2.0);
+	qplanner.SetGoalHeightRange(0.5, 2.5);
 }
 
 void TestCase4_Config(QuadPathRepair& qplanner)
@@ -97,7 +97,7 @@ void TestCase4_Config(QuadPathRepair& qplanner)
 	qplanner.EnablePositionAutoUpdate(true);
 
 	qplanner.SetGoalRefWorldPosition(Position2Dd(8.0, 3.8));
-	qplanner.SetDesiredHeight(1.5);
+	qplanner.SetGoalHeightRange(0.5, 2.5);
 }
 
 int main(int argc, char* argv[])

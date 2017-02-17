@@ -29,6 +29,9 @@ typedef struct {
 	int16_t padded_right;
 	int16_t padded_left;
 
+	// meter per edge
+	double resolution;
+
 	double scale_x;			// map/world
 	double scale_y;
 
