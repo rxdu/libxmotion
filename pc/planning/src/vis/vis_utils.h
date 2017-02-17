@@ -12,6 +12,7 @@
 
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
 
 #include "common/planning_types.h"
 
@@ -43,6 +44,8 @@ namespace VisUtils {
 
 	void DrawPoint(cv::Mat img, cv::Point pos, const cv::Scalar& color = VisUtils::default_pt_color_);
 	void DrawLine(cv::Mat img, cv::Point pt1, cv::Point pt2, const cv::Scalar& color = VisUtils::default_ln_color_);
+	void DrawArrow(cv::Mat img, cv::Point pos, double angle, const cv::Scalar& color = VisUtils::default_pt_color_);
+
 	void FillRectangularArea(cv::Mat img, BoundingBox bbox, const cv::Scalar& color = VisUtils::default_area_color_);
 
 	// RGB: r,g,b ∈ [0-255]

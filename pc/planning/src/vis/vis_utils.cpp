@@ -48,6 +48,34 @@ void VisUtils::DrawLine(cv::Mat img, cv::Point pt1, cv::Point pt2, const cv::Sca
 		  lineType);
 }
 
+// Source:
+//	* https://adishavit.github.io/2015/drawing-arrows-with-opencv/
+//	* http://docs.opencv.org/2.4/modules/core/doc/drawing_functions.html#arrowedline
+void VisUtils::DrawArrow(cv::Mat img, cv::Point pos, double angle, const cv::Scalar& color)
+{
+	int lineType = 8;
+	int thickness = 1;
+	double tipLength = 0.1;
+
+	auto angleRad = angle*CV_PI / 180.0;   // convert angle to radians
+
+	auto length = 150;
+	auto direction = cv::Point(length * cos(angleRad), length * sin(angleRad)); // calculate direction
+
+	//arrowedLine(img, pos+direction*0.5, pos + direction, color, thickness, lineType, 0, tipLength);
+//	line(img, pt1, pt2, color, thickness, line_type, shift);
+//
+//	const double angle = atan2( (double) pt1.y - pt2.y, (double) pt1.x - pt2.x );
+//
+//	Point p(cvRound(pt2.x + tipSize * cos(angle + CV_PI / 4)),
+//			cvRound(pt2.y + tipSize * sin(angle + CV_PI / 4)));
+//	line(img, p, pt2, color, thickness, line_type, shift);
+//
+//	p.x = cvRound(pt2.x + tipSize * cos(angle - CV_PI / 4));
+//	p.y = cvRound(pt2.y + tipSize * sin(angle - CV_PI / 4));
+//	line(img, p, pt2, color, thickness, line_type, shift);
+}
+
 void VisUtils::FillRectangularArea(cv::Mat img, BoundingBox bbox, const cv::Scalar& color)
 {
 	Range rngx(bbox.x.min, bbox.x.max);

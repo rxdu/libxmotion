@@ -13,6 +13,8 @@
 // opencv
 #include "opencv2/opencv.hpp"
 
+#include "eigen3/Eigen/Geometry"
+
 #include "vis/graph_vis.h"
 #include "vis/sgrid_vis.h"
 #include "vis/vis_utils.h"
@@ -71,19 +73,35 @@ double ShortcutEval::EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_v
 {
 	auto nbs = sgrid_->GetNeighboursWithinRange(eval_vtx->bundled_data_->data_id_, sensor_range);
 
-	std::priority_queue<double> rewards_queue;
+	//std::priority_queue<double> rewards_queue;
+	double max_rwd = 0;
+	Vertex_t<SquareCell*>* max_rwd_vtx;
 	for(auto& n : nbs) {
 		if(n->occu_ == OccupancyType::OCCUPIED)
 			continue;
 
 		auto vtx = nav_field_->field_graph_->GetVertexFromID(n->data_id_);
 
-		rewards_queue.push(eval_vtx->potential_ - vtx->potential_
-				- CalcDirectDistance(vtx->bundled_data_->index_, eval_vtx->bundled_data_->index_,sgrid_->cell_size_,true));
+		double rewards = eval_vtx->potential_ - vtx->potential_
+				- CalcDirectDistance(vtx->bundled_data_->index_, eval_vtx->bundled_data_->index_,sgrid_->cell_size_,true);
+		if(rewards > max_rwd) {
+			max_rwd = rewards;
+			max_rwd_vtx = vtx;
+		}
+		//rewards_queue.push(rewards);
 	}
 
+	// update heading angle
+	Eigen::Vector3d max_rwd_vec(max_rwd_vtx->bundled_data_->location_.x, max_rwd_vtx->bundled_data_->location_.y, 0);
+	Eigen::Vector3d pos_vec(eval_vtx->bundled_data_->location_.x, eval_vtx->bundled_data_->location_.y, 0);
+	Eigen::Vector3d dir_vec = max_rwd_vec - pos_vec;
+	Eigen::Vector3d x_vec(1,0,0);
+	double angle = - std::acos(dir_vec.normalized().dot(x_vec));
+	eval_vtx->rewards_yaw_ = angle;
+
 	//eval_vtx->shortcut_rewards_ = rewards_queue.top();
-	return rewards_queue.top();
+	//return rewards_queue.top();
+	return max_rwd;
 }
 
 void ShortcutEval::EvaluateGridShortcutPotential(uint16_t sensor_range)

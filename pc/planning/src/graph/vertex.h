@@ -31,6 +31,7 @@ public:
 		potential_(0),
 		potential_parent_(nullptr),
 		shortcut_rewards_(0),
+		rewards_yaw_(0),
 		weighted_cost_(0),
 		shortcut_cost_(0),
 		shortcut_avg_(0),
@@ -47,6 +48,7 @@ public:
 		potential_(0),
 		potential_parent_(nullptr),
 		shortcut_rewards_(0),
+		rewards_yaw_(0),
 		weighted_cost_(0),
 		shortcut_cost_(0),
 		shortcut_avg_(0),
@@ -78,6 +80,7 @@ public:
 	double potential_;
 	Vertex<BundledStructType>* potential_parent_;
 	double shortcut_rewards_;
+	double rewards_yaw_;
 
 	// Dijkstra search with shortcut rewards
 	double shortcut_cost_;

@@ -43,18 +43,22 @@ int main(int argc, char* argv[])
 
 	// read octomap data
 	std::shared_ptr<octomap::OcTree> tree = std::make_shared<octomap::OcTree>(0.35);
-	std::string tree_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/geomark/octree_obstacle_test_36.bt";
-	//"/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/experiments/set3/octree_from_server_node_eset3.bt";
+	//std::string tree_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/geomark/octree_obstacle_test_36.bt";
+	std::string tree_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/geomark/case4.bt";
 	tree->readBinary(tree_path);
 
 	// read 2d map data
 	Mat input_image;
-	std::string image_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/experiments/set3/map_path_repair.png";
+	//std::string image_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/experiments/set3/map_path_repair.png";
+	std::string image_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/experiments/map_testcase4.png";
 	MapUtils::ReadImageFromFile(image_path, input_image);
-	Map_t<SquareGrid> sgrid_map = SGridBuilderV2::BuildSquareGridMap(input_image, 64);
-	sgrid_map.info.SetWorldSize(5.0, 5.0);
-	sgrid_map.info.origin_offset_x = 2.5;
-	sgrid_map.info.origin_offset_y = 2.5;
+	Map_t<SquareGrid> sgrid_map = SGridBuilderV2::BuildSquareGridMap(input_image, 32);
+//	sgrid_map.info.SetWorldSize(5.0, 5.0);
+//	sgrid_map.info.origin_offset_x = 2.5;
+//	sgrid_map.info.origin_offset_y = 2.5;
+	sgrid_map.info.SetWorldSize(10.0, 18.0);
+	sgrid_map.info.origin_offset_x = 5.0;
+	sgrid_map.info.origin_offset_y = 9.0;
 
 	std::shared_ptr<Graph_t<SquareCell*>> map_graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);
 
@@ -73,7 +77,8 @@ int main(int argc, char* argv[])
 	GeoMarkGraph combiner;
 	// -1.65,0.8,0.8,-M_PI/5
 	Eigen::Quaterniond quat(Eigen::AngleAxisd(-M_PI/5, Eigen::Vector3d::UnitZ()));
-	combiner.UpdateVehiclePose(Position3Dd(-1.65,0.8,0.8), quat);//Eigen::Quaterniond(1 , 0 , 0 , 0));
+//	combiner.UpdateVehiclePose(Position3Dd(-1.65,0.8,0.8), quat);//Eigen::Quaterniond(1 , 0 , 0 , 0));
+	combiner.UpdateVehiclePose(Position3Dd(-1.35,-0.5,1.5), quat);//Eigen::Quaterniond(1 , 0 , 0 , 0));
 //	combiner.UpdateSquareGridInfo(map_graph, sgrid_map.data_model, sgrid_map.data_model->cells_.size(), sgrid_map.info);
 	combiner.UpdateSquareGridInfo(map_graph, sgrid_map);
 	combiner.SetGoalHeightRange(0.5, 1.5);
@@ -94,23 +99,23 @@ int main(int argc, char* argv[])
 
 	// search in combined graph
 //	uint64_t geo_start_id_astar = map_graph->GetVertexFromID(844)->bundled_data_->geo_mark_id_;
-	uint64_t geo_goal_id_astar = map_graph->GetVertexFromID(26)->bundled_data_->geo_mark_id_;
-
-	exec_time = clock();
-	auto comb_path = AStar::Search(combiner.combined_graph_, geo_start_id_astar, geo_goal_id_astar);
-	exec_time = clock() - exec_time;
-	std::cout << "Search finished in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
-
-	std::vector<Position3Dd> comb_path_pos;
-	for(auto& wp:comb_path)
-		comb_path_pos.push_back(wp->bundled_data_.position);
-
-	double est_new_dist = 0;
-	for(int i = 0; i < comb_path.size() - 1; i++)
-		est_new_dist += std::sqrt(std::pow(comb_path_pos[i].x - comb_path_pos[i + 1].x,2) +
-				std::pow(comb_path_pos[i].y - comb_path_pos[i + 1].y,2) +
-				std::pow(comb_path_pos[i].z - comb_path_pos[i + 1].z,2));
-	std::cout << "total cost of path: " << est_new_dist << std::endl;
+//	uint64_t geo_goal_id_astar = map_graph->GetVertexFromID(26)->bundled_data_->geo_mark_id_;
+//
+//	exec_time = clock();
+//	auto comb_path = AStar::Search(combiner.combined_graph_, geo_start_id_astar, geo_goal_id_astar);
+//	exec_time = clock() - exec_time;
+//	std::cout << "Search finished in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
+//
+//	std::vector<Position3Dd> comb_path_pos;
+//	for(auto& wp:comb_path)
+//		comb_path_pos.push_back(wp->bundled_data_.position);
+//
+//	double est_new_dist = 0;
+//	for(int i = 0; i < comb_path.size() - 1; i++)
+//		est_new_dist += std::sqrt(std::pow(comb_path_pos[i].x - comb_path_pos[i + 1].x,2) +
+//				std::pow(comb_path_pos[i].y - comb_path_pos[i + 1].y,2) +
+//				std::pow(comb_path_pos[i].z - comb_path_pos[i + 1].z,2));
+//	std::cout << "total cost of path: " << est_new_dist << std::endl;
 
 	////////////////////////////////////////////////////////////////////////////////////////////
 	// send data for visualization
@@ -172,20 +177,22 @@ int main(int argc, char* argv[])
 
 	lcm->publish("quad_planner/geo_mark_graph", &graph_msg3);
 
-	srcl_lcm_msgs::Path_t path_msg;
-
-	path_msg.waypoint_num = comb_path.size();
-	for(auto& wp : comb_path_pos)
-	{
-		srcl_lcm_msgs::WayPoint_t waypoint;
-		waypoint.positions[0] = wp.x;
-		waypoint.positions[1] = wp.y;
-		waypoint.positions[2] = wp.z;
-
-		path_msg.waypoints.push_back(waypoint);
-	}
-
-	lcm->publish("quad_planner/geo_mark_graph_path", &path_msg);
+//	if(!comb_path.empty()) {
+//		srcl_lcm_msgs::Path_t path_msg;
+//
+//		path_msg.waypoint_num = comb_path.size();
+//		for(auto& wp : comb_path_pos)
+//		{
+//			srcl_lcm_msgs::WayPoint_t waypoint;
+//			waypoint.positions[0] = wp.x;
+//			waypoint.positions[1] = wp.y;
+//			waypoint.positions[2] = wp.z;
+//
+//			path_msg.waypoints.push_back(waypoint);
+//		}
+//
+//		lcm->publish("quad_planner/geo_mark_graph_path", &path_msg);
+//	}
 
 	std::cout << "----" << std::endl;
 

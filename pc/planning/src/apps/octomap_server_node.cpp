@@ -19,7 +19,21 @@ using namespace srcl_ctrl;
 
 int main(int argc, char** argv)
 {
+	double octree_reso;
 	std::shared_ptr<lcm::LCM> lcm = std::make_shared<lcm::LCM>();
+
+	std::string octomap_file_name = "octree_server_saved_map.bt";
+	if ( argc == 2 ) {
+		std::string file_name = argv[1];
+		octomap_file_name = file_name + ".bt";
+	}
+	else if ( argc == 3 ) {
+		std::string res = argv[1];
+		octree_reso = stof(res);
+
+		std::string file_name = argv[2];
+		octomap_file_name = file_name + ".bt";
+	}
 
 	if(!lcm->good())
 	{
@@ -28,6 +42,7 @@ int main(int argc, char** argv)
 	}
 
 	OctomapServer server(lcm);
+	server.SetOctreeResolution(octree_reso);
 
 	std::cout << "INFO: Octomap server started." << std::endl;
 
@@ -41,7 +56,7 @@ int main(int argc, char** argv)
 
 		double duration =  double(clock() - start_time)/CLOCKS_PER_SEC;
 		if(duration > 10 && !tree_saved) {
-			server.SaveTreeToFile("octree_obstacle_test_36.bt");
+			server.SaveTreeToFile(octomap_file_name);
 			tree_saved = true;
 		}
 
