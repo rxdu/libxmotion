@@ -17,6 +17,7 @@
 // user
 #include "graph/graph.h"
 #include "vis/graph_vis.h"
+#include "vis/sgrid_vis.h"
 #include "geometry/graph_builder.h"
 #include "map/image_utils.h"
 #include "geometry/sgrid_builder.h"
@@ -43,7 +44,7 @@ int main(int argc, char** argv )
 		}
 		else
 		{
-			sgrid_map = SGridBuilder::BuildSquareGridMap(input_map, 32);
+			sgrid_map = SGridBuilderV2::BuildSquareGridMap(input_map, 64, 2);
 			use_input_image = true;
 		}
 	}
@@ -88,9 +89,9 @@ int main(int argc, char** argv )
 	Mat vis_img;
 
 	if(sgrid_map.padded_image.empty())
-		GraphVis::VisSquareGrid(*sgrid_map.data_model, vis_img);
+		Vis::VisSquareGrid(*sgrid_map.data_model, vis_img);
 	else
-		GraphVis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
+		Vis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
 	Range rngx(0 + sgrid_map.info.padded_left, vis_img.cols - sgrid_map.info.padded_right);
 	Range rngy(0 + sgrid_map.info.padded_top, vis_img.rows - sgrid_map.info.padded_bottom);

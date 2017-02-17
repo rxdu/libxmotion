@@ -15,6 +15,7 @@ set(GEOMETRY_LIB_SRC
   # builders
   qtree_builder.cpp
   sgrid_builder.cpp
+  sgrid_builder_v2.cpp
   cube_array_builder.cpp
   graph_builder.cpp
 )

@@ -8,8 +8,9 @@ find_package(OpenCV REQUIRED)
 
 # Add libraries
 set(VIS_LIB_SRC
-    graph_vis.cpp
-    curve_vis.cpp
+    #graph_vis.cpp # header only
+    qtree_vis.cpp
+    sgrid_vis.cpp
     rrt_vis.cpp
     vis_utils.cpp
 )

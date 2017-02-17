@@ -97,8 +97,8 @@ std::vector<QuadTreeNode*> QuadTree::GetDummyNeighbours(QuadTreeNode* dummy_leaf
 	uint16_t x,y;
 	QuadTreeNode* leaf = dummy_leaf;
 
-	x = ((leaf->bounding_box_.x.min + leaf->bounding_box_.x.max + 1)/2)/cell_res_;
-	y = ((leaf->bounding_box_.y.min + leaf->bounding_box_.y.max + 1)/2)/cell_res_;
+	x = ((leaf->bbox_.x.min + leaf->bbox_.x.max + 1)/2)/cell_res_;
+	y = ((leaf->bbox_.y.min + leaf->bbox_.y.max + 1)/2)/cell_res_;
 
 	QuadTreeNode* element;
 	element = node_manager_->GetNodeReference(x-1,y-1);
@@ -165,8 +165,8 @@ std::vector<QuadTreeNode*> QuadTree::FindNeighbours(QuadTreeNode* node)
 	{
 		// first find the coordinates of top left corner neighbour leaf dummy
 		uint16_t x,y;
-		x = (node->bounding_box_.x.min - 1)/cell_res_;
-		y = (node->bounding_box_.y.min - 1)/cell_res_;
+		x = (node->bbox_.x.min - 1)/cell_res_;
+		y = (node->bbox_.y.min - 1)/cell_res_;
 
 		uint16_t neighbour_side_num;
 		neighbour_side_num = pow(2,dummy_depth)+2;
@@ -276,8 +276,8 @@ std::vector<QuadTreeNode*> QuadTree::FindNeighbours(QuadTreeNode* node, bool all
 	{
 		// first find the coordinates of top left corner neighbour leaf dummy
 		uint16_t x,y;
-		x = (node->bounding_box_.x.min - 1)/cell_res_;
-		y = (node->bounding_box_.y.min - 1)/cell_res_;
+		x = (node->bbox_.x.min - 1)/cell_res_;
+		y = (node->bbox_.y.min - 1)/cell_res_;
 
 		uint16_t neighbour_side_num;
 		neighbour_side_num = pow(2,dummy_depth)+2;
@@ -401,13 +401,13 @@ QuadTreeNode::QuadTreeNode(BoundingBox bound, OccupancyType occupancy):
 {
 	node_type_ = NodeType::INNER;
 
-	bounding_box_.x.min = bound.x.min;
-	bounding_box_.x.max = bound.x.max;
-	bounding_box_.y.min = bound.y.min;
-	bounding_box_.y.max = bound.y.max;
+	bbox_.x.min = bound.x.min;
+	bbox_.x.max = bound.x.max;
+	bbox_.y.min = bound.y.min;
+	bbox_.y.max = bound.y.max;
 
-	location_.x = bounding_box_.x.min + (bounding_box_.x.max - bounding_box_.x.min + 1)/2;
-	location_.y = bounding_box_.y.min + (bounding_box_.y.max - bounding_box_.y.min + 1)/2;
+	location_.x = bbox_.x.min + (bbox_.x.max - bbox_.x.min + 1)/2;
+	location_.y = bbox_.y.min + (bbox_.y.max - bbox_.y.min + 1)/2;
 
 	child_nodes_[0] = nullptr;
 	child_nodes_[1] = nullptr;

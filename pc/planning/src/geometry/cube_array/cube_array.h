@@ -66,13 +66,13 @@ public:
 class CubeArray {
 public:
 	// row, col, hei : x, y , z
-	CubeArray(uint32_t row_num, uint32_t col_num, uint32_t height_num, double cube_size);
+	CubeArray(int32_t row_num, int32_t col_num, int32_t height_num, double cube_size);
 	~CubeArray(){};
 
 public:
-	uint32_t row_size_;
-	uint32_t col_size_;
-	uint32_t hei_size_;
+	int32_t row_size_;
+	int32_t col_size_;
+	int32_t hei_size_;
 
 	// cube numbers on the negative side of axes
 	int32_t row_offset_;
@@ -103,6 +103,7 @@ public:
 	bool GetCubeIDAtPosition(double x, double y, double z, uint64_t& id);
 
 	bool GetCubeHeightIndexAtHeight(double z, std::vector<uint32_t>& hei_set);
+	std::vector<uint64_t> GetFreeCubesAroundHeight(double height);
 };
 
 }

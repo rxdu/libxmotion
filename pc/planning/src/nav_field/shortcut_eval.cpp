@@ -14,6 +14,7 @@
 #include "opencv2/opencv.hpp"
 
 #include "vis/graph_vis.h"
+#include "vis/sgrid_vis.h"
 #include "vis/vis_utils.h"
 #include "graph/priority_queue.h"
 #include "nav_field/shortcut_eval.h"
@@ -107,6 +108,7 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 	bool found_path = false;
 	Path_t<SquareCell*> path;
 	Vertex_t<SquareCell*>* current_vertex;
+
 	// open list - a list of vertices that need to be checked out
 	PriorityQueue<Vertex_t<SquareCell*>*> openlist;
 
@@ -221,9 +223,9 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavFieldbyStep(Vertex_t<SquareCell*>* 
 {
 	cv::Mat vis_img;
 
-	GraphVis::VisSquareGrid(*sgrid_, vis_img);
+	Vis::VisSquareGrid(*sgrid_, vis_img);
 	cv::namedWindow("Search Process", cv::WINDOW_NORMAL ); // WINDOW_AUTOSIZE
-	GraphVis::VisSquareGridShortcutPotential(*(this->nav_field_), vis_img, vis_img);
+	Vis::VisSquareGridShortcutPotential(*(this->nav_field_), vis_img, vis_img);
 
 	nav_field_->field_graph_->ResetGraphVertices();
 
@@ -262,15 +264,11 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavFieldbyStep(Vertex_t<SquareCell*>* 
 			if(successor->is_checked_ == false)
 			{
 				// first set the parent of the adjacent vertex to be the current vertex
-				double avg_rewards = 0;
-				avg_rewards = nav_field_->max_rewards_ - std::max(successor->shortcut_rewards_, current_vertex->shortcut_avg_);
-				//(successor->shortcut_rewards_ + current_vertex->shortcut_avg_*current_vertex->reward_num_)/(current_vertex->reward_num_ + 1);
-				//new_rewards = nav_field_->max_rewards_ - std::max(current_vertex->shortcut_cost_, (successor->shortcut_rewards_ + current_vertex->shortcut_cost_*current_vertex->reward_num_)/(current_vertex->reward_num_ + 1));
-				double new_rewards = current_vertex->shortcut_cost_ + (nav_field_->max_rewards_ - successor->shortcut_rewards_);///nav_field_->max_rewards_*sgrid_->cell_size_;
+				double new_rewards = current_vertex->shortcut_cost_ + (current_vertex->shortcut_rewards_ - successor->shortcut_rewards_ ) + (1-successor->shortcut_rewards_/nav_field_->max_rewards_)*sgrid_->cell_size_;
 				double new_dist = current_vertex->g_astar_ + (*ite).cost_;
 
 				//double new_cost = current_vertex->weighted_cost_ + (new_dist*dist_weight + new_rewards*(1-dist_weight));
-				double new_cost = new_dist*dist_weight + new_rewards*(1-dist_weight);
+				double new_cost = new_dist*dist_weight + new_rewards*(1-dist_weight);// + avg_rewards; // avg_rewards*(1-dist_weight);
 
 				// if the vertex is not in open list
 				// or if the vertex is in open list but has a higher cost
@@ -281,7 +279,7 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavFieldbyStep(Vertex_t<SquareCell*>* 
 
 //					if(successor->shortcut_rewards_ != 0)
 //					{
-						successor->shortcut_avg_ = avg_rewards;
+//						successor->shortcut_avg_ = avg_rewards;
 //						successor->reward_num_ = current_vertex->reward_num_ + 1;
 //					}
 //					else

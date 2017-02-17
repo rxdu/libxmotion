@@ -13,18 +13,6 @@ using namespace cv;
 
 std::shared_ptr<SquareGrid> SGridBuilder::BuildSquareGrid(cv::InputArray _src, uint32_t cell_size)
 {
-//	Mat image_bin;
-//	Mat image_map;
-//	Mat src = _src.getMat();
-//
-//	// binarize grayscale image
-//	ImageUtils::BinarizeImage(src, image_bin, 200);
-//	//ImageUtils::ExpandObstacleAreaOnImage(image_bin, image_bin, 5);
-//
-//	// pad image to 2^n on each side so that we can calculate
-//	//	the dimension of the grid more conveniently
-//	ImageUtils::PadImageTo2Exp(image_bin, image_map);
-
 	Mat image_map = _src.getMat();
 
 	// create square grid

@@ -12,14 +12,15 @@
 #include "vis/vis_utils.h"
 
 using namespace srcl_ctrl;
+using namespace srcl_ctrl::VisUtils;
 using namespace cv;
 
-cv::Scalar GraphVis::bk_color_ = Scalar(255,255,255);
-cv::Scalar GraphVis::ln_color_ = Scalar(Scalar(0,0,0));
-cv::Scalar GraphVis::obs_color_ = Scalar(Scalar(0,102,204));
-cv::Scalar GraphVis::aoi_color_ = Scalar(Scalar(0,255,255));
-cv::Scalar GraphVis::start_color_ = Scalar(0,0,255);
-cv::Scalar GraphVis::finish_color_ = Scalar(153,76,0);
+//cv::Scalar GraphVis::bk_color_ = Scalar(255,255,255);
+//cv::Scalar GraphVis::ln_color_ = Scalar(Scalar(0,0,0));
+//cv::Scalar GraphVis::obs_color_ = Scalar(Scalar(0,102,204));
+//cv::Scalar GraphVis::aoi_color_ = Scalar(Scalar(0,255,255));
+//cv::Scalar GraphVis::start_color_ = Scalar(0,0,255);
+//cv::Scalar GraphVis::finish_color_ = Scalar(153,76,0);
 
 /*
  * @param tree : reference to the tree to be visualized
@@ -251,7 +252,7 @@ void GraphVis::VisQTreeNodes(const std::vector<QuadTreeNode*>& nodes, cv::InputA
 	}
 }
 
-void GraphVis::VisQTreeGraph(const Graph_t<QuadTreeNode*>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost)
+void Vis::VisQTreeGraph(const Graph_t<QuadTreeNode*>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id, bool show_cost)
 {
 	Mat src = _src.getMat();
 	_dst.create(_src.size(), _src.type());
@@ -304,7 +305,7 @@ void GraphVis::VisQTreeGraph(const Graph_t<QuadTreeNode*>& graph, cv::InputArray
 	}
 }
 
-void GraphVis::VisQTreeGraphPath(const std::vector<Vertex_t<QuadTreeNode*>*>& vertices, cv::InputArray _src, cv::OutputArray _dst)
+void Vis::VisQTreeGraphPath(const std::vector<Vertex_t<QuadTreeNode*>*>& vertices, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src = _src.getMat();
 	_dst.create(_src.size(), _src.type());
@@ -364,7 +365,7 @@ void GraphVis::VisQTreeGraphPath(const std::vector<Vertex_t<QuadTreeNode*>*>& ve
 	}
 }
 
-void GraphVis::VisSquareGrid(const SquareGrid& grid, cv::OutputArray _dst)
+void Vis::VisSquareGrid(const SquareGrid& grid, cv::OutputArray _dst)
 {
 	_dst.create(Size(grid.col_size_*grid.cell_size_, grid.row_size_*grid.cell_size_), CV_8UC3);
 	Mat dst = _dst.getMat();
@@ -404,7 +405,7 @@ void GraphVis::VisSquareGrid(const SquareGrid& grid, cv::OutputArray _dst)
 	}
 }
 
-void GraphVis::VisSquareGrid(const SquareGrid& grid, cv::InputArray _src, cv::OutputArray _dst)
+void Vis::VisSquareGrid(const SquareGrid& grid, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src_img_color;
 	cvtColor(_src, src_img_color, CV_GRAY2BGR);
@@ -444,7 +445,7 @@ void GraphVis::VisSquareGrid(const SquareGrid& grid, cv::InputArray _src, cv::Ou
 	src_img_color.copyTo(dst);
 }
 
-void GraphVis::VisSquareGridGraph(const Graph_t<SquareCell*>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
+void Vis::VisSquareGridGraph(const Graph_t<SquareCell*>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
 {
 	Mat src, dst;
 	int src_type = _src.getMat().type();
@@ -501,7 +502,7 @@ void GraphVis::VisSquareGridGraph(const Graph_t<SquareCell*>& graph, cv::InputAr
 	}
 }
 
-void GraphVis::VisSquareGridNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, Vertex_t<SquareCell*>* start_vtx, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
+void Vis::VisSquareGridNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, Vertex_t<SquareCell*>* start_vtx, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
 {
 	_dst.create(Size(grid.col_size_*grid.cell_size_, grid.row_size_*grid.cell_size_), CV_8UC3);
 	Mat dst = _dst.getMat();
@@ -595,7 +596,7 @@ void GraphVis::VisSquareGridNavField(const SquareGrid& grid, const NavField<Squa
 	}
 }
 
-void GraphVis::VisSquareGridLocalNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, Vertex_t<SquareCell*>* center_vtx, cv::InputArray _src, cv::OutputArray _dst, uint16_t sensor_range)
+void Vis::VisSquareGridLocalNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, Vertex_t<SquareCell*>* center_vtx, cv::InputArray _src, cv::OutputArray _dst, uint16_t sensor_range)
 {
 	Mat src, dst;
 	int src_type = _src.getMat().type();
@@ -638,7 +639,7 @@ void GraphVis::VisSquareGridLocalNavField(const SquareGrid& grid, const NavField
 //		VisUtils::FillRectangularArea(dst, (*itv)->bundled_data_->bbox_, Scalar(211,211,211));
 }
 
-void GraphVis::VisSquareGridShortcutPotential(const NavField<SquareCell*>& nav_field, cv::InputArray _src, cv::OutputArray _dst)
+void Vis::VisSquareGridShortcutPotential(const NavField<SquareCell*>& nav_field, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src = _src.getMat();
 	_dst.create(_src.size(), _src.type());
@@ -689,7 +690,7 @@ void GraphVis::VisSquareGridShortcutPotential(const NavField<SquareCell*>& nav_f
 	}
 }
 
-void GraphVis::VisSquareGridPath(const std::vector<Vertex_t<SquareCell*>*>& path, cv::InputArray _src, cv::OutputArray _dst)
+void Vis::VisSquareGridPath(const std::vector<Vertex_t<SquareCell*>*>& path, cv::InputArray _src, cv::OutputArray _dst)
 {
 	Mat src, dst;
 	int src_type = _src.getMat().type();
@@ -724,6 +725,129 @@ void GraphVis::VisSquareGridPath(const std::vector<Vertex_t<SquareCell*>*>& path
 	y = cell_f->location_.y;
 	y = y + (cell_f->bbox_.y.max - cell_f->bbox_.y.min)/8;
 	//FillSquareCellColor(cell_f->bbox_, finish_color_, dst);
+	VisUtils::FillRectangularArea(dst, cell_f->bbox_, finish_color_);
+	putText(dst, "F" ,Point(x,y), CV_FONT_NORMAL, 1, Scalar(0,0,0),1,1);
+
+	// draw path
+	uint64_t x1,y1,x2,y2;
+	int thickness = 3;
+	int lineType = 8;
+	int pathline_thickness = 2;
+
+	for(auto it = path.begin(); it != path.end()-1; it++)
+	{
+		// consecutive cells
+		auto cell1 = (*it)->bundled_data_;
+		auto cell2 = (*(it+1))->bundled_data_;
+
+		// center coordinates
+		x1 = cell1->location_.x;
+		y1 = cell1->location_.y;
+
+		x2 = cell2->location_.x;
+		y2 = cell2->location_.y;
+
+		line( dst,
+				Point(x1,y1),
+				Point(x2,y2),
+				//Scalar( 237, 149, 100 ),
+				Scalar( 255, 153, 51 ),
+				pathline_thickness,
+				lineType);
+	}
+}
+
+template<class GraphNodeType>
+void VisGraph(const Graph_t<GraphNodeType*>& graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
+{
+	Mat src, dst;
+	int src_type = _src.getMat().type();
+	if(src_type == CV_8UC1)
+	{
+		cvtColor(_src, src, CV_GRAY2BGR);
+		_dst.create(src.size(), src.type());
+		dst = _dst.getMat();
+	}
+	else
+	{
+		src = _src.getMat();
+		_dst.create(_src.size(), _src.type());
+		dst = _dst.getMat();
+		src.copyTo(dst);
+	}
+
+	// draw all vertices
+	std::vector<Vertex_t<GraphNodeType*>*> vertices;
+	vertices = graph.GetGraphVertices();
+	for(auto itv = vertices.begin(); itv != vertices.end(); itv++)
+	{
+		cv::Point center((*itv)->bundled_data_->location_.x, (*itv)->bundled_data_->location_.y);
+		VisUtils::DrawPoint(dst, center);
+
+		// current vertex center coordinate
+		uint64_t x1,y1,x2,y2;
+		x1 = (*itv)->bundled_data_->location_.x;
+		y1 = (*itv)->bundled_data_->location_.y;
+
+		if(show_id) {
+			if((*itv)->bundled_data_->data_id_ % 2 == 0)
+			{
+				std::string id = std::to_string((*itv)->bundled_data_->data_id_);
+				putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+			}
+		}
+	}
+
+	// draw all edges
+	auto edges = graph.GetGraphUndirectedEdges();
+	for(auto it = edges.begin(); it != edges.end(); it++)
+	{
+		uint64_t x1,y1,x2,y2;
+		x1 = (*it).src_->bundled_data_->location_.x;
+		y1 = (*it).src_->bundled_data_->location_.y;
+		x2 = (*it).dst_->bundled_data_->location_.x;
+		y2 = (*it).dst_->bundled_data_->location_.y;
+
+		VisUtils::DrawLine(dst, Point(x1,y1), Point(x2,y2));
+	}
+}
+
+template<class GraphNodeType>
+void VisGraphPath(const Path_t<GraphNodeType*>& path, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
+{
+	Mat src, dst;
+	int src_type = _src.getMat().type();
+	if(src_type == CV_8UC1)
+	{
+		cvtColor(_src, src, CV_GRAY2BGR);
+		_dst.create(src.size(), src.type());
+		dst = _dst.getMat();
+	}
+	else
+	{
+		src = _src.getMat();
+		_dst.create(_src.size(), _src.type());
+		dst = _dst.getMat();
+		src.copyTo(dst);
+	}
+
+	// draw starting and finishing cell
+	auto cell_s = path[0]->bundled_data_;
+	uint64_t x,y;
+	x = cell_s->location_.x;
+	x = x - (cell_s->bbox_.x.max - cell_s->bbox_.x.min)/8;
+	y = cell_s->location_.y;
+	y = y + (cell_s->bbox_.y.max - cell_s->bbox_.y.min)/8;
+
+	VisUtils::FillRectangularArea(dst, cell_s->bbox_, start_color_);
+	putText(dst, "S" ,Point(x,y), CV_FONT_NORMAL, 1, Scalar(0,0,0),1,1);
+
+	auto cell_f = (*(path.end()-1))->bundled_data_;
+	x = cell_f->location_.x;
+	x = x - (cell_f->bbox_.x.max - cell_f->bbox_.x.min)/8;
+	y = cell_f->location_.y;
+	y = y + (cell_f->bbox_.y.max - cell_f->bbox_.y.min)/8;
+
 	VisUtils::FillRectangularArea(dst, cell_f->bbox_, finish_color_);
 	putText(dst, "F" ,Point(x,y), CV_FONT_NORMAL, 1, Scalar(0,0,0),1,1);
 

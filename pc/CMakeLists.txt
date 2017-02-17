@@ -65,7 +65,7 @@ endif(LCM_FOUND)
 find_package(VTK 7.0)
 
 if (VTK_FOUND)
-	add_subdirectory(visualization)    # <-----------------------------------
+#	add_subdirectory(visualization)    # <-----------------------------------
 elseif(VTK_FOUND)
 	message(STATUS "GUI module will not be built because not all dependent libraries can be found.")
 endif(VTK_FOUND)

@@ -18,6 +18,7 @@
 #include "graph/graph.h"
 #include "graph/astar.h"
 #include "vis/graph_vis.h"
+#include "vis/sgrid_vis.h"
 #include "geometry/graph_builder.h"
 #include "map/image_utils.h"
 #include "geometry/sgrid_builder.h"
@@ -110,12 +111,12 @@ int main(int argc, char** argv )
 	Mat vis_img;
 
 	if(sgrid_map.padded_image.empty())
-		GraphVis::VisSquareGrid(*sgrid_map.data_model, vis_img);
+		Vis::VisSquareGrid(*sgrid_map.data_model, vis_img);
 	else
-		GraphVis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
+		Vis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
-	GraphVis::VisSquareGridGraph(*graph, vis_img, vis_img, true);
-	GraphVis::VisSquareGridPath(path, vis_img, vis_img);
+	Vis::VisGraph(*graph, vis_img, vis_img, true);
+	Vis::VisGraphPath(path, vis_img, vis_img);
 
 	Range rngx(0 + sgrid_map.info.padded_left, vis_img.cols - sgrid_map.info.padded_right);
 	Range rngy(0 + sgrid_map.info.padded_top, vis_img.rows - sgrid_map.info.padded_bottom);

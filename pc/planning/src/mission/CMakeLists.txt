@@ -20,7 +20,7 @@ set(MISSION_LIB_SRC
     trajectory_generator.cpp
 )
 add_library(mission STATIC ${MISSION_LIB_SRC})
-target_link_libraries(mission map local3d planner utils polyopt quadflat ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(mission map local3d utils polyopt quadflat ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 # Add executables
 add_executable(wp_manager tests/wp_manager.cpp)

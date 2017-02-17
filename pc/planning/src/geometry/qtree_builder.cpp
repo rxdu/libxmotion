@@ -86,14 +86,14 @@ std::shared_ptr<QuadTree> QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsig
 				OccupancyType occupancy[4];
 
 				// top left area
-				bbox[0].x.min = parent->bounding_box_.x.min;
-				bbox[0].x.max = parent->bounding_box_.x.min + (parent->bounding_box_.x.max - parent->bounding_box_.x.min + 1)/2 - 1;
-				bbox[0].y.min = parent->bounding_box_.y.min;
-				bbox[0].y.max = parent->bounding_box_.y.min + (parent->bounding_box_.y.max - parent->bounding_box_.y.min + 1)/2 - 1;
+				bbox[0].x.min = parent->bbox_.x.min;
+				bbox[0].x.max = parent->bbox_.x.min + (parent->bbox_.x.max - parent->bbox_.x.min + 1)/2 - 1;
+				bbox[0].y.min = parent->bbox_.y.min;
+				bbox[0].y.max = parent->bbox_.y.min + (parent->bbox_.y.max - parent->bbox_.y.min + 1)/2 - 1;
 
 				// top right area
 				bbox[1].x.min = bbox[0].x.max + 1;
-				bbox[1].x.max = parent->bounding_box_.x.max;
+				bbox[1].x.max = parent->bbox_.x.max;
 				bbox[1].y.min = bbox[0].y.min;
 				bbox[1].y.max = bbox[0].y.max;
 
@@ -101,7 +101,7 @@ std::shared_ptr<QuadTree> QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsig
 				bbox[2].x.min = bbox[0].x.min;
 				bbox[2].x.max = bbox[0].x.max;
 				bbox[2].y.min = bbox[0].y.max + 1;
-				bbox[2].y.max = parent->bounding_box_.y.max;
+				bbox[2].y.max = parent->bbox_.y.max;
 
 				// bottom right area
 				bbox[3].x.min = bbox[1].x.min;

@@ -32,7 +32,7 @@ void TestCase1_Config(QuadPathRepair& qplanner)
 	MapConfig map_config;
 
 	map_config.SetMapPath(image_dir);
-	map_config.SetMapType(MapDataModel::SQUARE_GRID, 32);
+	map_config.SetMapType(MapDataModel::SQUARE_GRID, 64);
 	//	map_config.SetMapType(MapDataModel::QUAD_TREE, 6);
 	map_config.SetOriginOffset(2.5, 2.5);
 
@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
 	QuadPathRepair qplanner(lcm);
 
 	//TestCase1_Config(qplanner);
-	TestCase4_Config(qplanner);
+	TestCase1_Config(qplanner);
 
 #ifdef ENABLE_G3LOG
 	LoggingHelper& logging_helper = LoggingHelper::GetInstance("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/log");
