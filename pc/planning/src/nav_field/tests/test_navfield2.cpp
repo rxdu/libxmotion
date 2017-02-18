@@ -108,22 +108,24 @@ int main(int argc, char* argv[])
 	///////////////////////////////////////////////////////////////
 
 	std::shared_ptr<NavField<SquareCell*>> nav_field = std::make_shared<NavField<SquareCell*>>(graph);
-	//nav_field.UpdateNavField(185); // 32
-	//nav_field.UpdateNavField(60); // 64
-	nav_field->UpdateNavField(50); // new lab map
-//	nav_field->UpdateNavField(406); // lab map
-//	nav_field->UpdateNavField(536); // case 3
+	nav_field->UpdateNavField(95);
+////	nav_field.UpdateNavField(185); // 32
+//	nav_field->UpdateNavField(185); // 32
+//	//nav_field.UpdateNavField(60); // 64
+////	nav_field->UpdateNavField(50); // new lab map
+////	nav_field->UpdateNavField(406); // lab map
+////	nav_field->UpdateNavField(536); // case 3
 
 	ShortcutEval sc_eval(sgrid_map.data_model, nav_field);
 	sc_eval.EvaluateGridShortcutPotential(6);
 
 	// abstract: 552, 95
 	// case 3: 930, 536
-	Vertex_t<SquareCell*> * start_vertex = graph->GetVertexFromID(390);// 552, 508
-	Vertex_t<SquareCell*> * finish_vertex = graph->GetVertexFromID(50); //95
+	Vertex_t<SquareCell*> * start_vertex = graph->GetVertexFromID(552); // 390 for case 4// 552, 508
+	Vertex_t<SquareCell*> * finish_vertex = graph->GetVertexFromID(95);//50 for case 4 //95
 
 	auto nav_path = sc_eval.SearchInNavField(start_vertex, finish_vertex);
-//	auto nav_path = sc_eval.SearchInNavFieldbyStep(start_vertex, finish_vertex);
+	//auto nav_path = sc_eval.SearchInNavFieldbyStep(start_vertex, finish_vertex);
 
 	///////////////////////////////////////////////////////////////
 
@@ -140,11 +142,9 @@ int main(int argc, char* argv[])
 	//GraphVis::VisSquareGridLocalNavField(*sgrid_map.data_model, *nav_field, start_vertex, vis_img, vis_img, 5);
 
 	Vis::VisSquareGridShortcutPotential(*nav_field, vis_img, vis_img);
-//
-////	if(!path.empty())
-////		GraphVis::VisSquareGridPath(path, vis_img, vis_img);
-	if(!nav_path.empty())
-		Vis::VisGraphPath(nav_path, vis_img, vis_img);
+
+//	if(!nav_path.empty())
+//		Vis::VisGraphPath(nav_path, vis_img, vis_img);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 

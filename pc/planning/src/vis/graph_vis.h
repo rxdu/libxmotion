@@ -53,11 +53,11 @@ namespace Vis
 			y1 = (*itv)->bundled_data_->location_.y;
 
 			if(show_id) {
-				if((*itv)->bundled_data_->data_id_ % 2 == 0)
-				{
+//				if((*itv)->bundled_data_->data_id_ % 2 == 0)
+//				{
 					std::string id = std::to_string((*itv)->bundled_data_->data_id_);
 					cv::putText(dst, id ,cv::Point(x1,y1), CV_FONT_NORMAL, 0.5, cv::Scalar(204,204,102),1,1);
-				}
+//				}
 			}
 		}
 

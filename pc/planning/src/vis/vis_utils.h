@@ -44,7 +44,7 @@ namespace VisUtils {
 
 	void DrawPoint(cv::Mat img, cv::Point pos, const cv::Scalar& color = VisUtils::default_pt_color_);
 	void DrawLine(cv::Mat img, cv::Point pt1, cv::Point pt2, const cv::Scalar& color = VisUtils::default_ln_color_);
-	void DrawArrow(cv::Mat img, cv::Point pos, double angle, const cv::Scalar& color = VisUtils::default_pt_color_);
+	void DrawArrow(cv::Mat img, cv::Point base_pos, double length, double angle, const cv::Scalar& color = VisUtils::default_pt_color_);
 
 	void FillRectangularArea(cv::Mat img, BoundingBox bbox, const cv::Scalar& color = VisUtils::default_area_color_);
 

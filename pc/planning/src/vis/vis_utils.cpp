@@ -51,29 +51,29 @@ void VisUtils::DrawLine(cv::Mat img, cv::Point pt1, cv::Point pt2, const cv::Sca
 // Source:
 //	* https://adishavit.github.io/2015/drawing-arrows-with-opencv/
 //	* http://docs.opencv.org/2.4/modules/core/doc/drawing_functions.html#arrowedline
-void VisUtils::DrawArrow(cv::Mat img, cv::Point pos, double angle, const cv::Scalar& color)
+void VisUtils::DrawArrow(cv::Mat img, cv::Point base_pos, double length, double angle, const cv::Scalar& color)
 {
-	int lineType = 8;
-	int thickness = 1;
-	double tipLength = 0.1;
+	int line_type = 8;
+	int thickness = 2;
 
-	auto angleRad = angle*CV_PI / 180.0;   // convert angle to radians
+	double tip_size = length * 0.1;
+	if(tip_size < 1)
+		tip_size = 1;
 
-	auto length = 150;
-	auto direction = cv::Point(length * cos(angleRad), length * sin(angleRad)); // calculate direction
+	double angleRad = angle*CV_PI / 180.0;   // convert angle to radians
+	cv::Point tip_pt = cv::Point(base_pos.x + length * sin(angleRad), base_pos.y - length * cos(angleRad)); // calculate tip position
 
-	//arrowedLine(img, pos+direction*0.5, pos + direction, color, thickness, lineType, 0, tipLength);
-//	line(img, pt1, pt2, color, thickness, line_type, shift);
-//
-//	const double angle = atan2( (double) pt1.y - pt2.y, (double) pt1.x - pt2.x );
-//
-//	Point p(cvRound(pt2.x + tipSize * cos(angle + CV_PI / 4)),
-//			cvRound(pt2.y + tipSize * sin(angle + CV_PI / 4)));
-//	line(img, p, pt2, color, thickness, line_type, shift);
-//
-//	p.x = cvRound(pt2.x + tipSize * cos(angle - CV_PI / 4));
-//	p.y = cvRound(pt2.y + tipSize * sin(angle - CV_PI / 4));
-//	line(img, p, pt2, color, thickness, line_type, shift);
+	line(img, base_pos, tip_pt, color, thickness, line_type);
+
+	double angle_l = atan2( (double) base_pos.y - tip_pt.y, (double) base_pos.x - tip_pt.x );
+
+	Point p(cvRound(tip_pt.x + tip_size * cos(angle_l + CV_PI / 4)),
+			cvRound(tip_pt.y + tip_size * sin(angle_l + CV_PI / 4)));
+	line(img, p, tip_pt, color, thickness, line_type);
+
+	p.x = cvRound(tip_pt.x + tip_size * cos(angle_l - CV_PI / 4));
+	p.y = cvRound(tip_pt.y + tip_size * sin(angle_l - CV_PI / 4));
+	line(img, p, tip_pt, color, thickness, line_type);
 }
 
 void VisUtils::FillRectangularArea(cv::Mat img, BoundingBox bbox, const cv::Scalar& color)

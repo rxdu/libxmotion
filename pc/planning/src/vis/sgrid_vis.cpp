@@ -27,16 +27,16 @@ void Vis::VisSquareGrid(const SquareGrid& grid, cv::OutputArray _dst)
 		else if((*itc).second->occu_ == OccupancyType::INTERESTED)
 			VisUtils::FillRectangularArea(dst, (*itc).second->bbox_, aoi_color_);
 
-		auto cell = (*itc);
-		uint64_t x,y;
-		x = cell.second->bbox_.x.min + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/2;
-		x = x + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/6;
-		y = cell.second->bbox_.y.min + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)/2;
-		y = y + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)*3/7;
-
-		std::string id = std::to_string(cell.second->data_id_);
-
-		putText(dst, id ,Point(x,y), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
+//		auto cell = (*itc);
+//		uint64_t x,y;
+//		x = cell.second->bbox_.x.min + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/2;
+//		x = x + (cell.second->bbox_.x.max - cell.second->bbox_.x.min)/6;
+//		y = cell.second->bbox_.y.min + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)/2;
+//		y = y + (cell.second->bbox_.y.max - cell.second->bbox_.y.min)*3/7;
+//
+//		std::string id = std::to_string(cell.second->data_id_);
+//
+//		putText(dst, id ,Point(x,y), CV_FONT_NORMAL, 0.5, Scalar(0,0,0),1,1);
 	}
 
 	// draw grid lines
@@ -305,6 +305,12 @@ void Vis::VisSquareGridShortcutPotential(const NavField<SquareCell*>& nav_field,
 
 			//DrawEdge(Point(x1,y1), Point(x2,y2), dst);
 			VisUtils::DrawLine(dst, Point(x1,y1), Point(x2,y2));
+		}
+
+		// draw yaw
+		if((*itv)->shortcut_rewards_ > 1) {
+			double arrow_size = ((*itv)->bundled_data_->bbox_.x.max -  (*itv)->bundled_data_->bbox_.x.min)/2.0;
+			DrawArrow(dst, Point(x1,y1), arrow_size, (*itv)->rewards_yaw_);
 		}
 	}
 }

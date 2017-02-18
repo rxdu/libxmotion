@@ -18,5 +18,5 @@ add_library(vis STATIC ${VIS_LIB_SRC})
 target_link_libraries(vis map geometry ${OpenCV_LIBS})
 
 # Add executables
-#add_executable(test_graph test_graph.cpp)
-#target_link_libraries(test_graph qtree vis map ${OpenCV_LIBS})
+add_executable(test_vis tests/test_vis.cpp)
+target_link_libraries(test_vis vis ${OpenCV_LIBS})

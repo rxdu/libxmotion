@@ -74,8 +74,8 @@ double ShortcutEval::EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_v
 	auto nbs = sgrid_->GetNeighboursWithinRange(eval_vtx->bundled_data_->data_id_, sensor_range);
 
 	//std::priority_queue<double> rewards_queue;
-	double max_rwd = 0;
-	Vertex_t<SquareCell*>* max_rwd_vtx;
+	double max_rwd;
+	Vertex_t<SquareCell*>* max_rwd_vtx = nullptr;
 	for(auto& n : nbs) {
 		if(n->occu_ == OccupancyType::OCCUPIED)
 			continue;
@@ -84,7 +84,8 @@ double ShortcutEval::EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_v
 
 		double rewards = eval_vtx->potential_ - vtx->potential_
 				- CalcDirectDistance(vtx->bundled_data_->index_, eval_vtx->bundled_data_->index_,sgrid_->cell_size_,true);
-		if(rewards > max_rwd) {
+
+		if(max_rwd_vtx == nullptr || rewards > max_rwd) {
 			max_rwd = rewards;
 			max_rwd_vtx = vtx;
 		}
@@ -92,12 +93,31 @@ double ShortcutEval::EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_v
 	}
 
 	// update heading angle
+	double angle = 0;
 	Eigen::Vector3d max_rwd_vec(max_rwd_vtx->bundled_data_->location_.x, max_rwd_vtx->bundled_data_->location_.y, 0);
 	Eigen::Vector3d pos_vec(eval_vtx->bundled_data_->location_.x, eval_vtx->bundled_data_->location_.y, 0);
-	Eigen::Vector3d dir_vec = max_rwd_vec - pos_vec;
+	Eigen::Vector3d dir_vec_origin = max_rwd_vec - pos_vec;
+	Eigen::Vector3d dir_vec(-dir_vec_origin[1], -dir_vec_origin[0],0);
 	Eigen::Vector3d x_vec(1,0,0);
-	double angle = - std::acos(dir_vec.normalized().dot(x_vec));
-	eval_vtx->rewards_yaw_ = angle;
+	Eigen::Vector3d y_vec(0,1,0);
+	//double angle = - std::acos(dir_vec.normalized().dot(x_vec));
+	double x_dir_vec = dir_vec.dot(x_vec);
+	double y_dir_vec = dir_vec.dot(y_vec);
+
+	if(y_dir_vec > 0) {
+		angle = std::acos(dir_vec.normalized().dot(x_vec));
+	}
+	else if(y_dir_vec < 0) {
+		angle = - std::acos(dir_vec.normalized().dot(x_vec));
+	}
+	else {
+		if(x_dir_vec >= 0)
+			angle = 0;
+		else
+			angle = M_PI;
+	}
+
+	eval_vtx->rewards_yaw_ = angle/M_PI*180.0;
 
 	//eval_vtx->shortcut_rewards_ = rewards_queue.top();
 	//return rewards_queue.top();
