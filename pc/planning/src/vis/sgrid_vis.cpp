@@ -256,6 +256,9 @@ void Vis::VisSquareGridLocalNavField(const SquareGrid& grid, const NavField<Squa
 		putText(dst, std::to_string((int)(rewards)) ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
 
 	}
+
+	double arrow_size = (center_vtx->bundled_data_->bbox_.x.max -  center_vtx->bundled_data_->bbox_.x.min)/2.0;
+	DrawArrow(dst, Point(center_vtx->bundled_data_->location_.x,center_vtx->bundled_data_->location_.y), arrow_size, -center_vtx->rewards_yaw_);
 }
 
 void Vis::VisSquareGridShortcutPotential(const NavField<SquareCell*>& nav_field, cv::InputArray _src, cv::OutputArray _dst)
@@ -310,7 +313,7 @@ void Vis::VisSquareGridShortcutPotential(const NavField<SquareCell*>& nav_field,
 		// draw yaw
 		if((*itv)->shortcut_rewards_ > 1) {
 			double arrow_size = ((*itv)->bundled_data_->bbox_.x.max -  (*itv)->bundled_data_->bbox_.x.min)/2.0;
-			DrawArrow(dst, Point(x1,y1), arrow_size, (*itv)->rewards_yaw_);
+			DrawArrow(dst, Point(x1,y1), arrow_size, -(*itv)->rewards_yaw_);
 		}
 	}
 }
