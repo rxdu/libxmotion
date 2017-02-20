@@ -77,7 +77,7 @@ double ShortcutEval::EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_v
 	double max_rwd;
 	Vertex_t<SquareCell*>* max_rwd_vtx = nullptr;
 	for(auto& n : nbs) {
-		if(n->occu_ == OccupancyType::OCCUPIED)
+		if(n->occu_ == OccupancyType::OCCUPIED || nav_field_->field_graph_->GetVertexFromID(n->data_id_) == nullptr)
 			continue;
 
 		auto vtx = nav_field_->field_graph_->GetVertexFromID(n->data_id_);

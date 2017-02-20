@@ -43,7 +43,7 @@ int main(int argc, char** argv )
 		}
 		else
 		{
-			sgrid_map = SGridBuilderV2::BuildSquareGridMap(input_map, 64);
+			sgrid_map = SGridBuilderV2::BuildSquareGridMap(input_map, 32, 1);
 			use_input_image = true;
 		}
 	}
@@ -96,30 +96,30 @@ int main(int argc, char** argv )
 	std::shared_ptr<Graph<SquareCell*>> graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);
 
 	/*** Search path in the graph ***/
-//	Vertex<SquareCell*> * start_vertex;
-//	Vertex<SquareCell*> * finish_vertex;
-//	if(use_input_image)
-//	{
-//		start_vertex = graph->GetVertexFromID(160);
-//		finish_vertex = graph->GetVertexFromID(830);
-//	}
-//	else
-//	{
-//		start_vertex = graph->GetVertexFromID(0);
-//		finish_vertex = graph->GetVertexFromID(143);
-//	}
-//
-//	if(start_vertex == nullptr || finish_vertex == nullptr) {
-//		std::cerr << "Invalid starting and finishing vertices, please choose two vertices in free space!" << std::endl;
-//		std::cerr << "Use image \"example.png\" inside \\planning\\data folder for this demo." << std::endl;
-//		return 0;
-//	}
-//
-//	clock_t		exec_time;
-//	exec_time = clock();
-//	std::vector<Vertex<SquareCell*>*> path = AStar::Search(graph,start_vertex,finish_vertex);
-//	exec_time = clock() - exec_time;
-//	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
+	Vertex<SquareCell*> * start_vertex;
+	Vertex<SquareCell*> * finish_vertex;
+	if(use_input_image)
+	{
+		start_vertex = graph->GetVertexFromID(704);
+		finish_vertex = graph->GetVertexFromID(107);
+	}
+	else
+	{
+		start_vertex = graph->GetVertexFromID(0);
+		finish_vertex = graph->GetVertexFromID(143);
+	}
+
+	if(start_vertex == nullptr || finish_vertex == nullptr) {
+		std::cerr << "Invalid starting and finishing vertices, please choose two vertices in free space!" << std::endl;
+		std::cerr << "Use image \"example.png\" inside \\planning\\data folder for this demo." << std::endl;
+		return 0;
+	}
+
+	clock_t		exec_time;
+	exec_time = clock();
+	std::vector<Vertex<SquareCell*>*> path = AStar::Search(graph,start_vertex,finish_vertex);
+	exec_time = clock() - exec_time;
+	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 
 	/*** Visualize the map and graph ***/
 	Mat vis_img;
@@ -132,9 +132,9 @@ int main(int argc, char** argv )
 		Vis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
 	/*** put the graph on top of the square grid ***/
-	Vis::VisGraph(*graph, vis_img, vis_img, true);
+	Vis::VisGraph(*graph, vis_img, vis_img, false);
 	/*** put the path on top of the graph ***/
-//	GraphVis::VisSquareGridPath(path, vis_img, vis_img);
+	Vis::VisGraphPath(path, vis_img, vis_img);
 
 	// display visualization result
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
