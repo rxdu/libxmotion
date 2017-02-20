@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
 //////	nav_field->UpdateNavField(536); // case 3
 
 	ShortcutEval sc_eval(sgrid_map.data_model, nav_field);
-	sc_eval.EvaluateGridShortcutPotential(15);
+	sc_eval.EvaluateGridShortcutPotential(20);
 
 	// abstract: 552, 95
 	// case 3: 930, 536
@@ -139,10 +139,10 @@ int main(int argc, char* argv[])
 
 //	Vis::VisGraph(*graph, vis_img, vis_img, true);
 
-	Vertex_t<SquareCell*>* check_vtx = graph->GetVertexFromID(704); // 390 for case 4// 552, 508
-	Vis::VisSquareGridLocalNavField(*sgrid_map.data_model, *nav_field, check_vtx, vis_img, vis_img, 15);
+//	Vertex_t<SquareCell*>* check_vtx = graph->GetVertexFromID(704); // 390 for case 4// 552, 508
+//	Vis::VisSquareGridLocalNavField(*sgrid_map.data_model, *nav_field, check_vtx, vis_img, vis_img, 15);
 
-//	Vis::VisSquareGridShortcutPotential(*nav_field, vis_img, vis_img);
+	Vis::VisSquareGridShortcutPotential(*nav_field, vis_img, vis_img);
 
 //	if(!nav_path.empty())
 //		Vis::VisGraphPath(nav_path, vis_img, vis_img);
