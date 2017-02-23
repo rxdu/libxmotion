@@ -68,8 +68,6 @@ void QuadPathRepair::ConfigGraphPlanner(MapConfig config, double world_size_x, d
 			// configure navigation field for shortcut analysis
 			nav_field_ = std::make_shared<NavField<SquareCell*>>(sgrid_planner_.graph_);
 			sc_evaluator_ = std::make_shared<ShortcutEval>(sgrid_planner_.map_.data_model, nav_field_);
-			// TODO update sensor range from calculation
-			sc_evaluator_->EvaluateGridShortcutPotential(15);
 		}
 	}
 	else
@@ -113,6 +111,8 @@ void QuadPathRepair::SetGoalMapPosition(Position2D pos)
 
 	auto goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
 	nav_field_->UpdateNavField(goal_id);
+	// TODO update sensor range from calculation
+	sc_evaluator_->EvaluateGridShortcutPotential(15);
 
 	if(gstart_set_ && ggoal_set_)
 		update_global_plan_ = true;
@@ -228,7 +228,7 @@ bool QuadPathRepair::CheckPathSafety(std::shared_ptr<CubeArray> cube_array)
 	// only check waypoints that is from 3D graph
 	for(auto& wp : mission_tracker_->active_path_)
 	{
-		Position3Dd pt_pos_w = wp->bundled_data_.position;
+		Position3Dd pt_pos_w = wp.position;
 
 		if(octomap_server_.IsPositionOccupied(pt_pos_w))
 			return false;
@@ -295,6 +295,197 @@ int32_t QuadPathRepair::FindFurthestPointWithinRadius(std::vector<Position3Dd>& 
 	return goal_idx;
 }
 
+//void QuadPathRepair::LcmOctomapHandler(
+//		const lcm::ReceiveBuffer* rbuf,
+//		const std::string& chan,
+//		const srcl_lcm_msgs::NewDataReady_t* msg)
+//{
+//	std::cout << "\n---------------------- New Iteration -------------------------" << std::endl;
+//
+//	LOG(INFO) << "----------- New iteration -----------";
+//
+//	if(mission_tracker_->remaining_path_length_ < 0.5)
+//	{
+//		std::cout << "Getting close to goal, no need to replan" << std::endl;
+//		LOG(INFO) << "Getting close to goal, no need to replan";
+//		return;
+//	}
+//
+//	static int count = 0;
+//	srcl_lcm_msgs::KeyframeSet_t kf_cmd;
+//
+//	// record the planning time
+//	kf_cmd.sys_time.time_stamp = current_sys_time_;
+//
+//	//LOG(INFO) << "Before build cube array and cube graph";
+//
+//	//std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
+//	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctreeWithExtObstacle(octomap_server_.octree_);
+//	std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
+//
+//	//LOG(INFO) << "After build cube array and cube graph";
+//
+//	// don't replan if 3d information is too limited
+//	if(mission_tracker_->mission_started_ && (cubearray->cubes_.size() == 0 || cubegraph->GetGraphVertices().size() < 5))
+//	{
+//		std::cerr << "Too limited 3D information collected" << std::endl;
+//		LOG(INFO) << "Too limited 3D information collected";
+//		return;
+//	}
+//
+//	//LOG(INFO) << "Before combining graphs";
+//
+//	//int64_t geo_start_id_astar = geomark_graph_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);//, octomap_server_.octree_transf_);
+//	int64_t geo_start_id_astar = geomark_graph_.MergeCubeArrayInfo(cubegraph, cubearray);
+//	//LOG(INFO) << "After combining graphs";
+//
+//	// don't replan if failed to combine graphs
+//	if(geo_start_id_astar == -1)
+//	{
+//		std::cerr << "Failed to combine graphs" << std::endl;
+//		LOG(INFO) << "Failed to combine graphs";
+//		return;
+//	}
+//
+//	LOG(INFO) << "Combined graph size: " << sgrid_planner_.graph_->GetGraphVertices().size();
+//	std::cout << "Graph size (combined, 3d): " << sgrid_planner_.graph_->GetGraphVertices().size() << " , " << cubegraph->GetGraphVertices().size() << std::endl;
+//
+//	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
+//	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
+//
+//	//LOG(INFO) << "Before a* search";
+//
+//	clock_t exec_time;
+//	exec_time = clock();
+//	auto comb_path = AStar::Search(geomark_graph_.combined_graph_, geo_start_id_astar, geo_goal_id_astar);
+//	exec_time = clock() - exec_time;
+//	std::cout << "Search in 3D finished in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
+//
+//	//LOG(INFO) << "After a* search";
+//
+//	std::vector<Position3Dd> raw_wps;
+//	for(auto& wp:comb_path)
+//		raw_wps.push_back(wp->bundled_data_.position);
+//
+//	// if failed to find a 3d path, terminate this iteration
+//	if(raw_wps.size() <= 1)
+//		return;
+//
+//	std::vector<Position3Dd> selected_wps = MissionUtils::GetKeyTurningWaypoints(raw_wps);
+//
+//	 if(!mission_tracker_->mission_started_ || EvaluateNewPath(selected_wps))
+//	 {
+//	 	if(mission_tracker_->mission_started_)
+//	 		std::cout << "-------- found better solution ---------" << std::endl;
+//	 	else
+//	 		mission_tracker_->mission_started_ = true;
+//
+//	 	// update mission tracking information
+//	 	mission_tracker_->UpdateActivePathWaypoints(comb_path);
+//	 	mission_tracker_->remaining_path_length_ = est_new_dist_;
+//
+//	 	kf_cmd.path_id = mission_tracker_->path_id_;
+//
+//	 	//**** Strategy Change ****//
+//	 	//Eigen::Vector3d goal_vec(selected_wps.back().x, selected_wps.back().y, 0);
+//	 	int32_t fpt_idx = FindFurthestPointWithinRadius(selected_wps, 5.0);
+//	 	Eigen::Vector3d furthest_pt_vec(selected_wps[fpt_idx].x, selected_wps[fpt_idx].y, 0);
+//	 	Eigen::Vector3d goal_vec(selected_wps.back().x, selected_wps.back().y, 0);
+//
+//	 	kf_cmd.kf_num = selected_wps.size();
+//	 	int32_t wp_cnt = 0;
+//	 	for(auto& wp:selected_wps)
+//	 	{
+//	 		srcl_lcm_msgs::Keyframe_t kf;
+//	 		kf.vel_constr = false;
+//
+//	 		kf.positions[0] = wp.x;
+//	 		kf.positions[1] = wp.y;
+//	 		kf.positions[2] = wp.z;
+//
+//	 		Eigen::Vector3d pos_vec(wp.x, wp.y, 0);
+//	 		Eigen::Vector3d dir_vec;
+//	 		if(wp_cnt < fpt_idx)
+//	 			dir_vec = furthest_pt_vec - pos_vec;
+//	 		else
+//	 			dir_vec = goal_vec - pos_vec;
+//	 		Eigen::Vector3d x_vec(1,0,0);
+//	 		double angle = - std::acos(dir_vec.normalized().dot(x_vec));
+//	 		//std::cout<<"angle: " << angle << " , vec: " << dir_vec << std::endl;
+//	 		kf.yaw = angle;
+//
+//	 		kf_cmd.kfs.push_back(kf);
+//	 		wp_cnt++;
+//	 	}
+//	 	kf_cmd.kfs.front().yaw = 0;
+//	 	kf_cmd.kfs.back().yaw = -M_PI/4;
+//
+//	 	lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
+//
+//	 	// send data for visualization
+//	 	Send3DSearchPathToVis(selected_wps);
+//	 }
+//
+////	if(count++ % 20 == 0)
+////	{
+////		Send3DSearchPathToVis(selected_wps);
+////
+////		srcl_lcm_msgs::Graph_t graph_msg;
+////
+////		// combined graph
+////		graph_msg.vertex_num = gcombiner_.combined_graph_.GetGraphVertices().size();
+////		for(auto& vtx : gcombiner_.combined_graph_.GetGraphVertices())
+////		{
+////			srcl_lcm_msgs::Vertex_t vertex;
+////			vertex.id = vtx->vertex_id_;
+////
+////			vertex.position[0] = vtx->bundled_data_.position.x;
+////			vertex.position[1] = vtx->bundled_data_.position.y;
+////			vertex.position[2] = vtx->bundled_data_.position.z;
+////
+////			graph_msg.vertices.push_back(vertex);
+////		}
+////
+////		graph_msg.edge_num = gcombiner_.combined_graph_.GetGraphUndirectedEdges().size();
+////		for(auto& eg : gcombiner_.combined_graph_.GetGraphUndirectedEdges())
+////		{
+////			srcl_lcm_msgs::Edge_t edge;
+////			edge.id_start = eg.src_->vertex_id_;
+////			edge.id_end = eg.dst_->vertex_id_;
+////
+////			graph_msg.edges.push_back(edge);
+////		}
+////
+////		// cube graph
+//////		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
+//////		for(auto& vtx : cubegraph->GetGraphVertices())
+//////		{
+//////			srcl_lcm_msgs::Vertex_t vertex;
+//////			vertex.id = vtx->vertex_id_;
+//////
+//////			vertex.position[0] = vtx->bundled_data_.location_.x;
+//////			vertex.position[1] = vtx->bundled_data_.location_.y;
+//////			vertex.position[2] = vtx->bundled_data_.location_.z;
+//////
+//////			graph_msg.vertices.push_back(vertex);
+//////		}
+//////
+//////		graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
+//////		for(auto& eg : cubegraph->GetGraphUndirectedEdges())
+//////		{
+//////			srcl_lcm_msgs::Edge_t edge;
+//////			edge.id_start = eg.src_->vertex_id_;
+//////			edge.id_end = eg.dst_->vertex_id_;
+//////
+//////			graph_msg.edges.push_back(edge);
+//////		}
+////
+////		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
+////
+////		std::cout << "######################## graph sent ########################" << std::endl;
+////	}
+//}
+
 void QuadPathRepair::LcmOctomapHandler(
 		const lcm::ReceiveBuffer* rbuf,
 		const std::string& chan,
@@ -317,55 +508,79 @@ void QuadPathRepair::LcmOctomapHandler(
 	// record the planning time
 	kf_cmd.sys_time.time_stamp = current_sys_time_;
 
-	//LOG(INFO) << "Before build cube array and cube graph";
-
-	//std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
-	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctreeWithExtObstacle(octomap_server_.octree_);
-	std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
-
-	//LOG(INFO) << "After build cube array and cube graph";
-
-	// don't replan if 3d information is too limited
-	if(mission_tracker_->mission_started_ && (cubearray->cubes_.size() == 0 || cubegraph->GetGraphVertices().size() < 5))
-	{
-		std::cerr << "Too limited 3D information collected" << std::endl;
-		LOG(INFO) << "Too limited 3D information collected";
-		return;
-	}
-
-	//LOG(INFO) << "Before combining graphs";
-
-	//int64_t geo_start_id_astar = geomark_graph_.CombineBaseWithCubeArrayGraph(cubearray, cubegraph);//, octomap_server_.octree_transf_);
-	int64_t geo_start_id_astar = geomark_graph_.MergeCubeArrayInfo(cubegraph, cubearray);
-	//LOG(INFO) << "After combining graphs";
-
-	// don't replan if failed to combine graphs
-	if(geo_start_id_astar == -1)
-	{
-		std::cerr << "Failed to combine graphs" << std::endl;
-		LOG(INFO) << "Failed to combine graphs";
-		return;
-	}
-
-	LOG(INFO) << "Combined graph size: " << sgrid_planner_.graph_->GetGraphVertices().size();
-	std::cout << "Graph size (combined, 3d): " << sgrid_planner_.graph_->GetGraphVertices().size() << " , " << cubegraph->GetGraphVertices().size() << std::endl;
-
-	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
-	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
-
-	//LOG(INFO) << "Before a* search";
-
-	clock_t exec_time;
-	exec_time = clock();
-	auto comb_path = AStar::Search(geomark_graph_.combined_graph_, geo_start_id_astar, geo_goal_id_astar);
-	exec_time = clock() - exec_time;
-	std::cout << "Search in 3D finished in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
-
-	//LOG(INFO) << "After a* search";
-
 	std::vector<Position3Dd> raw_wps;
-	for(auto& wp:comb_path)
-		raw_wps.push_back(wp->bundled_data_.position);
+	std::vector<GeoMark> geo_path;
+
+	if(!mission_tracker_->mission_started_)
+	{
+		uint64_t map_start_id = sgrid_planner_.map_.data_model->GetIDFromPosition(start_pos_.x, start_pos_.y);
+		uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
+		auto start_vertex = sgrid_planner_.graph_->GetVertexFromID(map_start_id);
+		auto finish_vertex = sgrid_planner_.graph_->GetVertexFromID(map_goal_id);
+		auto path = sc_evaluator_->SearchInNavField(start_vertex, finish_vertex);
+
+		for(auto& wp : path)
+		{
+			GeoMark mark;
+			mark.data_id_ = wp->bundled_data_->data_id_;
+			Position2Dd ref_world_pos2 = MapUtils::CoordinatesFromMapPaddedToRefWorld(wp->bundled_data_->location_, sgrid_planner_.map_.info);
+			mark.position.x = ref_world_pos2.x;
+			mark.position.y = ref_world_pos2.y;
+			mark.position.z = mission_tracker_->current_position_.z;
+			mark.source = GeoMarkSource::PLANAR_MAP;
+			mark.source_id = wp->bundled_data_->data_id_;
+			geo_path.push_back(mark);
+		}
+
+		for(int i = 0; i < geo_path.size() - 1; i++)
+			est_new_dist_ += std::sqrt(std::pow(geo_path[i].position.x - geo_path[i + 1].position.x,2) +
+					std::pow(geo_path[i].position.y - geo_path[i + 1].position.y,2));
+
+		for(auto& wp:geo_path) {
+			raw_wps.push_back(wp.position);
+		}
+	}
+	else
+	{
+		//std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
+		std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctreeWithExtObstacle(octomap_server_.octree_);
+		std::shared_ptr<Graph<CubeCell&>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
+
+		// don't replan if 3d information is too limited
+		if(mission_tracker_->mission_started_ && (cubearray->cubes_.size() == 0 || cubegraph->GetGraphVertices().size() < 5))
+		{
+			std::cerr << "Too limited 3D information collected" << std::endl;
+			LOG(INFO) << "Too limited 3D information collected";
+			return;
+		}
+
+		int64_t geo_start_id_astar = geomark_graph_.MergeCubeArrayInfo(cubegraph, cubearray);
+
+		// don't replan if failed to combine graphs
+		if(geo_start_id_astar == -1)
+		{
+			std::cerr << "Failed to combine graphs" << std::endl;
+			LOG(INFO) << "Failed to combine graphs";
+			return;
+		}
+
+		LOG(INFO) << "Combined graph size: " << sgrid_planner_.graph_->GetGraphVertices().size();
+		std::cout << "Graph size (combined, 3d): " << sgrid_planner_.graph_->GetGraphVertices().size() << " , " << cubegraph->GetGraphVertices().size() << std::endl;
+
+		uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
+		uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
+
+		clock_t exec_time;
+		exec_time = clock();
+		auto path = AStar::Search(geomark_graph_.combined_graph_, geo_start_id_astar, geo_goal_id_astar);
+		exec_time = clock() - exec_time;
+		std::cout << "Search in 3D finished in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
+
+		for(auto& wp:path) {
+			geo_path.push_back(wp->bundled_data_);
+			raw_wps.push_back(wp->bundled_data_.position);
+		}
+	}
 
 	// if failed to find a 3d path, terminate this iteration
 	if(raw_wps.size() <= 1)
@@ -373,117 +588,57 @@ void QuadPathRepair::LcmOctomapHandler(
 
 	std::vector<Position3Dd> selected_wps = MissionUtils::GetKeyTurningWaypoints(raw_wps);
 
-	 if(!mission_tracker_->mission_started_ || EvaluateNewPath(selected_wps))
-	 {
-	 	if(mission_tracker_->mission_started_)
-	 		std::cout << "-------- found better solution ---------" << std::endl;
-	 	else
-	 		mission_tracker_->mission_started_ = true;
+	if(!mission_tracker_->mission_started_ || EvaluateNewPath(selected_wps))
+	{
+		if(mission_tracker_->mission_started_)
+			std::cout << "-------- found better solution ---------" << std::endl;
+		else
+			mission_tracker_->mission_started_ = true;
 
-	 	// update mission tracking information
-	 	mission_tracker_->UpdateActivePathWaypoints(comb_path);
-	 	mission_tracker_->remaining_path_length_ = est_new_dist_;
+		// update mission tracking information
+		mission_tracker_->UpdateActivePathWaypoints(geo_path);
+		mission_tracker_->remaining_path_length_ = est_new_dist_;
 
-	 	kf_cmd.path_id = mission_tracker_->path_id_;
+		kf_cmd.path_id = mission_tracker_->path_id_;
 
-	 	//**** Strategy Change ****//
-	 	//Eigen::Vector3d goal_vec(selected_wps.back().x, selected_wps.back().y, 0);
-	 	int32_t fpt_idx = FindFurthestPointWithinRadius(selected_wps, 5.0);
-	 	Eigen::Vector3d furthest_pt_vec(selected_wps[fpt_idx].x, selected_wps[fpt_idx].y, 0);
-	 	Eigen::Vector3d goal_vec(selected_wps.back().x, selected_wps.back().y, 0);
+		//**** Strategy Change ****//
+		//Eigen::Vector3d goal_vec(selected_wps.back().x, selected_wps.back().y, 0);
+		int32_t fpt_idx = FindFurthestPointWithinRadius(selected_wps, 5.0);
+		Eigen::Vector3d furthest_pt_vec(selected_wps[fpt_idx].x, selected_wps[fpt_idx].y, 0);
+		Eigen::Vector3d goal_vec(selected_wps.back().x, selected_wps.back().y, 0);
 
-	 	kf_cmd.kf_num = selected_wps.size();
-	 	int32_t wp_cnt = 0;
-	 	for(auto& wp:selected_wps)
-	 	{
-	 		srcl_lcm_msgs::Keyframe_t kf;
-	 		kf.vel_constr = false;
+		kf_cmd.kf_num = selected_wps.size();
+		int32_t wp_cnt = 0;
+		for(auto& wp:selected_wps)
+		{
+			srcl_lcm_msgs::Keyframe_t kf;
+			kf.vel_constr = false;
 
-	 		kf.positions[0] = wp.x;
-	 		kf.positions[1] = wp.y;
-	 		kf.positions[2] = wp.z;
+			kf.positions[0] = wp.x;
+			kf.positions[1] = wp.y;
+			kf.positions[2] = wp.z;
 
-	 		Eigen::Vector3d pos_vec(wp.x, wp.y, 0);
-	 		Eigen::Vector3d dir_vec;
-	 		if(wp_cnt < fpt_idx)
-	 			dir_vec = furthest_pt_vec - pos_vec;
-	 		else
-	 			dir_vec = goal_vec - pos_vec;
-	 		Eigen::Vector3d x_vec(1,0,0);
-	 		double angle = - std::acos(dir_vec.normalized().dot(x_vec));
-	 		//std::cout<<"angle: " << angle << " , vec: " << dir_vec << std::endl;
-	 		kf.yaw = angle;
+			Eigen::Vector3d pos_vec(wp.x, wp.y, 0);
+			Eigen::Vector3d dir_vec;
+			if(wp_cnt < fpt_idx)
+				dir_vec = furthest_pt_vec - pos_vec;
+			else
+				dir_vec = goal_vec - pos_vec;
+			Eigen::Vector3d x_vec(1,0,0);
+			double angle = - std::acos(dir_vec.normalized().dot(x_vec));
+			kf.yaw = angle;
 
-	 		kf_cmd.kfs.push_back(kf);
-	 		wp_cnt++;
-	 	}
-	 	kf_cmd.kfs.front().yaw = 0;
-	 	kf_cmd.kfs.back().yaw = -M_PI/4;
+			kf_cmd.kfs.push_back(kf);
+			wp_cnt++;
+		}
+		kf_cmd.kfs.front().yaw = 0;
+		kf_cmd.kfs.back().yaw = -M_PI/4;
 
-	 	lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
+		lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
 
-	 	// send data for visualization
-	 	Send3DSearchPathToVis(selected_wps);
-	 }
-
-//	if(count++ % 20 == 0)
-//	{
-//		Send3DSearchPathToVis(selected_wps);
-//
-//		srcl_lcm_msgs::Graph_t graph_msg;
-//
-//		// combined graph
-//		graph_msg.vertex_num = gcombiner_.combined_graph_.GetGraphVertices().size();
-//		for(auto& vtx : gcombiner_.combined_graph_.GetGraphVertices())
-//		{
-//			srcl_lcm_msgs::Vertex_t vertex;
-//			vertex.id = vtx->vertex_id_;
-//
-//			vertex.position[0] = vtx->bundled_data_.position.x;
-//			vertex.position[1] = vtx->bundled_data_.position.y;
-//			vertex.position[2] = vtx->bundled_data_.position.z;
-//
-//			graph_msg.vertices.push_back(vertex);
-//		}
-//
-//		graph_msg.edge_num = gcombiner_.combined_graph_.GetGraphUndirectedEdges().size();
-//		for(auto& eg : gcombiner_.combined_graph_.GetGraphUndirectedEdges())
-//		{
-//			srcl_lcm_msgs::Edge_t edge;
-//			edge.id_start = eg.src_->vertex_id_;
-//			edge.id_end = eg.dst_->vertex_id_;
-//
-//			graph_msg.edges.push_back(edge);
-//		}
-//
-//		// cube graph
-////		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
-////		for(auto& vtx : cubegraph->GetGraphVertices())
-////		{
-////			srcl_lcm_msgs::Vertex_t vertex;
-////			vertex.id = vtx->vertex_id_;
-////
-////			vertex.position[0] = vtx->bundled_data_.location_.x;
-////			vertex.position[1] = vtx->bundled_data_.location_.y;
-////			vertex.position[2] = vtx->bundled_data_.location_.z;
-////
-////			graph_msg.vertices.push_back(vertex);
-////		}
-////
-////		graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
-////		for(auto& eg : cubegraph->GetGraphUndirectedEdges())
-////		{
-////			srcl_lcm_msgs::Edge_t edge;
-////			edge.id_start = eg.src_->vertex_id_;
-////			edge.id_end = eg.dst_->vertex_id_;
-////
-////			graph_msg.edges.push_back(edge);
-////		}
-//
-//		lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
-//
-//		std::cout << "######################## graph sent ########################" << std::endl;
-//	}
+		// send data for visualization
+		Send3DSearchPathToVis(selected_wps);
+	}
 }
 
 template<typename PlannerType>

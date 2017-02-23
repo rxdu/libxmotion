@@ -45,12 +45,12 @@ public:
 	int64_t path_id_;
 	bool mission_started_;
 	bool replan_needed_;
-	Path_t<GeoMark> active_path_;
+	std::vector<GeoMark> active_path_;
 
 	double remaining_path_length_;
 	Position3Dd current_position_;
 
-	void UpdateActivePathWaypoints(Path_t<GeoMark>& path);
+	void UpdateActivePathWaypoints(std::vector<GeoMark>& path);
 	void UpdateCurrentPosition(Position3Dd pos);
 
 };

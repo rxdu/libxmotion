@@ -25,8 +25,8 @@ double MissionTracker::CalcRemainingPathLenght(uint32_t current_idx)
 	double dist = 0;
 	for(int i = current_idx; i < active_path_.size() - 1; i++)
 	{
-		Position3Dd pos1 = active_path_[i]->bundled_data_.position;
-		Position3Dd pos2 = active_path_[i+1]->bundled_data_.position;
+		Position3Dd pos1 = active_path_[i].position;
+		Position3Dd pos2 = active_path_[i+1].position;
 		dist += std::sqrt(std::pow(pos1.x - pos2.x, 2) +
 				std::pow(pos1.y - pos2.y, 2) + std::pow(pos1.z - pos2.z, 2));
 	}
@@ -35,7 +35,7 @@ double MissionTracker::CalcRemainingPathLenght(uint32_t current_idx)
 	return dist;
 }
 
-void MissionTracker::UpdateActivePathWaypoints(Path_t<GeoMark>& path)
+void MissionTracker::UpdateActivePathWaypoints(std::vector<GeoMark>& path)
 {
 	path_id_++;
 	active_path_ = path;
@@ -45,8 +45,8 @@ void MissionTracker::UpdateActivePathWaypoints(Path_t<GeoMark>& path)
 	double cost = 0;
 	for(int i = 0; i < active_path_.size() - 1; i++)
 	{
-		Position3Dd pos1 = active_path_[i]->bundled_data_.position;
-		Position3Dd pos2 = active_path_[i+1]->bundled_data_.position;
+		Position3Dd pos1 = active_path_[i].position;
+		Position3Dd pos2 = active_path_[i+1].position;
 		cost += std::sqrt(std::pow(pos1.x - pos2.x, 2) +
 				std::pow(pos1.y - pos2.y, 2) + std::pow(pos1.z - pos2.z, 2));
 	}
