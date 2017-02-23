@@ -131,6 +131,8 @@ void ShortcutEval::EvaluateGridShortcutPotential(uint16_t sensor_range)
 	auto vertices = nav_field_->field_graph_->GetGraphVertices();
 
 	for(auto& vtx : vertices) {
+		if(vtx->potential_ == std::numeric_limits<double>::infinity())
+			continue;
 		vtx->shortcut_rewards_ = EvaluateCellShortcutPotential(vtx, sensor_range);
 		all_rewards.push(vtx->shortcut_rewards_);
 	}

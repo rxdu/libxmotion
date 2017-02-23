@@ -293,8 +293,8 @@ void Vis::VisSquareGridShortcutPotential(const NavField<SquareCell*>& nav_field,
 		x1 = (*itv)->bundled_data_->location_.x;
 		y1 = (*itv)->bundled_data_->location_.y;
 
-		std::string id = std::to_string((int)(*itv)->shortcut_rewards_);
-		putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+		//std::string id = std::to_string((int)(*itv)->shortcut_rewards_);
+		//putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
 
 		// draw all edges
 		auto edges = nav_field.field_graph_->GetGraphUndirectedEdges();

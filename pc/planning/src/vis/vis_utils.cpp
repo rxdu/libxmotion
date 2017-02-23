@@ -54,7 +54,7 @@ void VisUtils::DrawLine(cv::Mat img, cv::Point pt1, cv::Point pt2, const cv::Sca
 void VisUtils::DrawArrow(cv::Mat img, cv::Point base_pos, double length, double angle, const cv::Scalar& color)
 {
 	int line_type = 8;
-	int thickness = 2;
+	int thickness = 1.5;
 
 	double tip_size = length * 0.1;
 	if(tip_size < 1)

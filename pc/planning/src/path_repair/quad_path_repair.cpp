@@ -29,6 +29,7 @@ QuadPathRepair::QuadPathRepair(std::shared_ptr<lcm::LCM> lcm):
 		octomap_server_(OctomapServer(lcm_)),
 		mission_tracker_(new MissionTracker(lcm_)),
 		active_graph_planner_(GraphPlannerType::NOT_SPECIFIED),
+		sensor_range_(5.0),
 		current_sys_time_(0),
 		gstart_set_(false),
 		ggoal_set_(false),
@@ -63,6 +64,12 @@ void QuadPathRepair::ConfigGraphPlanner(MapConfig config, double world_size_x, d
 		{
 			std::cout << "square grid planner activated" << std::endl;
 			active_graph_planner_ = GraphPlannerType::SQUAREGRID_PLANNER;
+
+			// configure navigation field for shortcut analysis
+			nav_field_ = std::make_shared<NavField<SquareCell*>>(sgrid_planner_.graph_);
+			sc_evaluator_ = std::make_shared<ShortcutEval>(sgrid_planner_.map_.data_model, nav_field_);
+			// TODO update sensor range from calculation
+			sc_evaluator_->EvaluateGridShortcutPotential(15);
 		}
 	}
 	else
@@ -103,6 +110,9 @@ void QuadPathRepair::SetGoalMapPosition(Position2D pos)
 	goal_pos_.y = pos.y;
 
 	ggoal_set_ = true;
+
+	auto goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
+	nav_field_->UpdateNavField(goal_id);
 
 	if(gstart_set_ && ggoal_set_)
 		update_global_plan_ = true;

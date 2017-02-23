@@ -9,6 +9,7 @@
 #define SRC_GRAPH_VERTEX_H_
 
 #include <cstdint>
+#include <limits>
 #include <algorithm>
 
 #include "graph/edge.h"
@@ -28,7 +29,7 @@ public:
 		// attributes related to associated node
 		bundled_data_(bundled_data),vertex_id_(bundled_data->data_id_),
 		// common attributes
-		potential_(0),
+		potential_(std::numeric_limits<double>::infinity()),
 		potential_parent_(nullptr),
 		shortcut_rewards_(0),
 		rewards_yaw_(0),
@@ -45,7 +46,7 @@ public:
 		// attributes related to associated node
 		bundled_data_(bundled_data), vertex_id_(bundled_data.data_id_),
 		// common attributes
-		potential_(0),
+		potential_(std::numeric_limits<double>::infinity()),
 		potential_parent_(nullptr),
 		shortcut_rewards_(0),
 		rewards_yaw_(0),

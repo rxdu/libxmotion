@@ -53,11 +53,11 @@ namespace Vis
 			y1 = (*itv)->bundled_data_->location_.y;
 
 			if(show_id) {
-//				if((*itv)->bundled_data_->data_id_ % 2 == 0)
-//				{
+				if((*itv)->bundled_data_->data_id_ % 5 == 0)
+				{
 					std::string id = std::to_string((*itv)->bundled_data_->data_id_);
 					cv::putText(dst, id ,cv::Point(x1,y1), CV_FONT_NORMAL, 0.5, cv::Scalar(204,204,102),1,1);
-//				}
+				}
 			}
 		}
 
@@ -76,7 +76,7 @@ namespace Vis
 	}
 
 	template<class GraphNodeType>
-	void VisGraphPath(const Path_t<GraphNodeType*>& path, cv::InputArray _src, cv::OutputArray _dst)
+	void VisGraphPath(const Path_t<GraphNodeType*>& path, cv::InputArray _src, cv::OutputArray _dst, cv::Scalar line_color = cv::Scalar( 255, 153, 51 ))
 	{
 		cv::Mat src, dst;
 		int src_type = _src.getMat().type();
@@ -137,7 +137,7 @@ namespace Vis
 					cv::Point(x1,y1),
 					cv::Point(x2,y2),
 					//Scalar( 237, 149, 100 ),
-					cv::Scalar( 255, 153, 51 ),
+					line_color,
 					pathline_thickness,
 					lineType);
 		}

@@ -25,6 +25,8 @@
 #include "quad_flat/quad_polyopt.h"
 #include "mission/mission_tracker.h"
 #include "mission/trajectory_generator.h"
+#include "nav_field/nav_field.h"
+#include "nav_field/shortcut_eval.h"
 
 namespace srcl_ctrl {
 
@@ -41,6 +43,10 @@ private:
 	GraphPlanner<SquareGrid> sgrid_planner_;
 	GeoMarkGraph geomark_graph_;
 	OctomapServer octomap_server_;
+
+	std::shared_ptr<NavField<SquareCell*>> nav_field_;
+	std::shared_ptr<ShortcutEval> sc_evaluator_;
+	double sensor_range_;
 
 	std::unique_ptr<MissionTracker> mission_tracker_;
 	time_stamp current_sys_time_;
@@ -76,6 +82,7 @@ private:
 public:
 	// graph planner configuration
 	void ConfigGraphPlanner(MapConfig config, double world_size_x, double world_size_y);
+	void SetSensorRange(double meter) { sensor_range_ = meter; };
 
 	// general planner configuration
 	void EnablePositionAutoUpdate(bool cmd) { auto_update_pos_ = cmd; };

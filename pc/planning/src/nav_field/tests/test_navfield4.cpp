@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
-			sgrid_map = SGridBuilderV2::BuildSquareGridMap(input_map, 32,1);
+			sgrid_map = SGridBuilderV2::BuildSquareGridMap(input_map, 16,1);
 			use_input_image = true;
 		}
 	}
@@ -89,18 +89,6 @@ int main(int argc, char* argv[])
 
 	std::shared_ptr<Graph_t<SquareCell*>> graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);
 
-//	Path_t<SquareCell*> path;
-//	if(start_vertex == nullptr || finish_vertex == nullptr) {
-//		std::cerr << "Invalid starting and finishing vertices, please choose two vertices in free space!" << std::endl;
-//	}
-//	else {
-//		clock_t		exec_time;
-//		exec_time = clock();
-//		path = AStar::Search(graph,start_vertex,finish_vertex);
-//		exec_time = clock() - exec_time;
-//		std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
-//	}
-
 //	auto nbs = sgrid_map.data_model->GetNeighboursWithinRange(603, 1);
 //	for(const auto& n : nbs)
 //		std::cout << n->data_id_ << std::endl;
@@ -108,25 +96,29 @@ int main(int argc, char* argv[])
 	///////////////////////////////////////////////////////////////
 
 	std::shared_ptr<NavField<SquareCell*>> nav_field = std::make_shared<NavField<SquareCell*>>(graph);
-	nav_field->UpdateNavField(107);
-////	nav_field->UpdateNavField(95);
-//////	nav_field.UpdateNavField(185); // 32
-////	nav_field->UpdateNavField(185); // 32
-////	//nav_field.UpdateNavField(60); // 64
-//////	nav_field->UpdateNavField(50); // new lab map
-//////	nav_field->UpdateNavField(406); // lab map
-//////	nav_field->UpdateNavField(536); // case 3
+	nav_field->UpdateNavField(340);
 
 	ShortcutEval sc_eval(sgrid_map.data_model, nav_field);
-	sc_eval.EvaluateGridShortcutPotential(20);
+	sc_eval.EvaluateGridShortcutPotential(15);
 
-	// abstract: 552, 95
-	// case 3: 930, 536
-	Vertex_t<SquareCell*> * start_vertex = graph->GetVertexFromID(107); // 390 for case 4// 552, 508
-	Vertex_t<SquareCell*> * finish_vertex = graph->GetVertexFromID(704);//50 for case 4 //95
+	Vertex_t<SquareCell*> * start_vertex = graph->GetVertexFromID(1815); // 3200, 3050-works
+	Vertex_t<SquareCell*> * finish_vertex = graph->GetVertexFromID(340);//50 for case 4 //95
 
 	auto nav_path = sc_eval.SearchInNavField(start_vertex, finish_vertex);
-	//auto nav_path = sc_eval.SearchInNavFieldbyStep(start_vertex, finish_vertex);
+
+	///////////////////////////////////////////////////////////////
+
+	Path_t<SquareCell*> geo_path;
+	if(start_vertex == nullptr || finish_vertex == nullptr) {
+		std::cerr << "Invalid starting and finishing vertices, please choose two vertices in free space!" << std::endl;
+	}
+	else {
+		clock_t		exec_time;
+		exec_time = clock();
+		geo_path = AStar::Search(graph,start_vertex,finish_vertex);
+		exec_time = clock() - exec_time;
+		std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
+	}
 
 	///////////////////////////////////////////////////////////////
 
@@ -139,10 +131,13 @@ int main(int argc, char* argv[])
 
 //	Vis::VisGraph(*graph, vis_img, vis_img, true);
 
-//	Vertex_t<SquareCell*>* check_vtx = graph->GetVertexFromID(704); // 390 for case 4// 552, 508
+//	Vertex_t<SquareCell*>* check_vtx = graph->GetVertexFromID(1702); // 390 for case 4// 552, 508
 //	Vis::VisSquareGridLocalNavField(*sgrid_map.data_model, *nav_field, check_vtx, vis_img, vis_img, 15);
 
 	Vis::VisSquareGridShortcutPotential(*nav_field, vis_img, vis_img);
+
+	if(!geo_path.empty())
+		Vis::VisGraphPath(geo_path, vis_img, vis_img, Scalar( 66, 66, 244 ));
 
 	if(!nav_path.empty())
 		Vis::VisGraphPath(nav_path, vis_img, vis_img);

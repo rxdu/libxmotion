@@ -100,6 +100,24 @@ void TestCase4_Config(QuadPathRepair& qplanner)
 	qplanner.SetGoalHeightRange(0.5, 2.5);
 }
 
+void TestCase5_Config(QuadPathRepair& qplanner)
+{
+	std::string image_dir = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/data/map_testcase5.png";
+
+	MapConfig map_config;
+
+	map_config.SetMapPath(image_dir);
+	map_config.SetMapType(MapDataModel::SQUARE_GRID, 16);
+	//	map_config.SetMapType(MapDataModel::QUAD_TREE, 6);
+	map_config.SetOriginOffset(10.0, 7.5);
+
+	qplanner.ConfigGraphPlanner(map_config, 20.0, 15.0);
+	qplanner.EnablePositionAutoUpdate(true);
+
+	qplanner.SetGoalRefWorldPosition(Position2Dd(5.125, -7.725));
+	qplanner.SetGoalHeightRange(0.5, 2.5);
+}
+
 int main(int argc, char* argv[])
 {
 	// set up network first
@@ -114,7 +132,7 @@ int main(int argc, char* argv[])
 	QuadPathRepair qplanner(lcm);
 
 	//TestCase1_Config(qplanner);
-	TestCase1_Config(qplanner);
+	TestCase5_Config(qplanner);
 
 #ifdef ENABLE_G3LOG
 	LoggingHelper& logging_helper = LoggingHelper::GetInstance("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/log");

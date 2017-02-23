@@ -44,7 +44,7 @@ int main(int argc, char** argv )
 		}
 		else
 		{
-			sgrid_map = SGridBuilderV2::BuildSquareGridMap(input_map, 32, 1);
+			sgrid_map = SGridBuilderV2::BuildSquareGridMap(input_map, 16, 1);
 			use_input_image = true;
 		}
 	}
