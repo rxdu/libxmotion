@@ -203,37 +203,40 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 		//Eigen::Vector3d goal_vec(waypoints_.back().x, waypoints_.back().y, 0);
 		std::cout << "start id: " << seg_idx << ", furthest id: " << fpt_idx << std::endl;
 
-		double angle;
-		if(seg_idx == waypoints_.size() - 1)
-		//if(fpt_idx == waypoints_.size() - 1)
-			angle = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 0, t_factor);
-		else {
-			Position3Dd wp(pt.positions[0], pt.positions[1], pt.positions[2]);
-			Eigen::Vector3d pos_vec(wp.x, wp.y, 0);
-			Eigen::Vector3d dir_vec;
-			dir_vec = furthest_pt_vec - pos_vec;
-			Eigen::Vector3d x_vec(1,0,0);
-			Eigen::Vector3d y_vec(0,1,0);
+//		double angle;
+//		if(seg_idx == waypoints_.size() - 1)
+//		//if(fpt_idx == waypoints_.size() - 1)
+//			angle = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 0, t_factor);
+//		else {
+//			Position3Dd wp(pt.positions[0], pt.positions[1], pt.positions[2]);
+//			Eigen::Vector3d pos_vec(wp.x, wp.y, 0);
+//			Eigen::Vector3d dir_vec;
+//			dir_vec = furthest_pt_vec - pos_vec;
+//			Eigen::Vector3d x_vec(1,0,0);
+//			Eigen::Vector3d y_vec(0,1,0);
+//
+//			double x_dir_vec = dir_vec.dot(x_vec);
+//			double y_dir_vec = dir_vec.dot(y_vec);
+//
+//			if(y_dir_vec > 0) {
+//				angle = std::acos(dir_vec.normalized().dot(x_vec));
+//			}
+//			else if(y_dir_vec < 0) {
+//				angle = - std::acos(dir_vec.normalized().dot(x_vec));
+//			}
+//			else {
+//				if(x_dir_vec >= 0)
+//					angle = 0;
+//				else
+//					angle = M_PI;
+//			}
+//		}
+//
+//		pt.yaw = angle;
+//		pt.yaw_rate = 0;
 
-			double x_dir_vec = dir_vec.dot(x_vec);
-			double y_dir_vec = dir_vec.dot(y_vec);
-
-			if(y_dir_vec > 0) {
-				angle = std::acos(dir_vec.normalized().dot(x_vec));
-			}
-			else if(y_dir_vec < 0) {
-				angle = - std::acos(dir_vec.normalized().dot(x_vec));
-			}
-			else {
-				if(x_dir_vec >= 0)
-					angle = 0;
-				else
-					angle = M_PI;
-			}
-		}
-
-		pt.yaw = angle;
-		pt.yaw_rate = 0;
+		pt.yaw = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 0, t_factor);
+		pt.yaw_rate = 0;//PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 1, t_factor);
 
 		// calculate remaining distance to goal
 		double dist = 0;

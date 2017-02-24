@@ -114,7 +114,7 @@ void TestCase5_Config(QuadPathRepair& qplanner)
 	qplanner.ConfigGraphPlanner(map_config, 20.0, 15.0);
 	qplanner.EnablePositionAutoUpdate(true);
 
-	qplanner.SetGoalRefWorldPosition(Position2Dd(5.125, -7.725));
+	qplanner.SetGoalRefWorldPosition(Position2Dd(5.475, -7.35));
 	qplanner.SetGoalHeightRange(0.5, 2.5);
 }
 

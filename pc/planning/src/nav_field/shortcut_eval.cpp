@@ -26,7 +26,7 @@ using namespace srcl_ctrl;
 ShortcutEval::ShortcutEval(std::shared_ptr<SquareGrid> sgrid, std::shared_ptr<NavField<SquareCell*>> nav_field):
 			sgrid_(sgrid),
 			nav_field_(nav_field),
-			dist_weight(0.5)
+			dist_weight_(0.5)
 {
 
 }
@@ -197,7 +197,7 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 				double new_dist = current_vertex->g_astar_ + (*ite).cost_;
 
 				//double new_cost = current_vertex->weighted_cost_ + (new_dist*dist_weight + new_rewards*(1-dist_weight));
-				double new_cost = new_dist*dist_weight + new_rewards*(1-dist_weight);// + avg_rewards; // avg_rewards*(1-dist_weight);
+				double new_cost = new_dist*dist_weight_ + new_rewards*(1-dist_weight_);// + avg_rewards; // avg_rewards*(1-dist_weight);
 
 				// if the vertex is not in open list
 				// or if the vertex is in open list but has a higher cost
@@ -309,7 +309,7 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavFieldbyStep(Vertex_t<SquareCell*>* 
 				double new_dist = current_vertex->g_astar_ + (*ite).cost_;
 
 				//double new_cost = current_vertex->weighted_cost_ + (new_dist*dist_weight + new_rewards*(1-dist_weight));
-				double new_cost = new_dist*dist_weight + new_rewards*(1-dist_weight);// + avg_rewards; // avg_rewards*(1-dist_weight);
+				double new_cost = new_dist*dist_weight_ + new_rewards*(1-dist_weight_);// + avg_rewards; // avg_rewards*(1-dist_weight);
 
 				// if the vertex is not in open list
 				// or if the vertex is in open list but has a higher cost
