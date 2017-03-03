@@ -130,17 +130,17 @@ int main(int argc, char* argv[])
 		Vis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
 //	Vis::VisGraph(*graph, vis_img, vis_img, true);
-
-//	Vertex_t<SquareCell*>* check_vtx = graph->GetVertexFromID(1702); // 390 for case 4// 552, 508
+//
+//	Vertex_t<SquareCell*>* check_vtx = graph->GetVertexFromID(1825); // 390 for case 4// 552, 508
 //	Vis::VisSquareGridLocalNavField(*sgrid_map.data_model, *nav_field, check_vtx, vis_img, vis_img, 15);
 
 	Vis::VisSquareGridShortcutPotential(*nav_field, vis_img, vis_img);
 
-	if(!geo_path.empty())
-		Vis::VisGraphPath(geo_path, vis_img, vis_img, Scalar( 66, 66, 244 ));
-
-	if(!nav_path.empty())
-		Vis::VisGraphPath(nav_path, vis_img, vis_img);
+//	if(!geo_path.empty())
+//		Vis::VisGraphPath(geo_path, vis_img, vis_img, Scalar( 66, 66, 244 ));
+//
+//	if(!nav_path.empty())
+//		Vis::VisGraphPath(nav_path, vis_img, vis_img);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 

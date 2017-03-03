@@ -253,7 +253,7 @@ void Vis::VisSquareGridLocalNavField(const SquareGrid& grid, const NavField<Squa
 		y1 = vtx->bundled_data_->location_.y;
 
 		// display potential value
-		putText(dst, std::to_string((int)(rewards)) ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+		putText(dst, std::to_string((int)(rewards)) ,Point(x1,y1), CV_FONT_NORMAL, 0.2, Scalar(204,204,102),1,1);
 
 	}
 

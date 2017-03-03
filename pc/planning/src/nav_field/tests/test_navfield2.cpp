@@ -139,13 +139,13 @@ int main(int argc, char* argv[])
 
 //	Vis::VisGraph(*graph, vis_img, vis_img, true);
 
-//	Vertex_t<SquareCell*>* check_vtx = graph->GetVertexFromID(704); // 390 for case 4// 552, 508
-//	Vis::VisSquareGridLocalNavField(*sgrid_map.data_model, *nav_field, check_vtx, vis_img, vis_img, 15);
+	Vertex_t<SquareCell*>* check_vtx = graph->GetVertexFromID(704); // 390 for case 4// 552, 508
+	Vis::VisSquareGridLocalNavField(*sgrid_map.data_model, *nav_field, check_vtx, vis_img, vis_img, 20);
 
-	Vis::VisSquareGridShortcutPotential(*nav_field, vis_img, vis_img);
-
-	if(!nav_path.empty())
-		Vis::VisGraphPath(nav_path, vis_img, vis_img);
+//	Vis::VisSquareGridShortcutPotential(*nav_field, vis_img, vis_img);
+//
+//	if(!nav_path.empty())
+//		Vis::VisGraphPath(nav_path, vis_img, vis_img);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 
