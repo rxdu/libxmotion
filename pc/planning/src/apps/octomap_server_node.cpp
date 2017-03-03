@@ -19,7 +19,7 @@ using namespace srcl_ctrl;
 
 int main(int argc, char** argv)
 {
-	double octree_reso;
+	double octree_reso = 0.341151;
 	std::shared_ptr<lcm::LCM> lcm = std::make_shared<lcm::LCM>();
 
 	std::string octomap_file_name = "octree_server_saved_map.bt";
