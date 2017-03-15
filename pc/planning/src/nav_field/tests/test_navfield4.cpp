@@ -136,11 +136,11 @@ int main(int argc, char* argv[])
 
 	Vis::VisSquareGridShortcutPotential(*nav_field, vis_img, vis_img);
 
-//	if(!geo_path.empty())
-//		Vis::VisGraphPath(geo_path, vis_img, vis_img, Scalar( 66, 66, 244 ));
-//
-//	if(!nav_path.empty())
-//		Vis::VisGraphPath(nav_path, vis_img, vis_img);
+	if(!geo_path.empty())
+		Vis::VisGraphPath(geo_path, vis_img, vis_img, Scalar( 66, 66, 244 ));
+
+	if(!nav_path.empty())
+		Vis::VisGraphPath(nav_path, vis_img, vis_img);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 
