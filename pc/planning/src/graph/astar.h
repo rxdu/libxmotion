@@ -171,6 +171,10 @@ public:
 			current_vertex = openlist.get();
 			if(current_vertex->is_checked_)
 				continue;
+			if(current_vertex == goal_vtx){
+				found_path = true;
+				break;
+			}
 
 			current_vertex->is_in_openlist_ = false;
 			current_vertex->is_checked_ = true;
@@ -205,10 +209,6 @@ public:
 
 						openlist.put(successor, successor->f_astar_);
 						successor->is_in_openlist_ = true;
-
-						if(successor == goal_vtx){
-							found_path = true;
-						}
 					}
 				}
 			}
@@ -267,6 +267,10 @@ private:
 			current_vertex = openlist.get();
 			if(current_vertex->is_checked_)
 				continue;
+			if(current_vertex == goal){
+				found_path = true;
+				break;
+			}
 
 			current_vertex->is_in_openlist_ = false;
 			current_vertex->is_checked_ = true;
@@ -295,10 +299,6 @@ private:
 
 						openlist.put(successor, successor->f_astar_);
 						successor->is_in_openlist_ = true;
-
-						if(successor == goal){
-							found_path = true;
-						}
 					}
 				}
 			}
@@ -356,6 +356,10 @@ private:
 			current_vertex = openlist.get();
 			if(current_vertex->is_checked_)
 				continue;
+			if(current_vertex == goal_vtx){
+				found_path = true;
+				break;
+			}
 
 			current_vertex->is_in_openlist_ = false;
 			current_vertex->is_checked_ = true;
@@ -387,10 +391,6 @@ private:
 
 						openlist.put(successor, successor->weighted_cost_);
 						successor->is_in_openlist_ = true;
-
-						if(successor == goal_vtx){
-							found_path = true;
-						}
 					}
 				}
 			}
