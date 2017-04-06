@@ -5,7 +5,9 @@ function display_3d_space(space)
     for x = 1:1:space.x_size
         for y = 1:1:space.y_size
             for z = 1:1:space.z_size          
-                display_voxel(space.voxels{x,y,z}, 'k', 'g')
+                if space.voxels{x,y,z}.occupied == true
+                    display_voxel(space.voxels{x,y,z}, 'k', 'g')
+                end
             end
         end
     end

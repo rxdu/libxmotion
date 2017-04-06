@@ -8,7 +8,7 @@ function space = create_3d_space(dim)
     for x = 1:1:space.x_size
         for y = 1:1:space.y_size
             for z = 1:1:space.z_size          
-                id = (z - 1) * (space.x_size*space.y_size) + (y - 1) * space.y_size + x;
+                id = (z - 1) * (space.x_size*space.y_size) + (y - 1) * space.y_size + x - 1;
 
                 voxel = create_voxel(x,y,z);  
                 voxel.id = id;
