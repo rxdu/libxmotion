@@ -1,4 +1,5 @@
 function display_3d_space(space)
+    figure
     view(3)
     axis([0 space.x_size+1 0 space.y_size+1 0 space.z_size+1],'square')
     

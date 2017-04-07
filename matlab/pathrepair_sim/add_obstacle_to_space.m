@@ -4,7 +4,8 @@ function obs_space = add_obstacle_to_space(space,obs_percentage)
     btn_layer_num = space.x_size * space.y_size;
     obs_num = int64(btn_layer_num * obs_percentage);
     
-    pos_rn = rand(obs_num,1);        
+    pos_rn = rand(obs_num,1);    
+    hei_num_rn = rand(obs_num,1);    
     btn_idx = int64(pos_rn * btn_layer_num);
         
     for i = 1:size(btn_idx,1)
@@ -21,10 +22,16 @@ function obs_space = add_obstacle_to_space(space,obs_percentage)
         obs_space.voxels{x,y,z}.occupied = true;
         
         % randomly set obstacles along z axis
-        hei_rn = rand(int64(space.z_size*1/3),1);
-        hei = int64(hei_rn*space.z_size*1/2)+1;
+        hei_rn = rand(int64(space.z_size*hei_num_rn(i)),1);
+        hei = int64(hei_rn*space.z_size);
         for hidx = 1:size(hei,1)
             h = hei(hidx);
+            if h <= 0
+                h = 1;
+            end
+            if h > space.z_size
+                h = space.z_size;
+            end
             %if h <= space.z_size*2/3
                 obs_space.voxels{x,y,h}.occupied = true;
             %end
