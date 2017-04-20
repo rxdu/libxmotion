@@ -43,13 +43,13 @@ public:
 		double x1,y1,z1;
 		double x2,y2,z2;
 
-		x1 = this->location_.x;
-		y1 = this->location_.y;
-		z1 = this->location_.z;
+		x1 = this->index_.x;
+		y1 = this->index_.y;
+		z1 = this->index_.z;
 
-		x2 = other_struct.location_.x;
-		y2 = other_struct.location_.y;
-		z2 = other_struct.location_.z;
+		x2 = other_struct.index_.x;
+		y2 = other_struct.index_.y;
+		z2 = other_struct.index_.z;
 
 		// static_cast: can get wrong result to use "unsigned long" type for deduction
 		long x_error = static_cast<long>(x1) - static_cast<long>(x2);
@@ -66,13 +66,13 @@ public:
 class CubeArray {
 public:
 	// row, col, hei : x, y , z
-	CubeArray(uint32_t row_num, uint32_t col_num, uint32_t height_num, double cube_size);
+	CubeArray(int32_t row_num, int32_t col_num, int32_t height_num, double cube_size);
 	~CubeArray(){};
 
 public:
-	uint32_t row_size_;
-	uint32_t col_size_;
-	uint32_t hei_size_;
+	int32_t row_size_;
+	int32_t col_size_;
+	int32_t hei_size_;
 
 	// cube numbers on the negative side of axes
 	int32_t row_offset_;
@@ -103,6 +103,7 @@ public:
 	bool GetCubeIDAtPosition(double x, double y, double z, uint64_t& id);
 
 	bool GetCubeHeightIndexAtHeight(double z, std::vector<uint32_t>& hei_set);
+	std::vector<uint64_t> GetFreeCubesAroundHeight(double height);
 };
 
 }

@@ -56,6 +56,49 @@ double QuadPolyTrajHandler::GetRefactoredTime(double ts, double te, double t)
 	return (t - ts) / (te - ts);
 }
 
+int32_t QuadPolyTrajHandler::FindFurthestPointWithinRadius(std::vector<Position3Dd>& path, int32_t current_idx,  double radius) const
+{
+//	Position3Dd start = path[current_idx];
+//	int32_t goal_idx = path.size() - 1;
+//
+//	int32_t idx = 0;
+//	for(int32_t idx = current_idx; idx < path.size(); idx++)
+//	{
+//		double dist1 = std::sqrt(std::pow(path[idx].x - start.x,2) +
+//				std::pow(path[idx].y - start.y,2) +
+//				std::pow(path[idx].z - start.z,2));
+////		double dist2 = std::sqrt(std::pow(path[idx+1].x - start.x,2) +
+////				std::pow(path[idx+1].y - start.y,2) +
+////				std::pow(path[idx+1].z - start.z,2));
+//
+//		if(dist1 >= radius) {
+////		if(dist1 <= radius && dist2 > radius) {
+//			goal_idx = idx;
+//			break;
+//		}
+//
+//		//idx++;
+//	}
+
+	Position3Dd start = path[current_idx];
+	int32_t goal_idx = path.size() - 1;
+
+	int32_t idx = 0;
+	for(int32_t idx = path.size() - 1; idx > current_idx; --idx)
+	{
+		double dist1 = std::sqrt(std::pow(path[idx].x - start.x,2) +
+				std::pow(path[idx].y - start.y,2) +
+				std::pow(path[idx].z - start.z,2));
+
+		if(dist1 <= radius) {
+			goal_idx = idx;
+			break;
+		}
+	}
+
+	return goal_idx;
+}
+
 void QuadPolyTrajHandler::LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::PolynomialCurve_t* msg)
 {
 	//std::cout << "polynomial msg received" << std::endl;
@@ -152,8 +195,48 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 		pt.jerks[1] = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_y.param_.coeffs, 3, t_factor);
 		pt.jerks[2] = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_z.param_.coeffs, 3, t_factor);
 
+//		pt.yaw = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 0, t_factor);
+//		pt.yaw_rate = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 1, t_factor);
+
+		int32_t fpt_idx = FindFurthestPointWithinRadius(waypoints_,seg_idx, 5.0);
+		Eigen::Vector3d furthest_pt_vec(waypoints_[fpt_idx].x, waypoints_[fpt_idx].y, 0);
+		//Eigen::Vector3d goal_vec(waypoints_.back().x, waypoints_.back().y, 0);
+		std::cout << "start id: " << seg_idx << ", furthest id: " << fpt_idx << std::endl;
+
+//		double angle;
+//		if(seg_idx == waypoints_.size() - 1)
+//		//if(fpt_idx == waypoints_.size() - 1)
+//			angle = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 0, t_factor);
+//		else {
+//			Position3Dd wp(pt.positions[0], pt.positions[1], pt.positions[2]);
+//			Eigen::Vector3d pos_vec(wp.x, wp.y, 0);
+//			Eigen::Vector3d dir_vec;
+//			dir_vec = furthest_pt_vec - pos_vec;
+//			Eigen::Vector3d x_vec(1,0,0);
+//			Eigen::Vector3d y_vec(0,1,0);
+//
+//			double x_dir_vec = dir_vec.dot(x_vec);
+//			double y_dir_vec = dir_vec.dot(y_vec);
+//
+//			if(y_dir_vec > 0) {
+//				angle = std::acos(dir_vec.normalized().dot(x_vec));
+//			}
+//			else if(y_dir_vec < 0) {
+//				angle = - std::acos(dir_vec.normalized().dot(x_vec));
+//			}
+//			else {
+//				if(x_dir_vec >= 0)
+//					angle = 0;
+//				else
+//					angle = M_PI;
+//			}
+//		}
+//
+//		pt.yaw = angle;
+//		pt.yaw_rate = 0;
+
 		pt.yaw = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 0, t_factor);
-		pt.yaw_rate = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 1, t_factor);
+		pt.yaw_rate = 0;//PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 1, t_factor);
 
 		// calculate remaining distance to goal
 		double dist = 0;
@@ -162,30 +245,21 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 		{
 			dist = std::sqrt(std::pow(pt.positions[0] - waypoints_.back().x,2) +
 					std::pow(pt.positions[1] - waypoints_.back().y,2) + std::pow(pt.positions[2] - waypoints_.back().z,2));
-			//std::cout << "estimated distance to goal - last: " << dist << std::endl;
 		}
 		else
 		{
 			// calc remaining distance of the current segment
-			dist += std::sqrt(std::pow(pt.positions[0] - waypoints_[seg_idx + 1].x,2) +
-					std::pow(pt.positions[1] - waypoints_[seg_idx + 1].y,2) + std::pow(pt.positions[2] - waypoints_[seg_idx + 1].z,2));
-
-			//std::cout << "estimated distance to goal - 1: " << dist << std::endl;
-
-			//std::cout << "idx: " << seg_idx + 1 << " , " << flat_traj_.traj_segs_.size() - 1 << std::endl;
+			//dist += std::sqrt(std::pow(pt.positions[0] - waypoints_[seg_idx + 1].x,2) +
+			//		std::pow(pt.positions[1] - waypoints_[seg_idx + 1].y,2) + std::pow(pt.positions[2] - waypoints_[seg_idx + 1].z,2));
 
 			// calc other waypoints
-			for(int i = seg_idx + 1; i < flat_traj_.traj_segs_.size() - 1; i++)
+			//for(int i = seg_idx + 1; i < flat_traj_.traj_segs_.size() - 1; i++)
+			for(int i = seg_idx; i < flat_traj_.traj_segs_.size() - 1; i++)
 			{
 				dist += std::sqrt(std::pow(waypoints_[i].x - waypoints_[i + 1].x,2) +
-									std::pow(waypoints_[i].y - waypoints_[i + 1].y,2) +
-									std::pow(waypoints_[i].z - waypoints_[i + 1].z,2));
-
-//				std::cout << "error : " << waypoints_[i].x - waypoints_[i + 1].x << " , "
-//						<< waypoints_[i].y - waypoints_[i + 1].y << " , "
-//						<< waypoints_[i].z - waypoints_[i + 1].z << std::endl;
+									std::pow(waypoints_[i].y - waypoints_[i + 1].y,2));
+									//+ std::pow(waypoints_[i].z - waypoints_[i + 1].z,2));
 			}
-			//std::cout << "estimated distance to goal - 2: " << dist << std::endl;
 		}
 
 		if(dist < 0.01)
@@ -212,5 +286,3 @@ void QuadPolyTrajHandler::ReportProgress(void)
 		lcm_->publish("quad_ctrl/mission_info", &info_msg);
 	}
 }
-
-

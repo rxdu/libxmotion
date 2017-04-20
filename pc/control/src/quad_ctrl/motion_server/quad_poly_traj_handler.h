@@ -47,6 +47,7 @@ private:
 
 	double GetRefactoredTime(double ts, double te, double t);
 	void UpdateSystemTime(double t) { current_sys_time_ = t; };
+	int32_t FindFurthestPointWithinRadius(std::vector<Position3Dd>& path, int32_t current_idx, double radius) const;
 
 public:
 	void LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::PolynomialCurve_t* msg);

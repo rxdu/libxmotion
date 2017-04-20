@@ -21,8 +21,6 @@
 #include "polyopt/polyopt_math.h"
 #include "polyopt/gurobi_utils.h"
 
-#include "vis/curve_vis.h"
-
 using namespace std;
 using namespace srcl_ctrl;
 using namespace Eigen;

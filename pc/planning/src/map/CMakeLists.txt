@@ -21,6 +21,9 @@ target_link_libraries(test_qtree geometry vis map ${OpenCV_LIBS})
 add_executable(test_sgrid tests/test_squaregrid.cpp)
 target_link_libraries(test_sgrid geometry vis map ${OpenCV_LIBS})
 
+add_executable(test_sgridv2 tests/test_squaregridv2.cpp)
+target_link_libraries(test_sgridv2 geometry vis map ${OpenCV_LIBS})
+
 add_executable(test_graphvis tests/test_graphvis.cpp)
 target_link_libraries(test_graphvis geometry vis map ${OpenCV_LIBS})
 

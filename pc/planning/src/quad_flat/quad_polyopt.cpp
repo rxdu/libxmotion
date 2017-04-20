@@ -361,7 +361,7 @@ bool QuadPolyOpt::OptimizeFlatTrajWithCorridorJoint()
 //	for(auto& param:pos_result.params)
 //		std::cout << param << std::endl;
 
-	if(pos_result.params.empty() || pos_result.params.empty())
+	if(pos_result.params.empty())// || yaw_result.params.empty())
 	{
 		std::cerr << "Bad optimization result." << std::endl;
 

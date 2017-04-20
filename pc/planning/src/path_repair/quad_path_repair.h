@@ -20,11 +20,13 @@
 #include "planner/graph_planner.h"
 #include "map/map_info.h"
 #include "geometry/geo_mark.h"
-#include "path_repair/graph_combiner.h"
+#include "path_repair/geo_mark_graph.h"
 #include "local3d/octomap_server.h"
 #include "quad_flat/quad_polyopt.h"
 #include "mission/mission_tracker.h"
 #include "mission/trajectory_generator.h"
+#include "nav_field/nav_field.h"
+#include "nav_field/shortcut_eval.h"
 
 namespace srcl_ctrl {
 
@@ -38,11 +40,13 @@ private:
 	std::shared_ptr<lcm::LCM> lcm_;
 
 	// planners
-	GraphPlanner<QuadTree> qtree_planner_;
 	GraphPlanner<SquareGrid> sgrid_planner_;
-	GraphCombiner<SquareCell*, SquareGrid> gcombiner_;
-//	GraphCombiner<QuadTreeNode*, QuadTree> gcombiner_;
+	GeoMarkGraph geomark_graph_;
 	OctomapServer octomap_server_;
+
+	std::shared_ptr<NavField<SquareCell*>> nav_field_;
+	std::shared_ptr<ShortcutEval> sc_evaluator_;
+	double sensor_range_;
 
 	std::unique_ptr<MissionTracker> mission_tracker_;
 	time_stamp current_sys_time_;
@@ -61,7 +65,7 @@ private:
 	bool world_size_set_;
 	bool auto_update_pos_;
 
-	double desired_height_;
+	//double desired_height_;
 	double est_new_dist_;	// temporary calculation result, internal use only
 
 public:
@@ -78,15 +82,15 @@ private:
 public:
 	// graph planner configuration
 	void ConfigGraphPlanner(MapConfig config, double world_size_x, double world_size_y);
+	void SetSensorRange(double meter) { sensor_range_ = meter; };
 
 	// general planner configuration
 	void EnablePositionAutoUpdate(bool cmd) { auto_update_pos_ = cmd; };
 
 	void SetStartRefWorldPosition(Position2Dd pos);
 	void SetGoalRefWorldPosition(Position2Dd pos);
-	void SetDesiredHeight(double height) {
-		desired_height_ = height;
-		gcombiner_.SetDesiredHeight(height);
+	void SetGoalHeightRange(double height_min, double height_max) {
+		geomark_graph_.SetGoalHeightRange(height_min, height_max);
 	};
 
 	// search functions

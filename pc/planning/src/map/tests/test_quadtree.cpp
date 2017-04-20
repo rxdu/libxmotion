@@ -17,6 +17,7 @@
 // quad_tree
 #include "graph/astar.h"
 #include "vis/graph_vis.h"
+#include "vis/qtree_vis.h"
 
 #include "map/map_type.h"
 #include "geometry/graph_builder.h"
@@ -54,7 +55,7 @@ int main(int argc, char** argv )
 
     Mat image_tree, image_nodes;
     Mat vis_map;
-    GraphVis::VisQuadTree(*qtree_map.data_model, qtree_map.padded_image, image_tree, TreeVisType::ALL_SPACE);
+    Vis::VisQuadTree(*qtree_map.data_model, qtree_map.padded_image, image_tree, TreeVisType::ALL_SPACE);
 //    TreeNode* node = tree->leaf_nodes_.at(0);
 //    vis.DrawQTreeSingleNode(node, image_tree, image_nodes);
     std::vector<QuadTreeNode*> free_leaves;
@@ -64,7 +65,7 @@ int main(int argc, char** argv )
     	if((*it)->occupancy_ == OccupancyType::FREE)
     		free_leaves.push_back((*it));
     }
-    GraphVis::VisQTreeNodes(free_leaves, image_tree, image_nodes);
+    Vis::VisQTreeNodes(free_leaves, image_tree, image_nodes);
 
 //    Mat image_dummy;
 //    vis.DrawQTreeWithDummies(tree,builder.padded_img_, image_dummy);
@@ -72,7 +73,7 @@ int main(int argc, char** argv )
     // build a graph from quadtree
 	std::shared_ptr<Graph<QuadTreeNode*>> graph = GraphBuilder::BuildFromQuadTree(qtree_map.data_model);
 	Mat image_graph;
-	GraphVis::VisQTreeGraph(*graph, image_tree, image_graph, true,false);
+	Vis::VisGraph(*graph, image_tree, image_graph, true);
 
 	// try a* search
 	std::vector<Vertex<QuadTreeNode*>*> vertices = graph->GetGraphVertices();
@@ -96,7 +97,7 @@ int main(int argc, char** argv )
 	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 
 	Mat path_img;
-	GraphVis::VisQTreeGraphPath(traj, image_graph, path_img);
+	Vis::VisGraphPath(traj, image_graph, path_img);
 
 	image_disp = path_img;
 

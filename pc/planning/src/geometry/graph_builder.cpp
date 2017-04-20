@@ -107,7 +107,10 @@ std::shared_ptr<Graph<CubeCell&>> GraphBuilder::BuildFromCubeArray(const std::sh
 			{
 				if(cube_array->cubes_[nid].occu_ == OccupancyType::FREE)
 				{
-					graph->AddEdge(cube_array->cubes_[current_nodeid], cube_array->cubes_[nid], size);
+					// only consider planer distance
+					double cost = std::sqrt(std::pow(cube_array->cubes_[current_nodeid].location_.x - cube_array->cubes_[nid].location_.x, 2) +
+							std::pow(cube_array->cubes_[current_nodeid].location_.y - cube_array->cubes_[nid].location_.y, 2));
+					graph->AddEdge(cube_array->cubes_[current_nodeid], cube_array->cubes_[nid], cost);
 				}
 			}
 		}

@@ -11,7 +11,7 @@
 
 using namespace srcl_ctrl;
 
-CubeArray::CubeArray(uint32_t row_num, uint32_t col_num, uint32_t height_num, double cube_size):
+CubeArray::CubeArray(int32_t row_num, int32_t col_num, int32_t height_num, double cube_size):
 		row_size_(row_num),
 		col_size_(col_num),
 		hei_size_(height_num),
@@ -146,6 +146,45 @@ bool CubeArray::GetCubeHeightIndexAtHeight(double z, std::vector<uint32_t>& hei_
 	}
 
 	return true;
+}
+
+std::vector<uint64_t> CubeArray::GetFreeCubesAroundHeight(double height)
+{
+	std::vector<uint64_t> set;
+
+	for(int32_t i = 0; i < row_size_; i++)
+		for(int32_t j = 0; j < col_size_; j++) {
+			// find node right above or equal to given height
+			for(int32_t k = 0; k < hei_size_; k++) {
+				uint64_t id = GetIDFromIndex(i, j, k);
+				if(cubes_[id].occu_ == OccupancyType::OCCUPIED)
+					continue;
+
+				// height at given index
+				double ch = (k - hei_offset_) * cube_size_ - cube_size_/2;
+
+				if(ch >= height) {
+					set.push_back(id);
+					break;
+				}
+			}
+			// find node right below given height
+			for(int32_t k = 0; k < hei_size_; k++) {
+				uint64_t id = GetIDFromIndex(i, j, k);
+				if(cubes_[id].occu_ == OccupancyType::OCCUPIED)
+					continue;
+
+				// height at given index
+				double ch = (k - hei_offset_) * cube_size_ - cube_size_/2;
+
+				if(ch < height) {
+					set.push_back(id);
+					break;
+				}
+			}
+		}
+
+	return set;
 }
 
 void CubeArray::UpdateCubeOccupancy(double x, double y, double z, OccupancyType oc_type)

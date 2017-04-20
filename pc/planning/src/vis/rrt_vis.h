@@ -8,9 +8,6 @@
 #ifndef PLANNING_SRC_RRT_VIS_RRT_VIS_H_
 #define PLANNING_SRC_RRT_VIS_RRT_VIS_H_
 
-#include <vector>
-#include <cstdint>
-
 #include "opencv2/opencv.hpp"
 
 #include "common/planning_types.h"
@@ -20,18 +17,9 @@
 
 namespace srcl_ctrl {
 
-class RRTVis {
-private:
-	static cv::Scalar bk_color_;		// background color
-	static cv::Scalar ln_color_;		// line color
-	static cv::Scalar obs_color_;		// obstacle color
-	static cv::Scalar aoi_color_;		// area of interest color
-	static cv::Scalar start_color_; 	// starting cell color
-	static cv::Scalar finish_color_;	// finishing cell color
-
-public:
-	static void VisRRTPath(const std::vector<Position2Dd>& path, MapInfo info, cv::InputArray _src, cv::OutputArray _dst);
-	static void VisRRTGraph(const Graph_t<RRTNode>& graph, MapInfo info, cv::InputArray _src, cv::OutputArray _dst);
+namespace RRTVis {
+	void VisRRTPath(const std::vector<Position2Dd>& path, MapInfo info, cv::InputArray _src, cv::OutputArray _dst);
+	void VisRRTGraph(const Graph_t<RRTNode>& graph, MapInfo info, cv::InputArray _src, cv::OutputArray _dst);
 };
 
 }

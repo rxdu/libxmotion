@@ -30,6 +30,7 @@ public:
 private:
 	std::shared_ptr<lcm::LCM> lcm_;
 	uint64_t user_path_id_;
+	double CalcFlightTime(Position3Dd start, Position3Dd goal, double vel);
 
 private:
 	void LcmWaypointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::Path_t* msg);

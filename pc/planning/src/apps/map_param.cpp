@@ -21,6 +21,7 @@
 #include "graph/graph.h"
 #include "graph/astar.h"
 #include "vis/graph_vis.h"
+#include "vis/sgrid_vis.h"
 #include "map/image_utils.h"
 #include "map/map_utils.h"
 #include "planner/graph_planner.h"
@@ -142,13 +143,13 @@ int main(int argc, char** argv )
 	Mat vis_img;
 
 	/*** Image Layouts: (map) -> square grid -> graph -> path ***/
-	GraphVis::VisSquareGrid(*sgrid_planner.map_.data_model, sgrid_planner.map_.padded_image, vis_img);
+	Vis::VisSquareGrid(*sgrid_planner.map_.data_model, sgrid_planner.map_.padded_image, vis_img);
 
 	/*** put the graph on top of the square grid ***/
-	GraphVis::VisSquareGridGraph(*sgrid_planner.graph_, vis_img, vis_img, true);
+	Vis::VisGraph(*sgrid_planner.graph_, vis_img, vis_img, true);
 	/*** put the path on top of the graph ***/
 	if(!path.empty())
-		GraphVis::VisSquareGridPath(path, vis_img, vis_img);
+		Vis::VisGraphPath(path, vis_img, vis_img);
 
 	if(!show_padding)
 	{

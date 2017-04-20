@@ -9,6 +9,7 @@
 #define SRC_GRAPH_VERTEX_H_
 
 #include <cstdint>
+#include <limits>
 #include <algorithm>
 
 #include "graph/edge.h"
@@ -28,6 +29,14 @@ public:
 		// attributes related to associated node
 		bundled_data_(bundled_data),vertex_id_(bundled_data->data_id_),
 		// common attributes
+		potential_(std::numeric_limits<double>::infinity()),
+		potential_parent_(nullptr),
+		shortcut_rewards_(0),
+		rewards_yaw_(0),
+		weighted_cost_(0),
+		shortcut_cost_(0),
+		shortcut_avg_(0),
+		reward_num_(0),
 		search_parent_(nullptr),
 		is_checked_(false), is_in_openlist_(false),
 		f_astar_(0),g_astar_(0),h_astar_(0){};
@@ -37,6 +46,14 @@ public:
 		// attributes related to associated node
 		bundled_data_(bundled_data), vertex_id_(bundled_data.data_id_),
 		// common attributes
+		potential_(std::numeric_limits<double>::infinity()),
+		potential_parent_(nullptr),
+		shortcut_rewards_(0),
+		rewards_yaw_(0),
+		weighted_cost_(0),
+		shortcut_cost_(0),
+		shortcut_avg_(0),
+		reward_num_(0),
 		search_parent_(nullptr),
 		is_checked_(false), is_in_openlist_(false),
 		f_astar_(0),g_astar_(0),h_astar_(0){};
@@ -50,10 +67,27 @@ public:
 	friend class Graph;
 	friend class AStar;
 
+	// additional friends (for specific applications)
+	template<typename BDSType>
+	friend class NavField;
+	friend class ShortcutEval;
+
 	// generic attributes
 	BundledStructType bundled_data_;
 	uint64_t vertex_id_;
 	std::vector<Edge<Vertex<BundledStructType>*>> edges_;
+
+	// attributes for discrete potential field
+	double potential_;
+	Vertex<BundledStructType>* potential_parent_;
+	double shortcut_rewards_;
+	double rewards_yaw_;
+
+	// Dijkstra search with shortcut rewards
+	double shortcut_cost_;
+	double shortcut_avg_;
+	uint16_t reward_num_;
+	double weighted_cost_;
 
 private:
     // attributes for A* search

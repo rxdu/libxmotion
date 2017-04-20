@@ -84,7 +84,7 @@ public:
 
 		if(MapUtils::ReadImageFromFile(config.GetMapPath(), input_image)) {
 //			map_ = SGridBuilder::BuildSquareGridMap(input_image, config.GetMapType().data_param);
-			map_ = SGridBuilder::BuildSquareGridMapWithExtObstacle(input_image, config.GetMapType().data_param, 1);
+			map_ = SGridBuilderV2::BuildSquareGridMap(input_image, config.GetMapType().data_param,1);
 			graph_ = GraphBuilder::BuildFromSquareGrid(map_.data_model,true);
 
 			map_.info.origin_offset_x = config.GetOriginOffsetX();

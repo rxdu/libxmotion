@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "graph/graph.h"
+#include "graph/priority_queue.h"
 
 #define MINIMAL_PRINTOUT 1
 
@@ -31,28 +32,6 @@ namespace srcl_ctrl {
 
 template<typename GraphBDSType>
 using GetNeighbourBDSFunc_t = std::function<std::vector<std::tuple<GraphBDSType, double>>(GraphBDSType)>;
-
-/// A simple priority queue structure used as A* open list.
-// Source: http://www.redblobgames.com/pathfinding/a-star/implementation.html
-template<typename T, typename Number=double>
-struct PriorityQueue {
-	typedef std::pair<Number, T> PQElement;
-
-	std::priority_queue<PQElement, std::vector<PQElement>,
-	std::greater<PQElement>> elements;
-
-	inline bool empty() const { return elements.empty(); }
-
-	inline void put(T item, Number priority) {
-		elements.emplace(priority, item);
-	}
-
-	inline T get() {
-		T best_item = elements.top().second;
-		elements.pop();
-		return best_item;
-	}
-};
 
 /// A* search algorithm.
 class AStar{
@@ -145,6 +124,25 @@ public:
 			return empty;
 	}
 
+	/// Biased search with consideration on shortcuts
+	template<typename GraphBDSType>
+	static std::vector<Vertex<GraphBDSType>*> BiasedSearchWithShortcut(Graph<GraphBDSType>& graph, uint64_t start_id, uint64_t goal_id, double max_rewards, double dist_weight = 0.5, double cell_size = 16)
+	{
+		// reset last search information
+		graph.ResetGraphVertices();
+
+		Vertex<GraphBDSType>* start = graph.GetVertexFromID(start_id);
+		Vertex<GraphBDSType>* goal = graph.GetVertexFromID(goal_id);
+
+		std::vector<Vertex<GraphBDSType>*> empty;
+
+		// start a new search and return result
+		if(start != nullptr && goal != nullptr)
+			return BiasedSearch(start, goal, max_rewards, dist_weight, cell_size);
+		else
+			return empty;
+	}
+
 	/// Incremental search
 	template<typename GraphBDSType>
 	static std::vector<GraphBDSType> IncSearch(GraphBDSType start, GraphBDSType goal, std::function<std::vector<std::tuple<GraphBDSType, double>>(GraphBDSType)> get_neighbour_bds)
@@ -173,6 +171,10 @@ public:
 			current_vertex = openlist.get();
 			if(current_vertex->is_checked_)
 				continue;
+			if(current_vertex == goal_vtx){
+				found_path = true;
+				break;
+			}
 
 			current_vertex->is_in_openlist_ = false;
 			current_vertex->is_checked_ = true;
@@ -207,10 +209,6 @@ public:
 
 						openlist.put(successor, successor->f_astar_);
 						successor->is_in_openlist_ = true;
-
-						if(successor == goal_vtx){
-							found_path = true;
-						}
 					}
 				}
 			}
@@ -249,7 +247,6 @@ public:
 	};
 
 private:
-
 	template<typename GraphVertexType>
 	static std::vector<GraphVertexType*> Search(GraphVertexType *start, GraphVertexType *goal)
 	{
@@ -270,6 +267,10 @@ private:
 			current_vertex = openlist.get();
 			if(current_vertex->is_checked_)
 				continue;
+			if(current_vertex == goal){
+				found_path = true;
+				break;
+			}
 
 			current_vertex->is_in_openlist_ = false;
 			current_vertex->is_checked_ = true;
@@ -298,10 +299,6 @@ private:
 
 						openlist.put(successor, successor->f_astar_);
 						successor->is_in_openlist_ = true;
-
-						if(successor == goal){
-							found_path = true;
-						}
 					}
 				}
 			}
@@ -336,6 +333,98 @@ private:
 		return trajectory;
 	};
 
+	template<typename GraphBDSType>
+	static Path_t<GraphBDSType> BiasedSearch(Vertex_t<GraphBDSType>* start_vtx, Vertex_t<GraphBDSType>* goal_vtx, double max_rewards, double dist_weight, double cell_size)
+	{
+		bool found_path = false;
+		Path_t<GraphBDSType> path;
+		Vertex_t<GraphBDSType>* current_vertex;
+
+		// open list - a list of vertices that need to be checked out
+		PriorityQueue<Vertex_t<GraphBDSType>*> openlist;
+
+		openlist.put(start_vtx, 0);
+		start_vtx->is_in_openlist_ = true;
+
+		start_vtx->g_astar_ = 0;
+		start_vtx->shortcut_rewards_ = 0;
+		start_vtx->reward_num_ = 0;
+		start_vtx->weighted_cost_ = max_rewards;// 0;
+
+		while(!openlist.empty() && found_path != true)
+		{
+			current_vertex = openlist.get();
+			if(current_vertex->is_checked_)
+				continue;
+			if(current_vertex == goal_vtx){
+				found_path = true;
+				break;
+			}
+
+			current_vertex->is_in_openlist_ = false;
+			current_vertex->is_checked_ = true;
+
+			// check all adjacent vertices (successors of current vertex)
+			for(auto ite = current_vertex->edges_.begin(); ite != current_vertex->edges_.end(); ite++)
+			{
+				Vertex_t<GraphBDSType>* successor;
+				successor = (*ite).dst_;
+
+				// check if the vertex has been checked (in closed list)
+				if(successor->is_checked_ == false)
+				{
+					double new_rewards = current_vertex->shortcut_cost_ + (current_vertex->shortcut_rewards_ - successor->shortcut_rewards_ ) + (1-successor->shortcut_rewards_/max_rewards)*cell_size;
+					double new_dist = current_vertex->g_astar_ + (*ite).cost_;
+
+					//double new_cost = current_vertex->weighted_cost_ + (new_dist*dist_weight + new_rewards*(1-dist_weight));
+					double new_cost = new_dist*dist_weight + new_rewards*(1-dist_weight);// + avg_rewards; // avg_rewards*(1-dist_weight);
+
+					// if the vertex is not in open list
+					// or if the vertex is in open list but has a higher cost
+					if(successor->is_in_openlist_ == false || new_cost < successor->weighted_cost_)
+					{
+						successor->search_parent_ = current_vertex;
+						successor->weighted_cost_ = new_cost;
+
+						successor->shortcut_cost_ = new_rewards;
+						successor->g_astar_ = new_dist;
+
+						openlist.put(successor, successor->weighted_cost_);
+						successor->is_in_openlist_ = true;
+					}
+				}
+			}
+		}
+
+		if(found_path)
+		{
+			std::cout << "path found in nav field" << std::endl;
+			Vertex_t<GraphBDSType>* waypoint = goal_vtx;
+			while(waypoint != start_vtx)
+			{
+				path.push_back(waypoint);
+				waypoint = waypoint->search_parent_;
+			}
+			// add the start node
+			path.push_back(waypoint);
+			std::reverse(path.begin(), path.end());
+
+			auto traj_s = path.begin();
+			auto traj_e = path.end() - 1;
+#ifndef MINIMAL_PRINTOUT
+			std::cout << "starting vertex id: " << (*traj_s)->vertex_id_ << std::endl;
+			std::cout << "finishing vertex id: " << (*traj_e)->vertex_id_ << std::endl;
+			std::cout << "path length: " << path.size() << std::endl;
+			std::cout << "total dist cost: " << path.back()->g_astar_ << std::endl;
+			std::cout << "total shortcut cost: " << path.back()->shortcut_cost_ << std::endl;
+			std::cout << "total cost with rewards: " << path.back()->weighted_cost_ << std::endl;
+#endif
+		}
+		else
+			std::cout << "failed to find a path in nav field" << std::endl;
+
+		return path;
+	};
 };
 
 }

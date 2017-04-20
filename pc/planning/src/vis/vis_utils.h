@@ -12,21 +12,46 @@
 
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
 
 #include "common/planning_types.h"
 
 namespace srcl_ctrl {
 
-class VisUtils {
-private:
-	static cv::Scalar pt_color_;		// default point color
-	static cv::Scalar ln_color_;		// default line color
-	static cv::Scalar area_color_;		// default area color
+typedef struct {
+    double r;       // percent
+    double g;       // percent
+    double b;       // percent
+} RGBColor;
 
-public:
-	static void DrawPoint(cv::Mat img, cv::Point pos, const cv::Scalar& color = VisUtils::pt_color_);
-	static void DrawLine(cv::Mat img, cv::Point pt1, cv::Point pt2, const cv::Scalar& color = VisUtils::ln_color_);
-	static void FillRectangularArea(cv::Mat img, BoundingBox bbox, const cv::Scalar& color = VisUtils::area_color_);
+typedef struct {
+    double h;       // angle in degrees
+    double s;       // percent
+    double v;       // percent
+} HSVColor;
+
+namespace VisUtils {
+	extern cv::Scalar default_pt_color_;		// default point color
+	extern cv::Scalar default_ln_color_;		// default line color
+	extern cv::Scalar default_area_color_;		// default area color
+
+	extern cv::Scalar bk_color_;		// background color
+	extern cv::Scalar ln_color_;		// line color
+	extern cv::Scalar obs_color_;		// obstacle color
+	extern cv::Scalar aoi_color_;		// area of interest color
+	extern cv::Scalar start_color_; 	// starting cell color
+	extern cv::Scalar finish_color_;	// finishing cell color
+
+	void DrawPoint(cv::Mat img, cv::Point pos, const cv::Scalar& color = VisUtils::default_pt_color_);
+	void DrawLine(cv::Mat img, cv::Point pt1, cv::Point pt2, const cv::Scalar& color = VisUtils::default_ln_color_);
+	void DrawArrow(cv::Mat img, cv::Point base_pos, double length, double angle, const cv::Scalar& color = VisUtils::default_pt_color_);
+
+	void FillRectangularArea(cv::Mat img, BoundingBox bbox, const cv::Scalar& color = VisUtils::default_area_color_);
+
+	// RGB: r,g,b ∈ [0-255]
+	// HSV: h ∈ [0, 360] and s,v ∈ [0, 1]
+	HSVColor RGB2HSV(RGBColor in);
+	RGBColor HSV2RGB(HSVColor in);
 };
 
 }

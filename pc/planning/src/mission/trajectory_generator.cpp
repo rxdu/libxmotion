@@ -74,6 +74,18 @@ void TrajectoryGenerator::LcmKeyframeSetHandler(const lcm::ReceiveBuffer* rbuf, 
 	GenerateTrajectory(new_kfs, msg->path_id);
 }
 
+double TrajectoryGenerator::CalcFlightTime(Position3Dd start, Position3Dd goal, double vel)
+{
+	double xe = start.x - goal.x;
+	double ye = start.y - goal.y;
+	double ze = start.z - goal.z;
+
+	double dist = std::sqrt(std::pow(xe, 2) + std::pow(ye, 2) + std::pow(ze, 2));
+	std::cout << "dist: " << dist << ", allocated time: " << dist/vel << std::endl;
+
+	return dist/vel;
+}
+
 void TrajectoryGenerator::GenerateTrajectory(KeyframeSet& kfs, uint64_t traj_id)
 {
 	srcl_lcm_msgs::PolynomialCurve_t poly_msg;
@@ -118,7 +130,21 @@ void TrajectoryGenerator::GenerateTrajectory(KeyframeSet& kfs, uint64_t traj_id)
 		traj_opt_.keyframe_yaw_vals_(0,i) = kfs.keyframes[i].yaw;
 		traj_opt_.keyframe_yaw_vals_(1,i) = std::numeric_limits<float>::infinity();
 
-		traj_opt_.keyframe_ts_(0,i) = i * 1.0;
+		//traj_opt_.keyframe_ts_(0,i) = i * 1.0;
+
+		if(i == 0) {
+			traj_opt_.keyframe_ts_(0,i) = 0;
+		}
+		else {
+			traj_opt_.keyframe_ts_(0,i) = traj_opt_.keyframe_ts_(0,i-1) + 1.0;
+
+//			Position3Dd start(traj_opt_.keyframe_x_vals_(0,i-1), traj_opt_.keyframe_y_vals_(0,i-1), traj_opt_.keyframe_z_vals_(0,i-1));
+//			Position3Dd goal(traj_opt_.keyframe_x_vals_(0,i), traj_opt_.keyframe_y_vals_(0,i), traj_opt_.keyframe_z_vals_(0,i));
+//
+//			double tp = CalcFlightTime(start, goal, 2.0);
+//			traj_opt_.keyframe_ts_(0,i) = traj_opt_.keyframe_ts_(0,i-1) + tp*5;
+		}
+//		std::cout << "allocated time: " << traj_opt_.keyframe_ts_(0,i) << std::endl;
 
 		srcl_lcm_msgs::WayPoint_t wpoint;
 		wpoint.positions[0] = kfs.keyframes[i].positions[0];
@@ -187,7 +213,7 @@ void TrajectoryGenerator::GenerateTrajectory(KeyframeSet& kfs, uint64_t traj_id)
 		poly_msg.start_time.time_stamp = kfs.start_time;
 		poly_msg.trajectory_id = traj_id;
 
-		poly_msg.scaling_factor = 0.5;
+		poly_msg.scaling_factor = 0.3;
 
 		lcm_->publish("quad_planner/trajectory_polynomial", &poly_msg);
 	}

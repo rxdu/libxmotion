@@ -76,6 +76,11 @@ private:
 
 	friend class AStar;
 
+	// additiona friends
+	template<class GraphNodeType>
+	friend class NavField;
+	friend class ShortcutEval;
+
 private:
 	/// This function checks if a vertex already exists in the graph.
 	///	If yes, the functions returns the pointer of the existing vertex,
