@@ -308,9 +308,9 @@ bool QuadHbirdSimClient::ReceiveQuadQuaternion(Quaternion& data)
 {
 	if (simxGetStringSignal(client_id_,"hummingbird_quat",&quat_sig,&quat_sig_size,simx_opmode_buffer) == simx_error_noerror)
 	{
-		int cnt=acc_sig_size/4;
+		int cnt=quat_sig_size/4;
 
-		if(cnt == 3)
+		if(cnt == 4)
 		{
 			data.x=((float*)quat_sig)[0];
 			data.y=((float*)quat_sig)[1];
