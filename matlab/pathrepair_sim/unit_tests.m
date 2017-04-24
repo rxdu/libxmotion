@@ -4,15 +4,27 @@ clear;
 clc;
 
 %% create 2d/3d space
-sdim = [50,50,5];
+sdim = [10,10,5];
 s = create_3d_space(sdim);
 so = add_obstacle_to_space(s, 0.1);
 map = create_2d_map(so);
 
 [x,y,z] = get_index_from_id(s, 1);
 
+% misc space structure helper functions
+idx = get_voxel_from_pos(s, [1.1,0.2,1.2]);
+idx = get_voxel_from_pos(s, [12.1194,9.4134,4.5])
+
 %% neighbour finding
 nbs = get_2d_neighbours(map, [1,1]);
+nbs3 = get_3d_neighbours(s, [2,2,2]);
+nbs3s = size(nbs3);
+
+%% 3d sensor model
+close all;
+ssensor = create_3d_space([10 10 10]);
+ssensoro = add_obstacle_to_space(ssensor, 0.1);
+display_3d_space(ssensoro)
 
 %% graph construction
 ss = create_3d_space([50, 50, 5]);
