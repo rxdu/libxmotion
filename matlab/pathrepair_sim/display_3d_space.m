@@ -23,8 +23,39 @@ function display_3d_space(space, sensor_data)
     end
     
     if show_sensor
-        sensor_center = space.voxels{sd.sensor_pos(1),sd.sensor_pos(2), sd.sensor_pos(3)};
-        plot3(sensor_center.center_pos(1),sensor_center.center_pos(2),sensor_center.center_pos(3),'r*')
+        sensor_cor = sensor_data.sensor_model.sensor_info.sensor_pos;
+        ll_pos = sensor_data.sensor_model.projection_plane_points(1,:);
+        rl_pos = sensor_data.sensor_model.projection_plane_points(2,:);
+        llu_pos = sensor_data.sensor_model.projection_plane_points(3,:);
+        rlu_pos = sensor_data.sensor_model.projection_plane_points(4,:);
+        lll_pos = sensor_data.sensor_model.projection_plane_points(5,:);
+        rll_pos = sensor_data.sensor_model.projection_plane_points(6,:);
+        
+        % projection plane
+        plot3([ll_pos(1) rl_pos(1)],[ll_pos(2) rl_pos(2)],[ll_pos(3) rl_pos(3)],'b')
+        plot3([lll_pos(1) llu_pos(1) rlu_pos(1) rll_pos(1) lll_pos(1)],...
+              [lll_pos(2) llu_pos(2) rlu_pos(2) rll_pos(2) lll_pos(2)],...
+              [lll_pos(3) llu_pos(3) rlu_pos(3) rll_pos(3) lll_pos(3)],'b')
+
+        % boundary points
+        plot3(ll_pos(1),ll_pos(2),ll_pos(3),'b*')
+        plot3(rl_pos(1),rl_pos(2),rl_pos(3),'b*')
+
+        plot3(llu_pos(1),llu_pos(2),llu_pos(3),'b*')
+        plot3(rlu_pos(1),rlu_pos(2),rlu_pos(3),'b*')
+
+        plot3(lll_pos(1),lll_pos(2),lll_pos(3),'b*')
+        plot3(rll_pos(1),rll_pos(2),rll_pos(3),'b*')
+
+        % sensor to boundaries
+        plot3([ll_pos(1) sensor_cor(1)],[ll_pos(2) sensor_cor(2)],[ll_pos(3) sensor_cor(3)],'b')
+        plot3([rl_pos(1) sensor_cor(1)],[rl_pos(2) sensor_cor(2)],[rl_pos(3) sensor_cor(3)],'b')
+
+        plot3([llu_pos(1) sensor_cor(1)],[llu_pos(2) sensor_cor(2)],[llu_pos(3) sensor_cor(3)],'b')
+        plot3([rlu_pos(1) sensor_cor(1)],[rlu_pos(2) sensor_cor(2)],[rlu_pos(3) sensor_cor(3)],'b')
+
+        plot3([lll_pos(1) sensor_cor(1)],[lll_pos(2) sensor_cor(2)],[lll_pos(3) sensor_cor(3)],'b')
+        plot3([rll_pos(1) sensor_cor(1)],[rll_pos(2) sensor_cor(2)],[rll_pos(3) sensor_cor(3)],'b')
     end
     hold off
 end
