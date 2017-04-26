@@ -13,7 +13,7 @@ map = create_2d_map(so);
 
 % misc space structure helper functions
 idx = get_voxel_from_pos(s, [1.1,0.2,1.2]);
-idx = get_voxel_from_pos(s, [12.1194,9.4134,4.5])
+idx = get_voxel_from_pos(s, [12.1194,9.4134,4.5]);
 
 %% neighbour finding
 nbs = get_2d_neighbours(map, [1,1]);
@@ -24,7 +24,7 @@ nbs3s = size(nbs3);
 close all;
 ssensor = create_3d_space([10 10 10]);
 ssensoro = add_obstacle_to_space(ssensor, 0.1);
-display_3d_space(ssensoro)
+display_3d_space(ssensoro);
 
 %% graph construction
 ss = create_3d_space([50, 50, 5]);
