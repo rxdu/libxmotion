@@ -7,8 +7,8 @@ function sensor_model = init_depth_sensor(sensor_info)
     alpha2 = sensor_info.sensor_angle - sensor_info.aov_h/2;
     left_limit = sensor_info.sensor_pos(1:2) + [sin(alpha1) cos(alpha1)] * sensor_info.range;
     right_limit = sensor_info.sensor_pos(1:2) + [sin(alpha2) cos(alpha2)] * sensor_info.range;
-    ll_idx = get_voxel_free_index([left_limit sensor_info.sensor_pos(3)]);
-    rl_idx = get_voxel_free_index([right_limit sensor_info.sensor_pos(3)]);
+    ll_idx = get_voxel_coordinates([left_limit sensor_info.sensor_pos(3)]);
+    rl_idx = get_voxel_coordinates([right_limit sensor_info.sensor_pos(3)]);
 
     pp_half_layer_num = floor(sensor_info.range*tan(sensor_info.aov_v/2));
     llu_idx = [ll_idx(1) ll_idx(2) ll_idx(3) + pp_half_layer_num];
@@ -27,4 +27,10 @@ function sensor_model = init_depth_sensor(sensor_info)
     rll_pos = calc_center_pos([rll_idx(1),rll_idx(2), rll_idx(3)]);
 
     sensor_model.projection_plane_points = [ll_pos'; rl_pos'; llu_pos'; rlu_pos'; lll_pos'; rll_pos'];
+    
+    %% helper functions
+    % calculate the coordinates from position
+    function cor = get_voxel_coordinates(pos)
+        cor = floor(pos) + 1;
+    end
 end
