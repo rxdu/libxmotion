@@ -3,11 +3,15 @@ function graph = create_graph(space)
     ys = space.y_size;
     zs = space.z_size;
     
-    graph = zeros(xs*ys*zs, xs*ys*zs);
+    graph = Inf(xs*ys*zs, xs*ys*zs);
     
     for x = 1:1:xs
         for y = 1:1:ys
-            for z = 1:1:zs                 
+            for z = 1:1:zs  
+                if space.voxels{x,y,z}.occupied == true
+                    continue
+                end
+                
                 neighbours = [];
                 if zs == 1
                     neighbours = get_2d_neighbours(space, [x,y]);
