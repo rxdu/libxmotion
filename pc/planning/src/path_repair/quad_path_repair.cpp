@@ -82,8 +82,8 @@ void QuadPathRepair::ConfigGraphPlanner(MapConfig config, double world_size_x, d
 	geomark_graph_.UpdateSquareGridInfo(sgrid_planner_.graph_, sgrid_planner_.map_);
 	octomap_server_.SetOctreeResolution(sgrid_planner_.map_.info.resolution);
 
-	srcl_lcm_msgs::Graph_t graph_msg = GenerateLcmGraphMsg();
-	lcm_->publish("quad_planner/quad_planner_graph", &graph_msg);
+//	srcl_lcm_msgs::Graph_t graph_msg = GenerateLcmGraphMsg();
+//	lcm_->publish("quad_planner/quad_planner_graph", &graph_msg);
 }
 
 void QuadPathRepair::SetStartMapPosition(Position2D pos)

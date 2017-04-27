@@ -46,7 +46,7 @@ int main(int argc, char** argv )
 		else
 		{
 			//sgrid_map = SGridBuilder::BuildSquareGridMap(input_map, 32);
-			sgrid_map = SGridBuilder::BuildSquareGridMapWithExtObstacle(input_map, 32, 1);
+			sgrid_map = SGridBuilderV2::BuildSquareGridMap(input_map, 16, 1);
 			use_input_image = true;
 		}
 	}
@@ -93,20 +93,23 @@ int main(int argc, char** argv )
 	Vertex_t<SquareCell*> * start_vertex;
 	Vertex_t<SquareCell*> * finish_vertex;
 
-	start_vertex = graph->GetVertexFromID(1554); // 1548
-	finish_vertex = graph->GetVertexFromID(390);
+	start_vertex = graph->GetVertexFromID(2000); // 2075
+	finish_vertex = graph->GetVertexFromID(800); // 325
 
-	if(start_vertex == nullptr || finish_vertex == nullptr) {
+	Path_t<SquareCell*> path;
+	if(start_vertex == nullptr || finish_vertex == nullptr)
+	{
 		std::cerr << "Invalid starting and finishing vertices, please choose two vertices in free space!" << std::endl;
-		std::cerr << "Use image \"example.png\" inside \\planning\\data folder for this demo." << std::endl;
-		return 0;
+		//return 0;
 	}
-
-	clock_t		exec_time;
-	exec_time = clock();
-	Path_t<SquareCell*> path = AStar::Search(graph,start_vertex,finish_vertex);
-	exec_time = clock() - exec_time;
-	std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
+	else
+	{
+		clock_t		exec_time;
+		exec_time = clock();
+		path = AStar::Search(graph,start_vertex,finish_vertex);
+		exec_time = clock() - exec_time;
+		std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
+	}
 
 	Mat vis_img;
 
@@ -116,7 +119,9 @@ int main(int argc, char** argv )
 		Vis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
 	Vis::VisGraph(*graph, vis_img, vis_img, true);
-	Vis::VisGraphPath(path, vis_img, vis_img);
+
+	if(!path.empty())
+		Vis::VisGraphPath(path, vis_img, vis_img);
 
 	Range rngx(0 + sgrid_map.info.padded_left, vis_img.cols - sgrid_map.info.padded_right);
 	Range rngy(0 + sgrid_map.info.padded_top, vis_img.rows - sgrid_map.info.padded_bottom);
