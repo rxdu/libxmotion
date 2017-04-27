@@ -25,5 +25,7 @@ function space = create_3d_space(dim)
         voxel.bound = [x-1:x, y-1:y, z-1:z];
         voxel.occupied = false;
         voxel.cost_to_goal = 0;
+        voxel.shortcut_rewards = 0;
+        voxel.shortcut_heading = 0;
     end
 end
