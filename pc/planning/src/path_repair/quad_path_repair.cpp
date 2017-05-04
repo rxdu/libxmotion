@@ -591,6 +591,8 @@ void QuadPathRepair::LcmOctomapHandler(
 			else
 				kf.yaw = last_yaw;
 
+			LOG(INFO) << "way point yaw: " << kf.yaw << " at id: " << nd_id;
+
 			kf_cmd.kfs.push_back(kf);
 
 		}
