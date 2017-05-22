@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/icons">
-        <file>icons/open_map.ico</file>
-        <file>icons/reset_cam.ico</file>
-        <file>icons/full_view.ico</file>
-        <file>icons/open_octomap.ico</file>
-    </qresource>
-</RCC>

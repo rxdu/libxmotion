@@ -50,27 +50,27 @@ pkg_search_module(LCM REQUIRED lcm)
 
 if(LCM_FOUND)
 	set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
-	include_directories(${LCM_GENERATED_HEADER_PATH})	
+	include_directories(${LCM_GENERATED_HEADER_PATH})
 	# Include files for LCM
     include_directories(${CMAKE_BINARY_DIR}/include)
 	# add comm and control module
-	add_subdirectory(comm)            # <-----------------------------------	
-	add_subdirectory(control)         # <-----------------------------------	
+	add_subdirectory(comm)            # <-----------------------------------
+	add_subdirectory(control)         # <-----------------------------------
 elseif(LCM_FOUND)
     message(STATUS "LCM is not found. IPC functions will not work without LCM.")
 	message(STATUS "Key components missing. The comm, control modules and part of planning module will not be built.")
 endif(LCM_FOUND)
 
 ## Check dependencies for GUI module
-find_package(VTK 7.0)
+#find_package(VTK 7.0)
 
-if (VTK_FOUND)
+#if (VTK_FOUND)
 #	add_subdirectory(visualization)    # <-----------------------------------
-elseif(VTK_FOUND)
-	message(STATUS "GUI module will not be built because not all dependent libraries can be found.")
-endif(VTK_FOUND)
+#elseif(VTK_FOUND)
+#	message(STATUS "GUI module will not be built because not all dependent libraries can be found.")
+#endif(VTK_FOUND)
 
 ## Add other sub source directories
-add_subdirectory(utils)   
+add_subdirectory(utils)
 add_subdirectory(planning)
-add_subdirectory(third_party)        
+add_subdirectory(third_party)
