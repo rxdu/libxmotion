@@ -13,7 +13,7 @@
 
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
-#include "lcmtypes/comm.hpp"
+#include "lcmtypes/srcl_ctrl.hpp"
 
 #include "common/planning_types.h"
 #include "common/control_types.h"

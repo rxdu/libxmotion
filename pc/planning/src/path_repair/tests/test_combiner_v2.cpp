@@ -18,7 +18,7 @@
 
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
-#include "lcmtypes/comm.hpp"
+#include "lcmtypes/srcl_ctrl.hpp"
 
 // opencv
 #include "opencv2/opencv.hpp"

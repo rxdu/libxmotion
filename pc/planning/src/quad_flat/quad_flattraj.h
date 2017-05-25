@@ -10,7 +10,7 @@
 
 #include <cstdint>
 
-#include "lcmtypes/comm.hpp"
+#include "lcmtypes/srcl_ctrl.hpp"
 
 #include "polyopt/polytraj_curve.h"
 

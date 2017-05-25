@@ -10,7 +10,7 @@
 
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
-#include "lcmtypes/comm.hpp"
+#include "lcmtypes/srcl_ctrl.hpp"
 
 #include <octomap/octomap.h>
 #include <octomap/OcTree.h>

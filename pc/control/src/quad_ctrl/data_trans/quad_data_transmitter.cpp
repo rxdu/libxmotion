@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "lcmtypes/comm.hpp"
+#include "lcmtypes/srcl_ctrl.hpp"
 
 #include "data_trans/quad_data_transmitter.h"
 

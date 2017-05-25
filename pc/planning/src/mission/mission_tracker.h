@@ -20,7 +20,7 @@
 
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
-#include "lcmtypes/comm.hpp"
+#include "lcmtypes/srcl_ctrl.hpp"
 
 #include "graph/graph.h"
 #include "common/planning_types.h"

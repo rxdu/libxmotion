@@ -27,7 +27,7 @@ if (NOT GUROBI_FOUND)
 else()
   message("Gurobi found")
   include_directories(${GUROBI_INCLUDE_DIRS})
-    
+
   add_subdirectory(src/polyopt)        # <-----------------------------------
   add_subdirectory(src/quad_flat)      # <-----------------------------------
   add_subdirectory(src/path_repair)    # <-----------------------------------

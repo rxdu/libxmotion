@@ -12,7 +12,7 @@
 #include <memory>
 
 #include <lcm/lcm-cpp.hpp>
-#include "lcmtypes/comm.hpp"
+#include "lcmtypes/srcl_ctrl.hpp"
 
 #include "common/control_types.h"
 #include "quad_ctrl/motion_server/quad_poly_traj_handler.h"
