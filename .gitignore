@@ -27,7 +27,7 @@ pc/visualization/CMakeLists.txt.user
 pc/lcmtypes/c
 pc/lcmtypes/cpp
 pc/lcmtypes/java
-pc/comm/lcmtypes/python
+pc/lcmtypes/python
 pc/third_party/libbot2/*/lcmtypes/
 pc/third_party/libbot2/bot2-lcmgl/java/src/bot_lcmgl/data_t.java
 pc/third_party/libbot2/bot2-lcmgl/python/src/bot_lcmgl/data_t.py
