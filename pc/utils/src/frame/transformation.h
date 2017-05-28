@@ -10,7 +10,7 @@
 
 #include "eigen3/Eigen/Geometry"
 
-#include "planning/src/common/planning_types.h"
+#include "common/planning_types.h"
 
 namespace srcl_ctrl {
 

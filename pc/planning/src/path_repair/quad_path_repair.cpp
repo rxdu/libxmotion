@@ -12,9 +12,9 @@
 
 #include "eigen3/Eigen/Geometry"
 
-#ifdef ENABLE_G3LOG
-#include "ctrl_utils/logging/logging_helper.h"
-#endif
+// #ifdef ENABLE_G3LOG
+// #include "ctrl_utils/logging/logging_helper.h"
+// #endif
 
 #include "path_repair/quad_path_repair.h"
 #include "map/map_utils.h"
@@ -256,14 +256,14 @@ bool QuadPathRepair::EvaluateNewPath(std::vector<Position3Dd>& new_path)
 	std::cout << "new path dist: " << est_new_dist_ << " , remaining dist of current path: "
 			<< mission_tracker_->remaining_path_length_ << std::endl;
 
-	LOG(INFO) << "old_dist = " <<  mission_tracker_->remaining_path_length_
-					<< " , new_dist = " << est_new_dist_;
+	// LOG(INFO) << "old_dist = " <<  mission_tracker_->remaining_path_length_
+	// 				<< " , new_dist = " << est_new_dist_;
 
 	if(new_path.size() > 0 && est_new_dist_ < mission_tracker_->remaining_path_length_ * 0.85)
 	{
-		LOG(INFO) << " --------> new plan found <-------- ";
-		LOG(INFO) << "remaining path length: " <<  mission_tracker_->remaining_path_length_
-							<< " , new path length: " << est_new_dist_;
+		// LOG(INFO) << " --------> new plan found <-------- ";
+		// LOG(INFO) << "remaining path length: " <<  mission_tracker_->remaining_path_length_
+		// 					<< " , new path length: " << est_new_dist_;
 		return true;
 	}
 	else
@@ -493,12 +493,12 @@ void QuadPathRepair::LcmOctomapHandler(
 {
 	std::cout << "\n---------------------- New Iteration -------------------------" << std::endl;
 
-	LOG(INFO) << "----------- New iteration -----------";
+	// LOG(INFO) << "----------- New iteration -----------";
 
 	if(mission_tracker_->remaining_path_length_ < 0.5)
 	{
 		std::cout << "Getting close to goal, no need to replan" << std::endl;
-		LOG(INFO) << "Getting close to goal, no need to replan";
+		// LOG(INFO) << "Getting close to goal, no need to replan";
 		return;
 	}
 
@@ -519,7 +519,7 @@ void QuadPathRepair::LcmOctomapHandler(
 	if(mission_tracker_->mission_started_ && (cubearray->cubes_.size() == 0 || cubegraph->GetGraphVertices().size() < 5))
 	{
 		std::cerr << "Too limited 3D information collected" << std::endl;
-		LOG(INFO) << "Too limited 3D information collected";
+		// LOG(INFO) << "Too limited 3D information collected";
 		return;
 	}
 
@@ -529,11 +529,11 @@ void QuadPathRepair::LcmOctomapHandler(
 	if(geo_start_id_astar == -1)
 	{
 		std::cerr << "Failed to combine graphs" << std::endl;
-		LOG(INFO) << "Failed to combine graphs";
+		// LOG(INFO) << "Failed to combine graphs";
 		return;
 	}
 
-	LOG(INFO) << "Combined graph size: " << sgrid_planner_.graph_->GetGraphVertices().size();
+	// LOG(INFO) << "Combined graph size: " << sgrid_planner_.graph_->GetGraphVertices().size();
 	std::cout << "Graph size (combined, 3d): " << sgrid_planner_.graph_->GetGraphVertices().size() << " , " << cubegraph->GetGraphVertices().size() << std::endl;
 
 	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
@@ -591,7 +591,7 @@ void QuadPathRepair::LcmOctomapHandler(
 			else
 				kf.yaw = last_yaw;
 
-			LOG(INFO) << "way point yaw: " << kf.yaw << " at id: " << nd_id;
+			// LOG(INFO) << "way point yaw: " << kf.yaw << " at id: " << nd_id;
 
 			kf_cmd.kfs.push_back(kf);
 

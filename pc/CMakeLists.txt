@@ -16,7 +16,7 @@ lcmtypes_build()
 #set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Choose to enable g3log or not: on/off
-set(ENABLE_LOGGING on)
+set(ENABLE_LOGGING off)
 
 if(ENABLE_LOGGING)
 	message( "-- Enable logging with g3log -- Yes" )
@@ -26,9 +26,11 @@ else(ENABLE_LOGGING)
 	message( "-- Enable logging with g3log -- No" )
 endif(ENABLE_LOGGING)
 
-set(BUILD_TESTS on)
+set(BUILD_TESTS off)
 
-## Config eigen include directories
+## Config common include directories
+include_directories(${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/planning/src)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/)
 
 ## Config octomap include directories
@@ -42,7 +44,7 @@ include_directories(${CMAKE_SOURCE_DIR}/third_party/ompl-1.2.1/src)
 
 ## Other include directories
 include_directories(${CMAKE_SOURCE_DIR})
-#include_directories(${CMAKE_SOURCE_DIR}/control/src)
+include_directories(${CMAKE_SOURCE_DIR}/control/src)
 #include_directories(${CMAKE_SOURCE_DIR}/planning/src)
 #include_directories(${CMAKE_SOURCE_DIR}/utils/src)
 
@@ -67,5 +69,5 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 	include_directories(${CMAKE_BINARY_DIR}/include)
 # add comm and control module
 add_subdirectory(control)
-#add_subdirectory(planning)
+add_subdirectory(planning)
 add_subdirectory(third_party)

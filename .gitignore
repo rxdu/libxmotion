@@ -24,10 +24,13 @@ docs/doxygen/latex
 pc/visualization/CMakeLists.txt.user
 
 # LCM
-pc/comm/lcmtypes/c
-pc/comm/lcmtypes/cpp
-pc/comm/lcmtypes/java
+pc/lcmtypes/c
+pc/lcmtypes/cpp
+pc/lcmtypes/java
 pc/comm/lcmtypes/python
+pc/third_party/libbot2/*/lcmtypes/
+pc/third_party/libbot2/bot2-lcmgl/java/src/bot_lcmgl/data_t.java
+pc/third_party/libbot2/bot2-lcmgl/python/src/bot_lcmgl/data_t.py
 
 # Compiled Object files
 *.slo
