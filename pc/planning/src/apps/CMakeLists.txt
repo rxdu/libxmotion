@@ -32,8 +32,8 @@ target_link_libraries(map_param geometry vis ${OpenCV_LIBS})
 add_executable(local_analysis local_analysis.cpp)
 target_link_libraries(local_analysis map vis nav_field ${OpenCV_LIBS})
 
-add_executable(octomap_server_node octomap_server_node.cpp)
-target_link_libraries(octomap_server_node local3d map geometry ${Octomap_LIBS} ${LCM_LIBRARIES})
+#add_executable(octomap_server_node octomap_server_node.cpp)
+#target_link_libraries(octomap_server_node local3d map geometry ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 add_executable(shortcut_analysis shortcut_analysis.cpp)
 target_link_libraries(shortcut_analysis map vis nav_field ${OpenCV_LIBS})
