@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(srcl_ctrl)
 
+# cmake module path
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+
 # pull in the pods macros. See cmake/pods.cmake for documentation
 set(POD_NAME srcl_ctrl)
 include(cmake/pods.cmake)
@@ -48,6 +51,8 @@ include_directories(${CMAKE_SOURCE_DIR}/control/src)
 #include_directories(${CMAKE_SOURCE_DIR}/planning/src)
 #include_directories(${CMAKE_SOURCE_DIR}/utils/src)
 
+#find_package(GLib2 REQUIRED)
+
 ## Find LCM
 find_package(PkgConfig REQUIRED)
 pkg_search_module(LCM REQUIRED lcm)
@@ -68,6 +73,6 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 # Include files for LCM
 	include_directories(${CMAKE_BINARY_DIR}/include)
 # add comm and control module
-add_subdirectory(control)
+#add_subdirectory(control)
 add_subdirectory(planning)
 add_subdirectory(third_party)

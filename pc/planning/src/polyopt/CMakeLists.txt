@@ -10,7 +10,7 @@ else()
 endif()
 
 # Add libraries
-set(POLYOPT_LIB_SRC 
+set(POLYOPT_LIB_SRC
 	# optimization solver
     polyopt_math.cpp
     gurobi_utils.cpp
@@ -39,5 +39,5 @@ target_link_libraries(test_qp3 polyopt ${GUROBI_LIBRARIES})
 add_executable(test_opt tests/test_opt.cpp)
 target_link_libraries(test_opt polyopt ${GUROBI_LIBRARIES})
 
-add_executable(test_corridor tests/test_corridor.cpp)
-target_link_libraries(test_corridor polyopt ${GUROBI_LIBRARIES} ${LCM_LIBRARIES})
+#add_executable(test_corridor tests/test_corridor.cpp)
+#target_link_libraries(test_corridor polyopt ${GUROBI_LIBRARIES} ${LCM_LIBRARIES})

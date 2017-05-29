@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(srcl_planning)
 
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
-
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
@@ -19,6 +17,8 @@ else()
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+find_package(GLib2 REQUIRED)
 
 ## Conditional add sources
 find_package(GUROBI)

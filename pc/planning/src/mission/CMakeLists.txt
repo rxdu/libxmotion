@@ -5,13 +5,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Dependency libraries
 find_package(OpenCV REQUIRED)
-find_package(GUROBI REQUIRED)
-if (NOT GUROBI_FOUND)
-  message("Gurobi not found. If you want to use Gurobi, set the GUROBI_HOME variable")
-else()
-  message("Gurobi found")
-  include_directories(${GUROBI_INCLUDE_DIRS})
-endif()
 
 # Add libraries
 set(MISSION_LIB_SRC

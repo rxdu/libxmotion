@@ -19,8 +19,8 @@ target_link_libraries(local3d utils map geometry ${Octomap_LIBS} ${LCM_LIBRARIES
 add_executable(octree_example tests/octomap_example.cpp)
 target_link_libraries(octree_example ${Octomap_LIBS})
 
-add_executable(test_octomap tests/test_octomap.cpp)
-target_link_libraries(test_octomap local3d ${Octomap_LIBS})
+#add_executable(test_octomap tests/test_octomap.cpp)
+#target_link_libraries(test_octomap local3d ${Octomap_LIBS})
 
-add_executable(test_cubebuilder tests/test_cubebuilder.cpp)
-target_link_libraries(test_cubebuilder map geometry local3d ${Octomap_LIBS} ${LCM_LIBRARIES})
+#add_executable(test_cubebuilder tests/test_cubebuilder.cpp)
+#target_link_libraries(test_cubebuilder map geometry local3d ${Octomap_LIBS} ${LCM_LIBRARIES})
