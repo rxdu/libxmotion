@@ -30,6 +30,7 @@ set(BUILD_TESTS off)
 
 ## Config common include directories
 include_directories(${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/control/src)
 include_directories(${CMAKE_SOURCE_DIR}/planning/src)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/)
 
@@ -43,10 +44,6 @@ set(Octomap_LIBS octomap octomath)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/ompl-1.2.1/src)
 
 ## Other include directories
-include_directories(${CMAKE_SOURCE_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/control/src)
-#include_directories(${CMAKE_SOURCE_DIR}/planning/src)
-#include_directories(${CMAKE_SOURCE_DIR}/utils/src)
 
 ## Find LCM
 find_package(PkgConfig REQUIRED)
