@@ -11,7 +11,7 @@ set(VIS_LIB_SRC
     #graph_vis.cpp # header only
     qtree_vis.cpp
     sgrid_vis.cpp
-    rrt_vis.cpp
+    #rrt_vis.cpp
     vis_utils.cpp
 )
 add_library(vis STATIC ${VIS_LIB_SRC})

@@ -61,6 +61,11 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 # Include files for LCM
 include_directories(${CMAKE_BINARY_DIR}/include)
 
+## Add test source directories
+if(BUILD_TESTS)
+    add_subdirectory(gtests)
+endif()
+
 ## Add other sub source directories
 add_subdirectory(utils)
 set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)

@@ -17,7 +17,7 @@
 
 #include "common/planning_types.h"
 #include "common/control_types.h"
-#include "planner/graph_planner.h"
+#include "graph_planner.h"
 #include "map/map_info.h"
 #include "geometry/geo_mark.h"
 #include "path_repair/geo_mark_graph.h"
