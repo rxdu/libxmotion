@@ -24,7 +24,7 @@
 #include "vis/sgrid_vis.h"
 #include "map/image_utils.h"
 #include "map/map_utils.h"
-#include "planner/graph_planner.h"
+#include "path_repair/graph_planner.h"
 #include "geometry/graph_builder.h"
 #include "geometry/sgrid_builder.h"
 
@@ -170,6 +170,3 @@ int main(int argc, char** argv )
 
 	return 0;
 }
-
-
-

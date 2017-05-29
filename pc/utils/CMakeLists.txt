@@ -24,8 +24,3 @@ set(UTILS_LIB_SRC
   src/frame/transformation.cpp
 )
 add_library(utils STATIC ${UTILS_LIB_SRC})
-
-## Add sub source directories
-if(BUILD_TESTS)
-    add_subdirectory(src/gtests)
-endif()

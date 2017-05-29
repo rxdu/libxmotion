@@ -33,6 +33,7 @@ set(BUILD_TESTS off)
 
 ## Config common include directories
 include_directories(${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/control/src)
 include_directories(${CMAKE_SOURCE_DIR}/planning/src)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/)
 
@@ -46,10 +47,6 @@ set(Octomap_LIBS octomap octomath)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/ompl-1.2.1/src)
 
 ## Other include directories
-include_directories(${CMAKE_SOURCE_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/control/src)
-#include_directories(${CMAKE_SOURCE_DIR}/planning/src)
-#include_directories(${CMAKE_SOURCE_DIR}/utils/src)
 
 #find_package(GLib2 REQUIRED)
 
@@ -65,6 +62,11 @@ set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 # Include files for LCM
 include_directories(${CMAKE_BINARY_DIR}/include)
+
+## Add test source directories
+if(BUILD_TESTS)
+    add_subdirectory(gtests)
+endif()
 
 ## Add other sub source directories
 add_subdirectory(utils)
