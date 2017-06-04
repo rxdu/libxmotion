@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(srcl_ctrl)
 
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++") #libc++
+#find_library (LIBSTDCXX NAMES stdc++)
+#add_compile_options(-stdlib=libstdc++)
+
 # cmake module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
@@ -62,6 +66,7 @@ set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 # Include files for LCM
 include_directories(${CMAKE_BINARY_DIR}/include)
+set(LCM_LIBRARIES lcm)
 
 ## Add test source directories
 if(BUILD_TESTS)

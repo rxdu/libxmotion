@@ -20,14 +20,14 @@ target_link_libraries(nav_field geometry vis)# ${OpenCV_LIBS} ${LCM_LIBRARIES})
 #add_executable(test_calc tests/test_calc.cpp)
 #target_link_libraries(test_calc nav_field map vis ${OpenCV_LIBS})
 
-add_executable(test_navfield tests/test_navfield.cpp)
-target_link_libraries(test_navfield map vis ${OpenCV_LIBS})
+#add_executable(test_navfield tests/test_navfield.cpp)
+#target_link_libraries(test_navfield map vis ${OpenCV_LIBS})
 
-add_executable(test_navfield2 tests/test_navfield2.cpp)
-target_link_libraries(test_navfield2 map vis nav_field ${OpenCV_LIBS})
+#add_executable(test_navfield2 tests/test_navfield2.cpp)
+#target_link_libraries(test_navfield2 map vis nav_field ${OpenCV_LIBS})
 
-add_executable(test_navfield3 tests/test_navfield3.cpp)
-target_link_libraries(test_navfield3 map vis nav_field ${OpenCV_LIBS})
+#add_executable(test_navfield3 tests/test_navfield3.cpp)
+#target_link_libraries(test_navfield3 map vis nav_field ${OpenCV_LIBS})
 
-add_executable(test_navfield4 tests/test_navfield4.cpp)
-target_link_libraries(test_navfield4 map vis nav_field ${OpenCV_LIBS})
+#add_executable(test_navfield4 tests/test_navfield4.cpp)
+#target_link_libraries(test_navfield4 map vis nav_field ${OpenCV_LIBS} ${LCM_LIBRARIES})

@@ -20,6 +20,20 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 find_package(GLib2 REQUIRED)
 
+## Find LCM
+find_package(PkgConfig REQUIRED)
+pkg_search_module(LCM REQUIRED lcm)
+
+if(LCM_NOT_FOUND)
+  message(STATUS "LCM is not found. Inter-process communication depends on LCM.")
+endif(LCM_NOT_FOUND)
+
+set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
+include_directories(${LCM_GENERATED_HEADER_PATH})
+# Include files for LCM
+include_directories(${CMAKE_BINARY_DIR}/include)
+set(LCM_LIBRARIES lcm)
+
 ## Conditional add sources
 find_package(GUROBI)
 if (NOT GUROBI_FOUND)
