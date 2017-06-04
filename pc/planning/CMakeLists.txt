@@ -30,12 +30,6 @@ include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/octomap/includ
 #include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/dynamicEDT3D/include)
 set(Octomap_LIBS octomap octomath)
 
-## OMPL include directories
-include_directories(${CMAKE_SOURCE_DIR}/third_party/ompl-1.2.1/src)
-
-## Find dependency libraries
-find_package(GLib2 REQUIRED)
-
 ## Find LCM
 find_package(PkgConfig REQUIRED)
 pkg_search_module(LCM REQUIRED lcm)
@@ -43,25 +37,24 @@ pkg_search_module(LCM REQUIRED lcm)
 if(LCM_NOT_FOUND)
   message(STATUS "LCM is not found. Inter-process communication depends on LCM.")
 endif(LCM_NOT_FOUND)
+set(LCM_LIBRARIES lcm)
 
+# Include files for LCM
 set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
-# Include files for LCM
-include_directories(${CMAKE_BINARY_DIR}/include)
-set(LCM_LIBRARIES lcm)
 
 ## Conditional add sources
 find_package(GUROBI)
 if (NOT GUROBI_FOUND)
   message("Gurobi not found. If you want to use Gurobi, set the GUROBI_HOME variable")
-else()
-  message("Gurobi found")
-  include_directories(${GUROBI_INCLUDE_DIRS})
-
-  add_subdirectory(src/polyopt)        # <-----------------------------------
-  add_subdirectory(src/quad_flat)      # <-----------------------------------
-  add_subdirectory(src/path_repair)    # <-----------------------------------
 endif()
+
+message("Gurobi found")
+include_directories(${GUROBI_INCLUDE_DIRS})
+
+add_subdirectory(src/polyopt)
+add_subdirectory(src/quad_flat)
+add_subdirectory(src/path_repair)
 
 ## Add other sub source directories
 add_subdirectory(src/geometry)
@@ -76,7 +69,3 @@ add_subdirectory(src/examples)
 add_subdirectory(src/mission)
 add_subdirectory(src/apps)
 add_subdirectory(src/nav_field)
-
-if(BUILD_TESTS)
-    add_subdirectory(src/gtests)
-endif()

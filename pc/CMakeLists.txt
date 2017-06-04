@@ -13,8 +13,9 @@ include(cmake/pods.cmake)
 include(cmake/lcmtypes.cmake)
 lcmtypes_build()
 
-## Choose to enable g3log or not: on/off
+## Optionally built modules: on/off
 set(ENABLE_LOGGING off)
+set(BUILD_TESTS off)
 
 if(ENABLE_LOGGING)
 	message( "-- Enable logging with g3log -- Yes" )
@@ -24,21 +25,19 @@ else(ENABLE_LOGGING)
 	message( "-- Enable logging with g3log -- No" )
 endif(ENABLE_LOGGING)
 
-set(BUILD_TESTS off)
-
 ## Config common include directories
 include_directories(${CMAKE_SOURCE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/control/src)
 include_directories(${CMAKE_SOURCE_DIR}/planning/src)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/)
 
-## Add test source directories
-if(BUILD_TESTS)
-    add_subdirectory(gtests)
-endif()
-
 ## Add other sub source directories
 add_subdirectory(utils)
 add_subdirectory(control)
 add_subdirectory(planning)
 add_subdirectory(third_party)
+
+## Add test source directories
+if(BUILD_TESTS)
+    add_subdirectory(gtests)
+endif()
