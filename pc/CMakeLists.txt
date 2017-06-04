@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(srcl_ctrl)
 
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++") #libc++
-#find_library (LIBSTDCXX NAMES stdc++)
-#add_compile_options(-stdlib=libstdc++)
-
 # cmake module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
@@ -16,11 +12,6 @@ include(cmake/pods.cmake)
 # variables, see cmake/lcmtypes.cmake for details
 include(cmake/lcmtypes.cmake)
 lcmtypes_build()
-
-## Put all binary files into /bin and libraries into /lib
-#set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
-#set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
-#set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Choose to enable g3log or not: on/off
 set(ENABLE_LOGGING off)
@@ -41,33 +32,6 @@ include_directories(${CMAKE_SOURCE_DIR}/control/src)
 include_directories(${CMAKE_SOURCE_DIR}/planning/src)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/)
 
-## Config octomap include directories
-include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/octomap/include)
-include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/octovis/include)
-include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/dynamicEDT3D/include)
-set(Octomap_LIBS octomap octomath)
-
-## Config ompl include directories
-include_directories(${CMAKE_SOURCE_DIR}/third_party/ompl-1.2.1/src)
-
-## Other include directories
-
-#find_package(GLib2 REQUIRED)
-
-## Find LCM
-find_package(PkgConfig REQUIRED)
-pkg_search_module(LCM REQUIRED lcm)
-
-if(LCM_NOT_FOUND)
-  message(STATUS "LCM is not found. Inter-process communication depends on LCM.")
-endif(LCM_NOT_FOUND)
-
-set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
-include_directories(${LCM_GENERATED_HEADER_PATH})
-# Include files for LCM
-include_directories(${CMAKE_BINARY_DIR}/include)
-set(LCM_LIBRARIES lcm)
-
 ## Add test source directories
 if(BUILD_TESTS)
     add_subdirectory(gtests)
@@ -75,11 +39,6 @@ endif()
 
 ## Add other sub source directories
 add_subdirectory(utils)
-set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
-include_directories(${LCM_GENERATED_HEADER_PATH})
-# Include files for LCM
-	include_directories(${CMAKE_BINARY_DIR}/include)
-# add comm and control module
-#add_subdirectory(control)
+add_subdirectory(control)
 add_subdirectory(planning)
 add_subdirectory(third_party)

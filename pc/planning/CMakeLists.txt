@@ -16,8 +16,24 @@ else()
 	message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++14 or C++11 support. Please use a different C++ compiler.")
 endif()
 
+## Put all binary files into /bin and libraries into /lib
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
+set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+## Include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
+# Octomap include directories
+include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/octomap/include)
+#include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/octovis/include)
+#include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/dynamicEDT3D/include)
+set(Octomap_LIBS octomap octomath)
+
+## OMPL include directories
+include_directories(${CMAKE_SOURCE_DIR}/third_party/ompl-1.2.1/src)
+
+## Find dependency libraries
 find_package(GLib2 REQUIRED)
 
 ## Find LCM
