@@ -33,6 +33,7 @@ set(Octomap_LIBS octomap octomath)
 ## Find LCM
 find_package(PkgConfig REQUIRED)
 pkg_search_module(LCM REQUIRED lcm)
+find_package(lcm REQUIRED)
 
 if(LCM_NOT_FOUND)
   message(STATUS "LCM is not found. Inter-process communication depends on LCM.")
