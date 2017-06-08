@@ -7,8 +7,7 @@
 
 #include <iostream>
 
-#include "polyopt/polyopt_math.h"
-#include "polyopt/poly_curve.h"
+#include "common/poly_curve.h"
 
 using namespace srcl_ctrl;
 
@@ -56,7 +55,7 @@ double PolyCurve::GetCurvePointDerivVal(uint32_t deriv, double t)
 	int64_t r = deriv;
 	double ts = GetRefactoredTime(t);
 	PolynomialCoeffs deriv_coeff(N + 1);
-	PolyOptMath::GetDerivativeCoeffs(N, r, deriv_coeff);
+	GetDerivativeCoeffs(N, r, deriv_coeff);
 
 	double val = 0;
 	for(int i = 0; i <= N; i++)

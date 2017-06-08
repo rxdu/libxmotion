@@ -9,7 +9,7 @@
 #include <cmath>
 
 #include "motion_server/quad_poly_traj_handler.h"
-#include "polyopt/polyopt_math.h"
+#include "common/poly_helper.h"
 
 using namespace srcl_ctrl;
 
@@ -179,24 +179,24 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 
 		pt.point_empty = false;
 
-		pt.positions[0] = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_x.param_.coeffs, 0, t_factor);
-		pt.positions[1] = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_y.param_.coeffs, 0, t_factor);
-		pt.positions[2] = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_z.param_.coeffs, 0, t_factor);
+		pt.positions[0] = PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_x.param_.coeffs, 0, t_factor);
+		pt.positions[1] = PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_y.param_.coeffs, 0, t_factor);
+		pt.positions[2] = PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_z.param_.coeffs, 0, t_factor);
 
-		pt.velocities[0] = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_x.param_.coeffs, 1, t_factor);
-		pt.velocities[1] = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_y.param_.coeffs, 1, t_factor);
-		pt.velocities[2] = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_z.param_.coeffs, 1, t_factor);
+		pt.velocities[0] = PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_x.param_.coeffs, 1, t_factor);
+		pt.velocities[1] = PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_y.param_.coeffs, 1, t_factor);
+		pt.velocities[2] = PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_z.param_.coeffs, 1, t_factor);
 
-		pt.accelerations[0] = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_x.param_.coeffs, 2, t_factor);
-		pt.accelerations[1] = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_y.param_.coeffs, 2, t_factor);
-		pt.accelerations[2] = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_z.param_.coeffs, 2, t_factor);
+		pt.accelerations[0] = PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_x.param_.coeffs, 2, t_factor);
+		pt.accelerations[1] = PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_y.param_.coeffs, 2, t_factor);
+		pt.accelerations[2] = PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_z.param_.coeffs, 2, t_factor);
 
-		pt.jerks[0] = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_x.param_.coeffs, 3, t_factor);
-		pt.jerks[1] = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_y.param_.coeffs, 3, t_factor);
-		pt.jerks[2] = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_z.param_.coeffs, 3, t_factor);
+		pt.jerks[0] = PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_x.param_.coeffs, 3, t_factor);
+		pt.jerks[1] = PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_y.param_.coeffs, 3, t_factor);
+		pt.jerks[2] = PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_z.param_.coeffs, 3, t_factor);
 
-//		pt.yaw = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 0, t_factor);
-//		pt.yaw_rate = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 1, t_factor);
+//		pt.yaw = PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 0, t_factor);
+//		pt.yaw_rate = PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 1, t_factor);
 
 		int32_t fpt_idx = FindFurthestPointWithinRadius(waypoints_,seg_idx, 5.0);
 		Eigen::Vector3d furthest_pt_vec(waypoints_[fpt_idx].x, waypoints_[fpt_idx].y, 0);
@@ -206,7 +206,7 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 //		double angle;
 //		if(seg_idx == waypoints_.size() - 1)
 //		//if(fpt_idx == waypoints_.size() - 1)
-//			angle = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 0, t_factor);
+//			angle = PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 0, t_factor);
 //		else {
 //			Position3Dd wp(pt.positions[0], pt.positions[1], pt.positions[2]);
 //			Eigen::Vector3d pos_vec(wp.x, wp.y, 0);
@@ -235,8 +235,8 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 //		pt.yaw = angle;
 //		pt.yaw_rate = 0;
 
-		pt.yaw = PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 0, t_factor);
-		pt.yaw_rate = 0;//PolyOptMath::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 1, t_factor);
+		pt.yaw = PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 0, t_factor);
+		pt.yaw_rate = 0;//PolyHelper::GetPolynomialValue(flat_traj_.traj_segs_[seg_idx].seg_yaw.param_.coeffs, 1, t_factor);
 
 		// calculate remaining distance to goal
 		double dist = 0;

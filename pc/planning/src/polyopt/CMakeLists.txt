@@ -12,7 +12,7 @@ endif()
 # Add libraries
 set(POLYOPT_LIB_SRC
     polyopt_math.cpp
-    poly_curve.cpp
+    #poly_curve.cpp
     gurobi_utils.cpp
     gurobi_polyopt.cpp
 )

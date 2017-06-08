@@ -11,7 +11,7 @@
 #ifndef PLANNING_SRC_POLYOPT_GUROBI_POLYOPT_H_
 #define PLANNING_SRC_POLYOPT_GUROBI_POLYOPT_H_
 
-#include "polyopt/poly_curve.h"
+#include "common/poly_curve.h"
 
 #include <cstdint>
 #include <iostream>

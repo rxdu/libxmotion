@@ -18,7 +18,7 @@
 
 #include "common/control_types.h"
 #include "common/planning_types.h"
-#include "quad_traj/quad_flattraj.h"
+#include "common/quad_flattraj.h"
 
 namespace srcl_ctrl {
 

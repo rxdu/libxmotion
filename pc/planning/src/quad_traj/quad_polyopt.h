@@ -16,7 +16,7 @@
 #include "gurobi_c++.h"
 #include "eigen3/Eigen/Core"
 
-#include "quad_traj/quad_flattraj.h"
+#include "common/quad_flattraj.h"
 #include "polyopt/gurobi_polyopt.h"
 
 namespace srcl_ctrl {

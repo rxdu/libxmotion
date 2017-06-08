@@ -8,8 +8,8 @@
 #include <iostream>
 #include <vector>
 
-#include "polyopt/poly_curve.h"
-#include "quad_traj/quad_flattraj.h"
+#include "common/poly_curve.h"
+#include "common/quad_flattraj.h"
 
 using namespace srcl_ctrl;
 

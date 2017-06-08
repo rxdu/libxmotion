@@ -27,8 +27,6 @@ endif(ENABLE_LOGGING)
 
 ## Config common include directories
 include_directories(${CMAKE_SOURCE_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/control/src)
-include_directories(${CMAKE_SOURCE_DIR}/planning/src)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/)
 
 ## Add other sub source directories
