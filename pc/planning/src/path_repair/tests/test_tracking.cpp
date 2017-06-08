@@ -29,7 +29,7 @@
 #include "geometry/sgrid_builder.h"
 #include "geometry/cube_array_builder.h"
 #include "map/map_utils.h"
-#include "quad_flat/quad_polyopt.h"
+#include "quad_traj/quad_polyopt.h"
 
 using namespace srcl_ctrl;
 using namespace octomap;

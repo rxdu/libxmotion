@@ -1,12 +1,12 @@
 /*
- * polytraj.h
+ * poly_curve.h
  *
  *  Created on: Aug 29, 2016
  *      Author: rdu
  */
 
-#ifndef PLANNING_SRC_POLYOPT_POLYTRAJ_CURVE_H_
-#define PLANNING_SRC_POLYOPT_POLYTRAJ_CURVE_H_
+#ifndef PLANNING_SRC_POLYOPT_POLY_CURVE_H_
+#define PLANNING_SRC_POLYOPT_POLY_CURVE_H_
 
 #include <vector>
 #include <string>
@@ -21,12 +21,12 @@ typedef struct {
 	double te;
 } CurveParameter;
 
-class PolyTrajCurve {
+class PolyCurve {
 public:
-	PolyTrajCurve();
-	PolyTrajCurve(const std::vector<double>& coefficients, bool coeff_nondim, double start_t, double end_t);
-	PolyTrajCurve(const std::vector<double>& coefficients, bool coeff_nondim, double start_t, double end_t, std::string str);
-	~PolyTrajCurve(){};
+	PolyCurve()=delete;
+	PolyCurve(const std::vector<double>& coefficients, bool coeff_nondim, double start_t, double end_t);
+	PolyCurve(const std::vector<double>& coefficients, bool coeff_nondim, double start_t, double end_t, std::string str);
+	~PolyCurve()=default;
 
 private:
 	bool is_nondim_;
@@ -53,4 +53,4 @@ public:
 
 }
 
-#endif /* PLANNING_SRC_POLYOPT_POLYTRAJ_CURVE_H_ */
+#endif /* PLANNING_SRC_POLYOPT_POLY_CURVE_H_ */

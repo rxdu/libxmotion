@@ -9,27 +9,27 @@
 #include <ctime>
 #include <string>
 
-#include "polyopt/traj_optimizer.h"
+#include "polyopt/gurobi_polyopt.h"
 #include "polyopt/polyopt_math.h"
 #include "polyopt/gurobi_utils.h"
 
 using namespace srcl_ctrl;
 using namespace Eigen;
 
-GRBEnv TrajOptimizer::grb_env_ = GRBEnv();
+GRBEnv GurobiPolyOpt::grb_env_ = GRBEnv();
 
-TrajOptimizer::TrajOptimizer():
+GurobiPolyOpt::GurobiPolyOpt():
 		r_(4), N_(10),
 		kf_num_(2)
 {
 }
 
-TrajOptimizer::~TrajOptimizer()
+GurobiPolyOpt::~GurobiPolyOpt()
 {
 
 }
 
-void TrajOptimizer::InitCalcVars()
+void GurobiPolyOpt::InitCalcVars()
 {
 	Q_ = MatrixXf::Zero((kf_num_ - 1) * (N_+1), (kf_num_ - 1) * (N_+1));
 	A_eq_ = MatrixXf::Zero((kf_num_ - 1) * 2 * r_, (kf_num_ - 1) * (N_ + 1));
@@ -39,7 +39,7 @@ void TrajOptimizer::InitCalcVars()
 	MatrixXf keyframe_ts = MatrixXf::Zero(1, kf_num_);
 }
 
-OptResultCurve TrajOptimizer::OptimizeTrajectory(const Eigen::Ref<const Eigen::MatrixXf> keyframe_vals,
+OptResultCurve GurobiPolyOpt::OptimizeTrajectory(const Eigen::Ref<const Eigen::MatrixXf> keyframe_vals,
 			const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts, uint32_t keyframe_num, uint32_t poly_order, uint32_t deriv_order)
 {
 	OptResultCurve result;
@@ -138,7 +138,7 @@ OptResultCurve TrajOptimizer::OptimizeTrajectory(const Eigen::Ref<const Eigen::M
 	return result;
 }
 
-OptResultParam TrajOptimizer::OptimizeTrajectory(const Eigen::Ref<const Eigen::MatrixXf> Q_m,
+OptResultParam GurobiPolyOpt::OptimizeTrajectory(const Eigen::Ref<const Eigen::MatrixXf> Q_m,
 				const Eigen::Ref<const Eigen::MatrixXf> Aeq_m, const Eigen::Ref<const Eigen::MatrixXf> beq_m,
 				const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts,
 				uint32_t keyframe_num, uint32_t var_size)
@@ -206,7 +206,7 @@ OptResultParam TrajOptimizer::OptimizeTrajectory(const Eigen::Ref<const Eigen::M
 	return result;
 }
 
-OptResultParam TrajOptimizer::OptimizeTrajectory(const Eigen::Ref<const Eigen::MatrixXf> Q_m,
+OptResultParam GurobiPolyOpt::OptimizeTrajectory(const Eigen::Ref<const Eigen::MatrixXf> Q_m,
 		const Eigen::Ref<const Eigen::MatrixXf> Aeq_m, const Eigen::Ref<const Eigen::MatrixXf> beq_m,
 		const Eigen::Ref<const Eigen::MatrixXf> Aineq_m, const Eigen::Ref<const Eigen::MatrixXf> bineq_m,
 		const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts,

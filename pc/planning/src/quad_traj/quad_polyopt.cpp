@@ -7,7 +7,7 @@
 
 #include <ctime>
 
-#include "quad_flat/quad_polyopt.h"
+#include "quad_traj/quad_polyopt.h"
 #include "polyopt/polyopt_math.h"
 
 using namespace srcl_ctrl;

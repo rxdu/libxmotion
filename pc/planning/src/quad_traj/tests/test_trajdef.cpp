@@ -8,8 +8,8 @@
 #include <iostream>
 #include <vector>
 
-#include "polyopt/polytraj_curve.h"
-#include "quad_flat/quad_flattraj.h"
+#include "polyopt/poly_curve.h"
+#include "quad_traj/quad_flattraj.h"
 
 using namespace srcl_ctrl;
 
@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	coeffs.push_back(3);
 	coeffs.push_back(1);
 
-	PolyTrajCurve seg(coeffs, true, 0, 1);
+	PolyCurve seg(coeffs, true, 0, 1);
 
 //	std::cout << "point value: " << seg.GetTrajPointDerivVal(1, 0) << std::endl;
 //	std::cout << "point value: " << seg.GetTrajPointDerivVal(1, 0.5) << std::endl;
@@ -47,6 +47,3 @@ int main(int argc, char* argv[])
 
 	QuadFlatTraj traj;
 }
-
-
-

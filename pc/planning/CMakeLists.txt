@@ -54,14 +54,14 @@ message("Gurobi found")
 include_directories(${GUROBI_INCLUDE_DIRS})
 
 add_subdirectory(src/polyopt)
-add_subdirectory(src/quad_flat)
+add_subdirectory(src/quad_traj)
 add_subdirectory(src/path_repair)
 
 ## Add other sub source directories
 add_subdirectory(src/geometry)
 #add_subdirectory(src/graph)
 add_subdirectory(src/map)
-add_subdirectory(src/local3d)
+add_subdirectory(src/octomap)
 add_subdirectory(src/vis)
 #add_subdirectory(src/rrtstar)
 #add_subdirectory(src/planner)

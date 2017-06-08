@@ -8,17 +8,17 @@
 #include <iostream>
 
 #include "polyopt/polyopt_math.h"
-#include "polyopt/polytraj_curve.h"
+#include "polyopt/poly_curve.h"
 
 using namespace srcl_ctrl;
 
-PolyTrajCurve::PolyTrajCurve():
+PolyCurve::PolyCurve():
 		is_nondim_(false)
 {
 
 }
 
-PolyTrajCurve::PolyTrajCurve(const std::vector<double>& coefficients, bool coeff_nondim, double start_t, double end_t):
+PolyCurve::PolyCurve(const std::vector<double>& coefficients, bool coeff_nondim, double start_t, double end_t):
 		is_nondim_(coeff_nondim)
 {
 	for(auto& coeff:coefficients)
@@ -27,7 +27,7 @@ PolyTrajCurve::PolyTrajCurve(const std::vector<double>& coefficients, bool coeff
 	param_.te = end_t;
 }
 
-PolyTrajCurve::PolyTrajCurve(const std::vector<double>& coefficients, bool coeff_nondim, double start_t, double end_t, std::string str):
+PolyCurve::PolyCurve(const std::vector<double>& coefficients, bool coeff_nondim, double start_t, double end_t, std::string str):
 		is_nondim_(coeff_nondim)
 {
 	for(auto& coeff:coefficients)
@@ -37,7 +37,7 @@ PolyTrajCurve::PolyTrajCurve(const std::vector<double>& coefficients, bool coeff
 	name_ = str;
 }
 
-double PolyTrajCurve::GetRefactoredTime(double t)
+double PolyCurve::GetRefactoredTime(double t)
 {
 	if(t < param_.ts)
 		t = param_.ts;
@@ -50,7 +50,7 @@ double PolyTrajCurve::GetRefactoredTime(double t)
 		return t;
 }
 
-double PolyTrajCurve::GetCurvePointDerivVal(uint32_t deriv, double t)
+double PolyCurve::GetCurvePointDerivVal(uint32_t deriv, double t)
 {
 	int64_t N = param_.coeffs.size() - 1;
 	int64_t r = deriv;
@@ -76,28 +76,28 @@ double PolyTrajCurve::GetCurvePointDerivVal(uint32_t deriv, double t)
 	return val;
 }
 
-double PolyTrajCurve::GetCurvePointPos(double t)
+double PolyCurve::GetCurvePointPos(double t)
 {
 	double ts = GetRefactoredTime(t);
 
 	return GetCurvePointDerivVal(0, ts);
 }
 
-double PolyTrajCurve::GetCurvePointVel(double t)
+double PolyCurve::GetCurvePointVel(double t)
 {
 	double ts = GetRefactoredTime(t);
 
 	return GetCurvePointDerivVal(1, ts);
 }
 
-double PolyTrajCurve::GetCurvePointAcc(double t)
+double PolyCurve::GetCurvePointAcc(double t)
 {
 	double ts = GetRefactoredTime(t);
 
 	return GetCurvePointDerivVal(2, ts);
 }
 
-void PolyTrajCurve::print()
+void PolyCurve::print()
 {
 	uint32_t coeff_idx = 0;
 	std::cout << "\ncurve " << name_ << std::endl;

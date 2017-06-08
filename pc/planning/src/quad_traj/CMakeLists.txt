@@ -11,7 +11,7 @@ endif()
 
 # Add libraries
 set(QUADFLAT_LIB_SRC
-    quad_flattraj.cpp
+    #quad_flattraj.cpp
     quad_polyopt.cpp
 )
 add_library(quadflat STATIC ${QUADFLAT_LIB_SRC})

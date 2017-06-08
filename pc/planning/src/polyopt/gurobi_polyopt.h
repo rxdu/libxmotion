@@ -1,5 +1,5 @@
 /*
- * traj_optimizer.h
+ * gurobi_polyopt.h
  *
  *  Created on: Aug 29, 2016
  *      Author: rdu
@@ -8,8 +8,10 @@
  *  	a N-order polynomial.
  */
 
-#ifndef PLANNING_SRC_POLYOPT_TRAJ_OPTIMIZER_H_
-#define PLANNING_SRC_POLYOPT_TRAJ_OPTIMIZER_H_
+#ifndef PLANNING_SRC_POLYOPT_GUROBI_POLYOPT_H_
+#define PLANNING_SRC_POLYOPT_GUROBI_POLYOPT_H_
+
+#include "polyopt/poly_curve.h"
 
 #include <cstdint>
 #include <iostream>
@@ -17,8 +19,6 @@
 
 #include "gurobi_c++.h"
 #include "eigen3/Eigen/Core"
-
-#include "polyopt/polytraj_curve.h"
 
 namespace srcl_ctrl {
 
@@ -49,10 +49,10 @@ typedef struct {
 	double cost;
 } OptResultParam;
 
-class TrajOptimizer {
+class GurobiPolyOpt {
 public:
-	TrajOptimizer();
-	~TrajOptimizer();
+	GurobiPolyOpt();
+	~GurobiPolyOpt();
 
 private:
 	// only one environment needed
@@ -93,4 +93,4 @@ public:
 
 
 
-#endif /* PLANNING_SRC_POLYOPT_TRAJ_OPTIMIZER_H_ */
+#endif /* PLANNING_SRC_POLYOPT_GUROBI_POLYOPT_H_ */

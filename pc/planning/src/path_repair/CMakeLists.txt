@@ -5,19 +5,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Dependency libraries
 find_package(OpenCV REQUIRED)
-find_package(GUROBI REQUIRED)
-if (NOT GUROBI_FOUND)
-  message("Gurobi not found. If you want to use Gurobi, set the GUROBI_HOME variable")
-else()
-  message("Gurobi found")
-  include_directories(${GUROBI_INCLUDE_DIRS})
-endif()
 
 # Add libraries
 set(PATH_REPAIR_LIB_SRC
     quad_path_repair.cpp
     geo_mark_graph.cpp
-    #waypoint_manager.cpp
 )
 add_library(path_repair STATIC ${PATH_REPAIR_LIB_SRC})
 if (ENABLE_LOGGING)
@@ -42,8 +34,8 @@ endif (ENABLE_LOGGING)
 #add_executable(test_tracking tests/test_tracking.cpp)
 #target_link_libraries(test_tracking polyopt quadflat utils ${LCM_LIBRARIES})
 
-add_executable(test_cubearray tests/test_cubearray.cpp)
-target_link_libraries(test_cubearray geometry)
+#add_executable(test_cubearray tests/test_cubearray.cpp)
+#target_link_libraries(test_cubearray geometry)
 
 #add_executable(test_cubearray_builder tests/test_cubearray_builder.cpp)
 #target_link_libraries(test_cubearray_builder geometry  ${LCM_LIBRARIES})

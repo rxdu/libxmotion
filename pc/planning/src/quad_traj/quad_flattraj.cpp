@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "quad_flat/quad_flattraj.h"
+#include "quad_traj/quad_flattraj.h"
 
 using namespace srcl_ctrl;
 
@@ -29,10 +29,10 @@ void QuadFlatTraj::AddTrajSeg(const std::vector<std::vector<double>>& seg_coeffs
 	}
 
 	QuadFlatOutputSeg seg;
-	seg.seg_x = PolyTrajCurve(seg_coeffs[0], true, ts, te, "x");
-	seg.seg_y = PolyTrajCurve(seg_coeffs[1], true, ts, te, "y");
-	seg.seg_z = PolyTrajCurve(seg_coeffs[2], true, ts, te, "z");
-	seg.seg_yaw = PolyTrajCurve(seg_coeffs[3], true, ts, te, "yaw");
+	seg.seg_x = PolyCurve(seg_coeffs[0], true, ts, te, "x");
+	seg.seg_y = PolyCurve(seg_coeffs[1], true, ts, te, "y");
+	seg.seg_z = PolyCurve(seg_coeffs[2], true, ts, te, "z");
+	seg.seg_yaw = PolyCurve(seg_coeffs[3], true, ts, te, "yaw");
 
 	seg.t_start = ts;
 	seg.t_end = te;

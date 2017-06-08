@@ -16,8 +16,8 @@
 #include "gurobi_c++.h"
 #include "eigen3/Eigen/Core"
 
-#include "quad_flat/quad_flattraj.h"
-#include "polyopt/traj_optimizer.h"
+#include "quad_traj/quad_flattraj.h"
+#include "polyopt/gurobi_polyopt.h"
 
 namespace srcl_ctrl {
 
@@ -49,7 +49,7 @@ public:
 	~QuadPolyOpt();
 
 private:
-	TrajOptimizer optimizer_;
+	GurobiPolyOpt optimizer_;
 
 	const uint32_t r_pos_;
 	uint32_t N_pos_;

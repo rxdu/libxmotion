@@ -46,7 +46,7 @@ typedef struct{
 	float ftotal_d;
 
 	// output of attitude controller
-	float motor_ang_vel_d[3];
+	float motor_ang_vel_d[4];
 }AttQuatConOutput;
 
 class AttQuatCon
