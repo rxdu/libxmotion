@@ -33,5 +33,11 @@ set(SRCL_COMMON_LIB_SRC
     poly_curve.cpp
     quad_flattraj.cpp
 )
+if(ENABLE_LOGGING)
+	set(SRCL_COMMON_LIB_SRC
+			${SRCL_COMMON_LIB_SRC}
+	    logging_helper.cpp
+	    )
+endif(ENABLE_LOGGING)
 add_library(common STATIC ${SRCL_COMMON_LIB_SRC})
 #target_link_libraries(common quadflat ${LCM_LIBRARIES})

@@ -10,13 +10,14 @@ find_package(OpenCV REQUIRED)
 set(PATH_REPAIR_LIB_SRC
     quad_path_repair.cpp
     geo_mark_graph.cpp
+    transformation.cpp
 )
 add_library(path_repair STATIC ${PATH_REPAIR_LIB_SRC})
 if (ENABLE_LOGGING)
   add_definitions(-DENABLE_G3LOG)
-  target_link_libraries(path_repair map nav_field local3d utils polyopt quadflat mission ctrl_utils g3logger ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
+  target_link_libraries(path_repair map nav_field local3d polyopt quadflat mission ctrl_utils g3logger ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
 else(ENABLE_LOGGING)
-  target_link_libraries(path_repair map nav_field local3d utils polyopt quadflat mission ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
+  target_link_libraries(path_repair map nav_field local3d polyopt quadflat mission ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
 endif (ENABLE_LOGGING)
 
 # Add executables
@@ -25,14 +26,14 @@ endif (ENABLE_LOGGING)
 
 #add_executable(test_combiner tests/test_combiner.cpp)
 #add_definitions(-DENABLE_G3LOG)
-#target_link_libraries(test_combiner map geometry local3d polyopt quadflat utils g3logger path_repair ${Octomap_LIBS} ${LCM_LIBRARIES})
+#target_link_libraries(test_combiner map geometry local3d polyopt quadflat g3logger path_repair ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 #add_executable(test_combinerv2 tests/test_combiner_v2.cpp)
 #add_definitions(-DENABLE_G3LOG)
-#target_link_libraries(test_combinerv2 map geometry local3d polyopt quadflat utils g3logger path_repair ${Octomap_LIBS} ${LCM_LIBRARIES})
+#target_link_libraries(test_combinerv2 map geometry local3d polyopt quadflat g3logger path_repair ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 #add_executable(test_tracking tests/test_tracking.cpp)
-#target_link_libraries(test_tracking polyopt quadflat utils ${LCM_LIBRARIES})
+#target_link_libraries(test_tracking polyopt quadflat ${LCM_LIBRARIES})
 
 #add_executable(test_cubearray tests/test_cubearray.cpp)
 #target_link_libraries(test_cubearray geometry)

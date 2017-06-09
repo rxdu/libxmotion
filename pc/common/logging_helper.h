@@ -5,8 +5,8 @@
  *      Author: rdu
  */
 
-#ifndef CONTROL_SRC_LOGGING_LOGGING_HELPER_H_
-#define CONTROL_SRC_LOGGING_LOGGING_HELPER_H_
+#ifndef COMMON_LOGGING_HELPER_H_
+#define COMMON_LOGGING_HELPER_H_
 
 #include <cstdint>
 #include <string>
@@ -67,4 +67,4 @@ public:
 
 }
 
-#endif /* CONTROL_SRC_LOGGING_LOGGING_HELPER_H_ */
+#endif /* COMMON_LOGGING_HELPER_H_ */
