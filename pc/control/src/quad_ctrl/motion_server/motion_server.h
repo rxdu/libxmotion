@@ -15,7 +15,7 @@
 #include "lcmtypes/srcl_ctrl.hpp"
 
 #include "common/control_types.h"
-#include "quad_ctrl/motion_server/quad_poly_traj_handler.h"
+#include "quad_ctrl/motion_server/quad_flattraj_handler.h"
 
 namespace srcl_ctrl {
 
@@ -30,11 +30,11 @@ class MotionServer {
 public:
 	MotionServer();
 	MotionServer(std::shared_ptr<lcm::LCM> lcm);
-	~MotionServer();
+	~MotionServer() = default;
 
 private:
 	std::shared_ptr<lcm::LCM> lcm_;
-	std::unique_ptr<QuadPolyTrajHandler> polytraj_handler_;
+	std::unique_ptr<QuadFlatTrajHandler> polytraj_handler_;
 
 private:
 	bool goal_completed_;

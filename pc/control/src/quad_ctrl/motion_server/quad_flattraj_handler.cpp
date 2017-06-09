@@ -1,5 +1,5 @@
 /*
- * quad_poly_traj_handler.cpp
+ * quad_flattraj_handler.cpp
  *
  *  Created on: Oct 28, 2016
  *      Author: rdu
@@ -8,12 +8,12 @@
 #include <iostream>
 #include <cmath>
 
-#include "motion_server/quad_poly_traj_handler.h"
 #include "common/poly_helper.h"
+#include "quad_ctrl/motion_server/quad_flattraj_handler.h"
 
 using namespace srcl_ctrl;
 
-QuadPolyTrajHandler::QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm):
+QuadFlatTrajHandler::QuadFlatTrajHandler(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
 		poly_traj_topic_("quad_planner/trajectory_polynomial"),
 		traj_available_(false),
@@ -24,10 +24,10 @@ QuadPolyTrajHandler::QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm):
 		scaling_factor_(1.0),
 		traj_id_(0)
 {
-	lcm_->subscribe(poly_traj_topic_,&QuadPolyTrajHandler::LcmPolyTrajMsgHandler, this);
+	lcm_->subscribe(poly_traj_topic_,&QuadFlatTrajHandler::LcmPolyTrajMsgHandler, this);
 }
 
-QuadPolyTrajHandler::QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm, std::string poly_traj_topic):
+QuadFlatTrajHandler::QuadFlatTrajHandler(std::shared_ptr<lcm::LCM> lcm, std::string poly_traj_topic):
 		lcm_(lcm),
 		poly_traj_topic_(poly_traj_topic),
 		traj_available_(false),
@@ -38,15 +38,10 @@ QuadPolyTrajHandler::QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm, std::str
 		scaling_factor_(1.0),
 		traj_id_(0)
 {
-	lcm_->subscribe(poly_traj_topic_,&QuadPolyTrajHandler::LcmPolyTrajMsgHandler, this);
+	lcm_->subscribe(poly_traj_topic_,&QuadFlatTrajHandler::LcmPolyTrajMsgHandler, this);
 }
 
-QuadPolyTrajHandler::~QuadPolyTrajHandler()
-{
-
-}
-
-double QuadPolyTrajHandler::GetRefactoredTime(double ts, double te, double t)
+double QuadFlatTrajHandler::GetRefactoredTime(double ts, double te, double t)
 {
 	if(t < ts)
 		t = ts;
@@ -56,7 +51,7 @@ double QuadPolyTrajHandler::GetRefactoredTime(double ts, double te, double t)
 	return (t - ts) / (te - ts);
 }
 
-int32_t QuadPolyTrajHandler::FindFurthestPointWithinRadius(std::vector<Position3Dd>& path, int32_t current_idx,  double radius) const
+int32_t QuadFlatTrajHandler::FindFurthestPointWithinRadius(std::vector<Position3Dd>& path, int32_t current_idx,  double radius) const
 {
 //	Position3Dd start = path[current_idx];
 //	int32_t goal_idx = path.size() - 1;
@@ -99,7 +94,7 @@ int32_t QuadPolyTrajHandler::FindFurthestPointWithinRadius(std::vector<Position3
 	return goal_idx;
 }
 
-void QuadPolyTrajHandler::LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::PolynomialCurve_t* msg)
+void QuadFlatTrajHandler::LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::PolynomialCurve_t* msg)
 {
 	//std::cout << "polynomial msg received" << std::endl;
 	//std::cout << "current time: " << current_sys_time_ << std::endl;
@@ -138,7 +133,7 @@ void QuadPolyTrajHandler::LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, 
 	traj_available_ = true;
 }
 
-UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
+UAVTrajectoryPoint QuadFlatTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 {
 	UAVTrajectoryPoint pt;
 
@@ -273,7 +268,7 @@ UAVTrajectoryPoint QuadPolyTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 	return pt;
 }
 
-void QuadPolyTrajHandler::ReportProgress(void)
+void QuadFlatTrajHandler::ReportProgress(void)
 {
 	if(traj_available_)
 	{

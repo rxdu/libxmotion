@@ -1,12 +1,12 @@
 /*
- * quad_poly_traj_handler.h
+ * quad_flattraj_handler.h
  *
  *  Created on: Oct 28, 2016
  *      Author: rdu
  */
 
-#ifndef CONTROL_SRC_QUAD_CTRL_MOTION_SERVER_QUAD_POLY_TRAJ_HANDLER_H_
-#define CONTROL_SRC_QUAD_CTRL_MOTION_SERVER_QUAD_POLY_TRAJ_HANDLER_H_
+#ifndef CONTROL_SRC_QUAD_CTRL_MOTION_SERVER_QUAD_FLATTRAJ_HANDLER_H_
+#define CONTROL_SRC_QUAD_CTRL_MOTION_SERVER_QUAD_FLATTRAJ_HANDLER_H_
 
 #include <memory>
 #include <string>
@@ -22,11 +22,11 @@
 
 namespace srcl_ctrl {
 
-class QuadPolyTrajHandler {
+class QuadFlatTrajHandler {
 public:
-	QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm);
-	QuadPolyTrajHandler(std::shared_ptr<lcm::LCM> lcm, std::string poly_traj_topic);
-	~QuadPolyTrajHandler();
+	QuadFlatTrajHandler(std::shared_ptr<lcm::LCM> lcm);
+	QuadFlatTrajHandler(std::shared_ptr<lcm::LCM> lcm, std::string poly_traj_topic);
+	~QuadFlatTrajHandler() = default;
 
 	friend class MotionServer;
 
@@ -58,4 +58,4 @@ public:
 
 }
 
-#endif /* CONTROL_SRC_QUAD_CTRL_MOTION_SERVER_QUAD_POLY_TRAJ_HANDLER_H_ */
+#endif /* CONTROL_SRC_QUAD_CTRL_MOTION_SERVER_QUAD_FLATTRAJ_HANDLER_H_ */
