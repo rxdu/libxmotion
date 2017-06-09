@@ -17,7 +17,7 @@ set(POLYOPT_LIB_SRC
     gurobi_polyopt.cpp
 )
 add_library(polyopt STATIC ${POLYOPT_LIB_SRC})
-target_link_libraries(polyopt ${GUROBI_LIBRARIES})
+target_link_libraries(polyopt common ${GUROBI_LIBRARIES})
 
 # Add executables
 add_executable(qp_cpp tests/qp_c++.cpp)
