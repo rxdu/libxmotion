@@ -4,7 +4,7 @@
 
 ### octomap-1.8.0
 
-octomap 
+octomap
 
 * set "CMAKE_INSTALL_PREFIX" to be "${CMAKE_BINARY_DIR}" in octomap-1.8.0/octomap/CMakeLists.txt
 * set "BASE_DIR" to be ${CMAKE_BINARY_DIR} in octomap-1.8.0/octomap/CMakeLists.txt
@@ -13,7 +13,7 @@ octomap
 * commented out conditions for "add_dependencies()" for octovis and dynamicsEDT3D (because same target is defined in ompl)
 * commented out the target "uninstall" in octomap-1.8.0/octomap/CMakeLists.txt at line 76-77
 
-octovis 
+octovis
 
 * changed the HINTS location in octomap-1.8.0/octovis/CMakeLists.txt at line 40,41
 
@@ -28,3 +28,7 @@ octovis
 ### SMP (Sertac Karaman)
 
 * Added CMakeLists.txt to build external libraries
+
+### spdlog
+
+* commit: e6cbc22da53bc807a6172a99cd6dc75534926b99
