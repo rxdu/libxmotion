@@ -5,34 +5,39 @@
  *      Author: rdu
  */
 
+#include "common/logging_helper.h"
+
 #include <iostream>
-#include "logging/logging_helper.h"
+#include <ctime>
 
 using namespace srcl_ctrl;
-using namespace g3;
 
-LoggingHelper::LoggingHelper():
+LoggingHelper::LoggingHelper(std::string log_name_suffix, std::string log_save_path):
 		head_added_(false),
-		log_name_prefix_("g3log"),
-		log_save_path_("/home/logs"),
-		item_counter_(0)
-{
-	// initialize logger
-	log_worker_ = g3::LogWorker::createLogWorker();
-	file_sink_hd_ = log_worker_->addDefaultLogger(log_name_prefix_, log_save_path_);
-	g3::initializeLogging(log_worker_.get());
-}
-
-LoggingHelper::LoggingHelper(std::string log_name_prefix, std::string log_save_path):
-		head_added_(false),
-		log_name_prefix_(log_name_prefix),
+		log_name_prefix_(log_name_suffix),
 		log_save_path_(log_save_path),
 		item_counter_(0)
 {
+	std::string file_name;
+
+	// ref: https://stackoverflow.com/questions/22318389/pass-system-date-and-time-as-a-filename-in-c
+	time_t t = time(0);   // get time now
+	struct tm * now = localtime(&t);
+	char buffer[80];
+	strftime (buffer,80,"%F-%H-%M-%S-",now);
+	std::string fdate(buffer);
+
+	if(log_save_path.back() == '/')
+		file_name = log_save_path + fdate + log_name_suffix;
+	else
+		file_name = log_save_path + "/"  + fdate + log_name_suffix;
+
 	// initialize logger
-	log_worker_ = g3::LogWorker::createLogWorker();
-	file_sink_hd_ = log_worker_->addDefaultLogger(log_name_prefix_, log_save_path_);
-	g3::initializeLogging(log_worker_.get());
+#ifdef ENABLE_LOGGING
+	spdlog::set_async_mode(1024*8);
+	logger_ = spdlog::rotating_logger_mt("file_logger", file_name, 1024 * 1024 * 5, 3);
+	logger_->set_pattern("%R:%S.%e | %l | %v");
+#endif
 }
 
 LoggingHelper& LoggingHelper::GetInstance(std::string log_name_prefix , std::string log_save_path)
@@ -44,6 +49,7 @@ LoggingHelper& LoggingHelper::GetInstance(std::string log_name_prefix , std::str
 
 LoggingHelper::~LoggingHelper()
 {
+	spdlog::drop_all();
 }
 
 void LoggingHelper::AddItemNameToEntryHead(std::string name)
@@ -105,7 +111,9 @@ void LoggingHelper::PassEntryHeaderToLogger()
 	if (found != std::string::npos)
 		head_str.erase(found);
 
-	LOG(DATA) << head_str;
+#ifdef ENABLE_LOGGING
+	logger_->info(head_str);
+#endif
 
 	item_data_.resize(item_counter_);
 	head_added_ = true;
@@ -114,18 +122,6 @@ void LoggingHelper::PassEntryHeaderToLogger()
 void LoggingHelper::PassEntryDataToLogger()
 {
 	std::string log_entry;
-
-//	for(const auto& dt:item_data_)
-//	{
-//		if(dt.empty())
-//			log_entry += " 0 , ";
-//		else
-//			log_entry += dt + " , ";
-//	}
-//
-//	std::size_t found = log_entry.rfind(", ");
-//	if (found != std::string::npos)
-//		log_entry.erase(found);
 
 	for(auto it = item_data_.begin(); it != item_data_.end(); it++)
 	{
@@ -142,11 +138,15 @@ void LoggingHelper::PassEntryDataToLogger()
 			log_entry += str;
 	}
 
+#ifdef ENABLE_LOGGING
 	if(!log_entry.empty())
-		LOG(DATA) << log_entry;
+		logger_->info(log_entry);
+#endif
 }
 
 void LoggingHelper::LogStringMsg(std::string msg)
 {
-	LOG(INFO) << msg;
+#ifdef ENABLE_LOGGING
+	logger_->info(msg);
+#endif
 }

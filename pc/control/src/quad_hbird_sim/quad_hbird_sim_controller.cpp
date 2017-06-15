@@ -8,9 +8,7 @@
 #include <iostream>
 
 #include "quad_hbird_sim/quad_hbird_sim_controller.h"
-#ifdef ENABLE_G3LOG
-#include "ctrl_utils/logging/logging_helper.h"
-#endif
+#include "common/logging_helper.h"
 
 using namespace srcl_ctrl;
 

@@ -15,16 +15,13 @@
 #include <memory>
 #include <atomic>
 
-// headers for g3log
-#include "g3log/g3log.hpp"
-#include "g3log/logworker.hpp"
-#include "g3log/std2_make_unique.hpp"
+#include "spdlog/spdlog.h"
 
 namespace srcl_ctrl {
 
 class LoggingHelper {
 private:
-	LoggingHelper();
+	LoggingHelper() = delete;
 	LoggingHelper(std::string log_name_prefix, std::string log_save_path);
 
 	// prevent copy or assignment
@@ -37,12 +34,11 @@ public:
 	~LoggingHelper();
 
 private:
+	std::shared_ptr<spdlog::logger> logger_;
+
 	bool head_added_;
 	std::string log_name_prefix_;
 	std::string log_save_path_;
-
-	std::unique_ptr<g3::LogWorker> log_worker_;
-	std::unique_ptr<g3::FileSinkHandle> file_sink_hd_;
 
 	std::map<uint64_t, std::string> entry_names_;
 	std::map<std::string, uint64_t> entry_ids_;
@@ -50,6 +46,8 @@ private:
 	std::vector<std::string> item_data_;
 
 public:
+	// logger configuration
+
 	// basic functions
 	void AddItemNameToEntryHead(std::string name);
 	void AddItemDataToEntry(std::string item_name, std::string data_str);

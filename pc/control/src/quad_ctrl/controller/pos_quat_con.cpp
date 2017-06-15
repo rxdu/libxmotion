@@ -11,8 +11,8 @@
 #include "eigen3/Eigen/Core"
 #include "eigen3/Eigen/Geometry"
 
-#ifdef ENABLE_G3LOG
-#include "ctrl_utils/logging/logging_helper.h"
+#ifdef ENABLE_LOGGING
+#include "common/logging_helper.h"
 #endif
 
 #include "quad_ctrl/controller/pos_quat_con.h"

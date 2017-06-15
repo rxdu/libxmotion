@@ -32,12 +32,13 @@ set(SRCL_COMMON_LIB_SRC
     poly_helper.cpp
     poly_curve.cpp
     quad_flattraj.cpp
+	logging_helper.cpp
 )
-if(ENABLE_LOGGING)
-	set(SRCL_COMMON_LIB_SRC
-			${SRCL_COMMON_LIB_SRC}
-	    logging_helper.cpp
-	    )
-endif(ENABLE_LOGGING)
 add_library(common STATIC ${SRCL_COMMON_LIB_SRC})
+if(ENABLE_LOGGING)
+add_definitions(-DENABLE_LOGGING)
+endif(ENABLE_LOGGING)
 #target_link_libraries(common quadflat ${LCM_LIBRARIES})
+
+add_executable(test_logging tests/test_logging.cpp)
+target_link_libraries(test_logging common)

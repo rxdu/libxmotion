@@ -6,14 +6,15 @@
  */
 
 #include <memory>
-#include "ctrl_utils/logging/logging_helper.h"
+#include "common/logging_helper.h"
 
 using namespace srcl_ctrl;
 
 int main(int argc, char* argv[])
 {
-//	LoggingHelper helper("test_log", "/home/rdu");
-//
+	//LoggingHelper helper("test_log", "/home/rdu");
+	LoggingHelper& helper = LoggingHelper::GetInstance("log2.txt", "/Users/rdu/Workspace/srcl/srcl_ctrl/build2/bin");
+
 //	helper.AddItemNameToEntryHead("x1");
 //	helper.AddItemNameToEntryHead("x2");
 //	helper.AddItemNameToEntryHead("x3");
