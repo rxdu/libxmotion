@@ -32,7 +32,7 @@ include_directories(${CMAKE_SOURCE_DIR}/third_party/)
 #add_subdirectory(utils)
 add_subdirectory(common)
 add_subdirectory(control)
-#add_subdirectory(planning)
+add_subdirectory(planning)
 add_subdirectory(third_party)
 
 ## Add test source directories

@@ -163,7 +163,6 @@ QuadCmd QuadSoloSimController::UpdateCtrlLoop()
 	cmd_m.ang_vel[2] = att_con_output.motor_ang_vel_d[2];
 	cmd_m.ang_vel[3] = att_con_output.motor_ang_vel_d[3];
 
-#ifdef ENABLE_G3LOG
 	/* log data */
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_x", rs_.position_.x);
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_y", rs_.position_.y);
@@ -192,7 +191,6 @@ QuadCmd QuadSoloSimController::UpdateCtrlLoop()
 
 	// write all data from current iteration into log file
 	LoggingHelper::GetInstance().PassEntryDataToLogger();
-#endif
 
 	ctrl_loop_count_++;
 	lcm_->handleTimeout(0);

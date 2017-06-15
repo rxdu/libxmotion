@@ -17,12 +17,6 @@
 
 #include "spdlog/spdlog.h"
 
-#ifdef ENABLE_LOGGING
-#define INIT_LOGGER(x) log_message(x)
-#else
-#define LOG(x)
-#endif
-
 namespace srcl_ctrl {
 
 class LoggingHelper {
@@ -62,11 +56,31 @@ public:
 	void PassEntryHeaderToLogger();
 	void PassEntryDataToLogger();
 
-	void LogStringMsg(std::string msg);
-
 	// extra helper functions
 	void AddItemDataToEntry(std::string item_name, double data);
 	void AddItemDataToEntry(uint64_t item_id, double data);
+
+	// logger wrapper functions
+	void LogInfo(std::string msg)
+	{
+#ifdef ENABLE_LOGGING
+		logger_->info(msg);
+#endif
+	}
+
+	void LogWarn(std::string msg)
+	{
+#ifdef ENABLE_LOGGING
+		logger_->warn(msg);
+#endif
+	}
+
+	void LogError(std::string msg)
+	{
+#ifdef ENABLE_LOGGING
+		logger_->error(msg);
+#endif
+	}
 };
 
 }

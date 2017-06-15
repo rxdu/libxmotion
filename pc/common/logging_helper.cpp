@@ -144,9 +144,3 @@ void LoggingHelper::PassEntryDataToLogger()
 #endif
 }
 
-void LoggingHelper::LogStringMsg(std::string msg)
-{
-#ifdef ENABLE_LOGGING
-	logger_->info(msg);
-#endif
-}
