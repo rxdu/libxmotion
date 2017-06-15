@@ -11,11 +11,7 @@ set(VREPSIM_LIB_SRC
 )
 
 add_library(vrep_sim STATIC ${VREPSIM_LIB_SRC})
-if (ENABLE_G3LOG)
-	add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255 -DENABLE_LOG)
-else (ENABLE_G3LOG)
-	add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255)
-endif (ENABLE_G3LOG)
+add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255)
 
 if (UNIX)
  	target_link_libraries(vrep_sim pthread)

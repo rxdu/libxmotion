@@ -48,7 +48,6 @@ QuadSoloSimController::~QuadSoloSimController()
 // This function must be called before entering the control loop.
 void  QuadSoloSimController::InitLogger(std::string log_name_prefix, std::string log_save_path)
 {
-#ifdef ENABLE_G3LOG
 	LoggingHelper& logging_helper = LoggingHelper::GetInstance(log_name_prefix, log_save_path);
 
 	logging_helper.AddItemNameToEntryHead("pos_x");
@@ -77,7 +76,6 @@ void  QuadSoloSimController::InitLogger(std::string log_name_prefix, std::string
 	logging_helper.AddItemNameToEntryHead("force");
 
 	logging_helper.PassEntryHeaderToLogger();
-#endif
 }
 
 void QuadSoloSimController::SetInitPose(float x, float y, float z, float yaw)

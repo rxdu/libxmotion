@@ -12,13 +12,8 @@ set(QUADSIM_LIB_SRC
     quad_hbird_sim_controller.cpp
 )
 add_library(quadsim STATIC ${QUADSIM_LIB_SRC})
-if (ENABLE_LOGGING)
-	add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255 -DENABLE_G3LOG)
-	target_link_libraries(quadsim vrep_sim quad_ctrl common ${LCM_LIBRARIES})
-else (ENABLE_LOGGING)
-	add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255)
-	target_link_libraries(quadsim vrep_sim quad_ctrl ${LCM_LIBRARIES})
-endif (ENABLE_LOGGING)
+add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255)
+target_link_libraries(quadsim vrep_sim quad_ctrl common ${LCM_LIBRARIES})
 
 # Add executables
 #add_executable(quadsim_demo quadsim_demo.cpp)

@@ -42,7 +42,6 @@ QuadHbirdSimController::~QuadHbirdSimController()
 
 void  QuadHbirdSimController::InitLogger(std::string log_name_prefix, std::string log_save_path)
 {
-#ifdef ENABLE_G3LOG
 	LoggingHelper& logging_helper = LoggingHelper::GetInstance(log_name_prefix, log_save_path);
 
 	logging_helper.AddItemNameToEntryHead("pos_x");
@@ -92,7 +91,6 @@ void  QuadHbirdSimController::InitLogger(std::string log_name_prefix, std::strin
 	logging_helper.AddItemNameToEntryHead("omega_d_z");
 
 	logging_helper.PassEntryHeaderToLogger();
-#endif
 }
 
 void QuadHbirdSimController::SetInitPose(float x, float y, float z, float yaw)
@@ -200,7 +198,6 @@ QuadCmd QuadHbirdSimController::UpdateCtrlLoop()
 
 	//std::cout << "pos x desired: " << previous_state_.positions[0] << std::endl;
 
-#ifdef ENABLE_G3LOG
 	/* log data */
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_x", rs_.position_.x);
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_y", rs_.position_.y);
@@ -240,7 +237,6 @@ QuadCmd QuadHbirdSimController::UpdateCtrlLoop()
 
 	// write all data from current iteration into log file
 	LoggingHelper::GetInstance().PassEntryDataToLogger();
-#endif
 
 	ctrl_loop_count_++;
 	lcm_->handleTimeout(0);

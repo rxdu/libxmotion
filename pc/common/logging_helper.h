@@ -17,6 +17,12 @@
 
 #include "spdlog/spdlog.h"
 
+#ifdef ENABLE_LOGGING
+#define INIT_LOGGER(x) log_message(x)
+#else
+#define LOG(x)
+#endif
+
 namespace srcl_ctrl {
 
 class LoggingHelper {

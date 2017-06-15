@@ -11,10 +11,7 @@
 #include "eigen3/Eigen/Core"
 #include "eigen3/Eigen/Geometry"
 
-#ifdef ENABLE_LOGGING
 #include "common/logging_helper.h"
-#endif
-
 #include "quad_ctrl/controller/pos_quat_con.h"
 
 using namespace srcl_ctrl;
@@ -195,7 +192,6 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 		last_acc_desired_[i] = ri_acc_fb[i];
 	}
 
-#ifdef ENABLE_G3LOG
 	LoggingHelper::GetInstance().AddItemDataToEntry("omega_d_x", output.rot_rate_d[0]);
 	LoggingHelper::GetInstance().AddItemDataToEntry("omega_d_y", output.rot_rate_d[1]);
 	LoggingHelper::GetInstance().AddItemDataToEntry("omega_d_z", output.rot_rate_d[2]);
@@ -207,5 +203,4 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 	LoggingHelper::GetInstance().AddItemDataToEntry("vel_e_x", vel_error[0]);
 	LoggingHelper::GetInstance().AddItemDataToEntry("vel_e_y", vel_error[1]);
 	LoggingHelper::GetInstance().AddItemDataToEntry("vel_e_z", vel_error[2]);
-#endif
 }
