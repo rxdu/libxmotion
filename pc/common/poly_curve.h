@@ -17,12 +17,12 @@
 
 namespace srcl_ctrl {
 
-typedef struct {
+struct  CurveParameter{
 	// coefficients arranged from high order to low order
 	std::vector<double> coeffs;
 	double ts;
 	double te;
-} CurveParameter;
+};
 
 class PolyCurve {
 public:
@@ -48,9 +48,7 @@ public:
 	double GetRefactoredTime(double t);
 
 	double GetCurvePointPos(double t);
-
 	double GetCurvePointVel(double t);
-
 	double GetCurvePointAcc(double t);
 
 	void print();
