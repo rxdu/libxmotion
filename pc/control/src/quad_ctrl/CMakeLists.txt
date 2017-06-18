@@ -18,18 +18,13 @@ set(QUADCON_LIB_SRC
     controller/pos_quat_con.cpp
     # motion management
     motion_server/motion_server.cpp
-    motion_server/quad_poly_traj_handler.cpp
+    motion_server/quad_flattraj_handler.cpp
     #motion_server/waypoint_path_handler.cpp
     # data transmitter
     data_trans/quad_data_transmitter.cpp
 )
 add_library(quad_ctrl STATIC ${QUADCON_LIB_SRC})
-if (ENABLE_LOGGING)
-  add_definitions(-DENABLE_G3LOG)
-  target_link_libraries(quad_ctrl quadflat ctrl_utils g3logger ${LCM_LIBRARIES})
-else(ENABLE_LOGGING)
-  target_link_libraries(quad_ctrl quadflat ${LCM_LIBRARIES})
-endif (ENABLE_LOGGING)
+target_link_libraries(quad_ctrl quadflat common ${LCM_LIBRARIES})
 
 # Add executables
 #add_executable(quad_motion_client motion_server/motion_client.cpp)

@@ -38,7 +38,6 @@ set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add sub source directories
-add_subdirectory(src/ctrl_utils)
 add_subdirectory(src/vrep_sim)
 add_subdirectory(src/quad_ctrl)
 add_subdirectory(src/quad_hbird_sim)

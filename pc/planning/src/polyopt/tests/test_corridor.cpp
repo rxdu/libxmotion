@@ -22,7 +22,7 @@
 
 #include "polyopt/polyopt_math.h"
 #include "polyopt/gurobi_utils.h"
-#include "polyopt/polytraj_curve.h"
+#include "common/poly_curve.h"
 
 using namespace srcl_ctrl;
 using namespace Eigen;

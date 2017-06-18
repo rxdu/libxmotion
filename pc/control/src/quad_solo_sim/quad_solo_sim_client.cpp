@@ -115,9 +115,9 @@ bool QuadSoloSimClient::ReceiveDataFromRobot(DataFromQuadSim& rx_data)
 			ReceiveQuadQuaternion(rx_data.quat_i))
 		//&& Get3DScanPoints(rx_data->laser_points))
 	{
-		rx_data.rot_rate_b.x = rx_data.imu_data.gyro.raw_x;
-		rx_data.rot_rate_b.y = rx_data.imu_data.gyro.raw_y;
-		rx_data.rot_rate_b.z = rx_data.imu_data.gyro.raw_z;
+		rx_data.rot_rate_b.x = rx_data.imu_data.gyro.x;
+		rx_data.rot_rate_b.y = rx_data.imu_data.gyro.y;
+		rx_data.rot_rate_b.z = rx_data.imu_data.gyro.z;
 
 		//Get3DScanPoints(rx_data.laser_points);
 
@@ -232,13 +232,13 @@ bool QuadSoloSimClient::ReceiveGyroData(IMU_DataType& data)
 
 		if(cnt == 3)
 		{
-			data.raw_x=((float*)gyro_sig)[0];
-			data.raw_y=((float*)gyro_sig)[1];
-			data.raw_z=((float*)gyro_sig)[2];
+			data.x=((float*)gyro_sig)[0];
+			data.y=((float*)gyro_sig)[1];
+			data.z=((float*)gyro_sig)[2];
 		}
 
 		//		std::cout << "gyro data received" << std::endl;
-		//		std::cout << "gyro (x, y, z) = " << "( " << data->raw_x <<" , " << data->raw_y << " , " << data->raw_z << " )" << std::endl;
+		//		std::cout << "gyro (x, y, z) = " << "( " << data->x <<" , " << data->y << " , " << data->z << " )" << std::endl;
 		return true;
 	}
 	else
@@ -253,13 +253,13 @@ bool QuadSoloSimClient::ReceiveAccData(IMU_DataType& data)
 
 		if(cnt == 3)
 		{
-			data.raw_x=((float*)acc_sig)[0];
-			data.raw_y=((float*)acc_sig)[1];
-			data.raw_z=((float*)acc_sig)[2];
+			data.x=((float*)acc_sig)[0];
+			data.y=((float*)acc_sig)[1];
+			data.z=((float*)acc_sig)[2];
 		}
 
 		//		std::cout << "acc data received" << std::endl;
-		//		std::cout << "acc (x, y, z) = " << "( " << data->raw_x <<" , " << data->raw_y << " , " << data->raw_z << " )" << std::endl;
+		//		std::cout << "acc (x, y, z) = " << "( " << data->x <<" , " << data->y << " , " << data->z << " )" << std::endl;
 
 		return true;
 	}

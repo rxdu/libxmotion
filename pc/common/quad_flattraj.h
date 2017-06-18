@@ -5,14 +5,14 @@
  *      Author: rdu
  */
 
-#ifndef PLANNING_SRC_POLYOPT_QUAD_FLATTRAJ_H_
-#define PLANNING_SRC_POLYOPT_QUAD_FLATTRAJ_H_
+#ifndef COMMON_QUAD_FLATTRAJ_H_
+#define COMMON_QUAD_FLATTRAJ_H_
 
 #include <cstdint>
 
 #include "lcmtypes/srcl_ctrl.hpp"
 
-#include "polyopt/polytraj_curve.h"
+#include "common/poly_curve.h"
 
 namespace srcl_ctrl {
 
@@ -24,10 +24,10 @@ typedef struct {
 }QuadFlatOutput;
 
 typedef struct {
-	PolyTrajCurve seg_x;
-	PolyTrajCurve seg_y;
-	PolyTrajCurve seg_z;
-	PolyTrajCurve seg_yaw;
+	PolyCurve seg_x;
+	PolyCurve seg_y;
+	PolyCurve seg_z;
+	PolyCurve seg_yaw;
 
 	double t_start;
 	double t_end;
@@ -43,15 +43,14 @@ typedef struct {
 
 class QuadFlatTraj {
 public:
-	QuadFlatTraj();
-	~QuadFlatTraj();
+	QuadFlatTraj()=default;
+	~QuadFlatTraj()=default;
 
 public:
 	std::vector<QuadFlatOutputSeg> traj_segs_;
 
 public:
 	void AddTrajSeg(const std::vector<std::vector<double>>& seg_coeffs, double ts, double te);
-
 	QuadFlatOutput GetTrajPointPos(double t);
 
 	void clear() { traj_segs_.clear(); traj_segs_.resize(0); };
@@ -60,5 +59,4 @@ public:
 
 }
 
-
-#endif /* PLANNING_SRC_POLYOPT_QUAD_FLATTRAJ_H_ */
+#endif /* COMMON_QUAD_FLATTRAJ_H_ */

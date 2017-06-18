@@ -11,10 +11,7 @@
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
 
-#ifdef ENABLE_G3LOG
-#include "ctrl_utils/logging/logging_helper.h"
-#endif
-
+#include "common/logging_helper.h"
 #include "common/planning_types.h"
 #include "map/map_utils.h"
 #include "map/map_config.h"
@@ -153,9 +150,7 @@ int main(int argc, char* argv[])
 	//TestCase1_Config(qplanner);
 	TestCase6_Config(qplanner);
 
-#ifdef ENABLE_G3LOG
 	LoggingHelper& logging_helper = LoggingHelper::GetInstance("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/planning/log");
-#endif
 
 	if(qplanner.active_graph_planner_ == GraphPlannerType::NOT_SPECIFIED)
 	{
@@ -171,5 +166,3 @@ int main(int argc, char* argv[])
 		lcm->handleTimeout(0);
 	}
 }
-
-

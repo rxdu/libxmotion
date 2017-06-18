@@ -7,7 +7,7 @@
 
 #include "eigen3/Eigen/Core"
 
-#include "polyopt/traj_optimizer.h"
+#include "polyopt/gurobi_polyopt.h"
 
 using namespace srcl_ctrl;
 using namespace Eigen;
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 	keyframe_ts(0,2) = 3;
 	keyframe_ts(0,3) = 4.5;
 
-	TrajOptimizer traj_opt;
+	GurobiPolyOpt traj_opt;
 	OptResultCurve result;
 	result = traj_opt.OptimizeTrajectory(keyframe_vals, keyframe_ts, kf_num, N, r);
 

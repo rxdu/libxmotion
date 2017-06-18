@@ -12,9 +12,7 @@
 
 #include "eigen3/Eigen/Geometry"
 
-// #ifdef ENABLE_G3LOG
-// #include "ctrl_utils/logging/logging_helper.h"
-// #endif
+#include "common/logging_helper.h"
 
 #include "path_repair/quad_path_repair.h"
 #include "map/map_utils.h"

@@ -14,25 +14,23 @@ include(cmake/lcmtypes.cmake)
 lcmtypes_build()
 
 ## Optionally built modules: on/off
-set(ENABLE_LOGGING off)
+set(ENABLE_LOGGING on)
 set(BUILD_TESTS off)
 
 if(ENABLE_LOGGING)
-	message( "-- Enable logging with g3log -- Yes" )
+	message( "-- Enable logging with spdlog -- Yes" )
 	message( "-- Deafult log directory: srcl_ctrl/control/log " )
-	include_directories(${CMAKE_SOURCE_DIR}/third_party/g3log/src)
 else(ENABLE_LOGGING)
-	message( "-- Enable logging with g3log -- No" )
+	message( "-- Enable logging with spdlog -- No" )
 endif(ENABLE_LOGGING)
 
 ## Config common include directories
 include_directories(${CMAKE_SOURCE_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/control/src)
-include_directories(${CMAKE_SOURCE_DIR}/planning/src)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/)
 
 ## Add other sub source directories
-add_subdirectory(utils)
+#add_subdirectory(utils)
+add_subdirectory(common)
 add_subdirectory(control)
 add_subdirectory(planning)
 add_subdirectory(third_party)

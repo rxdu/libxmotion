@@ -26,7 +26,7 @@ MotionServer::MotionServer():
 
 MotionServer::MotionServer(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
-		polytraj_handler_(new QuadPolyTrajHandler(lcm_)),
+		polytraj_handler_(new QuadFlatTrajHandler(lcm_)),
 		goal_completed_(false),
 		ms_count_(0),
 		waypoint_idx_(0),
@@ -36,11 +36,6 @@ MotionServer::MotionServer(std::shared_ptr<lcm::LCM> lcm):
 	//lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmGoalHandler, this);
 	lcm_->subscribe("quad_data/system_time", &MotionServer::LcmSysTimeHandler, this);
 	lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmUserGoalHandler, this);
-}
-
-MotionServer::~MotionServer()
-{
-
 }
 
 UAVTrajectory MotionServer::GenerateTestTrajectory()

@@ -13,19 +13,19 @@
 
 namespace srcl_ctrl{
 
-typedef struct
+template<typename T>
+struct point3
 {
-	float raw_x;
-	float raw_y;
-	float raw_z;
-}IMU_DataType;
+	T x;
+	T y;
+	T z;
+};
 
-typedef struct
-{
-	float x;
-	float y;
-	float z;
-}Point3f;
+using Point3f = point3<float>;
+using Point3d = point3<double>;
+using Point3i = point3<int32_t>;
+
+typedef Point3f IMU_DataType;
 
 typedef struct
 {

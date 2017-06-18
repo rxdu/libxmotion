@@ -7,9 +7,9 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Check if g3log needs to be built
-if(ENABLE_LOGGING)
-	add_subdirectory(g3log)
-endif(ENABLE_LOGGING)
+#if(ENABLE_LOGGING)
+#	add_subdirectory(g3log)
+#endif(ENABLE_LOGGING)
 
 ## Add sub source directories
 #add_subdirectory(eigen)

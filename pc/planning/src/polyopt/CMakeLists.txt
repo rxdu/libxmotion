@@ -11,14 +11,13 @@ endif()
 
 # Add libraries
 set(POLYOPT_LIB_SRC
-	# optimization solver
     polyopt_math.cpp
+    #poly_curve.cpp
     gurobi_utils.cpp
-    traj_optimizer.cpp
-    polytraj_curve.cpp
+    gurobi_polyopt.cpp
 )
 add_library(polyopt STATIC ${POLYOPT_LIB_SRC})
-target_link_libraries(polyopt ${GUROBI_LIBRARIES})
+target_link_libraries(polyopt common ${GUROBI_LIBRARIES})
 
 # Add executables
 add_executable(qp_cpp tests/qp_c++.cpp)

@@ -7,9 +7,7 @@
 
 #include <iostream>
 #include "quad_solo_sim/quad_solo_sim_controller.h"
-#ifdef ENABLE_G3LOG
-#include "ctrl_utils/logging/logging_helper.h"
-#endif
+#include "common/logging_helper.h"
 
 using namespace srcl_ctrl;
 
@@ -50,7 +48,6 @@ QuadSoloSimController::~QuadSoloSimController()
 // This function must be called before entering the control loop.
 void  QuadSoloSimController::InitLogger(std::string log_name_prefix, std::string log_save_path)
 {
-#ifdef ENABLE_G3LOG
 	LoggingHelper& logging_helper = LoggingHelper::GetInstance(log_name_prefix, log_save_path);
 
 	logging_helper.AddItemNameToEntryHead("pos_x");
@@ -79,7 +76,6 @@ void  QuadSoloSimController::InitLogger(std::string log_name_prefix, std::string
 	logging_helper.AddItemNameToEntryHead("force");
 
 	logging_helper.PassEntryHeaderToLogger();
-#endif
 }
 
 void QuadSoloSimController::SetInitPose(float x, float y, float z, float yaw)
@@ -167,7 +163,6 @@ QuadCmd QuadSoloSimController::UpdateCtrlLoop()
 	cmd_m.ang_vel[2] = att_con_output.motor_ang_vel_d[2];
 	cmd_m.ang_vel[3] = att_con_output.motor_ang_vel_d[3];
 
-#ifdef ENABLE_G3LOG
 	/* log data */
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_x", rs_.position_.x);
 	LoggingHelper::GetInstance().AddItemDataToEntry("pos_y", rs_.position_.y);
@@ -196,7 +191,6 @@ QuadCmd QuadSoloSimController::UpdateCtrlLoop()
 
 	// write all data from current iteration into log file
 	LoggingHelper::GetInstance().PassEntryDataToLogger();
-#endif
 
 	ctrl_loop_count_++;
 	lcm_->handleTimeout(0);
