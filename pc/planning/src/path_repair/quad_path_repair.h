@@ -21,7 +21,7 @@
 #include "map/map_info.h"
 #include "geometry/geo_mark.h"
 #include "path_repair/geo_mark_graph.h"
-#include "octomap/octomap_server.h"
+#include "map3d/octomap_server.h"
 #include "quad_traj/quad_polyopt.h"
 #include "mission/mission_tracker.h"
 #include "mission/trajectory_generator.h"

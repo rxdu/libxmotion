@@ -13,7 +13,7 @@
 
 #include <lcm/lcm-cpp.hpp>
 
-#include "octomap/octomap_server.h"
+#include <map3d/octomap_server.h>
 
 using namespace srcl_ctrl;
 

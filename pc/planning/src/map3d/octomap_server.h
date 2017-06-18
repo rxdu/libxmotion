@@ -19,7 +19,7 @@
 #include <octomap/OcTree.h>
 #include <octomap/ColorOcTree.h>
 
-#include "path_repair/transformation.h"
+#include "map3d/transformation.h"
 
 namespace srcl_ctrl {
 

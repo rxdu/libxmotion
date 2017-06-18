@@ -10,10 +10,9 @@ find_package(OpenCV REQUIRED)
 set(PATH_REPAIR_LIB_SRC
     quad_path_repair.cpp
     geo_mark_graph.cpp
-    transformation.cpp
 )
 add_library(path_repair STATIC ${PATH_REPAIR_LIB_SRC})
-target_link_libraries(path_repair map nav_field local3d polyopt quadflat common mission ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(path_repair map nav_field map3d polyopt quadflat common mission ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 # Add executables
 #add_executable(graph_combine_exp tests/graph_combine_exp.cpp)

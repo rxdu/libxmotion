@@ -20,7 +20,7 @@
 #include "geometry/cube_array/cube_array.h"
 #include "quad_traj/quad_polyopt.h"
 
-#include "path_repair/transformation.h"
+#include "map3d/transformation.h"
 
 namespace srcl_ctrl
 {
