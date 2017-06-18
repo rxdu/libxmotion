@@ -1,11 +1,11 @@
 /*
- * trajectory_generator.cpp
+ * path_manager.cpp
  *
  *  Created on: Oct 31, 2016
  *      Author: rdu
  */
 
-#include <mission/trajectory_generator.h>
+#include <path_manager.h>
 #include <iostream>
 #include <cmath>
 
@@ -15,20 +15,96 @@
 
 using namespace srcl_ctrl;
 
-TrajectoryGenerator::TrajectoryGenerator(std::shared_ptr<lcm::LCM> lcm):
+PathManager::PathManager(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
 		user_path_id_(0)
 {
 	//lcm_->subscribe("quad_planner/goal_waypoints",&TrajectoryGenerator::LcmWaypointsHandler, this);
-	lcm_->subscribe("quad_planner/goal_keyframe_set",&TrajectoryGenerator::LcmKeyframeSetHandler, this);
+	lcm_->subscribe("quad_planner/goal_keyframe_set",&PathManager::LcmKeyframeSetHandler, this);
 }
 
-TrajectoryGenerator::~TrajectoryGenerator()
+PathManager::~PathManager()
 {
 
 }
 
-void TrajectoryGenerator::LcmWaypointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::Path_t* msg)
+std::vector<Position3Dd> PathManager::GetKeyTurningWaypoints(std::vector<Position3Dd>& wps)
+{
+	// first remove undesired points at the connections between 2d/3d geomarks
+	std::vector<Position3Dd> smoothed_points = wps;
+//	for(auto it = wps.begin(); it != wps.end() - 1; ++it)
+//	{
+//		Position3Dd pt1 = *it;
+//		Position3Dd pt2 = *(it+1);
+//
+//		smoothed_points.push_back(pt1);
+//
+//		// fix the connections between 2d and 3d vertices
+//		if(std::abs(pt1.z - pt2.z) > 0.05)
+//		{
+//			// ignore the last point if there is a 2d/3d connection
+//			//	between the last two points
+//			if(it + 2 != wps.end())
+//			{
+//				Position3Dd pt3 = *(it + 2);
+//
+//				Eigen::Vector3d v1(pt2.x - pt1.x, pt2.y - pt1.y, pt2.z - pt1.z);
+//				Eigen::Vector3d v2(pt3.x - pt2.x, pt3.y - pt2.y, pt3.z - pt2.z);
+//
+//				// skip next point if direction is opposite
+//				if(v1.dot(v2) <= 0)
+//					it++;
+//			}
+//		}
+//		else if(it + 2 == wps.end())
+//			smoothed_points.push_back(pt2);
+//	}
+
+	// std::cout << "selected points: " << smoothed_points.size() << std::endl;
+
+	// then remove intermediate points in a straight line
+	std::vector<Position3Dd> minimum_points;
+
+	if(smoothed_points.size() <= 2)
+	{
+		minimum_points = smoothed_points;
+	}
+	else
+	{
+		// add first waypoint
+		minimum_points.push_back(smoothed_points.front());
+		Position3Dd last_wp = smoothed_points.front();
+		// check intermediate waypoints
+		for(int cid = 1; cid < smoothed_points.size() - 1; cid++)
+		{
+			Position3Dd pt1 = smoothed_points[cid - 1];
+			Position3Dd pt2 = smoothed_points[cid];
+			Position3Dd pt3 = smoothed_points[cid + 1];
+
+			Eigen::Vector3d v1 = Eigen::Vector3d(pt2.x - pt1.x, pt2.y - pt1.y, pt2.z - pt1.z).normalized();
+			Eigen::Vector3d v2 = Eigen::Vector3d(pt3.x - pt2.x, pt3.y - pt2.y, pt3.z - pt2.z).normalized();
+			Eigen::Vector3d e = v1 - v2;
+
+			double dist = std::sqrt(std::pow(smoothed_points[cid].x - last_wp.x,2) +
+					std::pow(smoothed_points[cid].y - last_wp.y,2) +
+					std::pow(smoothed_points[cid].z - last_wp.z,2));
+
+			// |e| = sqrt[sin(theta)^2 + (1 - cos(theta))^2], |e| ~= 0.082 when theta = 5 degree
+			if(e.norm() > 0.082 || dist > 0.2)
+			{
+				minimum_points.push_back(smoothed_points[cid]);
+				last_wp = smoothed_points[cid];
+			}
+		}
+		// add last waypoint
+		minimum_points.push_back(smoothed_points.back());
+	}
+
+	return minimum_points;
+	//return smoothed_points;
+}
+
+void PathManager::LcmWaypointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::Path_t* msg)
 {
 	std::cout << "waypoints received: " << msg->waypoint_num << std::endl;
 
@@ -49,7 +125,7 @@ void TrajectoryGenerator::LcmWaypointsHandler(const lcm::ReceiveBuffer* rbuf, co
 	GenerateTrajectory(new_kfs, user_path_id_++);
 }
 
-void TrajectoryGenerator::LcmKeyframeSetHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::KeyframeSet_t* msg)
+void PathManager::LcmKeyframeSetHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::KeyframeSet_t* msg)
 {
 	std::cout << "keyframes received: " << msg->kf_num << std::endl;
 
@@ -74,7 +150,7 @@ void TrajectoryGenerator::LcmKeyframeSetHandler(const lcm::ReceiveBuffer* rbuf, 
 	GenerateTrajectory(new_kfs, msg->path_id);
 }
 
-double TrajectoryGenerator::CalcFlightTime(Position3Dd start, Position3Dd goal, double vel)
+double PathManager::CalcFlightTime(Position3Dd start, Position3Dd goal, double vel)
 {
 	double xe = start.x - goal.x;
 	double ye = start.y - goal.y;
@@ -86,7 +162,7 @@ double TrajectoryGenerator::CalcFlightTime(Position3Dd start, Position3Dd goal, 
 	return dist/vel;
 }
 
-void TrajectoryGenerator::GenerateTrajectory(KeyframeSet& kfs, uint64_t traj_id)
+void PathManager::GenerateTrajectory(KeyframeSet& kfs, uint64_t traj_id)
 {
 	srcl_lcm_msgs::PolynomialCurve_t poly_msg;
 	uint8_t kf_num = kfs.keyframes.size();

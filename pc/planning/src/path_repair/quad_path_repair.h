@@ -24,9 +24,9 @@
 #include "map3d/octomap_server.h"
 #include "quad_traj/quad_polyopt.h"
 #include "mission/mission_tracker.h"
-#include "mission/trajectory_generator.h"
 #include "nav_field/nav_field.h"
 #include "nav_field/shortcut_eval.h"
+#include "mission/path_manager.h"
 
 namespace srcl_ctrl {
 
@@ -53,7 +53,7 @@ private:
 
 	// trajectory optimization
 	QuadPolyOpt traj_opt_;
-	std::shared_ptr<TrajectoryGenerator> traj_gen_;
+	std::shared_ptr<PathManager> traj_gen_;
 
 	// planning parameters
 	Position2D start_pos_;

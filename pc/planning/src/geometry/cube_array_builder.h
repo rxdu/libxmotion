@@ -5,8 +5,8 @@
  *      Author: rdu
  */
 
-#ifndef PLANNING_SRC_LOCAL3D_CUBE_ARRAY_BUILDER_H_
-#define PLANNING_SRC_LOCAL3D_CUBE_ARRAY_BUILDER_H_
+#ifndef PLANNING_SRC_GEOMETRY_CUBE_ARRAY_BUILDER_H_
+#define PLANNING_SRC_GEOMETRY_CUBE_ARRAY_BUILDER_H_
 
 #include <memory>
 
@@ -26,4 +26,4 @@ std::shared_ptr<CubeArray> BuildCubeArrayFromOctreeWithExtObstacle(std::shared_p
 
 }
 
-#endif /* PLANNING_SRC_LOCAL3D_CUBE_ARRAY_BUILDER_H_ */
+#endif /* PLANNING_SRC_GEOMETRY_CUBE_ARRAY_BUILDER_H_ */

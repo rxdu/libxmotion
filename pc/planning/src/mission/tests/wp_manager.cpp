@@ -9,9 +9,9 @@
 
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
+#include <path_manager.h>
 #include "lcmtypes/srcl_ctrl.hpp"
 
-#include "mission/trajectory_generator.h"
 
 using namespace srcl_ctrl;
 
@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	std::shared_ptr<TrajectoryGenerator> wp_m = std::make_shared<TrajectoryGenerator>(lcm);
+	std::shared_ptr<PathManager> wp_m = std::make_shared<PathManager>(lcm);
 
 	while(true)
 	{

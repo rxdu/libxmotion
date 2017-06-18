@@ -17,7 +17,7 @@
 
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
-#include <mission/trajectory_generator.h>
+#include <path_manager.h>
 #include "lcmtypes/srcl_ctrl.hpp"
 
 // opencv

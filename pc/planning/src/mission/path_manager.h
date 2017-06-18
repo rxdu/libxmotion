@@ -1,12 +1,12 @@
 /*
- * trajectory_generator.h
+ * path_manager.h
  *
  *  Created on: Oct 31, 2016
  *      Author: rdu
  */
 
-#ifndef PLANNING_SRC_MISSION_TRAJECTORY_GENERATOR_H_
-#define PLANNING_SRC_MISSION_TRAJECTORY_GENERATOR_H_
+#ifndef PLANNING_SRC_MISSION_PATH_MANAGER_H_
+#define PLANNING_SRC_MISSION_PATH_MANAGER_H_
 
 #include <vector>
 #include <memory>
@@ -18,19 +18,19 @@
 
 #include "common/planning_types.h"
 #include "quad_traj/quad_polyopt.h"
-#include "mission/mission_utils.h"
 
 namespace srcl_ctrl {
 
-class TrajectoryGenerator {
+class PathManager {
 public:
-	TrajectoryGenerator(std::shared_ptr<lcm::LCM> lcm);
-	~TrajectoryGenerator();
+	PathManager(std::shared_ptr<lcm::LCM> lcm);
+	~PathManager();
 
 private:
 	std::shared_ptr<lcm::LCM> lcm_;
 	uint64_t user_path_id_;
 	double CalcFlightTime(Position3Dd start, Position3Dd goal, double vel);
+	std::vector<Position3Dd> GetKeyTurningWaypoints(std::vector<Position3Dd>& wps);
 
 private:
 	void LcmWaypointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::Path_t* msg);
@@ -42,4 +42,4 @@ public:
 
 }
 
-#endif /* PLANNING_SRC_MISSION_TRAJECTORY_GENERATOR_H_ */
+#endif /* PLANNING_SRC_MISSION_PATH_MANAGER_H_ */
