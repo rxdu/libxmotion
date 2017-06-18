@@ -24,7 +24,7 @@ set(QUADCON_LIB_SRC
     data_trans/quad_data_transmitter.cpp
 )
 add_library(quad_ctrl STATIC ${QUADCON_LIB_SRC})
-target_link_libraries(quad_ctrl quadflat common ${LCM_LIBRARIES})
+target_link_libraries(quad_ctrl common ${LCM_LIBRARIES})
 
 # Add executables
 #add_executable(quad_motion_client motion_server/motion_client.cpp)

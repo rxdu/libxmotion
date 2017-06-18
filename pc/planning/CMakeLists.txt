@@ -33,14 +33,11 @@ set(Octomap_LIBS octomap octomath)
 ## Find LCM
 #find_package(PkgConfig REQUIRED)
 #pkg_search_module(LCM REQUIRED lcm)
-#find_package(lcm REQUIRED)
-
 find_package(LCM REQUIRED)
 
 if(LCM_NOT_FOUND)
   message(STATUS "LCM is not found. Inter-process communication depends on LCM.")
 endif(LCM_NOT_FOUND)
-set(LCM_LIBRARIES lcm)
 
 # Include files for LCM
 set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
