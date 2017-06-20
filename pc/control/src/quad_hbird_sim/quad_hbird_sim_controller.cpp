@@ -17,6 +17,15 @@ QuadHbirdSimController::QuadHbirdSimController():
 		att_quat_con_(new AttQuatCon(rs_)),
 		broadcast_rs_(false)
 {
+	AttQuatCon::ParamType att_param;
+	att_param.kp_phi = 1.25;
+	att_param.kd_phi = 0.06;
+	att_param.kp_theta = 1.25;
+	att_param.kd_theta = 0.06;
+	att_param.kp_psi = 0.08;
+	att_param.kd_psi = 0.03;
+	att_quat_con_->InitParams(att_param);
+
 	previous_state_.point_empty = false;
 	previous_state_.positions[0] = 0;
 	previous_state_.positions[1] = 0;

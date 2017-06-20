@@ -17,19 +17,19 @@
 using namespace srcl_ctrl;
 
 PosQuatCon::PosQuatCon(const QuadState& _rs):
-		rs_(_rs),
+		PosQuatConIF(_rs),
 		zint_uppper_limit(0.1),zint_lower_limit(-1.0),
 		xyint_uppper_limit(0.8), xyint_lower_limit(-0.8),
 		ts_(0.01)
 {
 	// 0-1: 3.8, 0.08, 3.2
-	kp_0 = 3.8;
-	ki_0 = 0.1;
-	kd_0 = 3.2;
+	param_.kp_0 = 3.8;
+	param_.ki_0 = 0.1;
+	param_.kd_0 = 3.2;
 
-	kp_1 = 3.8;
-	ki_1 = 0.1;
-	kd_1 = 3.2;
+	param_.kp_1 = 3.8;
+	param_.ki_1 = 0.1;
+	param_.kd_1 = 3.2;
 
 	// kp kd 1.8 2.45
 //	kp_2 = 1.2;
@@ -37,9 +37,9 @@ PosQuatCon::PosQuatCon(const QuadState& _rs):
 //	kd_2 = 1.85;
 	// 1.25, 0.145, 1.65
 	// 1.8, 0.05, 1.85
-	kp_2 = 1.8;
-	ki_2 = 0.05;
-	kd_2 = 1.85;
+	param_.kp_2 = 1.8;
+	param_.ki_2 = 0.05;
+	param_.kd_2 = 1.85;
 
 	for(int i = 0; i < 3; i++)
 	{
@@ -48,22 +48,28 @@ PosQuatCon::PosQuatCon(const QuadState& _rs):
 	}
 }
 
-PosQuatCon::~PosQuatCon()
+void PosQuatCon::InitParams(const PosQuatConParam& param)
 {
+	param_ = param;
 
+	for(int i = 0; i < 3; i++)
+	{
+		pos_e_integral[i] = 0.0;
+		last_acc_desired_[i] = 0.0;
+	}
 }
 
 void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 {
 	float pos_error[3],vel_error[3];
 
-	pos_error[0] = input.pos_d[0] - rs_.position_.x;
-	pos_error[1] = input.pos_d[1] - rs_.position_.y;
-	pos_error[2] = input.pos_d[2] - rs_.position_.z;
+	pos_error[0] = input.pos_d[0] - state_.position_.x;
+	pos_error[1] = input.pos_d[1] - state_.position_.y;
+	pos_error[2] = input.pos_d[2] - state_.position_.z;
 
-	vel_error[0] = input.vel_d[0] - rs_.velocity_.x;
-	vel_error[1] = input.vel_d[1] - rs_.velocity_.y;
-	vel_error[2] = input.vel_d[2] - rs_.velocity_.z;
+	vel_error[0] = input.vel_d[0] - state_.velocity_.x;
+	vel_error[1] = input.vel_d[1] - state_.velocity_.y;
+	vel_error[2] = input.vel_d[2] - state_.velocity_.z;
 
 	for(int i = 0; i < 3; i++)
 	{
@@ -79,9 +85,9 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 
 	double ri_acc_fb[3];
 
-	ri_acc_fb[0] = kp_0 * pos_error[0] + ki_0 * pos_e_integral[0] + kd_0 * vel_error[0];
-	ri_acc_fb[1] = kp_1 * pos_error[1] + ki_1 * pos_e_integral[1] + kd_1 * vel_error[1];
-	ri_acc_fb[2] = kp_2 * pos_error[2] + ki_2 * pos_e_integral[2] + kd_2 * vel_error[2];
+	ri_acc_fb[0] = param_.kp_0 * pos_error[0] + param_.ki_0 * pos_e_integral[0] + param_.kd_0 * vel_error[0];
+	ri_acc_fb[1] = param_.kp_1 * pos_error[1] + param_.ki_1 * pos_e_integral[1] + param_.kd_1 * vel_error[1];
+	ri_acc_fb[2] = param_.kp_2 * pos_error[2] + param_.ki_2 * pos_e_integral[2] + param_.kd_2 * vel_error[2];
 
 	if(pos_e_integral[0] > xyint_uppper_limit)
 		pos_e_integral[0] = xyint_uppper_limit;
@@ -102,7 +108,7 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 	Eigen::Vector3d Fi_n;
 	Eigen::Vector3d Fb_n(0,0,1);
 
-	Fi = rs_.mass_ * Eigen::Vector3d(ri_acc_fb[0]+input.acc_d[0], ri_acc_fb[1]+input.acc_d[1], ri_acc_fb[2] + input.acc_d[2] + rs_.g_);
+	Fi = state_.mass_ * Eigen::Vector3d(ri_acc_fb[0]+input.acc_d[0], ri_acc_fb[1]+input.acc_d[1], ri_acc_fb[2] + input.acc_d[2] + state_.g_);
 	Fi_n = Fi.normalized();
 
 	Eigen::Vector4d qd_n;
@@ -148,7 +154,7 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 
 	ri_jerk_fb = Eigen::Vector3d(ri_acc_fb[0]-last_acc_desired_[0],
 			ri_acc_fb[1]-last_acc_desired_[1], ri_acc_fb[2]-last_acc_desired_[2]) / ts_;
-	Fidot = rs_.mass_ * (ri_jerk_d + ri_jerk_fb);
+	Fidot = state_.mass_ * (ri_jerk_d + ri_jerk_fb);
 
 	Eigen::Vector3d Fidot_n;
 	Fidot_n = Fidot / Fi.norm() - Fi * (Fi.transpose() * Fidot)/std::pow(Fi.norm(), 3);
@@ -162,7 +168,7 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 	Eigen::Quaterniond p, rotated_p;
 	p.w() = 0;
 	p.vec() = omega_dxy;
-	rotated_p = rs_.quat_ * p * rs_.quat_.inverse();
+	rotated_p = state_.quat_ * p * state_.quat_.inverse();
 	omega_dxy_b = rotated_p.vec();
 
 	omega_d[0] = omega_dxy_b(0);

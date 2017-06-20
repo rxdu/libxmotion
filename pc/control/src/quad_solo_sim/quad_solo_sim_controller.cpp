@@ -19,9 +19,17 @@ QuadSoloSimController::QuadSoloSimController():
 	rs_.arm_length_ = 0.205;
 	rs_.mass_ = 1.2 + 0.02465 * 4;
 	rs_.w_h_ = sqrt(rs_.mass_ * rs_.g_ / 4 / rs_.kF_);
-	att_con_->UpdateQuadParams();
 
-	att_con_->SetControlGains(1.0, 0.1, 1.0, 0.1, 1.2, 0.15);
+	AttQuatCon::ParamType att_param;
+	att_param.kp_phi = 1.0;
+	att_param.kd_phi = 0.1;
+	att_param.kp_theta = 1.0;
+	att_param.kd_theta = 0.1;
+	att_param.kp_psi = 1.2;
+	att_param.kd_psi = 0.15;
+	att_con_->InitParams(att_param);
+
+	//att_con_->SetControlGains(1.0, 0.1, 1.0, 0.1, 1.2, 0.15);
 	pos_con_->SetControlGains(3.8, 0.08, 3.2, 3.8, 0.08, 3.2, 1.8, 0.05, 1.85);
 
 	previous_state_.point_empty = false;
