@@ -25,12 +25,12 @@ struct PosQuatConParam
 	float ki_2;
 	float kd_2;
 
-	double zint_uppper_limit;
-	double zint_lower_limit;
-	double xyint_uppper_limit;
-	double xyint_lower_limit;
+	double zint_uppper_limit = 0.1;
+	double zint_lower_limit = -1.0;
+	double xyint_uppper_limit = 0.8;
+	double xyint_lower_limit = -0.8;
 
-	double ts_;
+	double ts_ = 0.01;
 };
 
 struct PosQuatConInput
@@ -60,44 +60,10 @@ public:
 	~PosQuatCon() = default;
 
 private:
-//	float kp_0;
-//	float ki_0;
-//	float kd_0;
-//	float kp_1;
-//	float ki_1;
-//	float kd_1;
-//	float kp_2;
-//	float ki_2;
-//	float kd_2;
-
 	double pos_e_integral[3];
-	double zint_uppper_limit;
-	double zint_lower_limit;
-	double xyint_uppper_limit;
-	double xyint_lower_limit;
-
-	double ts_;
 	double last_acc_desired_[3];
 
 public:
-	void SetControlGains(float _kp_0, float _ki_0, float _kd_0,
-			float _kp_1, float _ki_1, float _kd_1,
-			float _kp_2, float _ki_2, float _kd_2)
-	{
-		param_.kp_0 = _kp_0;
-		param_.ki_0 = _ki_0;
-		param_.kd_0 = _kd_0;
-		param_.kp_1 = _kp_1;
-		param_.kd_1 = _kd_1;
-		param_.ki_1 = _ki_1;
-		param_.kp_2 = _kp_2;
-		param_.ki_2 = _ki_2;
-		param_.kd_2 = _kd_2;
-	};
-
-	//void Update(const PosQuatConInput& input, PosQuatConOutput& output);
-	void SetControlPeriod(double ts) { ts_ = ts; };
-
 	void InitParams(const PosQuatConParam& param) override;
 	void Update(const PosQuatConInput& desired, PosQuatConOutput& cmd) override;
 };

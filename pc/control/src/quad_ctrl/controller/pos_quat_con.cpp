@@ -17,10 +17,7 @@
 using namespace srcl_ctrl;
 
 PosQuatCon::PosQuatCon(const QuadState& _rs):
-		PosQuatConIF(_rs),
-		zint_uppper_limit(0.1),zint_lower_limit(-1.0),
-		xyint_uppper_limit(0.8), xyint_lower_limit(-0.8),
-		ts_(0.01)
+		PosQuatConIF(_rs)
 {
 	// 0-1: 3.8, 0.08, 3.2
 	param_.kp_0 = 3.8;
@@ -40,6 +37,13 @@ PosQuatCon::PosQuatCon(const QuadState& _rs):
 	param_.kp_2 = 1.8;
 	param_.ki_2 = 0.05;
 	param_.kd_2 = 1.85;
+
+	param_.zint_uppper_limit = 0.1;
+	param_.zint_lower_limit = -1.0;
+	param_.xyint_uppper_limit = 0.8;
+	param_.xyint_lower_limit = -0.8;
+
+	param_.ts_ = 0.01;
 
 	for(int i = 0; i < 3; i++)
 	{
@@ -89,20 +93,20 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 	ri_acc_fb[1] = param_.kp_1 * pos_error[1] + param_.ki_1 * pos_e_integral[1] + param_.kd_1 * vel_error[1];
 	ri_acc_fb[2] = param_.kp_2 * pos_error[2] + param_.ki_2 * pos_e_integral[2] + param_.kd_2 * vel_error[2];
 
-	if(pos_e_integral[0] > xyint_uppper_limit)
-		pos_e_integral[0] = xyint_uppper_limit;
-	if(pos_e_integral[0] < xyint_lower_limit)
-		pos_e_integral[0] = xyint_lower_limit;
+	if(pos_e_integral[0] > param_.xyint_uppper_limit)
+		pos_e_integral[0] = param_.xyint_uppper_limit;
+	if(pos_e_integral[0] < param_.xyint_lower_limit)
+		pos_e_integral[0] = param_.xyint_lower_limit;
 
-	if(pos_e_integral[1] > xyint_uppper_limit)
-		pos_e_integral[1] = xyint_uppper_limit;
-	if(pos_e_integral[1] < xyint_lower_limit)
-		pos_e_integral[1] = xyint_lower_limit;
+	if(pos_e_integral[1] > param_.xyint_uppper_limit)
+		pos_e_integral[1] = param_.xyint_uppper_limit;
+	if(pos_e_integral[1] < param_.xyint_lower_limit)
+		pos_e_integral[1] = param_.xyint_lower_limit;
 
-	if(pos_e_integral[2] > zint_uppper_limit)
-		pos_e_integral[2] = zint_uppper_limit;
-	if(pos_e_integral[2] < zint_lower_limit)
-		pos_e_integral[2] = zint_lower_limit;
+	if(pos_e_integral[2] > param_.zint_uppper_limit)
+		pos_e_integral[2] = param_.zint_uppper_limit;
+	if(pos_e_integral[2] < param_.zint_lower_limit)
+		pos_e_integral[2] = param_.zint_lower_limit;
 
 	Eigen::Vector3d Fi;
 	Eigen::Vector3d Fi_n;
@@ -153,7 +157,7 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 	Eigen::Vector3d ri_jerk_fb;
 
 	ri_jerk_fb = Eigen::Vector3d(ri_acc_fb[0]-last_acc_desired_[0],
-			ri_acc_fb[1]-last_acc_desired_[1], ri_acc_fb[2]-last_acc_desired_[2]) / ts_;
+			ri_acc_fb[1]-last_acc_desired_[1], ri_acc_fb[2]-last_acc_desired_[2]) / param_.ts_;
 	Fidot = state_.mass_ * (ri_jerk_d + ri_jerk_fb);
 
 	Eigen::Vector3d Fidot_n;

@@ -29,8 +29,24 @@ QuadSoloSimController::QuadSoloSimController():
 	att_param.kd_psi = 0.15;
 	att_con_->InitParams(att_param);
 
-	//att_con_->SetControlGains(1.0, 0.1, 1.0, 0.1, 1.2, 0.15);
-	pos_con_->SetControlGains(3.8, 0.08, 3.2, 3.8, 0.08, 3.2, 1.8, 0.05, 1.85);
+	PosQuatCon::ParamType pos_param;
+	pos_param.kp_0 = 3.8;
+	pos_param.ki_0 = 0.08;
+	pos_param.kd_0 = 3.2;
+	pos_param.kp_1 = 3.8;
+	pos_param.ki_1 = 0.08;
+	pos_param.kd_1 = 3.2;
+	pos_param.kp_2 = 1.8;
+	pos_param.ki_2 = 0.05;
+	pos_param.kd_2 = 1.85;
+
+	pos_param.zint_uppper_limit = 0.1;
+	pos_param.zint_lower_limit = -1.0;
+	pos_param.xyint_uppper_limit = 0.8;
+	pos_param.xyint_lower_limit = -0.8;
+
+	pos_param.ts_ = 0.01;
+	pos_con_->InitParams(pos_param);
 
 	previous_state_.point_empty = false;
 	previous_state_.positions[0] = 0;

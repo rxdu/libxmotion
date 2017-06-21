@@ -43,7 +43,7 @@ int main(int arc, char* argv[])
 		// default path
 		log_path = "/home/rdu/Workspace/srcl_rtk/srcl_ctrl/pc/control/log/quad";
 	}
-	controller->InitLogger("quadsim_hummingbird", log_path);
+	controller->InitLogger("quadsim_hummingbird.log", log_path);
 
 	// create a simulation process
 	RobotSimProcess<DataFromQuadSim, DataToQuadSim,QuadState, QuadCmd> process(client,controller);
