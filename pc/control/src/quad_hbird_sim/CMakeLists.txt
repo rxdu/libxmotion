@@ -9,7 +9,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../vrep_sim/vrep_lib/remoteApi)
 # Add libraries
 set(QUADSIM_LIB_SRC
     quad_hbird_sim_client.cpp
-    quad_hbird_sim_controller.cpp
+    quad_hbird_sim_control.cpp
 )
 add_library(quadsim STATIC ${QUADSIM_LIB_SRC})
 add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255)

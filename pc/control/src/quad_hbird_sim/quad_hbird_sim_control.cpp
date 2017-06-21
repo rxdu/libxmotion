@@ -1,5 +1,5 @@
 /*
- * quad_sim_controller.cpp
+ * quad_sim_control.cpp
  *
  *  Created on: Sep 2, 2016
  *      Author: rdu
@@ -7,12 +7,12 @@
 
 #include <iostream>
 
-#include "quad_hbird_sim/quad_hbird_sim_controller.h"
+#include "quad_hbird_sim/quad_hbird_sim_control.h"
 #include "common/logging_helper.h"
 
 using namespace srcl_ctrl;
 
-QuadHbirdSimController::QuadHbirdSimController():
+QuadHbirdSimControl::QuadHbirdSimControl():
 		pos_quat_con_(new PosQuatCon(rs_)),
 		att_quat_con_(new AttQuatCon(rs_)),
 		broadcast_rs_(false)
@@ -45,11 +45,7 @@ QuadHbirdSimController::QuadHbirdSimController():
 	}
 }
 
-QuadHbirdSimController::~QuadHbirdSimController()
-{
-}
-
-void  QuadHbirdSimController::InitLogger(std::string log_name_prefix, std::string log_save_path)
+void  QuadHbirdSimControl::InitLogger(std::string log_name_prefix, std::string log_save_path)
 {
 	LoggingHelper& logging_helper = LoggingHelper::GetInstance(log_name_prefix, log_save_path);
 
@@ -102,7 +98,7 @@ void  QuadHbirdSimController::InitLogger(std::string log_name_prefix, std::strin
 	logging_helper.PassEntryHeaderToLogger();
 }
 
-void QuadHbirdSimController::SetInitPose(float x, float y, float z, float yaw)
+void QuadHbirdSimControl::SetInitPose(float x, float y, float z, float yaw)
 {
 	previous_state_.positions[0] = x;
 	previous_state_.positions[1] = y;
@@ -110,7 +106,7 @@ void QuadHbirdSimController::SetInitPose(float x, float y, float z, float yaw)
 	previous_state_.yaw = yaw;
 }
 
-DataToQuadSim QuadHbirdSimController::ConvertRobotCmdToSimCmd(const QuadCmd& cmd)
+DataToQuadSim QuadHbirdSimControl::ConvertRobotCmdToSimCmd(const QuadCmd& cmd)
 {
 	DataToQuadSim sim_cmd;
 
@@ -124,7 +120,7 @@ DataToQuadSim QuadHbirdSimController::ConvertRobotCmdToSimCmd(const QuadCmd& cmd
 	return sim_cmd;
 }
 
-void QuadHbirdSimController::UpdateRobotState(const DataFromQuadSim& data)
+void QuadHbirdSimControl::UpdateRobotState(const DataFromQuadSim& data)
 {
 	/********* update robot state *********/
 	// Test without state estimator
@@ -134,7 +130,7 @@ void QuadHbirdSimController::UpdateRobotState(const DataFromQuadSim& data)
 		data_trans_->SendQuadStateData(rs_);
 }
 
-QuadCmd QuadHbirdSimController::UpdateCtrlLoop()
+QuadCmd QuadHbirdSimControl::UpdateCtrlLoop()
 {
 	// send system time first
 	// this sim runs at 100 Hz, so system time increase at a step of 10 ms

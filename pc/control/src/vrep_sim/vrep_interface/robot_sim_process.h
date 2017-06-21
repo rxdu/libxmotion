@@ -19,7 +19,7 @@ extern "C" {
 }
 
 #include "vrep_sim/vrep_interface/robot_sim_client.h"
-#include "vrep_sim/vrep_interface/robot_sim_controller.h"
+#include "vrep_sim/vrep_interface/robot_sim_control.h"
 
 namespace srcl_ctrl {
 
@@ -28,7 +28,7 @@ class RobotSimProcess
 {
 public:
 	RobotSimProcess(std::shared_ptr<RobotSimClient<DataFromSimType, DataToSimType>> client,
-			std::shared_ptr<RobotSimController<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>> controller):
+			std::shared_ptr<RobotSimControl<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>> controller):
 		server_port_(29999),
 		server_connected_(false),
 		sync_mode_(true),
@@ -45,7 +45,7 @@ private:
 	DataToSimType data_to_sim_;
 
 	std::shared_ptr<RobotSimClient<DataFromSimType, DataToSimType>> sim_client_;
-	std::shared_ptr<RobotSimController<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>> robot_controller_;
+	std::shared_ptr<RobotSimControl<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>> robot_controller_;
 
 	uint64_t loop_count_;
 

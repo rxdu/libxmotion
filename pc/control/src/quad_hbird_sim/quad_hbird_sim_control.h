@@ -1,12 +1,12 @@
 /*
- * quad_sim_controller.h
+ * quad_sim_control.h
  *
  *  Created on: Sep 2, 2016
  *      Author: rdu
  */
 
-#ifndef CONTROL_SRC_QUAD_HBIRD_SIM_QUAD_HBIRD_SIM_CONTROLLER_H_
-#define CONTROL_SRC_QUAD_HBIRD_SIM_QUAD_HBIRD_SIM_CONTROLLER_H_
+#ifndef CONTROL_SRC_QUAD_HBIRD_SIM_QUAD_HBIRD_SIM_CONTROL_H_
+#define CONTROL_SRC_QUAD_HBIRD_SIM_QUAD_HBIRD_SIM_CONTROL_H_
 
 #include <memory>
 
@@ -14,7 +14,7 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/srcl_ctrl.hpp"
 
-#include "vrep_sim/vrep_interface/robot_sim_controller.h"
+#include "vrep_sim/vrep_interface/robot_sim_control.h"
 #include "quad_ctrl/controller/att_quat_con.h"
 #include "quad_ctrl/controller/pos_quat_con.h"
 #include "quad_ctrl/motion_server/motion_server.h"
@@ -24,11 +24,10 @@
 
 namespace srcl_ctrl {
 
-class QuadHbirdSimController : public RobotSimController<DataFromQuadSim, DataToQuadSim,QuadState, QuadCmd>
+class QuadHbirdSimControl: public RobotSimControl<DataFromQuadSim, DataToQuadSim,QuadState, QuadCmd>
 {
 public:
-	QuadHbirdSimController();
-	~QuadHbirdSimController();
+	QuadHbirdSimControl();
 
 private:
 	UAVTrajectoryPoint previous_state_;
@@ -57,4 +56,4 @@ public:
 
 }
 
-#endif /* CONTROL_SRC_QUAD_HBIRD_SIM_QUAD_HBIRD_SIM_CONTROLLER_H_ */
+#endif /* CONTROL_SRC_QUAD_HBIRD_SIM_QUAD_HBIRD_SIM_CONTROL_H_ */

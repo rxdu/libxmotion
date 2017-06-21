@@ -1,12 +1,12 @@
 /*
- * robot_sim_controller.h
+ * robot_sim_control.h
  *
  *  Created on: Sep 1, 2016
  *      Author: rdu
  */
 
-#ifndef CONTROL_SRC_VREP_SIM_VREP_INTERFACE_ROBOT_SIM_CONTROLLER_H_
-#define CONTROL_SRC_VREP_SIM_VREP_INTERFACE_ROBOT_SIM_CONTROLLER_H_
+#ifndef CONTROL_SRC_VREP_SIM_VREP_INTERFACE_ROBOT_SIM_CONTROL_H_
+#define CONTROL_SRC_VREP_SIM_VREP_INTERFACE_ROBOT_SIM_CONTROL_H_
 
 //extern "C" {
 //    #include "extApi.h"
@@ -21,11 +21,11 @@ namespace srcl_ctrl
 {
 
 template<typename DataFromSimType, typename DataToSimType, typename RobotStateType, typename RobotCmdType>
-class RobotSimController
+class RobotSimControl
 {
 protected:
-	RobotSimController():ctrl_loop_count_(0){};
-	virtual ~RobotSimController(){};
+	RobotSimControl():ctrl_loop_count_(0){};
+	virtual ~RobotSimControl() = default;
 
 protected:
 	RobotStateType rs_;
@@ -42,4 +42,4 @@ public:
 
 }
 
-#endif /* CONTROL_SRC_VREP_SIM_VREP_INTERFACE_ROBOT_SIM_CONTROLLER_H_ */
+#endif /* CONTROL_SRC_VREP_SIM_VREP_INTERFACE_ROBOT_SIM_CONTROL_H_ */

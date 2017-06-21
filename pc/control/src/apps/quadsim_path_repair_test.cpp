@@ -12,14 +12,14 @@
 #include "vrep_sim/vrep_interface/robot_sim_process.h"
 
 #include "quad_hbird_sim/quad_hbird_sim_client.h"
-#include "quad_hbird_sim/quad_hbird_sim_controller.h"
+#include "quad_hbird_sim/quad_hbird_sim_control.h"
 
 using namespace srcl_ctrl;
 
 int main(int arc, char* argv[])
 {
 	std::shared_ptr<QuadHbirdSimClient> client = std::make_shared<QuadHbirdSimClient>();
-	std::shared_ptr<QuadHbirdSimController> controller = std::make_shared<QuadHbirdSimController>();
+	std::shared_ptr<QuadHbirdSimControl> controller = std::make_shared<QuadHbirdSimControl>();
 
 	// set quadrotor init pose
 //	controller->SetInitPose(-1.8,1,0.5,-M_PI/4);

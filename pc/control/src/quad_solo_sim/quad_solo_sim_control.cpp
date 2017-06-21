@@ -1,17 +1,19 @@
 /*
- * quad_solo_sim_controller.cpp
+ * quad_solo_sim_control.cpp
  *
  *  Created on: Oct 22, 2016
  *      Author: rdu
  */
 
+#include "quad_solo_sim/quad_solo_sim_control.h"
+
 #include <iostream>
-#include "quad_solo_sim/quad_solo_sim_controller.h"
+
 #include "common/logging_helper.h"
 
 using namespace srcl_ctrl;
 
-QuadSoloSimController::QuadSoloSimController():
+QuadSoloSimControl::QuadSoloSimControl():
 		att_con_(new AttQuatCon(rs_)),
 		pos_con_(new PosQuatCon(rs_)),
 		broadcast_rs_(false)
@@ -65,12 +67,8 @@ QuadSoloSimController::QuadSoloSimController():
 	}
 }
 
-QuadSoloSimController::~QuadSoloSimController()
-{
-}
-
 // This function must be called before entering the control loop.
-void  QuadSoloSimController::InitLogger(std::string log_name_prefix, std::string log_save_path)
+void  QuadSoloSimControl::InitLogger(std::string log_name_prefix, std::string log_save_path)
 {
 	LoggingHelper& logging_helper = LoggingHelper::GetInstance(log_name_prefix, log_save_path);
 
@@ -102,7 +100,7 @@ void  QuadSoloSimController::InitLogger(std::string log_name_prefix, std::string
 	logging_helper.PassEntryHeaderToLogger();
 }
 
-void QuadSoloSimController::SetInitPose(float x, float y, float z, float yaw)
+void QuadSoloSimControl::SetInitPose(float x, float y, float z, float yaw)
 {
 	previous_state_.positions[0] = x;
 	previous_state_.positions[1] = y;
@@ -110,7 +108,7 @@ void QuadSoloSimController::SetInitPose(float x, float y, float z, float yaw)
 	previous_state_.yaw = yaw;
 }
 
-DataToQuadSim QuadSoloSimController::ConvertRobotCmdToSimCmd(const QuadCmd& cmd)
+DataToQuadSim QuadSoloSimControl::ConvertRobotCmdToSimCmd(const QuadCmd& cmd)
 {
 	DataToQuadSim sim_cmd;
 
@@ -124,7 +122,7 @@ DataToQuadSim QuadSoloSimController::ConvertRobotCmdToSimCmd(const QuadCmd& cmd)
 	return sim_cmd;
 }
 
-void QuadSoloSimController::UpdateRobotState(const DataFromQuadSim& data)
+void QuadSoloSimControl::UpdateRobotState(const DataFromQuadSim& data)
 {
 	/********* update robot state *********/
 	// Test without state estimator
@@ -134,7 +132,7 @@ void QuadSoloSimController::UpdateRobotState(const DataFromQuadSim& data)
 		data_trans_->SendQuadStateData(rs_);
 }
 
-QuadCmd QuadSoloSimController::UpdateCtrlLoop()
+QuadCmd QuadSoloSimControl::UpdateCtrlLoop()
 {
 	// this sim runs at 100 Hz, so system time increase at a step of 10 ms
 	data_trans_->SendSystemTime(ctrl_loop_count_*10);
