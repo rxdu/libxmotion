@@ -22,12 +22,12 @@ enum class QuadFlightType {
 	PLUS_TYPE,
 };
 
-typedef struct
+struct QuadCmd
 {
 	float ang_vel[4];
-}QuadCmd;
+};
 
-typedef struct
+struct DataFromQuad
 {
 	// sensor data
 	unsigned char mono_image[IMG_RES_Y][IMG_RES_X];
@@ -40,17 +40,17 @@ typedef struct
 	Point3f rot_i;
 	Quaternion quat_i;
 	Point3f rot_rate_b;
-} DataFromQuad;
+};
 
-typedef struct
+struct DataToQuad
 {
 	QuadCmd motor_cmd;
-} DataToQuad;
+};
 
 class QuadState {
 public:
 	QuadState();
-	~QuadState();
+	~QuadState() = default;
 
 public:
 	Point3f position_;

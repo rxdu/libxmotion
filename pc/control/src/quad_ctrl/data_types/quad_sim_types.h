@@ -13,7 +13,7 @@
 
 namespace srcl_ctrl {
 
-typedef struct
+struct DataFromQuadSim
 {
 	// sensor data
 	unsigned char mono_image[IMG_RES_Y][IMG_RES_X];
@@ -26,12 +26,12 @@ typedef struct
 	Point3f rot_i;
 	Quaternion quat_i;
 	Point3f rot_rate_b;
-} DataFromQuadSim;
+};
 
-typedef struct
+struct DataToQuadSim
 {
 	float ang_vel[4];
-} DataToQuadSim;
+};
 
 }
 

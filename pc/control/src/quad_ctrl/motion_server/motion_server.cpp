@@ -12,17 +12,17 @@
 
 using namespace srcl_ctrl;
 
-MotionServer::MotionServer():
-		goal_completed_(false),
-		ms_count_(0),
-		waypoint_idx_(0),
-		current_sys_time_(0),
-		mode_(MotionMode::POLYNOMIAL)
-{
-//	UAVTrajectory test_traj = GenerateTestTrajectory();
-//
-//	SetMotionGoal(test_traj);
-}
+//MotionServer::MotionServer():
+//		goal_completed_(false),
+//		ms_count_(0),
+//		waypoint_idx_(0),
+//		current_sys_time_(0),
+//		mode_(MotionMode::POLYNOMIAL)
+//{
+////	UAVTrajectory test_traj = GenerateTestTrajectory();
+////
+////	SetMotionGoal(test_traj);
+//}
 
 MotionServer::MotionServer(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
@@ -33,7 +33,6 @@ MotionServer::MotionServer(std::shared_ptr<lcm::LCM> lcm):
 		current_sys_time_(0),
 		mode_(MotionMode::POLYNOMIAL)
 {
-	//lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmGoalHandler, this);
 	lcm_->subscribe("quad_data/system_time", &MotionServer::LcmSysTimeHandler, this);
 	lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmUserGoalHandler, this);
 }

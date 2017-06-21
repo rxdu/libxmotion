@@ -28,7 +28,7 @@ enum class MotionMode {
 
 class MotionServer {
 public:
-	MotionServer();
+	MotionServer() = delete;
 	MotionServer(std::shared_ptr<lcm::LCM> lcm);
 	~MotionServer() = default;
 

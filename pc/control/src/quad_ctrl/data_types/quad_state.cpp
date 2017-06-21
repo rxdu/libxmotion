@@ -9,10 +9,6 @@
 #include <iostream>
 #include <iomanip>
 
-#ifdef ENABLE_LOG
-#include "g3log/g3log.hpp"
-#endif
-
 #include "quad_ctrl/data_types/quad_state.h"
 
 using namespace srcl_ctrl;
@@ -50,11 +46,6 @@ QuadState::QuadState():
 	rotation_rate_.x = 0;
 	rotation_rate_.y = 0;
 	rotation_rate_.z = 0;
-}
-
-QuadState::~QuadState()
-{
-
 }
 
 void QuadState::UpdateRobotState(const DataFromQuad& new_data)
