@@ -33,7 +33,6 @@ namespace srcl_ctrl {
 class QuadPathRepair{
 public:
 	QuadPathRepair(std::shared_ptr<lcm::LCM> lcm);
-	~QuadPathRepair();
 
 private:
 	// lcm

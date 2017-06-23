@@ -47,11 +47,6 @@ QuadPathRepair::QuadPathRepair(std::shared_ptr<lcm::LCM> lcm):
 	}
 }
 
-QuadPathRepair::~QuadPathRepair()
-{
-
-}
-
 void QuadPathRepair::ConfigGraphPlanner(MapConfig config, double world_size_x, double world_size_y)
 {
 	if(config.GetMapType().data_model == MapDataModel::SQUARE_GRID)
