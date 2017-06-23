@@ -41,7 +41,13 @@ You may need to add the following line to your ~/.bashrc so that the shared libr
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/
 ```
 
-* Qt5
+* Boost (Possibly required by 3rd-praty libraries)
+
+```
+$ sudo apt-get install libboost-all-dev
+```
+
+* Qt5 (Optional)
 ```
 $ sudo apt-get install qt5-default
 ```
@@ -83,12 +89,6 @@ $ sudo make install
 ```
 
 For more information, refer to this official [wiki](http://www.vtk.org/Wiki/VTK/Configure_and_Build).
-
-* Boost (Required by dependent libraries)
-
-```
-$ sudo apt-get install libboost-all-dev
-```
 
 ## 3. Use Eclipse to build project
 
