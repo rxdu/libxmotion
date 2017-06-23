@@ -16,13 +16,10 @@
 #include <cmath>
 #include <memory>
 
-#include "eigen3/Eigen/Geometry"
-
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/srcl_ctrl.hpp"
 
-#include "graph/graph.h"
 #include "common/planning_types.h"
 #include "geometry/geo_mark.h"
 

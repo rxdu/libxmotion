@@ -25,8 +25,8 @@
 using namespace cv;
 using namespace srcl_ctrl;
 
-#include "nav_field/nav_field.h"
-#include "nav_field/shortcut_eval.h"
+#include "path_repair/nav_field.h"
+#include "path_repair/shortcut_eval.h"
 #include "geometry/square_grid/square_grid.h"
 
 int main(int argc, char* argv[])
@@ -80,5 +80,3 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-
-

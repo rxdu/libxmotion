@@ -12,7 +12,7 @@
 
 #include "graph/graph.h"
 #include "geometry/square_grid/square_grid.h"
-#include "nav_field/nav_field.h"
+#include "path_repair/nav_field.h"
 
 namespace srcl_ctrl {
 

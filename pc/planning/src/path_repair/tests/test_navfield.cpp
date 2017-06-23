@@ -37,8 +37,7 @@
 using namespace cv;
 using namespace srcl_ctrl;
 
-#include "nav_field/nav_field.h"
-#include "nav_field/shortcut_eval.h"
+#include "path_repair/nav_field.h"
 #include "geometry/square_grid/square_grid.h"
 
 int main(int argc, char* argv[])
@@ -60,34 +59,52 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
-			sgrid_map = SGridBuilderV2::BuildSquareGridMap(input_map, 32,1);
+			sgrid_map = SGridBuilder::BuildSquareGridMap(input_map, 64);
 			use_input_image = true;
 		}
 	}
 	else{
 		// create a empty grid
-		std::shared_ptr<SquareGrid> grid = std::make_shared<SquareGrid>(25,25,95);
+		std::shared_ptr<SquareGrid> grid = std::make_shared<SquareGrid>(12,12,95);
 
 		// set occupancy for cells
-		for(int i = 425; i <= 440; i++)
+		for(int i = 52; i <= 57; i++)
 			grid->SetCellOccupancy(i, OccupancyType::OCCUPIED);
 
-		for(int i = 450; i <= 465; i++)
+		for(int i = 88; i <= 93; i++)
 			grid->SetCellOccupancy(i, OccupancyType::OCCUPIED);
 
-		for(int i = 184; i <= 199; i++)
+		for(int i = 74; i <= 75; i++)
 			grid->SetCellOccupancy(i, OccupancyType::OCCUPIED);
 
-		for(int i = 209; i <= 224; i++)
+		for(int i = 0; i < 8; i++)
+			grid->SetCellOccupancy(i,10, OccupancyType::OCCUPIED);
+
+		for(int i = 24; i <= 28; i++)
 			grid->SetCellOccupancy(i, OccupancyType::OCCUPIED);
 
-		for(int i = 234; i <= 249; i++)
-			grid->SetCellOccupancy(i, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(58, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(87, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(22, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(34, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(46, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(118, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(119, OccupancyType::OCCUPIED);
+
+		grid->SetCellOccupancy(7, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(19, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(31, OccupancyType::OCCUPIED);
+
+		grid->SetCellOccupancy(66, OccupancyType::OCCUPIED);
+		grid->SetCellOccupancy(81, OccupancyType::OCCUPIED);
 
 		sgrid_map.data_model = grid;
 	}
 
 	std::shared_ptr<Graph_t<SquareCell*>> graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);
+
+	Vertex_t<SquareCell*> * start_vertex = graph->GetVertexFromID(225);
+	Vertex_t<SquareCell*> * finish_vertex = graph->GetVertexFromID(60);
 
 //	Path_t<SquareCell*> path;
 //	if(start_vertex == nullptr || finish_vertex == nullptr) {
@@ -101,32 +118,12 @@ int main(int argc, char* argv[])
 //		std::cout << "Searched in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 //	}
 
-//	auto nbs = sgrid_map.data_model->GetNeighboursWithinRange(603, 1);
-//	for(const auto& n : nbs)
-//		std::cout << n->data_id_ << std::endl;
-
 	///////////////////////////////////////////////////////////////
 
-	std::shared_ptr<NavField<SquareCell*>> nav_field = std::make_shared<NavField<SquareCell*>>(graph);
-	nav_field->UpdateNavField(107);
-////	nav_field->UpdateNavField(95);
-//////	nav_field.UpdateNavField(185); // 32
-////	nav_field->UpdateNavField(185); // 32
-////	//nav_field.UpdateNavField(60); // 64
-//////	nav_field->UpdateNavField(50); // new lab map
-//////	nav_field->UpdateNavField(406); // lab map
-//////	nav_field->UpdateNavField(536); // case 3
-
-	ShortcutEval sc_eval(sgrid_map.data_model, nav_field);
-	sc_eval.EvaluateGridShortcutPotential(20);
-
-	// abstract: 552, 95
-	// case 3: 930, 536
-	Vertex_t<SquareCell*> * start_vertex = graph->GetVertexFromID(107); // 390 for case 4// 552, 508
-	Vertex_t<SquareCell*> * finish_vertex = graph->GetVertexFromID(704);//50 for case 4 //95
-
-	auto nav_path = sc_eval.SearchInNavField(start_vertex, finish_vertex);
-	//auto nav_path = sc_eval.SearchInNavFieldbyStep(start_vertex, finish_vertex);
+	NavField<SquareCell*> nav_field(graph);
+	//nav_field.UpdateNavField(185); // 32
+	//nav_field.UpdateNavField(60); // 64
+	//auto nav_path = nav_field.SearchInNavField(start_vertex, finish_vertex);
 
 	///////////////////////////////////////////////////////////////
 
@@ -137,15 +134,10 @@ int main(int argc, char* argv[])
 	else
 		Vis::VisSquareGrid(*sgrid_map.data_model, sgrid_map.padded_image, vis_img);
 
-//	Vis::VisGraph(*graph, vis_img, vis_img, true);
+	Vis::VisGraph(*graph, vis_img, vis_img, false);
 
-	Vertex_t<SquareCell*>* check_vtx = graph->GetVertexFromID(704); // 390 for case 4// 552, 508
-	Vis::VisSquareGridLocalNavField(*sgrid_map.data_model, *nav_field, check_vtx, vis_img, vis_img, 20);
-
-//	Vis::VisSquareGridShortcutPotential(*nav_field, vis_img, vis_img);
-//
 //	if(!nav_path.empty())
-//		Vis::VisGraphPath(nav_path, vis_img, vis_img);
+//		GraphVis::VisSquareGridPath(nav_path, vis_img, vis_img);
 
 	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
 
@@ -153,7 +145,7 @@ int main(int argc, char* argv[])
 
 	waitKey(0);
 
-	imwrite("potential_field.jpg", vis_img);
+	imwrite("potential.jpg", vis_img);
 
 	return 0;
 }

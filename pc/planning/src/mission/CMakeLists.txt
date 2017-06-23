@@ -4,7 +4,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Dependency libraries
-find_package(OpenCV REQUIRED)
+#find_package(OpenCV REQUIRED)
 
 # Add libraries
 set(MISSION_LIB_SRC

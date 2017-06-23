@@ -10,9 +10,10 @@ find_package(OpenCV REQUIRED)
 set(PATH_REPAIR_LIB_SRC
     quad_path_repair.cpp
     geo_mark_graph.cpp
+    shortcut_eval.cpp
 )
 add_library(path_repair STATIC ${PATH_REPAIR_LIB_SRC})
-target_link_libraries(path_repair map nav_field local polyopt quadflat common mission ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(path_repair map local polyopt quadflat common mission vis ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 # Add executables
 #add_executable(graph_combine_exp tests/graph_combine_exp.cpp)
@@ -32,3 +33,21 @@ target_link_libraries(path_repair map nav_field local polyopt quadflat common mi
 
 #add_executable(test_cubearray_builder tests/test_cubearray_builder.cpp)
 #target_link_libraries(test_cubearray_builder geometry  ${LCM_LIBRARIES})
+
+#add_executable(graph_combine_exp tests/graph_combine_exp.cpp)
+#target_link_libraries(graph_combine_exp map local utils ${Octomap_LIBS} ${LCM_LIBRARIES})
+
+#add_executable(test_calc tests/test_calc.cpp)
+#target_link_libraries(test_calc path_repair map vis ${OpenCV_LIBS})
+
+#add_executable(test_navfield tests/test_navfield.cpp)
+#target_link_libraries(test_navfield map vis ${OpenCV_LIBS})
+
+#add_executable(test_navfield2 tests/test_navfield2.cpp)
+#target_link_libraries(test_navfield2 map vis path_repair ${OpenCV_LIBS})
+
+#add_executable(test_navfield3 tests/test_navfield3.cpp)
+#target_link_libraries(test_navfield3 map vis path_repair ${OpenCV_LIBS})
+
+#add_executable(test_navfield4 tests/test_navfield4.cpp)
+#target_link_libraries(test_navfield4 map vis path_repair ${OpenCV_LIBS} ${LCM_LIBRARIES})

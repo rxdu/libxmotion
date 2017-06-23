@@ -24,8 +24,8 @@
 #include "local/octomap_server.h"
 #include "quad_traj/quad_polyopt.h"
 #include "mission/mission_tracker.h"
-#include "nav_field/nav_field.h"
-#include "nav_field/shortcut_eval.h"
+#include "path_repair/nav_field.h"
+#include "path_repair/shortcut_eval.h"
 #include "mission/path_manager.h"
 
 namespace srcl_ctrl {
