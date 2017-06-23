@@ -20,7 +20,7 @@
 #include "map/map_utils.h"
 #include "geometry/cube_array/cube_array.h"
 
-#include "map3d/transformation.h"
+#include "local/transformation.h"
 
 namespace srcl_ctrl
 {

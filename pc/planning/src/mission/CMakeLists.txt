@@ -12,11 +12,11 @@ set(MISSION_LIB_SRC
     path_manager.cpp
 )
 add_library(mission STATIC ${MISSION_LIB_SRC})
-target_link_libraries(mission map map3d polyopt quadflat ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(mission map local polyopt quadflat ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 # Add executables
 #add_executable(wp_manager tests/wp_manager.cpp)
 #target_link_libraries(wp_manager mission ${LCM_LIBRARIES})
 
 #add_executable(test_waypoints tests/test_wpmanager.cpp)
-#target_link_libraries(test_waypoints mission map geometry map3d polyopt quadflat ${Octomap_LIBS} ${LCM_LIBRARIES})
+#target_link_libraries(test_waypoints mission map geometry local polyopt quadflat ${Octomap_LIBS} ${LCM_LIBRARIES})

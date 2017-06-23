@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "map3d/transformation.h"
+#include "local/transformation.h"
 
 using namespace Eigen;
 
@@ -26,5 +26,3 @@ Position3Dd Transformation::TransformPosition3D(Transform3D transform, Position3
 
 	return Position3Dd(output[0], output[1], output[2]);
 }
-
-

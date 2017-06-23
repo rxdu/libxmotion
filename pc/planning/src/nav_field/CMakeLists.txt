@@ -15,7 +15,7 @@ target_link_libraries(nav_field geometry vis)# ${OpenCV_LIBS} ${LCM_LIBRARIES})
 
 # Add executables
 #add_executable(graph_combine_exp tests/graph_combine_exp.cpp)
-#target_link_libraries(graph_combine_exp map map3d utils ${Octomap_LIBS} ${LCM_LIBRARIES})
+#target_link_libraries(graph_combine_exp map local utils ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 #add_executable(test_calc tests/test_calc.cpp)
 #target_link_libraries(test_calc nav_field map vis ${OpenCV_LIBS})
