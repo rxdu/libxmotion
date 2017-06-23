@@ -1,7 +1,7 @@
 /*
  * test_quadopt.cpp
  *
- *  Created on: Aug 29, 2016
+ *  Created on: Sep 16, 2016
  *      Author: rdu
  */
 
@@ -15,7 +15,7 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/srcl_ctrl.hpp"
 
-#include "quad_traj/quad_polyopt.h"
+#include "quad/quad_polyopt.h"
 
 using namespace srcl_ctrl;
 using namespace Eigen;
@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 	QuadPolyOpt opt;
 	//opt.OptimizeFlatTraj(keyframe_x_vals, keyframe_y_vals, keyframe_z_vals, keyframe_yaw_vals, keyframe_ts, kf_num);
 
-	opt.InitOptMatrices(kf_num);
+	opt.InitOptJointMatrices(kf_num);
 
 	// position
 	opt.keyframe_x_vals_(0,0) = 0;
@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
 	opt.keyframe_ts_(0,2) = 3;
 	opt.keyframe_ts_(0,3) = 4.5;
 
-	opt.OptimizeFlatTraj();
+	opt.OptimizeFlatTrajJoint();
 
 	opt.flat_traj_.print();
 
@@ -153,6 +153,5 @@ int main(int argc, char* argv[])
 	lcm->publish("quad_planner/polynomial_curve", &poly_msg);
 
 	std::cout << "traj sent to lcm" << std::endl;
-
 }
 

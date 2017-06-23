@@ -31,8 +31,7 @@
 #include "geometry/sgrid_builder.h"
 #include "geometry/cube_array_builder.h"
 #include "map/map_utils.h"
-#include "quad_traj/quad_polyopt.h"
-#include "mission/mission_utils.h"
+#include "quad/quad_polyopt.h"
 
 using namespace srcl_ctrl;
 using namespace octomap;
@@ -145,6 +144,3 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-
-
-

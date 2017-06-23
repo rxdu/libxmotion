@@ -1,23 +1,27 @@
 # Include path
+#include_directories(${CMAKE_SOURCE_DIR}/inc)
+include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-find_package(GUROBI REQUIRED)
-if (NOT GUROBI_FOUND)
-  message("Gurobi not found. If you want to use Gurobi, set the GUROBI_HOME variable")
-else()
-  message("Gurobi found")
-  include_directories(${GUROBI_INCLUDE_DIRS})
-endif()
+# Dependency libraries
+#find_package(OpenCV REQUIRED)
 
 # Add libraries
-set(QUADFLAT_LIB_SRC
-    #quad_flattraj.cpp
+set(QUAD_LIB_SRC
+    mission_tracker.cpp
+    path_manager.cpp
     quad_polyopt.cpp
 )
-add_library(quadflat STATIC ${QUADFLAT_LIB_SRC})
-target_link_libraries(quadflat polyopt ${GUROBI_LIBRARIES})
+add_library(quad STATIC ${QUAD_LIB_SRC})
+target_link_libraries(quad map local polyopt quadflat ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 # Add executables
+#add_executable(wp_manager tests/wp_manager.cpp)
+#target_link_libraries(wp_manager quad ${LCM_LIBRARIES})
+
+#add_executable(test_waypoints tests/test_wpmanager.cpp)
+#target_link_libraries(test_waypoints quad map geometry local polyopt quadflat ${Octomap_LIBS} ${LCM_LIBRARIES})
+
 #add_executable(test_quadopt tests/test_quadopt.cpp)
 #target_link_libraries(test_quadopt polyopt quadflat ${GUROBI_LIBRARIES} ${LCM_LIBRARIES})
 

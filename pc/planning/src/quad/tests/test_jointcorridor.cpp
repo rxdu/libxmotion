@@ -15,7 +15,7 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/srcl_ctrl.hpp"
 
-#include "quad_traj/quad_polyopt.h"
+#include "quad/quad_polyopt.h"
 
 using namespace srcl_ctrl;
 using namespace Eigen;

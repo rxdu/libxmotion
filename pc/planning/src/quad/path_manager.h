@@ -17,7 +17,7 @@
 #include "lcmtypes/srcl_ctrl.hpp"
 
 #include "common/planning_types.h"
-#include "quad_traj/quad_polyopt.h"
+#include "quad/quad_polyopt.h"
 
 namespace srcl_ctrl {
 

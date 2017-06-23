@@ -22,11 +22,11 @@
 #include "geometry/geo_mark.h"
 #include "path_repair/geo_mark_graph.h"
 #include "local/octomap_server.h"
-#include "quad_traj/quad_polyopt.h"
-#include "mission/mission_tracker.h"
 #include "path_repair/nav_field.h"
 #include "path_repair/shortcut_eval.h"
-#include "mission/path_manager.h"
+#include "quad/path_manager.h"
+#include "quad/quad_polyopt.h"
+#include "quad/mission_tracker.h"
 
 namespace srcl_ctrl {
 
