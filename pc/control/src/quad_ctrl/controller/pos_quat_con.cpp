@@ -61,10 +61,15 @@ void PosQuatCon::InitParams(const PosQuatConParam& param)
 		pos_e_integral[i] = 0.0;
 		last_acc_desired_[i] = 0.0;
 	}
+
+	initialized_ = true;
 }
 
 void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 {
+	if(!initialized_)
+		return;
+
 	float pos_error[3],vel_error[3];
 
 	pos_error[0] = input.pos_d[0] - state_.position_.x;
