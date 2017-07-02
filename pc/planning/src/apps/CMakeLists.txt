@@ -8,7 +8,7 @@ find_package(OpenCV REQUIRED)
 
 # Add executables
 add_executable(quadsim_pr_planner quadsim_planner.cpp)
-target_link_libraries(quadsim_pr_planner map path_repair common ${OpenCV_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(quadsim_pr_planner map path_repair quad common ${OpenCV_LIBS} ${LCM_LIBRARIES})
 
 add_executable(planar_search planar_search.cpp)
 target_link_libraries(planar_search geometry map vis ${OpenCV_LIBS})

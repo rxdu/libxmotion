@@ -13,20 +13,20 @@ set(PATH_REPAIR_LIB_SRC
     shortcut_eval.cpp
 )
 add_library(path_repair STATIC ${PATH_REPAIR_LIB_SRC})
-target_link_libraries(path_repair map local polyopt quadflat common mission vis ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(path_repair map local polyopt common vis ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 # Add executables
 #add_executable(graph_combine_exp tests/graph_combine_exp.cpp)
 #target_link_libraries(graph_combine_exp map local utils ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 #add_executable(test_combiner tests/test_combiner.cpp)
-#target_link_libraries(test_combiner map geometry local polyopt quadflat g3logger path_repair ${Octomap_LIBS} ${LCM_LIBRARIES})
+#target_link_libraries(test_combiner map geometry local polyopt g3logger path_repair ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 #add_executable(test_combinerv2 tests/test_combiner_v2.cpp)
-#target_link_libraries(test_combinerv2 map geometry local polyopt quadflat g3logger path_repair ${Octomap_LIBS} ${LCM_LIBRARIES})
+#target_link_libraries(test_combinerv2 map geometry local polyopt g3logger path_repair ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 #add_executable(test_tracking tests/test_tracking.cpp)
-#target_link_libraries(test_tracking polyopt quadflat ${LCM_LIBRARIES})
+#target_link_libraries(test_tracking polyopt ${LCM_LIBRARIES})
 
 #add_executable(test_cubearray tests/test_cubearray.cpp)
 #target_link_libraries(test_cubearray geometry)
