@@ -4,6 +4,7 @@
 #include <array>
 #include <chrono>
 #include <cstdint>
+#include <algorithm>
 
 namespace stopwatch {
 // An implementation of the 'TrivialClock' concept using the rdtscp instruction.

@@ -36,6 +36,6 @@ set(SRCL_COMMON_LIB_SRC
 add_library(common STATIC ${SRCL_COMMON_LIB_SRC})
 if(ENABLE_LOGGING)
 add_definitions(-DENABLE_LOGGING)
-target_link_libraries(common g3logger -lpthread)
+target_link_libraries(common -lpthread)
 endif(ENABLE_LOGGING)
 
