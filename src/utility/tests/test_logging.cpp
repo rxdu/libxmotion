@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 //		helper.PassEntryDataToLogger();
 //	}
 
-	DataLogger& logger = DataLogger::InitLogger("logtest.txt", "/Users/rdu/Workspace");
+	CsvLogger logger("logtest.txt", "/Users/rdu/Workspace");
 
 	for(int i = 0; i < 500; i++)
 		logger.LogData(i+1, i+0.5, i*100.5);

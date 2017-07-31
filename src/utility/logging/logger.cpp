@@ -45,7 +45,7 @@ CtrlLogger::CtrlLogger(std::string log_name_prefix, std::string log_save_path):
 #endif
 }
 
-CtrlLogger& CtrlLogger::InitLogger(std::string log_name_prefix, std::string log_save_path)
+CtrlLogger& CtrlLogger::GetLogger(std::string log_name_prefix, std::string log_save_path)
 {
 	static CtrlLogger instance(log_name_prefix, log_save_path);
 
@@ -144,9 +144,9 @@ void CtrlLogger::PassEntryDataToLogger()
 #endif
 }
 
-/******************************* Data Logger **********************************/
+/******************************* CSV Logger **********************************/
 
-DataLogger::DataLogger(std::string log_name_prefix, std::string log_save_path):
+CsvLogger::CsvLogger(std::string log_name_prefix, std::string log_save_path):
 				log_name_prefix_(log_name_prefix),
 				log_save_path_(log_save_path)
 {
@@ -159,9 +159,9 @@ DataLogger::DataLogger(std::string log_name_prefix, std::string log_save_path):
 #endif
 }
 
-DataLogger& DataLogger::InitLogger(std::string log_name_prefix, std::string log_save_path)
+GlobalCsvLogger& GlobalCsvLogger::GetLogger(std::string log_name_prefix, std::string log_save_path)
 {
-	static DataLogger instance(log_name_prefix, log_save_path);
+	static GlobalCsvLogger instance(log_name_prefix, log_save_path);
 
 	return instance;
 }

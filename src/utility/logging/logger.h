@@ -29,8 +29,7 @@ private:
 	CtrlLogger& operator= (const CtrlLogger &) = delete;
 
 public:
-	static CtrlLogger& InitLogger(std::string log_name_prefix = "", std::string log_save_path = "");
-	static CtrlLogger& GetLogger() { return CtrlLogger::InitLogger(); };
+	static CtrlLogger& GetLogger(std::string log_name_prefix = "", std::string log_save_path = "");
 
 	// basic functions
 	void AddItemNameToEntryHead(std::string name);
@@ -79,19 +78,16 @@ private:
 	std::vector<std::string> item_data_;
 };
 
-class DataLogger {
-private:
-	DataLogger() = delete;
-	DataLogger(std::string log_name_prefix, std::string log_save_path);
+class CsvLogger {
+public:
+	CsvLogger() = delete;
+	CsvLogger(std::string log_name_prefix, std::string log_save_path);
 
 	// prevent copy or assignment
-	DataLogger(const CtrlLogger&) = delete;
-	DataLogger& operator= (const CtrlLogger &) = delete;
+	CsvLogger(const CsvLogger&) = delete;
+	CsvLogger& operator= (const CsvLogger &) = delete;
 
 public:
-	static DataLogger& InitLogger(std::string log_name_prefix = "", std::string log_save_path = "");
-	static DataLogger& GetLogger() { return DataLogger::InitLogger(); };
-
 	// basic functions
 	void AddItemNameToEntryHead(std::string name);
 	void PassEntryHeaderToLogger();
@@ -122,6 +118,20 @@ private:
 		o << std::to_string(value) + ",";
 		build_string(o, rest...);
 	}
+};
+
+class GlobalCsvLogger: public CsvLogger
+{
+private:
+	GlobalCsvLogger() = delete;
+	GlobalCsvLogger(std::string prefix, std::string path):CsvLogger(prefix,path){};
+
+	// prevent copy or assignment
+	GlobalCsvLogger(const GlobalCsvLogger&) = delete;
+	GlobalCsvLogger& operator= (const GlobalCsvLogger &) = delete;
+
+public:
+	static GlobalCsvLogger& GetLogger(std::string log_name_prefix = "", std::string log_save_path = "");
 };
 
 }
