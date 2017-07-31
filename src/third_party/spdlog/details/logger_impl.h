@@ -12,6 +12,7 @@
 #include <memory>
 #include <string>
 
+static std::once_flag signal_install_flag;
 
 // create logger with given name, sinks and the default pattern formatter
 // all other ctors will call this one
@@ -25,7 +26,9 @@ inline spdlog::logger::logger(const std::string& logger_name, const It& begin, c
     _last_err_time(0),
     _msg_counter(1)  // message counter will start from 1. 0-message id will be reserved for controll messages
 {
-    spdlog::installCrashHandler();
+    std::call_once(signal_install_flag, [] {
+         spdlog::installCrashHandler();
+    });    
 
     _err_handler = [this](const std::string &msg)
     {

@@ -43,28 +43,6 @@ public:
 	void AddItemDataToEntry(std::string item_name, double data);
 	void AddItemDataToEntry(uint64_t item_id, double data);
 
-	// logger wrapper functions
-	void LogInfo(std::string msg)
-	{
-#ifdef ENABLE_LOGGING
-		logger_->info(msg);
-#endif
-	}
-
-	void LogWarn(std::string msg)
-	{
-#ifdef ENABLE_LOGGING
-		logger_->warn(msg);
-#endif
-	}
-
-	void LogFatal(std::string msg)
-	{
-#ifdef ENABLE_LOGGING
-		logger_->critical(msg);
-#endif
-	}
-
 private:
 	std::shared_ptr<spdlog::logger> logger_;
 
@@ -95,6 +73,7 @@ public:
 	template<class... T>
 	void LogData(const T&... value)
 	{
+#ifdef ENABLE_LOGGING
 		std::ostringstream o;
 		build_string(o, value...);
 
@@ -102,6 +81,9 @@ public:
 		data.pop_back();
 
 		logger_->info(data);
+#else
+		return;
+#endif
 	}
 
 private:
@@ -132,6 +114,67 @@ private:
 
 public:
 	static GlobalCsvLogger& GetLogger(std::string log_name_prefix = "", std::string log_save_path = "");
+};
+
+class EventLogger {
+public:
+	EventLogger() = delete;
+	EventLogger(std::string log_name_prefix, std::string log_save_path);
+
+	// prevent copy or assignment
+	EventLogger(const EventLogger&) = delete;
+	EventLogger& operator= (const EventLogger &) = delete;
+
+public:
+	// basic functions
+	template<class... T>
+	void LogEvent(const T&... value)
+	{
+#ifdef ENABLE_LOGGING
+		std::ostringstream o;
+		build_string(o, value...);
+
+		std::string data = o.str();
+		data.pop_back();
+
+		logger_->info(o.str());
+#else
+		return;
+#endif
+	}
+
+	// logger wrapper functions
+	void LogInfo(std::string msg)
+	{
+#ifdef ENABLE_LOGGING
+		logger_->info(msg);
+#endif
+	}
+
+	void LogWarn(std::string msg)
+	{
+#ifdef ENABLE_LOGGING
+		logger_->warn(msg);
+#endif
+	}
+
+	void LogFatal(std::string msg)
+	{
+#ifdef ENABLE_LOGGING
+		logger_->critical(msg);
+#endif
+	}
+
+private:
+	std::shared_ptr<spdlog::logger> logger_;
+
+	inline void build_string (std::ostream& o) {(void)o; }
+	template<class First, class... Rest> inline void build_string (std::ostream& o, const First& value, const Rest&... rest)
+	{
+		o << value;
+		o << ",";
+		build_string(o, rest...);
+	}
 };
 
 }

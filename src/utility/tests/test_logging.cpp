@@ -31,8 +31,16 @@ int main(int argc, char* argv[])
 //		helper.PassEntryDataToLogger();
 //	}
 
-	CsvLogger logger("logtest.txt", "/Users/rdu/Workspace");
+	CsvLogger logger("logtest", "/Users/rdu/Workspace");
 
 	for(int i = 0; i < 500; i++)
+	{
+		GlobalCsvLogger::GetLogger("csv", "/Users/rdu/Workspace").LogData(21,34,56);
 		logger.LogData(i+1, i+0.5, i*100.5);
+	}
+
+	EventLogger logger2("eventlog", "/Users/rdu/Workspace");
+
+	for(int i = 0; i < 500; i++)
+			logger2.LogEvent("event1", "event2", i*100.5);
 }
