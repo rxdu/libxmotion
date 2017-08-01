@@ -8,6 +8,6 @@ set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Add sub source directories
 #add_subdirectory(eigen)
-add_subdirectory(g3log)
+#add_subdirectory(g3log)
 add_subdirectory(octomap-1.8.0)
 add_subdirectory(googletest)

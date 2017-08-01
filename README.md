@@ -1,6 +1,6 @@
-# SRCL Control
+# Library for Research on Autonomous Vehicles (librav)
 
-This repository contains a collection of software that are used to develop and test robot related algorithms with physics-based simulation at SRCL.
+This repository contains a collection of software for research on autonomous vehicles.
 
 ## 1. Repository structure
 

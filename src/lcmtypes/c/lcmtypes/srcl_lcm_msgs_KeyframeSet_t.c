@@ -18,7 +18,7 @@ uint64_t __srcl_lcm_msgs_KeyframeSet_t_hash_recursive(const __lcm_hash_ptr *p)
 
     __lcm_hash_ptr cp;
     cp.parent =  p;
-    cp.v = __srcl_lcm_msgs_KeyframeSet_t_get_hash;
+    cp.v = (void*)__srcl_lcm_msgs_KeyframeSet_t_get_hash;
     (void) cp;
 
     uint64_t hash = (uint64_t)0x7e244a5374dace1fLL
