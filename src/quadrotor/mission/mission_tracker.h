@@ -21,7 +21,7 @@
 #include "lcmtypes/librav.hpp"
 
 #include "common/planning_types.h"
-#include "geometry/geo_mark.h"
+#include "planning/geometry/geo_mark.h"
 
 namespace librav {
 

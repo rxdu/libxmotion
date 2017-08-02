@@ -17,7 +17,7 @@
 #include "lcmtypes/librav.hpp"
 
 #include "common/planning_types.h"
-#include "quad/quad_polyopt.h"
+#include "quadrotor/trajectory/quad_polyopt.h"
 
 namespace librav {
 

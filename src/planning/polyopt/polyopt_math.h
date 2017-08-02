@@ -1,5 +1,5 @@
 /*
- * polyopt_utils.h
+ * polyopt_math.h
  *
  *  Created on: Aug 23, 2016
  *      Author: rdu

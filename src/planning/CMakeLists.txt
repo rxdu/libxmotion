@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(rav_planning)
 
+# cmake module path
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
@@ -22,7 +25,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Include directories
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 ## Find LCM
 #find_package(PkgConfig REQUIRED)
@@ -37,14 +40,23 @@ endif(LCM_NOT_FOUND)
 set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 
+## Conditional add sources
+find_package(GUROBI)
+if (NOT GUROBI_FOUND)
+  message("Gurobi not found. If you want to use Gurobi, set the GUROBI_HOME variable")
+endif()
+
+message("Gurobi found")
+include_directories(${GUROBI_INCLUDE_DIRS})
+
 ## Add other sub source directories
-add_subdirectory(src/geometry)
-add_subdirectory(src/polyopt)
-add_subdirectory(src/path_repair)
+add_subdirectory(geometry)
+add_subdirectory(polyopt)
+#add_subdirectory(src/path_repair)
 #add_subdirectory(src/graph)
-add_subdirectory(src/map)
-add_subdirectory(src/local)
-add_subdirectory(src/vis)
-add_subdirectory(src/examples)
-add_subdirectory(src/quad)
-add_subdirectory(src/apps)
+#add_subdirectory(src/map)
+#add_subdirectory(src/local)
+#add_subdirectory(vis)
+#add_subdirectory(examples)
+#add_subdirectory(src/quad)
+#add_subdirectory(src/apps)

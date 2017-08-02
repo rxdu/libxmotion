@@ -10,7 +10,7 @@
 
 #include <cmath>
 
-#include "graph/bds_base.h"
+#include "planning/graph/bds_base.h"
 #include "common/planning_types.h"
 
 namespace librav {

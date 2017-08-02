@@ -1,5 +1,4 @@
 # Include path
-#include_directories(${CMAKE_SOURCE_DIR}/inc)
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -9,8 +8,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # Add libraries
 set(QUAD_LIB_SRC
     mission_tracker.cpp
-    path_manager.cpp
-    quad_polyopt.cpp
+    #path_manager.cpp
+    #quad_polyopt.cpp
 )
 add_library(quad STATIC ${QUAD_LIB_SRC})
 target_link_libraries(quad map local polyopt ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})
@@ -31,5 +30,5 @@ target_link_libraries(quad map local polyopt ${OpenCV_LIBS} ${Octomap_LIBS} ${LC
 #add_executable(test_jointcorridor tests/test_jointcorridor.cpp)
 #target_link_libraries(test_jointcorridor polyopt ${GUROBI_LIBRARIES} ${LCM_LIBRARIES})
 
-add_executable(test_trajdef tests/test_trajdef.cpp)
-target_link_libraries(test_trajdef polyopt ${GUROBI_LIBRARIES})
+#add_executable(test_trajdef tests/test_trajdef.cpp)
+#target_link_libraries(test_trajdef polyopt ${GUROBI_LIBRARIES})

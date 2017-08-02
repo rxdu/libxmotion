@@ -5,7 +5,7 @@
  *      Author: rdu
  */
 
-#include "quad/mission_tracker.h"
+#include "quadrotor/mission/mission_tracker.h"
 
 using namespace librav;
 

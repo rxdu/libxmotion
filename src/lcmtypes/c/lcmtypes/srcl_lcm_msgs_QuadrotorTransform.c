@@ -18,7 +18,7 @@ uint64_t __srcl_lcm_msgs_QuadrotorTransform_hash_recursive(const __lcm_hash_ptr 
 
     __lcm_hash_ptr cp;
     cp.parent =  p;
-    cp.v = (void*)__srcl_lcm_msgs_QuadrotorTransform_get_hash;
+    cp.v = __srcl_lcm_msgs_QuadrotorTransform_get_hash;
     (void) cp;
 
     uint64_t hash = (uint64_t)0x10299cea50417ef5LL
