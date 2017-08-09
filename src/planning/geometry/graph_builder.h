@@ -10,7 +10,7 @@
 
 #include <memory>
 
-#include "graph/graph.h"
+#include "planning/graph/graph.h"
 #include "quadtree/quad_tree.h"
 #include "square_grid/square_grid.h"
 #include "cube_array/cube_array.h"

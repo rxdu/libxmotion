@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "local/transformation.h"
+#include "map/transformation.h"
 
 using namespace Eigen;
 

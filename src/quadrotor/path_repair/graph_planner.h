@@ -17,16 +17,16 @@
 #include "opencv2/opencv.hpp"
 
 // User headers
-#include "graph/graph.h"
-#include "graph/astar.h"
-#include "map/map_type.h"
-#include "map/map_config.h"
-#include "map/map_utils.h"
-#include "geometry/square_grid/square_grid.h"
-#include "geometry/quadtree/quad_tree.h"
-#include "geometry/sgrid_builder.h"
-#include "geometry/qtree_builder.h"
-#include "geometry/graph_builder.h"
+#include "planning/graph/graph.h"
+#include "planning/graph/astar.h"
+#include "planning/map/map_type.h"
+#include "planning/map/map_config.h"
+#include "planning/map/map_utils.h"
+#include "planning/geometry/square_grid/square_grid.h"
+#include "planning/geometry/quadtree/quad_tree.h"
+#include "planning/geometry/sgrid_builder.h"
+#include "planning/geometry/qtree_builder.h"
+#include "planning/geometry/graph_builder.h"
 
 namespace librav {
 

@@ -12,7 +12,7 @@
 #include <limits>
 #include <algorithm>
 
-#include "graph/edge.h"
+#include "planning/graph/edge.h"
 
 namespace librav {
 

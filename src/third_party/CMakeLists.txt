@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
-project(ave_third_party)
+project(librav_third_party)
 
 ## Put all binary files into /bin and libraries into /lib
 #set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)

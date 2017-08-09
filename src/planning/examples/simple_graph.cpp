@@ -13,9 +13,9 @@
 //#include <tuple>
 
 // user
-#include "graph/graph.h"
-#include "graph/astar.h"
-#include "graph/bds_example.h"
+#include "planning/graph/graph.h"
+#include "planning/graph/astar.h"
+#include "planning/graph/bds_example.h"
 
 using namespace librav;
 

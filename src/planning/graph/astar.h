@@ -23,8 +23,8 @@
 #include <iostream>
 #include <memory>
 
-#include "graph/graph.h"
-#include "graph/priority_queue.h"
+#include "planning/graph/graph.h"
+#include "planning/graph/priority_queue.h"
 
 #define MINIMAL_PRINTOUT 1
 

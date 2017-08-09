@@ -18,8 +18,8 @@
 #include "vis/graph_vis.h"
 #include "vis/sgrid_vis.h"
 #include "vis/vis_utils.h"
-#include "graph/priority_queue.h"
-#include "path_repair/shortcut_eval.h"
+#include "planning/graph/priority_queue.h"
+#include "quadrotor/path_repair/shortcut_eval.h"
 
 using namespace librav;
 

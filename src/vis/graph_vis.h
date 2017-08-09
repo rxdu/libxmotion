@@ -12,7 +12,7 @@
 
 #include "opencv2/opencv.hpp"
 
-#include "graph/graph.h"
+#include "planning/graph/graph.h"
 #include "vis/vis_utils.h"
 
 namespace librav {

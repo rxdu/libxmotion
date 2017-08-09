@@ -23,7 +23,7 @@
 // opencv
 #include "opencv2/opencv.hpp"
 
-#include "graph/astar.h"
+#include "planning/graph/astar.h"
 #include "path_repair/graph_combiner.h"
 #include "geometry/square_grid/square_grid.h"
 #include "geometry/cube_array/cube_array.h"

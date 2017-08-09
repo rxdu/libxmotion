@@ -8,7 +8,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "local/octomap_server.h"
+#include "map/octomap_server.h"
 #include "geometry/cube_array/cube_array.h"
 #include "geometry/cube_array_builder.h"
 #include "geometry/graph_builder.h"

@@ -10,9 +10,9 @@
 
 #include "opencv2/opencv.hpp"
 
-#include "graph/graph.h"
-#include "geometry/square_grid/square_grid.h"
-#include "path_repair/nav_field.h"
+#include "planning/graph/graph.h"
+#include "planning/geometry/square_grid/square_grid.h"
+#include "quadrotor/path_repair/nav_field.h"
 
 namespace librav {
 

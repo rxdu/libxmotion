@@ -16,11 +16,11 @@
 // opencv
 #include "opencv2/opencv.hpp"
 
-#include "graph/graph.h"
-#include "geometry/square_grid/square_grid.h"
-#include "geometry/quadtree/quad_tree.h"
+#include "planning/graph/graph.h"
+#include "planning/geometry/square_grid/square_grid.h"
+#include "planning/geometry/quadtree/quad_tree.h"
 #include "common/planning_types.h"
-#include "map/map_info.h"
+#include "planning/map/map_info.h"
 
 namespace librav {
 

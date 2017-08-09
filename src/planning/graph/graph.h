@@ -28,8 +28,8 @@
 #include <cstdint>
 #include <type_traits>
 
-#include "graph/bds_base.h"
-#include "graph/vertex.h"
+#include "planning/graph/bds_base.h"
+#include "planning/graph/vertex.h"
 
 namespace librav {
 

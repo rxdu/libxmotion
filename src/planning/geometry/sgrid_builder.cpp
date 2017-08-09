@@ -6,7 +6,7 @@
  */
 
 #include "map/image_utils.h"
-#include "geometry/sgrid_builder.h"
+#include "planning/geometry/sgrid_builder.h"
 
 using namespace librav;
 using namespace cv;

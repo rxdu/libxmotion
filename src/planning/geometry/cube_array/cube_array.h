@@ -12,7 +12,7 @@
 #include <vector>
 
 #include "common/planning_types.h"
-#include "graph/bds_base.h"
+#include "planning/graph/bds_base.h"
 
 namespace librav{
 

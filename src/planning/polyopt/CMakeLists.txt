@@ -1,29 +1,13 @@
 # Include path
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-## Conditional add sources
-find_package(GUROBI)
-if (NOT GUROBI_FOUND)
-  message("Gurobi not found. If you want to use Gurobi, set the GUROBI_HOME variable")
-endif()
-
-message("Gurobi found")
-include_directories(${GUROBI_INCLUDE_DIRS})
-
-find_package(GUROBI REQUIRED)
-if (NOT GUROBI_FOUND)
-  message("Gurobi not found. If you want to use Gurobi, set the GUROBI_HOME variable")
-else()
-  message("Gurobi found")
-  include_directories(${GUROBI_INCLUDE_DIRS})
-endif()
-
 # Add libraries
 set(POLYOPT_LIB_SRC
     polyopt_math.cpp
     #poly_curve.cpp
     gurobi_utils.cpp
     gurobi_polyopt.cpp
+    quad_polyopt.cpp
 )
 add_library(polyopt STATIC ${POLYOPT_LIB_SRC})
 target_link_libraries(polyopt common ${GUROBI_LIBRARIES})

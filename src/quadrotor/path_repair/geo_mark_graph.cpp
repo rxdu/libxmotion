@@ -5,7 +5,7 @@
  *      Author: rdu
  */
 
-#include "path_repair/geo_mark_graph.h"
+#include "quadrotor/path_repair/geo_mark_graph.h"
 
 using namespace librav;
 

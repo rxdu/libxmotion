@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(rav_quadrotor)
 
+# cmake module path
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
@@ -37,7 +40,16 @@ endif(LCM_NOT_FOUND)
 set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 
+## Find Gurobi
+find_package(GUROBI REQUIRED)
+if (NOT GUROBI_FOUND)
+  message("Gurobi not found. If you want to use Gurobi, set the GUROBI_HOME variable")
+else()
+  message("Gurobi found")
+  include_directories(${GUROBI_INCLUDE_DIRS})
+endif()
+
 ## Add other sub source directories
 #add_subdirectory(apps)
 add_subdirectory(mission)
-#add_subdirectory(path_repair)
+add_subdirectory(path_repair)

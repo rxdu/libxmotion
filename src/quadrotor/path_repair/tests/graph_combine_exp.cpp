@@ -25,7 +25,7 @@
 // user
 #include "map/map_type.h"
 #include "map/map_utils.h"
-#include "graph/graph.h"
+#include "planning/graph/graph.h"
 #include "geometry/graph_builder.h"
 #include "geometry/sgrid_builder.h"
 #include "geometry/cube_array/cube_array.h"

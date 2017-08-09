@@ -7,8 +7,8 @@
 
 #include <ctime>
 
-#include "quad/quad_polyopt.h"
-#include "polyopt/polyopt_math.h"
+#include "planning/polyopt/quad_polyopt.h"
+#include "planning/polyopt/polyopt_math.h"
 
 using namespace librav;
 

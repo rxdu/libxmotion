@@ -16,8 +16,8 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
 
-#include "square_grid/square_grid.h"
-#include "map/map_type.h"
+#include "planning/geometry/square_grid/square_grid.h"
+#include "planning/map/map_type.h"
 
 namespace librav {
 

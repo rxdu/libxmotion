@@ -13,11 +13,11 @@
 
 #include <cstdint>
 
-#include "gurobi_c++.h"
+#include <gurobi_c++.h>
 #include "eigen3/Eigen/Core"
 
 #include "common/quad_flattraj.h"
-#include "polyopt/gurobi_polyopt.h"
+#include "planning/polyopt/gurobi_polyopt.h"
 
 namespace librav {
 

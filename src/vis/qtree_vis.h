@@ -12,8 +12,8 @@
 
 #include "opencv2/opencv.hpp"
 
-#include "graph/graph.h"
-#include "geometry/quadtree/quad_tree.h"
+#include "planning/graph/graph.h"
+#include "planning/geometry/quadtree/quad_tree.h"
 
 namespace librav {
 

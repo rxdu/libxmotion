@@ -12,13 +12,13 @@
 
 #include "eigen3/Eigen/Geometry"
 
-#include "common/logging_helper.h"
+#include "utility/logging/logger.h"
 
-#include "path_repair/quad_path_repair.h"
-#include "map/map_utils.h"
-#include "geometry/cube_array/cube_array.h"
-#include "geometry/cube_array_builder.h"
-#include "geometry/graph_builder.h"
+#include "quadrotor/path_repair/quad_path_repair.h"
+#include "planning/map/map_utils.h"
+#include "planning/geometry/cube_array/cube_array.h"
+#include "planning/geometry/cube_array_builder.h"
+#include "planning/geometry/graph_builder.h"
 
 using namespace librav;
 

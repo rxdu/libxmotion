@@ -8,11 +8,15 @@ find_package(OpenCV REQUIRED)
 
 # Add libraries
 set(MAP_LIB_SRC
+  # 2D map
   image_utils.cpp
   map_utils.cpp
+  # 3D map
+  octomap_server.cpp
+  transformation.cpp
 )
 add_library(map STATIC ${MAP_LIB_SRC})
-target_link_libraries(map geometry ${OpenCV_LIBS})
+target_link_libraries(map geometry ${Octomap_LIBS} ${LCM_LIBRARIES} ${OpenCV_LIBS})
 
 # Add executables
 add_executable(test_qtree tests/test_quadtree.cpp)
@@ -35,3 +39,12 @@ target_link_libraries(test_expansion map vis ${OpenCV_LIBS})
 
 add_executable(test_traj tests/test_traj.cpp)
 target_link_libraries(test_traj map vis ${OpenCV_LIBS})
+
+add_executable(octree_example tests/octomap_example.cpp)
+target_link_libraries(octree_example ${Octomap_LIBS})
+
+#add_executable(test_octomap tests/test_octomap.cpp)
+#target_link_libraries(test_octomap local ${Octomap_LIBS})
+
+#add_executable(test_cubebuilder tests/test_cubebuilder.cpp)
+#target_link_libraries(test_cubebuilder map geometry local ${Octomap_LIBS} ${LCM_LIBRARIES})

@@ -40,23 +40,19 @@ endif(LCM_NOT_FOUND)
 set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 
-## Conditional add sources
-find_package(GUROBI)
+## Find Gurobi
+find_package(GUROBI REQUIRED)
 if (NOT GUROBI_FOUND)
   message("Gurobi not found. If you want to use Gurobi, set the GUROBI_HOME variable")
+else()
+  message("Gurobi found")
+  include_directories(${GUROBI_INCLUDE_DIRS})
 endif()
-
-message("Gurobi found")
-include_directories(${GUROBI_INCLUDE_DIRS})
 
 ## Add other sub source directories
 add_subdirectory(geometry)
 add_subdirectory(polyopt)
-#add_subdirectory(src/path_repair)
-#add_subdirectory(src/graph)
-#add_subdirectory(src/map)
-#add_subdirectory(src/local)
-#add_subdirectory(vis)
-#add_subdirectory(examples)
-#add_subdirectory(src/quad)
-#add_subdirectory(src/apps)
+#add_subdirectory(graph)
+add_subdirectory(map)
+#add_subdirectory(trajectory)
+add_subdirectory(examples)

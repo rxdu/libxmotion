@@ -15,7 +15,7 @@
 #include "opencv2/opencv.hpp"
 
 // quad_tree
-#include "graph/astar.h"
+#include "planning/graph/astar.h"
 #include "vis/graph_vis.h"
 #include "vis/qtree_vis.h"
 

@@ -8,8 +8,8 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
 
-#include "quadtree/quad_tree.h"
-#include "map/map_type.h"
+#include "planning/geometry/quadtree/quad_tree.h"
+#include "planning/map/map_type.h"
 
 namespace librav{
 

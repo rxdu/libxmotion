@@ -22,8 +22,8 @@
 #include <cstdint>
 #include <memory>
 
-#include "graph/graph.h"
-#include "graph/priority_queue.h"
+#include "planning/graph/graph.h"
+#include "planning/graph/priority_queue.h"
 
 namespace librav {
 	template<class GraphNodeType>

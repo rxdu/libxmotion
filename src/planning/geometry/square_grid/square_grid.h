@@ -13,7 +13,7 @@
 #include <vector>
 #include <cstdint>
 
-#include "graph/bds_base.h"
+#include "planning/graph/bds_base.h"
 
 namespace librav{
 
