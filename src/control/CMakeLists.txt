@@ -36,3 +36,4 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add sub source directories
 add_subdirectory(quad_ctrl)
+add_subdirectory(rc_car_ctrl)
