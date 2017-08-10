@@ -10,7 +10,7 @@
 
 #include "gtest/gtest.h"
 
-#include "frame/transformation.h"
+#include "common/transformation.h"
 
 using namespace Eigen;
 using namespace librav;

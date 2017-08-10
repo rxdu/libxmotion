@@ -13,7 +13,7 @@ set(MAP_LIB_SRC
   map_utils.cpp
   # 3D map
   octomap_server.cpp
-  transformation.cpp
+  #transformation.cpp
 )
 add_library(map STATIC ${MAP_LIB_SRC})
 target_link_libraries(map geometry ${Octomap_LIBS} ${LCM_LIBRARIES} ${OpenCV_LIBS})

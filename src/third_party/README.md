@@ -17,17 +17,9 @@ octovis
 
 * changed the HINTS location in octomap-1.8.0/octovis/CMakeLists.txt at line 40,41
 
-### g3log_srcl
-
-* refer to "change_forl_srcl.txt" inside the library folder
-
 ### ompl-1.2.0
 
 * changed the library output directory from "${PROJECT_BINARY_DIR}/lib" to "${CMAKE_BINARY_DIR}/lib" in the ompl-1.2.0/CMakeLists.txt at line 43
-
-### SMP (Sertac Karaman)
-
-* Added CMakeLists.txt to build external libraries
 
 ### spdlog
 

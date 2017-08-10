@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
-project(rav_sim)
+project(librav_sim)
 
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)

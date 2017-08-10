@@ -19,7 +19,7 @@
 #include <octomap/OcTree.h>
 #include <octomap/ColorOcTree.h>
 
-#include "planning/map/transformation.h"
+#include "common/transformation.h"
 
 namespace librav {
 

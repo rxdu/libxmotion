@@ -33,7 +33,7 @@
 #include "vis/graph_vis.h"
 #include "path_repair/geo_mark.h"
 
-#include "path_repair/transformation.h"
+#include "common/transformation.h"
 
 using namespace librav;
 using namespace octomap;

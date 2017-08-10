@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
-project(ave_common)
+project(librav_common)
 
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
@@ -32,6 +32,7 @@ set(SRCL_COMMON_LIB_SRC
     poly_helper.cpp
     poly_curve.cpp
     quad_flattraj.cpp
+	transformation.cpp
 )
 add_library(common STATIC ${SRCL_COMMON_LIB_SRC})
 if(ENABLE_LOGGING)

@@ -18,9 +18,9 @@
 #include "map/map_info.h"
 #include "map/map_utils.h"
 #include "geometry/cube_array/cube_array.h"
-#include "quad/quad_polyopt.h"
+#include "planning/polyopt/quad_polyopt.h"
 
-#include "local/transformation.h"
+#include "common/transformation.h"
 
 namespace librav
 {

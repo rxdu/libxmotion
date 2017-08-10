@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
-project(librav_planning)
+project(librav_car)
 
 # cmake module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
@@ -25,7 +25,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Include directories
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 ## Find LCM
 #find_package(PkgConfig REQUIRED)
@@ -50,8 +50,6 @@ else()
 endif()
 
 ## Add other sub source directories
-add_subdirectory(geometry)
-add_subdirectory(polyopt)
-#add_subdirectory(graph)
-add_subdirectory(map)
-add_subdirectory(examples)
+add_subdirectory(apps)
+add_subdirectory(mission)
+add_subdirectory(path_repair)
