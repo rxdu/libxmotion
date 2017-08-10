@@ -11,14 +11,14 @@
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
 
-#include "common/logging_helper.h"
+#include "utility/logging/logger.h"
 #include "common/planning_types.h"
-#include "map/map_utils.h"
-#include "map/map_config.h"
-#include "map/map_info.h"
-#include "geometry/graph_builder.h"
-#include "geometry/sgrid_builder.h"
-#include "path_repair/quad_path_repair.h"
+#include "planning/map/map_utils.h"
+#include "planning/map/map_config.h"
+#include "planning/map/map_info.h"
+#include "planning/geometry/graph_builder.h"
+#include "planning/geometry/sgrid_builder.h"
+#include "quadrotor/path_repair/quad_path_repair.h"
 
 using namespace librav;
 
@@ -150,7 +150,7 @@ int main(int argc, char* argv[])
 	//TestCase1_Config(qplanner);
 	TestCase6_Config(qplanner);
 
-	LoggingHelper& logging_helper = LoggingHelper::GetInstance("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/librav/pc/planning/log");
+	//LoggingHelper& logging_helper = LoggingHelper::GetInstance("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/librav/pc/planning/log");
 
 	if(qplanner.active_graph_planner_ == GraphPlannerType::NOT_SPECIFIED)
 	{

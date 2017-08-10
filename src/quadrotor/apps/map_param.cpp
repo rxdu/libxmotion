@@ -22,11 +22,11 @@
 #include "planning/graph/astar.h"
 #include "vis/graph_vis.h"
 #include "vis/sgrid_vis.h"
-#include "map/image_utils.h"
-#include "map/map_utils.h"
-#include "path_repair/graph_planner.h"
-#include "geometry/graph_builder.h"
-#include "geometry/sgrid_builder.h"
+#include "planning/map/image_utils.h"
+#include "planning/map/map_utils.h"
+#include "quadrotor/path_repair/graph_planner.h"
+#include "planning/geometry/graph_builder.h"
+#include "planning/geometry/sgrid_builder.h"
 
 using namespace cv;
 using namespace librav;

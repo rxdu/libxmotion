@@ -13,7 +13,7 @@
 
 #include <lcm/lcm-cpp.hpp>
 
-#include "local/octomap_server.h"
+#include "planning/map/octomap_server.h"
 
 using namespace librav;
 

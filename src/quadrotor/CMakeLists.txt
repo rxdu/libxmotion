@@ -50,6 +50,6 @@ else()
 endif()
 
 ## Add other sub source directories
-#add_subdirectory(apps)
+add_subdirectory(apps)
 add_subdirectory(mission)
 add_subdirectory(path_repair)

@@ -17,15 +17,16 @@
 
 #include "common/planning_types.h"
 #include "common/control_types.h"
-#include "graph_planner.h"
+
 #include "planning/map/map_info.h"
 #include "planning/geometry/geo_mark.h"
-#include "quadrotor/path_repair/geo_mark_graph.h"
 #include "planning/map/octomap_server.h"
+
+#include "quadrotor/path_repair/graph_planner.h"
+#include "quadrotor/path_repair/geo_mark_graph.h"
 #include "quadrotor/path_repair/nav_field.h"
 #include "quadrotor/path_repair/shortcut_eval.h"
 #include "quadrotor/mission/path_manager.h"
-//#include "quadrotor/path_repair/quad_polyopt.h"
 #include "quadrotor/mission/mission_tracker.h"
 
 namespace librav {
