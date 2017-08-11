@@ -10,8 +10,8 @@ set(QUADCON_LIB_SRC
     #estimator/att_estimator.cpp
     estimator/rc_car_state.cpp
 )
-add_library(rc_car_ctrl STATIC ${QUADCON_LIB_SRC})
-target_link_libraries(rc_car_ctrl common utility ${LCM_LIBRARIES})
+add_library(rccar_ctrl STATIC ${QUADCON_LIB_SRC})
+target_link_libraries(rccar_ctrl common utility ${LCM_LIBRARIES})
 
 # Add executables
 #add_executable(quad_motion_client motion_server/motion_client.cpp)
