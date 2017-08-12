@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(librav_quadrotor)
 
-# cmake module path
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
-
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
