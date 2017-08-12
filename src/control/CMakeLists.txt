@@ -34,6 +34,10 @@ endif(LCM_NOT_FOUND)
 set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 
+## Find Eigen3
+find_package(Eigen3 REQUIRED)
+include_directories(${EIGEN3_INCLUDE_DIR})
+
 ## Add sub source directories
 add_subdirectory(quad_ctrl)
 add_subdirectory(rc_car_ctrl)
