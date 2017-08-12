@@ -59,7 +59,7 @@ QuadHbirdSimControl::QuadHbirdSimControl():
 		//lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server_);
 		motion_server_ = std::make_shared<MotionServer>(lcm_);
 
-		data_trans_ = std::make_shared<QuadDataTransmitter>(lcm_);
+		data_trans_ = std::make_shared<QuadStateBroadcaster>(lcm_);
 		//poly_motion_client_ = std::make_shared<PolyMotionClient>(lcm_,"quad_planner/polynomial_curve", "quad_controller/quad_motion_service");
 	}
 }
@@ -143,7 +143,35 @@ void QuadHbirdSimControl::UpdateRobotState(const DataFromQuadSim& data)
 {
 	/********* update robot state *********/
 	// Test without state estimator
-	rs_.UpdateRobotState(data);
+	QuadSensorData sensor_data;
+
+	// get values directly from simulator, will be replaced by state estimator later
+	sensor_data.pos_i.x = data.pos_i.x;
+	sensor_data.pos_i.y = data.pos_i.y;
+	sensor_data.pos_i.z = data.pos_i.z;
+
+	sensor_data.vel_i.x = data.vel_i.x;
+	sensor_data.vel_i.y = data.vel_i.y;
+	sensor_data.vel_i.z = data.vel_i.z;
+
+	// euler in X-Y-Z convension
+	sensor_data.rot_i.x = data.rot_i.x;
+	sensor_data.rot_i.y = data.rot_i.y;
+	sensor_data.rot_i.z = data.rot_i.z;
+
+	// quaternion
+	sensor_data.quat_i.x = data.quat_i.x;
+	sensor_data.quat_i.y = data.quat_i.y;
+	sensor_data.quat_i.z = data.quat_i.z;
+	sensor_data.quat_i.w = data.quat_i.w;
+
+	sensor_data.rot_rate_b.x = data.rot_rate_b.x;
+	sensor_data.rot_rate_b.y = data.rot_rate_b.y;
+	sensor_data.rot_rate_b.z = data.rot_rate_b.z;
+
+	sensor_data.laser_points = data.laser_points;
+
+	rs_.UpdateRobotState(sensor_data);
 
 	if(broadcast_rs_)
 		data_trans_->SendQuadStateData(rs_);

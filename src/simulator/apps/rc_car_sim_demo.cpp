@@ -27,7 +27,7 @@ int main(int arc, char* argv[])
 	if(process.ConnectToServer())
 		process.StartSimLoop_Synchronous();
 
-	return 1;
+	return 0;
 }
 
 

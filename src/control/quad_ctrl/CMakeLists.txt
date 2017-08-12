@@ -21,7 +21,7 @@ set(QUADCON_LIB_SRC
     motion_server/quad_flattraj_handler.cpp
     #motion_server/waypoint_path_handler.cpp
     # data transmitter
-    data_trans/quad_data_transmitter.cpp
+    # data_trans/quad_data_transmitter.cpp
 )
 add_library(quad_ctrl STATIC ${QUADCON_LIB_SRC})
 target_link_libraries(quad_ctrl common utility ${LCM_LIBRARIES})

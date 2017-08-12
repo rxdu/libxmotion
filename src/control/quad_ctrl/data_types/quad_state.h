@@ -12,8 +12,7 @@
 #include "eigen3/Eigen/Geometry"
 
 #include "common/control_types.h"
-#include "quad_ctrl/data_types/quad_sim_types.h"
-#include "quad_ctrl/data_types/quad_config.h"
+#include "control/quad_ctrl/data_types/quad_config.h"
 
 namespace librav{
 
@@ -22,12 +21,7 @@ enum class QuadFlightType {
 	PLUS_TYPE,
 };
 
-struct QuadCmd
-{
-	float ang_vel[4];
-};
-
-struct DataFromQuad
+struct QuadSensorData
 {
 	// sensor data
 	unsigned char mono_image[IMG_RES_Y][IMG_RES_X];
@@ -42,9 +36,9 @@ struct DataFromQuad
 	Point3f rot_rate_b;
 };
 
-struct DataToQuad
+struct QuadCmd
 {
-	QuadCmd motor_cmd;
+	float ang_vel[4];
 };
 
 class QuadState {
@@ -75,8 +69,7 @@ public:
 	double sim_step_;
 
 public:
-	void UpdateRobotState(const DataFromQuad& new_data);
-	void UpdateRobotState(const DataFromQuadSim& new_data);
+	void UpdateRobotState(const QuadSensorData& new_data);
 };
 
 }

@@ -69,14 +69,6 @@ void RCCarSimControl::InitLogger(std::string log_name_prefix, std::string log_sa
 	logging_helper.AddItemNameToEntryHead("acc_d_y");
 	logging_helper.AddItemNameToEntryHead("acc_d_z");
 
-	logging_helper.AddItemNameToEntryHead("jerk_d_x");
-	logging_helper.AddItemNameToEntryHead("jerk_d_y");
-	logging_helper.AddItemNameToEntryHead("jerk_d_z");
-
-	logging_helper.AddItemNameToEntryHead("omega_d_x");
-	logging_helper.AddItemNameToEntryHead("omega_d_y");
-	logging_helper.AddItemNameToEntryHead("omega_d_z");
-
 	logging_helper.PassEntryHeaderToLogger();
 }
 
@@ -112,8 +104,8 @@ RCCarCmd RCCarSimControl::UpdateCtrlLoop()
 	// control
 
 	// set control variables
-	cmd.driving_vel_lcmd = 100;
-	cmd.driving_vel_rcmd = 100;
+	cmd.driving_vel_lcmd = 5;
+	cmd.driving_vel_rcmd = 5;
 	cmd.steering_ang_cmd = 0.0f * 3.1415f / 180.0f;
 
 	return cmd;

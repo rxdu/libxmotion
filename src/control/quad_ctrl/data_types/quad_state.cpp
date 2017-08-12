@@ -48,36 +48,7 @@ QuadState::QuadState():
 	rotation_rate_.z = 0;
 }
 
-void QuadState::UpdateRobotState(const DataFromQuad& new_data)
-{
-	// get values directly from simulator, will be replaced by state estimator later
-	position_.x = new_data.pos_i.x;
-	position_.y = new_data.pos_i.y;
-	position_.z = new_data.pos_i.z;
-
-	velocity_.x = new_data.vel_i.x;
-	velocity_.y = new_data.vel_i.y;
-	velocity_.z = new_data.vel_i.z;
-
-	// euler in X-Y-Z convension
-	orientation_.x = new_data.rot_i.x;
-	orientation_.y = new_data.rot_i.y;
-	orientation_.z = new_data.rot_i.z;
-
-	// quaternion
-	quat_.x() = new_data.quat_i.x;
-	quat_.y() = new_data.quat_i.y;
-	quat_.z() = new_data.quat_i.z;
-	quat_.w() = new_data.quat_i.w;
-
-	rotation_rate_.x = new_data.rot_rate_b.x;
-	rotation_rate_.y = new_data.rot_rate_b.y;
-	rotation_rate_.z = new_data.rot_rate_b.z;
-
-	laser_points_ = new_data.laser_points;
-}
-
-void QuadState::UpdateRobotState(const DataFromQuadSim& new_data)
+void QuadState::UpdateRobotState(const QuadSensorData& new_data)
 {
 	// get values directly from simulator, will be replaced by state estimator later
 	position_.x = new_data.pos_i.x;

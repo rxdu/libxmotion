@@ -51,5 +51,6 @@ endif()
 
 ## Add other sub source directories
 add_subdirectory(apps)
+add_subdirectory(driver)
 add_subdirectory(mission)
 add_subdirectory(path_repair)

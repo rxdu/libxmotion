@@ -22,7 +22,7 @@
 #include "quad_ctrl/controller/pos_quat_con.h"
 
 #include "quad_ctrl/motion_server/motion_server.h"
-#include "quad_ctrl/data_trans/quad_data_transmitter.h"
+#include "quadrotor/driver/quad_state_broadcaster.h"
 
 namespace librav {
 
@@ -40,7 +40,7 @@ public:
 	std::shared_ptr<MotionServer> motion_server_;
 
 	bool broadcast_rs_;
-	std::shared_ptr<QuadDataTransmitter> data_trans_;
+	std::shared_ptr<QuadStateBroadcaster> data_trans_;
 
 public:
 	virtual DataToQuadSim ConvertRobotCmdToSimCmd(const QuadCmd& cmd);

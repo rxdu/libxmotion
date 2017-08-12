@@ -1,5 +1,5 @@
 /*
- * vis_data_transmitter.cpp
+ * quad_state_broadcaster.cpp
  *
  *  Created on: May 26, 2016
  *      Author: rdu
@@ -8,31 +8,30 @@
 #include <iostream>
 
 #include "lcmtypes/librav.hpp"
-
-#include "data_trans/quad_data_transmitter.h"
+#include "quadrotor/driver/quad_state_broadcaster.h"
 
 using namespace librav;
 
-QuadDataTransmitter::QuadDataTransmitter(std::shared_ptr<lcm::LCM> lcm_ptr):
+QuadStateBroadcaster::QuadStateBroadcaster(std::shared_ptr<lcm::LCM> lcm_ptr):
 		lcm_(lcm_ptr)
 {
 	if(!lcm_->good())
 		std::cerr << "LCM instance is not initialized properly. Quad data transmitter is not going to work." << std::endl;
 }
 
-QuadDataTransmitter::~QuadDataTransmitter()
+QuadStateBroadcaster::~QuadStateBroadcaster()
 {
 
 }
 
-void QuadDataTransmitter::SendQuadStateData(const QuadState& rs)
+void QuadStateBroadcaster::SendQuadStateData(const QuadState& rs)
 {
 	//SendLaserPoints(rs.laser_points_);
 	SendLaserPoints(rs.laser_points_,rs.position_, rs.quat_);
 	SendQuadTransform(rs.position_, rs.quat_);
 }
 
-void QuadDataTransmitter::SendQuadTransform(Point3f pos, Eigen::Quaterniond quat)
+void QuadStateBroadcaster::SendQuadTransform(Point3f pos, Eigen::Quaterniond quat)
 {
 	srcl_lcm_msgs::QuadrotorTransform trans_msg;
 	srcl_lcm_msgs::Pose_t trans_base2world;
@@ -68,7 +67,7 @@ void QuadDataTransmitter::SendQuadTransform(Point3f pos, Eigen::Quaterniond quat
 	lcm_->publish("quad_data/quad_transform", &trans_msg);
 }
 
-void QuadDataTransmitter::SendLaserPoints(const std::vector<Point3f>& pts)
+void QuadStateBroadcaster::SendLaserPoints(const std::vector<Point3f>& pts)
 {
 	srcl_lcm_msgs::LaserScanPoints_t pts_msg;
 	srcl_lcm_msgs::Point3Df_t point;
@@ -97,7 +96,7 @@ void QuadDataTransmitter::SendLaserPoints(const std::vector<Point3f>& pts)
 //	std::cout << "points sent" << std::endl;
 }
 
-void QuadDataTransmitter::SendLaserPoints(const std::vector<Point3f>& pts, Point3f pos, Eigen::Quaterniond quat)
+void QuadStateBroadcaster::SendLaserPoints(const std::vector<Point3f>& pts, Point3f pos, Eigen::Quaterniond quat)
 {
 	srcl_lcm_msgs::LaserScanPoints_t pts_msg;
 	srcl_lcm_msgs::Point3Df_t point;
@@ -140,7 +139,7 @@ void QuadDataTransmitter::SendLaserPoints(const std::vector<Point3f>& pts, Point
 	lcm_->publish("quad_data/laser_scan_points", &pts_msg);
 }
 
-void QuadDataTransmitter::SendSystemTime(uint64_t sys_t)
+void QuadStateBroadcaster::SendSystemTime(uint64_t sys_t)
 {
 	srcl_lcm_msgs::TimeStamp_t t_msg;
 

@@ -1,5 +1,5 @@
 /*
- * quad_data_transmitter.h
+ * quad_state_broadcaster.h
  *
  *  Created on: May 26, 2016
  *      Author: rdu
@@ -15,14 +15,18 @@
 #include <lcm/lcm-cpp.hpp>
 
 #include "common/control_types.h"
-#include "quad_ctrl/data_types/quad_state.h"
+#include "control/quad_ctrl/data_types/quad_state.h"
 
 namespace librav {
 
-class QuadDataTransmitter {
+class QuadStateBroadcaster {
 public:
-	QuadDataTransmitter(std::shared_ptr<lcm::LCM> lcm_ptr);
-	~QuadDataTransmitter();
+	QuadStateBroadcaster(std::shared_ptr<lcm::LCM> lcm_ptr);
+	~QuadStateBroadcaster();
+
+public:
+	void SendQuadStateData(const QuadState& rs);
+	void SendSystemTime(uint64_t sys_t);
 
 private:
 	std::shared_ptr<lcm::LCM> lcm_;
@@ -30,10 +34,6 @@ private:
 	void SendQuadTransform(Point3f pos, Eigen::Quaterniond quat);
 	void SendLaserPoints(const std::vector<Point3f>& pts);
 	void SendLaserPoints(const std::vector<Point3f>& pts, Point3f pos, Eigen::Quaterniond quat);
-
-public:
-	void SendQuadStateData(const QuadState& rs);
-	void SendSystemTime(uint64_t sys_t);
 };
 
 }
