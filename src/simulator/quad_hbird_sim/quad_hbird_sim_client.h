@@ -1,12 +1,12 @@
 /*
- * quad_sim_client.h
+ * quad_hbird_sim_client.h
  *
  *  Created on: Sep 1, 2016
  *      Author: rdu
  */
 
-#ifndef CONTROL_SRC_QUAD_HBIRD_SIM_QUAD_HBIRD_SIM_CLIENT_H_
-#define CONTROL_SRC_QUAD_HBIRD_SIM_QUAD_HBIRD_SIM_CLIENT_H_
+#ifndef SIMULATOR_QUAD_HBIRD_SIM_CLIENT_H_
+#define SIMULATOR_QUAD_HBIRD_SIM_CLIENT_H_
 
 #include <cstdint>
 
@@ -17,7 +17,7 @@ extern "C" {
 
 #include "common/control_types.h"
 
-#include "quad_ctrl/data_types/quad_sim_types.h"
+#include "simulator/quad_hbird_sim/quad_hbird_sim_types.h"
 #include "vrep_sim/vrep_interface/robot_sim_client.h"
 
 namespace librav {
@@ -78,4 +78,4 @@ private:
 
 }
 
-#endif /* CONTROL_SRC_QUAD_HBIRD_SIM_QUAD_HBIRD_SIM_CLIENT_H_ */
+#endif /* SIMULATOR_QUAD_HBIRD_SIM_CLIENT_H_ */

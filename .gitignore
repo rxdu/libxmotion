@@ -6,16 +6,14 @@ build2
 build*
 /control/hummingbird/quad_ctrl/build
 *~
-pc/gui/*~
 */~
 */*.*~
 *.m~
-utils/log_analyzer/build-log_analyzer-Desktop_Qt_5_5_1_GCC_64bit-Debug/
-pc/gui/CMakeLists.txt.user
 *.DS_Store
 
 # log
 *.log
+*.data
 
 # Doxygen
 docs/doxygen/html/
@@ -28,13 +26,10 @@ pc/visualization/CMakeLists.txt.user
 .vscode
 
 # LCM
-pc/lcmtypes/c
-pc/lcmtypes/cpp
-pc/lcmtypes/java
-pc/lcmtypes/python
-pc/third_party/libbot2/*/lcmtypes/
-pc/third_party/libbot2/bot2-lcmgl/java/src/bot_lcmgl/data_t.java
-pc/third_party/libbot2/bot2-lcmgl/python/src/bot_lcmgl/data_t.py
+src/lcmtypes/c
+src/lcmtypes/cpp
+src/lcmtypes/java
+src/lcmtypes/python
 
 # Compiled Object files
 *.slo

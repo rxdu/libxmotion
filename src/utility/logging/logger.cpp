@@ -30,6 +30,24 @@ namespace
 	}
 }
 
+std::string LoggerHelper::GetDefaultLogPath()
+{
+	char* home_path;
+	home_path = getenv ("HOME");
+	std::string log_path;
+	if (home_path!=NULL)
+	{
+		std::string hm(home_path);
+		log_path = hm+"/Workspace/librav/data/log";
+	}
+	else
+	{
+		// default path
+		log_path = "/home/rdu/Workspace/librav/data/log";
+	}
+	return log_path;
+}
+
 CtrlLogger::CtrlLogger(std::string log_name_prefix, std::string log_save_path):
 				head_added_(false),
 				log_name_prefix_(log_name_prefix),

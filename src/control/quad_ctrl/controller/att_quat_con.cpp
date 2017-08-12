@@ -132,6 +132,10 @@ void AttQuatCon::Update(const AttQuatConInput& input, AttQuatConOutput& output)
 		if(desired_ft(i) < 10e-5 && desired_ft(i) > -10e-5)
 			desired_ft(i) = 0;
 
+	output.torque_d[0] = desired_ft(1);
+	output.torque_d[1] = desired_ft(2);
+	output.torque_d[2] = desired_ft(3);
+
 	// calculate desired motor cmd from desired force and torque
 	Eigen::Matrix<double,4,1> motor_vel = CalcMotorCmd(desired_ft, state_.quad_flight_type_);
 

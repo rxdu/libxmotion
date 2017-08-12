@@ -16,17 +16,11 @@ QuadStateBroadcaster::QuadStateBroadcaster(std::shared_ptr<lcm::LCM> lcm_ptr):
 		lcm_(lcm_ptr)
 {
 	if(!lcm_->good())
-		std::cerr << "LCM instance is not initialized properly. Quad data transmitter is not going to work." << std::endl;
-}
-
-QuadStateBroadcaster::~QuadStateBroadcaster()
-{
-
+		std::cerr << "LCM instance is not initialized properly. Quad state broadcaster is not going to work." << std::endl;
 }
 
 void QuadStateBroadcaster::SendQuadStateData(const QuadState& rs)
 {
-	//SendLaserPoints(rs.laser_points_);
 	SendLaserPoints(rs.laser_points_,rs.position_, rs.quat_);
 	SendQuadTransform(rs.position_, rs.quat_);
 }
@@ -58,12 +52,6 @@ void QuadStateBroadcaster::SendQuadTransform(Point3f pos, Eigen::Quaterniond qua
 	trans_msg.base_to_world = trans_base2world;
 	trans_msg.laser_to_base = trans_laser2base;
 
-//	std::cout << "pos: " << pos.x << " , " << pos.y << " , " << pos.z << std::endl;
-//	std::cout << "quat (w, x, y ,z): " << quat.w() << " , "
-//			<< quat.x() << " , "
-//			<< quat.y() << " , "
-//			<< quat.z() << std::endl;
-
 	lcm_->publish("quad_data/quad_transform", &trans_msg);
 }
 
@@ -83,17 +71,7 @@ void QuadStateBroadcaster::SendLaserPoints(const std::vector<Point3f>& pts)
 	}
 	pts_msg.point_num = pts_msg.points.size();
 
-//	if(!pts.empty()){
-//	for(int i = 0; i < 3; i++)
-//	{
-//		std::cout << "(" << pts[i].x << " , " << pts[i].y << " , " << pts[i].z << " ) " << std::endl;
-//	}
-//	std::cout << "--------" << std::endl;
-//	}
-
 	lcm_->publish("quad_data/laser_scan_points", &pts_msg);
-
-//	std::cout << "points sent" << std::endl;
 }
 
 void QuadStateBroadcaster::SendLaserPoints(const std::vector<Point3f>& pts, Point3f pos, Eigen::Quaterniond quat)

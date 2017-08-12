@@ -27,21 +27,7 @@ int main(int arc, char* argv[])
 	//controller->SetInitPose(-1.8,2,0.5,-M_PI/4);
 	control->SetInitPose(0,0,0.5,0);
 	control->BroadcastRobotState(true);
-
-	char* home_path;
-	home_path = getenv ("HOME");
-	std::string log_path;
-	if (home_path!=NULL)
-	{
-		std::string hm(home_path);
-		log_path = hm+"/Workspace/srcl/librav/pc/control/log/quad";
-	}
-	else
-	{
-		// default path
-		log_path = "/home/rdu/Workspace/srcl_rtk/librav/pc/control/log/quad";
-	}
-	control->InitLogger("quadsim_hummingbird.log", log_path);
+	control->InitLogger("quadsim_hummingbird", "/quad/control");
 
 	// create a simulation process
 	RobotSimProcess<DataFromQuadSim, DataToQuadSim,QuadState, QuadCmd> process(client,control);

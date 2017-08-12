@@ -24,21 +24,8 @@ int main(int arc, char* argv[])
 	// set quadrotor init pose
 	//controller->SetInitPose(-1.8,2,0.5,-M_PI/4);
 	controller->SetInitPose(-1.8,1.8,0.8,M_PI/4);
-	controller->BroadcastRobotState(true);
-	char* home_path;
-	home_path = getenv ("HOME");
-	std::string log_path;
-	if (home_path!=NULL)
-	{
-		std::string hm(home_path);
-		log_path = hm+"/Workspace/srcl_rtk/librav/pc/control/log/quad";
-	}
-	else
-	{
-		// default path
-		log_path = "/home/rdu/Workspace/srcl_rtk/librav/pc/control/log/quad";
-	}
-	controller->InitLogger("quadsim_hummingbird", log_path);//controller->SetMotionMode(MotionMode::POS_STEP_RESPONSE);
+	controller->BroadcastRobotState(true);	
+	controller->InitLogger("quadsim_hummingbird", "/quad/control");//controller->SetMotionMode(MotionMode::POS_STEP_RESPONSE);
 
 	// create a simulation process
 	RobotSimProcess<DataFromQuadSim, DataToQuadSim,QuadState, QuadCmd> process(client,controller);

@@ -9,7 +9,7 @@
 #define CONTROL_POS_QUAT_CON_H_
 
 #include "interface/controller.h"
-#include "quad_ctrl/data_types/quad_state.h"
+#include "quad_ctrl/state/quad_state.h"
 
 namespace librav {
 

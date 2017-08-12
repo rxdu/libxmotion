@@ -23,21 +23,20 @@ namespace librav
 template<typename DataFromSimType, typename DataToSimType, typename RobotStateType, typename RobotCmdType>
 class RobotSimControl
 {
-protected:
-	RobotSimControl():ctrl_loop_count_(0){};
-	virtual ~RobotSimControl() = default;
-
-protected:
-	RobotStateType rs_;
-	RobotStateType est_rs_;
-	uint64_t ctrl_loop_count_;
-
 public:
 	virtual const RobotStateType& GetRobotState() { return rs_;};
 	virtual DataToSimType ConvertRobotCmdToSimCmd(const RobotCmdType& cmd) = 0;
 
 	virtual void UpdateRobotState(const DataFromSimType& data) = 0;
 	virtual RobotCmdType UpdateCtrlLoop() = 0;
+
+protected:
+	RobotSimControl():ctrl_loop_count_(0){};
+	virtual ~RobotSimControl() = default;	
+
+	RobotStateType rs_;
+	RobotStateType est_rs_;
+	uint64_t ctrl_loop_count_;	
 };
 
 }

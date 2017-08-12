@@ -23,20 +23,18 @@ namespace librav
 
 class RCCarSimControl : public RobotSimControl<DataFromRCCarSim, DataToRCCarSim, RCCarState, RCCarCmd>
 {
-  public:
+public:
 	RCCarSimControl();
 
-  private:
-	std::shared_ptr<lcm::LCM> lcm_;
-
-  public:
 	virtual DataToRCCarSim ConvertRobotCmdToSimCmd(const RCCarCmd &cmd);
 	virtual void UpdateRobotState(const DataFromRCCarSim &data);
 	virtual RCCarCmd UpdateCtrlLoop();
 
-  public:
 	void SetInitPose(float x, float y, float yaw);
 	void InitLogger(std::string log_name_prefix, std::string log_save_path);
+
+private:
+	std::shared_ptr<lcm::LCM> lcm_;
 };
 }
 

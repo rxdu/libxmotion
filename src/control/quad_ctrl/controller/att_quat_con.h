@@ -13,7 +13,7 @@
 
 #include "common/control_types.h"
 #include "interface/controller.h"
-#include "quad_ctrl/data_types/quad_state.h"
+#include "quad_ctrl/state/quad_state.h"
 
 namespace librav {
 
@@ -41,6 +41,7 @@ struct AttQuatConInput
 struct AttQuatConOutput
 {
 	float motor_ang_vel_d[4];
+	float torque_d[3];
 };
 
 using AttQuatConIF = ControllerInterface<AttQuatConParam, QuadState,AttQuatConInput,AttQuatConOutput>;
@@ -62,7 +63,7 @@ private:
 
 public:
 	void InitParams(const AttQuatConParam& param) override;
-	void Update(const AttQuatConInput& desired, AttQuatConOutput& cmd) override;
+	void Update(const AttQuatConInput& desired, AttQuatConOutput& output) override;
 };
 
 }

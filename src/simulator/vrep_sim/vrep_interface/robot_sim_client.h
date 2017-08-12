@@ -19,11 +19,6 @@ namespace librav
 template<typename DataFromSimType, typename DataToSimType>
 class RobotSimClient
 {
-protected:
-	RobotSimClient(simxInt id):client_id_(id){};
-	RobotSimClient():client_id_(-1){};
-	virtual ~RobotSimClient(){};
-
 public:
 	simxInt client_id_;
 
@@ -31,6 +26,11 @@ public:
 	virtual void ConfigDataStreaming(void) = 0;
 	virtual bool ReceiveDataFromRobot(DataFromSimType& state) = 0;
 	virtual void SendDataToRobot(const DataToSimType& rcmd) = 0;
+
+protected:
+	RobotSimClient(simxInt id):client_id_(id){};
+	RobotSimClient():client_id_(-1){};
+	virtual ~RobotSimClient(){};
 };
 
 }

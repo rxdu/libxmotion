@@ -5,8 +5,8 @@
  *      Author: rdu
  */
 
-#ifndef CONTROL_SRC_QUAD_SOLO_SIM_QUAD_SIM_CONTROL_H_
-#define CONTROL_SRC_QUAD_SOLO_SIM_QUAD_SIM_CONTROL_H_
+#ifndef SIMULATOR_QUAD_SOLO_SIM_CONTROL_H_
+#define SIMULATOR_QUAD_SOLO_SIM_CONTROL_H_
 
 #include <memory>
 
@@ -14,14 +14,14 @@
 #include <lcm/lcm-cpp.hpp>
 
 #include "vrep_sim/vrep_interface/robot_sim_control.h"
+#include "simulator/quad_solo_sim/quad_solo_sim_types.h"
 
-#include "quad_ctrl/data_types/quad_sim_types.h"
-#include "quad_ctrl/data_types/quad_state.h"
+#include "control/quad_ctrl/state/quad_state.h"
+#include "control/quad_ctrl/controller/att_quat_con.h"
+#include "control/quad_ctrl/controller/pos_quat_con.h"
+#include "control/quad_ctrl/actuator/quad_mixer.h"
 
-#include "quad_ctrl/controller/att_quat_con.h"
-#include "quad_ctrl/controller/pos_quat_con.h"
-
-#include "quad_ctrl/motion_server/motion_server.h"
+#include "quadrotor/motion_server/motion_server.h"
 #include "quadrotor/driver/quad_state_broadcaster.h"
 
 namespace librav {
@@ -34,6 +34,7 @@ public:
 
 	std::unique_ptr<AttQuatCon> att_con_;
 	std::unique_ptr<PosQuatCon> pos_con_;
+	std::unique_ptr<QuadMixer>	mixer_;
 
 	std::shared_ptr<lcm::LCM> lcm_;
 
@@ -56,4 +57,4 @@ public:
 
 }
 
-#endif /* CONTROL_SRC_QUAD_SOLO_SIM_QUAD_SIM_CONTROL_H_ */
+#endif /* SIMULATOR_QUAD_SOLO_SIM_CONTROL_H_ */

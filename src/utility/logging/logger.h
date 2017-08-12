@@ -19,6 +19,10 @@
 
 namespace librav {
 
+namespace LoggerHelper{
+	std::string GetDefaultLogPath();
+}
+
 class CtrlLogger {
 private:
 	CtrlLogger() = delete;

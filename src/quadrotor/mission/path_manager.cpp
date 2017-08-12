@@ -5,13 +5,12 @@
  *      Author: rdu
  */
 
-#include <path_manager.h>
 #include <iostream>
 #include <cmath>
 
 #include "eigen3/Eigen/Core"
 #include "eigen3/Eigen/Geometry"
-
+#include "quadrotor/mission/path_manager.h"
 
 using namespace librav;
 

@@ -5,8 +5,8 @@
  *      Author: rdu
  */
 
-#ifndef CONTROL_SRC_QUAD_SOLO_SIM_QUAD_SIM_CLIENT_H_
-#define CONTROL_SRC_QUAD_SOLO_SIM_QUAD_SIM_CLIENT_H_
+#ifndef SIMULATOR_QUAD_SOLO_SIM_CLIENT_H_
+#define SIMULATOR_QUAD_SOLO_SIM_CLIENT_H_
 
 #include <cstdint>
 
@@ -18,7 +18,7 @@ extern "C" {
 #include "common/control_types.h"
 
 #include "vrep_sim/vrep_interface/robot_sim_client.h"
-#include "quad_ctrl/data_types/quad_sim_types.h"
+#include "simulator/quad_solo_sim/quad_solo_sim_types.h"
 
 namespace librav {
 
@@ -78,4 +78,4 @@ private:
 
 }
 
-#endif /* CONTROL_SRC_QUAD_SOLO_SIM_QUAD_SIM_CLIENT_H_ */
+#endif /* SIMULATOR_QUAD_SOLO_SIM_CLIENT_H_ */

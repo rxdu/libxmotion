@@ -25,7 +25,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Include directories
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 ## Find LCM
 #find_package(PkgConfig REQUIRED)
@@ -49,8 +49,19 @@ else()
   include_directories(${GUROBI_INCLUDE_DIRS})
 endif()
 
+set(QUAD_BASE_SRC
+    driver/quad_state_broadcaster.cpp
+    mission/mission_tracker.cpp
+    mission/path_manager.cpp
+    motion_server/motion_server.cpp
+    motion_server/quad_flattraj_handler.cpp
+)
+add_library(quad_base STATIC ${QUAD_BASE_SRC})
+target_link_libraries(quad_base common ${LCM_LIBRARIES})
+
 ## Add other sub source directories
 add_subdirectory(apps)
-add_subdirectory(driver)
-add_subdirectory(mission)
+#add_subdirectory(driver)
+#add_subdirectory(mission)
+#add_subdirectory(motion_server)
 add_subdirectory(path_repair)

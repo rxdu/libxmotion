@@ -11,7 +11,7 @@ set(QUADSIM_LIB_SRC
 )
 add_library(quadsolosim STATIC ${QUADSIM_LIB_SRC})
 add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255)
-target_link_libraries(quadsolosim vrep_sim quad_ctrl ${LCM_LIBRARIES})
+target_link_libraries(quadsolosim vrep_sim quad_ctrl quad_base ${LCM_LIBRARIES})
 
 # Add executables
 #add_executable(quadsim_demo quadsim_demo.cpp)

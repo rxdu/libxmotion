@@ -5,8 +5,8 @@
  *      Author: rdu
  */
 
-#ifndef SRC_CONTROL_SRC_QUAD_CTRL_DATA_TRANS_DATA_TRANSMITTER_H_
-#define SRC_CONTROL_SRC_QUAD_CTRL_DATA_TRANS_DATA_TRANSMITTER_H_
+#ifndef QUADROTOR_DRIVER_QUAD_STATE_BROADCASTER_H_
+#define QUADROTOR_DRIVER_QUAD_STATE_BROADCASTER_H_
 
 #include <memory>
 #include <vector>
@@ -15,28 +15,28 @@
 #include <lcm/lcm-cpp.hpp>
 
 #include "common/control_types.h"
-#include "control/quad_ctrl/data_types/quad_state.h"
+#include "control/quad_ctrl/state/quad_state.h"
 
-namespace librav {
+namespace librav
+{
 
-class QuadStateBroadcaster {
-public:
+class QuadStateBroadcaster
+{
+  public:
+	QuadStateBroadcaster() = delete;
 	QuadStateBroadcaster(std::shared_ptr<lcm::LCM> lcm_ptr);
-	~QuadStateBroadcaster();
 
-public:
-	void SendQuadStateData(const QuadState& rs);
+	void SendQuadStateData(const QuadState &rs);
 	void SendSystemTime(uint64_t sys_t);
 
-private:
+  private:
 	std::shared_ptr<lcm::LCM> lcm_;
 
 	void SendQuadTransform(Point3f pos, Eigen::Quaterniond quat);
-	void SendLaserPoints(const std::vector<Point3f>& pts);
-	void SendLaserPoints(const std::vector<Point3f>& pts, Point3f pos, Eigen::Quaterniond quat);
+	void SendLaserPoints(const std::vector<Point3f> &pts);
+	void SendLaserPoints(const std::vector<Point3f> &pts, Point3f pos, Eigen::Quaterniond quat);
 };
 
 }
 
-
-#endif /* SRC_CONTROL_SRC_QUAD_CTRL_DATA_TRANS_DATA_TRANSMITTER_H_ */
+#endif /* QUADROTOR_DRIVER_QUAD_STATE_BROADCASTER_H_ */

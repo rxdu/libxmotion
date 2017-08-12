@@ -1,5 +1,5 @@
 /*
- * quad_sim_client.cpp
+ * quad_hbird_sim_client.cpp
  *
  *  Created on: Sep 1, 2016
  *      Author: rdu

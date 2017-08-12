@@ -32,24 +32,11 @@ public:
 		server_port_(29999),
 		server_connected_(false),
 		sync_mode_(true),
+		loop_count_(0),
 		sim_client_(client),
-		robot_controller_(controller),
-		loop_count_(0){};
-	virtual ~RobotSimProcess(){};
+		robot_controller_(controller){};
+	virtual ~RobotSimProcess() = default;
 
-private:
-	const uint64_t server_port_;
-	bool server_connected_;
-	bool sync_mode_;
-	DataFromSimType data_from_sim_;
-	DataToSimType data_to_sim_;
-
-	std::shared_ptr<RobotSimClient<DataFromSimType, DataToSimType>> sim_client_;
-	std::shared_ptr<RobotSimControl<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>> robot_controller_;
-
-	uint64_t loop_count_;
-
-public:
 	bool ConnectToServer(uint64_t port = -1)
 	{
 		if(port == -1)
@@ -78,6 +65,17 @@ public:
 	}
 
 private:
+	const uint64_t server_port_;
+	bool server_connected_;
+	bool sync_mode_;
+	uint64_t loop_count_;
+
+	DataFromSimType data_from_sim_;
+	DataToSimType data_to_sim_;
+
+	std::shared_ptr<RobotSimClient<DataFromSimType, DataToSimType>> sim_client_;
+	std::shared_ptr<RobotSimControl<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>> robot_controller_;
+
 	void StartSimLoop()
 	{
 		sim_client_->ConfigDataStreaming();

@@ -15,6 +15,7 @@ using namespace librav;
 QuadHbirdSimControl::QuadHbirdSimControl():
 		pos_quat_con_(new PosQuatCon(rs_)),
 		att_quat_con_(new AttQuatCon(rs_)),
+		mixer_(new QuadMixer(rs_)),
 		broadcast_rs_(false)
 {
 	AttQuatCon::ParamType att_param;
@@ -45,6 +46,8 @@ QuadHbirdSimControl::QuadHbirdSimControl():
 	pos_param.ts_ = 0.01;
 	pos_quat_con_->InitParams(pos_param);
 
+	rs_.quad_flight_type_ = QuadFlightType::X_TYPE;
+
 	previous_state_.point_empty = false;
 	previous_state_.positions[0] = 0;
 	previous_state_.positions[1] = 0;
@@ -66,7 +69,7 @@ QuadHbirdSimControl::QuadHbirdSimControl():
 
 void  QuadHbirdSimControl::InitLogger(std::string log_name_prefix, std::string log_save_path)
 {
-	CtrlLogger& logging_helper = CtrlLogger::GetLogger(log_name_prefix, log_save_path);
+	CtrlLogger& logging_helper = CtrlLogger::GetLogger(log_name_prefix, LoggerHelper::GetDefaultLogPath()+log_save_path);
 
 	logging_helper.AddItemNameToEntryHead("pos_x");
 	logging_helper.AddItemNameToEntryHead("pos_y");
@@ -243,10 +246,11 @@ QuadCmd QuadHbirdSimControl::UpdateCtrlLoop()
 	att_quat_con_->Update(quat_con_input, att_con_output);
 
 	// set control variables
-	cmd_m.ang_vel[0] = att_con_output.motor_ang_vel_d[0];
-	cmd_m.ang_vel[1] = att_con_output.motor_ang_vel_d[1];
-	cmd_m.ang_vel[2] = att_con_output.motor_ang_vel_d[2];
-	cmd_m.ang_vel[3] = att_con_output.motor_ang_vel_d[3];
+	// cmd_m.ang_vel[0] = att_con_output.motor_ang_vel_d[0];
+	// cmd_m.ang_vel[1] = att_con_output.motor_ang_vel_d[1];
+	// cmd_m.ang_vel[2] = att_con_output.motor_ang_vel_d[2];
+	// cmd_m.ang_vel[3] = att_con_output.motor_ang_vel_d[3];
+	cmd_m = mixer_->CalcMotorCmd(pos_con_output.ftotal_d, att_con_output.torque_d, rs_.quad_flight_type_);
 
 	//std::cout << "pos x desired: " << previous_state_.positions[0] << std::endl;
 
