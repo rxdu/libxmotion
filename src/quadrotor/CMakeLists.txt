@@ -47,7 +47,7 @@ else()
 endif()
 
 set(QUAD_BASE_SRC
-    driver/quad_state_broadcaster.cpp
+    driver/quad_data_broadcaster.cpp
     mission/mission_tracker.cpp
     mission/path_manager.cpp
     motion_server/motion_server.cpp

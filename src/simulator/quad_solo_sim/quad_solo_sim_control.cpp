@@ -66,7 +66,7 @@ QuadSoloSimControl::QuadSoloSimControl():
 	else {
 		//lcm_->subscribe("quad_controller/quad_motion_service", &MotionServer::LcmGoalHandler, &motion_server_);
 		motion_server_ = std::make_shared<MotionServer>(lcm_);
-		data_trans_ = std::make_shared<QuadStateBroadcaster>(lcm_);
+		data_trans_ = std::make_shared<QuadDataBroadcaster>(lcm_);
 	}
 }
 

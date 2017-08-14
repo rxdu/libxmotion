@@ -8,24 +8,24 @@
 #include <iostream>
 
 #include "lcmtypes/librav.hpp"
-#include "quadrotor/driver/quad_state_broadcaster.h"
+#include "quadrotor/driver/quad_data_broadcaster.h"
 
 using namespace librav;
 
-QuadStateBroadcaster::QuadStateBroadcaster(std::shared_ptr<lcm::LCM> lcm_ptr):
+QuadDataBroadcaster::QuadDataBroadcaster(std::shared_ptr<lcm::LCM> lcm_ptr):
 		lcm_(lcm_ptr)
 {
 	if(!lcm_->good())
 		std::cerr << "LCM instance is not initialized properly. Quad state broadcaster is not going to work." << std::endl;
 }
 
-void QuadStateBroadcaster::SendQuadStateData(const QuadState& rs)
+void QuadDataBroadcaster::SendQuadStateData(const QuadState& rs)
 {
 	SendLaserPoints(rs.laser_points_,rs.position_, rs.quat_);
 	SendQuadTransform(rs.position_, rs.quat_);
 }
 
-void QuadStateBroadcaster::SendQuadTransform(Point3f pos, Eigen::Quaterniond quat)
+void QuadDataBroadcaster::SendQuadTransform(Point3f pos, Eigen::Quaterniond quat)
 {
 	srcl_lcm_msgs::QuadrotorTransform trans_msg;
 	srcl_lcm_msgs::Pose_t trans_base2world;
@@ -55,7 +55,7 @@ void QuadStateBroadcaster::SendQuadTransform(Point3f pos, Eigen::Quaterniond qua
 	lcm_->publish("quad_data/quad_transform", &trans_msg);
 }
 
-void QuadStateBroadcaster::SendLaserPoints(const std::vector<Point3f>& pts)
+void QuadDataBroadcaster::SendLaserPoints(const std::vector<Point3f>& pts)
 {
 	srcl_lcm_msgs::LaserScanPoints_t pts_msg;
 	srcl_lcm_msgs::Point3Df_t point;
@@ -74,7 +74,7 @@ void QuadStateBroadcaster::SendLaserPoints(const std::vector<Point3f>& pts)
 	lcm_->publish("quad_data/laser_scan_points", &pts_msg);
 }
 
-void QuadStateBroadcaster::SendLaserPoints(const std::vector<Point3f>& pts, Point3f pos, Eigen::Quaterniond quat)
+void QuadDataBroadcaster::SendLaserPoints(const std::vector<Point3f>& pts, Point3f pos, Eigen::Quaterniond quat)
 {
 	srcl_lcm_msgs::LaserScanPoints_t pts_msg;
 	srcl_lcm_msgs::Point3Df_t point;
@@ -117,7 +117,7 @@ void QuadStateBroadcaster::SendLaserPoints(const std::vector<Point3f>& pts, Poin
 	lcm_->publish("quad_data/laser_scan_points", &pts_msg);
 }
 
-void QuadStateBroadcaster::SendSystemTime(uint64_t sys_t)
+void QuadDataBroadcaster::SendSystemTime(uint64_t sys_t)
 {
 	srcl_lcm_msgs::TimeStamp_t t_msg;
 

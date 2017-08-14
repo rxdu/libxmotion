@@ -1,12 +1,12 @@
 /*
- * quad_state_broadcaster.h
+ * quad_data_broadcaster.h
  *
  *  Created on: May 26, 2016
  *      Author: rdu
  */
 
-#ifndef QUADROTOR_DRIVER_QUAD_STATE_BROADCASTER_H_
-#define QUADROTOR_DRIVER_QUAD_STATE_BROADCASTER_H_
+#ifndef QUADROTOR_DRIVER_QUAD_DATA_BROADCASTER_H_
+#define QUADROTOR_DRIVER_QUAD_DATA_BROADCASTER_H_
 
 #include <memory>
 #include <vector>
@@ -20,11 +20,11 @@
 namespace librav
 {
 
-class QuadStateBroadcaster
+class QuadDataBroadcaster
 {
   public:
-	QuadStateBroadcaster() = delete;
-	QuadStateBroadcaster(std::shared_ptr<lcm::LCM> lcm_ptr);
+	QuadDataBroadcaster() = delete;
+	QuadDataBroadcaster(std::shared_ptr<lcm::LCM> lcm_ptr);
 
 	void SendQuadStateData(const QuadState &rs);
 	void SendSystemTime(uint64_t sys_t);
@@ -39,4 +39,4 @@ class QuadStateBroadcaster
 
 }
 
-#endif /* QUADROTOR_DRIVER_QUAD_STATE_BROADCASTER_H_ */
+#endif /* QUADROTOR_DRIVER_QUAD_DATA_BROADCASTER_H_ */
