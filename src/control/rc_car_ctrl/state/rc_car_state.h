@@ -33,6 +33,7 @@ struct RCCarCmd
 	float steering_ang_cmd;
 };
 
+//template<typename T>
 class RCCarState
 {
 public:
@@ -41,7 +42,7 @@ public:
 
 private:
 	float driving_velocity_;
-	uint8_t mono_image_[IMG_RES_Y][IMG_RES_X];
+	//uint8_t mono_image_[IMG_RES_Y][IMG_RES_X];
 
 public:
 	void UpdateRobotState(const RCCarSensorData &new_data);

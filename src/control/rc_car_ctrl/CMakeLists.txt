@@ -9,6 +9,7 @@ set(QUADCON_LIB_SRC
     # state estimator
     #estimator/att_estimator.cpp
     state/rc_car_state.cpp
+    state/rc_car_params.cpp
 )
 add_library(rccar_ctrl STATIC ${QUADCON_LIB_SRC})
 target_link_libraries(rccar_ctrl common utility ${LCM_LIBRARIES})

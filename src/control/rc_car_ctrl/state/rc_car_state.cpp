@@ -27,7 +27,7 @@ void RCCarState::UpdateRobotState(const RCCarSensorData &new_data)
 {
 	driving_velocity_ = new_data.body_vel;
 
-	for(int i = 0; i < IMG_RES_Y; i++)
-		for(int j = 0; j < IMG_RES_X; j++)
-			mono_image_[i][j] = new_data.mono_image[i][j];
+	// for(int i = 0; i < IMG_RES_Y; i++)
+	// 	for(int j = 0; j < IMG_RES_X; j++)
+	// 		mono_image_[i][j] = new_data.mono_image[i][j];
 }

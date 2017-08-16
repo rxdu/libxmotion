@@ -104,9 +104,9 @@ RCCarCmd RCCarSimControl::UpdateCtrlLoop()
 	// control
 
 	// set control variables
-	cmd.driving_vel_lcmd = 5;
-	cmd.driving_vel_rcmd = 5;
-	cmd.steering_ang_cmd = 0.0f * 3.1415f / 180.0f;
+	cmd.driving_vel_lcmd = 50;
+	cmd.driving_vel_rcmd = 50;
+	cmd.steering_ang_cmd = 45.0f;// * 3.1415f / 180.0f;
 
 	return cmd;
 }
