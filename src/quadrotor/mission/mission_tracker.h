@@ -28,7 +28,7 @@ namespace librav {
 class MissionTracker {
 public:
 	MissionTracker(std::shared_ptr<lcm::LCM> lcm);
-	~MissionTracker(){};
+	~MissionTracker() = default;
 
 private:
 	std::shared_ptr<lcm::LCM> lcm_;

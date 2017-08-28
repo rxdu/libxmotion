@@ -24,7 +24,7 @@ namespace librav {
 class PathManager {
 public:
 	PathManager(std::shared_ptr<lcm::LCM> lcm);
-	~PathManager();
+	~PathManager() = default;
 
 private:
 	std::shared_ptr<lcm::LCM> lcm_;

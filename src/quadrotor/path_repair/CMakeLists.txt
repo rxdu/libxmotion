@@ -7,6 +7,12 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 find_package(OpenCV REQUIRED)
 
 # Add libraries
+set(PATH_REPAIR_SIM_SRC
+    sim/sim_env_gen.cpp
+)
+add_library(pr_sim STATIC ${PATH_REPAIR_SIM_SRC})
+#target_link_libraries(pr_sim map polyopt common vis ${OpenCV_LIBS} ${LCM_LIBRARIES})
+
 set(PATH_REPAIR_LIB_SRC
     quad_path_repair.cpp
     geo_mark_graph.cpp

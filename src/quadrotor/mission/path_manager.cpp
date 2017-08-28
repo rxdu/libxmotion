@@ -22,11 +22,6 @@ PathManager::PathManager(std::shared_ptr<lcm::LCM> lcm):
 	lcm_->subscribe("quad_planner/goal_keyframe_set",&PathManager::LcmKeyframeSetHandler, this);
 }
 
-PathManager::~PathManager()
-{
-
-}
-
 std::vector<Position3Dd> PathManager::GetKeyTurningWaypoints(std::vector<Position3Dd>& wps)
 {
 	// first remove undesired points at the connections between 2d/3d geomarks
