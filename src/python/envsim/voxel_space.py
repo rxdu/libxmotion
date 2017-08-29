@@ -6,8 +6,7 @@ import copy
 
 import numpy as np
 
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
+from cell_map import *
 
 
 class Voxel(object):
@@ -19,21 +18,12 @@ class Voxel(object):
     def print_info(self):
         print "{}: {}, {}, {}".format("Voxel info", self.id, self.index, self.occupied)
 
-class Map(object):
-    def __init__(self, x, y):
-        self.size = np.array([x, y])
-        self.voxels = np.array([], dtype=object)
-        self.map.resize((x, y))
-
 
 class Space(object):
     def __init__(self, x, y, z):
         self.size = np.array([x, y, z])
         self.voxels = np.array([], dtype=object)
         self.voxels.resize((x, y, z))
-
-        self.map = np.array([], dtype=object)
-        self.map.resize((x, y))
 
         for zi in range(0, z):
             for yi in range(0, y):
@@ -42,16 +32,33 @@ class Space(object):
                     self.voxels[xi, yi, zi] = Voxel(xi, yi, zi)
                     self.voxels[xi, yi, zi].id = id
 
-    def get_2d_projection(self):
+        self.map = Map(x, y)
+
+    def add_obstacles(self):
+        total_num = self.size[0] * self.size[1] * self.size[2]
+        percentage = 0.5
+        obs_prob = np.random.random([self.size[0], self.size[1], self.size[2]])
+        print obs_prob
+        for zi in range(0, self.size[2]):
+            for yi in range(0, self.size[1]):
+                for xi in range(0, self.size[0]):
+                    if obs_prob[xi, yi, zi] > 0.5:
+                        self.voxels[xi, yi, zi].occupied = True
+                    else:
+                        self.voxels[xi, yi, zi].occupied = False
+        self.generate_2d_map()
+
+    def generate_2d_map(self):
         for xi in range(0, self.size[0]):
             for yi in range(0, self.size[1]):
-                self.map[xi, yi] = copy.deepcopy(self.voxels[xi, yi, 0])
                 for zi in range(0, self.size[2]):
                     if self.voxels[xi, yi, zi].occupied == True:
-                        self.map[xi, yi].occupied = True
+                        self.map.cells[xi, yi].occupied = True
                         break
                     else:
-                        self.map[xi, yi].occupied = False
+                        self.map.cells[xi, yi].occupied = False
+
+    def get_2d_map(self):
         return self.map
 
     def print_info(self):

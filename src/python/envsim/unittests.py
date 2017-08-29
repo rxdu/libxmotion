@@ -17,8 +17,12 @@ def test_voxel():
 def test_space():
     print "test space"
     s = Space(2, 2, 2)
+    print "empty space:"
     s.print_info()
-    print s.get_2d_projection()
+    s.get_2d_map().print_info()
+    print "\nadded obstacles:"
+    s.add_obstacles()
+    s.get_2d_map().print_info()
     print "---------------------\n"
 
 
