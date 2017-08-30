@@ -25,19 +25,18 @@ class Cuboid(ObjectBase):
         for xi in range(0, sx):
             for yi in range(0, sy):
                 for zi in range(0, sz):
-                    print "element: ({}, {}, {})".format(xi, yi, zi)
+                    # print "element: ({}, {}, {})".format(xi, yi, zi)
                     pos = np.array(
                         [[self.position[0] + xi, self.position[1] + yi, zi]])
                     if self.occupied_voxels.size == 0:
                         self.occupied_voxels = pos
                     else:
                         self.occupied_voxels = np.concatenate((self.occupied_voxels, pos), axis=0)
-                    print self.occupied_voxels
+                    # print self.occupied_voxels
         # np.reshape(self.occupied_voxels,(sx*sy*sz,3))
-        print self.occupied_voxels
+        # print self.occupied_voxels
 
     def print_info(self):
-        # for v in np.nditer(self.occupied_voxels, order='C'):
-        for i in range(0, self.size[0]*self.size[1]*self.size[2])
-            print self.occupied_voxels[i]
-            # print "pos: ({}, {}, {}) \n".format(v[0], v[1], v[2])
+        print "Cuboid: {}*{}*{}".format(self.size[0], self.size[1], self.size[2])
+        for vi in range(0, self.size[0]*self.size[1]*self.size[2]):
+            print self.occupied_voxels[vi]

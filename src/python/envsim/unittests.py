@@ -4,8 +4,10 @@ import os
 import sys
 
 import numpy as np
+
 from voxel_space import *
 from object_lib import *
+from env_gen import *
 
 def test_voxel():
     print "test voxel"
@@ -25,18 +27,27 @@ def test_space():
     s.get_2d_map().print_info()
     print "---------------------\n"
 
+
 def test_objects():
     print "test objects"
-    cuboid = Cuboid(0,0,2,2,2)
+    cuboid = Cuboid(0, 0, 2, 2, 2)
     cuboid.print_info()
     print "---------------------\n"
+
+
+def test_envgen():
+    env = EnvGen()
+    env.show_space()
+
 
 def main():
     print "started unit tests: \n"
 
     test_voxel()
-    test_space()
     test_objects()
+    test_space()
+
+    test_envgen()
 
 # Standard boilerplate to call the main() function to begin
 # the program.
