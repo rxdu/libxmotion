@@ -10,11 +10,11 @@ import numpy as np
 class Cell(object):
     def __init__(self, x, y):
         self.id = -1
-        self.index = np.array([x, y])
+        self.position = np.array([x, y])
         self.occupied = False
 
     def print_info(self):
-        print "{}: {}, {}, {}".format("Cell info", self.id, self.index, self.occupied)
+        print "{}: {}, {}, {}".format("Cell info", self.id, self.position, self.occupied)
 
 
 class Map(object):

@@ -12,11 +12,11 @@ from cell_map import *
 class Voxel(object):
     def __init__(self, x, y, z):
         self.id = -1
-        self.index = np.array([x, y, z])
+        self.position = np.array([x, y, z])
         self.occupied = False
 
     def print_info(self):
-        print "{}: {}, {}, {}".format("Voxel info", self.id, self.index, self.occupied)
+        print "{}: {}, {}, {}".format("Voxel info", self.id, self.position, self.occupied)
 
 
 class Space(object):
