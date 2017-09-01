@@ -37,15 +37,17 @@ def test_objects():
 
 def test_envgen():
     env = EnvGen()
+    env.set_env_size(15,15,15)
+    env.generate_space()
     env.show_space()
 
 
 def main():
     print "started unit tests: \n"
 
-    test_voxel()
-    test_objects()
-    test_space()
+    # test_voxel()
+    # test_objects()
+    # test_space()
 
     test_envgen()
 

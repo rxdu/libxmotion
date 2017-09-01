@@ -36,13 +36,13 @@ class Space(object):
 
     def add_obstacles(self):
         total_num = self.size[0] * self.size[1] * self.size[2]
-        percentage = 0.5
+        percentage = 0.95
         obs_prob = np.random.random([self.size[0], self.size[1], self.size[2]])
         print obs_prob
         for zi in range(0, self.size[2]):
             for yi in range(0, self.size[1]):
                 for xi in range(0, self.size[0]):
-                    if obs_prob[xi, yi, zi] > 0.5:
+                    if obs_prob[xi, yi, zi] > percentage:
                         self.voxels[xi, yi, zi].occupied = True
                     else:
                         self.voxels[xi, yi, zi].occupied = False
@@ -60,6 +60,15 @@ class Space(object):
 
     def get_2d_map(self):
         return self.map
+
+    def get_occupancy_matrix(self):
+        mat = np.zeros((self.size[0],self.size[1],self.size[2]))
+        for xi in range(0, self.size[0]):
+            for yi in range(0, self.size[1]):
+                for zi in range(0, self.size[2]):
+                    if self.voxels[xi, yi, zi].occupied == True:
+                        mat[xi, yi,zi] = 1
+        return mat
 
     def print_info(self):
         print "{}: {}".format("Space info", self.size)

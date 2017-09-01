@@ -13,28 +13,24 @@ from mpl_toolkits.mplot3d import Axes3D
 
 import lcm
 from srcl_lcm_msgs import Graph_t
-
+from space_vis import *
+from voxel_space import *
 
 class EnvGen(object):
     def __init__(self):
-        self.space = np.array([])
+        self.space = Space(0,0,0)
         self.space_size = np.array([0, 0, 0])
 
     def set_env_size(self, x, y, z):
-        self.space.resize((x, y, z))
+        self.space = Space(x,y,z)
         self.space_size = np.array([x, y, z])
-
-        for x in range(0, self.space_size[0]):
-            for y in range(0, self.space_size[1]):
-                for z in range(0, self.space_size[2]):
-                    self.space[x, y, z] = 0
-
-        print self.space
 
     def generate_space(self):
         # add obstacles to space
-        print self.space
+        print 'generate space'
+        
         # get projection as 2d map
+        self.space.add_obstacles()
 
     def publish_space(self):
         print 'publish'
@@ -62,27 +58,26 @@ class EnvGen(object):
         plt.show()
 
     def show_space(self):
-        # prepare some coordinates
-        x, y, z = np.indices((8, 8, 8))
+        # create 3d space
+        N1 = self.space_size[0]
+        N2 = self.space_size[1]
+        N3 = self.space_size[2]
+        
+        # collect voxel data
+        ma = np.zeros((self.space_size[0],self.space_size[1],self.space_size[2]))
+        ma[14,14,14] = 1
+        ma[0,0,0] = 1
+        # ma = self.space.get_occupancy_matrix()
 
-        # draw cuboids in the top left and bottom right corners, and a link between them
-        cube1 = (x < 3) & (y < 3) & (z < 3)
-        cube2 = (x >= 5) & (y >= 5) & (z >= 5)
-        link = abs(x - y) + abs(y - z) + abs(z - x) <= 2
-
-        # combine the objects into a single boolean array
-        voxels = cube1 | cube2 | link
-
-        # set the colors of each object
-        colors = np.empty(voxels.shape, dtype=object)
-        colors[link] = 'red'
-        colors[cube1] = 'blue'
-        colors[cube2] = 'green'
-
-        # and plot everything
+        # plot space
         fig = plt.figure()
         ax = fig.gca(projection='3d')
-        ax.voxels(voxels, facecolors=colors, edgecolor='k')
+        ax.set_xlim(0, self.space_size[0])
+        ax.set_ylim(0, self.space_size[1])
+        ax.set_zlim(0, self.space_size[2])
+        ax.set_aspect('equal')
+
+        plotMatrix(ax, ma)
 
         plt.show()
 
