@@ -15,22 +15,77 @@ import lcm
 from srcl_lcm_msgs import Graph_t
 from space_vis import *
 from voxel_space import *
+from object_lib import *
+
 
 class EnvGen(object):
     def __init__(self):
-        self.space = Space(0,0,0)
+        self.space = Space(0, 0, 0)
         self.space_size = np.array([0, 0, 0])
 
+        # individual object constraints
+        self.min_side = 3
+        self.max_side = 8
+
+        self.min_height = 1
+        self.max_height = 4
+
+        # space obstacle configurations
+        self.obj_num = 50
+        self.obs_perc = 0.3
+
     def set_env_size(self, x, y, z):
-        self.space = Space(x,y,z)
         self.space_size = np.array([x, y, z])
 
     def generate_space(self):
-        # add obstacles to space
+        # create empty space
         print 'generate space'
-        
+        self.space = Space(
+            self.space_size[0], self.space_size[1], self.space_size[2])
+
+        # add obstacles to space
+        # self.space.add_obstacles()
+        objs = self.randomly_pick_objects()
+        self.space.add_objects(objs,self.obs_perc)
+
         # get projection as 2d map
-        self.space.add_obstacles()
+        self.space.get_2d_map().get_occupied_percentage()
+
+    def randomly_pick_objects(self):
+        # random locations
+        loc_x = np.random.randint(
+            0, self.space_size[0], size=(1, self.obj_num))
+        loc_y = np.random.randint(
+            0, self.space_size[1], size=(1, self.obj_num))
+
+        rand_loc = np.array([])
+        rand_loc.resize((self.obj_num, 2))
+
+        for i in range(0, self.obj_num):
+            rand_loc[i, 0] = loc_x[0, i]
+            rand_loc[i, 1] = loc_y[0, i]
+
+        # add random objects to random locations
+        objs = []
+        for loc in rand_loc:
+            # random object size
+            sz_xy = np.random.randint(
+                self.min_side, self.max_side, size=(1, 2))
+            sz_z = np.random.randint(
+                self.min_height, self.max_height, size=(1, 1))
+            sz_xyz = np.array([sz_xy[0, 0], sz_xy[0, 1], sz_z])
+            obj = Cuboid(loc[0], loc[1], sz_xyz[0], sz_xyz[1], sz_xyz[2])
+            objs.append(obj)
+            # print loc
+            # print sz_xyz
+
+        # obj1 = Cuboid(5,5,2,5,3)
+        # objs.append(obj1)
+
+        # obj2 = Cuboid(5,5,5,2,3)
+        # objs.append(obj2)
+
+        return objs
 
     def publish_space(self):
         print 'publish'
@@ -47,27 +102,28 @@ class EnvGen(object):
 
         # lc.publish("EXAMPLE", msg.encode())
 
-    def show_map(self):
-        print self.space_size[0]
+    def plot_map(self):
+        print "map size: {} * {}".format(self.space_size[0], self.space_size[1])
 
-        random_image = np.random.random(
-            [self.space_size[0], self.space_size[1]])
+        fig = plt.figure()
+        # random_image = np.random.random(
+        #     [self.space_size[0], self.space_size[1]])
+        map_img = self.space.get_2d_map().get_image()
 
-        plt.imshow(random_image, cmap='gray',
+        plt.imshow(map_img, cmap='gray',
                    interpolation='None', aspect='equal')
-        plt.show()
 
-    def show_space(self):
-        # create 3d space
-        N1 = self.space_size[0]
-        N2 = self.space_size[1]
-        N3 = self.space_size[2]
-        
-        # collect voxel data
-        ma = np.zeros((self.space_size[0],self.space_size[1],self.space_size[2]))
-        ma[14,14,14] = 1
-        ma[0,0,0] = 1
-        # ma = self.space.get_occupancy_matrix()
+    def plot_space(self):
+        # # create 3d space
+        # N1 = self.space_size[0]
+        # N2 = self.space_size[1]
+        # N3 = self.space_size[2]
+
+        # # collect voxel data
+        # mat = np.zeros((self.space_size[0],self.space_size[1],self.space_size[2]))
+        # mat[14,14,14] = 1
+        # mat[0,0,0] = 1
+        mat = self.space.get_occupancy_matrix()
 
         # plot space
         fig = plt.figure()
@@ -75,10 +131,11 @@ class EnvGen(object):
         ax.set_xlim(0, self.space_size[0])
         ax.set_ylim(0, self.space_size[1])
         ax.set_zlim(0, self.space_size[2])
-        ax.set_aspect('equal')
+        # ax.set_aspect('equal')
 
-        plotMatrix(ax, ma)
+        plotMatrix(ax, mat)
 
+    def show_all_plots(self):
         plt.show()
 
 
@@ -86,8 +143,13 @@ def main():
     print("started env_gen")
 
     gen = EnvGen()
-    gen.set_env_size(2, 5, 2)
-    gen.show_space()
+    # 1 unit = 1 meter
+    gen.set_env_size(30, 50, 5)
+    gen.generate_space()
+
+    gen.plot_map()
+    gen.plot_space()
+    gen.show_all_plots()
 
 
 # Standard boilerplate to call the main() function to begin

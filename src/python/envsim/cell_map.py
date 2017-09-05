@@ -29,6 +29,29 @@ class Map(object):
                 self.cells[xi, yi] = Cell(xi, yi)
                 self.cells[xi, yi].id = id
 
+    def get_occupied_percentage(self):
+        total = self.size[0] * self.size[1]
+        occ = 0
+        for yi in range(0, self.size[1]):
+            for xi in range(0, self.size[0]):
+                if self.cells[xi, yi].occupied == True:
+                    occ += 1
+        percentage = float(occ)/total
+                
+        return percentage
+
+    def get_image(self):
+        img = np.array([])
+        img.resize((self.size[0], self.size[1]))
+        for yi in range(0, self.size[1]):
+            for xi in range(0, self.size[0]):
+                if self.cells[xi, yi].occupied == True:
+                    img[xi, yi] = 0
+                else:
+                    img[xi, yi] = 1
+        # print img
+        return img
+
     def print_info(self):
         print "{}: {}".format("Map info", self.size)
 

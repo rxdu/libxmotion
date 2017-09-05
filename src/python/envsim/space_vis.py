@@ -2,6 +2,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import matplotlib.pyplot as plt
 
+np.seterr(divide='ignore', invalid='ignore')
 
 def cuboid_data(pos, size=(1, 1, 1)):
     # source: https://stackoverflow.com/questions/42611342/representing-voxels-with-matplotlib
