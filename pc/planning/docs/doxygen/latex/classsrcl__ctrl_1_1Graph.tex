@@ -1,0 +1,183 @@
+\hypertarget{classsrcl__ctrl_1_1Graph}{\section{srcl\-\_\-ctrl\-:\-:Graph$<$ Graph\-Node\-Type $>$ Class Template Reference}
+\label{classsrcl__ctrl_1_1Graph}\index{srcl\-\_\-ctrl\-::\-Graph$<$ Graph\-Node\-Type $>$@{srcl\-\_\-ctrl\-::\-Graph$<$ Graph\-Node\-Type $>$}}
+}
+
+
+A graph data structure template.  
+
+
+
+
+{\ttfamily \#include $<$graph.\-h$>$}
+
+
+
+Collaboration diagram for srcl\-\_\-ctrl\-:\-:Graph$<$ Graph\-Node\-Type $>$\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=246pt]{classsrcl__ctrl_1_1Graph__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classsrcl__ctrl_1_1Graph_a771676a45ae8f28cd8034f8063314b3f}{Graph} ()
+\begin{DoxyCompactList}\small\item\em \hyperlink{classsrcl__ctrl_1_1Graph}{Graph} constructor. \end{DoxyCompactList}\item 
+\hyperlink{classsrcl__ctrl_1_1Graph_a32fe1ca5b567b1cb7dd9dc47cb9a0bc9}{$\sim$\-Graph} ()
+\begin{DoxyCompactList}\small\item\em \hyperlink{classsrcl__ctrl_1_1Graph}{Graph} destructor. \end{DoxyCompactList}\item 
+void \hyperlink{classsrcl__ctrl_1_1Graph_a3b99f873fcce550f6b00bc720f04a647}{Add\-Edge} (Graph\-Node\-Type $\ast$src\-\_\-node, Graph\-Node\-Type $\ast$dst\-\_\-node, double cost)
+\begin{DoxyCompactList}\small\item\em This function is used to create a graph by adding edges connecting two nodes. \end{DoxyCompactList}\item 
+std\-::vector$<$ \hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}\\*
+$<$ Graph\-Node\-Type $>$ $\ast$ $>$ \hyperlink{classsrcl__ctrl_1_1Graph_ae0497c831e1bf4c77c39b223e4da9ff2}{Get\-Graph\-Vertices} ()
+\begin{DoxyCompactList}\small\item\em This functions is used to access all vertices of a graph. \end{DoxyCompactList}\item 
+std\-::vector$<$ \hyperlink{classsrcl__ctrl_1_1Edge}{Edge}$<$ \hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}\\*
+$<$ Graph\-Node\-Type $>$ $>$ $>$ \hyperlink{classsrcl__ctrl_1_1Graph_aefa9aee0e9904ae6745a90d22e2d5445}{Get\-Graph\-Edges} ()
+\begin{DoxyCompactList}\small\item\em This functions is used to access all edges of a graph. \end{DoxyCompactList}\item 
+\hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}$<$ Graph\-Node\-Type $>$ $\ast$ \hyperlink{classsrcl__ctrl_1_1Graph_abde35d17a81abb8cc985bd155c3cb390}{Get\-Vertex\-From\-I\-D} (uint64\-\_\-t vertex\-\_\-id)
+\begin{DoxyCompactList}\small\item\em This function return the vertex with specified id. \end{DoxyCompactList}\item 
+std\-::vector$<$ \hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}\\*
+$<$ Graph\-Node\-Type $>$ $\ast$ $>$ \hyperlink{classsrcl__ctrl_1_1Graph_aa1904470ed153dafd271961b5abee9e3}{A\-Star\-Search} (\hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}$<$ Graph\-Node\-Type $>$ $\ast$start, \hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}$<$ Graph\-Node\-Type $>$ $\ast$goal)
+\begin{DoxyCompactList}\small\item\em Perform A$\ast$ Search and return a path represented by a serious of vertices. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}$<$ Graph\-Node\-Type $>$ $\ast$ \hyperlink{classsrcl__ctrl_1_1Graph_a42096ac188347b7b978db6cc5da1fec3}{Get\-Vertex} (Graph\-Node\-Type $\ast$vertex\-\_\-node)
+\begin{DoxyCompactList}\small\item\em This function checks if a vertex already exists in the graph. \end{DoxyCompactList}\item 
+void \hyperlink{classsrcl__ctrl_1_1Graph_adc1fcd601227c25acfaf1d8f3ca6ba96}{Reset\-Graph\-Vertices} ()
+\begin{DoxyCompactList}\small\item\em This function is used to reset the vertices for a new search. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\-::map$<$ uint64\-\_\-t, \hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}\\*
+$<$ Graph\-Node\-Type $>$ $\ast$ $>$ \hyperlink{classsrcl__ctrl_1_1Graph_a0cdf1fbe36941c5fabc5b2f2c6bfa2ce}{vertex\-\_\-map\-\_\-}
+\item 
+\hyperlink{classsrcl__ctrl_1_1AStar}{A\-Star}$<$ \hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}$<$ Graph\-Node\-Type $>$ $>$ \hyperlink{classsrcl__ctrl_1_1Graph_afb3a6e5c667c05f3edfc87f1ea39577d}{astar\-\_\-}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$typename Graph\-Node\-Type$>$class srcl\-\_\-ctrl\-::\-Graph$<$ Graph\-Node\-Type $>$}
+
+A graph data structure template. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classsrcl__ctrl_1_1Graph_a771676a45ae8f28cd8034f8063314b3f}{\index{srcl\-\_\-ctrl\-::\-Graph@{srcl\-\_\-ctrl\-::\-Graph}!Graph@{Graph}}
+\index{Graph@{Graph}!srcl_ctrl::Graph@{srcl\-\_\-ctrl\-::\-Graph}}
+\subsubsection[{Graph}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph\-Node\-Type $>$ {\bf srcl\-\_\-ctrl\-::\-Graph}$<$ Graph\-Node\-Type $>$\-::{\bf Graph} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Graph_a771676a45ae8f28cd8034f8063314b3f}
+
+
+\hyperlink{classsrcl__ctrl_1_1Graph}{Graph} constructor. 
+
+\hypertarget{classsrcl__ctrl_1_1Graph_a32fe1ca5b567b1cb7dd9dc47cb9a0bc9}{\index{srcl\-\_\-ctrl\-::\-Graph@{srcl\-\_\-ctrl\-::\-Graph}!$\sim$\-Graph@{$\sim$\-Graph}}
+\index{$\sim$\-Graph@{$\sim$\-Graph}!srcl_ctrl::Graph@{srcl\-\_\-ctrl\-::\-Graph}}
+\subsubsection[{$\sim$\-Graph}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph\-Node\-Type $>$ {\bf srcl\-\_\-ctrl\-::\-Graph}$<$ Graph\-Node\-Type $>$\-::$\sim${\bf Graph} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Graph_a32fe1ca5b567b1cb7dd9dc47cb9a0bc9}
+
+
+\hyperlink{classsrcl__ctrl_1_1Graph}{Graph} destructor. 
+
+\hyperlink{classsrcl__ctrl_1_1Graph}{Graph} class is only responsible for the memory recycling of \hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex} and \hyperlink{classsrcl__ctrl_1_1Edge}{Edge} objects. The node, such as a quadtree node or a square cell, which each vertex is associated with needs to be recycled separately, for example by the quadtree/square\-\_\-grid class. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classsrcl__ctrl_1_1Graph_a3b99f873fcce550f6b00bc720f04a647}{\index{srcl\-\_\-ctrl\-::\-Graph@{srcl\-\_\-ctrl\-::\-Graph}!Add\-Edge@{Add\-Edge}}
+\index{Add\-Edge@{Add\-Edge}!srcl_ctrl::Graph@{srcl\-\_\-ctrl\-::\-Graph}}
+\subsubsection[{Add\-Edge}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph\-Node\-Type $>$ void {\bf srcl\-\_\-ctrl\-::\-Graph}$<$ Graph\-Node\-Type $>$\-::Add\-Edge (
+\begin{DoxyParamCaption}
+\item[{Graph\-Node\-Type $\ast$}]{src\-\_\-node, }
+\item[{Graph\-Node\-Type $\ast$}]{dst\-\_\-node, }
+\item[{double}]{cost}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Graph_a3b99f873fcce550f6b00bc720f04a647}
+
+
+This function is used to create a graph by adding edges connecting two nodes. 
+
+\hypertarget{classsrcl__ctrl_1_1Graph_aa1904470ed153dafd271961b5abee9e3}{\index{srcl\-\_\-ctrl\-::\-Graph@{srcl\-\_\-ctrl\-::\-Graph}!A\-Star\-Search@{A\-Star\-Search}}
+\index{A\-Star\-Search@{A\-Star\-Search}!srcl_ctrl::Graph@{srcl\-\_\-ctrl\-::\-Graph}}
+\subsubsection[{A\-Star\-Search}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph\-Node\-Type $>$ std\-::vector$<${\bf Vertex}$<$Graph\-Node\-Type$>$$\ast$$>$ {\bf srcl\-\_\-ctrl\-::\-Graph}$<$ Graph\-Node\-Type $>$\-::A\-Star\-Search (
+\begin{DoxyParamCaption}
+\item[{{\bf Vertex}$<$ Graph\-Node\-Type $>$ $\ast$}]{start, }
+\item[{{\bf Vertex}$<$ Graph\-Node\-Type $>$ $\ast$}]{goal}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Graph_aa1904470ed153dafd271961b5abee9e3}
+
+
+Perform A$\ast$ Search and return a path represented by a serious of vertices. 
+
+\hypertarget{classsrcl__ctrl_1_1Graph_aefa9aee0e9904ae6745a90d22e2d5445}{\index{srcl\-\_\-ctrl\-::\-Graph@{srcl\-\_\-ctrl\-::\-Graph}!Get\-Graph\-Edges@{Get\-Graph\-Edges}}
+\index{Get\-Graph\-Edges@{Get\-Graph\-Edges}!srcl_ctrl::Graph@{srcl\-\_\-ctrl\-::\-Graph}}
+\subsubsection[{Get\-Graph\-Edges}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph\-Node\-Type $>$ std\-::vector$<${\bf Edge}$<${\bf Vertex}$<$Graph\-Node\-Type$>$ $>$ $>$ {\bf srcl\-\_\-ctrl\-::\-Graph}$<$ Graph\-Node\-Type $>$\-::Get\-Graph\-Edges (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Graph_aefa9aee0e9904ae6745a90d22e2d5445}
+
+
+This functions is used to access all edges of a graph. 
+
+\hypertarget{classsrcl__ctrl_1_1Graph_ae0497c831e1bf4c77c39b223e4da9ff2}{\index{srcl\-\_\-ctrl\-::\-Graph@{srcl\-\_\-ctrl\-::\-Graph}!Get\-Graph\-Vertices@{Get\-Graph\-Vertices}}
+\index{Get\-Graph\-Vertices@{Get\-Graph\-Vertices}!srcl_ctrl::Graph@{srcl\-\_\-ctrl\-::\-Graph}}
+\subsubsection[{Get\-Graph\-Vertices}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph\-Node\-Type $>$ std\-::vector$<${\bf Vertex}$<$Graph\-Node\-Type$>$$\ast$$>$ {\bf srcl\-\_\-ctrl\-::\-Graph}$<$ Graph\-Node\-Type $>$\-::Get\-Graph\-Vertices (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Graph_ae0497c831e1bf4c77c39b223e4da9ff2}
+
+
+This functions is used to access all vertices of a graph. 
+
+\hypertarget{classsrcl__ctrl_1_1Graph_a42096ac188347b7b978db6cc5da1fec3}{\index{srcl\-\_\-ctrl\-::\-Graph@{srcl\-\_\-ctrl\-::\-Graph}!Get\-Vertex@{Get\-Vertex}}
+\index{Get\-Vertex@{Get\-Vertex}!srcl_ctrl::Graph@{srcl\-\_\-ctrl\-::\-Graph}}
+\subsubsection[{Get\-Vertex}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph\-Node\-Type $>$ {\bf Vertex}$<$Graph\-Node\-Type$>$$\ast$ {\bf srcl\-\_\-ctrl\-::\-Graph}$<$ Graph\-Node\-Type $>$\-::Get\-Vertex (
+\begin{DoxyParamCaption}
+\item[{Graph\-Node\-Type $\ast$}]{vertex\-\_\-node}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}}\label{classsrcl__ctrl_1_1Graph_a42096ac188347b7b978db6cc5da1fec3}
+
+
+This function checks if a vertex already exists in the graph. 
+
+If yes, the functions returns the index of the existing vertex, otherwise it creates a new vertex. \hypertarget{classsrcl__ctrl_1_1Graph_abde35d17a81abb8cc985bd155c3cb390}{\index{srcl\-\_\-ctrl\-::\-Graph@{srcl\-\_\-ctrl\-::\-Graph}!Get\-Vertex\-From\-I\-D@{Get\-Vertex\-From\-I\-D}}
+\index{Get\-Vertex\-From\-I\-D@{Get\-Vertex\-From\-I\-D}!srcl_ctrl::Graph@{srcl\-\_\-ctrl\-::\-Graph}}
+\subsubsection[{Get\-Vertex\-From\-I\-D}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph\-Node\-Type $>$ {\bf Vertex}$<$Graph\-Node\-Type$>$$\ast$ {\bf srcl\-\_\-ctrl\-::\-Graph}$<$ Graph\-Node\-Type $>$\-::Get\-Vertex\-From\-I\-D (
+\begin{DoxyParamCaption}
+\item[{uint64\-\_\-t}]{vertex\-\_\-id}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Graph_abde35d17a81abb8cc985bd155c3cb390}
+
+
+This function return the vertex with specified id. 
+
+\hypertarget{classsrcl__ctrl_1_1Graph_adc1fcd601227c25acfaf1d8f3ca6ba96}{\index{srcl\-\_\-ctrl\-::\-Graph@{srcl\-\_\-ctrl\-::\-Graph}!Reset\-Graph\-Vertices@{Reset\-Graph\-Vertices}}
+\index{Reset\-Graph\-Vertices@{Reset\-Graph\-Vertices}!srcl_ctrl::Graph@{srcl\-\_\-ctrl\-::\-Graph}}
+\subsubsection[{Reset\-Graph\-Vertices}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph\-Node\-Type $>$ void {\bf srcl\-\_\-ctrl\-::\-Graph}$<$ Graph\-Node\-Type $>$\-::Reset\-Graph\-Vertices (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}}\label{classsrcl__ctrl_1_1Graph_adc1fcd601227c25acfaf1d8f3ca6ba96}
+
+
+This function is used to reset the vertices for a new search. 
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classsrcl__ctrl_1_1Graph_afb3a6e5c667c05f3edfc87f1ea39577d}{\index{srcl\-\_\-ctrl\-::\-Graph@{srcl\-\_\-ctrl\-::\-Graph}!astar\-\_\-@{astar\-\_\-}}
+\index{astar\-\_\-@{astar\-\_\-}!srcl_ctrl::Graph@{srcl\-\_\-ctrl\-::\-Graph}}
+\subsubsection[{astar\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph\-Node\-Type $>$ {\bf A\-Star}$<${\bf Vertex}$<$Graph\-Node\-Type$>$ $>$ {\bf srcl\-\_\-ctrl\-::\-Graph}$<$ Graph\-Node\-Type $>$\-::astar\-\_\-\hspace{0.3cm}{\ttfamily [private]}}}\label{classsrcl__ctrl_1_1Graph_afb3a6e5c667c05f3edfc87f1ea39577d}
+\hypertarget{classsrcl__ctrl_1_1Graph_a0cdf1fbe36941c5fabc5b2f2c6bfa2ce}{\index{srcl\-\_\-ctrl\-::\-Graph@{srcl\-\_\-ctrl\-::\-Graph}!vertex\-\_\-map\-\_\-@{vertex\-\_\-map\-\_\-}}
+\index{vertex\-\_\-map\-\_\-@{vertex\-\_\-map\-\_\-}!srcl_ctrl::Graph@{srcl\-\_\-ctrl\-::\-Graph}}
+\subsubsection[{vertex\-\_\-map\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Graph\-Node\-Type $>$ std\-::map$<$uint64\-\_\-t, {\bf Vertex}$<$Graph\-Node\-Type$>$$\ast$$>$ {\bf srcl\-\_\-ctrl\-::\-Graph}$<$ Graph\-Node\-Type $>$\-::vertex\-\_\-map\-\_\-\hspace{0.3cm}{\ttfamily [private]}}}\label{classsrcl__ctrl_1_1Graph_a0cdf1fbe36941c5fabc5b2f2c6bfa2ce}
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+/home/rdu/\-Workspace/srcl\-\_\-robot\-\_\-suite/srcl\-\_\-ctrl/planning/src/graph/\hyperlink{graph_8h}{graph.\-h}\end{DoxyCompactItemize}

@@ -1,0 +1,7 @@
+path repair test data set 2:
+quadrotor set pose:
+(-1.8,0.6,0.8, 0);
+
+pose from vrep:
+pos: -1.79936 , 0.59911 , 0.742144
+quat (w, x, y ,z): 0.923868 , 3.68874e-05 , 9.55242e-06 , -0.382712
