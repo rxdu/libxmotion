@@ -12,14 +12,16 @@ import matplotlib.image as mpimg
 from mpl_toolkits.mplot3d import Axes3D
 
 import lcm
-from srcl_lcm_msgs import Graph_t
+from librav_lcm_msgs import Cell_t
+from librav_lcm_msgs import Map_t
 from space_vis import *
 from voxel_space import *
 from object_lib import *
 
 
 class EnvGen(object):
-    def __init__(self):
+    def __init__(self, lcm_h):
+        self.lcm_h = lcm_h
         self.space = Space(0, 0, 0)
         self.space_size = np.array([0, 0, 0])
 
@@ -87,6 +89,24 @@ class EnvGen(object):
 
         return objs
 
+    def publish_map(self):
+        print "publish 2d map"
+
+        map2d = self.space.get_2d_map()
+        map_msg = Map_t()
+        map_msg.cell_num = map2d.cells.size
+
+        print map_msg.cell_num
+        for yi in range(0, map2d.size[1]):
+            for xi in range(0, map2d.size[0]):
+                cell_msg = Cell_t()
+                cell_msg.pos_x = map2d.cells[xi,yi].position[0]
+                cell_msg.pos_y = map2d.cells[xi,yi].position[1]
+                cell_msg.occupied = map2d.cells[xi,yi].occupied
+                map_msg.waypoints.append(cell_msg)
+
+        self.lcm_h.publish("PATH_REPAIR_MAP", map_msg.encode())
+
     def publish_space(self):
         print 'publish'
         # lc = lcm.LCM()
@@ -142,13 +162,19 @@ class EnvGen(object):
 def main():
     print("started env_gen")
 
-    gen = EnvGen()
+    # create a LCM instance
+    lc = lcm.LCM() 
+
+    # create a environment generator
+    gen = EnvGen(lc)
     # 1 unit = 1 meter
     gen.set_env_size(30, 50, 5)
     gen.generate_space()
 
+    gen.publish_map()
+
     gen.plot_map()
-    gen.plot_space()
+    # gen.plot_space()
     gen.show_all_plots()
 
 

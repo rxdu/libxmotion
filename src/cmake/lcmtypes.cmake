@@ -482,7 +482,7 @@ macro(lcmtypes_build)
     lcmtypes_build_c(${ARGV})
     lcmtypes_build_cpp(${ARGV})
 
-    #lcmtypes_build_java(${ARGV})
+    lcmtypes_build_java(${ARGV})
     lcmtypes_build_python(${ARGV})
     lcmtypes_install_types()
 endmacro()

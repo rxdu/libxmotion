@@ -11,10 +11,10 @@ import lcm.lcm.*;
  
 public final class PolyCurveSegment_t implements lcm.lcm.LCMEncodable
 {
-    public long coeffsize_x;
-    public long coeffsize_y;
-    public long coeffsize_z;
-    public long coeffsize_yaw;
+    public int coeffsize_x;
+    public int coeffsize_y;
+    public int coeffsize_z;
+    public int coeffsize_yaw;
     public double coeffs_x[];
     public double coeffs_y[];
     public double coeffs_z[];
@@ -27,7 +27,7 @@ public final class PolyCurveSegment_t implements lcm.lcm.LCMEncodable
     }
  
     public static final long LCM_FINGERPRINT;
-    public static final long LCM_FINGERPRINT_BASE = 0x83be790aed767d0dL;
+    public static final long LCM_FINGERPRINT_BASE = 0xfd820417caf41e97L;
  
     static {
         LCM_FINGERPRINT = _hashRecursive(new ArrayList<Class<?>>());
@@ -53,13 +53,13 @@ public final class PolyCurveSegment_t implements lcm.lcm.LCMEncodable
  
     public void _encodeRecursive(DataOutput outs) throws IOException
     {
-        outs.writeLong(this.coeffsize_x); 
+        outs.writeInt(this.coeffsize_x); 
  
-        outs.writeLong(this.coeffsize_y); 
+        outs.writeInt(this.coeffsize_y); 
  
-        outs.writeLong(this.coeffsize_z); 
+        outs.writeInt(this.coeffsize_z); 
  
-        outs.writeLong(this.coeffsize_yaw); 
+        outs.writeInt(this.coeffsize_yaw); 
  
         for (int a = 0; a < this.coeffsize_x; a++) {
             outs.writeDouble(this.coeffs_x[a]); 
@@ -105,13 +105,13 @@ public final class PolyCurveSegment_t implements lcm.lcm.LCMEncodable
  
     public void _decodeRecursive(DataInput ins) throws IOException
     {
-        this.coeffsize_x = ins.readLong();
+        this.coeffsize_x = ins.readInt();
  
-        this.coeffsize_y = ins.readLong();
+        this.coeffsize_y = ins.readInt();
  
-        this.coeffsize_z = ins.readLong();
+        this.coeffsize_z = ins.readInt();
  
-        this.coeffsize_yaw = ins.readLong();
+        this.coeffsize_yaw = ins.readInt();
  
         this.coeffs_x = new double[(int) coeffsize_x];
         for (int a = 0; a < this.coeffsize_x; a++) {

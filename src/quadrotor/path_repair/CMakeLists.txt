@@ -15,6 +15,7 @@ add_library(pr_sim STATIC ${PATH_REPAIR_SIM_SRC})
 
 set(PATH_REPAIR_LIB_SRC
     quad_path_repair.cpp
+    path_repair.cpp
     geo_mark_graph.cpp
     shortcut_eval.cpp
 )

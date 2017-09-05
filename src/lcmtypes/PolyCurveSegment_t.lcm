@@ -2,10 +2,10 @@ package srcl_lcm_msgs;
 
 struct PolyCurveSegment_t
 {    
-	int64_t coeffsize_x;
-	int64_t coeffsize_y;
-	int64_t coeffsize_z;
-	int64_t coeffsize_yaw;
+	int32_t coeffsize_x;
+	int32_t coeffsize_y;
+	int32_t coeffsize_z;
+	int32_t coeffsize_yaw;
 	
 	double coeffs_x[coeffsize_x];
 	double coeffs_y[coeffsize_y];

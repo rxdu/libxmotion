@@ -31,7 +31,7 @@ class PolyCurveSegment_t(object):
         return buf.getvalue()
 
     def _encode_one(self, buf):
-        buf.write(struct.pack(">qqqq", self.coeffsize_x, self.coeffsize_y, self.coeffsize_z, self.coeffsize_yaw))
+        buf.write(struct.pack(">iiii", self.coeffsize_x, self.coeffsize_y, self.coeffsize_z, self.coeffsize_yaw))
         buf.write(struct.pack('>%dd' % self.coeffsize_x, *self.coeffs_x[:self.coeffsize_x]))
         buf.write(struct.pack('>%dd' % self.coeffsize_y, *self.coeffs_y[:self.coeffsize_y]))
         buf.write(struct.pack('>%dd' % self.coeffsize_z, *self.coeffs_z[:self.coeffsize_z]))
@@ -50,7 +50,7 @@ class PolyCurveSegment_t(object):
 
     def _decode_one(buf):
         self = PolyCurveSegment_t()
-        self.coeffsize_x, self.coeffsize_y, self.coeffsize_z, self.coeffsize_yaw = struct.unpack(">qqqq", buf.read(32))
+        self.coeffsize_x, self.coeffsize_y, self.coeffsize_z, self.coeffsize_yaw = struct.unpack(">iiii", buf.read(16))
         self.coeffs_x = struct.unpack('>%dd' % self.coeffsize_x, buf.read(self.coeffsize_x * 8))
         self.coeffs_y = struct.unpack('>%dd' % self.coeffsize_y, buf.read(self.coeffsize_y * 8))
         self.coeffs_z = struct.unpack('>%dd' % self.coeffsize_z, buf.read(self.coeffsize_z * 8))
@@ -62,7 +62,7 @@ class PolyCurveSegment_t(object):
     _hash = None
     def _get_hash_recursive(parents):
         if PolyCurveSegment_t in parents: return 0
-        tmphash = (0x83be790aed767d0d) & 0xffffffffffffffff
+        tmphash = (0xfd820417caf41e97) & 0xffffffffffffffff
         tmphash  = (((tmphash<<1)&0xffffffffffffffff)  + (tmphash>>63)) & 0xffffffffffffffff
         return tmphash
     _get_hash_recursive = staticmethod(_get_hash_recursive)
