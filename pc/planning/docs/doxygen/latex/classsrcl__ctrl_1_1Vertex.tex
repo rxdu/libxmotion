@@ -1,0 +1,128 @@
+\hypertarget{classsrcl__ctrl_1_1Vertex}{\section{srcl\-\_\-ctrl\-:\-:Vertex$<$ Vertex\-Node\-Type $>$ Class Template Reference}
+\label{classsrcl__ctrl_1_1Vertex}\index{srcl\-\_\-ctrl\-::\-Vertex$<$ Vertex\-Node\-Type $>$@{srcl\-\_\-ctrl\-::\-Vertex$<$ Vertex\-Node\-Type $>$}}
+}
+
+
+A vertex data structure template.  
+
+
+
+
+{\ttfamily \#include $<$vertex.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classsrcl__ctrl_1_1Vertex_af0578f23ded3d8439e87a3f2ae10292d}{Vertex} (Vertex\-Node\-Type $\ast$node=nullptr)
+\item 
+\hyperlink{classsrcl__ctrl_1_1Vertex_a0cb4745bc480b9efc8d0e502b16fbd52}{$\sim$\-Vertex} ()
+\item 
+bool \hyperlink{classsrcl__ctrl_1_1Vertex_a39000d2df49bb8bb1c69031cb643f4f8}{operator==} (const \hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}$<$ Vertex\-Node\-Type $>$ other)
+\item 
+void \hyperlink{classsrcl__ctrl_1_1Vertex_a0b523a10a2b6d3c6366351614212d6d7}{Clear\-Vertex\-Search\-Info} ()
+\item 
+double \hyperlink{classsrcl__ctrl_1_1Vertex_ad1bfb0c6db83570111f38239f253d705}{Get\-Edge\-Cost} (\hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}$<$ Vertex\-Node\-Type $>$ $\ast$dst\-\_\-node)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Vertex\-Node\-Type $\ast$ \hyperlink{classsrcl__ctrl_1_1Vertex_a8f6a4fe4b4f90da09585d217a45776c0}{node\-\_\-}
+\item 
+uint64\-\_\-t \hyperlink{classsrcl__ctrl_1_1Vertex_a3603bcc823fb7faf9e6bfa0dcd75d17f}{vertex\-\_\-id\-\_\-}
+\item 
+std\-::vector$<$ \hyperlink{classsrcl__ctrl_1_1Edge}{Edge}$<$ \hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}\\*
+$<$ Vertex\-Node\-Type $>$ $>$ $>$ \hyperlink{classsrcl__ctrl_1_1Vertex_a70fcde693fe27f0d683edbe61bacf157}{edges\-\_\-}
+\item 
+bool \hyperlink{classsrcl__ctrl_1_1Vertex_a0df1a1732482d5a18a255c8295ec47db}{is\-\_\-checked\-\_\-}
+\item 
+bool \hyperlink{classsrcl__ctrl_1_1Vertex_a903aae6844c345082211eef308df0237}{is\-\_\-in\-\_\-openlist\-\_\-}
+\item 
+double \hyperlink{classsrcl__ctrl_1_1Vertex_a2e160af974d32d2d45c6919834e6c95e}{f\-\_\-astar\-\_\-}
+\item 
+double \hyperlink{classsrcl__ctrl_1_1Vertex_a3e4031db49e20d962eb01daf9993a491}{g\-\_\-astar\-\_\-}
+\item 
+double \hyperlink{classsrcl__ctrl_1_1Vertex_a04fbe2b5fc6293e6f4298d1827847f91}{h\-\_\-astar\-\_\-}
+\item 
+\hyperlink{classsrcl__ctrl_1_1Vertex}{Vertex}$<$ Vertex\-Node\-Type $>$ $\ast$ \hyperlink{classsrcl__ctrl_1_1Vertex_a24423a829a6b5b22a16778c4d3e560fd}{search\-\_\-parent\-\_\-}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$typename Vertex\-Node\-Type$>$class srcl\-\_\-ctrl\-::\-Vertex$<$ Vertex\-Node\-Type $>$}
+
+A vertex data structure template. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classsrcl__ctrl_1_1Vertex_af0578f23ded3d8439e87a3f2ae10292d}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!Vertex@{Vertex}}
+\index{Vertex@{Vertex}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{Vertex}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Vertex\-Node\-Type$>$ {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Vertex\-Node\-Type $>$\-::{\bf Vertex} (
+\begin{DoxyParamCaption}
+\item[{Vertex\-Node\-Type $\ast$}]{node = {\ttfamily nullptr}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Vertex_af0578f23ded3d8439e87a3f2ae10292d}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a0cb4745bc480b9efc8d0e502b16fbd52}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!$\sim$\-Vertex@{$\sim$\-Vertex}}
+\index{$\sim$\-Vertex@{$\sim$\-Vertex}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{$\sim$\-Vertex}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Vertex\-Node\-Type$>$ {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Vertex\-Node\-Type $>$\-::$\sim${\bf Vertex} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Vertex_a0cb4745bc480b9efc8d0e502b16fbd52}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a0b523a10a2b6d3c6366351614212d6d7}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!Clear\-Vertex\-Search\-Info@{Clear\-Vertex\-Search\-Info}}
+\index{Clear\-Vertex\-Search\-Info@{Clear\-Vertex\-Search\-Info}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{Clear\-Vertex\-Search\-Info}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Vertex\-Node\-Type$>$ void {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Vertex\-Node\-Type $>$\-::Clear\-Vertex\-Search\-Info (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Vertex_a0b523a10a2b6d3c6366351614212d6d7}
+\hypertarget{classsrcl__ctrl_1_1Vertex_ad1bfb0c6db83570111f38239f253d705}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!Get\-Edge\-Cost@{Get\-Edge\-Cost}}
+\index{Get\-Edge\-Cost@{Get\-Edge\-Cost}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{Get\-Edge\-Cost}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Vertex\-Node\-Type$>$ double {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Vertex\-Node\-Type $>$\-::Get\-Edge\-Cost (
+\begin{DoxyParamCaption}
+\item[{{\bf Vertex}$<$ Vertex\-Node\-Type $>$ $\ast$}]{dst\-\_\-node}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Vertex_ad1bfb0c6db83570111f38239f253d705}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a39000d2df49bb8bb1c69031cb643f4f8}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!operator==@{operator==}}
+\index{operator==@{operator==}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{operator==}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Vertex\-Node\-Type$>$ bool {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Vertex\-Node\-Type $>$\-::operator== (
+\begin{DoxyParamCaption}
+\item[{const {\bf Vertex}$<$ Vertex\-Node\-Type $>$}]{other}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classsrcl__ctrl_1_1Vertex_a39000d2df49bb8bb1c69031cb643f4f8}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a70fcde693fe27f0d683edbe61bacf157}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!edges\-\_\-@{edges\-\_\-}}
+\index{edges\-\_\-@{edges\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{edges\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Vertex\-Node\-Type$>$ std\-::vector$<${\bf Edge}$<${\bf Vertex}$<$Vertex\-Node\-Type$>$ $>$ $>$ {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Vertex\-Node\-Type $>$\-::edges\-\_\-}}\label{classsrcl__ctrl_1_1Vertex_a70fcde693fe27f0d683edbe61bacf157}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a2e160af974d32d2d45c6919834e6c95e}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!f\-\_\-astar\-\_\-@{f\-\_\-astar\-\_\-}}
+\index{f\-\_\-astar\-\_\-@{f\-\_\-astar\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{f\-\_\-astar\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Vertex\-Node\-Type$>$ double {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Vertex\-Node\-Type $>$\-::f\-\_\-astar\-\_\-}}\label{classsrcl__ctrl_1_1Vertex_a2e160af974d32d2d45c6919834e6c95e}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a3e4031db49e20d962eb01daf9993a491}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!g\-\_\-astar\-\_\-@{g\-\_\-astar\-\_\-}}
+\index{g\-\_\-astar\-\_\-@{g\-\_\-astar\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{g\-\_\-astar\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Vertex\-Node\-Type$>$ double {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Vertex\-Node\-Type $>$\-::g\-\_\-astar\-\_\-}}\label{classsrcl__ctrl_1_1Vertex_a3e4031db49e20d962eb01daf9993a491}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a04fbe2b5fc6293e6f4298d1827847f91}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!h\-\_\-astar\-\_\-@{h\-\_\-astar\-\_\-}}
+\index{h\-\_\-astar\-\_\-@{h\-\_\-astar\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{h\-\_\-astar\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Vertex\-Node\-Type$>$ double {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Vertex\-Node\-Type $>$\-::h\-\_\-astar\-\_\-}}\label{classsrcl__ctrl_1_1Vertex_a04fbe2b5fc6293e6f4298d1827847f91}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a0df1a1732482d5a18a255c8295ec47db}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!is\-\_\-checked\-\_\-@{is\-\_\-checked\-\_\-}}
+\index{is\-\_\-checked\-\_\-@{is\-\_\-checked\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{is\-\_\-checked\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Vertex\-Node\-Type$>$ bool {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Vertex\-Node\-Type $>$\-::is\-\_\-checked\-\_\-}}\label{classsrcl__ctrl_1_1Vertex_a0df1a1732482d5a18a255c8295ec47db}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a903aae6844c345082211eef308df0237}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!is\-\_\-in\-\_\-openlist\-\_\-@{is\-\_\-in\-\_\-openlist\-\_\-}}
+\index{is\-\_\-in\-\_\-openlist\-\_\-@{is\-\_\-in\-\_\-openlist\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{is\-\_\-in\-\_\-openlist\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Vertex\-Node\-Type$>$ bool {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Vertex\-Node\-Type $>$\-::is\-\_\-in\-\_\-openlist\-\_\-}}\label{classsrcl__ctrl_1_1Vertex_a903aae6844c345082211eef308df0237}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a8f6a4fe4b4f90da09585d217a45776c0}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!node\-\_\-@{node\-\_\-}}
+\index{node\-\_\-@{node\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{node\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Vertex\-Node\-Type$>$ Vertex\-Node\-Type$\ast$ {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Vertex\-Node\-Type $>$\-::node\-\_\-}}\label{classsrcl__ctrl_1_1Vertex_a8f6a4fe4b4f90da09585d217a45776c0}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a24423a829a6b5b22a16778c4d3e560fd}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!search\-\_\-parent\-\_\-@{search\-\_\-parent\-\_\-}}
+\index{search\-\_\-parent\-\_\-@{search\-\_\-parent\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{search\-\_\-parent\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Vertex\-Node\-Type$>$ {\bf Vertex}$<$Vertex\-Node\-Type$>$$\ast$ {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Vertex\-Node\-Type $>$\-::search\-\_\-parent\-\_\-}}\label{classsrcl__ctrl_1_1Vertex_a24423a829a6b5b22a16778c4d3e560fd}
+\hypertarget{classsrcl__ctrl_1_1Vertex_a3603bcc823fb7faf9e6bfa0dcd75d17f}{\index{srcl\-\_\-ctrl\-::\-Vertex@{srcl\-\_\-ctrl\-::\-Vertex}!vertex\-\_\-id\-\_\-@{vertex\-\_\-id\-\_\-}}
+\index{vertex\-\_\-id\-\_\-@{vertex\-\_\-id\-\_\-}!srcl_ctrl::Vertex@{srcl\-\_\-ctrl\-::\-Vertex}}
+\subsubsection[{vertex\-\_\-id\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Vertex\-Node\-Type$>$ uint64\-\_\-t {\bf srcl\-\_\-ctrl\-::\-Vertex}$<$ Vertex\-Node\-Type $>$\-::vertex\-\_\-id\-\_\-}}\label{classsrcl__ctrl_1_1Vertex_a3603bcc823fb7faf9e6bfa0dcd75d17f}
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+/home/rdu/\-Workspace/srcl\-\_\-robot\-\_\-suite/srcl\-\_\-ctrl/planning/src/graph/\hyperlink{vertex_8h}{vertex.\-h}\end{DoxyCompactItemize}
