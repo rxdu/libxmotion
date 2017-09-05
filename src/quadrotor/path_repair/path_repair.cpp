@@ -26,7 +26,6 @@ PathRepair::PathRepair(std::shared_ptr<lcm::LCM> lcm):
 		lcm_(lcm),
 		octomap_server_(OctomapServer(lcm_)),
 		mission_tracker_(new MissionTracker(lcm_)),
-		active_graph_planner_(GraphPlannerType::NOT_SPECIFIED),
 		sensor_range_(5.0),
 		current_sys_time_(0),
 		gstart_set_(false),
@@ -39,8 +38,7 @@ PathRepair::PathRepair(std::shared_ptr<lcm::LCM> lcm):
 	if(!lcm_->good())
 		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
 	else {
-		traj_gen_ = std::make_shared<PathManager>(lcm_);
-
+		lcm_->subscribe("envsim/map", &PathRepair::LcmSimMapHandler, this);
 		lcm_->subscribe("quad_data/quad_transform",&PathRepair::LcmTransformHandler, this);
 		lcm_->subscribe("quad_planner/new_octomap_ready",&PathRepair::LcmOctomapHandler, this);
 		lcm_->subscribe("quad_data/system_time", &PathRepair::LcmSysTimeHandler, this);
@@ -56,7 +54,6 @@ void PathRepair::ConfigGraphPlanner(MapConfig config, double world_size_x, doubl
 		if(result)
 		{
 			std::cout << "square grid planner activated" << std::endl;
-			active_graph_planner_ = GraphPlannerType::SQUAREGRID_PLANNER;
 
 			// configure navigation field for shortcut analysis
 			nav_field_ = std::make_shared<NavField<SquareCell*>>(sgrid_planner_.graph_);
@@ -191,6 +188,13 @@ MapInfo PathRepair::GetActiveMapInfo()
 	return sgrid_planner_.map_.info;
 }
 
+void PathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const librav_lcm_msgs::Map_t* msg)
+{
+	std::cout << "Map msg received: " << std::endl;
+	std::cout << "Map size: " << msg->cell_num << std::endl;
+	
+}
+
 void PathRepair::LcmTransformHandler(
 		const lcm::ReceiveBuffer* rbuf,
 		const std::string& chan,
@@ -214,20 +218,6 @@ void PathRepair::LcmSysTimeHandler(
 		const srcl_lcm_msgs::TimeStamp_t* msg)
 {
 	current_sys_time_ = msg->time_stamp;
-}
-
-bool PathRepair::CheckPathSafety(std::shared_ptr<CubeArray> cube_array)
-{
-	// only check waypoints that is from 3D graph
-	for(auto& wp : mission_tracker_->active_path_)
-	{
-		Position3Dd pt_pos_w = wp.position;
-
-		if(octomap_server_.IsPositionOccupied(pt_pos_w))
-			return false;
-	}
-
-	return true;
 }
 
 bool PathRepair::EvaluateNewPath(std::vector<Position3Dd>& new_path)
@@ -261,31 +251,6 @@ bool PathRepair::EvaluateNewPath(std::vector<Position3Dd>& new_path)
 	}
 	else
 		return false;
-}
-
-int32_t PathRepair::FindFurthestPointWithinRadius(std::vector<Position3Dd>& new_path, double radius) const
-{
-	Position3Dd start = new_path.front();
-	int32_t goal_idx = new_path.size() - 1;
-
-	int32_t idx = 0;
-	for(auto it = new_path.begin(); it != new_path.end() - 1; it++)
-	{
-		double dist1 = std::sqrt(std::pow((*it).x - start.x,2) +
-				std::pow((*it).y - start.y,2) +
-				std::pow((*it).z - start.z,2));
-		double dist2 = std::sqrt(std::pow((*(it+1)).x - start.x,2) +
-				std::pow((*(it+1)).y - start.y,2) +
-				std::pow((*(it+1)).z - start.z,2));
-
-		if(dist1 <= radius && dist2 > radius) {
-			goal_idx = idx;
-		}
-
-		idx++;
-	}
-
-	return goal_idx;
 }
 
 void PathRepair::LcmOctomapHandler(

@@ -18,6 +18,7 @@ set(PATH_REPAIR_LIB_SRC
     path_repair.cpp
     geo_mark_graph.cpp
     shortcut_eval.cpp
+    sg_graph_planner.cpp
 )
 add_library(path_repair STATIC ${PATH_REPAIR_LIB_SRC})
 target_link_libraries(path_repair map polyopt common vis ${OpenCV_LIBS} ${LCM_LIBRARIES})

@@ -22,7 +22,7 @@
 #include "planning/geometry/geo_mark.h"
 #include "planning/map/octomap_server.h"
 
-#include "quadrotor/path_repair/graph_planner.h"
+#include "quadrotor/path_repair/sg_graph_planner.h"
 #include "quadrotor/path_repair/geo_mark_graph.h"
 #include "quadrotor/path_repair/nav_field.h"
 #include "quadrotor/path_repair/shortcut_eval.h"
@@ -40,7 +40,7 @@ private:
 	std::shared_ptr<lcm::LCM> lcm_;
 
 	// planners
-	GraphPlanner<SquareGrid> sgrid_planner_;
+	SGGraphPlanner sgrid_planner_;
 	GeoMarkGraph geomark_graph_;
 	OctomapServer octomap_server_;
 
@@ -50,10 +50,6 @@ private:
 
 	std::unique_ptr<MissionTracker> mission_tracker_;
 	time_stamp current_sys_time_;
-
-	// trajectory optimization
-	QuadPolyOpt traj_opt_;
-	std::shared_ptr<PathManager> traj_gen_;
 
 	// planning parameters
 	Position2D start_pos_;
@@ -70,14 +66,11 @@ private:
 
 public:
 	bool update_global_plan_;
-	GraphPlannerType active_graph_planner_;
 
 private:
 	template<typename PlannerType>
 	srcl_lcm_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner);
 	bool EvaluateNewPath(std::vector<Position3Dd>& new_path);
-	bool CheckPathSafety(std::shared_ptr<CubeArray> cube_array);
-	int32_t FindFurthestPointWithinRadius(std::vector<Position3Dd>& new_path, double radius) const;
 
 public:
 	// graph planner configuration
@@ -86,6 +79,9 @@ public:
 
 	// general planner configuration
 	void EnablePositionAutoUpdate(bool cmd) { auto_update_pos_ = cmd; };
+
+	void SetStartPosition(Position2D pos);
+	void SetGoalPosition(Position2D pos);
 
 	void SetStartRefWorldPosition(Position2Dd pos);
 	void SetGoalRefWorldPosition(Position2Dd pos);
@@ -99,6 +95,7 @@ public:
 
 private:
 	// lcm
+	void LcmSimMapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const librav_lcm_msgs::Map_t* msg);
 	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::QuadrotorTransform* msg);
 	void LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::NewDataReady_t* msg);
 	void LcmSysTimeHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::TimeStamp_t* msg);

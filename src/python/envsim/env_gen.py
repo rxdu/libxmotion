@@ -105,7 +105,7 @@ class EnvGen(object):
                 cell_msg.occupied = map2d.cells[xi,yi].occupied
                 map_msg.waypoints.append(cell_msg)
 
-        self.lcm_h.publish("PATH_REPAIR_MAP", map_msg.encode())
+        self.lcm_h.publish("envsim/map", map_msg.encode())
 
     def publish_space(self):
         print 'publish'

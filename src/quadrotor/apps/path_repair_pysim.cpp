@@ -19,24 +19,24 @@
 #include "planning/map/map_info.h"
 #include "planning/geometry/graph_builder.h"
 #include "planning/geometry/sgrid_builder.h"
-#include "quadrotor/path_repair/quad_path_repair.h"
+#include "quadrotor/path_repair/path_repair.h"
 
 using namespace librav;
 
-void TestCase1_Config(QuadPathRepair& qplanner)
+void TestCase1_Config(PathRepair& qplanner)
 {
-	std::string image_dir = "/home/rdu/Workspace/srcl_rtk/librav/pc/planning/data/experiments/map_path_repair.png";
+	// config 2d map
+	// std::string image_dir = "/home/rdu/Workspace/srcl_rtk/librav/pc/planning/data/experiments/map_path_repair.png";
+	// MapConfig map_config;
+	// map_config.SetMapPath(image_dir);
+	// map_config.SetMapType(MapDataModel::SQUARE_GRID, 32);
+	// map_config.SetOriginOffset(2.5, 2.5);
+	// qplanner.ConfigGraphPlanner(map_config, 5.0, 5.0);
 
-	MapConfig map_config;
-
-	map_config.SetMapPath(image_dir);
-	map_config.SetMapType(MapDataModel::SQUARE_GRID, 32);
-	//	map_config.SetMapType(MapDataModel::QUAD_TREE, 6);
-	map_config.SetOriginOffset(2.5, 2.5);
-
-	qplanner.ConfigGraphPlanner(map_config, 5.0, 5.0);
+	// position update
 	qplanner.EnablePositionAutoUpdate(true);
 
+	// set start and goal
 	qplanner.SetGoalRefWorldPosition(Position2Dd(1.8, -2.0));
 	qplanner.SetGoalHeightRange(0.5, 2.5);
 }
@@ -52,22 +52,16 @@ int main(int argc, char* argv[])
 	}
 
 	// init quadrotor planner
-	QuadPathRepair qplanner(lcm);
+	PathRepair qplanner(lcm);
 
-	TestCase1_Config(qplanner);
+	// TestCase1_Config(qplanner);
 
 	//LoggingHelper& logging_helper = LoggingHelper::GetInstance("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/librav/pc/planning/log");
 
-	if(qplanner.active_graph_planner_ == GraphPlannerType::NOT_SPECIFIED)
-	{
-		std::cout << "failed to init quad planner" << std::endl;
-		return -1;
-	}
-
 	while(true)
 	{
-		if(qplanner.update_global_plan_)
-			qplanner.UpdateGlobalPath();
+		// if(qplanner.update_global_plan_)
+		// 	qplanner.UpdateGlobalPath();
 
 		lcm->handleTimeout(0);
 	}
