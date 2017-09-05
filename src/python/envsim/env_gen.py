@@ -93,19 +93,24 @@ class EnvGen(object):
         print "publish 2d map"
 
         map2d = self.space.get_2d_map()
+        
         map_msg = Map_t()
+        map_msg.size_x = map2d.size[0]
+        map_msg.size_y = map2d.size[1]
         map_msg.cell_num = map2d.cells.size
 
-        print map_msg.cell_num
         for yi in range(0, map2d.size[1]):
             for xi in range(0, map2d.size[0]):
                 cell_msg = Cell_t()
+                cell_msg.id = map2d.cells[xi,yi].id
                 cell_msg.pos_x = map2d.cells[xi,yi].position[0]
                 cell_msg.pos_y = map2d.cells[xi,yi].position[1]
                 cell_msg.occupied = map2d.cells[xi,yi].occupied
-                map_msg.waypoints.append(cell_msg)
+                map_msg.cells.append(cell_msg)
 
         self.lcm_h.publish("envsim/map", map_msg.encode())
+
+        print "2d map published"
 
     def publish_space(self):
         print 'publish'

@@ -2,6 +2,7 @@ package librav_lcm_msgs;
 
 struct Cell_t
 {
+    int32_t id;
     int32_t pos_x;
     int32_t pos_y;
     boolean occupied;
@@ -9,6 +10,8 @@ struct Cell_t
 
 struct Map_t 
 {
+    int32_t size_x;
+    int32_t size_y;
 	int64_t cell_num;
-	Cell_t waypoints[cell_num];
+	Cell_t cells[cell_num];
 }
