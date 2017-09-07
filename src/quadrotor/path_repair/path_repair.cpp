@@ -27,6 +27,7 @@ using namespace librav;
 
 PathRepair::PathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 														octomap_server_(OctomapServer(lcm_)),
+														map_received_(false),
 														mission_tracker_(new MissionTracker(lcm_)),
 														sensor_range_(5.0),
 														current_sys_time_(0),
@@ -66,10 +67,13 @@ void PathRepair::SetGoalPosition(Position2D pos)
 
 	ggoal_set_ = true;
 
-	// auto goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
-	// nav_field_->UpdateNavField(goal_id);
-	// // TODO update sensor range from calculation
-	// sc_evaluator_->EvaluateGridShortcutPotential(15);
+	if (map_received_)
+	{
+		auto goal_id = sgrid_->GetIDFromIndex(goal_pos_.x, goal_pos_.y);
+		nav_field_->UpdateNavField(goal_id);
+		// TODO update sensor range from calculation
+		sc_evaluator_->EvaluateGridShortcutPotential(15);
+	}
 
 	if (gstart_set_ && ggoal_set_)
 		update_global_plan_ = true;
@@ -110,18 +114,29 @@ void PathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::str
 
 	// set square grid to graph planner
 	bool result = sgrid_planner_.UpdateMapConfig(sgrid_);
+	nav_field_ = std::make_shared<NavField<SquareCell *>>(sgrid_planner_.graph_);
+	sc_evaluator_ = std::make_shared<ShortcutEval>(sgrid_, nav_field_);
 
+	map_received_ = true;
 	update_global_plan_ = true;
 
-	cv::Mat vis_img;
-	Vis::VisSquareGrid(*sgrid_, vis_img);
-	Vis::VisGraph(*sgrid_planner_.graph_, vis_img, vis_img, true);
+	if(ggoal_set_)
+	{
+		auto goal_id = sgrid_->GetIDFromIndex(goal_pos_.x, goal_pos_.y);
+		nav_field_->UpdateNavField(goal_id);
+		// TODO update sensor range from calculation
+		sc_evaluator_->EvaluateGridShortcutPotential(15);
+	}
 
-	// display visualization result
-	cv::namedWindow("Processed Image", cv::WINDOW_NORMAL); // WINDOW_AUTOSIZE
-	cv::imshow("Processed Image", vis_img);
+	// cv::Mat vis_img;
+	// Vis::VisSquareGrid(*sgrid_, vis_img);
+	// Vis::VisGraph(*sgrid_planner_.graph_, vis_img, vis_img, true);
 
-	cv::waitKey(0);
+	// // display visualization result
+	// cv::namedWindow("Processed Image", cv::WINDOW_NORMAL); // WINDOW_AUTOSIZE
+	// cv::imshow("Processed Image", vis_img);
+
+	// cv::waitKey(0);
 }
 
 void PathRepair::LcmTransformHandler(

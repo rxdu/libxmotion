@@ -63,6 +63,7 @@ private:
 	GeoMarkGraph geomark_graph_;
 	OctomapServer octomap_server_;
 
+	bool map_received_;
 	std::shared_ptr<SquareGrid> sgrid_;
 	std::shared_ptr<NavField<SquareCell*>> nav_field_;
 	std::shared_ptr<ShortcutEval> sc_evaluator_;
