@@ -15,6 +15,7 @@
 #include "utility/logging/logger.h"
 
 #include "vis/sgrid_vis.h"
+#include "vis/graph_vis.h"
 
 #include "quadrotor/path_repair/path_repair.h"
 #include "planning/map/map_utils.h"
@@ -36,49 +37,13 @@ PathRepair::PathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 														est_new_dist_(std::numeric_limits<double>::infinity()),
 														update_global_plan_(false)
 {
-	if (!lcm_->good())
-		std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
-	else
-	{
-		lcm_->subscribe("envsim/map", &PathRepair::LcmSimMapHandler, this);
-		lcm_->subscribe("quad_data/quad_transform", &PathRepair::LcmTransformHandler, this);
-		lcm_->subscribe("quad_planner/new_octomap_ready", &PathRepair::LcmOctomapHandler, this);
-		lcm_->subscribe("quad_data/system_time", &PathRepair::LcmSysTimeHandler, this);
-	}
+	lcm_->subscribe("envsim/map", &PathRepair::LcmSimMapHandler, this);
+	lcm_->subscribe("quad_data/quad_transform", &PathRepair::LcmTransformHandler, this);
+	lcm_->subscribe("quad_planner/new_octomap_ready", &PathRepair::LcmOctomapHandler, this);
+	lcm_->subscribe("quad_data/system_time", &PathRepair::LcmSysTimeHandler, this);
 }
 
-void PathRepair::ConfigGraphPlanner(MapConfig config, double world_size_x, double world_size_y)
-{
-	if (config.GetMapType().data_model == MapDataModel::SQUARE_GRID)
-	{
-		bool result = sgrid_planner_.UpdateMapConfig(config);
-
-		if (result)
-		{
-			std::cout << "square grid planner activated" << std::endl;
-
-			// configure navigation field for shortcut analysis
-			nav_field_ = std::make_shared<NavField<SquareCell *>>(sgrid_planner_.graph_);
-			sc_evaluator_ = std::make_shared<ShortcutEval>(sgrid_planner_.map_.data_model, nav_field_);
-		}
-	}
-	else
-		return;
-
-	// the world size must be set after the planner is updated, otherwise the configuration will be override
-	sgrid_planner_.map_.info.SetWorldSize(world_size_x, world_size_y);
-	world_size_set_ = true;
-
-	sgrid_planner_.map_.info.resolution = sgrid_planner_.map_.info.world_size_x / sgrid_planner_.map_.info.map_size_x * sgrid_planner_.map_.data_model->cell_size_;
-	std::cout << "sgrid map reso: " << sgrid_planner_.map_.info.resolution << std::endl;
-	geomark_graph_.UpdateSquareGridInfo(sgrid_planner_.graph_, sgrid_planner_.map_);
-	octomap_server_.SetOctreeResolution(sgrid_planner_.map_.info.resolution);
-
-	//	srcl_lcm_msgs::Graph_t graph_msg = GenerateLcmGraphMsg();
-	//	lcm_->publish("quad_planner/quad_planner_graph", &graph_msg);
-}
-
-void PathRepair::SetStartMapPosition(Position2D pos)
+void PathRepair::SetStartPosition(Position2D pos)
 {
 	if (pos == start_pos_)
 		return;
@@ -94,82 +59,34 @@ void PathRepair::SetStartMapPosition(Position2D pos)
 		update_global_plan_ = true;
 }
 
-void PathRepair::SetGoalMapPosition(Position2D pos)
+void PathRepair::SetGoalPosition(Position2D pos)
 {
 	goal_pos_.x = pos.x;
 	goal_pos_.y = pos.y;
 
 	ggoal_set_ = true;
 
-	auto goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
-	nav_field_->UpdateNavField(goal_id);
-	// TODO update sensor range from calculation
-	sc_evaluator_->EvaluateGridShortcutPotential(15);
+	// auto goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
+	// nav_field_->UpdateNavField(goal_id);
+	// // TODO update sensor range from calculation
+	// sc_evaluator_->EvaluateGridShortcutPotential(15);
 
 	if (gstart_set_ && ggoal_set_)
 		update_global_plan_ = true;
-}
-
-void PathRepair::SetStartRefWorldPosition(Position2Dd pos)
-{
-	//	std::cout << "\nposition in ref world: " << pos.x << " , " << pos.y << std::endl;
-
-	Position2Dd mpos;
-	mpos = MapUtils::CoordinatesFromRefWorldToMapWorld(pos, GetActiveMapInfo());
-	//	std::cout << "position in map world: " << mpos.x << " , " << mpos.y << std::endl;
-
-	Position2D map_pos;
-	map_pos = MapUtils::CoordinatesFromMapWorldToMap(mpos, GetActiveMapInfo());
-	//	std::cout << "position in map: " << map_pos.x << " , " << map_pos.y << std::endl;
-
-	Position2D map_padded_pos;
-	map_padded_pos = MapUtils::CoordinatesFromOriginalToPadded(map_pos, GetActiveMapInfo());
-	//	std::cout << "position in padded map: " << map_padded_pos.x << " , " << map_padded_pos.y << std::endl;
-
-	SetStartMapPosition(map_padded_pos);
-}
-
-void PathRepair::SetGoalRefWorldPosition(Position2Dd pos)
-{
-	Position2Dd mpos;
-	mpos = MapUtils::CoordinatesFromRefWorldToMapWorld(pos, GetActiveMapInfo());
-
-	Position2D map_pos;
-	map_pos = MapUtils::CoordinatesFromMapWorldToMap(mpos, GetActiveMapInfo());
-
-	Position2D map_padded_pos;
-	map_padded_pos = MapUtils::CoordinatesFromOriginalToPadded(map_pos, GetActiveMapInfo());
-
-	SetGoalMapPosition(map_padded_pos);
-}
-
-std::vector<Position2D> PathRepair::UpdateGlobalPath()
-{
-	std::vector<Position2D> waypoints;
-
-	//	std::cout << "----> start: " << start_pos_.x << " , " << start_pos_.y << std::endl;
-	//	std::cout << "----> goal: " << goal_pos_.x << " , " << goal_pos_.y << std::endl;
-
-	auto traj_vtx = sgrid_planner_.Search(start_pos_, goal_pos_);
-	for (auto &wp : traj_vtx)
-		waypoints.push_back(wp->bundled_data_->location_);
-
-	srcl_lcm_msgs::Path_t path_msg = GenerateLcmPathMsg(waypoints);
-	lcm_->publish("quad_planner/quad_planner_graph_path", &path_msg);
-
-	update_global_plan_ = false;
-
-	return waypoints;
 }
 
 std::vector<uint64_t> PathRepair::UpdateGlobalPathID()
 {
 	std::vector<uint64_t> waypoints;
 
-	//		std::cout << "----> start: " << start_pos_.x << " , " << start_pos_.y << std::endl;
-	//		std::cout << "----> goal: " << goal_pos_.x << " , " << goal_pos_.y << std::endl;
+	auto start_id = sgrid_->GetIDFromIndex(start_pos_.x, start_pos_.y);
+	auto goal_id = sgrid_->GetIDFromIndex(goal_pos_.x, goal_pos_.y);
 
-	auto traj_vtx = sgrid_planner_.Search(start_pos_, goal_pos_);
+	std::cout << "----> start: " << start_pos_.x << " , " << start_pos_.y << ", id: " << start_id << std::endl;
+	std::cout << "----> goal: " << goal_pos_.x << " , " << goal_pos_.y << ", id: " << goal_id << std::endl;
+	//std::cout << "col: " << sgrid_->col_size_ << " , row: " << sgrid_->row_size_ << std::endl;
+
+	auto traj_vtx = sgrid_planner_.Search(start_id, goal_id);
 	for (auto &wp : traj_vtx)
 		waypoints.push_back(wp->vertex_id_);
 
@@ -178,42 +95,33 @@ std::vector<uint64_t> PathRepair::UpdateGlobalPathID()
 	return waypoints;
 }
 
-cv::Mat PathRepair::GetActiveMap()
-{
-	return sgrid_planner_.map_.padded_image;
-}
-
-MapInfo PathRepair::GetActiveMapInfo()
-{
-	MapInfo empty_info;
-
-	return sgrid_planner_.map_.info;
-}
-
 void PathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::Map_t *msg)
 {
 	std::cout << "Map msg received: " << std::endl;
 	std::cout << "Map size: " << msg->cell_num << std::endl;
 
-	std::shared_ptr<SquareGrid> grid = MapUtils::CreateSquareGrid(msg->size_x, msg->size_y, 100);
-	// std::shared_ptr<SquareGrid> grid = MapUtils::CreateSquareGrid(12, 12, 100);
-
-	// set occupancy for cells
+	// create square grid from map msg
+	sgrid_ = MapUtils::CreateSquareGrid(msg->size_x, msg->size_y, 100);
 	for (const auto &cell : msg->cells)
 	{
 		if (cell.occupied)
-			grid->SetCellOccupancy(cell.pos_y, cell.pos_x, OccupancyType::OCCUPIED);
+			sgrid_->SetCellOccupancy(cell.pos_y, cell.pos_x, OccupancyType::OCCUPIED);
 	}
 
-	// cv::Mat vis_img;
+	// set square grid to graph planner
+	bool result = sgrid_planner_.UpdateMapConfig(sgrid_);
 
-	// Vis::VisSquareGrid(*grid, vis_img);
+	update_global_plan_ = true;
 
-	// // display visualization result
-	// cv::namedWindow("Processed Image", cv::WINDOW_NORMAL); // WINDOW_AUTOSIZE
-	// cv::imshow("Processed Image", vis_img);
+	cv::Mat vis_img;
+	Vis::VisSquareGrid(*sgrid_, vis_img);
+	Vis::VisGraph(*sgrid_planner_.graph_, vis_img, vis_img, true);
 
-	// cv::waitKey(0);
+	// display visualization result
+	cv::namedWindow("Processed Image", cv::WINDOW_NORMAL); // WINDOW_AUTOSIZE
+	cv::imshow("Processed Image", vis_img);
+
+	cv::waitKey(0);
 }
 
 void PathRepair::LcmTransformHandler(
@@ -221,12 +129,12 @@ void PathRepair::LcmTransformHandler(
 	const std::string &chan,
 	const srcl_lcm_msgs::QuadrotorTransform *msg)
 {
-	Position2Dd rpos;
-	rpos.x = msg->base_to_world.position[0];
-	rpos.y = msg->base_to_world.position[1];
+	// Position2Dd rpos;
+	// rpos.x = msg->base_to_world.position[0];
+	// rpos.y = msg->base_to_world.position[1];
 
-	if (auto_update_pos_)
-		SetStartRefWorldPosition(rpos);
+	// if (auto_update_pos_)
+	// 	SetStartRefWorldPosition(rpos);
 
 	geomark_graph_.UpdateVehiclePose(Position3Dd(msg->base_to_world.position[0], msg->base_to_world.position[1], msg->base_to_world.position[2]),
 									 Eigen::Quaterniond(msg->base_to_world.quaternion[0], msg->base_to_world.quaternion[1], msg->base_to_world.quaternion[2], msg->base_to_world.quaternion[3]));
