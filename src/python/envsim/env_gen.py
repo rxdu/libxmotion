@@ -162,12 +162,12 @@ class EnvGen(object):
     def show_all_plots(self):
         plt.show()
 
-def map_request_handler(channel, data):
-    # msg = example_t.decode(data)
-    print("Received message on channel \"%s\"" % channel)
-    
-    # lc = lcm.LCM()
-    # subscription = lc.subscribe("EXAMPLE", my_handler)
+    def map_request_handler(channel, data):
+        # msg = example_t.decode(data)
+        print("Received message on channel \"%s\"" % channel)
+        
+        # lc = lcm.LCM()
+        # subscription = lc.subscribe("EXAMPLE", my_handler)
 
 
 def main():
