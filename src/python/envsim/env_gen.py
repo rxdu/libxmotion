@@ -12,8 +12,7 @@ import matplotlib.image as mpimg
 from mpl_toolkits.mplot3d import Axes3D
 
 import lcm
-from librav_lcm_msgs import Cell_t
-from librav_lcm_msgs import Map_t
+from librav_lcm_msgs import *
 from space_vis import *
 from voxel_space import *
 from object_lib import *
@@ -48,7 +47,7 @@ class EnvGen(object):
         # add obstacles to space
         # self.space.add_obstacles()
         objs = self.randomly_pick_objects()
-        self.space.add_objects(objs,self.obs_perc)
+        self.space.add_objects(objs, self.obs_perc)
 
         # get projection as 2d map
         self.space.get_2d_map().get_occupied_percentage()
@@ -93,7 +92,7 @@ class EnvGen(object):
         print "publish 2d map"
 
         map2d = self.space.get_2d_map()
-        
+
         map_msg = Map_t()
         map_msg.size_x = map2d.size[0]
         map_msg.size_y = map2d.size[1]
@@ -102,10 +101,10 @@ class EnvGen(object):
         for yi in range(0, map2d.size[1]):
             for xi in range(0, map2d.size[0]):
                 cell_msg = Cell_t()
-                cell_msg.id = map2d.cells[xi,yi].id
-                cell_msg.pos_x = map2d.cells[xi,yi].position[0]
-                cell_msg.pos_y = map2d.cells[xi,yi].position[1]
-                cell_msg.occupied = map2d.cells[xi,yi].occupied
+                cell_msg.id = map2d.cells[xi, yi].id
+                cell_msg.pos_x = map2d.cells[xi, yi].position[0]
+                cell_msg.pos_y = map2d.cells[xi, yi].position[1]
+                cell_msg.occupied = map2d.cells[xi, yi].occupied
                 map_msg.cells.append(cell_msg)
 
         self.lcm_h.publish("envsim/map", map_msg.encode())
@@ -163,24 +162,37 @@ class EnvGen(object):
     def show_all_plots(self):
         plt.show()
 
+def map_request_handler(channel, data):
+    # msg = example_t.decode(data)
+    print("Received message on channel \"%s\"" % channel)
+    
+    # lc = lcm.LCM()
+    # subscription = lc.subscribe("EXAMPLE", my_handler)
+
 
 def main():
     print("started env_gen")
 
     # create a LCM instance
-    lc = lcm.LCM() 
+    lc = lcm.LCM()
 
     # create a environment generator
     gen = EnvGen(lc)
     # 1 unit = 1 meter
     gen.set_env_size(30, 50, 5)
-    gen.generate_space()
 
+    gen.generate_space()
     gen.publish_map()
 
-    gen.plot_map()
+    try:
+        while True:
+            lc.handle()
+    except KeyboardInterrupt:
+        pass
+
+    # gen.plot_map()
     # gen.plot_space()
-    gen.show_all_plots()
+    # gen.show_all_plots()
 
 
 # Standard boilerplate to call the main() function to begin

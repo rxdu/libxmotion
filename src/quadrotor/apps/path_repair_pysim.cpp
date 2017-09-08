@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 
 	while (true)
 	{
-		if (qplanner.update_global_plan_)
+		if (qplanner.map_received_ && qplanner.update_global_plan_)
 		{
 			auto path = qplanner.UpdateGlobalPathID();
 			if (!path.empty())

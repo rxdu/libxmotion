@@ -1,5 +1,11 @@
 package librav_lcm_msgs;
 
+// 2D Map
+struct MapRequest_t
+{
+    boolean new_map_requested;
+}
+
 struct Cell_t
 {
     int32_t id;

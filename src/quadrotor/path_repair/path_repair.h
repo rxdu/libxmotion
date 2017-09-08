@@ -36,6 +36,7 @@ public:
 	PathRepair(std::shared_ptr<lcm::LCM> lcm);
 
 	bool update_global_plan_;
+	bool map_received_;
 
 public:
 	// graph planner configuration
@@ -63,7 +64,6 @@ private:
 	GeoMarkGraph geomark_graph_;
 	OctomapServer octomap_server_;
 
-	bool map_received_;
 	std::shared_ptr<SquareGrid> sgrid_;
 	std::shared_ptr<NavField<SquareCell*>> nav_field_;
 	std::shared_ptr<ShortcutEval> sc_evaluator_;
