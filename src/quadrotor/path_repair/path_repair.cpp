@@ -28,13 +28,12 @@ using namespace librav;
 PathRepair::PathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 														octomap_server_(OctomapServer(lcm_)),
 														map_received_(false),
+														config_complete_(false),
 														mission_tracker_(new MissionTracker(lcm_)),
 														sensor_range_(5.0),
 														current_sys_time_(0),
 														gstart_set_(false),
 														ggoal_set_(false),
-														world_size_set_(false),
-														auto_update_pos_(true),
 														est_new_dist_(std::numeric_limits<double>::infinity()),
 														update_global_plan_(false)
 {
@@ -46,18 +45,21 @@ PathRepair::PathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 
 void PathRepair::SetStartPosition(Position2D pos)
 {
+	gstart_set_ = true;
+
 	if (pos == start_pos_)
+	{
+		if (gstart_set_ && ggoal_set_)
+			config_complete_ = true;
+
 		return;
+	}
 
 	start_pos_.x = pos.x;
 	start_pos_.y = pos.y;
 
-	gstart_set_ = true;
-
-	//est_dist2goal_ = std::numeric_limits<double>::infinity();
-
 	if (gstart_set_ && ggoal_set_)
-		update_global_plan_ = true;
+		config_complete_ = true;
 }
 
 void PathRepair::SetGoalPosition(Position2D pos)
@@ -76,7 +78,7 @@ void PathRepair::SetGoalPosition(Position2D pos)
 	}
 
 	if (gstart_set_ && ggoal_set_)
-		update_global_plan_ = true;
+		config_complete_ = true;
 }
 
 std::vector<uint64_t> PathRepair::UpdateGlobalPathID()
@@ -99,6 +101,14 @@ std::vector<uint64_t> PathRepair::UpdateGlobalPathID()
 	return waypoints;
 }
 
+void PathRepair::RequestNewMap()
+{
+	librav_lcm_msgs::MapRequest_t map_rqt_msg;
+	map_rqt_msg.new_map_requested = true;
+	lcm_->publish("envsim/map_request", &map_rqt_msg);
+	std::cout << "New map request sent" << std::endl;
+}
+
 void PathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::Map_t *msg)
 {
 	std::cout << "Map msg received: " << std::endl;
@@ -117,15 +127,25 @@ void PathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::str
 	nav_field_ = std::make_shared<NavField<SquareCell *>>(sgrid_planner_.graph_);
 	sc_evaluator_ = std::make_shared<ShortcutEval>(sgrid_, nav_field_);
 
-	map_received_ = true;
-	update_global_plan_ = true;
-
-	if(ggoal_set_)
+	// first check if a path exists, if not request a new map
+	auto path = UpdateGlobalPathID();
+	if (!path.empty())
 	{
+		std::cout << "Map validated" << std::endl;
+		map_received_ = true;
+		update_global_plan_ = true;
+
 		auto goal_id = sgrid_->GetIDFromIndex(goal_pos_.x, goal_pos_.y);
 		nav_field_->UpdateNavField(goal_id);
 		// TODO update sensor range from calculation
 		sc_evaluator_->EvaluateGridShortcutPotential(15);
+
+		std::cout << "<-------------------" << std::endl;
+	}
+	else
+	{
+		std::cout << "Invalid map" << std::endl;
+		RequestNewMap();
 	}
 
 	// cv::Mat vis_img;

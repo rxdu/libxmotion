@@ -7,6 +7,7 @@
 
 #include <string>
 #include <memory>
+#include <thread>
 
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
@@ -14,6 +15,7 @@
 
 #include "common/planning_types.h"
 #include "utility/logging/logger.h"
+#include "stopwatch/stopwatch.h"
 #include "planning/map/map_utils.h"
 #include "planning/map/map_config.h"
 #include "planning/map/map_info.h"
@@ -25,10 +27,11 @@ using namespace librav;
 
 void Test_30by50_Config(PathRepair &qplanner)
 {
-	qplanner.EnablePositionAutoUpdate(true);
 	qplanner.SetStartPosition(Position2D(0, 0));
 	qplanner.SetGoalPosition(Position2D(29, 49));
 	qplanner.SetGoalHeightRange(0.5, 2.5);
+
+	//qplanner.RequestNewMap(true);
 }
 
 int main(int argc, char *argv[])
@@ -48,15 +51,32 @@ int main(int argc, char *argv[])
 
 	//LoggingHelper& logging_helper = LoggingHelper::GetInstance("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/librav/pc/planning/log");
 
-	while (true)
+	// should not start simulation if configuration is not complete
+	if (!qplanner.config_complete_)
 	{
-		if (qplanner.map_received_ && qplanner.update_global_plan_)
+		std::cerr << "Incomplete configuration for the simulation" << std::endl;
+		return -1;
+	}
+
+	// simulation loop
+	while (true)
+	{		
+		if (qplanner.map_received_)
 		{
-			auto path = qplanner.UpdateGlobalPathID();
-			if (!path.empty())
-				std::cout << "Path found" << std::endl;
-			else
-				std::cout << "Empty path" << std::endl;
+			if(qplanner.update_global_plan_)
+			{
+				auto path = qplanner.UpdateGlobalPathID();
+				if (!path.empty())
+					std::cout << "Path found" << std::endl;
+				else
+					std::cout << "Empty path" << std::endl;
+			}
+		}
+		else
+		{
+			qplanner.RequestNewMap();
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+			lcm->handleTimeout(0);
 		}
 
 		lcm->handleTimeout(0);

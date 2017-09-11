@@ -37,14 +37,13 @@ public:
 
 	bool update_global_plan_;
 	bool map_received_;
+	bool config_complete_;
 
 public:
 	// graph planner configuration
 	void SetSensorRange(double meter) { sensor_range_ = meter; };
 
 	// general planner configuration
-	void EnablePositionAutoUpdate(bool cmd) { auto_update_pos_ = cmd; };
-
 	void SetStartPosition(Position2D pos);
 	void SetGoalPosition(Position2D pos);
 	void SetGoalHeightRange(double height_min, double height_max) {
@@ -52,8 +51,9 @@ public:
 	};
 
 	// search functions
-	std::vector<Position2D> UpdateGlobalPath();
 	std::vector<uint64_t> UpdateGlobalPathID();
+
+	void RequestNewMap();
 
 private:
 	// lcm
@@ -64,25 +64,21 @@ private:
 	GeoMarkGraph geomark_graph_;
 	OctomapServer octomap_server_;
 
+	double sensor_range_;
 	std::shared_ptr<SquareGrid> sgrid_;
 	std::shared_ptr<NavField<SquareCell*>> nav_field_;
-	std::shared_ptr<ShortcutEval> sc_evaluator_;
-	double sensor_range_;
+	std::shared_ptr<ShortcutEval> sc_evaluator_;	
 
 	std::unique_ptr<MissionTracker> mission_tracker_;
 	time_stamp current_sys_time_;
 
 	// planning parameters
-	Position2D start_pos_;
-	Position2D goal_pos_;
-
 	bool gstart_set_;
 	bool ggoal_set_;
 
-	bool world_size_set_;
-	bool auto_update_pos_;
+	Position2D start_pos_;
+	Position2D goal_pos_;
 
-	//double desired_height_;
 	double est_new_dist_;	// temporary calculation result, internal use only
 
 private:
