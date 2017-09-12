@@ -166,8 +166,10 @@ class EnvGen(object):
 def map_request_handler(channel, data):
     msg = MapRequest_t.decode(data)
     print("Received message on channel \"%s\"" % channel)
-    gen_new_map = True #msg.new_map_requested
-    print "- Flag: {}".format(gen_new_map)
+    
+    # if requested, set up flag
+    global gen_new_map
+    gen_new_map = msg.new_map_requested 
 
 def main():
     print("started env_gen")
@@ -190,9 +192,9 @@ def main():
     gen_new_map = True
 
     subscription = lc.subscribe("envsim/map_request", map_request_handler)
+    
     try:
         while True:
-            print "Flag status: {}".format(gen_new_map)
             if gen_new_map == True:
                 gen.generate_space()
                 gen.publish_map()                
