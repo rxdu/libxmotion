@@ -34,10 +34,10 @@ namespace librav {
 class PathRepair{
 public:
 	PathRepair(std::shared_ptr<lcm::LCM> lcm);
-
-	bool update_global_plan_;
-	bool map_received_;
+	
 	bool config_complete_;
+	bool map_received_;
+	bool update_global_plan_;
 
 public:
 	// graph planner configuration
@@ -54,6 +54,7 @@ public:
 	std::vector<uint64_t> UpdateGlobalPathID();
 
 	void RequestNewMap();
+	void UpdatePath();
 
 private:
 	// lcm

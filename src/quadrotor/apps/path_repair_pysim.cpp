@@ -63,20 +63,21 @@ int main(int argc, char *argv[])
 	{		
 		if (qplanner.map_received_)
 		{
-			if(qplanner.update_global_plan_)
-			{
-				auto path = qplanner.UpdateGlobalPathID();
-				if (!path.empty())
-					std::cout << "Path found" << std::endl;
-				else
-					std::cout << "Empty path" << std::endl;
-			}
+			// if(qplanner.update_global_plan_)
+			// {
+			// 	auto path = qplanner.UpdateGlobalPathID();
+			// 	if (!path.empty())
+			// 		std::cout << "Path found" << std::endl;
+			// 	else
+			// 		std::cout << "Empty path" << std::endl;
+			// }
+			qplanner.UpdatePath();
 		}
 		else
 		{
 			qplanner.RequestNewMap();
+			// don't send the request too frequenctly
 			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-			lcm->handleTimeout(0);
 		}
 
 		lcm->handleTimeout(0);

@@ -163,13 +163,12 @@ class EnvGen(object):
     def show_all_plots(self):
         plt.show()
 
-def map_request_handler(channel, data):
-    msg = MapRequest_t.decode(data)
-    print("Received message on channel \"%s\"" % channel)
-    
-    # if requested, set up flag
-    global gen_new_map
-    gen_new_map = msg.new_map_requested 
+    def map_request_handler(self, channel, data):
+        msg = MapRequest_t.decode(data)        
+        print("Received message on channel \"%s\"" % channel)
+        
+        self.generate_space()
+        self.publish_map()
 
 def main():
     print("started env_gen")
@@ -179,30 +178,24 @@ def main():
     
     # create a environment generator
     gen = EnvGen(lc)
-    # 1 unit = 1 meter
+    # set random environment size: 1 unit = 1 meter
     gen.set_env_size(30, 50, 5)
 
+    subscription = lc.subscribe("envsim/map_request", gen.map_request_handler)
+    
+    try:
+        while True:
+            lc.handle()
+    except KeyboardInterrupt:
+        pass
+
+    lc.unsubscribe(subscription)
+
+    ## for development 
     # for i in range(0,50):
     # gen.generate_space()
     # gen.publish_map()
     # sleep(2.0)
-
-    # Flag used for new map request
-    global gen_new_map
-    gen_new_map = True
-
-    subscription = lc.subscribe("envsim/map_request", map_request_handler)
-    
-    try:
-        while True:
-            if gen_new_map == True:
-                gen.generate_space()
-                gen.publish_map()                
-                sleep(1.0)
-                gen_new_map = False
-            lc.handle()
-    except KeyboardInterrupt:
-        pass
 
     # gen.plot_map()
     # gen.plot_space()
