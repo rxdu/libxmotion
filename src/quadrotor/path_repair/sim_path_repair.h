@@ -29,26 +29,34 @@
 #include "quadrotor/mission/path_manager.h"
 #include "quadrotor/mission/mission_tracker.h"
 
-namespace librav {
+namespace librav
+{
 
-class PathRepair{
-public:
-	PathRepair(std::shared_ptr<lcm::LCM> lcm);
-	
+struct SimMapInfo
+{
+	uint32_t size_x;
+	uint32_t size_y;
+	uint32_t size_z;
+	double side_size;
+};
+
+class SimPathRepair
+{
+  public:
+	SimPathRepair(std::shared_ptr<lcm::LCM> lcm);
+
 	bool config_complete_;
 	bool map_received_;
 	bool update_global_plan_;
 
-public:
+  public:
 	// graph planner configuration
 	void SetSensorRange(double meter) { sensor_range_ = meter; };
 
 	// general planner configuration
 	void SetStartPosition(Position2D pos);
 	void SetGoalPosition(Position2D pos);
-	void SetGoalHeightRange(double height_min, double height_max) {
-		geomark_graph_.SetGoalHeightRange(height_min, height_max);
-	};
+	void SetGoalHeight(int32_t height) { goal_height_ = height; };
 
 	// search functions
 	std::vector<uint64_t> UpdateGlobalPathID();
@@ -56,7 +64,7 @@ public:
 	void RequestNewMap();
 	void UpdatePath();
 
-private:
+  private:
 	// lcm
 	std::shared_ptr<lcm::LCM> lcm_;
 
@@ -65,10 +73,11 @@ private:
 	GeoMarkGraph geomark_graph_;
 	OctomapServer octomap_server_;
 
+	SimMapInfo map_info_;
 	double sensor_range_;
 	std::shared_ptr<SquareGrid> sgrid_;
-	std::shared_ptr<NavField<SquareCell*>> nav_field_;
-	std::shared_ptr<ShortcutEval> sc_evaluator_;	
+	std::shared_ptr<NavField<SquareCell *>> nav_field_;
+	std::shared_ptr<ShortcutEval> sc_evaluator_;
 
 	std::unique_ptr<MissionTracker> mission_tracker_;
 	time_stamp current_sys_time_;
@@ -79,26 +88,26 @@ private:
 
 	Position2D start_pos_;
 	Position2D goal_pos_;
+	int32_t goal_height_;
 
-	double est_new_dist_;	// temporary calculation result, internal use only
+	double est_new_dist_; // temporary calculation result, internal use only
 
-private:
-	template<typename PlannerType>
-	srcl_lcm_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner);
-	bool EvaluateNewPath(std::vector<Position3Dd>& new_path);
+  private:
+	template <typename PlannerType>
+	srcl_lcm_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType &planner);
+	bool EvaluateNewPath(std::vector<Position3Dd> &new_path);
 
 	// lcm
-	void LcmSimMapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const librav_lcm_msgs::Map_t* msg);
-	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::QuadrotorTransform* msg);
-	void LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::NewDataReady_t* msg);
-	void LcmSysTimeHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::TimeStamp_t* msg);
+	void LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::Map_t *msg);
+	void LcmTransformHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const srcl_lcm_msgs::QuadrotorTransform *msg);
+	void LcmOctomapHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const srcl_lcm_msgs::NewDataReady_t *msg);
+	void LcmSysTimeHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const srcl_lcm_msgs::TimeStamp_t *msg);
 
 	// helper functions
 	srcl_lcm_msgs::Graph_t GenerateLcmGraphMsg();
 	srcl_lcm_msgs::Path_t GenerateLcmPathMsg(std::vector<Position2D> waypoints);
 	void Send3DSearchPathToVis(std::vector<Position3Dd> path);
 };
-
 }
 
 #endif /* PLANNING_SRC_PATH_REPAIR_QUAD_PATH_REPAIR_H_ */

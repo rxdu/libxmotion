@@ -1,6 +1,6 @@
 package librav_lcm_msgs;
 
-// 2D Map
+// MAP
 struct MapRequest_t
 {
     boolean new_map_requested;
@@ -16,8 +16,34 @@ struct Cell_t
 
 struct Map_t 
 {
+    // 3D map dimension
     int32_t size_x;
     int32_t size_y;
+    int32_t size_z;
+
+    // 2D map cells
 	int64_t cell_num;
 	Cell_t cells[cell_num];
+}
+
+// VEHICLE INFO
+struct QuadPose_t
+{
+    int32_t x;
+    int32_t y;
+    int32_t z;
+    int32_t id;
+    double yaw;
+}
+
+// PATH
+struct Waypoint_t
+{
+    int32_t id;
+}
+
+struct Path_t
+{
+    int32_t pt_num;
+    Waypoint_t points[pt_num];
 }

@@ -95,8 +95,9 @@ class EnvGen(object):
         map2d = self.space.get_2d_map()
 
         map_msg = Map_t()
-        map_msg.size_x = map2d.size[0]
-        map_msg.size_y = map2d.size[1]
+        map_msg.size_x = self.space_size[0]
+        map_msg.size_y = self.space_size[1]
+        map_msg.size_z = self.space_size[2]
         map_msg.cell_num = map2d.cells.size
 
         for yi in range(0, map2d.size[1]):
@@ -110,22 +111,7 @@ class EnvGen(object):
 
         self.lcm_h.publish("envsim/map", map_msg.encode())
 
-        print "2d map published"
-
-    def publish_space(self):
-        print 'publish'
-        # lc = lcm.LCM()
-
-        # msg = example_t()
-        # msg.timestamp = int(time.time() * 1000000)
-        # msg.position = (1, 2, 3)
-        # msg.orientation = (1, 0, 0, 0)
-        # msg.ranges = range(15)
-        # msg.num_ranges = len(msg.ranges)
-        # msg.name = "example string - python"
-        # msg.enabled = True
-
-        # lc.publish("EXAMPLE", msg.encode())
+        print "map published"
 
     def plot_map(self):
         print "map size: {} * {}".format(self.space_size[0], self.space_size[1])

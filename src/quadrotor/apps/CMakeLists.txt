@@ -8,7 +8,7 @@ find_package(OpenCV REQUIRED)
 
 # Add executables
 add_executable(path_repair_pysim path_repair_pysim.cpp)
-target_link_libraries(path_repair_pysim map path_repair quad_base common ${OpenCV_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(path_repair_pysim map path_repair pr_sim quad_base common ${OpenCV_LIBS} ${LCM_LIBRARIES})
 
 add_executable(quadsim_pr_planner quadsim_planner.cpp)
 target_link_libraries(quadsim_pr_planner map path_repair quad_base common ${OpenCV_LIBS} ${LCM_LIBRARIES})

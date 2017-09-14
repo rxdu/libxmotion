@@ -14,7 +14,7 @@
 
 #include "utility/logging/logger.h"
 
-#include "quadrotor/path_repair/path_repair.h"
+#include "quadrotor/path_repair/sim_path_repair.h"
 #include "planning/map/map_utils.h"
 #include "planning/geometry/cube_array/cube_array.h"
 #include "planning/geometry/cube_array_builder.h"
@@ -25,7 +25,7 @@
 
 using namespace librav;
 
-PathRepair::PathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
+SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 														octomap_server_(OctomapServer(lcm_)),
 														config_complete_(false),
 														map_received_(false),
@@ -37,13 +37,13 @@ PathRepair::PathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 														ggoal_set_(false),
 														est_new_dist_(std::numeric_limits<double>::infinity())
 {
-	lcm_->subscribe("envsim/map", &PathRepair::LcmSimMapHandler, this);
-	lcm_->subscribe("quad_data/quad_transform", &PathRepair::LcmTransformHandler, this);
-	lcm_->subscribe("quad_planner/new_octomap_ready", &PathRepair::LcmOctomapHandler, this);
-	lcm_->subscribe("quad_data/system_time", &PathRepair::LcmSysTimeHandler, this);
+	lcm_->subscribe("envsim/map", &SimPathRepair::LcmSimMapHandler, this);
+	lcm_->subscribe("quad_data/quad_transform", &SimPathRepair::LcmTransformHandler, this);
+	lcm_->subscribe("quad_data/system_time", &SimPathRepair::LcmSysTimeHandler, this);
+	lcm_->subscribe("quad_planner/new_octomap_ready", &SimPathRepair::LcmOctomapHandler, this);
 }
 
-void PathRepair::SetStartPosition(Position2D pos)
+void SimPathRepair::SetStartPosition(Position2D pos)
 {
 	if (gstart_set_ && pos == start_pos_)
 		return;
@@ -57,7 +57,7 @@ void PathRepair::SetStartPosition(Position2D pos)
 		config_complete_ = true;
 }
 
-void PathRepair::SetGoalPosition(Position2D pos)
+void SimPathRepair::SetGoalPosition(Position2D pos)
 {
 	goal_pos_.x = pos.x;
 	goal_pos_.y = pos.y;
@@ -68,7 +68,7 @@ void PathRepair::SetGoalPosition(Position2D pos)
 		config_complete_ = true;
 }
 
-std::vector<uint64_t> PathRepair::UpdateGlobalPathID()
+std::vector<uint64_t> SimPathRepair::UpdateGlobalPathID()
 {
 	std::vector<uint64_t> waypoints;
 
@@ -88,7 +88,7 @@ std::vector<uint64_t> PathRepair::UpdateGlobalPathID()
 	return waypoints;
 }
 
-void PathRepair::RequestNewMap()
+void SimPathRepair::RequestNewMap()
 {
 	librav_lcm_msgs::MapRequest_t map_rqt_msg;
 	map_rqt_msg.new_map_requested = true;
@@ -96,36 +96,50 @@ void PathRepair::RequestNewMap()
 	std::cout << "New map request sent" << std::endl;
 }
 
-void PathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::Map_t *msg)
+void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::Map_t *msg)
 {
+	// discard msg if a valid map has been received
+	if (map_received_)
+		return;
+
+	// otherwise process the msg to get a new map
 	std::cout << "Map msg received: " << std::endl;
 	std::cout << "Map size: " << msg->cell_num << std::endl;
 
 	// create square grid from map msg
-	sgrid_ = MapUtils::CreateSquareGrid(msg->size_x, msg->size_y, 100);
+	double cube_size = 100;
+	sgrid_ = MapUtils::CreateSquareGrid(msg->size_x, msg->size_y, cube_size);
 	for (const auto &cell : msg->cells)
 	{
 		if (cell.occupied)
 			sgrid_->SetCellOccupancy(cell.pos_y, cell.pos_x, OccupancyType::OCCUPIED);
 	}
 
-	// set square grid to graph planner
+	// set square grid to graph planner, and check if a path exists
+	// 	if not request a new map
 	bool result = sgrid_planner_.UpdateMapConfig(sgrid_);
-	nav_field_ = std::make_shared<NavField<SquareCell *>>(sgrid_planner_.graph_);
-	sc_evaluator_ = std::make_shared<ShortcutEval>(sgrid_, nav_field_);
-
-	// first check if a path exists, if not request a new map
 	auto path = UpdateGlobalPathID();
 	if (!path.empty())
 	{
 		std::cout << "Map validated" << std::endl;
+		// update flags
 		map_received_ = true;
 		update_global_plan_ = true;
 
+		// init and update navigation field and shortcut evaluator
+		nav_field_ = std::make_shared<NavField<SquareCell *>>(sgrid_planner_.graph_);
+		sc_evaluator_ = std::make_shared<ShortcutEval>(sgrid_, nav_field_);
+
 		auto goal_id = sgrid_->GetIDFromIndex(goal_pos_.x, goal_pos_.y);
 		nav_field_->UpdateNavField(goal_id);
-		// TODO update sensor range from calculation
+		
 		sc_evaluator_->EvaluateGridShortcutPotential(15);
+
+		// update info of virtual space for 3d planning
+		map_info_.size_x = msg->size_x;
+		map_info_.size_y = msg->size_y;
+		map_info_.size_z = msg->size_z;
+		map_info_.side_size = cube_size;
 	}
 	else
 	{
@@ -144,24 +158,17 @@ void PathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::str
 	// cv::waitKey(0);
 }
 
-void PathRepair::LcmTransformHandler(
+void SimPathRepair::LcmTransformHandler(
 	const lcm::ReceiveBuffer *rbuf,
 	const std::string &chan,
 	const srcl_lcm_msgs::QuadrotorTransform *msg)
 {
-	// Position2Dd rpos;
-	// rpos.x = msg->base_to_world.position[0];
-	// rpos.y = msg->base_to_world.position[1];
-
-	// if (auto_update_pos_)
-	// 	SetStartRefWorldPosition(rpos);
-
 	geomark_graph_.UpdateVehiclePose(Position3Dd(msg->base_to_world.position[0], msg->base_to_world.position[1], msg->base_to_world.position[2]),
 									 Eigen::Quaterniond(msg->base_to_world.quaternion[0], msg->base_to_world.quaternion[1], msg->base_to_world.quaternion[2], msg->base_to_world.quaternion[3]));
 	mission_tracker_->UpdateCurrentPosition(Position3Dd(msg->base_to_world.position[0], msg->base_to_world.position[1], msg->base_to_world.position[2]));
 }
 
-void PathRepair::LcmSysTimeHandler(
+void SimPathRepair::LcmSysTimeHandler(
 	const lcm::ReceiveBuffer *rbuf,
 	const std::string &chan,
 	const srcl_lcm_msgs::TimeStamp_t *msg)
@@ -169,7 +176,7 @@ void PathRepair::LcmSysTimeHandler(
 	current_sys_time_ = msg->time_stamp;
 }
 
-bool PathRepair::EvaluateNewPath(std::vector<Position3Dd> &new_path)
+bool SimPathRepair::EvaluateNewPath(std::vector<Position3Dd> &new_path)
 {
 	if (std::sqrt(std::pow(new_path.front().x - mission_tracker_->current_position_.x, 2) +
 				  std::pow(new_path.front().y - mission_tracker_->current_position_.y, 2) +
@@ -202,7 +209,7 @@ bool PathRepair::EvaluateNewPath(std::vector<Position3Dd> &new_path)
 		return false;
 }
 
-void PathRepair::LcmOctomapHandler(
+void SimPathRepair::LcmOctomapHandler(
 	const lcm::ReceiveBuffer *rbuf,
 	const std::string &chan,
 	const srcl_lcm_msgs::NewDataReady_t *msg)
@@ -382,123 +389,135 @@ void PathRepair::LcmOctomapHandler(
 	//		}
 }
 
-void PathRepair::UpdatePath()
+void SimPathRepair::UpdatePath()
 {
 	std::cout << "\n---------------------- New Iteration -------------------------" << std::endl;
 
-	if (mission_tracker_->remaining_path_length_ < 0.5)
-	{
-		std::cout << "Getting close to goal, no need to replan" << std::endl;
-		// LOG(INFO) << "Getting close to goal, no need to replan";
-		return;
-	}
+	auto path = UpdateGlobalPathID();
 
-	static int count = 0;
-	srcl_lcm_msgs::KeyframeSet_t kf_cmd;
+	// create an empty cube array
+	std::shared_ptr<CubeArray> carray = CubeArrayBuilder::BuildEmptyCubeArray(map_info_.size_x, map_info_.size_y, map_info_.size_z, map_info_.side_size);
+	
+	// add 2d map info into cube array
 
-	// record the planning time
-	kf_cmd.sys_time.time_stamp = current_sys_time_;
+	// add 3d info into cube array
 
-	std::vector<Position3Dd> raw_wps;
-	std::vector<GeoMark> geo_path;
+	// create a graph from the cube array	
+	std::shared_ptr<Graph<CubeCell &>> cubegraph = GraphBuilder::BuildFromCubeArray(carray);
 
-	//std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
-	std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctreeWithExtObstacle(octomap_server_.octree_);
-	std::shared_ptr<Graph<CubeCell &>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
+	// if (mission_tracker_->remaining_path_length_ < 0.5)
+	// {
+	// 	std::cout << "Getting close to goal, no need to replan" << std::endl;
+	// 	// LOG(INFO) << "Getting close to goal, no need to replan";
+	// 	return;
+	// }
 
-	// don't replan if 3d information is too limited
-	if (mission_tracker_->mission_started_ && (cubearray->cubes_.size() == 0 || cubegraph->GetGraphVertices().size() < 5))
-	{
-		std::cerr << "Too limited 3D information collected" << std::endl;
-		// LOG(INFO) << "Too limited 3D information collected";
-	}
+	// static int count = 0;
+	// srcl_lcm_msgs::KeyframeSet_t kf_cmd;
 
-	int64_t geo_start_id_astar = geomark_graph_.MergeCubeArrayInfo(cubegraph, cubearray);
+	// // record the planning time
+	// kf_cmd.sys_time.time_stamp = current_sys_time_;
 
-	// don't replan if failed to combine graphs
-	if (geo_start_id_astar == -1)
-	{
-		std::cerr << "Failed to combine graphs" << std::endl;
-		// LOG(INFO) << "Failed to combine graphs";
-		return;
-	}
+	// std::vector<Position3Dd> raw_wps;
+	// std::vector<GeoMark> geo_path;
 
-	// LOG(INFO) << "Combined graph size: " << sgrid_planner_.graph_->GetGraphVertices().size();
-	std::cout << "Graph size (combined, 3d): " << sgrid_planner_.graph_->GetGraphVertices().size() << " , " << cubegraph->GetGraphVertices().size() << std::endl;
+	// //std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
+	// std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctreeWithExtObstacle(octomap_server_.octree_);
+	// std::shared_ptr<Graph<CubeCell &>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
 
-	uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
-	uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
+	// // don't replan if 3d information is too limited
+	// if (mission_tracker_->mission_started_ && (cubearray->cubes_.size() == 0 || cubegraph->GetGraphVertices().size() < 5))
+	// {
+	// 	std::cerr << "Too limited 3D information collected" << std::endl;
+	// 	// LOG(INFO) << "Too limited 3D information collected";
+	// }
 
-	clock_t exec_time;
-	exec_time = clock();
-	//auto path = AStar::Search(geomark_graph_.combined_graph_, geo_start_id_astar, geo_goal_id_astar);
-	auto path = AStar::BiasedSearchWithShortcut(geomark_graph_.combined_graph_, geo_start_id_astar, geo_goal_id_astar, nav_field_->max_rewards_, sc_evaluator_->dist_weight_, sgrid_planner_.map_.data_model->cell_size_);
-	exec_time = clock() - exec_time;
-	std::cout << "Search in 3D finished in " << double(exec_time) / CLOCKS_PER_SEC << " s." << std::endl;
+	// int64_t geo_start_id_astar = geomark_graph_.MergeCubeArrayInfo(cubegraph, cubearray);
 
-	for (auto &wp : path)
-	{
-		geo_path.push_back(wp->bundled_data_);
-		raw_wps.push_back(wp->bundled_data_.position);
-	}
+	// // don't replan if failed to combine graphs
+	// if (geo_start_id_astar == -1)
+	// {
+	// 	std::cerr << "Failed to combine graphs" << std::endl;
+	// 	// LOG(INFO) << "Failed to combine graphs";
+	// 	return;
+	// }
 
-	// if failed to find a 3d path, terminate this iteration
-	if (raw_wps.size() <= 1)
-		return;
+	// // LOG(INFO) << "Combined graph size: " << sgrid_planner_.graph_->GetGraphVertices().size();
+	// std::cout << "Graph size (combined, 3d): " << sgrid_planner_.graph_->GetGraphVertices().size() << " , " << cubegraph->GetGraphVertices().size() << std::endl;
 
-	std::vector<Position3Dd> selected_wps = raw_wps; // MissionUtils::GetKeyTurningWaypoints(raw_wps);
+	// uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
+	// uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
 
-	if (!mission_tracker_->mission_started_ || EvaluateNewPath(selected_wps))
-	{
-		if (mission_tracker_->mission_started_)
-			std::cout << "-------- found better solution ---------" << std::endl;
-		else
-			mission_tracker_->mission_started_ = true;
+	// clock_t exec_time;
+	// exec_time = clock();
+	// //auto path = AStar::Search(geomark_graph_.combined_graph_, geo_start_id_astar, geo_goal_id_astar);
+	// auto path = AStar::BiasedSearchWithShortcut(geomark_graph_.combined_graph_, geo_start_id_astar, geo_goal_id_astar, nav_field_->max_rewards_, sc_evaluator_->dist_weight_, sgrid_planner_.map_.data_model->cell_size_);
+	// exec_time = clock() - exec_time;
+	// std::cout << "Search in 3D finished in " << double(exec_time) / CLOCKS_PER_SEC << " s." << std::endl;
 
-		// update mission tracking information
-		mission_tracker_->UpdateActivePathWaypoints(geo_path);
-		mission_tracker_->remaining_path_length_ = est_new_dist_;
+	// for (auto &wp : path)
+	// {
+	// 	geo_path.push_back(wp->bundled_data_);
+	// 	raw_wps.push_back(wp->bundled_data_.position);
+	// }
 
-		kf_cmd.path_id = mission_tracker_->path_id_;
-		kf_cmd.kf_num = selected_wps.size();
-		double last_yaw = 0;
-		for (auto &wp : selected_wps)
-		{
-			srcl_lcm_msgs::Keyframe_t kf;
-			kf.vel_constr = false;
+	// // if failed to find a 3d path, terminate this iteration
+	// if (raw_wps.size() <= 1)
+	// 	return;
 
-			kf.positions[0] = wp.x;
-			kf.positions[1] = wp.y;
-			kf.positions[2] = wp.z;
+	// std::vector<Position3Dd> selected_wps = raw_wps; // MissionUtils::GetKeyTurningWaypoints(raw_wps);
 
-			uint64_t nd_id = sgrid_planner_.map_.data_model->GetIDFromPosition(wp.x, wp.y);
-			auto nd_vtx = nav_field_->field_graph_->GetVertexFromID(nd_id);
-			if (nd_vtx != nullptr)
-			{
-				kf.yaw = nd_vtx->rewards_yaw_;
+	// if (!mission_tracker_->mission_started_ || EvaluateNewPath(selected_wps))
+	// {
+	// 	if (mission_tracker_->mission_started_)
+	// 		std::cout << "-------- found better solution ---------" << std::endl;
+	// 	else
+	// 		mission_tracker_->mission_started_ = true;
 
-				if (kf.yaw != 0)
-					last_yaw = kf.yaw;
-			}
-			else
-				kf.yaw = last_yaw;
+	// 	// update mission tracking information
+	// 	mission_tracker_->UpdateActivePathWaypoints(geo_path);
+	// 	mission_tracker_->remaining_path_length_ = est_new_dist_;
 
-			// LOG(INFO) << "way point yaw: " << kf.yaw << " at id: " << nd_id;
+	// 	kf_cmd.path_id = mission_tracker_->path_id_;
+	// 	kf_cmd.kf_num = selected_wps.size();
+	// 	double last_yaw = 0;
+	// 	for (auto &wp : selected_wps)
+	// 	{
+	// 		srcl_lcm_msgs::Keyframe_t kf;
+	// 		kf.vel_constr = false;
 
-			kf_cmd.kfs.push_back(kf);
-		}
-		//kf_cmd.kfs.front().yaw = 0;
-		//kf_cmd.kfs.back().yaw = -M_PI/4;
+	// 		kf.positions[0] = wp.x;
+	// 		kf.positions[1] = wp.y;
+	// 		kf.positions[2] = wp.z;
 
-		lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
+	// 		uint64_t nd_id = sgrid_planner_.map_.data_model->GetIDFromPosition(wp.x, wp.y);
+	// 		auto nd_vtx = nav_field_->field_graph_->GetVertexFromID(nd_id);
+	// 		if (nd_vtx != nullptr)
+	// 		{
+	// 			kf.yaw = nd_vtx->rewards_yaw_;
 
-		// send data for visualization
-		Send3DSearchPathToVis(selected_wps);
-	}
+	// 			if (kf.yaw != 0)
+	// 				last_yaw = kf.yaw;
+	// 		}
+	// 		else
+	// 			kf.yaw = last_yaw;
+
+	// 		// LOG(INFO) << "way point yaw: " << kf.yaw << " at id: " << nd_id;
+
+	// 		kf_cmd.kfs.push_back(kf);
+	// 	}
+	// 	//kf_cmd.kfs.front().yaw = 0;
+	// 	//kf_cmd.kfs.back().yaw = -M_PI/4;
+
+	// 	lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
+
+	// 	// send data for visualization
+	// 	Send3DSearchPathToVis(selected_wps);
+	// }
 }
 
 template <typename PlannerType>
-srcl_lcm_msgs::Graph_t PathRepair::GetLcmGraphFromPlanner(const PlannerType &planner)
+srcl_lcm_msgs::Graph_t SimPathRepair::GetLcmGraphFromPlanner(const PlannerType &planner)
 {
 	srcl_lcm_msgs::Graph_t graph_msg;
 
@@ -528,7 +547,7 @@ srcl_lcm_msgs::Graph_t PathRepair::GetLcmGraphFromPlanner(const PlannerType &pla
 	return graph_msg;
 }
 
-srcl_lcm_msgs::Graph_t PathRepair::GenerateLcmGraphMsg()
+srcl_lcm_msgs::Graph_t SimPathRepair::GenerateLcmGraphMsg()
 {
 	srcl_lcm_msgs::Graph_t graph_msg;
 
@@ -537,7 +556,7 @@ srcl_lcm_msgs::Graph_t PathRepair::GenerateLcmGraphMsg()
 	return graph_msg;
 }
 
-srcl_lcm_msgs::Path_t PathRepair::GenerateLcmPathMsg(std::vector<Position2D> waypoints)
+srcl_lcm_msgs::Path_t SimPathRepair::GenerateLcmPathMsg(std::vector<Position2D> waypoints)
 {
 	srcl_lcm_msgs::Path_t path_msg;
 
@@ -555,7 +574,7 @@ srcl_lcm_msgs::Path_t PathRepair::GenerateLcmPathMsg(std::vector<Position2D> way
 	return path_msg;
 }
 
-void PathRepair::Send3DSearchPathToVis(std::vector<Position3Dd> path)
+void SimPathRepair::Send3DSearchPathToVis(std::vector<Position3Dd> path)
 {
 	if (path.size() > 0)
 	{
