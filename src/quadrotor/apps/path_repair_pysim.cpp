@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 	// init quadrotor planner
 	VirtualQuadrotor vquad(lcm);
 	// vquad.Load_30by50_Config();
-	vquad.Load_10by10_Config();
+	vquad.Load_5by5_Config();
 
 	// should not start simulation if configuration is not complete
 	if (!vquad.IsReady())

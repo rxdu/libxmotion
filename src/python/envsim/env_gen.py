@@ -166,7 +166,7 @@ def main():
     gen = EnvGen(lc)
     # set random environment size: 1 unit = 1 meter
     # gen.set_env_size(30, 50, 5)
-    gen.set_env_size(10, 10, 5)
+    gen.set_env_size(5, 5, 5)
 
     subscription = lc.subscribe("envsim/map_request", gen.map_request_handler)
     

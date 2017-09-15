@@ -229,25 +229,23 @@ void SimPathRepair::UpdatePath()
 	std::cout << "cube array size: " << carray->cubes_.size() << std::endl;
 	std::cout << "cube array graph size: " << cubegraph->GetGraphVertices().size() << std::endl;
 
-	srcl_lcm_msgs::Graph_t graph_msg;
-
 	// cube graph
-	std::cout << "preparing data for publish" << std::endl;
+	srcl_lcm_msgs::Graph_t graph_msg;
+	
 	graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
 	for (auto &vtx : cubegraph->GetGraphVertices())
 	{
 		srcl_lcm_msgs::Vertex_t vertex;
 		vertex.id = vtx->vertex_id_;
 
-		vertex.position[0] = vtx->bundled_data_.location_.x;
-		vertex.position[1] = vtx->bundled_data_.location_.y;
-		vertex.position[2] = vtx->bundled_data_.location_.z;
-
+		vertex.position[0] = vtx->bundled_data_.location_.x/100.0;
+		vertex.position[1] = vtx->bundled_data_.location_.y/100.0;
+		vertex.position[2] = vtx->bundled_data_.location_.z/100.0;
 		graph_msg.vertices.push_back(vertex);
 	}
 
-	graph_msg.edge_num = cubegraph->GetGraphEdges().size();
-	for (auto &eg : cubegraph->GetGraphEdges())
+	graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
+	for (auto &eg : cubegraph->GetGraphUndirectedEdges())
 	{
 		srcl_lcm_msgs::Edge_t edge;
 		edge.id_start = eg.src_->vertex_id_;
@@ -256,7 +254,8 @@ void SimPathRepair::UpdatePath()
 		graph_msg.edges.push_back(edge);
 	}
 
-	std::cout << "publishing ..." << std::endl;
+	std::cout << "vertex size: " << graph_msg.vertex_num << " , edge size: " << graph_msg.edge_num << std::endl;
+
 	lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
 
 	std::cout << "######################## graph sent ########################" << std::endl;

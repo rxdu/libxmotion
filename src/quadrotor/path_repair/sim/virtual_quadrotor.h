@@ -18,7 +18,7 @@ public:
     VirtualQuadrotor(std::shared_ptr<lcm::LCM> lcm);
 
 public:    
-    void Load_10by10_Config();
+    void Load_5by5_Config();
     void Load_30by50_Config();
     bool IsReady(){ return qplanner_->IsConfigComplete(); };
 
