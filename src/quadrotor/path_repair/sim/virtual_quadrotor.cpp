@@ -19,6 +19,15 @@ void VirtualQuadrotor::Load_30by50_Config()
 {
     qplanner_->SetStartPosition(Position2D(0, 0));
     qplanner_->SetGoalPosition(Position2D(29, 49));
+    qplanner_->SetStartHeight(3);
+    qplanner_->SetGoalHeight(3);
+}
+
+void VirtualQuadrotor::Load_10by10_Config()
+{
+    qplanner_->SetStartPosition(Position2D(0, 0));
+    qplanner_->SetGoalPosition(Position2D(9, 9));
+    qplanner_->SetStartHeight(3);
     qplanner_->SetGoalHeight(3);
 }
 

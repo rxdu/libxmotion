@@ -39,14 +39,13 @@ int main(int argc, char *argv[])
 
 	// init quadrotor planner
 	VirtualQuadrotor vquad(lcm);
-	vquad.Load_30by50_Config();
-
-	//LoggingHelper& logging_helper = LoggingHelper::GetInstance("quadsim_hummingbird", "/home/rdu/Workspace/srcl_rtk/librav/pc/planning/log");
+	// vquad.Load_30by50_Config();
+	vquad.Load_10by10_Config();
 
 	// should not start simulation if configuration is not complete
 	if (!vquad.IsReady())
 	{
-		std::cerr << "Incomplete configuration for the simulation" << std::endl;
+		std::cerr << "ERROR: Incomplete configuration for the simulation" << std::endl;
 		return -1;
 	}
 

@@ -8,8 +8,7 @@ find_package(OpenCV REQUIRED)
 
 # Add libraries
 set(PATH_REPAIR_LIB_SRC
-    quad_path_repair.cpp
-    sim_path_repair.cpp
+    quad_path_repair.cpp    
     geo_mark_graph.cpp
     shortcut_eval.cpp
     sg_graph_planner.cpp
@@ -18,6 +17,7 @@ add_library(path_repair STATIC ${PATH_REPAIR_LIB_SRC})
 target_link_libraries(path_repair map mission polyopt common vis ${OpenCV_LIBS} ${LCM_LIBRARIES})
 
 set(PATH_REPAIR_SIM_SRC
+    sim/sim_path_repair.cpp
     sim/virtual_quadrotor.cpp
 )
 add_library(pr_sim STATIC ${PATH_REPAIR_SIM_SRC})

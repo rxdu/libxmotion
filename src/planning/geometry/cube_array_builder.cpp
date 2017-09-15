@@ -18,7 +18,10 @@ using namespace octomap;
 
 std::shared_ptr<CubeArray> CubeArrayBuilder::BuildEmptyCubeArray(int32_t row_size, int32_t col_size, int32_t hei_size, double res)
 {
-	return std::make_shared<CubeArray>(row_size,col_size,hei_size,res);
+	auto ca = std::make_shared<CubeArray>(row_size,col_size,hei_size,res);
+	for(auto& cb : ca->cubes_)
+		cb.occu_ = OccupancyType::FREE;
+	return ca;
 }
 
 std::shared_ptr<CubeArray> CubeArrayBuilder::BuildCubeArrayFromOctree(std::shared_ptr<octomap::OcTree> tree)

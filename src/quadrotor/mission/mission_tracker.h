@@ -30,14 +30,6 @@ public:
 	MissionTracker(std::shared_ptr<lcm::LCM> lcm);
 	~MissionTracker() = default;
 
-private:
-	std::shared_ptr<lcm::LCM> lcm_;
-
-	int64_t trajectory_id_;
-
-	double CalcRemainingPathLenght(uint32_t current_idx);
-	void LcmMissionInfoHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::MissionInfo_t* msg);
-
 public:
 	int64_t path_id_;
 	bool mission_started_;
@@ -50,6 +42,13 @@ public:
 	void UpdateActivePathWaypoints(std::vector<GeoMark>& path);
 	void UpdateCurrentPosition(Position3Dd pos);
 
+private:
+	std::shared_ptr<lcm::LCM> lcm_;
+
+	int64_t trajectory_id_;
+
+	double CalcRemainingPathLenght(uint32_t current_idx);
+	void LcmMissionInfoHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::MissionInfo_t* msg);
 };
 
 }

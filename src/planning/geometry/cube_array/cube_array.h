@@ -96,6 +96,7 @@ public:
 	void SetOriginOffset(int32_t row_offset, int32_t col_offset, int32_t hei_offset);
 	uint64_t GetIDFromIndex(uint32_t row, uint32_t col, uint32_t hei);
 	uint64_t GetIDFromPosition(double x, double y, double z);
+	void SetCubeOccupancy(uint32_t row, uint32_t col, uint32_t hei, OccupancyType oc_type);
 	void UpdateCubeOccupancy(double x, double y, double z, OccupancyType oc_type);
 	std::vector<uint64_t> GetNeighbours(uint64_t id);
 	std::vector<uint64_t> GetNeighbours(uint64_t id, bool allow_diag);

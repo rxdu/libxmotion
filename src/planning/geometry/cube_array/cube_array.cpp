@@ -187,6 +187,12 @@ std::vector<uint64_t> CubeArray::GetFreeCubesAroundHeight(double height)
 	return set;
 }
 
+void CubeArray::SetCubeOccupancy(uint32_t row, uint32_t col, uint32_t hei, OccupancyType oc_type)
+{
+	auto id = GetIDFromIndex(row,col,hei);
+	cubes_[id].occu_ = oc_type;
+}
+
 void CubeArray::UpdateCubeOccupancy(double x, double y, double z, OccupancyType oc_type)
 {
 	uint64_t id = GetIDFromPosition(x,y,z);
