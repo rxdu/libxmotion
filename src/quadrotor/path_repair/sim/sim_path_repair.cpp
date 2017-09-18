@@ -151,7 +151,7 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 		else
 		{
 			for (int i = 0; i < msg->size_z; i++)
-				carray_base_->SetCubeOccupancy(cell.pos_y, cell.pos_x, i, OccupancyType::FREE);
+				carray_base_->SetCubeOccupancy(cell.pos_x, cell.pos_y, i, OccupancyType::FREE);
 		}
 	}
 
@@ -244,7 +244,7 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 	for (int j = 0; j < map_info_.size_y; j++)
 		for (int i = 0; i < map_info_.size_x; i++)
 		{
-			auto id = carray->GetIDFromIndex(j, i, height);
+			auto id = carray->GetIDFromIndex(i, j, height);
 			if (carray_base_->cubes_[id].occu_ == OccupancyType::FREE)
 				carray->cubes_[id].occu_ = OccupancyType::FREE;
 		}
@@ -257,8 +257,8 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 	std::cout << "cube array size: " << carray->cubes_.size() << std::endl;
 	std::cout << "cube graph size: " << cubegraph->GetGraphVertices().size() << " , edge num: " << cubegraph->GetGraphEdges().size() << std::endl;
 
-	auto start_id = carray->GetIDFromIndex(pos.y, pos.x, height);
-	auto goal_id = carray->GetIDFromIndex(goal_pos_.y, goal_pos_.x, goal_height_);
+	auto start_id = carray->GetIDFromIndex(pos.x, pos.y, height);
+	auto goal_id = carray->GetIDFromIndex(goal_pos_.x, goal_pos_.y, goal_height_);
 	std::cout << "start id: " << start_id << " , goal id: " << goal_id << std::endl;
 	Path_t<CubeCell &> path = AStar::Search(cubegraph, start_id, goal_id);
 
