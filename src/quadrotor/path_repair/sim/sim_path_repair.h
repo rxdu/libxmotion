@@ -39,6 +39,18 @@ struct SimMapInfo
 	double side_size;
 };
 
+struct SimWaypoint
+{
+    int32_t x;
+    int32_t y;
+    int32_t z;
+    double yaw;
+
+    int32_t id;
+};
+
+using SimPath = std::vector<SimWaypoint>;
+
 class SimPathRepair
 {
   public:
@@ -53,6 +65,7 @@ class SimPathRepair
 	void SetGoalPosition(Position2D pos);
 	void SetStartHeight(int32_t height);
 	void SetGoalHeight(int32_t height);
+	void SetMapSize(int32_t x, int32_t y, int32_t z);
 
 	// check if general planner configuration is complete
 	bool IsConfigComplete();
@@ -64,7 +77,8 @@ class SimPathRepair
 	std::vector<uint64_t> UpdateGlobal2DPath();
 
 	void RequestNewMap();
-	void UpdatePath();
+	void ResetPlanner();
+	SimPath UpdatePath(Position2D pos, int32_t height, double heading);
 
   private:
 	// lcm
@@ -96,20 +110,20 @@ class SimPathRepair
 	int32_t start_height_;
 	int32_t goal_height_;
 
+	int32_t map_size_[3];
+
 	double est_new_dist_; // temporary calculation result, internal use only
 
   private:
-	template <typename PlannerType>
-	srcl_lcm_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType &planner);
+	// planner
 	bool EvaluateNewPath(std::vector<Position3Dd> &new_path);
 
 	// lcm
 	void LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::Map_t *msg);	
 
 	// helper functions
-	srcl_lcm_msgs::Graph_t GenerateLcmGraphMsg();
-	srcl_lcm_msgs::Path_t GenerateLcmPathMsg(std::vector<Position2D> waypoints);
-	void Send3DSearchPathToVis(std::vector<Position3Dd> path);
+	void Send3DSearchPathToVis(Path_t<CubeCell &>& path);
+	void SendCubeArrayGraphToVis(std::shared_ptr<Graph_t<CubeCell &>> graph);
 };
 }
 

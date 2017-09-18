@@ -54,8 +54,6 @@ bool SGGraphPlanner::UpdateMapConfig(MapConfig config)
 
 bool SGGraphPlanner::UpdateMapConfig(std::shared_ptr<SquareGrid> grid)
 {
-	cv::Mat input_image;
-
 	graph_ = GraphBuilder::BuildFromSquareGrid(grid, true);
 	is_ready_ = true;
 

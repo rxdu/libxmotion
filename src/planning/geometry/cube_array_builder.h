@@ -21,6 +21,7 @@ namespace librav {
 namespace CubeArrayBuilder {
 
 std::shared_ptr<CubeArray> BuildEmptyCubeArray(int32_t row_size, int32_t col_size, int32_t hei_size, double res);
+std::shared_ptr<CubeArray> BuildSolidCubeArray(int32_t row_size, int32_t col_size, int32_t hei_size, double res);
 std::shared_ptr<CubeArray> BuildCubeArrayFromOctree(std::shared_ptr<octomap::OcTree> tree);
 std::shared_ptr<CubeArray> BuildCubeArrayFromOctreeWithExtObstacle(std::shared_ptr<octomap::OcTree> tree);
 

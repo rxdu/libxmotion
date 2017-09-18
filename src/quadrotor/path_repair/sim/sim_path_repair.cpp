@@ -36,6 +36,12 @@ SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 															  hgoal_set_(false),
 															  est_new_dist_(std::numeric_limits<double>::infinity())
 {
+	// default map size
+	map_size_[0] = 5;
+	map_size_[1] = 5;
+	map_size_[2] = 5;
+
+	// lcm subscription
 	lcm_->subscribe("envsim/map", &SimPathRepair::LcmSimMapHandler, this);
 }
 
@@ -57,6 +63,13 @@ void SimPathRepair::SetGoalHeight(int32_t height)
 {
 	goal_height_ = height;
 	hgoal_set_ = true;
+}
+
+void SimPathRepair::SetMapSize(int32_t x, int32_t y, int32_t z)
+{
+	map_size_[0] = x;
+	map_size_[1] = y;
+	map_size_[2] = z;
 }
 
 void SimPathRepair::SetStartPosition(Position2D pos)
@@ -82,8 +95,8 @@ std::vector<uint64_t> SimPathRepair::UpdateGlobal2DPath()
 {
 	std::vector<uint64_t> waypoints;
 
-	auto start_id = sgrid_->GetIDFromIndex(start_pos_.x, start_pos_.y);
-	auto goal_id = sgrid_->GetIDFromIndex(goal_pos_.x, goal_pos_.y);
+	auto start_id = sgrid_->GetIDFromIndex(start_pos_.y, start_pos_.x);
+	auto goal_id = sgrid_->GetIDFromIndex(goal_pos_.y, goal_pos_.x);
 
 	std::cout << "----> start: " << start_pos_.x << " , " << start_pos_.y << ", id: " << start_id << std::endl;
 	std::cout << "----> goal: " << goal_pos_.x << " , " << goal_pos_.y << ", id: " << goal_id << std::endl;
@@ -98,10 +111,19 @@ std::vector<uint64_t> SimPathRepair::UpdateGlobal2DPath()
 	return waypoints;
 }
 
+void SimPathRepair::ResetPlanner()
+{
+	est_new_dist_ = std::numeric_limits<double>::infinity();
+	map_received_ = false;
+}
+
 void SimPathRepair::RequestNewMap()
 {
 	librav_lcm_msgs::MapRequest_t map_rqt_msg;
 	map_rqt_msg.new_map_requested = true;
+	map_rqt_msg.map_size_x = map_size_[0];
+	map_rqt_msg.map_size_y = map_size_[1];
+	map_rqt_msg.map_size_z = map_size_[2];
 	lcm_->publish("envsim/map_request", &map_rqt_msg);
 	std::cout << "New map request sent" << std::endl;
 }
@@ -117,15 +139,19 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 	std::cout << "Map size: " << msg->cell_num << std::endl;
 
 	// create square grid from map msg
-	double side_size = 100;
+	double side_size = 1.0;
 	sgrid_ = MapUtils::CreateSquareGrid(msg->size_x, msg->size_y, side_size);
-	carray_base_ = CubeArrayBuilder::BuildEmptyCubeArray(msg->size_x, msg->size_y, msg->size_z, side_size);
+	carray_base_ = CubeArrayBuilder::BuildSolidCubeArray(msg->size_x, msg->size_y, msg->size_z, side_size);
 	for (const auto &cell : msg->cells)
 	{
 		if (cell.occupied)
 		{
 			sgrid_->SetCellOccupancy(cell.pos_y, cell.pos_x, OccupancyType::OCCUPIED);
-			carray_base_->SetCubeOccupancy(cell.pos_y, cell.pos_x, goal_height_, OccupancyType::OCCUPIED);
+		}
+		else
+		{
+			for (int i = 0; i < msg->size_z; i++)
+				carray_base_->SetCubeOccupancy(cell.pos_y, cell.pos_x, i, OccupancyType::FREE);
 		}
 	}
 
@@ -135,7 +161,7 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 	auto path = UpdateGlobal2DPath();
 	if (!path.empty())
 	{
-		std::cout << "Map validated" << std::endl;
+		std::cout << "Validate map received" << std::endl;
 		// update flags
 		map_received_ = true;
 		update_global_plan_ = true;
@@ -144,7 +170,7 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 		nav_field_ = std::make_shared<NavField<SquareCell *>>(sgrid_planner_.graph_);
 		sc_evaluator_ = std::make_shared<ShortcutEval>(sgrid_, nav_field_);
 
-		auto goal_id = sgrid_->GetIDFromIndex(goal_pos_.x, goal_pos_.y);
+		auto goal_id = sgrid_->GetIDFromIndex(goal_pos_.y, goal_pos_.x);
 		nav_field_->UpdateNavField(goal_id);
 
 		sc_evaluator_->EvaluateGridShortcutPotential(15);
@@ -154,6 +180,8 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 		map_info_.size_y = msg->size_y;
 		map_info_.size_z = msg->size_z;
 		map_info_.side_size = side_size;
+
+		std::cout << "Configs for new map updated" << std::endl;
 	}
 	else
 	{
@@ -202,70 +230,89 @@ bool SimPathRepair::EvaluateNewPath(std::vector<Position3Dd> &new_path)
 		return false;
 }
 
-void SimPathRepair::UpdatePath()
+SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading)
 {
 	std::cout << "\n---------------------- New Iteration -------------------------" << std::endl;
 
 	//auto path = UpdateGlobal2DPath();
 
 	// create an empty cube array
-	std::shared_ptr<CubeArray> carray = CubeArrayBuilder::BuildEmptyCubeArray(map_info_.size_x, map_info_.size_y, map_info_.size_z, map_info_.side_size);
+	std::shared_ptr<CubeArray> carray = CubeArrayBuilder::BuildSolidCubeArray(map_info_.size_x, map_info_.size_y, map_info_.size_z, map_info_.side_size);
 
 	// add 2d map info into cube array
-	for (int k = 0; k < map_info_.size_z; k++)
-		for (int j = 0; j < map_info_.size_y; j++)
-			for (int i = 0; i < map_info_.size_x; i++)
-			{
-				auto id = carray->GetIDFromIndex(j, i, k);
-				if (carray_base_->cubes_[id].occu_ == OccupancyType::OCCUPIED)
-					carray->cubes_[id].occu_ = OccupancyType::OCCUPIED;
-			}
+	// for (int k = 0; k < map_info_.size_z; k++)
+	for (int j = 0; j < map_info_.size_y; j++)
+		for (int i = 0; i < map_info_.size_x; i++)
+		{
+			auto id = carray->GetIDFromIndex(j, i, height);
+			if (carray_base_->cubes_[id].occu_ == OccupancyType::FREE)
+				carray->cubes_[id].occu_ = OccupancyType::FREE;
+		}
 
 	// add 3d info into cube array
 
 	// create a graph from the cube array
-	std::shared_ptr<Graph<CubeCell &>> cubegraph = GraphBuilder::BuildFromCubeArray(carray);
-	std::cout << "base cube array size: " << carray_base_->cubes_.size() << std::endl;
+	std::shared_ptr<Graph_t<CubeCell &>> cubegraph = GraphBuilder::BuildFromCubeArray(carray);
+
 	std::cout << "cube array size: " << carray->cubes_.size() << std::endl;
-	std::cout << "cube array graph size: " << cubegraph->GetGraphVertices().size() << std::endl;
+	std::cout << "cube graph size: " << cubegraph->GetGraphVertices().size() << " , edge num: " << cubegraph->GetGraphEdges().size() << std::endl;
 
-	// cube graph
-	srcl_lcm_msgs::Graph_t graph_msg;
-	
-	graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
-	for (auto &vtx : cubegraph->GetGraphVertices())
+	auto start_id = carray->GetIDFromIndex(pos.y, pos.x, height);
+	auto goal_id = carray->GetIDFromIndex(goal_pos_.y, goal_pos_.x, goal_height_);
+	std::cout << "start id: " << start_id << " , goal id: " << goal_id << std::endl;
+	Path_t<CubeCell &> path = AStar::Search(cubegraph, start_id, goal_id);
+
+	if (path.empty())
+		std::cout << "no path found" << std::endl;
+
+	SimPath path_result;
+
+	if (!path.empty())
 	{
-		srcl_lcm_msgs::Vertex_t vertex;
-		vertex.id = vtx->vertex_id_;
+		librav_lcm_msgs::Path_t path_msg;
+		path_msg.pt_num = path.size();
+		double prev_heading = 0;
+		for (auto &cell : path)
+		{
+			double heading = 0;
+			// uint64_t nd_id = sgrid_->GetIDFromPosition(cell->bundled_data_.index_.x, cell->bundled_data_.index_.y);
+			// auto nd_vtx = nav_field_->field_graph_->GetVertexFromID(nd_id);
+			// if (nd_vtx != nullptr)
+			// {
+			// 	heading = nd_vtx->rewards_yaw_;
 
-		vertex.position[0] = vtx->bundled_data_.location_.x/100.0;
-		vertex.position[1] = vtx->bundled_data_.location_.y/100.0;
-		vertex.position[2] = vtx->bundled_data_.location_.z/100.0;
-		graph_msg.vertices.push_back(vertex);
+			// 	if (heading != 0)
+			// 		prev_heading = heading;
+			// }
+			// else
+			// {
+			// 	heading = prev_heading;
+			// }
+
+			librav_lcm_msgs::Waypoint_t wp;
+			wp.id = cell->bundled_data_.data_id_;
+			wp.x = cell->bundled_data_.index_.x;
+			wp.y = cell->bundled_data_.index_.y;
+			wp.z = cell->bundled_data_.index_.z;
+			wp.yaw = heading;
+
+			path_msg.points.push_back(wp);
+
+			SimWaypoint swp;
+			swp.id = cell->bundled_data_.data_id_;
+			swp.x = cell->bundled_data_.index_.x;
+			swp.y = cell->bundled_data_.index_.y;
+			swp.z = cell->bundled_data_.index_.z;
+			swp.yaw = heading;
+			path_result.push_back(swp);
+		}
+		lcm_->publish("quad_planner/repaired_path", &path_msg);
 	}
 
-	graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
-	for (auto &eg : cubegraph->GetGraphUndirectedEdges())
-	{
-		srcl_lcm_msgs::Edge_t edge;
-		edge.id_start = eg.src_->vertex_id_;
-		edge.id_end = eg.dst_->vertex_id_;
+	SendCubeArrayGraphToVis(cubegraph);
+	Send3DSearchPathToVis(path);
 
-		graph_msg.edges.push_back(edge);
-	}
-
-	std::cout << "vertex size: " << graph_msg.vertex_num << " , edge size: " << graph_msg.edge_num << std::endl;
-
-	lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
-
-	std::cout << "######################## graph sent ########################" << std::endl;
-
-	// if (mission_tracker_->remaining_path_length_ < 0.5)
-	// {
-	// 	std::cout << "Getting close to goal, no need to replan" << std::endl;
-	// 	// LOG(INFO) << "Getting close to goal, no need to replan";
-	// 	return;
-	// }
+	return path_result;
 
 	// static int count = 0;
 	// srcl_lcm_msgs::KeyframeSet_t kf_cmd;
@@ -279,26 +326,6 @@ void SimPathRepair::UpdatePath()
 	// //std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
 	// std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctreeWithExtObstacle(octomap_server_.octree_);
 	// std::shared_ptr<Graph<CubeCell &>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
-
-	// // don't replan if 3d information is too limited
-	// if (mission_tracker_->mission_started_ && (cubearray->cubes_.size() == 0 || cubegraph->GetGraphVertices().size() < 5))
-	// {
-	// 	std::cerr << "Too limited 3D information collected" << std::endl;
-	// 	// LOG(INFO) << "Too limited 3D information collected";
-	// }
-
-	// int64_t geo_start_id_astar = geomark_graph_.MergeCubeArrayInfo(cubegraph, cubearray);
-
-	// // don't replan if failed to combine graphs
-	// if (geo_start_id_astar == -1)
-	// {
-	// 	std::cerr << "Failed to combine graphs" << std::endl;
-	// 	// LOG(INFO) << "Failed to combine graphs";
-	// 	return;
-	// }
-
-	// // LOG(INFO) << "Combined graph size: " << sgrid_planner_.graph_->GetGraphVertices().size();
-	// std::cout << "Graph size (combined, 3d): " << sgrid_planner_.graph_->GetGraphVertices().size() << " , " << cubegraph->GetGraphVertices().size() << std::endl;
 
 	// uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
 	// uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
@@ -371,65 +398,7 @@ void SimPathRepair::UpdatePath()
 	// }
 }
 
-template <typename PlannerType>
-srcl_lcm_msgs::Graph_t SimPathRepair::GetLcmGraphFromPlanner(const PlannerType &planner)
-{
-	srcl_lcm_msgs::Graph_t graph_msg;
-
-	graph_msg.vertex_num = planner.graph_->GetGraphVertices().size();
-	for (auto &vtx : planner.graph_->GetGraphVertices())
-	{
-		srcl_lcm_msgs::Vertex_t vertex;
-		vertex.id = vtx->vertex_id_;
-
-		Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(vtx->bundled_data_->location_, planner.map_.info);
-		vertex.position[0] = ref_world_pos.x;
-		vertex.position[1] = ref_world_pos.y;
-
-		graph_msg.vertices.push_back(vertex);
-	}
-
-	graph_msg.edge_num = planner.graph_->GetGraphUndirectedEdges().size();
-	for (auto &eg : planner.graph_->GetGraphUndirectedEdges())
-	{
-		srcl_lcm_msgs::Edge_t edge;
-		edge.id_start = eg.src_->vertex_id_;
-		edge.id_end = eg.dst_->vertex_id_;
-
-		graph_msg.edges.push_back(edge);
-	}
-
-	return graph_msg;
-}
-
-srcl_lcm_msgs::Graph_t SimPathRepair::GenerateLcmGraphMsg()
-{
-	srcl_lcm_msgs::Graph_t graph_msg;
-
-	graph_msg = GetLcmGraphFromPlanner(this->sgrid_planner_);
-
-	return graph_msg;
-}
-
-srcl_lcm_msgs::Path_t SimPathRepair::GenerateLcmPathMsg(std::vector<Position2D> waypoints)
-{
-	srcl_lcm_msgs::Path_t path_msg;
-
-	path_msg.waypoint_num = waypoints.size();
-	for (auto &wp : waypoints)
-	{
-		Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(wp, this->sgrid_planner_.map_.info);
-		srcl_lcm_msgs::WayPoint_t waypoint;
-		waypoint.positions[0] = ref_world_pos.x;
-		waypoint.positions[1] = ref_world_pos.y;
-
-		path_msg.waypoints.push_back(waypoint);
-	}
-
-	return path_msg;
-}
-
-void SimPathRepair::Send3DSearchPathToVis(std::vector<Position3Dd> path)
+void SimPathRepair::Send3DSearchPathToVis(Path_t<CubeCell &> &path)
 {
 	if (path.size() > 0)
 	{
@@ -439,13 +408,47 @@ void SimPathRepair::Send3DSearchPathToVis(std::vector<Position3Dd> path)
 		for (auto &wp : path)
 		{
 			srcl_lcm_msgs::WayPoint_t waypoint;
-			waypoint.positions[0] = wp.x;
-			waypoint.positions[1] = wp.y;
-			waypoint.positions[2] = wp.z;
+			waypoint.positions[0] = wp->bundled_data_.location_.x;
+			waypoint.positions[1] = wp->bundled_data_.location_.y;
+			waypoint.positions[2] = wp->bundled_data_.location_.z;
 
 			path_msg.waypoints.push_back(waypoint);
 		}
 
 		lcm_->publish("quad_planner/geo_mark_graph_path", &path_msg);
 	}
+}
+
+void SimPathRepair::SendCubeArrayGraphToVis(std::shared_ptr<Graph_t<CubeCell &>> cubegraph)
+{
+	// cube graph
+	srcl_lcm_msgs::Graph_t graph_msg;
+
+	graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
+	for (auto &vtx : cubegraph->GetGraphVertices())
+	{
+		srcl_lcm_msgs::Vertex_t vertex;
+		vertex.id = vtx->vertex_id_;
+
+		vertex.position[0] = vtx->bundled_data_.location_.x;
+		vertex.position[1] = vtx->bundled_data_.location_.y;
+		vertex.position[2] = vtx->bundled_data_.location_.z;
+		graph_msg.vertices.push_back(vertex);
+	}
+
+	graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
+	for (auto &eg : cubegraph->GetGraphUndirectedEdges())
+	{
+		srcl_lcm_msgs::Edge_t edge;
+		edge.id_start = eg.src_->vertex_id_;
+		edge.id_end = eg.dst_->vertex_id_;
+
+		graph_msg.edges.push_back(edge);
+	}
+
+	//std::cout << "vertex size: " << graph_msg.vertex_num << " , edge size: " << graph_msg.edge_num << std::endl;
+
+	lcm_->publish("quad_planner/geo_mark_graph", &graph_msg);
+
+	std::cout << "######################## graph sent ########################" << std::endl;
 }

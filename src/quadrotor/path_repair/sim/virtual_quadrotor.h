@@ -14,26 +14,35 @@ namespace librav
 
 class VirtualQuadrotor
 {
-public:
+  public:
     VirtualQuadrotor(std::shared_ptr<lcm::LCM> lcm);
 
-public:    
     void Load_5by5_Config();
     void Load_30by50_Config();
-    bool IsReady(){ return qplanner_->IsConfigComplete(); };
+    void Load_10by10_Config();
 
-    void Step();    
-    
-private:
+  public:
+    bool IsReady();
+    void Step();
+
+  private:
     std::shared_ptr<lcm::LCM> lcm_;
     std::shared_ptr<SimPathRepair> qplanner_;
-    
-    bool reached_goal_;
 
-    bool MoveForward();
-    // void SendTransformation
+    // pose info for sim reset
+    Position2D init_pos_;
+    int32_t init_height_;
+
+    // pose info for flight sim
+    Position2D current_pos_;
+    int32_t current_height_;
+    double current_heading_;
+
+    // path from planner
+    SimPath active_path_;
+
+    void MoveForward();
 };
-
 }
 
 #endif /* PATH_REPAIR_SIM_VIRTUAL_QUAD_H_ */

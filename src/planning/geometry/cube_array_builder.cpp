@@ -24,6 +24,14 @@ std::shared_ptr<CubeArray> CubeArrayBuilder::BuildEmptyCubeArray(int32_t row_siz
 	return ca;
 }
 
+std::shared_ptr<CubeArray> CubeArrayBuilder::BuildSolidCubeArray(int32_t row_size, int32_t col_size, int32_t hei_size, double res)
+{
+	auto ca = std::make_shared<CubeArray>(row_size,col_size,hei_size,res);
+	for(auto& cb : ca->cubes_)
+		cb.occu_ = OccupancyType::OCCUPIED;
+	return ca;
+}
+
 std::shared_ptr<CubeArray> CubeArrayBuilder::BuildCubeArrayFromOctree(std::shared_ptr<octomap::OcTree> tree)
 {
 	double mmin[3],mmax[3];

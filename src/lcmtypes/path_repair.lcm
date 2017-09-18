@@ -4,6 +4,9 @@ package librav_lcm_msgs;
 struct MapRequest_t
 {
     boolean new_map_requested;
+    int32_t map_size_x;
+    int32_t map_size_y;
+    int32_t map_size_z;
 }
 
 struct Cell_t
@@ -32,13 +35,19 @@ struct QuadPose_t
     int32_t x;
     int32_t y;
     int32_t z;
-    int32_t id;
     double yaw;
+
+    int32_t id;    
 }
 
 // PATH
 struct Waypoint_t
 {
+    int32_t x;
+    int32_t y;
+    int32_t z;
+    double yaw;
+
     int32_t id;
 }
 

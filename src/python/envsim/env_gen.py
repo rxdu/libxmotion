@@ -153,6 +153,8 @@ class EnvGen(object):
         msg = MapRequest_t.decode(data)        
         print("Received message on channel \"%s\"" % channel)
         
+        self.set_env_size(msg.map_size_x, msg.map_size_y, msg.map_size_z)
+        
         self.generate_space()
         self.publish_map()
 
