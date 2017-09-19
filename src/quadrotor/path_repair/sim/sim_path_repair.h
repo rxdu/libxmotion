@@ -21,6 +21,7 @@
 #include "planning/geometry/geo_mark.h"
 #include "planning/map/map_info.h"
 
+#include "quadrotor/path_repair/sim/sim_depth_sensor.h"
 #include "quadrotor/path_repair/sg_graph_planner.h"
 #include "quadrotor/path_repair/geo_mark_graph.h"
 #include "quadrotor/path_repair/nav_field.h"
@@ -41,12 +42,12 @@ struct SimMapInfo
 
 struct SimWaypoint
 {
-    int32_t x;
-    int32_t y;
-    int32_t z;
-    double yaw;
+	int32_t x;
+	int32_t y;
+	int32_t z;
+	double yaw;
 
-    int32_t id;
+	int32_t id;
 };
 
 using SimPath = std::vector<SimWaypoint>;
@@ -55,11 +56,12 @@ class SimPathRepair
 {
   public:
 	SimPathRepair(std::shared_ptr<lcm::LCM> lcm);
+	SimPathRepair(std::shared_ptr<lcm::LCM> lcm, std::shared_ptr<SimDepthSensor> dsensor);
 
 	bool map_received_;
 	bool update_global_plan_;
 
-  public:	
+  public:
 	// general planner configuration
 	void SetStartPosition(Position2D pos);
 	void SetGoalPosition(Position2D pos);
@@ -83,6 +85,7 @@ class SimPathRepair
   private:
 	// lcm
 	std::shared_ptr<lcm::LCM> lcm_;
+	std::shared_ptr<SimDepthSensor> depth_sensor_;
 
 	// planners
 	SGGraphPlanner sgrid_planner_;
@@ -90,7 +93,7 @@ class SimPathRepair
 
 	SimMapInfo map_info_;
 	double sensor_range_;
-	
+
 	std::shared_ptr<SquareGrid> sgrid_;
 	std::shared_ptr<CubeArray> carray_base_;
 
@@ -119,10 +122,10 @@ class SimPathRepair
 	bool EvaluateNewPath(std::vector<Position3Dd> &new_path);
 
 	// lcm
-	void LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::Map_t *msg);	
+	void LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::Map_t *msg);
 
 	// helper functions
-	void Send3DSearchPathToVis(Path_t<CubeCell &>& path);
+	void Send3DSearchPathToVis(Path_t<CubeCell &> &path);
 	void SendCubeArrayGraphToVis(std::shared_ptr<Graph_t<CubeCell &>> graph);
 };
 }

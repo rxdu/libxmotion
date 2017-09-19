@@ -8,6 +8,7 @@
 #include "lcmtypes/librav.hpp"
 
 #include "quadrotor/path_repair/sim/sim_path_repair.h"
+#include "quadrotor/path_repair/sim/sim_depth_sensor.h"
 
 namespace librav
 {
@@ -27,6 +28,7 @@ class VirtualQuadrotor
 
   private:
     std::shared_ptr<lcm::LCM> lcm_;
+    std::shared_ptr<SimDepthSensor> dsensor_;
     std::shared_ptr<SimPathRepair> qplanner_;
 
     // pose info for sim reset
@@ -43,6 +45,7 @@ class VirtualQuadrotor
 
     void MoveForward();
 };
+
 }
 
 #endif /* PATH_REPAIR_SIM_VIRTUAL_QUAD_H_ */

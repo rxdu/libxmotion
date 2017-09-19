@@ -45,6 +45,28 @@ SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 	lcm_->subscribe("envsim/map", &SimPathRepair::LcmSimMapHandler, this);
 }
 
+SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm, std::shared_ptr<SimDepthSensor> dsensor):
+																lcm_(lcm),
+																depth_sensor_(dsensor),
+																map_received_(false),
+																update_global_plan_(false),
+																mission_tracker_(new MissionTracker(lcm_)),
+																sensor_range_(5.0),
+																pstart_set_(false),
+																pgoal_set_(false),
+																hstart_set_(false),
+																hgoal_set_(false),
+																est_new_dist_(std::numeric_limits<double>::infinity())
+{
+	// default map size
+	map_size_[0] = 5;
+	map_size_[1] = 5;
+	map_size_[2] = 5;
+
+	// lcm subscription
+	lcm_->subscribe("envsim/map", &SimPathRepair::LcmSimMapHandler, this);
+}
+
 bool SimPathRepair::IsConfigComplete()
 {
 	if (pstart_set_ && pgoal_set_ && hstart_set_ && hgoal_set_)
@@ -180,6 +202,8 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 		map_info_.size_y = msg->size_y;
 		map_info_.size_z = msg->size_z;
 		map_info_.side_size = side_size;
+
+		depth_sensor_->SetWorkspace(msg);
 
 		std::cout << "Configs for new map updated" << std::endl;
 	}

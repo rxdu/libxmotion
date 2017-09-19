@@ -17,6 +17,15 @@ struct Cell_t
     boolean occupied;
 }
 
+struct Voxel_t
+{
+    int32_t id;
+    int32_t pos_x;
+    int32_t pos_y;
+    int32_t pos_z;
+    boolean occupied;
+}
+
 struct Map_t 
 {
     // 3D map dimension
@@ -27,6 +36,10 @@ struct Map_t
     // 2D map cells
 	int64_t cell_num;
 	Cell_t cells[cell_num];
+
+    // 3D map voxels
+    int64_t voxel_num;
+    Voxel_t voxels[voxel_num];
 }
 
 // VEHICLE INFO

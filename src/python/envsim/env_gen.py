@@ -95,10 +95,13 @@ class EnvGen(object):
         map2d = self.space.get_2d_map()
 
         map_msg = Map_t()
+
         map_msg.size_x = self.space_size[0]
         map_msg.size_y = self.space_size[1]
         map_msg.size_z = self.space_size[2]
+        
         map_msg.cell_num = map2d.cells.size
+        map_msg.voxel_num = self.space.voxels.size
 
         for yi in range(0, map2d.size[1]):
             for xi in range(0, map2d.size[0]):
@@ -108,6 +111,17 @@ class EnvGen(object):
                 cell_msg.pos_y = map2d.cells[xi, yi].position[1]
                 cell_msg.occupied = map2d.cells[xi, yi].occupied
                 map_msg.cells.append(cell_msg)
+
+        for zi in range(0, self.space_size[2]):
+            for yi in range(0, self.space_size[1]):
+                for xi in range(0, self.space_size[0]):
+                    voxel_msg = Voxel_t()
+                    voxel_msg.id = self.space.voxels[xi, yi, zi].id
+                    voxel_msg.pos_x = self.space.voxels[xi, yi, zi].position[0]
+                    voxel_msg.pos_y = self.space.voxels[xi, yi, zi].position[1]
+                    voxel_msg.pos_z = self.space.voxels[xi, yi, zi].position[2]
+                    voxel_msg.occupied = self.space.voxels[xi, yi, zi].occupied
+                    map_msg.voxels.append(voxel_msg)
 
         self.lcm_h.publish("envsim/map", map_msg.encode())
 

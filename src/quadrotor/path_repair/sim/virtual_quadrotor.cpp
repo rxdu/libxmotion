@@ -10,16 +10,18 @@
 using namespace librav;
 
 VirtualQuadrotor::VirtualQuadrotor(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
-                                                                    qplanner_(std::make_shared<SimPathRepair>(lcm)),
+                                                                    dsensor_(std::make_shared<SimDepthSensor>()),
+                                                                    qplanner_(std::make_shared<SimPathRepair>(lcm,dsensor_)),
                                                                     current_heading_(0)
 {
+    
 }
 
 void VirtualQuadrotor::Load_5by5_Config()
 {
     // set sim map size
     qplanner_->SetMapSize(5, 5, 5);
-    
+
     // set initial and goal pose
     init_pos_ = Position2D(0, 0);
     init_height_ = 2;

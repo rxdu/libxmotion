@@ -19,6 +19,7 @@ target_link_libraries(path_repair map mission polyopt common vis ${OpenCV_LIBS} 
 set(PATH_REPAIR_SIM_SRC
     sim/sim_path_repair.cpp
     sim/virtual_quadrotor.cpp
+    sim/sim_depth_sensor.cpp
 )
 add_library(pr_sim STATIC ${PATH_REPAIR_SIM_SRC})
 target_link_libraries(pr_sim path_repair ${LCM_LIBRARIES})
