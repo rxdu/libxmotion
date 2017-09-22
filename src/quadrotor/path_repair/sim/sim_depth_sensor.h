@@ -8,11 +8,14 @@
 #ifndef QUADROTOR_PATH_REPAIR_SIM_DEPTH_SENSOR_H
 #define QUADROTOR_PATH_REPAIR_SIM_DEPTH_SENSOR_H
 
+#include <memory>
 #include <cstdint>
 
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/librav.hpp"
+
+#include "planning/geometry/cube_array/cube_array.h"
 
 namespace librav
 {
@@ -22,13 +25,16 @@ class SimDepthSensor
 public:
     SimDepthSensor();
 
-    void SetWorkspace(const librav_lcm_msgs::Map_t *msg);
+    void SetWorkspace(const librav_lcm_msgs::Map_t *msg, double side_size);
+    std::shared_ptr<CubeArray> GetSensedArea(int32_t x, int32_t y, int32_t z, double yaw);
 
 private:
     int32_t ws_x_;
     int32_t ws_y_;
     int32_t ws_z_;
+    double unit_size_;
 
+    std::shared_ptr<CubeArray> workspace_;
 };
 
 }

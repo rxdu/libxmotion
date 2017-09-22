@@ -203,7 +203,7 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 		map_info_.size_z = msg->size_z;
 		map_info_.side_size = side_size;
 
-		depth_sensor_->SetWorkspace(msg);
+		depth_sensor_->SetWorkspace(msg, side_size);
 
 		std::cout << "Configs for new map updated" << std::endl;
 	}
