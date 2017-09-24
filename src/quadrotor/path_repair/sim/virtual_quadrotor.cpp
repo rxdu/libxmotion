@@ -5,6 +5,9 @@
  *      Author: rdu
  */
 
+#include "eigen3/Eigen/Core"
+#include "eigen3/Eigen/Geometry"
+
 #include "quadrotor/path_repair/sim/virtual_quadrotor.h"
 
 using namespace librav;
@@ -32,6 +35,8 @@ void VirtualQuadrotor::Load_5by5_Config()
     qplanner_->SetGoalPosition(Position2D(4, 4));
     qplanner_->SetGoalHeight(2);
 
+    qplanner_->SetSensorRange(2);
+
     current_pos_ = init_pos_;
     current_height_ = init_height_;
 }
@@ -51,6 +56,8 @@ void VirtualQuadrotor::Load_10by10_Config()
     qplanner_->SetGoalPosition(Position2D(9, 9));
     qplanner_->SetGoalHeight(0);
 
+    qplanner_->SetSensorRange(5);
+
     current_pos_ = init_pos_;
     current_height_ = init_height_;
 }
@@ -69,6 +76,11 @@ void VirtualQuadrotor::Load_30by50_Config()
 
     qplanner_->SetGoalPosition(Position2D(29, 49));
     qplanner_->SetGoalHeight(3);
+
+    qplanner_->SetSensorRange(5);
+
+    current_pos_ = init_pos_;
+    current_height_ = init_height_;
 }
 
 bool VirtualQuadrotor::IsReady()
@@ -89,16 +101,49 @@ void VirtualQuadrotor::MoveForward()
     }
 }
 
+void VirtualQuadrotor::PublishState()
+{
+    srcl_lcm_msgs::QuadrotorTransform trans_msg;
+	srcl_lcm_msgs::Pose_t trans_base2world;
+	srcl_lcm_msgs::Pose_t trans_laser2base;
+
+    Eigen::Quaterniond quat(Eigen::AngleAxisd(current_heading_, Eigen::Vector3d::UnitZ()));
+	trans_base2world.position[0] = current_pos_.x + 0.5;
+	trans_base2world.position[1] = current_pos_.y + 0.5;
+	trans_base2world.position[2] = current_height_ + 0.5;
+
+	trans_base2world.quaternion[0] = quat.w();
+	trans_base2world.quaternion[1] = quat.x();
+	trans_base2world.quaternion[2] = quat.y();
+	trans_base2world.quaternion[3] = quat.z();
+
+	trans_laser2base.position[0] = 0.0;
+	trans_laser2base.position[1] = 0.0;
+	trans_laser2base.position[2] = 0.0;
+
+	trans_laser2base.quaternion[0] = 1.0;
+	trans_laser2base.quaternion[1] = 0;
+	trans_laser2base.quaternion[2] = 0;
+	trans_laser2base.quaternion[3] = 0;
+
+	trans_msg.base_to_world = trans_base2world;
+	trans_msg.laser_to_base = trans_laser2base;
+
+	lcm_->publish("quad_data/quad_transform", &trans_msg);
+}
+
 void VirtualQuadrotor::Step()
 {
     if (qplanner_->map_received_)
     {
         // update quadrotor state
         MoveForward();
-
+        
         // update planner
         active_path_ = qplanner_->UpdatePath(current_pos_, current_height_, current_heading_);
 
+        PublishState();
+        
         if (active_path_.size() == 1)
         {
             // reset quadrotor state

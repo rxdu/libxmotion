@@ -281,6 +281,15 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 		}
 
 	// add 3d info into cube array
+	// auto sensor_carray = depth_sensor_->GetSensedArea(pos.x, pos.y, height, heading);
+	// for (int k = 0; k < map_info_.size_z; k++)
+	// 	for (int j = 0; j < map_info_.size_y; j++)
+	// 		for (int i = 0; i < map_info_.size_x; i++)
+	// 		{
+	// 			auto id = carray->GetIDFromIndex(i, j, k);
+	// 			if (sensor_carray->cubes_[id].occu_ == OccupancyType::FREE)
+	// 				carray->cubes_[id].occu_ = OccupancyType::FREE;
+	// 		}
 
 	// create a graph from the cube array
 	std::shared_ptr<Graph_t<CubeCell &>> cubegraph = GraphBuilder::BuildFromCubeArray(carray);
@@ -291,6 +300,7 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 	auto start_id = carray->GetIDFromIndex(pos.x, pos.y, height);
 	auto goal_id = carray->GetIDFromIndex(goal_pos_.x, goal_pos_.y, goal_height_);
 	std::cout << "start id: " << start_id << " , goal id: " << goal_id << std::endl;
+	std::cout << "heading: " << heading*180.0/M_PI << std::endl;
 	Path_t<CubeCell &> path = AStar::Search(cubegraph, start_id, goal_id);
 
 	if (path.empty())
@@ -306,19 +316,19 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 		for (auto &cell : path)
 		{
 			double heading = 0;
-			// uint64_t nd_id = sgrid_->GetIDFromPosition(cell->bundled_data_.index_.x, cell->bundled_data_.index_.y);
-			// auto nd_vtx = nav_field_->field_graph_->GetVertexFromID(nd_id);
-			// if (nd_vtx != nullptr)
-			// {
-			// 	heading = nd_vtx->rewards_yaw_;
+			uint64_t nd_id = sgrid_->GetIDFromPosition(cell->bundled_data_.index_.x, cell->bundled_data_.index_.y);
+			auto nd_vtx = nav_field_->field_graph_->GetVertexFromID(nd_id);
+			if (nd_vtx != nullptr)
+			{
+				heading = nd_vtx->rewards_yaw_/180.0*M_PI;
 
-			// 	if (heading != 0)
-			// 		prev_heading = heading;
-			// }
-			// else
-			// {
-			// 	heading = prev_heading;
-			// }
+				if (heading != 0)
+					prev_heading = heading;
+			}
+			else
+			{
+				heading = prev_heading;
+			}
 
 			librav_lcm_msgs::Waypoint_t wp;
 			wp.id = cell->bundled_data_.data_id_;
