@@ -40,6 +40,8 @@ public:
     SimDepthSensor();
 
     void SetRange(int32_t rng) { range_ = rng; };
+    void SetFOV(double fov) { fov_ = fov; };
+    void SetWorkspace(std::shared_ptr<CubeArray> ws, double side_size);
     void SetWorkspace(const librav_lcm_msgs::Map_t *msg, double side_size);
     std::shared_ptr<CubeArray> GetSensedArea(int32_t x, int32_t y, int32_t z, double yaw);
 
