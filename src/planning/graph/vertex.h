@@ -127,6 +127,11 @@ private:
 	}
 
 public:
+	double GetAStarGCost()
+	{
+		return g_astar_;
+	}
+
 	/// == operator overloading. If two vertices have the same id, they're regarded as equal.
 	bool operator ==(const Vertex<BundledStructType>& other) const
 	{

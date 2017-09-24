@@ -30,6 +30,7 @@ SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 															  update_global_plan_(false),
 															  mission_tracker_(new MissionTracker(lcm_)),
 															  sensor_range_(5.0),
+															  path_2d_cost_(std::numeric_limits<double>::infinity()),
 															  pstart_set_(false),
 															  pgoal_set_(false),
 															  hstart_set_(false),
@@ -45,18 +46,18 @@ SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 	lcm_->subscribe("envsim/map", &SimPathRepair::LcmSimMapHandler, this);
 }
 
-SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm, std::shared_ptr<SimDepthSensor> dsensor):
-																lcm_(lcm),
-																depth_sensor_(dsensor),
-																map_received_(false),
-																update_global_plan_(false),
-																mission_tracker_(new MissionTracker(lcm_)),
-																sensor_range_(5.0),
-																pstart_set_(false),
-																pgoal_set_(false),
-																hstart_set_(false),
-																hgoal_set_(false),
-																est_new_dist_(std::numeric_limits<double>::infinity())
+SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm, std::shared_ptr<SimDepthSensor> dsensor) : lcm_(lcm),
+																									   depth_sensor_(dsensor),
+																									   map_received_(false),
+																									   update_global_plan_(false),
+																									   mission_tracker_(new MissionTracker(lcm_)),
+																									   sensor_range_(5.0),
+																									   path_2d_cost_(std::numeric_limits<double>::infinity()),
+																									   pstart_set_(false),
+																									   pgoal_set_(false),
+																									   hstart_set_(false),
+																									   hgoal_set_(false),
+																									   est_new_dist_(std::numeric_limits<double>::infinity())
 {
 	// default map size
 	map_size_[0] = 5;
@@ -67,10 +68,10 @@ SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm, std::shared_ptr<SimD
 	lcm_->subscribe("envsim/map", &SimPathRepair::LcmSimMapHandler, this);
 }
 
-void SimPathRepair::SetSensorRange(int32_t rng) 
-{ 
-	sensor_range_ = rng; 
-	if(depth_sensor_ != nullptr)
+void SimPathRepair::SetSensorRange(int32_t rng)
+{
+	sensor_range_ = rng;
+	if (depth_sensor_ != nullptr)
 		depth_sensor_->SetRange(sensor_range_);
 }
 
@@ -132,6 +133,13 @@ std::vector<uint64_t> SimPathRepair::UpdateGlobal2DPath()
 	//std::cout << "col: " << sgrid_->col_size_ << " , row: " << sgrid_->row_size_ << std::endl;
 
 	auto traj_vtx = sgrid_planner_.Search(start_id, goal_id);
+
+	if (!traj_vtx.empty())
+	{
+		path_2d_cost_ = traj_vtx.back()->GetAStarGCost();
+		std::cout << "** shortest 2D path cost: " << path_2d_cost_ << std::endl;
+	}
+
 	for (auto &wp : traj_vtx)
 		waypoints.push_back(wp->vertex_id_);
 
@@ -202,7 +210,7 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 		auto goal_id = sgrid_->GetIDFromIndex(goal_pos_.y, goal_pos_.x);
 		nav_field_->UpdateNavField(goal_id);
 
-		sc_evaluator_->EvaluateGridShortcutPotential(15);
+		sc_evaluator_->EvaluateGridShortcutPotential(sensor_range_);
 
 		// update info of virtual space for 3d planning
 		map_info_.size_x = msg->size_x;
@@ -281,15 +289,15 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 		}
 
 	// add 3d info into cube array
-	// auto sensor_carray = depth_sensor_->GetSensedArea(pos.x, pos.y, height, heading);
-	// for (int k = 0; k < map_info_.size_z; k++)
-	// 	for (int j = 0; j < map_info_.size_y; j++)
-	// 		for (int i = 0; i < map_info_.size_x; i++)
-	// 		{
-	// 			auto id = carray->GetIDFromIndex(i, j, k);
-	// 			if (sensor_carray->cubes_[id].occu_ == OccupancyType::FREE)
-	// 				carray->cubes_[id].occu_ = OccupancyType::FREE;
-	// 		}
+	auto sensor_carray = depth_sensor_->GetSensedArea(pos.x, pos.y, height, heading);
+	for (int k = 0; k < map_info_.size_z; k++)
+		for (int j = 0; j < map_info_.size_y; j++)
+			for (int i = 0; i < map_info_.size_x; i++)
+			{
+				auto id = carray->GetIDFromIndex(i, j, k);
+				if (sensor_carray->cubes_[id].occu_ == OccupancyType::FREE)
+					carray->cubes_[id].occu_ = OccupancyType::FREE;
+			}
 
 	// create a graph from the cube array
 	std::shared_ptr<Graph_t<CubeCell &>> cubegraph = GraphBuilder::BuildFromCubeArray(carray);
@@ -300,8 +308,11 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 	auto start_id = carray->GetIDFromIndex(pos.x, pos.y, height);
 	auto goal_id = carray->GetIDFromIndex(goal_pos_.x, goal_pos_.y, goal_height_);
 	std::cout << "start id: " << start_id << " , goal id: " << goal_id << std::endl;
-	std::cout << "heading: " << heading*180.0/M_PI << std::endl;
+	std::cout << "heading: " << heading * 180.0 / M_PI << std::endl;
+	
+	std::cout << "max rewards: " << nav_field_->max_rewards_ << " , dist weight: " << sc_evaluator_->dist_weight_ << std::endl;
 	Path_t<CubeCell &> path = AStar::Search(cubegraph, start_id, goal_id);
+	auto path2 = AStar::BiasedSearchWithShortcut(*cubegraph, start_id, goal_id, nav_field_->max_rewards_, sc_evaluator_->dist_weight_, map_info_.side_size);
 
 	if (path.empty())
 		std::cout << "no path found" << std::endl;
@@ -320,7 +331,7 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 			auto nd_vtx = nav_field_->field_graph_->GetVertexFromID(nd_id);
 			if (nd_vtx != nullptr)
 			{
-				heading = nd_vtx->rewards_yaw_/180.0*M_PI;
+				heading = nd_vtx->rewards_yaw_ / 180.0 * M_PI;
 
 				if (heading != 0)
 					prev_heading = heading;
@@ -354,89 +365,6 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 	Send3DSearchPathToVis(path);
 
 	return path_result;
-
-	// static int count = 0;
-	// srcl_lcm_msgs::KeyframeSet_t kf_cmd;
-
-	// // record the planning time
-	// kf_cmd.sys_time.time_stamp = current_sys_time_;
-
-	// std::vector<Position3Dd> raw_wps;
-	// std::vector<GeoMark> geo_path;
-
-	// //std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctree(octomap_server_.octree_);
-	// std::shared_ptr<CubeArray> cubearray = CubeArrayBuilder::BuildCubeArrayFromOctreeWithExtObstacle(octomap_server_.octree_);
-	// std::shared_ptr<Graph<CubeCell &>> cubegraph = GraphBuilder::BuildFromCubeArray(cubearray);
-
-	// uint64_t map_goal_id = sgrid_planner_.map_.data_model->GetIDFromPosition(goal_pos_.x, goal_pos_.y);
-	// uint64_t geo_goal_id_astar = sgrid_planner_.graph_->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
-
-	// clock_t exec_time;
-	// exec_time = clock();
-	// //auto path = AStar::Search(geomark_graph_.combined_graph_, geo_start_id_astar, geo_goal_id_astar);
-	// auto path = AStar::BiasedSearchWithShortcut(geomark_graph_.combined_graph_, geo_start_id_astar, geo_goal_id_astar, nav_field_->max_rewards_, sc_evaluator_->dist_weight_, sgrid_planner_.map_.data_model->cell_size_);
-	// exec_time = clock() - exec_time;
-	// std::cout << "Search in 3D finished in " << double(exec_time) / CLOCKS_PER_SEC << " s." << std::endl;
-
-	// for (auto &wp : path)
-	// {
-	// 	geo_path.push_back(wp->bundled_data_);
-	// 	raw_wps.push_back(wp->bundled_data_.position);
-	// }
-
-	// // if failed to find a 3d path, terminate this iteration
-	// if (raw_wps.size() <= 1)
-	// 	return;
-
-	// std::vector<Position3Dd> selected_wps = raw_wps; // MissionUtils::GetKeyTurningWaypoints(raw_wps);
-
-	// if (!mission_tracker_->mission_started_ || EvaluateNewPath(selected_wps))
-	// {
-	// 	if (mission_tracker_->mission_started_)
-	// 		std::cout << "-------- found better solution ---------" << std::endl;
-	// 	else
-	// 		mission_tracker_->mission_started_ = true;
-
-	// 	// update mission tracking information
-	// 	mission_tracker_->UpdateActivePathWaypoints(geo_path);
-	// 	mission_tracker_->remaining_path_length_ = est_new_dist_;
-
-	// 	kf_cmd.path_id = mission_tracker_->path_id_;
-	// 	kf_cmd.kf_num = selected_wps.size();
-	// 	double last_yaw = 0;
-	// 	for (auto &wp : selected_wps)
-	// 	{
-	// 		srcl_lcm_msgs::Keyframe_t kf;
-	// 		kf.vel_constr = false;
-
-	// 		kf.positions[0] = wp.x;
-	// 		kf.positions[1] = wp.y;
-	// 		kf.positions[2] = wp.z;
-
-	// 		uint64_t nd_id = sgrid_planner_.map_.data_model->GetIDFromPosition(wp.x, wp.y);
-	// 		auto nd_vtx = nav_field_->field_graph_->GetVertexFromID(nd_id);
-	// 		if (nd_vtx != nullptr)
-	// 		{
-	// 			kf.yaw = nd_vtx->rewards_yaw_;
-
-	// 			if (kf.yaw != 0)
-	// 				last_yaw = kf.yaw;
-	// 		}
-	// 		else
-	// 			kf.yaw = last_yaw;
-
-	// 		// LOG(INFO) << "way point yaw: " << kf.yaw << " at id: " << nd_id;
-
-	// 		kf_cmd.kfs.push_back(kf);
-	// 	}
-	// 	//kf_cmd.kfs.front().yaw = 0;
-	// 	//kf_cmd.kfs.back().yaw = -M_PI/4;
-
-	// 	lcm_->publish("quad_planner/goal_keyframe_set", &kf_cmd);
-
-	// 	// send data for visualization
-	// 	Send3DSearchPathToVis(selected_wps);
-	// }
 }
 
 void SimPathRepair::Send3DSearchPathToVis(Path_t<CubeCell &> &path)

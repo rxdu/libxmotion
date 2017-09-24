@@ -77,6 +77,7 @@ class SimPathRepair
 
 	// search functions
 	std::vector<uint64_t> UpdateGlobal2DPath();
+	double GetGlobal2DPathCost() { return path_2d_cost_; };
 
 	void RequestNewMap();
 	void ResetPlanner();
@@ -93,6 +94,8 @@ class SimPathRepair
 
 	SimMapInfo map_info_;
 	int32_t sensor_range_;
+
+	double path_2d_cost_;
 
 	std::shared_ptr<SquareGrid> sgrid_;
 	std::shared_ptr<CubeArray> carray_base_;

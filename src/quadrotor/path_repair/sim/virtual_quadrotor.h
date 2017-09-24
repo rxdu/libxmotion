@@ -42,6 +42,7 @@ private:
 
   // path from planner
   SimPath active_path_;
+  double traveled_distance_;
 
   void MoveForward();
   void PublishState();

@@ -32,7 +32,7 @@ double ShortcutEval::CalcDirectDistance(Position2D start, Position2D goal, doubl
 {
 	double dist = 0;
 
-	uint32_t x_error, y_error;
+	int32_t x_error, y_error;
 
 	if(start.x > goal.x)
 		x_error = start.x - goal.x;
@@ -48,8 +48,8 @@ double ShortcutEval::CalcDirectDistance(Position2D start, Position2D goal, doubl
 		dist = (x_error + y_error) * cell_size;
 	}
 	else {
-		uint32_t diag_steps = 0;
-		uint32_t straight_steps = 0;
+		int32_t diag_steps = 0;
+		int32_t straight_steps = 0;
 
 		if(x_error > y_error) {
 			diag_steps = y_error;
@@ -70,7 +70,6 @@ double ShortcutEval::EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_v
 {
 	auto nbs = sgrid_->GetNeighboursWithinRange(eval_vtx->bundled_data_->data_id_, sensor_range);
 
-	//std::priority_queue<double> rewards_queue;
 	double max_rwd;
 	Vertex_t<SquareCell*>* max_rwd_vtx = nullptr;
 	for(auto& n : nbs) {
@@ -86,39 +85,35 @@ double ShortcutEval::EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_v
 			max_rwd = rewards;
 			max_rwd_vtx = vtx;
 		}
-		//rewards_queue.push(rewards);
 	}
 
 	// update heading angle
 	double angle = 0;
 	Eigen::Vector3d max_rwd_vec(max_rwd_vtx->bundled_data_->location_.x, max_rwd_vtx->bundled_data_->location_.y, 0);
 	Eigen::Vector3d pos_vec(eval_vtx->bundled_data_->location_.x, eval_vtx->bundled_data_->location_.y, 0);
-//	Eigen::Vector3d dir_vec_origin = max_rwd_vec - pos_vec;
-//	Eigen::Vector3d dir_vec(-dir_vec_origin[1], -dir_vec_origin[0],0);
 	Eigen::Vector3d dir_vec = max_rwd_vec - pos_vec;
-	Eigen::Vector3d x_vec(0,-1,0);
-	Eigen::Vector3d y_vec(-1,0,0);
-	//double angle = - std::acos(dir_vec.normalized().dot(x_vec));
-	double x_dir_vec = dir_vec.dot(x_vec);
-	double y_dir_vec = dir_vec.dot(y_vec);
+	angle = atan2(dir_vec(1), dir_vec(0));
 
-	if(y_dir_vec > 0) {
-		angle = std::acos(dir_vec.normalized().dot(x_vec));
-	}
-	else if(y_dir_vec < 0) {
-		angle = - std::acos(dir_vec.normalized().dot(x_vec));
-	}
-	else {
-		if(x_dir_vec >= 0)
-			angle = 0;
-		else
-			angle = M_PI;
-	}
+	// Eigen::Vector3d x_vec(0,-1,0);
+	// Eigen::Vector3d y_vec(-1,0,0);
+	// double x_dir_vec = dir_vec.dot(x_vec);
+	// double y_dir_vec = dir_vec.dot(y_vec);
+
+	// if(y_dir_vec > 0) {
+	// 	angle = std::acos(dir_vec.normalized().dot(x_vec));
+	// }
+	// else if(y_dir_vec < 0) {
+	// 	angle = - std::acos(dir_vec.normalized().dot(x_vec));
+	// }
+	// else {
+	// 	if(x_dir_vec >= 0)
+	// 		angle = 0;
+	// 	else
+	// 		angle = M_PI;
+	// }
 
 	eval_vtx->rewards_yaw_ = angle/M_PI*180.0;
 
-	//eval_vtx->shortcut_rewards_ = rewards_queue.top();
-	//return rewards_queue.top();
 	return max_rwd;
 }
 

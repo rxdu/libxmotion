@@ -60,7 +60,8 @@ int main(int argc, char *argv[])
 		vquad.Step();
 		lcm->handleTimeout(0);
 	
-		int64_t duration = static_cast<int64_t>(timer.mtoc());
-		std::this_thread::sleep_for(std::chrono::milliseconds(LOOP_PERIOD - duration));
+		int64_t duration = LOOP_PERIOD - static_cast<int64_t>(timer.mtoc());
+		if(duration > 0)
+		std::this_thread::sleep_for(std::chrono::milliseconds(duration));
 	}
 }
