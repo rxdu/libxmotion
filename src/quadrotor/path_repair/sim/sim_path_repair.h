@@ -73,7 +73,7 @@ class SimPathRepair
 	bool IsConfigComplete();
 
 	// graph planner configuration
-	void SetSensorRange(double meter) { sensor_range_ = meter; };
+	void SetSensorRange(int32_t rng);
 
 	// search functions
 	std::vector<uint64_t> UpdateGlobal2DPath();
@@ -92,7 +92,7 @@ class SimPathRepair
 	GeoMarkGraph geomark_graph_;
 
 	SimMapInfo map_info_;
-	double sensor_range_;
+	int32_t sensor_range_;
 
 	std::shared_ptr<SquareGrid> sgrid_;
 	std::shared_ptr<CubeArray> carray_base_;

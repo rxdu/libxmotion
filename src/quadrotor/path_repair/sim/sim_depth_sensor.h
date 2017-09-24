@@ -20,21 +20,41 @@
 namespace librav
 {
 
+struct CartesianCoordinate
+{
+    double x;
+    double y;
+    double z;
+};
+
+struct SphericalCoordinate
+{
+    double r;
+    double theta;
+    double phi;
+};
+
 class SimDepthSensor
 {
 public:
     SimDepthSensor();
 
+    void SetRange(int32_t rng) { range_ = rng; };
     void SetWorkspace(const librav_lcm_msgs::Map_t *msg, double side_size);
     std::shared_ptr<CubeArray> GetSensedArea(int32_t x, int32_t y, int32_t z, double yaw);
 
 private:
+    int32_t range_;
+    double fov_;
+    
     int32_t ws_x_;
     int32_t ws_y_;
     int32_t ws_z_;
     double unit_size_;
 
     std::shared_ptr<CubeArray> workspace_;
+
+    SphericalCoordinate CartesianToSpherical(CartesianCoordinate& cart);
 };
 
 }

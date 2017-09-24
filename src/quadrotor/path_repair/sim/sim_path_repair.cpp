@@ -67,6 +67,13 @@ SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm, std::shared_ptr<SimD
 	lcm_->subscribe("envsim/map", &SimPathRepair::LcmSimMapHandler, this);
 }
 
+void SimPathRepair::SetSensorRange(int32_t rng) 
+{ 
+	sensor_range_ = rng; 
+	if(depth_sensor_ != nullptr)
+		depth_sensor_->SetRange(sensor_range_);
+}
+
 bool SimPathRepair::IsConfigComplete()
 {
 	if (pstart_set_ && pgoal_set_ && hstart_set_ && hgoal_set_)
