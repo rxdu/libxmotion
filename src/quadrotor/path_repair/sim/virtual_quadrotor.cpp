@@ -160,7 +160,10 @@ void VirtualQuadrotor::Step()
         MoveForward();
 
         // update planner
-        active_path_ = qplanner_->UpdatePath(current_pos_, current_height_, current_heading_);
+        auto new_path = qplanner_->UpdatePath(current_pos_, current_height_, current_heading_);
+
+        if(!new_path.empty())
+            active_path_ = new_path;
 
         PublishState();
 

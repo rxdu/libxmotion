@@ -311,8 +311,8 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 	std::cout << "heading: " << heading * 180.0 / M_PI << std::endl;
 	
 	std::cout << "max rewards: " << nav_field_->max_rewards_ << " , dist weight: " << sc_evaluator_->dist_weight_ << std::endl;
-	Path_t<CubeCell &> path = AStar::Search(cubegraph, start_id, goal_id);
-	auto path2 = AStar::BiasedSearchWithShortcut(*cubegraph, start_id, goal_id, nav_field_->max_rewards_, sc_evaluator_->dist_weight_, map_info_.side_size);
+	//Path_t<CubeCell &> path = AStar::Search(cubegraph, start_id, goal_id);
+	auto path = AStar::BiasedSearchWithShortcut(*cubegraph, start_id, goal_id, nav_field_->max_rewards_, sc_evaluator_->dist_weight_, map_info_.side_size);
 
 	if (path.empty())
 		std::cout << "no path found" << std::endl;
