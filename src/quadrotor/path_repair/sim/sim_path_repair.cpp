@@ -25,7 +25,7 @@
 
 using namespace librav;
 
-#define MINIMAL_EXTRAS
+//#define MINIMAL_EXTRAS
 
 SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 															  map_received_(false),
@@ -291,15 +291,15 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 		}
 
 	// add 3d info into cube array
-	auto sensor_carray = depth_sensor_->GetSensedArea(pos.x, pos.y, height, heading);
-	for (int k = 0; k < map_info_.size_z; k++)
-		for (int j = 0; j < map_info_.size_y; j++)
-			for (int i = 0; i < map_info_.size_x; i++)
-			{
-				auto id = carray->GetIDFromIndex(i, j, k);
-				if (sensor_carray->cubes_[id].occu_ == OccupancyType::FREE)
-					carray->cubes_[id].occu_ = OccupancyType::FREE;
-			}
+	// auto sensor_carray = depth_sensor_->GetSensedArea(pos.x, pos.y, height, heading);
+	// for (int k = 0; k < map_info_.size_z; k++)
+	// 	for (int j = 0; j < map_info_.size_y; j++)
+	// 		for (int i = 0; i < map_info_.size_x; i++)
+	// 		{
+	// 			auto id = carray->GetIDFromIndex(i, j, k);
+	// 			if (sensor_carray->cubes_[id].occu_ == OccupancyType::FREE)
+	// 				carray->cubes_[id].occu_ = OccupancyType::FREE;
+	// 		}
 
 	// create a graph from the cube array
 	std::shared_ptr<Graph_t<CubeCell &>> cubegraph = GraphBuilder::BuildFromCubeArray(carray);
@@ -318,10 +318,9 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 	//Path_t<CubeCell &> path = AStar::Search(cubegraph, start_id, goal_id);
 	auto path = AStar::BiasedSearchWithShortcut(*cubegraph, start_id, goal_id, nav_field_->max_rewards_, sc_evaluator_->dist_weight_, map_info_.side_size);
 
-#ifndef MINIMAL_EXTRAS
 	if (path.empty())
 		std::cout << "no path found" << std::endl;
-#endif
+
 	SimPath path_result;
 
 	if (!path.empty())
