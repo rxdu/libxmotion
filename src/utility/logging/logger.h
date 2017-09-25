@@ -17,6 +17,8 @@
 
 #include "spdlog/spdlog.h"
 
+#define ENABLE_LOGGING
+
 namespace librav {
 
 namespace LoggerHelper{

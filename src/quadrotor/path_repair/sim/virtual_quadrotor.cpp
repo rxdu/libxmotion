@@ -16,7 +16,11 @@ VirtualQuadrotor::VirtualQuadrotor(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
                                                                     dsensor_(std::make_shared<SimDepthSensor>()),
                                                                     qplanner_(std::make_shared<SimPathRepair>(lcm, dsensor_)),
                                                                     current_heading_(0),
-                                                                    traveled_distance_(0)
+                                                                    traveled_distance_(0),
+                                                                    init_path_found_(false),
+                                                                    init_repair_path_cost_(0),
+                                                                    sim_index_(0),
+                                                                    logger_(new CsvLogger("prsim", "/home/rdu/Workspace/librav/data/log/quad/prsim"))
 {
 }
 
@@ -62,6 +66,27 @@ void VirtualQuadrotor::Load_10by10_Config()
     current_height_ = init_height_;
 }
 
+void VirtualQuadrotor::Load_20by30_Config()
+{
+    // set sim map size
+    qplanner_->SetMapSize(20, 30, 5);
+
+    // set initial and goal pose
+    init_pos_ = Position2D(0, 0);
+    init_height_ = 2;
+
+    qplanner_->SetStartPosition(init_pos_);
+    qplanner_->SetStartHeight(init_height_);
+
+    qplanner_->SetGoalPosition(Position2D(19, 29));
+    qplanner_->SetGoalHeight(2);
+
+    qplanner_->SetSensorRange(10);
+
+    current_pos_ = init_pos_;
+    current_height_ = init_height_;
+}
+
 void VirtualQuadrotor::Load_30by50_Config()
 {
     // set sim map size
@@ -77,7 +102,28 @@ void VirtualQuadrotor::Load_30by50_Config()
     qplanner_->SetGoalPosition(Position2D(29, 49));
     qplanner_->SetGoalHeight(3);
 
-    qplanner_->SetSensorRange(5);
+    qplanner_->SetSensorRange(10);
+
+    current_pos_ = init_pos_;
+    current_height_ = init_height_;
+}
+
+void VirtualQuadrotor::Load_50by50_Config()
+{
+    // set sim map size
+    qplanner_->SetMapSize(50, 50, 5);
+
+    // set initial and goal pose
+    init_pos_ = Position2D(0, 0);
+    init_height_ = 3;
+
+    qplanner_->SetStartPosition(init_pos_);
+    qplanner_->SetStartHeight(init_height_);
+
+    qplanner_->SetGoalPosition(Position2D(49, 49));
+    qplanner_->SetGoalHeight(3);
+
+    qplanner_->SetSensorRange(10);
 
     current_pos_ = init_pos_;
     current_height_ = init_height_;
@@ -88,40 +134,79 @@ bool VirtualQuadrotor::IsReady()
     return qplanner_->IsConfigComplete();
 }
 
+double VirtualQuadrotor::CalcWaypointDistance(Position2D pos1, Position2D pos2)
+{
+    double x1, x2, y1, y2;
+
+    x1 = pos1.x;
+    y1 = pos1.y;
+
+    x2 = pos2.x;
+    y2 = pos2.y;
+
+    // static_cast: can get wrong result to use "unsigned long" type for deduction
+    long x_error = static_cast<long>(x1) - static_cast<long>(x2);
+    long y_error = static_cast<long>(y1) - static_cast<long>(y2);
+
+    double cost = std::sqrt(x_error * x_error + y_error * y_error);
+
+    return cost;
+}
+
 void VirtualQuadrotor::MoveForward()
 {
-    // active_path_ should always start from current pose
     // if active_path_ is not empty, then set the next waypoint to be current pose
     if (active_path_.size() >= 2)
     {
-        // calculate travel distance after this move 
-        double x1, x2, y1, y2;
+        // find next waypoint
+        Position2D next_pt;
+        int32_t next_idx = 0;
 
-        x1 = current_pos_.x;
-        y1 = current_pos_.y;
+        for (int i = 0; i < active_path_.size(); i++)
+        {
+            if (active_path_[i].x != current_pos_.x ||
+                active_path_[i].y != current_pos_.y ||
+                active_path_[i].z != current_height_)
+            {
+                next_idx = i;
+                break;
+            }
+        }
 
-        x2 = active_path_[1].x;
-        y2 = active_path_[1].y;
+        // // calculate travel distance after this move
+        // double x1, x2, y1, y2;
 
-        // static_cast: can get wrong result to use "unsigned long" type for deduction
-        long x_error = static_cast<long>(x1) - static_cast<long>(x2);
-        long y_error = static_cast<long>(y1) - static_cast<long>(y2);
+        // x1 = current_pos_.x;
+        // y1 = current_pos_.y;
 
-        double cost = std::sqrt(x_error*x_error + y_error*y_error);
-        
-        traveled_distance_ += cost;
+        // x2 = active_path_[next_idx].x;
+        // y2 = active_path_[next_idx].y;
+
+        // // static_cast: can get wrong result to use "unsigned long" type for deduction
+        // long x_error = static_cast<long>(x1) - static_cast<long>(x2);
+        // long y_error = static_cast<long>(y1) - static_cast<long>(y2);
+
+        // double cost = std::sqrt(x_error * x_error + y_error * y_error);
+
+        // traveled_distance_ += cost;
+
+        Position2D pos1(current_pos_.x, current_pos_.y);
+        Position2D pos2(active_path_[next_idx].x, active_path_[next_idx].y);
+        traveled_distance_ += CalcWaypointDistance(pos1, pos2);
 
         // update current pose
-        current_pos_.x = active_path_[1].x;
-        current_pos_.y = active_path_[1].y;
-        current_height_ = active_path_[1].z;
-        current_heading_ = active_path_[1].yaw;
+        current_pos_.x = active_path_[next_idx].x;
+        current_pos_.y = active_path_[next_idx].y;
+        current_height_ = active_path_[next_idx].z;
+        current_heading_ = active_path_[next_idx].yaw;
+
+        active_path_.erase(active_path_.begin());
     }
 }
 
 void VirtualQuadrotor::PublishState()
 {
-    std::cout << "** traveled distance: " << traveled_distance_ << std::endl;
+    //std::cout << "** traveled distance: " << traveled_distance_ << std::endl;
 
     srcl_lcm_msgs::QuadrotorTransform trans_msg;
     srcl_lcm_msgs::Pose_t trans_base2world;
@@ -162,23 +247,46 @@ void VirtualQuadrotor::Step()
         // update planner
         auto new_path = qplanner_->UpdatePath(current_pos_, current_height_, current_heading_);
 
-        if(!new_path.empty())
+        if (!new_path.empty())
+        {
             active_path_ = new_path;
+
+            if (!init_path_found_)
+            {
+                init_path_found_ = true;
+
+                for (auto it = active_path_.begin(); it != active_path_.end() - 1; it++)
+                {
+                    Position2D pos1((*it).x, (*it).y);
+                    Position2D pos2((*(it + 1)).x, (*(it + 1)).y);
+                    init_repair_path_cost_ += CalcWaypointDistance(pos1, pos2);
+                }
+            }
+        }
 
         PublishState();
 
         if (active_path_.size() == 1)
         {
             // calculate shortcut distance
-            std::cout << "** path shortened by :" << qplanner_->GetGlobal2DPathCost() - traveled_distance_ << std::endl;
+            double shortest_path = qplanner_->GetGlobal2DPathCost();
+            double shortend_dist = shortest_path - traveled_distance_;
+            std::cout << "** shorted path :" << shortest_path << " , init repair path: " << init_repair_path_cost_ << std::endl;
+            std::cout << "** path shortened by :" << shortend_dist << std::endl;
+
+            // log data for analysis
+            logger_->LogData(sim_index_, shortest_path, init_repair_path_cost_, shortend_dist);
 
             // reset quadrotor state
             current_pos_ = init_pos_;
             current_height_ = init_height_;
             traveled_distance_ = 0.0;
+            init_path_found_ = false;
+            init_repair_path_cost_ = 0.0;
 
             // reset planner
             qplanner_->ResetPlanner();
+            ++sim_index_;
         }
     }
     else

@@ -40,48 +40,13 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/
 $ sudo apt-get install libboost-all-dev
 ```
 
-* Qt5 (Optional)
+* Add environment variables
 ```
-$ sudo apt-get install qt5-default
+# librav
+export LIBRAV_HOME=$HOME/Workspace/librav
+export PYTHONPATH=$LIBRAV_HOME/src/lcmtypes/python:$LIBRAV_HOME/src/python/envsim:$PYTHONPATH
+export CLASSPATH=$LIBRAV_HOME/build/lcmtypes_librav.jar:$CLASSPATH
 ```
-
-* VTK >= 7.0 (Optional)
-
-Gui module will not be built if VTK is not installed.
-
-Install dependencies first.
-
-```
-$ sudo apt-get install qttools5-dev
-```
-Then use cmake-gui to configure the VTK source with Qt5 support.
-
-Step 1:
-
-Click "Configure", and select the default Unix make tools
-
-- Select "Group_Qt"
-- Choose "OpenGL" in VTK_RENDERING_BACKEND
-- Select USE_CXX11_FEATURES
-
-Click "Configure" again.
-
-Step 2:
-
-- Choose 5 in VTK_QT_VERSION
-
-Click "Configure" one more time. You should see no red highlighted items and no error information in the output of the configuration.
-
-Setp 3:
-
-Click "Generate" so that cmake will generate a makefile project for you.
-
-```
-$ make
-$ sudo make install
-```
-
-For more information, refer to this official [wiki](http://www.vtk.org/Wiki/VTK/Configure_and_Build).
 
 ## 3. Use Eclipse to build project
 

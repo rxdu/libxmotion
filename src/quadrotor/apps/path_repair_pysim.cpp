@@ -25,7 +25,7 @@
 
 using namespace librav;
 
-#define LOOP_PERIOD 1500	// ms
+#define LOOP_PERIOD 500	// ms
 
 int main(int argc, char *argv[])
 {
@@ -40,8 +40,9 @@ int main(int argc, char *argv[])
 	// init quadrotor planner
 	VirtualQuadrotor vquad(lcm);
 	// vquad.Load_5by5_Config();
-	vquad.Load_10by10_Config();
-	// vquad.Load_30by50_Config();	
+	//vquad.Load_10by10_Config();
+	vquad.Load_30by50_Config();	
+	vquad.Load_50by50_Config();
 
 	// should not start simulation if configuration is not complete
 	if (!vquad.IsReady())
@@ -61,7 +62,8 @@ int main(int argc, char *argv[])
 		lcm->handleTimeout(0);
 	
 		int64_t duration = LOOP_PERIOD - static_cast<int64_t>(timer.mtoc());
+		
 		if(duration > 0)
-		std::this_thread::sleep_for(std::chrono::milliseconds(duration));
+			std::this_thread::sleep_for(std::chrono::milliseconds(duration));
 	}
 }

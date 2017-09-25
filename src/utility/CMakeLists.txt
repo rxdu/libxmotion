@@ -29,9 +29,6 @@ find_package(Threads REQUIRED)
 
 # Add libraries
 set(UTILITY_LIB_SRC
-  #  poly_helper.cpp
-  #  poly_curve.cpp
-  #  quad_flattraj.cpp
 	logging/logger.cpp
 )
 add_library(utility STATIC ${UTILITY_LIB_SRC})

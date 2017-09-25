@@ -25,6 +25,8 @@
 
 using namespace librav;
 
+#define MINIMAL_EXTRAS
+
 SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 															  map_received_(false),
 															  update_global_plan_(false),
@@ -301,22 +303,25 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 
 	// create a graph from the cube array
 	std::shared_ptr<Graph_t<CubeCell &>> cubegraph = GraphBuilder::BuildFromCubeArray(carray);
-
+#ifndef MINIMAL_EXTRAS
 	std::cout << "cube array size: " << carray->cubes_.size() << std::endl;
 	std::cout << "cube graph size: " << cubegraph->GetGraphVertices().size() << " , edge num: " << cubegraph->GetGraphEdges().size() << std::endl;
-
+#endif
 	auto start_id = carray->GetIDFromIndex(pos.x, pos.y, height);
 	auto goal_id = carray->GetIDFromIndex(goal_pos_.x, goal_pos_.y, goal_height_);
+#ifndef MINIMAL_EXTRAS
 	std::cout << "start id: " << start_id << " , goal id: " << goal_id << std::endl;
 	std::cout << "heading: " << heading * 180.0 / M_PI << std::endl;
-	
+
 	std::cout << "max rewards: " << nav_field_->max_rewards_ << " , dist weight: " << sc_evaluator_->dist_weight_ << std::endl;
+#endif
 	//Path_t<CubeCell &> path = AStar::Search(cubegraph, start_id, goal_id);
 	auto path = AStar::BiasedSearchWithShortcut(*cubegraph, start_id, goal_id, nav_field_->max_rewards_, sc_evaluator_->dist_weight_, map_info_.side_size);
 
+#ifndef MINIMAL_EXTRAS
 	if (path.empty())
 		std::cout << "no path found" << std::endl;
-
+#endif
 	SimPath path_result;
 
 	if (!path.empty())
@@ -361,8 +366,10 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 		lcm_->publish("quad_planner/repaired_path", &path_msg);
 	}
 
+#ifndef MINIMAL_EXTRAS
 	SendCubeArrayGraphToVis(cubegraph);
 	Send3DSearchPathToVis(path);
+#endif
 
 	return path_result;
 }
