@@ -25,7 +25,7 @@
 
 using namespace librav;
 
-#define LOOP_PERIOD 500	// ms
+#define LOOP_PERIOD 2000	// ms
 
 int main(int argc, char *argv[])
 {

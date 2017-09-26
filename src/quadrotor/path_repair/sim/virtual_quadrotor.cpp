@@ -69,7 +69,7 @@ void VirtualQuadrotor::Load_10by10_Config()
 void VirtualQuadrotor::Load_15by20_Config()
 {
     // set sim map size
-    qplanner_->SetMapSize(18, 20, 5);
+    qplanner_->SetMapSize(15, 20, 5);
 
     // set initial and goal pose
     init_pos_ = Position2D(0, 0);
@@ -78,7 +78,7 @@ void VirtualQuadrotor::Load_15by20_Config()
     qplanner_->SetStartPosition(init_pos_);
     qplanner_->SetStartHeight(init_height_);
 
-    qplanner_->SetGoalPosition(Position2D(17, 19));
+    qplanner_->SetGoalPosition(Position2D(14, 19));
     qplanner_->SetGoalHeight(2);
 
     qplanner_->SetSensorRange(8);
@@ -296,7 +296,8 @@ void VirtualQuadrotor::Step()
             std::cout << "** path shortened by :" << shortend_dist << std::endl;
 
             // log data for analysis
-            logger_->LogData(sim_index_, shortest_path, init_repair_path_cost_, shortend_dist);
+            if(init_repair_path_cost_ != 0)
+                logger_->LogData(sim_index_, shortest_path, init_repair_path_cost_, shortend_dist);
 
             // reset quadrotor state
             current_pos_ = init_pos_;

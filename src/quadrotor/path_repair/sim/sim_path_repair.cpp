@@ -25,7 +25,7 @@
 
 using namespace librav;
 
-//#define MINIMAL_EXTRAS
+// #define MINIMAL_EXTRAS
 
 SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 															  map_received_(false),
@@ -130,6 +130,8 @@ std::vector<uint64_t> SimPathRepair::UpdateGlobal2DPath()
 	auto start_id = sgrid_->GetIDFromIndex(start_pos_.y, start_pos_.x);
 	auto goal_id = sgrid_->GetIDFromIndex(goal_pos_.y, goal_pos_.x);
 
+	std::cout << "sgrid size: " << sgrid_->row_size_ << " , " << sgrid_->col_size_ << std::endl;
+
 	std::cout << "----> start: " << start_pos_.x << " , " << start_pos_.y << ", id: " << start_id << std::endl;
 	std::cout << "----> goal: " << goal_pos_.x << " , " << goal_pos_.y << ", id: " << goal_id << std::endl;
 	//std::cout << "col: " << sgrid_->col_size_ << " , row: " << sgrid_->row_size_ << std::endl;
@@ -179,7 +181,7 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 
 	// create square grid from map msg
 	double side_size = 1.0;
-	sgrid_ = MapUtils::CreateSquareGrid(msg->size_x, msg->size_y, side_size);
+	sgrid_ = MapUtils::CreateSquareGrid(msg->size_y, msg->size_x, side_size);
 	carray_base_ = CubeArrayBuilder::BuildSolidCubeArray(msg->size_x, msg->size_y, msg->size_z, side_size);
 	for (const auto &cell : msg->cells)
 	{
@@ -281,7 +283,6 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 	std::shared_ptr<CubeArray> carray = CubeArrayBuilder::BuildSolidCubeArray(map_info_.size_x, map_info_.size_y, map_info_.size_z, map_info_.side_size);
 
 	// add 2d map info into cube array
-	// for (int k = 0; k < map_info_.size_z; k++)
 	for (int j = 0; j < map_info_.size_y; j++)
 		for (int i = 0; i < map_info_.size_x; i++)
 		{
@@ -317,9 +318,6 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 #endif
 	//Path_t<CubeCell &> path = AStar::Search(cubegraph, start_id, goal_id);
 	auto path = AStar::BiasedSearchWithShortcut(*cubegraph, start_id, goal_id, nav_field_->max_rewards_, sc_evaluator_->dist_weight_, map_info_.side_size);
-
-	if (path.empty())
-		std::cout << "no path found" << std::endl;
 
 	SimPath path_result;
 
@@ -363,12 +361,19 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 			path_result.push_back(swp);
 		}
 		lcm_->publish("quad_planner/repaired_path", &path_msg);
-	}
 
 #ifndef MINIMAL_EXTRAS
-	SendCubeArrayGraphToVis(cubegraph);
-	Send3DSearchPathToVis(path);
+		SendCubeArrayGraphToVis(cubegraph);
+		Send3DSearchPathToVis(path);
 #endif
+	}
+	else
+	{
+		// SendCubeArrayGraphToVis(cubegraph);
+		// Send3DSearchPathToVis(path);
+
+		std::cout << "no path found" << std::endl;
+	}
 
 	return path_result;
 }
