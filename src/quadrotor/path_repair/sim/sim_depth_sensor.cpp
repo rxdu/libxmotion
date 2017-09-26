@@ -25,8 +25,8 @@ SimDepthSensor::SimDepthSensor() : range_(5),
 void SimDepthSensor::SetWorkspace(std::shared_ptr<CubeArray> ws, double side_size)
 {
     // save basic parameters
-    ws_x_ = ws->row_size_;
-    ws_y_ = ws->col_size_;
+    ws_x_ = ws->col_size_;
+    ws_y_ = ws->row_size_;
     ws_z_ = ws->hei_size_;
 
     unit_size_ = side_size;

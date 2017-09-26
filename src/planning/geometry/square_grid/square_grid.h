@@ -17,9 +17,22 @@
 
 namespace librav{
 
+/*
+ * Coordinate System:
+ *		y
+ *	^	^
+ *	^	|
+ *		|
+ * row	|
+ *		|
+ *		|
+ *	v	|
+ *  v	origin ------------------> x
+ *		<<		   column       >>
+ */
 class SquareCell: public BDSBase<SquareCell>{
 public:
-	SquareCell(uint64_t id, uint32_t row, uint32_t col, BoundingBox bbox, OccupancyType occupancy):
+	SquareCell(uint64_t id, uint32_t col, uint32_t row, BoundingBox bbox, OccupancyType occupancy):
 		BDSBase<SquareCell>(id),
 		occu_(occupancy),
 		geo_mark_id_(0)
@@ -62,8 +75,8 @@ public:
 
 class SquareGrid{
 public:
-	SquareGrid(uint32_t row_num, uint32_t col_num, uint32_t cell_size);
-	SquareGrid(uint32_t row_num, uint32_t col_num, uint32_t cell_size, int64_t img_offset_x, int64_t img_offset_y);
+	SquareGrid(uint32_t col_num, uint32_t row_num, uint32_t cell_size);
+	SquareGrid(uint32_t col_num, uint32_t row_num, uint32_t cell_size, int64_t img_offset_x, int64_t img_offset_y);
 	~SquareGrid();
 
 	typedef SquareCell node_type;
@@ -85,9 +98,9 @@ private:
 	BoundingBox CalcBoundingBox(uint64_t id, int64_t img_offset_x, int64_t img_offset_y);
 
 public:
-	void SetCellOccupancy(uint32_t row, uint32_t col, OccupancyType occ);
+	void SetCellOccupancy(uint32_t col, uint32_t row, OccupancyType occ);
 	void SetCellOccupancy(uint64_t id, OccupancyType occ);
-	uint64_t GetIDFromIndex(uint32_t row, uint32_t col);
+	uint64_t GetIDFromIndex(uint32_t col, uint32_t row);
 	uint64_t GetIDFromPosition(uint32_t x, uint32_t y);
 	SquareCell* GetCellFromID(uint64_t id);
 	std::vector<SquareCell*> GetNeighbours(uint64_t id, bool allow_diag);

@@ -10,27 +10,27 @@
 
 using namespace librav;
 
-SquareGrid::SquareGrid(uint32_t row_num, uint32_t col_num, uint32_t cell_size):
+SquareGrid::SquareGrid(uint32_t col_num, uint32_t row_num, uint32_t cell_size):
 		row_size_(row_num), col_size_(col_num), cell_size_(cell_size),
 		img_offset_x_(0), img_offset_y_(0)
 {
-	for(uint32_t i = 0; i < row_num; i++)
-		for(uint32_t j = 0; j < col_num; j++)
+	for(uint32_t j = 0; j < row_num; j++)
+		for(uint32_t i = 0; i < col_num; i++)
 		{
-			uint64_t new_id = i * col_num + j;
+			uint64_t new_id = j * col_num + i;
 			SquareCell* new_cell = new SquareCell(new_id, i, j, CalcBoundingBox(new_id), OccupancyType::FREE);
 			cells_[new_id] = new_cell;
 		}
 }
 
-SquareGrid::SquareGrid(uint32_t row_num, uint32_t col_num, uint32_t cell_size, int64_t img_offset_x, int64_t img_offset_y):
+SquareGrid::SquareGrid(uint32_t col_num, uint32_t row_num, uint32_t cell_size, int64_t img_offset_x, int64_t img_offset_y):
 		row_size_(row_num), col_size_(col_num), cell_size_(cell_size),
 		img_offset_x_(img_offset_x), img_offset_y_(img_offset_y)
 {
-	for(uint32_t i = 0; i < row_num; i++)
-		for(uint32_t j = 0; j < col_num; j++)
+	for(uint32_t j = 0; j < row_num; j++)
+		for(uint32_t i = 0; i < col_num; i++)
 		{
-			uint64_t new_id = i * col_num + j;
+			uint64_t new_id = j * col_num + i;
 			SquareCell* new_cell = new SquareCell(new_id, i, j, CalcBoundingBox(new_id, img_offset_x_, img_offset_y_), OccupancyType::FREE);
 			cells_[new_id] = new_cell;
 		}
@@ -41,16 +41,16 @@ SquareGrid::~SquareGrid(){
 		delete itm->second;
 }
 
-void SquareGrid::SetCellOccupancy(uint32_t row, uint32_t col, OccupancyType occ)
+void SquareGrid::SetCellOccupancy(uint32_t col, uint32_t row, OccupancyType occ)
 {
-	SetCellOccupancy(row+col*col_size_, occ);
+	SetCellOccupancy(col+row*col_size_, occ);
 }
 void SquareGrid::SetCellOccupancy(uint64_t id, OccupancyType occ)
 {
 	cells_[id]->occu_ = occ;
 }
 
-uint64_t SquareGrid::GetIDFromIndex(uint32_t row, uint32_t col)
+uint64_t SquareGrid::GetIDFromIndex(uint32_t col, uint32_t row)
 {
 	return row * col_size_ + col;
 }
@@ -62,7 +62,7 @@ uint64_t SquareGrid::GetIDFromPosition(uint32_t x, uint32_t y)
 	col = (x - img_offset_x_) / cell_size_;
 	row = (y - img_offset_y_) / cell_size_;
 
-	return GetIDFromIndex(row, col);
+	return GetIDFromIndex(col, row);
 }
 
 SquareCell* SquareGrid::GetCellFromID(uint64_t id)

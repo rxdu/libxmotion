@@ -16,6 +16,19 @@
 
 namespace librav{
 
+/*
+ * Coordinate System:
+ *		y
+ *	^	^
+ *	^	|
+ *		|
+ * row	|
+ *		|
+ *		|
+ *	v	|
+ *  v	z+ ---------------------> x
+ *		<<		   column       >>
+ */
 class CubeCell: public BDSBase<CubeCell>{
 public:
 	CubeCell():
@@ -66,7 +79,7 @@ public:
 class CubeArray {
 public:
 	// row, col, hei : x, y , z
-	CubeArray(int32_t row_num, int32_t col_num, int32_t height_num, double cube_size);
+	CubeArray(int32_t col_num, int32_t row_num, int32_t height_num, double cube_size);
 	~CubeArray(){};
 
 public:
@@ -93,10 +106,10 @@ public:
 	std::vector<CubeCell> cubes_;
 
 public:
-	void SetOriginOffset(int32_t row_offset, int32_t col_offset, int32_t hei_offset);
-	uint64_t GetIDFromIndex(uint32_t row, uint32_t col, uint32_t hei);
+	void SetOriginOffset(int32_t col_offset, int32_t row_offset, int32_t hei_offset);
+	uint64_t GetIDFromIndex(uint32_t col, uint32_t row, uint32_t hei);
 	uint64_t GetIDFromPosition(double x, double y, double z);
-	void SetCubeOccupancy(uint32_t row, uint32_t col, uint32_t hei, OccupancyType oc_type);
+	void SetCubeOccupancy(uint32_t col, uint32_t row, uint32_t hei, OccupancyType oc_type);
 	void UpdateCubeOccupancy(double x, double y, double z, OccupancyType oc_type);
 	std::vector<uint64_t> GetNeighbours(uint64_t id);
 	std::vector<uint64_t> GetNeighbours(uint64_t id, bool allow_diag);

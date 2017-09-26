@@ -19,6 +19,7 @@ class VirtualQuadrotor
 public:
   VirtualQuadrotor(std::shared_ptr<lcm::LCM> lcm);
 
+  void SetConfig(int32_t map_x, int32_t map_y, int32_t map_z, int32_t height, int32_t sensor_rng);
   void Load_5by5_Config();
   void Load_10by10_Config();
   void Load_15by20_Config();

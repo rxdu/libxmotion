@@ -24,6 +24,27 @@ VirtualQuadrotor::VirtualQuadrotor(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 {
 }
 
+void VirtualQuadrotor::SetConfig(int32_t map_x, int32_t map_y, int32_t map_z, int32_t height, int32_t sensor_rng)
+{
+    // set sim map size
+    qplanner_->SetMapSize(map_x, map_y, map_z);
+
+    // set initial and goal pose
+    init_pos_ = Position2D(0, 0);
+    init_height_ = height;
+
+    qplanner_->SetStartPosition(init_pos_);
+    qplanner_->SetStartHeight(init_height_);
+
+    qplanner_->SetGoalPosition(Position2D(map_x-1, map_y-1));
+    qplanner_->SetGoalHeight(height);
+
+    qplanner_->SetSensorRange(sensor_rng);
+
+    current_pos_ = init_pos_;
+    current_height_ = init_height_;
+}
+
 void VirtualQuadrotor::Load_5by5_Config()
 {
     // set sim map size
@@ -296,8 +317,7 @@ void VirtualQuadrotor::Step()
             std::cout << "** path shortened by :" << shortend_dist << std::endl;
 
             // log data for analysis
-            if(init_repair_path_cost_ != 0)
-                logger_->LogData(sim_index_, shortest_path, init_repair_path_cost_, shortend_dist);
+            logger_->LogData(sim_index_, shortest_path, init_repair_path_cost_, shortend_dist, shortend_dist/shortest_path);
 
             // reset quadrotor state
             current_pos_ = init_pos_;

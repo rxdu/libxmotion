@@ -25,7 +25,7 @@
 
 using namespace librav;
 
-// #define MINIMAL_EXTRAS
+#define MINIMAL_EXTRAS
 
 SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 															  map_received_(false),
@@ -127,8 +127,8 @@ std::vector<uint64_t> SimPathRepair::UpdateGlobal2DPath()
 {
 	std::vector<uint64_t> waypoints;
 
-	auto start_id = sgrid_->GetIDFromIndex(start_pos_.y, start_pos_.x);
-	auto goal_id = sgrid_->GetIDFromIndex(goal_pos_.y, goal_pos_.x);
+	auto start_id = sgrid_->GetIDFromIndex(start_pos_.x, start_pos_.y);
+	auto goal_id = sgrid_->GetIDFromIndex(goal_pos_.x, goal_pos_.y);
 
 	std::cout << "sgrid size: " << sgrid_->row_size_ << " , " << sgrid_->col_size_ << std::endl;
 
@@ -181,13 +181,13 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 
 	// create square grid from map msg
 	double side_size = 1.0;
-	sgrid_ = MapUtils::CreateSquareGrid(msg->size_y, msg->size_x, side_size);
+	sgrid_ = MapUtils::CreateSquareGrid(msg->size_x, msg->size_y, side_size);
 	carray_base_ = CubeArrayBuilder::BuildSolidCubeArray(msg->size_x, msg->size_y, msg->size_z, side_size);
 	for (const auto &cell : msg->cells)
 	{
 		if (cell.occupied)
 		{
-			sgrid_->SetCellOccupancy(cell.pos_y, cell.pos_x, OccupancyType::OCCUPIED);
+			sgrid_->SetCellOccupancy(cell.pos_x, cell.pos_y, OccupancyType::OCCUPIED);
 		}
 		else
 		{
@@ -211,7 +211,7 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 		nav_field_ = std::make_shared<NavField<SquareCell *>>(sgrid_planner_.graph_);
 		sc_evaluator_ = std::make_shared<ShortcutEval>(sgrid_, nav_field_);
 
-		auto goal_id = sgrid_->GetIDFromIndex(goal_pos_.y, goal_pos_.x);
+		auto goal_id = sgrid_->GetIDFromIndex(goal_pos_.x, goal_pos_.y);
 		nav_field_->UpdateNavField(goal_id);
 
 		sc_evaluator_->EvaluateGridShortcutPotential(sensor_range_);
@@ -292,15 +292,15 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 		}
 
 	// add 3d info into cube array
-	// auto sensor_carray = depth_sensor_->GetSensedArea(pos.x, pos.y, height, heading);
-	// for (int k = 0; k < map_info_.size_z; k++)
-	// 	for (int j = 0; j < map_info_.size_y; j++)
-	// 		for (int i = 0; i < map_info_.size_x; i++)
-	// 		{
-	// 			auto id = carray->GetIDFromIndex(i, j, k);
-	// 			if (sensor_carray->cubes_[id].occu_ == OccupancyType::FREE)
-	// 				carray->cubes_[id].occu_ = OccupancyType::FREE;
-	// 		}
+	auto sensor_carray = depth_sensor_->GetSensedArea(pos.x, pos.y, height, heading);
+	for (int k = 0; k < map_info_.size_z; k++)
+		for (int j = 0; j < map_info_.size_y; j++)
+			for (int i = 0; i < map_info_.size_x; i++)
+			{
+				auto id = carray->GetIDFromIndex(i, j, k);
+				if (sensor_carray->cubes_[id].occu_ == OccupancyType::FREE)
+					carray->cubes_[id].occu_ = OccupancyType::FREE;
+			}
 
 	// create a graph from the cube array
 	std::shared_ptr<Graph_t<CubeCell &>> cubegraph = GraphBuilder::BuildFromCubeArray(carray);
@@ -369,9 +369,6 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 	}
 	else
 	{
-		// SendCubeArrayGraphToVis(cubegraph);
-		// Send3DSearchPathToVis(path);
-
 		std::cout << "no path found" << std::endl;
 	}
 

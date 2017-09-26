@@ -28,7 +28,7 @@ int main()
     auto ws = CubeArrayBuilder::BuildEmptyCubeArray(20, 20, 20, 1.0);
     sensor.SetWorkspace(ws, 1.0);
 
-    auto area = sensor.GetSensedArea(10, 10, 10, -M_PI/4);
+    auto area = sensor.GetSensedArea(10, 10, 10, M_PI/4);
 
     ////////////////////////////////////////////////////////////////
     // send data to LCM network for visualization
