@@ -172,6 +172,27 @@ void VirtualQuadrotor::Load_50by50_Config()
     current_height_ = init_height_;
 }
 
+void VirtualQuadrotor::Load_75by100_Config()
+{
+    // set sim map size
+    qplanner_->SetMapSize(75, 100, 5);
+
+    // set initial and goal pose
+    init_pos_ = Position2D(0, 0);
+    init_height_ = 3;
+
+    qplanner_->SetStartPosition(init_pos_);
+    qplanner_->SetStartHeight(init_height_);
+
+    qplanner_->SetGoalPosition(Position2D(74, 99));
+    qplanner_->SetGoalHeight(3);
+
+    qplanner_->SetSensorRange(12);
+
+    current_pos_ = init_pos_;
+    current_height_ = init_height_;
+}
+
 bool VirtualQuadrotor::IsReady()
 {
     return qplanner_->IsConfigComplete();

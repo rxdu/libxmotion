@@ -33,7 +33,7 @@ class EnvGen(object):
         self.max_height = 4
 
         # space obstacle configurations
-        self.obj_num = 200
+        self.obj_num = 500
         self.obs_perc = 0.45
 
     def set_env_size(self, x, y, z):
