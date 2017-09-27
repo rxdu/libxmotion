@@ -102,7 +102,8 @@ void VirtualQuadrotor::Load_15by20_Config()
     qplanner_->SetGoalPosition(Position2D(14, 19));
     qplanner_->SetGoalHeight(2);
 
-    qplanner_->SetSensorRange(8);
+    // qplanner_->SetSensorRange(8);
+    qplanner_->SetSensorRange(5);
 
     current_pos_ = init_pos_;
     current_height_ = init_height_;

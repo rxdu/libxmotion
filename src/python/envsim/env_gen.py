@@ -34,7 +34,7 @@ class EnvGen(object):
 
         # space obstacle configurations
         self.obj_num = 200
-        self.obs_perc = 0.65
+        self.obs_perc = 0.45
 
     def set_env_size(self, x, y, z):
         self.space_size = np.array([x, y, z])
