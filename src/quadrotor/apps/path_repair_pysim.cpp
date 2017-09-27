@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 	// vquad.Load_20by30_Config();
 	// vquad.Load_30by50_Config();	
 	//vquad.Load_50by50_Config();
-	vquad.Load_75by100_Config();
+	vquad.Load_45by60_Config();
 
 	// should not start simulation if configuration is not complete
 	if (!vquad.IsReady())
