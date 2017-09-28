@@ -26,7 +26,7 @@ public:
   void Load_20by30_Config();  
   void Load_30by50_Config();  
   void Load_50by50_Config();
-  void Load_75by100_Config();
+  void Load_45by60_Config();
 
 public:
   bool IsReady();
