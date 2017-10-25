@@ -23,7 +23,7 @@ docs/doxygen/latex
 pc/visualization/CMakeLists.txt.user
 
 # VS Code
-.vscode
+#.vscode
 
 # LCM
 src/lcmtypes/c

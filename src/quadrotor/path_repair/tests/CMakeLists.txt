@@ -43,5 +43,5 @@ target_link_libraries(test_sim_sensor pr_sim)
 #add_executable(test_navfield3 tests/test_navfield3.cpp)
 #target_link_libraries(test_navfield3 map vis path_repair ${OpenCV_LIBS})
 
-#add_executable(test_navfield4 tests/test_navfield4.cpp)
-#target_link_libraries(test_navfield4 map vis path_repair ${OpenCV_LIBS} ${LCM_LIBRARIES})
+add_executable(test_navfield4 test_navfield4.cpp)
+target_link_libraries(test_navfield4 map vis path_repair ${OpenCV_LIBS} ${LCM_LIBRARIES})
