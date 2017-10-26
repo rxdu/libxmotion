@@ -68,7 +68,7 @@ class Space(object):
             for vi in range(0, obj.size[0] * obj.size[1] * obj.size[2]):
                 idx = obj.occupied_voxels[vi]
                 if idx[0] >= 0 and idx[0] < self.size[0] and idx[1] >= 0 and idx[1] < self.size[1] and idx[2] >= 0 and idx[2] < self.size[2]:
-                    self.voxels[idx[0], idx[1], idx[2]].occupied = True
+                    self.voxels[long(idx[0]), long(idx[1]), long(idx[2])].occupied = True
             # regenerate 2d map
             self.__generate_2d_map()
             if self.map2d.get_occupied_percentage() > max_percentage:

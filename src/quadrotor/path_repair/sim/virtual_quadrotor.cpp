@@ -19,6 +19,7 @@ VirtualQuadrotor::VirtualQuadrotor(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
                                                                     traveled_distance_(0),
                                                                     init_path_found_(false),
                                                                     init_repair_path_cost_(0),
+                                                                    run_flag_(1),
                                                                     sim_index_(0),
                                                                     logger_(new CsvLogger("prsim", "/home/rdu/Workspace/librav/data/log/quad/prsim"))
 {
@@ -36,13 +37,18 @@ void VirtualQuadrotor::SetConfig(int32_t map_x, int32_t map_y, int32_t map_z, in
     qplanner_->SetStartPosition(init_pos_);
     qplanner_->SetStartHeight(init_height_);
 
-    qplanner_->SetGoalPosition(Position2D(map_x-1, map_y-1));
+    qplanner_->SetGoalPosition(Position2D(map_x - 1, map_y - 1));
     qplanner_->SetGoalHeight(height);
 
     qplanner_->SetSensorRange(sensor_rng);
 
     current_pos_ = init_pos_;
     current_height_ = init_height_;
+}
+
+void VirtualQuadrotor::SetSensorRange(int32_t rng)
+{
+    qplanner_->SetSensorRange(rng);
 }
 
 void VirtualQuadrotor::Load_5by5_Config()
@@ -217,7 +223,7 @@ double VirtualQuadrotor::CalcWaypointDistance(Position2D pos1, Position2D pos2)
     return cost;
 }
 
-void VirtualQuadrotor::MoveForward()
+void VirtualQuadrotor::MoveForward(bool enable_path_repair)
 {
     // if active_path_ is not empty, then set the next waypoint to be current pose
     if (active_path_.size() >= 2)
@@ -237,23 +243,6 @@ void VirtualQuadrotor::MoveForward()
             }
         }
 
-        // // calculate travel distance after this move
-        // double x1, x2, y1, y2;
-
-        // x1 = current_pos_.x;
-        // y1 = current_pos_.y;
-
-        // x2 = active_path_[next_idx].x;
-        // y2 = active_path_[next_idx].y;
-
-        // // static_cast: can get wrong result to use "unsigned long" type for deduction
-        // long x_error = static_cast<long>(x1) - static_cast<long>(x2);
-        // long y_error = static_cast<long>(y1) - static_cast<long>(y2);
-
-        // double cost = std::sqrt(x_error * x_error + y_error * y_error);
-
-        // traveled_distance_ += cost;
-
         Position2D pos1(current_pos_.x, current_pos_.y);
         Position2D pos2(active_path_[next_idx].x, active_path_[next_idx].y);
         traveled_distance_ += CalcWaypointDistance(pos1, pos2);
@@ -262,7 +251,23 @@ void VirtualQuadrotor::MoveForward()
         current_pos_.x = active_path_[next_idx].x;
         current_pos_.y = active_path_[next_idx].y;
         current_height_ = active_path_[next_idx].z;
-        current_heading_ = active_path_[next_idx].yaw;
+
+        if (enable_path_repair)
+        {
+            current_heading_ = active_path_[next_idx].yaw;
+        }
+        else
+        {
+            if(active_path_.size() == 2)
+            {
+                current_heading_ = 0;
+            }
+            else
+            {
+                current_heading_ = atan2(active_path_[next_idx+1].y - active_path_[next_idx].y, 
+                    active_path_[next_idx+1].x - active_path_[next_idx].x);
+            }
+        }
 
         active_path_.erase(active_path_.begin());
     }
@@ -339,7 +344,7 @@ void VirtualQuadrotor::Step()
             std::cout << "** path shortened by :" << shortend_dist << std::endl;
 
             // log data for analysis
-            logger_->LogData(sim_index_, shortest_path, init_repair_path_cost_, shortend_dist, shortend_dist/shortest_path);
+            logger_->LogData(sim_index_, shortest_path, init_repair_path_cost_, shortend_dist, shortend_dist / shortest_path);
 
             // reset quadrotor state
             current_pos_ = init_pos_;
@@ -356,5 +361,88 @@ void VirtualQuadrotor::Step()
     else
     {
         qplanner_->RequestNewMap();
+    }
+}
+
+void VirtualQuadrotor::CmpStep()
+{
+    if (qplanner_->map_received_ && run_flag_ != 0)
+    {
+        // update quadrotor state and planner
+        SimPath new_path;
+        if (run_flag_ == 1)
+        {
+            MoveForward();
+            new_path = qplanner_->UpdatePath(current_pos_, current_height_, current_heading_);
+        }
+        else
+        {
+            MoveForward(false);
+            new_path = qplanner_->UpdatePath(current_pos_, current_height_, current_heading_, false);
+        }
+
+        if (new_path.size() > 1)
+        {
+            active_path_ = new_path;
+
+            if (!init_path_found_)
+            {
+                init_path_found_ = true;
+
+                for (auto it = active_path_.begin(); it != active_path_.end() - 1; it++)
+                {
+                    Position2D pos1((*it).x, (*it).y);
+                    Position2D pos2((*(it + 1)).x, (*(it + 1)).y);
+                    init_repair_path_cost_ += CalcWaypointDistance(pos1, pos2);
+                }
+            }
+        }
+
+        PublishState();
+
+        if (active_path_.size() == 1)
+        {
+            // calculate shortcut distance
+            double shortest_path = qplanner_->GetGlobal2DPathCost();
+            double shortend_dist = shortest_path - traveled_distance_;
+            std::cout << "** shorted path :" << shortest_path << " , init repair path: " << init_repair_path_cost_ << std::endl;
+            std::cout << "** path shortened by :" << shortend_dist << std::endl;
+
+            // log data for analysis
+            logger_->LogData(sim_index_, run_flag_, shortest_path, init_repair_path_cost_, shortend_dist, shortend_dist / shortest_path);
+
+            // reset quadrotor state
+            current_pos_ = init_pos_;
+            current_height_ = init_height_;
+            traveled_distance_ = 0.0;
+            init_path_found_ = false;
+            init_repair_path_cost_ = 0.0;
+
+            // update run flag
+            switch (run_flag_)
+            {
+            case 1:
+                run_flag_ = 2;
+                std::cout << "*********************** finished path repair run ***********************" << std::endl;
+                break;
+            case 2:
+                run_flag_ = 0;
+                std::cout << "*********************** finished shortest path run ***********************" << std::endl;
+                break;
+            }
+
+            // reset planner
+            qplanner_->ResetPlanner();      
+            
+            if(run_flag_ != 0)
+                qplanner_->map_received_ = true;
+            else
+                ++sim_index_;
+        }
+    }
+    else
+    {
+        qplanner_->RequestNewMap();
+        run_flag_ = 1;
     }
 }

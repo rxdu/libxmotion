@@ -81,7 +81,7 @@ class SimPathRepair
 
 	void RequestNewMap();
 	void ResetPlanner();
-	SimPath UpdatePath(Position2D pos, int32_t height, double heading);
+	SimPath UpdatePath(Position2D pos, int32_t height, double heading, bool enable_path_repair = true);
 
   private:
 	// lcm

@@ -31,6 +31,8 @@ public:
 public:
   bool IsReady();
   void Step();
+  void CmpStep();
+  void SetSensorRange(int32_t rng);
 
 private:
   std::shared_ptr<lcm::LCM> lcm_;
@@ -53,10 +55,11 @@ private:
   double traveled_distance_;  
   bool init_path_found_;
   double init_repair_path_cost_;
+  int64_t run_flag_;
   int64_t sim_index_;
   std::unique_ptr<CsvLogger> logger_;
 
-  void MoveForward();
+  void MoveForward(bool enable_path_repair = true);
   void PublishState();
   double CalcWaypointDistance(Position2D pos1, Position2D pos2);
 };

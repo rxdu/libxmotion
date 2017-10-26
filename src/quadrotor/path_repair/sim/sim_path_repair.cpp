@@ -273,7 +273,7 @@ bool SimPathRepair::EvaluateNewPath(std::vector<Position3Dd> &new_path)
 		return false;
 }
 
-SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading)
+SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading, bool enable_path_repair)
 {
 	std::cout << "\n---------------------- New Iteration -------------------------" << std::endl;
 
@@ -316,8 +316,12 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 
 	std::cout << "max rewards: " << nav_field_->max_rewards_ << " , dist weight: " << sc_evaluator_->dist_weight_ << std::endl;
 #endif
-	//Path_t<CubeCell &> path = AStar::Search(cubegraph, start_id, goal_id);
-	auto path = AStar::BiasedSearchWithShortcut(*cubegraph, start_id, goal_id, nav_field_->max_rewards_, sc_evaluator_->dist_weight_, map_info_.side_size);
+	
+	Path_t<CubeCell &> path;
+	if(enable_path_repair)
+		path = AStar::BiasedSearchWithShortcut(*cubegraph, start_id, goal_id, nav_field_->max_rewards_, sc_evaluator_->dist_weight_, map_info_.side_size);
+	else
+		path = AStar::Search(*cubegraph, start_id, goal_id);
 
 	SimPath path_result;
 

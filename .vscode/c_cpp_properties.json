@@ -31,11 +31,12 @@
                 "/usr/local/include",
                 "/usr/include",
                 "/usr/include/x86_64-linux-gnu",
+                "/usr/include/linux",
                 "${workspaceRoot}",
                 "${workspaceRoot}/src",
                 "${workspaceRoot}/src/quadrotor",
-                "/usr/include/linux",
-                "${workspaceRoot}/src/planning"
+                "${workspaceRoot}/src/planning",
+                "${workspaceRoot}/build/include"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",
