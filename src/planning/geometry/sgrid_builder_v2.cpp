@@ -16,15 +16,15 @@ std::shared_ptr<SquareGrid> SGridBuilderV2::BuildSquareGrid(cv::InputArray _src,
 	Mat image_map = _src.getMat();
 
 	// calculate square grid params
-	uint32_t row_num = (image_map.rows/2) / cell_size * 2;
-	uint32_t col_num = (image_map.cols/2) / cell_size * 2;
+	uint32_t row_num = image_map.rows / cell_size;
+	uint32_t col_num = image_map.cols / cell_size;
 
 	// create square grid
-	std::shared_ptr<SquareGrid> sgrid = std::make_shared<SquareGrid>(row_num,col_num, cell_size, img_offset_x, img_offset_y);
+	std::shared_ptr<SquareGrid> sgrid = std::make_shared<SquareGrid>(col_num,row_num, cell_size, img_offset_x, img_offset_y);
 
 	// set occupancy of each cell
-	for(uint32_t i = 0; i < row_num; i++)
-		for(uint32_t j = 0; j < col_num; j++)
+	for(uint32_t i = 0; i < col_num; i++)
+		for(uint32_t j = 0; j < row_num; j++)
 		{
 			uint32_t id = sgrid->GetIDFromIndex(i,j);
 			OccupancyType type = ImageUtils::CheckAreaOccupancy(image_map, sgrid->cells_[id]->bbox_) ;
@@ -35,8 +35,8 @@ std::shared_ptr<SquareGrid> SGridBuilderV2::BuildSquareGrid(cv::InputArray _src,
 	std::vector<uint64_t> edge_obs_cells;
 	if(obj_expand_num > 0)
 	{
-		for(uint32_t i = 0; i < sgrid->row_size_; i++)
-			for(uint32_t j = 0; j < sgrid->col_size_; j++)
+		for(uint32_t i = 0; i < sgrid->col_size_; i++)
+			for(uint32_t j = 0; j < sgrid->row_size_; j++)
 			{
 				uint32_t id = sgrid->GetIDFromIndex(i,j);
 				uint8_t free_neighbour_size = 0;
@@ -54,11 +54,11 @@ std::shared_ptr<SquareGrid> SGridBuilderV2::BuildSquareGrid(cv::InputArray _src,
 
 		for(auto& cid : edge_obs_cells)
 		{
-			for(int i = sgrid->cells_[cid]->index_.y - obj_expand_num; i <= sgrid->cells_[cid]->index_.y + obj_expand_num; i++ )
-				for(int j = sgrid->cells_[cid]->index_.x - obj_expand_num; j <= sgrid->cells_[cid]->index_.x + obj_expand_num; j++ )
+			for(int i = sgrid->cells_[cid]->index_.x - obj_expand_num; i <= sgrid->cells_[cid]->index_.x + obj_expand_num; i++ )
+				for(int j = sgrid->cells_[cid]->index_.y - obj_expand_num; j <= sgrid->cells_[cid]->index_.y + obj_expand_num; j++ )
 				{
-					if(i >= 0 && i < sgrid->row_size_ &&
-							j >= 0 && j < sgrid->col_size_)
+					if(i >= 0 && i < sgrid->col_size_ &&
+							j >= 0 && j < sgrid->row_size_)
 					{
 						uint32_t checked_id = sgrid->GetIDFromIndex(i,j);
 
@@ -84,8 +84,8 @@ Map_t<SquareGrid> SGridBuilderV2::BuildSquareGridMap(cv::InputArray _src, uint32
 	// binarize grayscale image
 	ImageUtils::BinarizeImage(src, map.padded_image, 200);
 
-	uint32_t row_num = (map.padded_image.rows/2) / cell_size * 2;
-	uint32_t col_num = (map.padded_image.cols/2) / cell_size * 2;
+	uint32_t row_num = map.padded_image.rows / cell_size;
+	uint32_t col_num = map.padded_image.cols / cell_size;
 
 	int64_t img_offset_x = (map.padded_image.cols - col_num * cell_size)/2;
 	int64_t img_offset_y = (map.padded_image.rows - row_num * cell_size)/2;

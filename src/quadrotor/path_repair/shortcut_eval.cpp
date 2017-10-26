@@ -186,6 +186,8 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 //				if(region_rewards > 0)
 //					region_rewards = 0;
 				double new_rewards = current_vertex->shortcut_cost_ + (current_vertex->shortcut_rewards_ - successor->shortcut_rewards_ ) + (1-successor->shortcut_rewards_/nav_field_->max_rewards_)*sgrid_->cell_size_;
+				// equivalent cost function
+				//double new_rewards = current_vertex->shortcut_cost_ + (1-successor->shortcut_rewards_/nav_field_->max_rewards_)*sgrid_->cell_size_;
 				double new_dist = current_vertex->g_astar_ + (*ite).cost_;
 
 				//double new_cost = current_vertex->weighted_cost_ + (new_dist*dist_weight + new_rewards*(1-dist_weight));
