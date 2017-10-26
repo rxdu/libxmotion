@@ -23,3 +23,6 @@ target_link_libraries(expt_pysim_03 map path_repair pr_sim quad_base common ${Op
 
 add_executable(expt_pysim_04 pr_pysim_04.cpp)
 target_link_libraries(expt_pysim_04 map path_repair pr_sim quad_base common ${OpenCV_LIBS} ${LCM_LIBRARIES})
+
+add_executable(expt_pysim_05 pr_pysim_05.cpp)
+target_link_libraries(expt_pysim_05 map path_repair pr_sim quad_base common ${OpenCV_LIBS} ${LCM_LIBRARIES})
