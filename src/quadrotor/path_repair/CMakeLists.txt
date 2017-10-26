@@ -25,7 +25,6 @@ add_library(pr_sim STATIC ${PATH_REPAIR_SIM_SRC})
 target_link_libraries(pr_sim path_repair utility ${LCM_LIBRARIES})
 
 # Add executables
-add_subdirectory(expts)
 
 # Tests
 add_subdirectory(tests)

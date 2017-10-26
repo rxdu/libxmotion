@@ -58,6 +58,7 @@ target_link_libraries(quad_base common ${LCM_LIBRARIES})
 
 ## Add other sub source directories
 add_subdirectory(apps)
+add_subdirectory(expts)
 add_subdirectory(driver)
 add_subdirectory(mission)
 add_subdirectory(motion_server)
