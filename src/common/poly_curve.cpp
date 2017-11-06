@@ -1,9 +1,11 @@
-/*
+/* 
  * poly_curve.cpp
- *
- *  Created on: Jun 8, 2017
- *      Author: rdu
- */
+ * 
+ * Created on: Jun 08, 2016
+ * Description:   
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
 #include "common/poly_curve.h"
 

@@ -211,8 +211,8 @@ void Vis::VisSquareGridLocalNavField(const SquareGrid& grid, const NavField<Squa
 
 		// calc shortcut rewards
 		double dist = 0;
-		Position2D start = center_vtx->bundled_data_->index_;
-		Position2D goal = vtx->bundled_data_->index_;
+		Position2Di start = center_vtx->bundled_data_->index_;
+		Position2Di goal = vtx->bundled_data_->index_;
 
 		uint32_t x_error, y_error;
 

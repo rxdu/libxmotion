@@ -79,7 +79,7 @@ void QuadPathRepair::ConfigGraphPlanner(MapConfig config, double world_size_x, d
 //	lcm_->publish("quad_planner/quad_planner_graph", &graph_msg);
 }
 
-void QuadPathRepair::SetStartMapPosition(Position2D pos)
+void QuadPathRepair::SetStartMapPosition(Position2Di pos)
 {
 	if(pos == start_pos_)
 		return;
@@ -95,7 +95,7 @@ void QuadPathRepair::SetStartMapPosition(Position2D pos)
 		update_global_plan_ = true;
 }
 
-void QuadPathRepair::SetGoalMapPosition(Position2D pos)
+void QuadPathRepair::SetGoalMapPosition(Position2Di pos)
 {
 	goal_pos_.x = pos.x;
 	goal_pos_.y = pos.y;
@@ -119,11 +119,11 @@ void QuadPathRepair::SetStartRefWorldPosition(Position2Dd pos)
 	mpos = MapUtils::CoordinatesFromRefWorldToMapWorld(pos, GetActiveMapInfo());
 //	std::cout << "position in map world: " << mpos.x << " , " << mpos.y << std::endl;
 
-	Position2D map_pos;
+	Position2Di map_pos;
 	map_pos = MapUtils::CoordinatesFromMapWorldToMap(mpos, GetActiveMapInfo());
 //	std::cout << "position in map: " << map_pos.x << " , " << map_pos.y << std::endl;
 
-	Position2D map_padded_pos;
+	Position2Di map_padded_pos;
 	map_padded_pos = MapUtils::CoordinatesFromOriginalToPadded(map_pos, GetActiveMapInfo());
 //	std::cout << "position in padded map: " << map_padded_pos.x << " , " << map_padded_pos.y << std::endl;
 
@@ -135,18 +135,18 @@ void QuadPathRepair::SetGoalRefWorldPosition(Position2Dd pos)
 	Position2Dd mpos;
 	mpos = MapUtils::CoordinatesFromRefWorldToMapWorld(pos, GetActiveMapInfo());
 
-	Position2D map_pos;
+	Position2Di map_pos;
 	map_pos = MapUtils::CoordinatesFromMapWorldToMap(mpos, GetActiveMapInfo());
 
-	Position2D map_padded_pos;
+	Position2Di map_padded_pos;
 	map_padded_pos = MapUtils::CoordinatesFromOriginalToPadded(map_pos, GetActiveMapInfo());
 
 	SetGoalMapPosition(map_padded_pos);
 }
 
-std::vector<Position2D> QuadPathRepair::UpdateGlobalPath()
+std::vector<Position2Di> QuadPathRepair::UpdateGlobalPath()
 {
-	std::vector<Position2D> waypoints;
+	std::vector<Position2Di> waypoints;
 
 //	std::cout << "----> start: " << start_pos_.x << " , " << start_pos_.y << std::endl;
 //	std::cout << "----> goal: " << goal_pos_.x << " , " << goal_pos_.y << std::endl;
@@ -569,9 +569,9 @@ void QuadPathRepair::LcmOctomapHandler(
 			srcl_lcm_msgs::Keyframe_t kf;
 			kf.vel_constr = false;
 
-			kf.positions[0] = wp.x;
-			kf.positions[1] = wp.y;
-			kf.positions[2] = wp.z;
+			kf.position[0] = wp.x;
+			kf.position[1] = wp.y;
+			kf.position[2] = wp.z;
 
 			uint64_t nd_id = sgrid_planner_.map_.data_model->GetIDFromPosition(wp.x, wp.y);
 			auto nd_vtx = nav_field_->field_graph_->GetVertexFromID(nd_id);
@@ -698,7 +698,7 @@ srcl_lcm_msgs::Graph_t QuadPathRepair::GenerateLcmGraphMsg()
 	return graph_msg;
 }
 
-srcl_lcm_msgs::Path_t QuadPathRepair::GenerateLcmPathMsg(std::vector<Position2D> waypoints)
+srcl_lcm_msgs::Path_t QuadPathRepair::GenerateLcmPathMsg(std::vector<Position2Di> waypoints)
 {
 	srcl_lcm_msgs::Path_t path_msg;
 

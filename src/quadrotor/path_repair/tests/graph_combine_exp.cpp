@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
 	// connect starting points
 	GeoMark map2d_start_mark, cube_start_mark;
 
-	Position2D map2d_start_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(-1.8,0.6), sgrid_map.info);
+	Position2Di map2d_start_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(-1.8,0.6), sgrid_map.info);
 	uint64_t map2d_start_id = sgrid_map.data_model->GetIDFromPosition(map2d_start_pos.x, map2d_start_pos.y);
 	uint64_t geo_start_id = map_graph->GetVertexFromID(map2d_start_id)->bundled_data_->geo_mark_id_;
 	map2d_start_mark = comb_graph.GetVertexFromID(geo_start_id)->bundled_data_;
@@ -160,7 +160,7 @@ int main(int argc, char* argv[])
 		GeoMark mark2d, mark3d;
 		mark3d = comb_graph.GetVertexFromID(v)->bundled_data_;
 
-		Position2D map_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(mark3d.position.x,mark3d.position.y), sgrid_map.info);
+		Position2Di map_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(mark3d.position.x,mark3d.position.y), sgrid_map.info);
 		uint64_t map2d_id = sgrid_map.data_model->GetIDFromPosition(map_pos.x, map_pos.y);
 		if(map_graph->GetVertexFromID(map2d_id) == nullptr)
 			continue;
@@ -176,7 +176,7 @@ int main(int argc, char* argv[])
 	exec_time = clock() - exec_time;
 	std::cout << "Graph construction finished in " << double(exec_time)/CLOCKS_PER_SEC << " s." << std::endl;
 
-//	Position2D geo_goal_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(1.8, -2.0), sgrid_map.info);
+//	Position2Di geo_goal_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(1.8, -2.0), sgrid_map.info);
 //	uint64_t map_goal_id = sgrid_map.data_model->GetIDFromPosition(geo_goal_pos.x, geo_goal_pos.y);
 //	uint64_t geo_goal_id = map_graph->GetVertexFromID(map_goal_id)->bundled_data_->geo_mark_id_;
 

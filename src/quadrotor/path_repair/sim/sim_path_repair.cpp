@@ -104,7 +104,7 @@ void SimPathRepair::SetMapSize(int32_t x, int32_t y, int32_t z)
 	map_size_[2] = z;
 }
 
-void SimPathRepair::SetStartPosition(Position2D pos)
+void SimPathRepair::SetStartPosition(Position2Di pos)
 {
 	if (pstart_set_ && pos == start_pos_)
 		return;
@@ -115,7 +115,7 @@ void SimPathRepair::SetStartPosition(Position2D pos)
 	pstart_set_ = true;
 }
 
-void SimPathRepair::SetGoalPosition(Position2D pos)
+void SimPathRepair::SetGoalPosition(Position2Di pos)
 {
 	goal_pos_.x = pos.x;
 	goal_pos_.y = pos.y;
@@ -273,7 +273,7 @@ bool SimPathRepair::EvaluateNewPath(std::vector<Position3Dd> &new_path)
 		return false;
 }
 
-SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading, bool enable_path_repair)
+SimPath SimPathRepair::UpdatePath(Position2Di pos, int32_t height, double heading, bool enable_path_repair)
 {
 	std::cout << "\n---------------------- New Iteration -------------------------" << std::endl;
 

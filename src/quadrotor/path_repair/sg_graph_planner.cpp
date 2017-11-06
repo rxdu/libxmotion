@@ -80,7 +80,7 @@ Path_t<SquareCell *> SGGraphPlanner::Search(uint64_t start, uint64_t goal)
 	return empty_path_;
 }
 
-Path_t<SquareCell *> SGGraphPlanner::Search(Position2D start, Position2D goal)
+Path_t<SquareCell *> SGGraphPlanner::Search(Position2Di start, Position2Di goal)
 {
 	if (is_ready_)
 	{

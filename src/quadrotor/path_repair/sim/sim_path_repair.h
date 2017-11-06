@@ -63,8 +63,8 @@ class SimPathRepair
 
   public:
 	// general planner configuration
-	void SetStartPosition(Position2D pos);
-	void SetGoalPosition(Position2D pos);
+	void SetStartPosition(Position2Di pos);
+	void SetGoalPosition(Position2Di pos);
 	void SetStartHeight(int32_t height);
 	void SetGoalHeight(int32_t height);
 	void SetMapSize(int32_t x, int32_t y, int32_t z);
@@ -81,7 +81,7 @@ class SimPathRepair
 
 	void RequestNewMap();
 	void ResetPlanner();
-	SimPath UpdatePath(Position2D pos, int32_t height, double heading, bool enable_path_repair = true);
+	SimPath UpdatePath(Position2Di pos, int32_t height, double heading, bool enable_path_repair = true);
 
   private:
 	// lcm
@@ -111,8 +111,8 @@ class SimPathRepair
 	bool hstart_set_;
 	bool hgoal_set_;
 
-	Position2D start_pos_;
-	Position2D goal_pos_;
+	Position2Di start_pos_;
+	Position2Di goal_pos_;
 	int32_t start_height_;
 	int32_t goal_height_;
 

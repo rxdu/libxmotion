@@ -82,8 +82,8 @@ int main(int argc, char** argv )
 	Position2Dd start_w(-11.0,8.5);
 	Position2Dd goal_w(11.0, -8.5);
 
-	Position2D start_m = MapUtils::CoordinatesFromRefWorldToMapPadded(start_w, sgrid_planner.map_.info);
-	Position2D goal_m = MapUtils::CoordinatesFromRefWorldToMapPadded(goal_w, sgrid_planner.map_.info);
+	Position2Di start_m = MapUtils::CoordinatesFromRefWorldToMapPadded(start_w, sgrid_planner.map_.info);
+	Position2Di goal_m = MapUtils::CoordinatesFromRefWorldToMapPadded(goal_w, sgrid_planner.map_.info);
 
 	auto start_vertex_id = sgrid_planner.map_.data_model->GetIDFromPosition(start_m.x, start_m.y);
 	auto goal_vertex_id = sgrid_planner.map_.data_model->GetIDFromPosition(goal_m.x, goal_m.y);

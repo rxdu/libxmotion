@@ -72,11 +72,11 @@ int main(int argc, char* argv[])
 	//auto nav_path = nav_field.SearchInNavField(start_vertex, finish_vertex);
 	auto nav_path = sc_eval.SearchInNavField(start_vertex, finish_vertex);
 
-	std::cout << "dist: " << sc_eval.CalcDirectDistance(Position2D(0,3), Position2D(3,0), 5, false) << std::endl;
-	std::cout << "dist: " << sc_eval.CalcDirectDistance(Position2D(0,3), Position2D(2,0), 5, false) << std::endl;
+	std::cout << "dist: " << sc_eval.CalcDirectDistance(Position2Di(0,3), Position2Di(3,0), 5, false) << std::endl;
+	std::cout << "dist: " << sc_eval.CalcDirectDistance(Position2Di(0,3), Position2Di(2,0), 5, false) << std::endl;
 
-	std::cout << "dist: " << sc_eval.CalcDirectDistance(Position2D(0,3), Position2D(3,0), 5, true) << std::endl;
-	std::cout << "dist: " << sc_eval.CalcDirectDistance(Position2D(0,3), Position2D(2,0), 5, true) << std::endl;
+	std::cout << "dist: " << sc_eval.CalcDirectDistance(Position2Di(0,3), Position2Di(3,0), 5, true) << std::endl;
+	std::cout << "dist: " << sc_eval.CalcDirectDistance(Position2Di(0,3), Position2Di(2,0), 5, true) << std::endl;
 
 	return 0;
 }

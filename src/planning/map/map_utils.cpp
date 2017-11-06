@@ -36,7 +36,7 @@ std::shared_ptr<SquareGrid> MapUtils::CreateSquareGrid(uint32_t row_size, uint32
 	return std::make_shared<SquareGrid>(row_size,col_size,cell_size);
 }
 
-Position2Dd MapUtils::CoordinatesFromMapToMapWorld(Position2D map_pos, MapInfo info)
+Position2Dd MapUtils::CoordinatesFromMapToMapWorld(Position2Di map_pos, MapInfo info)
 {
 	Position2Dd rpos;
 
@@ -56,9 +56,9 @@ Position2Dd MapUtils::CoordinatesFromMapToMapWorld(Position2D map_pos, MapInfo i
 	return rpos;
 }
 
-Position2D MapUtils::CoordinatesFromMapWorldToMap(Position2Dd world_pos, MapInfo info)
+Position2Di MapUtils::CoordinatesFromMapWorldToMap(Position2Dd world_pos, MapInfo info)
 {
-	Position2D rpos;
+	Position2Di rpos;
 
 	rpos.x = world_pos.x * info.scale_x;
 	rpos.y = world_pos.y * info.scale_y;
@@ -75,9 +75,9 @@ Position2D MapUtils::CoordinatesFromMapWorldToMap(Position2Dd world_pos, MapInfo
 	return rpos;
 }
 
-Position2D MapUtils::CoordinatesFromPaddedToOriginal(Position2D pad_pos, MapInfo info)
+Position2Di MapUtils::CoordinatesFromPaddedToOriginal(Position2Di pad_pos, MapInfo info)
 {
-	Position2D rpos;
+	Position2Di rpos;
 
 	if(pad_pos.x > info.map_size_x + info.padded_left)
 		rpos.x = info.map_size_x;
@@ -100,9 +100,9 @@ Position2D MapUtils::CoordinatesFromPaddedToOriginal(Position2D pad_pos, MapInfo
 	return rpos;
 }
 
-Position2D MapUtils::CoordinatesFromOriginalToPadded(Position2D ori_pos, MapInfo info)
+Position2Di MapUtils::CoordinatesFromOriginalToPadded(Position2Di ori_pos, MapInfo info)
 {
-	Position2D rpos;
+	Position2Di rpos;
 
 	rpos.x = ori_pos.x + info.padded_left;
 	rpos.y = ori_pos.y + info.padded_top;
@@ -137,9 +137,9 @@ Position2Dd MapUtils::CoordinatesFromRefWorldToMapWorld(Position2Dd ref_world_po
 	return mpos;
 }
 
-Position2Dd MapUtils::CoordinatesFromMapPaddedToRefWorld(Position2D map_pos, MapInfo info)
+Position2Dd MapUtils::CoordinatesFromMapPaddedToRefWorld(Position2Di map_pos, MapInfo info)
 {
-	Position2D original_map_pos;
+	Position2Di original_map_pos;
 	Position2Dd mapw_pos, refw_pos;
 
 	original_map_pos = MapUtils::CoordinatesFromPaddedToOriginal(map_pos, info);
@@ -152,11 +152,11 @@ Position2Dd MapUtils::CoordinatesFromMapPaddedToRefWorld(Position2D map_pos, Map
 	return refw_pos;
 }
 
-Position2D MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd world_pos, MapInfo info)
+Position2Di MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd world_pos, MapInfo info)
 {
 	Position2Dd mapw_pos;
-	Position2D map_pos;
-	Position2D map_padded_pos;
+	Position2Di map_pos;
+	Position2Di map_padded_pos;
 
 	//std::cout << "conversion input: " << world_pos.x << " , " << world_pos.y << std::endl;
 

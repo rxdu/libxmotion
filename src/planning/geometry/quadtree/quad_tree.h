@@ -36,7 +36,7 @@ public:
 //	uint64_t node_id_;
 	NodeType node_type_;
 	OccupancyType occupancy_;
-	Position2D location_;
+	Position2Di location_;
 	BoundingBox bbox_;
 
 	// Pointers to child nodes

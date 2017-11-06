@@ -18,6 +18,9 @@
 namespace librav
 {
 
+// time_stamp starts from 0 when system initialized, increases at step 1 ms
+typedef uint64_t time_stamp;
+
 /****************** Types for Control ******************/
 template <typename T>
 struct point3
@@ -30,8 +33,6 @@ struct point3
 using Point3f = point3<float>;
 using Point3d = point3<double>;
 using Point3i = point3<int32_t>;
-
-// typedef Point3f Point3f;
 
 struct EulerAngle
 {
@@ -73,9 +74,6 @@ struct UAVTrajectoryPoint
 };
 
 typedef std::vector<UAVTrajectoryPoint> UAVTrajectory;
-
-// time_stamp starts from 0 when system initialized, increases at step 1 ms
-typedef uint64_t time_stamp;
 
 /****************** Types for Planning ******************/
 template <typename T>
@@ -127,9 +125,9 @@ struct position3d
 	}
 };
 
-using Position2D = position2d<int32_t>;
+using Position2Di = position2d<int32_t>;
 using Position2Dd = position2d<double>;
-using Position3D = position3d<int32_t>;
+using Position3Di = position3d<int32_t>;
 using Position3Dd = position3d<double>;
 
 enum class OccupancyType
@@ -157,7 +155,7 @@ struct BoundingBox
 
 struct Keyframe
 {
-	float positions[3];
+	float position[3];
 	float velocity[3];
 	float yaw;
 

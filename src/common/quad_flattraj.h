@@ -1,9 +1,11 @@
-/*
+/* 
  * quad_flattraj.h
- *
- *  Created on: Aug 29, 2016
- *      Author: rdu
- */
+ * 
+ * Created on: Aug 29, 2016
+ * Description:   
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
 #ifndef COMMON_QUAD_FLATTRAJ_H_
 #define COMMON_QUAD_FLATTRAJ_H_

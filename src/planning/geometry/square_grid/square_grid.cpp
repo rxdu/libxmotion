@@ -114,7 +114,7 @@ std::vector<SquareCell*> SquareGrid::GetNeighbours(uint64_t id, bool allow_diag)
 	// not consider diagonal cells
 	if(allow_diag)
 	{
-		Position2D pos[8];
+		Position2Di pos[8];
 
 		pos[0].x = x - 1;
 		pos[0].y = y - 1;
@@ -148,7 +148,7 @@ std::vector<SquareCell*> SquareGrid::GetNeighbours(uint64_t id, bool allow_diag)
 	}
 	else
 	{
-		Position2D pos[4];
+		Position2Di pos[4];
 
 		pos[0].x = x;
 		pos[0].y = y + 1;

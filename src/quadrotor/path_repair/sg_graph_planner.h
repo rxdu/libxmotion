@@ -43,7 +43,7 @@ public:
 	bool UpdateMapConfig(std::shared_ptr<SquareGrid> grid);
 	Path_t<SquareCell*> Search(Vertex_t<SquareCell*>* start, Vertex_t<SquareCell*>* goal);
 	Path_t<SquareCell*> Search(uint64_t start, uint64_t goal);
-	Path_t<SquareCell*> Search(Position2D start, Position2D goal);
+	Path_t<SquareCell*> Search(Position2Di start, Position2Di goal);
 
 private:
 	bool is_ready_;

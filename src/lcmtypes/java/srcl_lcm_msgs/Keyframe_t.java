@@ -11,19 +11,19 @@ import lcm.lcm.*;
  
 public final class Keyframe_t implements lcm.lcm.LCMEncodable
 {
-    public float positions[];
+    public float position[];
     public float velocity[];
     public float yaw;
     public boolean vel_constr;
  
     public Keyframe_t()
     {
-        positions = new float[3];
+        position = new float[3];
         velocity = new float[3];
     }
  
     public static final long LCM_FINGERPRINT;
-    public static final long LCM_FINGERPRINT_BASE = 0xad5f94f44c99be7cL;
+    public static final long LCM_FINGERPRINT_BASE = 0xc5f4c6b7363280a5L;
  
     static {
         LCM_FINGERPRINT = _hashRecursive(new ArrayList<Class<?>>());
@@ -50,7 +50,7 @@ public final class Keyframe_t implements lcm.lcm.LCMEncodable
     public void _encodeRecursive(DataOutput outs) throws IOException
     {
         for (int a = 0; a < 3; a++) {
-            outs.writeFloat(this.positions[a]); 
+            outs.writeFloat(this.position[a]); 
         }
  
         for (int a = 0; a < 3; a++) {
@@ -85,9 +85,9 @@ public final class Keyframe_t implements lcm.lcm.LCMEncodable
  
     public void _decodeRecursive(DataInput ins) throws IOException
     {
-        this.positions = new float[(int) 3];
+        this.position = new float[(int) 3];
         for (int a = 0; a < 3; a++) {
-            this.positions[a] = ins.readFloat();
+            this.position[a] = ins.readFloat();
         }
  
         this.velocity = new float[(int) 3];
@@ -104,8 +104,8 @@ public final class Keyframe_t implements lcm.lcm.LCMEncodable
     public srcl_lcm_msgs.Keyframe_t copy()
     {
         srcl_lcm_msgs.Keyframe_t outobj = new srcl_lcm_msgs.Keyframe_t();
-        outobj.positions = new float[(int) 3];
-        System.arraycopy(this.positions, 0, outobj.positions, 0, 3); 
+        outobj.position = new float[(int) 3];
+        System.arraycopy(this.position, 0, outobj.position, 0, 3); 
         outobj.velocity = new float[(int) 3];
         System.arraycopy(this.velocity, 0, outobj.velocity, 0, 3); 
         outobj.yaw = this.yaw;

@@ -63,9 +63,9 @@ struct position3d
 	}
 };
 
-using Position2D = position2d<int32_t>;
+using Position2Di = position2d<int32_t>;
 using Position2Dd = position2d<double>;
-using Position3D = position3d<int32_t>;
+using Position3Di = position3d<int32_t>;
 using Position3Dd = position3d<double>;
 
 enum class OccupancyType

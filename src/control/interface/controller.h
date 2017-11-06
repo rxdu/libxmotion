@@ -1,9 +1,11 @@
-/*
+/* 
  * controller.h
- *
- *  Created on: Jun 19, 2017
- *      Author: rdu
- */
+ * 
+ * Created on: Jun 19, 2017
+ * Description: generic controller interface  
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
 #ifndef CONTROL_SRC_CONTROLLER_CONTROLLER_H_
 #define CONTROL_SRC_CONTROLLER_CONTROLLER_H_

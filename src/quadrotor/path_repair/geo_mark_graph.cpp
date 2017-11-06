@@ -101,7 +101,7 @@ int64_t GeoMarkGraph::MergeCubeArrayInfo(std::shared_ptr<Graph<CubeCell&>> cg, s
 		mark3d = combined_graph_.GetVertexFromID(geo3d_id)->bundled_data_;
 
 		// find 2d geomark
-		Position2D map_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(mark3d.position.x,mark3d.position.y), sgrid_map_info_);
+		Position2Di map_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(mark3d.position.x,mark3d.position.y), sgrid_map_info_);
 		uint64_t map2d_id = sgrid_->GetIDFromPosition(map_pos.x, map_pos.y);
 		if(sgrid_graph_->GetVertexFromID(map2d_id) == nullptr)
 			continue;
@@ -130,7 +130,7 @@ int64_t GeoMarkGraph::MergeCubeArrayInfo(std::shared_ptr<Graph<CubeCell&>> cg, s
 	bool loc_found_2d = false;
 	bool loc_found_3d = false;
 
-	Position2D map_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(pos_.x,pos_.y), sgrid_map_info_);
+	Position2Di map_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(pos_.x,pos_.y), sgrid_map_info_);
 	uint64_t map2d_id = sgrid_->GetIDFromPosition(map_pos.x, map_pos.y);
 	if(sgrid_graph_->GetVertexFromID(map2d_id) != nullptr)
 		loc_found_2d = true;

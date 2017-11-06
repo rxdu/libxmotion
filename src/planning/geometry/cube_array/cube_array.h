@@ -47,7 +47,7 @@ public:
 
 		}
 
-	Position3D index_;
+	Position3Di index_;
 	Position3Dd location_;
 	OccupancyType occu_;
 	uint64_t geo_mark_id_;

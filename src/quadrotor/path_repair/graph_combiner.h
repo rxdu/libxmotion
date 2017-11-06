@@ -132,7 +132,7 @@ public:
 		// then try to connect points between 2d and 3d
 		GeoMark vehicle_2dstart_mark, vehicle_3dstart_mark;
 
-		Position2D map2d_start_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(pos_.x,pos_.y), base_map_info_);
+		Position2Di map2d_start_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(pos_.x,pos_.y), base_map_info_);
 		uint64_t map2d_start_id = base_ds_->GetIDFromPosition(map2d_start_pos.x, map2d_start_pos.y);
 
 		std::cout << "quad pos: " << pos_.x << " , " << pos_.y << std::endl;
@@ -230,7 +230,7 @@ public:
 			GeoMark mark2d, mark3d;
 			mark3d = combined_graph_.GetVertexFromID(v)->bundled_data_;
 
-			Position2D map_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(mark3d.position.x,mark3d.position.y), base_map_info_);
+			Position2Di map_pos = MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd(mark3d.position.x,mark3d.position.y), base_map_info_);
 			uint64_t map2d_id = base_ds_->GetIDFromPosition(map_pos.x, map_pos.y);
 			if(base_graph_->GetVertexFromID(map2d_id) == nullptr)
 				continue;

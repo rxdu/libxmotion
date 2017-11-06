@@ -1,9 +1,11 @@
-/*
+/* 
  * poly_curve.h
- *
- *  Created on: Aug 29, 2016
- *      Author: rdu
- */
+ * 
+ * Created on: Aug 29, 2016
+ * Description:   
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
 #ifndef COMMON_POLY_CURVE_H_
 #define COMMON_POLY_CURVE_H_

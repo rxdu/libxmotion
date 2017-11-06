@@ -109,7 +109,7 @@ void PathManager::LcmWaypointsHandler(const lcm::ReceiveBuffer* rbuf, const std:
 		Keyframe kf;
 
 		for(int j = 0; j < 3; j++)
-			kf.positions[j] = msg->waypoints[i].positions[j];
+			kf.position[j] = msg->waypoints[i].positions[j];
 
 		kf.vel_constr = false;
 		kf.yaw = msg->waypoints[i].yaw;
@@ -131,7 +131,7 @@ void PathManager::LcmKeyframeSetHandler(const lcm::ReceiveBuffer* rbuf, const st
 
 		for(int j = 0; j < 3; j++)
 		{
-			kf.positions[j] = msg->kfs[i].positions[j];
+			kf.position[j] = msg->kfs[i].position[j];
 			kf.velocity[j] = msg->kfs[i].velocity[j];
 		}
 		kf.vel_constr = msg->kfs[i].vel_constr;
@@ -172,9 +172,9 @@ void PathManager::GenerateTrajectory(KeyframeSet& kfs, uint64_t traj_id)
 
 	for(int i = 0; i < kfs.keyframes.size(); i++)
 	{
-		traj_opt_.keyframe_x_vals_(0,i) = kfs.keyframes[i].positions[0];
-		traj_opt_.keyframe_y_vals_(0,i) = kfs.keyframes[i].positions[1];
-		traj_opt_.keyframe_z_vals_(0,i) = kfs.keyframes[i].positions[2];
+		traj_opt_.keyframe_x_vals_(0,i) = kfs.keyframes[i].position[0];
+		traj_opt_.keyframe_y_vals_(0,i) = kfs.keyframes[i].position[1];
+		traj_opt_.keyframe_z_vals_(0,i) = kfs.keyframes[i].position[2];
 
 		if(kfs.keyframes[i].vel_constr)
 		{
@@ -217,9 +217,9 @@ void PathManager::GenerateTrajectory(KeyframeSet& kfs, uint64_t traj_id)
 //		std::cout << "allocated time: " << traj_opt_.keyframe_ts_(0,i) << std::endl;
 
 		srcl_lcm_msgs::WayPoint_t wpoint;
-		wpoint.positions[0] = kfs.keyframes[i].positions[0];
-		wpoint.positions[1] = kfs.keyframes[i].positions[1];
-		wpoint.positions[2] = kfs.keyframes[i].positions[2];
+		wpoint.positions[0] = kfs.keyframes[i].position[0];
+		wpoint.positions[1] = kfs.keyframes[i].position[1];
+		wpoint.positions[2] = kfs.keyframes[i].position[2];
 		poly_msg.waypoints.push_back(wpoint);
 	}
 

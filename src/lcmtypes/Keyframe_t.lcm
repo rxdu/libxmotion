@@ -2,7 +2,7 @@ package srcl_lcm_msgs;
 
 struct Keyframe_t 
 {
-	float positions[3];
+	float position[3];
 	float velocity[3];
 	float yaw;
 	

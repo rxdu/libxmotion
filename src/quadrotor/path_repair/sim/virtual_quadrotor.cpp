@@ -31,13 +31,13 @@ void VirtualQuadrotor::SetConfig(int32_t map_x, int32_t map_y, int32_t map_z, in
     qplanner_->SetMapSize(map_x, map_y, map_z);
 
     // set initial and goal pose
-    init_pos_ = Position2D(0, 0);
+    init_pos_ = Position2Di(0, 0);
     init_height_ = height;
 
     qplanner_->SetStartPosition(init_pos_);
     qplanner_->SetStartHeight(init_height_);
 
-    qplanner_->SetGoalPosition(Position2D(map_x - 1, map_y - 1));
+    qplanner_->SetGoalPosition(Position2Di(map_x - 1, map_y - 1));
     qplanner_->SetGoalHeight(height);
 
     qplanner_->SetSensorRange(sensor_rng);
@@ -57,13 +57,13 @@ void VirtualQuadrotor::Load_5by5_Config()
     qplanner_->SetMapSize(5, 5, 5);
 
     // set initial and goal pose
-    init_pos_ = Position2D(0, 0);
+    init_pos_ = Position2Di(0, 0);
     init_height_ = 2;
 
     qplanner_->SetStartPosition(init_pos_);
     qplanner_->SetStartHeight(init_height_);
 
-    qplanner_->SetGoalPosition(Position2D(4, 4));
+    qplanner_->SetGoalPosition(Position2Di(4, 4));
     qplanner_->SetGoalHeight(2);
 
     qplanner_->SetSensorRange(2);
@@ -78,13 +78,13 @@ void VirtualQuadrotor::Load_10by10_Config()
     qplanner_->SetMapSize(10, 10, 5);
 
     // set initial and goal pose
-    init_pos_ = Position2D(0, 0);
+    init_pos_ = Position2Di(0, 0);
     init_height_ = 2;
 
     qplanner_->SetStartPosition(init_pos_);
     qplanner_->SetStartHeight(init_height_);
 
-    qplanner_->SetGoalPosition(Position2D(9, 9));
+    qplanner_->SetGoalPosition(Position2Di(9, 9));
     qplanner_->SetGoalHeight(2);
 
     qplanner_->SetSensorRange(5);
@@ -99,13 +99,13 @@ void VirtualQuadrotor::Load_15by20_Config()
     qplanner_->SetMapSize(15, 20, 5);
 
     // set initial and goal pose
-    init_pos_ = Position2D(0, 0);
+    init_pos_ = Position2Di(0, 0);
     init_height_ = 2;
 
     qplanner_->SetStartPosition(init_pos_);
     qplanner_->SetStartHeight(init_height_);
 
-    qplanner_->SetGoalPosition(Position2D(14, 19));
+    qplanner_->SetGoalPosition(Position2Di(14, 19));
     qplanner_->SetGoalHeight(2);
 
     // qplanner_->SetSensorRange(8);
@@ -121,13 +121,13 @@ void VirtualQuadrotor::Load_20by30_Config()
     qplanner_->SetMapSize(20, 30, 5);
 
     // set initial and goal pose
-    init_pos_ = Position2D(0, 0);
+    init_pos_ = Position2Di(0, 0);
     init_height_ = 2;
 
     qplanner_->SetStartPosition(init_pos_);
     qplanner_->SetStartHeight(init_height_);
 
-    qplanner_->SetGoalPosition(Position2D(19, 29));
+    qplanner_->SetGoalPosition(Position2Di(19, 29));
     qplanner_->SetGoalHeight(2);
 
     qplanner_->SetSensorRange(10);
@@ -142,13 +142,13 @@ void VirtualQuadrotor::Load_30by50_Config()
     qplanner_->SetMapSize(30, 50, 5);
 
     // set initial and goal pose
-    init_pos_ = Position2D(0, 0);
+    init_pos_ = Position2Di(0, 0);
     init_height_ = 3;
 
     qplanner_->SetStartPosition(init_pos_);
     qplanner_->SetStartHeight(init_height_);
 
-    qplanner_->SetGoalPosition(Position2D(29, 49));
+    qplanner_->SetGoalPosition(Position2Di(29, 49));
     qplanner_->SetGoalHeight(3);
 
     qplanner_->SetSensorRange(10);
@@ -163,13 +163,13 @@ void VirtualQuadrotor::Load_50by50_Config()
     qplanner_->SetMapSize(50, 50, 5);
 
     // set initial and goal pose
-    init_pos_ = Position2D(0, 0);
+    init_pos_ = Position2Di(0, 0);
     init_height_ = 3;
 
     qplanner_->SetStartPosition(init_pos_);
     qplanner_->SetStartHeight(init_height_);
 
-    qplanner_->SetGoalPosition(Position2D(49, 49));
+    qplanner_->SetGoalPosition(Position2Di(49, 49));
     qplanner_->SetGoalHeight(3);
 
     qplanner_->SetSensorRange(10);
@@ -184,13 +184,13 @@ void VirtualQuadrotor::Load_45by60_Config()
     qplanner_->SetMapSize(45, 60, 5);
 
     // set initial and goal pose
-    init_pos_ = Position2D(0, 0);
+    init_pos_ = Position2Di(0, 0);
     init_height_ = 3;
 
     qplanner_->SetStartPosition(init_pos_);
     qplanner_->SetStartHeight(init_height_);
 
-    qplanner_->SetGoalPosition(Position2D(44, 59));
+    qplanner_->SetGoalPosition(Position2Di(44, 59));
     qplanner_->SetGoalHeight(3);
 
     qplanner_->SetSensorRange(12);
@@ -204,7 +204,7 @@ bool VirtualQuadrotor::IsReady()
     return qplanner_->IsConfigComplete();
 }
 
-double VirtualQuadrotor::CalcWaypointDistance(Position2D pos1, Position2D pos2)
+double VirtualQuadrotor::CalcWaypointDistance(Position2Di pos1, Position2Di pos2)
 {
     double x1, x2, y1, y2;
 
@@ -229,7 +229,7 @@ void VirtualQuadrotor::MoveForward(bool enable_path_repair)
     if (active_path_.size() >= 2)
     {
         // find next waypoint
-        Position2D next_pt;
+        Position2Di next_pt;
         int32_t next_idx = 0;
 
         for (int i = 0; i < active_path_.size(); i++)
@@ -243,8 +243,8 @@ void VirtualQuadrotor::MoveForward(bool enable_path_repair)
             }
         }
 
-        Position2D pos1(current_pos_.x, current_pos_.y);
-        Position2D pos2(active_path_[next_idx].x, active_path_[next_idx].y);
+        Position2Di pos1(current_pos_.x, current_pos_.y);
+        Position2Di pos2(active_path_[next_idx].x, active_path_[next_idx].y);
         traveled_distance_ += CalcWaypointDistance(pos1, pos2);
 
         // update current pose
@@ -326,8 +326,8 @@ void VirtualQuadrotor::Step()
 
                 for (auto it = active_path_.begin(); it != active_path_.end() - 1; it++)
                 {
-                    Position2D pos1((*it).x, (*it).y);
-                    Position2D pos2((*(it + 1)).x, (*(it + 1)).y);
+                    Position2Di pos1((*it).x, (*it).y);
+                    Position2Di pos2((*(it + 1)).x, (*(it + 1)).y);
                     init_repair_path_cost_ += CalcWaypointDistance(pos1, pos2);
                 }
             }
@@ -391,8 +391,8 @@ void VirtualQuadrotor::CmpStep()
 
                 for (auto it = active_path_.begin(); it != active_path_.end() - 1; it++)
                 {
-                    Position2D pos1((*it).x, (*it).y);
-                    Position2D pos2((*(it + 1)).x, (*(it + 1)).y);
+                    Position2Di pos1((*it).x, (*it).y);
+                    Position2Di pos2((*(it + 1)).x, (*(it + 1)).y);
                     init_repair_path_cost_ += CalcWaypointDistance(pos1, pos2);
                 }
             }

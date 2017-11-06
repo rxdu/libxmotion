@@ -28,7 +28,7 @@ ShortcutEval::ShortcutEval(std::shared_ptr<SquareGrid> sgrid, std::shared_ptr<Na
 
 }
 
-double ShortcutEval::CalcDirectDistance(Position2D start, Position2D goal, double cell_size, bool allow_diag)
+double ShortcutEval::CalcDirectDistance(Position2Di start, Position2Di goal, double cell_size, bool allow_diag)
 {
 	double dist = 0;
 

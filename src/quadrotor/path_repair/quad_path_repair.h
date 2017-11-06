@@ -56,8 +56,8 @@ private:
 	std::shared_ptr<PathManager> traj_gen_;
 
 	// planning parameters
-	Position2D start_pos_;
-	Position2D goal_pos_;
+	Position2Di start_pos_;
+	Position2Di goal_pos_;
 
 	bool gstart_set_;
 	bool ggoal_set_;
@@ -94,7 +94,7 @@ public:
 	};
 
 	// search functions
-	std::vector<Position2D> UpdateGlobalPath();
+	std::vector<Position2Di> UpdateGlobalPath();
 	std::vector<uint64_t> UpdateGlobalPathID();
 
 private:
@@ -104,14 +104,14 @@ private:
 	void LcmSysTimeHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::TimeStamp_t* msg);
 
 	// set start and goal on map (internal use)
-	void SetStartMapPosition(Position2D pos);
-	void SetGoalMapPosition(Position2D pos);
+	void SetStartMapPosition(Position2Di pos);
+	void SetGoalMapPosition(Position2Di pos);
 
 	// helper functions
 	cv::Mat GetActiveMap();
 	MapInfo GetActiveMapInfo();
 	srcl_lcm_msgs::Graph_t GenerateLcmGraphMsg();
-	srcl_lcm_msgs::Path_t GenerateLcmPathMsg(std::vector<Position2D> waypoints);
+	srcl_lcm_msgs::Path_t GenerateLcmPathMsg(std::vector<Position2Di> waypoints);
 	void Send3DSearchPathToVis(std::vector<Position3Dd> path);
 };
 

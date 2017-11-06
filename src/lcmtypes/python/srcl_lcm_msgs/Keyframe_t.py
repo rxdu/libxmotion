@@ -10,10 +10,10 @@ except ImportError:
 import struct
 
 class Keyframe_t(object):
-    __slots__ = ["positions", "velocity", "yaw", "vel_constr"]
+    __slots__ = ["position", "velocity", "yaw", "vel_constr"]
 
     def __init__(self):
-        self.positions = [ 0.0 for dim0 in range(3) ]
+        self.position = [ 0.0 for dim0 in range(3) ]
         self.velocity = [ 0.0 for dim0 in range(3) ]
         self.yaw = 0.0
         self.vel_constr = False
@@ -25,7 +25,7 @@ class Keyframe_t(object):
         return buf.getvalue()
 
     def _encode_one(self, buf):
-        buf.write(struct.pack('>3f', *self.positions[:3]))
+        buf.write(struct.pack('>3f', *self.position[:3]))
         buf.write(struct.pack('>3f', *self.velocity[:3]))
         buf.write(struct.pack(">fb", self.yaw, self.vel_constr))
 
@@ -41,7 +41,7 @@ class Keyframe_t(object):
 
     def _decode_one(buf):
         self = Keyframe_t()
-        self.positions = struct.unpack('>3f', buf.read(12))
+        self.position = struct.unpack('>3f', buf.read(12))
         self.velocity = struct.unpack('>3f', buf.read(12))
         self.yaw = struct.unpack(">f", buf.read(4))[0]
         self.vel_constr = bool(struct.unpack('b', buf.read(1))[0])
@@ -51,7 +51,7 @@ class Keyframe_t(object):
     _hash = None
     def _get_hash_recursive(parents):
         if Keyframe_t in parents: return 0
-        tmphash = (0xad5f94f44c99be7c) & 0xffffffffffffffff
+        tmphash = (0xc5f4c6b7363280a5) & 0xffffffffffffffff
         tmphash  = (((tmphash<<1)&0xffffffffffffffff)  + (tmphash>>63)) & 0xffffffffffffffff
         return tmphash
     _get_hash_recursive = staticmethod(_get_hash_recursive)

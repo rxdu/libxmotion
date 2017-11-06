@@ -47,8 +47,8 @@ public:
 	}
 	~SquareCell(){};
 
-	Position2D index_;
-	Position2D location_;
+	Position2Di index_;
+	Position2Di location_;
 	OccupancyType occu_;
 	BoundingBox bbox_;
 	uint64_t geo_mark_id_;

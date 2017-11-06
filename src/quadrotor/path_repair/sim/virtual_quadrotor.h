@@ -40,11 +40,11 @@ private:
   std::shared_ptr<SimPathRepair> qplanner_;
 
   // pose info for sim reset
-  Position2D init_pos_;
+  Position2Di init_pos_;
   int32_t init_height_;
 
   // pose info for flight sim
-  Position2D current_pos_;
+  Position2Di current_pos_;
   int32_t current_height_;
   double current_heading_;
 
@@ -61,7 +61,7 @@ private:
 
   void MoveForward(bool enable_path_repair = true);
   void PublishState();
-  double CalcWaypointDistance(Position2D pos1, Position2D pos2);
+  double CalcWaypointDistance(Position2Di pos1, Position2Di pos2);
 };
 }
 

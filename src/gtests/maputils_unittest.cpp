@@ -47,7 +47,7 @@ struct MapUtilsTest: testing::Test
 
 TEST_F(MapUtilsTest, MapToWorld)
 {
-	Position2D input;
+	Position2Di input;
 	Position2Dd exp_value;
 	Position2Dd calc_value;
 
@@ -93,8 +93,8 @@ TEST_F(MapUtilsTest, MapToWorld)
 TEST_F(MapUtilsTest, WorldToMap)
 {
 	Position2Dd input;
-	Position2D exp_value;
-	Position2D calc_value;
+	Position2Di exp_value;
+	Position2Di calc_value;
 
 	//  calculation 1
 	input.x = 0.0;
@@ -135,9 +135,9 @@ TEST_F(MapUtilsTest, WorldToMap)
 
 TEST_F(MapUtilsTest, PaddedToOriginal)
 {
-	Position2D input;
-	Position2D exp_value;
-	Position2D calc_value;
+	Position2Di input;
+	Position2Di exp_value;
+	Position2Di calc_value;
 
 	//  calculation 1
 	input.x = 0.0;
@@ -178,9 +178,9 @@ TEST_F(MapUtilsTest, PaddedToOriginal)
 
 TEST_F(MapUtilsTest, OriginalToPadded)
 {
-	Position2D input;
-	Position2D exp_value;
-	Position2D calc_value;
+	Position2Di input;
+	Position2Di exp_value;
+	Position2Di calc_value;
 
 	//  calculation 1
 	input.x = 0.0;
