@@ -9,6 +9,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 set(QUAD_LIB_SRC
     motion_server.cpp
     quad_flattraj_handler.cpp
+    quad_polyopt.cpp
 )
 add_library(quad_motion_server STATIC ${QUAD_LIB_SRC})
 target_link_libraries(quad_motion_server map polyopt ${OpenCV_LIBS} ${Octomap_LIBS} ${LCM_LIBRARIES})

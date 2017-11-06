@@ -17,7 +17,7 @@
 
 #include "common/planning_types.h"
 #include "utility/logging/logger.h"
-#include "stopwatch/stopwatch.h"
+#include "utility/stopwatch/stopwatch.h"
 #include "planning/map/map_utils.h"
 #include "planning/map/map_config.h"
 #include "planning/map/map_info.h"

@@ -7,7 +7,7 @@ set(POLYOPT_LIB_SRC
     #poly_curve.cpp
     gurobi_utils.cpp
     gurobi_polyopt.cpp
-    quad_polyopt.cpp
+    #quad_polyopt.cpp
 )
 add_library(polyopt STATIC ${POLYOPT_LIB_SRC})
 target_link_libraries(polyopt common ${GUROBI_LIBRARIES})

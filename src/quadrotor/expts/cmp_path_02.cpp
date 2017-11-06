@@ -37,7 +37,7 @@
 #include "path_repair/nav_field.h"
 #include "path_repair/shortcut_eval.h"
 
-#include "third_party/stopwatch/stopwatch.h"
+#include "utility/stopwatch/stopwatch.h"
 
 using namespace cv;
 using namespace librav;

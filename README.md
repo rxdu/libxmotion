@@ -5,7 +5,9 @@ This repository contains a collection of software for research on autonomous veh
 ## 1. Repository structure
 
 * **src** : modules implemented in C++
-* **scripts** : python/shell scripts
+* **python**: python code
+* **matlab**: matlab code
+* **scripts** : shell scripts
 * **docs** : documentation of this project
 * **data** : map, experiment results, logs
 * **tools** : tool used for the development

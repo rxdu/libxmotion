@@ -1,3 +1,30 @@
+## Code organization
+
+Configurations
+
+* **cmake**: cmake cofigurations
+* **lcmtypes**: type definitions of LCM
+
+Modules 
+
+* **examples**: example apps of basic functions
+* **common**: code shared by multiple modules
+* **control**: platform-dependent control algorithms
+* **planning**: general motion planning algorithms
+* **gtests**: google test code
+* **vis**: basic visualization
+
+Libraries
+
+* **libraries**: relative large 3rd-party libraries, could potentially be removed by using system-wide installations
+* **utility**: small 3rd-party libraries and helper/wrappper classes implemented to simplify usage of external libraries
+
+Platforms
+
+* **simulator**: V-REP simulatior for quadrotor and RC cars
+* **quadrotor**: applications of quadrotors
+* **rc_car**: applications of RC cars
+
 ## LCM Channels
 
 ### Quadrotor

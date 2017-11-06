@@ -22,13 +22,14 @@ endif(ENABLE_LOGGING)
 
 ## Config common include directories
 include_directories(${CMAKE_SOURCE_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/third_party/)
-include_directories(${CMAKE_SOURCE_DIR}/third_party/octomap-1.8.0/octomap/include)
+include_directories(${CMAKE_SOURCE_DIR}/libraries/)
+include_directories(${CMAKE_SOURCE_DIR}/libraries/octomap-1.8.0/octomap/include)
 
 set(Octomap_LIBS octomap octomath)
 
 ## Add other sub source directories
-add_subdirectory(third_party)
+#add_subdirectory(examples)
+add_subdirectory(libraries)
 add_subdirectory(common)
 add_subdirectory(simulator)
 add_subdirectory(control)
