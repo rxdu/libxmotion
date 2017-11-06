@@ -1,20 +1,7 @@
 # Include path
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-find_package(CGAL REQUIRED)
-
-# Add libraries
-set(POLYOPT_LIB_SRC
-    polyopt_math.cpp
-    gurobi_solver/gurobi_utils.cpp
-    gurobi_solver/gurobi_polyopt.cpp
-)
-add_library(polyopt STATIC ${POLYOPT_LIB_SRC})
-target_link_libraries(polyopt common ${GUROBI_LIBRARIES})
-
 # Add executables
-add_subdirectory(tests)
-
 #add_executable(qp_cpp tests/qp_c++.cpp)
 #target_link_libraries(qp_cpp ${GUROBI_LIBRARIES})
 
@@ -35,3 +22,6 @@ add_subdirectory(tests)
 
 #add_executable(test_corridor tests/test_corridor.cpp)
 #target_link_libraries(test_corridor polyopt ${GUROBI_LIBRARIES} ${LCM_LIBRARIES})
+
+#add_executable(test_cgal_qp test_cgal_qp.cpp)
+#target_link_libraries(test_cgal_qp polyopt ${CGAL_LIBRARIES} ${GMP_LIBRARIES})

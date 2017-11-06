@@ -15,7 +15,7 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/librav.hpp"
 
-#include "common/planning_types.h"
+#include "common/librav_types.h"
 #include "utility/logging/logger.h"
 #include "utility/stopwatch/stopwatch.h"
 #include "planning/map/map_utils.h"

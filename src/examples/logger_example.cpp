@@ -7,7 +7,7 @@
 
 #include <memory>
 
-#include "logging/logger.h"
+#include "utility/librav_utility.h"
 
 using namespace librav;
 

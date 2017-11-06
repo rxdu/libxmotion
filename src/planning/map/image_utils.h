@@ -13,7 +13,7 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
 
-#include "common/planning_types.h"
+#include "common/librav_types.h"
 
 namespace librav
 {

@@ -20,7 +20,7 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/librav.hpp"
 
-#include "common/planning_types.h"
+#include "common/librav_types.h"
 #include "planning/geometry/geo_mark.h"
 
 namespace librav {

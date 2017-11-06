@@ -1,5 +1,5 @@
 /*
- * control_types.h
+ * librav_types.h
  *
  *  Created on: Jul 19, 2015
  *      Author: rdu

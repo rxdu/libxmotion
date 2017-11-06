@@ -11,7 +11,7 @@
 #include <map>
 #include <vector>
 
-#include "common/planning_types.h"
+#include "common/librav_types.h"
 #include "planning/graph/bds_base.h"
 
 namespace librav{

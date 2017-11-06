@@ -16,8 +16,8 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/librav.hpp"
 
-#include "common/control_types.h"
-#include "common/planning_types.h"
+#include "common/librav_types.h"
+#include "common/librav_types.h"
 
 namespace librav {
 

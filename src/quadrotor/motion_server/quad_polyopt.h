@@ -17,7 +17,7 @@
 #include "eigen3/Eigen/Core"
 
 #include "common/quad_flattraj.h"
-#include "planning/polyopt/gurobi_polyopt.h"
+#include "planning/polyopt/gurobi_solver/gurobi_polyopt.h"
 
 namespace librav {
 

@@ -15,8 +15,8 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/librav.hpp"
 
-#include "common/planning_types.h"
-#include "common/control_types.h"
+#include "common/librav_types.h"
+#include "common/librav_types.h"
 
 #include "planning/map/map_info.h"
 #include "planning/geometry/geo_mark.h"

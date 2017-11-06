@@ -13,7 +13,7 @@
 #include "eigen3/Eigen/Geometry"
 
 #include "planning/graph/graph.h"
-#include "common/planning_types.h"
+#include "common/librav_types.h"
 #include "geometry/geo_mark.h"
 #include "map/map_info.h"
 #include "map/map_utils.h"

@@ -19,6 +19,7 @@ using PolynomialCoeffs = Eigen::Array<float,1, Eigen::Dynamic>;
 
 namespace PolyOptMath {
 
+/****** Minimum-snap Trajectory Optimization ******/
 // helper functions
 void GetDerivativeCoeffs(uint32_t poly_order, uint32_t deriv_order, Eigen::Ref<PolynomialCoeffs> coeffs);
 uint32_t GetNonZeroCoeffNum(const Eigen::Ref<const PolynomialCoeffs> coeffs);

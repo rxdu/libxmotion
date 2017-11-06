@@ -12,7 +12,7 @@
 
 #include "eigen3/Eigen/Geometry"
 
-#include "common/planning_types.h"
+#include "common/librav_types.h"
 #include "common/transformation.h"
 
 #include "planning/graph/graph.h"

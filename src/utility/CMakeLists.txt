@@ -37,7 +37,7 @@ add_definitions(-DENABLE_LOGGING)
 target_link_libraries(utility ${CMAKE_THREAD_LIBS_INIT})
 endif(ENABLE_LOGGING)
 
-add_executable(test_logging tests/test_logging.cpp)
-target_link_libraries(test_logging utility)
+#add_executable(test_logging tests/test_logging.cpp)
+#target_link_libraries(test_logging utility)
 
-add_executable(test_stopwatch tests/test_stopwatch.cpp)
+#add_executable(test_stopwatch tests/test_stopwatch.cpp)

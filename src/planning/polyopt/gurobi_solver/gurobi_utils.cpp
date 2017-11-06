@@ -5,7 +5,7 @@
  *      Author: rdu
  */
 
-#include "polyopt/gurobi_utils.h"
+#include "polyopt/gurobi_solver/gurobi_utils.h"
 
 using namespace librav;
 

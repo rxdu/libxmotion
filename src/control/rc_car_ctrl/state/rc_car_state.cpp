@@ -8,7 +8,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "common/control_types.h"
+#include "common/librav_types.h"
 #include "control/rc_car_ctrl/state/rc_car_state.h"
 
 using namespace librav;

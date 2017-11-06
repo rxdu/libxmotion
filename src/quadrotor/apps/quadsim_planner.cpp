@@ -12,7 +12,7 @@
 #include <lcm/lcm-cpp.hpp>
 
 #include "utility/logging/logger.h"
-#include "common/planning_types.h"
+#include "common/librav_types.h"
 #include "planning/map/map_utils.h"
 #include "planning/map/map_config.h"
 #include "planning/map/map_info.h"

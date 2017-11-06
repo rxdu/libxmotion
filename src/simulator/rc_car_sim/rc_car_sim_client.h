@@ -15,7 +15,7 @@ extern "C" {
 /*	#include "extApiCustom.h" // custom remote API functions */
 }
 
-#include "common/control_types.h"
+#include "common/librav_types.h"
 
 #include "simulator/rc_car_sim/rc_car_sim_types.h"
 #include "simulator/vrep_sim/vrep_interface/robot_sim_client.h"

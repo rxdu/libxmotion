@@ -9,9 +9,9 @@
 #include <ctime>
 #include <string>
 
-#include "polyopt/gurobi_polyopt.h"
 #include "polyopt/polyopt_math.h"
-#include "polyopt/gurobi_utils.h"
+#include "polyopt/gurobi_solver/gurobi_polyopt.h"
+#include "polyopt/gurobi_solver/gurobi_utils.h"
 
 using namespace librav;
 using namespace Eigen;

@@ -8,7 +8,7 @@
 #ifndef SIMULATOR_QUAD_HBIRD_SIM_TYPES_H_
 #define SIMULATOR_QUAD_HBIRD_SIM_TYPES_H_
 
-#include "common/control_types.h"
+#include "common/librav_types.h"
 #include "quad_ctrl/state/quad_config.h"
 
 namespace librav {
