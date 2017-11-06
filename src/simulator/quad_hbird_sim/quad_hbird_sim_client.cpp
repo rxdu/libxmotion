@@ -224,7 +224,7 @@ bool QuadHbirdSimClient::Get3DScanPoints(std::vector<Point3f>& points)
 	return true;
 }
 
-bool QuadHbirdSimClient::ReceiveGyroData(IMU_DataType& data)
+bool QuadHbirdSimClient::ReceiveGyroData(Point3f& data)
 {
 	if (simxGetStringSignal(client_id_,"hummingbird_gyro",&gyro_sig,&gyro_sig_size,simx_opmode_buffer) == simx_error_noerror)
 	{
@@ -243,7 +243,7 @@ bool QuadHbirdSimClient::ReceiveGyroData(IMU_DataType& data)
 		return false;
 }
 
-bool QuadHbirdSimClient::ReceiveAccData(IMU_DataType& data)
+bool QuadHbirdSimClient::ReceiveAccData(Point3f& data)
 {
 	if (simxGetStringSignal(client_id_,"hummingbird_acc",&acc_sig,&acc_sig_size,simx_opmode_buffer) == simx_error_noerror)
 	{

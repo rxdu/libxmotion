@@ -1,7 +1,7 @@
 % script to plot simulation data
 close all; clear; clc;
 
-data = csvread('/home/rdu/Workspace/librav/data/log/quad/prsim/prsim.20171026130113.cmp.data');
+data = csvread('/home/rdu/Workspace/librav/data/log/quad/prsim/batch2/prsim.20171026165655.100fov5.data');
 
 run1_data = [];
 run2_data = [];

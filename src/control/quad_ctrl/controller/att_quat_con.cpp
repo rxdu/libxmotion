@@ -111,7 +111,7 @@ void AttQuatCon::Update(const AttQuatConInput& input, AttQuatConOutput& output)
 	rate_error[1] = input.rot_rate_d[1] - state_.rotation_rate_.y;
 	rate_error[2] = input.rot_rate_d[2] - state_.rotation_rate_.z;
 
-	for(int i = 0; i < 4; i++){
+	for(int i = 0; i < 3; i++){
 		if(rate_error[i] < 10e-6 && rate_error[i] > -10e-6)
 			rate_error[i] = 0;
 	}

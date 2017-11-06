@@ -318,9 +318,9 @@ SimPath SimPathRepair::UpdatePath(Position2D pos, int32_t height, double heading
 #endif
 	
 	Path_t<CubeCell &> path;
-	if(enable_path_repair)
-		path = AStar::BiasedSearchWithShortcut(*cubegraph, start_id, goal_id, nav_field_->max_rewards_, sc_evaluator_->dist_weight_, map_info_.side_size);
-	else
+	// if(enable_path_repair)
+	// 	path = AStar::BiasedSearchWithShortcut(*cubegraph, start_id, goal_id, nav_field_->max_rewards_, sc_evaluator_->dist_weight_, map_info_.side_size);
+	// else
 		path = AStar::Search(*cubegraph, start_id, goal_id);
 
 	SimPath path_result;

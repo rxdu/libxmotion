@@ -16,14 +16,16 @@
 
 namespace librav {
 
-typedef struct {
+struct QuadFlatOutput
+{
 	double x;
 	double y;
 	double z;
 	double yaw;
-}QuadFlatOutput;
+};
 
-typedef struct {
+struct QuadFlatOutputSeg
+{
 	PolyCurve seg_x;
 	PolyCurve seg_y;
 	PolyCurve seg_z;
@@ -39,17 +41,13 @@ typedef struct {
 		seg_z.print();
 		seg_yaw.print();
 	}
-}QuadFlatOutputSeg;
+};
 
-class QuadFlatTraj {
-public:
-	QuadFlatTraj()=default;
-	~QuadFlatTraj()=default;
-
+class QuadFlatTraj 
+{
 public:
 	std::vector<QuadFlatOutputSeg> traj_segs_;
-
-public:
+	
 	void AddTrajSeg(const std::vector<std::vector<double>>& seg_coeffs, double ts, double te);
 	QuadFlatOutput GetTrajPointPos(double t);
 

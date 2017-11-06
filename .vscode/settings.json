@@ -51,6 +51,7 @@
         "valarray": "cpp",
         "__config": "cpp",
         "geometry": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "core": "cpp"
     }
 }

@@ -14,7 +14,7 @@
 using namespace librav;
 
 SimDepthSensor::SimDepthSensor() : range_(5),
-                                   fov_(M_PI / 3.0 * 2.0),
+                                   fov_(M_PI / 6.0 * 5.0),
                                    ws_x_(5),
                                    ws_y_(5),
                                    ws_z_(5),

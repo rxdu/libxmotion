@@ -20,7 +20,7 @@
 #include "geometry/cube_array/cube_array.h"
 #include "planning/polyopt/quad_polyopt.h"
 
-#include "common/transformation.h"
+#include "common/librav_math.h"
 
 namespace librav
 {

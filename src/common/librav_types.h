@@ -18,109 +18,109 @@
 namespace librav
 {
 
-/************ Types for Control ************/
+/****************** Types for Control ******************/
 template <typename T>
 struct point3
 {
-    T x;
-    T y;
-    T z;
+	T x;
+	T y;
+	T z;
 };
 
 using Point3f = point3<float>;
 using Point3d = point3<double>;
 using Point3i = point3<int32_t>;
 
-typedef Point3f IMU_DataType;
+// typedef Point3f Point3f;
 
-typedef struct
+struct EulerAngle
 {
-    float roll;
-    float pitch;
-    float yaw;
-} EulerAngle;
+	float roll;
+	float pitch;
+	float yaw;
+};
 
-typedef struct
+struct Quaternion
 {
-    float x;
-    float y;
-    float z;
-    float w;
-} Quaternion;
+	float x;
+	float y;
+	float z;
+	float w;
+};
 
-typedef struct
+struct Pose
 {
-    Point3f pos;
-    EulerAngle ori;
-} Pose;
+	Point3f pos;
+	EulerAngle ori;
+};
 
-typedef struct
+struct IMUData
 {
-    IMU_DataType gyro;
-    IMU_DataType acc;
-} IMUData;
+	Point3f gyro;
+	Point3f acc;
+};
 
-typedef struct
+struct UAVTrajectoryPoint
 {
-    bool point_empty;
-    float positions[3];
-    float velocities[3];
-    float accelerations[3];
-    float jerks[3];
-    float yaw;
-    float yaw_rate;
-    uint64_t duration; // in milliseconds
-} UAVTrajectoryPoint;
+	bool point_empty;
+	float positions[3];
+	float velocities[3];
+	float accelerations[3];
+	float jerks[3];
+	float yaw;
+	float yaw_rate;
+	uint64_t duration; // in milliseconds
+};
 
 typedef std::vector<UAVTrajectoryPoint> UAVTrajectory;
 
 // time_stamp starts from 0 when system initialized, increases at step 1 ms
 typedef uint64_t time_stamp;
 
-/************ Types for Planning ************/
-template<typename T>
+/****************** Types for Planning ******************/
+template <typename T>
 struct position2d
 {
-	position2d():x(0),y(0){}
-	position2d(T _x, T _y):x(_x),y(_y){}
+	position2d() : x(0), y(0) {}
+	position2d(T _x, T _y) : x(_x), y(_y) {}
 
 	T x;
 	T y;
 
-	bool operator==(const struct position2d& other) const
+	bool operator==(const struct position2d &other) const
 	{
-		if(this->x == other.x && this->y == other.y)
+		if (this->x == other.x && this->y == other.y)
 			return true;
 		else
 			return false;
 	}
 
-	friend std::ostream& operator<<(std::ostream& os, const struct position2d& pos)
+	friend std::ostream &operator<<(std::ostream &os, const struct position2d &pos)
 	{
 		os << pos.x << " , " << pos.y;
 		return os;
 	}
 };
 
-template<typename T>
+template <typename T>
 struct position3d
 {
-	position3d():x(0),y(0),z(0){}
-	position3d(T _x, T _y, T _z):x(_x),y(_y),z(_z){}
+	position3d() : x(0), y(0), z(0) {}
+	position3d(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {}
 
 	T x;
 	T y;
 	T z;
 
-	bool operator==(const struct position3d& other) const
+	bool operator==(const struct position3d &other) const
 	{
-		if(this->x == other.x && this->y == other.y && this->z == other.z)
+		if (this->x == other.x && this->y == other.y && this->z == other.z)
 			return true;
 		else
 			return false;
 	}
 
-	friend std::ostream& operator<<(std::ostream& os, const struct position3d& pos)
+	friend std::ostream &operator<<(std::ostream &os, const struct position3d &pos)
 	{
 		os << pos.x << " , " << pos.y << " , " << pos.z;
 		return os;
@@ -143,19 +143,20 @@ enum class OccupancyType
 	EXPANDED_OBS
 };
 
-typedef struct
+struct Range2D
 {
 	uint32_t min;
 	uint32_t max;
-}Range2D;
+};
 
-typedef struct
+struct BoundingBox
 {
 	Range2D x;
 	Range2D y;
-}BoundingBox;
+};
 
-typedef struct {
+struct Keyframe
+{
 	float positions[3];
 	float velocity[3];
 	float yaw;
@@ -163,12 +164,13 @@ typedef struct {
 	bool pos_constr;
 	bool vel_constr;
 	bool yaw_constr;
-} Keyframe;
+};
 
-typedef struct {
+struct KeyframeSet
+{
 	std::vector<Keyframe> keyframes;
 	uint64_t start_time;
-} KeyframeSet;
+};
 
 }
 

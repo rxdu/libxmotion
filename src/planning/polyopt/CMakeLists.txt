@@ -1,7 +1,7 @@
 # Include path
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-find_package(CGAL REQUIRED)
+#find_package(CGAL REQUIRED)
 
 # Add libraries
 set(POLYOPT_LIB_SRC

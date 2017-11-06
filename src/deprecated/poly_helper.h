@@ -1,5 +1,5 @@
 /*
- * poly_helper.h
+ * librav_math.h
  *
  *  Created on: June 08, 2017
  *      Author: rdu
@@ -16,7 +16,7 @@
 
 namespace librav
 {
-namespace PolyHelper
+namespace PolynomialMath
 {
 
 using PolynomialCoeffs = Eigen::Array<float,1, Eigen::Dynamic>;

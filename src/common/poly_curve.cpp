@@ -33,8 +33,8 @@ double PolyCurve::GetCurvePointDerivVal(uint32_t deriv, double t)
 	int64_t N = param_.coeffs.size() - 1;
 	int64_t r = deriv;
 	double ts = GetRefactoredTime(t);
-	PolyHelper::PolynomialCoeffs deriv_coeff(N + 1);
-	PolyHelper::GetDerivativeCoeffs(N, r, deriv_coeff);
+	PolynomialMath::PolynomialCoeffs deriv_coeff(N + 1);
+	PolynomialMath::GetDerivativeCoeffs(N, r, deriv_coeff);
 
 	double val = 0;
 	for(int i = 0; i <= N; i++)

@@ -25,7 +25,7 @@ using Point3f = point3<float>;
 using Point3d = point3<double>;
 using Point3i = point3<int32_t>;
 
-typedef Point3f IMU_DataType;
+typedef Point3f Point3f;
 
 typedef struct
 {
@@ -50,8 +50,8 @@ typedef struct
 
 typedef struct
 {
-	IMU_DataType gyro;
-	IMU_DataType acc;
+	Point3f gyro;
+	Point3f acc;
 }IMUData;
 
 typedef struct

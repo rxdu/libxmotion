@@ -37,8 +37,8 @@ public:
 	virtual void SendDataToRobot(const DataToQuadSim& rcmd);
 
 private:
-	bool ReceiveGyroData(IMU_DataType& data);
-	bool ReceiveAccData(IMU_DataType& data);
+	bool ReceiveGyroData(Point3f& data);
+	bool ReceiveAccData(Point3f& data);
 	bool GetVisionImage(simxUChar img[IMG_RES_Y][IMG_RES_X]);
 	bool Get3DScanPoints(std::vector<Point3f>& points);
 

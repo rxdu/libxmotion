@@ -5,11 +5,11 @@
  *      Author: rdu
  */
 
-#include "common/poly_helper.h"
+#include "common/librav_math.h"
 
 using namespace librav;
 
-void PolyHelper::GetDerivativeCoeffs(uint32_t poly_order, uint32_t deriv_order, Eigen::Ref<PolynomialCoeffs> coeffs)
+void PolynomialMath::GetDerivativeCoeffs(uint32_t poly_order, uint32_t deriv_order, Eigen::Ref<PolynomialCoeffs> coeffs)
 {
 	{
 		int64_t N = poly_order;
@@ -40,14 +40,14 @@ void PolyHelper::GetDerivativeCoeffs(uint32_t poly_order, uint32_t deriv_order, 
 	}
 }
 
-double PolyHelper::GetPolynomialValue(std::vector<double> coeffs, uint32_t deriv_order, double tau)
+double PolynomialMath::GetPolynomialValue(std::vector<double> coeffs, uint32_t deriv_order, double tau)
 {
 	double val = 0;
 	int64_t N = coeffs.size() - 1;
 	int64_t r = deriv_order;
 
 	PolynomialCoeffs deriv_coeff(N + 1);
-	PolyHelper::GetDerivativeCoeffs(N, r, deriv_coeff);
+	PolynomialMath::GetDerivativeCoeffs(N, r, deriv_coeff);
 
 	uint32_t coeff_size = coeffs.size();
 	for(int i = 0; i <= N; i++)

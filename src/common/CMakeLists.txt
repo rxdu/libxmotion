@@ -29,10 +29,12 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add libraries
 set(SRCL_COMMON_LIB_SRC
-    poly_helper.cpp
+	librav_math.cpp
+	#librav_types.cpp
+    #poly_helper.cpp
     poly_curve.cpp
     quad_flattraj.cpp
-	transformation.cpp
+	#transformation.cpp
 )
 add_library(common STATIC ${SRCL_COMMON_LIB_SRC})
 if(ENABLE_LOGGING)

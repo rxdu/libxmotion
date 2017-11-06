@@ -224,7 +224,7 @@ bool QuadSoloSimClient::Get3DScanPoints(std::vector<Point3f>& points)
 	return true;
 }
 
-bool QuadSoloSimClient::ReceiveGyroData(IMU_DataType& data)
+bool QuadSoloSimClient::ReceiveGyroData(Point3f& data)
 {
 	if (simxGetStringSignal(client_id_,"solo_gyro",&gyro_sig,&gyro_sig_size,simx_opmode_buffer) == simx_error_noerror)
 	{
@@ -245,7 +245,7 @@ bool QuadSoloSimClient::ReceiveGyroData(IMU_DataType& data)
 		return false;
 }
 
-bool QuadSoloSimClient::ReceiveAccData(IMU_DataType& data)
+bool QuadSoloSimClient::ReceiveAccData(Point3f& data)
 {
 	if (simxGetStringSignal(client_id_,"solo_acc",&acc_sig,&acc_sig_size,simx_opmode_buffer) == simx_error_noerror)
 	{

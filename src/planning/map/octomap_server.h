@@ -19,7 +19,7 @@
 #include <octomap/OcTree.h>
 #include <octomap/ColorOcTree.h>
 
-#include "common/transformation.h"
+#include "common/librav_math.h"
 
 namespace librav {
 
@@ -55,7 +55,7 @@ private:
 
 public:
 	std::shared_ptr<octomap::OcTree> octree_;
-	utils::Transformation::Transform3D octree_transf_;
+	TransformationMath::Transform3D octree_transf_;
 
 public:
 	void SetOctreeResolution(double new_res) { octree_res_ = new_res; };

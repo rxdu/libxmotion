@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <iostream>
 
-#include "common/poly_helper.h"
+#include "common/librav_math.h"
 
 namespace librav {
 
@@ -30,18 +30,11 @@ public:
 	PolyCurve(const std::vector<double>& coefficients, bool coeff_nondim, double start_t, double end_t);
 	PolyCurve(const std::vector<double>& coefficients, bool coeff_nondim, double start_t, double end_t, std::string str);
 	~PolyCurve()=default;
-
-private:
-	bool is_nondim_;
-
+	
 public:
 	CurveParameter param_;
 	std::string name_;
 
-private:
-	double GetCurvePointDerivVal(uint32_t deriv, double t);
-
-public:
 	void SetCurveName(std::string str){ name_ = str; };
 	std::string GetCurveName(){ return name_; };
 
@@ -52,6 +45,10 @@ public:
 	double GetCurvePointAcc(double t);
 
 	void print();
+
+private:
+	bool is_nondim_;	
+	double GetCurvePointDerivVal(uint32_t deriv, double t);
 };
 
 }

@@ -10,7 +10,7 @@
 
 #include "gtest/gtest.h"
 
-#include "common/transformation.h"
+#include "common/librav_math.h"
 
 using namespace Eigen;
 using namespace librav;

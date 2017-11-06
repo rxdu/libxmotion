@@ -13,7 +13,7 @@
 #include "eigen3/Eigen/Geometry"
 
 #include "common/librav_types.h"
-#include "common/transformation.h"
+#include "common/librav_math.h"
 
 #include "planning/graph/graph.h"
 #include "planning/geometry/geo_mark.h"
@@ -40,7 +40,7 @@ private:
 
 	Graph_t<GeoMark> sgrid_geomark_graph_;
 
-	utils::Transformation::Transform3D transf_;
+	TransformationMath::Transform3D transf_;
 public:
 	Position3Dd pos_;
 	Eigen::Quaterniond quat_;
