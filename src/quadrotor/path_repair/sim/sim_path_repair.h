@@ -23,10 +23,8 @@
 
 #include "quadrotor/path_repair/sim/sim_depth_sensor.h"
 #include "quadrotor/path_repair/sg_graph_planner.h"
-#include "quadrotor/path_repair/geo_mark_graph.h"
 #include "quadrotor/path_repair/nav_field.h"
 #include "quadrotor/path_repair/shortcut_eval.h"
-#include "quadrotor/mission/path_manager.h"
 #include "quadrotor/mission/mission_tracker.h"
 
 namespace librav
@@ -90,7 +88,6 @@ class SimPathRepair
 
 	// planners
 	SGGraphPlanner sgrid_planner_;
-	GeoMarkGraph geomark_graph_;
 
 	SimMapInfo map_info_;
 	int32_t sensor_range_;

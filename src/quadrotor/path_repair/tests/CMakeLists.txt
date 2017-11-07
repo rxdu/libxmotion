@@ -8,7 +8,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add executables
 add_executable(test_sim_sensor test_sim_sensor.cpp)
-target_link_libraries(test_sim_sensor pr_sim)
+target_link_libraries(test_sim_sensor pr_sim geometry)
 
 #add_executable(graph_combine_exp tests/graph_combine_exp.cpp)
 #target_link_libraries(graph_combine_exp map utils ${Octomap_LIBS} ${LCM_LIBRARIES})
@@ -44,4 +44,4 @@ target_link_libraries(test_sim_sensor pr_sim)
 #target_link_libraries(test_navfield3 map vis path_repair ${OpenCV_LIBS})
 
 add_executable(test_navfield4 test_navfield4.cpp)
-target_link_libraries(test_navfield4 map vis path_repair ${OpenCV_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(test_navfield4 pr_sim map vis ${OpenCV_LIBS} ${LCM_LIBRARIES})

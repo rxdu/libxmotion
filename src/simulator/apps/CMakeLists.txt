@@ -5,11 +5,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_executable(quadsim_hbird_demo quadsim_hbird_demo.cpp)
 target_link_libraries(quadsim_hbird_demo quadsim)
 
-add_executable(rc_car_sim_demo rc_car_sim_demo.cpp)
-target_link_libraries(rc_car_sim_demo rccarsim rccar_ctrl)
+#add_executable(rc_car_sim_demo rc_car_sim_demo.cpp)
+#target_link_libraries(rc_car_sim_demo rccarsim car_ctrl)
 
-add_executable(rc_car_sim_control rc_car_sim_control.cpp)
-target_link_libraries(rc_car_sim_control rccarsim rccar_ctrl)
+#add_executable(rc_car_sim_control rc_car_sim_control.cpp)
+#target_link_libraries(rc_car_sim_control rccarsim car_ctrl)
 
 add_executable(quadsim_path_repair quadsim_path_repair.cpp)
 target_link_libraries(quadsim_path_repair quadsim path_repair)

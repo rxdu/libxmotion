@@ -38,17 +38,16 @@ set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Find Gurobi
-find_package(GUROBI REQUIRED)
+find_package(GUROBI QUIET)
 if (NOT GUROBI_FOUND)
-  message("Gurobi not found. If you want to use Gurobi, set the GUROBI_HOME variable")
+  message("Gurobi not found. Trajectory generation will not be built. Make sure you have set the GUROBI_HOME variable")
 else()
   message("Gurobi found")
   include_directories(${GUROBI_INCLUDE_DIRS})
+  add_subdirectory(polyopt)
 endif()
 
 ## Add other sub source directories
 add_subdirectory(geometry)
-add_subdirectory(polyopt)
-#add_subdirectory(graph)
 add_subdirectory(map)
 add_subdirectory(examples)

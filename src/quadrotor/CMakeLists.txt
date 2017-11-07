@@ -38,28 +38,35 @@ set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Find Gurobi
-find_package(GUROBI REQUIRED)
+find_package(GUROBI QUIET)
 if (NOT GUROBI_FOUND)
-  message("Gurobi not found. If you want to use Gurobi, set the GUROBI_HOME variable")
+  message("Gurobi not found. Trajectory generation will not be built. Make sure you have set the GUROBI_HOME variable")
 else()
   message("Gurobi found")
   include_directories(${GUROBI_INCLUDE_DIRS})
 endif()
 
 set(QUAD_BASE_SRC
-    driver/quad_data_broadcaster.cpp
-    mission/mission_tracker.cpp
-    mission/path_manager.cpp
+    driver/quad_data_broadcaster.cpp    
     motion_server/motion_server.cpp
     motion_server/quad_flattraj_handler.cpp
+    mission/mission_tracker.cpp
 )
-add_library(quad_base STATIC ${QUAD_BASE_SRC})
+set(TRAJ_SRC     
+    mission/path_manager.cpp
+    motion_server/quad_polyopt.cpp
+)
+
+if (NOT GUROBI_FOUND)
+  set(QUAD_MOD_SRC ${QUAD_BASE_SRC})
+else()
+  set(QUAD_MOD_SRC ${QUAD_BASE_SRC} ${TRAJ_SRC})
+endif()
+
+add_library(quad_base STATIC ${QUAD_MOD_SRC})
 target_link_libraries(quad_base common ${LCM_LIBRARIES})
 
 ## Add other sub source directories
 add_subdirectory(apps)
 add_subdirectory(expts)
-add_subdirectory(driver)
-add_subdirectory(mission)
-add_subdirectory(motion_server)
 add_subdirectory(path_repair)

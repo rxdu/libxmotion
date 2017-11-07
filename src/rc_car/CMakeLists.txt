@@ -37,15 +37,6 @@ endif(LCM_NOT_FOUND)
 set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 
-## Find Gurobi
-find_package(GUROBI REQUIRED)
-if (NOT GUROBI_FOUND)
-  message("Gurobi not found. If you want to use Gurobi, set the GUROBI_HOME variable")
-else()
-  message("Gurobi found")
-  include_directories(${GUROBI_INCLUDE_DIRS})
-endif()
-
 ## Add other sub source directories
 add_subdirectory(apps)
 add_subdirectory(comm)

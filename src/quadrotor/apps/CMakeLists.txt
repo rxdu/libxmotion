@@ -8,7 +8,7 @@ find_package(OpenCV REQUIRED)
 
 # Add executables
 add_executable(path_repair_pysim path_repair_pysim.cpp)
-target_link_libraries(path_repair_pysim map path_repair pr_sim quad_base common ${OpenCV_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(path_repair_pysim map pr_sim quad_base common ${OpenCV_LIBS} ${LCM_LIBRARIES})
 
 #add_executable(quadsim_pr_planner quadsim_planner.cpp)
 #target_link_libraries(quadsim_pr_planner map path_repair quad_base common ${OpenCV_LIBS} ${LCM_LIBRARIES})
@@ -23,10 +23,10 @@ add_executable(map_param map_param.cpp)
 target_link_libraries(map_param geometry vis ${OpenCV_LIBS} ${LCM_LIBRARIES})
 
 add_executable(local_analysis local_analysis.cpp)
-target_link_libraries(local_analysis map vis path_repair ${OpenCV_LIBS})
+target_link_libraries(local_analysis map vis pr_sim ${OpenCV_LIBS})
 
 add_executable(octomap_server_node octomap_server_node.cpp)
-target_link_libraries(octomap_server_node path_repair map geometry ${Octomap_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(octomap_server_node pr_sim map geometry common ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 add_executable(shortcut_analysis shortcut_analysis.cpp)
-target_link_libraries(shortcut_analysis map vis path_repair ${OpenCV_LIBS})
+target_link_libraries(shortcut_analysis map vis pr_sim ${OpenCV_LIBS})
