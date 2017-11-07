@@ -18,6 +18,11 @@
 #include "rc_car/comm/can_messenger.h"
 #include "rc_car/comm/lcm_messenger.h"
 
+#include "utility/librav_utility.h"
+
+#define WHEEL_DIAMETER 0.065
+#define GEAR_RATIO	6.58	// with 20T pinion gear
+
 using namespace librav;
 
 class CarCommCoordinator
@@ -25,7 +30,11 @@ class CarCommCoordinator
 public:
     CarCommCoordinator(std::shared_ptr<lcm::LCM> lcm):
         lcm_(lcm),
-        lcm_messenger_(lcm){};
+        lcm_messenger_(lcm),
+        imu_logger_(new CsvLogger("raw_imu", "/home/rdu/CarLog")),
+        mag_logger_(new CsvLogger("raw_mag", "/home/rdu/CarLog")),
+        spd_logger_(new CsvLogger("raw_spd", "/home/rdu/CarLog"))
+        {};
 
     bool initCarComm()
     {
@@ -51,11 +60,16 @@ private:
     LCMMessenger lcm_messenger_;    
     CANMessenger can_messenger_;
 
+    std::unique_ptr<CsvLogger> imu_logger_;
+    std::unique_ptr<CsvLogger> mag_logger_;
+    std::unique_ptr<CsvLogger> spd_logger_;
+
     void uavcanIMUMsgCallback(const uavcantypes::pixcar::CarRawIMU &msg)
     {
         std::cout << "Gyro: " << msg.gyro[0] << " , " << msg.gyro[1] << " , " << msg.gyro[2] << std::endl; 
         std::cout << "Accel: " << msg.accel[0] << " , " << msg.accel[1] << " , " << msg.accel[2] << std::endl; 
 
+        imu_logger_->LogData(msg.time_stamp,msg.gyro[0],msg.gyro[1],msg.gyro[2],msg.accel[0],msg.accel[1],msg.accel[2]);
         lcm_messenger_.republishRawIMUData(msg);
     }
 
@@ -63,13 +77,15 @@ private:
     {
         std::cout << "Mag: " << msg.mag[0] << " , " << msg.mag[1] << " , " << msg.mag[2] << std::endl; 
 
+        mag_logger_->LogData(msg.time_stamp,msg.mag[0],msg.mag[1],msg.mag[2]);
         lcm_messenger_.republishRawMagData(msg);
     }
     
     void uavcanSpeedMsgCallback(const uavcantypes::pixcar::CarRawSpeed &msg)
     {
         std::cout << "Speed: " << msg.speed << std::endl;     
-
+        float car_speed = 1.0e6/(msg.speed * 6.0)/GEAR_RATIO*(M_PI*WHEEL_DIAMETER);
+        spd_logger_->LogData(msg.time_stamp,msg.speed,car_speed);        
         lcm_messenger_.republishRawSpeedData(msg);
     }
 

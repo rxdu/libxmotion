@@ -16,8 +16,6 @@
 #include <uavcan/uavcan.hpp>
 #include <uavcan_linux/uavcan_linux.hpp>
 
-#include "utility/logging/logger.h"
-
 // UAVCAN types
 #include <pixcar/CarRawIMU.hpp>
 #include <pixcar/CarRawMag.hpp>
@@ -64,9 +62,7 @@ private:
     bool imu_sub_init_;
     bool mag_sub_init_;
     bool spd_sub_init_;
-    bool running_;
-
-    std::unique_ptr<CsvLogger> logger_;
+    bool running_;    
 
     static UAVCANNode &getNode();
 };

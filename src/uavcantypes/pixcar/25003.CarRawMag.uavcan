@@ -1,3 +1,2 @@
-# 4-byte float
 uint32 time_stamp
 float32[3] mag
