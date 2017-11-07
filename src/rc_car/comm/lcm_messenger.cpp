@@ -10,7 +10,6 @@
  #include "lcm_channels.h"
 
  using namespace librav;
- using namespace uavcantypes;
 
  LCMMessenger::LCMMessenger(std::shared_ptr<lcm::LCM> lcm):
     lcm_(lcm)

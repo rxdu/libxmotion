@@ -9,7 +9,7 @@
 cmake_minimum_required(VERSION 2.6.0)
 
 set(UAVCAN_DSDL_COMPILER ${CMAKE_SOURCE_DIR}/libraries/uavcan/libuavcan/dsdl_compiler/libuavcan_dsdlc)
-set(UAVCAN_DSDL_TYPEDEF_DIR ${CMAKE_SOURCE_DIR}/uavcantypes)
+set(UAVCAN_DSDL_TYPEDEF_DIR ${CMAKE_SOURCE_DIR}/uavcantypes/pixcar)
 #set(UAVCAN_DSDL_TYPEDEF_DIR ${CMAKE_SOURCE_DIR}/../../firmware/flight/UAVCAN/pixcar)
 set(UAVCAN_DSDL_OUTPUT_DIR ${CMAKE_BINARY_DIR}/include) 
 

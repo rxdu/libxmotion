@@ -10,7 +10,6 @@
 #include "can_messenger.h"
 
 using namespace librav;
-using namespace uavcantypes;
 
 namespace
 {
@@ -44,6 +43,7 @@ CANMessenger::CANMessenger():
     mag_sub_init_(false),
     spd_sub_init_(false),
     running_(false)
+    //,logger_(new CsvLogger("raw_imu", "/home/rdu/Workspace/auto_racing/data/log"))
 {
     // init CAN node
     node_.setNodeID(CAN_MESSENGER_NODE_ID);

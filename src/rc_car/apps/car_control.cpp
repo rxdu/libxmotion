@@ -64,7 +64,7 @@ private:
     std::unique_ptr<CsvLogger> mag_logger_;
     std::unique_ptr<CsvLogger> spd_logger_;
 
-    void uavcanIMUMsgCallback(const uavcantypes::pixcar::CarRawIMU &msg)
+    void uavcanIMUMsgCallback(const pixcar::CarRawIMU &msg)
     {
         std::cout << "Gyro: " << msg.gyro[0] << " , " << msg.gyro[1] << " , " << msg.gyro[2] << std::endl; 
         std::cout << "Accel: " << msg.accel[0] << " , " << msg.accel[1] << " , " << msg.accel[2] << std::endl; 
@@ -73,7 +73,7 @@ private:
         lcm_messenger_.republishRawIMUData(msg);
     }
 
-    void uavcanMagMsgCallback(const uavcantypes::pixcar::CarRawMag &msg)
+    void uavcanMagMsgCallback(const pixcar::CarRawMag &msg)
     {
         std::cout << "Mag: " << msg.mag[0] << " , " << msg.mag[1] << " , " << msg.mag[2] << std::endl; 
 
@@ -81,7 +81,7 @@ private:
         lcm_messenger_.republishRawMagData(msg);
     }
     
-    void uavcanSpeedMsgCallback(const uavcantypes::pixcar::CarRawSpeed &msg)
+    void uavcanSpeedMsgCallback(const pixcar::CarRawSpeed &msg)
     {
         std::cout << "Speed: " << msg.speed << std::endl;     
         float car_speed = 1.0e6/(msg.speed * 6.0)/GEAR_RATIO*(M_PI*WHEEL_DIAMETER);

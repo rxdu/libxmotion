@@ -25,9 +25,9 @@ public:
     LCMMessenger(std::shared_ptr<lcm::LCM> lcm);
     ~LCMMessenger() = default;
 
-    void republishRawIMUData(const uavcantypes::pixcar::CarRawIMU &msg);
-    void republishRawMagData(const uavcantypes::pixcar::CarRawMag &msg);
-    void republishRawSpeedData(const uavcantypes::pixcar::CarRawSpeed &msg);
+    void republishRawIMUData(const pixcar::CarRawIMU &msg);
+    void republishRawMagData(const pixcar::CarRawMag &msg);
+    void republishRawSpeedData(const pixcar::CarRawSpeed &msg);
 
 private:
     std::shared_ptr<lcm::LCM> lcm_;
