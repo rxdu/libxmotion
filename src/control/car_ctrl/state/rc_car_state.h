@@ -9,7 +9,7 @@
 #define ROBOT_STATE_CAR_STATE_H_
 
 #include <cstdint>
-#include "control/rc_car_ctrl/state/rc_car_config.h"
+#include "control/car_ctrl/state/rc_car_config.h"
 
 namespace librav
 {

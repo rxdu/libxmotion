@@ -39,8 +39,8 @@ uavcan::ICanDriver &getCanDriver()
  */
 #include <uavcan/protocol/debug/KeyValue.hpp> // uavcan.protocol.debug.KeyValue
 #include <uavcan/equipment/ahrs/RawIMU.hpp>
-#include <pixcar/CarRawIMU.hpp>
-#include <pixcar/CarRawSpeed.hpp>
+#include <uavcantypes/pixcar/CarRawIMU.hpp>
+#include <uavcantypes/pixcar/CarRawSpeed.hpp>
 
 extern uavcan::ICanDriver &getCanDriver();
 extern uavcan::ISystemClock &getSystemClock();
@@ -72,9 +72,9 @@ int main(int argc, const char **argv)
         throw std::runtime_error("Failed to start the node; error: " + std::to_string(node_start_res));
     }
 
-    uavcan::Subscriber<pixcar::CarRawIMU> imu_sub(node);
+    uavcan::Subscriber<uavcantypes::pixcar::CarRawIMU> imu_sub(node);
     const int imu_sub_start_res =
-        imu_sub.start([&](const pixcar::CarRawIMU &msg) 
+        imu_sub.start([&](const uavcantypes::pixcar::CarRawIMU &msg) 
         { 
             std::cout << "Gyro: " << msg.gyro[0] << " , " << msg.gyro[1] << " , " << msg.gyro[2] << std::endl; 
             std::cout << "Accel: " << msg.accel[0] << " , " << msg.accel[1] << " , " << msg.accel[2] << std::endl; 
@@ -86,9 +86,9 @@ int main(int argc, const char **argv)
         throw std::runtime_error("Failed to start the IMU subscriber; error: " + std::to_string(imu_sub_start_res));
     }
 
-    uavcan::Subscriber<pixcar::CarRawSpeed> spd_sub(node);
+    uavcan::Subscriber<uavcantypes::pixcar::CarRawSpeed> spd_sub(node);
     const int spd_sub_start_res =
-        spd_sub.start([&](const pixcar::CarRawSpeed &msg) 
+        spd_sub.start([&](const uavcantypes::pixcar::CarRawSpeed &msg) 
         { 
             std::cout << "Speed: " << msg.speed << std::endl; 
         }

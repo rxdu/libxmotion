@@ -40,4 +40,4 @@ include_directories(${EIGEN3_INCLUDE_DIR})
 
 ## Add sub source directories
 add_subdirectory(quad_ctrl)
-add_subdirectory(rc_car_ctrl)
+add_subdirectory(car_ctrl)

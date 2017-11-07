@@ -9,8 +9,8 @@
 #define SIMULATOR_RC_CAR_SIM_TYPES_H_
 
 #include "common/librav_types.h"
-#include "control/rc_car_ctrl/state/rc_car_state.h"
-#include "control/rc_car_ctrl/state/rc_car_config.h"
+#include "control/car_ctrl/state/rc_car_state.h"
+#include "control/car_ctrl/state/rc_car_config.h"
 
 namespace librav
 {

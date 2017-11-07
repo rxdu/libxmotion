@@ -5,14 +5,12 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 #find_package(OpenCV REQUIRED)
 
 # Add libraries
-set(QUADCON_LIB_SRC
-    # state estimator
-    #estimator/att_estimator.cpp
-    state/rc_car_state.cpp
-    state/rc_car_params.cpp
+set(CARCON_LIB_SRC    
+    # state estimation
+    estimator/car_state.cpp
 )
-add_library(rccar_ctrl STATIC ${QUADCON_LIB_SRC})
-target_link_libraries(rccar_ctrl common utility ${LCM_LIBRARIES})
+add_library(car_ctrl STATIC ${CARCON_LIB_SRC})
+target_link_libraries(car_ctrl common utility ${LCM_LIBRARIES})
 
 # Add executables
 #add_executable(quad_motion_client motion_server/motion_client.cpp)

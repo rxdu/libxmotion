@@ -38,8 +38,8 @@ uavcan::ICanDriver& getCanDriver()
  *      X.replace('.', '/') + ".hpp"
  */
 #include <uavcan/protocol/debug/KeyValue.hpp> // uavcan.protocol.debug.KeyValue
-#include <pixcar/CarRawIMU.hpp>
-#include <pixcar/CarCommand.hpp>
+#include <uavcantypes/pixcar/CarRawIMU.hpp>
+#include <uavcantypes/pixcar/CarCommand.hpp>
 
 extern uavcan::ICanDriver& getCanDriver();
 extern uavcan::ISystemClock& getSystemClock();
@@ -104,7 +104,7 @@ int main(int argc, const char** argv)
      */
     kv_pub.setPriority(uavcan::TransferPriority::MiddleLower);
 
-    uavcan::Publisher<pixcar::CarRawIMU> imu_pub(node);
+    uavcan::Publisher<uavcantypes::pixcar::CarRawIMU> imu_pub(node);
     const int imu_pub_init_res = imu_pub.init();
     if (imu_pub_init_res < 0)
     {
@@ -113,7 +113,7 @@ int main(int argc, const char** argv)
     imu_pub.setTxTimeout(uavcan::MonotonicDuration::fromMSec(1000));
     imu_pub.setPriority(uavcan::TransferPriority::MiddleLower); 
 
-    uavcan::Publisher<pixcar::CarCommand> cmd_pub(node);
+    uavcan::Publisher<uavcantypes::pixcar::CarCommand> cmd_pub(node);
     const int cmd_pub_init_res = cmd_pub.init();
     if (cmd_pub_init_res < 0)
     {
@@ -177,7 +177,7 @@ int main(int argc, const char** argv)
         //     std::cerr << "IMU publication failure: " << pub_res2 << std::endl;
         // }
 
-        pixcar::CarCommand cmd_msg;  // Always zero initialized
+        uavcantypes::pixcar::CarCommand cmd_msg;  // Always zero initialized
         cmd_msg.servo_cmd = (float)0.3;
         cmd_msg.motor_cmd = (float)0.2;
         const int pub_res3 = cmd_pub.broadcast(cmd_msg);

@@ -1,8 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
-project(librav_car)
-
-# cmake module path
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+project(librav_rccar)
 
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
@@ -51,5 +48,4 @@ endif()
 
 ## Add other sub source directories
 add_subdirectory(apps)
-add_subdirectory(mission)
-add_subdirectory(path_repair)
+add_subdirectory(comm)
