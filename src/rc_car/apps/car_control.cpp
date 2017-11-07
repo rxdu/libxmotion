@@ -11,34 +11,41 @@
  * 
  *      (real-time performance of this node is desired)
  *  
- */ 
+ */
 
 #include <functional>
 
 #include "rc_car/comm/can_messenger.h"
 #include "rc_car/comm/lcm_messenger.h"
+#include "rc_car/comm/lcm_channels.h"
 
 #include "utility/librav_utility.h"
 
 #define WHEEL_DIAMETER 0.065
-#define GEAR_RATIO	6.58	// with 20T pinion gear
+#define GEAR_RATIO 6.58 // with 20T pinion gear
+
+// #define ENABLE_CSV_LOGGING
 
 using namespace librav;
 
 class CarCommCoordinator
 {
-public:
-    CarCommCoordinator(std::shared_ptr<lcm::LCM> lcm):
-        lcm_(lcm),
-        lcm_messenger_(lcm),
-        imu_logger_(new CsvLogger("raw_imu", "/home/rdu/CarLog")),
-        mag_logger_(new CsvLogger("raw_mag", "/home/rdu/CarLog")),
-        spd_logger_(new CsvLogger("raw_spd", "/home/rdu/CarLog"))
-        {};
+  public:
+    CarCommCoordinator(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
+                                                        lcm_messenger_(lcm)
+#ifdef ENABLE_CSV_LOGGING
+                                                        ,
+                                                        imu_logger_(new CsvLogger("raw_imu", "/home/rdu/CarLog")),
+                                                        mag_logger_(new CsvLogger("raw_mag", "/home/rdu/CarLog")),
+                                                        spd_logger_(new CsvLogger("raw_spd", "/home/rdu/CarLog"))
+#endif
+    {
+        lcm_->subscribe(LCM_CHANNELS::CAR_COMMOND_CHANNEL, &CarCommCoordinator::handleLCMCarCmdMessage, this);
+    };
 
     bool initCarComm()
     {
-        if(!setupCallbacks())
+        if (!setupCallbacks())
             return false;
 
         return can_messenger_.setCANOperational();
@@ -46,46 +53,52 @@ public:
 
     void startCarComm()
     {
-        // spin at 1kHz
-        while(true)
+        // spin at ~1kHz
+        while (true)
         {
             can_messenger_.spin(1);
             lcm_->handleTimeout(0);
         }
     }
 
-private:
+  private:
     std::shared_ptr<lcm::LCM> lcm_;
 
-    LCMMessenger lcm_messenger_;    
+    LCMMessenger lcm_messenger_;
     CANMessenger can_messenger_;
 
+#ifdef ENABLE_CSV_LOGGING
     std::unique_ptr<CsvLogger> imu_logger_;
     std::unique_ptr<CsvLogger> mag_logger_;
     std::unique_ptr<CsvLogger> spd_logger_;
+#endif
 
     void uavcanIMUMsgCallback(const pixcar::CarRawIMU &msg)
     {
-        std::cout << "Gyro: " << msg.gyro[0] << " , " << msg.gyro[1] << " , " << msg.gyro[2] << std::endl; 
-        std::cout << "Accel: " << msg.accel[0] << " , " << msg.accel[1] << " , " << msg.accel[2] << std::endl; 
-
-        imu_logger_->LogData(msg.time_stamp,msg.gyro[0],msg.gyro[1],msg.gyro[2],msg.accel[0],msg.accel[1],msg.accel[2]);
+        // std::cout << "Gyro: " << msg.gyro[0] << " , " << msg.gyro[1] << " , " << msg.gyro[2] << std::endl;
+        // std::cout << "Accel: " << msg.accel[0] << " , " << msg.accel[1] << " , " << msg.accel[2] << std::endl;
+#ifdef ENABLE_CSV_LOGGING
+        imu_logger_->LogData(msg.time_stamp, msg.gyro[0], msg.gyro[1], msg.gyro[2], msg.accel[0], msg.accel[1], msg.accel[2]);
+#endif
         lcm_messenger_.republishRawIMUData(msg);
     }
 
     void uavcanMagMsgCallback(const pixcar::CarRawMag &msg)
     {
-        std::cout << "Mag: " << msg.mag[0] << " , " << msg.mag[1] << " , " << msg.mag[2] << std::endl; 
-
-        mag_logger_->LogData(msg.time_stamp,msg.mag[0],msg.mag[1],msg.mag[2]);
+        // std::cout << "Mag: " << msg.mag[0] << " , " << msg.mag[1] << " , " << msg.mag[2] << std::endl;
+#ifdef ENABLE_CSV_LOGGING
+        mag_logger_->LogData(msg.time_stamp, msg.mag[0], msg.mag[1], msg.mag[2]);
+#endif
         lcm_messenger_.republishRawMagData(msg);
     }
-    
+
     void uavcanSpeedMsgCallback(const pixcar::CarRawSpeed &msg)
     {
-        std::cout << "Speed: " << msg.speed << std::endl;     
-        float car_speed = 1.0e6/(msg.speed * 6.0)/GEAR_RATIO*(M_PI*WHEEL_DIAMETER);
-        spd_logger_->LogData(msg.time_stamp,msg.speed,car_speed);        
+        // std::cout << "Speed: " << msg.speed << std::endl;
+        float car_speed = 1.0e6 / (msg.speed * 6.0) / GEAR_RATIO * (M_PI * WHEEL_DIAMETER);
+#ifdef ENABLE_CSV_LOGGING
+        spd_logger_->LogData(msg.time_stamp, msg.speed, car_speed);
+#endif
         lcm_messenger_.republishRawSpeedData(msg);
     }
 
@@ -97,13 +110,19 @@ private:
 
         return (imu_init && mag_init && spd_init);
     }
+
+    void handleLCMCarCmdMessage(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::CarCommand_t *msg)
+    {
+        std::cout << "received command: " << msg->servo << " , " << msg->motor << std::endl;
+        can_messenger_.sendCmdToCar(msg->servo, msg->motor);
+    }
 };
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     std::shared_ptr<lcm::LCM> lcm = std::make_shared<lcm::LCM>();
-    
-    if(!lcm->good())
+
+    if (!lcm->good())
     {
         std::cout << "ERROR: Failed to initialize LCM." << std::endl;
         return -1;
@@ -111,7 +130,7 @@ int main(int argc, char* argv[])
 
     CarCommCoordinator coordinator(lcm);
 
-    if(!coordinator.initCarComm())
+    if (!coordinator.initCarComm())
         return -1;
 
     coordinator.startCarComm();

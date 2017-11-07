@@ -15,4 +15,5 @@ namespace librav
     const std::string LCM_CHANNELS::CAR_RAW_MAG_CHANNEL =  "car_raw_mag";
     const std::string LCM_CHANNELS::CAR_RAW_SPEED_CHANNEL = "car_raw_speed";
 
+    const std::string LCM_CHANNELS::CAR_COMMOND_CHANNEL = "car_command";
 }
