@@ -24,20 +24,15 @@
 
 namespace librav {
 
-class MapUtils{
-public:
-	MapUtils(){};
-	~MapUtils(){};
+namespace MapUtils{	
+	bool ReadImageFromFile(std::string map_path, cv::OutputArray _dst);
+	std::shared_ptr<SquareGrid> CreateSquareGrid(uint32_t row_size, uint32_t col_size, uint32_t cell_size);
 
-public:
-	static bool ReadImageFromFile(std::string map_path, cv::OutputArray _dst);
-	static std::shared_ptr<SquareGrid> CreateSquareGrid(uint32_t row_size, uint32_t col_size, uint32_t cell_size);
-
-	static std::vector<Position2Di> GetWaypointsFromSGridPath(std::vector<Vertex<SquareCell*>*>& path);
-	static std::vector<Position2Di> GetWaypointsFromQTreePath(std::vector<Vertex<QuadTreeNode*>*>& path);
+	std::vector<Position2Di> GetWaypointsFromSGridPath(std::vector<Vertex<SquareCell*>*>& path);
+	std::vector<Position2Di> GetWaypointsFromQTreePath(std::vector<Vertex<QuadTreeNode*>*>& path);
 
 	template<typename T>
-	static std::vector<Position2Di> GetWaypointsFromVertexSequence(std::vector<Vertex_t<T>*>& path)
+	std::vector<Position2Di> GetWaypointsFromVertexSequence(std::vector<Vertex_t<T>*>& path)
 	{
 		std::vector<Position2Di> waypoints;
 
@@ -47,19 +42,19 @@ public:
 		return waypoints;
 	}
 
-	static Position2Dd CoordinatesFromMapToMapWorld(Position2Di map_pos, MapInfo info);
-	static Position2Di CoordinatesFromMapWorldToMap(Position2Dd world_pos, MapInfo info);
+	Position2Dd CoordinatesFromMapToMapWorld(Position2Di map_pos, MapInfo info);
+	Position2Di CoordinatesFromMapWorldToMap(Position2Dd world_pos, MapInfo info);
 
-	static Position2Di CoordinatesFromPaddedToOriginal(Position2Di pad_pos, MapInfo info);
-	static Position2Di CoordinatesFromOriginalToPadded(Position2Di ori_pos, MapInfo info);
+	Position2Di CoordinatesFromPaddedToOriginal(Position2Di pad_pos, MapInfo info);
+	Position2Di CoordinatesFromOriginalToPadded(Position2Di ori_pos, MapInfo info);
 
 	// ref world frame: x points forward, y points towards left
-	static Position2Dd CoordinatesFromMapWorldToRefWorld(Position2Dd map_world_pos, MapInfo info);
-	static Position2Dd CoordinatesFromRefWorldToMapWorld(Position2Dd ref_world_pos, MapInfo info);
+	Position2Dd CoordinatesFromMapWorldToRefWorld(Position2Dd map_world_pos, MapInfo info);
+	Position2Dd CoordinatesFromRefWorldToMapWorld(Position2Dd ref_world_pos, MapInfo info);
 
-	static Position2Dd CoordinatesFromMapPaddedToRefWorld(Position2Di map_pos, MapInfo info);
-	static Position2Di CoordinatesFromRefWorldToMapPadded(Position2Dd world_pos, MapInfo info);
-};
+	Position2Dd CoordinatesFromMapPaddedToRefWorld(Position2Di map_pos, MapInfo info);
+	Position2Di CoordinatesFromRefWorldToMapPadded(Position2Dd world_pos, MapInfo info);
+}
 
 }
 

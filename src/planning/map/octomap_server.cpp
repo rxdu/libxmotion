@@ -1,8 +1,10 @@
-/*
+/* 
  * octomap_server.cpp
- *
- *  Created on: May 26, 2016
- *      Author: rdu
+ * 
+ * Created on: May 26, 2016
+ * Description: 
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
 #include <iostream>

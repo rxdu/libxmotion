@@ -3,8 +3,6 @@
 build
 build2
 */build
-build*
-/control/hummingbird/quad_ctrl/build
 *~
 */~
 */*.*~
