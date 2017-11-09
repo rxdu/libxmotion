@@ -46,7 +46,7 @@ $ sudo apt-get install libboost-all-dev
 ```
 # librav
 export LIBRAV_HOME=$HOME/Workspace/librav
-export PYTHONPATH=$LIBRAV_HOME/src/lcmtypes/python:$LIBRAV_HOME/src/python/envsim:$PYTHONPATH
+export PYTHONPATH=$LIBRAV_HOME/src/lcmtypes/python:$LIBRAV_HOME/python:$PYTHONPATH
 export CLASSPATH=$LIBRAV_HOME/build/lcmtypes_librav.jar:$CLASSPATH
 ```
 
@@ -66,13 +66,6 @@ $ cd build
 $ cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug ../src
 ```
 * Import generated project located at build folder into eclipse. Make sure "Copy project into workspace" option is unchecked during the import process.
-
-You can install an Eclipse plugin from the following source to edit CMAKE files:
-
-```
-Name: CMAKE Editor
-Location: http://cmakeed.sourceforge.net/eclipse/
-```
 
 ## 4. Build the documentation
 

@@ -7,6 +7,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 #find_package(OpenCV REQUIRED)
 
 # Add executables
+add_executable(test_map_request test_map_request.cpp)
+target_link_libraries(test_map_request geometry map vis ${LCM_LIBRARIES})
+
 add_executable(test_sim_sensor test_sim_sensor.cpp)
 target_link_libraries(test_sim_sensor pr_sim geometry)
 

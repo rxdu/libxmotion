@@ -7,6 +7,7 @@ import argparse
 from time import sleep
 
 import numpy as np
+import scipy.stats
 
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
@@ -19,7 +20,7 @@ from voxel_space import *
 from object_lib import *
 
 
-class EnvGen(object):
+class RandEnvGen(object):
     def __init__(self, lcm_h):
         self.lcm_h = lcm_h
         self.space = Space(0, 0, 0)
@@ -28,26 +29,42 @@ class EnvGen(object):
         # individual object constraints
         self.min_side = 3
         self.max_side = 8
+        self.norm_side = 5
 
         self.min_height = 1
         self.max_height = 4
+        self.norm_height = 3
 
         # space obstacle configurations
         self.obj_num = 500
-        self.obs_perc = 0.45
+        self.obs_perc = 0.35
 
     def set_env_size(self, x, y, z):
         self.space_size = np.array([x, y, z])
 
-    def generate_space(self):
+    def generate_rand_pos_space(self):
         # create empty space
-        print 'generate space'
+        print 'generate random position space'
         self.space = Space(
             self.space_size[0], self.space_size[1], self.space_size[2])
 
         # add obstacles to space
         # self.space.add_obstacles()
         objs = self.randomly_pick_objects()
+        self.space.add_objects(objs, self.obs_perc)
+
+        # get projection as 2d map
+        self.space.get_2d_map().get_occupied_percentage()
+
+    def generate_poisson_space(self):
+        # create empty space
+        print 'generate spatial poisson space'
+        self.space = Space(
+            self.space_size[0], self.space_size[1], self.space_size[2])
+
+        # add obstacles to space
+        # self.space.add_obstacles()
+        objs = self.gen_poisson_pos_objects()
         self.space.add_objects(objs, self.obs_perc)
 
         # get projection as 2d map
@@ -77,6 +94,55 @@ class EnvGen(object):
                 self.min_height, self.max_height, size=(1, 1))
             sz_xyz = np.array([sz_xy[0, 0], sz_xy[0, 1], sz_z])
             obj = Cuboid(loc[0], loc[1], sz_xyz[0], sz_xyz[1], sz_xyz[2])
+            objs.append(obj)
+            # print loc
+            # print sz_xyz
+
+        # obj1 = Cuboid(5,5,2,5,3)
+        # objs.append(obj1)
+
+        # obj2 = Cuboid(5,5,5,2,3)
+        # objs.append(obj2)
+
+        return objs
+
+    def PoissonPP(self, rate, Dx, Dy=None ):
+        '''
+        Determines the number of events `N` for a rectangular region,
+        given the rate `rate` and the dimensions, `Dx`, `Dy`.
+        Returns a <2xN> NumPy array.
+        Source: http://connor-johnson.com/2014/02/25/spatial-point-processes/
+        '''
+        if Dy == None:
+            Dy = Dx
+        N = scipy.stats.poisson( rate*Dx*Dy ).rvs()
+        x = scipy.stats.uniform.rvs(0,Dx,((N,1)))
+        y = scipy.stats.uniform.rvs(0,Dy,((N,1)))
+        P = np.hstack((x,y))
+        return P
+
+    def gen_poisson_pos_objects(self):
+        # random poission locations
+        rate = self.obj_num/(self.space_size[0] * self.space_size[1])
+        loc = self.PoissonPP(rate, self.space_size[0], self.space_size[1])
+     
+        rand_loc = np.array([])
+        rand_loc.resize((loc.size/2, 2))
+        for i in range(0, loc.size/2):
+            rand_loc[i, 0] = int(loc[i, 0])
+            rand_loc[i, 1] = int(loc[i, 1])
+
+        # add random objects to random locations
+        objs = []
+        ymu,ysigma = 2, 0.8
+        zmu,zsigma = self.norm_height, 0.8
+        for loc in rand_loc:
+            # random object size
+            sz_x = 8
+            sz_y = 3          
+            # sz_y = int(np.random.normal(ymu, ysigma))
+            sz_z = int(np.random.normal(zmu, zsigma))
+            obj = PoissonCuboid(loc[0], loc[1], sz_x, sz_y, sz_z)
             objs.append(obj)
             # print loc
             # print sz_xyz
@@ -169,7 +235,10 @@ class EnvGen(object):
         
         self.set_env_size(msg.map_size_x, msg.map_size_y, msg.map_size_z)
         
-        self.generate_space()
+        if msg.map_type == 2:
+            self.generate_poisson_space()
+        else:
+            self.generate_rand_pos_space()
         self.publish_map()
 
 def main():
@@ -179,10 +248,12 @@ def main():
     lc = lcm.LCM()
     
     # create a environment generator
-    gen = EnvGen(lc)
+    gen = RandEnvGen(lc)
     # set random environment size: 1 unit = 1 meter
     # gen.set_env_size(30, 50, 5)
-    gen.set_env_size(5, 5, 5)
+    # gen.set_env_size(5, 5, 5)
+
+    gen.gen_poisson_pos_objects()
 
     subscription = lc.subscribe("envsim/map_request", gen.map_request_handler)
     
@@ -196,7 +267,7 @@ def main():
 
     ## for development 
     # for i in range(0,50):
-    # gen.generate_space()
+    # gen.generate_rand_pos_space()
     # gen.publish_map()
     # sleep(2.0)
 

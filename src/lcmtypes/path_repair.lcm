@@ -7,6 +7,7 @@ struct MapRequest_t
     int32_t map_size_x;
     int32_t map_size_y;
     int32_t map_size_z;
+    int8_t map_type;
 }
 
 struct Cell_t
