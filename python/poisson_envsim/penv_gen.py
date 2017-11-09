@@ -173,7 +173,7 @@ class EnvGen(object):
         self.publish_map()
 
 def main():
-    print("started env_gen")
+    print("started penv_gen")
 
     # create a LCM instance
     lc = lcm.LCM()
