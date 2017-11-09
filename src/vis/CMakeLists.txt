@@ -48,4 +48,4 @@ target_link_libraries(vis map geometry ${OpenCV_LIBS})
 
 # Add executables
 add_executable(test_vis tests/test_vis.cpp)
-target_link_libraries(test_vis vis ${OpenCV_LIBS})
+target_link_libraries(test_vis vis)

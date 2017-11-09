@@ -4,7 +4,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Dependency libraries
-find_package(OpenCV REQUIRED)
+# find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
 set(GEOMETRY_LIB_SRC
@@ -20,7 +20,7 @@ set(GEOMETRY_LIB_SRC
   graph_builder.cpp
 )
 add_library(geometry STATIC ${GEOMETRY_LIB_SRC})
-target_link_libraries(geometry map ${OpenCV_LIBS} ${Octomap_LIBS})
+target_link_libraries(geometry map ${Octomap_LIBS})
 
 # Add executables
 #add_executable(octomap_server_node octomap_server_node.cpp)

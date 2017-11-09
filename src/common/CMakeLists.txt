@@ -25,7 +25,7 @@ set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Dependency libraries
-#find_package(OpenCV REQUIRED)
+#find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
 set(SRCL_COMMON_LIB_SRC

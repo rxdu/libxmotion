@@ -3,7 +3,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Dependency libraries
-#find_package(OpenCV REQUIRED)
+#find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
 set(SQUAREGRID_LIB_SRC
@@ -14,4 +14,4 @@ add_library(squaregrid STATIC ${SQUAREGRID_LIB_SRC})
 
 # Add executables
 #add_executable(test_graph test_graph.cpp)
-#target_link_libraries(test_graph h2c graph_vis ${OpenCV_LIBS})
+#target_link_libraries(test_graph h2c graph_vis)

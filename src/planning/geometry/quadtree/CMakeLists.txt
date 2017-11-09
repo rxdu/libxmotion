@@ -4,7 +4,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Dependency libraries
-#find_package(OpenCV REQUIRED)
+#find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
 set(QTREE_LIB_SRC
@@ -15,4 +15,4 @@ add_library(qtree STATIC ${QTREE_LIB_SRC})
 
 # Add executables
 #add_executable(build_quadtree test_quadtree.cpp)
-#target_link_libraries(build_quadtree qtree graph ${OpenCV_LIBS})
+#target_link_libraries(build_quadtree qtree graph)

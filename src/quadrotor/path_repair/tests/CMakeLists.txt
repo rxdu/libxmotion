@@ -4,7 +4,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Dependency libraries
-#find_package(OpenCV REQUIRED)
+#find_package(LIBRARY_NAME REQUIRED)
 
 # Add executables
 add_executable(test_map_request test_map_request.cpp)
@@ -35,16 +35,16 @@ target_link_libraries(test_sim_sensor pr_sim geometry)
 #target_link_libraries(graph_combine_exp map utils ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 #add_executable(test_calc tests/test_calc.cpp)
-#target_link_libraries(test_calc path_repair map vis ${OpenCV_LIBS})
+#target_link_libraries(test_calc path_repair map vis)
 
 #add_executable(test_navfield tests/test_navfield.cpp)
-#target_link_libraries(test_navfield map vis ${OpenCV_LIBS})
+#target_link_libraries(test_navfield map vis)
 
 #add_executable(test_navfield2 tests/test_navfield2.cpp)
-#target_link_libraries(test_navfield2 map vis path_repair ${OpenCV_LIBS})
+#target_link_libraries(test_navfield2 map vis path_repair)
 
 #add_executable(test_navfield3 tests/test_navfield3.cpp)
-#target_link_libraries(test_navfield3 map vis path_repair ${OpenCV_LIBS})
+#target_link_libraries(test_navfield3 map vis path_repair)
 
 add_executable(test_navfield4 test_navfield4.cpp)
-target_link_libraries(test_navfield4 pr_sim map vis ${OpenCV_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(test_navfield4 pr_sim map vis ${LCM_LIBRARIES})
