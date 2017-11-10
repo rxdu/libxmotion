@@ -23,6 +23,7 @@ public:
   void Load_5by5_Config();
   void Load_10by10_Config();
   void Load_15by20_Config();
+  void Load_20by25_Config();
   void Load_20by30_Config();  
   void Load_30by50_Config();  
   void Load_50by50_Config();

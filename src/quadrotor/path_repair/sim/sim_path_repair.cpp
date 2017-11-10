@@ -33,6 +33,7 @@ SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 															  mission_tracker_(new MissionTracker(lcm_)),
 															  sensor_range_(5.0),
 															  path_2d_cost_(std::numeric_limits<double>::infinity()),
+															  path_3d_cost_(std::numeric_limits<double>::infinity()),
 															  pstart_set_(false),
 															  pgoal_set_(false),
 															  hstart_set_(false),
@@ -55,6 +56,7 @@ SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm, std::shared_ptr<SimD
 																									   mission_tracker_(new MissionTracker(lcm_)),
 																									   sensor_range_(5.0),
 																									   path_2d_cost_(std::numeric_limits<double>::infinity()),
+																									   path_3d_cost_(std::numeric_limits<double>::infinity()),
 																									   pstart_set_(false),
 																									   pgoal_set_(false),
 																									   hstart_set_(false),
@@ -165,6 +167,7 @@ void SimPathRepair::RequestNewMap()
 	map_rqt_msg.map_size_x = map_size_[0];
 	map_rqt_msg.map_size_y = map_size_[1];
 	map_rqt_msg.map_size_z = map_size_[2];
+	map_rqt_msg.map_type = 2;
 	lcm_->publish("envsim/map_request", &map_rqt_msg);
 	std::cout << "New map request sent" << std::endl;
 }
@@ -322,11 +325,13 @@ SimPath SimPathRepair::UpdatePath(Position2Di pos, int32_t height, double headin
 	// 	path = AStar::BiasedSearchWithShortcut(*cubegraph, start_id, goal_id, nav_field_->max_rewards_, sc_evaluator_->dist_weight_, map_info_.side_size);
 	// else
 		path = AStar::Search(*cubegraph, start_id, goal_id);
-
+	
 	SimPath path_result;
 
 	if (!path.empty())
 	{
+		path_3d_cost_ = path.back()->GetAStarGCost();
+
 		librav_lcm_msgs::Path_t path_msg;
 		path_msg.pt_num = path.size();
 		double prev_heading = 0;

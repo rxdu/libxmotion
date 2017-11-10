@@ -41,8 +41,8 @@ class MapHandler
 		{
 			librav_lcm_msgs::MapRequest_t map_rqt_msg;
 			map_rqt_msg.new_map_requested = true;
-			map_rqt_msg.map_size_x = 15;
-			map_rqt_msg.map_size_y = 20;
+			map_rqt_msg.map_size_x = 20;
+			map_rqt_msg.map_size_y = 25;
 			map_rqt_msg.map_size_z = 5;
 			map_rqt_msg.map_type = 2;
 			lcm_->publish("envsim/map_request", &map_rqt_msg);
