@@ -32,3 +32,6 @@ target_link_libraries(expt_pysim_05 map pr_sim quad_base common ${LCM_LIBRARIES}
 
 add_executable(expt_pysim_06 pr_pysim_06.cpp)
 target_link_libraries(expt_pysim_06 map pr_sim quad_base common ${LCM_LIBRARIES})
+
+add_executable(expt_pysim_07 pr_pysim_07.cpp)
+target_link_libraries(expt_pysim_07 map pr_sim quad_base common ${LCM_LIBRARIES})

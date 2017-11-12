@@ -3,7 +3,7 @@
  *
  *  Created on: Sep 7, 2016
  *      Author: rdu
- * Description: 20 by 25 map with sensor range 8, compare heading
+ * Description: 15 by 20 map with sensor range 8, using poisson environment
  * 
  */
 
@@ -27,7 +27,7 @@
 
 using namespace librav;
 
-#define LOOP_PERIOD 1000	// ms
+#define LOOP_PERIOD 500	// ms
 
 int main(int argc, char *argv[])
 {
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 
 	// init quadrotor planner
 	VirtualQuadrotor vquad(lcm);
-	vquad.Load_20by25_Config();
+	vquad.Load_15by20_Config();
 	vquad.SetSensorRange(8);
 
 	// should not start simulation if configuration is not complete
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 	{		
 		timer.tic();
 
-		vquad.CmpStep();
+		vquad.Step();
 		lcm->handleTimeout(0);
 	
 		int64_t duration = LOOP_PERIOD - static_cast<int64_t>(timer.mtoc());

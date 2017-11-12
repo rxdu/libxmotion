@@ -25,7 +25,7 @@
 
 using namespace librav;
 
-#define MINIMAL_EXTRAS
+// #define MINIMAL_EXTRAS
 
 SimPathRepair::SimPathRepair(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 															  map_received_(false),

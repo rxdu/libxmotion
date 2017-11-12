@@ -290,6 +290,9 @@ void VirtualQuadrotor::MoveForward(bool enable_path_repair)
             }
         }
 
+        std::cout << "current heading: " << current_heading_ << " , traj heading: " << atan2(active_path_[next_idx+1].y - active_path_[next_idx].y, 
+                    active_path_[next_idx+1].x - active_path_[next_idx].x) << std::endl;
+
         active_path_.erase(active_path_.begin());
     }
 }
@@ -411,12 +414,13 @@ void VirtualQuadrotor::CmpStep()
             {
                 init_path_found_ = true;
 
-                for (auto it = active_path_.begin(); it != active_path_.end() - 1; it++)
-                {
-                    Position2Di pos1((*it).x, (*it).y);
-                    Position2Di pos2((*(it + 1)).x, (*(it + 1)).y);
-                    init_repair_path_cost_ += CalcWaypointDistance(pos1, pos2);
-                }
+                // for (auto it = active_path_.begin(); it != active_path_.end() - 1; it++)
+                // {
+                //     Position2Di pos1((*it).x, (*it).y);
+                //     Position2Di pos2((*(it + 1)).x, (*(it + 1)).y);
+                //     init_repair_path_cost_ += CalcWaypointDistance(pos1, pos2);
+                // }
+                init_repair_path_cost_ = qplanner_->GetGlobal3DPathCost();
             }
         }
 
