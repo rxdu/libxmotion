@@ -24,7 +24,7 @@
 #define WHEEL_DIAMETER 0.065
 #define GEAR_RATIO 6.58 // with 20T pinion gear
 
-// #define ENABLE_CSV_LOGGING
+#define ENABLE_CSV_LOGGING
 
 using namespace librav;
 
