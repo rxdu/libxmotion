@@ -1,9 +1,9 @@
 /*
- * pr_pysim_07.cpp
+ * quadsim_planner.cpp
  *
- *  Created on: Nov 12, 2017
+ *  Created on: Sep 7, 2016
  *      Author: rdu
- * Description: 15 by 20 map with sensor range 5, FOV 120 degrees in poisson environment
+ * Description: 15 by 20 map with sensor range 8, compare heading
  * 
  */
 
@@ -41,11 +41,11 @@ int main(int argc, char *argv[])
 
 	// init quadrotor planner
 	VirtualQuadrotor vquad(lcm);
-	vquad.Load_15by20_Config();
+	vquad.Load_20by25_Config();
 	vquad.SetSensorRange(5);
 	vquad.SetSensorFOV(M_PI*2.0/3.0);
-	vquad.SetInitPosition(Position2Di(7, 0),2);
-	vquad.SetGoalPosition(Position2Di(7, 19),2);
+	vquad.SetInitPosition(Position2Di(9, 0),2);
+	vquad.SetGoalPosition(Position2Di(9, 24),2);
 
 	// should not start simulation if configuration is not complete
 	if (!vquad.IsReady())
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 	{		
 		timer.tic();
 
-		vquad.Step();
+		vquad.CmpStep();
 		lcm->handleTimeout(0);
 	
 		int64_t duration = LOOP_PERIOD - static_cast<int64_t>(timer.mtoc());

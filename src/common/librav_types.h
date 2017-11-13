@@ -15,6 +15,8 @@
 #include <vector>
 #include <iostream>
 
+#include "eigen3/Eigen/Core"
+
 namespace librav
 {
 
@@ -25,6 +27,9 @@ typedef uint64_t time_stamp;
 template <typename T>
 struct point3
 {
+	point3(): x(0), y(0), z(0){};
+	point3(T _x, T _y, T _z): x(_x), y(_y), z(_z){};
+
 	T x;
 	T y;
 	T z;
@@ -53,12 +58,6 @@ struct Pose
 {
 	Point3f pos;
 	EulerAngle ori;
-};
-
-struct IMUData
-{
-	Point3f gyro;
-	Point3f acc;
 };
 
 struct UAVTrajectoryPoint
@@ -168,6 +167,47 @@ struct KeyframeSet
 {
 	std::vector<Keyframe> keyframes;
 	uint64_t start_time;
+};
+
+/****************** Types for Sensors ******************/
+// Deprecated
+struct IMUData
+{
+	time_stamp mtime;
+	Point3f gyro;
+	Point3f acc;
+};
+
+struct AccGyroData
+{
+	AccGyroData():
+		mtime(0),
+		accel(Point3d(0,0,0)), 
+		gyro(Point3d(0,0,0)){};
+
+	AccGyroData(int64_t time, double accel_x, double accel_y, double accel_z,
+		double gyro_x, double gyro_y, double gyro_z):
+		mtime(time),
+		accel(Point3d(accel_x,accel_y,accel_z)), 
+		gyro(Point3d(gyro_x,gyro_y,gyro_z)){};
+
+	int64_t mtime;
+	Point3d accel;
+	Point3d gyro;
+
+	friend std::ostream &operator<<(std::ostream &os, const AccGyroData &data)
+	{
+		os << "time_stamp: " << data.mtime << " ; accel(x,y,z): " << data.accel.x << " , " << data.accel.y << " , " << data.accel.z
+			<< " ; gyro(x,y,z): " << data.gyro.x << " , " << data.gyro.y << " , " << data.gyro.z << std::endl;
+		return os;
+	}
+};
+
+struct IMUCalibParams
+{
+    Eigen::Matrix<double,3,3> misalignment_matrix;
+    Eigen::Matrix<double,3,3> scale_matrix;
+    Eigen::Matrix<double,3,1> bias_vector;
 };
 
 }

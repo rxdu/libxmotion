@@ -19,6 +19,8 @@
 #include "rc_car/comm/lcm_messenger.h"
 #include "rc_car/comm/lcm_channels.h"
 
+#include "rc_car/sensor/imu_filter.h"
+
 #include "utility/librav_utility.h"
 
 #define WHEEL_DIAMETER 0.065
@@ -61,11 +63,14 @@ class CarCommCoordinator
         }
     }
 
-  private:
+private:
+    // communication
     std::shared_ptr<lcm::LCM> lcm_;
-
     LCMMessenger lcm_messenger_;
     CANMessenger can_messenger_;
+
+    // sensors
+    IMUFilter imu_filter_;
 
 #ifdef ENABLE_CSV_LOGGING
     std::unique_ptr<CsvLogger> imu_logger_;
@@ -78,8 +83,12 @@ class CarCommCoordinator
         // std::cout << "Gyro: " << msg.gyro[0] << " , " << msg.gyro[1] << " , " << msg.gyro[2] << std::endl;
         // std::cout << "Accel: " << msg.accel[0] << " , " << msg.accel[1] << " , " << msg.accel[2] << std::endl;
 #ifdef ENABLE_CSV_LOGGING
-        imu_logger_->LogData(msg.time_stamp, msg.gyro[0], msg.gyro[1], msg.gyro[2], msg.accel[0], msg.accel[1], msg.accel[2]);
+        imu_logger_->LogData(msg.time_stamp, msg.accel[0], msg.accel[1], msg.accel[2], msg.gyro[0], msg.gyro[1], msg.gyro[2]);
 #endif
+
+        auto corrected_imu_data = 
+            imu_filter_.CorrectIMURawData(AccGyroData(msg.time_stamp, msg.accel[0], msg.accel[1], msg.accel[2], 
+                                msg.gyro[0], msg.gyro[1], msg.gyro[2]));
         lcm_messenger_.republishRawIMUData(msg);
     }
 

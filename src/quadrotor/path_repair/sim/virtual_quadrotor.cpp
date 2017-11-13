@@ -21,6 +21,7 @@ VirtualQuadrotor::VirtualQuadrotor(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
                                                                     init_repair_path_cost_(0),
                                                                     run_flag_(1),
                                                                     sim_index_(0),
+                                                                    sim_steps_(0),
                                                                     logger_(new CsvLogger("prsim", "/home/rdu/Workspace/librav/data/log/quad/prsim"))
 {
 }
@@ -48,7 +49,30 @@ void VirtualQuadrotor::SetConfig(int32_t map_x, int32_t map_y, int32_t map_z, in
 
 void VirtualQuadrotor::SetSensorRange(int32_t rng)
 {
+    // sensor range affects shortcut evaluations
     qplanner_->SetSensorRange(rng);
+}
+
+void VirtualQuadrotor::SetSensorFOV(double fov)
+{
+    dsensor_->SetFOV(fov);
+}
+
+void VirtualQuadrotor::SetInitPosition(Position2Di pos, int32_t hei)
+{
+    init_pos_ = pos;
+    init_height_ = hei;
+    qplanner_->SetStartPosition(init_pos_);
+    qplanner_->SetStartHeight(init_height_);
+
+    current_pos_ = init_pos_;
+    current_height_ = init_height_;
+}
+  
+void VirtualQuadrotor::SetGoalPosition(Position2Di pos, int32_t hei)
+{
+    qplanner_->SetGoalPosition(pos);
+    qplanner_->SetGoalHeight(hei);
 }
 
 void VirtualQuadrotor::Load_5by5_Config()
@@ -294,6 +318,7 @@ void VirtualQuadrotor::MoveForward(bool enable_path_repair)
                     active_path_[next_idx+1].x - active_path_[next_idx].x) << std::endl;
 
         active_path_.erase(active_path_.begin());
+        sim_steps_++;
     }
 }
 
@@ -360,7 +385,7 @@ void VirtualQuadrotor::Step()
 
         PublishState();
 
-        if (active_path_.size() == 1)
+        if (active_path_.size() == 1 || sim_steps_ >= 100)
         {
             // calculate shortcut distance
             double shortest_path = qplanner_->GetGlobal2DPathCost();
@@ -369,7 +394,8 @@ void VirtualQuadrotor::Step()
             std::cout << "** path shortened by :" << shortened_dist << std::endl;
 
             // log data for analysis
-            logger_->LogData(sim_index_, shortest_path, init_repair_path_cost_, shortened_dist, shortened_dist / shortest_path);
+            if(sim_steps_ < 100)
+                logger_->LogData(sim_index_, shortest_path, init_repair_path_cost_, shortened_dist, shortened_dist / shortest_path);
 
             // reset quadrotor state
             current_pos_ = init_pos_;
@@ -381,6 +407,7 @@ void VirtualQuadrotor::Step()
             // reset planner
             qplanner_->ResetPlanner();
             ++sim_index_;
+            sim_steps_ = 0;
         }
     }
     else
@@ -426,7 +453,7 @@ void VirtualQuadrotor::CmpStep()
 
         PublishState();
 
-        if (active_path_.size() == 1)
+        if (active_path_.size() == 1 || sim_steps_ >= 100)
         {
             // calculate shortcut distance
             double shortest_path = qplanner_->GetGlobal2DPathCost();
@@ -463,7 +490,10 @@ void VirtualQuadrotor::CmpStep()
             if(run_flag_ != 0)
                 qplanner_->map_received_ = true;
             else
+            {
                 ++sim_index_;
+                sim_steps_ = 0;
+            }
         }
     }
     else

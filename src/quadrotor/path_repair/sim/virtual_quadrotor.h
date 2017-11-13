@@ -34,6 +34,9 @@ public:
   void Step();
   void CmpStep();
   void SetSensorRange(int32_t rng);
+  void SetSensorFOV(double fov);
+  void SetInitPosition(Position2Di pos, int32_t hei);
+  void SetGoalPosition(Position2Di pos, int32_t hei);
 
 private:
   std::shared_ptr<lcm::LCM> lcm_;
@@ -58,6 +61,7 @@ private:
   double init_repair_path_cost_;
   int64_t run_flag_;
   int64_t sim_index_;
+  int64_t sim_steps_;
   std::unique_ptr<CsvLogger> logger_;
 
   void MoveForward(bool enable_path_repair = true);

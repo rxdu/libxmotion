@@ -46,8 +46,8 @@ public:
     std::shared_ptr<CubeArray> GetSensedArea(int32_t x, int32_t y, int32_t z, double yaw);
 
 private:
-    int32_t range_;
-    double fov_;
+    int32_t range_; // in meter
+    double fov_;    // in radian
     
     int32_t ws_x_;
     int32_t ws_y_;

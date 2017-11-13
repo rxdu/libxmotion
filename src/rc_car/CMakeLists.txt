@@ -40,3 +40,6 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 ## Add other sub source directories
 add_subdirectory(apps)
 add_subdirectory(comm)
+add_subdirectory(sensor)
+
+add_subdirectory(tests)
