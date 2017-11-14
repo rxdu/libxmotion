@@ -123,7 +123,8 @@ class RandEnvGen(object):
 
     def gen_poisson_pos_objects(self):
         # random poission locations
-        rate = self.obj_num/(self.space_size[0] * self.space_size[1])
+        # rate = self.obj_num/(self.space_size[0] * self.space_size[1])
+        rate = 0.6
         loc = self.PoissonPP(rate, self.space_size[0], self.space_size[1])
      
         rand_loc = np.array([])
@@ -135,7 +136,7 @@ class RandEnvGen(object):
         # add random objects to random locations
         objs = []
         ymu,ysigma = 2, 0.8
-        zmu,zsigma = self.norm_height, 0.8
+        zmu,zsigma = self.norm_height, 0.6
         for loc in rand_loc:
             # random object size
             sz_x = 6

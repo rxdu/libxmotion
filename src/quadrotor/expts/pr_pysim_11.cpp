@@ -41,11 +41,11 @@ int main(int argc, char *argv[])
 
 	// init quadrotor planner
 	VirtualQuadrotor vquad(lcm);
-	vquad.Load_20by25_Config();
-	vquad.SetSensorRange(5);
+	vquad.SetMapSize(40,50,5);
+	vquad.SetSensorRange(8);
 	vquad.SetSensorFOV(M_PI*5.0/9.0);
-	vquad.SetInitPosition(Position2Di(9, 0),2);
-	vquad.SetGoalPosition(Position2Di(9, 24),2);
+	vquad.SetInitPosition(Position2Di(19, 0),2);
+	vquad.SetGoalPosition(Position2Di(19, 49),2);
 
 	// should not start simulation if configuration is not complete
 	if (!vquad.IsReady())

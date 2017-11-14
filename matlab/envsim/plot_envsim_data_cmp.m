@@ -1,7 +1,7 @@
 % script to plot simulation data
 close all; clear; clc;
 
-data = csvread('/home/rdu/Workspace/librav/data/log/quad/prsim/prsim.20171112142456.data');
+data = csvread('/home/rdu/Workspace/librav/data/log/quad/prsim/prsim.20171114133050.data');
 
 run1_data = [];
 run2_data = [];
@@ -19,7 +19,8 @@ mean2 = mean(run2_data(:,6))
 figure
 plot(run1_data(:,6),'-rd')
 hold on
-plot(run2_data(:,6),'-d')
+plot(run2_data(:,6),'-bd')
+legend('path repair', 'shortest')
 
 %xlim([0, 500])
 %ylim([0, 0.4])

@@ -19,6 +19,7 @@ class VirtualQuadrotor
 public:
   VirtualQuadrotor(std::shared_ptr<lcm::LCM> lcm);
 
+  void SetMapSize(int32_t map_x, int32_t map_y, int32_t map_z);
   void SetConfig(int32_t map_x, int32_t map_y, int32_t map_z, int32_t height, int32_t sensor_rng);
   void Load_5by5_Config();
   void Load_10by10_Config();
@@ -64,6 +65,7 @@ private:
   int64_t sim_steps_;
   std::unique_ptr<CsvLogger> logger_;
 
+  bool EvaluationPath(const SimPath& old_path, const SimPath& new_path);
   void MoveForward(bool enable_path_repair = true);
   void PublishState();
   double CalcWaypointDistance(Position2Di pos1, Position2Di pos2);

@@ -23,7 +23,7 @@ using namespace librav;
 ShortcutEval::ShortcutEval(std::shared_ptr<SquareGrid> sgrid, std::shared_ptr<NavField<SquareCell*>> nav_field):
 			sgrid_(sgrid),
 			nav_field_(nav_field),
-			dist_weight_(0.5)
+			dist_weight_(0.9)
 {
 
 }

@@ -26,6 +26,13 @@ VirtualQuadrotor::VirtualQuadrotor(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
 {
 }
 
+void VirtualQuadrotor::SetMapSize(int32_t map_x, int32_t map_y, int32_t map_z)
+{
+    // set sim map size
+    qplanner_->SetMapSize(map_x, map_y, map_z);
+
+}
+
 void VirtualQuadrotor::SetConfig(int32_t map_x, int32_t map_y, int32_t map_z, int32_t height, int32_t sensor_rng)
 {
     // set sim map size
@@ -268,6 +275,27 @@ double VirtualQuadrotor::CalcWaypointDistance(Position2Di pos1, Position2Di pos2
     return cost;
 }
 
+bool VirtualQuadrotor::EvaluationPath(const SimPath& old_path, const SimPath& new_path)
+{
+    double old_path_dist = 0;
+    for (auto it = old_path.begin(); it != old_path.end() - 1; it++)
+    {
+        Position2Di pos1((*it).x, (*it).y);
+        Position2Di pos2((*(it + 1)).x, (*(it + 1)).y);
+        old_path_dist += CalcWaypointDistance(pos1, pos2);
+    }
+
+    double new_path_dist = 0;
+    for (auto it = new_path.begin(); it != new_path.end() - 1; it++)
+    {
+        Position2Di pos1((*it).x, (*it).y);
+        Position2Di pos2((*(it + 1)).x, (*(it + 1)).y);
+        new_path_dist += CalcWaypointDistance(pos1, pos2);
+    }
+
+    return (old_path_dist - new_path_dist > 1.0);
+}
+
 void VirtualQuadrotor::MoveForward(bool enable_path_repair)
 {
     // if active_path_ is not empty, then set the next waypoint to be current pose
@@ -367,10 +395,9 @@ void VirtualQuadrotor::Step()
 
         if (new_path.size() > 1)
         {
-            active_path_ = new_path;
-
             if (!init_path_found_)
             {
+                active_path_ = new_path;
                 init_path_found_ = true;
 
                 // for (auto it = active_path_.begin(); it != active_path_.end() - 1; it++)
@@ -381,6 +408,11 @@ void VirtualQuadrotor::Step()
                 // }
                 init_repair_path_cost_ = qplanner_->GetGlobal3DPathCost();
             }
+            else if(EvaluationPath(active_path_, new_path))
+            {
+                active_path_ = new_path;
+            }
+
         }
 
         PublishState();
@@ -390,7 +422,7 @@ void VirtualQuadrotor::Step()
             // calculate shortcut distance
             double shortest_path = qplanner_->GetGlobal2DPathCost();
             double shortened_dist = shortest_path - traveled_distance_;
-            std::cout << "** shorted path :" << shortest_path << " , init repair path: " << init_repair_path_cost_ << std::endl;
+            std::cout << "** shortest path :" << shortest_path << " , init repair path: " << init_repair_path_cost_ << std::endl;
             std::cout << "** path shortened by :" << shortened_dist << std::endl;
 
             // log data for analysis
@@ -433,12 +465,12 @@ void VirtualQuadrotor::CmpStep()
             new_path = qplanner_->UpdatePath(current_pos_, current_height_, current_heading_, false);
         }
 
+        // add a condition to compare length
         if (new_path.size() > 1)
-        {
-            active_path_ = new_path;
-
+        {           
             if (!init_path_found_)
             {
+                active_path_ = new_path;
                 init_path_found_ = true;
 
                 // for (auto it = active_path_.begin(); it != active_path_.end() - 1; it++)
@@ -448,6 +480,10 @@ void VirtualQuadrotor::CmpStep()
                 //     init_repair_path_cost_ += CalcWaypointDistance(pos1, pos2);
                 // }
                 init_repair_path_cost_ = qplanner_->GetGlobal3DPathCost();
+            }
+            else if(EvaluationPath(active_path_, new_path))
+            {
+                active_path_ = new_path;
             }
         }
 
