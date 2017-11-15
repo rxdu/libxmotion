@@ -1,7 +1,7 @@
 % script to plot simulation data
 close all; clear; clc;
 
-data = csvread('/home/rdu/Workspace/librav/data/log/quad/prsim/prsim.20171114133050.data');
+data = csvread('/home/rdu/Workspace/librav/data/log/quad/prsim/prsim.20171115151538.data');
 
 run1_data = [];
 run2_data = [];
@@ -15,6 +15,14 @@ end
 
 mean1 = mean(run1_data(:,6))
 mean2 = mean(run2_data(:,6))
+
+count = 0;
+for i = 1:min(size(run1_data(:,6)),size(run2_data(:,6)))
+   if  run1_data(i,6) >= run2_data(i,6)
+       count = count + 1;
+   end
+end
+count
 
 figure
 plot(run1_data(:,6),'-rd')

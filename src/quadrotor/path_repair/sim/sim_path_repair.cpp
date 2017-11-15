@@ -206,10 +206,7 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 	if (!path.empty())
 	{
 		std::cout << "Validate map received" << std::endl;
-		// update flags
-		map_received_ = true;
-		update_global_plan_ = true;
-
+		
 		// init and update navigation field and shortcut evaluator
 		nav_field_ = std::make_shared<NavField<SquareCell *>>(sgrid_planner_.graph_);
 		sc_evaluator_ = std::make_shared<ShortcutEval>(sgrid_, nav_field_);
@@ -219,15 +216,26 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 
 		sc_evaluator_->EvaluateGridShortcutPotential(sensor_range_);
 
-		// update info of virtual space for 3d planning
-		map_info_.size_x = msg->size_x;
-		map_info_.size_y = msg->size_y;
-		map_info_.size_z = msg->size_z;
-		map_info_.side_size = side_size;
+		if(nav_field_->max_rewards_ > path_2d_cost_*0.20)
+		{
+			// update flags
+			map_received_ = true;
+			update_global_plan_ = true;
 
-		depth_sensor_->SetWorkspace(msg, side_size);
+			// update info of virtual space for 3d planning
+			map_info_.size_x = msg->size_x;
+			map_info_.size_y = msg->size_y;
+			map_info_.size_z = msg->size_z;
+			map_info_.side_size = side_size;
 
-		std::cout << "Configs for new map updated" << std::endl;
+			depth_sensor_->SetWorkspace(msg, side_size);
+			std::cout << "Configs for new map updated" << std::endl;
+		}	
+		else
+		{
+			std::cout << "Invalid map" << std::endl;
+			RequestNewMap();
+		}	
 	}
 	else
 	{
