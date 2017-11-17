@@ -10,11 +10,6 @@
 
 #include <cstdint>
 
-extern "C" {
-    #include "extApi.h"
-/*	#include "extApiCustom.h" // custom remote API functions */
-}
-
 #include "common/librav_types.h"
 
 #include "vrep_sim/vrep_interface/robot_sim_client.h"

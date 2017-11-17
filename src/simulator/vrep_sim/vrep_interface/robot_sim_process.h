@@ -1,12 +1,14 @@
-/*
+/* 
  * robot_sim_process.h
- *
- *  Created on: Sep 1, 2016
- *      Author: rdu
- */
+ * 
+ * Created on: Sep 1, 2016
+ * Description: 
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
-#ifndef CONTROL_SRC_VREP_SIM_VREP_INTERFACE_ROBOT_SIM_PROCESS_H_
-#define CONTROL_SRC_VREP_SIM_VREP_INTERFACE_ROBOT_SIM_PROCESS_H_
+#ifndef ROBOT_SIM_PROCESS_H
+#define ROBOT_SIM_PROCESS_H
 
 #include <cstdint>
 #include <memory>
@@ -28,13 +30,13 @@ class RobotSimProcess
 {
 public:
 	RobotSimProcess(std::shared_ptr<RobotSimClient<DataFromSimType, DataToSimType>> client,
-			std::shared_ptr<RobotSimControl<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>> controller):
+			std::shared_ptr<RobotSimControl<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>> control):
 		server_port_(29999),
 		server_connected_(false),
 		sync_mode_(true),
 		loop_count_(0),
 		sim_client_(client),
-		robot_controller_(controller){};
+		sim_control_(control){};
 	virtual ~RobotSimProcess() = default;
 
 	bool ConnectToServer(uint64_t port = -1)
@@ -74,7 +76,7 @@ private:
 	DataToSimType data_to_sim_;
 
 	std::shared_ptr<RobotSimClient<DataFromSimType, DataToSimType>> sim_client_;
-	std::shared_ptr<RobotSimControl<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>> robot_controller_;
+	std::shared_ptr<RobotSimControl<DataFromSimType, DataToSimType,RobotStateType, RobotCmdType>> sim_control_;
 
 	void StartSimLoop()
 	{
@@ -98,11 +100,11 @@ private:
 			if(sim_client_->ReceiveDataFromRobot(data_from_sim_))
 			{
 				RobotCmdType rcmd;
-				robot_controller_->UpdateRobotState(data_from_sim_);
+				sim_control_->UpdateRobotState(data_from_sim_);
 
-				rcmd = robot_controller_->UpdateCtrlLoop();
+				rcmd = sim_control_->UpdateCtrlLoop();
 
-				data_to_sim_ = robot_controller_->ConvertRobotCmdToSimCmd(rcmd);
+				data_to_sim_ = sim_control_->ConvertRobotCmdToSimCmd(rcmd);
 			}
 			else
 				std::cout << "failed to fetch new data" << std::endl;
@@ -135,4 +137,4 @@ private:
 
 }
 
-#endif /* CONTROL_SRC_VREP_SIM_VREP_INTERFACE_ROBOT_SIM_PROCESS_H_ */
+#endif /* ROBOT_SIM_PROCESS_H */

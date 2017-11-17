@@ -1,19 +1,14 @@
-/*
+/* 
  * robot_sim_control.h
- *
- *  Created on: Sep 1, 2016
- *      Author: rdu
- */
+ * 
+ * Created on: Sep 1, 2016
+ * Description: 
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
-#ifndef CONTROL_SRC_VREP_SIM_VREP_INTERFACE_ROBOT_SIM_CONTROL_H_
-#define CONTROL_SRC_VREP_SIM_VREP_INTERFACE_ROBOT_SIM_CONTROL_H_
-
-//extern "C" {
-//    #include "extApi.h"
-///*	#include "extApiCustom.h" // custom remote API functions */
-//}
-//
-//#include "common/robot_state_base.h"
+#ifndef ROBOT_SIM_CONTROL_H
+#define ROBOT_SIM_CONTROL_H
 
 #include <cstdint>
 
@@ -41,4 +36,4 @@ protected:
 
 }
 
-#endif /* CONTROL_SRC_VREP_SIM_VREP_INTERFACE_ROBOT_SIM_CONTROL_H_ */
+#endif /* ROBOT_SIM_CONTROL_H */

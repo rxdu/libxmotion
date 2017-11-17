@@ -10,11 +10,6 @@
 
 #include <cstdint>
 
-extern "C" {
-    #include "extApi.h"
-/*	#include "extApiCustom.h" // custom remote API functions */
-}
-
 #include "common/librav_types.h"
 
 #include "simulator/rc_car_sim/rc_car_sim_types.h"

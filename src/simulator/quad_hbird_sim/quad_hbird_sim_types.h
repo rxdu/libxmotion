@@ -1,12 +1,14 @@
-/*
+/* 
  * quad_hbird_sim_types.h
- *
- *  Created on: Sep 1, 2016
- *      Author: rdu
- */
+ * 
+ * Created on: Sep 1, 2016
+ * Description: 
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
-#ifndef SIMULATOR_QUAD_HBIRD_SIM_TYPES_H_
-#define SIMULATOR_QUAD_HBIRD_SIM_TYPES_H_
+#ifndef QUAD_HBIRD_SIM_TYPES_H
+#define QUAD_HBIRD_SIM_TYPES_H
 
 #include "common/librav_types.h"
 #include "quad_ctrl/state/quad_config.h"
@@ -35,4 +37,4 @@ struct DataToQuadSim
 
 }
 
-#endif /* SIMULATOR_QUAD_HBIRD_SIM_TYPES_H_ */
+#endif /* QUAD_HBIRD_SIM_TYPES_H */

@@ -1,19 +1,16 @@
-/*
+/* 
  * quad_hbird_sim_client.h
- *
- *  Created on: Sep 1, 2016
- *      Author: rdu
- */
+ * 
+ * Created on: Sep 1, 2016
+ * Description: 
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
-#ifndef SIMULATOR_QUAD_HBIRD_SIM_CLIENT_H_
-#define SIMULATOR_QUAD_HBIRD_SIM_CLIENT_H_
+#ifndef QUAD_HBIRD_SIM_CLIENT_H
+#define QUAD_HBIRD_SIM_CLIENT_H
 
 #include <cstdint>
-
-extern "C" {
-    #include "extApi.h"
-/*	#include "extApiCustom.h" // custom remote API functions */
-}
 
 #include "common/librav_types.h"
 
@@ -78,4 +75,4 @@ private:
 
 }
 
-#endif /* SIMULATOR_QUAD_HBIRD_SIM_CLIENT_H_ */
+#endif /* QUAD_HBIRD_SIM_CLIENT_H */

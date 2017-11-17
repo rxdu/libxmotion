@@ -1,13 +1,14 @@
-/*
+/* 
  * quad_hbird_sim_client.cpp
- *
- *  Created on: Sep 1, 2016
- *      Author: rdu
- */
+ * 
+ * Created on: Sep 1, 2016
+ * Description: 
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
 #include <quad_hbird_sim/quad_hbird_sim_client.h>
 #include <iostream>
-
 
 using namespace librav;
 

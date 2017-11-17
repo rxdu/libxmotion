@@ -1,12 +1,14 @@
-/*
+/* 
  * robot_sim_client.h
- *
- *  Created on: Aug 4, 2015
- *      Author: rdu
- */
+ * 
+ * Created on: Aug 4, 2015
+ * Description: 
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
-#ifndef VREP_CLIENT_ROBOT_SIM_CLIENT_H_
-#define VREP_CLIENT_ROBOT_SIM_CLIENT_H_
+#ifndef ROBOT_SIM_CLIENT_H
+#define ROBOT_SIM_CLIENT_H
 
 extern "C" {
     #include "extApi.h"
@@ -35,4 +37,4 @@ protected:
 
 }
 
-#endif /* VREP_CLIENT_ROBOT_SIM_CLIENT_H_ */
+#endif /* ROBOT_SIM_CLIENT_H */

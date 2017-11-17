@@ -1,12 +1,14 @@
-/*
+/* 
  * quad_hbird_config.h
- *
- *  Created on: Aug 9, 2016
- *      Author: rdu
- */
+ * 
+ * Created on: Aug 9, 2016
+ * Description: 
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
-#ifndef CONTROL_QUAD_CTRL_HBIRD_CONFIG_H_
-#define CONTROL_QUAD_CTRL_HBIRD_CONFIG_H_
+#ifndef QUAD_HBIRD_CONFIG_H
+#define QUAD_HBIRD_CONFIG_H
 
 namespace librav
 {
@@ -19,4 +21,4 @@ namespace librav
 
 }
 
-#endif /* CONTROL_QUAD_CTRL_HBIRD_CONFIG_H_ */
+#endif /* QUAD_HBIRD_CONFIG_H */

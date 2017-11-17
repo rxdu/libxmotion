@@ -1,12 +1,14 @@
-/*
- * quad_sim_control.h
- *
- *  Created on: Sep 2, 2016
- *      Author: rdu
- */
+/* 
+ * quad_hbird_sim_control.h
+ * 
+ * Created on: Sep 2, 2016
+ * Description: 
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
-#ifndef SIMULATOR_QUAD_HBIRD_SIM_CONTROL_H_
-#define SIMULATOR_QUAD_HBIRD_SIM_CONTROL_H_
+#ifndef QUAD_HBIRD_SIM_CONTROL_H
+#define QUAD_HBIRD_SIM_CONTROL_H
 
 #include <memory>
 
@@ -60,4 +62,4 @@ public:
 
 }
 
-#endif /* SIMULATOR_QUAD_HBIRD_SIM_CONTROL_H_ */
+#endif /* QUAD_HBIRD_SIM_CONTROL_H */
