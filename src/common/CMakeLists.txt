@@ -28,17 +28,19 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 #find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
-set(SRCL_COMMON_LIB_SRC
-	librav_math.cpp
-	#librav_types.cpp
-    #poly_helper.cpp
-    poly_curve.cpp
-    quad_flattraj.cpp
-	#transformation.cpp
+set(COMMON_LIB_SRC
+	src/librav_math.cpp
+    src/poly_curve.cpp
+    src/quad_flattraj.cpp
 )
-add_library(common STATIC ${SRCL_COMMON_LIB_SRC})
+add_library(common STATIC ${COMMON_LIB_SRC})
 if(ENABLE_LOGGING)
-add_definitions(-DENABLE_LOGGING)
-target_link_libraries(common -lpthread)
+	add_definitions(-DENABLE_LOGGING)
+	target_compile_definitions(common PUBLIC ENABLE_LOGGING=1)
+	target_link_libraries(common -lpthread)
 endif(ENABLE_LOGGING)
+target_include_directories(common PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+	$<INSTALL_INTERFACE:include>
+	PRIVATE src)
 

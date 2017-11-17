@@ -16,7 +16,7 @@ set(MAP_LIB_SRC
   #transformation.cpp
 )
 add_library(map STATIC ${MAP_LIB_SRC})
-target_link_libraries(map geometry ${Octomap_LIBS} ${LCM_LIBRARIES} ${OpenCV_LIBS})
+target_link_libraries(map geometry common ${Octomap_LIBS} ${LCM_LIBRARIES} ${OpenCV_LIBS})
 
 # Add executables
 add_executable(test_qtree tests/test_quadtree.cpp)

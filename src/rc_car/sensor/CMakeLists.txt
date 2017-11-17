@@ -6,7 +6,7 @@ set(SENSOR_LIB_SRC
 	imu_filter.cpp
 )
 add_library(sensor STATIC ${SENSOR_LIB_SRC})
-#target_link_libraries(sensor uavcan ${LCM_LIBRARIES})
+target_link_libraries(sensor common)
 
 # Add executables
 #add_executable(car_messenger car_messenger.cpp)

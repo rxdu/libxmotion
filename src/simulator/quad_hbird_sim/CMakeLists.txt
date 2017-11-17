@@ -10,7 +10,6 @@ set(QUADSIM_LIB_SRC
     quad_hbird_sim_control.cpp
 )
 add_library(quadsim STATIC ${QUADSIM_LIB_SRC})
-add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255)
 target_link_libraries(quadsim vrep_sim quad_ctrl quad_base common ${LCM_LIBRARIES})
 
 # Add executables

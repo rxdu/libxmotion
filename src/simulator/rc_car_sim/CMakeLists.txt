@@ -10,7 +10,6 @@ set(QUADSIM_LIB_SRC
     rc_car_sim_control.cpp
 )
 add_library(rccarsim STATIC ${QUADSIM_LIB_SRC})
-add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255)
 target_link_libraries(rccarsim vrep_sim common ${LCM_LIBRARIES})
 
 # Add executables
