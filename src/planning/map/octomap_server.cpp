@@ -11,7 +11,7 @@
 #include <sstream>
 
 #include "map/octomap_server.h"
-#include "geometry/cube_array/cube_array.h"
+#include "geometry/cube_array.h"
 #include "geometry/cube_array_builder.h"
 #include "geometry/graph_builder.h"
 

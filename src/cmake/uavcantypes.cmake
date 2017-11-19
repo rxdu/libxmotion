@@ -5,6 +5,7 @@
 #
 # ----
 # File: uavcantypes.cmake
+# To be updated: https://blog.kangz.net/posts/2016/05/26/integrating-a-code-generator-with-cmake/
 
 cmake_minimum_required(VERSION 2.6.0)
 

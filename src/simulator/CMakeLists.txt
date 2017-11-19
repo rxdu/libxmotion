@@ -28,6 +28,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/vrep_sim/vrep_lib/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/vrep_sim/vrep_lib/remoteApi)
 # control module
 include_directories(${CMAKE_SOURCE_DIR}/control)
+include_directories(${CMAKE_SOURCE_DIR}/platforms/quadrotor)
 
 ## Find LCM
 find_package(LCM REQUIRED)

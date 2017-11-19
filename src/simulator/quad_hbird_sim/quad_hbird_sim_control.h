@@ -24,8 +24,8 @@
 #include "control/quad_ctrl/controller/pos_quat_con.h"
 #include "control/quad_ctrl/actuator/quad_mixer.h"
 
-#include "quadrotor/motion_server/motion_server.h"
-#include "quadrotor/driver/quad_data_broadcaster.h"
+#include "platforms/quadrotor/motion_server/motion_server.h"
+#include "platforms/quadrotor/driver/quad_data_broadcaster.h"
 
 namespace librav {
 
