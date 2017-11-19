@@ -1,23 +1,20 @@
-/* 
- * quad_hbird_sim_control.h
- * 
- * Created on: Sep 2, 2016
- * Description: 
- * 
- * Copyright (c) 2017 Ruixiang Du (rdu)
- */ 
+/*
+ * quad_solo_sim_control.h
+ *
+ *  Created on: Oct 22, 2016
+ *      Author: rdu
+ */
 
-#ifndef QUAD_HBIRD_SIM_CONTROL_H
-#define QUAD_HBIRD_SIM_CONTROL_H
+#ifndef SIMULATOR_QUAD_SOLO_SIM_CONTROL_H_
+#define SIMULATOR_QUAD_SOLO_SIM_CONTROL_H_
 
 #include <memory>
 
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
-#include "lcmtypes/librav.hpp"
 
 #include "vrep_sim/vrep_interface/robot_sim_control.h"
-#include "simulator/quad_hbird_sim/quad_hbird_sim_types.h"
+#include "quad_solo_sim/quad_solo_sim_types.h"
 
 #include "control/quad_ctrl/state/quad_state.h"
 #include "control/quad_ctrl/controller/att_quat_con.h"
@@ -29,16 +26,14 @@
 
 namespace librav {
 
-class QuadHbirdSimControl: public RobotSimControl<DataFromQuadSim, DataToQuadSim,QuadState, QuadCmd>
+class QuadSoloSimControl: public RobotSimControl<DataFromQuadSim, DataToQuadSim, QuadState, QuadCmd>
 {
 public:
-	QuadHbirdSimControl();
-
-private:
+	QuadSoloSimControl();
 	UAVTrajectoryPoint previous_state_;
 
-	std::unique_ptr<AttQuatCon> att_quat_con_;
-	std::unique_ptr<PosQuatCon> pos_quat_con_;
+	std::unique_ptr<AttQuatCon> att_con_;
+	std::unique_ptr<PosQuatCon> pos_con_;
 	std::unique_ptr<QuadMixer>	mixer_;
 
 	std::shared_ptr<lcm::LCM> lcm_;
@@ -62,4 +57,4 @@ public:
 
 }
 
-#endif /* QUAD_HBIRD_SIM_CONTROL_H */
+#endif /* SIMULATOR_QUAD_SOLO_SIM_CONTROL_H_ */

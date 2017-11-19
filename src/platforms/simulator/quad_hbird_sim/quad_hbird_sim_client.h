@@ -14,7 +14,7 @@
 
 #include "common/librav_types.h"
 
-#include "simulator/quad_hbird_sim/quad_hbird_sim_types.h"
+#include "quad_hbird_sim/quad_hbird_sim_types.h"
 #include "vrep_sim/vrep_interface/robot_sim_client.h"
 
 namespace librav {

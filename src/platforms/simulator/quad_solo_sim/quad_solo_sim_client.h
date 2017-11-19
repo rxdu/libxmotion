@@ -13,7 +13,7 @@
 #include "common/librav_types.h"
 
 #include "vrep_sim/vrep_interface/robot_sim_client.h"
-#include "simulator/quad_solo_sim/quad_solo_sim_types.h"
+#include "quad_solo_sim/quad_solo_sim_types.h"
 
 namespace librav {
 

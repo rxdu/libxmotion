@@ -15,7 +15,7 @@
 #include "lcmtypes/librav.hpp"
 
 #include "vrep_sim/vrep_interface/robot_sim_control.h"
-#include "simulator/rc_car_sim/rc_car_sim_types.h"
+#include "rc_car_sim/rc_car_sim_types.h"
 //#include "control/rc_car_ctrl/rc_car_state.h"
 
 namespace librav

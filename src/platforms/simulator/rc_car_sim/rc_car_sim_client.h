@@ -12,8 +12,8 @@
 
 #include "common/librav_types.h"
 
-#include "simulator/rc_car_sim/rc_car_sim_types.h"
-#include "simulator/vrep_sim/vrep_interface/robot_sim_client.h"
+#include "rc_car_sim/rc_car_sim_types.h"
+#include "vrep_sim/vrep_interface/robot_sim_client.h"
 
 namespace librav {
 
