@@ -6,21 +6,17 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 #find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
-set(FIELD_LIB_SRC
-    src/scalar_field.cpp
-    src/road_field.cpp
-    src/vehicle_field.cpp
-    src/collision_field.cpp
-    src/field_utils.cpp
+set(TRAFFIC_LIB_SRC
+    src/traffic_sim.cpp
 )
-add_library(field STATIC ${FIELD_LIB_SRC})
-target_link_libraries(field common)
-target_include_directories(field PUBLIC
+add_library(traffic STATIC ${TRAFFIC_LIB_SRC})
+target_link_libraries(traffic common)
+target_include_directories(traffic PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 
-add_subdirectory(tests)
+#add_subdirectory(tests)
 
 # TEMPLATE, TO BE UPDATED
 # # 'make install' to the correct locations (provided by GNUInstallDirs).

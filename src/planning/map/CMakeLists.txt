@@ -21,5 +21,5 @@ target_include_directories(map PUBLIC
   $<INSTALL_INTERFACE:include>
   PRIVATE src)
 
-add_subdirectory(src/tests)
+add_subdirectory(tests)
 

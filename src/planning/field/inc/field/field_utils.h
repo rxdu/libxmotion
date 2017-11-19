@@ -13,6 +13,7 @@
 #include <memory>
 
 #include "field/road_field.h"
+#include "field/vehicle_field.h"
 
 namespace librav
 {
@@ -21,6 +22,8 @@ namespace FieldUtils
 {
     std::shared_ptr<RoadField> CreateTestRoadField();
     std::shared_ptr<RoadField> CreateDemoRoadField();
+
+    std::shared_ptr<VehicleField> CreateTestVehicleField();
 }
 
 }

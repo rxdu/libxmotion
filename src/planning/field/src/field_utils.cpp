@@ -42,3 +42,13 @@ std::shared_ptr<RoadField> FieldUtils::CreateDemoRoadField()
 
     return field;
 }
+
+std::shared_ptr<VehicleField> FieldUtils::CreateTestVehicleField()
+{
+    auto field = std::make_shared<VehicleField>(50, 50);
+
+    field->SetCarPosition(24,24);
+    field->UpdateDistribution();
+
+    return field;
+}
