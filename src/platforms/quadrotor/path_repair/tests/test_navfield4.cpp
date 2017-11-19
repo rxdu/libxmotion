@@ -28,7 +28,7 @@
 // user
 #include "planning/graph/graph.h"
 #include "planning/graph/astar.h"
-#include "planning/map/image_utils.h"
+#include "map/image_utils.h"
 #include "geometry/square_grid.h"
 #include "geometry/graph_builder.h"
 #include "geometry/sgrid_builder.h"

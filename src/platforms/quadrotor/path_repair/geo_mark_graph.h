@@ -16,9 +16,9 @@
 #include "common/librav_math.h"
 
 #include "planning/graph/graph.h"
-#include "planning/map/map_type.h"
-#include "planning/map/map_info.h"
-#include "planning/map/map_utils.h"
+#include "map/map_type.h"
+#include "map/map_info.h"
+#include "map/map_utils.h"
 #include "geometry/geo_mark.h"
 #include "geometry/cube_array.h"
 

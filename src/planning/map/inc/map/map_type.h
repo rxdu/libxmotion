@@ -12,7 +12,7 @@
 
 #include "opencv2/opencv.hpp"
 
-#include "planning/map/map_info.h"
+#include "map/map_info.h"
 
 namespace librav {
 

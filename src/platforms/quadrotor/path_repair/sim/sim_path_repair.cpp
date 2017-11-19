@@ -15,7 +15,7 @@
 #include "utility/logging/logger.h"
 
 #include "path_repair/sim/sim_path_repair.h"
-#include "planning/map/map_utils.h"
+#include "map/map_utils.h"
 
 #include "geometry/cube_array.h"
 #include "geometry/cube_array_builder.h"

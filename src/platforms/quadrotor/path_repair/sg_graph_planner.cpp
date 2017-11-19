@@ -19,9 +19,9 @@
 // User headers
 #include "planning/graph/graph.h"
 #include "planning/graph/astar.h"
-#include "planning/map/map_type.h"
-#include "planning/map/map_config.h"
-#include "planning/map/map_utils.h"
+#include "map/map_type.h"
+#include "map/map_config.h"
+#include "map/map_utils.h"
 
 #include "geometry/square_grid.h"
 #include "geometry/quad_tree.h"

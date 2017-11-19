@@ -28,7 +28,7 @@
 // user
 #include "planning/graph/graph.h"
 #include "planning/graph/astar.h"
-#include "planning/map/image_utils.h"
+#include "map/image_utils.h"
 
 #include "path_repair/nav_field.h"
 #include "path_repair/shortcut_eval.h"

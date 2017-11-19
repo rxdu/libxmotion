@@ -20,7 +20,7 @@
 #include "lcmtypes/librav.hpp"
 
 #include "geometry/square_grid.h"
-#include "planning/map/map_utils.h"
+#include "map/map_utils.h"
 #include "vis/sgrid_vis.h"
 #include "vis/graph_vis.h"
 

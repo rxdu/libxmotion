@@ -13,9 +13,9 @@
 
 #include "utility/logging/logger.h"
 #include "common/librav_types.h"
-#include "planning/map/map_utils.h"
-#include "planning/map/map_config.h"
-#include "planning/map/map_info.h"
+#include "map/map_utils.h"
+#include "map/map_config.h"
+#include "map/map_info.h"
 #include "planning/geometry/graph_builder.h"
 #include "planning/geometry/sgrid_builder.h"
 #include "path_repair/quad_path_repair.h"

@@ -19,7 +19,7 @@
 #include "common/librav_types.h"
 
 #include "geometry/geo_mark.h"
-#include "planning/map/map_info.h"
+#include "map/map_info.h"
 
 #include "path_repair/sim/sim_depth_sensor.h"
 #include "path_repair/sg_graph_planner.h"

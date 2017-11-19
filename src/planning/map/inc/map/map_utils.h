@@ -20,7 +20,7 @@
 #include "geometry/square_grid.h"
 #include "geometry/quad_tree.h"
 #include "common/librav_types.h"
-#include "planning/map/map_info.h"
+#include "map/map_info.h"
 
 namespace librav {
 

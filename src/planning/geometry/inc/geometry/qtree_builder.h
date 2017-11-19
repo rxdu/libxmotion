@@ -9,7 +9,7 @@
 #include "opencv2/core/core.hpp"
 
 #include "geometry/quad_tree.h"
-#include "planning/map/map_type.h"
+#include "map/map_type.h"
 
 namespace librav{
 

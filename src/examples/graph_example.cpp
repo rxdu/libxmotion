@@ -22,8 +22,8 @@
 #include "vis/sgrid_vis.h"
 #include "geometry/graph_builder.h"
 #include "geometry/sgrid_builder.h"
-#include "planning/map/map_type.h"
-#include "planning/map/map_utils.h"
+#include "map/map_type.h"
+#include "map/map_utils.h"
 
 using namespace cv;
 using namespace librav;
