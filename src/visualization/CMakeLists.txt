@@ -35,16 +35,15 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # find_package(DISLIN REQUIRED)
 # include_directories(${DISLIN_INCLUDE_DIRS})
 
+find_package(VTK REQUIRED)
+include(${VTK_USE_FILE})
+
 # # Add libraries
-# set(VIS_LIB_SRC
-#     #graph_vis.cpp # header only
-#     qtree_vis.cpp
-#     sgrid_vis.cpp
-#     #rrt_vis.cpp
-#     vis_utils.cpp
+# set(PLOT_LIB_SRC
+#     matplot/matplot.cpp
 # )
-# add_library(vis STATIC ${VIS_LIB_SRC})
-# target_link_libraries(vis map geometry ${OpenCV_LIBS})
+# add_library(plot STATIC ${PLOT_LIB_SRC})
+# target_link_libraries(plot ${VTK_LIBRARIES})
 
 # Add executables
 # add_executable(test_dislin tests/test_dislin.cpp)
@@ -56,9 +55,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # add_executable(test_plplot tests/test_plplot.cpp tests/plstream.cc)
 # target_link_libraries(test_plplot ${PLplot_LIBRARIES})
 
-find_package(VTK REQUIRED)
-include(${VTK_USE_FILE})
-
-add_executable(test_vtk MACOSX_BUNDLE tests/test_vtk.cpp )
-
+add_executable(test_vtk tests/test_vtk.cpp )
 target_link_libraries(test_vtk ${VTK_LIBRARIES})
+
+add_executable(test_vtk2 tests/test_vtk2.cpp )
+target_link_libraries(test_vtk2 ${VTK_LIBRARIES})
+
+add_executable(test_surface tests/test_surface.cpp )
+target_link_libraries(test_surface ${VTK_LIBRARIES})

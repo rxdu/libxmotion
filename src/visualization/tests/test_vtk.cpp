@@ -20,12 +20,12 @@ int main(int, char *[])
 
     vtkSmartPointer<vtkDoubleArray> xArray =
         vtkSmartPointer<vtkDoubleArray>::New();
-    for(int i = 0; i < 20; i++)
+    for (int i = 0; i < 20; i++)
         xArray->InsertNextValue(i);
 
     vtkSmartPointer<vtkDoubleArray> yArray =
         vtkSmartPointer<vtkDoubleArray>::New();
-    for(int i = 0; i < 50; i++)
+    for (int i = 0; i < 50; i++)
         yArray->InsertNextValue(i);
 
     vtkSmartPointer<vtkDoubleArray> zArray =
