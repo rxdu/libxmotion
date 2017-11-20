@@ -76,15 +76,15 @@ typedef std::vector<UAVTrajectoryPoint> UAVTrajectory;
 
 /****************** Types for Planning ******************/
 template <typename T>
-struct position2d
+struct value2d
 {
-	position2d() : x(0), y(0) {}
-	position2d(T _x, T _y) : x(_x), y(_y) {}
+	value2d() : x(0), y(0) {}
+	value2d(T _x, T _y) : x(_x), y(_y) {}
 
 	T x;
 	T y;
 
-	bool operator==(const struct position2d &other) const
+	bool operator==(const struct value2d &other) const
 	{
 		if (this->x == other.x && this->y == other.y)
 			return true;
@@ -92,7 +92,7 @@ struct position2d
 			return false;
 	}
 
-	friend std::ostream &operator<<(std::ostream &os, const struct position2d &pos)
+	friend std::ostream &operator<<(std::ostream &os, const struct value2d &pos)
 	{
 		os << pos.x << " , " << pos.y;
 		return os;
@@ -100,16 +100,16 @@ struct position2d
 };
 
 template <typename T>
-struct position3d
+struct value3d
 {
-	position3d() : x(0), y(0), z(0) {}
-	position3d(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {}
+	value3d() : x(0), y(0), z(0) {}
+	value3d(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {}
 
 	T x;
 	T y;
 	T z;
 
-	bool operator==(const struct position3d &other) const
+	bool operator==(const struct value3d &other) const
 	{
 		if (this->x == other.x && this->y == other.y && this->z == other.z)
 			return true;
@@ -117,17 +117,22 @@ struct position3d
 			return false;
 	}
 
-	friend std::ostream &operator<<(std::ostream &os, const struct position3d &pos)
+	friend std::ostream &operator<<(std::ostream &os, const struct value3d &pos)
 	{
 		os << pos.x << " , " << pos.y << " , " << pos.z;
 		return os;
 	}
 };
 
-using Position2Di = position2d<int32_t>;
-using Position2Dd = position2d<double>;
-using Position3Di = position3d<int32_t>;
-using Position3Dd = position3d<double>;
+using Position2Di = value2d<int32_t>;
+using Position2Dd = value2d<double>;
+using Position3Di = value3d<int32_t>;
+using Position3Dd = value3d<double>;
+
+using Velocity2Di = value2d<int32_t>;
+using Velocity2Dd = value2d<double>;
+using Velocity3Di = value3d<int32_t>;
+using Velocity3Dd = value3d<double>;
 
 enum class OccupancyType
 {

@@ -7,7 +7,6 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 
 # Add libraries
 set(TRAFFIC_LIB_SRC
-    src/vehicle_sim.cpp
     src/traffic_sim.cpp
 )
 add_library(traffic STATIC ${TRAFFIC_LIB_SRC})

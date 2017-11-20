@@ -19,8 +19,16 @@ public:
     TrafficSim();
     ~TrafficSim()=default;
 
-private:
+    void SetDuration(double duration) { sim_duration_ = duration; };
+    void SetStartTime(double start) { start_time_ = start; };
+    void SetStepSize(double step) { step_size_ = step; };
 
+    void UpdateTraffic();
+
+private:
+    double sim_duration_;
+    double start_time_;
+    double step_size_;
 };
 
 }
