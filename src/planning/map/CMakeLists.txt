@@ -9,42 +9,17 @@ find_package(OpenCV REQUIRED)
 # Add libraries
 set(MAP_LIB_SRC
   # 2D map
-  image_utils.cpp
-  map_utils.cpp
+  src/image_utils.cpp
+  src/map_utils.cpp
   # 3D map
-  octomap_server.cpp
-  #transformation.cpp
+  src/octomap_server.cpp
 )
 add_library(map STATIC ${MAP_LIB_SRC})
 target_link_libraries(map geometry common ${Octomap_LIBS} ${LCM_LIBRARIES} ${OpenCV_LIBS})
+target_include_directories(map PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+  $<INSTALL_INTERFACE:include>
+  PRIVATE src)
 
-# Add executables
-add_executable(test_qtree tests/test_quadtree.cpp)
-target_link_libraries(test_qtree geometry vis map)
+add_subdirectory(tests)
 
-add_executable(test_sgrid tests/test_squaregrid.cpp)
-target_link_libraries(test_sgrid geometry vis map)
-
-add_executable(test_sgridv2 tests/test_squaregridv2.cpp)
-target_link_libraries(test_sgridv2 geometry vis map)
-
-add_executable(test_graphvis tests/test_graphvis.cpp)
-target_link_libraries(test_graphvis geometry vis map)
-
-add_executable(test_image tests/test_image.cpp)
-target_link_libraries(test_image map vis)
-
-add_executable(test_expansion tests/test_expansion.cpp)
-target_link_libraries(test_expansion map vis)
-
-add_executable(test_traj tests/test_traj.cpp)
-target_link_libraries(test_traj map vis)
-
-add_executable(octree_example tests/octomap_example.cpp)
-target_link_libraries(octree_example ${Octomap_LIBS})
-
-#add_executable(test_octomap tests/test_octomap.cpp)
-#target_link_libraries(test_octomap ${Octomap_LIBS})
-
-#add_executable(test_cubebuilder tests/test_cubebuilder.cpp)
-#target_link_libraries(test_cubebuilder map geometry ${LCM_LIBRARIES})

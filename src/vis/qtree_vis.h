@@ -13,7 +13,7 @@
 #include "opencv2/opencv.hpp"
 
 #include "planning/graph/graph.h"
-#include "planning/geometry/quadtree/quad_tree.h"
+#include "geometry/quad_tree.h"
 
 namespace librav {
 

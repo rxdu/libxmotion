@@ -9,6 +9,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 set(FIELD_LIB_SRC
     src/scalar_field.cpp
     src/road_field.cpp
+    src/vehicle_field.cpp
     src/collision_field.cpp
     src/field_utils.cpp
 )

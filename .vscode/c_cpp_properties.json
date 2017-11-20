@@ -34,6 +34,7 @@
                 "/usr/include/linux",
                 "${workspaceRoot}",
                 "${workspaceRoot}/src",
+                "${workspaceRoot}/src/common",
                 "${workspaceRoot}/src/quadrotor",
                 "${workspaceRoot}/src/planning",
                 "${workspaceRoot}/build/include"

@@ -54,3 +54,8 @@ add_executable(logger_example logger_example.cpp)
 target_link_libraries(logger_example utility)
 
 add_executable(stopwatch_example stopwatch_example.cpp)
+
+add_executable(graph_example graph_example.cpp)
+target_link_libraries(graph_example vis map geometry)
+
+add_executable(simple_graph simple_graph.cpp)

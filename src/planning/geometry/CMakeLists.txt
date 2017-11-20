@@ -9,18 +9,22 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # Add libraries
 set(GEOMETRY_LIB_SRC
   # data structures
-  square_grid/square_grid.cpp
-  quadtree/quad_tree.cpp
-  cube_array/cube_array.cpp
+  src/square_grid.cpp
+  src/quad_tree.cpp
+  src/cube_array.cpp
   # builders
-  qtree_builder.cpp
-  sgrid_builder.cpp
-  sgrid_builder_v2.cpp
-  cube_array_builder.cpp
-  graph_builder.cpp
+  src/qtree_builder.cpp
+  src/sgrid_builder.cpp
+  src/sgrid_builder_v2.cpp
+  src/cube_array_builder.cpp
+  src/graph_builder.cpp
 )
 add_library(geometry STATIC ${GEOMETRY_LIB_SRC})
 target_link_libraries(geometry map ${Octomap_LIBS})
+target_include_directories(geometry PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+  $<INSTALL_INTERFACE:include>
+  PRIVATE src)
 
 # Add executables
 #add_executable(octomap_server_node octomap_server_node.cpp)

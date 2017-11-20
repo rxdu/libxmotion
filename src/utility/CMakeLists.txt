@@ -34,6 +34,7 @@ set(UTILITY_LIB_SRC
 add_library(utility STATIC ${UTILITY_LIB_SRC})
 if(ENABLE_LOGGING)
 add_definitions(-DENABLE_LOGGING)
+target_compile_definitions(utility PUBLIC ENABLE_LOGGING=1)
 target_link_libraries(utility ${CMAKE_THREAD_LIBS_INIT})
 endif(ENABLE_LOGGING)
 

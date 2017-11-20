@@ -10,8 +10,10 @@
 #ifndef VEHICLE_FIELD_H
 #define VEHICLE_FIELD_H
 
-#include "field/scalar_field.h"
 #include "lcmtypes/librav.hpp"
+
+#include "field/scalar_field.h"
+#include "common/librav_types.h"
 
 namespace librav
 {
@@ -24,6 +26,11 @@ class VehicleField : public ScalarField
     ~VehicleField() = default;
 
     void SetCarPosition(int64_t x, int64_t y);
+    void UpdateDistribution();
+
+  private:
+    Position2Di com_pos_;
+    Position2Di com_vel_;
 };
 }
 
