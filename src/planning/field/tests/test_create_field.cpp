@@ -5,7 +5,7 @@ using namespace librav;
 
 int main()
 {
-    CollisionField field;
+    CollisionField field(1,1);
 
     std::cout << "field created" << std::endl;
 

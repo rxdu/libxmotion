@@ -11,15 +11,25 @@
 #ifndef COLLISION_FIELD_H
 #define COLLISION_FIELD_H
 
+#include <memory>
+
+#include "field/scalar_field.h"
+#include "field/road_field.h"
+#include "field/vehicle_field.h"
+
 namespace librav
 {
 
-class CollisionField
+class CollisionField : public ScalarField
 {
-  public:
-    CollisionField();
-};
+public:
+  CollisionField(int64_t size_x, int64_t size_y);
 
+  void CombineAllFields();
+
+  std::shared_ptr<RoadField> road_field_;
+  std::shared_ptr<VehicleField> vehicle_field_;
+};
 }
 
 #endif /* COLLISION_FIELD_H */

@@ -41,5 +41,5 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 add_subdirectory(apps)
 add_subdirectory(comm)
 add_subdirectory(sensor)
-
+add_subdirectory(listening)
 add_subdirectory(tests)

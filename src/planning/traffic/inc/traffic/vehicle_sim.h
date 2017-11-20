@@ -11,20 +11,25 @@
 #define VEHICLE_SIM_H
 
 #include "common/librav_types.h"
+#include "traffic/traffic_participant.h"
 
 namespace librav
 {
 
-class VehicleSim
+class VehicleSim : public TrafficParticipant
 {
-  public:
-    VehicleSim();
-    VehicleSim(Position2Dd init_pos);
-    ~VehicleSim() = default;
+public:
+  VehicleSim();
+  VehicleSim(Position2Dd init_pos);
+  ~VehicleSim() = default;
 
-  private:
-    Position2Dd init_pos_;
+public:
+  void Update(double t, double dt) override;
+  
+private:
+  Position2Dd init_pos_;
 };
+
 }
 
 #endif /* VEHICLE_SIM_H */

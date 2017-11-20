@@ -12,7 +12,7 @@
 using namespace librav;
 
 RoadField::RoadField(int64_t size_x, int64_t size_y) : ScalarField(size_x, size_y),
-                                                       drivable_area_potential_(1.5)
+                                                       drivable_area_potential_(0.01)
 {
 }
 

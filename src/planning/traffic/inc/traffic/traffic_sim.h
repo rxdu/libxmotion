@@ -10,6 +10,8 @@
 #ifndef TRAFFIC_SIM_H
 #define TRAFFIC_SIM_H
 
+#include "traffic/vehicle_sim.h"
+
 namespace librav
 {
 
@@ -23,11 +25,13 @@ public:
     void SetStartTime(double start) { start_time_ = start; };
     void SetStepSize(double step) { step_size_ = step; };
 
-    void UpdateTraffic();
+    bool UpdateTraffic();
+    VehicleSim vehicle_;
 
 private:
     double sim_duration_;
     double start_time_;
+    double sim_t_;
     double step_size_;
 };
 

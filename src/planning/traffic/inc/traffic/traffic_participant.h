@@ -10,21 +10,28 @@
 #ifndef TRAFFIC_PARTICIPANT_H
 #define TRAFFIC_PARTICIPANT_H
 
-#include "common/librav_common.h"
+#include "common/librav_types.h"
 
 namespace librav
 {
 
 class TrafficParticipant
 {
-  public:
-    TrafficParticipant() = default;
-    ~TrafficParticipant() = default;
+public:
+  TrafficParticipant() = default;
+  ~TrafficParticipant() = default;
 
+  Position2Dd position_;
+  Velocity2Dd velocity_;
 
-    virtual void Update() = 0;
+  virtual void Update(double t, double dt) = 0;
+
+  Position2Dd GetPosition() { return position_; };
+  Velocity2Dd GetVelocity() { return velocity_; };
+
+  void SetPosition(Position2Dd pos) { position_ = pos; };
+  void SetVelocity(Velocity2Dd vel) { velocity_ = vel; };
 };
-
 }
 
 #endif /* TRAFFIC_PARTICIPANT_H */

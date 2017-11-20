@@ -72,6 +72,8 @@ class FieldVis(object):
 
         fig = plt.figure()
         ax = fig.gca(projection='3d')
+        plt.gca().invert_xaxis()
+        # plt.gca().invert_yaxis()
 
         # Make data.
         X = np.arange(0, msg.size_x, 1)
@@ -91,7 +93,7 @@ class FieldVis(object):
                             linewidth=0, antialiased=False)
 
         # Customize the z axis.
-        # ax.set_zlim(-1.01, 1.01)
+        ax.set_zlim(0, 1.0)
         # ax.zaxis.set_major_locator(LinearLocator(10))
         # ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
 
