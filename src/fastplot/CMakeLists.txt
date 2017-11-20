@@ -55,11 +55,4 @@ include(${VTK_USE_FILE})
 # add_executable(test_plplot tests/test_plplot.cpp tests/plstream.cc)
 # target_link_libraries(test_plplot ${PLplot_LIBRARIES})
 
-add_executable(test_vtk tests/test_vtk.cpp )
-target_link_libraries(test_vtk ${VTK_LIBRARIES})
-
-add_executable(test_vtk2 tests/test_vtk2.cpp )
-target_link_libraries(test_vtk2 ${VTK_LIBRARIES})
-
-add_executable(test_surface tests/test_surface.cpp )
-target_link_libraries(test_surface ${VTK_LIBRARIES})
+add_subdirectory(tests)
