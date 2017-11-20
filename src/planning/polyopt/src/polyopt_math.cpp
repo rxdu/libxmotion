@@ -1,17 +1,17 @@
-/*
+/* 
  * polyopt_math.cpp
- *
- *  Created on: Aug 23, 2016
- *      Author: rdu
- *
- *  Reference:
+ * 
+ * Created on: Aug 23, 2016
+ * Description: 
+ * Reference:
  *  [1] https://github.com/MUNEEBABBASI/2DQuadSim
  *  [2] Mellinger, D., and V. Kumar. 2011. “Minimum Snap Trajectory Generation and Control for Quadrotors.”
  *  	In Robotics and Automation (ICRA), 2011 IEEE International Conference on, 2520–25.
  *  [3] Richter, Charles, Adam Bry, and Nicholas Roy. 2013/5. “Polynomial Trajectory Planning for Quadrotor Flight.”
  *  	In. http://rss2013_uav.visual-navigation.com/pdf/richter_rss13_workshop.pdf.
- *
- */
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
 #include <iostream>
 #include <cmath>

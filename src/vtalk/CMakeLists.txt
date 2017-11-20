@@ -3,20 +3,27 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
 # Dependency libraries
-#find_package(LIBRARY_NAME REQUIRED)
+## Find LCM
+find_package(LCM REQUIRED)
+if(LCM_NOT_FOUND)
+  message(STATUS "LCM is not found. Inter-process communication depends on LCM.")
+endif(LCM_NOT_FOUND)
+# Include files for LCM
+set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
+include_directories(${LCM_GENERATED_HEADER_PATH})
 
 # Add libraries
-set(TRAFFIC_LIB_SRC
-    src/traffic_sim.cpp
+set(VTALK_LIB_SRC
+    src/vtalk.cpp
 )
-add_library(traffic STATIC ${TRAFFIC_LIB_SRC})
-target_link_libraries(traffic common)
-target_include_directories(traffic PUBLIC
+add_library(vtalk STATIC ${VTALK_LIB_SRC})
+target_link_libraries(vtalk ${LCM_LIBRARIES})
+target_include_directories(vtalk PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 
-add_subdirectory(tests)
+#add_subdirectory(tests)
 
 # TEMPLATE, TO BE UPDATED
 # # 'make install' to the correct locations (provided by GNUInstallDirs).

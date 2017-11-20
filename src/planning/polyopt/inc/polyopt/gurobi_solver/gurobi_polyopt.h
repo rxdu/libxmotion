@@ -1,15 +1,14 @@
-/*
+/* 
  * gurobi_polyopt.h
- *
- *  Created on: Aug 29, 2016
- *      Author: rdu
- *
- *  Description: this configuration tries to minimize r'th derivative of
- *  	a N-order polynomial.
- */
+ * 
+ * Created on: Aug 29, 2016
+ * Description: 
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
-#ifndef PLANNING_SRC_POLYOPT_GUROBI_POLYOPT_H_
-#define PLANNING_SRC_POLYOPT_GUROBI_POLYOPT_H_
+#ifndef GUROBI_POLYOPT_H
+#define GUROBI_POLYOPT_H
 
 #include "common/poly_curve.h"
 
@@ -91,6 +90,4 @@ public:
 
 }
 
-
-
-#endif /* PLANNING_SRC_POLYOPT_GUROBI_POLYOPT_H_ */
+#endif /* GUROBI_POLYOPT_H */

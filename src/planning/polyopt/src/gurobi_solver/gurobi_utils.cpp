@@ -1,9 +1,11 @@
-/*
+/* 
  * gurobi_utils.cpp
- *
- *  Created on: Aug 28, 2016
- *      Author: rdu
- */
+ * 
+ * Created on: Aug 28, 2016
+ * Description: 
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
 #include "polyopt/gurobi_solver/gurobi_utils.h"
 

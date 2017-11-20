@@ -1,12 +1,14 @@
-/*
+/* 
  * gurobi_utils.h
- *
- *  Created on: Aug 28, 2016
- *      Author: rdu
- */
+ * 
+ * Created on: Aug 28, 2016
+ * Description: 
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
-#ifndef PLANNING_SRC_POLYOPT_GUROBI_UTILS_H_
-#define PLANNING_SRC_POLYOPT_GUROBI_UTILS_H_
+#ifndef GUROBI_UTILS_H
+#define GUROBI_UTILS_H
 
 #include <cstdint>
 #include <vector>
@@ -27,4 +29,4 @@ void AddLinInequalityConstrExpr(const std::vector<GRBVar>& x, const Eigen::Ref<c
 
 }
 
-#endif /* PLANNING_SRC_POLYOPT_GUROBI_UTILS_H_ */
+#endif /* GUROBI_UTILS_H */

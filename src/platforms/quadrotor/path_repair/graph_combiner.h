@@ -18,7 +18,7 @@
 #include "map/map_info.h"
 #include "map/map_utils.h"
 #include "geometry/cube_array/cube_array.h"
-#include "planning/polyopt/quad_polyopt.h"
+#include "polyopt/quad_polyopt.h"
 
 #include "common/librav_math.h"
 

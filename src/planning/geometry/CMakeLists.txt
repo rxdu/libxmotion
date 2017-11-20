@@ -1,6 +1,4 @@
 # Include path
-#include_directories(${CMAKE_SOURCE_DIR}/inc)
-include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Dependency libraries
@@ -26,6 +24,3 @@ target_include_directories(geometry PUBLIC
   $<INSTALL_INTERFACE:include>
   PRIVATE src)
 
-# Add executables
-#add_executable(octomap_server_node octomap_server_node.cpp)
-#target_link_libraries(octomap_server_node octomap_utils ${Octomap_LIBS} ${LCM_LIBRARIES})

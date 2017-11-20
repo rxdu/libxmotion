@@ -32,6 +32,7 @@ set(Octomap_LIBS octomap octomath)
 
 ## Add other sub source directories
 add_subdirectory(examples)
+add_subdirectory(vtalk)
 add_subdirectory(libraries)
 add_subdirectory(common)
 add_subdirectory(control)

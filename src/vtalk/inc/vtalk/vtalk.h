@@ -5,7 +5,7 @@
  * Description: 
  * 
  * Copyright (c) 2017 Ruixiang Du (rdu)
- */ 
+ */
 
 #ifndef VTALK_H
 #define VTALK_H
@@ -13,7 +13,12 @@
 namespace librav
 {
 
-
+class VTalk
+{
+  public:
+    VTalk();
+    ~VTalk() = default;
+};
 
 }
 

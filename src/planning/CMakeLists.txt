@@ -24,15 +24,15 @@ set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 ## Include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-## Find LCM
-#find_package(PkgConfig REQUIRED)
-#pkg_search_module(LCM REQUIRED lcm)
-find_package(LCM REQUIRED)
+## Find Eigen3
+find_package(Eigen3 REQUIRED)
+include_directories(${EIGEN3_INCLUDE_DIR})
 
+## Find LCM
+find_package(LCM REQUIRED)
 if(LCM_NOT_FOUND)
   message(STATUS "LCM is not found. Inter-process communication depends on LCM.")
 endif(LCM_NOT_FOUND)
-
 # Include files for LCM
 set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
@@ -43,6 +43,7 @@ if (NOT GUROBI_FOUND)
   message("Gurobi not found. Trajectory generation will not be built. Make sure you have set the GUROBI_HOME variable")
 else()
   message("Gurobi found")
+  message(STATUS "Gurobi library: "${GUROBI_LIBRARIES})
   include_directories(${GUROBI_INCLUDE_DIRS})
   add_subdirectory(polyopt)
 endif()

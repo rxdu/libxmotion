@@ -1,9 +1,11 @@
-/*
- * traj_optimizer.cpp
- *
- *  Created on: Aug 29, 2016
- *      Author: rdu
- */
+/* 
+ * gurobi_polyopt.cpp
+ * 
+ * Created on: Aug 29, 2016
+ * Description: 
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
 #include <limits>
 #include <ctime>

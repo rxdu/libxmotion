@@ -1,12 +1,14 @@
-/*
+/* 
  * polyopt_math.h
- *
- *  Created on: Aug 23, 2016
- *      Author: rdu
+ * 
+ * Created on: Aug 23, 2016
+ * Description: 
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#ifndef PLANNING_SRC_POLYOPT_POLYOPT_MATH_H_
-#define PLANNING_SRC_POLYOPT_POLYOPT_MATH_H_
+#ifndef POLYOPT_MATH_H
+#define POLYOPT_MATH_H
 
 #include <vector>
 #include <cstdint>
@@ -43,4 +45,4 @@ void GetNonDimCorridorConstrs(uint32_t poly_order, uint32_t keyframe_num, uint32
 }
 }
 
-#endif /* PLANNING_SRC_POLYOPT_POLYOPT_MATH_H_ */
+#endif /* POLYOPT_MATH_H */

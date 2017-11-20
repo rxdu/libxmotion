@@ -7,7 +7,7 @@
 
 #include "eigen3/Eigen/Core"
 
-#include "polyopt/gurobi_polyopt.h"
+#include "polyopt/gurobi_solver/gurobi_polyopt.h"
 
 using namespace librav;
 using namespace Eigen;

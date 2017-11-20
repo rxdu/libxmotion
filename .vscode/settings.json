@@ -52,6 +52,7 @@
         "__config": "cpp",
         "geometry": "cpp",
         "*.ipp": "cpp",
-        "core": "cpp"
+        "core": "cpp",
+        "vector": "cpp"
     }
 }

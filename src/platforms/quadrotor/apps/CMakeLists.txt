@@ -10,8 +10,8 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 add_executable(path_repair_pysim path_repair_pysim.cpp)
 target_link_libraries(path_repair_pysim map pr_sim quad_base common ${LCM_LIBRARIES})
 
-#add_executable(quadsim_pr_planner quadsim_planner.cpp)
-#target_link_libraries(quadsim_pr_planner map path_repair quad_base common ${LCM_LIBRARIES})
+# add_executable(quadsim_pr_planner quadsim_planner.cpp)
+# target_link_libraries(quadsim_pr_planner map path_repair quad_base common ${LCM_LIBRARIES})
 
 add_executable(planar_search planar_search.cpp)
 target_link_libraries(planar_search geometry map vis)

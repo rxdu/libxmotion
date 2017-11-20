@@ -64,7 +64,11 @@ else()
 endif()
 
 add_library(quad_base STATIC ${QUAD_MOD_SRC})
-target_link_libraries(quad_base common geometry ${LCM_LIBRARIES})
+if (NOT GUROBI_FOUND)
+  target_link_libraries(quad_base common geometry ${LCM_LIBRARIES})
+else()
+  target_link_libraries(quad_base polyopt common geometry ${LCM_LIBRARIES})
+endif()
 
 ## Add other sub source directories
 add_subdirectory(apps)

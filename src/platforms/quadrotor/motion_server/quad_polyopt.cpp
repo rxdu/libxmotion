@@ -8,7 +8,7 @@
 #include <ctime>
 
 #include "motion_server/quad_polyopt.h"
-#include "planning/polyopt/polyopt_math.h"
+#include "polyopt/polyopt_math.h"
 
 using namespace librav;
 
