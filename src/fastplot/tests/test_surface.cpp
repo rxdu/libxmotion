@@ -1,7 +1,7 @@
 
 #include <cmath>
 
-#include <vtkVersion.h>
+// #include <vtkVersion.h>
 #include <vtkSmartPointer.h>
 #include <vtkPoints.h>
 #include <vtkFloatArray.h>

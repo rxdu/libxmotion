@@ -14,3 +14,6 @@ target_link_libraries(test_vtk2 ${VTK_LIBRARIES})
 
 add_executable(test_surface test_surface.cpp )
 target_link_libraries(test_surface ${VTK_LIBRARIES})
+
+# add_executable(test_mathgl test_mathgl.cpp )
+# target_link_libraries(test_mathgl ${MATHGL2_LIBRARIES})
