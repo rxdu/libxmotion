@@ -1,6 +1,6 @@
 close all;clear;clc;
 
-imu_log_file = '/home/rdu/CarLog/raw_imu.20171112000855.data'
+imu_log_file = '/home/rdu/CarLog/raw_imu.20171122145342.data'
 
 imu_data = csvread(imu_log_file);
 

@@ -14,6 +14,7 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/librav.hpp"
 
+#include "common/librav_types.h"
 #include "comm/can_messenger.h"
 
 namespace librav
@@ -28,6 +29,10 @@ public:
     void republishRawIMUData(const pixcar::CarRawIMU &msg);
     void republishRawMagData(const pixcar::CarRawMag &msg);
     void republishRawSpeedData(const pixcar::CarRawSpeed &msg);
+
+    void publishCalibratedIMUData(const AccGyroData &imu);
+    //void publishCalibratedMagData(const pixcar::CarRawMag &msg);
+    void publishConvertedSpeedData(const CarSpeed &spd);
 
 private:
     std::shared_ptr<lcm::LCM> lcm_;

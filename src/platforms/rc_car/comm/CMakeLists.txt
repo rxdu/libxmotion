@@ -20,7 +20,7 @@ set(COMM_LIB_SRC
 )
 add_library(comm STATIC ${COMM_LIB_SRC})
 add_definitions(-DUAVCAN_CPP_VERSION=UAVCAN_CPP11)
-target_link_libraries(comm uavcan ${LCM_LIBRARIES})
+target_link_libraries(comm uavcan common ${LCM_LIBRARIES})
 target_include_directories(comm PUBLIC ${CMAKE_BINARY_DIR}/include/uavcantypes)
 
 # Add executables

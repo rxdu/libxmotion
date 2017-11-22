@@ -9,8 +9,8 @@ close all;clear;clc;
 % mag_log_file = '/home/rdu/CarLog/archive/run/raw_mag.20171107163048.data'
 % spd_log_file = '/home/rdu/CarLog/archive/run/raw_spd.20171107163048.data'
 
-imu_log_file = '/home/rdu/CarLog/raw_imu.20171111235018.data'
-mag_log_file = '/home/rdu/CarLog/raw_mag.20171111235018.data'
+imu_log_file = '/home/rdu/CarLog/raw_imu.20171122145342.data'
+mag_log_file = '/home/rdu/CarLog/raw_mag.20171122145342.data'
 
 %imu_log_file = '/home/rdu/CarLog/raw_imu.20171112000855.data'
 %mag_log_file = '/home/rdu/CarLog/raw_mag.20171112000855.data'

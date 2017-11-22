@@ -208,6 +208,26 @@ struct AccGyroData
 	}
 };
 
+struct CarSpeed
+{
+	CarSpeed():
+		mtime(0),
+		speed(0.0){};
+
+	CarSpeed(int64_t time, float spd):
+		mtime(time),
+		speed(spd){};
+
+	int64_t mtime;
+	float speed;
+
+	friend std::ostream &operator<<(std::ostream &os, const CarSpeed &data)
+	{
+		os << "time_stamp: " << data.mtime << " ; speed: " << data.speed << std::endl;
+		return os;
+	}
+};
+
 struct IMUCalibParams
 {
     Eigen::Matrix<double,3,3> misalignment_matrix;

@@ -19,7 +19,11 @@ struct LCM_CHANNELS
     static const std::string CAR_RAW_IMU_CHANNEL;
     static const std::string CAR_RAW_MAG_CHANNEL;
     static const std::string CAR_RAW_SPEED_CHANNEL;
-
+    
+    static const std::string CAR_CALIB_IMU_CHANNEL;
+    static const std::string CAR_CALIB_MAG_CHANNEL;
+    static const std::string CAR_COVT_SPEED_CHANNEL;
+   
     static const std::string CAR_COMMOND_CHANNEL;
 };
 

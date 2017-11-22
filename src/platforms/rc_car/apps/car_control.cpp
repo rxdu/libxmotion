@@ -26,7 +26,7 @@
 #define WHEEL_DIAMETER 0.065
 #define GEAR_RATIO 6.58 // with 20T pinion gear
 
-#define ENABLE_CSV_LOGGING
+// #define ENABLE_CSV_LOGGING
 
 using namespace librav;
 
@@ -85,11 +85,13 @@ private:
 #ifdef ENABLE_CSV_LOGGING
         imu_logger_->LogData(msg.time_stamp, msg.accel[0], msg.accel[1], msg.accel[2], msg.gyro[0], msg.gyro[1], msg.gyro[2]);
 #endif
+        
+        lcm_messenger_.republishRawIMUData(msg);
 
         auto corrected_imu_data = 
             imu_filter_.CorrectIMURawData(AccGyroData(msg.time_stamp, msg.accel[0], msg.accel[1], msg.accel[2], 
                                 msg.gyro[0], msg.gyro[1], msg.gyro[2]));
-        lcm_messenger_.republishRawIMUData(msg);
+        lcm_messenger_.publishCalibratedIMUData(corrected_imu_data);
     }
 
     void uavcanMagMsgCallback(const pixcar::CarRawMag &msg)
@@ -104,11 +106,14 @@ private:
     void uavcanSpeedMsgCallback(const pixcar::CarRawSpeed &msg)
     {
         // std::cout << "Speed: " << msg.speed << std::endl;
-        float car_speed = 1.0e6 / (msg.speed * 6.0) / GEAR_RATIO * (M_PI * WHEEL_DIAMETER);
+        float covt_speed = 1.0e6 / (msg.speed * 6.0) / GEAR_RATIO * (M_PI * WHEEL_DIAMETER);
 #ifdef ENABLE_CSV_LOGGING
-        spd_logger_->LogData(msg.time_stamp, msg.speed, car_speed);
+        spd_logger_->LogData(msg.time_stamp, msg.speed, covt_speed);
 #endif
         lcm_messenger_.republishRawSpeedData(msg);
+
+        CarSpeed car_speed(msg.time_stamp, covt_speed);
+        lcm_messenger_.publishConvertedSpeedData(car_speed);
     }
 
     bool setupCallbacks()
