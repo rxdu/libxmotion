@@ -61,8 +61,8 @@ CANMessenger::CANMessenger():
     {
         throw std::runtime_error("Failed to start the CMD publisher; error: " + std::to_string(cmd_pub_init_res));
     }
-    cmd_pub_.setTxTimeout(uavcan::MonotonicDuration::fromMSec(1000));
-    cmd_pub_.setPriority(uavcan::TransferPriority(0));  
+    cmd_pub_.setTxTimeout(uavcan::MonotonicDuration::fromMSec(5));
+    cmd_pub_.setPriority(uavcan::TransferPriority(1));  
 }
 
 UAVCANNode& CANMessenger::getNode()
