@@ -27,23 +27,24 @@ set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 ## Include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-# Include path
-#include_directories(${CMAKE_SOURCE_DIR}/inc)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+## Dependency libraries
+# CImg is a single-head library, which is included in "libraries" folder
+find_package(CImg REQUIRED)
+include_directories(${CImg_INCLUDE_DIRS})
 
-# Dependency libraries
-# find_package(DISLIN REQUIRED)
-# include_directories(${DISLIN_INCLUDE_DIRS})
-
-find_package(VTK REQUIRED)
-include(${VTK_USE_FILE})
+#find_package(VTK REQUIRED)
+#include(${VTK_USE_FILE})
 
 # # Add libraries
-# set(PLOT_LIB_SRC
-#     matplot/matplot.cpp
-# )
-# add_library(plot STATIC ${PLOT_LIB_SRC})
-# target_link_libraries(plot ${VTK_LIBRARIES})
+set(FASTPLOT_LIB_SRC
+    src/image_plot.cpp
+)
+add_library(fastplot STATIC ${FASTPLOT_LIB_SRC})
+target_link_libraries(fastplot ${CImg_SYSTEM_LIBS})
+target_include_directories(fastplot PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+	$<INSTALL_INTERFACE:include>
+	PRIVATE src)
 
 # Add executables
 # add_executable(test_dislin tests/test_dislin.cpp)
