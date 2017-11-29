@@ -28,23 +28,20 @@ set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 ## Dependency libraries
-# CImg is a single-head library, which is included in "libraries" folder
-find_package(CImg REQUIRED)
-include_directories(${CImg_INCLUDE_DIRS})
 
 #find_package(VTK REQUIRED)
 #include(${VTK_USE_FILE})
 
 # # Add libraries
-set(FASTPLOT_LIB_SRC
-    src/image_plot.cpp
-)
-add_library(fastplot STATIC ${FASTPLOT_LIB_SRC})
-target_link_libraries(fastplot ${CImg_SYSTEM_LIBS})
-target_include_directories(fastplot PUBLIC
-	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
-	$<INSTALL_INTERFACE:include>
-	PRIVATE src)
+# set(FASTPLOT_LIB_SRC
+#     src/image_plot.cpp
+# )
+# add_library(fastplot STATIC ${FASTPLOT_LIB_SRC})
+# target_link_libraries(fastplot ${CImg_SYSTEM_LIBS})
+# target_include_directories(fastplot PUBLIC
+# 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+# 	$<INSTALL_INTERFACE:include>
+# 	PRIVATE src)
 
 # Add executables
 # add_executable(test_dislin tests/test_dislin.cpp)
@@ -56,4 +53,4 @@ target_include_directories(fastplot PUBLIC
 # add_executable(test_plplot tests/test_plplot.cpp tests/plstream.cc)
 # target_link_libraries(test_plplot ${PLplot_LIBRARIES})
 
-add_subdirectory(tests)
+#add_subdirectory(tests)
