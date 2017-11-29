@@ -3,6 +3,7 @@
 import os
 import sys
 import time
+import math
 import argparse
 from time import sleep
 
@@ -65,7 +66,7 @@ class RandEnvGen(object):
         # add obstacles to space
         # self.space.add_obstacles()
         objs = self.gen_poisson_pos_objects()
-        self.space.add_objects(objs, self.obs_perc)
+        self.space.add_objects_no_overlap(objs, self.obs_perc)
 
         # get projection as 2d map
         self.space.get_2d_map().get_occupied_percentage()
@@ -121,17 +122,36 @@ class RandEnvGen(object):
         P = np.hstack((x,y))
         return P
 
+    def PoissonPPVertical(self, rate, Dy):
+        '''
+        Determines the number of events `N` for a rectangular region,
+        given the rate `rate` and the dimensions, `Dx`, `Dy`.
+        Returns a <2xN> NumPy array.
+        Source: http://connor-johnson.com/2014/02/25/spatial-point-processes/
+        '''
+        N = scipy.stats.poisson( rate*Dy ).rvs()
+        y = scipy.stats.uniform.rvs(0,Dy,((N,1)))
+        P = np.hstack(y)
+        return P
+
     def gen_poisson_pos_objects(self):
         # random poission locations
         # rate = self.obj_num/(self.space_size[0] * self.space_size[1])
-        rate = 0.3
-        loc = self.PoissonPP(rate, self.space_size[0], self.space_size[1])
-     
+        rate = 0.8
+        # loc = self.PoissonPP(rate, self.space_size[0], self.space_size[1])
+        y_loc = self.PoissonPPVertical(rate, self.space_size[1])
+        x_center = self.space_size[0]/2
+        x_var = math.sqrt(self.space_size[0])
+
         rand_loc = np.array([])
-        rand_loc.resize((loc.size/2, 2))
-        for i in range(0, loc.size/2):
-            rand_loc[i, 0] = int(loc[i, 0])
-            rand_loc[i, 1] = int(loc[i, 1])
+        rand_loc.resize((y_loc.size, 2))
+        # for i in range(0, loc.size/2):
+            # rand_loc[i, 0] = int(loc[i, 0])
+            # rand_loc[i, 1] = int(loc[i, 1])
+        for i in range(0, y_loc.size):
+            x_loc = np.random.normal(x_center, x_var)
+            rand_loc[i, 0] = int(x_loc)
+            rand_loc[i, 1] = int(y_loc[i])            
 
         # add random objects to random locations
         objs = []
@@ -253,8 +273,7 @@ def main():
     # set random environment size: 1 unit = 1 meter
     # gen.set_env_size(30, 50, 5)
     # gen.set_env_size(5, 5, 5)
-
-    gen.gen_poisson_pos_objects()
+    # gen.gen_poisson_pos_objects()
 
     subscription = lc.subscribe("envsim/map_request", gen.map_request_handler)
     
