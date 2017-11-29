@@ -159,7 +159,7 @@ class RandEnvGen(object):
         zmu,zsigma = self.norm_height, 0.6
         for loc in rand_loc:
             # random object size
-            sz_x = 10 #6
+            sz_x = 12 #6
             sz_y = 3          
             # sz_y = int(np.random.normal(ymu, ysigma))
             sz_z = int(np.random.normal(zmu, zsigma))
