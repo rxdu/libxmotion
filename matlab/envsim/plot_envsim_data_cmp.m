@@ -1,7 +1,9 @@
 % script to plot simulation data
 close all; clear; clc;
 
-data = csvread('/home/rdu/Workspace/librav/data/log/quad/prsim/prsim.20171129172802.data');
+data = csvread('/home/rdu/Workspace/librav/data/log/quad/prsim/prsim.20171129175649.data');
+
+data = data(1:200,:);
 
 run1_data = [];
 run2_data = [];
@@ -29,6 +31,9 @@ plot(run1_data(:,6),'-rd')
 hold on
 plot(run2_data(:,6),'-bd')
 legend('path repair', 'shortest')
+
+figure
+plot(run1_data(:,6)-run2_data(:,6),'-rd')
 
 %xlim([0, 500])
 %ylim([0, 0.4])
