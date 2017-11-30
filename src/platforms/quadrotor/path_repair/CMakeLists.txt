@@ -27,7 +27,7 @@ set(PATH_REPAIR_SIM_SRC
     sim/sim_depth_sensor.cpp
 )
 add_library(pr_sim STATIC ${PATH_REPAIR_SIM_SRC} ${PATH_REPAIR_COMMON_SRC})
-target_link_libraries(pr_sim utility map geometry ${LCM_LIBRARIES})
+target_link_libraries(pr_sim utility map geometry vis ${LCM_LIBRARIES})
 
 # Add executables
 

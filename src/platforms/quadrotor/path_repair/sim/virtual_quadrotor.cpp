@@ -22,6 +22,8 @@ VirtualQuadrotor::VirtualQuadrotor(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
                                                                     run_flag_(1),
                                                                     sim_index_(0),
                                                                     sim_steps_(0),
+                                                                    repair_percentage_(0),
+                                                                    shortest_percentage_(0),
                                                                     logger_(new CsvLogger("prsim", "/home/rdu/Workspace/librav/data/log/quad/prsim"))
 {
 }
@@ -512,11 +514,20 @@ void VirtualQuadrotor::CmpStep()
             {
             case 1:
                 run_flag_ = 2;
+                repair_percentage_ = shortend_dist / shortest_path;
                 std::cout << "*********************** finished path repair run ***********************" << std::endl;
                 break;
             case 2:
                 run_flag_ = 0;
+                shortest_percentage_ = shortend_dist / shortest_path;
                 std::cout << "*********************** finished shortest path run ***********************" << std::endl;
+
+                if(shortest_percentage_ > repair_percentage_)
+                {
+                    std::cout << "-----------> record special case <-----------" << std::endl;
+                    qplanner_->SaveMap(std::to_string(sim_index_));
+                }
+
                 break;
             }
 

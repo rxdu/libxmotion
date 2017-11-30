@@ -173,6 +173,17 @@ void SimPathRepair::RequestNewMap()
 	std::cout << "New map request sent" << std::endl;
 }
 
+void SimPathRepair::SaveMap(std::string map_name)
+{
+	cv::Mat vis_img;
+	Vis::VisSquareGrid(*sgrid_, vis_img);
+	// Vis::VisGraph(*sgrid_planner_.graph_, vis_img, vis_img, true);
+	// cv::namedWindow("Processed Image", cv::WINDOW_NORMAL);
+	// cv::imshow("Processed Image", vis_img);
+	// cv::waitKey(0);
+	cv::imwrite(map_name, vis_img);
+}
+
 void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::Map_t *msg)
 {
 	// discard msg if a valid map has been received
@@ -207,7 +218,7 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 	if (!path.empty())
 	{
 		std::cout << "Validate map received" << std::endl;
-		
+
 		// init and update navigation field and shortcut evaluator
 		nav_field_ = std::make_shared<NavField<SquareCell *>>(sgrid_planner_.graph_);
 		sc_evaluator_ = std::make_shared<ShortcutEval>(sgrid_, nav_field_);
@@ -217,7 +228,7 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 
 		sc_evaluator_->EvaluateGridShortcutPotential(sensor_range_);
 
-		if(nav_field_->max_rewards_ > path_2d_cost_*0.20)
+		if (nav_field_->max_rewards_ > path_2d_cost_ * 0.20)
 		{
 			// update flags
 			map_received_ = true;
@@ -231,12 +242,12 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 
 			depth_sensor_->SetWorkspace(msg, side_size);
 			std::cout << "Configs for new map updated" << std::endl;
-		}	
+		}
 		else
 		{
 			std::cout << "Invalid map" << std::endl;
 			RequestNewMap();
-		}	
+		}
 	}
 	else
 	{
@@ -328,13 +339,13 @@ SimPath SimPathRepair::UpdatePath(Position2Di pos, int32_t height, double headin
 
 	std::cout << "max rewards: " << nav_field_->max_rewards_ << " , dist weight: " << sc_evaluator_->dist_weight_ << std::endl;
 #endif
-	
+
 	Path_t<CubeCell &> path;
-	if(enable_path_repair)
-		path = AStar::BiasedSearchWithShortcut(*cubegraph, start_id, goal_id, nav_field_->max_rewards_, sc_evaluator_->dist_weight_, map_info_.side_size);
-	else
-		path = AStar::Search(*cubegraph, start_id, goal_id);
-	
+	// if(enable_path_repair)
+	// 	path = AStar::BiasedSearchWithShortcut(*cubegraph, start_id, goal_id, nav_field_->max_rewards_, sc_evaluator_->dist_weight_, map_info_.side_size);
+	// else
+	path = AStar::Search(*cubegraph, start_id, goal_id);
+
 	SimPath path_result;
 
 	if (!path.empty())

@@ -64,6 +64,8 @@ private:
   int64_t sim_index_;
   int64_t sim_steps_;
   std::unique_ptr<CsvLogger> logger_;
+  double repair_percentage_;
+  double shortest_percentage_;
 
   bool EvaluationPath(const SimPath& old_path, const SimPath& new_path);
   void MoveForward(bool enable_path_repair = true);

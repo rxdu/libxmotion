@@ -66,6 +66,7 @@ class SimPathRepair
 	void SetStartHeight(int32_t height);
 	void SetGoalHeight(int32_t height);
 	void SetMapSize(int32_t x, int32_t y, int32_t z);
+	void SaveMap(std::string map_name);
 
 	// check if general planner configuration is complete
 	bool IsConfigComplete();
