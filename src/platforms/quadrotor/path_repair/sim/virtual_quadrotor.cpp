@@ -526,21 +526,21 @@ void VirtualQuadrotor::CmpStep()
                 {
                     std::cout << "-----------> record special case <-----------" << std::endl;
                     qplanner_->SaveMap(std::to_string(sim_index_));
+                    // repeat simulation
+                    run_flag_ = 1;
                 }
-
                 break;
             }
 
             // reset planner
             qplanner_->ResetPlanner();      
-            
+
             if(run_flag_ != 0)
                 qplanner_->map_received_ = true;
             else
-            {
                 ++sim_index_;
-                sim_steps_ = 0;
-            }
+                
+            sim_steps_ = 0;
         }
     }
     else

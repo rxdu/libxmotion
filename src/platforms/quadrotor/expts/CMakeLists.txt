@@ -15,6 +15,9 @@ target_link_libraries(expt_cmp_path_02 map pr_sim vis ${LCM_LIBRARIES})
 add_executable(expt_cmp_path_03 cmp_path_03.cpp)
 target_link_libraries(expt_cmp_path_03 map pr_sim vis ${LCM_LIBRARIES})
 
+add_executable(expt_cmp_path_04 cmp_path_04.cpp)
+target_link_libraries(expt_cmp_path_04 map pr_sim vis ${LCM_LIBRARIES})
+
 add_executable(expt_pysim_01 pr_pysim_01.cpp)
 target_link_libraries(expt_pysim_01 map pr_sim quad_base common ${LCM_LIBRARIES})
 

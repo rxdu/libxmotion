@@ -80,7 +80,7 @@ BoundingBox SquareGrid::CalcBoundingBox(uint64_t id)
 	BoundingBox bbox;
 	uint32_t x,y;
 	x = id%col_size_;
-	y = id/col_size_;
+	y = row_size_ - id/col_size_ - 1;
 	bbox.x.min = x*cell_size_;
 	bbox.x.max = bbox.x.min + cell_size_ - 1;
 	bbox.y.min = y*cell_size_;

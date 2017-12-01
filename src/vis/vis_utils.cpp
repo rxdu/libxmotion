@@ -61,7 +61,8 @@ void VisUtils::DrawArrow(cv::Mat img, cv::Point base_pos, double length, double 
 		tip_size = 1;
 
 	double angleRad = angle*CV_PI / 180.0;   // convert angle to radians
-	cv::Point tip_pt = cv::Point(base_pos.x + length * sin(angleRad), base_pos.y - length * cos(angleRad)); // calculate tip position
+	// cv::Point tip_pt = cv::Point(base_pos.x + length * sin(angleRad), base_pos.y - length * cos(angleRad)); // calculate tip position
+    cv::Point tip_pt = cv::Point(base_pos.x + length * sin(angleRad), base_pos.y - length * cos(angleRad)); // calculate tip position
 
 	line(img, base_pos, tip_pt, color, thickness, line_type);
 

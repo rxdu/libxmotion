@@ -74,6 +74,63 @@ std::shared_ptr<SquareGrid> SGridBuilderV2::BuildSquareGrid(cv::InputArray _src,
 	return sgrid;
 }
 
+std::shared_ptr<SquareGrid> SGridBuilderV2::BuildExtSquareGrid(std::shared_ptr<SquareGrid> original_grid, uint8_t obj_expand_num)
+{	
+	std::shared_ptr<SquareGrid> sgrid = std::make_shared<SquareGrid>(original_grid->col_size_,original_grid->row_size_, original_grid->cell_size_);
+
+	uint32_t row_num = original_grid->row_size_;
+	uint32_t col_num = original_grid->col_size_;
+	// set occupancy of each cell
+	for(uint32_t i = 0; i < col_num; i++)
+		for(uint32_t j = 0; j < row_num; j++)
+		{
+			uint32_t id = sgrid->GetIDFromIndex(i,j);
+			if(original_grid->cells_[id]->occu_ == OccupancyType::OCCUPIED)
+				sgrid->SetCellOccupancy(id, OccupancyType::OCCUPIED);
+		}
+
+	std::vector<uint64_t> edge_obs_cells;
+	if(obj_expand_num > 0)
+	{
+		for(uint32_t i = 0; i < sgrid->col_size_; i++)
+			for(uint32_t j = 0; j < sgrid->row_size_; j++)
+			{
+				uint32_t id = sgrid->GetIDFromIndex(i,j);
+				uint8_t free_neighbour_size = 0;
+
+				for(auto& nei : sgrid->GetNeighbours(id, false))
+				{
+					if(nei->occu_ == OccupancyType::FREE)
+						free_neighbour_size++;
+				}
+
+				if((sgrid->cells_[id]->occu_ == OccupancyType::OCCUPIED) &&
+						(free_neighbour_size > 0 &&  free_neighbour_size < 4))
+					edge_obs_cells.push_back(id);
+			}
+
+		for(auto& cid : edge_obs_cells)
+		{
+			for(int i = sgrid->cells_[cid]->index_.x - obj_expand_num; i <= sgrid->cells_[cid]->index_.x + obj_expand_num; i++ )
+				for(int j = sgrid->cells_[cid]->index_.y - obj_expand_num; j <= sgrid->cells_[cid]->index_.y + obj_expand_num; j++ )
+				{
+					if(i >= 0 && i < sgrid->col_size_ &&
+							j >= 0 && j < sgrid->row_size_)
+					{
+						uint32_t checked_id = sgrid->GetIDFromIndex(i,j);
+
+						if(checked_id != cid && sgrid->cells_[checked_id]->occu_ != OccupancyType::OCCUPIED)
+							sgrid->cells_[checked_id]->occu_ = OccupancyType::OCCUPIED;
+					}
+				}
+		}
+
+		std::cout << "extended obstacles on the map" << std::endl;
+	}
+
+	return sgrid;
+}
+
 Map_t<SquareGrid> SGridBuilderV2::BuildSquareGridMap(cv::InputArray _src, uint32_t cell_size, uint8_t obj_expand_num)
 {
 	Mat src = _src.getMat();

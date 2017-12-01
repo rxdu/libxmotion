@@ -204,6 +204,8 @@ void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::
 	// create square grid from map msg
 	double side_size = 1.0;
 	sgrid_ = MapUtils::CreateSquareGrid(msg->size_x, msg->size_y, side_size);
+	// auto new_grid = MapUtils::CreateSquareGrid(msg->size_x, msg->size_y, side_size);
+	// sgrid_ = SGridBuilderV2::BuildExtSquareGrid(new_grid, 1);
 	carray_base_ = CubeArrayBuilder::BuildSolidCubeArray(msg->size_x, msg->size_y, msg->size_z, side_size);
 	for (const auto &cell : msg->cells)
 	{
