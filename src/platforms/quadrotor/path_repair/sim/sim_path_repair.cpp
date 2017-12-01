@@ -175,13 +175,20 @@ void SimPathRepair::RequestNewMap()
 
 void SimPathRepair::SaveMap(std::string map_name)
 {
+	auto vis_grid = MapUtils::CreateSquareGrid(sgrid_->col_size_, sgrid_->row_size_, 50);
+	for(auto& cell:sgrid_->cells_)
+	{
+		if(cell.second->occu_ == OccupancyType::OCCUPIED)
+			vis_grid->SetCellOccupancy(cell.second->index_.x, cell.second->index_.y, OccupancyType::OCCUPIED);
+	}
+
 	cv::Mat vis_img;
-	Vis::VisSquareGrid(*sgrid_, vis_img);
+	Vis::VisSquareGrid(*vis_grid, vis_img);
 	// Vis::VisGraph(*sgrid_planner_.graph_, vis_img, vis_img, true);
 	// cv::namedWindow("Processed Image", cv::WINDOW_NORMAL);
 	// cv::imshow("Processed Image", vis_img);
 	// cv::waitKey(0);
-	cv::imwrite(map_name, vis_img);
+	cv::imwrite(map_name+".png", vis_img);
 }
 
 void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::Map_t *msg)
