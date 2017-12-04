@@ -31,8 +31,17 @@ int main(int argc, char* argv[])
 
    img.setTo(0);                          // clear image - set to black
 
-   for(long ag = 0; ag <= 360; ag += 36)
-	   VisUtils::DrawArrow(img, center, 50, ag, Scalar(204,204,102));
+//    for(long ag = 0; ag <= 360; ag += 36)
+// 	   VisUtils::DrawArrow(img, center, 50, ag, Scalar(204,204,102));
+    VisUtils::DrawArrow(img, center, 50, 0, Scalar(204,204,102));
+    VisUtils::DrawArrow(img, center, 60, 45, Scalar(204,204,102));
+    VisUtils::DrawArrow(img, center, 70, 90, Scalar(204,204,102));
+    VisUtils::DrawArrow(img, center, 80, 135, Scalar(204,204,102));
+    VisUtils::DrawArrow(img, center, 90, 180, Scalar(204,204,102));
+    VisUtils::DrawArrow(img, center, 100, 225, Scalar(204,204,102));
+    VisUtils::DrawArrow(img, center, 110, 270, Scalar(204,204,102));
+    VisUtils::DrawArrow(img, center, 120, 315, Scalar(204,204,102));
+    VisUtils::DrawArrow(img, center, 130, 360, Scalar(204,204,102));
 
    imshow("Arrowed Image", img);          // show image
 
