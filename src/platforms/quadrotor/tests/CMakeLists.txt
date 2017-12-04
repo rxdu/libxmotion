@@ -48,3 +48,6 @@ target_link_libraries(test_sim_sensor pr_sim geometry)
 
 add_executable(test_navfield4 test_navfield4.cpp)
 target_link_libraries(test_navfield4 pr_sim map vis ${LCM_LIBRARIES})
+
+add_executable(test_heading_policy test_heading_policy.cpp)
+target_link_libraries(test_heading_policy map pr_sim vis ${LCM_LIBRARIES})

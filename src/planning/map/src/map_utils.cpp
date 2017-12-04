@@ -31,9 +31,9 @@ bool MapUtils::ReadImageFromFile(std::string map_path, cv::OutputArray _dst)
 		return false;
 }
 
-std::shared_ptr<SquareGrid> MapUtils::CreateSquareGrid(uint32_t row_size, uint32_t col_size, uint32_t cell_size)
+std::shared_ptr<SquareGrid> MapUtils::CreateSquareGrid(uint32_t col_size, uint32_t row_size, uint32_t cell_size)
 {
-	return std::make_shared<SquareGrid>(row_size,col_size,cell_size);
+	return std::make_shared<SquareGrid>(col_size,row_size,cell_size);
 }
 
 Position2Dd MapUtils::CoordinatesFromMapToMapWorld(Position2Di map_pos, MapInfo info)

@@ -27,7 +27,7 @@
 
 using namespace librav;
 
-#define LOOP_PERIOD 500	// ms
+#define LOOP_PERIOD 1500	// ms
 
 int main(int argc, char *argv[])
 {
@@ -64,9 +64,12 @@ int main(int argc, char *argv[])
 		vquad.CmpStep();
 		lcm->handleTimeout(0);
 	
-		int64_t duration = LOOP_PERIOD - static_cast<int64_t>(timer.mtoc());
-		
-		if(duration > 0)
-			std::this_thread::sleep_for(std::chrono::milliseconds(duration));
+		if(vquad.abnormal_state_)
+		{
+			int64_t duration = LOOP_PERIOD - static_cast<int64_t>(timer.mtoc());
+			
+			if(duration > 0)
+				std::this_thread::sleep_for(std::chrono::milliseconds(duration));
+		}
 	}
 }

@@ -94,7 +94,7 @@ double ShortcutEval::EvaluateCellShortcutPotential(Vertex_t<SquareCell*>* eval_v
 	Eigen::Vector3d dir_vec = max_rwd_vec - pos_vec;
 	// angle = atan2(dir_vec(1), dir_vec(0));
 	angle = -atan2(dir_vec(0), dir_vec(1));
-	std::cout << "id: " << eval_vtx->bundled_data_->data_id_ <<" ;dir vec: " << dir_vec(0) << " , " << dir_vec(1) << " ; angle: " << angle/M_PI*180.0 << std::endl;
+	// std::cout << "id: " << eval_vtx->bundled_data_->data_id_ <<" ;dir vec: " << dir_vec(0) << " , " << dir_vec(1) << " ; angle: " << angle/M_PI*180.0 << std::endl;
 
 	// Eigen::Vector3d x_vec(0,-1,0);
 	// Eigen::Vector3d y_vec(-1,0,0);

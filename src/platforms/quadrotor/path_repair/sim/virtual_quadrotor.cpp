@@ -12,7 +12,8 @@
 
 using namespace librav;
 
-VirtualQuadrotor::VirtualQuadrotor(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
+VirtualQuadrotor::VirtualQuadrotor(std::shared_ptr<lcm::LCM> lcm) : abnormal_state_(false),
+                                                                    lcm_(lcm),
                                                                     dsensor_(std::make_shared<SimDepthSensor>()),
                                                                     qplanner_(std::make_shared<SimPathRepair>(lcm, dsensor_)),
                                                                     current_heading_(0),
@@ -25,6 +26,8 @@ VirtualQuadrotor::VirtualQuadrotor(std::shared_ptr<lcm::LCM> lcm) : lcm_(lcm),
                                                                     repair_percentage_(0),
                                                                     shortest_percentage_(0),
                                                                     logger_(new CsvLogger("prsim", "/home/rdu/Workspace/librav/data/log/quad/prsim"))
+// ,
+// elogger_(new EventLogger("prsim_event", "/home/rdu/Workspace/librav/data/log/quad/prsim"))
 {
 }
 
@@ -32,7 +35,6 @@ void VirtualQuadrotor::SetMapSize(int32_t map_x, int32_t map_y, int32_t map_z)
 {
     // set sim map size
     qplanner_->SetMapSize(map_x, map_y, map_z);
-
 }
 
 void VirtualQuadrotor::SetConfig(int32_t map_x, int32_t map_y, int32_t map_z, int32_t height, int32_t sensor_rng)
@@ -77,7 +79,7 @@ void VirtualQuadrotor::SetInitPosition(Position2Di pos, int32_t hei)
     current_pos_ = init_pos_;
     current_height_ = init_height_;
 }
-  
+
 void VirtualQuadrotor::SetGoalPosition(Position2Di pos, int32_t hei)
 {
     qplanner_->SetGoalPosition(pos);
@@ -277,7 +279,7 @@ double VirtualQuadrotor::CalcWaypointDistance(Position2Di pos1, Position2Di pos2
     return cost;
 }
 
-bool VirtualQuadrotor::EvaluationPath(const SimPath& old_path, const SimPath& new_path)
+bool VirtualQuadrotor::EvaluationPath(const SimPath &old_path, const SimPath &new_path)
 {
     double old_path_dist = 0;
     for (auto it = old_path.begin(); it != old_path.end() - 1; it++)
@@ -327,25 +329,28 @@ void VirtualQuadrotor::MoveForward(bool enable_path_repair)
         current_pos_.y = active_path_[next_idx].y;
         current_height_ = active_path_[next_idx].z;
 
-        if (enable_path_repair)
+        double traj_heading = -1;
+        if (active_path_.size() == 2)
         {
-            current_heading_ = active_path_[next_idx].yaw;
+            traj_heading = 0;
         }
         else
         {
-            if(active_path_.size() == 2)
-            {
-                current_heading_ = 0;
-            }
-            else
-            {
-                current_heading_ = atan2(active_path_[next_idx+1].y - active_path_[next_idx].y, 
-                    active_path_[next_idx+1].x - active_path_[next_idx].x);
-            }
+            // current_heading_ = atan2(active_path_[next_idx+1].y - active_path_[next_idx].y,
+            //     active_path_[next_idx+1].x - active_path_[next_idx].x);
+            traj_heading = -atan2(active_path_[next_idx + 1].x - active_path_[next_idx].x,
+                                 active_path_[next_idx + 1].y - active_path_[next_idx].y);
+            std::cout << "dir vector: " << active_path_[next_idx + 1].x - active_path_[next_idx].x << " , " << active_path_[next_idx + 1].y - active_path_[next_idx].y << std::endl;
         }
 
-        std::cout << "current heading: " << current_heading_ << " , traj heading: " << atan2(active_path_[next_idx+1].y - active_path_[next_idx].y, 
-                    active_path_[next_idx+1].x - active_path_[next_idx].x) << std::endl;
+        if (enable_path_repair)
+            current_heading_ = active_path_[next_idx].yaw;
+        else
+            current_heading_ = traj_heading;
+
+        std::cout << "---> current heading: " << current_heading_ * 180.0 / M_PI << " , traj heading: " << traj_heading * 180.0 / M_PI << std::endl;
+        // if(abnormal_state_)
+        //     elogger_->LogEvent(current_heading_*180.0/M_PI, traj_heading*180.0/M_PI, active_path_[next_idx].id);
 
         active_path_.erase(active_path_.begin());
         sim_steps_++;
@@ -410,11 +415,10 @@ void VirtualQuadrotor::Step()
                 // }
                 init_repair_path_cost_ = qplanner_->GetGlobal3DPathCost();
             }
-            else if(EvaluationPath(active_path_, new_path))
+            else if (EvaluationPath(active_path_, new_path))
             {
                 active_path_ = new_path;
             }
-
         }
 
         PublishState();
@@ -428,7 +432,7 @@ void VirtualQuadrotor::Step()
             std::cout << "** path shortened by :" << shortened_dist << std::endl;
 
             // log data for analysis
-            if(sim_steps_ < 100)
+            if (sim_steps_ < 100)
                 logger_->LogData(sim_index_, shortest_path, init_repair_path_cost_, shortened_dist, shortened_dist / shortest_path);
 
             // reset quadrotor state
@@ -469,7 +473,7 @@ void VirtualQuadrotor::CmpStep()
 
         // add a condition to compare length
         if (new_path.size() > 1)
-        {           
+        {
             if (!init_path_found_)
             {
                 active_path_ = new_path;
@@ -483,7 +487,7 @@ void VirtualQuadrotor::CmpStep()
                 // }
                 init_repair_path_cost_ = qplanner_->GetGlobal3DPathCost();
             }
-            else if(EvaluationPath(active_path_, new_path))
+            else if (EvaluationPath(active_path_, new_path))
             {
                 active_path_ = new_path;
             }
@@ -515,31 +519,32 @@ void VirtualQuadrotor::CmpStep()
             case 1:
                 run_flag_ = 2;
                 repair_percentage_ = shortend_dist / shortest_path;
-                std::cout << "*********************** finished path repair run ***********************" << std::endl;
+                std::cout << "*********************** finished path repair run: " << sim_index_ << " ***********************" << std::endl;
                 break;
             case 2:
                 run_flag_ = 0;
                 shortest_percentage_ = shortend_dist / shortest_path;
-                std::cout << "*********************** finished shortest path run ***********************" << std::endl;
+                std::cout << "*********************** finished shortest path run: " << sim_index_ << " ***********************" << std::endl;
 
-                if(shortest_percentage_ > repair_percentage_)
+                if (shortest_percentage_ > repair_percentage_)
                 {
                     std::cout << "-----------> record special case <-----------" << std::endl;
                     qplanner_->SaveMap(std::to_string(sim_index_));
                     // repeat simulation
                     run_flag_ = 1;
+                    abnormal_state_ = true;
                 }
                 break;
             }
 
             // reset planner
-            qplanner_->ResetPlanner();      
+            qplanner_->ResetPlanner();
 
-            if(run_flag_ != 0)
+            if (run_flag_ != 0)
                 qplanner_->map_received_ = true;
             else
                 ++sim_index_;
-                
+
             sim_steps_ = 0;
         }
     }

@@ -74,3 +74,6 @@ endif()
 add_subdirectory(apps)
 add_subdirectory(expts)
 add_subdirectory(path_repair)
+
+# Tests
+add_subdirectory(tests)

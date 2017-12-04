@@ -43,7 +43,7 @@ SquareGrid::~SquareGrid(){
 
 void SquareGrid::SetCellOccupancy(uint32_t col, uint32_t row, OccupancyType occ)
 {
-	SetCellOccupancy(col+row*col_size_, occ);
+	SetCellOccupancy(GetIDFromIndex(col, row), occ);
 }
 void SquareGrid::SetCellOccupancy(uint64_t id, OccupancyType occ)
 {
@@ -205,7 +205,8 @@ std::vector<SquareCell*> SquareGrid::GetNeighboursWithinRange(uint64_t id, uint3
 			if(i == x && j == y)
 				continue;
 
-			neighbours.push_back(cells_[j * col_size_ + i]);
+			// neighbours.push_back(cells_[j * col_size_ + i]);
+			neighbours.push_back(cells_[GetIDFromIndex(i,j)]);			
 		}
 
 	return neighbours;

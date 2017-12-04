@@ -176,19 +176,25 @@ void SimPathRepair::RequestNewMap()
 void SimPathRepair::SaveMap(std::string map_name)
 {
 	auto vis_grid = MapUtils::CreateSquareGrid(sgrid_->col_size_, sgrid_->row_size_, 50);
-	for(auto& cell:sgrid_->cells_)
+	for (auto &cell : sgrid_->cells_)
 	{
-		if(cell.second->occu_ == OccupancyType::OCCUPIED)
+		if (cell.second->occu_ == OccupancyType::OCCUPIED)
 			vis_grid->SetCellOccupancy(cell.second->index_.x, cell.second->index_.y, OccupancyType::OCCUPIED);
 	}
 
 	cv::Mat vis_img;
 	Vis::VisSquareGrid(*vis_grid, vis_img);
-	// Vis::VisGraph(*sgrid_planner_.graph_, vis_img, vis_img, true);
-	// cv::namedWindow("Processed Image", cv::WINDOW_NORMAL);
-	// cv::imshow("Processed Image", vis_img);
-	// cv::waitKey(0);
-	cv::imwrite(map_name+".png", vis_img);
+	cv::imwrite(map_name + ".png", vis_img);
+
+	std::shared_ptr<Graph_t<SquareCell *>> vis_graph = GraphBuilder::BuildFromSquareGrid(vis_grid, true);
+	std::shared_ptr<NavField<SquareCell *>> vis_nav_field = std::make_shared<NavField<SquareCell *>>(vis_graph);
+	vis_nav_field->UpdateNavField(589);
+
+	ShortcutEval sc_eval(vis_grid, vis_nav_field);
+	sc_eval.EvaluateGridShortcutPotential(5);
+
+	Vis::VisSquareGridShortcutPotential(*vis_nav_field, vis_img, vis_img);
+	cv::imwrite(map_name+"_nav_field.png", vis_img);
 }
 
 void SimPathRepair::LcmSimMapHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::Map_t *msg)
@@ -308,7 +314,10 @@ bool SimPathRepair::EvaluateNewPath(std::vector<Position3Dd> &new_path)
 SimPath SimPathRepair::UpdatePath(Position2Di pos, int32_t height, double heading, bool enable_path_repair)
 {
 	std::cout << "\n---------------------- New Iteration -------------------------" << std::endl;
-
+	if(enable_path_repair)
+		std::cout << "run type: repair" << std::endl;
+	else
+		std::cout << "run type: shortest" << std::endl;
 	//auto path = UpdateGlobal2DPath();
 
 	// create an empty cube array
@@ -336,18 +345,18 @@ SimPath SimPathRepair::UpdatePath(Position2Di pos, int32_t height, double headin
 
 	// create a graph from the cube array
 	std::shared_ptr<Graph_t<CubeCell &>> cubegraph = GraphBuilder::BuildFromCubeArray(carray);
-#ifndef MINIMAL_EXTRAS
-	std::cout << "cube array size: " << carray->cubes_.size() << std::endl;
-	std::cout << "cube graph size: " << cubegraph->GetGraphVertices().size() << " , edge num: " << cubegraph->GetGraphEdges().size() << std::endl;
-#endif
+// #ifndef MINIMAL_EXTRAS
+// 	std::cout << "cube array size: " << carray->cubes_.size() << std::endl;
+// 	std::cout << "cube graph size: " << cubegraph->GetGraphVertices().size() << " , edge num: " << cubegraph->GetGraphEdges().size() << std::endl;
+// #endif
 	auto start_id = carray->GetIDFromIndex(pos.x, pos.y, height);
 	auto goal_id = carray->GetIDFromIndex(goal_pos_.x, goal_pos_.y, goal_height_);
-#ifndef MINIMAL_EXTRAS
-	std::cout << "start id: " << start_id << " , goal id: " << goal_id << std::endl;
-	std::cout << "heading: " << heading * 180.0 / M_PI << std::endl;
+// #ifndef MINIMAL_EXTRAS
+// 	std::cout << "start id: " << start_id << " , goal id: " << goal_id << std::endl;
+// 	std::cout << "heading: " << heading * 180.0 / M_PI << std::endl;
 
-	std::cout << "max rewards: " << nav_field_->max_rewards_ << " , dist weight: " << sc_evaluator_->dist_weight_ << std::endl;
-#endif
+// 	std::cout << "max rewards: " << nav_field_->max_rewards_ << " , dist weight: " << sc_evaluator_->dist_weight_ << std::endl;
+// #endif
 
 	Path_t<CubeCell &> path;
 	// if(enable_path_repair)
@@ -363,7 +372,7 @@ SimPath SimPathRepair::UpdatePath(Position2Di pos, int32_t height, double headin
 
 		librav_lcm_msgs::Path_t path_msg;
 		path_msg.pt_num = path.size();
-		double prev_heading = 0;
+		// double prev_heading = 0;
 		for (auto &cell : path)
 		{
 			double heading = 0;
@@ -373,12 +382,13 @@ SimPath SimPathRepair::UpdatePath(Position2Di pos, int32_t height, double headin
 			{
 				heading = nd_vtx->rewards_yaw_ / 180.0 * M_PI;
 
-				if (heading != 0)
-					prev_heading = heading;
+				// if (heading != 0)
+				// 	prev_heading = heading;
 			}
 			else
 			{
-				heading = prev_heading;
+				heading = 0;
+				// heading = prev_heading;
 			}
 
 			librav_lcm_msgs::Waypoint_t wp;

@@ -70,6 +70,9 @@ SphericalCoordinate SimDepthSensor::CartesianToSpherical(CartesianCoordinate &ca
 
 std::shared_ptr<CubeArray> SimDepthSensor::GetSensedArea(int32_t x, int32_t y, int32_t z, double yaw)
 {
+    // offset
+    yaw = yaw + M_PI/2.0;
+    
     // convert yaw from (-pi, pi) to (0, 2pi)
     yaw = yaw + M_PI;
 

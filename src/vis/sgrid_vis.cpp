@@ -313,8 +313,8 @@ void Vis::VisSquareGridShortcutPotential(const NavField<SquareCell*>& nav_field,
 		// draw yaw
 		if((*itv)->shortcut_rewards_ > 1) {
 			double arrow_size = ((*itv)->bundled_data_->bbox_.x.max -  (*itv)->bundled_data_->bbox_.x.min)/2.0;
-			//DrawArrow(dst, Point(x1,y1), arrow_size, -(*itv)->rewards_yaw_);
-			DrawArrow(dst, Point(x1,y1), arrow_size, (*itv)->rewards_yaw_);
+			DrawArrow(dst, Point(x1,y1), arrow_size, -(*itv)->rewards_yaw_);
+			// DrawArrow(dst, Point(x1,y1), arrow_size, (*itv)->rewards_yaw_);
 		}
 	}
 }

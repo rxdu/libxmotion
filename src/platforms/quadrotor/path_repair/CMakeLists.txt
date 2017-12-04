@@ -31,5 +31,3 @@ target_link_libraries(pr_sim utility map geometry vis ${LCM_LIBRARIES})
 
 # Add executables
 
-# Tests
-add_subdirectory(tests)
