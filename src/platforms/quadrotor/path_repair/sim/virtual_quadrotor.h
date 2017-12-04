@@ -66,7 +66,7 @@ private:
   int64_t sim_index_;
   int64_t sim_steps_;
   std::unique_ptr<CsvLogger> logger_;
-  // std::unique_ptr<EventLogger> elogger_;
+  std::unique_ptr<EventLogger> elogger_;
   double repair_percentage_;
   double shortest_percentage_;
 

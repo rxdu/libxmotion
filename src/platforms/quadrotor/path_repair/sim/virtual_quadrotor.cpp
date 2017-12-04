@@ -25,9 +25,8 @@ VirtualQuadrotor::VirtualQuadrotor(std::shared_ptr<lcm::LCM> lcm) : abnormal_sta
                                                                     sim_steps_(0),
                                                                     repair_percentage_(0),
                                                                     shortest_percentage_(0),
-                                                                    logger_(new CsvLogger("prsim", "/home/rdu/Workspace/librav/data/log/quad/prsim"))
-// ,
-// elogger_(new EventLogger("prsim_event", "/home/rdu/Workspace/librav/data/log/quad/prsim"))
+                                                                    logger_(new CsvLogger("prsim", "/home/rdu/Workspace/librav/data/log/quad/prsim")),
+                                                                    elogger_(new EventLogger("prsim_event", "/home/rdu/Workspace/librav/data/log/quad/prsim"))
 {
 }
 
@@ -297,6 +296,9 @@ bool VirtualQuadrotor::EvaluationPath(const SimPath &old_path, const SimPath &ne
         new_path_dist += CalcWaypointDistance(pos1, pos2);
     }
 
+    if (old_path_dist - new_path_dist > 1.0 && abnormal_state_)
+        elogger_->LogEvent(sim_index_, run_flag_, "shortcut found", old_path_dist - new_path_dist);
+
     return (old_path_dist - new_path_dist > 1.0);
 }
 
@@ -339,7 +341,7 @@ void VirtualQuadrotor::MoveForward(bool enable_path_repair)
             // current_heading_ = atan2(active_path_[next_idx+1].y - active_path_[next_idx].y,
             //     active_path_[next_idx+1].x - active_path_[next_idx].x);
             traj_heading = -atan2(active_path_[next_idx + 1].x - active_path_[next_idx].x,
-                                 active_path_[next_idx + 1].y - active_path_[next_idx].y);
+                                  active_path_[next_idx + 1].y - active_path_[next_idx].y);
             std::cout << "dir vector: " << active_path_[next_idx + 1].x - active_path_[next_idx].x << " , " << active_path_[next_idx + 1].y - active_path_[next_idx].y << std::endl;
         }
 
@@ -526,13 +528,13 @@ void VirtualQuadrotor::CmpStep()
                 shortest_percentage_ = shortend_dist / shortest_path;
                 std::cout << "*********************** finished shortest path run: " << sim_index_ << " ***********************" << std::endl;
 
-                if (shortest_percentage_ > repair_percentage_)
+                if (shortest_percentage_ - repair_percentage_ > 1e-10)
                 {
                     std::cout << "-----------> record special case <-----------" << std::endl;
                     qplanner_->SaveMap(std::to_string(sim_index_));
                     // repeat simulation
-                    run_flag_ = 1;
-                    abnormal_state_ = true;
+                    // run_flag_ = 1;
+                    // abnormal_state_ = true;
                 }
                 break;
             }
