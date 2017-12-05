@@ -293,8 +293,11 @@ void Vis::VisSquareGridShortcutPotential(const NavField<SquareCell*>& nav_field,
 		x1 = (*itv)->bundled_data_->location_.x;
 		y1 = (*itv)->bundled_data_->location_.y;
 
-		//std::string id = std::to_string((int)(*itv)->shortcut_rewards_);
-		//putText(dst, id ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+		// std::string rwd = std::to_string((int)(*itv)->shortcut_rewards_);
+		// putText(dst, rwd ,Point(x1,y1), CV_FONT_NORMAL, 0.5, Scalar(204,204,102),1,1);
+
+		// std::string ptl = std::to_string((int)(*itv)->potential_);
+		// putText(dst, ptl ,Point(x1,y1), CV_FONT_NORMAL, 1.2, Scalar(204,204,102),1,1);
 
 		// draw all edges
 		auto edges = nav_field.field_graph_->GetGraphUndirectedEdges();
@@ -314,7 +317,6 @@ void Vis::VisSquareGridShortcutPotential(const NavField<SquareCell*>& nav_field,
 		if((*itv)->shortcut_rewards_ > 1) {
 			double arrow_size = ((*itv)->bundled_data_->bbox_.x.max -  (*itv)->bundled_data_->bbox_.x.min)/2.0;
 			DrawArrow(dst, Point(x1,y1), arrow_size, -(*itv)->rewards_yaw_);
-			// DrawArrow(dst, Point(x1,y1), arrow_size, (*itv)->rewards_yaw_);
 		}
 	}
 }

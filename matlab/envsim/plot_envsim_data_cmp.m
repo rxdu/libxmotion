@@ -1,7 +1,7 @@
 % script to plot simulation data
 close all; clear; clc;
 
-data = csvread('/home/rdu/Workspace/librav/data/log/quad/prsim/prsim.20171204180251.data');
+data = csvread('/home/rdu/Workspace/librav/data/log/quad/prsim/prsim.20171205114104.data');
 
 %data = data(1:200,:);
 
@@ -31,12 +31,13 @@ plot(run1_data(:,6),'-rd')
 hold on
 plot(run2_data(:,6),'-bd')
 legend('path repair', 'shortest')
+xlim([0, 250])
 
 figure
 hold on
 plot(run1_data(:,6)-run2_data(:,6),'-rd')
 plot(zeros(size(run1_data(:,6))),'b')
-%xlim([0, 500])
+xlim([0, 250])
 %ylim([0, 0.4])
 %title('path repair result - sensor range 8')
 %xlabel('simulation instance')

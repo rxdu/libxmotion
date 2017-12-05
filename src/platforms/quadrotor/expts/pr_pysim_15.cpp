@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 	// init quadrotor planner
 	VirtualQuadrotor vquad(lcm);
 	vquad.SetMapSize(20,30,5);
-	vquad.SetSensorRange(5);
+	vquad.SetSensorRange(4);
 	vquad.SetSensorFOV(75.0/180.0*M_PI);
 	vquad.SetInitPosition(Position2Di(9, 0),2);
 	vquad.SetGoalPosition(Position2Di(9, 29),2);

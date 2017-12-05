@@ -270,8 +270,10 @@ double VirtualQuadrotor::CalcWaypointDistance(Position2Di pos1, Position2Di pos2
     y2 = pos2.y;
 
     // static_cast: can get wrong result to use "unsigned long" type for deduction
-    long x_error = static_cast<long>(x1) - static_cast<long>(x2);
-    long y_error = static_cast<long>(y1) - static_cast<long>(y2);
+    // long x_error = static_cast<long>(x1) - static_cast<long>(x2);
+    // long y_error = static_cast<long>(y1) - static_cast<long>(y2);
+    double x_error = x1 - x2;
+    double y_error = y1 - y2;
 
     double cost = std::sqrt(x_error * x_error + y_error * y_error);
 
@@ -296,10 +298,10 @@ bool VirtualQuadrotor::EvaluationPath(const SimPath &old_path, const SimPath &ne
         new_path_dist += CalcWaypointDistance(pos1, pos2);
     }
 
-    if (old_path_dist - new_path_dist > 1.0 && abnormal_state_)
+    if (old_path_dist - new_path_dist >= 1.0 && abnormal_state_)
         elogger_->LogEvent(sim_index_, run_flag_, "shortcut found", old_path_dist - new_path_dist);
 
-    return (old_path_dist - new_path_dist > 1.0);
+    return (old_path_dist - new_path_dist >= 1.0);
 }
 
 void VirtualQuadrotor::MoveForward(bool enable_path_repair)
@@ -357,6 +359,8 @@ void VirtualQuadrotor::MoveForward(bool enable_path_repair)
         active_path_.erase(active_path_.begin());
         sim_steps_++;
     }
+
+    elogger_->LogEvent(sim_index_, run_flag_, "move forward", current_heading_ * 180.0 / M_PI, current_pos_.x, current_pos_.y, current_height_);
 }
 
 void VirtualQuadrotor::PublishState()
@@ -533,8 +537,8 @@ void VirtualQuadrotor::CmpStep()
                     std::cout << "-----------> record special case <-----------" << std::endl;
                     qplanner_->SaveMap(std::to_string(sim_index_));
                     // repeat simulation
-                    // run_flag_ = 1;
-                    // abnormal_state_ = true;
+                    run_flag_ = 1;
+                    abnormal_state_ = true;
                 }
                 break;
             }
