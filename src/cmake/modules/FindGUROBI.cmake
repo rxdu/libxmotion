@@ -44,16 +44,9 @@ find_library( GUROBI_CXX_LIBRARY
              "/Library/gurobi702/mac64/lib"
              "C:\\libs\\gurobi702\\lib"
           )
-
-find_library( GUROBI_GPP_LIBRARY
-          NAMES gurobi_g++5.0
-          PATHS "$ENV{GUROBI_HOME}/lib"
-             "/Library/gurobi702/mac64/lib"
-             "C:\\libs\\gurobi702\\lib"
-          )          
           
 set(GUROBI_INCLUDE_DIRS "${GUROBI_INCLUDE_DIR}" )
-set(GUROBI_LIBRARIES "${GUROBI_CXX_LIBRARY};${GUROBI_LIBRARY};${GUROBI_GPP_LIBRARY}" )
+set(GUROBI_LIBRARIES "${GUROBI_CXX_LIBRARY};${GUROBI_LIBRARY}" )
 
 # use c++ headers as default
 set(GUROBI_COMPILER_FLAGS "-DIL_STD" CACHE STRING "Gurobi Compiler Flags")
