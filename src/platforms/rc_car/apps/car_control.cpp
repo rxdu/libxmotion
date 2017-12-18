@@ -80,8 +80,8 @@ private:
 
     void uavcanIMUMsgCallback(const pixcar::CarRawIMU &msg)
     {
-        // std::cout << "Gyro: " << msg.gyro[0] << " , " << msg.gyro[1] << " , " << msg.gyro[2] << std::endl;
-        // std::cout << "Accel: " << msg.accel[0] << " , " << msg.accel[1] << " , " << msg.accel[2] << std::endl;
+        std::cout << "Gyro: " << msg.gyro[0] << " , " << msg.gyro[1] << " , " << msg.gyro[2] << std::endl;
+        std::cout << "Accel: " << msg.accel[0] << " , " << msg.accel[1] << " , " << msg.accel[2] << std::endl;
 #ifdef ENABLE_CSV_LOGGING
         imu_logger_->LogData(msg.time_stamp, msg.accel[0], msg.accel[1], msg.accel[2], msg.gyro[0], msg.gyro[1], msg.gyro[2]);
 #endif
@@ -106,13 +106,13 @@ private:
     void uavcanSpeedMsgCallback(const pixcar::CarRawSpeed &msg)
     {
         // std::cout << "Speed: " << msg.speed << std::endl;
-        float covt_speed = 1.0e6 / (msg.speed * 6.0) / GEAR_RATIO * (M_PI * WHEEL_DIAMETER);
+        // float covt_speed = 1.0e6 / (msg.speed * 6.0) / GEAR_RATIO * (M_PI * WHEEL_DIAMETER);
 #ifdef ENABLE_CSV_LOGGING
-        spd_logger_->LogData(msg.time_stamp, msg.speed, covt_speed);
+        spd_logger_->LogData(msg.time_stamp, msg.speed_estimate, msg.speed_estimate);
 #endif
         lcm_messenger_.republishRawSpeedData(msg);
 
-        CarSpeed car_speed(msg.time_stamp, covt_speed);
+        CarSpeed car_speed(msg.time_stamp, msg.speed_estimate);
         lcm_messenger_.publishConvertedSpeedData(car_speed);
     }
 
