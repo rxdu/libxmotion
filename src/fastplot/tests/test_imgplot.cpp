@@ -1,22 +1,28 @@
+
+#include <iostream>
+
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
 #include "fastplot/image_plot.h"
 
+using namespace cv;
 using namespace librav;
-using namespace cimg_library;
 
 int main()
 {
-    CImg<unsigned char> img(300, 200, 1, 3);
-    img.fill(32);
-    //img.noise(128);
+    // Mat image;
+    // image = imread("/home/rdu/Workspace/librav/data/intensity.jpg", CV_LOAD_IMAGE_COLOR);   // Read the file
+    std::string file_name = "/home/rdu/Workspace/librav/data/intensity.jpg";
 
-    const unsigned char white[] ={255,255,255};
-    img.draw_text(80, 80, "HelloWorld", white, 0, 32);
+    Mat imagen = ImagePlot::ReadImageFile(file_name);
+    ImagePlot::ShowImage(imagen, "test normal");
 
-    unsigned short color[5] ={0,8,16,24,32};
-    img.draw_line(0,20,300,20, color);
-    img.display();
+    Mat imagec = ImagePlot::ReadColorImage(file_name);
+    ImagePlot::ShowImage(imagec, "test color");
 
-    // ImagePlot::ShowImage(img);
+    Mat imageg = ImagePlot::ReadGreyscaleImage(file_name);
+    ImagePlot::ShowImage(imageg, "test greyscale");
 
     return 0;
 }

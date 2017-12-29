@@ -10,14 +10,19 @@
 #ifndef IMAGE_PLOT_H
 #define IMAGE_PLOT_H
 
-#include "CImg/CImg.h"
+#include <opencv2/opencv.hpp>
 
 namespace librav
 {
 namespace ImagePlot
 {
-    // template<typename T>
-    void ShowImage(cimg_library::CImg<unsigned char>& img);
+    // Read image from a file
+    cv::Mat ReadImageFile(std::string img_file);
+    cv::Mat ReadColorImage(std::string img_file);
+    cv::Mat ReadGreyscaleImage(std::string img_file);
+
+    // Display image
+    void ShowImage(cv::Mat img, std::string window_name = "Image");
 }
 }
 

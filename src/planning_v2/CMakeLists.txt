@@ -1,8 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
-project(librav_fastplot)
-
-# cmake module path
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+project(librav_planning_v2)
 
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
@@ -27,32 +24,21 @@ set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 ## Include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-## Dependency libraries
-find_package(OpenCV REQUIRED)
+## Find Eigen3
+find_package(Eigen3 REQUIRED)
+include_directories(${EIGEN3_INCLUDE_DIR})
 
-#find_package(VTK REQUIRED)
-#include(${VTK_USE_FILE})
+## Find LCM
+find_package(LCM REQUIRED)
+if(LCM_NOT_FOUND)
+  message(STATUS "LCM is not found. Inter-process communication depends on LCM.")
+endif(LCM_NOT_FOUND)
+# Include files for LCM
+set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
+include_directories(${LCM_GENERATED_HEADER_PATH})
 
-## Add libraries
-set(FASTPLOT_LIB_SRC
-	src/image_plot.cpp
-	src/map_plot.cpp
-)
-add_library(fastplot STATIC ${FASTPLOT_LIB_SRC})
-target_link_libraries(fastplot ${OpenCV_LIBS})
-target_include_directories(fastplot PUBLIC
-	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
-	$<INSTALL_INTERFACE:include>
-	PRIVATE src)
-
-# Add executables
-# add_executable(test_dislin tests/test_dislin.cpp)
-# target_link_libraries(test_dislin ${DISLIN_LIBRARIES})
-
-# find_package(PLplot REQUIRED)
-# include_directories(${PLplot_INCLUDE_DIRS})
-
-# add_executable(test_plplot tests/test_plplot.cpp tests/plstream.cc)
-# target_link_libraries(test_plplot ${PLplot_LIBRARIES})
-
-add_subdirectory(tests)
+## Add other sub source directories
+add_subdirectory(libgraph)
+add_subdirectory(demo)
+add_subdirectory(geometry)
+# add_subdirectory(map)
