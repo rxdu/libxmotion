@@ -12,205 +12,110 @@
 
 using namespace librav;
 
-SquareGrid::SquareGrid(uint32_t col_num, uint32_t row_num, uint32_t cell_size):
-		row_size_(row_num), col_size_(col_num), cell_size_(cell_size),
-		img_offset_x_(0), img_offset_y_(0)
+// Note: Assertions are for debugging purpose. Since assert() will be expanded as void if "NDEBUG" is defined, 
+// 	you should not rely on it to do online condition checking in Release code.
+#define ASSERT_INDEX_RANGE(col, row) \
+	assert(col >= 0 && row >= 0 && col < col_size_ && row < row_size_)
+
+#define ASSERT_ID_RANGE(id) \
+	assert(id >= 0 && id < col_size_ * row_size_)
+
+
+SquareGrid::SquareGrid(int32_t col_num, int32_t row_num) : row_size_(row_num), col_size_(col_num)
 {
-	for(uint32_t j = 0; j < row_num; j++)
-		for(uint32_t i = 0; i < col_num; i++)
+	assert((col_num > 0 && row_num > 0));
+
+	for (int32_t j = 0; j < row_num; j++)
+		for (int32_t i = 0; i < col_num; i++)
 		{
 			uint64_t new_id = j * col_num + i;
-			SquareCell* new_cell = new SquareCell(new_id, i, j, CalcBoundingBox(new_id), OccupancyType::FREE);
+			SquareCell *new_cell = new SquareCell(new_id, i, j, OccupancyType::FREE);
 			cells_[new_id] = new_cell;
 		}
 }
 
-SquareGrid::SquareGrid(uint32_t col_num, uint32_t row_num, uint32_t cell_size, int64_t img_offset_x, int64_t img_offset_y):
-		row_size_(row_num), col_size_(col_num), cell_size_(cell_size),
-		img_offset_x_(img_offset_x), img_offset_y_(img_offset_y)
+// This should be the only place to delete SquareGrid objects
+SquareGrid::~SquareGrid()
 {
-	for(uint32_t j = 0; j < row_num; j++)
-		for(uint32_t i = 0; i < col_num; i++)
-		{
-			uint64_t new_id = j * col_num + i;
-			SquareCell* new_cell = new SquareCell(new_id, i, j, CalcBoundingBox(new_id, img_offset_x_, img_offset_y_), OccupancyType::FREE);
-			cells_[new_id] = new_cell;
-		}
-}
-
-SquareGrid::~SquareGrid(){
-	for(auto itm = cells_.begin(); itm != cells_.end(); itm++)
+	for (auto itm = cells_.begin(); itm != cells_.end(); itm++)
 		delete itm->second;
 }
 
 void SquareGrid::SetCellOccupancy(uint32_t col, uint32_t row, OccupancyType occ)
 {
-	SetCellOccupancy(GetIDFromIndex(col, row), occ);
+	ASSERT_INDEX_RANGE(col, row);
+
+	SetCellOccupancy(col + row * col_size_, occ);
 }
+
 void SquareGrid::SetCellOccupancy(uint64_t id, OccupancyType occ)
 {
-	cells_[id]->occu_ = occ;
+	ASSERT_ID_RANGE(id);
+
+	cells_[id]->occupancy_ = occ;
 }
 
 uint64_t SquareGrid::GetIDFromIndex(uint32_t col, uint32_t row)
 {
+	ASSERT_INDEX_RANGE(col, row);
+
 	return row * col_size_ + col;
 }
 
-uint64_t SquareGrid::GetIDFromPosition(uint32_t x, uint32_t y)
+SquareCell *SquareGrid::GetCellFromID(uint64_t id)
 {
-	uint32_t row, col;
+	ASSERT_ID_RANGE(id);
 
-	col = (x - img_offset_x_) / cell_size_;
-	row = (y - img_offset_y_) / cell_size_;
-
-	return GetIDFromIndex(col, row);
+	return cells_[id];
 }
 
-SquareCell* SquareGrid::GetCellFromID(uint64_t id)
+std::vector<SquareCell *> SquareGrid::GetNeighbours(uint64_t id, bool allow_diag)
 {
-	auto it = cells_.find(id);
+	ASSERT_ID_RANGE(id);
 
-	if(it != cells_.end())
-		return (*it).second;
-	else
-		return nullptr;
-}
+	std::vector<SquareCell *> neighbours;
 
-BoundingBox SquareGrid::CalcBoundingBox(uint64_t id)
-{
-	BoundingBox bbox;
-	uint32_t x,y;
-	x = id%col_size_;
-	y = row_size_ - id/col_size_ - 1;
-	bbox.x.min = x*cell_size_;
-	bbox.x.max = bbox.x.min + cell_size_ - 1;
-	bbox.y.min = y*cell_size_;
-	bbox.y.max = bbox.y.min + cell_size_ - 1;
-
-	return bbox;
-}
-
-BoundingBox SquareGrid::CalcBoundingBox(uint64_t id, int64_t img_offset_x, int64_t img_offset_y)
-{
-	BoundingBox bbox;
-	uint32_t x,y;
-	x = id%col_size_;
-	y = row_size_ - id/col_size_;
-	bbox.x.min = x*cell_size_ + img_offset_x;
-	bbox.x.max = bbox.x.min + cell_size_ - 1;
-	bbox.y.min = y*cell_size_ + img_offset_y;
-	bbox.y.max = bbox.y.min + cell_size_ - 1;
-
-	return bbox;
-}
-
-std::vector<SquareCell*> SquareGrid::GetNeighbours(uint64_t id, bool allow_diag)
-{
-	std::vector<SquareCell*> neighbours;
-
-	uint32_t x,y;
-	x = cells_[id]->index_.x;
-	y = cells_[id]->index_.y;
+	int32_t xc, yc;
+	xc = cells_[id]->index_.x;
+	yc = cells_[id]->index_.y;
 
 	// not consider diagonal cells
-	if(allow_diag)
+	if (allow_diag)
 	{
-		Position2Di pos[8];
+		for(int32_t x = xc - 1; x <= xc + 1; ++x)
+			for(int32_t y = yc - 1; y <= yc + 1; ++y)
+			{
+				if(x == xc && y == yc)
+					continue;
 
-		pos[0].x = x - 1;
-		pos[0].y = y - 1;
-
-		pos[1].x = x;
-		pos[1].y = y - 1;
-
-		pos[2].x = x + 1;
-		pos[2].y = y - 1;
-
-		pos[3].x = x - 1;
-		pos[3].y = y;
-
-		pos[4].x = x + 1;
-		pos[4].y = y;
-
-		pos[5].x = x - 1;
-		pos[5].y = y + 1;
-
-		pos[6].x = x;
-		pos[6].y = y + 1;
-
-		pos[7].x = x + 1;
-		pos[7].y = y + 1;
-
-		for(int i = 0; i < 8; i++)
-		{
-			if(pos[i].x < col_size_ && pos[i].y < row_size_)
-				neighbours.push_back(cells_[pos[i].y * col_size_ + pos[i].x]);
-		}
+				if (x > 0 && x < col_size_ &&
+					 y > 0 && y < row_size_)
+					neighbours.push_back(cells_[GetIDFromIndex(x,y)]);
+			}
 	}
 	else
 	{
 		Position2Di pos[4];
 
-		pos[0].x = x;
-		pos[0].y = y + 1;
+		pos[0].x = xc;
+		pos[0].y = yc + 1;
 
-		pos[1].x = x;
-		pos[1].y = y - 1;
+		pos[1].x = xc;
+		pos[1].y = yc - 1;
 
-		pos[2].x = x + 1;
-		pos[2].y = y;
+		pos[2].x = xc + 1;
+		pos[2].y = yc;
 
-		pos[3].x = x - 1;
-		pos[3].y = y;
+		pos[3].x = xc - 1;
+		pos[3].y = yc;
 
-		for(int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++)
 		{
-			if(pos[i].x < col_size_ && pos[i].y < row_size_)
-				neighbours.push_back(cells_[pos[i].y * col_size_ + pos[i].x]);
+			if (pos[i].x > 0 && pos[i].x < col_size_ &&
+				pos[i].y > 0 && pos[i].y < row_size_)
+				neighbours.push_back(cells_[GetIDFromIndex(pos[i].x,pos[i].y)]);
 		}
 	}
 
 	return neighbours;
 }
-
-std::vector<SquareCell*> SquareGrid::GetNeighboursWithinRange(uint64_t id, uint32_t cell_range)
-{
-	std::vector<SquareCell*> neighbours;
-
-	uint32_t x,y;
-	x = cells_[id]->index_.x;
-	y = cells_[id]->index_.y;
-
-	uint32_t xmin,xmax,ymin,ymax;
-
-	if(x < cell_range)
-		xmin = 0;
-	else
-		xmin = x - cell_range;
-	if(x + cell_range >= col_size_)
-		xmax = col_size_ - 1;
-	else
-		xmax = x + cell_range;
-
-	if(y < cell_range)
-		ymin = 0;
-	else
-		ymin = y - cell_range;
-	if(y + cell_range >= row_size_)
-		ymax = row_size_ - 1;
-	else
-		ymax = y + cell_range;
-
-	for(int64_t i = xmin; i <= xmax; i++)
-		for(int64_t j = ymin; j <= ymax; j++) {
-			if(i == x && j == y)
-				continue;
-
-			// neighbours.push_back(cells_[j * col_size_ + i]);
-			neighbours.push_back(cells_[GetIDFromIndex(i,j)]);			
-		}
-
-	return neighbours;
-}
-
