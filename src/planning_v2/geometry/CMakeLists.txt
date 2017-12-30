@@ -18,9 +18,11 @@ set(GEOMETRY_LIB_SRC
   #src/graph_builder.cpp
 )
 add_library(geometry STATIC ${GEOMETRY_LIB_SRC})
-target_link_libraries(geometry common ${Octomap_LIBS})
+target_link_libraries(geometry common)
 target_include_directories(geometry PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
   $<INSTALL_INTERFACE:include>
   PRIVATE src)
+
+add_subdirectory(tests)
 

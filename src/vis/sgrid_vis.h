@@ -20,7 +20,6 @@ namespace Vis
 {
 	// square grid visualization
 	void VisSquareGrid(const SquareGrid& grid, cv::OutputArray _dst);
-	void VisAbstractSquareGrid(const SquareGrid& grid, cv::OutputArray _dst);
 	void VisSquareGrid(const SquareGrid& grid, cv::InputArray _src, cv::OutputArray _dst);
 
 	void VisSquareGridNavField(const SquareGrid& grid, const NavField<SquareCell*>& nav_field, cv::InputArray _src, cv::OutputArray _dst, bool show_id);

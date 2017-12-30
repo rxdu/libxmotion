@@ -37,9 +37,11 @@ find_package(OpenCV REQUIRED)
 set(FASTPLOT_LIB_SRC
 	src/image_plot.cpp
 	src/map_plot.cpp
+	src/graph_plot.cpp
+	src/plot_utils.cpp
 )
 add_library(fastplot STATIC ${FASTPLOT_LIB_SRC})
-target_link_libraries(fastplot ${OpenCV_LIBS})
+target_link_libraries(fastplot geometry graph ${OpenCV_LIBS})
 target_include_directories(fastplot PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
 	$<INSTALL_INTERFACE:include>

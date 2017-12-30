@@ -145,16 +145,18 @@ enum class OccupancyType
 	EXPANDED_OBS
 };
 
+template<typename T>
 struct Range2D
 {
-	uint32_t min;
-	uint32_t max;
+	T min;
+	T max;
 };
 
+template<typename T>
 struct BoundingBox
 {
-	Range2D x;
-	Range2D y;
+	Range2D<T> x;
+	Range2D<T> y;
 };
 
 struct Keyframe

@@ -9,6 +9,12 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 add_executable(test_imgplot test_imgplot.cpp )
 target_link_libraries(test_imgplot fastplot)
 
+add_executable(test_mapplot test_mapplot.cpp )
+target_link_libraries(test_mapplot fastplot)
+
+add_executable(test_graphplot test_graphplot.cpp )
+target_link_libraries(test_graphplot fastplot)
+
 # add_executable(test_vtk test_vtk.cpp )
 # target_link_libraries(test_vtk ${VTK_LIBRARIES})
 

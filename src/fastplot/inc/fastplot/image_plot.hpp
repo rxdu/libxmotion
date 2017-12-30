@@ -14,7 +14,7 @@
 
 namespace librav
 {
-namespace ImagePlot
+namespace FastPlot
 {
     // Read image from a file
     cv::Mat ReadImageFile(std::string img_file);

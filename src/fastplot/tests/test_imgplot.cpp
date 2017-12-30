@@ -4,7 +4,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include "fastplot/image_plot.h"
+#include "fastplot/image_plot.hpp"
 
 using namespace cv;
 using namespace librav;
@@ -15,14 +15,14 @@ int main()
     // image = imread("/home/rdu/Workspace/librav/data/intensity.jpg", CV_LOAD_IMAGE_COLOR);   // Read the file
     std::string file_name = "/home/rdu/Workspace/librav/data/intensity.jpg";
 
-    Mat imagen = ImagePlot::ReadImageFile(file_name);
-    ImagePlot::ShowImage(imagen, "test normal");
+    Mat imagen = FastPlot::ReadImageFile(file_name);
+    FastPlot::ShowImage(imagen, "test normal");
 
-    Mat imagec = ImagePlot::ReadColorImage(file_name);
-    ImagePlot::ShowImage(imagec, "test color");
+    Mat imagec = FastPlot::ReadColorImage(file_name);
+    FastPlot::ShowImage(imagec, "test color");
 
-    Mat imageg = ImagePlot::ReadGreyscaleImage(file_name);
-    ImagePlot::ShowImage(imageg, "test greyscale");
+    Mat imageg = FastPlot::ReadGreyscaleImage(file_name);
+    FastPlot::ShowImage(imageg, "test greyscale");
 
     return 0;
 }
