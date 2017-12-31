@@ -2,7 +2,7 @@
 #include <cstdint>
 #include <vector>
 
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 #include "utility/librav_utility.h"
 #include "sensor/imu_filter.h"
 

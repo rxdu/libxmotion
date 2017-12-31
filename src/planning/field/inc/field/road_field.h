@@ -10,7 +10,7 @@
 #ifndef ROAD_FIELD_H
 #define ROAD_FIELD_H
 
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 #include "field/scalar_field.h"
 #include "lcmtypes/librav.hpp"
 

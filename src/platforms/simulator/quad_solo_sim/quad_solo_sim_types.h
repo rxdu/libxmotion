@@ -8,7 +8,7 @@
 #ifndef SIMULATOR_QUAD_SOLO_SIM_TYPES_H_
 #define SIMULATOR_QUAD_SOLO_SIM_TYPES_H_
 
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 #include "quad_ctrl/state/quad_config.h"
 
 namespace librav {

@@ -1,15 +1,17 @@
-/*
+/* 
  * map_utils.cpp
- *
- *  Created on: Apr 26, 2016
- *      Author: rdu
- */
+ * 
+ * Created on: Apr 26, 2016
+ * Description: 
+ * 
+ * Copyright (c) 2017 Ruixiang Du (rdu)
+ */ 
 
-#include "map/map_utils.h"
+#include "map/map_utils.hpp"
 
 using namespace librav;
 
-bool MapUtils::ReadImageFromFile(std::string map_path, cv::OutputArray _dst)
+bool Map::ReadImageFromFile(std::string map_path, cv::OutputArray _dst)
 {
 	cv::Mat image;
 
@@ -31,12 +33,12 @@ bool MapUtils::ReadImageFromFile(std::string map_path, cv::OutputArray _dst)
 		return false;
 }
 
-std::shared_ptr<SquareGrid> MapUtils::CreateSquareGrid(uint32_t col_size, uint32_t row_size, uint32_t cell_size)
+std::shared_ptr<SquareGrid> Map::CreateSquareGrid(uint32_t col_size, uint32_t row_size, uint32_t cell_size)
 {
 	return std::make_shared<SquareGrid>(col_size,row_size,cell_size);
 }
 
-Position2Dd MapUtils::CoordinatesFromMapToMapWorld(Position2Di map_pos, MapInfo info)
+Position2Dd Map::CoordinatesFromMapToMapWorld(Position2Di map_pos, MapInfo info)
 {
 	Position2Dd rpos;
 
@@ -56,7 +58,7 @@ Position2Dd MapUtils::CoordinatesFromMapToMapWorld(Position2Di map_pos, MapInfo 
 	return rpos;
 }
 
-Position2Di MapUtils::CoordinatesFromMapWorldToMap(Position2Dd world_pos, MapInfo info)
+Position2Di Map::CoordinatesFromMapWorldToMap(Position2Dd world_pos, MapInfo info)
 {
 	Position2Di rpos;
 
@@ -75,7 +77,7 @@ Position2Di MapUtils::CoordinatesFromMapWorldToMap(Position2Dd world_pos, MapInf
 	return rpos;
 }
 
-Position2Di MapUtils::CoordinatesFromPaddedToOriginal(Position2Di pad_pos, MapInfo info)
+Position2Di Map::CoordinatesFromPaddedToOriginal(Position2Di pad_pos, MapInfo info)
 {
 	Position2Di rpos;
 
@@ -100,7 +102,7 @@ Position2Di MapUtils::CoordinatesFromPaddedToOriginal(Position2Di pad_pos, MapIn
 	return rpos;
 }
 
-Position2Di MapUtils::CoordinatesFromOriginalToPadded(Position2Di ori_pos, MapInfo info)
+Position2Di Map::CoordinatesFromOriginalToPadded(Position2Di ori_pos, MapInfo info)
 {
 	Position2Di rpos;
 
@@ -114,7 +116,7 @@ Position2Di MapUtils::CoordinatesFromOriginalToPadded(Position2Di ori_pos, MapIn
 	return rpos;
 }
 
-Position2Dd MapUtils::CoordinatesFromMapWorldToRefWorld(Position2Dd map_world_pos, MapInfo info)
+Position2Dd Map::CoordinatesFromMapWorldToRefWorld(Position2Dd map_world_pos, MapInfo info)
 {
 	Position2Dd rpos;
 
@@ -125,7 +127,7 @@ Position2Dd MapUtils::CoordinatesFromMapWorldToRefWorld(Position2Dd map_world_po
 	return rpos;
 }
 
-Position2Dd MapUtils::CoordinatesFromRefWorldToMapWorld(Position2Dd ref_world_pos, MapInfo info)
+Position2Dd Map::CoordinatesFromRefWorldToMapWorld(Position2Dd ref_world_pos, MapInfo info)
 {
 	Position2Dd mpos;
 
@@ -137,22 +139,22 @@ Position2Dd MapUtils::CoordinatesFromRefWorldToMapWorld(Position2Dd ref_world_po
 	return mpos;
 }
 
-Position2Dd MapUtils::CoordinatesFromMapPaddedToRefWorld(Position2Di map_pos, MapInfo info)
+Position2Dd Map::CoordinatesFromMapPaddedToRefWorld(Position2Di map_pos, MapInfo info)
 {
 	Position2Di original_map_pos;
 	Position2Dd mapw_pos, refw_pos;
 
-	original_map_pos = MapUtils::CoordinatesFromPaddedToOriginal(map_pos, info);
+	original_map_pos = Map::CoordinatesFromPaddedToOriginal(map_pos, info);
 	//std::cout << "conversion input: " << map_pos.x << " , " << map_pos.y << std::endl;
-	mapw_pos = MapUtils::CoordinatesFromMapToMapWorld(original_map_pos, info);
+	mapw_pos = Map::CoordinatesFromMapToMapWorld(original_map_pos, info);
 	//std::cout << "conversion intermediate: " << mapw_pos.x << " , " << mapw_pos.y << std::endl;
-	refw_pos = MapUtils::CoordinatesFromMapWorldToRefWorld(mapw_pos, info);
+	refw_pos = Map::CoordinatesFromMapWorldToRefWorld(mapw_pos, info);
 	//std::cout << "conversion output: " << refw_pos.x << " , " << refw_pos.y << std::endl;
 
 	return refw_pos;
 }
 
-Position2Di MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd world_pos, MapInfo info)
+Position2Di Map::CoordinatesFromRefWorldToMapPadded(Position2Dd world_pos, MapInfo info)
 {
 	Position2Dd mapw_pos;
 	Position2Di map_pos;
@@ -160,13 +162,13 @@ Position2Di MapUtils::CoordinatesFromRefWorldToMapPadded(Position2Dd world_pos, 
 
 	//std::cout << "conversion input: " << world_pos.x << " , " << world_pos.y << std::endl;
 
-	mapw_pos = MapUtils::CoordinatesFromRefWorldToMapWorld(world_pos, info);
+	mapw_pos = Map::CoordinatesFromRefWorldToMapWorld(world_pos, info);
 	//std::cout << "map world: " << mapw_pos.x << " , " << mapw_pos.y << std::endl;
 
-	map_pos = MapUtils::CoordinatesFromMapWorldToMap(mapw_pos, info);
+	map_pos = Map::CoordinatesFromMapWorldToMap(mapw_pos, info);
 	//std::cout << "map: " << map_pos.x << " , " << map_pos.y << std::endl;
 
-	map_padded_pos = MapUtils::CoordinatesFromOriginalToPadded(map_pos, info);
+	map_padded_pos = Map::CoordinatesFromOriginalToPadded(map_pos, info);
 	//std::cout << "padded map: " << map_padded_pos.x << " , " << map_padded_pos.y << std::endl;
 
 	return map_padded_pos;

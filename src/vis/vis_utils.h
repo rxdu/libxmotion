@@ -14,7 +14,7 @@
 #include "opencv2/core/core.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 
 namespace librav {
 

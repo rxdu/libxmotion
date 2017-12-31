@@ -13,14 +13,14 @@
 #include "eigen3/Eigen/Geometry"
 
 #include "planning/graph/graph.h"
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 #include "geometry/geo_mark.h"
 #include "map/map_info.h"
 #include "map/map_utils.h"
 #include "geometry/cube_array/cube_array.h"
 #include "polyopt/quad_polyopt.h"
 
-#include "common/librav_math.h"
+#include "common/librav_math.hpp"
 
 namespace librav
 {

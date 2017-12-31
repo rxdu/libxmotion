@@ -14,7 +14,7 @@
 #include <vector>
 #include <cstdint>
 
-#include <common/librav_types.h>
+#include <common/librav_types.hpp>
 
 namespace librav
 {

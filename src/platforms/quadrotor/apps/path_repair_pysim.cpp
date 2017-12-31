@@ -13,7 +13,7 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/librav.hpp"
 
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 #include "utility/logging/logger.h"
 #include "utility/stopwatch/stopwatch.h"
 #include "map/map_utils.h"

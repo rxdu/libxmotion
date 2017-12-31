@@ -10,7 +10,7 @@
 #ifndef TRAFFIC_PARTICIPANT_H
 #define TRAFFIC_PARTICIPANT_H
 
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 
 namespace librav
 {

@@ -10,7 +10,7 @@
 #ifndef IMU_FILTER_H
 #define IMU_FILTER_H
 
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 
 namespace librav
 {

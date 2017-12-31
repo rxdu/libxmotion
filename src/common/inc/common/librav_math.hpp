@@ -1,5 +1,5 @@
 /* 
- * librav_math.h
+ * librav_math.hpp
  * 
  * Created on: Nov 06, 2017 14:38
  * Description:   
@@ -17,7 +17,7 @@
 #include "eigen3/Eigen/Core"
 #include "eigen3/Eigen/Geometry"
 
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 
 namespace librav
 {

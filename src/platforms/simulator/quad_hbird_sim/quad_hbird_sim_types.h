@@ -10,7 +10,7 @@
 #ifndef QUAD_HBIRD_SIM_TYPES_H
 #define QUAD_HBIRD_SIM_TYPES_H
 
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 #include "quad_ctrl/state/quad_config.h"
 
 namespace librav {

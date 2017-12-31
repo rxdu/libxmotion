@@ -13,7 +13,7 @@
 #include "lcmtypes/librav.hpp"
 
 #include "field/scalar_field.h"
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 
 namespace librav
 {

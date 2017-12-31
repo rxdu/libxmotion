@@ -1,7 +1,7 @@
 #ifndef QUAD_TREE_
 #define QUAD_TREE_
 
-#include <common/librav_types.h>
+#include <common/librav_types.hpp>
 #include <cstdint>
 #include <vector>
 #include <cstdint>

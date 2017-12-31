@@ -8,7 +8,7 @@
 #ifndef SRC_MAP_SQUARE_GRID_H_
 #define SRC_MAP_SQUARE_GRID_H_
 
-#include <common/librav_types.h>
+#include <common/librav_types.hpp>
 #include <map>
 #include <vector>
 #include <cstdint>

@@ -15,8 +15,8 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/librav.hpp"
 
-#include "common/librav_types.h"
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
+#include "common/librav_types.hpp"
 
 #include "geometry/geo_mark.h"
 #include "map/map_info.h"

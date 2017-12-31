@@ -11,7 +11,7 @@
 #include <cmath>
 
 #include "planning/graph/bds_base.h"
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 
 namespace librav {
 

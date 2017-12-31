@@ -16,7 +16,7 @@
 #include "opencv2/opencv.hpp"
 
 // user
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 #include "map/map_utils.h"
 #include "map/map_type.h"
 #include "geometry/graph_builder.h"

@@ -10,7 +10,7 @@
 
 #include <cstdint>
 
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 
 #include "rc_car_sim/rc_car_sim_types.h"
 #include "vrep_sim/vrep_interface/robot_sim_client.h"

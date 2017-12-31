@@ -10,7 +10,7 @@
 #ifndef IMU_PARAMS_H
 #define IMU_PARAMS_H
 
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 
 namespace librav
 {

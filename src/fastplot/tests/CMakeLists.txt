@@ -13,7 +13,7 @@ add_executable(test_mapplot test_mapplot.cpp )
 target_link_libraries(test_mapplot fastplot)
 
 add_executable(test_graphplot test_graphplot.cpp )
-target_link_libraries(test_graphplot fastplot)
+target_link_libraries(test_graphplot fastplot planner)
 
 # add_executable(test_vtk test_vtk.cpp )
 # target_link_libraries(test_vtk ${VTK_LIBRARIES})

@@ -14,7 +14,7 @@
 #include "eigen3/Eigen/Geometry"
 #include <lcm/lcm-cpp.hpp>
 
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 #include "control/quad_ctrl/state/quad_state.h"
 
 namespace librav

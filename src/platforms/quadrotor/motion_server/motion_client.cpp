@@ -11,7 +11,7 @@
 #include <lcm/lcm-cpp.hpp>
 
 #include "lcmtypes/librav.hpp"
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 
 using namespace librav;
 

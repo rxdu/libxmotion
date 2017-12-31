@@ -12,7 +12,7 @@
 #include <lcm/lcm-cpp.hpp>
 
 #include "utility/logging/logger.h"
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 #include "map/map_utils.h"
 #include "map/map_config.h"
 #include "map/map_info.h"

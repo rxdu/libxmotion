@@ -1,15 +1,15 @@
 /* 
- * librav_types.h
+ * librav_types.hpp
  * 
  * Created on: Nov 06, 2017 11:33
  * Description: common type definitions for librav, evolved from 
- *              librav_types.h and librav_types.h   
+ *              planning_types.h and control_types.h   
  * 
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#ifndef LIBRAV_TYPES_H
-#define LIBRAV_TYPES_H
+#ifndef LIBRAV_TYPES_HPP
+#define LIBRAV_TYPES_HPP
 
 #include <cstdint>
 #include <vector>

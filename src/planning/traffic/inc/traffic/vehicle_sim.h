@@ -10,7 +10,7 @@
 #ifndef VEHICLE_SIM_H
 #define VEHICLE_SIM_H
 
-#include "common/librav_types.h"
+#include "common/librav_types.hpp"
 #include "traffic/traffic_participant.h"
 
 namespace librav

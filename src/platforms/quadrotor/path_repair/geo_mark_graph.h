@@ -12,8 +12,8 @@
 
 #include "eigen3/Eigen/Geometry"
 
-#include "common/librav_types.h"
-#include "common/librav_math.h"
+#include "common/librav_types.hpp"
+#include "common/librav_math.hpp"
 
 #include "planning/graph/graph.h"
 #include "map/map_type.h"

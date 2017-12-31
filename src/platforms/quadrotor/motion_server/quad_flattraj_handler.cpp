@@ -8,7 +8,7 @@
 #include <iostream>
 #include <cmath>
 
-#include "common/librav_math.h"
+#include "common/librav_math.hpp"
 #include "motion_server/quad_flattraj_handler.h"
 
 using namespace librav;
