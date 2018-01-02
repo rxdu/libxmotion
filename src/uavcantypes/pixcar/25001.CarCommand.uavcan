@@ -1,3 +1,3 @@
-# range [-1, 1]
-float32 servo_cmd
-float32 motor_cmd
+# range [-100, 100]
+int8 servo_cmd
+int8 motor_cmd

@@ -46,7 +46,7 @@ public:
     // this function should be called periodically
     void spin(int32_t timeout_ms);
     
-    bool sendCmdToCar(float servo, float motor);
+    bool sendCmdToCar(int8_t servo, int8_t motor);
 
 private:
     // the only CAN node that talks with car

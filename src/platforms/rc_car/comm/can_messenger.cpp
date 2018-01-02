@@ -140,12 +140,14 @@ void CANMessenger::spin(int32_t timeout_ms)
     }
 }
 
-bool CANMessenger::sendCmdToCar(float servo, float motor)
+bool CANMessenger::sendCmdToCar(int8_t servo, int8_t motor)
 {
     pixcar::CarCommand cmd_msg; 
 
-    cmd_msg.servo_cmd = (float)servo;
-    cmd_msg.motor_cmd = (float)motor;
+    std::cout << "cmd signature : " << cmd_msg.getDataTypeSignature() << std::endl;
+
+    cmd_msg.servo_cmd = (int8_t)servo;
+    cmd_msg.motor_cmd = (int8_t)motor;
 
     auto cmd_pub_res = cmd_pub_.broadcast(cmd_msg);
     if (cmd_pub_res < 0)
