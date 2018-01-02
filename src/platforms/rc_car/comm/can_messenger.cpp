@@ -144,8 +144,6 @@ bool CANMessenger::sendCmdToCar(int8_t servo, int8_t motor)
 {
     pixcar::CarCommand cmd_msg; 
 
-    std::cout << "cmd signature : " << cmd_msg.getDataTypeSignature() << std::endl;
-
     cmd_msg.servo_cmd = (int8_t)servo;
     cmd_msg.motor_cmd = (int8_t)motor;
 
