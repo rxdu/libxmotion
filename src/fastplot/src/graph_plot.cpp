@@ -60,7 +60,7 @@ void FastPlot::AddGraphLayer(std::shared_ptr<Graph_t<SquareCell*>> graph, cv::In
         loc_x2 = (edge.dst_->state_->bounding_box_.x.min + edge.dst_->state_->bounding_box_.x.max) / 2;
         loc_y2 = (edge.dst_->state_->bounding_box_.y.min + edge.dst_->state_->bounding_box_.y.max) / 2;;
 
-        PlotUtils::DrawLine(dst, cv::Point(loc_x1, loc_y1), cv::Point(loc_x2, loc_y2));
+        PlotUtils::DrawLine(dst, cv::Point(loc_x1, loc_y1), cv::Point(loc_x2, loc_y2), cv::Scalar(237, 149, 100));
     }
 }
 

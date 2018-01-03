@@ -32,7 +32,7 @@ void PlotUtils::DrawPoint(cv::Mat img, cv::Point pos, const cv::Scalar &color)
     circle(img,
            center,
            3,
-           Scalar(0, 0, 255),
+           color,
            thickness,
            lineType);
 }
@@ -45,7 +45,7 @@ void PlotUtils::DrawLine(cv::Mat img, cv::Point pt1, cv::Point pt2, const cv::Sc
     line(img,
          pt1,
          pt2,
-         Scalar(237, 149, 100),
+         color,
          thickness,
          lineType);
 }
