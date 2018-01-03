@@ -18,8 +18,8 @@ class CarCommander(object):
     def publish_car_command(self):
         print "publish car command"
         cmd_msg = CarCommand_t()
-        cmd_msg.servo = 20
-        cmd_msg.motor = -20
+        cmd_msg.servo = 25
+        cmd_msg.motor = -32
 
         self.lcm_h.publish("car_command", cmd_msg.encode())
 

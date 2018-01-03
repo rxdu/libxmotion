@@ -49,7 +49,7 @@ void LCMMessenger::republishRawSpeedData(const pixcar::CarRawSpeed &msg)
 {
     librav_lcm_msgs::CarRawSpeed_t spd_msg;
 
-    spd_msg.mtime = msg.time_stamp;
+    spd_msg.mtime = 0;// msg.time_stamp;
     spd_msg.speed = msg.speed;
 
     lcm_->publish(LCM_CHANNELS::CAR_RAW_SPEED_CHANNEL, &spd_msg);

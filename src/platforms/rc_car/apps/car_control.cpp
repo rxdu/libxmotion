@@ -112,7 +112,7 @@ private:
 #endif
         lcm_messenger_.republishRawSpeedData(msg);
 
-        CarSpeed car_speed(msg.time_stamp, covt_speed);
+        CarSpeed car_speed(0, msg.speed);
         lcm_messenger_.publishConvertedSpeedData(car_speed);
     }
 
