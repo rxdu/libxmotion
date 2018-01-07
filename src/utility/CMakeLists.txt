@@ -37,6 +37,9 @@ add_definitions(-DENABLE_LOGGING)
 target_compile_definitions(utility PUBLIC ENABLE_LOGGING=1)
 target_link_libraries(utility ${CMAKE_THREAD_LIBS_INIT})
 endif(ENABLE_LOGGING)
+target_include_directories(utility PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+	$<INSTALL_INTERFACE:include>)
 
 #add_executable(test_logging tests/test_logging.cpp)
 #target_link_libraries(test_logging utility)
