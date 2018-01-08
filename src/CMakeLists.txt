@@ -9,9 +9,6 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 include(cmake/lcmtypes.cmake)
 lcmtypes_build()
 
-include(cmake/uavcantypes.cmake)
-uavcantypes_build()
-
 ## Optionally built modules: on/off
 set(ENABLE_LOGGING on)
 set(BUILD_TESTS off)
@@ -42,7 +39,6 @@ add_subdirectory(planning_v2)
 # add_subdirectory(vis)
 add_subdirectory(fastplot)
 # add_subdirectory(platforms/quadrotor)
-# add_subdirectory(platforms/rc_car)
 # add_subdirectory(platforms/simulator)
 
 ## Add test source directories

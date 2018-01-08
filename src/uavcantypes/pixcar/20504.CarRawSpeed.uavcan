@@ -1,3 +1,0 @@
-uint32 time_stamp
-uint16 hallsensor_count
-float32 speed_estimate

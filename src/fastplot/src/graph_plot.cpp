@@ -117,7 +117,7 @@ void FastPlot::AddGraphLayer(std::shared_ptr<Graph_t<SquareCell*>> graph, cv::In
 // }
 
 template <typename StateType>
-void FastPlot::AddGraphPathLayer(const Path_t<StateType> &path, cv::InputArray _src, cv::OutputArray _dst, cv::Scalar line_color = cv::Scalar(255, 153, 51))
+void FastPlot::AddGraphPathLayer(const Path_t<StateType> &path, cv::InputArray _src, cv::OutputArray _dst, cv::Scalar line_color)
 {
     // cv::Mat src, dst;
     // int src_type = _src.getMat().type();
