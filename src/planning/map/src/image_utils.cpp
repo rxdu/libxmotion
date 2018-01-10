@@ -177,7 +177,7 @@ void ImageUtils::CreateOccupancyMapForRRT(uint64_t width, uint64_t height, cv::O
 	dst = Scalar(255);
 }
 
-OccupancyType ImageUtils::CheckAreaOccupancy(cv::InputArray _src, BoundingBox area)
+OccupancyType ImageUtils::CheckAreaOccupancy(cv::InputArray _src, BoundingBox<int32_t> area)
 {
 	Mat src = _src.getMat();
 

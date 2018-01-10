@@ -11,7 +11,7 @@
 // headers for lcm
 #include <lcm/lcm-cpp.hpp>
 
-#include "utility/logging/logger.h"
+#include "utility/logging/logger.hpp"
 #include "common/librav_types.hpp"
 #include "map/map_utils.h"
 #include "map/map_config.h"

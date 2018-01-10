@@ -28,7 +28,7 @@ enum class NodeType
 class QuadTreeNode: public BDSBase<QuadTreeNode>
 {
 public:
-	QuadTreeNode(BoundingBox bound, OccupancyType occupancy);
+	QuadTreeNode(BoundingBox<int32_t> bound, OccupancyType occupancy);
 	~QuadTreeNode();
 
 public:
@@ -37,7 +37,7 @@ public:
 	NodeType node_type_;
 	OccupancyType occupancy_;
 	Position2Di location_;
-	BoundingBox bbox_;
+	BoundingBox<int32_t> bbox_;
 
 	// Pointers to child nodes
 	QuadTreeNode* child_nodes_[4];

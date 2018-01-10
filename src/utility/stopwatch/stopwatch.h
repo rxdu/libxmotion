@@ -1,5 +1,5 @@
-#ifndef STOPWATCH_H_
-#define STOPWATCH_H_
+#ifndef STOPWATCH_H
+#define STOPWATCH_H
 
 #include <array>
 #include <chrono>
@@ -10,6 +10,8 @@
 
 namespace stopwatch
 {
+// only supported on x86 processors
+#if (defined __x86_64__) || (defined __i386)
 // An implementation of the 'TrivialClock' concept using the rdtscp instruction.
 struct rdtscp_clock
 {
@@ -70,6 +72,7 @@ std::array<typename Clock::duration, N> sample(Func &&function)
   std::sort(samples.begin(), samples.end());
   return samples;
 }
+#endif  /* __x86_64__ or __i386 */
 
 struct StopWatch
 {
@@ -124,4 +127,4 @@ struct StopWatch
 
 } // namespace stopwatch
 
-#endif // STOPWATCH_H_
+#endif // STOPWATCH_H

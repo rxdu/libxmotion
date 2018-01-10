@@ -24,6 +24,6 @@ struct CarRawSpeed_t
 // command range: [-1,1]
 struct CarCommand_t
 {
-    float servo;
-    float motor;
+    int8_t servo;
+    int8_t motor;
 } 

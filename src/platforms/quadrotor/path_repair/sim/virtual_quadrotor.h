@@ -9,7 +9,7 @@
 
 #include "path_repair/sim/sim_path_repair.h"
 #include "path_repair/sim/sim_depth_sensor.h"
-#include "utility/logging/logger.h"
+#include "utility/logging/logger.hpp"
 
 namespace librav
 {

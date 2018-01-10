@@ -11,7 +11,7 @@
 #include "eigen3/Eigen/Core"
 #include "eigen3/Eigen/Geometry"
 
-#include "utility/logging/logger.h"
+#include "utility/logging/logger.hpp"
 #include "quad_ctrl/controller/pos_quat_con.h"
 
 using namespace librav;

@@ -395,7 +395,7 @@ QuadTreeNode* QTreeNodeManager::GetNodeReference(uint16_t index_x, uint16_t inde
 /*              Implementation of Tree Node              */
 /*********************************************************/
 
-QuadTreeNode::QuadTreeNode(BoundingBox bound, OccupancyType occupancy):
+QuadTreeNode::QuadTreeNode(BoundingBox<int32_t> bound, OccupancyType occupancy):
 		BDSBase<QuadTreeNode>(0),
 		occupancy_(occupancy),dummy_root_(this),has_dummy_(false)
 {

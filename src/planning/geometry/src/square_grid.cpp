@@ -75,9 +75,9 @@ SquareCell* SquareGrid::GetCellFromID(uint64_t id)
 		return nullptr;
 }
 
-BoundingBox SquareGrid::CalcBoundingBox(uint64_t id)
+BoundingBox<int32_t> SquareGrid::CalcBoundingBox(uint64_t id)
 {
-	BoundingBox bbox;
+	BoundingBox<int32_t> bbox;
 	uint32_t x,y;
 	x = id%col_size_;
 	y = row_size_ - id/col_size_ - 1;
@@ -89,9 +89,9 @@ BoundingBox SquareGrid::CalcBoundingBox(uint64_t id)
 	return bbox;
 }
 
-BoundingBox SquareGrid::CalcBoundingBox(uint64_t id, int64_t img_offset_x, int64_t img_offset_y)
+BoundingBox<int32_t> SquareGrid::CalcBoundingBox(uint64_t id, int64_t img_offset_x, int64_t img_offset_y)
 {
-	BoundingBox bbox;
+	BoundingBox<int32_t> bbox;
 	uint32_t x,y;
 	x = id%col_size_;
 	y = row_size_ - id/col_size_;

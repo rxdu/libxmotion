@@ -51,5 +51,5 @@ endif()
 ## Add other sub source directories
 add_subdirectory(map)
 add_subdirectory(geometry)
-add_subdirectory(field)
-add_subdirectory(traffic)
+# add_subdirectory(field)
+# add_subdirectory(traffic)

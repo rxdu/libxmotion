@@ -42,18 +42,11 @@ target_link_libraries(lcm_subscriber_cpp ${LCM_LIBRARIES})
 add_executable(lcm_publisher_cpp lcm_publisher.cpp)
 target_link_libraries(lcm_publisher_cpp ${LCM_LIBRARIES})
 
-#add_executable(uavcan_publisher uavcan_publisher.cpp)
-#add_definitions(-DUAVCAN_CPP_VERSION=UAVCAN_CPP11)
-#target_link_libraries(uavcan_publisher uavcan)
-
-#add_executable(uavcan_subscriber uavcan_subscriber.cpp)
-#add_definitions(-DUAVCAN_CPP_VERSION=UAVCAN_CPP11)
-#target_link_libraries(uavcan_subscriber uavcan)
-
 add_executable(logger_example logger_example.cpp)
 target_link_libraries(logger_example utility)
 
 add_executable(stopwatch_example stopwatch_example.cpp)
+target_link_libraries(stopwatch_example utility)
 
 add_executable(graph_example graph_example.cpp)
 target_link_libraries(graph_example vis map geometry)

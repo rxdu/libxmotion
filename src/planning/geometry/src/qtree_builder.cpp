@@ -44,7 +44,7 @@ std::shared_ptr<QuadTree> QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsig
 		// root level
 		if(grown_depth == 0)
 		{
-			BoundingBox bbox;
+			BoundingBox<int32_t> bbox;
 			bbox.x.min = 0;
 			bbox.x.max = image_map.cols - 1;
 			bbox.y.min = 0;
@@ -82,7 +82,7 @@ std::shared_ptr<QuadTree> QTreeBuilder::BuildQuadTree(cv::InputArray _src, unsig
 				 * 	v
 				 * 	y
 				 */
-				BoundingBox bbox[4];
+				BoundingBox<int32_t> bbox[4];
 				OccupancyType occupancy[4];
 
 				// top left area

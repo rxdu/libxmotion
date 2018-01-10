@@ -8,7 +8,7 @@
 #include <iostream>
 
 #include "rc_car_sim/rc_car_sim_control.h"
-#include "utility/logging/logger.h"
+#include "utility/logging/logger.hpp"
 
 using namespace librav;
 

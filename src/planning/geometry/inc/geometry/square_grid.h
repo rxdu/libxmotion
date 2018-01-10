@@ -32,7 +32,7 @@ namespace librav{
  */
 class SquareCell: public BDSBase<SquareCell>{
 public:
-	SquareCell(uint64_t id, uint32_t col, uint32_t row, BoundingBox bbox, OccupancyType occupancy):
+	SquareCell(uint64_t id, uint32_t col, uint32_t row, BoundingBox<int32_t> bbox, OccupancyType occupancy):
 		BDSBase<SquareCell>(id),
 		occu_(occupancy),
 		geo_mark_id_(0)
@@ -50,7 +50,7 @@ public:
 	Position2Di index_;
 	Position2Di location_;
 	OccupancyType occu_;
-	BoundingBox bbox_;
+	BoundingBox<int32_t> bbox_;
 	uint64_t geo_mark_id_;
 
 	double GetHeuristic(const SquareCell& other_struct) const{
@@ -94,8 +94,8 @@ public:
 	uint32_t cell_size_;
 
 private:
-	BoundingBox CalcBoundingBox(uint64_t id);
-	BoundingBox CalcBoundingBox(uint64_t id, int64_t img_offset_x, int64_t img_offset_y);
+	BoundingBox<int32_t> CalcBoundingBox(uint64_t id);
+	BoundingBox<int32_t> CalcBoundingBox(uint64_t id, int64_t img_offset_x, int64_t img_offset_y);
 
 public:
 	void SetCellOccupancy(uint32_t col, uint32_t row, OccupancyType occ);

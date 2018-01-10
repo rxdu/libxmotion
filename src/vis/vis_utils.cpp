@@ -77,7 +77,7 @@ void VisUtils::DrawArrow(cv::Mat img, cv::Point base_pos, double length, double 
 	line(img, p, tip_pt, color, thickness, line_type);
 }
 
-void VisUtils::FillRectangularArea(cv::Mat img, BoundingBox bbox, const cv::Scalar& color)
+void VisUtils::FillRectangularArea(cv::Mat img, BoundingBox<int32_t> bbox, const cv::Scalar& color)
 {
 	Range rngx(bbox.x.min, bbox.x.max);
 	Range rngy(bbox.y.min, bbox.y.max);

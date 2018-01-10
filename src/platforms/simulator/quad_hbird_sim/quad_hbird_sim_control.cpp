@@ -10,7 +10,7 @@
 #include <iostream>
 
 #include "quad_hbird_sim/quad_hbird_sim_control.h"
-#include "utility/logging/logger.h"
+#include "utility/logging/logger.hpp"
 
 using namespace librav;
 

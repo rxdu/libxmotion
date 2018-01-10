@@ -7,7 +7,7 @@
 
 #include <memory>
 
-#include "utility/librav_utility.h"
+#include "librav_utility.hpp"
 
 using namespace librav;
 

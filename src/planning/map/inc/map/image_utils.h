@@ -37,7 +37,7 @@ typedef struct {
 //
 //	static void CreateOccupancyMapForRRT(uint64_t width, uint64_t height, cv::OutputArray _dst);
 //
-//	static OccupancyType CheckAreaOccupancy(cv::InputArray _src, BoundingBox area);
+//	static OccupancyType CheckAreaOccupancy(cv::InputArray _src, BoundingBox<int32_t> area);
 //	static bool IsPointNonObstacle(cv::InputArray _src, cv::Point pt);
 //};
 
@@ -50,7 +50,7 @@ namespace ImageUtils{
 
 	void CreateOccupancyMapForRRT(uint64_t width, uint64_t height, cv::OutputArray _dst);
 
-	OccupancyType CheckAreaOccupancy(cv::InputArray _src, BoundingBox area);
+	OccupancyType CheckAreaOccupancy(cv::InputArray _src, BoundingBox<int32_t> area);
 	bool IsPointNonObstacle(cv::InputArray _src, cv::Point pt);
 
 };

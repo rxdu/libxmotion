@@ -5,7 +5,7 @@
  *      Author: rdu
  */
 
-#include "logging/logger.h"
+#include "logging/logger.hpp"
 
 #include <iostream>
 #include <sstream>

@@ -9,7 +9,7 @@
 #include <iostream>
 #include <thread>
 
-#include "utility/stopwatch/stopwatch.h"
+#include "stopwatch/stopwatch.h"
 
 int main() 
 {
