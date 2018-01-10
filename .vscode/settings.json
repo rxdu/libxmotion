@@ -53,6 +53,7 @@
         "geometry": "cpp",
         "*.ipp": "cpp",
         "core": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "*.txx": "cpp"
     }
 }

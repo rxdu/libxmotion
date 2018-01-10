@@ -127,7 +127,8 @@ namespace matplot
 	    curve->GetPointData()->SetScalars(yVal);
 
 	    // attach gridfunction to plot
-	    xyplot->AddInput(curve);
+	    // xyplot->AddInput(curve);
+		xyplot->AddDataSetInput(curve);
 
 	    // how to read data
 	    xyplot->SetXValuesToValue();

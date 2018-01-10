@@ -30,8 +30,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 ## Dependency libraries
 find_package(OpenCV REQUIRED)
 
-#find_package(VTK REQUIRED)
-#include(${VTK_USE_FILE})
+## (Optional) Libraries for more advanced plotting 
+find_package(Eigen3 QUIET)
+include_directories(${EIGEN3_INCLUDE_DIR})
+find_package(VTK QUIET)
+include(${VTK_USE_FILE})
 
 ## Add libraries
 set(FASTPLOT_LIB_SRC
@@ -40,21 +43,25 @@ set(FASTPLOT_LIB_SRC
 	src/graph_plot.cpp
 	src/plot_utils.cpp
 )
-add_library(fastplot STATIC ${FASTPLOT_LIB_SRC})
-target_link_libraries(fastplot geometry graph ${OpenCV_LIBS})
+
+if(VTK_FOUND AND EIGEN3_FOUND)
+	set(ADVANCED_PLOT_SRC
+		src/surface_plot.cpp
+	)
+	set(ADV_DEPENDENT_LIBS
+		${OpenCV_LIBS}
+		${VTK_LIBRARIES}
+	)
+else()
+	set(ADVANCED_PLOT_SRC )
+	set(ADV_DEPENDENT_LIBS )
+endif()
+add_library(fastplot STATIC ${FASTPLOT_LIB_SRC} ${ADVANCED_PLOT_SRC})
+target_link_libraries(fastplot geometry graph ${ADV_DEPENDENT_LIBS} ${OpenCV_LIBS})
 target_include_directories(fastplot PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
 	$<INSTALL_INTERFACE:include>
 	PRIVATE src)
 
 # Add executables
-# add_executable(test_dislin tests/test_dislin.cpp)
-# target_link_libraries(test_dislin ${DISLIN_LIBRARIES})
-
-# find_package(PLplot REQUIRED)
-# include_directories(${PLplot_INCLUDE_DIRS})
-
-# add_executable(test_plplot tests/test_plplot.cpp tests/plstream.cc)
-# target_link_libraries(test_plplot ${PLplot_LIBRARIES})
-
 add_subdirectory(tests)

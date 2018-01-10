@@ -47,7 +47,7 @@ void FieldBase<T>::ResizeField(int64_t x, int64_t y)
 template <typename T>
 void FieldBase<T>::SetTileAtLocation(int64_t x, int64_t y, T tile)
 {
-    assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y));
+    assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
 
     field_tiles_[x][y] = tile;
 }
@@ -55,7 +55,7 @@ void FieldBase<T>::SetTileAtLocation(int64_t x, int64_t y, T tile)
 template <typename T>
 T& FieldBase<T>::GetTileAtLocation(int64_t x, int64_t y)
 {
-    assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y));
+    assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
     
     return field_tiles_[x][y];
 }

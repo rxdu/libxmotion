@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
-project(librav_planning_v2)
+project(librav_generic_car)
 
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
@@ -38,9 +38,9 @@ set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add other sub source directories
-add_subdirectory(libgraph)
-add_subdirectory(demo)
-add_subdirectory(geometry)
-add_subdirectory(planner)
-add_subdirectory(map)
+# add_subdirectory(apps)
+# add_subdirectory(expts)
+add_subdirectory(field)
+add_subdirectory(traffic)
+
 

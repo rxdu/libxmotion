@@ -12,6 +12,9 @@ target_link_libraries(test_imgplot fastplot)
 add_executable(test_mapplot test_mapplot.cpp )
 target_link_libraries(test_mapplot fastplot)
 
+add_executable(test_surfplot test_surfplot.cpp )
+target_link_libraries(test_surfplot fastplot)
+
 add_executable(test_graphplot test_graphplot.cpp )
 target_link_libraries(test_graphplot fastplot planner)
 
@@ -21,8 +24,10 @@ target_link_libraries(test_graphplot fastplot planner)
 # add_executable(test_vtk2 test_vtk2.cpp )
 # target_link_libraries(test_vtk2 ${VTK_LIBRARIES})
 
-# add_executable(test_surface test_surface.cpp )
-# target_link_libraries(test_surface ${VTK_LIBRARIES})
+# add_executable(test_surfaceplot test_surfaceplot.cpp )
+# target_link_libraries(test_surfaceplot ${VTK_LIBRARIES})
 
-# add_executable(test_mathgl test_mathgl.cpp )
-# target_link_libraries(test_mathgl ${MATHGL2_LIBRARIES})
+# find_package(Boost REQUIRED)
+# include_directories(${Boost_INCLUDE_DIRS})
+# add_executable(matplot_example matplot/examples.cpp matplot/matplot.cpp matplot/matplot.h matplot/mtl4_dims.h)
+# target_link_libraries(matplot_example ${VTK_LIBRARIES} )

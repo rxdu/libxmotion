@@ -134,7 +134,7 @@ void Surf_VTK::renderer(bool draw_axes, bool draw_colorbar, bool draw_box,
     // filter to geometry primitive
     vtkStructuredGridGeometryFilter *geometry =
 	vtkStructuredGridGeometryFilter::New();
-    geometry->SetInput(gridfunc);
+    geometry->SetInputData(gridfunc);
 
     // warp to fit in box
     vtkWarpScalar *warp = vtkWarpScalar::New();
@@ -168,7 +168,7 @@ void Surf_VTK::renderer(bool draw_axes, bool draw_colorbar, bool draw_box,
     else
 	outlinefilter->SetInputConnection(geometry->GetOutputPort());
     vtkPolyDataMapper *outlineMapper = vtkPolyDataMapper::New();
-    outlineMapper->SetInput(outlinefilter->GetOutput());
+    outlineMapper->SetInputData(outlinefilter->GetOutput());
     vtkActor *outline = vtkActor::New();
     outline->SetMapper(outlineMapper);
     outline->GetProperty()->SetColor(0, 0, 0);
@@ -263,7 +263,7 @@ void Contour_VTK::renderer(bool draw_colorbar, bool draw_surf, int lines)
     // filter to geometry primitive
     vtkRectilinearGridGeometryFilter *geometry =
 	vtkRectilinearGridGeometryFilter::New();
-    geometry->SetInput(gridfunc);
+    geometry->SetInputData(gridfunc);
 
     // map gridfunction
     vtkPolyDataMapper *mapper = vtkPolyDataMapper::New();
@@ -295,7 +295,7 @@ void Contour_VTK::renderer(bool draw_colorbar, bool draw_surf, int lines)
     vtkOutlineFilter *outlinefilter = vtkOutlineFilter::New();
     outlinefilter->SetInputConnection(geometry->GetOutputPort());
     vtkPolyDataMapper *outlineMapper = vtkPolyDataMapper::New();
-    outlineMapper->SetInput(outlinefilter->GetOutput());
+    outlineMapper->SetInputData(outlinefilter->GetOutput());
     vtkActor *outline = vtkActor::New();
     outline->SetMapper(outlineMapper);
     outline->GetProperty()->SetColor(0, 0, 0);
@@ -378,7 +378,7 @@ void Quiver_VTK::renderer(double s)
     // filter to geometry primitive
     vtkRectilinearGridGeometryFilter *geometry =
 	vtkRectilinearGridGeometryFilter::New();
-    geometry->SetInput(gridfunc);
+    geometry->SetInputData(gridfunc);
 
     // make a vector glyph
     vtkGlyphSource2D* vec = vtkGlyphSource2D::New();
@@ -388,7 +388,7 @@ void Quiver_VTK::renderer(double s)
 
     vtkGlyph3D* glyph = vtkGlyph3D::New();
     glyph->SetInputConnection(geometry->GetOutputPort());
-    glyph->SetSource(vec->GetOutput());
+    glyph->SetSourceData(vec->GetOutput());
     glyph->SetColorModeToColorByScalar();
 
     // map gridfunction
@@ -417,7 +417,7 @@ void Quiver_VTK::renderer(double s)
     vtkOutlineFilter *outlinefilter = vtkOutlineFilter::New();
     outlinefilter->SetInputConnection(geometry->GetOutputPort());
     vtkPolyDataMapper *outlineMapper = vtkPolyDataMapper::New();
-    outlineMapper->SetInput(outlinefilter->GetOutput());
+    outlineMapper->SetInputData(outlinefilter->GetOutput());
     vtkActor *outline = vtkActor::New();
     outline->SetMapper(outlineMapper);
     outline->GetProperty()->SetColor(0, 0, 0);
