@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.7.2)
 project(librav_fastplot)
 
 # cmake module path
@@ -30,11 +30,17 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 ## Dependency libraries
 find_package(OpenCV REQUIRED)
 
-## (Optional) Libraries for more advanced plotting 
+## (Optional) Libraries for advanced plotting 
+# Eigen3
 find_package(Eigen3 QUIET)
-include_directories(${EIGEN3_INCLUDE_DIR})
-find_package(VTK QUIET)
-include(${VTK_USE_FILE})
+if(EIGEN3_FOUND)
+	include_directories(${EIGEN3_INCLUDE_DIR})
+endif()
+# VTK
+find_package(VTK 7 QUIET)
+if(VTK_FOUND)
+	include(${VTK_USE_FILE})
+endif()
 
 ## Add libraries
 set(FASTPLOT_LIB_SRC
@@ -45,6 +51,7 @@ set(FASTPLOT_LIB_SRC
 )
 
 if(VTK_FOUND AND EIGEN3_FOUND)
+	message(STATUS "Advanced plotting features will be built.")
 	set(ADVANCED_PLOT_SRC
 		src/surface_plot.cpp
 	)
@@ -53,8 +60,7 @@ if(VTK_FOUND AND EIGEN3_FOUND)
 		${VTK_LIBRARIES}
 	)
 else()
-	set(ADVANCED_PLOT_SRC )
-	set(ADV_DEPENDENT_LIBS )
+	message(STATUS "Eigen3 or VTK 7+ is not found, fastplot will be built without advanced plotting.")
 endif()
 add_library(fastplot STATIC ${FASTPLOT_LIB_SRC} ${ADVANCED_PLOT_SRC})
 target_link_libraries(fastplot geometry graph ${ADV_DEPENDENT_LIBS} ${OpenCV_LIBS})

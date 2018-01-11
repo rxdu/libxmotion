@@ -85,7 +85,7 @@ void SurfacePlot::RenderSurface()
     // warp to fit in box
     vtkSmartPointer<vtkWarpScalar> warp = vtkSmartPointer<vtkWarpScalar>::New();
 
-    bool do_warp = true;
+    bool do_warp = false;
     if (do_warp)
     {
         double scale = 10; //Lxy / Lz;
@@ -100,6 +100,7 @@ void SurfacePlot::RenderSurface()
         mapper->SetInputConnection(warp->GetOutputPort());
     else
         mapper->SetInputConnection(geometry_filter->GetOutputPort());
+
     double tmp[2];
     structured_grid_->GetScalarRange(tmp);
     mapper->SetScalarRange(tmp[0], tmp[1]);
@@ -152,7 +153,7 @@ void SurfacePlot::RenderSurface()
     renderer_->AddActor(surfplot);
     bool draw_box = true;
     bool draw_axes = true;
-    bool draw_colorbar = true;
+    bool draw_colorbar = false;
     if (draw_box)
         renderer_->AddActor(outline);
     if (draw_axes)
@@ -160,7 +161,8 @@ void SurfacePlot::RenderSurface()
     if (draw_colorbar)
         renderer_->AddActor(colorbar);
 
-    renderer_->SetBackground(0.25, 0.25, 0.25);
+    // renderer_->SetBackground(0.25, 0.25, 0.25);
+    renderer_->SetBackground(.2, .3, .4);
 
     render_window_->Render();
     render_window_interactor_->Start();
