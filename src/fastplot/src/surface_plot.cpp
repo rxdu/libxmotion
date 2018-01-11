@@ -29,9 +29,7 @@ SurfacePlot::SurfacePlot()
     structured_grid_ = vtkSmartPointer<vtkStructuredGrid>::New();
     renderer_ = vtkSmartPointer<vtkRenderer>::New();
     render_window_ = vtkSmartPointer<vtkRenderWindow>::New();
-    render_window_->AddRenderer(renderer_);
     render_window_interactor_ = vtkSmartPointer<vtkRenderWindowInteractor>::New();
-    render_window_interactor_->SetRenderWindow(render_window_);
 }
 
 // template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
@@ -163,6 +161,9 @@ void SurfacePlot::RenderSurface()
 
     // renderer_->SetBackground(0.25, 0.25, 0.25);
     renderer_->SetBackground(.2, .3, .4);
+
+    render_window_->AddRenderer(renderer_);
+    render_window_interactor_->SetRenderWindow(render_window_);
 
     render_window_->Render();
     render_window_interactor_->Start();

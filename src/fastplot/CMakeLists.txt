@@ -51,7 +51,7 @@ set(FASTPLOT_LIB_SRC
 )
 
 if(VTK_FOUND AND EIGEN3_FOUND)
-	message(STATUS "Advanced plotting features will be built.")
+	message(STATUS "Fastplot: advanced plotting features will be built")
 	set(ADVANCED_PLOT_SRC
 		src/surface_plot.cpp
 	)
@@ -60,7 +60,7 @@ if(VTK_FOUND AND EIGEN3_FOUND)
 		${VTK_LIBRARIES}
 	)
 else()
-	message(STATUS "Eigen3 or VTK 7+ is not found, fastplot will be built without advanced plotting.")
+	message(STATUS "Fastplot will be built without advanced plotting: Eigen3 or VTK 7+ is not found")
 endif()
 add_library(fastplot STATIC ${FASTPLOT_LIB_SRC} ${ADVANCED_PLOT_SRC})
 target_link_libraries(fastplot geometry graph ${ADV_DEPENDENT_LIBS} ${OpenCV_LIBS})
