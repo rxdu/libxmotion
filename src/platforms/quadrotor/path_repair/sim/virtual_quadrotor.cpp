@@ -532,14 +532,14 @@ void VirtualQuadrotor::CmpStep()
                 shortest_percentage_ = shortend_dist / shortest_path;
                 std::cout << "*********************** finished shortest path run: " << sim_index_ << " ***********************" << std::endl;
 
-                if (shortest_percentage_ - repair_percentage_ > 1e-10)
-                {
-                    std::cout << "-----------> record special case <-----------" << std::endl;
-                    qplanner_->SaveMap(std::to_string(sim_index_));
-                    // repeat simulation
-                    run_flag_ = 1;
-                    abnormal_state_ = true;
-                }
+                // if (shortest_percentage_ - repair_percentage_ > 1e-10)
+                // {
+                //     std::cout << "-----------> record special case <-----------" << std::endl;
+                //     qplanner_->SaveMap(std::to_string(sim_index_));
+                //     // repeat simulation
+                //     run_flag_ = 1;
+                //     abnormal_state_ = true;
+                // }
                 break;
             }
 

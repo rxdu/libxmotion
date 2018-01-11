@@ -54,19 +54,19 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	stopwatch::StopWatch timer;
+	// stopwatch::StopWatch timer;
 
 	// simulation loop
 	while (true)
 	{		
-		timer.tic();
+		// timer.tic();
 
 		vquad.Step();
 		lcm->handleTimeout(0);
 	
-		int64_t duration = LOOP_PERIOD - static_cast<int64_t>(timer.mtoc());
+		// int64_t duration = LOOP_PERIOD - static_cast<int64_t>(timer.mtoc());
 		
-		if(duration > 0)
-			std::this_thread::sleep_for(std::chrono::milliseconds(duration));
+		// if(duration > 0)
+		// 	std::this_thread::sleep_for(std::chrono::milliseconds(duration));
 	}
 }
