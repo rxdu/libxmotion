@@ -24,7 +24,7 @@
 #include "vtkRenderWindow.h"
 #include "vtkRenderWindowInteractor.h"
 #include "vtkTable.h"
-#include "vtkRegressionTestImage.h"
+// #include "vtkRegressionTestImage.h"
 #include "vtkUnsignedCharArray.h"
 #include "vtkVector.h"
 
