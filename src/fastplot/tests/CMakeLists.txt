@@ -24,7 +24,7 @@ target_link_libraries(test_graphplot fastplot planner)
 # add_executable(test_vtk2 test_vtk2.cpp )
 # target_link_libraries(test_vtk2 ${VTK_LIBRARIES})
 
-add_executable(test_surfaceplot test_vtk2.cpp )
+add_executable(test_surfaceplot test_surfaceplot.cpp )
 target_link_libraries(test_surfaceplot ${VTK_LIBRARIES})
 
 # find_package(Boost REQUIRED)
