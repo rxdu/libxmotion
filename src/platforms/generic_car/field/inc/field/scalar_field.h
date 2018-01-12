@@ -5,7 +5,7 @@
  * Description: 
  * 
  * Copyright (c) 2017 Ruixiang Du (rdu)
- */ 
+ */
 
 #ifndef SCALAR_FIELD_H
 #define SCALAR_FIELD_H
@@ -18,15 +18,19 @@ namespace librav
 
 class ScalarField : public FieldBase<double>
 {
-  public:
-    ScalarField() = delete;
-    ScalarField(int64_t size_x, int64_t size_y);
-    ~ScalarField() = default;
+public:
+  ScalarField() = delete;
+  ScalarField(int64_t size_x, int64_t size_y);
+  ~ScalarField() = default;
 
-    void SetValueAtLocation(int64_t x, int64_t y, double val);
-    double GetValueAtLocation(int64_t x, int64_t y);
-    
-    librav_lcm_msgs::ScalarField_t GenerateScalarFieldMsg();
+  void SetValueAtLocation(int64_t x, int64_t y, double val);
+  double GetValueAtLocation(int64_t x, int64_t y);
+
+  librav_lcm_msgs::ScalarField_t GenerateScalarFieldMsg();
+  FieldMatrix GenerateFieldMatrix(double x_start, double x_step, double y_start, double y_step);
+
+private:
+  FieldMatrix field_matrix_;
 };
 }
 

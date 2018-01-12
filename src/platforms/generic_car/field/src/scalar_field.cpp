@@ -43,3 +43,22 @@ librav_lcm_msgs::ScalarField_t ScalarField::GenerateScalarFieldMsg()
 
     return field_msg;
 }
+
+FieldMatrix ScalarField::GenerateFieldMatrix(double x_start, double x_step, double y_start, double y_step)
+{
+    FieldMatrix mat;
+    mat.x.resize(size_x_);
+    mat.y.resize(size_y_);
+    mat.z.resize(size_x_, size_y_);
+
+    for (int64_t i = 0; i < size_x_; ++i)
+        mat.x(i) = x_start + i * x_step;
+    for (int64_t j = 0; j < size_y_; ++j)
+        mat.y(j) = y_start + j * y_step;
+
+    for (int64_t j = 0; j < size_y_; ++j)
+        for (int64_t i = 0; i < size_x_; ++i)
+            mat.z(i, j) = GetTileAtLocation(i, j);
+
+    return mat;
+}

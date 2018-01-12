@@ -9,25 +9,32 @@
 #include "field/field_utils.h"
 #include "field/collision_field.h"
 
+#include "fastplot/surface_plot.hpp"
+
 using namespace librav;
 
 int main()
 {
     auto test_vehicle_field = FieldUtils::CreateTestVehicleField();
 
-    librav_lcm_msgs::ScalarField_t msg = test_vehicle_field->GenerateScalarFieldMsg();
+    FieldMatrix mat = test_vehicle_field->GenerateFieldMatrix(0, 1, 0, 1.5);
+    // plot surface
+    SurfacePlot splot;
+    splot.ShowSurface(mat.x,mat.y,mat.z, true);
+    // splot.SaveSurfaceToFile(x, y, z, "test_surf.png");
+    // librav_lcm_msgs::ScalarField_t msg = test_vehicle_field->GenerateScalarFieldMsg();
 
-    std::cout << "msg generated" << std::endl;
+    // std::cout << "msg generated" << std::endl;
 
-    // set up network first
-    std::shared_ptr<lcm::LCM> lcm = std::make_shared<lcm::LCM>();
-    if (!lcm->good())
-    {
-        std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
-        return -1;
-    }
+    // // set up network first
+    // std::shared_ptr<lcm::LCM> lcm = std::make_shared<lcm::LCM>();
+    // if (!lcm->good())
+    // {
+    //     std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
+    //     return -1;
+    // }
 
-    lcm->publish("ScalarField", &msg);
+    // lcm->publish("ScalarField", &msg);
 
     return 0;
 }

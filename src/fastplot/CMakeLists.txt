@@ -59,14 +59,18 @@ if(VTK_FOUND AND EIGEN3_FOUND)
 		${OpenCV_LIBS}
 		${VTK_LIBRARIES}
 	)
+	set(ADV_INC_DIR
+		${VTK_INCLUDE_DIRS}
+	)
 else()
 	message(STATUS "Fastplot will be built without advanced plotting: Eigen3 or VTK 7+ is not found")
 endif()
 add_library(fastplot STATIC ${FASTPLOT_LIB_SRC} ${ADVANCED_PLOT_SRC})
 target_link_libraries(fastplot geometry graph ${ADV_DEPENDENT_LIBS} ${OpenCV_LIBS})
 target_include_directories(fastplot PUBLIC
+	${ADV_INC_DIR}
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
-	$<INSTALL_INTERFACE:include>
+	$<INSTALL_INTERFACE:include>	
 	PRIVATE src)
 
 # Add executables

@@ -116,7 +116,7 @@ struct StopWatch
   };
 
   // you have to call tic() before calling this function
-  void sleep_ms_util(int64_t period_ms)
+  void sleep_util_ms(int64_t period_ms)
   {
     int64_t duration = period_ms - static_cast<int64_t>(mtoc());
 

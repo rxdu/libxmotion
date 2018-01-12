@@ -30,8 +30,8 @@ public:
   SurfacePlot();
   ~SurfacePlot() = default;
 
-  void SetCameraPosition(double cam_pos[3]);
-  void SetFocalPosition(double foc_pos[3]);
+  void SetCameraPosition(double x, double y, double z);
+  void SetFocalPosition(double x, double y, double z);
 
   template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
   void ShowSurface(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, bool do_warp = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
@@ -42,6 +42,17 @@ public:
     // render and show in window
     RenderSurface(structured_grid, do_warp, wrap_scale_, show_box, show_axes, show_bar);
     ShowRenderToWindow();
+  }
+
+  template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
+  void ShowInteractiveSurface(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, bool do_warp = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
+  {
+    // create a grid
+    vtkSmartPointer<vtkStructuredGrid> structured_grid = CreateStructuredGrid(x, y, z);
+
+    // render and show in window
+    RenderSurface(structured_grid, do_warp, wrap_scale_, show_box, show_axes, show_bar);
+    ShowRenderToWindowWithInteraction();
   }
 
   template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
@@ -56,7 +67,7 @@ public:
   }
 
 private:
-  vtkSmartPointer<vtkStructuredGrid> structured_grid_;
+  // vtkSmartPointer<vtkStructuredGrid> structured_grid_;
   vtkSmartPointer<vtkRenderer> renderer_;
   vtkSmartPointer<vtkRenderWindow> render_window_;
   vtkSmartPointer<vtkRenderWindowInteractor> render_window_interactor_;
@@ -67,6 +78,7 @@ private:
 
   void RenderSurface(vtkSmartPointer<vtkStructuredGrid> structured_grid, bool do_warp, double wrap_scale, bool show_box, bool show_axes, bool show_bar);
   void ShowRenderToWindow();
+  void ShowRenderToWindowWithInteraction();
   void SaveRenderToFile(std::string file_name, int32_t pixel_x = 640, int32_t pixel_y = 480);
 
   template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
@@ -76,6 +88,8 @@ private:
     const int size_x = x.rows();
     const int size_y = y.rows();
     double wrap_scale = 1.0;
+
+    // std::cout << "size x-y-z: " << size_x << " , " << size_y << " , " << z.rows() << " * " << z.cols() << std::endl;
 
     assert(size_x == z.rows());
     assert(size_y == z.cols());

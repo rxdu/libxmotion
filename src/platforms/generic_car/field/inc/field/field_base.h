@@ -13,8 +13,17 @@
 #include <cstdint>
 #include <vector>
 
+#include <Eigen/Dense>
+
 namespace librav
 {
+
+struct FieldMatrix
+{
+  Eigen::VectorXd x;
+  Eigen::VectorXd y;
+  Eigen::MatrixXd z;
+};
 
 template <typename T>
 class FieldBase

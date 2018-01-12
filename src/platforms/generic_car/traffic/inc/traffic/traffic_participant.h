@@ -21,16 +21,17 @@ public:
   TrafficParticipant() = default;
   ~TrafficParticipant() = default;
 
-  Position2Dd position_;
-  Velocity2Dd velocity_;
-
-  virtual void Update(double t, double dt) = 0;
-
   Position2Dd GetPosition() { return position_; };
   Velocity2Dd GetVelocity() { return velocity_; };
 
   void SetPosition(Position2Dd pos) { position_ = pos; };
   void SetVelocity(Velocity2Dd vel) { velocity_ = vel; };
+
+  virtual void Update(double t, double dt) = 0;
+
+protected:
+  Position2Dd position_;
+  Velocity2Dd velocity_;
 };
 }
 

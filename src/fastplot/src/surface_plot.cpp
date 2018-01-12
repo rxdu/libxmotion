@@ -31,7 +31,7 @@ using namespace librav;
 
 SurfacePlot::SurfacePlot()
 {
-    structured_grid_ = vtkSmartPointer<vtkStructuredGrid>::New();
+    // structured_grid_ = vtkSmartPointer<vtkStructuredGrid>::New();
     renderer_ = vtkSmartPointer<vtkRenderer>::New();
     render_window_ = vtkSmartPointer<vtkRenderWindow>::New();
     render_window_interactor_ = vtkSmartPointer<vtkRenderWindowInteractor>::New();
@@ -41,20 +41,28 @@ SurfacePlot::SurfacePlot()
     renderer_->GetActiveCamera()->SetFocalPoint(focal_position_);
 }
 
-void SurfacePlot::SetCameraPosition(double cam_pos[3])
+void SurfacePlot::SetCameraPosition(double x, double y, double z)
 {
-    for (int i = 0; i < 3; i++)
-        camera_position_[i] = cam_pos[i];
+    camera_position_[0] = x;
+    camera_position_[1] = y;
+    camera_position_[2] = z;
 }
 
-void SurfacePlot::SetFocalPosition(double foc_pos[3])
+void SurfacePlot::SetFocalPosition(double x, double y, double z)
 {
-    for (int i = 0; i < 3; i++)
-        focal_position_[i] = foc_pos[i];
+    focal_position_[0] = x;
+    focal_position_[1] = y;
+    focal_position_[2] = z;
 }
 
 void SurfacePlot::RenderSurface(vtkSmartPointer<vtkStructuredGrid> structured_grid, bool do_warp, double wrap_scale, bool show_box, bool show_axes, bool show_bar)
 {
+    // create a new renderer
+    renderer_ = vtkSmartPointer<vtkRenderer>::New();
+    renderer_->GetActiveCamera()->SetViewUp(0, 0, 1);
+    renderer_->GetActiveCamera()->SetPosition(camera_position_);
+    renderer_->GetActiveCamera()->SetFocalPoint(focal_position_);
+
     /**************************** Setup the grid ****************************/
     vtkSmartPointer<vtkStructuredGridGeometryFilter> geometryFilter =
         vtkSmartPointer<vtkStructuredGridGeometryFilter>::New();
@@ -149,6 +157,15 @@ void SurfacePlot::RenderSurface(vtkSmartPointer<vtkStructuredGrid> structured_gr
 }
 
 void SurfacePlot::ShowRenderToWindow()
+{
+    // setup renderer, render window, and interactor
+    render_window_->AddRenderer(renderer_);
+
+    // Render and interact
+    render_window_->Render();
+}
+
+void SurfacePlot::ShowRenderToWindowWithInteraction()
 {
     // setup renderer, render window, and interactor
     render_window_->AddRenderer(renderer_);
