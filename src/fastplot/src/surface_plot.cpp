@@ -24,6 +24,8 @@
 #include <vtkTextActor.h>
 #include <vtkScalarBarActor.h>
 #include <vtkActorCollection.h>
+#include <vtkWindowToImageFilter.h>
+#include <vtkPNGWriter.h>
 
 using namespace librav;
 
@@ -41,13 +43,13 @@ SurfacePlot::SurfacePlot()
 
 void SurfacePlot::SetCameraPosition(double cam_pos[3])
 {
-    for(int i = 0; i < 3; i++)  
+    for (int i = 0; i < 3; i++)
         camera_position_[i] = cam_pos[i];
 }
 
 void SurfacePlot::SetFocalPosition(double foc_pos[3])
 {
-    for(int i = 0; i < 3; i++)  
+    for (int i = 0; i < 3; i++)
         focal_position_[i] = foc_pos[i];
 }
 
@@ -121,7 +123,7 @@ void SurfacePlot::RenderSurface(vtkSmartPointer<vtkStructuredGrid> structured_gr
     text_prop_cb->SetColor(1.0, 1.0, 1.0);
     colorbarActor->SetLabelTextProperty(text_prop_cb);
 
-    /**************************** Setup the rendering ****************************/
+    /**************************** Setup the renderer ****************************/
     // Remove existing actors
     if (renderer_->GetActors() != nullptr)
     {
@@ -144,7 +146,10 @@ void SurfacePlot::RenderSurface(vtkSmartPointer<vtkStructuredGrid> structured_gr
     renderer_->SetBackground(.2, .3, .4);
 
     renderer_->ResetCamera();
+}
 
+void SurfacePlot::ShowRenderToWindow()
+{
     // setup renderer, render window, and interactor
     render_window_->AddRenderer(renderer_);
     render_window_interactor_->SetRenderWindow(render_window_);
@@ -152,4 +157,24 @@ void SurfacePlot::RenderSurface(vtkSmartPointer<vtkStructuredGrid> structured_gr
     // Render and interact
     render_window_->Render();
     render_window_interactor_->Start();
+}
+
+void SurfacePlot::SaveRenderToFile(std::string file_name, int32_t pixel_x, int32_t pixel_y)
+{
+    // setup renderer, render window, and interactor
+    render_window_->SetSize(pixel_x, pixel_y);
+    render_window_->AddRenderer(renderer_);
+    render_window_->Render();
+
+    // save to file
+    vtkSmartPointer<vtkWindowToImageFilter> w2i = vtkSmartPointer<vtkWindowToImageFilter>::New();
+    vtkSmartPointer<vtkPNGWriter> pngfile = vtkSmartPointer<vtkPNGWriter>::New();
+
+    w2i->SetInput(render_window_);
+    w2i->Update();
+
+    pngfile->SetInputConnection(w2i->GetOutputPort());
+    pngfile->SetFileName(file_name.c_str());
+
+    pngfile->Write();
 }
