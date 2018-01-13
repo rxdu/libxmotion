@@ -31,7 +31,8 @@ int main()
 
   // plot surface
   SurfacePlot splot;
-  splot.ShowSurface(x,y,z);
+  // splot.ShowSurface(x,y,z);
+  splot.SaveSurfaceToFile(x,y,z,"test_surf.png");
 
   return 0;
 }
