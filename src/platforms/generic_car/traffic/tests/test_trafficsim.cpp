@@ -25,7 +25,7 @@ int main()
 
         sim.UpdateTraffic();
 
-        timer.sleep_ms_util(LOOP_PERIOD);
+        timer.sleep_until_ms(LOOP_PERIOD);
     }
 
     return 0;
