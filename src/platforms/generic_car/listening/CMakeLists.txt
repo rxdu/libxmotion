@@ -32,4 +32,5 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # Add executables
 
 # Tests
+add_subdirectory(expts)
 add_subdirectory(tests)
