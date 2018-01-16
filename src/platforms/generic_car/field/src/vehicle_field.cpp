@@ -7,7 +7,7 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#include "field/vehicle_field.h"
+#include "field/vehicle_field.hpp"
 
 #include <cmath>
 

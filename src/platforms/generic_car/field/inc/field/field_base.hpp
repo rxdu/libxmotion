@@ -1,5 +1,5 @@
 /* 
- * field.h
+ * field.hpp
  * 
  * Created on: Nov 17, 2017 13:25
  * Description: 
@@ -7,8 +7,8 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#ifndef FIELD_H
-#define FIELD_H
+#ifndef FIELD_HPP
+#define FIELD_HPP
 
 #include <cstdint>
 #include <vector>
@@ -18,7 +18,7 @@
 namespace librav
 {
 
-struct FieldMatrix
+struct ScalarFieldMatrix
 {
   Eigen::VectorXd x;
   Eigen::VectorXd y;
@@ -46,6 +46,6 @@ protected:
 
 }
 
-#include "details/field_base_impl.h"
+#include "details/field_base_impl.hpp"
 
-#endif /* FIELD_H */
+#endif /* FIELD_HPP */

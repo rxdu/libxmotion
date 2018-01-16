@@ -1,5 +1,5 @@
 /* 
- * vehicle_sim.h
+ * vehicle_sim.hpp
  * 
  * Created on: Nov 20, 2017 10:14
  * Description: a simple continuous-time car model
@@ -7,11 +7,11 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#ifndef VEHICLE_SIM_H
-#define VEHICLE_SIM_H
+#ifndef VEHICLE_SIM_HPP
+#define VEHICLE_SIM_HPP
 
 #include "common/librav_types.hpp"
-#include "traffic/traffic_participant.h"
+#include "traffic/traffic_participant.hpp"
 
 namespace librav
 {
@@ -32,4 +32,4 @@ private:
 
 }
 
-#endif /* VEHICLE_SIM_H */
+#endif /* VEHICLE_SIM_HPP */

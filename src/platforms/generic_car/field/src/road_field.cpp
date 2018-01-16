@@ -7,12 +7,12 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#include "field/road_field.h"
+#include "field/road_field.hpp"
 
 using namespace librav;
 
 RoadField::RoadField(int64_t size_x, int64_t size_y) : ScalarField(size_x, size_y),
-                                                       drivable_area_potential_(0.01)
+                                                       drivable_area_potential_(0.05)
 {
 }
 

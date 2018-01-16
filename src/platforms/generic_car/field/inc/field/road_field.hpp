@@ -1,5 +1,5 @@
 /* 
- * road_field.h
+ * road_field.hpp
  * 
  * Created on: Nov 17, 2017 15:32
  * Description: 
@@ -7,11 +7,11 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#ifndef ROAD_FIELD_H
-#define ROAD_FIELD_H
+#ifndef ROAD_FIELD_HPP
+#define ROAD_FIELD_HPP
 
 #include "common/librav_types.hpp"
-#include "field/scalar_field.h"
+#include "field/scalar_field.hpp"
 #include "lcmtypes/librav.hpp"
 
 namespace librav
@@ -31,4 +31,4 @@ class RoadField : public ScalarField
 };
 }
 
-#endif /* ROAD_FIELD_H */
+#endif /* ROAD_FIELD_HPP */

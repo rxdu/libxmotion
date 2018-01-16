@@ -7,19 +7,21 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#include "traffic/traffic_sim.h"
+#include "traffic/traffic_sim.hpp"
 
 using namespace librav;
 
-TrafficSim::TrafficSim() : sim_duration_(0),
-                           start_time_(0),
-                           sim_t_(start_time_),
-                           step_size_(0)
-{
-}
+// TrafficSim::TrafficSim() : sim_duration_(0),
+//                            start_time_(0),
+//                            sim_t_(start_time_),
+//                            step_size_(0)
+// {
+// }
 
-bool TrafficSim::UpdateTraffic()
+bool TrafficSim::UpdateTraffic(int32_t period_ms)
 {
+    timer_.tic();
+
     if(sim_t_ > sim_duration_ + start_time_)
         return true;
 
@@ -29,5 +31,8 @@ bool TrafficSim::UpdateTraffic()
 
     sim_t_ += step_size_;
 
+    if(period_ms > 0)
+        timer_.sleep_until_ms(period_ms);
+        
     return false;
 }

@@ -1,11 +1,11 @@
 #include <iostream>
 
-#include "traffic/traffic_sim.h"
+#include "traffic/traffic_sim.hpp"
 #include "utility/stopwatch/stopwatch.h"
 
 using namespace librav;
 
-#define LOOP_PERIOD 50
+#define LOOP_PERIOD 500
 
 int main()
 {
@@ -16,16 +16,10 @@ int main()
     sim.SetStartTime(0);
     sim.SetStepSize(1);
 
-    stopwatch::StopWatch timer;
-
     // simulation loop
     while (true)
     {
-        timer.tic();
-
-        sim.UpdateTraffic();
-
-        timer.sleep_until_ms(LOOP_PERIOD);
+        sim.UpdateTraffic(LOOP_PERIOD);
     }
 
     return 0;

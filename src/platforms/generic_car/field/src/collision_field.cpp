@@ -7,7 +7,7 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#include "field/collision_field.h"
+#include "field/collision_field.hpp"
 
 using namespace librav;
 

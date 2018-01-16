@@ -7,7 +7,7 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#include "field/field_utils.h"
+#include "field/field_utils.hpp"
 
 using namespace librav;
 

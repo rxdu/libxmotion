@@ -30,11 +30,13 @@ public:
   SurfacePlot();
   ~SurfacePlot() = default;
 
+  // Customization functions
   void SetCameraPosition(double x, double y, double z);
   void SetFocalPosition(double x, double y, double z);
 
+  // This function could be called in a loop to show the changing process of a surface
   template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
-  void ShowSurface(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, bool do_warp = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
+  void ShowSurfaceFrame(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, bool do_warp = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
   {
     // create a grid
     vtkSmartPointer<vtkStructuredGrid> structured_grid = CreateStructuredGrid(x, y, z);
@@ -44,8 +46,9 @@ public:
     ShowRenderToWindow();
   }
 
+  // This function shows the surface with mouse interactions enabled 
   template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
-  void ShowInteractiveSurface(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, bool do_warp = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
+  void ShowSurface(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, bool do_warp = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
   {
     // create a grid
     vtkSmartPointer<vtkStructuredGrid> structured_grid = CreateStructuredGrid(x, y, z);
@@ -55,19 +58,19 @@ public:
     ShowRenderToWindowWithInteraction();
   }
 
+  // This function renders the surface to a file
   template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
-  void SaveSurfaceToFile(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, std::string file_name, bool do_warp = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
+  void SaveSurfaceToFile(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, std::string file_name, int32_t pixel_x = 640, int32_t pixel_y = 480, bool do_warp = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
   {
     // create a grid
     vtkSmartPointer<vtkStructuredGrid> structured_grid = CreateStructuredGrid(x, y, z);
 
     // render and show in window
     RenderSurface(structured_grid, do_warp, wrap_scale_, show_box, show_axes, show_bar);
-    SaveRenderToFile(file_name);
+    SaveRenderToFile(file_name, pixel_x, pixel_y);
   }
 
-private:
-  // vtkSmartPointer<vtkStructuredGrid> structured_grid_;
+protected:
   vtkSmartPointer<vtkRenderer> renderer_;
   vtkSmartPointer<vtkRenderWindow> render_window_;
   vtkSmartPointer<vtkRenderWindowInteractor> render_window_interactor_;

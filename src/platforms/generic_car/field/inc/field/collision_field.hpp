@@ -1,5 +1,5 @@
 /* 
- * collision_field.h
+ * collision_field.hpp
  * 
  * Created on: Nov 17, 2017 11:18
  * Description: This is the field for planning, which may consist of multiple 
@@ -8,14 +8,14 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#ifndef COLLISION_FIELD_H
-#define COLLISION_FIELD_H
+#ifndef COLLISION_FIELD_HPP
+#define COLLISION_FIELD_HPP
 
 #include <memory>
 
-#include "field/scalar_field.h"
-#include "field/road_field.h"
-#include "field/vehicle_field.h"
+#include "field/scalar_field.hpp"
+#include "field/road_field.hpp"
+#include "field/vehicle_field.hpp"
 
 namespace librav
 {
@@ -32,4 +32,4 @@ public:
 };
 }
 
-#endif /* COLLISION_FIELD_H */
+#endif /* COLLISION_FIELD_HPP */

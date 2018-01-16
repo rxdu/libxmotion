@@ -4,12 +4,12 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/librav.hpp"
 
-#include "field/field_base.h"
-#include "field/road_field.h"
-#include "field/field_utils.h"
-#include "field/collision_field.h"
+#include "field/field_base.hpp"
+#include "field/road_field.hpp"
+#include "field/field_utils.hpp"
+#include "field/collision_field.hpp"
 
-#include "fastplot/surface_plot.hpp"
+#include "fastplot/field_plot.hpp"
 
 using namespace librav;
 
@@ -27,11 +27,11 @@ int main()
     // auto test_road_field = FieldUtils::CreateTestRoadField();
     // test_road_field->PrintField();
     auto test_road_field = FieldUtils::CreateDemoRoadField();
-    FieldMatrix mat = test_road_field->GenerateFieldMatrix(0, 1, 0, 1.5);
+    ScalarFieldMatrix mat = test_road_field->GenerateFieldMatrix(0, 1, 0, 1.5);
 
     // plot surface
-    SurfacePlot splot;
-    splot.ShowSurface(mat.x, mat.y, mat.z, false);
+    FieldPlot fplot(2,3);
+    fplot.ShowField(mat.x, mat.y, mat.z, false);
 
     // librav_lcm_msgs::ScalarField_t msg = test_road_field->GenerateScalarFieldMsg();
 

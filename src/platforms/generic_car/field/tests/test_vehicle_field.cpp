@@ -4,10 +4,10 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/librav.hpp"
 
-#include "field/field_base.h"
-#include "field/vehicle_field.h"
-#include "field/field_utils.h"
-#include "field/collision_field.h"
+#include "field/field_base.hpp"
+#include "field/vehicle_field.hpp"
+#include "field/field_utils.hpp"
+#include "field/collision_field.hpp"
 
 #include "fastplot/surface_plot.hpp"
 
@@ -17,7 +17,7 @@ int main()
 {
     auto test_vehicle_field = FieldUtils::CreateTestVehicleField();
 
-    FieldMatrix mat = test_vehicle_field->GenerateFieldMatrix(0, 1, 0, 1.5);
+    ScalarFieldMatrix mat = test_vehicle_field->GenerateFieldMatrix(0, 1, 0, 1.5);
     // plot surface
     SurfacePlot splot;
     splot.ShowSurface(mat.x,mat.y,mat.z, true);

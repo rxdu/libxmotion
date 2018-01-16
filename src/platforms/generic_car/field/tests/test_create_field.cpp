@@ -1,5 +1,5 @@
 #include <iostream>
-#include "field/collision_field.h"
+#include "field/collision_field.hpp"
 
 using namespace librav;
 

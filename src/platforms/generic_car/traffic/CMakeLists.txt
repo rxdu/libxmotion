@@ -11,7 +11,7 @@ set(TRAFFIC_LIB_SRC
     src/traffic_sim.cpp
 )
 add_library(traffic STATIC ${TRAFFIC_LIB_SRC})
-target_link_libraries(traffic common)
+target_link_libraries(traffic common utility)
 target_include_directories(traffic PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
     $<INSTALL_INTERFACE:include>

@@ -4,11 +4,11 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/librav.hpp"
 
-#include "field/collision_field.hpp"
-#include "traffic/traffic_sim.hpp"
+#include "field/collision_field.h"
+#include "traffic/traffic_sim.h"
 #include "stopwatch/stopwatch.h"
 
-#include "fastplot/field_plot.hpp"
+#include "fastplot/surface_plot.hpp"
 
 using namespace librav;
 
@@ -36,7 +36,7 @@ int main()
     sim.vehicle_.SetPosition(Position2Dd(81, 0));
 
     stopwatch::StopWatch timer;
-    FieldPlot surf_plot(200,200);
+    SurfacePlot surf_plot;
     surf_plot.SetCameraPosition(0,100,100);
 
     // simulation loop
@@ -55,7 +55,7 @@ int main()
 
         ScalarFieldMatrix mat = cfield->GenerateFieldMatrix(0, 1, 0, 1.5);
         // plot surface
-        surf_plot.ShowFieldFrame(mat.x, mat.y, mat.z, false);
+        surf_plot.ShowSurfaceFrame(mat.x, mat.y, mat.z, false);
 
         // librav_lcm_msgs::ScalarField_t msg = cfield->GenerateScalarFieldMsg();
         // lcm->publish("ScalarField", &msg);

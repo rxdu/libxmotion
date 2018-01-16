@@ -1,5 +1,5 @@
 /* 
- * scalar_field.h
+ * scalar_field.hpp
  * 
  * Created on: Nov 17, 2017 17:58
  * Description: 
@@ -7,10 +7,10 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#ifndef SCALAR_FIELD_H
-#define SCALAR_FIELD_H
+#ifndef SCALAR_FIELD_HPP
+#define SCALAR_FIELD_HPP
 
-#include "field/field_base.h"
+#include "field/field_base.hpp"
 #include "lcmtypes/librav.hpp"
 
 namespace librav
@@ -27,11 +27,11 @@ public:
   double GetValueAtLocation(int64_t x, int64_t y);
 
   librav_lcm_msgs::ScalarField_t GenerateScalarFieldMsg();
-  FieldMatrix GenerateFieldMatrix(double x_start, double x_step, double y_start, double y_step);
+  ScalarFieldMatrix GenerateFieldMatrix(double x_start, double x_step, double y_start, double y_step);
 
 private:
-  FieldMatrix field_matrix_;
+  ScalarFieldMatrix field_matrix_;
 };
 }
 
-#endif /* SCALAR_FIELD_H */
+#endif /* SCALAR_FIELD_HPP */

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cmath>
 
-#include "fastplot/surface_plot.hpp"
+#include "fastplot/field_plot.hpp"
 
 using namespace librav;
 
@@ -30,8 +30,8 @@ int main()
     }
 
   // plot surface
-  SurfacePlot splot;
-  splot.ShowSurface(x,y,z);
+  FieldPlot fplot(20,20);
+  fplot.ShowField(x,y,z);
   // splot.SaveSurfaceToFile(x,y,z,"test_surf.png",1024,768);
 
   return 0;

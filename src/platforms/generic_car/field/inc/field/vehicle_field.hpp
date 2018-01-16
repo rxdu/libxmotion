@@ -1,5 +1,5 @@
 /* 
- * vehicle_field.h
+ * vehicle_field.hpp
  * 
  * Created on: Nov 17, 2017 17:49
  * Description: 
@@ -7,12 +7,12 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#ifndef VEHICLE_FIELD_H
-#define VEHICLE_FIELD_H
+#ifndef VEHICLE_FIELD_HPP
+#define VEHICLE_FIELD_HPP
 
 #include "lcmtypes/librav.hpp"
 
-#include "field/scalar_field.h"
+#include "field/scalar_field.hpp"
 #include "common/librav_types.hpp"
 
 namespace librav
@@ -34,4 +34,4 @@ class VehicleField : public ScalarField
 };
 }
 
-#endif /* VEHICLE_FIELD_H */
+#endif /* VEHICLE_FIELD_HPP */

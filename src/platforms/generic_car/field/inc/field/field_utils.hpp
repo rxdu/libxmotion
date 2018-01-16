@@ -1,5 +1,5 @@
 /* 
- * field_utils.h
+ * field_utils.hpp
  * 
  * Created on: Nov 17, 2017 15:48
  * Description: 
@@ -7,13 +7,13 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#ifndef FIELD_UTILS_H
-#define FIELD_UTILS_H
+#ifndef FIELD_UTILS_HPP
+#define FIELD_UTILS_HPP
 
 #include <memory>
 
-#include "field/road_field.h"
-#include "field/vehicle_field.h"
+#include "field/road_field.hpp"
+#include "field/vehicle_field.hpp"
 
 namespace librav
 {
@@ -28,4 +28,4 @@ namespace FieldUtils
 
 }
 
-#endif /* FIELD_UTILS_H */
+#endif /* FIELD_UTILS_HPP */

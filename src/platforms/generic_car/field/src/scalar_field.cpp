@@ -7,7 +7,7 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#include "field/scalar_field.h"
+#include "field/scalar_field.hpp"
 
 using namespace librav;
 
@@ -44,9 +44,9 @@ librav_lcm_msgs::ScalarField_t ScalarField::GenerateScalarFieldMsg()
     return field_msg;
 }
 
-FieldMatrix ScalarField::GenerateFieldMatrix(double x_start, double x_step, double y_start, double y_step)
+ScalarFieldMatrix ScalarField::GenerateFieldMatrix(double x_start, double x_step, double y_start, double y_step)
 {
-    FieldMatrix mat;
+    ScalarFieldMatrix mat;
     mat.x.resize(size_x_);
     mat.y.resize(size_y_);
     mat.z.resize(size_x_, size_y_);

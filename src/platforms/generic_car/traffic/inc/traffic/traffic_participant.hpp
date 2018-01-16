@@ -1,5 +1,5 @@
 /* 
- * traffic_participant.h
+ * traffic_participant.hpp
  * 
  * Created on: Nov 20, 2017 10:31
  * Description: 
@@ -7,8 +7,8 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#ifndef TRAFFIC_PARTICIPANT_H
-#define TRAFFIC_PARTICIPANT_H
+#ifndef TRAFFIC_PARTICIPANT_HPP
+#define TRAFFIC_PARTICIPANT_HPP
 
 #include "common/librav_types.hpp"
 
@@ -35,4 +35,4 @@ protected:
 };
 }
 
-#endif /* TRAFFIC_PARTICIPANT_H */
+#endif /* TRAFFIC_PARTICIPANT_HPP */

@@ -7,7 +7,7 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#include "traffic/vehicle_sim.h"
+#include "traffic/vehicle_sim.hpp"
 
 using namespace librav;
 

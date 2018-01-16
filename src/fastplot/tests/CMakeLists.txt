@@ -15,6 +15,9 @@ target_link_libraries(test_mapplot fastplot)
 add_executable(test_surfplot test_surfplot.cpp )
 target_link_libraries(test_surfplot fastplot)
 
+add_executable(test_fieldplot test_fieldplot.cpp )
+target_link_libraries(test_fieldplot fastplot)
+
 add_executable(test_graphplot test_graphplot.cpp )
 target_link_libraries(test_graphplot fastplot planner)
 
@@ -24,8 +27,8 @@ target_link_libraries(test_graphplot fastplot planner)
 # add_executable(test_vtk2 test_vtk2.cpp )
 # target_link_libraries(test_vtk2 ${VTK_LIBRARIES})
 
-add_executable(test_surfaceplot test_surfaceplot.cpp )
-target_link_libraries(test_surfaceplot ${VTK_LIBRARIES})
+# add_executable(test_surfaceplot test_surfaceplot.cpp )
+# target_link_libraries(test_surfaceplot ${VTK_LIBRARIES})
 
 # find_package(Boost REQUIRED)
 # include_directories(${Boost_INCLUDE_DIRS})

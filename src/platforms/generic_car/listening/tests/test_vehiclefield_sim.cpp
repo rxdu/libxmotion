@@ -4,8 +4,8 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/librav.hpp"
 
-#include "field/vehicle_field.h"
-#include "traffic/traffic_sim.h"
+#include "field/vehicle_field.hpp"
+#include "traffic/traffic_sim.hpp"
 #include "stopwatch/stopwatch.h"
 
 using namespace librav;
@@ -51,7 +51,7 @@ int main()
         lcm->publish("ScalarField", &msg);
         std::cout << "scalar field msg published" << std::endl;
 
-        timer.sleep_util_ms(LOOP_PERIOD);
+        timer.sleep_until_ms(LOOP_PERIOD);
     }
 
     return 0;

@@ -1,5 +1,5 @@
 /* 
- * field_impl.h
+ * field_impl.hpp
  * 
  * Created on: Nov 17, 2017 15:12
  * Description: 
@@ -7,8 +7,8 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#ifndef FIELD_IMPL_H
-#define FIELD_IMPL_H
+#ifndef FIELD_IMPL_HPP
+#define FIELD_IMPL_HPP
 
 #include <cassert>
 #include <iostream>
@@ -69,4 +69,4 @@ void FieldBase<T>::PrintField() const
 }
 }
 
-#endif /* FIELD_IMPL_H */
+#endif /* FIELD_IMPL_HPP */
