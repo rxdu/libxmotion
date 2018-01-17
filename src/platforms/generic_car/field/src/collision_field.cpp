@@ -12,37 +12,62 @@
 using namespace librav;
 
 CollisionField::CollisionField(int64_t size_x, int64_t size_y)
-    : ScalarField(size_x, size_y),
-      road_field_(std::make_shared<RoadField>(size_x, size_y)),
-      vehicle_field_(std::make_shared<VehicleField>(size_x, size_y)) {
-  // for (int64_t x = 26; x < 26 + 37 * 2; ++x)
-  // {
-  //     for(int64_t y = 0; y < 200; ++y)
-  //         road_field_->SetLocationDrivable(x,y);
-  // }
+    : ScalarField(size_x, size_y)
+{
+}
 
-  // for (int64_t x = 100; x < 200; ++x)
-  // {
-  //     for(int64_t y = 100; y < 174; ++y)
-  //         road_field_->SetLocationDrivable(x,y);
-  // }
+void CollisionField::CreateAndAddVehicleField(int32_t id)
+{
+    vehicle_fields_.emplace(std::make_pair(id, std::make_shared<VehicleField>(size_x_, size_y_)));
 }
 
 void CollisionField::AddVehicleField(int32_t id,
-                                     std::shared_ptr<VehicleField> vfield) {
+                                     std::shared_ptr<VehicleField> vfield)
+{
+  assert(vfield->SizeX() == this->size_x_ && vfield->SizeY() == this->size_y_);
+
   vehicle_fields_.emplace(std::make_pair(id, vfield));
 }
 
-void CollisionField::RemoveVehicleField(int32_t id) {
+std::shared_ptr<VehicleField> CollisionField::GetVehicleField(int32_t id)
+{
+  assert(vehicle_fields_.find(id) != vehicle_fields_.end());
+
+  return vehicle_fields_[id];
+}
+
+void CollisionField::RemoveVehicleField(int32_t id)
+{
   vehicle_fields_.erase(id);
 }
 
-void CollisionField::CombineAllFields() {
-  for (int64_t i = 0; i < size_x_; ++i) {
-    for (int64_t j = 0; j < size_y_; ++j) {
-      // double road_val = road_field_->GetValueAtLocation(i,j);
-      double vehicle_val = vehicle_field_->GetValueAtLocation(i, j);
-      //   SetValueAtLocation(i, j, road_val + vehicle_val);
+void CollisionField::UpdateCollisionField()
+{
+  // update distribution of subfields first
+  for (const auto &vf : vehicle_fields_)
+    vf.second->UpdateDistribution();
+
+  for (int64_t i = 0; i < size_x_; ++i)
+  {
+    for (int64_t j = 0; j < size_y_; ++j)
+    {
+      double vehicle_val = 0;
+      for (const auto &vf : vehicle_fields_)
+        vehicle_val += vf.second->GetValueAtLocation(i, j);
+      SetValueAtLocation(i, j, vehicle_val);
+    }
+  }
+}
+
+void CollisionField::CombineChildFieldsWithNoUpdate()
+{
+  for (int64_t i = 0; i < size_x_; ++i)
+  {
+    for (int64_t j = 0; j < size_y_; ++j)
+    {
+      double vehicle_val = 0;
+      for (const auto &vf : vehicle_fields_)
+        vehicle_val += vf.second->GetValueAtLocation(i, j);
       SetValueAtLocation(i, j, vehicle_val);
     }
   }

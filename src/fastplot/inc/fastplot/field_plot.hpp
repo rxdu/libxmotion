@@ -5,7 +5,7 @@
  * Description: specialized version of surface plot
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
- */ 
+ */
 
 #ifndef FIELD_PLOT_HPP
 #define FIELD_PLOT_HPP
@@ -34,6 +34,14 @@ public:
   FieldPlot() = delete;
   ~FieldPlot() = default;
 
+  // Final scale factor = std::min(x_range, y_range)/ z_range / wrap_scale_factor_;
+  // This factor controls how much you want to increase the scale of z values so that
+  //  it's easier to see the height difference on the field plane.
+  void SetWrapScale(double scale)
+  {
+    wrap_scale_factor_ = scale;
+  }
+
   // This function could be called in a loop to show the changing process of a surface
   template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
   void ShowFieldFrame(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, bool do_warp = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
@@ -46,7 +54,7 @@ public:
     ShowRenderToWindow();
   }
 
-  // This function shows the surface with mouse interactions enabled 
+  // This function shows the surface with mouse interactions enabled
   template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
   void ShowField(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, bool do_warp = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
   {
@@ -73,6 +81,7 @@ public:
 private:
   int64_t field_size_x_;
   int64_t field_size_y_;
+  double wrap_scale_factor_ = 1.0;
 
   void RenderField(vtkSmartPointer<vtkStructuredGrid> structured_grid, bool do_warp, double wrap_scale, bool show_box, bool show_axes, bool show_bar);
 };

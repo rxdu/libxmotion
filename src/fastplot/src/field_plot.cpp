@@ -52,7 +52,7 @@ void FieldPlot::RenderField(vtkSmartPointer<vtkStructuredGrid> structured_grid, 
     vtkSmartPointer<vtkWarpScalar> warp = vtkSmartPointer<vtkWarpScalar>::New();
     warp->SetInputConnection(geometryFilter->GetOutputPort());
     warp->XYPlaneOn();
-    warp->SetScaleFactor(wrap_scale);
+    warp->SetScaleFactor(wrap_scale/wrap_scale_factor_);
 
     // create a grid mapper and actor
     vtkSmartPointer<vtkDataSetMapper> gridMapper = vtkSmartPointer<vtkDataSetMapper>::New();

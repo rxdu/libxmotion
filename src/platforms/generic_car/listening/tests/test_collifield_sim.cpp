@@ -36,12 +36,18 @@ int main()
     sim.vehicle_.SetPosition(Position2Dd(81, 0));
 
     stopwatch::StopWatch timer;
-    FieldPlot surf_plot(200,200);
-    surf_plot.SetCameraPosition(0,100,100);
+    FieldPlot surf_plot(200, 200);
+    surf_plot.SetCameraPosition(0, 100, 100);
 
-    // simulation loop
+    // simulation loop flags
     bool sim_finished = false;
     bool first_run = true;
+
+    // add vehicle field
+    auto vehicle_field1 = std::make_shared<VehicleField>(200, 200);
+    cfield->AddVehicleField(1, vehicle_field1);
+
+    // start simulation
     while (!sim_finished)
     {
         timer.tic();
@@ -49,12 +55,11 @@ int main()
         sim_finished = sim.UpdateTraffic();
 
         auto pos = sim.vehicle_.GetPosition();
-        cfield->vehicle_field_->SetCarPosition(static_cast<int64_t>(pos.x), static_cast<int64_t>(pos.y));
-        cfield->vehicle_field_->UpdateDistribution();
-        cfield->CombineAllFields();
+        vehicle_field1->SetCarPosition(static_cast<int64_t>(pos.x), static_cast<int64_t>(pos.y));
+        cfield->UpdateCollisionField();
 
-        ScalarFieldMatrix mat = cfield->GenerateFieldMatrix(0, 1, 0, 1.5);
         // plot surface
+        ScalarFieldMatrix mat = cfield->GenerateFieldMatrix(0, 1, 0, 1.5);
         surf_plot.ShowFieldFrame(mat.x, mat.y, mat.z, false);
 
         // librav_lcm_msgs::ScalarField_t msg = cfield->GenerateScalarFieldMsg();

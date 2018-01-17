@@ -54,6 +54,7 @@
         "*.ipp": "cpp",
         "core": "cpp",
         "vector": "cpp",
-        "*.txx": "cpp"
+        "*.txx": "cpp",
+        "unordered_map": "cpp"
     }
 }

@@ -32,6 +32,8 @@ public:
   FieldBase();
   FieldBase(int64_t size_x, int64_t size_y);
 
+  int64_t SizeX() const { return size_x_; };
+  int64_t SizeY() const { return size_y_; };
   void PrintField() const;
 
 protected:
@@ -41,9 +43,8 @@ protected:
 
   void ResizeField(int64_t x, int64_t y);
   void SetTileAtLocation(int64_t x, int64_t y, T tile);
-  T& GetTileAtLocation(int64_t x, int64_t y);
+  T &GetTileAtLocation(int64_t x, int64_t y);
 };
-
 }
 
 #include "details/field_base_impl.hpp"
