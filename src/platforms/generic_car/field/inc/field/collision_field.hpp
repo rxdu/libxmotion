@@ -14,6 +14,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <cstdint>
 
 #include "field/threat_basis.hpp"
 
@@ -27,7 +28,9 @@ public:
 
   void UpdateCollisionField();
 
-  void LoadPredefinedBasisPattern();
+  void LoadEgoCenteredBasisPattern(int32_t radius_step_size, double angle_step_size);
+  void LoadUniformBasisPattern(int32_t x_step, int32_t y_step);
+
   void AddThreatBasisField(int32_t id, std::shared_ptr<ThreatBasis> tfield);
 
   std::shared_ptr<ThreatBasis> GetThreatBasisField(int32_t id);

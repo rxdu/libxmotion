@@ -11,7 +11,6 @@
 #define SCALAR_FIELD_HPP
 
 #include "field/field_base.hpp"
-#include "lcmtypes/librav.hpp"
 
 namespace librav
 {
@@ -35,7 +34,6 @@ public:
 
   // for visualization/debugging purpose
   void PrintField(bool pretty = false) const;
-  librav_lcm_msgs::ScalarField_t GenerateScalarFieldMsg();
   ScalarFieldMatrix GenerateFieldMatrix(double x_start, double x_step, double y_start, double y_step, bool normalize_z = false);
 
 protected:

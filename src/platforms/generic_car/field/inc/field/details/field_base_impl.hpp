@@ -50,7 +50,7 @@ void FieldBase<T>::ResizeField(int64_t x, int64_t y)
 template <typename T>
 void FieldBase<T>::SetTileAtFieldCoordinate(int64_t x, int64_t y, T tile)
 {
-    auto internal_coordinate = GetInternalCoordinate(x, y);
+    auto internal_coordinate = ConvertToRawCoordinate(x, y);
     assert((internal_coordinate.GetX() >= 0) && (internal_coordinate.GetX() < size_x_) && (internal_coordinate.GetY() >= 0) && (internal_coordinate.GetY() < size_y_));
 
     field_tiles_[internal_coordinate.GetX()][internal_coordinate.GetY()] = tile;
@@ -59,7 +59,7 @@ void FieldBase<T>::SetTileAtFieldCoordinate(int64_t x, int64_t y, T tile)
 template <typename T>
 T &FieldBase<T>::GetTileAtFieldCoordinate(int64_t x, int64_t y)
 {
-    auto internal_coordinate = GetInternalCoordinate(x, y);
+    auto internal_coordinate = ConvertToRawCoordinate(x, y);
     assert((internal_coordinate.GetX() >= 0) && (internal_coordinate.GetX() < size_x_) && (internal_coordinate.GetY() >= 0) && (internal_coordinate.GetY() < size_y_));
 
     return field_tiles_[internal_coordinate.GetX()][internal_coordinate.GetY()];
@@ -82,10 +82,19 @@ T &FieldBase<T>::GetTileAtRawCoordinate(int64_t x, int64_t y)
 }
 
 template <typename T>
-FieldCoordinate FieldBase<T>::GetInternalCoordinate(int64_t x, int64_t y)
+FieldCoordinate FieldBase<T>::ConvertToRawCoordinate(int64_t x, int64_t y)
 {
+    assert((x > -size_x_) && (x < size_x_) && (y > -size_y_) && (y < size_y_));
+
     return FieldCoordinate(x + origin_x_, y + origin_y_);
 }
-}
 
+template <typename T>
+FieldCoordinate FieldBase<T>::ConvertToFieldCoordinate(int64_t x, int64_t y)
+{
+    assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
+
+    return FieldCoordinate(x - origin_x_, y + origin_y_);
+}
+}
 #endif /* FIELD_IMPL_HPP */

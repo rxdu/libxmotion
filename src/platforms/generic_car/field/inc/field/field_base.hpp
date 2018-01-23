@@ -99,12 +99,12 @@ protected:
   // operations WRT coordinate of field
   void SetTileAtFieldCoordinate(int64_t x, int64_t y, T tile);
   T &GetTileAtFieldCoordinate(int64_t x, int64_t y);
-  // operations WRT coordinate of internal data structure directly 
+  // operations WRT coordinate of internal data structure directly
   void SetTileAtRawCoordinate(int64_t x, int64_t y, T tile);
   T &GetTileAtRawCoordinate(int64_t x, int64_t y);
-
-private:
-  FieldCoordinate GetInternalCoordinate(int64_t x, int64_t y);
+  // convertion between two coordinates
+  FieldCoordinate ConvertToRawCoordinate(int64_t x, int64_t y);
+  FieldCoordinate ConvertToFieldCoordinate(int64_t x, int64_t y);
 };
 }
 

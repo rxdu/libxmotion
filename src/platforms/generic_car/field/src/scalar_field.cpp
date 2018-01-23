@@ -19,31 +19,13 @@ ScalarField::ScalarField(int64_t size_x, int64_t size_y) : FieldBase<double>(siz
 
 void ScalarField::SetValueAtCoordinate(int64_t x, int64_t y, double val)
 {
-    SetTileAtFieldCoordinate(x, y, val);
+    SetTileAtRawCoordinate(x, y, val);
 }
 
 double ScalarField::GetValueAtCoordinate(int64_t x, int64_t y)
 {
-    double val = GetTileAtFieldCoordinate(x, y);
+    double val = GetTileAtRawCoordinate(x, y);
     return val;
-}
-
-librav_lcm_msgs::ScalarField_t ScalarField::GenerateScalarFieldMsg()
-{
-    librav_lcm_msgs::ScalarField_t field_msg;
-    field_msg.size_x = size_x_;
-    field_msg.size_y = size_y_;
-    field_msg.value.resize(size_x_);
-    for (int64_t i = 0; i < size_x_; ++i)
-    {
-        field_msg.value[i].resize(size_y_);
-        for (int64_t j = 0; j < size_y_; ++j)
-        {
-            field_msg.value[i][j] = GetTileAtFieldCoordinate(i, j);
-        }
-    }
-
-    return field_msg;
 }
 
 ScalarFieldMatrix ScalarField::GenerateFieldMatrix(double x_start, double x_step, double y_start, double y_step, bool normalize_z)
@@ -59,7 +41,7 @@ ScalarFieldMatrix ScalarField::GenerateFieldMatrix(double x_start, double x_step
 
     for (int64_t j = 0; j < size_y_; ++j)
         for (int64_t i = 0; i < size_x_; ++i)
-            field_matrix_.z(i, j) = GetTileAtFieldCoordinate(i, j);
+            field_matrix_.z(i, j) = GetTileAtRawCoordinate(i, j);
 
     if (normalize_z)
         field_matrix_.z = field_matrix_.z / field_matrix_.z.maxCoeff() * 1.0;
