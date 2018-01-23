@@ -54,6 +54,7 @@ if(VTK_FOUND AND EIGEN3_FOUND)
 	message(STATUS "Fastplot: advanced plotting features will be built")
 	set(ADVANCED_PLOT_SRC
 		src/surface_plot.cpp
+		src/contour_plot.cpp
 		src/field_plot.cpp
 	)
 	set(ADV_DEPENDENT_LIBS

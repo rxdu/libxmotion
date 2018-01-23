@@ -3,6 +3,7 @@
 #include "field/collision_field.hpp"
 
 #include "fastplot/field_plot.hpp"
+#include "fastplot/contour_plot.hpp"
 #include "stopwatch/stopwatch.h"
 
 using namespace librav;
@@ -23,9 +24,12 @@ int main()
     ScalarFieldMatrix mat = cfield.GenerateFieldMatrix(0, 1, 0, 1, true);
 
     // plot surface
-    FieldPlot fplot(50, 50);
-    fplot.SetWrapScale(4.0);
-    fplot.ShowField(mat.x, mat.y, mat.z, true);
+    // FieldPlot fplot(50, 50);
+    // fplot.SetWrapScale(4.0);
+    // fplot.ShowField(mat.x, mat.y, mat.z, true);
+
+    ContourPlot cplot;
+    cplot.ShowContour(mat.x, mat.y, mat.z, true);
 
     return 0;
 }
