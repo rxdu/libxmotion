@@ -16,59 +16,49 @@ CollisionField::CollisionField(int64_t size_x, int64_t size_y)
 {
 }
 
-void CollisionField::CreateAndAddVehicleField(int32_t id)
+void CollisionField::LoadPredefinedBasisPattern()
 {
-    vehicle_fields_.emplace(std::make_pair(id, std::make_shared<VehicleField>(size_x_, size_y_)));
+  // distribute the basis around the center of field
+  // std::vector
+  // for ()
+    // auto basis = std::make_shared<ThreatBasis>(size_x_, size_y_);
 }
 
-void CollisionField::AddVehicleField(int32_t id,
-                                     std::shared_ptr<VehicleField> vfield)
+void CollisionField::CreateAndAddThreatBasisField(int64_t x, int64_t y, int32_t id)
 {
-  assert(vfield->SizeX() == this->size_x_ && vfield->SizeY() == this->size_y_);
-
-  vehicle_fields_.emplace(std::make_pair(id, vfield));
+  threat_basis_fields_.emplace(std::make_pair(id, std::make_shared<ThreatBasis>(size_x_, size_y_)));
 }
 
-std::shared_ptr<VehicleField> CollisionField::GetVehicleField(int32_t id)
+void CollisionField::AddThreatBasisField(int32_t id,
+                                         std::shared_ptr<ThreatBasis> tfield)
 {
-  assert(vehicle_fields_.find(id) != vehicle_fields_.end());
+  assert(tfield->SizeX() == this->size_x_ && tfield->SizeY() == this->size_y_);
 
-  return vehicle_fields_[id];
+  threat_basis_fields_.emplace(std::make_pair(id, tfield));
 }
 
-void CollisionField::RemoveVehicleField(int32_t id)
+std::shared_ptr<ThreatBasis> CollisionField::GetThreatBasisField(int32_t id)
 {
-  vehicle_fields_.erase(id);
+  assert(threat_basis_fields_.find(id) != threat_basis_fields_.end());
+
+  return threat_basis_fields_[id];
+}
+
+void CollisionField::RemoveThreatBasisField(int32_t id)
+{
+  threat_basis_fields_.erase(id);
 }
 
 void CollisionField::UpdateCollisionField()
 {
-  // update distribution of subfields first
-  for (const auto &vf : vehicle_fields_)
-    vf.second->UpdateDistribution();
-
   for (int64_t i = 0; i < size_x_; ++i)
   {
     for (int64_t j = 0; j < size_y_; ++j)
     {
       double vehicle_val = 0;
-      for (const auto &vf : vehicle_fields_)
-        vehicle_val += vf.second->GetValueAtLocation(i, j);
-      SetValueAtLocation(i, j, vehicle_val);
-    }
-  }
-}
-
-void CollisionField::CombineChildFieldsWithNoUpdate()
-{
-  for (int64_t i = 0; i < size_x_; ++i)
-  {
-    for (int64_t j = 0; j < size_y_; ++j)
-    {
-      double vehicle_val = 0;
-      for (const auto &vf : vehicle_fields_)
-        vehicle_val += vf.second->GetValueAtLocation(i, j);
-      SetValueAtLocation(i, j, vehicle_val);
+      for (const auto &tfd : threat_basis_fields_)
+        vehicle_val += tfd.second->GetValueAtCoordinate(i, j);
+      SetValueAtCoordinate(i, j, vehicle_val);
     }
   }
 }

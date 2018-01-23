@@ -16,6 +16,13 @@
 namespace librav
 {
 
+struct ScalarFieldMatrix
+{
+  Eigen::VectorXd x;
+  Eigen::VectorXd y;
+  Eigen::MatrixXd z;
+};
+
 class ScalarField : public FieldBase<double>
 {
 public:
@@ -23,13 +30,15 @@ public:
   ScalarField(int64_t size_x, int64_t size_y);
   ~ScalarField() = default;
 
-  void SetValueAtLocation(int64_t x, int64_t y, double val);
-  double GetValueAtLocation(int64_t x, int64_t y);
+  void SetValueAtCoordinate(int64_t x, int64_t y, double val);
+  double GetValueAtCoordinate(int64_t x, int64_t y);
 
+  // for visualization/debugging purpose
+  void PrintField(bool pretty = false) const;
   librav_lcm_msgs::ScalarField_t GenerateScalarFieldMsg();
-  ScalarFieldMatrix GenerateFieldMatrix(double x_start, double x_step, double y_start, double y_step);
+  ScalarFieldMatrix GenerateFieldMatrix(double x_start, double x_step, double y_start, double y_step, bool normalize_z = false);
 
-private:
+protected:
   ScalarFieldMatrix field_matrix_;
 };
 }

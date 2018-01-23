@@ -7,10 +7,12 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # Add libraries
 set(FIELD_LIB_SRC
     src/scalar_field.cpp
-    src/road_field.cpp
-    src/vehicle_field.cpp
+    src/threat_basis.cpp
+    src/threat_distribution.cpp
+    # src/road_field.cpp
+    # src/vehicle_field.cpp
     src/collision_field.cpp
-    src/field_utils.cpp
+    # src/field_utils.cpp
 )
 add_library(field STATIC ${FIELD_LIB_SRC})
 target_link_libraries(field common)

@@ -17,12 +17,6 @@ namespace librav
 {
 
 template <typename T>
-FieldBase<T>::FieldBase() : size_x_(0),
-                            size_y_(0)
-{
-}
-
-template <typename T>
 FieldBase<T>::FieldBase(int64_t size_x, int64_t size_y) : size_x_(size_x),
                                                           size_y_(size_y)
 {
@@ -35,8 +29,17 @@ FieldBase<T>::FieldBase(int64_t size_x, int64_t size_y) : size_x_(size_x),
 }
 
 template <typename T>
+void FieldBase<T>::SetOriginCoordinate(int64_t origin_x, int64_t origin_y)
+{
+    origin_x_ = origin_x;
+    origin_y_ = origin_y;
+}
+
+template <typename T>
 void FieldBase<T>::ResizeField(int64_t x, int64_t y)
 {
+    assert(x > origin_x_ && y > origin_y_);
+
     field_tiles_.resize(x);
     for (auto &tile_array : field_tiles_)
     {
@@ -45,7 +48,25 @@ void FieldBase<T>::ResizeField(int64_t x, int64_t y)
 }
 
 template <typename T>
-void FieldBase<T>::SetTileAtLocation(int64_t x, int64_t y, T tile)
+void FieldBase<T>::SetTileAtFieldCoordinate(int64_t x, int64_t y, T tile)
+{
+    auto internal_coordinate = GetInternalCoordinate(x, y);
+    assert((internal_coordinate.GetX() >= 0) && (internal_coordinate.GetX() < size_x_) && (internal_coordinate.GetY() >= 0) && (internal_coordinate.GetY() < size_y_));
+
+    field_tiles_[internal_coordinate.GetX()][internal_coordinate.GetY()] = tile;
+}
+
+template <typename T>
+T &FieldBase<T>::GetTileAtFieldCoordinate(int64_t x, int64_t y)
+{
+    auto internal_coordinate = GetInternalCoordinate(x, y);
+    assert((internal_coordinate.GetX() >= 0) && (internal_coordinate.GetX() < size_x_) && (internal_coordinate.GetY() >= 0) && (internal_coordinate.GetY() < size_y_));
+
+    return field_tiles_[internal_coordinate.GetX()][internal_coordinate.GetY()];
+}
+
+template <typename T>
+void FieldBase<T>::SetTileAtRawCoordinate(int64_t x, int64_t y, T tile)
 {
     assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
 
@@ -53,19 +74,17 @@ void FieldBase<T>::SetTileAtLocation(int64_t x, int64_t y, T tile)
 }
 
 template <typename T>
-T& FieldBase<T>::GetTileAtLocation(int64_t x, int64_t y)
+T &FieldBase<T>::GetTileAtRawCoordinate(int64_t x, int64_t y)
 {
     assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
-    
+
     return field_tiles_[x][y];
 }
 
 template <typename T>
-void FieldBase<T>::PrintField() const
+FieldCoordinate FieldBase<T>::GetInternalCoordinate(int64_t x, int64_t y)
 {
-    for (int64_t x = 0; x < field_tiles_.size(); ++x)
-        for (int64_t y = 0; y < field_tiles_[x].size(); ++y)
-            std::cout << "(" << x << " , " << y << ") : " << field_tiles_[x][y] << std::endl;
+    return FieldCoordinate(x + origin_x_, y + origin_y_);
 }
 }
 

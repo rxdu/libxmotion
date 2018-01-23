@@ -15,7 +15,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "field/threat_basis.hpp"
+#include "field/road_field.hpp"
+#include "field/scalar_field.hpp"
+#include "field/vehicle_field.hpp"
 
 namespace librav
 {
@@ -26,16 +28,15 @@ public:
   CollisionField(int64_t size_x, int64_t size_y);
 
   void UpdateCollisionField();
+  void CombineChildFieldsWithNoUpdate();
 
-  void LoadPredefinedBasisPattern();
-  void AddThreatBasisField(int32_t id, std::shared_ptr<ThreatBasis> tfield);
-
-  std::shared_ptr<ThreatBasis> GetThreatBasisField(int32_t id);
-  void RemoveThreatBasisField(int32_t id);
+  void AddVehicleField(int32_t id, std::shared_ptr<VehicleField> vfield);
+  void CreateAndAddVehicleField(int32_t id);
+  std::shared_ptr<VehicleField> GetVehicleField(int32_t id);
+  void RemoveVehicleField(int32_t id);
 
 private:
-  std::unordered_map<int32_t, std::shared_ptr<ThreatBasis>> threat_basis_fields_;
-  void CreateAndAddThreatBasisField(int64_t x, int64_t y, int32_t id);
+  std::unordered_map<int32_t, std::shared_ptr<VehicleField>> vehicle_fields_;
 };
 
 } // namespace librav

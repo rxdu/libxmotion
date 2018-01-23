@@ -18,5 +18,5 @@ RoadField::RoadField(int64_t size_x, int64_t size_y) : ScalarField(size_x, size_
 
 void RoadField::SetLocationDrivable(int64_t x, int64_t y)
 {
-    SetValueAtLocation(x, y, drivable_area_potential_);
+    SetValueAtCoordinate(x, y, drivable_area_potential_);
 }

@@ -26,6 +26,7 @@ class VehicleField : public ScalarField
     ~VehicleField() = default;
 
     void SetCarPosition(int64_t x, int64_t y);
+    void SetCarVelocity()
     void UpdateDistribution();
 
   private:

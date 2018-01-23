@@ -34,6 +34,6 @@ void VehicleField::UpdateDistribution()
 
             // double val = 20.0 * std::exp(-(x_err*x_err + y_err*y_err)/(2*sig))/(2*M_PI*sig);
             double val = std::exp(-(x_err*x_err + y_err*y_err)/(2*sig*sig))/2*M_PI*sig*sig;
-            SetValueAtLocation(i,j,val);
+            SetValueAtCoordinate(i,j,val);
         }
 }
