@@ -23,8 +23,8 @@ int main()
     ScalarFieldMatrix mat = cfield.GenerateFieldMatrix(0, 1, 0, 1, true);
 
     // plot surface
-    // fplot.ShowFieldSurface(mat.x, mat.y, mat.z, true);
-    FastPlot::ShowFieldContour(mat.x, mat.y, mat.z, true);
+    FastPlot::ShowFieldSurface(mat.x, mat.y, mat.z, true);
+    // FastPlot::ShowFieldContour(mat.x, mat.y, mat.z, true);
     
     return 0;
 }

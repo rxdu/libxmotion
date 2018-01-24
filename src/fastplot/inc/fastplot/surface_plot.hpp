@@ -34,6 +34,7 @@ public:
   void SetCameraPosition(double x, double y, double z);
   void SetFocalPosition(double x, double y, double z);
   void EnableAutoScaleRange(bool enable);
+  void SetGridEdgeVisibility(bool enable);
   void SetScaleRange(double min, double max);
   void SetWrapScaleFactor(double scale);
 
@@ -85,6 +86,7 @@ protected:
   bool z_auto_scale_ = true;
   double z_scale_min_ = 0;
   double z_scale_max_ = 1;
+  bool show_grid_edge_ = true;
 
   void RenderSurface(vtkSmartPointer<vtkStructuredGrid> structured_grid, bool do_warp, double wrap_scale, bool show_box, bool show_axes, bool show_bar);
   void ShowRenderToWindow();

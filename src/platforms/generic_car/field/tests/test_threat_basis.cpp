@@ -13,7 +13,7 @@ int main()
     stopwatch::StopWatch timer;
     timer.tic();
     GaussianThreat gau(20, 20, 5);
-    basis.UpdateThreatBasis(gau);
+    basis.SetThreatBasisDistribution(gau);
     ScalarFieldMatrix mat = basis.GenerateFieldMatrix(0, 1, 0, 1, true);
     std::cout << "time elapsed: " << timer.toc() << std::endl;
 

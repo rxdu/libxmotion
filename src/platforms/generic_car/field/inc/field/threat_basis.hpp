@@ -19,9 +19,13 @@ namespace librav
 class ThreatBasis : public ScalarField
 {
   public:
-    ThreatBasis(int64_t size_x = 0, int64_t size_y = 0);
+    ThreatBasis(int64_t size_x = 0, int64_t size_y = 0): ScalarField(size_x, size_y){};
+    
+    void SetCenterPosition(double x, double y);
+    void SetThreatBasisDistribution(std::function<double(double, double)> dist_func);
 
-    void UpdateThreatBasis(std::function<double(double, double)> dist_func);
+    double center_pos_x_;
+    double center_pos_y_;
 };
 }
 

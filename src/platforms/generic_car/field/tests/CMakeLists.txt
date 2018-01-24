@@ -15,6 +15,9 @@ target_link_libraries(test_threat_basis field fastplot utility)
 add_executable(test_collision_field test_collision_field.cpp)
 target_link_libraries(test_collision_field field fastplot utility)
 
+add_executable(test_coeff_est test_coeff_est.cpp)
+target_link_libraries(test_coeff_est field fastplot utility)
+
 # add_executable(test_create_field test_create_field.cpp)
 # target_link_libraries(test_create_field field)
 

@@ -60,6 +60,11 @@ void SurfacePlot::EnableAutoScaleRange(bool enable)
     z_auto_scale_ = enable;
 }
 
+void SurfacePlot::SetGridEdgeVisibility(bool enable)
+{
+    show_grid_edge_ = enable;
+}
+
 void SurfacePlot::SetScaleRange(double min, double max)
 {
     z_scale_min_ = min;
@@ -114,7 +119,8 @@ void SurfacePlot::RenderSurface(vtkSmartPointer<vtkStructuredGrid> structured_gr
         gridMapper->SetScalarRange(z_scale_min_, z_scale_max_);
     }
     gridActor->SetMapper(gridMapper);
-    gridActor->GetProperty()->EdgeVisibilityOn();
+    if(show_grid_edge_)
+        gridActor->GetProperty()->EdgeVisibilityOn();
     // gridActor->GetProperty()->SetEdgeColor(0, 0, 1);
 
     /**************************** Setup the outline ****************************/

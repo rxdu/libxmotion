@@ -11,11 +11,13 @@
 
 using namespace librav;
 
-ThreatBasis::ThreatBasis(int64_t size_x, int64_t size_y) : ScalarField(size_x, size_y)
+void ThreatBasis::SetCenterPosition(double x, double y)
 {
+    center_pos_x_ = x;
+    center_pos_y_ = y;
 }
 
-void ThreatBasis::UpdateThreatBasis(std::function<double(double, double)> dist_func)
+void ThreatBasis::SetThreatBasisDistribution(std::function<double(double, double)> dist_func)
 {
     for (int64_t i = 0; i < size_x_; ++i)
         for (int64_t j = 0; j < size_y_; ++j)
