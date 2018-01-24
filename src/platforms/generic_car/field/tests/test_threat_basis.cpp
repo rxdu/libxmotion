@@ -18,9 +18,7 @@ int main()
     std::cout << "time elapsed: " << timer.toc() << std::endl;
 
     // plot surface
-    FieldPlot fplot(50, 50);
-    fplot.SetWrapScale(4.0);
-    fplot.ShowField(mat.x, mat.y, mat.z, true);
+    FastPlot::ShowFieldSurface(mat.x, mat.y, mat.z, true);
 
     return 0;
 }

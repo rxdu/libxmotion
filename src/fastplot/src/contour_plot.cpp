@@ -58,7 +58,7 @@ void ContourPlot::RenderContour(vtkSmartPointer<vtkRectilinearGrid> rectilinear_
 {
     // create a new renderer
     renderer_ = vtkSmartPointer<vtkRenderer>::New();
-    renderer_->GetActiveCamera()->SetViewUp(0, 0, 1);
+    // renderer_->GetActiveCamera()->SetViewUp(0, 0, 1);
     renderer_->GetActiveCamera()->SetPosition(camera_position_);
     renderer_->GetActiveCamera()->SetFocalPoint(focal_position_);
 

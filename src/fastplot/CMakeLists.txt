@@ -55,7 +55,6 @@ if(VTK_FOUND AND EIGEN3_FOUND)
 	set(ADVANCED_PLOT_SRC
 		src/surface_plot.cpp
 		src/contour_plot.cpp
-		src/field_plot.cpp
 	)
 	set(ADV_DEPENDENT_LIBS
 		${OpenCV_LIBS}

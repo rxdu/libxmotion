@@ -33,6 +33,9 @@ public:
   // Customization functions
   void SetCameraPosition(double x, double y, double z);
   void SetFocalPosition(double x, double y, double z);
+  void EnableAutoScaleRange(bool enable);
+  void SetScaleRange(double min, double max);
+  void SetWrapScaleFactor(double scale);
 
   // This function could be called in a loop to show the changing process of a surface
   template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
@@ -76,8 +79,12 @@ protected:
   vtkSmartPointer<vtkRenderWindowInteractor> render_window_interactor_;
 
   double wrap_scale_ = 1.0;
+  double wrap_scale_factor_ = 1.0;
   double camera_position_[3] = {-1.0, -1.0, 1.0};
   double focal_position_[3] = {0, 0, 0};
+  bool z_auto_scale_ = true;
+  double z_scale_min_ = 0;
+  double z_scale_max_ = 1;
 
   void RenderSurface(vtkSmartPointer<vtkStructuredGrid> structured_grid, bool do_warp, double wrap_scale, bool show_box, bool show_axes, bool show_bar);
   void ShowRenderToWindow();
@@ -91,8 +98,6 @@ protected:
     const int size_x = x.rows();
     const int size_y = y.rows();
     double wrap_scale = 1.0;
-
-    // std::cout << "size x-y-z: " << size_x << " , " << size_y << " , " << z.rows() << " * " << z.cols() << std::endl;
 
     assert(size_x == z.rows());
     assert(size_y == z.cols());

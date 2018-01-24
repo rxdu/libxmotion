@@ -55,6 +55,26 @@ void SurfacePlot::SetFocalPosition(double x, double y, double z)
     focal_position_[2] = z;
 }
 
+void SurfacePlot::EnableAutoScaleRange(bool enable)
+{
+    z_auto_scale_ = enable;
+}
+
+void SurfacePlot::SetScaleRange(double min, double max)
+{
+    z_scale_min_ = min;
+    z_scale_max_ = max;
+    z_auto_scale_ = false;
+}
+
+// Final scale factor = std::min(x_range, y_range)/ z_range / wrap_scale_factor_;
+// This factor controls how much you want to increase the scale of z values so that
+//  it's easier to see the height difference on the field plane.
+void SurfacePlot::SetWrapScaleFactor(double scale)
+{
+    wrap_scale_factor_ = scale;
+}
+
 void SurfacePlot::RenderSurface(vtkSmartPointer<vtkStructuredGrid> structured_grid, bool do_warp, double wrap_scale, bool show_box, bool show_axes, bool show_bar)
 {
     // create a new renderer
@@ -73,18 +93,26 @@ void SurfacePlot::RenderSurface(vtkSmartPointer<vtkStructuredGrid> structured_gr
     vtkSmartPointer<vtkWarpScalar> warp = vtkSmartPointer<vtkWarpScalar>::New();
     warp->SetInputConnection(geometryFilter->GetOutputPort());
     warp->XYPlaneOn();
-    warp->SetScaleFactor(wrap_scale);
+    warp->SetScaleFactor(wrap_scale / wrap_scale_factor_);
 
     // create a grid mapper and actor
-    double grid_scalar_range[2];
     vtkSmartPointer<vtkDataSetMapper> gridMapper = vtkSmartPointer<vtkDataSetMapper>::New();
     vtkSmartPointer<vtkActor> gridActor = vtkSmartPointer<vtkActor>::New();
     if (do_warp)
         gridMapper->SetInputConnection(warp->GetOutputPort());
     else
         gridMapper->SetInputConnection(geometryFilter->GetOutputPort());
-    structured_grid->GetScalarRange(grid_scalar_range);
-    gridMapper->SetScalarRange(grid_scalar_range[0], grid_scalar_range[1]);
+
+    if (z_auto_scale_)
+    {
+        double grid_scalar_range[2];
+        structured_grid->GetScalarRange(grid_scalar_range);
+        gridMapper->SetScalarRange(grid_scalar_range[0], grid_scalar_range[1]);
+    }
+    else
+    {
+        gridMapper->SetScalarRange(z_scale_min_, z_scale_max_);
+    }
     gridActor->SetMapper(gridMapper);
     gridActor->GetProperty()->EdgeVisibilityOn();
     // gridActor->GetProperty()->SetEdgeColor(0, 0, 1);

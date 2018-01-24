@@ -30,9 +30,8 @@ int main()
     }
 
   // plot surface
-  FieldPlot fplot(20,20);
-  fplot.ShowField(x,y,z);
-  // splot.SaveSurfaceToFile(x,y,z,"test_surf.png",1024,768);
+  FastPlot::ShowFieldSurface(x,y,z);
+  // FastPlot::SaveFieldSurfaceToFile(x,y,z,"test_surf.png",1024,768);
 
   return 0;
 }

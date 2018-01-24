@@ -15,76 +15,75 @@
 
 #include <Eigen/Dense>
 
-#include <vtkSmartPointer.h>
-#include <vtkStructuredGrid.h>
-#include <vtkPointData.h>
-#include <vtkFloatArray.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindow.h>
-#include <vtkRenderWindowInteractor.h>
-
 #include "fastplot/surface_plot.hpp"
+#include "fastplot/contour_plot.hpp"
 
 namespace librav
 {
-class FieldPlot : public SurfacePlot
+struct FieldPlot
 {
-public:
-  FieldPlot(int64_t size_x, int64_t size_y);
-  FieldPlot() = delete;
-  ~FieldPlot() = default;
-
-  // Final scale factor = std::min(x_range, y_range)/ z_range / wrap_scale_factor_;
-  // This factor controls how much you want to increase the scale of z values so that
-  //  it's easier to see the height difference on the field plane.
-  void SetWrapScale(double scale)
+  FieldPlot()
   {
-    wrap_scale_factor_ = scale;
-  }
+    // parameters chosen for better field visualization
+    surface_plot.SetWrapScaleFactor(4.0);
+    surface_plot.SetScaleRange(0.0, 1.0);
+  };
 
-  // This function could be called in a loop to show the changing process of a surface
-  template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
-  void ShowFieldFrame(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, bool do_warp = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
-  {
-    // create a grid
-    vtkSmartPointer<vtkStructuredGrid> structured_grid = CreateStructuredGrid(x, y, z);
-
-    // render and show in window
-    RenderField(structured_grid, do_warp, wrap_scale_, show_box, show_axes, show_bar);
-    ShowRenderToWindow();
-  }
-
-  // This function shows the surface with mouse interactions enabled
-  template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
-  void ShowField(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, bool do_warp = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
-  {
-    // create a grid
-    vtkSmartPointer<vtkStructuredGrid> structured_grid = CreateStructuredGrid(x, y, z);
-
-    // render and show in window
-    RenderField(structured_grid, do_warp, wrap_scale_, show_box, show_axes, show_bar);
-    ShowRenderToWindowWithInteraction();
-  }
-
-  // This function renders the surface to a file
-  template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
-  void SaveFieldToFile(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, std::string file_name, int32_t pixel_x = 640, int32_t pixel_y = 480, bool do_warp = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
-  {
-    // create a grid
-    vtkSmartPointer<vtkStructuredGrid> structured_grid = CreateStructuredGrid(x, y, z);
-
-    // render and show in window
-    RenderField(structured_grid, do_warp, wrap_scale_, show_box, show_axes, show_bar);
-    SaveRenderToFile(file_name, pixel_x, pixel_y);
-  }
-
-private:
-  int64_t field_size_x_;
-  int64_t field_size_y_;
-  double wrap_scale_factor_ = 1.0;
-
-  void RenderField(vtkSmartPointer<vtkStructuredGrid> structured_grid, bool do_warp, double wrap_scale, bool show_box, bool show_axes, bool show_bar);
+  SurfacePlot surface_plot;
+  ContourPlot contour_plot;
 };
+
+namespace FastPlot
+{
+// This function could be called in a loop to show the changing process of a surface
+template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
+void ShowFieldSurfaceFrame(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, bool do_warp = false, double cam_pos_x = 0, double cam_pos_y = 50, double cam_pos_z = 50, bool show_box = true, bool show_axes = true, bool show_bar = true)
+{
+  FieldPlot fplot;
+  fplot.surface_plot.SetCameraPosition(cam_pos_x, cam_pos_y, cam_pos_z);
+  fplot.surface_plot.ShowSurfaceFrame(x, y, z, do_warp, show_box, show_axes, show_bar);
+}
+
+// This function shows the surface with mouse interactions enabled
+template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
+void ShowFieldSurface(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, bool do_warp = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
+{
+  FieldPlot fplot;
+  fplot.surface_plot.ShowSurface(x, y, z, do_warp, show_box, show_axes, show_bar);
+}
+
+// This function renders the surface to a file
+template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
+void SaveFieldSurfaceToFile(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, std::string file_name, int32_t pixel_x = 640, int32_t pixel_y = 480, bool do_warp = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
+{
+  FieldPlot fplot;
+  fplot.surface_plot.SaveSurfaceToFile(x, y, z, file_name, pixel_x, pixel_y, do_warp, show_box, show_axes, show_bar);
+}
+
+// This function could be called in a loop to show the changing process of a contour
+template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
+void ShowFieldContourFrame(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, bool show_surf = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
+{
+  FieldPlot fplot;
+  fplot.contour_plot.ShowContourFrame(x, y, z, show_surf, show_box, show_axes, show_bar);
+}
+
+// This function shows the contour with mouse interactions enabled
+template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
+void ShowFieldContour(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, bool show_surf = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
+{
+  FieldPlot fplot;
+  fplot.contour_plot.ShowContour(x, y, z, show_surf, show_box, show_axes, show_bar);
+}
+
+// This function renders the surface to a file
+template <typename DerivedVector1, typename DerivedVector2, typename DerivatedMatrix>
+void SaveFieldContourToFile(const Eigen::MatrixBase<DerivedVector1> &x, const Eigen::MatrixBase<DerivedVector2> &y, const Eigen::MatrixBase<DerivatedMatrix> &z, std::string file_name, int32_t pixel_x = 640, int32_t pixel_y = 480, bool show_surf = false, bool show_box = true, bool show_axes = true, bool show_bar = true)
+{
+  FieldPlot fplot;
+  fplot.contour_plot.SaveContourToFile(x, y, z, file_name, pixel_x, pixel_y, show_surf, show_box, show_axes, show_bar);
+}
+}
 }
 
 #endif /* FIELD_PLOT_HPP */
