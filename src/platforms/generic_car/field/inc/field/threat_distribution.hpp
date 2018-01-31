@@ -15,18 +15,41 @@
 namespace librav
 {
 
-class GaussianThreat
+class GaussianPositionThreat
 {
 public:
-  GaussianThreat() = default;
-  GaussianThreat(double miu1, double miu2, double sigma);
+  GaussianPositionThreat(double pos_x, double pos_y, double sigma1, double sigma2);
 
-  void SetParameters(double miu1, double miu2, double sigma);
+  void SetParameters(double pos_x, double pos_y, double sigma1, double sigma2);
   double operator()(double x, double y);
 
 private:
-  double miu1_ = 0;
-  double miu2_ = 0;
+  double pos_x_ = 0;
+  double pos_y_ = 0;
+  double sigma_1_ = 1;
+  double sigma_2_ = 1;
+
+  double coeff1_ = 0;
+  double coeff2_ = 1;
+  double coeff3_ = 1;
+};
+
+/*-------------------------------------------------------------*/
+
+class GaussianPositionVelocityThreat
+{
+public:
+  GaussianPositionVelocityThreat() = default;
+  GaussianPositionVelocityThreat(double pos_x, double pos_y, double vel_x, double vel_y, double sigma);
+
+  void SetParameters(double pos_x, double pos_y, double vel_x, double vel_y, double sigma);
+  double operator()(double x, double y);
+
+private:
+  double pos_x_ = 0;
+  double pos_y_ = 0;
+  double vel_x_ = 0;
+  double vel_y_ = 0;
   double sigma_ = 1;
 
   double coeff1_ = 0;

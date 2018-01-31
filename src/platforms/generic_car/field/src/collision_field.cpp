@@ -29,7 +29,7 @@ void CollisionField::LoadEgoCenteredBasisPattern(int32_t radius_step_size, doubl
   // first add one at center
   auto center_basis = std::make_shared<ThreatBasis>(size_x_, size_y_);
   auto center_raw_coordinate = ConvertToRawCoordinate(0, 0);
-  GaussianThreat center_gau(center_raw_coordinate.GetX(), center_raw_coordinate.GetY(), sigma);
+  GaussianPositionThreat center_gau(center_raw_coordinate.GetX(), center_raw_coordinate.GetY(), sigma, sigma);
   center_basis->SetCenterPosition(center_raw_coordinate.GetX(), center_raw_coordinate.GetY());
   center_basis->SetThreatBasisDistribution(center_gau);
   threat_basis_fields_.emplace(std::make_pair(basis_id, center_basis));
@@ -48,7 +48,7 @@ void CollisionField::LoadEgoCenteredBasisPattern(int32_t radius_step_size, doubl
           raw_coordinate.GetY() >= 0 && raw_coordinate.GetY() < SizeY())
       {
         auto basis = std::make_shared<ThreatBasis>(size_x_, size_y_);
-        GaussianThreat gau(raw_coordinate.GetX(), raw_coordinate.GetY(), sigma);
+        GaussianPositionThreat gau(raw_coordinate.GetX(), raw_coordinate.GetY(), sigma, sigma);
         basis->SetCenterPosition(raw_coordinate.GetX(), raw_coordinate.GetY());
         basis->SetThreatBasisDistribution(gau);
         threat_basis_fields_.emplace(std::make_pair(basis_id, basis));
@@ -73,7 +73,7 @@ void CollisionField::LoadUniformBasisPattern(int32_t x_step, int32_t y_step, dou
           raw_coordinate.GetY() >= 0 && raw_coordinate.GetY() < SizeY())
       {
         auto basis = std::make_shared<ThreatBasis>(size_x_, size_y_);
-        GaussianThreat gau(raw_coordinate.GetX(), raw_coordinate.GetY(), sigma);
+        GaussianPositionThreat gau(raw_coordinate.GetX(), raw_coordinate.GetY(), sigma, sigma);
         basis->SetCenterPosition(raw_coordinate.GetX(), raw_coordinate.GetY());
         basis->SetThreatBasisDistribution(gau);
         threat_basis_fields_.emplace(std::make_pair(basis_id, basis));

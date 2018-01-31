@@ -8,12 +8,14 @@ using namespace librav;
 
 int main()
 {
-    ThreatBasis basis(50, 50);
+    ThreatBasis basis(100, 100);
 
     stopwatch::StopWatch timer;
     timer.tic();
-    GaussianThreat gau(20, 20, 5);
+    GaussianPositionThreat gau(50, 50, 5, 3);
     basis.SetThreatBasisDistribution(gau);
+    // GaussianPositionVelocityThreat gau(100, 100, 1, 0, 5);
+    // basis.SetThreatBasisDistribution(gau);
     ScalarFieldMatrix mat = basis.GenerateFieldMatrix(0, 1, 0, 1, true);
     std::cout << "time elapsed: " << timer.toc() << std::endl;
 
