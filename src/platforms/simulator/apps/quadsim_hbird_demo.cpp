@@ -11,9 +11,9 @@
 #include <string>
 #include <stdlib.h>
 
-#include "vrep_sim/vrep_interface/robot_sim_process.h"
+#include "vrep_interface/vrep_sim_process.hpp"
 
-#include "quad_hbird_sim/quad_hbird_sim_client.h"
+#include "quad_hbird_sim/quad_hbird_sim_client.hpp"
 #include "quad_hbird_sim/quad_hbird_sim_control.h"
 
 using namespace librav;
@@ -21,7 +21,6 @@ using namespace librav;
 int main(int arc, char* argv[])
 {
 	std::shared_ptr<QuadHbirdSimClient> client = std::make_shared<QuadHbirdSimClient>();
-	std::shared_ptr<QuadHbirdSimControl> control = std::make_shared<QuadHbirdSimControl>();
 
 	// set quadrotor init pose
 	//controller->SetInitPose(-1.8,2,0.5,-M_PI/4);

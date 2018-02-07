@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "traffic/traffic_sim.hpp"
-#include "utility/stopwatch/stopwatch.h"
+#include "stopwatch/stopwatch.h"
 
 using namespace librav;
 

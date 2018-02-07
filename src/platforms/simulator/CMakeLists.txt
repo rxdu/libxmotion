@@ -42,8 +42,8 @@ set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add sub source directories
-add_subdirectory(apps)
-add_subdirectory(vrep_sim)
+# add_subdirectory(apps)
+add_subdirectory(sim_interface)
 add_subdirectory(quad_hbird_sim)
-add_subdirectory(quad_solo_sim)
-add_subdirectory(rc_car_sim)
+# add_subdirectory(quad_solo_sim)
+# add_subdirectory(rc_car_sim)

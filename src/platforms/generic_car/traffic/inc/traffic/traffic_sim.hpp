@@ -13,7 +13,7 @@
 #include <cstdint>
 
 #include "traffic/vehicle_sim.hpp"
-#include "utility/stopwatch/stopwatch.h"
+#include "stopwatch/stopwatch.h"
 
 namespace librav
 {
