@@ -130,20 +130,6 @@ void QuadHbirdSimControl::SetInitPose(float x, float y, float z, float yaw)
 	previous_state_.yaw = yaw;
 }
 
-DataToQuadSim QuadHbirdSimControl::ConvertRobotCmdToSimCmd(const QuadCmd& cmd)
-{
-	DataToQuadSim sim_cmd;
-
-	//std::cout << "quad cmd: ";
-	for(int i = 0; i < 4; i++) {
-		sim_cmd.ang_vel[i] = cmd.ang_vel[i];
-		//std::cout << sim_cmd.motor_cmd.ang_vel[i] << " , ";
-	}
-	//std::cout << std::endl;
-
-	return sim_cmd;
-}
-
 void QuadHbirdSimControl::UpdateRobotState(const DataFromQuadSim& data)
 {
 	/********* update robot state *********/
@@ -252,7 +238,12 @@ DataToQuadSim QuadHbirdSimControl::UpdateCtrlLoop()
 	// cmd_m.ang_vel[1] = att_con_output.motor_ang_vel_d[1];
 	// cmd_m.ang_vel[2] = att_con_output.motor_ang_vel_d[2];
 	// cmd_m.ang_vel[3] = att_con_output.motor_ang_vel_d[3];
-	cmd_m = mixer_->CalcMotorCmd(pos_con_output.ftotal_d, att_con_output.torque_d, rs_.quad_flight_type_);
+	auto cmd_val = mixer_->CalcMotorCmd(pos_con_output.ftotal_d, att_con_output.torque_d, rs_.quad_flight_type_);
+	cmd_m.ang_vel[0] = cmd_val.ang_vel[0];
+	cmd_m.ang_vel[1] = cmd_val.ang_vel[1];
+	cmd_m.ang_vel[2] = cmd_val.ang_vel[2];
+	cmd_m.ang_vel[3] = cmd_val.ang_vel[3];
+
 
 	//std::cout << "pos x desired: " << previous_state_.positions[0] << std::endl;
 

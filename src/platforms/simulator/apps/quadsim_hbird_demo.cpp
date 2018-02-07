@@ -14,7 +14,6 @@
 #include "vrep_interface/vrep_sim_process.hpp"
 
 #include "quad_hbird_sim/quad_hbird_sim_client.hpp"
-#include "quad_hbird_sim/quad_hbird_sim_control.h"
 
 using namespace librav;
 
@@ -24,12 +23,12 @@ int main(int arc, char* argv[])
 
 	// set quadrotor init pose
 	//controller->SetInitPose(-1.8,2,0.5,-M_PI/4);
-	control->SetInitPose(0,0,0.5,0);
-	control->BroadcastRobotState(true);
-	control->InitLogger("quadsim_hummingbird", "/quad/control");
+	client->quad_ctrl.SetInitPose(0,0,0.5,0);
+	client->quad_ctrl.BroadcastRobotState(true);
+	client->quad_ctrl.InitLogger("quadsim_hummingbird", "/quad/control");
 
 	// create a simulation process
-	RobotSimProcess<DataFromQuadSim, DataToQuadSim,QuadState, QuadCmd> process(client,control);
+	VrepSimProcess<DataFromQuadSim, DataToQuadSim> process(client);
 
 	// run the simulation in synchronous mode
 	if(process.ConnectToServer())

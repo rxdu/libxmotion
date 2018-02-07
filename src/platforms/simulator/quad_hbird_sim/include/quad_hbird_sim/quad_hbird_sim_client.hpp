@@ -23,16 +23,16 @@ namespace librav
 class QuadHbirdSimClient : public VrepSimClient<DataFromQuadSim, DataToQuadSim>
 {
   public:
-	QuadHbirdSimClient();
-	QuadHbirdSimClient(simxInt clientId);
+	QuadHbirdSimClient(simxInt clientId = 0);
 	~QuadHbirdSimClient();
 
 	virtual bool ReceiveDataFromSimRobot(DataFromQuadSim *rdata) override;
 	virtual void UpdateCtrlLoop(const DataFromQuadSim &rdata, DataToQuadSim *rcmd) override;
 	virtual void SendDataToSimRobot(const DataToQuadSim &rcmd) override;
 
-  private:
 	QuadHbirdSimControl quad_ctrl;
+
+  private:
 	const uint64_t max_motor_speed_ = 10000;
 
 	simxInt quad_handle_;

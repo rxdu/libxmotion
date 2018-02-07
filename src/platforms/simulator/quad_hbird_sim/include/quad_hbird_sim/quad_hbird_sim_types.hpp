@@ -10,6 +10,9 @@
 #ifndef QUAD_HBIRD_SIM_TYPES_HPP
 #define QUAD_HBIRD_SIM_TYPES_HPP
 
+#include "common/librav_types.hpp"
+#include "quad_hbird_sim/quad_hbird_config.hpp"
+
 namespace librav
 {
 struct DataFromQuadSim

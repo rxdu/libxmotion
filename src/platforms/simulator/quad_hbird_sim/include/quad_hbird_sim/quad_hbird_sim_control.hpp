@@ -16,7 +16,6 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/librav.hpp"
 
-#include "quad_hbird_sim/quad_hbird_sim_client.hpp"
 #include "quad_hbird_sim/quad_hbird_sim_types.hpp"
 
 #include "control/quad_state.hpp"
@@ -24,8 +23,8 @@
 #include "control/pos_quat_con.hpp"
 #include "control/quad_mixer.hpp"
 
-#include "platforms/quadrotor/motion_server/motion_server.h"
-#include "platforms/quadrotor/driver/quad_data_broadcaster.h"
+#include "system/motion_server.hpp"
+#include "system/quad_data_broadcaster.hpp"
 
 namespace librav {
 
@@ -36,6 +35,10 @@ public:
 	~QuadHbirdSimControl() = default;
 
 private:
+	QuadState rs_;
+	QuadState est_rs_;
+	uint64_t ctrl_loop_count_;	
+
 	UAVTrajectoryPoint previous_state_;
 
 	std::unique_ptr<AttQuatCon> att_quat_con_;

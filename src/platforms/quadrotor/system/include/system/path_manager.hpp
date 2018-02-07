@@ -19,7 +19,7 @@
 #include "lcmtypes/librav.hpp"
 
 #include "common/librav_types.hpp"
-#include "motion_server/quad_polyopt.h"
+#include "system/quad_polyopt.hpp"
 
 namespace librav {
 
