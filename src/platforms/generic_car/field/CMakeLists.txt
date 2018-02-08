@@ -14,7 +14,7 @@ set(FIELD_LIB_SRC
 add_library(field STATIC ${FIELD_LIB_SRC})
 # target_link_libraries(field common)
 target_include_directories(field PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 

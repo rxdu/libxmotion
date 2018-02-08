@@ -70,7 +70,7 @@ add_library(fastplot STATIC ${FASTPLOT_LIB_SRC} ${ADVANCED_PLOT_SRC})
 target_link_libraries(fastplot geometry graph ${ADV_DEPENDENT_LIBS} ${OpenCV_LIBS})
 target_include_directories(fastplot PUBLIC
 	${ADV_INC_DIR}
-	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>	
 	PRIVATE src)
 

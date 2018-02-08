@@ -17,7 +17,7 @@ set(MAP_LIB_SRC
 add_library(map STATIC ${MAP_LIB_SRC})
 target_link_libraries(map geometry common ${LCM_LIBRARIES} ${OpenCV_LIBS})
 target_include_directories(map PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
   PRIVATE src)
 
