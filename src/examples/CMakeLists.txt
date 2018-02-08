@@ -43,10 +43,10 @@ add_executable(lcm_publisher_cpp lcm_publisher.cpp)
 target_link_libraries(lcm_publisher_cpp ${LCM_LIBRARIES})
 
 add_executable(logger_example logger_example.cpp)
-target_link_libraries(logger_example utility)
+target_link_libraries(logger_example utilities)
 
 add_executable(stopwatch_example stopwatch_example.cpp)
-target_link_libraries(stopwatch_example utility)
+target_link_libraries(stopwatch_example utilities)
 
 add_executable(graph_example graph_example.cpp)
 target_link_libraries(graph_example vis map geometry)

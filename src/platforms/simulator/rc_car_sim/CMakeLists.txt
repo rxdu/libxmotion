@@ -5,12 +5,16 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 #find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
-set(QUADSIM_LIB_SRC
-    rc_car_sim_client.cpp
-    rc_car_sim_control.cpp
+set(RCCARSIM_LIB_SRC
+    src/rc_car_sim_client.cpp
+    src/rc_car_sim_control.cpp
 )
-add_library(rccarsim STATIC ${QUADSIM_LIB_SRC})
-target_link_libraries(rccarsim vrep_sim common ${LCM_LIBRARIES})
+add_library(rccar_sim STATIC ${RCCARSIM_LIB_SRC})
+target_link_libraries(rccar_sim sim_interface common utilities ${LCM_LIBRARIES})
+target_include_directories(rccar_sim PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+  PRIVATE src)
 
 # Add executables
 #add_executable(quadsim_demo quadsim_demo.cpp)

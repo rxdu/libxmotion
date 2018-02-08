@@ -27,7 +27,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 #     sim/sim_depth_sensor.cpp
 # )
 # add_library(pr_sim STATIC ${PATH_REPAIR_SIM_SRC} ${PATH_REPAIR_COMMON_SRC})
-# target_link_libraries(pr_sim utility map geometry ${LCM_LIBRARIES})
+# target_link_libraries(pr_sim utilities map geometry ${LCM_LIBRARIES})
 
 # Add executables
 

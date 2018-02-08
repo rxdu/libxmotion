@@ -10,7 +10,7 @@ set(CARCON_LIB_SRC
     estimator/car_state.cpp
 )
 add_library(car_ctrl STATIC ${CARCON_LIB_SRC})
-target_link_libraries(car_ctrl common utility ${LCM_LIBRARIES})
+target_link_libraries(car_ctrl common utilities ${LCM_LIBRARIES})
 
 # Add executables
 #add_executable(quad_motion_client motion_server/motion_client.cpp)

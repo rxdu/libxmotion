@@ -31,16 +31,16 @@ find_package(Threads REQUIRED)
 set(UTILITY_LIB_SRC
 	logging/logger.cpp
 )
-add_library(utility STATIC ${UTILITY_LIB_SRC})
+add_library(utilities STATIC ${UTILITY_LIB_SRC})
 if(ENABLE_LOGGING)
-target_compile_definitions(utility PUBLIC ENABLE_LOGGING=1)
+target_compile_definitions(utilities PUBLIC ENABLE_LOGGING=1)
 endif(ENABLE_LOGGING)
-target_link_libraries(utility spdlog ${CMAKE_THREAD_LIBS_INIT})
-target_include_directories(utility PUBLIC
+target_link_libraries(utilities spdlog ${CMAKE_THREAD_LIBS_INIT})
+target_include_directories(utilities PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	$<INSTALL_INTERFACE:include>)
 
 #add_executable(test_logging tests/test_logging.cpp)
-#target_link_libraries(test_logging utility)
+#target_link_libraries(test_logging utilities)
 
 #add_executable(test_stopwatch tests/test_stopwatch.cpp)
