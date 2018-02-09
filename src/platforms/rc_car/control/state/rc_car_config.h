@@ -16,7 +16,7 @@ namespace librav
   #define IMG_RES_Y 90
 
   const double max_steer_angle = 30.0;	// in degree
-  const double max_drive_speed = 100.0;	// in round/s
+  const double max_forward_speed = 100.0;	// in round/s
 }
 
 #endif /* CONTROL_RC_CAR_CTRL_RC_CAR_CONFIG_H_ */

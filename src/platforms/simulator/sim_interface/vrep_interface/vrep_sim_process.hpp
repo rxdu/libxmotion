@@ -94,8 +94,9 @@ class VrepSimProcess
 				std::cout << "INFO: Entered control loop, client id: " << sim_client_->client_id_ << std::endl;
 
 			// update simulated control loop
-			if (!sim_client_->ReceiveDataFromSimRobot(&data_from_sim_))
-				std::cout << "failed to fetch new data" << std::endl;
+			// if (!sim_client_->ReceiveDataFromSimRobot(&data_from_sim_) && sync_mode_)
+			// 	std::cout << "failed to fetch new data" << std::endl;
+			sim_client_->ReceiveDataFromSimRobot(&data_from_sim_);
 
 			// call user-defined update function
 			sim_client_->UpdateCtrlLoop(data_from_sim_, &data_to_sim_);
