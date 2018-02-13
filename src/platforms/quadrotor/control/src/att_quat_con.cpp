@@ -87,7 +87,7 @@ void AttQuatCon::InitParams(const AttQuatConParam& param)
 	initialized_ = true;
 }
 
-void AttQuatCon::Update(const AttQuatConInput& input, AttQuatConOutput& output)
+void AttQuatCon::Update(const AttQuatConInput& input, AttQuatConOutput* output)
 {
 	if(!initialized_)
 		return;
@@ -134,15 +134,15 @@ void AttQuatCon::Update(const AttQuatConInput& input, AttQuatConOutput& output)
 		if(desired_ft(i) < 10e-5 && desired_ft(i) > -10e-5)
 			desired_ft(i) = 0;
 
-	output.torque_d[0] = desired_ft(1);
-	output.torque_d[1] = desired_ft(2);
-	output.torque_d[2] = desired_ft(3);
+	output->torque_d[0] = desired_ft(1);
+	output->torque_d[1] = desired_ft(2);
+	output->torque_d[2] = desired_ft(3);
 
 	// calculate desired motor cmd from desired force and torque
 	Eigen::Matrix<double,4,1> motor_vel = CalcMotorCmd(desired_ft, state_.quad_flight_type_);
 
-	output.motor_ang_vel_d[0] = motor_vel(0);
-	output.motor_ang_vel_d[1] = motor_vel(1);
-	output.motor_ang_vel_d[2] = motor_vel(2);
-	output.motor_ang_vel_d[3] = motor_vel(3);
+	output->motor_ang_vel_d[0] = motor_vel(0);
+	output->motor_ang_vel_d[1] = motor_vel(1);
+	output->motor_ang_vel_d[2] = motor_vel(2);
+	output->motor_ang_vel_d[3] = motor_vel(3);
 }

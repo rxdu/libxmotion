@@ -65,7 +65,7 @@ private:
 
 public:
 	void InitParams(const AttQuatConParam& param) override;
-	void Update(const AttQuatConInput& desired, AttQuatConOutput& output) override;
+	void Update(const AttQuatConInput& desired, AttQuatConOutput* output) override;
 };
 
 }

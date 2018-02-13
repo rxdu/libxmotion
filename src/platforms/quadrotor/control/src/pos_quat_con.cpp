@@ -67,7 +67,7 @@ void PosQuatCon::InitParams(const PosQuatConParam& param)
 	initialized_ = true;
 }
 
-void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
+void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput* output)
 {
 	if(!initialized_)
 		return;
@@ -155,8 +155,8 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 	Eigen::Quaterniond quat_y(Eigen::AngleAxisd(input.yaw_d, quat_pr.matrix().col(2)));
 	Eigen::Quaterniond quat_result = quat_y * quat_pr;
 
-	output.quat_d = quat_result.normalized();
-	output.ftotal_d = Fi.norm();
+	output->quat_d = quat_result.normalized();
+	output->ftotal_d = Fi.norm();
 
 	float omega_d[3];
 	Eigen::Vector3d Fidot;
@@ -186,32 +186,32 @@ void PosQuatCon::Update(const PosQuatConInput& input, PosQuatConOutput& output)
 	omega_d[1] = omega_dxy_b(1);
 	omega_d[2] = input.yaw_rate_d;
 
-	output.rot_rate_d[0] = omega_d[0];
-	output.rot_rate_d[1] = omega_d[1];
-	output.rot_rate_d[2] = omega_d[2];
+	output->rot_rate_d[0] = omega_d[0];
+	output->rot_rate_d[1] = omega_d[1];
+	output->rot_rate_d[2] = omega_d[2];
 
 	// set control values to be zero if too small
-	if(output.quat_d.x() < 10e-6 && output.quat_d.x() > -10e-6)
-		output.quat_d.x() = 0;
-	if(output.quat_d.y() < 10e-6 && output.quat_d.y() > -10e-6)
-		output.quat_d.y() = 0;
-	if(output.quat_d.z() < 10e-6 && output.quat_d.z() > -10e-6)
-		output.quat_d.z() = 0;
-	if(output.quat_d.w() < 10e-6 && output.quat_d.w() > -10e-6)
-		output.quat_d.w() = 0;
+	if(output->quat_d.x() < 10e-6 && output->quat_d.x() > -10e-6)
+		output->quat_d.x() = 0;
+	if(output->quat_d.y() < 10e-6 && output->quat_d.y() > -10e-6)
+		output->quat_d.y() = 0;
+	if(output->quat_d.z() < 10e-6 && output->quat_d.z() > -10e-6)
+		output->quat_d.z() = 0;
+	if(output->quat_d.w() < 10e-6 && output->quat_d.w() > -10e-6)
+		output->quat_d.w() = 0;
 
 	for(int i = 0; i < 3; i++)
 	{
-		if(output.rot_rate_d[i] < 10e-6 && output.rot_rate_d[i] > -10e-6)
-			output.rot_rate_d[i] = 0;
+		if(output->rot_rate_d[i] < 10e-6 && output->rot_rate_d[i] > -10e-6)
+			output->rot_rate_d[i] = 0;
 
 		// save values for next iteration
 		last_acc_desired_[i] = ri_acc_fb[i];
 	}
 
-	CtrlLogger::GetLogger().AddItemDataToEntry("omega_d_x", output.rot_rate_d[0]);
-	CtrlLogger::GetLogger().AddItemDataToEntry("omega_d_y", output.rot_rate_d[1]);
-	CtrlLogger::GetLogger().AddItemDataToEntry("omega_d_z", output.rot_rate_d[2]);
+	CtrlLogger::GetLogger().AddItemDataToEntry("omega_d_x", output->rot_rate_d[0]);
+	CtrlLogger::GetLogger().AddItemDataToEntry("omega_d_y", output->rot_rate_d[1]);
+	CtrlLogger::GetLogger().AddItemDataToEntry("omega_d_z", output->rot_rate_d[2]);
 
 	CtrlLogger::GetLogger().AddItemDataToEntry("pos_e_x", pos_error[0]);
 	CtrlLogger::GetLogger().AddItemDataToEntry("pos_e_y", pos_error[1]);
