@@ -24,7 +24,7 @@ public:
 	typedef CtrlParamType ParamType;
 
 	virtual void InitParams(const CtrlParamType& param) = 0;
-	virtual void Update(const InputType& desired, OutputType& cmd) = 0;
+	virtual void Update(const InputType& desired, OutputType* cmd) = 0;
 
 protected:
 	const StateType& state_;

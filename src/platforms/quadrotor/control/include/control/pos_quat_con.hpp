@@ -67,7 +67,7 @@ private:
 
 public:
 	void InitParams(const PosQuatConParam& param) override;
-	void Update(const PosQuatConInput& desired, PosQuatConOutput& cmd) override;
+	void Update(const PosQuatConInput& desired, PosQuatConOutput* cmd) override;
 };
 
 }
