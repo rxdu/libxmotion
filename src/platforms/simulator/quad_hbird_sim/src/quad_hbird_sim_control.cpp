@@ -212,7 +212,7 @@ DataToQuadSim QuadHbirdSimControl::UpdateCtrlLoop()
 	pos_con_input.yaw_d = previous_state_.yaw;
 	pos_con_input.yaw_rate_d = previous_state_.yaw_rate;
 
-	pos_quat_con_->Update(pos_con_input, pos_con_output);
+	pos_quat_con_->Update(pos_con_input, &pos_con_output);
 
 	/********* update attitude control *********/
 	AttQuatConInput quat_con_input;
@@ -231,7 +231,7 @@ DataToQuadSim QuadHbirdSimControl::UpdateCtrlLoop()
 	quat_con_input.rot_rate_d[0] = pos_con_output.rot_rate_d[0];
 	quat_con_input.rot_rate_d[1] = pos_con_output.rot_rate_d[1];
 	quat_con_input.rot_rate_d[2] = pos_con_output.rot_rate_d[2];
-	att_quat_con_->Update(quat_con_input, att_con_output);
+	att_quat_con_->Update(quat_con_input, &att_con_output);
 
 	// set control variables
 	// cmd_m.ang_vel[0] = att_con_output.motor_ang_vel_d[0];
