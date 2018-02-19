@@ -1,6 +1,6 @@
-# Library for Research on Autonomous Vehicles (librav)
+# Library for Robotics and Autonomous Vehicles (librav)
 
-This repository contains a collection of software for research on autonomous vehicles.
+This repository contains a collection of software for research on robotics and autonomous vehicles.
 
 ## 1. Repository structure
 
@@ -28,7 +28,7 @@ $ sudo apt-get install libopencv-dev python-opencv
 
 * VTK 7.1.1 (Recommended)
 
-VTK is required for advanced plotting features such as surface plot. It's recommended to compile and install from source. The default version from the package manager in Debian/Ubuntu may not work. Newer version should also work.
+VTK is required for advanced plotting features such as surface plot. It's recommended to compile and install from source. The default version from the package manager in Debian/Ubuntu may not work. Newer version >7.1.1 should also work.
 
 * LCM
 
