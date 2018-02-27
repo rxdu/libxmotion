@@ -94,7 +94,7 @@ struct StopWatch
     return std::chrono::duration_cast<std::chrono::microseconds>(Clock::now() - tic_point).count() / 1000000.0;
   };
 
-  // for different precisions
+  // for second in different precisions
   double stoc()
   {
     return std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - tic_point).count();
@@ -118,10 +118,18 @@ struct StopWatch
   // you have to call tic() before calling this function
   void sleep_until_ms(int64_t period_ms)
   {
-    int64_t duration = period_ms - static_cast<int64_t>(mtoc());
+    int64_t duration = period_ms - std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - tic_point).count();
 
     if (duration > 0)
       std::this_thread::sleep_for(std::chrono::milliseconds(duration));
+  };
+
+  void sleep_until_us(int64_t period_us)
+  {
+    int64_t duration = period_us - std::chrono::duration_cast<std::chrono::microseconds>(Clock::now() - tic_point).count();
+
+    if (duration > 0)
+      std::this_thread::sleep_for(std::chrono::microseconds(duration));
   };
 };
 
