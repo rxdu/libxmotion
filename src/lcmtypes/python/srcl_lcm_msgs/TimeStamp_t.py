@@ -12,6 +12,10 @@ import struct
 class TimeStamp_t(object):
     __slots__ = ["time_stamp"]
 
+    __typenames__ = ["int64_t"]
+
+    __dimensions__ = [None]
+
     def __init__(self):
         self.time_stamp = 0
 

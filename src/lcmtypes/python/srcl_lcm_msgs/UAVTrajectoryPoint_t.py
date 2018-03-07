@@ -12,6 +12,10 @@ import struct
 class UAVTrajectoryPoint_t(object):
     __slots__ = ["point_empty", "positions", "velocities", "accelerations", "jerks", "yaw", "yaw_rate", "duration"]
 
+    __typenames__ = ["boolean", "float", "float", "float", "float", "float", "float", "int64_t"]
+
+    __dimensions__ = [None, [3], [3], [3], [3], None, None, None]
+
     def __init__(self):
         self.point_empty = False
         self.positions = [ 0.0 for dim0 in range(3) ]

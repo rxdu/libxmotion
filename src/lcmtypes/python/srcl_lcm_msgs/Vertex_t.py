@@ -12,6 +12,10 @@ import struct
 class Vertex_t(object):
     __slots__ = ["id", "position"]
 
+    __typenames__ = ["int64_t", "float"]
+
+    __dimensions__ = [None, [3]]
+
     def __init__(self):
         self.id = 0
         self.position = [ 0.0 for dim0 in range(3) ]

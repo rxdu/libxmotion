@@ -12,6 +12,10 @@ import struct
 class Pose_t(object):
     __slots__ = ["position", "quaternion"]
 
+    __typenames__ = ["float", "float"]
+
+    __dimensions__ = [[3], [4]]
+
     def __init__(self):
         self.position = [ 0.0 for dim0 in range(3) ]
         self.quaternion = [ 0.0 for dim0 in range(4) ]

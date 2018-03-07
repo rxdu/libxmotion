@@ -16,6 +16,10 @@ import srcl_lcm_msgs.TimeStamp_t
 class KeyframeSet_t(object):
     __slots__ = ["kf_num", "kfs", "sys_time", "path_id"]
 
+    __typenames__ = ["int64_t", "srcl_lcm_msgs.Keyframe_t", "srcl_lcm_msgs.TimeStamp_t", "int64_t"]
+
+    __dimensions__ = [None, ["kf_num"], None, None]
+
     def __init__(self):
         self.kf_num = 0
         self.kfs = []

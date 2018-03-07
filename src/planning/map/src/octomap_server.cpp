@@ -11,9 +11,9 @@
 #include <sstream>
 
 #include "map/octomap_server.h"
-#include "geometry/cube_array.h"
-#include "geometry/cube_array_builder.h"
-#include "geometry/graph_builder.h"
+#include "geometry/cube_array.hpp"
+#include "map/cube_array_builder.h"
+// #include "map/graph_builder.hpp"
 
 using namespace librav;
 using namespace octomap;

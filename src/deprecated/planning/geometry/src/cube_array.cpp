@@ -1,15 +1,13 @@
-/* 
+/*
  * cube_array.cpp
- * 
- * Created on: Sep 8, 2016
- * Description: 
- * 
- * Copyright (c) 2018 Ruixiang Du (rdu)
- */ 
+ *
+ *  Created on: Sep 8, 2016
+ *      Author: rdu
+ */
 
 #include <iostream>
 
-#include "geometry/cube_array.hpp"
+#include "geometry/cube_array.h"
 
 using namespace librav;
 

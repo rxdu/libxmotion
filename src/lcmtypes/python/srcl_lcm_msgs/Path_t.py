@@ -14,6 +14,10 @@ import srcl_lcm_msgs.WayPoint_t
 class Path_t(object):
     __slots__ = ["waypoint_num", "waypoints", "const_velocity"]
 
+    __typenames__ = ["int64_t", "srcl_lcm_msgs.WayPoint_t", "float"]
+
+    __dimensions__ = [None, ["waypoint_num"], None]
+
     def __init__(self):
         self.waypoint_num = 0
         self.waypoints = []

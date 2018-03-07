@@ -12,6 +12,10 @@ import struct
 class WayPoint_t(object):
     __slots__ = ["positions", "yaw"]
 
+    __typenames__ = ["float", "float"]
+
+    __dimensions__ = [[3], None]
+
     def __init__(self):
         self.positions = [ 0.0 for dim0 in range(3) ]
         self.yaw = 0.0

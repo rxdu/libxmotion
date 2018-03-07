@@ -5,12 +5,12 @@
  *      Author: rdu
  */
 
-#include "map/image_utils.hpp"
+#include "map/image_utils.h"
 
 using namespace librav;
 using namespace cv;
 
-void Map::BinarizeImage(cv::InputArray _src, cv::OutputArray _dst, uint8_t thresh)
+void ImageUtils::BinarizeImage(cv::InputArray _src, cv::OutputArray _dst, uint8_t thresh)
 {
 	// Prepare data structures
 	Mat src = _src.getMat();
@@ -21,13 +21,14 @@ void Map::BinarizeImage(cv::InputArray _src, cv::OutputArray _dst, uint8_t thres
 	threshold(src, dst, thresh, 255, THRESH_BINARY);
 }
 
-void Map::ExpandObstacleAreaOnImage(cv::InputArray _src, cv::OutputArray _dst, int16_t expand_size)
+void ImageUtils::ExpandObstacleAreaOnImage(cv::InputArray _src, cv::OutputArray _dst, int16_t expand_size)
 {
 	// Prepare data structures
 	Mat src = _src.getMat();
 
 	_dst.create(src.size(), CV_8UC1);
 	Mat dst = _dst.getMat();
+	//dst = Scalar(255);
 	src.copyTo(dst);
 
 	// Expand obstacle
@@ -55,18 +56,22 @@ void Map::ExpandObstacleAreaOnImage(cv::InputArray _src, cv::OutputArray _dst, i
 				Range rngx(minx, maxx);
 				Range rngy(miny, maxy);
 
+//				std::cout<< "size(x,y): ( " << rngx.start << " ~ " << rngx.end << " ; "
+//						<< rngy.start << " ~ " << rngy.end << " )" << std::endl;
+//				Mat exp_area = dst(rngy,rngx);
+//				exp_area = Scalar(0);//Scalar( 0, 0, 0 );
 				dst(rngy,rngx) = Scalar(0);
 			}
 		}
 }
 
-PaddingSize Map::PadImageToSquared(cv::InputArray _src, cv::OutputArray _dst)
+PaddingSize ImageUtils::PadImageToSquared(cv::InputArray _src, cv::OutputArray _dst)
 {
 	// create a image with size of power of 2
 	Mat src = _src.getMat();
 
-	long img_max_side;
-	long padded_size = -1;
+	unsigned long img_max_side;
+	unsigned long padded_size = -1;
 	PaddingSize psize;
 
 	if(src.cols > src.rows)
@@ -75,7 +80,7 @@ PaddingSize Map::PadImageToSquared(cv::InputArray _src, cv::OutputArray _dst)
 		img_max_side = src.rows;
 
 	// find the minimal size of the padded image
-	for(int i = 0; i <= 16; i++)
+	for(unsigned int i = 0; i <= 16; i++)
 	{
 		if((img_max_side > pow(2,i)) && (img_max_side <= pow(2, i+1)))
 		{
@@ -109,7 +114,7 @@ PaddingSize Map::PadImageToSquared(cv::InputArray _src, cv::OutputArray _dst)
 	return psize;
 }
 
-PaddingSize Map::PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst)
+PaddingSize ImageUtils::PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst)
 {
 	// create a image with size of power of 2
 	Mat src = _src.getMat();
@@ -164,7 +169,7 @@ PaddingSize Map::PadImageTo2Exp(cv::InputArray _src, cv::OutputArray _dst)
 	return psize;
 }
 
-void Map::CreateOccupancyMapForRRT(uint64_t width, uint64_t height, cv::OutputArray _dst)
+void ImageUtils::CreateOccupancyMapForRRT(uint64_t width, uint64_t height, cv::OutputArray _dst)
 {
 	_dst.create(Size(width, height), CV_8UC1);
 	Mat dst = _dst.getMat();
@@ -172,7 +177,7 @@ void Map::CreateOccupancyMapForRRT(uint64_t width, uint64_t height, cv::OutputAr
 	dst = Scalar(255);
 }
 
-OccupancyType Map::CheckAreaOccupancy(cv::InputArray _src, BoundingBox<int32_t> area)
+OccupancyType ImageUtils::CheckAreaOccupancy(cv::InputArray _src, BoundingBox<int32_t> area)
 {
 	Mat src = _src.getMat();
 
@@ -210,7 +215,7 @@ OccupancyType Map::CheckAreaOccupancy(cv::InputArray _src, BoundingBox<int32_t> 
 	return type;
 }
 
-bool Map::IsPointNonObstacle(cv::InputArray _src, cv::Point pt)
+bool ImageUtils::IsPointNonObstacle(cv::InputArray _src, cv::Point pt)
 {
 	Mat src = _src.getMat();
 

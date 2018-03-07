@@ -12,6 +12,10 @@ import struct
 class Point3Df_t(object):
     __slots__ = ["x", "y", "z"]
 
+    __typenames__ = ["float", "float", "float"]
+
+    __dimensions__ = [None, None, None]
+
     def __init__(self):
         self.x = 0.0
         self.y = 0.0

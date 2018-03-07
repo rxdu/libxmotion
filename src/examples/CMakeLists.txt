@@ -52,3 +52,6 @@ add_executable(graph_example graph_example.cpp)
 target_link_libraries(graph_example vis map geometry)
 
 add_executable(simple_graph simple_graph.cpp)
+
+add_executable(basic_example basic_example.cpp)
+target_link_libraries(basic_example graph)

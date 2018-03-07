@@ -21,25 +21,23 @@ else(ENABLE_LOGGING)
 endif(ENABLE_LOGGING)
 
 ## Config common include directories
-include_directories(${CMAKE_SOURCE_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/libraries/)
-include_directories(${CMAKE_SOURCE_DIR}/libraries/octomap-1.8.0/octomap/include)
+# include_directories(${CMAKE_SOURCE_DIR})
+# include_directories(${CMAKE_SOURCE_DIR}/libraries/)
+# include_directories(${CMAKE_SOURCE_DIR}/libraries/octomap-1.8.0/octomap/include)
+# set(Octomap_LIBS octomap octomath)
 
-set(Octomap_LIBS octomap octomath)
-
-## Add other sub source directories
+## Add sub source directories
 # add_subdirectory(examples)
 add_subdirectory(common)
-# add_subdirectory(planning)
-add_subdirectory(planning_v2)
+add_subdirectory(planning)
 add_subdirectory(fastplot)
 add_subdirectory(interface)
 add_subdirectory(utilities)
 add_subdirectory(libraries)
 
 add_subdirectory(platforms/generic_car)
-add_subdirectory(platforms/quadrotor)
-add_subdirectory(platforms/simulator)
+# add_subdirectory(platforms/quadrotor)
+# add_subdirectory(platforms/simulator)
 
 ## Add test source directories
 if(BUILD_TESTS)

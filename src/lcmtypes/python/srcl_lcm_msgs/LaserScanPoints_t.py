@@ -18,6 +18,10 @@ import srcl_lcm_msgs.Point3Df_t
 class LaserScanPoints_t(object):
     __slots__ = ["trans_sensor2world", "point_num", "points", "pose"]
 
+    __typenames__ = ["srcl_lcm_msgs.Pose_t", "int64_t", "srcl_lcm_msgs.Point3Df_t", "srcl_lcm_msgs.QuadrotorTransform"]
+
+    __dimensions__ = [None, None, ["point_num"], None]
+
     def __init__(self):
         self.trans_sensor2world = srcl_lcm_msgs.Pose_t()
         self.point_num = 0
