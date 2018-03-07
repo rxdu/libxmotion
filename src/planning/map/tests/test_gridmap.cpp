@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <vector>
 
-#include "map/map2d.hpp"
+#include "map/grid_map.hpp"
 #include "fastplot/fastplot.hpp"
 
 using namespace cv;
@@ -17,7 +17,7 @@ using namespace librav;
 
 int main(int argc, char** argv )
 {	
-	Map2D map;
+	GridMap map;
 
 	map.LoadMapImage("/home/rdu/Workspace/librav/data/example.png");
 	map.IsMapValid();

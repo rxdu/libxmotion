@@ -10,9 +10,10 @@ This repository contains a collection of software for research on robotics and a
 * **scripts** : shell scripts
 * **docs** : documentation of this project
 * **data** : map, experiment results, logs
-* **tools** : tool used for the development
 
 ## 2. Install dependencies
+
+Scripts in [this repository](https://github.com/rxdu/devel_setup) can be used to install all required dependencies (and other possibly useful software). For minimal dependency installation, you can follow instructions below.
 
 * Building tools, Git, CMake
 ```
@@ -46,7 +47,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/
 $ sudo apt-get install libboost-all-dev
 ```
 
-* Add environment variables
+* Add environment variables (to use LCM types in Python and Java)
 ```
 # librav
 export LIBRAV_HOME=$HOME/Workspace/librav
@@ -84,5 +85,10 @@ Then you can build the documentation from code.
 $ cd librav/docs/doxygen
 $ doxygen Doxyfile
 ```
+
+## TODO List
+
+- [ ] Finish plotting of graph and square grid in FastPlot module
+- [ ] Fix path_repair module for quadrotors and clean up all relevant code
 
 ## [Reference]

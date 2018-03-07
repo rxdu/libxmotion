@@ -1,5 +1,5 @@
 /* 
- * map2d.hpp
+ * grid_map.hpp
  * 
  * Created on: Jul 27, 2016
  * Description: 
@@ -7,8 +7,8 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#ifndef MAP2D_HPP
-#define MAP2D_HPP
+#ifndef GRID_MAP_HPP
+#define GRID_MAP_HPP
 
 #include <memory>
 
@@ -28,12 +28,12 @@ namespace librav
  *		|
  * 	origin ------------------> x
  */
-class Map2D
+class GridMap
 {
   public:
-	Map2D(std::string path) : map_path_(path){};
-	Map2D() = default;
-	~Map2D() = default;
+	GridMap(std::string path) : map_path_(path){};
+	GridMap() = default;
+	~GridMap() = default;
 
 	// Map images
 	cv::Mat raw_image_;
@@ -71,4 +71,4 @@ class Map2D
 };
 }
 
-#endif /* MAP2D_HPP */
+#endif /* GRID_MAP_HPP */

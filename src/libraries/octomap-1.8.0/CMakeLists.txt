@@ -6,15 +6,15 @@ PROJECT( octomap-distribution )
 SET( BASE_DIR ${CMAKE_BINARY_DIR} )
 SET( CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR} )
 
-option(BUILD_OCTOVIS_SUBPROJECT "Build targets from subproject octovis" OFF)
-option(BUILD_DYNAMICETD3D_SUBPROJECT  "Build targets from subproject dynamicEDT3D" OFF)
+# option(BUILD_OCTOVIS_SUBPROJECT "Build targets from subproject octovis" OFF)
+# option(BUILD_DYNAMICETD3D_SUBPROJECT  "Build targets from subproject dynamicEDT3D" OFF)
 
 ADD_SUBDIRECTORY( octomap )
-ADD_SUBDIRECTORY( octovis )
+# ADD_SUBDIRECTORY( octovis )
 
-if(BUILD_OCTOVIS_SUBPROJECT)
-	ADD_SUBDIRECTORY( octovis )
-endif()
+# if(BUILD_OCTOVIS_SUBPROJECT)
+# 	ADD_SUBDIRECTORY( octovis )
+# endif()
 
 if(BUILD_DYNAMICETD3D_SUBPROJECT)
 	ADD_SUBDIRECTORY( dynamicEDT3D )

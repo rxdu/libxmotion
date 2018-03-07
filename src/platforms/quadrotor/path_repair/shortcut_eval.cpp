@@ -12,9 +12,9 @@
 
 #include "eigen3/Eigen/Geometry"
 
-#include "vis/graph_vis.h"
-#include "vis/sgrid_vis.h"
-#include "vis/vis_utils.h"
+// #include "vis/graph_vis.h"
+// #include "vis/sgrid_vis.h"
+// #include "vis/vis_utils.h"
 #include "planning/graph/priority_queue.h"
 #include "path_repair/shortcut_eval.h"
 

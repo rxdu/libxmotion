@@ -26,11 +26,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 ## Find LCM
 find_package(LCM REQUIRED)
-
 if(LCM_NOT_FOUND)
   message(STATUS "LCM is not found. Inter-process communication depends on LCM.")
 endif(LCM_NOT_FOUND)
-
 # Include files for LCM
 set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
@@ -48,10 +46,9 @@ target_link_libraries(logger_example utilities)
 add_executable(stopwatch_example stopwatch_example.cpp)
 target_link_libraries(stopwatch_example utilities)
 
-add_executable(graph_example graph_example.cpp)
-target_link_libraries(graph_example vis map geometry)
+add_executable(basic_graph basic_graph.cpp)
+target_link_libraries(basic_graph graph)
 
-add_executable(simple_graph simple_graph.cpp)
+# add_executable(grid_graph grid_graph.cpp)
+# target_link_libraries(grid_graph graph planner map geometry)
 
-add_executable(basic_example basic_example.cpp)
-target_link_libraries(basic_example graph)

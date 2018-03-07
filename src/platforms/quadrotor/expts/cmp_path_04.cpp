@@ -25,7 +25,7 @@
 #include "opencv2/opencv.hpp"
 
 // user
-#include "planning/graph/graph.h"
+#include "graph/graph.hpp"
 #include "planning/graph/astar.h"
 #include "vis/graph_vis.h"
 #include "vis/sgrid_vis.h"

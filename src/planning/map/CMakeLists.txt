@@ -14,7 +14,7 @@ set(MAP_LIB_SRC
   # 2D map
   src/image_utils.cpp
   # src/map_utils.cpp
-  src/map2d.cpp
+  src/grid_map.cpp
   # src/sgrid_builder.cpp
   src/octomap_server.cpp
 )

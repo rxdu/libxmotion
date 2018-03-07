@@ -4,8 +4,8 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add executables
-add_executable(test_map2d test_map2d.cpp)
-target_link_libraries(test_map2d map fastplot)
+add_executable(test_gridmap test_gridmap.cpp)
+target_link_libraries(test_gridmap map fastplot)
 
 # add_executable(test_qtree test_quadtree.cpp)
 # target_link_libraries(test_qtree geometry vis map)

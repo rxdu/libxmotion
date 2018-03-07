@@ -1,5 +1,5 @@
 /* 
- * map2d.cpp
+ * grid_map.cpp
  * 
  * Created on: Jul 27, 2016
  * Description: 
@@ -7,11 +7,11 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#include "map/map2d.hpp"
+#include "map/grid_map.hpp"
 
 using namespace librav;
 
-bool Map2D::IsMapValid()
+bool GridMap::IsMapValid()
 {
     bool is_valid = image_loaded_ && dimension_set_ && offset_set_;
 
@@ -26,7 +26,7 @@ bool Map2D::IsMapValid()
     }
 }
 
-void Map2D::LoadMapImage()
+void GridMap::LoadMapImage()
 {
     cv::Mat image;
 
@@ -46,13 +46,13 @@ void Map2D::LoadMapImage()
     }
 }
 
-void Map2D::LoadMapImage(std::string map_path)
+void GridMap::LoadMapImage(std::string map_path)
 {
     map_path_ = map_path;
     LoadMapImage();
 }
 
-void Map2D::SetWorldSize(double world_x, double world_y)
+void GridMap::SetWorldSize(double world_x, double world_y)
 {
     if (image_loaded_)
     {

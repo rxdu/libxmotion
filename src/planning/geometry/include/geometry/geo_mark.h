@@ -10,7 +10,6 @@
 
 #include <cmath>
 
-#include "planning/graph/bds_base.h"
 #include "common/librav_types.hpp"
 
 namespace librav {
@@ -22,18 +21,19 @@ enum class GeoMarkSource {
 	VIRTUAL_POINT
 };
 
-struct GeoMark: public BDSBase<GeoMark>
+struct GeoMark
 {
 	GeoMark():
-		BDSBase<GeoMark>(0),
+		data_id_(0),
 		source(GeoMarkSource::NOT_SPECIFIED),
 		source_id(0){};
 	GeoMark(uint64_t id):
-		BDSBase<GeoMark>(id),
+		data_id_(id),
 		source(GeoMarkSource::NOT_SPECIFIED),
 		source_id(0){};
 	~GeoMark(){};
 
+	uint64_t data_id_;
 	Position3Dd position;
 	GeoMarkSource source;
 	uint64_t source_id;
