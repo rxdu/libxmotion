@@ -2,9 +2,6 @@
 #include <memory>
 #include <iostream>
 
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-
 #include "graph/graph.hpp"
 #include "fastplot/fastplot.hpp"
 #include "planner/graph_builder.hpp"
