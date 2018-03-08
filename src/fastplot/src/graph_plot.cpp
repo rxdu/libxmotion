@@ -64,58 +64,6 @@ void FastPlot::AddGraphLayer(std::shared_ptr<Graph_t<SquareCell*>> graph, cv::In
     }
 }
 
-// template <typename StateType, typename std::enable_if<!std::is_pointer<StateType>::value>::type * = nullptr>
-// void FastPlot::AddGraphLayer(std::shared_ptr<Graph_t<StateType, double>> graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id)
-// {
-//     cv::Mat src, dst;
-//     int src_type = _src.getMat().type();
-//     if (src_type == CV_8UC1)
-//     {
-//         cv::cvtColor(_src, src, CV_GRAY2BGR);
-//         _dst.create(src.size(), src.type());
-//         dst = _dst.getMat();
-//     }
-//     else
-//     {
-//         src = _src.getMat();
-//         _dst.create(_src.size(), _src.type());
-//         dst = _dst.getMat();
-//         src.copyTo(dst);
-//     }
-
-//     // draw all vertices
-//     auto vertices = graph->GetGraphVertices();
-//     for (auto &vertex : vertices)
-//     {
-//         // current vertex center coordinate
-//         int32_t loc_x, loc_y;
-//         loc_x = (vertex->state_.bounding_box_.x.min + vertex->state_.bounding_box_.x.max) / 2;
-//         loc_y = (vertex->state_.bounding_box_.y.min + vertex->state_.bounding_box_.y.max) / 2;
-
-//         cv::Point center(loc_x, loc_y);
-//         PlotUtils::DrawPoint(dst, center);
-        
-//         if (show_id && vertex->state_.data_id_ % 5 == 0)
-//         {
-//             std::string id = std::to_string(vertex->state_.GetUniqueID());
-//             cv::putText(dst, id, cv::Point(loc_x, loc_y), CV_FONT_NORMAL, 0.5, cv::Scalar(204, 204, 102), 1, 1);
-//         }
-//     }
-
-//     // draw all edges
-//     auto edges = graph->GetGraphUndirectedEdges();
-//     for (auto &edge : edges)
-//     {
-//         uint64_t loc_x1, loc_y1, loc_x2, loc_y2;
-//         loc_x1 = (edge.src_->state_.bounding_box_.x.min + edge.src_->state_.bounding_box_.x.max) / 2;
-//         loc_y1 = (edge.src_->state_.bounding_box_.y.min + edge.src_->state_.bounding_box_.y.max) / 2;
-//         loc_x2 = (edge.dst_->state_.bounding_box_.x.min + edge.dst_->state_.bounding_box_.x.max) / 2;
-//         loc_y2 = (edge.dst_->state_.bounding_box_.y.min + edge.dst_->state_.bounding_box_.y.max) / 2;;
-
-//         PlotUtils::DrawLine(dst, cv::Point(loc_x1, loc_y1), cv::Point(loc_x2, loc_y2));
-//     }
-// }
-
 template <typename StateType>
 void FastPlot::AddGraphPathLayer(const Path_t<StateType> &path, cv::InputArray _src, cv::OutputArray _dst, cv::Scalar line_color)
 {

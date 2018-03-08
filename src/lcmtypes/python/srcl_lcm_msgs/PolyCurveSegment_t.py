@@ -12,6 +12,10 @@ import struct
 class PolyCurveSegment_t(object):
     __slots__ = ["coeffsize_x", "coeffsize_y", "coeffsize_z", "coeffsize_yaw", "coeffs_x", "coeffs_y", "coeffs_z", "coeffs_yaw", "t_start", "t_end"]
 
+    __typenames__ = ["int32_t", "int32_t", "int32_t", "int32_t", "double", "double", "double", "double", "double", "double"]
+
+    __dimensions__ = [None, None, None, None, ["coeffsize_x"], ["coeffsize_y"], ["coeffsize_z"], ["coeffsize_yaw"], None, None]
+
     def __init__(self):
         self.coeffsize_x = 0
         self.coeffsize_y = 0

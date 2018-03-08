@@ -12,6 +12,10 @@ import struct
 class Octomap_t(object):
     __slots__ = ["binary", "id", "resolution", "data_size", "data"]
 
+    __typenames__ = ["boolean", "string", "double", "int32_t", "int8_t"]
+
+    __dimensions__ = [None, None, None, None, ["data_size"]]
+
     def __init__(self):
         self.binary = False
         self.id = ""

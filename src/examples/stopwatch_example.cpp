@@ -2,9 +2,10 @@
  * stopwatch_example.cpp
  * 
  * Created on: Oct 30, 2017 22:41
+ * Description: 
  * 
  * Copyright (c) 2017 Ruixiang Du (rdu)
- */ 
+ */
 
 #include <iostream>
 #include <thread>

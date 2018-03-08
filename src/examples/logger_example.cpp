@@ -1,8 +1,10 @@
-/*
- * test_logging.cpp
- *
- *  Created on: Oct 6, 2016
- *      Author: rdu
+/* 
+ * logger_example.cpp
+ * 
+ * Created on: Oct 6, 2016
+ * Description: 
+ * 
+ * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
 #include <memory>

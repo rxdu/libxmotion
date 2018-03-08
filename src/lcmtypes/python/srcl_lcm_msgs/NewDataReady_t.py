@@ -12,6 +12,10 @@ import struct
 class NewDataReady_t(object):
     __slots__ = ["new_data_ready_"]
 
+    __typenames__ = ["boolean"]
+
+    __dimensions__ = [None]
+
     def __init__(self):
         self.new_data_ready_ = False
 

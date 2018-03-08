@@ -16,13 +16,8 @@
 #include "lcmtypes/librav.hpp"
 
 #include "common/librav_types.hpp"
-#include "utility/logging/logger.hpp"
-#include "utility/stopwatch/stopwatch.h"
-#include "map/map_utils.h"
-#include "map/map_config.h"
-#include "map/map_info.h"
-#include "geometry/graph_builder.h"
-#include "geometry/sgrid_builder.h"
+#include "logging/logger.hpp"
+#include "stopwatch/stopwatch.h"
 #include "path_repair/sim/virtual_quadrotor.h"
 
 using namespace librav;

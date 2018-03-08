@@ -14,6 +14,10 @@ import srcl_lcm_msgs.UAVTrajectoryPoint_t
 class UAVTrajectory_t(object):
     __slots__ = ["waypoint_num", "trajectory"]
 
+    __typenames__ = ["int64_t", "srcl_lcm_msgs.UAVTrajectoryPoint_t"]
+
+    __dimensions__ = [None, ["waypoint_num"]]
+
     def __init__(self):
         self.waypoint_num = 0
         self.trajectory = []

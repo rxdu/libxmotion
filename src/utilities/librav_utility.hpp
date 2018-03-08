@@ -9,8 +9,8 @@
 #ifndef LIBRAV_UTILITY_H
 #define LIBRAV_UTILITY_H
 
-#include "utility/logging/logger.hpp"
-#include "utility/csv_parser/csv.h"
-#include "utility/stopwatch/stopwatch.h"
+#include "logging/logger.hpp"
+#include "csv_parser/csv.h"
+#include "stopwatch/stopwatch.h"
 
 #endif /* LIBRAV_UTILITY_H */

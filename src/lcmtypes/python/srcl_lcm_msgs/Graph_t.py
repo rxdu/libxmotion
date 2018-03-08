@@ -16,6 +16,10 @@ import srcl_lcm_msgs.Edge_t
 class Graph_t(object):
     __slots__ = ["edge_num", "vertex_num", "vertices", "edges"]
 
+    __typenames__ = ["int64_t", "int64_t", "srcl_lcm_msgs.Vertex_t", "srcl_lcm_msgs.Edge_t"]
+
+    __dimensions__ = [None, None, ["vertex_num"], ["edge_num"]]
+
     def __init__(self):
         self.edge_num = 0
         self.vertex_num = 0

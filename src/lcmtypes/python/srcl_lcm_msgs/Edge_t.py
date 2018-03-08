@@ -12,6 +12,10 @@ import struct
 class Edge_t(object):
     __slots__ = ["id_start", "id_end"]
 
+    __typenames__ = ["int64_t", "int64_t"]
+
+    __dimensions__ = [None, None]
+
     def __init__(self):
         self.id_start = 0
         self.id_end = 0

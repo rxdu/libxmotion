@@ -14,6 +14,10 @@ import srcl_lcm_msgs.Pose_t
 class QuadrotorTransform(object):
     __slots__ = ["base_to_world", "laser_to_base"]
 
+    __typenames__ = ["srcl_lcm_msgs.Pose_t", "srcl_lcm_msgs.Pose_t"]
+
+    __dimensions__ = [None, None]
+
     def __init__(self):
         self.base_to_world = srcl_lcm_msgs.Pose_t()
         self.laser_to_base = srcl_lcm_msgs.Pose_t()

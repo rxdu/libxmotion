@@ -17,7 +17,7 @@
 #include "opencv2/opencv.hpp"
 
 // User headers
-#include "planning/graph/graph.h"
+#include "graph/graph.hpp"
 #include "planning/graph/astar.h"
 #include "map/map_type.h"
 #include "map/map_config.h"

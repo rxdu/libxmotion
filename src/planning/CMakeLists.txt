@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
-project(librav_planning)
+project(librav_planning_v2)
 
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
@@ -40,16 +40,18 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 ## Find Gurobi
 find_package(GUROBI QUIET)
 if (NOT GUROBI_FOUND)
-  message("Gurobi not found. Trajectory generation will not be built. Make sure you have set the GUROBI_HOME variable")
+  message("-- Gurobi not found. Trajectory generation will not be built. Make sure you have set the GUROBI_HOME variable")
 else()
-  message("Gurobi found")
-  message(STATUS "Gurobi library: " ${GUROBI_LIBRARIES})
+  message("-- Gurobi found")
   include_directories(${GUROBI_INCLUDE_DIRS})
-  add_subdirectory(polyopt)
 endif()
 
 ## Add other sub source directories
-add_subdirectory(map)
+add_subdirectory(libgraph)
 add_subdirectory(geometry)
-# add_subdirectory(field)
-# add_subdirectory(traffic)
+add_subdirectory(planner)
+add_subdirectory(map)
+if (GUROBI_FOUND)
+add_subdirectory(polyopt)
+endif()
+

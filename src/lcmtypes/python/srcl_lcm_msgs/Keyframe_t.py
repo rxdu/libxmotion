@@ -12,6 +12,10 @@ import struct
 class Keyframe_t(object):
     __slots__ = ["position", "velocity", "yaw", "vel_constr"]
 
+    __typenames__ = ["float", "float", "float", "boolean"]
+
+    __dimensions__ = [[3], [3], None, None]
+
     def __init__(self):
         self.position = [ 0.0 for dim0 in range(3) ]
         self.velocity = [ 0.0 for dim0 in range(3) ]

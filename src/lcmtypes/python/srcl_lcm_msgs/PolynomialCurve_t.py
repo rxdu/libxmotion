@@ -18,6 +18,10 @@ import srcl_lcm_msgs.WayPoint_t
 class PolynomialCurve_t(object):
     __slots__ = ["seg_num", "segments", "wp_num", "waypoints", "start_time", "trajectory_id", "scaling_factor"]
 
+    __typenames__ = ["int64_t", "srcl_lcm_msgs.PolyCurveSegment_t", "int32_t", "srcl_lcm_msgs.WayPoint_t", "srcl_lcm_msgs.TimeStamp_t", "int64_t", "float"]
+
+    __dimensions__ = [None, ["seg_num"], None, ["wp_num"], None, None, None]
+
     def __init__(self):
         self.seg_num = 0
         self.segments = []

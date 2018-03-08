@@ -145,8 +145,8 @@ ENDIF(DOXYGEN_FOUND)
 INCLUDE(CPackSettings)
 
 # Finished:
-MESSAGE ("\n")
-MESSAGE (STATUS "Compile octomap using: make")
-MESSAGE (STATUS "Install octomap using: make install")
-MESSAGE (STATUS "    (be sure to set the correct CMAKE_INSTALL_PREFIX before)")
-MESSAGE (STATUS "Compile API-documentation using: make docs\n")
+# MESSAGE ("\n")
+# MESSAGE (STATUS "Compile octomap using: make")
+# MESSAGE (STATUS "Install octomap using: make install")
+# MESSAGE (STATUS "    (be sure to set the correct CMAKE_INSTALL_PREFIX before)")
+# MESSAGE (STATUS "Compile API-documentation using: make docs\n")

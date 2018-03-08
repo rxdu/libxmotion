@@ -12,6 +12,10 @@ import struct
 class MissionInfo_t(object):
     __slots__ = ["dist_to_goal", "next_wp_id", "trajectory_id"]
 
+    __typenames__ = ["double", "int32_t", "int64_t"]
+
+    __dimensions__ = [None, None, None]
+
     def __init__(self):
         self.dist_to_goal = 0.0
         self.next_wp_id = 0

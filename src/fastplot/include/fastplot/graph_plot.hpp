@@ -21,11 +21,7 @@ namespace librav {
 namespace FastPlot
 {
 	// graph visualization
-	// template<typename StateType, typename std::enable_if<std::is_pointer<StateType>::value>::type * = nullptr>
 	void AddGraphLayer(std::shared_ptr<Graph_t<SquareCell*>> graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id = false);
-
-	// template<typename StateType, typename std::enable_if<!std::is_pointer<StateType>::value>::type * = nullptr>
-	// void AddGraphLayer(std::shared_ptr<Graph_t<StateType>> graph, cv::InputArray _src, cv::OutputArray _dst, bool show_id = false);
 
 	template<typename StateType>
 	void AddGraphPathLayer(const Path_t<StateType>& path, cv::InputArray _src, cv::OutputArray _dst, cv::Scalar line_color = cv::Scalar( 255, 153, 51 ));
