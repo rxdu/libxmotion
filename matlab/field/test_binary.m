@@ -8,7 +8,12 @@ fz = zeros(size(fx,1),size(fy,2));
 V = 0.5;
 for i = 1:size(fx,1)
     for j = 1:size(fy,2)
-        fz(i,j) = expm(-(fx(i,j)*fx(i,j) + fy(i,j)*fy(i,j))/(2*V))/(2*pi*V);
+        if (i >= 35 & i <= 65) & (j >= 35 & j <= 65)
+            %fz(i,j) = expm(-(fx(i,j)*fx(i,j) + fy(i,j)*fy(i,j))/(2*V))/(2*pi*V);
+            fz(i,j) = 1;
+        else 
+            fz(i,j) = 0;
+        end
     end
 end
 
