@@ -13,7 +13,7 @@ using namespace librav;
 
 int main()
 {
-    const int32_t fsize_x = 100;
+    const int32_t fsize_x = 80;
     const int32_t fsize_y = 100;
 
     CollisionField cfield(fsize_x, fsize_y);
@@ -33,9 +33,9 @@ int main()
 
     // plot surface
     // FastPlot::ShowFieldSurface(mat.x, mat.y, mat.z, true);
+    // FastPlot::ShowFieldContour(mat.x, mat.y, mat.z, true);
     // FastPlot::ShowMatrixAsImage(mat.z);
     FastPlot::ShowMatrixAsColorMap(mat.z);
-    // FastPlot::ShowFieldContour(mat.x, mat.y, mat.z, true);
     
     return 0;
 }

@@ -51,4 +51,6 @@ void CollisionField::UpdateCollisionField()
         threat_val += tfd.second->GetValueAtCoordinate(i, j);
       SetValueAtCoordinate(i, j, threat_val);
     }
+
+    collision_threat_matrix_ = GenerateFieldMatrix(0, 0.1, 0, 0.1, true).z;
 }

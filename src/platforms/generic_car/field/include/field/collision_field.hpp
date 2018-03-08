@@ -21,7 +21,6 @@
 
 namespace librav
 {
-
 class CollisionField : public ScalarField
 {
 public:
@@ -34,6 +33,8 @@ public:
   void RemoveTrafficParticipant(int32_t id);
 
   void UpdateCollisionField();
+
+  Eigen::MatrixXd collision_threat_matrix_;
 
 private:
   std::unordered_map<int32_t, std::shared_ptr<TrafficParticipant>> traffic_participants_;

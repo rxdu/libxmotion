@@ -7,30 +7,15 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 #find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
-# set(PATH_REPAIR_COMMON_SRC
-#     shortcut_eval.cpp
-#     sg_graph_planner.cpp
-# )
-
-# if (GUROBI_FOUND)
-#     set(PATH_REPAIR_LIB_SRC
-#         quad_path_repair.cpp    
-#         geo_mark_graph.cpp    
-#     )
-#     add_library(path_repair STATIC ${PATH_REPAIR_LIB_SRC} ${PATH_REPAIR_COMMON_SRC})
-#     target_link_libraries(path_repair map geometry quad_base polyopt common vis ${LCM_LIBRARIES})
-# endif()
-
-# set(PATH_REPAIR_SIM_SRC
-#     sim/sim_path_repair.cpp
-#     sim/virtual_quadrotor.cpp
-#     sim/sim_depth_sensor.cpp
-# )
-# add_library(pr_sim STATIC ${PATH_REPAIR_SIM_SRC} ${PATH_REPAIR_COMMON_SRC})
-# target_link_libraries(pr_sim utilities map geometry ${LCM_LIBRARIES})
-
-# Add executables
+set(NAV_LIB_SRC
+    src/field_search.cpp
+)
+add_library(nav STATIC ${NAV_LIB_SRC})
+target_link_libraries(nav graph field)
+target_include_directories(nav PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+    PRIVATE src)
 
 # Tests
-add_subdirectory(expts)
 add_subdirectory(tests)

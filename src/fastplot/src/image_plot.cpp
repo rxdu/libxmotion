@@ -54,7 +54,8 @@ void FastPlot::ShowMatrixAsImage(const Eigen::MatrixXd &matrix, std::string wind
     destroyWindow(window_name);
 }
 
-// reference: https://www.learnopencv.com/applycolormap-for-pseudocoloring-in-opencv-c-python/
+// Reference: 
+//  [1] https://www.learnopencv.com/applycolormap-for-pseudocoloring-in-opencv-c-python/
 void FastPlot::ShowMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::string window_name)
 {
     cv::Mat grey_img, color_img;
