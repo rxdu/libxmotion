@@ -12,8 +12,14 @@ target_link_libraries(test_scalar_field field)
 add_executable(test_threat_basis test_threat_basis.cpp)
 target_link_libraries(test_threat_basis field fastplot utilities)
 
+add_executable(test_traffic_participant test_traffic_participant.cpp)
+target_link_libraries(test_traffic_participant field fastplot utilities)
+
 add_executable(test_collision_field test_collision_field.cpp)
 target_link_libraries(test_collision_field field fastplot utilities)
+
+add_executable(test_info_field test_info_field.cpp)
+target_link_libraries(test_info_field field fastplot utilities)
 
 add_executable(test_coeff_est test_coeff_est.cpp)
 target_link_libraries(test_coeff_est field fastplot utilities)

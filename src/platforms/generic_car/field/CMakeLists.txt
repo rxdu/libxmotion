@@ -9,7 +9,9 @@ set(FIELD_LIB_SRC
     src/scalar_field.cpp
     src/threat_basis.cpp
     src/threat_distribution.cpp
+    src/traffic_participant.cpp
     src/collision_field.cpp
+    src/information_field.cpp
 )
 add_library(field STATIC ${FIELD_LIB_SRC})
 # target_link_libraries(field common)

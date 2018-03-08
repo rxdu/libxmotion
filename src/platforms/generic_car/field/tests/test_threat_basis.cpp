@@ -12,7 +12,9 @@ int main()
 
     stopwatch::StopWatch timer;
     timer.tic();
-    GaussianPositionThreat gau(50, 50, 5, 3);
+    GaussianPositionThreat gau(50, 50, 10, 3);
+        // GaussianPositionThreat gau(50, 50, 5, 3);
+
     basis.SetThreatBasisDistribution(gau);
     // GaussianPositionVelocityThreat gau(100, 100, 1, 0, 5);
     // basis.SetThreatBasisDistribution(gau);

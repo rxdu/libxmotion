@@ -61,6 +61,9 @@ namespace PlotUtils
 	// HSV: h ∈ [0, 360] and s,v ∈ [0, 1]
 	HSVColor RGB2HSV(RGBColor in);
 	RGBColor HSV2RGB(HSVColor in);
+
+	std::string GetMatDepth(const cv::Mat& mat);
+	std::string GetMatType(const cv::Mat& mat);
 };
 }
 
