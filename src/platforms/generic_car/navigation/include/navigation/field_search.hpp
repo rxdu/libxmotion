@@ -14,6 +14,8 @@
 #include <vector>
 #include <tuple>
 
+#include <Eigen/Dense>
+
 #include "field/collision_field.hpp"
 
 #include "graph/graph.hpp"
@@ -54,6 +56,11 @@ public:
 private:
   std::shared_ptr<CollisionField> field_;
 };
+
+namespace FieldSearch
+{
+Eigen::MatrixXi GetPathWaypoints(const std::vector<FieldTile> &path);
+}
 }
 
 #endif /* FIELD_SEARCH_HPP */

@@ -22,7 +22,8 @@ const cv::Scalar FastplotColors::ln_color = Scalar(Scalar(0, 0, 0));
 const cv::Scalar FastplotColors::obs_color = Scalar(Scalar(0, 102, 204));
 const cv::Scalar FastplotColors::aoi_color = Scalar(Scalar(0, 255, 255));
 const cv::Scalar FastplotColors::start_color = Scalar(0, 0, 255);
-const cv::Scalar FastplotColors::finish_color = Scalar(153, 76, 0);
+const cv::Scalar FastplotColors::intermediate_color = Scalar(0, 0, 255);
+const cv::Scalar FastplotColors::finish_color = Scalar(51, 153, 51);//Scalar(153, 76, 0);
 
 void PlotUtils::DrawPoint(cv::Mat img, cv::Point pos, const cv::Scalar &color)
 {

@@ -37,7 +37,10 @@ int main()
     auto path = Dijkstra::IncSearch(tile_s, tile_g, GetNeighbourFunc_t<FieldTile>(GetFieldTileNeighbour(cfield)));
     std::cout << "path length: " << path.size() << std::endl;
 
-    FastPlot::ShowMatrixAsColorMap(cfield->collision_threat_matrix_);
+    auto path_matrix = FieldSearch::GetPathWaypoints(path);
+
+    // FastPlot::ShowMatrixAsColorMap(cfield->collision_threat_matrix_);
+    FastPlot::ShowPathOnColorMap(cfield->collision_threat_matrix_, path_matrix);
 
     return 0;
 }

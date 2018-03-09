@@ -17,15 +17,17 @@ namespace librav
 {
 namespace FastPlot
 {
-    // Read image from a file
-    cv::Mat ReadImageFile(std::string img_file);
-    cv::Mat ReadColorImage(std::string img_file);
-    cv::Mat ReadGreyscaleImage(std::string img_file);
+// Read image from a file
+cv::Mat ReadImageFile(std::string img_file);
+cv::Mat ReadColorImage(std::string img_file);
+cv::Mat ReadGreyscaleImage(std::string img_file);
 
-    // Display image
-    void ShowImage(cv::Mat img, std::string window_name = "Image");
-    void ShowMatrixAsImage(const Eigen::MatrixXd& matrix, std::string window_name = "Matrix Image");
-    void ShowMatrixAsColorMap(const Eigen::MatrixXd& matrix, std::string window_name = "Matrix Color Map");
+// Display image
+void ShowImage(cv::Mat img, std::string window_name = "Image");
+
+void ShowMatrixAsImage(const Eigen::MatrixXd &matrix, std::string window_name = "Matrix Image");
+void ShowMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::string window_name = "Matrix Color Map");
+void ShowPathOnColorMap(const Eigen::MatrixXd &matrix, const Eigen::MatrixXi &path, std::string window_name = "Color Map");
 }
 }
 
