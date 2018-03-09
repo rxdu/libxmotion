@@ -13,6 +13,7 @@
 
 using namespace librav;
 
+template <typename DistributionT>
 void TrafficParticipant::SetPositionVelocity(double posx, double posy, double velx, double vely)
 {
     position_x_ = posx;
@@ -20,11 +21,15 @@ void TrafficParticipant::SetPositionVelocity(double posx, double posy, double ve
 
     velocity_x_ = velx;
     velocity_y_ = vely;
+
+    dist_func_.SetParameters(position_x_, position_y_, velocity_x_, velocity_y_);
+    UpdateThreatDistribution();
 }
 
-void TrafficParticipant::SetThreatDistribution(std::function<double(double, double)> dist_func)
+template <typename DistributionT>
+void TrafficParticipant::UpdateThreatDistribution()
 {
     for (int64_t i = 0; i < size_x_; ++i)
         for (int64_t j = 0; j < size_y_; ++j)
-            SetValueAtCoordinate(i, j, dist_func(i, j));
+            SetValueAtCoordinate(i, j, dist_func_(i, j));
 }

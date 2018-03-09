@@ -22,12 +22,14 @@ cv::Mat ReadImageFile(std::string img_file);
 cv::Mat ReadColorImage(std::string img_file);
 cv::Mat ReadGreyscaleImage(std::string img_file);
 
-// Display image
-void ShowImage(cv::Mat img, std::string window_name = "Image");
+cv::Mat CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix);
 
-void ShowMatrixAsImage(const Eigen::MatrixXd &matrix, std::string window_name = "Matrix Image");
-void ShowMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::string window_name = "Matrix Color Map");
-void ShowPathOnColorMap(const Eigen::MatrixXd &matrix, const Eigen::MatrixXi &path, std::string window_name = "Color Map");
+// Display image
+void ShowImage(cv::Mat img, std::string window_name = "Image", bool save_img = false);
+
+void ShowMatrixAsImage(const Eigen::MatrixXd &matrix, std::string window_name = "Matrix Image", bool save_img = false);
+void ShowMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::string window_name = "Matrix Color Map", bool save_img = false);
+void ShowPathOnColorMap(const Eigen::MatrixXd &matrix, const Eigen::MatrixXi &path, std::string window_name = "Color Map", bool save_img = false);
 }
 }
 

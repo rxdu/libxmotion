@@ -4,6 +4,7 @@
 #include "field/collision_field.hpp"
 #include "field/traffic_participant.hpp"
 #include "field/threat_distribution.hpp"
+#include "field/lane_constraint.hpp"
 
 #include "fastplot/fastplot.hpp"
 #include "fastplot/field_plot.hpp"
@@ -17,14 +18,22 @@ int main()
     const int32_t fsize_y = 100;
 
     CollisionField cfield(fsize_x, fsize_y);
-    cfield.SetOriginCoordinate(0,0);
+    cfield.SetOriginCoordinate(0, 0);
 
-    GaussianPositionVelocityThreat gau(50, 50, 1, 1);
+    // add traffic participant
+    auto pt0 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
+    pt0->SetPositionVelocity(50, 50, 1, 1);
 
-    std::shared_ptr<TrafficParticipant> pt0 = std::make_shared<TrafficParticipant>(fsize_x, fsize_y);
-    pt0->SetThreatDistribution(gau);
+    // add lane constraint
+    std::shared_ptr<LaneConstraint> lc0 = std::make_shared<LaneConstraint>(fsize_x, fsize_y);
+    LanePolylinePoints line0;
+    line0.push_back(LanePoint(250, 0));
+    line0.push_back(LanePoint(250, 74));
+    lc0->SetLanePolylineKeypoints(line0);
+    
+    cfield.AddLaneConstraints(0, lc0);
 
-    cfield.AddTrafficParticipant(0, pt0);
+    // update collision field before use
     cfield.UpdateCollisionField();
 
     std::cout << "collision field created" << std::endl;
@@ -36,6 +45,6 @@ int main()
     // FastPlot::ShowFieldContour(mat.x, mat.y, mat.z, true);
     // FastPlot::ShowMatrixAsImage(mat.z);
     FastPlot::ShowMatrixAsColorMap(mat.z);
-    
+
     return 0;
 }

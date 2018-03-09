@@ -34,17 +34,38 @@ cv::Mat FastPlot::ReadGreyscaleImage(std::string img_file)
     return imread(img_file, CV_LOAD_IMAGE_GRAYSCALE);
 }
 
-void FastPlot::ShowImage(cv::Mat img, std::string window_name)
+// Reference:
+//  [1] https://www.learnopencv.com/applycolormap-for-pseudocoloring-in-opencv-c-python/
+cv::Mat FastPlot::CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix)
+{
+    cv::Mat grey_img, color_img;
+
+    // scale matrix to 0-255
+    Eigen::MatrixXd scaled_matrix = (matrix + Eigen::MatrixXd::Ones(matrix.rows(), matrix.cols()) * matrix.minCoeff()) / (matrix.maxCoeff() - matrix.minCoeff()) * 255.0;
+    // internally transposed for consistency of indexing so transpose back here
+    Eigen::MatrixXd rotated_matrix = scaled_matrix.transpose();
+    eigen2cv(rotated_matrix, grey_img);
+
+    grey_img.convertTo(grey_img, CV_8U);
+    applyColorMap(grey_img, color_img, COLORMAP_JET);
+
+    return color_img;
+}
+
+void FastPlot::ShowImage(cv::Mat img, std::string window_name, bool save_img)
 {
     namedWindow(window_name, WINDOW_NORMAL); // Create a window for display.
     imshow(window_name, img);                // Show our image inside it.
 
     waitKey(0); // Wait for a keystroke in the window
 
+    if (save_img)
+        imwrite(window_name + ".jpg", img);
+
     destroyWindow(window_name);
 }
 
-void FastPlot::ShowMatrixAsImage(const Eigen::MatrixXd &matrix, std::string window_name)
+void FastPlot::ShowMatrixAsImage(const Eigen::MatrixXd &matrix, std::string window_name, bool save_img)
 {
     cv::Mat img;
     eigen2cv(matrix, img);
@@ -53,40 +74,32 @@ void FastPlot::ShowMatrixAsImage(const Eigen::MatrixXd &matrix, std::string wind
 
     waitKey(0); // Wait for a keystroke in the window
 
+    if (save_img)
+        imwrite(window_name + ".jpg", img);
+
     destroyWindow(window_name);
 }
 
-// Reference:
-//  [1] https://www.learnopencv.com/applycolormap-for-pseudocoloring-in-opencv-c-python/
-void FastPlot::ShowMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::string window_name)
+void FastPlot::ShowMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::string window_name, bool save_img)
 {
-    cv::Mat grey_img, color_img;
+    cv::Mat color_img = CreateColorMapFromEigenMatrix(matrix);
 
-    // scale matrix to 0-255
-    Eigen::MatrixXd scaled_matrix = (matrix + Eigen::MatrixXd::Ones(matrix.rows(), matrix.cols()) * matrix.minCoeff()) / (matrix.maxCoeff() - matrix.minCoeff()) * 255.0;
-    eigen2cv(scaled_matrix, grey_img);
-
-    grey_img.convertTo(grey_img, CV_8U);
-    applyColorMap(grey_img, color_img, COLORMAP_JET);
+    cv::flip(color_img, color_img, 0);
 
     namedWindow(window_name, WINDOW_NORMAL); // Create a window for display.
     imshow(window_name, color_img);          // Show our image inside it.
 
     waitKey(0); // Wait for a keystroke in the window
 
+    if (save_img)
+        imwrite(window_name + ".jpg", color_img);
+
     destroyWindow(window_name);
 }
 
-void FastPlot::ShowPathOnColorMap(const Eigen::MatrixXd &matrix, const Eigen::MatrixXi &path, std::string window_name)
+void FastPlot::ShowPathOnColorMap(const Eigen::MatrixXd &matrix, const Eigen::MatrixXi &path, std::string window_name, bool save_img)
 {
-    cv::Mat grey_img, color_img;
-
-    // scale matrix to 0-255
-    Eigen::MatrixXd scaled_matrix = (matrix + Eigen::MatrixXd::Ones(matrix.rows(), matrix.cols()) * matrix.minCoeff()) / (matrix.maxCoeff() - matrix.minCoeff()) * 255.0;
-    eigen2cv(scaled_matrix, grey_img);
-
-    grey_img.convertTo(grey_img, CV_8U);
-    applyColorMap(grey_img, color_img, COLORMAP_JET);
+    cv::Mat color_img = CreateColorMapFromEigenMatrix(matrix);
 
     // add path to image
     for (int32_t r = 0; r < path.rows() - 1; ++r)
@@ -100,10 +113,15 @@ void FastPlot::ShowPathOnColorMap(const Eigen::MatrixXd &matrix, const Eigen::Ma
     color_img.at<cv::Vec3b>(path(path.rows() - 1, 1), path(path.rows() - 1, 0))[1] = FastplotColors::finish_color(1);
     color_img.at<cv::Vec3b>(path(path.rows() - 1, 1), path(path.rows() - 1, 0))[2] = FastplotColors::finish_color(2);
 
+    cv::flip(color_img, color_img, 0);
+
     namedWindow(window_name, WINDOW_NORMAL); // Create a window for display.
     imshow(window_name, color_img);          // Show our image inside it.
 
     waitKey(0); // Wait for a keystroke in the window
+
+    if (save_img)
+        imwrite(window_name + ".jpg", color_img);
 
     destroyWindow(window_name);
 }

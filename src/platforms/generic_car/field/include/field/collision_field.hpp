@@ -16,28 +16,36 @@
 #include <vector>
 #include <cstdint>
 
+#include "field/lane_constraint.hpp"
 #include "field/traffic_participant.hpp"
-#include "field/field_object.hpp"
+#include "field/threat_distribution.hpp"
 
 namespace librav
 {
+typedef TrafficParticipant<GaussianPositionVelocityThreat> TrafficParticipantType;
+
 class CollisionField : public ScalarField
 {
 public:
   CollisionField(int64_t size_x, int64_t size_y);
 
-  void LoadLaneConstraints();
+  void AddLaneConstraints(int32_t id, std::shared_ptr<LaneConstraint> lane_constr);
+  void RemoveLaneConstraints(int32_t id);
 
-  void AddTrafficParticipant(int32_t id, std::shared_ptr<TrafficParticipant> participant);
-  std::shared_ptr<TrafficParticipant> GetTrafficParticipant(int32_t id);
+  void AddTrafficParticipant(int32_t id, std::shared_ptr<TrafficParticipantType> participant);
+  std::shared_ptr<TrafficParticipantType> GetTrafficParticipant(int32_t id);
   void RemoveTrafficParticipant(int32_t id);
 
   void UpdateCollisionField();
 
   Eigen::MatrixXd collision_threat_matrix_;
+  Eigen::MatrixXd lane_threat_matrix_;
 
 private:
-  std::unordered_map<int32_t, std::shared_ptr<TrafficParticipant>> traffic_participants_;
+  std::unordered_map<int32_t, std::shared_ptr<TrafficParticipantType>> traffic_participants_;
+  std::unordered_map<int32_t, std::shared_ptr<LaneConstraint>> lane_constraints_;
+
+  void UpdateLaneConstraintMatrix();
 };
 }
 

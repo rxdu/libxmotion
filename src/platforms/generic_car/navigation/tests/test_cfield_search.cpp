@@ -20,10 +20,8 @@ int main()
     std::shared_ptr<CollisionField> cfield = std::make_shared<CollisionField>(fsize_x, fsize_y);
     cfield->SetOriginCoordinate(0, 0);
 
-    GaussianPositionVelocityThreat gau(15, 15, 1, 1);
-
-    std::shared_ptr<TrafficParticipant> pt0 = std::make_shared<TrafficParticipant>(fsize_x, fsize_y);
-    pt0->SetThreatDistribution(gau);
+    auto pt0 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
+    pt0->SetPositionVelocity(15, 15, 1, 1);
 
     cfield->AddTrafficParticipant(0, pt0);
     cfield->UpdateCollisionField();

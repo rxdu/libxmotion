@@ -43,6 +43,14 @@ public:
   {
     return field_->collision_threat_matrix_(position_x_, position_y_);
   }
+
+  bool IsLaneConstrained()
+  {
+    if (field_->lane_threat_matrix_(position_x_, position_y_) != 0)
+      return true;
+    else
+      return false;
+  }
 };
 
 class GetFieldTileNeighbour

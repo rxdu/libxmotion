@@ -11,7 +11,7 @@
 
 using namespace librav;
 
-// #define ALLOW_DIAGONAL_MOVE
+#define ALLOW_DIAGONAL_MOVE
 
 GetFieldTileNeighbour::GetFieldTileNeighbour(std::shared_ptr<CollisionField> cf) : field_(cf)
 {
@@ -32,11 +32,16 @@ std::vector<std::tuple<FieldTile, double>> GetFieldTileNeighbour::operator()(Fie
                 i >= 0 && i < field_->SizeX())
             {
                 FieldTile ntile(i, j, field_);
+
+                if (ntile.IsLaneConstrained())
+                    continue;
+
                 int32_t x_err = ntile.position_x_ - tile.position_x_;
                 int32_t y_err = ntile.position_y_ - tile.position_y_;
-
                 double dist = std::sqrt(x_err * x_err + y_err * y_err);
+
                 double edge_cost = ntile.GetCollisionThreat() - tile.GetCollisionThreat() + dist * 0.001;
+
                 adjacent_tiles.emplace_back(ntile, edge_cost);
             }
         }
@@ -61,6 +66,8 @@ std::vector<std::tuple<FieldTile, double>> GetFieldTileNeighbour::operator()(Fie
         if (pos_y[i] >= 0 && pos_y[i] < field_->SizeY() && pos_x[i] >= 0 && pos_x[i] < field_->SizeX())
         {
             FieldTile ntile(pos_x[i], pos_y[i], field_);
+            if (ntile.IsLaneConstrained())
+                continue;
             double edge_cost = ntile.GetCollisionThreat() - tile.GetCollisionThreat();
             adjacent_tiles.emplace_back(ntile, edge_cost);
         }

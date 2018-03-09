@@ -8,14 +8,13 @@ using namespace librav;
 
 int main()
 {
-    TrafficParticipant traff_part(100, 100);
+    TrafficParticipant<GaussianPositionVelocityThreat> traff_part(100, 100);
 
     stopwatch::StopWatch timer;
 
     timer.tic();
 
-    GaussianPositionVelocityThreat gau(50, 50, 2, -1);
-    traff_part.SetThreatDistribution(gau);
+    traff_part.SetPositionVelocity(50, 50, 2, -1);
     ScalarFieldMatrix mat = traff_part.GenerateFieldMatrix(0, 1, 0, 1, true);
 
     std::cout << "time elapsed: " << timer.toc() << std::endl;

@@ -9,7 +9,8 @@ set(FIELD_LIB_SRC
     src/scalar_field.cpp
     src/threat_basis.cpp
     src/threat_distribution.cpp
-    src/traffic_participant.cpp
+    # src/traffic_participant.cpp
+    src/lane_constraint.cpp
     src/collision_field.cpp
     src/information_field.cpp
 )
