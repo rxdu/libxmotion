@@ -51,7 +51,7 @@ private:
   double vel_x_ = 0;
   double vel_y_ = 0;
   const double sigma_1_ = 35;
-  const double sigma_2_ = 16;
+  const double sigma_2_ = 20;
   double rho_ = 0;
 
   double coeff1_ = 0;
