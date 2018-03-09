@@ -80,13 +80,12 @@ void GaussianPositionVelocityThreat::SetParameters(double pos_x, double pos_y, d
 double GaussianPositionVelocityThreat::operator()(double x, double y)
 {
     // transform position to align with velocity vector
-    // double theta = std::atan2(vel_y_, vel_x_);
-    // std::cout << "theta: " << theta << std::endl;
-    // double x_hat = x * std::cos(theta) + y * std::sin(theta);
-    // double y_hat = - x * std::sin(theta) + y * std::cos(theta);
+    double theta = std::atan2(vel_y_, vel_x_);
+    double x_hat = (x - pos_x_) * std::cos(theta) + (y - pos_y_) * std::sin(theta);
+    double y_hat = - (x - pos_x_) * std::sin(theta) + (y - pos_y_) * std::cos(theta);
 
-    double x_err = x - pos_x_;
-    double y_err = y - pos_y_;
+    double x_err = x_hat;
+    double y_err = y_hat;
 
     double val = std::exp(x_err * x_err / coeff2_ + x_err * y_err * coeff4_ + y_err * y_err / coeff3_) / coeff1_;
 

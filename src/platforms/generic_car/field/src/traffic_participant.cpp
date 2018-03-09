@@ -9,6 +9,8 @@
 
 #include "field/traffic_participant.hpp"
 
+#include <cmath>
+
 using namespace librav;
 
 void TrafficParticipant::SetPositionVelocity(double posx, double posy, double velx, double vely)

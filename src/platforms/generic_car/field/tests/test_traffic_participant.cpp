@@ -14,7 +14,7 @@ int main()
 
     timer.tic();
 
-    GaussianPositionVelocityThreat gau(50, 50, 1, 1);
+    GaussianPositionVelocityThreat gau(50, 50, 2, -1);
     traff_part.SetThreatDistribution(gau);
     ScalarFieldMatrix mat = traff_part.GenerateFieldMatrix(0, 1, 0, 1, true);
 
