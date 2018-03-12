@@ -98,28 +98,28 @@ int main()
     tp44->SetPositionVelocity(450, lane4_y, -15, 0);
 
     cfield->AddTrafficParticipant(10, tp10);
-    cfield->AddTrafficParticipant(11, tp11);
-    cfield->AddTrafficParticipant(12, tp12);
+    // cfield->AddTrafficParticipant(11, tp11);
+    // cfield->AddTrafficParticipant(12, tp12);
     cfield->AddTrafficParticipant(13, tp13);
     cfield->AddTrafficParticipant(14, tp14);
 
-    cfield->AddTrafficParticipant(20, tp20);
-    cfield->AddTrafficParticipant(21, tp21);
-    cfield->AddTrafficParticipant(22, tp22);
+    // cfield->AddTrafficParticipant(20, tp20);
+    // cfield->AddTrafficParticipant(21, tp21);
+    // cfield->AddTrafficParticipant(22, tp22);
     cfield->AddTrafficParticipant(23, tp23);
     cfield->AddTrafficParticipant(24, tp24);
 
-    cfield->AddTrafficParticipant(30, tp30);
+    // cfield->AddTrafficParticipant(30, tp30);
     cfield->AddTrafficParticipant(31, tp31);
-    cfield->AddTrafficParticipant(32, tp32);
-    cfield->AddTrafficParticipant(33, tp33);
-    cfield->AddTrafficParticipant(34, tp34);
+    // cfield->AddTrafficParticipant(32, tp32);
+    // cfield->AddTrafficParticipant(33, tp33);
+    // cfield->AddTrafficParticipant(34, tp34);
 
-    cfield->AddTrafficParticipant(40, tp40);
+    // cfield->AddTrafficParticipant(40, tp40);
     cfield->AddTrafficParticipant(41, tp41);
-    cfield->AddTrafficParticipant(42, tp42);
-    cfield->AddTrafficParticipant(43, tp43);
-    cfield->AddTrafficParticipant(44, tp44);
+    // cfield->AddTrafficParticipant(42, tp42);
+    // cfield->AddTrafficParticipant(43, tp43);
+    // cfield->AddTrafficParticipant(44, tp44);
 
     // add lane constraint
     std::shared_ptr<LaneConstraint> lc0 = std::make_shared<LaneConstraint>(fsize_x, fsize_y);
@@ -169,7 +169,7 @@ int main()
     std::cout << "path length: " << path.size() << std::endl;
 
     // FastPlot::ShowMatrixAsColorMap(cfield->collision_threat_matrix_);
-    FastPlot::ShowPathOnColorMap(cfield->collision_threat_matrix_, FieldSearch::GetPathWaypoints(path));
+    FastPlot::ShowPathOnColorMap(cfield->collision_threat_matrix_, FieldSearch::GetPathWaypoints(path), "search_in_field", true);
 
     return 0;
 }
