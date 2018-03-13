@@ -24,11 +24,14 @@ target_link_libraries(test_fieldplot fastplot)
 add_executable(test_graphplot test_graphplot.cpp )
 target_link_libraries(test_graphplot fastplot planner)
 
-find_package(MathGL2 REQUIRED GLUT)
-include_directories(${MATHGL2_INCLUDE_DIRS})
+# find_package(MathGL2 REQUIRED GLUT)
+# include_directories(${MATHGL2_INCLUDE_DIRS})
 
 add_executable(test_mathgl test_mathgl.cpp )
 target_link_libraries(test_mathgl ${MATHGL2_LIBRARIES})
+
+add_executable(test_mathgl_wrapper test_mathgl_wrapper.cpp )
+target_link_libraries(test_mathgl_wrapper fastplot)
 
 # add_executable(test_vtk test_vtk.cpp )
 # target_link_libraries(test_vtk ${VTK_LIBRARIES})

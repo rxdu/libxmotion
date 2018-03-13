@@ -5,7 +5,7 @@
  * Description: 
  * 
  * Copyright (c) 2017 Ruixiang Du (rdu)
- */ 
+ */
 
 #ifndef FASTPLOT_HPP
 #define FASTPLOT_HPP

@@ -55,6 +55,7 @@
         "core": "cpp",
         "vector": "cpp",
         "*.txx": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "dense": "cpp"
     }
 }

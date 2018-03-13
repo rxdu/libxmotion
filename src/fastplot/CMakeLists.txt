@@ -32,6 +32,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 ## Dependency libraries
 find_package(OpenCV REQUIRED)
 
+find_package(MathGL2 REQUIRED GLUT)
+include_directories(${MATHGL2_INCLUDE_DIRS})
+
 ## (Optional) Libraries for advanced plotting 
 # Eigen3
 find_package(Eigen3 QUIET)
@@ -50,6 +53,7 @@ set(FASTPLOT_LIB_SRC
 	src/map_plot.cpp
 	src/graph_plot.cpp
 	src/plot_utils.cpp
+	src/mathgl_plot.cpp
 )
 
 if(VTK_FOUND AND EIGEN3_FOUND)
@@ -60,6 +64,7 @@ if(VTK_FOUND AND EIGEN3_FOUND)
 	)
 	set(ADV_DEPENDENT_LIBS
 		${OpenCV_LIBS}
+		${MATHGL2_LIBRARIES}
 		${VTK_LIBRARIES}
 	)
 	set(ADV_INC_DIR
