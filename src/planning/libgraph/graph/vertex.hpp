@@ -25,6 +25,8 @@ namespace librav
 template <typename StateType, typename TransitionType>
 class Vertex_t
 {
+	using EdgeList = std::vector<Edge<Vertex_t<StateType, TransitionType> *, TransitionType>>;
+
   public:
 	template <class T = StateType, typename std::enable_if<std::is_pointer<T>::value>::type * = nullptr>
 	Vertex_t(T state_node);
@@ -42,14 +44,13 @@ class Vertex_t
 
 	// generic attributes
 	StateType state_;
-	uint64_t vertex_id_;
+	const uint64_t vertex_id_;
 
-	// edges connecting to other vertices
-	std::vector<Edge<Vertex_t<StateType, TransitionType> *, TransitionType>> edges_to_;
-
-	// vertices that contain edges connecting to current vertex,
-	//	used to cleanup edges in other vertices if current vertex is deleted
-	std::vector<Vertex_t<StateType, TransitionType> *> vertices_from_;
+	// edge iterator for easy access
+	typedef typename EdgeList::iterator edge_iterator;
+	typedef typename EdgeList::const_iterator const_edge_iterator;
+	edge_iterator edge_begin() { return edges_to_.begin(); }
+	edge_iterator edge_end() { return edges_to_.end(); }
 
   public:
 	/// == operator overloading. If two vertices have the same id, they're regarded as equal.
@@ -66,15 +67,21 @@ class Vertex_t
 	bool CheckNeighbour(Vertex_t<StateType, TransitionType> *dst_node);
 
   private:
-	// attributes for A* search
-	bool is_checked_;
-	bool is_in_openlist_;
-	double f_astar_;
-	double g_astar_;
-	double h_astar_;
-	Vertex_t<StateType, TransitionType> *search_parent_;
+	// edges connecting to other vertices
+	std::vector<Edge<Vertex_t<StateType, TransitionType> *, TransitionType>> edges_to_;
 
-  private:
+	// vertices that contain edges connecting to current vertex,
+	//	used to cleanup edges in other vertices if current vertex is deleted
+	std::vector<Vertex_t<StateType, TransitionType> *> vertices_from_;
+
+	// attributes for A* search
+	bool is_checked_ = false;
+	bool is_in_openlist_ = false;
+	double f_astar_ = 0.0;
+	double g_astar_ = 0.0;
+	double h_astar_ = 0.0;
+	Vertex_t<StateType, TransitionType> *search_parent_ = nullptr;
+
 	/// Clear exiting search info before a new search
 	void ClearVertexSearchInfo();
 };

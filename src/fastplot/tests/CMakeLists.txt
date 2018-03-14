@@ -28,7 +28,7 @@ target_link_libraries(test_graphplot fastplot planner)
 # include_directories(${MATHGL2_INCLUDE_DIRS})
 
 add_executable(test_mathgl test_mathgl.cpp )
-target_link_libraries(test_mathgl ${MATHGL2_LIBRARIES})
+target_link_libraries(test_mathgl fastplot ${MATHGL2_LIBRARIES})
 
 add_executable(test_mathgl_wrapper test_mathgl_wrapper.cpp )
 target_link_libraries(test_mathgl_wrapper fastplot)

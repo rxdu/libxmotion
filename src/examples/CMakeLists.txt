@@ -46,8 +46,8 @@ target_link_libraries(logger_example utilities)
 add_executable(stopwatch_example stopwatch_example.cpp)
 target_link_libraries(stopwatch_example utilities)
 
-add_executable(basic_graph basic_graph.cpp)
-target_link_libraries(basic_graph graph)
+add_executable(simple_graph_example simple_graph_example.cpp)
+target_link_libraries(simple_graph_example graph)
 
 # add_executable(grid_graph grid_graph.cpp)
 # target_link_libraries(grid_graph graph planner map geometry)

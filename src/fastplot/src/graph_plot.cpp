@@ -32,8 +32,7 @@ void FastPlot::AddGraphLayer(std::shared_ptr<Graph_t<SquareCell*>> graph, cv::In
     }
 
     // draw all vertices
-    auto vertices = graph->GetGraphVertices();
-    for (auto &vertex : vertices)
+    for(auto vertex = graph->vertex_begin(); vertex != graph->vertex_end(); ++vertex)
     {
         // current vertex center coordinate
         int32_t loc_x, loc_y;
@@ -51,9 +50,10 @@ void FastPlot::AddGraphLayer(std::shared_ptr<Graph_t<SquareCell*>> graph, cv::In
     }
 
     // draw all edges
-    auto edges = graph->GetGraphUndirectedEdges();
-    for (auto &edge : edges)
+    auto edges = graph->GetAllEdges();
+    for (auto &edge_it : edges)
     {
+        auto edge = *edge_it;
         uint64_t loc_x1, loc_y1, loc_x2, loc_y2;
         loc_x1 = (edge.src_->state_->bounding_box_.x.min + edge.src_->state_->bounding_box_.x.max) / 2;
         loc_y1 = (edge.src_->state_->bounding_box_.y.min + edge.src_->state_->bounding_box_.y.max) / 2;

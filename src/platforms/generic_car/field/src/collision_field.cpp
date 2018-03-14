@@ -20,6 +20,7 @@ CollisionField::CollisionField(int64_t size_x, int64_t size_y)
     : ScalarField(size_x, size_y)
 {
   lane_threat_matrix_.resize(size_x, size_y);
+  lane_threat_matrix_ =  Eigen::MatrixXd::Zero(size_x, size_y);
 }
 
 void CollisionField::AddLaneConstraints(int32_t id, std::shared_ptr<LaneConstraint> lane_constr)

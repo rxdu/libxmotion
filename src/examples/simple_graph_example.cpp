@@ -16,16 +16,17 @@
 // user
 #include "graph/graph.hpp"
 #include "graph/algorithms/astar.hpp"
+#include "graph/algorithms/dijkstra.hpp"
 
 using namespace librav;
 
 #define ROW_SIZE 4
 #define COL_SIZE 4
 
-struct BasicState
+struct SimpleState
 {
-    BasicState(int32_t row, int32_t col) : row_(row),
-                                           col_(col)
+    SimpleState(int32_t row, int32_t col) : row_(row),
+                                            col_(col)
     {
     }
 
@@ -40,8 +41,7 @@ struct BasicState
     }
 };
 
-double
-CalcHeuristic(BasicState *node1, BasicState *node2)
+double CalcHeuristic(SimpleState *node1, SimpleState *node2)
 {
     int32_t dist_row = node1->row_ - node2->row_;
     int32_t dist_col = node1->col_ - node2->col_;
@@ -51,15 +51,15 @@ CalcHeuristic(BasicState *node1, BasicState *node2)
 
 int main(int argc, char **argv)
 {
-    std::vector<BasicState *> nodes;
+    std::vector<SimpleState *> nodes;
 
     // create nodes
     for (int i = 0; i < ROW_SIZE; i++)
         for (int j = 0; j < COL_SIZE; j++)
-            nodes.push_back(new BasicState(i, j));
+            nodes.push_back(new SimpleState(i, j));
 
     // create a graph
-    Graph_t<BasicState *> graph;
+    Graph_t<SimpleState *> graph;
 
     graph.AddEdge(nodes[0], nodes[1], 1.0);
     graph.AddEdge(nodes[1], nodes[0], 1.0);
@@ -84,19 +84,25 @@ int main(int argc, char **argv)
     graph.AddEdge(nodes[13], nodes[9], 1.0);
     graph.AddEdge(nodes[13], nodes[10], 1.414);
 
-    auto all_edges = graph.GetGraphEdges();
+    auto all_edges = graph.GetAllEdges();
 
     for (auto &e : all_edges)
-        e.PrintEdge();
+        e->PrintEdge();
 
     // In order to use A* search, you need to specify how to calculate heuristic
-    auto path = AStar::Search(graph, 0, 13, CalcHeuristicFunc_t<BasicState *>(CalcHeuristic));
+    std::cout << "\nA* search: " << std::endl;
+    auto path_a = AStar::Search(&graph, 0, 13, CalcHeuristicFunc_t<SimpleState *>(CalcHeuristic));
+    for (auto &e : path_a)
+        std::cout << "id: " << e->GetUniqueID() << std::endl;
 
-    for (auto &e : path)
-        std::cout << "id: " << e->vertex_id_ << std::endl;
+    // Dijkstra search
+    std::cout << "\nDijkstra search: " << std::endl;
+    auto path_d = Dijkstra::Search(&graph, 0, 13);
+    for (auto &e : path_d)
+        std::cout << "id: " << e->GetUniqueID() << std::endl;
 
     // need to delete all nodes, the graph only maintains pointers to these nodes
-    for (auto& e : nodes)
+    for (auto &e : nodes)
         delete e;
 
     return 0;

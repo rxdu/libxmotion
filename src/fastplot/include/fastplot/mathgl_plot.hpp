@@ -18,6 +18,17 @@
 #include "mgl2/mgl.h"
 #include <mgl2/glut.h>
 
+#if __cplusplus == 201103L
+namespace std
+{
+template <typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args &&... args)
+{
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+}
+#endif
+
 namespace librav
 {
 namespace MathGLPlot
@@ -27,7 +38,6 @@ using MathGLPlotGraph_t = std::function<int(mglGraph *)>;
 
 void Run(MathGLPlotGraph_t plot_func, std::string window_name = "MathGL Plot");
 void Run(mglDraw *draw, std::string window_name = "MathGL Plot");
-
 };
 }
 
