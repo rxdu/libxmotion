@@ -33,6 +33,9 @@ target_link_libraries(test_mathgl fastplot ${MATHGL2_LIBRARIES})
 add_executable(test_mathgl_wrapper test_mathgl_wrapper.cpp )
 target_link_libraries(test_mathgl_wrapper fastplot)
 
+add_executable(test_mathgl_surf test_mathgl_surf.cpp )
+target_link_libraries(test_mathgl_surf fastplot)
+
 # add_executable(test_vtk test_vtk.cpp )
 # target_link_libraries(test_vtk ${VTK_LIBRARIES})
 
