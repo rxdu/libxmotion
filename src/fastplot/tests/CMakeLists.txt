@@ -36,6 +36,15 @@ target_link_libraries(test_mathgl_wrapper fastplot)
 add_executable(test_mathgl_surf test_mathgl_surf.cpp )
 target_link_libraries(test_mathgl_surf fastplot)
 
+add_executable(test_mathgl_2d test_mathgl_2d.cpp )
+target_link_libraries(test_mathgl_2d fastplot)
+
+# find_package(DISLIN REQUIRED GLUT)
+# include_directories(${DISLIN_INCLUDE_DIRS})
+
+# add_executable(test_dislin test_dislin.cpp )
+# target_link_libraries(test_dislin ${DISLIN_LIBRARIES})
+
 # add_executable(test_vtk test_vtk.cpp )
 # target_link_libraries(test_vtk ${VTK_LIBRARIES})
 

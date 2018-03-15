@@ -5,7 +5,7 @@
  * Description: 
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
- */ 
+ */
 
 #ifndef MATHGL_UTILS_HPP
 #define MATHGL_UTILS_HPP
@@ -21,7 +21,20 @@ namespace librav
 {
 namespace MathGLUtils
 {
-  mglData ConvertTo2DMathGLData(const Eigen::MatrixXd &matrix);
+template <typename Derivated>
+mglData ConvertToMathGLData(const Eigen::DenseBase<Derivated> &matrix)
+{
+  const int32_t size_x = matrix.rows();
+  const int32_t size_y = matrix.cols();
+
+  mglData data(size_x, size_y);
+
+  for (int32_t x = 0; x < size_x; ++x)
+    for (int32_t y = 0; y < size_y; ++y)
+      data.a[x + size_x * y] = matrix(x, y);
+
+  return data;
+}
 }
 }
 

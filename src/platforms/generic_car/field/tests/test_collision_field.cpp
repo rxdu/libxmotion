@@ -24,14 +24,16 @@ int main()
     auto pt0 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
     pt0->SetPositionVelocity(50, 50, 1, 1);
 
-    // add lane constraint
-    std::shared_ptr<LaneConstraint> lc0 = std::make_shared<LaneConstraint>(fsize_x, fsize_y);
-    LanePolylinePoints line0;
-    line0.push_back(LanePoint(250, 0));
-    line0.push_back(LanePoint(250, 74));
-    lc0->SetLanePolylineKeypoints(line0);
-    
-    cfield.AddLaneConstraints(0, lc0);
+    cfield.AddTrafficParticipant(0, pt0);
+
+    // // add lane constraint
+    // std::shared_ptr<LaneConstraint> lc0 = std::make_shared<LaneConstraint>(fsize_x, fsize_y);
+    // LanePolylinePoints line0;
+    // line0.push_back(LanePoint(50, 0));
+    // line0.push_back(LanePoint(50, 74));
+    // lc0->SetLanePolylineKeypoints(line0);
+
+    // cfield.AddLaneConstraints(0, lc0);
 
     // update collision field before use
     cfield.UpdateCollisionField();

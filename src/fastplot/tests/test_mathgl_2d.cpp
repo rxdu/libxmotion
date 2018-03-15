@@ -29,14 +29,6 @@ int main()
         plotd(i) = 0.7 * std::sin(2 * M_PI * xx) + 0.5 * std::cos(3 * M_PI * xx) + 0.2 * std::sin(M_PI * xx);
     }
 
-    // std::cout << "matrix: " << zd << std::endl;
-    // mglData data = MathGLUtils::ConvertToMathGLData(z);
-
-    // MathGLSurf surf(dend);
-    // surf.SetData(dend);
-    // // surf.SetData(plotd);
-    // MathGLPlot::Run(&surf);
-
     const int32_t x_size = 50;
     const int32_t y_size = 50;
 
@@ -57,12 +49,14 @@ int main()
     for (int i = 0; i < x_size; i++)
         for (int j = 0; j < y_size; j++)
         {
-            z(i, j) = 0.5*(sinf(x(i)) + cosf(y(j)));
+            z(i, j) = 0.5 * (sinf(x(i)) + cosf(y(j)));
         }
 
     // MathGLSurf surf(z);
     // MathGLPlot::Run(&surf);
-    FastPlot::FieldSurf(x, y, z);
+    // FastPlot::FieldSurf(x, y, z);
+    // FastPlot::FieldMesh(x, y, z);
+    FastPlot::FieldDens(x, y, z);
 
     return 0;
 }

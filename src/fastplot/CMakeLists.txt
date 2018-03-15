@@ -54,8 +54,7 @@ set(FASTPLOT_LIB_SRC
 	src/graph_plot.cpp
 	src/plot_utils.cpp
 	src/mathgl_plot.cpp
-	src/mathgl_utils.cpp
-	src/mathgl_surf.cpp
+	src/mathgl_2d.cpp
 )
 
 if(VTK_FOUND AND EIGEN3_FOUND)

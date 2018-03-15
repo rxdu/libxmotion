@@ -1,15 +1,8 @@
-#include <iostream>
-#include <memory>
-
 #include "mgl2/mgl.h"
 #include <mgl2/glut.h>
 
-#include "fastplot/mathgl_plot.hpp"
-
 int sample(mglGraph *gr)
 {
-    std::cout << "run sample" << std::endl;
-
     register long i, j, n = 50, m = 40, i0;
 
     mglData a;
@@ -57,9 +50,8 @@ int sample(mglGraph *gr)
 
 int main()
 {
-    // mglGraph *gr = new mglGraph();
-    // mglGLUT *gr = new mglGLUT(sample, "MathGL examples");
-    std::unique_ptr<mglGLUT> gr = std::make_unique<mglGLUT>(sample, "MathGL examples");
+    mglGLUT *gr = new mglGLUT(sample, "MathGL examples");
+    delete gr;
 
     return 0;
 }
