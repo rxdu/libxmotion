@@ -47,6 +47,15 @@ if(VTK_FOUND)
 	include(${VTK_USE_FILE})
 endif()
 
+find_package(Cairo REQUIRED)
+include_directories(${CAIRO_INCLUDE_DIRS})
+
+find_package(X11 REQUIRED)
+include_directories(${X11_INCLUDE_DIR})
+
+find_package(FLTK REQUIRED)
+include_directories(${FLTK_INCLUDE_DIR})
+
 ## Add libraries
 set(FASTPLOT_LIB_SRC
 	src/image_plot.cpp
@@ -55,6 +64,7 @@ set(FASTPLOT_LIB_SRC
 	src/plot_utils.cpp
 	src/mathgl_plot.cpp
 	src/mathgl_2d.cpp
+	src/fltk_utils.cpp
 )
 
 if(VTK_FOUND AND EIGEN3_FOUND)
