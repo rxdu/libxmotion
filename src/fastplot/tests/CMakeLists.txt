@@ -39,6 +39,15 @@ target_link_libraries(test_mathgl_surf fastplot)
 add_executable(test_mathgl_2d test_mathgl_2d.cpp )
 target_link_libraries(test_mathgl_2d fastplot)
 
+find_package(Cairo REQUIRED)
+include_directories(${CAIRO_INCLUDE_DIRS})
+
+find_package(X11 REQUIRED)
+include_directories(${X11_INCLUDE_DIR})
+
+add_executable(test_cairo test_cairo.cpp )
+target_link_libraries(test_cairo ${CAIRO_LIBRARIES} ${X11_LIBRARIES})
+
 # find_package(DISLIN REQUIRED GLUT)
 # include_directories(${DISLIN_INCLUDE_DIRS})
 
