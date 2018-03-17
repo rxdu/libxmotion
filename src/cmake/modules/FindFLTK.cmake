@@ -94,7 +94,7 @@ if(WIN32)
 endif()
 
 if(UNIX)
-#   include(${CMAKE_CURRENT_LIST_DIR}/FindX11.cmake)
+  include(${CMAKE_ROOT}/Modules/FindX11.cmake)
   find_library(FLTK_MATH_LIBRARY m)
   set( FLTK_PLATFORM_DEPENDENT_LIBS ${X11_LIBRARIES} ${FLTK_MATH_LIBRARY})
 endif()
@@ -257,7 +257,7 @@ else()
 
   list(APPEND FLTK_LIBRARY_SEARCH_PATH ${FLTK_INCLUDE_DIR}/lib ${_FLTK_POSSIBLE_LIBRARY_DIR})
 
-  include(${CMAKE_CURRENT_LIST_DIR}/SelectLibraryConfigurations.cmake)
+  include(${CMAKE_ROOT}/Modules/SelectLibraryConfigurations.cmake)
 
   # Allow libraries to be set manually
   if(NOT FLTK_BASE_LIBRARY)

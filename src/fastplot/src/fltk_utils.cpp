@@ -22,11 +22,14 @@ using namespace librav;
 
 FltkCanvas::FltkCanvas(int x, int y, int w, int h) : Fl_Box(x, y, w, h)
 {
-    surface = NULL;
-    cr = NULL;
 }
 
-cairo_surface_t *FltkCanvas::set_surface(int wo, int ho)
+void FltkCanvas::SetDrawCallback(CallBackFunc_t func)
+{
+    cairo_callback_ = func;
+}
+
+cairo_surface_t *FltkCanvas::cairo_gui_surface_create(int wo, int ho)
 {
 #ifdef WIN32
 #warning win32 mode
@@ -44,7 +47,7 @@ cairo_surface_t *FltkCanvas::set_surface(int wo, int ho)
 #endif
 }
 
-void FltkCanvas::out_png(const char *filename, int wpix, int hpix)
+void FltkCanvas::SaveToPNG(const char *filename, int wpix, int hpix)
 {
     cairo_surface_t *surface;
     cairo_t *cr;
@@ -64,7 +67,7 @@ void FltkCanvas::out_png(const char *filename, int wpix, int hpix)
     cairo_surface_destroy(surface);
 }
 
-void FltkCanvas::out_svg(const char *filename, int wpts, int hpts)
+void FltkCanvas::SaveToSVG(const char *filename, int wpts, int hpts)
 {
     cairo_surface_t *surface;
     cairo_t *cr;
@@ -80,7 +83,7 @@ void FltkCanvas::out_svg(const char *filename, int wpts, int hpts)
     cairo_surface_destroy(surface);
 }
 
-void FltkCanvas::out_eps(const char *filename, int wpts, int hpts)
+void FltkCanvas::SaveToEPS(const char *filename, int wpts, int hpts)
 {
     cairo_surface_t *surface;
     cairo_t *cr;
@@ -99,7 +102,7 @@ void FltkCanvas::out_eps(const char *filename, int wpts, int hpts)
     return;
 }
 
-void FltkCanvas::out_pdf(const char *filename, int wpts, int hpts)
+void FltkCanvas::SaveToPDF(const char *filename, int wpts, int hpts)
 {
     cairo_surface_t *surface;
     cairo_t *cr;
@@ -128,8 +131,9 @@ void FltkCanvas::draw(void)
     fl_rect(x(), y(), w(), h());
 
     // set up cairo structures
-    surface = set_surface(w(), h());
-    cr = cairo_create(surface);
+    cairo_surface_t *surface = cairo_gui_surface_create(w(), h());
+    cairo_t *cr = cairo_create(surface);
+
     /* All Cairo co-ordinates are shifted by 0.5 pixels to correct anti-aliasing */
     cairo_translate(cr, 0.5, 0.5);
     cairo_set_source_rgb(cr, 0.0, 0.0, 0.0); // set drawing color to black
@@ -196,6 +200,8 @@ void FltkCanvas::graphic(cairo_t *cr, double x, double y, double w, double h)
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////
+
 void FltkWindow::SetupWindow()
 {
     win = new Fl_Double_Window(w, h);
@@ -226,11 +232,10 @@ void FltkWindow::SetupWindow()
     // pdf->callback((Fl_Callback *)cb_to_pdf);
 
     canvas->box(FL_FLAT_BOX);
-
     buttons->resizable(spacer);
 
     win->resizable(canvas);
-    win->label("Cairo Graphics in FLTK with File Exports");
+    win->label("Cairo Graphics");
 }
 
 void FltkWindow::cb_Quit(Fl_Button *, void *)
@@ -242,7 +247,7 @@ void FltkWindow::cb_to_png(Fl_Button *, void *)
 {
     char filename[] = "pngtest.png";
     fprintf(stderr, "Output in %s\n", filename);
-    canvas->out_png(filename, wpix, hpix);
+    canvas->SaveToPNG(filename, wpix, hpix);
     return;
 }
 
@@ -250,7 +255,7 @@ void FltkWindow::cb_to_svg(Fl_Button *, void *)
 {
     char filename[] = "svgtest.svg";
     fprintf(stderr, "Output in %s\n", filename);
-    canvas->out_svg(filename, wpts, hpts);
+    canvas->SaveToSVG(filename, wpts, hpts);
     return;
 }
 
@@ -258,7 +263,7 @@ void FltkWindow::cb_to_eps(Fl_Button *, void *)
 {
     char filename[] = "epstest.eps";
     fprintf(stderr, "Output in %s\n", filename);
-    canvas->out_eps(filename, wpts, hpts);
+    canvas->SaveToEPS(filename, wpts, hpts);
     return;
 }
 
@@ -266,7 +271,7 @@ void FltkWindow::cb_to_pdf(Fl_Button *, void *)
 {
     char filename[] = "pdftest.pdf";
     fprintf(stderr, "Output in %s\n", filename);
-    canvas->out_pdf(filename, wpts, hpts);
+    canvas->SaveToPDF(filename, wpts, hpts);
     return;
 }
 

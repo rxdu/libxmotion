@@ -10,6 +10,8 @@
 #ifndef FLTK_UTILS_HPP
 #define FLTK_UTILS_HPP
 
+#include <functional>
+
 #include <FL/x.H>
 #include <FL/Fl.H>
 #include <FL/Fl_Box.H>
@@ -30,59 +32,67 @@ namespace librav
 {
 class FltkCanvas : public Fl_Box
 {
-    void draw(void);
-    cairo_t *cr;
-    cairo_surface_t *surface;
-    cairo_surface_t *set_surface(int wo, int ho);
+public:
+  FltkCanvas(int x, int y, int w, int h);
 
-  public:
-    virtual void graphic(cairo_t *cr, double, double, double, double);
-    void out_png(const char *filename, int, int);
-    void out_svg(const char *filename, int, int);
-    void out_eps(const char *filename, int, int);
-    void out_pdf(const char *filename, int, int);
+  using CallBackFunc_t = std::function<void(cairo_t *cr, double, double, double, double)>;
 
-    void star(cairo_t *cr, double radius);
+public:
+  virtual void graphic(cairo_t *cr, double, double, double, double);
+  void SaveToPNG(const char *filename, int, int);
+  void SaveToSVG(const char *filename, int, int);
+  void SaveToEPS(const char *filename, int, int);
+  void SaveToPDF(const char *filename, int, int);
 
-    FltkCanvas(int x, int y, int w, int h);
+  void star(cairo_t *cr, double radius);
+  void SetDrawCallback(CallBackFunc_t func);
+
+private:
+  // callback function for cario plotting
+  std::function<void(cairo_t *cr, double, double, double, double)> cairo_callback_;
+
+  // draw function for box
+  void draw(void);
+  // this function creates a surface for current platform (win/linux/mac)
+  cairo_surface_t *cairo_gui_surface_create(int wo, int ho);
 };
 
 class FltkWindow
 {
-  public:
-    FltkWindow() = default;
-    ~FltkWindow() = default;
+public:
+  FltkWindow() = default;
+  ~FltkWindow() = default;
 
-    void SetupWindow();
+  void SetupWindow();
 
-    const int w = 700;
-    const int h = 600;
-    const int sp = 5;
-    const int bw = 75;
-    const int bh = 25;
+  const int w = 700;
+  const int h = 600;
+  const int sp = 5;
+  const int bw = 75;
+  const int bh = 25;
 
-    const int wpts = 175; // width in points
-    const int hpts = 175; // height in points
-    const int wpix = 175; // width in pixels
-    const int hpix = 175; // height in pixels
+  const int wpts = 175; // width in points
+  const int hpts = 175; // height in points
+  const int wpix = 175; // width in pixels
+  const int hpix = 175; // height in pixels
 
-    Fl_Group *buttons;
-    Fl_Button *quit;
-    Fl_Button *png;
-    Fl_Button *svg;
-    Fl_Button *eps;
-    Fl_Button *pdf;
-    Fl_Box *spacer;
-    FltkCanvas *canvas;
-    Fl_Double_Window *win;
+  Fl_Group *buttons;
+  Fl_Button *quit;
+  Fl_Button *png;
+  Fl_Button *svg;
+  Fl_Button *eps;
+  Fl_Button *pdf;
+  Fl_Box *spacer;
+  FltkCanvas *canvas;
+  Fl_Double_Window *win;
 
-    void cb_Quit(Fl_Button *, void *);
-    void cb_to_png(Fl_Button *, void *);
-    void cb_to_svg(Fl_Button *, void *);
-    void cb_to_eps(Fl_Button *, void *);
-    void cb_to_pdf(Fl_Button *, void *);
+  void cb_Quit(Fl_Button *, void *);
+  void cb_to_png(Fl_Button *, void *);
+  void cb_to_svg(Fl_Button *, void *);
+  void cb_to_eps(Fl_Button *, void *);
+  void cb_to_pdf(Fl_Button *, void *);
 
-    void run();
+  void run();
 };
 }
 
