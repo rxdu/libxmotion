@@ -32,7 +32,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 ## Dependency libraries
 find_package(OpenCV REQUIRED)
 
-find_package(MathGL2 REQUIRED GLUT)
+find_package(MathGL2 REQUIRED FLTK GLUT)
 include_directories(${MATHGL2_INCLUDE_DIRS})
 
 ## (Optional) Libraries for advanced plotting 

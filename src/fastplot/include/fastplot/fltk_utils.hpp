@@ -76,7 +76,7 @@ public:
   const int wpix = 175; // width in pixels
   const int hpix = 175; // height in pixels
 
-  Fl_Group *buttons;
+  Fl_Group *button_group;
   Fl_Button *quit;
   Fl_Button *png;
   Fl_Button *svg;
@@ -86,13 +86,44 @@ public:
   FltkCanvas *canvas;
   Fl_Double_Window *win;
 
-  void cb_Quit(Fl_Button *, void *);
-  void cb_to_png(Fl_Button *, void *);
-  void cb_to_svg(Fl_Button *, void *);
-  void cb_to_eps(Fl_Button *, void *);
-  void cb_to_pdf(Fl_Button *, void *);
+  void CallbackBtnQuit(Fl_Widget *);
+  void CallbackBtnPNG(Fl_Widget *);
+  void CallbackBtnSVG(Fl_Widget *);
+  void CallbackBtnEPS(Fl_Widget *);
+  void CallbackBtnPDF(Fl_Widget *);
 
   void run();
+
+  // Reference: http://www.fltk.org/articles.php?L379+I0+TFAQ+P1+Q
+  static void StaticCallback_BtnQuit(Fl_Widget *w, void *data)
+  {
+    FltkWindow *win_ptr = (FltkWindow *)data;
+    win_ptr->CallbackBtnQuit(w);
+  }
+
+  static void StaticCallback_BtnPNG(Fl_Widget *w, void *data)
+  {
+    FltkWindow *win_ptr = (FltkWindow *)data;
+    win_ptr->CallbackBtnPNG(w);
+  }
+  
+  static void StaticCallback_BtnSVG(Fl_Widget *w, void *data)
+  {
+    FltkWindow *win_ptr = (FltkWindow *)data;
+    win_ptr->CallbackBtnSVG(w);
+  }
+
+  static void StaticCallback_BtnEPS(Fl_Widget *w, void *data)
+  {
+    FltkWindow *win_ptr = (FltkWindow *)data;
+    win_ptr->CallbackBtnEPS(w);
+  }
+
+  static void StaticCallback_BtnPDF(Fl_Widget *w, void *data)
+  {
+    FltkWindow *win_ptr = (FltkWindow *)data;
+    win_ptr->CallbackBtnPDF(w);
+  }
 };
 }
 

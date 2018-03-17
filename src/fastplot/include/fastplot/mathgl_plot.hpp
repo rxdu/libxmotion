@@ -17,7 +17,6 @@
 #include <Eigen/Dense>
 
 #include "mgl2/mgl.h"
-#include <mgl2/glut.h>
 
 #include "fastplot/mathgl_utils.hpp"
 

@@ -145,7 +145,6 @@ void FltkCanvas::draw(void)
     // release the cairo context
     cairo_destroy(cr);
     cairo_surface_destroy(surface);
-    //  cr = NULL;
 
     // remove clip regions
     fl_pop_clip(); // local clip region
@@ -154,8 +153,9 @@ void FltkCanvas::draw(void)
 
 void FltkCanvas::star(cairo_t *cr, double radius)
 {
-    // double theta = 0.8 * M_PI;
-    // cairo_save(cr);
+    double theta = 0.8 * M_PI;
+    cairo_save(cr);
+
     // cairo_move_to(cr, 0.0, -radius);
     // for (int i = 0; i < 5; i++)
     // {
@@ -163,7 +163,7 @@ void FltkCanvas::star(cairo_t *cr, double radius)
     //   cairo_line_to(cr, 0.0, -radius);
     // }
     // cairo_fill(cr);
-    // cairo_restore(cr);
+
     double x = 25.6, y = 128.0;
     double x1 = 102.4, y1 = 230.4,
            x2 = 153.6, y2 = 25.6,
@@ -182,6 +182,8 @@ void FltkCanvas::star(cairo_t *cr, double radius)
     cairo_move_to(cr, x2, y2);
     cairo_line_to(cr, x3, y3);
     cairo_stroke(cr);
+
+    cairo_restore(cr);
 }
 
 void FltkCanvas::graphic(cairo_t *cr, double x, double y, double w, double h)
@@ -207,43 +209,41 @@ void FltkWindow::SetupWindow()
     win = new Fl_Double_Window(w, h);
     win->begin();
     canvas = new FltkCanvas(sp, sp, w - 2 * sp, h - 3 * sp - bh);
-    buttons = new Fl_Group(sp, h - sp - bh, w - 2 * sp, bh);
+    button_group = new Fl_Group(sp, h - sp - bh, w - 2 * sp, bh);
     win->end();
 
     int x = sp;
-    buttons->begin();
-    quit = new Fl_Button(x, h - sp - bh, bw, bh, "Quit");
+    button_group->begin();
+    png = new Fl_Button(x, h - sp - bh, bw, bh, "Save png");
     x += bw;
-    png = new Fl_Button(x, h - sp - bh, bw, bh, "To png");
+    svg = new Fl_Button(x, h - sp - bh, bw, bh, "Save svg");
     x += bw;
-    svg = new Fl_Button(x, h - sp - bh, bw, bh, "To svg");
+    eps = new Fl_Button(x, h - sp - bh, bw, bh, "Save eps");
     x += bw;
-    eps = new Fl_Button(x, h - sp - bh, bw, bh, "To eps");
-    x += bw;
-    pdf = new Fl_Button(x, h - sp - bh, bw, bh, "To pdf");
-    x += bw;
-    spacer = new Fl_Box(FL_NO_BOX, x, h - sp - bh, 1, bh, "");
-    buttons->end();
+    pdf = new Fl_Button(x, h - sp - bh, bw, bh, "Save pdf");
+    // x += bw;
+    // quit = new Fl_Button(x, h - sp - bh, bw, bh, "Quit");
+    button_group->end();
 
-    // quit->callback((Fl_Callback *)cb_Quit);
-    // png->callback((Fl_Callback *)cb_to_png);
-    // svg->callback((Fl_Callback *)cb_to_svg);
-    // eps->callback((Fl_Callback *)cb_to_eps);
-    // pdf->callback((Fl_Callback *)cb_to_pdf);
+    // quit->callback(StaticCallback_BtnQuit, this);
+    png->callback(StaticCallback_BtnPNG, this);
+    svg->callback(StaticCallback_BtnSVG, this);
+    eps->callback(StaticCallback_BtnEPS, this);
+    pdf->callback(StaticCallback_BtnPDF, this);
 
     canvas->box(FL_FLAT_BOX);
-    buttons->resizable(spacer);
+    button_group->resizable(spacer);
 
     win->resizable(canvas);
     win->label("Cairo Graphics");
 }
 
-void FltkWindow::cb_Quit(Fl_Button *, void *)
+void FltkWindow::CallbackBtnQuit(Fl_Widget *)
 {
     win->hide();
 }
 
-void FltkWindow::cb_to_png(Fl_Button *, void *)
+void FltkWindow::CallbackBtnPNG(Fl_Widget *)
 {
     char filename[] = "pngtest.png";
     fprintf(stderr, "Output in %s\n", filename);
@@ -251,7 +251,7 @@ void FltkWindow::cb_to_png(Fl_Button *, void *)
     return;
 }
 
-void FltkWindow::cb_to_svg(Fl_Button *, void *)
+void FltkWindow::CallbackBtnSVG(Fl_Widget *)
 {
     char filename[] = "svgtest.svg";
     fprintf(stderr, "Output in %s\n", filename);
@@ -259,7 +259,7 @@ void FltkWindow::cb_to_svg(Fl_Button *, void *)
     return;
 }
 
-void FltkWindow::cb_to_eps(Fl_Button *, void *)
+void FltkWindow::CallbackBtnEPS(Fl_Widget *)
 {
     char filename[] = "epstest.eps";
     fprintf(stderr, "Output in %s\n", filename);
@@ -267,7 +267,7 @@ void FltkWindow::cb_to_eps(Fl_Button *, void *)
     return;
 }
 
-void FltkWindow::cb_to_pdf(Fl_Button *, void *)
+void FltkWindow::CallbackBtnPDF(Fl_Widget *)
 {
     char filename[] = "pdftest.pdf";
     fprintf(stderr, "Output in %s\n", filename);
