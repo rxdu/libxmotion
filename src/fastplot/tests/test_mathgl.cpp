@@ -1,5 +1,5 @@
 #include "mgl2/mgl.h"
-#include <mgl2/glut.h>
+#include <mgl2/fltk.h>
 
 int sample(mglGraph *gr)
 {
@@ -50,7 +50,10 @@ int sample(mglGraph *gr)
 
 int main()
 {
-    mglGLUT *gr = new mglGLUT(sample, "MathGL examples");
+    // mglGLUT *gr = new mglGLUT(sample, "MathGL examples");
+    mglFLTK *gr = new mglFLTK(sample, "MathGL examples");
+
+    gr->Run();
     delete gr;
 
     return 0;

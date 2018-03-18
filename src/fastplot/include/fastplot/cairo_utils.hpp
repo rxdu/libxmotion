@@ -1,5 +1,5 @@
 /* 
- * fltk_utils.hpp
+ * cairo_utils.hpp
  * 
  * Created on: Mar 16, 2018 16:51
  * Description: 
@@ -7,9 +7,11 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#ifndef FLTK_UTILS_HPP
-#define FLTK_UTILS_HPP
+#ifndef CAIRO_UTILS_HPP
+#define CAIRO_UTILS_HPP
 
+#include <memory>
+#include <cstdint>
 #include <functional>
 
 #include <FL/x.H>
@@ -30,22 +32,27 @@
 
 namespace librav
 {
-class FltkCanvas : public Fl_Box
+enum class FileType
+{
+  PNG = 0,
+  SVG,
+  EPS,
+  PDF
+};
+
+using CallBackFunc_t = std::function<void(cairo_t *cr, double, double, double, double)>;
+
+class CairoCanvas : public Fl_Box
 {
 public:
-  FltkCanvas(int x, int y, int w, int h);
+  CairoCanvas(int x, int y, int w, int h);
 
-  using CallBackFunc_t = std::function<void(cairo_t *cr, double, double, double, double)>;
+  friend class CairoWindow;
 
 public:
-  virtual void graphic(cairo_t *cr, double, double, double, double);
-  void SaveToPNG(const char *filename, int, int);
-  void SaveToSVG(const char *filename, int, int);
-  void SaveToEPS(const char *filename, int, int);
-  void SaveToPDF(const char *filename, int, int);
-
-  void star(cairo_t *cr, double radius);
-  void SetDrawCallback(CallBackFunc_t func);
+  // virtual void CairoDraw(cairo_t *cr, double, double, double, double);
+  void SaveToFile(std::string filename, FileType type, int32_t wpts = -1, int32_t hpts = -1);
+  inline void SetCairoCallback(CallBackFunc_t func) { cairo_callback_ = func; }
 
 private:
   // callback function for cario plotting
@@ -57,13 +64,12 @@ private:
   cairo_surface_t *cairo_gui_surface_create(int wo, int ho);
 };
 
-class FltkWindow
+class CairoWindow
 {
 public:
-  FltkWindow() = default;
-  ~FltkWindow() = default;
-
-  void SetupWindow();
+  CairoWindow();
+  CairoWindow(CallBackFunc_t cairo_cb);
+  ~CairoWindow() = default;
 
   const int w = 700;
   const int h = 600;
@@ -76,6 +82,10 @@ public:
   const int wpix = 175; // width in pixels
   const int hpix = 175; // height in pixels
 
+  void Run();
+  void SetCairoCallback(CallBackFunc_t func);
+
+private:
   Fl_Group *button_group;
   Fl_Button *quit;
   Fl_Button *png;
@@ -83,7 +93,7 @@ public:
   Fl_Button *eps;
   Fl_Button *pdf;
   Fl_Box *spacer;
-  FltkCanvas *canvas;
+  CairoCanvas *canvas;
   Fl_Double_Window *win;
 
   void CallbackBtnQuit(Fl_Widget *);
@@ -92,39 +102,39 @@ public:
   void CallbackBtnEPS(Fl_Widget *);
   void CallbackBtnPDF(Fl_Widget *);
 
-  void run();
+  void SetupWindowElements();
 
   // Reference: http://www.fltk.org/articles.php?L379+I0+TFAQ+P1+Q
   static void StaticCallback_BtnQuit(Fl_Widget *w, void *data)
   {
-    FltkWindow *win_ptr = (FltkWindow *)data;
+    CairoWindow *win_ptr = (CairoWindow *)data;
     win_ptr->CallbackBtnQuit(w);
   }
 
   static void StaticCallback_BtnPNG(Fl_Widget *w, void *data)
   {
-    FltkWindow *win_ptr = (FltkWindow *)data;
+    CairoWindow *win_ptr = (CairoWindow *)data;
     win_ptr->CallbackBtnPNG(w);
   }
-  
+
   static void StaticCallback_BtnSVG(Fl_Widget *w, void *data)
   {
-    FltkWindow *win_ptr = (FltkWindow *)data;
+    CairoWindow *win_ptr = (CairoWindow *)data;
     win_ptr->CallbackBtnSVG(w);
   }
 
   static void StaticCallback_BtnEPS(Fl_Widget *w, void *data)
   {
-    FltkWindow *win_ptr = (FltkWindow *)data;
+    CairoWindow *win_ptr = (CairoWindow *)data;
     win_ptr->CallbackBtnEPS(w);
   }
 
   static void StaticCallback_BtnPDF(Fl_Widget *w, void *data)
   {
-    FltkWindow *win_ptr = (FltkWindow *)data;
+    CairoWindow *win_ptr = (CairoWindow *)data;
     win_ptr->CallbackBtnPDF(w);
   }
 };
 }
 
-#endif /* FLTK_UTILS_HPP */
+#endif /* CAIRO_UTILS_HPP */

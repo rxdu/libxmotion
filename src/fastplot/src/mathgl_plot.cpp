@@ -9,7 +9,6 @@
 
 #include "fastplot/mathgl_plot.hpp"
 
-#include <mgl2/glut.h>
 #include <mgl2/fltk.h>
 
 // #define USE_GLUT
@@ -24,22 +23,14 @@ void MathGLPlot::Run(MathGLPlotGraph_t plot_func, std::string window_name)
 
     fptr func_ptr = *plot_func.target<int (*)(mglGraph * gr)>();
 
-#ifdef USE_GLUT
-    std::unique_ptr<mglGLUT> mgl_glut = std::make_unique<mglGLUT>(func_ptr, window_name.c_str());
-#else
     std::unique_ptr<mglFLTK> mgl_glut = std::make_unique<mglFLTK>(func_ptr, window_name.c_str());
     mgl_glut->Run();
-#endif
 }
 
 void MathGLPlot::Run(mglDraw *draw, std::string window_name)
 {
-#ifdef USE_GLUT
-    std::unique_ptr<mglGLUT> mgl_glut = std::make_unique<mglGLUT>(draw, window_name.c_str());
-#else
     std::unique_ptr<mglFLTK> mgl_glut = std::make_unique<mglFLTK>(draw, window_name.c_str());
     mgl_glut->Run();
-#endif
 }
 
 void MathGLBase::SetAspect(double ax, double ay)

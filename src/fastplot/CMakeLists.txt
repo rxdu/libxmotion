@@ -32,7 +32,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 ## Dependency libraries
 find_package(OpenCV REQUIRED)
 
-find_package(MathGL2 REQUIRED FLTK GLUT)
+find_package(MathGL2 REQUIRED FLTK)
 include_directories(${MATHGL2_INCLUDE_DIRS})
 
 ## (Optional) Libraries for advanced plotting 
@@ -64,7 +64,7 @@ set(FASTPLOT_LIB_SRC
 	src/plot_utils.cpp
 	src/mathgl_plot.cpp
 	src/mathgl_2d.cpp
-	src/fltk_utils.cpp
+	src/cairo_utils.cpp
 )
 
 if(VTK_FOUND AND EIGEN3_FOUND)
