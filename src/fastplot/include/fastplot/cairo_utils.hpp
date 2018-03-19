@@ -45,7 +45,7 @@ using CallBackFunc_t = std::function<void(cairo_t *cr, double, double, double, d
 class CairoCanvas : public Fl_Box
 {
 public:
-  CairoCanvas(int x, int y, int w, int h);
+  CairoCanvas(int32_t x, int32_t y, int32_t w, int32_t h);
 
   friend class CairoWindow;
 
@@ -71,16 +71,16 @@ public:
   CairoWindow(CallBackFunc_t cairo_cb);
   ~CairoWindow() = default;
 
-  const int w = 700;
-  const int h = 600;
-  const int sp = 5;
-  const int bw = 75;
-  const int bh = 25;
+  const int32_t win_width_ = 700;
+  const int32_t win_height_ = 600;
+  const int32_t vertical_spacer_ = 5;
+  const int32_t btn_width_ = 75;
+  const int32_t btn_height_ = 25;
 
-  const int wpts = 175; // width in points
-  const int hpts = 175; // height in points
-  const int wpix = 175; // width in pixels
-  const int hpix = 175; // height in pixels
+  // const int wpts = 175; // width in points
+  // const int hpts = 175; // height in points
+  // const int wpix = 175; // width in pixels
+  // const int hpix = 175; // height in pixels
 
   void Run();
   void SetCairoCallback(CallBackFunc_t func);

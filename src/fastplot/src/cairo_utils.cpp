@@ -21,7 +21,7 @@
 
 using namespace librav;
 
-CairoCanvas::CairoCanvas(int x, int y, int w, int h) : Fl_Box(x, y, w, h)
+CairoCanvas::CairoCanvas(int32_t x, int32_t y, int32_t w, int32_t h) : Fl_Box(x, y, w, h)
 {
 }
 
@@ -139,24 +139,24 @@ CairoWindow::CairoWindow(CallBackFunc_t cairo_cb)
 
 void CairoWindow::SetupWindowElements()
 {
-    win = new Fl_Double_Window(w, h);
+    win = new Fl_Double_Window(win_width_, win_height_);
     win->begin();
-    canvas = new CairoCanvas(sp, sp, w - 2 * sp, h - 3 * sp - bh);
-    button_group = new Fl_Group(sp, h - sp - bh, w - 2 * sp, bh);
+    canvas = new CairoCanvas(vertical_spacer_, vertical_spacer_, win_width_ - 2 * vertical_spacer_, win_height_ - 3 * vertical_spacer_ - btn_height_);
+    button_group = new Fl_Group(vertical_spacer_, win_height_ - vertical_spacer_ - btn_height_, win_width_ - 2 * vertical_spacer_, btn_height_);
     win->end();
 
-    int x = sp;
+    int x = vertical_spacer_;
     button_group->begin();
-    png = new Fl_Button(x, h - sp - bh, bw, bh, "Save png");
-    x += bw;
-    svg = new Fl_Button(x, h - sp - bh, bw, bh, "Save svg");
-    x += bw;
-    eps = new Fl_Button(x, h - sp - bh, bw, bh, "Save eps");
-    x += bw;
-    pdf = new Fl_Button(x, h - sp - bh, bw, bh, "Save pdf");
-    x += bw;
-    // quit = new Fl_Button(x, h - sp - bh, bw, bh, "Quit");
-    spacer = new Fl_Box(FL_NO_BOX, x, h - sp - bh, 1, bh, "");
+    png = new Fl_Button(x, win_height_ - vertical_spacer_ - btn_height_, btn_width_, btn_height_, "Save PNG");
+    x += btn_width_;
+    svg = new Fl_Button(x, win_height_ - vertical_spacer_ - btn_height_, btn_width_, btn_height_, "Save SVG");
+    x += btn_width_;
+    eps = new Fl_Button(x, win_height_ - vertical_spacer_ - btn_height_, btn_width_, btn_height_, "Save EPS");
+    x += btn_width_;
+    pdf = new Fl_Button(x, win_height_ - vertical_spacer_ - btn_height_, btn_width_, btn_height_, "Save PDF");
+    x += btn_width_;
+    // quit = new Fl_Button(x, win_height_ - vertical_spacer_ - btn_height_, btn_width_, btn_height_, "Quit");
+    spacer = new Fl_Box(FL_NO_BOX, x, win_height_ - vertical_spacer_ - btn_height_, 1, btn_height_, "");
     button_group->end();
 
     // quit->callback(StaticCallback_BtnQuit, this);

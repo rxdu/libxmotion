@@ -18,3 +18,6 @@ target_link_libraries(test_cairo_fltk ${CAIRO_LIBRARIES} ${FLTK_LIBRARIES})
 
 add_executable(test_cairo_utils test_cairo_utils.cpp)
 target_link_libraries(test_cairo_utils fastplot ${CAIRO_LIBRARIES} ${FLTK_LIBRARIES})
+
+add_executable(test_cairo_grid test_cairo_grid.cpp)
+target_link_libraries(test_cairo_grid fastplot ${CAIRO_LIBRARIES} ${FLTK_LIBRARIES})
