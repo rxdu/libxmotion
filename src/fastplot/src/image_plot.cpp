@@ -14,7 +14,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include "fastplot/plot_utils.hpp"
+#include "fastplot/cvplot_utils.hpp"
 
 using namespace librav;
 using namespace cv;

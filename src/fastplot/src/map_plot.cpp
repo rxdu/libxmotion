@@ -9,7 +9,7 @@
 
 #include "fastplot/map_plot.hpp"
 #include "fastplot/image_plot.hpp"
-#include "fastplot/plot_utils.hpp"
+#include "fastplot/cvplot_utils.hpp"
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>

@@ -1,5 +1,5 @@
 /* 
- * plot_utils.cpp
+ * cvplot_utils.cpp
  * 
  * Created on: Dec 29, 2017 18:13
  * Description: 
@@ -7,7 +7,7 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#include "fastplot/plot_utils.hpp"
+#include "fastplot/cvplot_utils.hpp"
 
 using namespace librav;
 using namespace cv;

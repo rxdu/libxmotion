@@ -2,9 +2,10 @@
 
 ## Planning
 
-- [ ] Iterators for Vertex_t and Edge_t
+- [ ] Monte Carlo simulation for autonomous vehicles
 - [ ] Priority queue that supports element priority update
 - [ ] RRT and RRT* with Dubins model  
+- [*] Iterators for Vertex_t and Edge_t
 
 ## Control
 
@@ -16,4 +17,5 @@
 
 ## Visualization
 
-- [ ] Better surface visualization
+- [ ] Graph visualization using Cairo
+- [*] Better surface visualization

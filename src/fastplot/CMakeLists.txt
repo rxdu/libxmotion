@@ -61,7 +61,7 @@ set(FASTPLOT_LIB_SRC
 	src/image_plot.cpp
 	src/map_plot.cpp
 	src/graph_plot.cpp
-	src/plot_utils.cpp
+	src/cvplot_utils.cpp
 	src/mathgl_plot.cpp
 	src/mathgl_2d.cpp
 	src/cairo_utils.cpp

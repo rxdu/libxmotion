@@ -1,5 +1,5 @@
 /* 
- * plot_utils.h
+ * cvplot_utils.h
  * 
  * Created on: Dec 29, 2017 18:11
  * Description: 
@@ -7,8 +7,8 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#ifndef PLOT_UTILS_H
-#define PLOT_UTILS_H
+#ifndef CVPLOT_UTILS_H
+#define CVPLOT_UTILS_H
 
 #include <cstdint>
 
@@ -68,4 +68,4 @@ std::string GetMatType(const cv::Mat &mat);
 };
 }
 
-#endif /* PLOT_UTILS_H */
+#endif /* CVPLOT_UTILS_H */

@@ -8,7 +8,7 @@
  */
 
 #include "fastplot/graph_plot.hpp"
-#include "fastplot/plot_utils.hpp"
+#include "fastplot/cvplot_utils.hpp"
 
 using namespace librav;
 
