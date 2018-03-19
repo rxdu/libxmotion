@@ -1,7 +1,5 @@
 ## Changes made to third-party libraries
 
-### eigen: unchanged
-
 ### octomap-1.8.0
 
 octomap
@@ -24,3 +22,7 @@ octovis
 ### spdlog
 
 * commit: e6cbc22da53bc807a6172a99cd6dc75534926b99
+
+### dubins_curves
+
+* minimal version for cleaner integration: https://github.com/rxdu/dubins_curves/tree/minimal

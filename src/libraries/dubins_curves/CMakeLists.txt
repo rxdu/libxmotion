@@ -1,5 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
-project(librav_libs)
+cmake_minimum_required(VERSION 3.0)
 
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
@@ -17,13 +16,30 @@ else()
 endif()
 
 ## Put all binary files into /bin and libraries into /lib
-#set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+# set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-## Add sub source directories
-add_subdirectory(octomap-1.8.0)
-add_subdirectory(googletest)
-add_subdirectory(spdlog)
-add_subdirectory(dubins_curves)
+## Add libraries
+add_library(dubins src/dubins.c)
+target_link_libraries(dubins PUBLIC m)
+target_include_directories(dubins PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+  PRIVATE src)
 
+add_executable(demo_app examples/demo.c)
+target_link_libraries(demo_app dubins)
+
+## Commented out testing part 
+# add_subdirectory(3rd_party/google-test)
+# enable_testing()
+# add_executable(unittest_dubins
+#     tests/montecarlo_tests.cpp
+#     tests/stableapi_tests.cpp)
+# target_link_libraries(unittest_dubins
+#     dubins
+#     GTest::Main
+#     GTest::GTest)
+# target_link_libraries(unittest_dubins --coverage)
+# add_test(unittest_dubins unittest_dubins)
