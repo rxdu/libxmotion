@@ -16,6 +16,7 @@
 #include <map>
 #include <memory>
 #include <atomic>
+#include <sstream>
 
 #include "spdlog/spdlog.h"
 
