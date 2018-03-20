@@ -42,7 +42,6 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 ## Add other sub source directories
 # add_subdirectory(apps)
 add_subdirectory(expts)
-add_subdirectory(field)
 add_subdirectory(navigation)
 # add_subdirectory(traffic)
 add_subdirectory(scenario)
