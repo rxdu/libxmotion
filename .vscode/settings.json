@@ -56,6 +56,12 @@
         "vector": "cpp",
         "*.txx": "cpp",
         "unordered_map": "cpp",
-        "dense": "cpp"
+        "dense": "cpp",
+        "algorithm": "cpp",
+        "iterator": "cpp",
+        "memory_resource": "cpp",
+        "random": "cpp",
+        "string": "cpp",
+        "string_view": "cpp"
     }
 }
