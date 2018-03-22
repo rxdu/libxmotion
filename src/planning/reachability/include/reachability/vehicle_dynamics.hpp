@@ -17,16 +17,31 @@ namespace librav
 {
 class LongitudinalDynamics
 {
-  public:
-    LongitudinalDynamics(double u);
+public:
+  using control_t = double;
+  LongitudinalDynamics(double u);
 
-    // x1 = s, x2 = v
-    void operator()(const asc::state_t &x, asc::state_t &xd, const double);
+  // x1 = s, x2 = v
+  void operator()(const asc::state_t &x, asc::state_t &xd, const double);
 
-  private:
-    double u_ = 0.0;
-    static constexpr double v_sw = 7.3;
-    static constexpr double a_max = 7;
+private:
+  double u_ = 0.0;
+  static constexpr double v_sw = 7.3;
+  static constexpr double a_max = 7;
+};
+
+class SteeringKinematics
+{
+public:
+  using control_t = std::vector<double>;
+  SteeringKinematics(control_t u);
+
+  // x1 = x, x2 = y, x3 = v, x4 = theta
+  void operator()(const asc::state_t &x, asc::state_t &xd, const double);
+
+private:
+  control_t u_ = {0.0, 0.0};
+  static constexpr double L = 2.4;
 };
 }
 

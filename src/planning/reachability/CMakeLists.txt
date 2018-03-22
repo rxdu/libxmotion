@@ -8,6 +8,7 @@ include_directories(${GSL_INCLUDE_DIRS})
 # Add libraries
 set(REACHABILITY_LIB_SRC
   src/vehicle_dynamics.cpp
+  src/gaussian_sampler.cpp
   src/bigaussian_sampler.cpp
   src/monte_carlo_sim.cpp
 )

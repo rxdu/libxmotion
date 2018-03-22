@@ -10,9 +10,12 @@
 #ifndef MONTE_CARLO_SIM_HPP
 #define MONTE_CARLO_SIM_HPP
 
+#include <cmath>
+
 #include "reachability/vehicle_dynamics.hpp"
 #include "reachability/system_propagator.hpp"
 #include "reachability/bigaussian_sampler.hpp"
+#include "reachability/gaussian_sampler.hpp"
 
 namespace librav
 {
@@ -24,8 +27,12 @@ class MonteCarloSim
     void RunSim(int32_t iter_num);
 
   private:
-    SystemPropagator<LongitudinalDynamics, double> propagator_;
-    BiGaussianSampler sampler_ = {0.1, 0.5, 0};
+    // SystemPropagator<LongitudinalDynamics, double> propagator_;
+    SystemPropagator<SteeringKinematics, SteeringKinematics::control_t> propagator_;
+
+    BiGaussianSampler init_pos_sampler_ = {0.1, 0.05, 0};
+    GaussianSampler acc_sampler_ = {0.0, 2.0};
+    GaussianSampler steer_sampler_ = {0.0, M_PI/36.0};
 };
 }
 
