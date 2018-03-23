@@ -24,7 +24,7 @@ class MonteCarloSim
   public:
     MonteCarloSim() = default;
 
-    void RunSim(int32_t iter_num);
+    void RunSim(double t0, double tf, double step, int32_t iter_num);
 
   private:
     // SystemPropagator<LongitudinalDynamics, double> propagator_;

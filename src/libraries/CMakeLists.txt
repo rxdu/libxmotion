@@ -27,4 +27,5 @@ add_subdirectory(googletest)
 add_subdirectory(spdlog)
 add_subdirectory(ascent)
 add_subdirectory(dubins_curves)
+add_subdirectory(dlib-19.10)
 

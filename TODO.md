@@ -2,6 +2,7 @@
 
 ## Planning
 
+- [ ] Road network model
 - [ ] Monte Carlo simulation for autonomous vehicles
 - [ ] Priority queue that supports element priority update
 - [ ] RRT and RRT* with Dubins model  
