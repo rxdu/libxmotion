@@ -27,20 +27,20 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # Dependency libraries
 find_package(Threads REQUIRED)
 
+## Find Eigen3
+find_package(Eigen3 REQUIRED)
+include_directories(${EIGEN3_INCLUDE_DIR})
+
 # Add libraries
 set(UTILITY_LIB_SRC
 	logging/logger.cpp
+	image/image_io.cpp
 )
 add_library(utilities STATIC ${UTILITY_LIB_SRC})
 if(ENABLE_LOGGING)
 target_compile_definitions(utilities PUBLIC ENABLE_LOGGING=1)
 endif(ENABLE_LOGGING)
-target_link_libraries(utilities spdlog ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(utilities spdlog dlib ${CMAKE_THREAD_LIBS_INIT})
 target_include_directories(utilities PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	$<INSTALL_INTERFACE:include>)
-
-#add_executable(test_logging tests/test_logging.cpp)
-#target_link_libraries(test_logging utilities)
-
-#add_executable(test_stopwatch tests/test_stopwatch.cpp)
