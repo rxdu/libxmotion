@@ -22,10 +22,11 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Add sub source directories
-add_subdirectory(octomap-1.8.0)
+# add_subdirectory(octomap-1.8.0)
 add_subdirectory(googletest)
 add_subdirectory(spdlog)
 add_subdirectory(ascent)
 add_subdirectory(dubins_curves)
-add_subdirectory(dlib-19.10)
+# add_subdirectory(glfw-3.2.1)
+# add_subdirectory(dlib-19.10)
 
