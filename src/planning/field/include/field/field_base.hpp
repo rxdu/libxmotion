@@ -22,28 +22,30 @@ namespace librav
 /*
  * 
  *  Field Coordinate System:
- *		          y
- *		          ^
- *		          |
+ *              y
+ *              ^
+ *              |
  *		          |
  *  	          |
  *		          |
- *   ---------- 0 ---------> x
+ *   ---------- o ---------> x
  *		          |
  *  	          |
  *              |
- *              |  
+ *              | 
+ *                           
  * 
  *  Internal Coordinate System:
- *		y
- *		^
- *		|
- *		|
- *  	| --------O(origin offset)
+ *		
+ *		y 
+ *		^         
+ *		|         
+ *    |         
+ *  	| --------o' (origin offset)
  *		|         |
  *		|         |
- *		|         |
- *  	0 ------------------> x
+ *    |         |         
+ *    o------------------> x 
  * 
  */
 
@@ -57,8 +59,8 @@ public:
   }
   ~FieldCoordinate() = default;
 
-  inline int64_t GetX() { return coordinate_x_; };
-  inline int64_t GetY() { return coordinate_y_; };
+  inline int64_t GetX() const { return coordinate_x_; };
+  inline int64_t GetY() const { return coordinate_y_; };
   inline void SetX(int64_t x) { coordinate_x_ = x; };
   inline void SetY(int64_t y) { coordinate_y_ = y; };
   inline void SetXY(int64_t x, int64_t y)
@@ -93,8 +95,8 @@ protected:
   std::vector<std::vector<T>> field_tiles_;
 
   // origin offset
-  int64_t origin_x_ = 0;
-  int64_t origin_y_ = 0;
+  int64_t origin_offset_x_ = 0;
+  int64_t origin_offset_y_ = 0;
 
   // operations WRT coordinate of field
   void SetTileAtFieldCoordinate(int64_t x, int64_t y, T tile);

@@ -31,14 +31,14 @@ FieldBase<T>::FieldBase(int64_t size_x, int64_t size_y) : size_x_(size_x),
 template <typename T>
 void FieldBase<T>::SetOriginCoordinate(int64_t origin_x, int64_t origin_y)
 {
-    origin_x_ = origin_x;
-    origin_y_ = origin_y;
+    origin_offset_x_ = origin_x;
+    origin_offset_y_ = origin_y;
 }
 
 template <typename T>
 void FieldBase<T>::ResizeField(int64_t x, int64_t y)
 {
-    assert(x > origin_x_ && y > origin_y_);
+    assert(x > origin_offset_x_ && y > origin_offset_y_);
 
     field_tiles_.resize(x);
     for (auto &tile_array : field_tiles_)
@@ -86,7 +86,7 @@ FieldCoordinate FieldBase<T>::ConvertToRawCoordinate(int64_t x, int64_t y)
 {
     assert((x > -size_x_) && (x < size_x_) && (y > -size_y_) && (y < size_y_));
 
-    return FieldCoordinate(x + origin_x_, y + origin_y_);
+    return FieldCoordinate(x + origin_offset_x_, y + origin_offset_y_);
 }
 
 template <typename T>
@@ -94,7 +94,7 @@ FieldCoordinate FieldBase<T>::ConvertToFieldCoordinate(int64_t x, int64_t y)
 {
     assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
 
-    return FieldCoordinate(x - origin_x_, y + origin_y_);
+    return FieldCoordinate(x - origin_offset_x_, y - origin_offset_y_);
 }
 }
 #endif /* FIELD_IMPL_HPP */

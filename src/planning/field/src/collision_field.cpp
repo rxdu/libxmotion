@@ -19,8 +19,8 @@ using namespace librav;
 CollisionField::CollisionField(int64_t size_x, int64_t size_y)
     : ScalarField(size_x, size_y)
 {
-  lane_threat_matrix_.resize(size_x, size_y);
-  lane_threat_matrix_ =  Eigen::MatrixXd::Zero(size_x, size_y);
+  lane_threat_matrix_.resize(size_y, size_x);
+  lane_threat_matrix_ =  Eigen::MatrixXd::Zero(size_y, size_x);
 }
 
 void CollisionField::AddLaneConstraints(int32_t id, std::shared_ptr<LaneConstraint> lane_constr)
@@ -80,6 +80,6 @@ void CollisionField::UpdateLaneConstraintMatrix()
       double threat_val = 0;
       for (const auto &lc : lane_constraints_)
         threat_val += lc.second->GetValueAtCoordinate(i, j);
-      lane_threat_matrix_(i, j) = threat_val;
+      lane_threat_matrix_(j, i) = threat_val;
     }
 }

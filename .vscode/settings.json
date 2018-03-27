@@ -62,6 +62,7 @@
         "memory_resource": "cpp",
         "random": "cpp",
         "string": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "future": "cpp"
     }
 }

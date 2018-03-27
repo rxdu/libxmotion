@@ -22,7 +22,7 @@ int main()
 
     // add traffic participant
     auto pt0 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    pt0->SetPositionVelocity(50, 50, 1, 1);
+    pt0->SetPositionVelocity(20, 50, 1, 1);
 
     cfield.AddTrafficParticipant(0, pt0);
 

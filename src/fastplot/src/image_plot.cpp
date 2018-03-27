@@ -42,9 +42,7 @@ cv::Mat FastPlot::CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix)
 
     // scale matrix to 0-255
     Eigen::MatrixXd scaled_matrix = (matrix + Eigen::MatrixXd::Ones(matrix.rows(), matrix.cols()) * matrix.minCoeff()) / (matrix.maxCoeff() - matrix.minCoeff()) * 255.0;
-    // internally transposed for consistency of indexing so transpose back here
-    Eigen::MatrixXd rotated_matrix = scaled_matrix.transpose();
-    eigen2cv(rotated_matrix, grey_img);
+    eigen2cv(scaled_matrix, grey_img);
 
     grey_img.convertTo(grey_img, CV_8U);
     applyColorMap(grey_img, color_img, COLORMAP_JET);

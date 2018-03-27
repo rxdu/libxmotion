@@ -13,12 +13,14 @@ int main()
     field.SetValueAtCoordinate(2, 2, 5.6);
     field.SetValueAtCoordinate(1, 2, 2.5);
     field.SetValueAtCoordinate(0, 0, 1.6);
-    field.SetValueAtCoordinate(-1, -1, 2.6);
-    field.SetValueAtCoordinate(-1, -2, 1.8);
+    // field.SetValueAtCoordinate(-1, -1, 2.6);
+    // field.SetValueAtCoordinate(-1, -2, 1.8);
 
     field.PrintField(true);
 
+    std::cout << "matrix: \n" << field.GenerateFieldMatrix(0, 1, 0, 1).z << std::endl;
+
     std::cout << "done" << std::endl;
-    
+
     return 0;
 }

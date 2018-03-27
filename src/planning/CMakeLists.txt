@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
-project(librav_planning_v2)
+project(librav_planning)
 
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)

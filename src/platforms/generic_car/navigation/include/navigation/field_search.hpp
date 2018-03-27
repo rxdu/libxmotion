@@ -41,12 +41,12 @@ public:
 
   double GetCollisionThreat()
   {
-    return field_->collision_threat_matrix_(position_x_, position_y_);
+    return field_->collision_threat_matrix_(position_y_, position_x_);
   }
 
   bool IsLaneConstrained()
   {
-    if (field_->lane_threat_matrix_(position_x_, position_y_) != 0)
+    if (field_->lane_threat_matrix_(position_y_, position_x_) != 0)
       return true;
     else
       return false;

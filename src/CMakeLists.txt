@@ -9,6 +9,9 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 include(cmake/lcmtypes.cmake)
 lcmtypes_build()
 
+## Chosse build type
+set(CMAKE_BUILD_TYPE Debug)
+
 ## Optionally built modules: on/off
 set(ENABLE_LOGGING on)
 set(BUILD_TESTS off)
