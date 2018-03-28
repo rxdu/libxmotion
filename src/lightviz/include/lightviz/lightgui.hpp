@@ -11,6 +11,6 @@
 #define LIGHTGUI_HPP
 
 #include <stdio.h>
-#include "imgui/imgui.h"
+// #include "imgui/imgui.h"
 
 #endif /* LIGHTGUI_HPP */

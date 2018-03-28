@@ -40,7 +40,7 @@ add_library(utilities STATIC ${UTILITY_LIB_SRC})
 if(ENABLE_LOGGING)
 target_compile_definitions(utilities PUBLIC ENABLE_LOGGING=1)
 endif(ENABLE_LOGGING)
-target_link_libraries(utilities spdlog dlib ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(utilities spdlog ${CMAKE_THREAD_LIBS_INIT})
 target_include_directories(utilities PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	$<INSTALL_INTERFACE:include>)

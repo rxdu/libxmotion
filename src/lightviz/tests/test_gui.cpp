@@ -1,32 +1,30 @@
-#include "lightviz/lightgui.hpp"
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Box.H>
 
-int main()
+#include <FL/Fl_Shared_Image.H>
+#include <FL/Fl_JPEG_Image.H>
+
+int main(int argc, char **argv)
 {
-    ImGui::CreateContext();
-    ImGuiIO &io = ImGui::GetIO();
+    fl_register_images();
 
-    // Build atlas
-    unsigned char *tex_pixels = NULL;
-    int tex_w, tex_h;
-    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
+    Fl_Window *window = new Fl_Window(340, 180);
 
-    for (int n = 0; n < 50; n++)
-    {
-        // printf("NewFrame() %d\n", n);
-        io.DisplaySize = ImVec2(1920, 1080);
-        io.DeltaTime = 1.0f / 60.0f;
-        ImGui::NewFrame();
+    window->begin();
 
-        static float f = 0.0f;
-        ImGui::Text("Hello, world!");
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-        // ImGui::ShowDemoWindow(NULL);
-        ImGui::Render();
-    }
+    Fl_Box *box = new Fl_Box(20, 40, 300, 100, "Hello, World!");
+    box->box(FL_UP_BOX);
+    box->labelfont(FL_BOLD + FL_ITALIC);
+    box->labelsize(36);
+    box->labeltype(FL_SHADOW_LABEL);
 
-    printf("DestroyContext()\n");
-    ImGui::DestroyContext();
+    Fl_Box box2(10, 10, 720 - 20, 486 - 20);         // widget that will contain image
+    Fl_JPEG_Image jpg("/home/rdu/Pictures/cat.jpg"); // load jpeg image into ram
+    box2.image(jpg);                                 // attach jpg image to box
 
-    return 0;
+    window->end();
+
+    window->show(argc, argv);
+    return Fl::run();
 }

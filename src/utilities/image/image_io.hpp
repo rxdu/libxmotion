@@ -10,8 +10,10 @@
 #ifndef IMAGE_IO_HPP
 #define IMAGE_IO_HPP
 
-#include <dlib/image_io.h>
 #include <Eigen/Dense>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "image/stb_image.h"
 
 namespace librav
 {

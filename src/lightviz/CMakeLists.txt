@@ -34,44 +34,28 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 
+find_package(FLTK REQUIRED)
+include_directories(${FLTK_INCLUDE_DIR})
+
 find_package(Cairo REQUIRED)
 include_directories(${CAIRO_INCLUDE_DIRS})
 
-find_package(X11 REQUIRED)
-include_directories(${X11_INCLUDE_DIR})
+# find_package(X11 REQUIRED)
+# include_directories(${X11_INCLUDE_DIR})
 
-find_package(GLFW REQUIRED)
-include_directories(${GLFW_INCLUDE_DIR})
+# find_package(GLFW REQUIRED)
+# include_directories(${GLFW_INCLUDE_DIR})
 
-find_package(OpenGL REQUIRED)
-include_directories(${OPENGL_INCLUDE_DIR})
+# find_package(OpenGL REQUIRED)
+# include_directories(${OPENGL_INCLUDE_DIR})
 
 ## Add libraries
-# GUI library
-set(IMGUI_SRC
-	imgui/imgui.cpp
-	imgui/imgui.h
-	imgui/imgui_demo.cpp
-	imgui/imgui_draw.cpp
-	imgui/imgui_internal.h
-	imgui/imconfig.h 
-	imgui/stb_rect_pack.h
-	imgui/stb_textedit.h
-	imgui/stb_truetype.h
-)
-add_library(imgui STATIC ${IMGUI_SRC})
-# target_link_libraries(fastplot geometry graph ${ADV_DEPENDENT_LIBS} ${OpenCV_LIBS})
-target_include_directories(imgui PUBLIC
-	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgui>
-	$<INSTALL_INTERFACE:include>	
-	PRIVATE imgui)
-
 # LightViz library
 set(LIGHTVIZ_LIB_SRC
-	# src/image_plot.cpp
+	src/lightgui.cpp
 )
 add_library(lightviz STATIC ${LIGHTVIZ_LIB_SRC})
-target_link_libraries(lightviz imgui ${OPENGL_gl_LIBRARY} ${GLFW_LIBRARIES} )
+target_link_libraries(lightviz ${FLTK_LIBRARIES} )
 target_include_directories(lightviz PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>	
