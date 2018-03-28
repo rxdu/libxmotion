@@ -29,7 +29,7 @@ cv::Mat FastPlot::ReadColorImage(std::string img_file)
     return imread(img_file, CV_LOAD_IMAGE_COLOR);
 }
 
-cv::Mat FastPlot::ReadGreyscaleImage(std::string img_file)
+cv::Mat FastPlot::ReadGrayscaleImage(std::string img_file)
 {
     return imread(img_file, CV_LOAD_IMAGE_GRAYSCALE);
 }

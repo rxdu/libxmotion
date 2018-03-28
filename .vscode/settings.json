@@ -63,6 +63,7 @@
         "random": "cpp",
         "string": "cpp",
         "string_view": "cpp",
-        "future": "cpp"
+        "future": "cpp",
+        "optional": "cpp"
     }
 }

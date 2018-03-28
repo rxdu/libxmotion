@@ -6,9 +6,11 @@
 #include "field/threat_distribution.hpp"
 #include "field/lane_constraint.hpp"
 
-#include "fastplot/fastplot.hpp"
-#include "fastplot/field_plot.hpp"
+// #include "fastplot/fastplot.hpp"
+// #include "fastplot/field_plot.hpp"
 #include "stopwatch/stopwatch.h"
+
+#include "lightviz/image_viz.hpp"
 
 using namespace librav;
 
@@ -46,7 +48,8 @@ int main()
     // FastPlot::ShowFieldSurface(mat.x, mat.y, mat.z, true);
     // FastPlot::ShowFieldContour(mat.x, mat.y, mat.z, true);
     // FastPlot::ShowMatrixAsImage(mat.z);
-    FastPlot::ShowMatrixAsColorMap(mat.z);
+    LightViz::ShowMatrixAsImage(mat.z);
+    // LightViz::ShowMatrixAsColorMap(mat.z);
 
     return 0;
 }

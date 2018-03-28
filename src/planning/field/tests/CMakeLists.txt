@@ -16,7 +16,7 @@ add_executable(test_traffic_participant test_traffic_participant.cpp)
 target_link_libraries(test_traffic_participant field fastplot utilities)
 
 add_executable(test_collision_field test_collision_field.cpp)
-target_link_libraries(test_collision_field field fastplot utilities)
+target_link_libraries(test_collision_field field lightviz utilities)
 
 add_executable(test_info_field test_info_field.cpp)
 target_link_libraries(test_info_field field fastplot utilities)

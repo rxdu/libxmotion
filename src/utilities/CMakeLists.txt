@@ -44,3 +44,5 @@ target_link_libraries(utilities spdlog ${CMAKE_THREAD_LIBS_INIT})
 target_include_directories(utilities PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	$<INSTALL_INTERFACE:include>)
+
+add_subdirectory(tests)

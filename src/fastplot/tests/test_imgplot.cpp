@@ -21,7 +21,7 @@ int main()
     Mat imagec = FastPlot::ReadColorImage(file_name);
     FastPlot::ShowImage(imagec, "test color");
 
-    Mat imageg = FastPlot::ReadGreyscaleImage(file_name);
+    Mat imageg = FastPlot::ReadGrayscaleImage(file_name);
     FastPlot::ShowImage(imageg, "test greyscale");
 
     return 0;

@@ -20,7 +20,7 @@ namespace FastPlot
 // Read image from a file
 cv::Mat ReadImageFile(std::string img_file);
 cv::Mat ReadColorImage(std::string img_file);
-cv::Mat ReadGreyscaleImage(std::string img_file);
+cv::Mat ReadGrayscaleImage(std::string img_file);
 
 cv::Mat CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix);
 

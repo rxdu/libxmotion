@@ -10,16 +10,24 @@
 #ifndef IMAGE_IO_HPP
 #define IMAGE_IO_HPP
 
-#include <Eigen/Dense>
+#include <cstdint>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "image/stb_image.h"
+#include <Eigen/Dense>
 
 namespace librav
 {
+struct MonoImageMatrix
+{
+    int32_t w = 0;
+    int32_t h = 0;
+    const int32_t d = 1;
+    Eigen::MatrixXd data;
+};
+
 namespace ImageIO
 {
-void DisplayImage();
+MonoImageMatrix ReadImage(std::string file_name);
+bool SaveToImage(const MonoImageMatrix& matrix, std::string file_name);
 }
 }
 
