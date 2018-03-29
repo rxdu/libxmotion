@@ -6,7 +6,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add libraries
 set(DECOMP_LIB_SRC
-  src/square_grid.cpp
+  # src/square_grid.cpp
 )
 add_library(decomp STATIC ${DECOMP_LIB_SRC})
 target_link_libraries(decomp common)
@@ -15,5 +15,5 @@ target_include_directories(decomp PUBLIC
   $<INSTALL_INTERFACE:include>
   PRIVATE src)
 
-# add_subdirectory(tests)
+add_subdirectory(tests)
 

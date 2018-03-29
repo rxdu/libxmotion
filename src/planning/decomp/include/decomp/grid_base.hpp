@@ -13,9 +13,12 @@
 #include <cstdint>
 #include <vector>
 #include <tuple>
+#include <iomanip>
 #include <type_traits>
 
 #include <Eigen/Dense>
+
+#include "details/grid_base_tiles.hpp"
 
 namespace librav
 {
@@ -50,32 +53,7 @@ namespace librav
  * 
  */
 
-// Reference: https://stackoverflow.com/questions/25492589/can-i-use-sfinae-to-selectively-define-a-member-variable-in-a-template-class?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-template <typename T, typename IsScalar = void>
-class GridTiles;
-
-// my favourite type :D
-template <typename T>
-class GridTiles<T, std::enable_if_t<std::is_floating_point<T>::value>>
-{
-public:
-  int some_variable;
-};
-
-// not my favourite type :(
-template <typename T>
-class GridTiles<T, std::enable_if_t<!std::is_floating_point<T>::value>>
-{
-public:
-  // no variable
-};
-
-template <typename T>
-class derived_class : public base_class<T>
-{
-public:
-  // do stuff
-};
+////////////////////////////////////////////////////////////////////
 
 class GridCoordinate
 {
@@ -102,42 +80,109 @@ private:
   int64_t coordinate_y_;
 };
 
-template <typename TileType, typename TileContainer>
-class GridBase
+////////////////////////////////////////////////////////////////////
+
+template <typename TileType>
+class GridBase : public GridTiles<TileType>
 {
 public:
-  GridBase(int64_t size_x = 0, int64_t size_y = 0);
+  GridBase(int64_t size_x = 0, int64_t size_y = 0) : size_x_(size_x),
+                                                     size_y_(size_y)
+  {
+    GridTiles<TileType>::ResizeGrid(size_x, size_y);
+  }
 
-  int64_t SizeX() const { return size_x_; };
+  int64_t SizeX() const
+  {
+    return size_x_;
+  };
   int64_t SizeY() const { return size_y_; };
 
-  void ResizeGrid(int64_t x, int64_t y);
-  void SetOriginCoordinate(int64_t origin_x, int64_t origin_y);
+  void ResizeGrid(int64_t x, int64_t y)
+  {
+    if (x == size_x_ && y == size_y_)
+      return;
 
-  void PrintGrid() const;
+    assert(x > origin_offset_x_ && y > origin_offset_y_);
+
+    GridTiles<TileType>::ResizeGrid(x, y);
+    size_x_ = x;
+    size_y_ = y;
+  }
+
+  void SetOriginCoordinate(int64_t origin_x, int64_t origin_y)
+  {
+    origin_offset_x_ = origin_x;
+    origin_offset_y_ = origin_y;
+  }
+
+  // operations WRT coordinate of internal data structure directly
+  void SetTileAtRawCoordinate(int64_t x, int64_t y, TileType tile)
+  {
+    assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
+
+    GridTiles<TileType>::SetTileAtCoordinate(x, y, tile);
+  }
+
+  TileType &GetTileAtRawCoordinate(int64_t x, int64_t y)
+  {
+    assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
+
+    return GridTiles<TileType>::GetTileAtCoordinate(x, y);
+  }
+
+  // operations WRT coordinate of field
+  void SetTileAtGridCoordinate(int64_t x, int64_t y, TileType tile)
+  {
+    auto internal_coordinate = ConvertToRawCoordinate(x, y);
+    assert((internal_coordinate.GetX() >= 0) && (internal_coordinate.GetX() < size_x_) && (internal_coordinate.GetY() >= 0) && (internal_coordinate.GetY() < size_y_));
+
+    SetTileAtRawCoordinate(internal_coordinate.GetX(), internal_coordinate.GetY(), tile);
+  }
+
+  TileType &GetTileAtGridCoordinate(int64_t x, int64_t y)
+  {
+    auto internal_coordinate = ConvertToRawCoordinate(x, y);
+    assert((internal_coordinate.GetX() >= 0) && (internal_coordinate.GetX() < size_x_) && (internal_coordinate.GetY() >= 0) && (internal_coordinate.GetY() < size_y_));
+
+    return GetTileAtRawCoordinate(internal_coordinate.GetX(), internal_coordinate.GetY());
+  }
+
+  // convertion between two coordinates
+  GridCoordinate ConvertToRawCoordinate(int64_t x, int64_t y)
+  {
+    assert((x > -size_x_) && (x < size_x_) && (y > -size_y_) && (y < size_y_));
+
+    return GridCoordinate(x + origin_offset_x_, y + origin_offset_y_);
+  }
+
+  GridCoordinate ConvertToGridCoordinate(int64_t x, int64_t y)
+  {
+    assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
+
+    return GridCoordinate(x - origin_offset_x_, y - origin_offset_y_);
+  }
+
+  template <typename T = TileType, typename std::enable_if<std::is_floating_point<T>::value || std::is_integral<T>::value>::type * = nullptr>
+  void PrintGrid() const
+  {
+    for (int64_t y = 0; y < size_y_; ++y)
+    {
+      for (int64_t x = 0; x < size_x_; ++x)
+        std::cout << std::setw(6) << GridTiles<TileType>::GetTileAtCoordinate(x, y);
+      std::cout << std::endl;
+    }
+  }
 
 protected:
   // internal data structure for a 2D field
   int64_t size_x_;
   int64_t size_y_;
-  std::vector<std::vector<TileType>> field_tiles_;
 
   // origin offset
   int64_t origin_offset_x_ = 0;
   int64_t origin_offset_y_ = 0;
-
-  // operations WRT coordinate of field
-  void SetTileAtGridCoordinate(int64_t x, int64_t y, TileType tile);
-  TileType &GetTileAtGridCoordinate(int64_t x, int64_t y);
-  // operations WRT coordinate of internal data structure directly
-  void SetTileAtRawCoordinate(int64_t x, int64_t y, TileType tile);
-  TileType &GetTileAtRawCoordinate(int64_t x, int64_t y);
-  // convertion between two coordinates
-  GridCoordinate ConvertToRawCoordinate(int64_t x, int64_t y);
-  GridCoordinate ConvertToGridCoordinate(int64_t x, int64_t y);
 };
 }
-
-#include "details/field_base_impl.hpp"
 
 #endif /* GRID_BASE_HPP */
