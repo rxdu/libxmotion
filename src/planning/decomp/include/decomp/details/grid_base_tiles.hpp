@@ -36,6 +36,11 @@ class GridTiles<T, std::enable_if_t<std::is_floating_point<T>::value || std::is_
         return grid_tiles_(y, x);
     }
 
+    T &GetTileRefAtCoordinate(int64_t x, int64_t y)
+    {
+        return grid_tiles_(y, x);
+    }
+
     void SetTileAtCoordinate(int64_t x, int64_t y, T tile)
     {
         grid_tiles_(y, x) = tile;
@@ -58,7 +63,13 @@ class GridTiles<T, std::enable_if_t<!std::is_floating_point<T>::value && !std::i
                 tile_array.resize(x);
     }
 
-    T &GetTileAtCoordinate(int64_t x, int64_t y)
+    T GetTileAtCoordinate(int64_t x, int64_t y) const
+    {
+        return grid_tiles_[y][x];
+    }
+
+    template<typename T2 = T, typename std::enable_if<!std::is_pointer<T2>::value>::type * = nullptr>
+    T &GetTileRefAtCoordinate(int64_t x, int64_t y)
     {
         return grid_tiles_[y][x];
     }

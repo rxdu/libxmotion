@@ -14,6 +14,7 @@
 #include <vector>
 #include <tuple>
 #include <iomanip>
+#include <iostream>
 #include <type_traits>
 
 #include <Eigen/Dense>
@@ -26,8 +27,8 @@ namespace librav
 /*
  * 
  *  Grid Coordinate System:
- *              y
- *              ^
+ * 
+ *              |
  *              |
  *		          |
  *  	          |
@@ -37,19 +38,22 @@ namespace librav
  *  	          |
  *              |
  *              | 
+ *              v
+ *              y
  *                           
  * 
  *  Internal Coordinate System:
  *		
- *		y 
- *		^         
- *		|         
- *    |         
+ *		o ------------------> x  
+ *		|         |
+ *		|         |
+ *    |         |
  *  	| --------o' (origin offset)
- *		|         |
- *		|         |
- *    |         |         
- *    o------------------> x 
+ *		|         
+ *		|         
+ *    |                 
+ *    v
+ *    y
  * 
  */
 
@@ -98,6 +102,8 @@ public:
   };
   int64_t SizeY() const { return size_y_; };
 
+  // Note: resizing the grid may invalidate the reference to grid elements
+  //    acquired from GetTileRefAtRawCoordinate() and GetTileRefAtGridCoordinate()
   void ResizeGrid(int64_t x, int64_t y)
   {
     if (x == size_x_ && y == size_y_)
@@ -124,11 +130,18 @@ public:
     GridTiles<TileType>::SetTileAtCoordinate(x, y, tile);
   }
 
-  TileType &GetTileAtRawCoordinate(int64_t x, int64_t y)
+  TileType GetTileAtRawCoordinate(int64_t x, int64_t y) const
   {
     assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
 
     return GridTiles<TileType>::GetTileAtCoordinate(x, y);
+  }
+
+  TileType &GetTileRefAtRawCoordinate(int64_t x, int64_t y)
+  {
+    assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
+
+    return GridTiles<TileType>::GetTileRefAtCoordinate(x, y);
   }
 
   // operations WRT coordinate of field
@@ -140,7 +153,7 @@ public:
     SetTileAtRawCoordinate(internal_coordinate.GetX(), internal_coordinate.GetY(), tile);
   }
 
-  TileType &GetTileAtGridCoordinate(int64_t x, int64_t y)
+  TileType GetTileAtGridCoordinate(int64_t x, int64_t y) const
   {
     auto internal_coordinate = ConvertToRawCoordinate(x, y);
     assert((internal_coordinate.GetX() >= 0) && (internal_coordinate.GetX() < size_x_) && (internal_coordinate.GetY() >= 0) && (internal_coordinate.GetY() < size_y_));
@@ -148,15 +161,23 @@ public:
     return GetTileAtRawCoordinate(internal_coordinate.GetX(), internal_coordinate.GetY());
   }
 
+  TileType &GetTileRefAtGridCoordinate(int64_t x, int64_t y)
+  {
+    auto internal_coordinate = ConvertToRawCoordinate(x, y);
+    assert((internal_coordinate.GetX() >= 0) && (internal_coordinate.GetX() < size_x_) && (internal_coordinate.GetY() >= 0) && (internal_coordinate.GetY() < size_y_));
+
+    return GetTileRefAtRawCoordinate(internal_coordinate.GetX(), internal_coordinate.GetY());
+  }
+
   // convertion between two coordinates
-  GridCoordinate ConvertToRawCoordinate(int64_t x, int64_t y)
+  GridCoordinate ConvertToRawCoordinate(int64_t x, int64_t y) const
   {
     assert((x > -size_x_) && (x < size_x_) && (y > -size_y_) && (y < size_y_));
 
     return GridCoordinate(x + origin_offset_x_, y + origin_offset_y_);
   }
 
-  GridCoordinate ConvertToGridCoordinate(int64_t x, int64_t y)
+  GridCoordinate ConvertToGridCoordinate(int64_t x, int64_t y) const
   {
     assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
 

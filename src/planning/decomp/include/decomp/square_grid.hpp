@@ -19,42 +19,107 @@ namespace librav
 {
 /*
  * Coordinate System:
- *		y
- *	^	^
- *	^	|
- *		|
- * row	|
- *		|
- *		|
- *	v	|
- *  v	origin ------------------> x
- *		<<		   column       >>
+ *
+ *		   <<		   column       >>
+ *  	   o --------------------> x
+ *	^	   |
+ *	^	   |
+ *		   |
+ * row	 |
+ *		   |
+ *	v	   |
+ *	v	   v
+ *       y
  */
-struct SquareCell
+
+enum class SquareCellLabel
 {
-    bool occupied = false;
+  OCCUPIED,
+  FREE
 };
 
-template <typename TileType>
-class SquareGrid : public GridBase<SquareCell>
+struct GridPoint
 {
-  public:
-    SquareGrid(int32_t row_num, int32_t col_num, double cell_size = 0.1, int32_t pixel_per_meter = 100);
-    ~SquareGrid();
+  GridPoint(double xval = 0, double yval = 0) : x(xval), y(yval){};
 
-    double cell_size_;
-    int32_t pixel_per_meter_;
+  double x;
+  double y;
+};
 
-  public:
-    void SetCellOccupancy(int32_t x_col, int32_t y_row, OccupancyType occ);
-    void SetCellOccupancy(int64_t id, OccupancyType occ);
+struct SquareCell
+{
+  SquareCell(int32_t r, int32_t c, int64_t id_val = -1) : row(r),
+                                                          col(c),
+                                                          id(id_val) {}
 
-    Position2Di GetCoordinateFromID(int64_t id);
-    int64_t GetIDFromCoordinate(int32_t x_col, int32_t y_row);
+  // for easy reference, maybe unnecessary for some applications
+  int64_t id;
 
-    SquareCell *GetCellFromID(int64_t id);
-    std::vector<SquareCell *> GetNeighbours(int32_t x_col, int32_t y_row, bool allow_diag);
-    std::vector<SquareCell *> GetNeighbours(int64_t id, bool allow_diag = false);
+  // topological attributes
+  int32_t row;
+  int32_t col;
+  SquareCellLabel label = SquareCellLabel::FREE;
+
+  // geometrical attributes
+  // 4 vertices in the order:
+  // 0 - top left, 1 - top right
+  // 2 - bottom left, 3 - bottom right
+  GridPoint vertices[4];
+  GridPoint center;
+
+  void UpdateGeometry(double size)
+  {
+    vertices[0].x = size * col;
+    vertices[0].y = size * row;
+
+    vertices[1].x = size * (col + 1);
+    vertices[1].y = size * row;
+
+    vertices[2].x = size * col;
+    vertices[2].y = size * (row + 1);
+
+    vertices[3].x = size * (col + 1);
+    vertices[3].y = size * (row + 1);
+
+    center.x = vertices[0].x + size / 2.0;
+    center.y = vertices[0].y + size / 2.0;
+  }
+};
+
+class SquareGrid : public GridBase<SquareCell *>
+{
+public:
+  SquareGrid(int32_t row_num, int32_t col_num, double cell_size = 0.1);
+  ~SquareGrid();
+
+  int32_t row_num_;
+  int32_t col_num_;
+  double cell_size_;
+
+public:
+  void SetCellLabel(int32_t x_col, int32_t y_row, SquareCellLabel label);
+  void SetCellLabel(int64_t id, SquareCellLabel label);
+
+  GridCoordinate GetCoordinateFromID(int64_t id);
+  int64_t GetIDFromCoordinate(int32_t x_col, int32_t y_row);
+
+  SquareCell *GetCell(int64_t id);
+  SquareCell *GetCell(int32_t x_col, int32_t y_row);
+  std::vector<SquareCell *> GetNeighbours(int32_t x_col, int32_t y_row, bool allow_diag = true);
+  std::vector<SquareCell *> GetNeighbours(int64_t id, bool allow_diag = true);
+
+private:
+  // CoordinateToID() and IDToCoordinate() are the only places that define
+  //  the mapping between coordinate and id
+  inline int64_t CoordinateToID(int32_t row, int32_t col)
+  {
+    return row * col_num_ + col;
+  }
+
+  inline GridCoordinate IDToCoordinate(int64_t id)
+  {
+    return GridCoordinate(id % col_num_, id / col_num_);
+  }
 };
 }
 

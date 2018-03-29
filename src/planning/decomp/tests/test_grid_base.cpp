@@ -16,6 +16,7 @@ int main()
     // grid.SetTileAtGridCoordinate(-2, -1, -1.0);
     grid.SetTileAtGridCoordinate(0, 0, 1.0);
     grid.SetTileAtGridCoordinate(1, 2, 1.2);
+    grid.GetTileRefAtGridCoordinate(1, 2) = 1.3;
 
     grid.PrintGrid();
 
