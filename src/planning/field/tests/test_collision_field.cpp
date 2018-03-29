@@ -10,7 +10,7 @@
 // #include "fastplot/field_plot.hpp"
 #include "stopwatch/stopwatch.h"
 
-#include "lightviz/image_viz.hpp"
+#include "lightviz/lightviz.hpp"
 
 using namespace librav;
 

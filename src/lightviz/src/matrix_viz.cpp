@@ -1,18 +1,20 @@
 /* 
- * image_viz.cpp
+ * matrix_viz.cpp
  * 
- * Created on: Mar 28, 2018 14:47
+ * Created on: Mar 28, 2018 21:02
  * Description: 
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
- */
+ */ 
 
-#include "lightviz/image_viz.hpp"
+#include "lightviz/matrix_viz.hpp"
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/eigen.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
+
+#include "lightviz/cv_draw.hpp"
 
 using namespace librav;
 using namespace cv;
@@ -34,25 +36,6 @@ cv::Mat CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix)
 
     return color_img;
 }
-}
-
-void LightViz::ShowImage(cv::Mat img, std::string window_name, bool save_img)
-{
-    namedWindow(window_name, WINDOW_NORMAL); // Create a window for display.
-    imshow(window_name, img);                // Show our image inside it.
-
-    waitKey(0); // Wait for a keystroke in the window
-
-    if (save_img)
-        imwrite(window_name + ".jpg", img);
-
-    destroyWindow(window_name);
-}
-
-void LightViz::ShowImage(std::string file_name, std::string window_name)
-{
-    cv::Mat img = imread(file_name);
-    ShowImage(img, window_name, false);
 }
 
 void LightViz::ShowMatrixAsImage(const Eigen::MatrixXd &matrix, std::string window_name, bool save_img)
