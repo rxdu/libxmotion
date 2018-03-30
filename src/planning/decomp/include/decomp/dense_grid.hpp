@@ -17,11 +17,29 @@
 
 namespace librav
 {
+
+/*
+ * Coordinate System:
+ *
+ *  	o --------------------> x
+ *		|
+ *		|
+ *		|
+ *      |
+ *		|
+ *		|
+ *		v
+ *      y
+ */
+
 class DenseGrid : public GridBase<double>
 {
   public:
     DenseGrid(int32_t size_x, int32_t size_y);
-    ~DenseGrid();
+    ~DenseGrid() = default;
+
+    void SetValueAtCoordinate(int64_t x, int64_t y, double val);
+    double GetValueAtCoordinate(int64_t x, int64_t y);
 };
 }
 
