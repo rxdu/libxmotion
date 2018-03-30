@@ -5,8 +5,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 #find_package(LIBRARY_NAME REQUIRED)
 
 ## tests
-add_executable(test_image_viz test_image_viz.cpp )
+add_executable(test_image_viz test_image_viz.cpp)
 target_link_libraries(test_image_viz lightviz)
+
+add_executable(test_grid_viz test_grid_viz.cpp )
+target_link_libraries(test_grid_viz lightviz)
 
 # add_executable(test_glfw_gui test_glfw_gui.cpp )
 # target_link_libraries(test_glfw_gui lightviz glfw)
