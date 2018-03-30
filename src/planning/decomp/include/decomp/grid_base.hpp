@@ -90,16 +90,13 @@ template <typename TileType>
 class GridBase : public GridTiles<TileType>
 {
 public:
-  GridBase(int64_t size_x = 0, int64_t size_y = 0) : size_x_(size_x),
-                                                     size_y_(size_y)
+  GridBase(int64_t size_x, int64_t size_y) : GridTiles<TileType>(size_x, size_y),
+                                             size_x_(size_x),
+                                             size_y_(size_y)
   {
-    GridTiles<TileType>::ResizeGrid(size_x, size_y);
   }
 
-  int64_t SizeX() const
-  {
-    return size_x_;
-  };
+  int64_t SizeX() const { return size_x_; };
   int64_t SizeY() const { return size_y_; };
 
   // Note: resizing the grid may invalidate the reference to grid elements
@@ -111,7 +108,7 @@ public:
 
     assert(x > origin_offset_x_ && y > origin_offset_y_);
 
-    GridTiles<TileType>::ResizeGrid(x, y);
+    GridTiles<TileType>::ResizeGridTiles(x, y);
     size_x_ = x;
     size_y_ = y;
   }
@@ -122,6 +119,18 @@ public:
     origin_offset_y_ = origin_y;
   }
 
+  template <typename T = TileType, typename std::enable_if<std::is_floating_point<T>::value || std::is_integral<T>::value>::type * = nullptr>
+  void PrintGrid() const
+  {
+    for (int64_t y = 0; y < size_y_; ++y)
+    {
+      for (int64_t x = 0; x < size_x_; ++x)
+        std::cout << std::setw(6) << GridTiles<TileType>::GetTileAtCoordinate(x, y);
+      std::cout << std::endl;
+    }
+  }
+
+protected:
   // operations WRT coordinate of internal data structure directly
   void SetTileAtRawCoordinate(int64_t x, int64_t y, TileType tile)
   {
@@ -184,21 +193,10 @@ public:
     return GridCoordinate(x - origin_offset_x_, y - origin_offset_y_);
   }
 
-  template <typename T = TileType, typename std::enable_if<std::is_floating_point<T>::value || std::is_integral<T>::value>::type * = nullptr>
-  void PrintGrid() const
-  {
-    for (int64_t y = 0; y < size_y_; ++y)
-    {
-      for (int64_t x = 0; x < size_x_; ++x)
-        std::cout << std::setw(6) << GridTiles<TileType>::GetTileAtCoordinate(x, y);
-      std::cout << std::endl;
-    }
-  }
-
 protected:
   // internal data structure for a 2D field
-  int64_t size_x_;
-  int64_t size_y_;
+  int64_t size_x_ = 0;
+  int64_t size_y_ = 0;
 
   // origin offset
   int64_t origin_offset_x_ = 0;

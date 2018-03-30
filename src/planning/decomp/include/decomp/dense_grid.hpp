@@ -21,15 +21,15 @@ namespace librav
 /*
  * Coordinate System:
  *
- *  	o --------------------> x
+ *		o --------------------> x
  *		|
  *		|
  *		|
- *      |
+ *		|
  *		|
  *		|
  *		v
- *      y
+ *		y
  */
 
 class DenseGrid : public GridBase<double>
@@ -40,6 +40,14 @@ class DenseGrid : public GridBase<double>
 
     void SetValueAtCoordinate(int64_t x, int64_t y, double val);
     double GetValueAtCoordinate(int64_t x, int64_t y);
+
+    // public functions inherited from GridBase
+    /****************************************************************
+    void ResizeGrid(int64_t x, int64_t y);
+    void SetOriginCoordinate(int64_t origin_x, int64_t origin_y);   
+    *****************************************************************/
+
+    Eigen::MatrixXd GetGridMatrix(bool normalize);
 };
 }
 
