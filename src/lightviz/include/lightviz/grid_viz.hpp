@@ -19,11 +19,11 @@ namespace librav
 {
 namespace LightViz
 {
-cv::Mat CreateSquareGridCanvas(SquareGrid *grid, int32_t pixel_per_unit = 10);
-cv::Mat SquareGridCellViz(cv::Mat canvas, SquareGrid *grid, int32_t pixel_per_unit = 10);
-cv::Mat SquareGridNetViz(cv::Mat canvas, SquareGrid *grid, int32_t pixel_per_unit = 10);
-cv::Mat SquareGridPathStartGoalViz(cv::Mat canvas, const std::vector<SquareCell *> &path, int32_t pixel_per_unit = 10);
-cv::Mat SquareGridPathViz(cv::Mat canvas, const std::vector<SquareCell *> &path, int32_t pixel_per_unit = 10);
+cv::Mat CreateSquareGridCanvas(SquareGrid *grid);
+cv::Mat DrawSquareGridCell(cv::Mat canvas, SquareGrid *grid);
+cv::Mat DrawSquareGridNet(cv::Mat canvas, SquareGrid *grid);
+cv::Mat DrawSquareGridPathStartGoal(cv::Mat canvas, const std::vector<SquareCell *> &path);
+cv::Mat DrawSquareGridPath(cv::Mat canvas, const std::vector<SquareCell *> &path);
 
 void ShowSquareGrid(SquareGrid *grid, int32_t pixel_per_unit = 10, std::string window_name = "Square Grid", bool save_img = false);
 void ShowSquareGridPath(SquareGrid *grid, const std::vector<SquareCell *> &path, int32_t pixel_per_unit = 10, std::string window_name = "Square Grid", bool save_img = false);
