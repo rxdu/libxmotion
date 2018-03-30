@@ -11,18 +11,15 @@
 
 using namespace librav;
 
-SquareGrid::SquareGrid(int32_t row_num, int32_t col_num, double cell_size) : row_num_(row_num),
-                                                                             col_num_(col_num),
-                                                                             cell_size_(cell_size)
+SquareGrid::SquareGrid(int32_t size_x, int32_t size_y, double cell_size) : GridBase<SquareCell *>(size_x, size_y),
+                                                                           cell_size_(cell_size)
 {
-    assert((row_num > 0 && col_num > 0));
+    assert((size_x > 0 && size_y > 0));
 
-    ResizeGrid(col_num, row_num);
-
-    for (int32_t y = 0; y < row_num; y++)
-        for (int32_t x = 0; x < col_num; x++)
+    for (int32_t y = 0; y < size_y; y++)
+        for (int32_t x = 0; x < size_x; x++)
         {
-            SquareCell *new_cell = new SquareCell(y, x, CoordinateToID(y, x));
+            SquareCell *new_cell = new SquareCell(x, y, CoordinateToID(x, y));
             new_cell->UpdateGeometry(cell_size);
             SetTileAtRawCoordinate(x, y, new_cell);
         }
@@ -30,16 +27,16 @@ SquareGrid::SquareGrid(int32_t row_num, int32_t col_num, double cell_size) : row
 
 SquareGrid::~SquareGrid()
 {
-    for (int32_t y = 0; y < row_num_; y++)
-        for (int32_t x = 0; x < col_num_; x++)
+    for (int32_t y = 0; y < size_y_; y++)
+        for (int32_t x = 0; x < size_x_; x++)
         {
             delete GetTileAtRawCoordinate(x, y);
         }
 }
 
-int64_t SquareGrid::GetIDFromCoordinate(int32_t x_col, int32_t y_row)
+int64_t SquareGrid::GetIDFromCoordinate(int32_t x, int32_t y)
 {
-    return CoordinateToID(y_row, x_col);
+    return CoordinateToID(x, y);
 }
 
 GridCoordinate SquareGrid::GetCoordinateFromID(int64_t id)
@@ -47,9 +44,9 @@ GridCoordinate SquareGrid::GetCoordinateFromID(int64_t id)
     return IDToCoordinate(id);
 }
 
-void SquareGrid::SetCellLabel(int32_t x_col, int32_t y_row, SquareCellLabel label)
+void SquareGrid::SetCellLabel(int32_t x, int32_t y, SquareCellLabel label)
 {
-    GetTileAtGridCoordinate(x_col, y_row)->label = label;
+    GetTileAtGridCoordinate(x, y)->label = label;
 }
 
 void SquareGrid::SetCellLabel(int64_t id, SquareCellLabel label)
@@ -64,42 +61,42 @@ SquareCell *SquareGrid::GetCell(int64_t id)
     return GetTileAtGridCoordinate(coordinate.GetX(), coordinate.GetY());
 }
 
-SquareCell *SquareGrid::GetCell(int32_t x_col, int32_t y_row)
+SquareCell *SquareGrid::GetCell(int32_t x, int32_t y)
 {
-    return GetTileAtGridCoordinate(x_col, y_row);
+    return GetTileAtGridCoordinate(x, y);
 }
 
-std::vector<SquareCell *> SquareGrid::GetNeighbours(int32_t x_col, int32_t y_row, bool allow_diag)
+std::vector<SquareCell *> SquareGrid::GetNeighbours(int32_t x, int32_t y, bool allow_diag)
 {
     std::vector<GridCoordinate> candidates;
 
     if (allow_diag)
     {
-        for (int32_t x = x_col - 1; x <= x_col + 1; ++x)
-            for (int32_t y = y_row - 1; y <= y_row + 1; ++y)
+        for (int32_t xi = x - 1; xi <= x + 1; ++xi)
+            for (int32_t yi = y - 1; yi <= yi + 1; ++yi)
             {
-                if (x == x_col && y == y_row)
+                if (xi == x && yi == y)
                     continue;
-                candidates.emplace_back(x, y);
+                candidates.emplace_back(xi, yi);
             }
     }
     else
     {
         std::vector<GridCoordinate> candidates;
-        candidates.emplace_back(x_col, y_row + 1);
-        candidates.emplace_back(x_col, y_row - 1);
-        candidates.emplace_back(x_col + 1, y_row);
-        candidates.emplace_back(x_col - 1, y_row);
+        candidates.emplace_back(x, y + 1);
+        candidates.emplace_back(x, y - 1);
+        candidates.emplace_back(x + 1, y);
+        candidates.emplace_back(x - 1, y);
     }
 
     std::vector<SquareCell *> neighbours;
     for (auto &can : candidates)
     {
-        int32_t x = can.GetX();
-        int32_t y = can.GetY();
-        if (x >= 0 && x < col_num_ &&
-            y >= 0 && y < row_num_)
-            neighbours.push_back(GetTileAtRawCoordinate(x, y));
+        int32_t xi = can.GetX();
+        int32_t yi = can.GetY();
+        if (xi >= 0 && xi < size_x_ &&
+            yi >= 0 && yi < size_y_)
+            neighbours.push_back(GetTileAtRawCoordinate(xi, yi));
     }
 
     return neighbours;

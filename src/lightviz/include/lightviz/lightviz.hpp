@@ -12,5 +12,6 @@
 
 #include "cv_draw.hpp"
 #include "matrix_viz.hpp"
+#include "grid_viz.hpp"
 
 #endif /* LIGHTVIZ_HPP */
