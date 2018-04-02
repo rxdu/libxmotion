@@ -7,7 +7,7 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */ 
 
-#include "polyopt/gurobi_solver/gurobi_utils.h"
+#include "polyopt/gurobi_solver/gurobi_utils.hpp"
 
 using namespace librav;
 

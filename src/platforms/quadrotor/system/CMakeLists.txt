@@ -20,20 +20,11 @@ set(QUAD_BASE_SRC
     src/quad_flattraj_handler.cpp
     src/mission_tracker.cpp
 )
-set(TRAJ_SRC     
-    src/path_manager.cpp
-    src/quad_polyopt.cpp
-)
-if (NOT GUROBI_FOUND)
-  set(QUAD_SYS_SRC ${QUAD_BASE_SRC})
-else()
-  set(QUAD_SYS_SRC ${QUAD_BASE_SRC} ${TRAJ_SRC})
-endif()
-add_library(quad_sys STATIC ${QUAD_SYS_SRC})
+add_library(quad_sys STATIC ${QUAD_BASE_SRC})
 if (NOT GUROBI_FOUND)
   target_link_libraries(quad_sys quad_ctrl common geometry ${LCM_LIBRARIES})
 else()
-  target_link_libraries(quad_sys quad_ctrl polyopt common geometry ${LCM_LIBRARIES})
+  target_link_libraries(quad_sys quad_ctrl quad_traj common geometry ${LCM_LIBRARIES})
 endif()
 target_include_directories(quad_sys PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

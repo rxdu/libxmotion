@@ -1,22 +1,23 @@
 /* 
- * quad_flattraj.h
+ * quad_flattraj.hpp
  * 
  * Created on: Aug 29, 2016
  * Description:   
  * 
  * Copyright (c) 2017 Ruixiang Du (rdu)
- */ 
+ */
 
-#ifndef COMMON_QUAD_FLATTRAJ_H_
-#define COMMON_QUAD_FLATTRAJ_H_
+#ifndef QUAD_FLATTRAJ_HPP
+#define QUAD_FLATTRAJ_HPP
 
 #include <cstdint>
 
 #include "lcmtypes/librav.hpp"
 
-#include "common/poly_curve.h"
+#include "common/poly_curve.hpp"
 
-namespace librav {
+namespace librav
+{
 
 struct QuadFlatOutput
 {
@@ -45,18 +46,22 @@ struct QuadFlatOutputSeg
 	}
 };
 
-class QuadFlatTraj 
+class QuadFlatTraj
 {
-public:
+  public:
 	std::vector<QuadFlatOutputSeg> traj_segs_;
-	
-	void AddTrajSeg(const std::vector<std::vector<double>>& seg_coeffs, double ts, double te);
+
+	void AddTrajSeg(const std::vector<std::vector<double>> &seg_coeffs, double ts, double te);
 	QuadFlatOutput GetTrajPointPos(double t);
 
-	void clear() { traj_segs_.clear(); traj_segs_.resize(0); };
+	void clear()
+	{
+		traj_segs_.clear();
+		traj_segs_.resize(0);
+	};
+
 	void print();
 };
-
 }
 
-#endif /* COMMON_QUAD_FLATTRAJ_H_ */
+#endif /* QUAD_FLATTRAJ_HPP */

@@ -10,7 +10,6 @@
 #include <iostream>
 #include <cmath>
 
-#include "common/librav_math.hpp"
 #include "system/quad_flattraj_handler.hpp"
 
 using namespace librav;
