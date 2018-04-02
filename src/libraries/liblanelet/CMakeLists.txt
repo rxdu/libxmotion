@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
-project(librav_libs)
+project(liblanelet)
 
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
@@ -17,17 +17,26 @@ else()
 endif()
 
 ## Put all binary files into /bin and libraries into /lib
-#set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-## Add sub source directories
-# add_subdirectory(octomap-1.8.0)
-add_subdirectory(googletest)
-add_subdirectory(spdlog)
-add_subdirectory(ascent)
-add_subdirectory(dubins_curves)
-add_subdirectory(liblanelet)
-# add_subdirectory(glfw-3.2.1)
-# add_subdirectory(dlib-19.10)
+## Chosse build type
+# set(CMAKE_BUILD_TYPE Debug)
 
+## Optionally built modules: on/off
+set(BUILD_TESTS off)
+
+## Find dependencies
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+
+## Add sub source directories
+add_subdirectory(common)
+add_subdirectory(libpugixml)
+add_subdirectory(liblanelet)
+
+## Add test source directories
+if(BUILD_TESTS)
+    add_subdirectory(gtests)
+endif()

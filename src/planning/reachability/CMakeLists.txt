@@ -13,7 +13,7 @@ set(REACHABILITY_LIB_SRC
   src/monte_carlo_sim.cpp
 )
 add_library(reachability STATIC ${REACHABILITY_LIB_SRC})
-target_link_libraries(reachability utilities ascent ${GSL_LIBRARIES})
+target_link_libraries(reachability decomp utilities ascent ${GSL_LIBRARIES})
 target_include_directories(reachability PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
