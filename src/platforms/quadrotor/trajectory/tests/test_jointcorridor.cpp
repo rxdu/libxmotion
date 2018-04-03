@@ -15,7 +15,7 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/librav.hpp"
 
-#include "quad/quad_polyopt.h"
+#include "trajectory/quad_polyopt.hpp"
 
 using namespace librav;
 using namespace Eigen;

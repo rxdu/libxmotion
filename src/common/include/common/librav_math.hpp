@@ -22,14 +22,6 @@
 namespace librav
 {
 
-namespace PolynomialMath
-{
-    using PolynomialCoeffs = Eigen::Array<float,1, Eigen::Dynamic>;
-
-    void GetDerivativeCoeffs(uint32_t poly_order, uint32_t deriv_order, Eigen::Ref<PolynomialCoeffs> coeffs);
-    double GetPolynomialValue(std::vector<double> coeffs, uint32_t deriv_order, double tau);
-}
-
 namespace TransformationMath 
 {
     

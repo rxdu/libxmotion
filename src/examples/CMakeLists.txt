@@ -49,12 +49,6 @@ target_link_libraries(stopwatch_example utilities)
 add_executable(simple_graph_example simple_graph_example.cpp)
 target_link_libraries(simple_graph_example graph)
 
-add_executable(lanelet_demo lanelet_demo.cpp)
-target_link_libraries(lanelet_demo lanelet)
-
-add_executable(lanelet_test lanelet_test.cpp)
-target_link_libraries(lanelet_test lanelet)
-
 # add_executable(grid_graph grid_graph.cpp)
 # target_link_libraries(grid_graph graph planner map geometry)
 

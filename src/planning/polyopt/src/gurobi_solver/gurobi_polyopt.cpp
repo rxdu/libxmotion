@@ -11,25 +11,14 @@
 #include <ctime>
 #include <string>
 
-#include "polyopt/polyopt_math.h"
-#include "polyopt/gurobi_solver/gurobi_polyopt.h"
-#include "polyopt/gurobi_solver/gurobi_utils.h"
+#include "polyopt/polyopt_math.hpp"
+#include "polyopt/gurobi_solver/gurobi_polyopt.hpp"
+#include "polyopt/gurobi_solver/gurobi_utils.hpp"
 
 using namespace librav;
 using namespace Eigen;
 
 GRBEnv GurobiPolyOpt::grb_env_ = GRBEnv();
-
-GurobiPolyOpt::GurobiPolyOpt():
-		r_(4), N_(10),
-		kf_num_(2)
-{
-}
-
-GurobiPolyOpt::~GurobiPolyOpt()
-{
-
-}
 
 void GurobiPolyOpt::InitCalcVars()
 {

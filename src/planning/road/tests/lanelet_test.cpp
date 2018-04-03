@@ -35,7 +35,7 @@ using namespace LLet;
 int main(int argc, char *argv[])
 {
     // std::string source = argv[1];
-    std::string source = "/home/rdu/Workspace/librav/data/road_map/intersection.osm";
+    std::string source = "/home/rdu/Workspace/librav/data/road_map/intersection_single_lane.osm";
     LaneletMap the_map(source);
 
     BoundingBox world(std::make_tuple(-180, -180, 180, 180));
@@ -51,22 +51,28 @@ int main(int argc, char *argv[])
         }
     }
 
-    lanelet_ptr_t llet = the_map.lanelet_by_id(-30598);
+    // lanelet_ptr_t llet = the_map.lanelet_by_id(-30598);
 
-    std::vector<point_with_id_t> nodes_right(llet->nodes(RIGHT));
-    std::vector<point_with_id_t> nodes_left(llet->nodes(LEFT));
+    // std::vector<point_with_id_t> nodes_right(llet->nodes(RIGHT));
+    // std::vector<point_with_id_t> nodes_left(llet->nodes(LEFT));
 
-    for (auto &node : nodes_right)
-        std::cout << "id: " << std::get<ID>(node) << std::endl;
+    // for (auto &node : nodes_right)
+    //     std::cout << "right bound id: " << std::get<ID>(node) << std::endl;
+
+    // for (auto &node : nodes_left)
+    //     std::cout << "left bound id: " << std::get<ID>(node) << std::endl;
+
+    // auto start_vec = LLet::vec(nodes_right.front(), nodes_left.front());
+    //  std::cout << " vec: " << start_vec.first << " , " << start_vec.second << std::endl;
 
     // exploiting the lanelet graph directly
-    // const Graph &G = the_map.graph();
+    const Graph &G = the_map.graph();
 
-    // BOOST_FOREACH (const auto &edge, boost::edges(G))
-    // {
-    //     auto src_vtx = boost::source(edge, G);
-    //     auto dest_vtx = boost::target(edge, G);
+    BOOST_FOREACH (const auto &edge, boost::edges(G))
+    {
+        auto src_vtx = boost::source(edge, G);
+        auto dest_vtx = boost::target(edge, G);
 
-    //     std::cout << G[src_vtx].lanelet << " --> " << G[dest_vtx].lanelet << std::endl;
-    // }
+        std::cout << G[src_vtx].lanelet << " --> " << G[dest_vtx].lanelet << std::endl;
+    }
 }

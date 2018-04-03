@@ -1,5 +1,5 @@
 /* 
- * gurobi_utils.h
+ * gurobi_utils.hpp
  * 
  * Created on: Aug 28, 2016
  * Description: 
@@ -7,8 +7,8 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */ 
 
-#ifndef GUROBI_UTILS_H
-#define GUROBI_UTILS_H
+#ifndef GUROBI_UTILS_HPP
+#define GUROBI_UTILS_HPP
 
 #include <cstdint>
 #include <vector>
@@ -29,4 +29,4 @@ void AddLinInequalityConstrExpr(const std::vector<GRBVar>& x, const Eigen::Ref<c
 
 }
 
-#endif /* GUROBI_UTILS_H */
+#endif /* GUROBI_UTILS_HPP */

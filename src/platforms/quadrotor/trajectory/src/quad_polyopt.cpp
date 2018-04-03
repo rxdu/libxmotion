@@ -9,23 +9,10 @@
 
 #include <ctime>
 
-#include "system/quad_polyopt.hpp"
-#include "polyopt/polyopt_math.h"
+#include "trajectory/quad_polyopt.hpp"
+#include "polyopt/polyopt_math.hpp"
 
 using namespace librav;
-
-QuadPolyOpt::QuadPolyOpt():
-		r_pos_(4), N_pos_(10),
-		r_yaw_(2), N_yaw_(3),
-		keyframe_num_(2)
-{
-
-}
-
-QuadPolyOpt::~QuadPolyOpt()
-{
-
-}
 
 void QuadPolyOpt::InitOptMatrices(uint32_t keyframe_num)
 {

@@ -6,7 +6,7 @@
  *  	for a quadrotor in the flat output space (x,y,z,yaw).
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
- */ 
+ */
 #ifndef QUAD_POLYOPT_HPP
 #define QUAD_POLYOPT_HPP
 
@@ -15,12 +15,14 @@
 #include <gurobi_c++.h>
 #include "eigen3/Eigen/Core"
 
-#include "common/quad_flattraj.h"
-#include "polyopt/gurobi_solver/gurobi_polyopt.h"
+#include "common/quad_flattraj.hpp"
+#include "polyopt/gurobi_solver/gurobi_polyopt.hpp"
 
-namespace librav {
+namespace librav
+{
 
-typedef struct {
+typedef struct
+{
 	uint64_t Qpos_size;
 	uint64_t Qyaw_size;
 
@@ -42,30 +44,52 @@ typedef struct {
 	uint64_t cor_constr_size;
 } OptMatrixSize;
 
-class QuadPolyOpt{
-public:
-	QuadPolyOpt();
-	~QuadPolyOpt();
+class QuadPolyOpt
+{
+  public:
+	QuadPolyOpt() = default;
+	~QuadPolyOpt() = default;
 
-private:
-	GurobiPolyOpt optimizer_;
-
-	const uint32_t r_pos_;
-	uint32_t N_pos_;
-
-	const uint32_t r_yaw_;
-	uint32_t N_yaw_;
-
-	uint32_t keyframe_num_;
-
-	OptResultCurve traj_[4];
-
-public:
+	// input of trajectory optimization
 	Eigen::MatrixXf keyframe_x_vals_;
 	Eigen::MatrixXf keyframe_y_vals_;
 	Eigen::MatrixXf keyframe_z_vals_;
 	Eigen::MatrixXf keyframe_yaw_vals_;
 	Eigen::MatrixXf keyframe_ts_;
+
+	// output of trajectory optimization
+	QuadFlatTraj flat_traj_;
+
+	// optimize each dimension of the trajectory separately (not recommended)
+	void InitOptMatrices(uint32_t keyframe_num);
+	void OptimizeFlatTraj();
+	void OptimizeFlatTraj(const Eigen::Ref<const Eigen::MatrixXf> keyframe_x_vals,
+						  const Eigen::Ref<const Eigen::MatrixXf> keyframe_y_vals,
+						  const Eigen::Ref<const Eigen::MatrixXf> keyframe_z_vals,
+						  const Eigen::Ref<const Eigen::MatrixXf> keyframe_yaw_vals,
+						  const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts,
+						  uint32_t keyframe_num);
+
+	// jointly optimize all dimensions of the trajectory WITHOUT corridor constraint
+	void InitOptJointMatrices(uint32_t keyframe_num);
+	void OptimizeFlatTrajJoint();
+
+	// jointly optimize all dimensions of the trajectory WITH corridor constraint
+	void InitOptWithCorridorJointMatrices(uint32_t keyframe_num, uint32_t midpoint_num, double cor_size);
+	bool OptimizeFlatTrajWithCorridorJoint();
+
+  private:
+	GurobiPolyOpt optimizer_;
+
+	const uint32_t r_pos_ = 4;
+	uint32_t N_pos_ = 10;
+
+	const uint32_t r_yaw_ = 2;
+	uint32_t N_yaw_ = 3;
+
+	uint32_t keyframe_num_ = 2;
+
+	OptResultCurve traj_[4];
 
 	// for joint optimization
 	OptMatrixSize opt_size_;
@@ -95,32 +119,11 @@ public:
 	Eigen::MatrixXf A_cor_;
 	Eigen::MatrixXf b_cor_;
 
-	QuadFlatTraj flat_traj_;
-
 	void SetPositionPolynomialOrder(uint32_t N) { N_pos_ = N; };
 	uint32_t GetPositionPolynomialOrder() { return N_pos_; };
 	void SetYawPolynomialOrder(uint32_t N) { N_yaw_ = N; };
 	uint32_t GetYawPolynomialOrder() { return N_yaw_; };
-
-public:
-	// optimize each dimension of the trajectory separately
-	void InitOptMatrices(uint32_t keyframe_num);
-	void OptimizeFlatTraj();
-	void OptimizeFlatTraj(const Eigen::Ref<const Eigen::MatrixXf> keyframe_x_vals,
-			const Eigen::Ref<const Eigen::MatrixXf> keyframe_y_vals,
-			const Eigen::Ref<const Eigen::MatrixXf> keyframe_z_vals,
-			const Eigen::Ref<const Eigen::MatrixXf> keyframe_yaw_vals,
-			const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts,
-			uint32_t keyframe_num);
-
-	// jointly optimize all dimensions of the trajectory
-	void InitOptJointMatrices(uint32_t keyframe_num);
-	void OptimizeFlatTrajJoint();
-
-	void InitOptWithCorridorJointMatrices(uint32_t keyframe_num, uint32_t midpoint_num, double cor_size);
-	bool OptimizeFlatTrajWithCorridorJoint();
 };
-
 }
 
 #endif /* QUAD_POLYOPT_HPP */

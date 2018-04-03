@@ -1,5 +1,5 @@
 /* 
- * polyopt_math.h
+ * polyopt_math.hpp
  * 
  * Created on: Aug 23, 2016
  * Description: 
@@ -7,8 +7,8 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#ifndef POLYOPT_MATH_H
-#define POLYOPT_MATH_H
+#ifndef POLYOPT_MATH_HPP
+#define POLYOPT_MATH_HPP
 
 #include <vector>
 #include <cstdint>
@@ -45,4 +45,4 @@ void GetNonDimCorridorConstrs(uint32_t poly_order, uint32_t keyframe_num, uint32
 }
 }
 
-#endif /* POLYOPT_MATH_H */
+#endif /* POLYOPT_MATH_HPP */

@@ -5,7 +5,7 @@
  * Description: 
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
- */ 
+ */
 
 #ifndef QUAD_FLATTRAJ_HANDLER_HPP
 #define QUAD_FLATTRAJ_HANDLER_HPP
@@ -19,20 +19,26 @@
 #include "lcmtypes/librav.hpp"
 
 #include "common/librav_types.hpp"
-#include "common/librav_types.hpp"
-#include "common/quad_flattraj.h"
+#include "common/quad_flattraj.hpp"
 
-namespace librav {
+namespace librav
+{
 
-class QuadFlatTrajHandler {
-public:
+class QuadFlatTrajHandler
+{
+  public:
 	QuadFlatTrajHandler(std::shared_ptr<lcm::LCM> lcm);
 	QuadFlatTrajHandler(std::shared_ptr<lcm::LCM> lcm, std::string poly_traj_topic);
 	~QuadFlatTrajHandler() = default;
 
 	friend class MotionServer;
 
-private:
+	void LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const srcl_lcm_msgs::PolynomialCurve_t *msg);
+	UAVTrajectoryPoint GetDesiredTrajectoryPoint(time_t tstamp);
+
+	void ReportProgress(void);
+
+  private:
 	std::shared_ptr<lcm::LCM> lcm_;
 	std::string poly_traj_topic_;
 
@@ -49,15 +55,8 @@ private:
 
 	double GetRefactoredTime(double ts, double te, double t);
 	void UpdateSystemTime(double t) { current_sys_time_ = t; };
-	int32_t FindFurthestPointWithinRadius(std::vector<Position3Dd>& path, int32_t current_idx, double radius) const;
-
-public:
-	void LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::PolynomialCurve_t* msg);
-	UAVTrajectoryPoint GetDesiredTrajectoryPoint(time_t tstamp);
-
-	void ReportProgress(void);
+	int32_t FindFurthestPointWithinRadius(std::vector<Position3Dd> &path, int32_t current_idx, double radius) const;
 };
-
 }
 
 #endif /* QUAD_FLATTRAJ_HANDLER_HPP */
