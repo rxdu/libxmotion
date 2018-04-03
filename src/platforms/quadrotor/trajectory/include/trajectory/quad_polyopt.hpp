@@ -13,7 +13,6 @@
 
 #include <cstdint>
 
-#include <gurobi_c++.h>
 #include "eigen3/Eigen/Core"
 
 #include "common/quad_flattraj.hpp"
@@ -22,7 +21,7 @@
 namespace librav
 {
 
-typedef struct
+struct OptMatrixSize
 {
 	uint64_t Qpos_size;
 	uint64_t Qyaw_size;
@@ -43,7 +42,7 @@ typedef struct
 	uint64_t var_cor_pos_size;
 	uint64_t var_cor_yaw_size;
 	uint64_t cor_constr_size;
-} OptMatrixSize;
+};
 
 class QuadPolyOpt
 {

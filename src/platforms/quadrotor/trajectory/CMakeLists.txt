@@ -16,7 +16,7 @@ endif()
 # Add libraries
 if (GUROBI_FOUND)
 set(TRAJ_SRC     
-    src/path_manager.cpp
+    # src/path_manager.cpp
     src/quad_polyopt.cpp
     src/trajectory_manager.cpp
 )

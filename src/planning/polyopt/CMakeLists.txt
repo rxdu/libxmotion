@@ -16,6 +16,7 @@ set(POLYOPT_LIB_SRC
     src/polyopt_math.cpp
     src/gurobi_solver/gurobi_utils.cpp
     src/gurobi_solver/gurobi_polyopt.cpp
+    src/osqp_solver/osqp_polyopt.cpp
 )
 add_library(polyopt STATIC ${POLYOPT_LIB_SRC})
 target_link_libraries(polyopt common gurobi_cpp ${GUROBI_LIBRARIES})
@@ -26,4 +27,4 @@ target_include_directories(polyopt PUBLIC
 endif()
 
 # Add executables
-#add_subdirectory(tests)
+add_subdirectory(tests)

@@ -64,6 +64,7 @@
         "string": "cpp",
         "string_view": "cpp",
         "future": "cpp",
-        "optional": "cpp"
+        "optional": "cpp",
+        "stdio.h": "c"
     }
 }

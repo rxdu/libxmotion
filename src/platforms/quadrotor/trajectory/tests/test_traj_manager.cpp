@@ -1,3 +1,7 @@
+// headers for lcm
+#include <lcm/lcm-cpp.hpp>
+#include "lcmtypes/librav.hpp"
+
 #include "trajectory/trajectory_manager.hpp"
 
 using namespace librav;
@@ -62,5 +66,20 @@ UAVTrajectory GenerateTestTrajectory()
 
 int main()
 {
+    std::shared_ptr<lcm::LCM> lcm = std::make_shared<lcm::LCM>();
+
+	if(!lcm->good())
+	{
+		std::cout << "ERROR: Failed to initialize LCM." << std::endl;
+		return -1;
+	}
+
+    TrajectoryManager traj_man(lcm);
+
+    while(true)
+    {
+        lcm->handleTimeout(0);
+    }
+
     return 0;
 }
