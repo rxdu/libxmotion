@@ -28,6 +28,7 @@ add_subdirectory(spdlog)
 add_subdirectory(ascent)
 add_subdirectory(dubins_curves)
 add_subdirectory(liblanelet)
+add_subdirectory(gurobi_cpp)
 # add_subdirectory(glfw-3.2.1)
 # add_subdirectory(dlib-19.10)
 

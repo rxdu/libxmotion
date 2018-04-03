@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
-project(librav_lightviz)
+project(gurobi_cpp)
 
 # cmake module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
@@ -19,6 +19,8 @@ else()
 	message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++14 or C++11 support. Please use a different C++ compiler.")
 endif()
 
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -m64 -O")
+
 ## Put all binary files into /bin and libraries into /lib
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
@@ -28,30 +30,34 @@ set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 ## Dependency libraries
-find_package(OpenCV REQUIRED)
-
-find_package(Eigen3 REQUIRED)
-include_directories(${EIGEN3_INCLUDE_DIR})
-
-find_package(FLTK REQUIRED)
-include_directories(${FLTK_INCLUDE_DIR})
-
-find_package(Cairo REQUIRED)
-include_directories(${CAIRO_INCLUDE_DIRS})
+## Find Gurobi
+find_package(GUROBI QUIET)
+if (GUROBI_FOUND)
+  message("-- Gurobi found, a local copy of libgurobi_c++.a will be built and used for better compatibility.")
+  include_directories(${GUROBI_INCLUDE_DIRS})
+endif()
 
 ## Add libraries
-# LightViz library
-set(LIGHTVIZ_LIB_SRC
-	src/cv_draw.cpp
-	src/matrix_viz.cpp
-	src/grid_viz.cpp
+if(GUROBI_FOUND)
+set(GUROBI_CPP_LIB_SRC
+	Env.cpp
+	SOS.cpp
+	Var.cpp
+	Model.cpp
+	Column.cpp
+	Constr.cpp
+	LinExpr.cpp
+	QConstr.cpp
+	Callback.cpp
+	QuadExpr.cpp
+	Exception.cpp
+	GenConstr.cpp
+	TempConstr.cpp
 )
-add_library(lightviz STATIC ${LIGHTVIZ_LIB_SRC})
-target_link_libraries(lightviz decomp ${FLTK_LIBRARIES} ${OpenCV_LIBS})
-target_include_directories(lightviz PUBLIC
-	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+add_library(gurobi_cpp STATIC ${GUROBI_CPP_LIB_SRC})
+target_link_libraries(gurobi_cpp decomp ${GUROBI_LIBRARIES})
+target_include_directories(gurobi_cpp PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	$<INSTALL_INTERFACE:include>	
 	PRIVATE src)
-
-# Add executables
-add_subdirectory(tests)
+endif()
