@@ -7,6 +7,7 @@
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
+
 #ifndef QUAD_POLYOPT_HPP
 #define QUAD_POLYOPT_HPP
 

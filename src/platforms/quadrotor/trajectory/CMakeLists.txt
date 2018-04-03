@@ -18,6 +18,7 @@ if (GUROBI_FOUND)
 set(TRAJ_SRC     
     src/path_manager.cpp
     src/quad_polyopt.cpp
+    src/trajectory_manager.cpp
 )
 add_library(quad_traj STATIC ${TRAJ_SRC})
 target_link_libraries(quad_traj polyopt common ${LCM_LIBRARIES})
