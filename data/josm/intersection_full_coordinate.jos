@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <josm-session version="0.1">
     <viewport>
-        <center lat="42.272914806335926" lon="-71.81113131478429"/>
-        <scale meter-per-pixel="0.11046780290141356"/>
+        <center lat="42.27287412000734" lon="-71.81120239332319"/>
+        <scale meter-per-pixel="0.11046787420077608"/>
     </viewport>
     <projection>
         <projection-choice>

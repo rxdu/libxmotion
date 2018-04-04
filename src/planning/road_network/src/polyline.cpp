@@ -15,11 +15,13 @@ using namespace librav;
 
 void PolyLine::AddPoint(double x, double y)
 {
-    points_.insert(std::make_pair(point_num_++, PolyLinePoint(x, y)));
+    // points_.insert(std::make_pair(point_num_++, PolyLinePoint(x, y)));
+    points_.emplace_back(x, y);
+    point_num_++;
 }
 
 void PolyLine::PrintPoints() const
 {
     for (auto &pt : points_)
-        std::cout << pt.second.x << " , " << pt.second.y << std::endl;
+        std::cout << pt.x << " , " << pt.y << std::endl;
 }

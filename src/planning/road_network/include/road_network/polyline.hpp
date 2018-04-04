@@ -41,7 +41,7 @@ class PolyLine
 
     void AddPoint(double x, double y);
 
-    std::unordered_map<int32_t, PolyLinePoint> points_;
+    std::vector<PolyLinePoint> points_;
     void PrintPoints() const;
 
   private:

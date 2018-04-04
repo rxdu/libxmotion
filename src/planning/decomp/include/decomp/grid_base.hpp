@@ -157,7 +157,6 @@ protected:
   void SetTileAtGridCoordinate(int64_t x, int64_t y, TileType tile)
   {
     auto internal_coordinate = ConvertToRawCoordinate(x, y);
-    assert((internal_coordinate.GetX() >= 0) && (internal_coordinate.GetX() < size_x_) && (internal_coordinate.GetY() >= 0) && (internal_coordinate.GetY() < size_y_));
 
     SetTileAtRawCoordinate(internal_coordinate.GetX(), internal_coordinate.GetY(), tile);
   }
@@ -165,7 +164,6 @@ protected:
   TileType GetTileAtGridCoordinate(int64_t x, int64_t y) const
   {
     auto internal_coordinate = ConvertToRawCoordinate(x, y);
-    assert((internal_coordinate.GetX() >= 0) && (internal_coordinate.GetX() < size_x_) && (internal_coordinate.GetY() >= 0) && (internal_coordinate.GetY() < size_y_));
 
     return GetTileAtRawCoordinate(internal_coordinate.GetX(), internal_coordinate.GetY());
   }
@@ -173,7 +171,6 @@ protected:
   TileType &GetTileRefAtGridCoordinate(int64_t x, int64_t y)
   {
     auto internal_coordinate = ConvertToRawCoordinate(x, y);
-    assert((internal_coordinate.GetX() >= 0) && (internal_coordinate.GetX() < size_x_) && (internal_coordinate.GetY() >= 0) && (internal_coordinate.GetY() < size_y_));
 
     return GetTileRefAtRawCoordinate(internal_coordinate.GetX(), internal_coordinate.GetY());
   }
@@ -181,8 +178,6 @@ protected:
   // convertion between two coordinates
   GridCoordinate ConvertToRawCoordinate(int64_t x, int64_t y) const
   {
-    assert((x > -size_x_) && (x < size_x_) && (y > -size_y_) && (y < size_y_));
-
     return GridCoordinate(x + origin_offset_x_, y + origin_offset_y_);
   }
 

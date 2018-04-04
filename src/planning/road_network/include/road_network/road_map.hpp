@@ -19,29 +19,38 @@
 #include <liblanelet/LaneletMap.hpp>
 
 #include "road_network/polyline.hpp"
+#include "road_network/road_coordinate.hpp"
 
 namespace librav
 {
 class RoadMap
 {
-  public:
-    RoadMap(std::string map_osm);
-    void LoadMapFile(std::string map_file = "");
+public:
+  RoadMap(std::string map_osm);
+  void LoadMapFile(std::string map_file = "");
 
-    void CreateDenseGrid(int32_t pixel_per_meter);
+  std::unique_ptr<DenseGrid> dense_grid_;
 
-  private:
-    std::unique_ptr<LLet::LaneletMap> lanelet_map_;
-    std::vector<LLet::lanelet_ptr_t> lanelets_;
-    std::unordered_map<int32_t, std::pair<PolyLine, PolyLine>> lane_bounds_;
+  void GenerateDenseGrid(int32_t pixel_per_meter);
 
-    // const LLet::point_with_id_t world_origin_ = {0, 0, 0};
-    const int32_t ref_lanelet_id_ = -1;
-    LLet::point_with_id_t world_origin_;
-    double x_min_ = 0;
-    double x_max_ = 0;
-    double y_min_ = 0;
-    double y_max_ = 0;
+private:
+  std::unique_ptr<LLet::LaneletMap> lanelet_map_;
+  std::vector<LLet::lanelet_ptr_t> lanelets_;
+
+  double x_min_ = 0.0;
+  double x_max_ = 0.0;
+  double y_min_ = 0.0;
+  double y_max_ = 0.0;
+
+  RoadCoordinateFrame coordinate_;
+  std::unordered_map<int32_t, std::pair<PolyLine, PolyLine>> lane_bounds_;
+
+  const int32_t ref_lanelet_id_ = -1;
+  LLet::point_with_id_t world_origin_;
+
+  std::vector<DenseGridPixel> GenerateLanePoints(const PolyLine &line, double resolution = 0.01);
+  std::vector<DenseGridPixel> InterpolateGridPixelPoints(PolyLinePoint plt1, PolyLinePoint plt2, double resolution);
+  std::vector<DenseGridPixel> InterpolateGridPixelPoints(DenseGridPixel pt1, DenseGridPixel pt2);
 };
 }
 

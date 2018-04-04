@@ -13,4 +13,7 @@ add_executable(lanelet_test lanelet_test.cpp)
 target_link_libraries(lanelet_test lanelet)
 
 add_executable(test_roadmap test_roadmap.cpp)
-target_link_libraries(test_roadmap road)
+target_link_libraries(test_roadmap road lightviz utilities)
+
+add_executable(test_coordinate test_coordinate.cpp)
+target_link_libraries(test_coordinate road)
