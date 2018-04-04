@@ -38,7 +38,7 @@ void GetNonDimEqualityConstrs(uint32_t poly_order, uint32_t deriv_order, uint32_
 		const Eigen::Ref<const Eigen::MatrixXf> keyframe_vals, const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts,
 		Eigen::Ref<Eigen::MatrixXf> A_eq, Eigen::Ref<Eigen::MatrixXf> b_eq);
 
-// Corridor constraints
+// Inequality (corridor) constraints
 void GetNonDimCorridorConstrs(uint32_t poly_order, uint32_t keyframe_num, uint32_t midpoint_num, double max_dist,
 		const std::vector<Eigen::MatrixXf>& keyframe_vals, const Eigen::Ref<const Eigen::MatrixXf> keyframe_ts,
 		Eigen::Ref<Eigen::MatrixXf> A_cor, Eigen::Ref<Eigen::MatrixXf> b_cor);

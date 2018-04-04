@@ -46,6 +46,6 @@ add_subdirectory(decomp)
 add_subdirectory(behavior)
 add_subdirectory(reachability)
 add_subdirectory(map)
-add_subdirectory(road)
+add_subdirectory(road_network)
 add_subdirectory(polyopt)
 

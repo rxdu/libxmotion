@@ -5,16 +5,18 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 #find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
-# set(ROAD_LIB_SRC
-#     src/scalar_field.cpp
-#     src/threat_basis.cpp
-# )
-# add_library(road STATIC ${ROAD_LIB_SRC})
-# target_link_libraries(road graph)
-# target_include_directories(road PUBLIC
-#     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-#     $<INSTALL_INTERFACE:include>
-#     PRIVATE src)
+set(ROAD_LIB_SRC
+    src/polyline.cpp
+    src/road_map.cpp
+    src/road_coordinate.cpp
+    src/traffic_scenario.cpp
+)
+add_library(road STATIC ${ROAD_LIB_SRC})
+target_link_libraries(road decomp lanelet)
+target_include_directories(road PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+    PRIVATE src)
 
 add_subdirectory(tests)
 

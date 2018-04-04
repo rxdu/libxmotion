@@ -55,7 +55,7 @@ set(GUROBI_CPP_LIB_SRC
 	TempConstr.cpp
 )
 add_library(gurobi_cpp STATIC ${GUROBI_CPP_LIB_SRC})
-target_link_libraries(gurobi_cpp decomp ${GUROBI_LIBRARIES})
+target_link_libraries(gurobi_cpp ${GUROBI_LIBRARIES})
 target_include_directories(gurobi_cpp PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	$<INSTALL_INTERFACE:include>	
