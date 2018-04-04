@@ -11,8 +11,10 @@ int main()
     RoadMap map("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
 
     stopwatch::StopWatch timer;
-    map.GenerateDenseGrid(5);
-    std::cout <<"generated grid in " << timer.toc() << " seconds" << std::endl;
+    map.GenerateDenseGrid(15);
+    std::cout << "generated grid in " << timer.toc() << " seconds" << std::endl;
+
+    map.OccupiedLanelet(CartCooridnate(60, 60));
 
     LightViz::ShowMatrixAsColorMap(map.dense_grid_->GetGridMatrix(true), "roadnetwork", true);
 

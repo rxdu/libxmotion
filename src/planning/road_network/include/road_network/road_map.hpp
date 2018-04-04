@@ -33,6 +33,8 @@ public:
 
   void GenerateDenseGrid(int32_t pixel_per_meter);
 
+  std::vector<LLet::lanelet_ptr_t> OccupiedLanelet(CartCooridnate pos);
+
 private:
   std::unique_ptr<LLet::LaneletMap> lanelet_map_;
   std::vector<LLet::lanelet_ptr_t> lanelets_;
@@ -48,7 +50,7 @@ private:
   const int32_t ref_lanelet_id_ = -1;
   LLet::point_with_id_t world_origin_;
 
-  std::vector<DenseGridPixel> GenerateLanePoints(const PolyLine &line, double resolution = 0.01);
+  std::vector<DenseGridPixel> GenerateLanePoints(const PolyLine &line, double resolution);
   std::vector<DenseGridPixel> InterpolateGridPixelPoints(PolyLinePoint plt1, PolyLinePoint plt2, double resolution);
   std::vector<DenseGridPixel> InterpolateGridPixelPoints(DenseGridPixel pt1, DenseGridPixel pt2);
 };

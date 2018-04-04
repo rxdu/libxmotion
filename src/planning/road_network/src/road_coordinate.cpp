@@ -26,6 +26,13 @@ void RoadCoordinateFrame::SetDenseGridSize(int32_t x, int32_t y, int32_t ppm)
     pixel_per_meter_ = ppm;
 }
 
+LLet::point_with_id_t RoadCoordinateFrame::CreateLaneletPoint(CartCooridnate input)
+{
+    double output_lat, output_lon;
+    std::tie(output_lat, output_lon) = local_coordinate_.xy2ll(input.x, input.y);
+    return std::make_tuple(output_lat, output_lon, -1);
+}
+
 GeoCoordinate RoadCoordinateFrame::ConvertToGeographic(CartCooridnate input)
 {
     double output_lat, output_lon;

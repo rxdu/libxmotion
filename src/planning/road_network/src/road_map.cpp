@@ -103,15 +103,41 @@ void RoadMap::GenerateDenseGrid(int32_t pixel_per_meter)
         for (const auto &pt : points_right)
             dense_grid_->SetValueAtCoordinate(pt.x, pt.y, 1.0);
     }
+
+    // auto bound = lane_bounds_[-39200];
+    // std::vector<DenseGridPixel> points_left = GenerateLanePoints(bound.first, resolution);
+    // // std::vector<DenseGridPixel> points_right = GenerateLanePoints(bound.second, resolution);
+    // for (const auto &pt : points_left)
+    //     dense_grid_->SetValueAtCoordinate(pt.x, pt.y, 1.0);
+    // // for (const auto &pt : points_right)
+    // //     dense_grid_->SetValueAtCoordinate(pt.x, pt.y, 1.0);
 }
 
 std::vector<DenseGridPixel> RoadMap::GenerateLanePoints(const PolyLine &line, double resolution)
 {
+    std::vector<DenseGridPixel> grid_points;
     std::vector<DenseGridPixel> interpolated_points;
 
-    for (int i = 0; i < line.points_.size() - 1; ++i)
+    // for (int i = 0; i < line.points_.size() - 1; ++i)
+    // {
+    //     std::vector<DenseGridPixel> pts = InterpolateGridPixelPoints(line.points_[i], line.points_[i + 1], resolution);
+
+    //     interpolated_points.insert(interpolated_points.end(), pts.begin(), pts.end());
+    // }
+
+    for (const auto &pt : line.points_)
+    // for (int i = 0; i < 3; ++i)
     {
-        std::vector<DenseGridPixel> pts = InterpolateGridPixelPoints(line.points_[i], line.points_[i + 1], resolution);
+        // auto pt = line.points_[i];
+        auto gpt = coordinate_.ConvertToGridPixel(CartCooridnate(pt.x, pt.y));
+        // std::cout << "line point: " << gpt.x << " , " << gpt.y << std::endl;
+        grid_points.push_back(gpt);
+    }
+
+    for (int i = 0; i < grid_points.size() - 1; ++i)
+    // for (int i = 0; i < 2; ++i)
+    {
+        std::vector<DenseGridPixel> pts = InterpolateGridPixelPoints(grid_points[i], grid_points[i + 1]);
 
         interpolated_points.insert(interpolated_points.end(), pts.begin(), pts.end());
     }
@@ -164,4 +190,103 @@ std::vector<DenseGridPixel> RoadMap::InterpolateGridPixelPoints(PolyLinePoint pl
     }
 
     return points;
+}
+
+std::vector<DenseGridPixel> RoadMap::InterpolateGridPixelPoints(DenseGridPixel pt1, DenseGridPixel pt2)
+{
+    std::vector<DenseGridPixel> points;
+
+    int32_t x_err = pt2.x - pt1.x;
+    int32_t y_err = pt2.y - pt1.y;
+
+    std::cout << "xerr: " << x_err << " , y_err: " << y_err << std::endl;
+
+    DenseGridPixel start_pt, end_pt;
+
+    // if vertical line
+    if (x_err == 0)
+    {
+        // find lower point
+        if (y_err > 0)
+        {
+            start_pt = pt1;
+            end_pt = pt2;
+        }
+        else
+        {
+            start_pt = pt2;
+            end_pt = pt1;
+        }
+
+        for (int32_t y = start_pt.y; y <= end_pt.y; ++y)
+            points.emplace_back(pt1.x, y);
+    }
+    // if horizontal line
+    else if (y_err == 0)
+    {
+        // find left point
+        if (x_err > 0)
+        {
+            start_pt = pt1;
+            end_pt = pt2;
+        }
+        else
+        {
+            start_pt = pt2;
+            end_pt = pt1;
+        }
+        for (double x = start_pt.x; x <= end_pt.x; ++x)
+            points.emplace_back(x, pt1.y);
+    }
+    // otherwise
+    else
+    {
+        double k = static_cast<double>(y_err) / x_err;
+
+        if (std::abs(x_err) > std::abs(y_err))
+        {
+            if (x_err > 0)
+            {
+                start_pt = pt1;
+                end_pt = pt2;
+            }
+            else
+            {
+                start_pt = pt2;
+                end_pt = pt1;
+            }
+
+            for (double x = start_pt.x; x <= end_pt.x; ++x)
+                points.emplace_back(x, pt1.y + (x - pt1.x) * k);
+        }
+        else
+        {
+            if (y_err > 0)
+            {
+                start_pt = pt1;
+                end_pt = pt2;
+            }
+            else
+            {
+                start_pt = pt2;
+                end_pt = pt1;
+            }
+
+            for (double y = start_pt.y; y <= end_pt.y; ++y)
+                points.emplace_back((y - pt1.y) / k + pt1.x, y);
+        }
+    }
+
+    return points;
+}
+
+std::vector<LLet::lanelet_ptr_t> RoadMap::OccupiedLanelet(CartCooridnate pos)
+{
+    point_with_id_t geo_pt = coordinate_.CreateLaneletPoint(pos);
+    BoundingBox world(geo_pt);
+
+    auto lanelets = lanelet_map_->query(world);
+    std::cout << "Number of lanelets found: " << lanelets_.size() << std::endl;
+
+    return lanelets;
 }

@@ -36,10 +36,10 @@ namespace librav
 template <typename T>
 struct XYCooridnate
 {
-  XYCooridnate(T px, T py) : x(px), y(py){};
+  XYCooridnate(T px = 0, T py = 0) : x(px), y(py){};
 
-  T x = 0;
-  T y = 0;
+  T x;
+  T y;
 };
 
 using CartCooridnate = XYCooridnate<double>;
@@ -47,10 +47,10 @@ using DenseGridPixel = XYCooridnate<int32_t>;
 
 struct GeoCoordinate
 {
-  GeoCoordinate(double lat, double lon) : latitude(lat), longitude(lon){};
+  GeoCoordinate(double lat = 0, double lon = 0) : latitude(lat), longitude(lon){};
 
-  double latitude = 0.0;
-  double longitude = 0.0;
+  double latitude;
+  double longitude;
 };
 
 /////////////////////////////////////////////////////////////
@@ -62,6 +62,8 @@ public:
 
   void SetOrigin(LLet::point_with_id_t origin);
   void SetDenseGridSize(int32_t x, int32_t y, int32_t ppm);
+
+  LLet::point_with_id_t CreateLaneletPoint(CartCooridnate input);
 
   CartCooridnate ConvertToCartesian(LLet::point_with_id_t input);
 
