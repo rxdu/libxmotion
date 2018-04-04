@@ -33,15 +33,15 @@ void RoadMap::LoadMapFile(std::string map_file)
     std::cout << "Number of lanelets found: " << lanelets_.size() << std::endl;
 
     // find lanelet 0 and use the second point of the left bound as origin
-    world_origin_ = lanelet_map_->lanelet_by_id(0)->nodes(LEFT)[1];
+    world_origin_ = lanelet_map_->lanelet_by_id(ref_lanelet_id_)->nodes(LEFT)[1];
 
     // extract lane bounds from all lanelets
     std::vector<double> x_coordinates;
     std::vector<double> y_coordinates;
     for (auto &lanelet : lanelets_)
     {
-        // lanelet with id 0 is reserved for coordinate reference
-        if (lanelet->id() == 0)
+        // lanelet with id "ref_lanelet_id_" is reserved for coordinate reference
+        if (lanelet->id() == ref_lanelet_id_)
             continue;
 
         PolyLine left_line, right_line;

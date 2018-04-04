@@ -273,7 +273,7 @@
     <member type='way' ref='-39616' role='left' />
     <tag k='type' v='lanelet' />
   </relation>
-  <relation id='0' action='modify'>
+  <relation id='-1' action='modify'>
     <member type='way' ref='-39630' role='right' />
     <member type='way' ref='-39628' role='left' />
     <tag k='name' v='origin' />

@@ -2,8 +2,8 @@
  * road_coordinate.hpp
  * 
  * Created on: Apr 03, 2018 17:18
- * Description: it's assumed that the map is defined in north american regions and
- *          the origin is defined at the north-west corner on the map
+ * Description: it's assumed that the map is defined in north america and
+ *          the origin is defined at the south-west corner on the map
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
@@ -15,10 +15,16 @@ namespace librav
 {
 class RoadCoordinate
 {
-  public:
-    RoadCoordinate() = default;
+public:
+  RoadCoordinate() = default;
 
-    void SetRange(double x_min, double x_max, double y_min, double y_max);
+  void SetRange(double x_min, double x_max, double y_min, double y_max);
+
+private:
+  double x_min_ = 0.0;
+  double x_max_ = 0.0;
+  double y_min_ = 0.0;
+  double y_max_ = 0.0;
 };
 }
 

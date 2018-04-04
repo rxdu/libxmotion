@@ -36,6 +36,7 @@ class RoadMap
     std::unordered_map<int32_t, std::pair<PolyLine, PolyLine>> lane_bounds_;
 
     // const LLet::point_with_id_t world_origin_ = {0, 0, 0};
+    const int32_t ref_lanelet_id_ = -1;
     LLet::point_with_id_t world_origin_;
     double x_min_ = 0;
     double x_max_ = 0;
