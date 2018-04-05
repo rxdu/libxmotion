@@ -19,7 +19,7 @@
 
 #include <Eigen/Dense>
 
-#include "details/grid_base_tiles.hpp"
+#include "decomp/details/grid_base_tiles.hpp"
 
 namespace librav
 {
@@ -176,12 +176,12 @@ protected:
   }
 
   // convertion between two coordinates
-  GridCoordinate ConvertToRawCoordinate(int64_t x, int64_t y) const
+  inline GridCoordinate ConvertToRawCoordinate(int64_t x, int64_t y) const
   {
     return GridCoordinate(x + origin_offset_x_, y + origin_offset_y_);
   }
 
-  GridCoordinate ConvertToGridCoordinate(int64_t x, int64_t y) const
+  inline GridCoordinate ConvertToGridCoordinate(int64_t x, int64_t y) const
   {
     assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
 

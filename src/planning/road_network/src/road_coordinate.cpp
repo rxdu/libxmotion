@@ -60,5 +60,5 @@ DenseGridPixel RoadCoordinateFrame::ConvertToGridPixel(CartCooridnate input)
 
 CartCooridnate RoadCoordinateFrame::ConvertToCartesian(DenseGridPixel input)
 {
-    return CartCooridnate(static_cast<double>(input.x) / pixel_per_meter_, static_cast<double>(grid_size_y_ - input.y) * pixel_per_meter_);
+    return CartCooridnate(static_cast<double>(input.x) / pixel_per_meter_, static_cast<double>(grid_size_y_ - input.y) / pixel_per_meter_);
 }

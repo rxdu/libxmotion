@@ -6,10 +6,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add libraries
 set(ROAD_LIB_SRC
-    src/polyline.cpp
     src/road_map.cpp
+    src/road_geometry.cpp
     src/road_coordinate.cpp
-    src/traffic_scenario.cpp
 )
 add_library(road STATIC ${ROAD_LIB_SRC})
 target_link_libraries(road decomp lanelet)

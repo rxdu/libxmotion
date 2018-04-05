@@ -39,6 +39,20 @@ void DenseGrid::SubtractGrid(const DenseGrid &other)
     this->grid_tiles_ -= other.grid_tiles_;
 }
 
+void DenseGrid::AddGrid(DenseGrid *other)
+{
+    assert(this->SizeX() == other->SizeX() && this->SizeY() == other->SizeY());
+
+    this->grid_tiles_ += other->grid_tiles_;
+}
+
+void DenseGrid::SubtractGrid(DenseGrid *other)
+{
+    assert(this->SizeX() == other->SizeX() && this->SizeY() == other->SizeY());
+
+    this->grid_tiles_ -= other->grid_tiles_;
+}
+
 Eigen::MatrixXd DenseGrid::GetGridMatrix(bool normalize)
 {
     Eigen::MatrixXd grid_matrix = grid_tiles_;

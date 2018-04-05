@@ -1,5 +1,5 @@
 /* 
- * dijkstra_single_source.hpp
+ * dijkstra_traversal.hpp
  * 
  * Created on: Mar 30, 2018 15:35
  * Description: 
@@ -7,8 +7,8 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#ifndef DIJKSTRA_SS_HPP
-#define DIJKSTRA_SS_HPP
+#ifndef DIJKSTRA_TR_HPP
+#define DIJKSTRA_TR_HPP
 
 #include <vector>
 #include <tuple>
@@ -34,7 +34,7 @@ template <typename StateType, typename TransitionType = double>
 using GetNeighbourFunc_t = std::function<std::vector<std::tuple<StateType, TransitionType>>(StateType)>;
 
 /// Dijkstra search algorithm.
-class DijkstraSingleSource
+class DijkstraTraversal
 {
   public:
     /// Search using vertex ids
@@ -50,6 +50,11 @@ class DijkstraSingleSource
         // start a new search and return result
         if (start != nullptr && goal != nullptr)
             Search(start, goal);
+    }
+
+    template <typename StateType, typename TransitionType>
+    static Graph_t<StateType, TransitionType> IncSearch(std::vector<StateType> start_states, GetNeighbourFunc_t<StateType, TransitionType> get_neighbours)
+    {
     }
 
     template <typename StateType, typename TransitionType>
@@ -168,4 +173,4 @@ class DijkstraSingleSource
 };
 }
 
-#endif /* DIJKSTRA_SS_HPP */
+#endif /* DIJKSTRA_TR_HPP */

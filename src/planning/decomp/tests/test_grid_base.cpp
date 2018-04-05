@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include "decomp/grid_base.hpp"
+#include "decomp/details/grid_base.hpp"
 
 using namespace librav;
 

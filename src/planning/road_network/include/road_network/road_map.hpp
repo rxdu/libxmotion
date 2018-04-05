@@ -19,7 +19,7 @@
 #include <liblanelet/Lanelet.hpp>
 #include <liblanelet/LaneletMap.hpp>
 
-#include "road_network/polyline.hpp"
+#include "road_network/road_geometry.hpp"
 #include "road_network/road_coordinate.hpp"
 
 namespace librav
@@ -27,8 +27,8 @@ namespace librav
 class RoadMap
 {
 public:
-  RoadMap(std::string map_osm = "", int32_t ppm = 10);
-  bool LoadMapFile(std::string map_file, int32_t ppm = 10);
+  RoadMap(std::string map_osm = "", int32_t ppm = 15);
+  bool LoadMapFile(std::string map_file, int32_t ppm = 15);
 
   std::vector<int32_t> FindShortestRoute(std::string start_name, std::string goal_name);
   std::vector<std::string> FindShortestRouteName(std::string start_name, std::string goal_name);
@@ -36,10 +36,14 @@ public:
   std::vector<LLet::lanelet_ptr_t> OccupiedLanelet(CartCooridnate pos);
 
   // dense grid for planning
-  std::shared_ptr<DenseGrid> GetFullGrid();
-  std::shared_ptr<DenseGrid> GetLaneBoundsGrid(std::vector<std::string> lanelets);
-  std::shared_ptr<DenseGrid> GetLaneBoundsGrid(std::vector<int32_t> lanelets);
-  std::shared_ptr<DenseGrid> GetDrivableAreaGrid();
+  std::shared_ptr<DenseGrid> GetFullLaneBoundaryGrid();
+  std::shared_ptr<DenseGrid> GetFullDrivableAreaGrid();
+
+  std::shared_ptr<DenseGrid> GetLaneBoundGrid(std::vector<std::string> lanelets);
+  std::shared_ptr<DenseGrid> GetLaneBoundGrid(std::vector<int32_t> lanelets);
+
+  std::shared_ptr<DenseGrid> GetLaneletDrivableArea(std::string llname);
+  std::shared_ptr<DenseGrid> GetLaneletDrivableArea(int32_t llid);
 
 private:
   std::unique_ptr<LLet::LaneletMap> lanelet_map_;
@@ -61,9 +65,11 @@ private:
   int32_t pixel_per_meter_ = 10;
   int32_t grid_size_x_ = 0;
   int32_t grid_size_y_ = 0;
-  std::unordered_map<int32_t, std::shared_ptr<DenseGrid>> lane_grids_;
+  std::unordered_map<int32_t, std::shared_ptr<DenseGrid>> lane_bound_grids_;
+  std::unordered_map<int32_t, std::shared_ptr<DenseGrid>> lane_drivable_grids_;
 
   void GenerateDenseGrids(int32_t pixel_per_meter);
+  void ExtractDrivableAreas();
   std::vector<DenseGridPixel> GenerateLanePoints(const PolyLine &line);
   std::vector<DenseGridPixel> InterpolateGridPixelPoints(DenseGridPixel pt1, DenseGridPixel pt2);
 };

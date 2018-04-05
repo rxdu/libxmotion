@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <vector>
 
-#include "decomp/grid_base.hpp"
+#include "decomp/details/grid_base.hpp"
 
 namespace librav
 {
@@ -49,6 +49,9 @@ public:
 
   void AddGrid(const DenseGrid &other);
   void SubtractGrid(const DenseGrid &other);
+
+  void AddGrid(DenseGrid *other);
+  void SubtractGrid(DenseGrid *other);
 
   Eigen::MatrixXd GetGridMatrix(bool normalize = false);
 };

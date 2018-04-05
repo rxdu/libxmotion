@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <vector>
 
-#include "decomp/grid_base.hpp"
+#include "decomp/details/grid_base.hpp"
 
 namespace librav
 {

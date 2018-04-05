@@ -14,8 +14,6 @@
 #include <liblanelet/Lanelet.hpp>
 #include <liblanelet/lanelet_point.hpp>
 
-#include "road_network/polyline.hpp"
-
 namespace librav
 {
 /*
