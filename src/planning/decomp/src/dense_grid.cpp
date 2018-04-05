@@ -25,6 +25,20 @@ double DenseGrid::GetValueAtCoordinate(int64_t x, int64_t y)
     return GetTileAtGridCoordinate(x, y);
 }
 
+void DenseGrid::AddGrid(const DenseGrid &other)
+{
+    assert(this->SizeX() == other.SizeX() && this->SizeY() == other.SizeY());
+
+    this->grid_tiles_ += other.grid_tiles_;
+}
+
+void DenseGrid::SubtractGrid(const DenseGrid &other)
+{
+    assert(this->SizeX() == other.SizeX() && this->SizeY() == other.SizeY());
+
+    this->grid_tiles_ -= other.grid_tiles_;
+}
+
 Eigen::MatrixXd DenseGrid::GetGridMatrix(bool normalize)
 {
     Eigen::MatrixXd grid_matrix = grid_tiles_;

@@ -15,14 +15,17 @@
 using namespace librav;
 using namespace LLet;
 
-RoadMap::RoadMap(std::string map_osm)
+RoadMap::RoadMap(std::string map_osm, int32_t ppm) : pixel_per_meter_(ppm)
 {
     if (!map_osm.empty())
-        LoadMapFile(map_osm);
+        LoadMapFile(map_osm, pixel_per_meter_);
 }
 
-void RoadMap::LoadMapFile(std::string map_file)
+bool RoadMap::LoadMapFile(std::string map_file, int32_t ppm)
 {
+    if (map_file.empty())
+        return false;
+
     // create lanelet map from osm file
     lanelet_map_ = std::make_unique<LaneletMap>(map_file);
     std::cout << "Map loaded: " << map_file << std::endl;
@@ -32,8 +35,22 @@ void RoadMap::LoadMapFile(std::string map_file)
     lanelets_ = lanelet_map_->query(world);
     std::cout << "Number of lanelets found: " << lanelets_.size() << std::endl;
 
-    // find lanelet 0 and use the second point of the left bound as origin
-    world_origin_ = lanelet_map_->lanelet_by_id(ref_lanelet_id_)->nodes(LEFT)[1];
+    // find lanelet with name "origin" and use the second point of the left bound as origin
+    bool origin_found = false;
+    for (auto &lanelet : lanelets_)
+    {
+        if (lanelet->attribute("name").as_string() == "origin")
+        {
+            world_origin_ = lanelet->nodes(LEFT)[1];
+            ref_lanelet_id_ = lanelet->id();
+            origin_found = true;
+        }
+    }
+
+    if (!origin_found)
+        return false;
+
+    // continue setup if origin lanelet found
     coordinate_.SetOrigin(world_origin_);
 
     // extract lane bounds from all lanelets
@@ -41,11 +58,13 @@ void RoadMap::LoadMapFile(std::string map_file)
     std::vector<double> y_coordinates;
     for (auto &lanelet : lanelets_)
     {
-        // lanelet with id "ref_lanelet_id_" is reserved for coordinate reference
+        // lanelet with id "ref_lanelet_id_" is used for coordinate reference only
         if (lanelet->id() == ref_lanelet_id_)
             continue;
 
         std::cout << "lanelet info: id " << lanelet->id() << " , name " << lanelet->attribute("name").as_string() << std::endl;
+        ll_id_lookup_.insert(std::make_pair(lanelet->attribute("name").as_string(), lanelet->id()));
+        ll_name_lookup_.insert(std::make_pair(lanelet->id(), lanelet->attribute("name").as_string()));
 
         PolyLine left_line, right_line;
         std::vector<point_with_id_t> nodes_right(lanelet->nodes(RIGHT));
@@ -79,39 +98,98 @@ void RoadMap::LoadMapFile(std::string map_file)
 
     y_min_ = *(yrange.first);
     y_max_ = *(yrange.second);
+
+    // generate dense grids for planning
+    GenerateDenseGrids(ppm);
+
+    return true;
 }
 
-void RoadMap::GenerateDenseGrid(int32_t pixel_per_meter)
+void RoadMap::GenerateDenseGrids(int32_t pixel_per_meter)
 {
-    int32_t x_size, y_size;
-
     // add 1 to each dimension to compensate for the rounding
-    x_size = static_cast<int32_t>(x_max_ * pixel_per_meter) + 1;
-    y_size = static_cast<int32_t>(y_max_ * pixel_per_meter) + 1;
+    grid_size_x_ = static_cast<int32_t>(x_max_ * pixel_per_meter) + 1;
+    grid_size_y_ = static_cast<int32_t>(y_max_ * pixel_per_meter) + 1;
 
-    coordinate_.SetDenseGridSize(x_size, y_size, pixel_per_meter);
-    dense_grid_ = std::make_unique<DenseGrid>(x_size, y_size);
+    coordinate_.SetDenseGridSize(grid_size_x_, grid_size_y_, pixel_per_meter);
 
-    std::cout << "dense grid size: " << x_size << " , " << y_size << " on region " << x_min_ << " , " << x_max_ << " , " << y_min_ << " , " << y_max_ << std::endl;
+    std::cout << "dense grid size: " << grid_size_x_ << " , " << grid_size_y_ << " on region " << x_min_ << " , " << x_max_ << " , " << y_min_ << " , " << y_max_ << std::endl;
 
     for (auto &bound : lane_bounds_)
     {
+        auto sub_grid = std::make_shared<DenseGrid>(grid_size_x_, grid_size_y_);
+
         // std::cout << "lanelet id: " << bound.first << std::endl;
         std::vector<DenseGridPixel> points_left = GenerateLanePoints(bound.second.first);
         std::vector<DenseGridPixel> points_right = GenerateLanePoints(bound.second.second);
         for (const auto &pt : points_left)
-            dense_grid_->SetValueAtCoordinate(pt.x, pt.y, 1.0);
+            sub_grid->SetValueAtCoordinate(pt.x, pt.y, 1.0);
         for (const auto &pt : points_right)
-            dense_grid_->SetValueAtCoordinate(pt.x, pt.y, 1.0);
+            sub_grid->SetValueAtCoordinate(pt.x, pt.y, 1.0);
+
+        lane_grids_.insert(std::make_pair(bound.first, sub_grid));
     }
 
     // auto bound = lane_bounds_[-39200];
     // std::vector<DenseGridPixel> points_left = GenerateLanePoints(bound.first, resolution);
     // // std::vector<DenseGridPixel> points_right = GenerateLanePoints(bound.second, resolution);
     // for (const auto &pt : points_left)
-    //     dense_grid_->SetValueAtCoordinate(pt.x, pt.y, 1.0);
+    //     full_grid->SetValueAtCoordinate(pt.x, pt.y, 1.0);
     // // for (const auto &pt : points_right)
-    // //     dense_grid_->SetValueAtCoordinate(pt.x, pt.y, 1.0);
+    // //     full_grid->SetValueAtCoordinate(pt.x, pt.y, 1.0);
+}
+
+std::shared_ptr<DenseGrid> RoadMap::GetFullGrid()
+{
+    auto full_grid = std::make_shared<DenseGrid>(grid_size_x_, grid_size_y_);
+    for (auto grid : lane_grids_)
+    {
+        full_grid->AddGrid(*grid.second.get());
+    }
+    return full_grid;
+}
+
+std::shared_ptr<DenseGrid> RoadMap::GetLaneBoundsGrid(std::vector<std::string> lanelets)
+{
+    auto grid = std::make_shared<DenseGrid>(grid_size_x_, grid_size_y_);
+    for (const auto &ll_name : lanelets)
+    {
+        grid->AddGrid(*lane_grids_[ll_id_lookup_[ll_name]].get());
+    }
+    return grid;
+}
+
+std::shared_ptr<DenseGrid> RoadMap::GetLaneBoundsGrid(std::vector<int32_t> lanelets)
+{
+    auto grid = std::make_shared<DenseGrid>(grid_size_x_, grid_size_y_);
+    for (const auto &ll_id : lanelets)
+    {
+        grid->AddGrid(*lane_grids_[ll_id].get());
+    }
+    return grid;
+}
+
+std::vector<int32_t> RoadMap::FindShortestRoute(std::string start_name, std::string goal_name)
+{
+    auto start = lanelet_map_->lanelet_by_id(ll_id_lookup_[start_name]);
+    auto dest = lanelet_map_->lanelet_by_id(ll_id_lookup_[goal_name]);
+    std::vector<lanelet_ptr_t> path = lanelet_map_->shortest_path(start, dest);
+
+    std::vector<int32_t> ids;
+    for (auto wp : path)
+        ids.push_back(wp->id());
+
+    return ids;
+}
+
+std::vector<std::string> RoadMap::FindShortestRouteName(std::string start_name, std::string goal_name)
+{
+    auto ids = FindShortestRoute(start_name, goal_name);
+    std::vector<std::string> names;
+    for (auto wp : ids)
+        names.push_back(ll_name_lookup_[wp]);
+
+    return names;
 }
 
 std::vector<DenseGridPixel> RoadMap::GenerateLanePoints(const PolyLine &line)
@@ -119,16 +197,10 @@ std::vector<DenseGridPixel> RoadMap::GenerateLanePoints(const PolyLine &line)
     std::vector<DenseGridPixel> grid_points;
     std::vector<DenseGridPixel> interpolated_points;
 
-    // for (int i = 0; i < line.points_.size() - 1; ++i)
-    // {
-    //     std::vector<DenseGridPixel> pts = InterpolateGridPixelPoints(line.points_[i], line.points_[i + 1], resolution);
-
-    //     interpolated_points.insert(interpolated_points.end(), pts.begin(), pts.end());
-    // }
-
     for (const auto &pt : line.points_)
-    // for (int i = 0; i < 3; ++i)
     {
+        // for (int i = 0; i < 3; ++i)
+        // {
         // auto pt = line.points_[i];
         auto gpt = coordinate_.ConvertToGridPixel(CartCooridnate(pt.x, pt.y));
         // std::cout << "line point: " << gpt.x << " , " << gpt.y << std::endl;
@@ -241,7 +313,7 @@ std::vector<LLet::lanelet_ptr_t> RoadMap::OccupiedLanelet(CartCooridnate pos)
     BoundingBox world(geo_pt);
 
     auto lanelets = lanelet_map_->query(world);
-    std::cout << "Number of lanelets found: " << lanelets_.size() << std::endl;
+    std::cout << "Number of lanelets found at (" << pos.x << " , " << pos.y << ") : " << lanelets.size() << std::endl;
 
     return lanelets;
 }

@@ -35,7 +35,7 @@ namespace librav
 class DenseGrid : public GridBase<double>
 {
 public:
-  DenseGrid(int32_t size_x, int32_t size_y);
+  DenseGrid(int32_t size_x = 0, int32_t size_y = 0);
   ~DenseGrid() = default;
 
   void SetValueAtCoordinate(int64_t x, int64_t y, double val);
@@ -46,6 +46,9 @@ public:
     void ResizeGrid(int64_t x, int64_t y);
     void SetOriginCoordinate(int64_t origin_x, int64_t origin_y);   
     *****************************************************************/
+
+  void AddGrid(const DenseGrid &other);
+  void SubtractGrid(const DenseGrid &other);
 
   Eigen::MatrixXd GetGridMatrix(bool normalize = false);
 };

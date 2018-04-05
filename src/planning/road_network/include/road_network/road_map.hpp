@@ -12,6 +12,7 @@
 
 #include <string>
 #include <memory>
+#include <unordered_map>
 
 #include "decomp/dense_grid.hpp"
 
@@ -26,18 +27,22 @@ namespace librav
 class RoadMap
 {
 public:
-  RoadMap(std::string map_osm);
-  void LoadMapFile(std::string map_file = "");
+  RoadMap(std::string map_osm = "", int32_t ppm = 10);
+  bool LoadMapFile(std::string map_file, int32_t ppm = 10);
 
-  std::unique_ptr<DenseGrid> dense_grid_;
-
-  void GenerateDenseGrid(int32_t pixel_per_meter);
+  std::shared_ptr<DenseGrid> GetFullGrid();
+  std::shared_ptr<DenseGrid> GetLaneBoundsGrid(std::vector<std::string> lanelets);
+  std::shared_ptr<DenseGrid> GetLaneBoundsGrid(std::vector<int32_t> lanelets);
+  std::vector<int32_t> FindShortestRoute(std::string start_name, std::string goal_name);
+  std::vector<std::string> FindShortestRouteName(std::string start_name, std::string goal_name);
 
   std::vector<LLet::lanelet_ptr_t> OccupiedLanelet(CartCooridnate pos);
 
 private:
   std::unique_ptr<LLet::LaneletMap> lanelet_map_;
   std::vector<LLet::lanelet_ptr_t> lanelets_;
+  std::unordered_map<std::string, int32_t> ll_id_lookup_;
+  std::unordered_map<int32_t, std::string> ll_name_lookup_;
 
   double x_min_ = 0.0;
   double x_max_ = 0.0;
@@ -47,9 +52,15 @@ private:
   RoadCoordinateFrame coordinate_;
   std::unordered_map<int32_t, std::pair<PolyLine, PolyLine>> lane_bounds_;
 
-  const int32_t ref_lanelet_id_ = -1;
+  int32_t ref_lanelet_id_ = 0;
   LLet::point_with_id_t world_origin_;
 
+  int32_t pixel_per_meter_ = 10;
+  int32_t grid_size_x_ = 0;
+  int32_t grid_size_y_ = 0;
+  std::unordered_map<int32_t, std::shared_ptr<DenseGrid>> lane_grids_;
+
+  void GenerateDenseGrids(int32_t pixel_per_meter);
   std::vector<DenseGridPixel> GenerateLanePoints(const PolyLine &line);
   std::vector<DenseGridPixel> InterpolateGridPixelPoints(DenseGridPixel pt1, DenseGridPixel pt2);
 };
