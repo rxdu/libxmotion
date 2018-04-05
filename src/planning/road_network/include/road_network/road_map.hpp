@@ -30,13 +30,16 @@ public:
   RoadMap(std::string map_osm = "", int32_t ppm = 10);
   bool LoadMapFile(std::string map_file, int32_t ppm = 10);
 
-  std::shared_ptr<DenseGrid> GetFullGrid();
-  std::shared_ptr<DenseGrid> GetLaneBoundsGrid(std::vector<std::string> lanelets);
-  std::shared_ptr<DenseGrid> GetLaneBoundsGrid(std::vector<int32_t> lanelets);
   std::vector<int32_t> FindShortestRoute(std::string start_name, std::string goal_name);
   std::vector<std::string> FindShortestRouteName(std::string start_name, std::string goal_name);
 
   std::vector<LLet::lanelet_ptr_t> OccupiedLanelet(CartCooridnate pos);
+
+  // dense grid for planning
+  std::shared_ptr<DenseGrid> GetFullGrid();
+  std::shared_ptr<DenseGrid> GetLaneBoundsGrid(std::vector<std::string> lanelets);
+  std::shared_ptr<DenseGrid> GetLaneBoundsGrid(std::vector<int32_t> lanelets);
+  std::shared_ptr<DenseGrid> GetDrivableAreaGrid();
 
 private:
   std::unique_ptr<LLet::LaneletMap> lanelet_map_;

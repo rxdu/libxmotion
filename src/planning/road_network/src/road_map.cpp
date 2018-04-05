@@ -159,6 +159,11 @@ std::shared_ptr<DenseGrid> RoadMap::GetLaneBoundsGrid(std::vector<std::string> l
     return grid;
 }
 
+std::shared_ptr<DenseGrid> RoadMap::GetDrivableAreaGrid()
+{
+    // check whether a position is inside a lanelet
+}
+
 std::shared_ptr<DenseGrid> RoadMap::GetLaneBoundsGrid(std::vector<int32_t> lanelets)
 {
     auto grid = std::make_shared<DenseGrid>(grid_size_x_, grid_size_y_);
