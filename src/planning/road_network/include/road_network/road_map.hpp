@@ -50,8 +50,7 @@ private:
   const int32_t ref_lanelet_id_ = -1;
   LLet::point_with_id_t world_origin_;
 
-  std::vector<DenseGridPixel> GenerateLanePoints(const PolyLine &line, double resolution);
-  std::vector<DenseGridPixel> InterpolateGridPixelPoints(PolyLinePoint plt1, PolyLinePoint plt2, double resolution);
+  std::vector<DenseGridPixel> GenerateLanePoints(const PolyLine &line);
   std::vector<DenseGridPixel> InterpolateGridPixelPoints(DenseGridPixel pt1, DenseGridPixel pt2);
 };
 }
