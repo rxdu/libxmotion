@@ -2,11 +2,11 @@
 
 ## Planning
 
-- [ ] Road network model
 - [ ] Monte Carlo simulation for autonomous vehicles
 - [ ] Priority queue that supports element priority update
 - [ ] RRT and RRT* with Dubins model  
-- [ ] Remove dependency on OpenCV
+- [*] Remove dependency on OpenCV (now only visualization depends on OpenCV)
+- [*] Road network model
 - [*] Iterators for Vertex_t and Edge_t
 
 ## Control

@@ -56,7 +56,7 @@ struct SquareCell
                                                                id(idval) {}
 
   // for easy reference, maybe unnecessary for some applications
-  int64_t id;
+  int64_t id = -1;
 
   // topological attributes
   int32_t x;

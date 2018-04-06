@@ -5,7 +5,7 @@
  * Description: 
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
- */ 
+ */
 
 #ifndef ROAD_MAP_ANALYSIS_HPP
 #define ROAD_MAP_ANALYSIS_HPP
@@ -29,7 +29,7 @@ public:
   GetSquareGridNeighbour(std::shared_ptr<SquareGrid> sg);
 
   // define the functor operator
-  std::vector<std::tuple<SquareCell, double>> operator()(SquareCell tile);
+  std::vector<std::tuple<SquareCell *, double>> operator()(SquareCell *cell);
 
 private:
   std::shared_ptr<SquareGrid> sgrid_;
