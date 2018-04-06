@@ -26,8 +26,8 @@ const cv::Scalar LVColors::ln_color = Scalar(Scalar(0, 0, 0));
 const cv::Scalar LVColors::obs_color = Scalar(Scalar(0, 102, 204));
 const cv::Scalar LVColors::aoi_color = Scalar(Scalar(0, 255, 255));
 const cv::Scalar LVColors::start_color = Scalar(0, 0, 255);
-const cv::Scalar LVColors::intermediate_color = cv::Scalar( 255, 153, 51 );//Scalar(0, 0, 255);
-const cv::Scalar LVColors::finish_color = Scalar(51, 153, 51); //Scalar(153, 76, 0);
+const cv::Scalar LVColors::intermediate_color = cv::Scalar(255, 153, 51); //Scalar(0, 0, 255);
+const cv::Scalar LVColors::finish_color = Scalar(51, 153, 51);            //Scalar(153, 76, 0);
 
 /******************* Basic Input/Output *******************/
 cv::Mat LightViz::ReadImageFile(std::string img_file)
@@ -62,6 +62,58 @@ void LightViz::ShowImage(std::string file_name, std::string window_name)
 {
     cv::Mat img = imread(file_name);
     ShowImage(img, window_name, false);
+}
+
+/******************** Transformations *********************/
+namespace
+{
+// Source:
+// https://stackoverflow.com/questions/7706339/grayscale-to-red-green-blue-matlab-jet-color-scale?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+double JetInterpolate(double val, double y0, double x0, double y1, double x1)
+{
+    return (val - x0) * (y1 - y0) / (x1 - x0) + y0;
+}
+
+double JetBase(double val)
+{
+    if (val <= -0.75)
+        return 0;
+    else if (val <= -0.25)
+        return JetInterpolate(val, 0.0, -0.75, 1.0, -0.25);
+    else if (val <= 0.25)
+        return 1.0;
+    else if (val <= 0.75)
+        return JetInterpolate(val, 1.0, 0.25, 0.0, 0.75);
+    else
+        return 0.0;
+}
+
+double JetRed(double gray)
+{
+    return JetBase(gray - 0.5) * 255;
+}
+double JetGreen(double gray)
+{
+    return JetBase(gray) * 255;
+}
+double JetBlue(double gray)
+{
+    return JetBase(gray + 0.5) * 255;
+}
+}
+
+// Input range: 0-1
+// Output range: 0-255 (OpenCV color)
+cv::Scalar LightViz::JetPaletteTransform(double val)
+{
+    return cv::Scalar(JetBlue(val), JetGreen(val), JetRed(val));
+}
+
+void LightViz::JetPaletteTransform(double val, double &r, double &g, double &b)
+{
+    r = JetRed(val);
+    g = JetGreen(val);
+    b = JetBlue(val);
 }
 
 /******************** Draw Primitives *********************/

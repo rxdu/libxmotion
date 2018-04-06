@@ -62,11 +62,7 @@ namespace librav
 class GridCoordinate
 {
 public:
-  GridCoordinate(int64_t x = 0, int64_t y = 0)
-  {
-    coordinate_x_ = x;
-    coordinate_y_ = y;
-  }
+  GridCoordinate(int64_t x = 0, int64_t y = 0) : coordinate_x_(x), coordinate_y_(y) {}
   ~GridCoordinate() = default;
 
   inline int64_t GetX() const { return coordinate_x_; };

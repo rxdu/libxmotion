@@ -4,7 +4,7 @@
 #include "navigation/road_map_analysis.hpp"
 
 #include "road_network/road_map.hpp"
-#include "decomp/grid_decomposer.hpp"
+#include "graph/algorithms/dijkstra_tr.hpp"
 
 #include "lightviz/matrix_viz.hpp"
 #include "lightviz/grid_viz.hpp"
@@ -18,12 +18,6 @@ int main()
     stopwatch::StopWatch timer;
     RoadMap map("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm", 10);
     std::cout << "generated grid in " << timer.toc() << " seconds" << std::endl;
-    // LightViz::ShowMatrixAsColorMap(map.GetFullLaneBoundaryGrid()->GetGridMatrix(true), "roadnetwork", true);
-
-    // std::vector<std::string> lanelets;
-    // lanelets.push_back("s4");
-    // lanelets.push_back("icm2");
-    // lanelets.push_back("s1");
     auto lanelets = map.FindShortestRoute("s4", "s1");
     // LightViz::ShowMatrixAsColorMap(map.GetLaneBoundGrid(lanelets)->GetGridMatrix(true), "driving", true);
 
@@ -33,18 +27,28 @@ int main()
 
     // auto matrix = map.GetFullLaneBoundaryGrid()->GetGridMatrix(false);
     auto matrix = map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false);
-    auto sgrid = GridDecomposer::CreateSquareGridFromMatrix(matrix, 5);
-    LightViz::ShowSquareGrid(sgrid.get(), 100, "Square Grid", true);
+    auto sgrid = std::make_shared<SquareGrid>(matrix, 10);
+    // LightViz::ShowSquareGrid(sgrid.get(), 100, "Square Grid", true);
 
-    // SquareCell tile_s(0, 0, cfield);
-    // FieldTile tile_g(29, 29, cfield);
-    // auto path = Dijkstra::IncSearch(tile_s, tile_g, GetNeighbourFunc_t<FieldTile>(GetFieldTileNeighbour(cfield)));
-    // std::cout << "path length: " << path.size() << std::endl;
+    std::cout << "grid size: " << sgrid->SizeX() << " , " << sgrid->SizeY() << std::endl;
+    auto nbs = sgrid->GetNeighbours(0, 0, true);
+    for (auto &n : nbs)
+    {
+        std::cout << "n: " << n->id << std::endl;
+        if (n->label == SquareCellLabel::FREE)
+            std::cout << "free" << std::endl;
+    }
+    std::cout << "check neighbour: " << nbs.size() << std::endl;
 
-    // auto path_matrix = FieldSearch::GetPathWaypoints(path);
+    timer.tic();
+    SquareCell *tile_s = sgrid->GetCell(0, 2);
+    auto graph = DijkstraTraversal::IncSearch(tile_s, GetNeighbourFunc_t<SquareCell *>(GetSquareGridNeighbour(sgrid)));
+    std::cout << "traversal finished in " << timer.toc() << " seconds, vertex visited: " << graph.GetGraphVertexNumber() << std::endl;
 
-    // FastPlot::ShowMatrixAsColorMap(cfield->collision_threat_matrix_);
-    // FastPlot::ShowPathOnColorMap(cfield->collision_threat_matrix_, path_matrix);
+    LightViz::ShowSquareGridGraph(sgrid.get(), &graph, 100);
+
+    RoadMapAnalysis::GenerateGraphCostMap(sgrid.get(), &graph);
+    LightViz::ShowSquareGridGraphCost(sgrid.get(), &graph);
 
     return 0;
 }

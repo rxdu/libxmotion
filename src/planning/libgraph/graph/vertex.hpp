@@ -41,12 +41,18 @@ class Vertex_t
 	// friends
 	template <typename T1, typename T2>
 	friend class Graph_t;
-	friend class AStar;
-	friend class Dijkstra;
 
 	// generic attributes
 	StateType state_;
 	const uint64_t vertex_id_;
+
+	// attributes for A* search
+	bool is_checked_ = false;
+	bool is_in_openlist_ = false;
+	double f_astar_ = 0.0;
+	double g_astar_ = 0.0;
+	double h_astar_ = 0.0;
+	VertexType *search_parent_ = nullptr;
 
 	// edge iterator for easy access
 	typedef typename EdgeListType::iterator edge_iterator;
@@ -77,14 +83,6 @@ class Vertex_t
 	// vertices that contain edges connecting to current vertex,
 	//	used to cleanup edges in other vertices if current vertex is deleted
 	std::vector<VertexType *> vertices_from_;
-
-	// attributes for A* search
-	bool is_checked_ = false;
-	bool is_in_openlist_ = false;
-	double f_astar_ = 0.0;
-	double g_astar_ = 0.0;
-	double h_astar_ = 0.0;
-	VertexType *search_parent_ = nullptr;
 
 	/// Get edge cost from current vertex to given vertex. -1 is returned if no edge between
 	///		the two vertices exists.

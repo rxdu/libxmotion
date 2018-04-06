@@ -102,9 +102,7 @@ SquareGrid::~SquareGrid()
 {
     for (int32_t y = 0; y < size_y_; y++)
         for (int32_t x = 0; x < size_x_; x++)
-        {
             delete GetTileAtRawCoordinate(x, y);
-        }
 }
 
 int64_t SquareGrid::GetIDFromCoordinate(int32_t x, int32_t y)
@@ -142,11 +140,10 @@ SquareCell *SquareGrid::GetCell(int32_t x, int32_t y)
 std::vector<SquareCell *> SquareGrid::GetNeighbours(int32_t x, int32_t y, bool allow_diag)
 {
     std::vector<GridCoordinate> candidates;
-
     if (allow_diag)
     {
         for (int32_t xi = x - 1; xi <= x + 1; ++xi)
-            for (int32_t yi = y - 1; yi <= yi + 1; ++yi)
+            for (int32_t yi = y - 1; yi <= y + 1; ++yi)
             {
                 if (xi == x && yi == y)
                     continue;
@@ -155,7 +152,6 @@ std::vector<SquareCell *> SquareGrid::GetNeighbours(int32_t x, int32_t y, bool a
     }
     else
     {
-        std::vector<GridCoordinate> candidates;
         candidates.emplace_back(x, y + 1);
         candidates.emplace_back(x, y - 1);
         candidates.emplace_back(x + 1, y);
@@ -167,8 +163,7 @@ std::vector<SquareCell *> SquareGrid::GetNeighbours(int32_t x, int32_t y, bool a
     {
         int32_t xi = can.GetX();
         int32_t yi = can.GetY();
-        if (xi >= 0 && xi < size_x_ &&
-            yi >= 0 && yi < size_y_)
+        if (xi >= 0 && xi < size_x_ && yi >= 0 && yi < size_y_)
             neighbours.push_back(GetTileAtRawCoordinate(xi, yi));
     }
 

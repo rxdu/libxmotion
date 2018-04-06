@@ -43,6 +43,10 @@ cv::Mat ReadGrayscaleImage(std::string img_file);
 void ShowImage(std::string file_name, std::string window_name = "Image");
 void ShowImage(cv::Mat img, std::string window_name = "Image", bool save_img = false);
 
+/******************** Transformations *********************/
+cv::Scalar JetPaletteTransform(double val);
+void JetPaletteTransform(double val, double &r, double &g, double &b);
+
 /******************** Draw Primitives *********************/
 void DrawPoint(cv::Mat img, cv::Point pos, const cv::Scalar &color = LVColors::default_pt_color);
 void DrawLine(cv::Mat img, cv::Point pt1, cv::Point pt2, const cv::Scalar &color = LVColors::default_ln_color);

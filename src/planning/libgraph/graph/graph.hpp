@@ -64,6 +64,14 @@ public:
   typedef Edge_t<StateType, TransitionType> EdgeType;
   typedef Path_t<StateType> PathType;
 
+#ifndef USE_UNORDERED_MAP
+  typedef std::map<int64_t, VertexType *> VertexMapType;
+  typedef VertexMapType::iterator VertexMapTypeIterator;
+#else
+  typedef std::unordered_map<int64_t, VertexType *> VertexMapType;
+  typedef typename VertexMapType::iterator VertexMapTypeIterator;
+#endif
+
   // vertex_iterator can be used to access vertices in the graph
   // edge_iterator can be used to access edges in each vertex
   class vertex_iterator;
@@ -71,6 +79,7 @@ public:
 
   friend class AStar;
   friend class Dijkstra;
+  friend class DijkstraTraversal;
 
 public:
   /// This function creates a vertex in the graph that associates with the given node.
@@ -119,14 +128,37 @@ public:
   /// This function removes all edges and vertices in the graph
   void ClearGraph();
 
+public:
+  // Vertex iterator for easy access
+  // Reference:
+  //  [1] https://stackoverflow.com/a/16527081/2200873
+  //  [2] https://stackoverflow.com/questions/1443793/iterate-keys-in-a-c-map/35262398#35262398
+  class vertex_iterator : public VertexMapTypeIterator
+  {
+  public:
+    vertex_iterator() : VertexMapTypeIterator(){};
+    vertex_iterator(VertexMapTypeIterator s) : VertexMapTypeIterator(s){};
+
+    VertexType *operator->() { return (VertexType *const)(VertexMapTypeIterator::operator->()->second); }
+    VertexType &operator*() { return *(VertexMapTypeIterator::operator*().second); }
+  };
+
+  vertex_iterator vertex_begin() { return vertex_iterator(vertex_map_.begin()); }
+  vertex_iterator vertex_end() { return vertex_iterator(vertex_map_.end()); }
+
+  /// This function return the vertex iterator with specified id
+  inline vertex_iterator FindVertex(int64_t vertex_id)
+  {
+    return vertex_iterator(vertex_map_.find(vertex_id));
+  }
+
+  template <class T = StateType, typename std::enable_if<!std::is_integral<T>::value>::type * = nullptr>
+  vertex_iterator FindVertex(T state)
+  {
+    return vertex_iterator(vertex_map_.find(GetStateID(state)));
+  }
+  
 private:
-#ifndef USE_UNORDERED_MAP
-  typedef std::map<int64_t, VertexType *> VertexMapType;
-  typedef VertexMapType::iterator VertexMapTypeIterator;
-#else
-  typedef std::unordered_map<int64_t, VertexType *> VertexMapType;
-  typedef typename VertexMapType::iterator VertexMapTypeIterator;
-#endif
   VertexMapType vertex_map_;
 
   /// This function is used to reset states of all vertice for a new search
@@ -156,36 +188,6 @@ private:
   inline int64_t GetStateID(T state)
   {
     return state->GetUniqueID();
-  }
-
-public:
-  // Vertex iterator for easy access
-  // Reference:
-  //  [1] https://stackoverflow.com/a/16527081/2200873
-  //  [2] https://stackoverflow.com/questions/1443793/iterate-keys-in-a-c-map/35262398#35262398
-  class vertex_iterator : public VertexMapTypeIterator
-  {
-  public:
-    vertex_iterator() : VertexMapTypeIterator(){};
-    vertex_iterator(VertexMapTypeIterator s) : VertexMapTypeIterator(s){};
-
-    VertexType *operator->() { return (VertexType *const)(VertexMapTypeIterator::operator->()->second); }
-    VertexType &operator*() { return *(VertexMapTypeIterator::operator*().second); }
-  };
-
-  vertex_iterator vertex_begin() { return vertex_iterator(vertex_map_.begin()); }
-  vertex_iterator vertex_end() { return vertex_iterator(vertex_map_.end()); }
-
-  /// This function return the vertex iterator with specified id
-  inline vertex_iterator FindVertex(int64_t vertex_id)
-  {
-    return vertex_iterator(vertex_map_.find(vertex_id));
-  }
-
-  template <class T = StateType, typename std::enable_if<!std::is_integral<T>::value>::type * = nullptr>
-  vertex_iterator FindVertex(T state)
-  {
-    return vertex_iterator(vertex_map_.find(GetStateID(state)));
   }
 };
 }

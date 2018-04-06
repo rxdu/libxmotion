@@ -117,15 +117,15 @@ class Dijkstra
 				graph.AddEdge(current_vertex->state_, std::get<0>(nb), std::get<1>(nb));
 
 			// check all adjacent vertices (successors of current vertex)
-			for (auto &edge : current_vertex->edges_to_)
+			for (auto edge = current_vertex->edge_begin(); edge != current_vertex->edge_end(); ++edge)
 			{
-				auto successor = edge.dst_;
+				auto successor = edge->dst_;
 
 				// check if the vertex has been checked (in closed list)
 				if (successor->is_checked_ == false)
 				{
 					// first set the parent of the adjacent vertex to be the current vertex
-					auto new_cost = current_vertex->g_astar_ + edge.cost_;
+					auto new_cost = current_vertex->g_astar_ + edge->cost_;
 
 					// if the vertex is not in open list
 					// or if the vertex is in open list but has a higher cost
@@ -188,15 +188,15 @@ class Dijkstra
 			current_vertex->is_checked_ = true;
 
 			// check all adjacent vertices (successors of current vertex)
-			for (auto &edge : current_vertex->edges_to_)
+			for (auto edge = current_vertex->edge_begin(); edge != current_vertex->edge_end(); ++edge)
 			{
-				auto successor = edge.dst_;
+				auto successor = edge->dst_;
 
 				// check if the vertex has been checked (in closed list)
 				if (successor->is_checked_ == false)
 				{
 					// first set the parent of the adjacent vertex to be the current vertex
-					auto new_cost = current_vertex->g_astar_ + edge.cost_;
+					auto new_cost = current_vertex->g_astar_ + edge->cost_;
 
 					// if the vertex is not in open list
 					// or if the vertex is in open list but has a higher cost

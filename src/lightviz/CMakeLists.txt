@@ -47,7 +47,7 @@ set(LIGHTVIZ_LIB_SRC
 	src/grid_viz.cpp
 )
 add_library(lightviz STATIC ${LIGHTVIZ_LIB_SRC})
-target_link_libraries(lightviz decomp ${FLTK_LIBRARIES} ${OpenCV_LIBS})
+target_link_libraries(lightviz decomp graph ${FLTK_LIBRARIES} ${OpenCV_LIBS})
 target_include_directories(lightviz PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>	

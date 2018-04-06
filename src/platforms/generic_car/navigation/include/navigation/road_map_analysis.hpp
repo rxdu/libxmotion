@@ -34,6 +34,11 @@ public:
 private:
   std::shared_ptr<SquareGrid> sgrid_;
 };
+
+namespace RoadMapAnalysis
+{
+  void GenerateGraphCostMap(SquareGrid *grid, Graph_t<SquareCell *> *graph);
+};
 }
 
 #endif /* ROAD_MAP_ANALYSIS_HPP */

@@ -70,6 +70,10 @@ struct SquareCell
   GridPoint vertices[4];
   GridPoint center;
 
+  // other application specific attributes
+  // you can assign values to "cost_map" for visualization
+	double cost_map = 0.0;  
+
   inline int64_t GetUniqueID() const { return id; }
 
   inline void UpdateGeometry(double size)
@@ -105,9 +109,8 @@ public:
   SquareGrid(const Eigen::MatrixXd &matrix, int32_t side_length, double cell_size = 0.1);
   ~SquareGrid();
 
-  double cell_size_;
+  double GetCellSize() const { return cell_size_; }
 
-public:
   void SetCellLabel(int32_t x, int32_t y, SquareCellLabel label);
   void SetCellLabel(int64_t id, SquareCellLabel label);
 
@@ -116,10 +119,12 @@ public:
 
   SquareCell *GetCell(int64_t id);
   SquareCell *GetCell(int32_t x, int32_t y);
-  std::vector<SquareCell *> GetNeighbours(int32_t x, int32_t y, bool allow_diag = true);
+  std::vector<SquareCell *> GetNeighbours(int32_t x, int32_t y, bool allow_diag);
   std::vector<SquareCell *> GetNeighbours(int64_t id, bool allow_diag = true);
 
 private:
+  double cell_size_;
+
   // CoordinateToID() and IDToCoordinate() are the only places that define
   //  the mapping between coordinate and id
   inline int64_t CoordinateToID(int32_t x, int32_t y)

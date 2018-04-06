@@ -43,7 +43,7 @@ int main()
     // auto sgrid = std::make_shared<SquareGrid>(map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false), 5);
     // LightViz::ShowSquareGrid(sgrid.get(), 100, "Square Grid", true);
 
-    auto sgrid = SquareGrid(map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false), 5);
+    auto sgrid = SquareGrid(map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false), 10);
     LightViz::ShowSquareGrid(&sgrid, 100, "Square Grid", true);
 
     return 0;
