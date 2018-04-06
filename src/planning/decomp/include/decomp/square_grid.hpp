@@ -102,6 +102,7 @@ class SquareGrid : public GridBase<SquareCell *>
 {
 public:
   SquareGrid(int32_t size_x, int32_t size_y, double cell_size = 0.1);
+  SquareGrid(const Eigen::MatrixXd &matrix, int32_t side_length, double cell_size = 0.1);
   ~SquareGrid();
 
   double cell_size_;

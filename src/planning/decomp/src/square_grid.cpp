@@ -25,6 +25,79 @@ SquareGrid::SquareGrid(int32_t size_x, int32_t size_y, double cell_size) : GridB
         }
 }
 
+SquareGrid::SquareGrid(const Eigen::MatrixXd &matrix, int32_t side_length, double cell_size) : GridBase<SquareCell *>(0, 0),
+                                                                                               cell_size_(cell_size)
+{
+    // determine size of grid
+    int32_t center_x = matrix.cols() / 2;
+    int32_t center_y = matrix.rows() / 2;
+
+    int32_t grid_size_x, grid_size_y;
+    bool shrink_x = false;
+    bool shrink_y = false;
+    if (matrix.cols() % side_length != 0)
+        shrink_x = true;
+    if (matrix.rows() % side_length != 0)
+        shrink_y = true;
+    grid_size_x = (center_x / side_length) * 2;
+    grid_size_y = (center_y / side_length) * 2;
+
+    Eigen::MatrixXd occupancy_matrix;
+    if (shrink_x || shrink_y)
+    {
+        occupancy_matrix = Eigen::MatrixXd::Ones(grid_size_y * side_length, grid_size_x * side_length);
+
+        int32_t x_start = 0, y_start = 0;
+        if (shrink_x)
+            x_start = center_x % side_length;
+        if (shrink_y)
+            y_start = center_y % side_length;
+
+        occupancy_matrix = matrix.block(y_start, x_start, occupancy_matrix.rows(), occupancy_matrix.cols());
+    }
+    else
+    {
+        occupancy_matrix = matrix;
+    }
+
+    // create new grid
+    this->ResizeGrid(grid_size_x, grid_size_y);
+    for (int32_t y = 0; y < grid_size_y; y++)
+        for (int32_t x = 0; x < grid_size_x; x++)
+        {
+            SquareCell *new_cell = new SquareCell(x, y, CoordinateToID(x, y));
+            new_cell->UpdateGeometry(cell_size);
+            SetTileAtRawCoordinate(x, y, new_cell);
+        }
+
+    // determine occupancy of grid
+    int32_t half_size_x = grid_size_x / 2;
+    int32_t half_size_y = grid_size_y / 2;
+    for (int64_t x = 0; x < this->SizeX(); ++x)
+        for (int64_t y = 0; y < this->SizeY(); ++y)
+        {
+            bool occupied = false;
+            int32_t xmin = x * side_length;
+            int32_t xmax = xmin + side_length;
+            int32_t ymin = y * side_length;
+            int32_t ymax = ymin + side_length;
+            for (int i = xmin; i < xmax; ++i)
+            {
+                for (int j = ymin; j < ymax; ++j)
+                {
+                    if (occupancy_matrix(j, i) != 0)
+                    {
+                        this->SetCellLabel(x, y, SquareCellLabel::OCCUPIED);
+                        occupied = true;
+                        break;
+                    }
+                }
+                if (occupied)
+                    break;
+            }
+        }
+}
+
 SquareGrid::~SquareGrid()
 {
     for (int32_t y = 0; y < size_y_; y++)

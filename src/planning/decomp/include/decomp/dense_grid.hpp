@@ -12,8 +12,10 @@
 
 #include <cstdint>
 #include <vector>
+#include <memory>
 
 #include "decomp/details/grid_base.hpp"
+#include "decomp/square_grid.hpp"
 
 namespace librav
 {
@@ -38,6 +40,7 @@ public:
   DenseGrid(int32_t size_x = 0, int32_t size_y = 0);
   ~DenseGrid() = default;
 
+  void SetupGridWithMatrix(const Eigen::MatrixXd& mat);
   void SetValueAtCoordinate(int64_t x, int64_t y, double val);
   double GetValueAtCoordinate(int64_t x, int64_t y);
 
@@ -54,6 +57,7 @@ public:
   void SubtractGrid(DenseGrid *other);
 
   Eigen::MatrixXd GetGridMatrix(bool normalize = false);
+  std::shared_ptr<SquareGrid> ConvertToSquareGrid(int32_t side_length, double threshold = 0);
 };
 }
 
