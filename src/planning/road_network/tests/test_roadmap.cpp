@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "road_network/road_map.hpp"
-#include "decomp/grid_decomposer.hpp"
 
 #include "lightviz/matrix_viz.hpp"
 #include "lightviz/grid_viz.hpp"
