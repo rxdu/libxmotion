@@ -1,5 +1,5 @@
 /* 
- * road_map_analysis.hpp
+ * map_analysis.hpp
  * 
  * Created on: Apr 05, 2018 18:23
  * Description: 
@@ -7,8 +7,8 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#ifndef ROAD_MAP_ANALYSIS_HPP
-#define ROAD_MAP_ANALYSIS_HPP
+#ifndef MAP_ANALYSIS_HPP
+#define MAP_ANALYSIS_HPP
 
 #include <memory>
 #include <vector>
@@ -35,10 +35,10 @@ private:
   std::shared_ptr<SquareGrid> sgrid_;
 };
 
-namespace RoadMapAnalysis
+namespace MapAnalysis
 {
   void GenerateGraphCostMap(SquareGrid *grid, Graph_t<SquareCell *> *graph);
 };
 }
 
-#endif /* ROAD_MAP_ANALYSIS_HPP */
+#endif /* MAP_ANALYSIS_HPP */

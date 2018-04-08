@@ -1,5 +1,5 @@
 /* 
- * road_map_analysis.cpp
+ * map_analysis.cpp
  * 
  * Created on: Apr 05, 2018 18:23
  * Description: 
@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-#include "navigation/road_map_analysis.hpp"
+#include "navigation/map_analysis.hpp"
 
 using namespace librav;
 
@@ -46,7 +46,7 @@ std::vector<std::tuple<SquareCell *, double>> GetSquareGridNeighbour::operator()
     return adjacent_cells;
 }
 
-void RoadMapAnalysis::GenerateGraphCostMap(SquareGrid *grid, Graph_t<SquareCell *> *graph)
+void MapAnalysis::GenerateGraphCostMap(SquareGrid *grid, Graph_t<SquareCell *> *graph)
 {
     Eigen::MatrixXd cost_matrix;
     cost_matrix = Eigen::MatrixXd::Zero(grid->SizeY(), grid->SizeX());
@@ -55,8 +55,8 @@ void RoadMapAnalysis::GenerateGraphCostMap(SquareGrid *grid, Graph_t<SquareCell 
     for (int32_t i = 0; i < grid->SizeX(); ++i)
         for (int32_t j = 0; j < grid->SizeY(); ++j)
         {
-            int64_t id = grid->GetCell(i, j)->GetUniqueID();
-            if (graph->FindVertex(id) != graph->vertex_end())
+            auto vtx = graph->FindVertex(grid->GetCell(i, j)->GetUniqueID());
+            if (vtx != graph->vertex_end())
                 cost_matrix(j, i) = vtx->g_astar_;
         }
 
