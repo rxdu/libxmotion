@@ -24,7 +24,7 @@
 #include <memory>
 
 #include "LaneletFwd.hpp"
-#include "lanelet_point.hpp"
+#include "LaneletPoint.hpp"
 #include "LineStrip.hpp"
 #include "Attribute.hpp"
 

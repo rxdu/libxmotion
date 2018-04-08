@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "road_network/road_coordinate.hpp"
-#include <liblanelet/lanelet_point.hpp>
+#include <liblanelet/LaneletPoint.hpp>
 
 using namespace librav;
 using namespace LLet;

@@ -22,7 +22,7 @@
 #include <tuple>
 #include <iostream>
 
-#include "lanelet_point.hpp"
+#include "LaneletPoint.hpp"
 
 namespace LLet
 {

@@ -22,7 +22,7 @@
 #include "LaneletBase.hpp"
 #include "Attribute.hpp"
 #include "LineStrip.hpp"
-#include "lanelet_point.hpp"
+#include "LaneletPoint.hpp"
 #include "RegulatoryElement.hpp"
 #include "LaneletFwd.hpp"
 

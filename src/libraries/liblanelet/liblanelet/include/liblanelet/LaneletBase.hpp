@@ -22,7 +22,7 @@
 #include <vector>
 #include <cstdint>
 
-#include "lanelet_point.hpp"
+#include "LaneletPoint.hpp"
 #include "LineStrip.hpp"
 #include "BoundingBox.hpp"
 #include "RegulatoryElement.hpp"

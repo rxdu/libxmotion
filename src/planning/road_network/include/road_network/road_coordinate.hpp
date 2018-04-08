@@ -12,7 +12,7 @@
 #define ROAD_COORDINATE_HPP
 
 #include <liblanelet/Lanelet.hpp>
-#include <liblanelet/lanelet_point.hpp>
+#include <liblanelet/LaneletPoint.hpp>
 
 namespace librav
 {

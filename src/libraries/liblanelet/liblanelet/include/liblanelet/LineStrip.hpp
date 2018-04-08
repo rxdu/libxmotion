@@ -20,7 +20,7 @@
 #pragma once
 
 #include <liblanelet/Attribute.hpp>
-#include <liblanelet/lanelet_point.hpp>
+#include <liblanelet/LaneletPoint.hpp>
 #include <liblanelet/BoundingBox.hpp>
 #include <vector>
 #include <memory>
