@@ -24,10 +24,10 @@ int main()
     // auto drivable = map.GetFullDrivableAreaGrid();
     // LightViz::ShowMatrixAsColorMap(drivable->GetGridMatrix(true), "drivable", true);
 
-    // auto matrix = map.GetFullLaneBoundaryGrid()->GetGridMatrix(false);
-    auto matrix = map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false);
+    auto matrix = map.GetFullLaneBoundaryGrid()->GetGridMatrix(false);
+    // auto matrix = map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false);
     auto sgrid = std::make_shared<SquareGrid>(matrix, 10);
-    // LightViz::ShowSquareGrid(sgrid.get(), 100, "Square Grid", true);
+    LightViz::ShowSquareGrid(sgrid.get(), 100, "Square Grid", true);
 
     std::cout << "grid size: " << sgrid->SizeX() << " , " << sgrid->SizeY() << std::endl;
     auto nbs = sgrid->GetNeighbours(0, 0, true);

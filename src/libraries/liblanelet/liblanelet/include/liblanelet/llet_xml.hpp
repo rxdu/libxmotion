@@ -20,9 +20,21 @@
 #pragma once
 
 #include <vector>
-#include "Lanelet.hpp"
+#include "liblanelet/Lanelet.hpp"
+#include "liblanelet/LaneletPoint.hpp"
 
 namespace LLet
 {
-    std::vector< lanelet_ptr_t > parse_xml(std::string filename);
+typedef std::vector<point_with_id_t> reference_line_t;
+
+struct LaneletXML
+{
+    std::vector<lanelet_ptr_t> lanelets;
+    bool local_origin_defined = false;
+    point_with_id_t reference_origin;
+    reference_line_t drivable_boundary;
+};
+
+std::vector<lanelet_ptr_t> parse_xml(std::string filename);
+LaneletXML parse_xml_full(std::string filename);
 }

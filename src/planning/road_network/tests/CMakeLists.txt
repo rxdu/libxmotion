@@ -20,3 +20,6 @@ target_link_libraries(test_roadmap road lightviz utilities)
 
 add_executable(test_coordinate test_coordinate.cpp)
 target_link_libraries(test_coordinate road)
+
+add_executable(test_roadmap_geometry test_roadmap_geometry.cpp)
+target_link_libraries(test_roadmap_geometry road lightviz utilities)

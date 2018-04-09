@@ -21,11 +21,13 @@ PolyLineSegment::PolyLineSegment(PolyLinePoint pt1, PolyLinePoint pt2)
     end_point_ = pt2;
 
     base_vec_ << end_point_.x - start_point_.x, end_point_.y - start_point_.y, 0;
+    // std::cout << "base vector: " << base_vec_(0) << " , " << base_vec_(1) << std::endl;
 }
 
 bool PolyLineSegment::IsOnTheRightSide(const PolyLinePoint &pt) const
 {
     Eigen::Vector3d check_vec(pt.x - start_point_.x, pt.y - start_point_.y, 0);
+    // std::cout << "check vector: " << check_vec(0) << " , " << check_vec(1) << " sign: " << check_vec.cross(base_vec_)(2) << std::endl;
 
     if (check_vec.cross(base_vec_)(2) >= 0)
         return true;

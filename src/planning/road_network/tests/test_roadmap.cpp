@@ -15,12 +15,19 @@ int main()
 
     RoadMap map("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm", 10);
 
+    if (!map.MapReady())
+    {
+        std::cout << "map didn't load correctly" << std::endl;
+        return -1;
+    }
+
     // map.GenerateDenseGrids(15);
     std::cout << "generated grid in " << timer.toc() << " seconds" << std::endl;
 
     // map.OccupiedLanelet(CartCooridnate(60, 60));
 
-    LightViz::ShowMatrixAsColorMap(map.GetFullLaneBoundaryGrid()->GetGridMatrix(true), "roadnetwork", true);
+    // LightViz::ShowMatrixAsColorMap(map.GetFullLaneBoundaryGrid()->GetGridMatrix(true), "roadnetwork", true);
+    LightViz::ShowMatrixAsColorMap(map.GetFullDrivableAreaGrid()->GetGridMatrix(true), "drivable", true);
 
     // std::vector<std::string> lanelets;
     // lanelets.push_back("s4");

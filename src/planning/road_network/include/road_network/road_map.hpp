@@ -28,7 +28,9 @@ class RoadMap
 {
 public:
   RoadMap(std::string map_osm = "", int32_t ppm = 15);
-  bool LoadMapFile(std::string map_file, int32_t ppm = 15);
+  void LoadMapFile(std::string map_file, int32_t ppm = 15);
+
+  bool MapReady() const { return map_loaded_; }
 
   std::vector<int32_t> FindShortestRoute(std::string start_name, std::string goal_name);
   std::vector<std::string> FindShortestRouteName(std::string start_name, std::string goal_name);
@@ -46,6 +48,7 @@ public:
   std::shared_ptr<DenseGrid> GetLaneletDrivableArea(int32_t llid);
 
 private:
+  bool map_loaded_ = false;
   std::unique_ptr<LLet::LaneletMap> lanelet_map_;
   std::vector<LLet::lanelet_ptr_t> lanelets_;
   std::unordered_map<std::string, int32_t> ll_id_lookup_;
@@ -59,12 +62,12 @@ private:
   RoadCoordinateFrame coordinate_;
   std::unordered_map<int32_t, std::pair<PolyLine, PolyLine>> lane_bounds_;
 
-  int32_t ref_lanelet_id_ = 0;
   LLet::point_with_id_t world_origin_;
 
   int32_t pixel_per_meter_ = 10;
   int32_t grid_size_x_ = 0;
   int32_t grid_size_y_ = 0;
+  std::shared_ptr<DenseGrid> drivable_area_grid_;
   std::unordered_map<int32_t, std::shared_ptr<DenseGrid>> lane_bound_grids_;
   std::unordered_map<int32_t, std::shared_ptr<DenseGrid>> lane_drivable_grids_;
 

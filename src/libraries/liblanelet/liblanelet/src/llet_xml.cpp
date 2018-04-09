@@ -98,6 +98,11 @@ struct XMLParser
     std::map<int32_t, lanelet_ptr_t> lanelets_by_id;
     std::map<int32_t, regulatory_element_ptr_t> regulatory_elements_by_id;
 
+    // additonal information for using map in a local region
+    bool local_origin_defined = false;
+    point_with_id_t reference_origin;
+    reference_line_t drivable_boundary;
+
     pugi::xml_document &doc;
 
     void parse_nodes();
@@ -107,6 +112,8 @@ struct XMLParser
     void parse_reference_points();
 
     std::vector<lanelet_ptr_t> parsed_lanelets() const;
+    bool parsed_reference_origin(point_with_id_t *pt) const;
+    reference_line_t parsed_boundary_points() const;
 
     XMLParser(pugi::xml_document &doc) : doc(doc)
     {
@@ -127,6 +134,17 @@ std::vector<lanelet_ptr_t> XMLParser::parsed_lanelets() const
     }
 
     return result;
+}
+
+bool XMLParser::parsed_reference_origin(point_with_id_t *pt) const
+{
+    *pt = reference_origin;
+    return local_origin_defined;
+}
+
+reference_line_t XMLParser::parsed_boundary_points() const
+{
+    return drivable_boundary;
 }
 
 void XMLParser::parse_nodes()
@@ -275,6 +293,22 @@ void XMLParser::parse_reference_points()
     for (pugi::xpath_node relation : doc.select_nodes("//relation/tag[@v='reference' and @k='type']/.."))
     {
         std::cout << "found reference" << std::endl;
+
+        for (pugi::xpath_node member : relation.node().select_nodes((boost::format("member[@type='node' and @role='%s']") % "boundary").str().c_str()))
+        {
+            int32_t id = member.node().attribute("ref").as_int();
+            std::cout << "ref id: " << id << std::endl;
+            drivable_boundary.push_back(points_by_id[id]);
+        }
+
+        // check for origin reference point
+        for (pugi::xpath_node member : relation.node().select_nodes((boost::format("member[@type='node' and @role='%s']") % "origin").str().c_str()))
+        {
+            int32_t id = member.node().attribute("ref").as_int();
+            local_origin_defined = true;
+            reference_origin = points_by_id[id];
+            std::cout << "ref id: " << id << std::endl;
+        }
     }
 }
 }
@@ -291,4 +325,22 @@ std::vector<lanelet_ptr_t> LLet::parse_xml(std::string filename)
     //    std::cout << "got " << parser.lanelets.size() << " lanelets." << std::endl;
 
     return parser.parsed_lanelets();
+}
+
+LaneletXML LLet::parse_xml_full(std::string filename)
+{
+    pugi::xml_document doc;
+    pugi::xml_parse_result res = doc.load_file(filename.c_str());
+
+    XMLParser parser(doc);
+
+    //    std::cout << "got " << parser.points_by_id.size() << " points." << std::endl;
+    //    std::cout << "got " << parser.linestrips_by_id.size() << " line strips." << std::endl;
+    //    std::cout << "got " << parser.lanelets.size() << " lanelets." << std::endl;
+    LaneletXML xml_struct;
+    xml_struct.lanelets = parser.parsed_lanelets();
+    xml_struct.local_origin_defined = parser.parsed_reference_origin(&xml_struct.reference_origin);
+    xml_struct.drivable_boundary = parser.parsed_boundary_points();
+
+    return xml_struct;
 }

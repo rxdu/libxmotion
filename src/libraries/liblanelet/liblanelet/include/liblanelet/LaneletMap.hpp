@@ -22,6 +22,7 @@
 #include "Lanelet.hpp"
 #include "LLTree.hpp"
 #include "LaneletGraph.hpp"
+#include "liblanelet/llet_xml.hpp"
 
 namespace LLet
 {
@@ -34,23 +35,25 @@ struct NoPath
 
 class LaneletMap
 {
-public:
-    LaneletMap( std::vector< lanelet_ptr_t > lanelets );
-    LaneletMap( std::string filename );
+  public:
+    LaneletMap(std::vector<lanelet_ptr_t> lanelets);
+    LaneletMap(std::string filename);
 
-    std::vector< lanelet_ptr_t > query( const BoundingBox& box );
-    std::vector< lanelet_ptr_t > shortest_path( const lanelet_ptr_t& start, const lanelet_ptr_t& dest ) const;
+    std::vector<lanelet_ptr_t> query(const BoundingBox &box);
+    std::vector<lanelet_ptr_t> shortest_path(const lanelet_ptr_t &start, const lanelet_ptr_t &dest) const;
 
-    const lanelet_ptr_t& lanelet_by_id( int32_t id ) const;
+    const lanelet_ptr_t &lanelet_by_id(int32_t id) const;
+    bool get_local_reference_frame_origin(point_with_id_t *pt) const;
+    reference_line_t get_drivable_boundary_points() const;
 
-    const Graph& graph() const;
+    const Graph &graph() const;
 
-private:
+  private:
     void init();
+    LaneletXML xml_struct;
     LLTree _lanelet_tree;
-    const std::vector< lanelet_ptr_t > _lanelets;
+    const std::vector<lanelet_ptr_t> _lanelets;
     LLet::Graph _graph;
-    int32_t vertex_id_by_lanelet( const lanelet_ptr_t& lanelet) const;
+    int32_t vertex_id_by_lanelet(const lanelet_ptr_t &lanelet) const;
 };
-
 }

@@ -18,7 +18,6 @@
  */
 
 #include "liblanelet/LaneletMap.hpp"
-#include "liblanelet/llet_xml.hpp"
 #include <iostream>
 #include <algorithm>
 #include <cassert>
@@ -32,7 +31,8 @@ LaneletMap::LaneletMap(std::vector<lanelet_ptr_t> lanelets) : _lanelets(lanelets
     init();
 }
 
-LaneletMap::LaneletMap(std::string filename) : _lanelets(LLet::parse_xml(filename))
+LaneletMap::LaneletMap(std::string filename) : xml_struct(LLet::parse_xml_full(filename)),
+                                               _lanelets(xml_struct.lanelets)
 {
     init();
 }
@@ -49,7 +49,7 @@ std::vector<lanelet_ptr_t> LaneletMap::shortest_path(const lanelet_ptr_t &start,
 
     auto sp = dijkstra_shortest_path(graph(), start_index, dest_index);
 
-    if( !sp || (*sp).empty() )
+    if (!sp || (*sp).empty())
     {
         NoPath exception;
         exception.start = start;
@@ -57,9 +57,9 @@ std::vector<lanelet_ptr_t> LaneletMap::shortest_path(const lanelet_ptr_t &start,
         throw exception;
     }
 
-    std::vector< lanelet_ptr_t > sp_ll(sp->size());
+    std::vector<lanelet_ptr_t> sp_ll(sp->size());
 
-    std::transform(sp->cbegin(), sp->cend(), sp_ll.begin(), [this](int32_t index){ return graph()[index].lanelet;});
+    std::transform(sp->cbegin(), sp->cend(), sp_ll.begin(), [this](int32_t index) { return graph()[index].lanelet; });
 
     std::cout << sp_ll << std::endl;
 
@@ -68,14 +68,25 @@ std::vector<lanelet_ptr_t> LaneletMap::shortest_path(const lanelet_ptr_t &start,
 
 const lanelet_ptr_t &LaneletMap::lanelet_by_id(int32_t id) const
 {
-    auto pos = std::find_if(_lanelets.cbegin(), _lanelets.cend(), [&id](const lanelet_ptr_t& ll) {return ll->id() == id;});
-    if( pos != _lanelets.cend() )
+    auto pos = std::find_if(_lanelets.cbegin(), _lanelets.cend(), [&id](const lanelet_ptr_t &ll) { return ll->id() == id; });
+    if (pos != _lanelets.cend())
         return *pos;
     else
     {
         boost::format fmt("trying to retieve lanelet with unknown id: %i");
-        throw std::runtime_error( (fmt % id).str() );
+        throw std::runtime_error((fmt % id).str());
     }
+}
+
+bool LaneletMap::get_local_reference_frame_origin(point_with_id_t *pt) const
+{
+    *pt = xml_struct.reference_origin;
+    return xml_struct.local_origin_defined;
+}
+
+reference_line_t LaneletMap::get_drivable_boundary_points() const
+{
+    return xml_struct.drivable_boundary;
 }
 
 const Graph &LaneletMap::graph() const
@@ -84,27 +95,27 @@ const Graph &LaneletMap::graph() const
 }
 
 void LaneletMap::init()
-{    
-    for( int i = 0; i < _lanelets.size(); ++i )
+{
+    for (int i = 0; i < _lanelets.size(); ++i)
     {
         Graph::vertex_descriptor vtx = boost::add_vertex(_graph);
         _graph[vtx].lanelet = _lanelets[i];
         // graph vertex descriptors and _lanelet indices should be in sync now.
-        assert( vtx == i );
-        assert( vertex_id_by_lanelet(_lanelets[i]) == i );
+        assert(vtx == i);
+        assert(vertex_id_by_lanelet(_lanelets[i]) == i);
         _lanelet_tree.insert(_lanelets[i]);
     }
 
-    for( const auto& src: _lanelets )
+    for (const auto &src : _lanelets)
     {
         int32_t index_src = this->vertex_id_by_lanelet(src);
         double len = src->length();
-        auto lls_around = this->query( src->bb() );
-        for( const auto& other: lls_around )
+        auto lls_around = this->query(src->bb());
+        for (const auto &other : lls_around)
         {
-            if(src->fits_before(other))
+            if (src->fits_before(other))
             {
-                int32_t index_dest = this->vertex_id_by_lanelet( other );
+                int32_t index_dest = this->vertex_id_by_lanelet(other);
                 bool inserted;
                 Graph::edge_descriptor new_edge;
                 std::tie(new_edge, inserted) = boost::add_edge(index_src, index_dest, this->_graph);
@@ -115,13 +126,12 @@ void LaneletMap::init()
             }
         }
     }
-
 }
 
 int32_t LaneletMap::vertex_id_by_lanelet(const lanelet_ptr_t &lanelet) const
 {
     auto pos = std::find(_lanelets.cbegin(), _lanelets.cend(), lanelet);
-    if( pos == _lanelets.cend() )
+    if (pos == _lanelets.cend())
         throw std::runtime_error("lanelet not found.");
     else
         return std::distance(_lanelets.cbegin(), pos);

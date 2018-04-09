@@ -35,7 +35,7 @@ using namespace LLet;
 int main(int argc, char *argv[])
 {
     // std::string source = argv[1];
-    std::string source = "/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full_with_ref.osm";
+    std::string source = "/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm";
     LaneletMap the_map(source);
 
     // BoundingBox world(std::make_tuple(-180, -180, 180, 180));
