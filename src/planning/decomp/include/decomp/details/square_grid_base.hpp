@@ -13,7 +13,7 @@
 namespace librav
 {
 template <typename T>
-SquareGridBase::SquareGridBase(int32_t size_x, int32_t size_y, double cell_size = 0.1) : GridBase<SquareCellBase<T> *>(size_x, size_y),
+SquareGridBase<T>::SquareGridBase(int32_t size_x, int32_t size_y, double cell_size) : GridBase<SquareCellBase<T> *>(size_x, size_y),
                                                                                          cell_size_(cell_size)
 {
     assert((size_x > 0 && size_y > 0));
@@ -28,7 +28,7 @@ SquareGridBase::SquareGridBase(int32_t size_x, int32_t size_y, double cell_size 
 }
 
 template <typename T>
-SquareGridBase::SquareGridBase(const Eigen::MatrixXd &matrix, int32_t side_length, double cell_size = 0.1) : GridBase<SquareCellBase<T> *>(0, 0),
+SquareGridBase<T>::SquareGridBase(const Eigen::MatrixXd &matrix, int32_t side_length, double cell_size) : GridBase<SquareCellBase<T> *>(0, 0),
                                                                                              cell_size_(cell_size)
 {
     // determine size of grid
@@ -102,7 +102,7 @@ SquareGridBase::SquareGridBase(const Eigen::MatrixXd &matrix, int32_t side_lengt
 }
 
 template <typename T>
-SquareGridBase::~SquareGridBase()
+SquareGridBase<T>::~SquareGridBase()
 {
     for (int32_t y = 0; y < GridBase<SquareCellBase<T> *>::size_y_; y++)
         for (int32_t x = 0; x < GridBase<SquareCellBase<T> *>::size_x_; x++)
@@ -110,45 +110,20 @@ SquareGridBase::~SquareGridBase()
 }
 
 template <typename T>
-void SetCellLabel(int32_t x, int32_t y, SquareCellLabel label)
-{
-    GridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(x, y)->label = label;
-}
-
-template <typename T>
-void SquareGridBase::SetCellLabel(int64_t id, SquareCellLabel label)
-{
-    auto coordinate = IDToCoordinate(id);
-    GridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(coordinate.GetX(), coordinate.GetY())->label = label;
-}
-
-template <typename T>
-GridCoordinate SquareGridBase::GetCoordinateFromID(int64_t id)
-{
-    return IDToCoordinate(id);
-}
-
-template <typename T>
-int64_t SquareGridBase::GetIDFromCoordinate(int32_t x, int32_t y)
-{
-    return CoordinateToID(x, y);
-}
-
-template <typename T>
-SquareCellBase<T> *SquareGridBase::GetCell(int64_t id)
+SquareCellBase<T> *SquareGridBase<T>::GetCell(int64_t id)
 {
     auto coordinate = IDToCoordinate(id);
     return GridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(coordinate.GetX(), coordinate.GetY());
 }
 
 template <typename T>
-SquareCellBase<T> *SquareGridBase::GetCell(int32_t x, int32_t y)
+SquareCellBase<T> *SquareGridBase<T>::GetCell(int32_t x, int32_t y)
 {
     return GridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(x, y);
 }
 
 template <typename T>
-std::vector<SquareCellBase<T> *> SquareGridBase::GetNeighbours(int32_t x, int32_t y, bool allow_diag)
+std::vector<SquareCellBase<T> *> SquareGridBase<T>::GetNeighbours(int32_t x, int32_t y, bool allow_diag)
 {
     std::vector<GridCoordinate> candidates;
     if (allow_diag)
@@ -182,7 +157,7 @@ std::vector<SquareCellBase<T> *> SquareGridBase::GetNeighbours(int32_t x, int32_
 }
 
 template <typename T>
-std::vector<SquareCellBase<T> *> SquareGridBase::GetNeighbours(int64_t id, bool allow_diag = true)
+std::vector<SquareCellBase<T> *> SquareGridBase<T>::GetNeighbours(int64_t id, bool allow_diag)
 {
     auto coordinate = IDToCoordinate(id);
     return GetNeighbours(coordinate.GetX(), coordinate.GetY(), allow_diag);
