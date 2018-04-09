@@ -5,16 +5,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
-set(DECOMP_LIB_SRC
-  # src/square_grid.cpp
-  src/dense_grid.cpp
-)
-add_library(decomp STATIC ${DECOMP_LIB_SRC})
-target_link_libraries(decomp common)
-target_include_directories(decomp PUBLIC
+add_library(decomp INTERFACE)
+target_include_directories(decomp INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-  PRIVATE src)
+  $<INSTALL_INTERFACE:include>)
 
+# Add tests
 add_subdirectory(tests)
 
