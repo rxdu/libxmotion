@@ -46,6 +46,8 @@ std::vector<std::tuple<SquareCell *, double>> GetSquareGridNeighbour::operator()
     return adjacent_cells;
 }
 
+////////////////////////////////////////////////////////////////////
+
 void MapAnalysis::GenerateGraphCostMap(SquareGrid *grid, Graph_t<SquareCell *> *graph)
 {
     Eigen::MatrixXd cost_matrix;

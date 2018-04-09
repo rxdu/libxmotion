@@ -13,6 +13,7 @@
 #include <memory>
 #include <vector>
 #include <tuple>
+#include <unordered_map>
 
 #include <Eigen/Dense>
 
@@ -23,6 +24,14 @@
 
 namespace librav
 {
+struct RoadCellAttributes
+{
+  double map_cost;
+};
+
+using RoadSquareCell = SquareCellBase<RoadCellAttributes>;
+using RoadSquareGrid = SquareGridBase<RoadCellAttributes>;
+
 class GetSquareGridNeighbour
 {
 public:
@@ -35,9 +44,11 @@ private:
   std::shared_ptr<SquareGrid> sgrid_;
 };
 
+////////////////////////////////////////////////////////////////////
+
 namespace MapAnalysis
 {
-  void GenerateGraphCostMap(SquareGrid *grid, Graph_t<SquareCell *> *graph);
+void GenerateGraphCostMap(SquareGrid *grid, Graph_t<SquareCell *> *graph);
 };
 }
 
