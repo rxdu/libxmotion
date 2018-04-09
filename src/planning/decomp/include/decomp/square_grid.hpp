@@ -75,7 +75,8 @@ struct SquareCellBase
   // you can assign values to "cost_map" for visualization
   double cost_map = 0.0;
 
-  AttributeType attribute;
+  // define extra attributes if the default ones are not enough
+  AttributeType extra_attribute;
 
   inline int64_t GetUniqueID() const { return id; }
 
