@@ -35,20 +35,20 @@ using RoadSquareGrid = SquareGridBase<RoadCellAttributes>;
 class GetSquareGridNeighbour
 {
 public:
-  GetSquareGridNeighbour(std::shared_ptr<SquareGrid> sg);
+  GetSquareGridNeighbour(std::shared_ptr<RoadSquareGrid> sg);
 
   // define the functor operator
-  std::vector<std::tuple<SquareCell *, double>> operator()(SquareCell *cell);
+  std::vector<std::tuple<RoadSquareCell *, double>> operator()(RoadSquareCell *cell);
 
 private:
-  std::shared_ptr<SquareGrid> sgrid_;
+  std::shared_ptr<RoadSquareGrid> sgrid_;
 };
 
 ////////////////////////////////////////////////////////////////////
 
 namespace MapAnalysis
 {
-void GenerateGraphCostMap(SquareGrid *grid, Graph_t<SquareCell *> *graph);
+void GenerateGraphCostMap(RoadSquareGrid *grid, Graph_t<RoadSquareCell *> *graph);
 };
 }
 

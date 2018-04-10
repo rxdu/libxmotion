@@ -6,13 +6,13 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 #find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
-set(TRAFFIC_LIB_SRC
+set(TRAFFIC_SIM_LIB_SRC
     src/vehicle_sim.cpp
     src/traffic_sim.cpp
 )
-add_library(traffic STATIC ${TRAFFIC_LIB_SRC})
-target_link_libraries(traffic common utilities)
-target_include_directories(traffic PUBLIC
+add_library(trafficsim STATIC ${TRAFFIC_SIM_LIB_SRC})
+target_link_libraries(trafficsim common utilities)
+target_include_directories(trafficsim PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)

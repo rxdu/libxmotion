@@ -26,7 +26,7 @@ int main()
 
     auto matrix = map.GetFullLaneBoundaryGrid()->GetGridMatrix(false);
     // auto matrix = map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false);
-    auto sgrid = std::make_shared<SquareGrid>(matrix, 10);
+    auto sgrid = std::make_shared<RoadSquareGrid>(matrix, 10);
     LightViz::ShowSquareGrid(sgrid.get(), 100, "Square Grid", true);
 
     std::cout << "grid size: " << sgrid->SizeX() << " , " << sgrid->SizeY() << std::endl;
@@ -40,8 +40,8 @@ int main()
     std::cout << "check neighbour: " << nbs.size() << std::endl;
 
     timer.tic();
-    SquareCell *tile_s = sgrid->GetCell(0, 2);
-    auto graph = DijkstraTraversal::IncSearch(tile_s, GetNeighbourFunc_t<SquareCell *>(GetSquareGridNeighbour(sgrid)));
+    RoadSquareCell *tile_s = sgrid->GetCell(0, 2);
+    auto graph = DijkstraTraversal::IncSearch(tile_s, GetNeighbourFunc_t<RoadSquareCell *>(GetSquareGridNeighbour(sgrid)));
     std::cout << "traversal finished in " << timer.toc() << " seconds, vertex visited: " << graph.GetGraphVertexNumber() << std::endl;
 
     LightViz::ShowSquareGridGraph(sgrid.get(), &graph, 100);

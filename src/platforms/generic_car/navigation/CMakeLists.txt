@@ -10,9 +10,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 set(NAV_LIB_SRC
     src/field_search.cpp
     src/map_analysis.cpp
+    src/traffic_flow.cpp
 )
 add_library(nav STATIC ${NAV_LIB_SRC})
-target_link_libraries(nav graph field decomp)
+target_link_libraries(nav graph field decomp road)
 target_include_directories(nav PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

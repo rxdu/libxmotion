@@ -11,7 +11,7 @@
 #define VEHICLE_SIM_HPP
 
 #include "common/librav_types.hpp"
-#include "traffic/traffic_participant.hpp"
+#include "traffic_sim/traffic_participant.hpp"
 
 namespace librav
 {

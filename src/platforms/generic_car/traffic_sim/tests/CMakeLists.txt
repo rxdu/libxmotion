@@ -7,4 +7,4 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 
 ## tests
 add_executable(test_trafficsim test_trafficsim.cpp)
-target_link_libraries(test_trafficsim field traffic utilities)
+target_link_libraries(test_trafficsim field trafficsim utilities)

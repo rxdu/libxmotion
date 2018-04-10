@@ -43,8 +43,8 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 # add_subdirectory(apps)
 add_subdirectory(expts)
 add_subdirectory(navigation)
-# add_subdirectory(traffic)
-add_subdirectory(scenario)
+add_subdirectory(traffic_sim)
+# add_subdirectory(scenario)
 
 
 

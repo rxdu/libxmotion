@@ -13,15 +13,15 @@
 
 using namespace librav;
 
-#define ALLOW_DIAGONAL_MOVE
+// #define ALLOW_DIAGONAL_MOVE
 
-GetSquareGridNeighbour::GetSquareGridNeighbour(std::shared_ptr<SquareGrid> sg) : sgrid_(sg)
+GetSquareGridNeighbour::GetSquareGridNeighbour(std::shared_ptr<RoadSquareGrid> sg) : sgrid_(sg)
 {
 }
 
-std::vector<std::tuple<SquareCell *, double>> GetSquareGridNeighbour::operator()(SquareCell *cell)
+std::vector<std::tuple<RoadSquareCell *, double>> GetSquareGridNeighbour::operator()(RoadSquareCell *cell)
 {
-    std::vector<std::tuple<SquareCell *, double>> adjacent_cells;
+    std::vector<std::tuple<RoadSquareCell *, double>> adjacent_cells;
 
     if (cell->label != SquareCellLabel::FREE)
         return adjacent_cells;
@@ -48,7 +48,7 @@ std::vector<std::tuple<SquareCell *, double>> GetSquareGridNeighbour::operator()
 
 ////////////////////////////////////////////////////////////////////
 
-void MapAnalysis::GenerateGraphCostMap(SquareGrid *grid, Graph_t<SquareCell *> *graph)
+void MapAnalysis::GenerateGraphCostMap(RoadSquareGrid *grid, Graph_t<RoadSquareCell *> *graph)
 {
     Eigen::MatrixXd cost_matrix;
     cost_matrix = Eigen::MatrixXd::Zero(grid->SizeY(), grid->SizeX());
