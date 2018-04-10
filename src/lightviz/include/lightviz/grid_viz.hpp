@@ -21,17 +21,6 @@ namespace librav
 {
 namespace LightViz
 {
-// basic drawing 
-cv::Mat CreateSquareGridCanvas(SquareGrid *grid);
-cv::Mat DrawSquareGridCell(cv::Mat canvas, SquareGrid *grid);
-cv::Mat DrawSquareGridCost(cv::Mat canvas, SquareGrid *grid);
-cv::Mat DrawSquareGridNet(cv::Mat canvas, SquareGrid *grid);
-cv::Mat DrawSquareGridPathStartGoal(cv::Mat canvas, const std::vector<SquareCell *> &path);
-cv::Mat DrawSquareGridPath(cv::Mat canvas, const std::vector<SquareCell *> &path);
-
-// graph related drawing
-cv::Mat DrawSquareGridGraph(cv::Mat canvas, SquareGrid *grid, Graph_t<SquareCell *> *graph);
-
 // convenience functions
 void ShowSquareGrid(SquareGrid *grid, int32_t pixel_per_unit = 100, std::string window_name = "Square Grid", bool save_img = false);
 void ShowSquareGridPath(SquareGrid *grid, const std::vector<SquareCell *> &path, int32_t pixel_per_unit = 100, std::string window_name = "Square Grid", bool save_img = false);

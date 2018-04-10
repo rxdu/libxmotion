@@ -40,17 +40,17 @@ int main()
     // auto drivable = map.GetFullDrivableAreaGrid();
     // LightViz::ShowMatrixAsColorMap(drivable->GetGridMatrix(true), "drivable", true);
 
-    // auto matrix = map.GetFullLaneBoundaryGrid()->GetGridMatrix(false);
+    auto matrix = map.GetFullLaneBoundaryGrid()->GetGridMatrix(false);
     // auto matrix = map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false);
-    // auto sgrid = GridDecomposer::CreateSquareGridFromMatrix(matrix, 5);
-    // LightViz::ShowSquareGrid(sgrid.get(), 100, "Square Grid", true);
+    auto sgrid = SquareGrid(matrix, 10);
+    LightViz::ShowSquareGrid(&sgrid, 100, "Square Grid", true);
 
     // auto sgrid = map.GetLaneBoundGrid(lanelets)->ConvertToSquareGrid(5);
     // auto sgrid = std::make_shared<SquareGrid>(map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false), 5);
     // LightViz::ShowSquareGrid(sgrid.get(), 100, "Square Grid", true);
 
-    auto sgrid = SquareGrid(map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false), 10);
-    LightViz::ShowSquareGrid(&sgrid, 100, "Square Grid", true);
+    // auto sgrid = SquareGrid(map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false), 10);
+    // LightViz::ShowSquareGrid(&sgrid, 100, "Square Grid", true);
 
     return 0;
 }

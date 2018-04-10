@@ -64,6 +64,7 @@ class Polygon
     Polygon(const std::vector<PolyLinePoint> &points);
 
     void SetBoundary(const std::vector<PolyLinePoint> &points);
+    // Note: this check only works with convex polygon
     bool IsInside(const PolyLinePoint &pt) const;
 
   private:
