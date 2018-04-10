@@ -2,7 +2,7 @@
  * grid_draw.hpp
  * 
  * Created on: Apr 09, 2018 23:13
- * Description: 
+ * Description: this file defines a set of grid drawing primitives that can be used in grid_viz.hpp
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
@@ -19,13 +19,13 @@
 
 namespace librav
 {
-struct GridDraw
+struct SquareGridDraw
 {
-    GridDraw(int32_t ppu) : pixel_per_unit(ppu) {}
+    SquareGridDraw(int32_t ppu) : pixel_per_unit(ppu) {}
 
     // basic drawing
     template <typename GridType>
-    cv::Mat CreateSquareGridCanvas(GridType *grid)
+    cv::Mat CreateGridCanvas(GridType *grid)
     {
         // create canvas
         int32_t vis_side_size = grid->GetCellSize() * pixel_per_unit;
@@ -35,7 +35,7 @@ struct GridDraw
     }
 
     template <typename GridType>
-    cv::Mat DrawSquareGridCell(cv::Mat canvas, GridType *grid)
+    cv::Mat DrawGridCell(cv::Mat canvas, GridType *grid)
     {
         // draw cells
         for (int32_t y = 0; y < grid->SizeY(); ++y)
@@ -54,7 +54,7 @@ struct GridDraw
     }
 
     template <typename GridType>
-    cv::Mat DrawSquareGridCost(cv::Mat canvas, GridType *grid)
+    cv::Mat DrawGridCost(cv::Mat canvas, GridType *grid)
     {
         // draw cells
         for (int32_t y = 0; y < grid->SizeY(); ++y)
@@ -73,7 +73,7 @@ struct GridDraw
     }
 
     template <typename GridType>
-    cv::Mat DrawSquareGridNet(cv::Mat canvas, GridType *grid)
+    cv::Mat DrawGridNet(cv::Mat canvas, GridType *grid)
     {
         // draw horizontal lines
         for (int32_t y = 1; y < grid->SizeY(); ++y)
@@ -103,7 +103,7 @@ struct GridDraw
     }
 
     template <typename GridCellType>
-    cv::Mat DrawSquareGridPathStartGoal(cv::Mat canvas, const std::vector<GridCellType *> &path)
+    cv::Mat DrawGridPathStartGoal(cv::Mat canvas, const std::vector<GridCellType *> &path)
     {
         cv::Range srngx(path.front()->vertices[0].x * pixel_per_unit, path.front()->vertices[1].x * pixel_per_unit);
         cv::Range srngy(path.front()->vertices[0].y * pixel_per_unit, path.front()->vertices[2].y * pixel_per_unit);
@@ -117,7 +117,7 @@ struct GridDraw
     }
 
     template <typename GridCellType>
-    cv::Mat DrawSquareGridPath(cv::Mat canvas, const std::vector<GridCellType *> &path)
+    cv::Mat DrawGridPath(cv::Mat canvas, const std::vector<GridCellType *> &path)
     {
         for (int i = 0; i < path.size() - 1; ++i)
         {
@@ -135,7 +135,7 @@ struct GridDraw
 
     // graph related drawing
     template <typename GridType, typename GridCellType>
-    cv::Mat DrawSquareGridGraph(cv::Mat canvas, GridType *grid, Graph_t<GridCellType *> *graph)
+    cv::Mat DrawGridGraph(cv::Mat canvas, GridType *grid, Graph_t<GridCellType *> *graph)
     {
         // draw all edges
         auto edges = graph->GetAllEdges();

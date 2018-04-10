@@ -44,7 +44,6 @@ include_directories(${CAIRO_INCLUDE_DIRS})
 set(LIGHTVIZ_LIB_SRC
 	src/cv_draw.cpp
 	src/matrix_viz.cpp
-	src/grid_viz.cpp
 )
 add_library(lightviz STATIC ${LIGHTVIZ_LIB_SRC})
 target_link_libraries(lightviz decomp graph ${FLTK_LIBRARIES} ${OpenCV_LIBS})

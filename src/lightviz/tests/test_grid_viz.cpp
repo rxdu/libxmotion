@@ -23,7 +23,7 @@ int main()
     path.push_back(grid.GetCell(18));
     path.push_back(grid.GetCell(48));
 
-    // LightViz::ShowSquareGrid(&grid, 200);
+    LightViz::ShowSquareGrid(&grid, 200);
     LightViz::ShowSquareGridPath(&grid, path, 100);
 
     return 0;
