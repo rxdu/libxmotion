@@ -11,7 +11,7 @@ set(ROAD_LIB_SRC
     src/road_coordinate.cpp
 )
 add_library(road STATIC ${ROAD_LIB_SRC})
-target_link_libraries(road decomp lanelet)
+target_link_libraries(road decomp lanelet utilities)
 target_include_directories(road PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

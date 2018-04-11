@@ -66,6 +66,7 @@ private:
   int32_t grid_size_y_ = 0;
   std::shared_ptr<DenseGrid> drivable_area_grid_;
   std::unordered_map<int32_t, std::shared_ptr<DenseGrid>> lane_bound_grids_;
+  std::unordered_map<int32_t, std::shared_ptr<DenseGrid>> lane_drivable_grids_;
 
   void GenerateDenseGrids(int32_t pixel_per_meter);
   void ExtractDrivableAreas();
