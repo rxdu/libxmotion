@@ -44,6 +44,8 @@ public:
   std::shared_ptr<DenseGrid> GetLaneBoundGrid(std::vector<std::string> lanelets);
   std::shared_ptr<DenseGrid> GetLaneBoundGrid(std::vector<int32_t> lanelets);
 
+  std::shared_ptr<DenseGrid> GetLaneDrivableGrid(std::vector<std::string> lanelets);
+
 private:
   bool map_loaded_ = false;
   std::unique_ptr<LLet::LaneletMap> lanelet_map_;

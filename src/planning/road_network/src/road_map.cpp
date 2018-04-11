@@ -125,21 +125,19 @@ void RoadMap::GenerateDenseGrids(int32_t pixel_per_meter)
 
 void RoadMap::ExtractDrivableAreas()
 {
-    stopwatch::StopWatch timer;
-
+    /* use annotated reference points */
     // drivable_area_grid_ = std::make_shared<DenseGrid>(grid_size_x_, grid_size_y_);
+    std::vector<PolyLinePoint> appr_bound_pts;
+    for (auto &bound_pt : lanelet_map_->get_drivable_boundary_points())
+    {
+        auto cart = coordinate_.ConvertToCartesian(bound_pt);
+        appr_bound_pts.emplace_back(cart.x, cart.y);
+    }
+    // to close the boundary loop
+    auto first_cart = coordinate_.ConvertToCartesian(lanelet_map_->get_drivable_boundary_points().front());
+    appr_bound_pts.emplace_back(first_cart.x, first_cart.y);
+    Polygon appr_polygon(appr_bound_pts);
 
-    // std::vector<PolyLinePoint> bound_pts;
-    // for (auto &bound_pt : lanelet_map_->get_drivable_boundary_points())
-    // {
-    //     auto cart = coordinate_.ConvertToCartesian(bound_pt);
-    //     bound_pts.emplace_back(cart.x, cart.y);
-    // }
-    // // to close the boundary loop
-    // auto first_cart = coordinate_.ConvertToCartesian(lanelet_map_->get_drivable_boundary_points().front());
-    // bound_pts.emplace_back(first_cart.x, first_cart.y);
-
-    // Polygon polygon(bound_pts);
     // for (int i = 0; i < grid_size_x_; ++i)
     //     for (int j = 0; j < grid_size_y_; ++j)
     //     {
@@ -150,7 +148,7 @@ void RoadMap::ExtractDrivableAreas()
     //             drivable_area_grid_->SetValueAtCoordinate(i, j, 1);
     //     }
 
-    // get drivable area of each lanelet
+    /* use lanelet boundary points */
     std::unordered_map<int32_t, Polygon> polygons;
     for (auto &bound : lane_bounds_)
     {
@@ -168,13 +166,15 @@ void RoadMap::ExtractDrivableAreas()
         lane_drivable_grids_.insert(std::make_pair(bound.first, sub_grid));
     }
 
-    std::cout << "get drivable areas points in " << timer.toc() << " seconds" << std::endl;
-    timer.tic();
+    stopwatch::StopWatch timer;
 
     for (int i = 0; i < grid_size_x_; ++i)
         for (int j = 0; j < grid_size_y_; ++j)
         {
             auto pt = coordinate_.ConvertToCartesian(DenseGridPixel(i, j));
+
+            if (!appr_polygon.InsidePolygon(PolyLinePoint(pt.x, pt.y)))
+                continue;
 
             for (auto &pg : polygons)
             {
@@ -185,35 +185,7 @@ void RoadMap::ExtractDrivableAreas()
 
     std::cout << "extract drivable areas in " << timer.toc() << " seconds" << std::endl;
 
-    // std::unordered_map<int32_t, Polygon> polygons;
-    // for (auto &bound : lane_bounds_)
-    // {
-    //     auto sub_grid = std::make_shared<DenseGrid>(grid_size_x_, grid_size_y_);
-    //     lane_drivable_grids_.insert(std::make_pair(bound.first, sub_grid));
-
-    //     std::vector<PolyLinePoint> bd_pts;
-    //     for (auto &pt : bound.second.first.points_)
-    //     {
-    //         auto cart = coordinate_.ConvertToCartesian(pt);
-    //         bd_pts.emplace_back(cart.x, cart.y);
-    //     }
-    //     for (auto pt_it = bound.second.second.points_.rbegin(); pt_it != bound.second.second.points_.rend(); ++pt_it)
-    //     {
-    //         auto cart = coordinate_.ConvertToCartesian(*pt_it);
-    //         bd_pts.emplace_back(cart.x, cart.y);
-    //     }
-    //     // to close the boundary loop
-    //     auto s_cart = coordinate_.ConvertToCartesian(bound.second.first.points_.front());
-    //     bd_pts.emplace_back(s_cart.x, s_cart.y);
-    //     polygons.insert(bound.first, Polygon(bound_pts));
-    // }
-    // for (int i = 0; i < grid_size_x_; ++i)
-    //     for (int j = 0; j < grid_size_y_; ++j)
-    //     {
-    //         auto pt = coordinate_.ConvertToCartesian(DenseGridPixel(i, j));
-    //     }
-
-    // naive checking
+    /* naive and inaccurate checking by using OccupiedLanelet() function */
     // for (auto &bound : lane_bounds_)
     // {
     //     auto sub_grid = std::make_shared<DenseGrid>(grid_size_x_, grid_size_y_);
@@ -262,17 +234,6 @@ std::shared_ptr<DenseGrid> RoadMap::GetLaneBoundGrid(std::vector<std::string> la
     return grid;
 }
 
-std::shared_ptr<DenseGrid> RoadMap::GetFullDrivableAreaGrid()
-{
-    // return drivable_area_grid_;
-    auto grid = std::make_shared<DenseGrid>(grid_size_x_, grid_size_y_);
-    for (auto ll : lane_drivable_grids_)
-        grid->AddGrid(*ll.second.get());
-    // Eigen::MatrixXd matrix = Eigen::MatrixXd::Ones(grid_size_y_, grid_size_x_)*(lane_drivable_grids_.size()-1) - grid->GetGridMatrix(false);
-    // grid->SetupGridWithMatrix(matrix);
-    return grid;
-}
-
 std::shared_ptr<DenseGrid> RoadMap::GetLaneBoundGrid(std::vector<int32_t> lanelets)
 {
     auto grid = std::make_shared<DenseGrid>(grid_size_x_, grid_size_y_);
@@ -280,6 +241,54 @@ std::shared_ptr<DenseGrid> RoadMap::GetLaneBoundGrid(std::vector<int32_t> lanele
     {
         grid->AddGrid(*lane_bound_grids_[ll_id].get());
     }
+    return grid;
+}
+
+std::shared_ptr<DenseGrid> RoadMap::GetFullDrivableAreaGrid()
+{
+    // return drivable_area_grid_;
+    // auto grid = std::make_shared<DenseGrid>(grid_size_x_, grid_size_y_);
+    // for (auto ll : lane_drivable_grids_)
+    //     grid->AddGrid(*ll.second.get());
+    // // Eigen::MatrixXd matrix = Eigen::MatrixXd::Ones(grid_size_y_, grid_size_x_)*(lane_drivable_grids_.size()-1) - grid->GetGridMatrix(false);
+    // // grid->SetupGridWithMatrix(matrix);
+    // return grid;
+
+    // auto grid = std::make_shared<DenseGrid>(grid_size_x_, grid_size_y_);
+    // Eigen::MatrixXd matrix = Eigen::MatrixXd::Zero(grid_size_y_, grid_size_x_);
+    // Eigen::MatrixXd mask_zero = Eigen::MatrixXd::Zero(grid_size_y_, grid_size_x_);
+    // Eigen::MatrixXd mask_ones = Eigen::MatrixXd::Ones(grid_size_y_, grid_size_x_);
+    // for (auto ll : lane_drivable_grids_)
+    // {
+    //     Eigen::MatrixXd base = ll.second->GetGridMatrix(false);
+    //     matrix = (matrix.array() > 0 && base.array() > 0).select(mask_ones, mask_zero);
+    // }
+    // grid->SetupGridWithMatrix(matrix);
+
+    auto grid = std::make_shared<DenseGrid>(grid_size_x_, grid_size_y_);
+    Eigen::MatrixXd matrix_full_mask = Eigen::MatrixXd::Zero(grid_size_y_, grid_size_x_);
+    Eigen::MatrixXd mask_zero = Eigen::MatrixXd::Zero(grid_size_y_, grid_size_x_);
+    Eigen::MatrixXd mask_ones = Eigen::MatrixXd::Ones(grid_size_y_, grid_size_x_);
+    for (auto ll : lane_drivable_grids_)
+        matrix_full_mask += ll.second->GetGridMatrix(false);
+    Eigen::MatrixXd matrix = (matrix_full_mask.array() > 0).select(mask_zero, mask_ones);
+    grid->SetupGridWithMatrix(matrix);
+
+    return grid;
+}
+
+// Reference: http://eigen.tuxfamily.org/dox/AsciiQuickReference.txt
+std::shared_ptr<DenseGrid> RoadMap::GetLaneDrivableGrid(std::vector<std::string> lanelets)
+{
+    auto grid = std::make_shared<DenseGrid>(grid_size_x_, grid_size_y_);
+    Eigen::MatrixXd matrix_full_mask = Eigen::MatrixXd::Zero(grid_size_y_, grid_size_x_);
+    Eigen::MatrixXd mask_zero = Eigen::MatrixXd::Zero(grid_size_y_, grid_size_x_);
+    Eigen::MatrixXd mask_ones = Eigen::MatrixXd::Ones(grid_size_y_, grid_size_x_);
+    for (auto ll_name : lanelets)
+        matrix_full_mask += lane_drivable_grids_[ll_id_lookup_[ll_name]]->GetGridMatrix(false);
+    Eigen::MatrixXd matrix = (matrix_full_mask.array() > 0).select(mask_zero, mask_ones);
+    grid->SetupGridWithMatrix(matrix);
+
     return grid;
 }
 
