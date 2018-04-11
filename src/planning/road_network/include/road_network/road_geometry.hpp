@@ -19,57 +19,61 @@ namespace librav
 {
 struct PolyLinePoint
 {
-    PolyLinePoint(double px = 0, double py = 0) : x(px), y(py){};
+  PolyLinePoint(double px = 0, double py = 0) : x(px), y(py){};
 
-    double x;
-    double y;
+  double x;
+  double y;
 };
 
 class PolyLineSegment
 {
-  public:
-    PolyLineSegment(PolyLinePoint pt1, PolyLinePoint pt2);
+public:
+  PolyLineSegment(PolyLinePoint pt1, PolyLinePoint pt2);
 
-    bool IsOnTheRightSide(const PolyLinePoint &pt) const;
+  bool IsOnTheRightSide(const PolyLinePoint &pt) const;
 
-  private:
-    PolyLinePoint start_point_;
-    PolyLinePoint end_point_;
+private:
+  PolyLinePoint start_point_;
+  PolyLinePoint end_point_;
 
-    Eigen::Vector3d base_vec_;
+  Eigen::Vector3d base_vec_;
 };
 
 ////////////////////////////////////////////////////////////
 
 class PolyLine
 {
-  public:
-    PolyLine() = default;
+public:
+  PolyLine() = default;
 
-    void AddPoint(double x, double y);
+  void AddPoint(double x, double y);
 
-    std::vector<PolyLinePoint> points_;
-    void PrintPoints() const;
+  std::vector<PolyLinePoint> points_;
+  void PrintPoints() const;
 
-  private:
-    int32_t point_num_ = 0;
+private:
+  int32_t point_num_ = 0;
 };
 
 ////////////////////////////////////////////////////////////
 
 class Polygon
 {
-  public:
-    Polygon() = default;
-    Polygon(const std::vector<PolyLinePoint> &points);
+public:
+  Polygon() = default;
+  Polygon(const std::vector<PolyLinePoint> &points);
 
-    void SetBoundary(const std::vector<PolyLinePoint> &points);
-    // Note: this check only works with convex polygon
-    bool IsInside(const PolyLinePoint &pt) const;
+  void SetBoundary(const std::vector<PolyLinePoint> &points);
 
-  private:
-    // std::vector<PolyLinePoint> boundary_points_;
-    std::vector<PolyLineSegment> boundaries_;
+  // Note: this function works with only convex polygons
+  bool InsideConvexPolygon(const PolyLinePoint &pt);
+  // Note: this function works with both convex and concave polygons
+  bool InsidePolygon(const PolyLinePoint &p);
+
+private:
+  std::vector<PolyLinePoint> boundary_points_;
+  std::vector<PolyLineSegment> boundaries_;
+  double Angle2D(double x1, double y1, double x2, double y2);
 };
 }
 

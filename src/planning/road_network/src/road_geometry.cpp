@@ -59,13 +59,13 @@ Polygon::Polygon(const std::vector<PolyLinePoint> &points)
 
 void Polygon::SetBoundary(const std::vector<PolyLinePoint> &points)
 {
-    // boundary_points_ = points;
+    boundary_points_ = points;
 
     for (int i = 0; i < points.size() - 1; ++i)
         boundaries_.emplace_back(points[i], points[i + 1]);
 }
 
-bool Polygon::IsInside(const PolyLinePoint &pt) const
+bool Polygon::InsideConvexPolygon(const PolyLinePoint &pt) 
 {
     for (const auto &bound : boundaries_)
     {
@@ -73,4 +73,55 @@ bool Polygon::IsInside(const PolyLinePoint &pt) const
             return false;
     }
     return true;
+}
+
+// Source:
+//  [1] http://www.eecs.umich.edu/courses/eecs380/HANDOUTS/PROJ2/InsidePoly.html
+/*
+ *  This solution forwarded by Philippe Reverdy is to compute the sum of the angles 
+ *  made between the test point and each pair of points making up the polygon. If this 
+ *  sum is 2pi then the point is an interior point, if 0 then the point is an exterior 
+ *  point. This also works for polygons with holes given the polygon is defined with a 
+ *  path made up of coincident edges into and out of the hole as is common practice in 
+ *  many CAD packages.
+ */
+bool Polygon::InsidePolygon(const PolyLinePoint &p)
+{
+    double angle = 0.0;
+    PolyLinePoint p1, p2;
+
+    int n = boundary_points_.size();
+    for (int i = 0; i < n; ++i)
+    {
+        p1.x = boundary_points_[i].x - p.x;
+        p1.y = boundary_points_[i].y - p.y;
+        p2.x = boundary_points_[(i + 1) % n].x - p.x;
+        p2.y = boundary_points_[(i + 1) % n].y - p.y;
+        angle += Angle2D(p1.x, p1.y, p2.x, p2.y);
+    }
+
+    if (std::abs(angle) < M_PI)
+        return false;
+    else
+        return true;
+}
+
+/*
+   Return the angle between two vectors on a plane
+   The angle is from vector 1 to vector 2, positive anticlockwise
+   The result is between -pi -> pi
+*/
+double Polygon::Angle2D(double x1, double y1, double x2, double y2)
+{
+    double dtheta, theta1, theta2;
+
+    theta1 = std::atan2(y1, x1);
+    theta2 = std::atan2(y2, x2);
+    dtheta = theta2 - theta1;
+    while (dtheta > M_PI)
+        dtheta -= 2 * M_PI;
+    while (dtheta < -M_PI)
+        dtheta += 2 * M_PI;
+
+    return dtheta;
 }

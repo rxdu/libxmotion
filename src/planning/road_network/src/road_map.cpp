@@ -142,7 +142,7 @@ void RoadMap::ExtractDrivableAreas()
         for (int j = 0; j < grid_size_y_; ++j)
         {
             auto pt = coordinate_.ConvertToCartesian(DenseGridPixel(i, j));
-            if (polygon.IsInside(PolyLinePoint(pt.x, pt.y)))
+            if (polygon.InsidePolygon(PolyLinePoint(pt.x, pt.y)))
             {
                 drivable_area_grid_->SetValueAtCoordinate(i, j, 0);
             }

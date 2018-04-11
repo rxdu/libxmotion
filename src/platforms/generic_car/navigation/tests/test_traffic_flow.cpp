@@ -16,7 +16,7 @@ using namespace librav;
 int main()
 {
     stopwatch::StopWatch timer;
-    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm", 10);
+    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full_with_ref2.osm", 10);
     std::cout << "loaded map in " << timer.toc() << " seconds" << std::endl;
 
     TrafficFlow tf;
