@@ -51,17 +51,19 @@ std::vector<lanelet_ptr_t> LaneletMap::shortest_path(const lanelet_ptr_t &start,
 
     if (!sp || (*sp).empty())
     {
-        NoPath exception;
-        exception.start = start;
-        exception.dest = dest;
-        throw exception;
+        // NoPath exception;
+        // exception.start = start;
+        // exception.dest = dest;
+        // throw exception;
+        std::vector<lanelet_ptr_t> empty;
+        return empty;
     }
 
     std::vector<lanelet_ptr_t> sp_ll(sp->size());
 
     std::transform(sp->cbegin(), sp->cend(), sp_ll.begin(), [this](int32_t index) { return graph()[index].lanelet; });
 
-    std::cout << sp_ll << std::endl;
+    // std::cout << sp_ll << std::endl;
 
     return sp_ll;
 }
