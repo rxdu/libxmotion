@@ -50,7 +50,7 @@ run_error = (traveled_dist2 - traveled_dist1)./traveled_dist1;
 edges = [-0.1 -0.05 0 0.05 0.1 0.15 0.2]*100;
 histogram(run_error*100,edges)
 title('Path repair result - sensor range 5')
-xlabel('Percentage of path length reduction')
+xlabel('Percentage of path cost reduction')
 ylabel('Number of simulation instances')
 
 

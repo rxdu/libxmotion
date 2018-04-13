@@ -40,7 +40,7 @@ figure
 histogram(data1(1:500,5)*100,edges)
 ylim([0, 120])
 title('Path repair result - sensor range 5')
-xlabel('Percentage of path length reduction')
+xlabel('Percentage of path cost reduction')
 ylabel('Number of simulation instances')
 
 figure
@@ -50,7 +50,7 @@ figure
 histogram(data2(1:500,5)*100,edges)
 ylim([0, 120])
 title('Path repair result - sensor range 8')
-xlabel('Percentage of path length reduction')
+xlabel('Percentage of path cost reduction')
 ylabel('Number of simulation instances')
 
 figure
@@ -60,5 +60,5 @@ figure
 histogram(data3(160:660,5)*100,edges)
 ylim([0, 120])
 title('Path repair result - sensor range 12')
-xlabel('Percentage of path length reduction')
+xlabel('Percentage of path cost reduction')
 ylabel('Number of simulation instances')
