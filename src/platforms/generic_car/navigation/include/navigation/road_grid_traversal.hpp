@@ -36,69 +36,69 @@ template <typename StateType, typename TransitionType = double>
 using GetNeighbourFunc_t = std::function<std::vector<std::tuple<StateType, TransitionType>>(StateType)>;
 
 /// Dijkstra search algorithm.
-namespace RoadGridTraversal
+struct RoadGridTraversal
 {
-template <typename StateType, typename TransitionType>
-static Graph_t<StateType, TransitionType> Run(RoadSquareGrid *grid, StateType start_state, GetNeighbourFunc_t<StateType, TransitionType> get_neighbours)
-{
-    using GraphVertexType = Vertex_t<StateType, TransitionType>;
-
-    // create a new graph with only start and goal vertices
-    Graph_t<StateType, TransitionType> graph;
-    graph.AddVertex(start_state);
-
-    GraphVertexType *start_vtx = graph.GetVertex(start_state);
-
-    // open list - a list of vertices that need to be checked out
-    PriorityQueue<GraphVertexType *> openlist;
-
-    // begin with start vertex
-    openlist.put(start_vtx, 0);
-    start_vtx->is_in_openlist_ = true;
-    start_vtx->g_astar_ = 0;
-
-    // start search iterations
-    GraphVertexType *current_vertex;
-    while (!openlist.empty())
+    template <typename StateType, typename TransitionType>
+    static void Traverse(std::string channel, StateType start_state, RoadSquareGrid *grid, GetNeighbourFunc_t<StateType, TransitionType> get_neighbours)
     {
-        current_vertex = openlist.get();
-        if (current_vertex->is_checked_)
-            continue;
+        using GraphVertexType = Vertex_t<StateType, TransitionType>;
 
-        current_vertex->is_in_openlist_ = false;
-        current_vertex->is_checked_ = true;
+        // create a new graph with only start and goal vertices
+        Graph_t<StateType, TransitionType> graph;
+        graph.AddVertex(start_state);
 
-        std::vector<std::tuple<StateType, TransitionType>> neighbours = get_neighbours(current_vertex->state_);
-        for (auto &nb : neighbours)
-            graph.AddEdge(current_vertex->state_, std::get<0>(nb), std::get<1>(nb));
+        GraphVertexType *start_vtx = graph.GetVertex(start_state);
 
-        // check all adjacent vertices (successors of current vertex)
-        for (auto edge = current_vertex->edge_begin(); edge != current_vertex->edge_end(); ++edge)
+        // open list - a list of vertices that need to be checked out
+        PriorityQueue<GraphVertexType *> openlist;
+
+        // begin with start vertex
+        openlist.put(start_vtx, 0);
+        start_vtx->is_in_openlist_ = true;
+        start_vtx->g_astar_ = 0;
+
+        // start search iterations
+        GraphVertexType *current_vertex;
+        while (!openlist.empty())
         {
-            auto successor = edge->dst_;
+            current_vertex = openlist.get();
+            if (current_vertex->is_checked_)
+                continue;
 
-            // check if the vertex has been checked (in closed list)
-            if (successor->is_checked_ == false)
+            current_vertex->is_in_openlist_ = false;
+            current_vertex->is_checked_ = true;
+
+            std::vector<std::tuple<StateType, TransitionType>> neighbours = get_neighbours(current_vertex->state_);
+            for (auto &nb : neighbours)
+                graph.AddEdge(current_vertex->state_, std::get<0>(nb), std::get<1>(nb));
+
+            // check all adjacent vertices (successors of current vertex)
+            for (auto edge = current_vertex->edge_begin(); edge != current_vertex->edge_end(); ++edge)
             {
-                // first set the parent of the adjacent vertex to be the current vertex
-                auto new_cost = current_vertex->g_astar_ + edge->cost_;
+                auto successor = edge->dst_;
 
-                // if the vertex is not in open list
-                // or if the vertex is in open list but has a higher cost
-                if (successor->is_in_openlist_ == false || new_cost < successor->g_astar_)
+                // check if the vertex has been checked (in closed list)
+                if (successor->is_checked_ == false)
                 {
-                    successor->search_parent_ = current_vertex;
-                    successor->g_astar_ = new_cost;
+                    // first set the parent of the adjacent vertex to be the current vertex
+                    auto new_cost = current_vertex->g_astar_ + edge->cost_;
 
-                    openlist.put(successor, successor->g_astar_);
-                    successor->is_in_openlist_ = true;
+                    // if the vertex is not in open list
+                    // or if the vertex is in open list but has a higher cost
+                    if (successor->is_in_openlist_ == false || new_cost < successor->g_astar_)
+                    {
+                        successor->search_parent_ = current_vertex;
+                        successor->g_astar_ = new_cost;
+
+                        // grid->
+
+                        openlist.put(successor, successor->g_astar_);
+                        successor->is_in_openlist_ = true;
+                    }
                 }
             }
         }
-    }
-
-    return graph;
-};
+    };
 };
 }
 

@@ -41,6 +41,7 @@ public:
   Eigen::MatrixXd GetTrafficChannelMatrix(std::string source);
 
   void GenerateTrafficFlowMap();
+  void TraverseTrafficChannel(std::string channel);
 
 private:
   std::vector<std::string> flow_sources_;
@@ -48,7 +49,6 @@ private:
   std::unordered_map<std::string, std::set<std::string>> traffic_channels_;
   std::unordered_map<std::string, std::shared_ptr<DenseGrid>> channel_grids_;
 
-  void TraverseTrafficChannel(std::string channel);
 };
 }
 

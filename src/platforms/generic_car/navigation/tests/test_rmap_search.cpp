@@ -41,7 +41,7 @@ int main()
 
     timer.tic();
     RoadSquareCell *tile_s = sgrid->GetCell(0, 2);
-    auto graph = DijkstraTraversal::IncSearch(tile_s, GetNeighbourFunc_t<RoadSquareCell *>(GetSquareGridNeighbour(sgrid)));
+    auto graph = DijkstraTraversal::IncSearch(tile_s, GetNeighbourFunc_t<RoadSquareCell *>(GetRoadSquareGridNeighbour(sgrid)));
     std::cout << "traversal finished in " << timer.toc() << " seconds, vertex visited: " << graph.GetGraphVertexNumber() << std::endl;
 
     LightViz::ShowSquareGridGraph(sgrid.get(), &graph, 100);

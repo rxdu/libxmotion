@@ -80,6 +80,7 @@ public:
   friend class AStar;
   friend class Dijkstra;
   friend class DijkstraTraversal;
+  friend class RoadGridTraversal;
 
 public:
   /// This function creates a vertex in the graph that associates with the given node.

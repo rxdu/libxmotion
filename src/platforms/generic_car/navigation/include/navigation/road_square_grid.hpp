@@ -16,6 +16,7 @@
 #include <unordered_map>
 
 #include "decomp/square_grid.hpp"
+#include "decomp/dense_grid.hpp"
 
 namespace librav
 {
@@ -29,16 +30,17 @@ struct RoadCellAttributes
 using RoadSquareCell = SquareCellBase<RoadCellAttributes>;
 using RoadSquareGrid = SquareGridBase<RoadCellAttributes>;
 
-class GetSquareGridNeighbour
+class GetRoadSquareGridNeighbour
 {
 public:
-  GetSquareGridNeighbour(std::shared_ptr<RoadSquareGrid> sg);
+  GetRoadSquareGridNeighbour(std::shared_ptr<RoadSquareGrid> sg, std::shared_ptr<DenseGrid> mask = nullptr);
 
   // define the functor operator
   std::vector<std::tuple<RoadSquareCell *, double>> operator()(RoadSquareCell *cell);
 
 private:
   std::shared_ptr<RoadSquareGrid> sgrid_;
+  std::shared_ptr<DenseGrid> mask_;
 };
 }
 

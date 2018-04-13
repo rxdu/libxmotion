@@ -40,6 +40,9 @@ int main()
         LightViz::ShowMatrixAsColorMap(matrix, channel, true);
     }
 
+    tf.TraverseTrafficChannel("s4");
+
+
     // std::vector<std::string> lanelets;
     // lanelets.push_back("s4");
     // lanelets.push_back("icm2");

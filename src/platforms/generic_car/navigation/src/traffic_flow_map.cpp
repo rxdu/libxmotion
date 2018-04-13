@@ -84,4 +84,6 @@ void TrafficFlowMap::GenerateTrafficFlowMap()
 
 void TrafficFlowMap::TraverseTrafficChannel(std::string channel)
 {
+    RoadSquareCell *tile_s = road_grid_->GetCell(51, 67);
+    RoadGridTraversal::Traverse(channel, tile_s, road_grid_.get(), GetNeighbourFunc_t<RoadSquareCell *>(GetRoadSquareGridNeighbour(road_grid_, channel_grids_[channel])));
 }
