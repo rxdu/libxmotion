@@ -31,34 +31,34 @@ cnt_range5
 cnt_range8
 cnt_range12
 
-edges = [-0.05 0 0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5];
+edges = [-0.05 0 0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5]*100;
 
 figure
 %plot(data1(1:500,5),'-d')
 %xlim([0, 500])
 %ylim([0, 0.6])
-histogram(data1(1:500,5),edges)
+histogram(data1(1:500,5)*100,edges)
 ylim([0, 120])
-title('path repair result - sensor range 5')
-xlabel('percentage of path length reduction')
-ylabel('number of simulation instances')
+title('Path repair result - sensor range 5')
+xlabel('Percentage of path length reduction')
+ylabel('Number of simulation instances')
 
 figure
 %plot(data2(1:500,5),'-d')
 %xlim([0, 500])
 %ylim([0, 0.6])
-histogram(data2(1:500,5),edges)
+histogram(data2(1:500,5)*100,edges)
 ylim([0, 120])
-title('path repair result - sensor range 8')
-xlabel('percentage of path length reduction')
-ylabel('number of simulation instances')
+title('Path repair result - sensor range 8')
+xlabel('Percentage of path length reduction')
+ylabel('Number of simulation instances')
 
 figure
 %plot(data3(160:660,5),'-d')
 %xlim([0, 500])
 %ylim([0, 0.6])
-histogram(data3(160:660,5),edges)
+histogram(data3(160:660,5)*100,edges)
 ylim([0, 120])
-title('path repair result - sensor range 12')
-xlabel('percentage of path length reduction')
-ylabel('number of simulation instances')
+title('Path repair result - sensor range 12')
+xlabel('Percentage of path length reduction')
+ylabel('Number of simulation instances')
