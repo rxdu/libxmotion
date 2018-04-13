@@ -61,8 +61,8 @@ void ShowSquareGridGraph(GridType *grid, Graph_t<GridCellType *> *graph, int32_t
     ShowImage(canvas, window_name, save_img);
 }
 
-template <typename GridType, typename GridCellType>
-void ShowSquareGridGraphCost(GridType *grid, Graph_t<GridCellType *> *graph, int32_t pixel_per_unit = 100, std::string window_name = "Square Grid", bool save_img = false)
+template <typename GridType>
+void ShowSquareGridGraphCost(GridType *grid, int32_t pixel_per_unit = 100, std::string window_name = "Square Grid", bool save_img = false)
 {
     SquareGridDraw gdraw(pixel_per_unit);
 

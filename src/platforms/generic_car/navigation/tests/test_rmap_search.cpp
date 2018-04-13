@@ -47,7 +47,7 @@ int main()
     LightViz::ShowSquareGridGraph(sgrid.get(), &graph, 100);
 
     MapAnalysis::GenerateGraphCostMap(sgrid.get(), &graph);
-    LightViz::ShowSquareGridGraphCost(sgrid.get(), &graph);
+    LightViz::ShowSquareGridGraphCost(sgrid.get());
 
     return 0;
 }

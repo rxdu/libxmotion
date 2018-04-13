@@ -41,7 +41,8 @@ int main()
     }
 
     tf.TraverseTrafficChannel("s4");
-
+    MapAnalysis::GenerateGraphCostMap(tf.road_grid_.get(), "s4");
+    LightViz::ShowSquareGridGraphCost(tf.road_grid_.get(), 100, "distance", true);
 
     // std::vector<std::string> lanelets;
     // lanelets.push_back("s4");

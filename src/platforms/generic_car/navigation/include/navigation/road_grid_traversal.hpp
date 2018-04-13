@@ -39,7 +39,7 @@ using GetNeighbourFunc_t = std::function<std::vector<std::tuple<StateType, Trans
 struct RoadGridTraversal
 {
     template <typename StateType, typename TransitionType>
-    static void Traverse(std::string channel, StateType start_state, RoadSquareGrid *grid, GetNeighbourFunc_t<StateType, TransitionType> get_neighbours)
+    static void Traverse(StateType start_state, std::string channel, RoadSquareGrid *grid, GetNeighbourFunc_t<StateType, TransitionType> get_neighbours)
     {
         using GraphVertexType = Vertex_t<StateType, TransitionType>;
 
@@ -90,7 +90,7 @@ struct RoadGridTraversal
                         successor->search_parent_ = current_vertex;
                         successor->g_astar_ = new_cost;
 
-                        // grid->
+                        grid->GetCell(successor->vertex_id_)->extra_attribute.cost_[channel] = new_cost;
 
                         openlist.put(successor, successor->g_astar_);
                         successor->is_in_openlist_ = true;

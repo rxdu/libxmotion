@@ -22,6 +22,7 @@ namespace librav
 namespace MapAnalysis
 {
 void GenerateGraphCostMap(RoadSquareGrid *grid, Graph_t<RoadSquareCell *> *graph);
+void GenerateGraphCostMap(RoadSquareGrid *grid, std::string channel);
 };
 }
 

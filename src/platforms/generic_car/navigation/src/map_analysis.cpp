@@ -34,3 +34,24 @@ void MapAnalysis::GenerateGraphCostMap(RoadSquareGrid *grid, Graph_t<RoadSquareC
         for (int32_t j = 0; j < grid->SizeY(); ++j)
             grid->GetCell(i, j)->cost_map = cost_matrix(j, i);
 }
+
+void MapAnalysis::GenerateGraphCostMap(RoadSquareGrid *grid, std::string channel)
+{
+    Eigen::MatrixXd cost_matrix;
+    cost_matrix = Eigen::MatrixXd::Zero(grid->SizeY(), grid->SizeX());
+
+    std::vector<double> cost;
+    for (int32_t i = 0; i < grid->SizeX(); ++i)
+        for (int32_t j = 0; j < grid->SizeY(); ++j)
+        {
+            auto cell = grid->GetCell(i, j);
+            if (cell->extra_attribute.cost_.find(channel) != cell->extra_attribute.cost_.end())
+                cost_matrix(j, i) = cell->extra_attribute.cost_[channel];
+        }
+
+    cost_matrix = (cost_matrix + Eigen::MatrixXd::Ones(cost_matrix.rows(), cost_matrix.cols()) * cost_matrix.minCoeff()) / (cost_matrix.maxCoeff() - cost_matrix.minCoeff()) * 1.0;
+
+    for (int32_t i = 0; i < grid->SizeX(); ++i)
+        for (int32_t j = 0; j < grid->SizeY(); ++j)
+            grid->GetCell(i, j)->cost_map = cost_matrix(j, i);
+}

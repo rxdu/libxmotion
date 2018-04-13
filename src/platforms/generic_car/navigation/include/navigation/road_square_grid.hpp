@@ -24,7 +24,7 @@ struct RoadCellAttributes
 {
   double map_cost;
   std::unordered_map<std::string, GridCoordinate> parent_;
-  std::unordered_map<std::string, GridCoordinate> cost_;
+  std::unordered_map<std::string, double> cost_;
 };
 
 using RoadSquareCell = SquareCellBase<RoadCellAttributes>;
