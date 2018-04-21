@@ -91,6 +91,7 @@ struct RoadGridTraversal
                         successor->g_astar_ = new_cost;
 
                         grid->GetCell(successor->vertex_id_)->extra_attribute.cost_[channel] = new_cost;
+                        std::cout << "vertex id: " << successor->vertex_id_ << " , " << new_cost << std::endl;
 
                         openlist.put(successor, successor->g_astar_);
                         successor->is_in_openlist_ = true;

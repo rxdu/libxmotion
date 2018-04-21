@@ -185,6 +185,9 @@ void RoadMap::ExtractDrivableAreas()
 
     std::cout << "extract drivable areas in " << timer.toc() << " seconds" << std::endl;
 
+    mask_zero_ = Eigen::MatrixXd::Zero(grid_size_y_, grid_size_x_);
+    mask_ones_ = Eigen::MatrixXd::Ones(grid_size_y_, grid_size_x_);
+
     /* naive and inaccurate checking by using OccupiedLanelet() function */
     // for (auto &bound : lane_bounds_)
     // {
@@ -266,12 +269,10 @@ std::shared_ptr<DenseGrid> RoadMap::GetFullDrivableAreaGrid()
     // grid->SetupGridWithMatrix(matrix);
 
     auto grid = std::make_shared<DenseGrid>(grid_size_x_, grid_size_y_);
-    Eigen::MatrixXd matrix_full_mask = Eigen::MatrixXd::Zero(grid_size_y_, grid_size_x_);
-    Eigen::MatrixXd mask_zero = Eigen::MatrixXd::Zero(grid_size_y_, grid_size_x_);
-    Eigen::MatrixXd mask_ones = Eigen::MatrixXd::Ones(grid_size_y_, grid_size_x_);
+    Eigen::MatrixXd occupancy_matrix = Eigen::MatrixXd::Zero(grid_size_y_, grid_size_x_);
     for (auto ll : lane_drivable_grids_)
-        matrix_full_mask += ll.second->GetGridMatrix(false);
-    Eigen::MatrixXd matrix = (matrix_full_mask.array() > 0).select(mask_zero, mask_ones);
+        occupancy_matrix += ll.second->GetGridMatrix(false);
+    Eigen::MatrixXd matrix = (occupancy_matrix.array() > 0).select(mask_zero_, mask_ones_);
     grid->SetupGridWithMatrix(matrix);
 
     return grid;
@@ -281,12 +282,10 @@ std::shared_ptr<DenseGrid> RoadMap::GetFullDrivableAreaGrid()
 std::shared_ptr<DenseGrid> RoadMap::GetLaneDrivableGrid(std::vector<std::string> lanelets)
 {
     auto grid = std::make_shared<DenseGrid>(grid_size_x_, grid_size_y_);
-    Eigen::MatrixXd matrix_full_mask = Eigen::MatrixXd::Zero(grid_size_y_, grid_size_x_);
-    Eigen::MatrixXd mask_zero = Eigen::MatrixXd::Zero(grid_size_y_, grid_size_x_);
-    Eigen::MatrixXd mask_ones = Eigen::MatrixXd::Ones(grid_size_y_, grid_size_x_);
+    Eigen::MatrixXd occupancy_matrix = Eigen::MatrixXd::Zero(grid_size_y_, grid_size_x_);
     for (auto ll_name : lanelets)
-        matrix_full_mask += lane_drivable_grids_[ll_id_lookup_[ll_name]]->GetGridMatrix(false);
-    Eigen::MatrixXd matrix = (matrix_full_mask.array() > 0).select(mask_zero, mask_ones);
+        occupancy_matrix += lane_drivable_grids_[ll_id_lookup_[ll_name]]->GetGridMatrix(false);
+    Eigen::MatrixXd matrix = (occupancy_matrix.array() > 0).select(mask_zero_, mask_ones_);
     grid->SetupGridWithMatrix(matrix);
 
     return grid;

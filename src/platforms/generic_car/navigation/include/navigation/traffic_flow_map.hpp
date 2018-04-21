@@ -44,11 +44,12 @@ public:
   void TraverseTrafficChannel(std::string channel);
 
 private:
+  int32_t side_length_;
   std::vector<std::string> flow_sources_;
   std::vector<std::string> flow_sinks_;
   std::unordered_map<std::string, std::set<std::string>> traffic_channels_;
   std::unordered_map<std::string, std::shared_ptr<DenseGrid>> channel_grids_;
-
+  std::unordered_map<std::string, std::shared_ptr<RoadSquareGrid>> channel_mask_grids_;
 };
 }
 

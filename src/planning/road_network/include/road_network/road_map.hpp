@@ -70,6 +70,9 @@ private:
   std::unordered_map<int32_t, std::shared_ptr<DenseGrid>> lane_bound_grids_;
   std::unordered_map<int32_t, std::shared_ptr<DenseGrid>> lane_drivable_grids_;
 
+  Eigen::MatrixXd mask_zero_;
+  Eigen::MatrixXd mask_ones_;
+
   void GenerateDenseGrids(int32_t pixel_per_meter);
   void ExtractDrivableAreas();
   std::vector<DenseGridPixel> GenerateLanePoints(const PolyLine &line);

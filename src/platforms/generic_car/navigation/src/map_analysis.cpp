@@ -47,6 +47,8 @@ void MapAnalysis::GenerateGraphCostMap(RoadSquareGrid *grid, std::string channel
             auto cell = grid->GetCell(i, j);
             if (cell->extra_attribute.cost_.find(channel) != cell->extra_attribute.cost_.end())
                 cost_matrix(j, i) = cell->extra_attribute.cost_[channel];
+            else
+                cost_matrix(j, i) = 0;
         }
 
     cost_matrix = (cost_matrix + Eigen::MatrixXd::Ones(cost_matrix.rows(), cost_matrix.cols()) * cost_matrix.minCoeff()) / (cost_matrix.maxCoeff() - cost_matrix.minCoeff()) * 1.0;

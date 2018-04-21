@@ -33,14 +33,14 @@ using RoadSquareGrid = SquareGridBase<RoadCellAttributes>;
 class GetRoadSquareGridNeighbour
 {
 public:
-  GetRoadSquareGridNeighbour(std::shared_ptr<RoadSquareGrid> sg, std::shared_ptr<DenseGrid> mask = nullptr);
+  GetRoadSquareGridNeighbour(std::shared_ptr<RoadSquareGrid> sg, std::shared_ptr<RoadSquareGrid> mask = nullptr);
 
   // define the functor operator
   std::vector<std::tuple<RoadSquareCell *, double>> operator()(RoadSquareCell *cell);
 
 private:
   std::shared_ptr<RoadSquareGrid> sgrid_;
-  std::shared_ptr<DenseGrid> mask_;
+  std::shared_ptr<RoadSquareGrid> mask_;
 };
 }
 

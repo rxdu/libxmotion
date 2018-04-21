@@ -13,7 +13,7 @@ using namespace librav;
 
 // #define ALLOW_DIAGONAL_MOVE
 
-GetRoadSquareGridNeighbour::GetRoadSquareGridNeighbour(std::shared_ptr<RoadSquareGrid> sg, std::shared_ptr<DenseGrid> mask) : sgrid_(sg), mask_(mask)
+GetRoadSquareGridNeighbour::GetRoadSquareGridNeighbour(std::shared_ptr<RoadSquareGrid> sg, std::shared_ptr<RoadSquareGrid> mask) : sgrid_(sg), mask_(mask)
 {
 }
 
@@ -47,13 +47,16 @@ std::vector<std::tuple<RoadSquareCell *, double>> GetRoadSquareGridNeighbour::op
     {
         for (auto nb : neighbours)
         {
-            if (mask_->GetValueAtCoordinate(nb->x, nb->y) == 0.0)
+            // std::cout << "checking: " << nb->x << " , " << nb->y << std::endl;
+            // std::cout << "mask: " << mask_->GetValueAtCoordinate(nb->y, nb->x) << std::endl;
+            if (mask_->GetCell(nb->x, nb->y)->label == SquareCellLabel::FREE)
             {
                 double x_err = cell->center.x - nb->center.x;
                 double y_err = cell->center.y - nb->center.y;
                 double dist = std::sqrt(x_err * x_err + y_err * y_err);
                 adjacent_cells.push_back(std::make_tuple(nb, dist));
             }
+            std::cout << "neighbour size: " << adjacent_cells.size() << std::endl;
         }
     }
 

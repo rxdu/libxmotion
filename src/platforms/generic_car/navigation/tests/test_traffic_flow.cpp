@@ -34,12 +34,19 @@ int main()
 
     tf.IdentifyTrafficFlow();
 
-    for (auto &channel : tf.GetTrafficChannelSources())
-    {
-        Eigen::MatrixXd matrix = tf.GetTrafficChannelMatrix(channel);
-        LightViz::ShowMatrixAsColorMap(matrix, channel, true);
-    }
+    // for (auto &channel : tf.GetTrafficChannelSources())
+    // {
+    //     Eigen::MatrixXd matrix = tf.GetTrafficChannelMatrix(channel);
+    //     LightViz::ShowMatrixAsColorMap(matrix, channel, true);
+    // }
 
+    Eigen::MatrixXd matrix = tf.GetTrafficChannelMatrix("s4");
+    // std::cout << "matrix size: " << matrix.cols() << " , " << matrix.rows() << std::endl;
+    // for (int i = 0; i < 122; ++i)
+    //     std::cout << "checking mask: " << i << " , " << matrix(0, i) << std::endl;
+    LightViz::ShowMatrixAsColorMap(matrix, "s4", false);
+
+    std::cout << "generating traffic channel s4" << std::endl;
     tf.TraverseTrafficChannel("s4");
     MapAnalysis::GenerateGraphCostMap(tf.road_grid_.get(), "s4");
     LightViz::ShowSquareGridGraphCost(tf.road_grid_.get(), 100, "distance", true);

@@ -16,8 +16,9 @@ void TrafficFlowMap::BuildRoadGrid(int32_t size_per_side)
 {
     assert(road_map_.get() != nullptr);
 
+    side_length_ = size_per_side;
     Eigen::MatrixXd matrix = road_map_->GetFullDrivableAreaGrid()->GetGridMatrix(false);
-    road_grid_ = std::make_shared<RoadSquareGrid>(matrix, 10);
+    road_grid_ = std::make_shared<RoadSquareGrid>(matrix, side_length_);
     std::cout << "square grid size: " << road_grid_->SizeX() << " , " << road_grid_->SizeY() << std::endl;
 }
 
@@ -56,6 +57,7 @@ void TrafficFlowMap::IdentifyTrafficFlow()
             for (auto &lanelet : dsts)
                 drivable.push_back(lanelet);
             channel_grids_[src] = road_map_->GetLaneDrivableGrid(drivable);
+            channel_mask_grids_[src] = std::make_shared<RoadSquareGrid>(channel_grids_[src]->GetGridMatrix(false), side_length_);
         }
     }
     std::cout << "total traffic channels:" << traffic_channels_.size() << std::endl;
@@ -85,5 +87,8 @@ void TrafficFlowMap::GenerateTrafficFlowMap()
 void TrafficFlowMap::TraverseTrafficChannel(std::string channel)
 {
     RoadSquareCell *tile_s = road_grid_->GetCell(51, 67);
-    RoadGridTraversal::Traverse(tile_s, channel, road_grid_.get(), GetNeighbourFunc_t<RoadSquareCell *>(GetRoadSquareGridNeighbour(road_grid_, channel_grids_[channel])));
+    // RoadSquareCell *tile_s = road_grid_->GetCell(8, 1);
+    // for(int i = 0; i < 122; ++i)
+    //     std::cout << "checking mask: " << i << " , " << road_map_->GetFullDrivableAreaGrid()->GetValueAtCoordinate(i,0) << std::endl;
+    RoadGridTraversal::Traverse(tile_s, channel, road_grid_.get(), GetNeighbourFunc_t<RoadSquareCell *>(GetRoadSquareGridNeighbour(road_grid_, channel_mask_grids_[channel])));
 }
