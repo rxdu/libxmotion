@@ -56,7 +56,7 @@ std::vector<std::tuple<RoadSquareCell *, double>> GetRoadSquareGridNeighbour::op
                 double dist = std::sqrt(x_err * x_err + y_err * y_err);
                 adjacent_cells.push_back(std::make_tuple(nb, dist));
             }
-            std::cout << "neighbour size: " << adjacent_cells.size() << std::endl;
+            // std::cout << "neighbour size: " << adjacent_cells.size() << std::endl;
         }
     }
 

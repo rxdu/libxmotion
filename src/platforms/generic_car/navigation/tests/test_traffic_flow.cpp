@@ -24,9 +24,9 @@ int main()
     tf.BuildRoadGrid(10);
     LightViz::ShowSquareGrid(tf.road_grid_.get(), 100);
 
-    tf.AddTrafficFlowSource("s2");
-    tf.AddTrafficFlowSource("s4");
-    tf.AddTrafficFlowSource("s6");
+    tf.AddTrafficFlowSource("s2", GridCoordinate(120, 18));
+    tf.AddTrafficFlowSource("s4", GridCoordinate(51, 67));
+    tf.AddTrafficFlowSource("s6", GridCoordinate(4, 7));
 
     tf.AddTrafficFlowSink("s1");
     tf.AddTrafficFlowSink("s3");
@@ -47,9 +47,20 @@ int main()
     LightViz::ShowMatrixAsColorMap(matrix, "s4", false);
 
     std::cout << "generating traffic channel s4" << std::endl;
-    tf.TraverseTrafficChannel("s4");
+    // tf.TraverseTrafficChannel("s4");
+    tf.GenerateTrafficFlowMap();
+
+    MapAnalysis::GenerateGraphCostMap(tf.road_grid_.get(), "s2");
+    LightViz::ShowSquareGridGraphCost(tf.road_grid_.get(), 100, "distance-s2", true);
+
     MapAnalysis::GenerateGraphCostMap(tf.road_grid_.get(), "s4");
-    LightViz::ShowSquareGridGraphCost(tf.road_grid_.get(), 100, "distance", true);
+    LightViz::ShowSquareGridGraphCost(tf.road_grid_.get(), 100, "distance-s4", true);
+
+    MapAnalysis::GenerateGraphCostMap(tf.road_grid_.get(), "s6");
+    LightViz::ShowSquareGridGraphCost(tf.road_grid_.get(), 100, "distance-s6", true);
+
+    MapAnalysis::GenerateTrafficDensityCostMap(tf.road_grid_.get());
+    LightViz::ShowSquareGridGraphCost(tf.road_grid_.get(), 100, "traffic density", true);
 
     // std::vector<std::string> lanelets;
     // lanelets.push_back("s4");

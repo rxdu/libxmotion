@@ -33,7 +33,7 @@ public:
   void BuildRoadGrid(int32_t size_per_side);
 
   // TODO: source and sink should be detected automatically in the future
-  void AddTrafficFlowSource(std::string source);
+  void AddTrafficFlowSource(std::string source, GridCoordinate start);
   void AddTrafficFlowSink(std::string sink);
 
   void IdentifyTrafficFlow();
@@ -47,6 +47,8 @@ private:
   int32_t side_length_;
   std::vector<std::string> flow_sources_;
   std::vector<std::string> flow_sinks_;
+  std::unordered_map<std::string, GridCoordinate> flow_source_nodes_;
+
   std::unordered_map<std::string, std::set<std::string>> traffic_channels_;
   std::unordered_map<std::string, std::shared_ptr<DenseGrid>> channel_grids_;
   std::unordered_map<std::string, std::shared_ptr<RoadSquareGrid>> channel_mask_grids_;

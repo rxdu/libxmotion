@@ -22,9 +22,11 @@ void TrafficFlowMap::BuildRoadGrid(int32_t size_per_side)
     std::cout << "square grid size: " << road_grid_->SizeX() << " , " << road_grid_->SizeY() << std::endl;
 }
 
-void TrafficFlowMap::AddTrafficFlowSource(std::string source)
+void TrafficFlowMap::AddTrafficFlowSource(std::string source, GridCoordinate start)
 {
+    std::cout << "adding source: " << start.GetX() << " , " << start.GetY() << std::endl;
     flow_sources_.push_back(source);
+    flow_source_nodes_.insert(std::make_pair(source, start));
 }
 
 void TrafficFlowMap::AddTrafficFlowSink(std::string sink)
@@ -78,17 +80,18 @@ Eigen::MatrixXd TrafficFlowMap::GetTrafficChannelMatrix(std::string source)
 
 void TrafficFlowMap::GenerateTrafficFlowMap()
 {
-    for (auto &grid_entry : channel_grids_)
+    for (auto &channel : traffic_channels_)
     {
-        auto grid = grid_entry.second;
+        TraverseTrafficChannel(channel.first);
     }
 }
 
 void TrafficFlowMap::TraverseTrafficChannel(std::string channel)
 {
-    RoadSquareCell *tile_s = road_grid_->GetCell(51, 67);
-    // RoadSquareCell *tile_s = road_grid_->GetCell(8, 1);
-    // for(int i = 0; i < 122; ++i)
-    //     std::cout << "checking mask: " << i << " , " << road_map_->GetFullDrivableAreaGrid()->GetValueAtCoordinate(i,0) << std::endl;
+    auto it = flow_source_nodes_.find(channel);
+    assert(it != flow_source_nodes_.end());
+
+    std::cout << "test point: " << (*it).second.GetX() << " , " << (*it).second.GetY() << std::endl;
+    RoadSquareCell *tile_s = road_grid_->GetCell((*it).second.GetX(), (*it).second.GetY());
     RoadGridTraversal::Traverse(tile_s, channel, road_grid_.get(), GetNeighbourFunc_t<RoadSquareCell *>(GetRoadSquareGridNeighbour(road_grid_, channel_mask_grids_[channel])));
 }
