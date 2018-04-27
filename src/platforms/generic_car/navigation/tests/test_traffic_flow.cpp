@@ -20,9 +20,11 @@ int main()
     std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm", 10);
     std::cout << "loaded map in " << timer.toc() << " seconds" << std::endl;
 
+    LightViz::ShowMatrixAsColorMap(map->GetFullDrivableAreaGrid()->GetGridMatrix(true), "full drivable area", true);
+
     TrafficFlowMap tf(map);
     tf.BuildRoadGrid(10);
-    LightViz::ShowSquareGrid(tf.road_grid_.get(), 100);
+    LightViz::ShowSquareGrid(tf.road_grid_.get(), 100, "raw grid", true);
 
     tf.AddTrafficFlowSource("s2", GridCoordinate(120, 18));
     tf.AddTrafficFlowSource("s4", GridCoordinate(51, 67));
@@ -34,20 +36,13 @@ int main()
 
     tf.IdentifyTrafficFlow();
 
-    // for (auto &channel : tf.GetTrafficChannelSources())
-    // {
-    //     Eigen::MatrixXd matrix = tf.GetTrafficChannelMatrix(channel);
-    //     LightViz::ShowMatrixAsColorMap(matrix, channel, true);
-    // }
+    for (auto &channel : tf.GetTrafficChannelSources())
+    {
+        Eigen::MatrixXd matrix = tf.GetTrafficChannelMatrix(channel);
+        LightViz::ShowMatrixAsColorMap(matrix, channel, true);
+    }
 
-    Eigen::MatrixXd matrix = tf.GetTrafficChannelMatrix("s4");
-    // std::cout << "matrix size: " << matrix.cols() << " , " << matrix.rows() << std::endl;
-    // for (int i = 0; i < 122; ++i)
-    //     std::cout << "checking mask: " << i << " , " << matrix(0, i) << std::endl;
-    LightViz::ShowMatrixAsColorMap(matrix, "s4", false);
-
-    std::cout << "generating traffic channel s4" << std::endl;
-    // tf.TraverseTrafficChannel("s4");
+    std::cout << "generating traffic flow map" << std::endl;
     tf.GenerateTrafficFlowMap();
 
     MapAnalysis::GenerateGraphCostMap(tf.road_grid_.get(), "s2");

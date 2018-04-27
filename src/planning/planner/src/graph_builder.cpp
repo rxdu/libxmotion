@@ -18,22 +18,23 @@ std::shared_ptr<Graph_t<SquareCell *>> Planner::BuildGraphFromSquareGrid(std::sh
 {
 	std::shared_ptr<Graph_t<SquareCell *>> graph = std::make_shared<Graph_t<SquareCell *>>();
 
-	for (auto &cell_col : grid->grid_cells_)
-		for (auto &cell : cell_col)
+	for (int32_t i = 0; i < grid->SizeX(); ++i)
+		for (int32_t j = 0; j < grid->SizeY(); ++j)
 		{
-			uint64_t current_nodeid = cell->id_;
+			auto cell = grid->GetCell(i,j);
+			uint64_t current_nodeid = cell->id;
 
-			if (cell->occupancy_ == OccupancyType::FREE)
+			if (cell->label == SquareCellLabel::FREE)
 			{
 				auto neighbour_list = grid->GetNeighbours(current_nodeid, allow_diag_move);
 
 				for (auto &neighbour : neighbour_list)
 				{
-					if (neighbour->occupancy_ == OccupancyType::FREE)
+					if (neighbour->label == SquareCellLabel::FREE)
 					{
 						double error_x, error_y, cost = 0;
-						error_x = std::abs(neighbour->position_.x - cell->position_.x);
-						error_y = std::abs(neighbour->position_.y - cell->position_.y);
+						error_x = std::abs(neighbour->center.x - cell->center.x);
+						error_y = std::abs(neighbour->center.y - cell->center.y);
 						cost = std::sqrt(error_x * error_x + error_y * error_y);
 
 						graph->AddEdge(cell, neighbour, cost);

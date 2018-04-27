@@ -14,7 +14,7 @@ namespace librav
 {
 template <typename T>
 SquareGridBase<T>::SquareGridBase(int32_t size_x, int32_t size_y, double cell_size) : GridBase<SquareCellBase<T> *>(size_x, size_y),
-                                                                                         cell_size_(cell_size)
+                                                                                      cell_size_(cell_size)
 {
     assert((size_x > 0 && size_y > 0));
 
@@ -29,38 +29,49 @@ SquareGridBase<T>::SquareGridBase(int32_t size_x, int32_t size_y, double cell_si
 
 template <typename T>
 SquareGridBase<T>::SquareGridBase(const Eigen::MatrixXd &matrix, int32_t side_length, double cell_size) : GridBase<SquareCellBase<T> *>(0, 0),
-                                                                                             cell_size_(cell_size)
+                                                                                                          cell_size_(cell_size)
 {
-    // determine size of grid
-    int32_t center_x = matrix.cols() / 2;
-    int32_t center_y = matrix.rows() / 2;
-
     int32_t grid_size_x, grid_size_y;
-    bool shrink_x = false;
-    bool shrink_y = false;
-    if (matrix.cols() % side_length != 0)
-        shrink_x = true;
-    if (matrix.rows() % side_length != 0)
-        shrink_y = true;
-    grid_size_x = (center_x / side_length) * 2;
-    grid_size_y = (center_y / side_length) * 2;
-
     Eigen::MatrixXd occupancy_matrix;
-    if (shrink_x || shrink_y)
+
+    if (side_length == 1)
     {
-        occupancy_matrix = Eigen::MatrixXd::Ones(grid_size_y * side_length, grid_size_x * side_length);
-
-        int32_t x_start = 0, y_start = 0;
-        if (shrink_x)
-            x_start = center_x % side_length;
-        if (shrink_y)
-            y_start = center_y % side_length;
-
-        occupancy_matrix = matrix.block(y_start, x_start, occupancy_matrix.rows(), occupancy_matrix.cols());
+        grid_size_x = matrix.cols();
+        grid_size_y = matrix.rows();
+        occupancy_matrix = matrix;
     }
     else
     {
-        occupancy_matrix = matrix;
+        bool shrink_x = false;
+        bool shrink_y = false;
+
+        // determine size of grid
+        int32_t center_x = matrix.cols() / 2;
+        int32_t center_y = matrix.rows() / 2;
+
+        if (matrix.cols() % side_length != 0)
+            shrink_x = true;
+        if (matrix.rows() % side_length != 0)
+            shrink_y = true;
+        grid_size_x = (center_x / side_length) * 2;
+        grid_size_y = (center_y / side_length) * 2;
+
+        if (shrink_x || shrink_y)
+        {
+            occupancy_matrix = Eigen::MatrixXd::Ones(grid_size_y * side_length, grid_size_x * side_length);
+
+            int32_t x_start = 0, y_start = 0;
+            if (shrink_x)
+                x_start = center_x % side_length;
+            if (shrink_y)
+                y_start = center_y % side_length;
+
+            occupancy_matrix = matrix.block(y_start, x_start, occupancy_matrix.rows(), occupancy_matrix.cols());
+        }
+        else
+        {
+            occupancy_matrix = matrix;
+        }
     }
 
     // create new grid

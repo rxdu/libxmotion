@@ -13,7 +13,7 @@
 #include <memory>
 
 #include "graph/graph.hpp"
-#include "geometry/square_grid.hpp"
+#include "decomp/square_grid.hpp"
 
 namespace librav
 {

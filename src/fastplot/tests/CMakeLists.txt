@@ -21,8 +21,8 @@ target_link_libraries(test_contourplot fastplot)
 add_executable(test_fieldplot test_fieldplot.cpp )
 target_link_libraries(test_fieldplot fastplot)
 
-add_executable(test_graphplot test_graphplot.cpp )
-target_link_libraries(test_graphplot fastplot planner)
+# add_executable(test_graphplot test_graphplot.cpp )
+# target_link_libraries(test_graphplot fastplot planner)
 
 # find_package(MathGL2 REQUIRED GLUT)
 # include_directories(${MATHGL2_INCLUDE_DIRS})
