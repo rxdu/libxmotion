@@ -6,14 +6,13 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add libraries
 set(RRT_LIB_SRC
-  src/lane_marker.cpp
 )
-add_library(rrt STATIC ${RRT_LIB_SRC})
-target_link_libraries(rrt common)
-target_include_directories(rrt PUBLIC
+add_library(rrt INTERFACE)
+# target_link_libraries(rrt common)
+target_sources(rrt INTERFACE ${RRT_LIB_SRC})
+target_include_directories(rrt INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-  PRIVATE src)
+  $<INSTALL_INTERFACE:include>)
 
-# add_subdirectory(tests)
+add_subdirectory(tests)
 

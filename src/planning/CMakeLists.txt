@@ -39,6 +39,7 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add other sub source directories
 add_subdirectory(libgraph)
+add_subdirectory(librrt)
 add_subdirectory(geometry)
 add_subdirectory(planner)
 add_subdirectory(field)
