@@ -5,7 +5,7 @@ project( VisApp )
 set( CMAKE_VERBOSE_MAKEFILE ON )
 set(cinder_DIR "${CMAKE_BINARY_DIR}/lib")
 
-get_filename_component( CINDER_PATH "${CMAKE_SOURCE_DIR}/libraries/cinder" ABSOLUTE )
+get_filename_component( CINDER_PATH "${CMAKE_SOURCE_DIR}/third_party/cinder" ABSOLUTE )
 get_filename_component( APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}" ABSOLUTE )
 
 include( "${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake" )

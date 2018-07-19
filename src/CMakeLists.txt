@@ -28,7 +28,7 @@ add_subdirectory(examples)
 
 add_subdirectory(core)
 add_subdirectory(platforms)
-add_subdirectory(libraries)
+add_subdirectory(third_party)
 
 ## Add test source directories
 if(BUILD_TESTS)

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
-project(librav_generic_car)
+project(librav_rccar)
 
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
@@ -16,8 +16,6 @@ else()
 	message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++14 or C++11 support. Please use a different C++ compiler.")
 endif()
 
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fext-numeric-literals")
-
 ## Put all binary files into /bin and libraries into /lib
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
@@ -25,10 +23,6 @@ set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
-## Find Eigen3
-find_package(Eigen3 REQUIRED)
-include_directories(${EIGEN3_INCLUDE_DIR})
 
 ## Find LCM
 find_package(LCM REQUIRED)
@@ -40,11 +34,11 @@ set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add other sub source directories
-# add_subdirectory(apps)
-add_subdirectory(expts)
-add_subdirectory(navigation)
-add_subdirectory(traffic_sim)
-# add_subdirectory(scenario)
+add_subdirectory(apps)
+add_subdirectory(control)
+add_subdirectory(system)
+add_subdirectory(trajectory)
 
-
-
+# !!! path repair and relevant experiments are broken !!!
+# add_subdirectory(expts)
+# add_subdirectory(path_repair)

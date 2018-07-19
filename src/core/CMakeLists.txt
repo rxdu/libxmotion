@@ -5,6 +5,9 @@ project(librav_core)
 add_subdirectory(common)
 add_subdirectory(interface)
 add_subdirectory(utilities)
+
 add_subdirectory(planning)
+add_subdirectory(vehicle_nav)
+
 add_subdirectory(visualization/lightviz)
 add_subdirectory(visualization/cinder)

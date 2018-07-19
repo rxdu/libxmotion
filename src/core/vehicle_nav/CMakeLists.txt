@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
-project(librav_utilities)
+project(librav_vehicle_nav)
 
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
@@ -16,35 +16,35 @@ else()
 	message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++14 or C++11 support. Please use a different C++ compiler.")
 endif()
 
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fext-numeric-literals")
+
 ## Put all binary files into /bin and libraries into /lib
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-# Include path
+## Include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
-# Dependency libraries
-find_package(Threads REQUIRED)
 
 ## Find Eigen3
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 
-# Add libraries
-set(UTILITY_LIB_SRC
-	logging/logger.cpp
-	image/image_io.cpp
-)
-add_library(utilities STATIC ${UTILITY_LIB_SRC})
-if(ENABLE_LOGGING)
-target_compile_definitions(utilities PUBLIC ENABLE_LOGGING=1)
-endif(ENABLE_LOGGING)
-target_link_libraries(utilities spdlog ${CMAKE_THREAD_LIBS_INIT})
-target_include_directories(utilities PUBLIC
-	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-	$<INSTALL_INTERFACE:include>)
+## Find LCM
+find_package(LCM REQUIRED)
+if(LCM_NOT_FOUND)
+  message(STATUS "LCM is not found. Inter-process communication depends on LCM.")
+endif(LCM_NOT_FOUND)
+# Include files for LCM
+set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
+include_directories(${LCM_GENERATED_HEADER_PATH})
 
-if(BUILD_TESTS)
-	add_subdirectory(tests)
-endif()
+## Add other sub source directories
+# add_subdirectory(apps)
+add_subdirectory(expts)
+add_subdirectory(navigation)
+add_subdirectory(traffic_sim)
+# add_subdirectory(scenario)
+
+
+
