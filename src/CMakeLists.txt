@@ -14,7 +14,7 @@ lcmtypes_build()
 
 ## Optionally built modules: on/off
 set(ENABLE_LOGGING on)
-set(BUILD_TESTS off)
+set(BUILD_TESTS on)
 
 if(ENABLE_LOGGING)
 	message( "-- Enable logging with spdlog -- Yes" )
@@ -25,19 +25,12 @@ endif(ENABLE_LOGGING)
 
 ## Add sub source directories
 add_subdirectory(examples)
-add_subdirectory(common)
-add_subdirectory(planning)
-add_subdirectory(fastplot)
-add_subdirectory(lightviz)
-add_subdirectory(interface)
-add_subdirectory(utilities)
-add_subdirectory(libraries)
 
-add_subdirectory(platforms/generic_car)
-add_subdirectory(platforms/quadrotor)
-add_subdirectory(platforms/simulator)
+add_subdirectory(core)
+add_subdirectory(platforms)
+add_subdirectory(libraries)
 
 ## Add test source directories
 if(BUILD_TESTS)
-    add_subdirectory(gtests)
+    # add_subdirectory(gtests) # broken
 endif()

@@ -65,6 +65,12 @@
         "string_view": "cpp",
         "future": "cpp",
         "optional": "cpp",
-        "stdio.h": "c"
-    }
+        "stdio.h": "c",
+        "strstream": "cpp",
+        "cinttypes": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "unordered_set": "cpp"
+    },
+    "git.ignoreLimitWarning": true
 }

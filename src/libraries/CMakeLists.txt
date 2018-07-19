@@ -15,6 +15,7 @@ elseif(COMPILER_SUPPORTS_CXX0X)
 else()
 	message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++14 or C++11 support. Please use a different C++ compiler.")
 endif()
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 ## Put all binary files into /bin and libraries into /lib
 #set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
@@ -23,6 +24,8 @@ set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Add sub source directories
 # add_subdirectory(octomap-1.8.0)
+# add_subdirectory(glfw-3.2.1)
+# add_subdirectory(dlib-19.10)
 add_subdirectory(googletest)
 add_subdirectory(spdlog)
 add_subdirectory(ascent)
@@ -30,6 +33,6 @@ add_subdirectory(dubins_curves)
 add_subdirectory(liblanelet)
 add_subdirectory(gurobi_cpp)
 add_subdirectory(osqp)
-# add_subdirectory(glfw-3.2.1)
-# add_subdirectory(dlib-19.10)
 
+set(CINDER_BOOST_USE_SYSTEM ON)
+add_subdirectory(cinder)

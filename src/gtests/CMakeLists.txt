@@ -16,7 +16,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add executables
 set(TESTCASES_SRC
-    frame_unittest.cpp
+    # frame_unittest.cpp
     graph_unittest.cpp
     typesize_unittest.cpp
     maputils_unittest.cpp
@@ -24,5 +24,5 @@ set(TESTCASES_SRC
 add_executable(utils_gtest_all start_tests.cpp ${TESTCASES_SRC})
 target_link_libraries(utils_gtest_all gtest utils)
 
-add_executable(utils_gtest_frame start_tests.cpp frame_unittest.cpp)
-target_link_libraries(utils_gtest_frame gtest utils)
+# add_executable(utils_gtest_frame start_tests.cpp frame_unittest.cpp)
+# target_link_libraries(utils_gtest_frame gtest utils)

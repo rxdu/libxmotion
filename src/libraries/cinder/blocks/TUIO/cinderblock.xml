@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<cinder>
+<block
+	name="TUIO"
+	id="org.libcinder.tuio"
+	author="Cinder Project, Ryan Bartley"
+	license="BSD"
+	summary="Implents the TUIO 1.1 spec. For full reference, go to www.tuio.org."
+	core="true"
+	>
+	<requires>org.libcinder.osc</requires>
+	<sourcePattern>src/cinder/tuio/*.cpp</sourcePattern>
+	<headerPattern>src/cinder/tuio/*.h</headerPattern>
+	<includePath>src</includePath>
+</block>
+</cinder>

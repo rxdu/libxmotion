@@ -26,3 +26,15 @@ octovis
 ### dubins_curves
 
 * minimal version for cleaner integration: https://github.com/rxdu/dubins_curves/tree/minimal
+
+## Cinder
+
+* cinder/proj/cmake/platform_linux.cmake: line 194	
+    - find_package( Boost REQUIRED COMPONENTS system filesystem )
+* cinder/proj/cmake/libcinder_target.cmake: line 7,8	
+    - set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
+    - set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
+* cinder/proj/cmake/modules/cinderMakeApp.cmake: line 55
+    - set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${ARG_APP_NAME} )
+    - comment out: line 44-51 
+
