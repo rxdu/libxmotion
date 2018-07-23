@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
 
-#include "navigation/map_analysis.hpp"
+#include "traffic_flow/road_cost_map.hpp"
 #include "road_network/road_map.hpp"
 #include "graph/algorithms/dijkstra_tr.hpp"
 
@@ -46,7 +46,7 @@ int main()
 
     LightViz::ShowSquareGridGraph(sgrid.get(), &graph, 100);
 
-    MapAnalysis::GenerateGraphCostMap(sgrid.get(), &graph);
+    RoadCostMap::GenerateGraphCostMap(sgrid.get(), &graph);
     LightViz::ShowSquareGridGraphCost(sgrid.get());
 
     return 0;

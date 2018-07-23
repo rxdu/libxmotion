@@ -25,6 +25,7 @@ struct RoadCellAttributes
   double map_cost;
   std::unordered_map<std::string, GridCoordinate> parent_;
   std::unordered_map<std::string, double> cost_;
+  std::unordered_map<std::string, GridPoint> flow_dir_vec;
 };
 
 using RoadSquareCell = SquareCellBase<RoadCellAttributes>;
@@ -42,6 +43,6 @@ private:
   std::shared_ptr<RoadSquareGrid> sgrid_;
   std::shared_ptr<RoadSquareGrid> mask_;
 };
-}
+} // namespace librav
 
 #endif /* ROAD_SQUARE_GRID_HPP */

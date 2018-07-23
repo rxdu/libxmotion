@@ -1,5 +1,5 @@
 /* 
- * map_analysis.cpp
+ * road_cost_map.cpp
  * 
  * Created on: Apr 05, 2018 18:23
  * Description: 
@@ -9,12 +9,12 @@
 
 #include <iostream>
 
-#include "navigation/map_analysis.hpp"
+#include "traffic_flow/road_cost_map.hpp"
 #include "graph/algorithms/dijkstra.hpp"
 
 using namespace librav;
 
-void MapAnalysis::GenerateGraphCostMap(RoadSquareGrid *grid, Graph_t<RoadSquareCell *> *graph)
+void RoadCostMap::GenerateGraphCostMap(RoadSquareGrid *grid, Graph_t<RoadSquareCell *> *graph)
 {
     Eigen::MatrixXd cost_matrix;
     cost_matrix = Eigen::MatrixXd::Zero(grid->SizeY(), grid->SizeX());
@@ -35,7 +35,7 @@ void MapAnalysis::GenerateGraphCostMap(RoadSquareGrid *grid, Graph_t<RoadSquareC
             grid->GetCell(i, j)->cost_map = cost_matrix(j, i);
 }
 
-void MapAnalysis::GenerateGraphCostMap(RoadSquareGrid *grid, std::string channel)
+void RoadCostMap::GenerateGraphCostMap(RoadSquareGrid *grid, std::string channel)
 {
     Eigen::MatrixXd cost_matrix;
     cost_matrix = Eigen::MatrixXd::Zero(grid->SizeY(), grid->SizeX());
@@ -58,7 +58,7 @@ void MapAnalysis::GenerateGraphCostMap(RoadSquareGrid *grid, std::string channel
             grid->GetCell(i, j)->cost_map = cost_matrix(j, i);
 }
 
-void MapAnalysis::GenerateTrafficDensityCostMap(RoadSquareGrid *grid)
+void RoadCostMap::GenerateTrafficDensityCostMap(RoadSquareGrid *grid)
 {
     Eigen::MatrixXd cost_matrix;
     cost_matrix = Eigen::MatrixXd::Zero(grid->SizeY(), grid->SizeX());

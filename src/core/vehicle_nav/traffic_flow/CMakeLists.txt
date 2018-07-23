@@ -2,15 +2,15 @@
 #find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
-set(NAV_LIB_SRC
+set(TRAFFICFLOW_LIB_SRC
     src/field_search.cpp
     src/road_square_grid.cpp
     src/traffic_flow_map.cpp
-    src/map_analysis.cpp
+    src/road_cost_map.cpp
 )
-add_library(nav STATIC ${NAV_LIB_SRC})
-target_link_libraries(nav graph field decomp road)
-target_include_directories(nav PUBLIC
+add_library(tflow STATIC ${TRAFFICFLOW_LIB_SRC})
+target_link_libraries(tflow graph field decomp road)
+target_include_directories(tflow PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)

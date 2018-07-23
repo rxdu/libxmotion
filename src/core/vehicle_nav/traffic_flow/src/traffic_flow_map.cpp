@@ -7,8 +7,10 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "navigation/traffic_flow_map.hpp"
-#include "navigation/road_grid_traversal.hpp"
+#include <algorithm>
+
+#include "traffic_flow/traffic_flow_map.hpp"
+#include "traffic_flow/road_grid_traversal.hpp"
 
 using namespace librav;
 
@@ -84,6 +86,38 @@ void TrafficFlowMap::GenerateTrafficFlowMap()
     {
         TraverseTrafficChannel(channel.first);
     }
+
+    for (int32_t i = 0; i < road_grid_->SizeX(); ++i)
+        for (int32_t j = 0; j < road_grid_->SizeY(); ++j)
+        {
+            for (auto &channel : traffic_channels_)
+            {
+                // check if cell belongs to traffic channel
+                auto cost_list = road_grid_->GetCell(i, j)->extra_attribute.cost_;
+                auto it = cost_list.find(channel.first);
+                if (it != cost_list.end())
+                {
+                    int i = 0, min_index = 0;
+                    double min_cost = std::numeric_limits<double>::max();
+                    auto neighbours = road_grid_->GetNeighbours(i, j, true);
+                    for (auto ng : neighbours)
+                    {
+                        auto ncost_list = ng->extra_attribute.cost_;
+                        if (ncost_list.find(channel.first) != ncost_list.end())
+                        {
+                            if (ncost_list[channel.first] < min_cost)
+                            {
+                                min_cost = ncost_list[channel.first];
+                                min_index = i;
+                            }
+                        }
+                        ++i;
+                    }
+                    road_grid_->GetCell(i, j)->extra_attribute.flow_dir_vec[channel.first] =
+                        GridPoint(neighbours[min_index]->x - i, neighbours[min_index]->y - j);
+                }
+            }
+        }
 }
 
 void TrafficFlowMap::TraverseTrafficChannel(std::string channel)

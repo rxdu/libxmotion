@@ -25,7 +25,7 @@
 #include "graph/graph.hpp"
 #include "graph/details/priority_queue.hpp"
 
-#include "navigation/road_square_grid.hpp"
+#include "traffic_flow/road_square_grid.hpp"
 
 #define MINIMAL_PRINTOUT 1
 

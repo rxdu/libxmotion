@@ -7,11 +7,11 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "navigation/road_square_grid.hpp"
+#include "traffic_flow/road_square_grid.hpp"
 
 using namespace librav;
 
-// #define ALLOW_DIAGONAL_MOVE
+#define ALLOW_DIAGONAL_MOVE
 
 GetRoadSquareGridNeighbour::GetRoadSquareGridNeighbour(std::shared_ptr<RoadSquareGrid> sg, std::shared_ptr<RoadSquareGrid> mask) : sgrid_(sg), mask_(mask)
 {

@@ -1,0 +1,16 @@
+# Dependency libraries
+#find_package(LIBRARY_NAME REQUIRED)
+
+# Add executables
+# add_executable(test_cfield_search test_cfield_search.cpp)
+# target_link_libraries(test_cfield_search tflow field fastplot utilities)
+
+add_executable(test_rmap_search test_rmap_search.cpp)
+target_link_libraries(test_rmap_search tflow decomp road lightviz utilities)
+
+add_executable(test_traffic_flow test_traffic_flow.cpp)
+target_link_libraries(test_traffic_flow tflow decomp road lightviz utilities)
+
+add_executable(test_roi test_roi.cpp)
+target_link_libraries(test_roi decomp road tflow lightviz utilities)
+

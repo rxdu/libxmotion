@@ -1,9 +1,9 @@
 #include <iostream>
 #include <memory>
 
-#include "navigation/map_analysis.hpp"
 #include "road_network/road_map.hpp"
-#include "navigation/traffic_flow_map.hpp"
+#include "traffic_flow/traffic_flow_map.hpp"
+#include "traffic_flow/road_cost_map.hpp"
 #include "graph/algorithms/dijkstra_tr.hpp"
 
 #include "lightviz/matrix_viz.hpp"
@@ -45,16 +45,16 @@ int main()
     std::cout << "generating traffic flow map" << std::endl;
     tf.GenerateTrafficFlowMap();
 
-    MapAnalysis::GenerateGraphCostMap(tf.road_grid_.get(), "s2");
+    RoadCostMap::GenerateGraphCostMap(tf.road_grid_.get(), "s2");
     LightViz::ShowSquareGridGraphCost(tf.road_grid_.get(), 100, "distance-s2", true);
 
-    MapAnalysis::GenerateGraphCostMap(tf.road_grid_.get(), "s4");
+    RoadCostMap::GenerateGraphCostMap(tf.road_grid_.get(), "s4");
     LightViz::ShowSquareGridGraphCost(tf.road_grid_.get(), 100, "distance-s4", true);
 
-    MapAnalysis::GenerateGraphCostMap(tf.road_grid_.get(), "s6");
+    RoadCostMap::GenerateGraphCostMap(tf.road_grid_.get(), "s6");
     LightViz::ShowSquareGridGraphCost(tf.road_grid_.get(), 100, "distance-s6", true);
 
-    MapAnalysis::GenerateTrafficDensityCostMap(tf.road_grid_.get());
+    RoadCostMap::GenerateTrafficDensityCostMap(tf.road_grid_.get());
     LightViz::ShowSquareGridGraphCost(tf.road_grid_.get(), 100, "traffic density", true);
 
     // std::vector<std::string> lanelets;
@@ -99,7 +99,7 @@ int main()
     // // LightViz::ShowSquareGridGraph(sgrid.get(), &graph, 100);
 
     // // traffic flow analysis
-    // MapAnalysis::GenerateGraphCostMap(sgrid.get(), &graph);
+    // RoadCostMap::GenerateGraphCostMap(sgrid.get(), &graph);
     // LightViz::ShowSquareGridGraphCost(sgrid.get(), &graph, 100, "distance", true);
 
     return 0;

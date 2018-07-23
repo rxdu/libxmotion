@@ -16,7 +16,7 @@
 #include <Eigen/Dense>
 
 #include "road_network/road_map.hpp"
-#include "navigation/map_analysis.hpp"
+#include "traffic_flow/road_cost_map.hpp"
 
 namespace librav
 {

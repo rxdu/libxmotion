@@ -9,7 +9,7 @@
 # target_link_libraries(static_field_animation field traffic utilities fastplot ${LCM_LIBRARIES})
 
 # add_executable(search_collision_field search_collision_field.cpp)
-# target_link_libraries(search_collision_field nav field fastplot utilities)
+# target_link_libraries(search_collision_field tflow field fastplot utilities)
 
 # add_executable(search_collision_field2 search_collision_field2.cpp)
-# target_link_libraries(search_collision_field2 nav field fastplot utilities)
+# target_link_libraries(search_collision_field2 tflow field fastplot utilities)

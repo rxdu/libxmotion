@@ -4,7 +4,7 @@
 #include "field/collision_field.hpp"
 #include "field/traffic_participant.hpp"
 #include "field/threat_distribution.hpp"
-#include "navigation/field_search.hpp"
+#include "traffic_flow/field_search.hpp"
 
 #include "fastplot/fastplot.hpp"
 #include "fastplot/field_plot.hpp"

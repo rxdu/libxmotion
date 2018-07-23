@@ -40,13 +40,11 @@ set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add other sub source directories
-# add_subdirectory(apps)
+add_subdirectory(field)
 add_subdirectory(behavior)
-add_subdirectory(navigation)
+add_subdirectory(traffic_flow)
 add_subdirectory(reachability)
 add_subdirectory(road_network)
 add_subdirectory(traffic_sim)
-# add_subdirectory(scenario)
-
 
 

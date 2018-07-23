@@ -1,7 +1,7 @@
 ## Additional requirements for the map file (.osm)
 
 * a relation of type "reference", containing a node of role "origin".
-* a relation of type "reference", containing a series of nodes of role "refline". The boundary points must be specified in order clockwise.
+* a relation of type "reference", containing a series of nodes of role "refline". The boundary points must be specified in clockwise order.
 
 Example:
 

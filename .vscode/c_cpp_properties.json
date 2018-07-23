@@ -34,9 +34,8 @@
                 "/usr/include/linux",
                 "${workspaceRoot}",
                 "${workspaceRoot}/src",
-                "${workspaceRoot}/src/common",
-                "${workspaceRoot}/src/quadrotor",
-                "${workspaceRoot}/src/planning",
+                "${workspaceRoot}/src/core",
+                "${workspaceRoot}/src/platforms",
                 "${workspaceRoot}/build/include"
             ],
             "defines": [],
