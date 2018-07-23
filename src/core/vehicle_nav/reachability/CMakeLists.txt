@@ -1,6 +1,3 @@
-# Include path
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
 # Dependency libraries
 find_package(GSL REQUIRED)
 include_directories(${GSL_INCLUDE_DIRS})

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.0.0)
 project(librav_utilities)
 
 ## Set compiler to use c++ 11 features
@@ -21,9 +21,6 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-# Include path
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
 # Dependency libraries
 find_package(Threads REQUIRED)
 
@@ -38,7 +35,7 @@ set(UTILITY_LIB_SRC
 )
 add_library(utilities STATIC ${UTILITY_LIB_SRC})
 if(ENABLE_LOGGING)
-target_compile_definitions(utilities PUBLIC ENABLE_LOGGING=1)
+target_compile_definitions(utilities PUBLIC -DENABLE_LOGGING)
 endif(ENABLE_LOGGING)
 target_link_libraries(utilities spdlog ${CMAKE_THREAD_LIBS_INIT})
 target_include_directories(utilities PUBLIC

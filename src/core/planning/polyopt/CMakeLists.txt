@@ -1,6 +1,3 @@
-# Include path
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
 ## Find Gurobi
 find_package(GUROBI QUIET)
 if (NOT GUROBI_FOUND)

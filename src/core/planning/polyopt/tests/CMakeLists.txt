@@ -1,6 +1,3 @@
-# Include path
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
 # Add executables
 #add_executable(qp_cpp tests/qp_c++.cpp)
 #target_link_libraries(qp_cpp ${GUROBI_LIBRARIES})

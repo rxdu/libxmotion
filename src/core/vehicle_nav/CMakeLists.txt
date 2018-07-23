@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.0.0)
 project(librav_vehicle_nav)
 
 ## Set compiler to use c++ 11 features
@@ -41,8 +41,10 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add other sub source directories
 # add_subdirectory(apps)
-add_subdirectory(expts)
+add_subdirectory(behavior)
 add_subdirectory(navigation)
+add_subdirectory(reachability)
+add_subdirectory(road_network)
 add_subdirectory(traffic_sim)
 # add_subdirectory(scenario)
 

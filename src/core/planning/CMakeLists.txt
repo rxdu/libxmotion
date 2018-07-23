@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.0.0)
 project(librav_planning)
 
 ## Set compiler to use c++ 11 features
@@ -21,9 +21,6 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-## Include directories
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
 ## Find Eigen3
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
@@ -38,15 +35,12 @@ set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add other sub source directories
+add_subdirectory(map)
+add_subdirectory(field)
+add_subdirectory(decomp)
 add_subdirectory(libgraph)
 add_subdirectory(librrt)
 add_subdirectory(geometry)
 add_subdirectory(planner)
-add_subdirectory(field)
-add_subdirectory(decomp)
-add_subdirectory(behavior)
-add_subdirectory(reachability)
-add_subdirectory(map)
-add_subdirectory(road_network)
 add_subdirectory(polyopt)
 

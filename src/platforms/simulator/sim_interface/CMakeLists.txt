@@ -1,7 +1,3 @@
-# Include path
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-
 # Add libraries
 set(SIM_INTERFACE_LIB_SRC
   # vrep remote api

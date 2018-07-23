@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.0.0)
 project(librav)
 
 # cmake module path
@@ -29,6 +29,8 @@ add_subdirectory(examples)
 add_subdirectory(core)
 add_subdirectory(platforms)
 add_subdirectory(third_party)
+
+add_subdirectory(experiments)
 
 ## Add test source directories
 if(BUILD_TESTS)

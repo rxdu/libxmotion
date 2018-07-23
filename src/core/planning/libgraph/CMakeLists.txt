@@ -1,6 +1,3 @@
-# Include path
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
 # Add libraries
 set(GRAPH_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/graph)
 set(GRAPH_LIB_SRC	

@@ -94,7 +94,7 @@ target_link_libraries(gtest_main gtest)
 # If the CMake version supports it, attach header directory information
 # to the targets for when we are part of a parent build (ie being pulled
 # in via add_subdirectory() rather than being a standalone build).
-if (DEFINED CMAKE_VERSION AND NOT "${CMAKE_VERSION}" VERSION_LESS "2.8.11")
+if (DEFINED CMAKE_VERSION AND NOT "${CMAKE_VERSION}" VERSION_LESS "3.0.0")
   target_include_directories(gtest      INTERFACE "${gtest_SOURCE_DIR}/include")
   target_include_directories(gtest_main INTERFACE "${gtest_SOURCE_DIR}/include")
 endif()

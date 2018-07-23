@@ -1,8 +1,5 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.0.0)
 project(librav_lightviz)
-
-# cmake module path
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
@@ -23,9 +20,6 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-
-## Include directories
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 ## Dependency libraries
 find_package(OpenCV REQUIRED)
