@@ -76,7 +76,7 @@ class Vertex_t
 	/// Check if a given vertex is the neighbor of current vertex.
 	bool CheckNeighbour(int64_t dst_id);
 
-  private:
+	// note: made public for decision making
 	// edges connecting to other vertices
 	EdgeListType edges_to_;
 
@@ -84,6 +84,7 @@ class Vertex_t
 	//	used to cleanup edges in other vertices if current vertex is deleted
 	std::vector<VertexType *> vertices_from_;
 
+  private:
 	/// Get edge cost from current vertex to given vertex. -1 is returned if no edge between
 	///		the two vertices exists.
 	TransitionType GetEdgeCost(const VertexType *dst_node) const;
@@ -94,7 +95,7 @@ class Vertex_t
 	/// Clear exiting search info before a new search
 	void ClearVertexSearchInfo();
 };
-}
+} // namespace librav
 
 #include "graph/details/vertex_impl.hpp"
 

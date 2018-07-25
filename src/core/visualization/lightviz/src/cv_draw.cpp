@@ -53,7 +53,7 @@ void LightViz::ShowImage(cv::Mat img, std::string window_name, bool save_img)
     waitKey(0); // Wait for a keystroke in the window
 
     if (save_img)
-        imwrite(window_name + ".jpg", img);
+        imwrite(window_name + ".png", img);
 
     destroyWindow(window_name);
 }

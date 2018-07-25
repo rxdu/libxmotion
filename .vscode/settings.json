@@ -73,7 +73,8 @@
         "unordered_set": "cpp",
         "forward_list": "cpp",
         "filesystem": "cpp",
-        "numeric": "cpp"
+        "numeric": "cpp",
+        "queue": "cpp"
     },
     "git.ignoreLimitWarning": true
 }
