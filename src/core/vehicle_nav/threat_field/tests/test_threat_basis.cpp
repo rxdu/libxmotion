@@ -1,5 +1,5 @@
-#include "field/threat_basis.hpp"
-#include "field/threat_distribution.hpp"
+#include "threat_field/threat_basis.hpp"
+#include "threat_field/threat_distribution.hpp"
 #include "fastplot/field_plot.hpp"
 
 #include "stopwatch/stopwatch.h"

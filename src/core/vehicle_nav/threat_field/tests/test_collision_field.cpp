@@ -1,10 +1,10 @@
 #include <iostream>
 #include <memory>
 
-#include "field/collision_field.hpp"
-#include "field/traffic_participant.hpp"
-#include "field/threat_distribution.hpp"
-#include "field/lane_constraint.hpp"
+#include "threat_field/collision_field.hpp"
+#include "threat_field/traffic_participant.hpp"
+#include "threat_field/threat_distribution.hpp"
+#include "threat_field/lane_constraint.hpp"
 
 // #include "fastplot/fastplot.hpp"
 // #include "fastplot/field_plot.hpp"

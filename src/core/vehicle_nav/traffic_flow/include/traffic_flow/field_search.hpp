@@ -16,7 +16,7 @@
 
 #include <Eigen/Dense>
 
-#include "field/collision_field.hpp"
+#include "threat_field/collision_field.hpp"
 
 #include "graph/graph.hpp"
 #include "graph/algorithms/dijkstra.hpp"

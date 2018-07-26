@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "field/traffic_participant.hpp"
+#include "threat_field/traffic_participant.hpp"
 
 #include <cmath>
 

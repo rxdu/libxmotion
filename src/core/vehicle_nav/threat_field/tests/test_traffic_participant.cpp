@@ -1,5 +1,5 @@
-#include "field/traffic_participant.hpp"
-#include "field/threat_distribution.hpp"
+#include "threat_field/traffic_participant.hpp"
+#include "threat_field/threat_distribution.hpp"
 #include "fastplot/field_plot.hpp"
 
 #include "stopwatch/stopwatch.h"

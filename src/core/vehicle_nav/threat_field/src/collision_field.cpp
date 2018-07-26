@@ -7,7 +7,7 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#include "field/collision_field.hpp"
+#include "threat_field/collision_field.hpp"
 
 #include <cmath>
 #include <iostream>

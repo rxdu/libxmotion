@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "field/lane_constraint.hpp"
+#include "threat_field/lane_constraint.hpp"
 
 using namespace librav;
 

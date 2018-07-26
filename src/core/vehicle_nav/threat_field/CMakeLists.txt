@@ -11,9 +11,9 @@ set(FIELD_LIB_SRC
     src/collision_field.cpp
     src/information_field.cpp
 )
-add_library(field STATIC ${FIELD_LIB_SRC})
-target_link_libraries(field graph)
-target_include_directories(field PUBLIC
+add_library(tfield STATIC ${FIELD_LIB_SRC})
+target_link_libraries(tfield graph)
+target_include_directories(tfield PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)

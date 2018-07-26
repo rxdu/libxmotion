@@ -26,8 +26,8 @@ int main()
 
     // map.OccupiedLanelet(CartCooridnate(60, 60));
 
-    // LightViz::ShowMatrixAsColorMap(map.GetFullLaneBoundaryGrid()->GetGridMatrix(true), "roadnetwork", true);
-    LightViz::ShowMatrixAsColorMap(map.GetFullDrivableAreaGrid()->GetGridMatrix(true), "drivable", true);
+    LightViz::ShowMatrixAsColorMap(map.GetFullLaneBoundaryGrid()->GetGridMatrix(true), "roadnetwork", true);
+    // LightViz::ShowMatrixAsColorMap(map.GetFullDrivableAreaGrid()->GetGridMatrix(true), "drivable", true);
 
     // std::vector<std::string> lanelets;
     // lanelets.push_back("s4");

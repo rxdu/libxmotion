@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "field/threat_basis.hpp"
+#include "threat_field/threat_basis.hpp"
 
 using namespace librav;
 

@@ -10,7 +10,7 @@ set(TRAFFICFLOW_LIB_SRC
     src/topogeo_graph.cpp
 )
 add_library(tflow STATIC ${TRAFFICFLOW_LIB_SRC})
-target_link_libraries(tflow graph field decomp road)
+target_link_libraries(tflow graph tfield decomp road)
 target_include_directories(tflow PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

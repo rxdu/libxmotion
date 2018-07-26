@@ -10,7 +10,7 @@
 #ifndef SCALAR_FIELD_HPP
 #define SCALAR_FIELD_HPP
 
-#include "field/field_base.hpp"
+#include "threat_field/field_base.hpp"
 
 namespace librav
 {

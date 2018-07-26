@@ -16,8 +16,8 @@
 #include <vector>
 #include <cstdint>
 
-#include "field/threat_basis.hpp"
-#include "field/field_object.hpp"
+#include "threat_field/threat_basis.hpp"
+#include "threat_field/field_object.hpp"
 
 namespace librav
 {

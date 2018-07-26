@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
 
-#include "field/information_field.hpp"
-#include "field/field_object.hpp"
+#include "threat_field/information_field.hpp"
+#include "threat_field/field_object.hpp"
 
 #include "fastplot/field_plot.hpp"
 #include "stopwatch/stopwatch.h"

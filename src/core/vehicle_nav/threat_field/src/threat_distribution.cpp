@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "field/threat_distribution.hpp"
+#include "threat_field/threat_distribution.hpp"
 
 #include <cmath>
 #include <iostream>

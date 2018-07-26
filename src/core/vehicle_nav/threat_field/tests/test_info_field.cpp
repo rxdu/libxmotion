@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "field/information_field.hpp"
+#include "threat_field/information_field.hpp"
 
 #include "fastplot/field_plot.hpp"
 #include "stopwatch/stopwatch.h"

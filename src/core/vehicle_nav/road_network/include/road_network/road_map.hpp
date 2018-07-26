@@ -30,6 +30,9 @@ public:
   RoadMap(std::string map_osm = "", int32_t ppm = 15);
   void LoadMapFile(std::string map_file, int32_t ppm = 15);
 
+  Eigen::MatrixXd mask_zero_;
+  Eigen::MatrixXd mask_ones_;
+
   bool MapReady() const { return map_loaded_; }
 
   std::vector<int32_t> FindShortestRoute(std::string start_name, std::string goal_name);
@@ -70,14 +73,11 @@ private:
   std::unordered_map<int32_t, std::shared_ptr<DenseGrid>> lane_bound_grids_;
   std::unordered_map<int32_t, std::shared_ptr<DenseGrid>> lane_drivable_grids_;
 
-  Eigen::MatrixXd mask_zero_;
-  Eigen::MatrixXd mask_ones_;
-
   void GenerateDenseGrids(int32_t pixel_per_meter);
   void ExtractDrivableAreas();
   std::vector<DenseGridPixel> GenerateLanePoints(const PolyLine &line);
   std::vector<DenseGridPixel> InterpolateGridPixelPoints(DenseGridPixel pt1, DenseGridPixel pt2);
 };
-}
+} // namespace librav
 
 #endif /* ROAD_MAP_HPP */

@@ -7,7 +7,7 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#include "field/scalar_field.hpp"
+#include "threat_field/scalar_field.hpp"
 
 #include <iomanip>
 

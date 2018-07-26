@@ -7,8 +7,8 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#include "field/information_field.hpp"
-#include "field/threat_distribution.hpp"
+#include "threat_field/information_field.hpp"
+#include "threat_field/threat_distribution.hpp"
 
 #include <cmath>
 #include <iostream>

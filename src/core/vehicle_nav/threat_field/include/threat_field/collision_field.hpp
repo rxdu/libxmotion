@@ -16,9 +16,9 @@
 #include <vector>
 #include <cstdint>
 
-#include "field/lane_constraint.hpp"
-#include "field/traffic_participant.hpp"
-#include "field/threat_distribution.hpp"
+#include "threat_field/lane_constraint.hpp"
+#include "threat_field/traffic_participant.hpp"
+#include "threat_field/threat_distribution.hpp"
 
 namespace librav
 {
