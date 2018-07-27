@@ -1,8 +1,6 @@
 #include "threat_field/traffic_participant.hpp"
 #include "threat_field/threat_distribution.hpp"
-
-#include "lightviz/matrix_viz.hpp"
-#include "lightviz/grid_viz.hpp"
+#include "fastplot/field_plot.hpp"
 
 #include "stopwatch/stopwatch.h"
 
@@ -22,7 +20,7 @@ int main()
     std::cout << "time elapsed: " << timer.toc() << std::endl;
 
     // plot surface
-    LightViz::ShowMatrixAsColorMap(mat.z);
+    FastPlot::ShowFieldSurface(mat.x, mat.y, mat.z, true);
 
     return 0;
 }

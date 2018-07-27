@@ -2,14 +2,17 @@
 #find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
-set(TFIELD_LIB_SRC
+set(FIELD_LIB_SRC
     src/scalar_field.cpp
     src/threat_basis.cpp
     src/threat_distribution.cpp
+    # src/traffic_participant.cpp
+    src/lane_constraint.cpp
     src/collision_field.cpp
+    src/information_field.cpp
 )
-add_library(tfield STATIC ${TFIELD_LIB_SRC})
-target_link_libraries(tfield decomp graph tflow)
+add_library(tfield STATIC ${FIELD_LIB_SRC})
+target_link_libraries(tfield graph)
 target_include_directories(tfield PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
@@ -35,3 +38,6 @@ endif()
 # # This makes the project importable from the build directory
 # export(TARGETS lib FILE MyLibraryConfig.cmake)
 
+## tests
+#add_executable(graph_example graph_example.cpp)
+#target_link_libraries(graph_example vis map geometry)

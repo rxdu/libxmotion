@@ -59,32 +59,6 @@ private:
   double coeff3_ = 1;
   double coeff4_ = 0;
 };
-
-/*-------------------------------------------------------------*/
-
-class BiasedGaussianThreat
-{
-public:
-  BiasedGaussianThreat() = default;
-  BiasedGaussianThreat(double pos_x, double pos_y, double vel_x, double vel_y);
-
-  void SetParameters(double pos_x, double pos_y, double vel_x, double vel_y);
-  double operator()(double x, double y);
-
-private:
-  double pos_x_ = 0;
-  double pos_y_ = 0;
-  double vel_x_ = 0;
-  double vel_y_ = 0;
-  double sigma_1_ = 25;
-  double sigma_2_ = 25;
-  double rho_ = 0;
-
-  double coeff1_ = 0;
-  double coeff2_ = 1;
-  double coeff3_ = 1;
-  double coeff4_ = 0;
-};
 }
 
 #endif /* THREAT_DISTRIBUTION_HPP */

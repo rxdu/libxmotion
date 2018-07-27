@@ -3,7 +3,7 @@
 
 # Add libraries
 set(TRAFFICFLOW_LIB_SRC
-    src/field_search.cpp
+    # src/field_search.cpp
     src/road_square_grid.cpp
     src/traffic_flow_map.cpp
     src/road_cost_map.cpp

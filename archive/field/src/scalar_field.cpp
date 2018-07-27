@@ -13,8 +13,19 @@
 
 using namespace librav;
 
-ScalarField::ScalarField(int64_t size_x, int64_t size_y) : DenseGrid(size_x, size_y)
+ScalarField::ScalarField(int64_t size_x, int64_t size_y) : FieldBase<double>(size_x, size_y)
 {
+}
+
+void ScalarField::SetValueAtCoordinate(int64_t x, int64_t y, double val)
+{
+    SetTileAtFieldCoordinate(x, y, val);
+}
+
+double ScalarField::GetValueAtCoordinate(int64_t x, int64_t y)
+{
+    double val = GetTileAtFieldCoordinate(x, y);
+    return val;
 }
 
 ScalarFieldMatrix ScalarField::GenerateFieldMatrix(double x_start, double x_step, double y_start, double y_step, bool normalize_z)
@@ -46,7 +57,7 @@ void ScalarField::PrintField(bool pretty) const
         {
             for (int64_t x = 0; x < size_x_; ++x)
             {
-                std::cout << std::setw(6) << GetTileAtRawCoordinate(x,y);
+                std::cout << std::setw(6) << field_tiles_[x][y];
             }
             std::cout << std::endl;
         }
@@ -55,6 +66,6 @@ void ScalarField::PrintField(bool pretty) const
     {
         for (int64_t y = 0; y < size_y_; ++y)
             for (int64_t x = 0; x < size_x_; ++x)
-                std::cout << "(" << x << " , " << y << ") : " << GetTileAtRawCoordinate(x,y) << std::endl;
+                std::cout << "(" << x << " , " << y << ") : " << field_tiles_[x][y] << std::endl;
     }
 }

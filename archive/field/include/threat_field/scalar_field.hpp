@@ -10,7 +10,7 @@
 #ifndef SCALAR_FIELD_HPP
 #define SCALAR_FIELD_HPP
 
-#include "decomp/dense_grid.hpp"
+#include "threat_field/field_base.hpp"
 
 namespace librav
 {
@@ -22,12 +22,15 @@ struct ScalarFieldMatrix
   Eigen::MatrixXd z;
 };
 
-class ScalarField : public DenseGrid
+class ScalarField : public FieldBase<double>
 {
 public:
   ScalarField() = delete;
   ScalarField(int64_t size_x, int64_t size_y);
   ~ScalarField() = default;
+
+  void SetValueAtCoordinate(int64_t x, int64_t y, double val);
+  double GetValueAtCoordinate(int64_t x, int64_t y);
 
   // for visualization/debugging purpose
   void PrintField(bool pretty = false) const;
