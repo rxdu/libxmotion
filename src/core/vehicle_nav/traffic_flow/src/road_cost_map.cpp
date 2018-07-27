@@ -23,9 +23,9 @@ void RoadCostMap::GenerateGraphCostMap(RoadSquareGrid *grid, Graph_t<RoadSquareC
     for (int32_t i = 0; i < grid->SizeX(); ++i)
         for (int32_t j = 0; j < grid->SizeY(); ++j)
         {
-            auto vtx = graph->FindVertex(grid->GetCell(i, j)->GetUniqueID());
+            auto vtx = graph->find(grid->GetCell(i, j)->GetUniqueID());
             if (vtx != graph->vertex_end())
-                cost_matrix(j, i) = vtx->g_astar_;
+                cost_matrix(j, i) = vtx->g_cost_;
         }
 
     cost_matrix = (cost_matrix + Eigen::MatrixXd::Ones(cost_matrix.rows(), cost_matrix.cols()) * cost_matrix.minCoeff()) / (cost_matrix.maxCoeff() - cost_matrix.minCoeff()) * 1.0;

@@ -55,7 +55,7 @@ struct RoadGridTraversal
         // begin with start vertex
         openlist.put(start_vtx, 0);
         start_vtx->is_in_openlist_ = true;
-        start_vtx->g_astar_ = 0;
+        start_vtx->g_cost_ = 0;
 
         // start search iterations
         GraphVertexType *current_vertex;
@@ -81,19 +81,19 @@ struct RoadGridTraversal
                 if (successor->is_checked_ == false)
                 {
                     // first set the parent of the adjacent vertex to be the current vertex
-                    auto new_cost = current_vertex->g_astar_ + edge->cost_;
+                    auto new_cost = current_vertex->g_cost_ + edge->cost_;
 
                     // if the vertex is not in open list
                     // or if the vertex is in open list but has a higher cost
-                    if (successor->is_in_openlist_ == false || new_cost < successor->g_astar_)
+                    if (successor->is_in_openlist_ == false || new_cost < successor->g_cost_)
                     {
                         successor->search_parent_ = current_vertex;
-                        successor->g_astar_ = new_cost;
+                        successor->g_cost_ = new_cost;
 
                         grid->GetCell(successor->vertex_id_)->extra_attribute.cost_[channel] = new_cost;
                         // std::cout << "vertex id: " << successor->vertex_id_ << " , " << new_cost << std::endl;
 
-                        openlist.put(successor, successor->g_astar_);
+                        openlist.put(successor, successor->g_cost_);
                         successor->is_in_openlist_ = true;
                     }
                 }

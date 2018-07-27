@@ -1,19 +1,21 @@
+# Dependency libraries
+#find_package(LIBRARY_NAME REQUIRED)
+
 # Add libraries
-set(GRAPH_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/graph)
-set(GRAPH_LIB_SRC	
-	${GRAPH_SRC_DIR}/graph.hpp
-	${GRAPH_SRC_DIR}/vertex.hpp
-	${GRAPH_SRC_DIR}/edge.hpp
-	${GRAPH_SRC_DIR}/details/graph_impl.hpp
-	${GRAPH_SRC_DIR}/details/vertex_impl.hpp
-	${GRAPH_SRC_DIR}/details/edge_impl.hpp
-	${GRAPH_SRC_DIR}/details/helper_func.hpp
-	${GRAPH_SRC_DIR}/details/priority_queue.hpp	
-	${GRAPH_SRC_DIR}/algorithms/astar.hpp
-)
 add_library(graph INTERFACE)
-target_sources(graph INTERFACE ${GRAPH_LIB_SRC})
-target_compile_definitions(graph INTERFACE -DUSE_UNORDERED_MAP)
+target_sources(graph INTERFACE 
+	${CMAKE_CURRENT_SOURCE_DIR}/graph/graph.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/graph/vertex.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/graph/edge.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/graph/details/graph_impl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/graph/details/vertex_impl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/graph/details/edge_impl.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/graph/details/helper_func.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/graph/details/priority_queue.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/graph/algorithms/astar.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/graph/algorithms/dijkstra.hpp
+	)
+target_compile_definitions(graph INTERFACE -DUSE_UNORDERED_MAP -DMINIMAL_PRINTOUT)
 target_include_directories(graph INTERFACE
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	$<INSTALL_INTERFACE:include>)

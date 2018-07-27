@@ -4,7 +4,6 @@
 #include "road_network/road_map.hpp"
 #include "traffic_flow/traffic_flow_map.hpp"
 #include "traffic_flow/road_cost_map.hpp"
-#include "graph/algorithms/dijkstra_tr.hpp"
 
 #include "lightviz/matrix_viz.hpp"
 #include "lightviz/grid_viz.hpp"

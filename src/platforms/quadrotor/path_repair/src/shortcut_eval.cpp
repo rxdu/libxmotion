@@ -150,7 +150,7 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 	openlist.put(start_vtx, 0);
 	start_vtx->is_in_openlist_ = true;
 
-	start_vtx->g_astar_ = 0;
+	start_vtx->g_cost_ = 0;
 	start_vtx->shortcut_rewards_ = 0;
 	start_vtx->reward_num_ = 0;
 	start_vtx->weighted_cost_ = nav_field_->max_rewards_;// 0;
@@ -190,7 +190,7 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 				double new_rewards = current_vertex->shortcut_cost_ + (current_vertex->shortcut_rewards_ - successor->shortcut_rewards_ ) + (1-successor->shortcut_rewards_/nav_field_->max_rewards_)*sgrid_->cell_size_;
 				// equivalent cost function
 				//double new_rewards = current_vertex->shortcut_cost_ + (1-successor->shortcut_rewards_/nav_field_->max_rewards_)*sgrid_->cell_size_;
-				double new_dist = current_vertex->g_astar_ + (*ite).cost_;
+				double new_dist = current_vertex->g_cost_ + (*ite).cost_;
 
 				//double new_cost = current_vertex->weighted_cost_ + (new_dist*dist_weight + new_rewards*(1-dist_weight));
 				double new_cost = new_dist*dist_weight_ + new_rewards*(1-dist_weight_);// + avg_rewards; // avg_rewards*(1-dist_weight);
@@ -213,7 +213,7 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 //						successor->reward_num_ = current_vertex->reward_num_;
 //					}
 					successor->shortcut_cost_ = new_rewards;
-					successor->g_astar_ = new_dist;
+					successor->g_cost_ = new_dist;
 
 					openlist.put(successor, successor->weighted_cost_);
 					successor->is_in_openlist_ = true;
@@ -245,7 +245,7 @@ Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_
 		std::cout << "starting vertex id: " << (*traj_s)->vertex_id_ << std::endl;
 		std::cout << "finishing vertex id: " << (*traj_e)->vertex_id_ << std::endl;
 		std::cout << "path length: " << path.size() << std::endl;
-		std::cout << "total dist cost: " << path.back()->g_astar_ << std::endl;
+		std::cout << "total dist cost: " << path.back()->g_cost_ << std::endl;
 		std::cout << "total shortcut cost: " << path.back()->shortcut_cost_ << std::endl;
 		std::cout << "total cost with rewards: " << path.back()->weighted_cost_ << std::endl;
 #endif

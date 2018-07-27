@@ -68,7 +68,7 @@ void TopoGeoGraph::GenerateGraph()
 
 std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
 {
-    auto vtx = graph_->FindVertex(id);
+    auto vtx = graph_->GetVertex(id);
     std::vector<std::string> names;
 
     std::set<Graph_t<LaneBlock>::VertexType *> vertices;

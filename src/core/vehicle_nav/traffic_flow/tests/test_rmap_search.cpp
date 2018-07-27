@@ -3,7 +3,7 @@
 
 #include "traffic_flow/road_cost_map.hpp"
 #include "road_network/road_map.hpp"
-#include "graph/algorithms/dijkstra_tr.hpp"
+#include "graph/algorithms/dijkstra.hpp"
 
 #include "lightviz/matrix_viz.hpp"
 #include "lightviz/grid_viz.hpp"
@@ -41,7 +41,7 @@ int main()
 
     timer.tic();
     RoadSquareCell *tile_s = sgrid->GetCell(0, 2);
-    auto graph = DijkstraTraversal::IncSearch(tile_s, GetNeighbourFunc_t<RoadSquareCell *>(GetRoadSquareGridNeighbour(sgrid)));
+    auto graph = DijkstraTraversal::RunInc(tile_s, GetNeighbourFunc_t<RoadSquareCell *>(GetRoadSquareGridNeighbour(sgrid)));
     std::cout << "traversal finished in " << timer.toc() << " seconds, vertex visited: " << graph.GetGraphVertexNumber() << std::endl;
 
     LightViz::ShowSquareGridGraph(sgrid.get(), &graph, 100);
