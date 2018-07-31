@@ -14,5 +14,7 @@ target_include_directories(geometry PUBLIC
   $<INSTALL_INTERFACE:include>
   PRIVATE src)
 
-add_subdirectory(tests)
+if(BUILD_TESTS)
+  add_subdirectory(tests)
+endif()
 

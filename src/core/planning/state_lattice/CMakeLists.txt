@@ -2,12 +2,11 @@
 # find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
-set(RRT_LIB_SRC
+set(LATTICE_LIB_SRC
 )
-add_library(rrt INTERFACE)
-# target_link_libraries(rrt common)
-target_sources(rrt INTERFACE ${RRT_LIB_SRC})
-target_include_directories(rrt INTERFACE
+add_library(lattice ${LATTICE_LIB_SRC})
+# target_link_libraries(lattice common)
+target_include_directories(lattice INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 

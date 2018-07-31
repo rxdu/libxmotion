@@ -17,4 +17,6 @@ target_include_directories(rccar_driver PUBLIC
 #add_definitions(-DUAVCAN_CPP_VERSION=UAVCAN_CPP11)
 #target_link_libraries(car_messenger messenger)
 
-add_subdirectory(tests)
+if(BUILD_TESTS)
+  add_subdirectory(tests)
+endif()

@@ -17,4 +17,6 @@ target_include_directories(tflow PUBLIC
     PRIVATE src)
 
 # Tests
-add_subdirectory(tests)
+if(BUILD_TESTS)
+    add_subdirectory(tests)
+endif()

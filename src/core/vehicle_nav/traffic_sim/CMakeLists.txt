@@ -13,7 +13,9 @@ target_include_directories(trafficsim PUBLIC
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 
-add_subdirectory(tests)
+if(BUILD_TESTS)
+    add_subdirectory(tests)
+endif()
 
 # TEMPLATE, TO BE UPDATED
 # # 'make install' to the correct locations (provided by GNUInstallDirs).

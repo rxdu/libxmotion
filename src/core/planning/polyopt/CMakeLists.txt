@@ -24,4 +24,6 @@ target_include_directories(polyopt PUBLIC
 endif()
 
 # Add executables
-add_subdirectory(tests)
+if(BUILD_TESTS)
+  add_subdirectory(tests)
+endif()

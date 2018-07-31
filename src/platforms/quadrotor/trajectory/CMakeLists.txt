@@ -29,4 +29,6 @@ endif()
 #add_executable(quad_motion_client motion_server/motion_client.cpp)
 #target_link_libraries(quad_motion_client ${LCM_LIBRARIES})
 
-add_subdirectory(tests)
+if(BUILD_TESTS)
+  add_subdirectory(tests)
+endif()
