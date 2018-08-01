@@ -49,7 +49,7 @@ import motion_model
 
 # optimization parameters
 terminal_residual = 0.01
-residual_weight = np.array([1.0, 1.0, 100.0, 100.0])
+residual_weight = np.array([1.0, 1.0, 1.0, 0.2])
 index_set = []
 res_set = []
 
@@ -70,18 +70,22 @@ def calc_g(q, stf):
 def calc_residual(gq):
     res = np.multiply(gq, residual_weight)
     print "residual: {0}".format(res)
-    weighted_res = math.sqrt(res[0]**2 + res[1]**2 + res[2]**2 + res[3]**2)
+    # weighted_res = math.sqrt(res[0]**2 + res[1]**2 + res[2]**2 + res[3]**2)
+    weighted_res = np.linalg.norm(res)
 
     return weighted_res
 
 
 def evaluate_partial_derivatives(q):
+
+    # extract variables for convenience
     a = q[0]
     b = q[1]
     c = q[2]
     d = q[3]
     sf = q[4]
 
+    # define integrands
     def C2(s): return (s**2) * np.cos(a * s + b * (s**2) /
                                       2.0 + c * (s**3) / 3.0 + d * (s**4) / 4.0)
 
@@ -100,16 +104,36 @@ def evaluate_partial_derivatives(q):
     def S4(s): return (s**4) * np.sin(a * s + b * (s**2) /
                                       2.0 + c * (s**3) / 3.0 + d * (s**4) / 4.0)
 
-    x_p0 = integrate.quad(S2, 0, sf)
-    x_p1 = integrate.quad(S3, 0, sf)
-    x_p2 = integrate.quad(S4, 0, sf)
+    # integrate using Simpson's rule
+    pts = np.linspace(0.0, sf, 5)
+    x0_samples = [S2(pt) for pt in pts]
+    x1_samples = [S3(pt) for pt in pts]
+    x2_samples = [S4(pt) for pt in pts]
+    y0_samples = [C2(pt) for pt in pts]
+    y1_samples = [C3(pt) for pt in pts]
+    y2_samples = [C4(pt) for pt in pts]
 
-    y_p0 = integrate.quad(C2, 0, sf)
-    y_p1 = integrate.quad(C3, 0, sf)
-    y_p2 = integrate.quad(C4, 0, sf)
+    x_p0 = integrate.simps(x0_samples, pts)
+    x_p1 = integrate.simps(x1_samples, pts)
+    x_p2 = integrate.simps(x2_samples, pts)
 
-    return np.array([[-x_p0[0]/2.0, -x_p1[0]/3.0, -x_p2[0]/4.0],
-                     [-y_p0[0]/2.0, -y_p1[0]/3.0, -y_p2[0]/4.0]])
+    y_p0 = integrate.simps(y0_samples, pts)
+    y_p1 = integrate.simps(y1_samples, pts)
+    y_p2 = integrate.simps(y2_samples, pts)
+
+    return np.array([[-x_p0/2.0, -x_p1/3.0, -x_p2/4.0],
+                     [-y_p0/2.0, -y_p1/3.0, -y_p2/4.0]])
+
+    # x_p0 = integrate.quad(S2, 0, sf)
+    # x_p1 = integrate.quad(S3, 0, sf)
+    # x_p2 = integrate.quad(S4, 0, sf)
+
+    # y_p0 = integrate.quad(C2, 0, sf)
+    # y_p1 = integrate.quad(C3, 0, sf)
+    # y_p2 = integrate.quad(C4, 0, sf)
+
+    # return np.array([[-x_p0[0]/2.0, -x_p1[0]/3.0, -x_p2[0]/4.0],
+    #                  [-y_p0[0]/2.0, -y_p1[0]/3.0, -y_p2[0]/4.0]])
 
 
 def calc_jacobian(q):
@@ -141,7 +165,19 @@ def calc_jacobian(q):
     return J
 
 
-def optimize_trajectory(st0, stf, q0, max_iter=3):
+def calculate_initial_guess(st0, stf):
+
+    d = np.sqrt(stf.x**2 + stf.y**2)
+    delta_theta = np.abs(stf.theta)
+    s = d * (delta_theta**2/5.0 + 1) + delta_theta*2.0/5.0
+    c = 0
+    a = 6 * stf.theta/(s**2) - 2*st0.kappa /s + 4 * stf.kappa/s
+    b = 3 * (st0.kappa + stf.kappa)/(s**2) + 6 * stf.theta / (s**3)
+
+    return np.array([a, b, c, d, s])
+
+
+def optimize_trajectory(st0, stf, q0, max_iter=5):
     print "Initial state: "
     st0.print_info()
     print "Final state: "
@@ -151,6 +187,8 @@ def optimize_trajectory(st0, stf, q0, max_iter=3):
     # initial condition
     q = q0
     q[0] = st0.kappa
+
+    show_trajectory_frame(q, stf)
 
     # final condition
     for i in range(max_iter):
@@ -182,6 +220,7 @@ def optimize_trajectory(st0, stf, q0, max_iter=3):
         print "delta_q: {0}".format(np.array(delta_q)[:, 0])
         q[1:5] += np.array(delta_q)[:, 0]
         print "q(n+1): {0}".format(q)
+        show_trajectory_frame(q, stf)
 
     print "------"
     print "q = {0}".format(q)
@@ -209,10 +248,23 @@ def evaluate_state(poly_coeffs, sf):
     def fy(s): return np.sin(a * s + b * (s**2) /
                              2.0 + c * (s**3) / 3.0 + d * (s**4) / 4.0)
 
-    x = integrate.quad(fx, 0, sf)
-    y = integrate.quad(fy, 0, sf)
+    # xint = integrate.quad(fx, 0, sf)
+    # yint = integrate.quad(fy, 0, sf)
 
-    return motion_model.State(x[0], y[0], theta, kappa)
+    if sf != 0.0:
+        pts = np.linspace(0.0, sf, 5)
+        # pts = np.arange(0, sf)
+        # print "sf: {0}, sampling points: {1}".format(sf, pts)
+        x_samples = [fx(pt) for pt in pts]
+        y_samples = [fy(pt) for pt in pts]
+
+        x = integrate.simps(x_samples, pts)
+        y = integrate.simps(y_samples, pts)
+    else:
+        x = 0
+        y = 0
+
+    return motion_model.State(x, y, theta, kappa)
 
 
 def setup_plot():
@@ -232,8 +284,6 @@ def plot_arrow(x, y, yaw, length=1.0, width=0.5, fc="r", ec="k"):
 
 
 def show_trajectory(poly_coeffs, s_f, show_3d=False):
-
-    setup_plot()
 
     ds = 0.01
     svals = np.arange(0.0, s_f, ds)
@@ -265,6 +315,35 @@ def show_trajectory(poly_coeffs, s_f, show_3d=False):
         ax.set_zlabel("Z")
 
 
+def show_trajectory_frame(q, target, show_3d=False):
+
+    ds = 0.01
+    svals = np.arange(0.0, q[4], ds)
+    states = [evaluate_state(q[:4], s) for s in svals]
+
+    x, y, yaw = [], [], []
+    for s in states:
+        x.append(s.x)
+        y.append(s.y)
+        yaw.append(s.theta)
+
+    plt.clf()
+    plot_arrow(target.x, target.y, target.theta)
+
+    plt.plot(x, y, "-r")
+
+    # plt.figure()
+    # plt.plot(svals, yaw)
+
+    # plt.figure()
+    # plt.plot(x, svals, "-g")
+
+    # plt.figure()
+    # plt.plot(y, svals, "-b")
+
+    plt.pause(2.0)
+
+
 def test_trajectory_plot():
     # plot_arrow(10,10,math.radians(-90))
 
@@ -277,10 +356,15 @@ def test_trajectory_plot():
 
 
 def test_trajectory_optimization(show_traj=False):
-    q0 = np.array([0.0, 1, 1, -0.8, 2.5])
+    # q0 = np.array([0.0, 1, 1, -0.8, 2.5])
+    # st0 = motion_model.State(0, 0, 0, 0)
+    # stf = motion_model.State(1.5, 1.2, math.radians(30), 0)
 
+    # q0 = np.array([0.0, -2.0, 4.0, -1.5, 2.5])
     st0 = motion_model.State(0, 0, 0, 0)
-    stf = motion_model.State(1.5, 1.2, math.radians(30), 0)
+    stf = motion_model.State(1.0, 0.0, math.radians(0), 0)
+    q0 = calculate_initial_guess(st0,stf)
+    print "initial guess: {0}".format(q0)
 
     q = optimize_trajectory(st0, stf, q0)
 
@@ -295,11 +379,10 @@ def test_trajectory_optimization(show_traj=False):
 
 
 def main():
-    print("trajectory generator: " + __file__)
+    print("trajectory generator started: " + __file__)
 
-    # setup_plot()
+    setup_plot()
     # test_trajectory_plot()
-    # test_trajectory_generate()
     test_trajectory_optimization()
 
 
