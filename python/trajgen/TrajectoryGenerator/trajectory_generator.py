@@ -12,7 +12,7 @@ import motion_model
 # optimization parameter
 max_iter = 100
 h = np.matrix([0.5, 0.02, 0.02]).T  # parameter sampling distanse
-cost_th = 0.1
+cost_th = 0.01
 
 show_animation = False
 
