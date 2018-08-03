@@ -14,6 +14,3 @@ target_link_libraries(test_traffic_flow tflow lightviz utilities)
 add_executable(test_roi test_roi.cpp)
 target_link_libraries(test_roi tflow lightviz utilities)
 
-add_executable(test_topogeo_graph test_topogeo_graph.cpp)
-target_link_libraries(test_topogeo_graph tflow lightviz utilities)
-

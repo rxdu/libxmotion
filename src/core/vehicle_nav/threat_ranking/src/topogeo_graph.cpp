@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "traffic_flow/topogeo_graph.hpp"
+#include "threat_ranking/topogeo_graph.hpp"
 
 #include <set>
 #include <algorithm>
