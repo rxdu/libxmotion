@@ -331,12 +331,13 @@ void XMLParser::parse_center_lines()
         // std::cout << "found center line: " << attmap["name"].as_string() << std::endl;
 
         reference_line_t center_line;
-        for (pugi::xpath_node member : relation.node().select_nodes((boost::format("member[@type='way' and @role='%s']") % "line").str().c_str()))
+        for (pugi::xpath_node member : relation.node().select_nodes((boost::format("member[@type='node' and @role='%s']") % "point").str().c_str()))
         {
             int32_t id = member.node().attribute("ref").as_int();
             // std::cout << "ref id: " << id << std::endl;
             center_line.push_back(points_by_id[id]);
         }
+        // std::cout << "point number: " << center_line.size() << std::endl;
         center_lines.insert(std::make_pair(attmap["name"].as_string(), center_line));
     }
 }

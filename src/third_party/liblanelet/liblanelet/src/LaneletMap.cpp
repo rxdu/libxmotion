@@ -91,6 +91,11 @@ reference_line_t LaneletMap::get_drivable_boundary_points() const
     return xml_struct.drivable_boundary;
 }
 
+std::unordered_map<std::string, reference_line_t> LaneletMap::get_lane_center_lines() const
+{
+    return xml_struct.center_lines;
+}
+
 const Graph &LaneletMap::graph() const
 {
     return _graph;

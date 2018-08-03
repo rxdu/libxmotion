@@ -33,6 +33,10 @@ public:
   Eigen::MatrixXd mask_zero_;
   Eigen::MatrixXd mask_ones_;
 
+  int32_t pixel_per_meter_ = 10;
+  int32_t grid_size_x_ = 0;
+  int32_t grid_size_y_ = 0;
+
   bool MapReady() const { return map_loaded_; }
 
   std::vector<int32_t> FindShortestRoute(std::string start_name, std::string goal_name);
@@ -43,6 +47,7 @@ public:
   // dense grid for planning
   std::shared_ptr<DenseGrid> GetFullLaneBoundaryGrid();
   std::shared_ptr<DenseGrid> GetFullDrivableAreaGrid();
+  std::shared_ptr<DenseGrid> GetFullCenterLineGrid();
 
   std::shared_ptr<DenseGrid> GetLaneBoundGrid(std::vector<std::string> lanelets);
   std::shared_ptr<DenseGrid> GetLaneBoundGrid(std::vector<int32_t> lanelets);
@@ -51,30 +56,38 @@ public:
 
 private:
   bool map_loaded_ = false;
+
+  // information from liblanelet
   std::unique_ptr<LLet::LaneletMap> lanelet_map_;
+
   std::vector<LLet::lanelet_ptr_t> lanelets_;
   std::unordered_map<std::string, int32_t> ll_id_lookup_;
   std::unordered_map<int32_t, std::string> ll_name_lookup_;
 
+  std::unordered_map<std::string, LLet::reference_line_t> center_lines_;
+
+  // extracted information for planning/decision making
   double x_min_ = 0.0;
   double x_max_ = 0.0;
   double y_min_ = 0.0;
   double y_max_ = 0.0;
 
-  RoadCoordinateFrame coordinate_;
-  std::unordered_map<int32_t, std::pair<PolyLine, PolyLine>> lane_bounds_;
-
   LLet::point_with_id_t world_origin_;
+  RoadCoordinateFrame coordinate_;
 
-  int32_t pixel_per_meter_ = 10;
-  int32_t grid_size_x_ = 0;
-  int32_t grid_size_y_ = 0;
-  std::shared_ptr<DenseGrid> drivable_area_grid_;
+  std::unordered_map<int32_t, std::pair<PolyLine, PolyLine>> lane_bounds_;
   std::unordered_map<int32_t, std::shared_ptr<DenseGrid>> lane_bound_grids_;
+
   std::unordered_map<int32_t, std::shared_ptr<DenseGrid>> lane_drivable_grids_;
 
-  void GenerateDenseGrids(int32_t pixel_per_meter);
+  std::unordered_map<std::string, PolyLine> lane_center_lines_;
+  std::unordered_map<int32_t, std::shared_ptr<DenseGrid>> lane_centerline_grids_;
+
+  void GenerateMapMasks();
+  // ExtractXXX() to be called inside GenerateMapMasks()
   void ExtractDrivableAreas();
+  void ExtractLaneCenterLines();
+
   std::vector<DenseGridPixel> GenerateLanePoints(const PolyLine &line);
   std::vector<DenseGridPixel> InterpolateGridPixelPoints(DenseGridPixel pt1, DenseGridPixel pt2);
 };

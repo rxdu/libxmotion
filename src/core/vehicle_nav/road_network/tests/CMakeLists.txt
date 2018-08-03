@@ -21,4 +21,4 @@ add_executable(test_roadmap_geometry test_roadmap_geometry.cpp)
 target_link_libraries(test_roadmap_geometry road lightviz utilities)
 
 add_executable(test_centerline test_centerline.cpp)
-target_link_libraries(test_centerline road lightviz utilities)
+target_link_libraries(test_centerline road tfield lightviz utilities)

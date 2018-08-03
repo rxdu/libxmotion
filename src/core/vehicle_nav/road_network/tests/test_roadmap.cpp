@@ -21,7 +21,7 @@ int main()
         return -1;
     }
 
-    // map.GenerateDenseGrids(15);
+    // map.GenerateMapMasks(15);
     std::cout << "generated grid in " << timer.toc() << " seconds" << std::endl;
 
     // map.OccupiedLanelet(CartCooridnate(60, 60));

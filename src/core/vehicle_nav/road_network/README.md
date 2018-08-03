@@ -2,6 +2,7 @@
 
 * a relation of type "reference", containing a node of role "origin".
 * a relation of type "reference", containing a series of nodes of role "boundary". The boundary points must be specified in clockwise order.
+* a relation of type "center_line", containing a series of nodes of role "point" and a path of role "line". The name should be "cl_<lanelet-name>"
 
 Example:
 

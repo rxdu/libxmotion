@@ -45,6 +45,7 @@ class LaneletMap
     const lanelet_ptr_t &lanelet_by_id(int32_t id) const;
     bool get_local_reference_frame_origin(point_with_id_t *pt) const;
     reference_line_t get_drivable_boundary_points() const;
+    std::unordered_map<std::string, reference_line_t> get_lane_center_lines() const;
 
     const Graph &graph() const;
 

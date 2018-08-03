@@ -76,8 +76,8 @@ private:
   double pos_y_ = 0;
   double vel_x_ = 0;
   double vel_y_ = 0;
-  double sigma_1_ = 25;
-  double sigma_2_ = 25;
+  double sigma_1_ = 15;
+  double sigma_2_ = 15;
   double rho_ = 0;
 
   double coeff1_ = 0;
