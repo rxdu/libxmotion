@@ -20,6 +20,8 @@
 #pragma once
 
 #include <vector>
+#include <unordered_map>
+
 #include "liblanelet/Lanelet.hpp"
 #include "liblanelet/LaneletPoint.hpp"
 
@@ -33,6 +35,7 @@ struct LaneletXML
     bool local_origin_defined = false;
     point_with_id_t reference_origin;
     reference_line_t drivable_boundary;
+    std::unordered_map<std::string, reference_line_t> center_lines;
 };
 
 std::vector<lanelet_ptr_t> parse_xml(std::string filename);

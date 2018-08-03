@@ -75,7 +75,7 @@ const lanelet_ptr_t &LaneletMap::lanelet_by_id(int32_t id) const
         return *pos;
     else
     {
-        boost::format fmt("trying to retieve lanelet with unknown id: %i");
+        boost::format fmt("trying to retrieve lanelet with unknown id: %i");
         throw std::runtime_error((fmt % id).str());
     }
 }

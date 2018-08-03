@@ -3,4 +3,4 @@
 
 ## tests
 add_executable(test_trafficsim test_trafficsim.cpp)
-target_link_libraries(test_trafficsim field trafficsim utilities)
+target_link_libraries(test_trafficsim tfield trafficsim utilities)

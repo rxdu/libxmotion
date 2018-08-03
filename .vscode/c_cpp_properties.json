@@ -35,6 +35,7 @@
                 "${workspaceRoot}",
                 "${workspaceRoot}/src",
                 "${workspaceRoot}/src/core",
+                "${workspaceRoot}/src/core/*",
                 "${workspaceRoot}/src/platforms",
                 "${workspaceRoot}/build/include"
             ],

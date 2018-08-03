@@ -7,6 +7,7 @@ set(TFIELD_LIB_SRC
     src/threat_basis.cpp
     src/threat_distribution.cpp
     src/collision_field.cpp
+    src/threat_projector.cpp
 )
 add_library(tfield STATIC ${TFIELD_LIB_SRC})
 target_link_libraries(tfield decomp graph tflow)

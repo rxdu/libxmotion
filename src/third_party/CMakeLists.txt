@@ -24,8 +24,6 @@ set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Add sub source directories
 # add_subdirectory(octomap-1.8.0)
-# add_subdirectory(glfw-3.2.1)
-# add_subdirectory(dlib-19.10)
 add_subdirectory(googletest)
 add_subdirectory(spdlog)
 add_subdirectory(ascent)
@@ -34,5 +32,5 @@ add_subdirectory(liblanelet)
 add_subdirectory(gurobi_cpp)
 add_subdirectory(osqp)
 
-set(CINDER_BOOST_USE_SYSTEM ON)
-add_subdirectory(cinder)
+# set(CINDER_BOOST_USE_SYSTEM ON)
+# add_subdirectory(cinder)

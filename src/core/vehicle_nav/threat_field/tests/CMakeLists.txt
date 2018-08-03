@@ -13,3 +13,6 @@ target_link_libraries(test_traffic_participant tfield lightviz utilities)
 
 add_executable(test_collision_field test_collision_field.cpp)
 target_link_libraries(test_collision_field tfield lightviz utilities)
+
+add_executable(test_projector test_projector.cpp)
+target_link_libraries(test_projector tfield tflow lightviz utilities)

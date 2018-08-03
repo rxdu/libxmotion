@@ -102,6 +102,7 @@ struct XMLParser
     bool local_origin_defined = false;
     point_with_id_t reference_origin;
     reference_line_t drivable_boundary;
+    std::unordered_map<std::string, reference_line_t> center_lines;
 
     pugi::xml_document &doc;
 
@@ -110,10 +111,12 @@ struct XMLParser
     void parse_lanelets();
     void parse_regulatory_elements_and_assign_to_lanelets();
     void parse_reference_points();
+    void parse_center_lines();
 
     std::vector<lanelet_ptr_t> parsed_lanelets() const;
     bool parsed_reference_origin(point_with_id_t *pt) const;
     reference_line_t parsed_boundary_points() const;
+    std::unordered_map<std::string, reference_line_t> parsed_center_lines() const;
 
     XMLParser(pugi::xml_document &doc) : doc(doc)
     {
@@ -122,6 +125,7 @@ struct XMLParser
         parse_lanelets();
         parse_regulatory_elements_and_assign_to_lanelets();
         parse_reference_points();
+        parse_center_lines();
     }
 };
 
@@ -145,6 +149,11 @@ bool XMLParser::parsed_reference_origin(point_with_id_t *pt) const
 reference_line_t XMLParser::parsed_boundary_points() const
 {
     return drivable_boundary;
+}
+
+std::unordered_map<std::string, reference_line_t> XMLParser::parsed_center_lines() const
+{
+    return center_lines;
 }
 
 void XMLParser::parse_nodes()
@@ -292,12 +301,12 @@ void XMLParser::parse_reference_points()
 {
     for (pugi::xpath_node relation : doc.select_nodes("//relation/tag[@v='reference' and @k='type']/.."))
     {
-        std::cout << "found reference" << std::endl;
+        // std::cout << "found reference" << std::endl;
 
         for (pugi::xpath_node member : relation.node().select_nodes((boost::format("member[@type='node' and @role='%s']") % "boundary").str().c_str()))
         {
             int32_t id = member.node().attribute("ref").as_int();
-            std::cout << "ref id: " << id << std::endl;
+            // std::cout << "ref id: " << id << std::endl;
             drivable_boundary.push_back(points_by_id[id]);
         }
 
@@ -307,11 +316,31 @@ void XMLParser::parse_reference_points()
             int32_t id = member.node().attribute("ref").as_int();
             local_origin_defined = true;
             reference_origin = points_by_id[id];
-            std::cout << "ref id: " << id << std::endl;
+            // std::cout << "ref id: " << id << std::endl;
         }
     }
 }
+
+void XMLParser::parse_center_lines()
+{
+    for (pugi::xpath_node relation : doc.select_nodes("//relation/tag[@v='center_line' and @k='type']/.."))
+    {
+        TagWalker tagwalker;
+        relation.node().traverse(tagwalker);
+        AttributeMap attmap = tagwalker.attributes;
+        // std::cout << "found center line: " << attmap["name"].as_string() << std::endl;
+
+        reference_line_t center_line;
+        for (pugi::xpath_node member : relation.node().select_nodes((boost::format("member[@type='way' and @role='%s']") % "line").str().c_str()))
+        {
+            int32_t id = member.node().attribute("ref").as_int();
+            // std::cout << "ref id: " << id << std::endl;
+            center_line.push_back(points_by_id[id]);
+        }
+        center_lines.insert(std::make_pair(attmap["name"].as_string(), center_line));
+    }
 }
+} // namespace
 
 std::vector<lanelet_ptr_t> LLet::parse_xml(std::string filename)
 {
@@ -341,6 +370,7 @@ LaneletXML LLet::parse_xml_full(std::string filename)
     xml_struct.lanelets = parser.parsed_lanelets();
     xml_struct.local_origin_defined = parser.parsed_reference_origin(&xml_struct.reference_origin);
     xml_struct.drivable_boundary = parser.parsed_boundary_points();
+    xml_struct.center_lines = parser.parsed_center_lines();
 
     return xml_struct;
 }
