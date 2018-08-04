@@ -68,7 +68,7 @@ public:
   BiasedGaussianThreat() = default;
   BiasedGaussianThreat(double pos_x, double pos_y, double vel_x, double vel_y);
 
-  void SetParameters(double pos_x, double pos_y, double vel_x, double vel_y);
+  void SetParameters(double pos_x, double pos_y, double vel_x, double vel_y, double sigpx = 15, double sigpy = 15);
   double operator()(double x, double y);
 
 private:
@@ -76,8 +76,8 @@ private:
   double pos_y_ = 0;
   double vel_x_ = 0;
   double vel_y_ = 0;
-  double sigma_1_ = 15;
-  double sigma_2_ = 15;
+  double sigma_1_;
+  double sigma_2_;
   double rho_ = 0;
 
   double coeff1_ = 0;
@@ -85,6 +85,6 @@ private:
   double coeff3_ = 1;
   double coeff4_ = 0;
 };
-}
+} // namespace librav
 
 #endif /* THREAT_DISTRIBUTION_HPP */

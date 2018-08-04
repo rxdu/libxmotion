@@ -16,39 +16,10 @@
 #include <vector>
 
 #include "graph/graph.hpp"
+#include "threat_ranking/lane_block.hpp"
 
 namespace librav
 {
-enum class LaneBockType
-{
-    LaneSegment = 0,
-    LaneConnector
-};
-
-struct LaneBlock
-{
-    LaneBlock() : id(-1), name("null"){};
-    LaneBlock(int32_t _id, std::string _name = "default") : id(_id), name(_name){};
-    LaneBlock(int32_t _id, LaneBockType _type, std::string _name = "default") : id(_id), name(_name), type(_type){};
-
-    int32_t id;
-    std::string name;
-    LaneBockType type;
-
-    int64_t GetUniqueID() const
-    {
-        return id;
-    }
-
-    bool operator==(const LaneBlock &other)
-    {
-        if (other.id == this->id)
-            return true;
-        else
-            return false;
-    }
-};
-
 class TopoGeoGraph
 {
   public:

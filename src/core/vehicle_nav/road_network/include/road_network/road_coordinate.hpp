@@ -38,6 +38,12 @@ struct XYCooridnate
 
   T x;
   T y;
+
+  friend std::ostream &operator<<(std::ostream &os, const struct XYCooridnate<T> &cor)
+  {
+		os << cor.x << " , " << cor.y;
+		return os;
+	}
 };
 
 using CartCooridnate = XYCooridnate<double>;

@@ -203,11 +203,15 @@ void RoadMap::ExtractLaneCenterLines()
         for (const auto &pt : linepts)
             sub_grid->SetValueAtCoordinate(pt.x, pt.y, 1.0);
 
-        std::string lane_name = cline.first;
-        // remove "cl_" prefix
-        lane_name.erase(0, 3);
-        lane_centerline_grids_.insert(std::make_pair(ll_id_lookup_[lane_name], sub_grid));
+        lane_centerline_grids_.insert(std::make_pair(GetLaneletIDByCenterLine(cline.first), sub_grid));
     }
+}
+
+/// Returns the lanelet id corresponding to the given center line identified by its name
+int32_t RoadMap::GetLaneletIDByCenterLine(std::string cl_name)
+{
+    cl_name.erase(0, 3);
+    return ll_id_lookup_[cl_name];
 }
 
 std::shared_ptr<DenseGrid> RoadMap::GetFullLaneBoundaryGrid()
@@ -275,6 +279,16 @@ std::shared_ptr<DenseGrid> RoadMap::GetLaneDrivableGrid(std::vector<std::string>
     grid->SetupGridWithMatrix(matrix);
 
     return grid;
+}
+
+void RoadMap::SetTrafficSinkSource(std::vector<std::string> sink, std::vector<std::string> source)
+{
+    // TODO: sinks and sources could be identified automatically by checking vertices
+    //  in the lanelet graph. A sink/source should have only incoming or outgoing connections
+    //  with other lanelets. The lanelet graph is a directed graph and the direction can be
+    //  used to check a node is sink or source.
+    traffic_sinks_ = sink;
+    traffic_sources_ = source;
 }
 
 std::vector<int32_t> RoadMap::FindShortestRoute(std::string start_name, std::string goal_name)
@@ -409,14 +423,23 @@ std::vector<DenseGridPixel> RoadMap::InterpolateGridPixelPoints(DenseGridPixel p
     return points;
 }
 
-std::vector<LLet::lanelet_ptr_t> RoadMap::OccupiedLanelet(CartCooridnate pos)
+PolyLine RoadMap::GetLaneCenterLine(std::string lane_name)
+{
+    return lane_center_lines_[GetCenterLineNameByLanelet(lane_name)];
+}
+
+std::vector<int32_t> RoadMap::OccupiedLanelet(CartCooridnate pos)
 {
     point_with_id_t geo_pt = coordinate_.CreateLaneletPoint(pos);
     BoundingBox world(geo_pt);
 
-    // auto lanelets = lanelet_map_->query(world);
+    auto lanelets = lanelet_map_->query(world);
     // std::cout << "Number of lanelets found at (" << pos.x << " , " << pos.y << ") : " << lanelets.size() << std::endl;
     // return lanelets;
 
-    return lanelet_map_->query(world);
+    std::vector<int32_t> ids;
+    for (auto ll : lanelets)
+        ids.push_back(ll->id());
+
+    return ids;
 }

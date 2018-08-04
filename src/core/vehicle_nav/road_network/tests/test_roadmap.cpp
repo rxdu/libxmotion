@@ -24,8 +24,10 @@ int main()
     // map.GenerateMapMasks(15);
     std::cout << "generated grid in " << timer.toc() << " seconds" << std::endl;
 
-    // map.OccupiedLanelet(CartCooridnate(60, 60));
+    auto ids = map.OccupiedLanelet(CartCooridnate(70, 60));
+    std::cout << "occupied laneles: " << ids.size() << std::endl;
 
+    /*
     LightViz::ShowMatrixAsColorMap(map.GetFullLaneBoundaryGrid()->GetGridMatrix(true), "roadnetwork", true);
     // LightViz::ShowMatrixAsColorMap(map.GetFullDrivableAreaGrid()->GetGridMatrix(true), "drivable", true);
 
@@ -44,7 +46,7 @@ int main()
     // auto matrix = map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false);
     auto sgrid = SquareGrid(matrix, 10);
     LightViz::ShowSquareGrid(&sgrid, 100, "Square Grid", true);
-
+    */
     // auto sgrid = map.GetLaneBoundGrid(lanelets)->ConvertToSquareGrid(5);
     // auto sgrid = std::make_shared<SquareGrid>(map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false), 5);
     // LightViz::ShowSquareGrid(sgrid.get(), 100, "Square Grid", true);

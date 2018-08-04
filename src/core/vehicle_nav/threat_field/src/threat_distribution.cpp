@@ -105,13 +105,15 @@ BiasedGaussianThreat::BiasedGaussianThreat(
     SetParameters(pos_x, pos_y, vel_x, vel_y);
 }
 
-void BiasedGaussianThreat::SetParameters(double pos_x, double pos_y, double vel_x, double vel_y)
+void BiasedGaussianThreat::SetParameters(double pos_x, double pos_y, double vel_x, double vel_y, double sigpx, double sigpy)
 {
     pos_x_ = pos_x;
     pos_y_ = pos_y;
     vel_x_ = vel_x;
     vel_y_ = vel_y;
     rho_ = 0;
+    sigma_1_ = sigpx;
+    sigma_2_ = sigpy;
 
     double one_minus_rho_s = std::sqrt(1 - rho_ * rho_);
 
@@ -124,7 +126,7 @@ double BiasedGaussianThreat::operator()(double x, double y)
 {
     double x_err = x - pos_x_;
     double y_err = y - pos_y_;
-    
+
     double alpha = 0.5;
     double val = std::exp(-x_err * x_err / coeff2_ - y_err * y_err / coeff3_) /
                  (1 + std::exp(-alpha * (vel_x_ * x_err + vel_y_ * y_err)));
