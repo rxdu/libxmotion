@@ -46,9 +46,12 @@ class PolyLine
 public:
   PolyLine() = default;
 
-  void AddPoint(double x, double y);
-
   std::vector<PolyLinePoint> points_;
+
+  void AddPoint(double x, double y);
+  void SetPoints(std::vector<PolyLinePoint> pts) { points_ = pts; }
+  // std::vector<PolyLinePoint> GetPoints() const { return points_; }
+
   void PrintPoints() const;
 
 private:
@@ -75,6 +78,6 @@ private:
   std::vector<PolyLineSegment> boundaries_;
   double Angle2D(double x1, double y1, double x2, double y2);
 };
-}
+} // namespace librav
 
 #endif /* ROAD_GEOMETRY_HPP */

@@ -319,7 +319,7 @@ std::vector<DenseGridPixel> RoadMap::GenerateLanePoints(const PolyLine &line)
     std::vector<DenseGridPixel> grid_points;
     std::vector<DenseGridPixel> interpolated_points;
 
-    for (const auto &pt : line.points_)
+    for (auto &pt : line.points_)
     {
         auto gpt = coordinate_.ConvertToGridPixel(CartCooridnate(pt.x, pt.y));
         grid_points.push_back(gpt);

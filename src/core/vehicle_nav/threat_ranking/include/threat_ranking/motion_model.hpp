@@ -14,13 +14,16 @@
 #include <string>
 
 #include "graph/graph.hpp"
+#include "decomp/dense_grid.hpp"
 #include "road_network/road_map.hpp"
 #include "threat_field/traffic_participant.hpp"
-#include "threat_ranking/lane_block.hpp"
 #include "threat_field/collision_field.hpp"
+#include "threat_ranking/lane_block.hpp"
 
 namespace librav
 {
+class MotionModel;
+
 struct MMStateEst
 {
   MMStateEst() : position_x(0), position_y(0), velocity_x(0), velocity_y(0),
@@ -47,9 +50,12 @@ struct MMStateEst
   double sigma_vy;
 };
 
+//-----------------------------------------------------------------------------------//
+
 class MotionPoint
 {
 public:
+  MotionPoint() = default;
   MotionPoint(MMStateEst est) : estimate_(est) {}
 
   MMStateEst estimate_;
@@ -61,6 +67,51 @@ public:
   }
 };
 
+//-----------------------------------------------------------------------------------//
+
+struct MChainLink
+{
+  MChainLink(int32_t id) : lanelet_id(id){};
+  ~MChainLink()
+  {
+    for (auto &child : child_links)
+      delete child;
+  }
+
+  int32_t lanelet_id;
+  PolyLine polyline;
+  double length;
+
+  MChainLink *parent_link;
+  std::vector<MChainLink *> child_links;
+
+  double GetLength()
+  {
+    auto pts = polyline.points_;
+    return 0;
+  }
+};
+
+class MotionChain
+{
+public:
+  MotionChain(MotionModel *model, MotionPoint pt, int32_t start);
+  ~MotionChain();
+
+  void TraverseChain();
+
+private:
+  int32_t start_id_;
+  int32_t chain_depth_;
+  int32_t chain_width_;
+
+  MotionModel *model_;
+  MotionPoint mp_pt_;
+  MChainLink *base_link_;
+};
+
+//-----------------------------------------------------------------------------------//
+
 /// Motion model manages the evolution of detected traffic participants
 class MotionModel
 {
@@ -68,24 +119,26 @@ public:
   MotionModel(std::shared_ptr<RoadMap> map);
   ~MotionModel() = default;
 
+  std::shared_ptr<RoadMap> road_map_;
+  std::shared_ptr<Graph_t<LaneBlock>> cline_graph_;
+
   void AddVehicleStateEstimate(MMStateEst pt) { ests_.push_back(pt); }
   void SetVehicleStateEstimates(std::vector<MMStateEst> pts) { ests_ = pts; }
 
   void MergePointsToNetwork();
   void GenerateCollisionField();
+  void PropagateMotionChains(double t);
+
   Eigen::MatrixXd GetThreatFieldVisMatrix();
 
 private:
-  std::shared_ptr<RoadMap> road_map_;
-  std::shared_ptr<Graph_t<LaneBlock>> line_network_;
-
   std::vector<MMStateEst> ests_;
   std::shared_ptr<CollisionField> cfield_;
 
   std::vector<MotionPoint> points_;
+  std::vector<std::shared_ptr<MotionChain>> chains_;
 
   void ConstructLineNetwork();
-  void FindMotionChains(std::string start_lane);
 };
 } // namespace librav
 

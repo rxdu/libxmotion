@@ -9,7 +9,91 @@
 
 #include "threat_ranking/motion_model.hpp"
 
+#include <queue>
+
 using namespace librav;
+
+MotionChain::MotionChain(MotionModel *model, MotionPoint pt, int32_t start) : start_id_(start), model_(model), mp_pt_(pt)
+{
+    // setup the base link polyline
+    base_link_ = new MChainLink(start_id_);
+    base_link_->polyline = model_->road_map_->GetLaneCenterLine(model_->road_map_->GetLaneletNameFromID(start_id_));
+
+    // create the chains
+    auto start_vtx = model_->cline_graph_->GetVertex(start_id_);
+    std::cout << "starting vertex: " << start_vtx->state_.name << std::endl;
+
+    chain_depth_ = 1;
+    auto neighbours = start_vtx->edges_to_;
+    chain_width_ = neighbours.size();
+
+    while (!neighbours.empty())
+    {
+        std::vector<Graph_t<LaneBlock>::VertexType *> vertices;
+        for (auto &nb : neighbours)
+            vertices.push_back(nb.dst_);
+
+        neighbours.clear();
+        for (auto vt : vertices)
+        {
+            if (!vt->edges_to_.empty())
+                neighbours.insert(neighbours.end(), vt->edges_to_.begin(), vt->edges_to_.end());
+        }
+
+        if (neighbours.size() > chain_width_)
+            chain_width_ = neighbours.size();
+        ++chain_depth_;
+    }
+    std::cout << "chain depth: " << chain_depth_ << " , width: " << chain_width_ << std::endl;
+
+    std::vector<MChainLink *> lks;
+    lks.push_back(base_link_);
+    while (!lks.empty())
+    {
+        std::vector<MChainLink *> next_lks;
+
+        // look for child links for each link at this depth
+        for (auto &lk : lks)
+        {
+            for (auto &edge : model_->cline_graph_->GetVertex(lk->lanelet_id)->edges_to_)
+            {
+                MChainLink *new_link = new MChainLink(edge.dst_->state_.id);
+                new_link->polyline = model_->road_map_->GetLaneCenterLine(model_->road_map_->GetLaneletNameFromID(edge.dst_->state_.id));
+                new_link->parent_link = lk;
+                lk->child_links.push_back(new_link);
+
+                next_lks.push_back(new_link);
+            }
+        }
+
+        lks = next_lks;
+    }
+
+    std::cout << "-------------" << std::endl;
+    TraverseChain();
+}
+
+MotionChain::~MotionChain()
+{
+    delete base_link_;
+}
+
+void MotionChain::TraverseChain()
+{
+    std::queue<MChainLink *> q;
+    MChainLink *node;
+    q.push(base_link_);
+    while (!q.empty())
+    {
+        node = q.front();
+        q.pop();
+        std::cout << "lanelet id: " << model_->road_map_->GetLaneletNameFromID(node->lanelet_id) << std::endl;
+        for (auto &nd : node->child_links)
+            q.push(nd);
+    }
+}
+
+//-----------------------------------------------------------------------------------//
 
 MotionModel::MotionModel(std::shared_ptr<RoadMap> map) : road_map_(map)
 {
@@ -18,7 +102,7 @@ MotionModel::MotionModel(std::shared_ptr<RoadMap> map) : road_map_(map)
 
 void MotionModel::ConstructLineNetwork()
 {
-    line_network_ = std::make_shared<Graph_t<LaneBlock>>();
+    cline_graph_ = std::make_shared<Graph_t<LaneBlock>>();
 
     for (auto &source : road_map_->traffic_sources_)
         for (auto &sink : road_map_->traffic_sinks_)
@@ -40,7 +124,7 @@ void MotionModel::ConstructLineNetwork()
                     src_bk.center_line = road_map_->GetLaneCenterLine(src_name);
                     dst_bk.center_line = road_map_->GetLaneCenterLine(dst_name);
 
-                    line_network_->AddEdge(src_bk, dst_bk, 1.0);
+                    cline_graph_->AddEdge(src_bk, dst_bk, 1.0);
                 }
             }
         }
@@ -73,15 +157,13 @@ void MotionModel::MergePointsToNetwork()
         // find the closest center line
         for (auto &id : lanelet_ids)
         {
+            // create chains to be maintained
             std::cout << "occupied lanes: " << road_map_->GetLaneletNameFromID(id) << std::endl;
+
+            std::shared_ptr<MotionChain> chain = std::make_shared<MotionChain>(this, pt, id);
+            chains_.push_back(chain);
         }
-
-        // identify chains to be maintained
     }
-}
-
-void MotionModel::FindMotionChains(std::string start_lane)
-{
 }
 
 void MotionModel::GenerateCollisionField()
@@ -102,5 +184,5 @@ void MotionModel::GenerateCollisionField()
 Eigen::MatrixXd MotionModel::GetThreatFieldVisMatrix()
 {
     return road_map_->GetFullCenterLineGrid()->GetGridMatrix(true) + road_map_->GetFullDrivableAreaGrid()->GetGridMatrix(true) +
-        cfield_->GetGridMatrix(true);
+           cfield_->GetGridMatrix(true);
 }
