@@ -22,7 +22,7 @@ class TrafficParticipant : public ScalarField
 public:
   TrafficParticipant(int64_t size_x = 0, int64_t size_y = 0) : ScalarField(size_x, size_y){};
 
-  void SetPositionVelocity(double posx, double posy, double velx, double vely)
+  void SetParameters(double posx, double posy, double velx, double vely, double sig1, double sig2)
   {
     position_x_ = posx;
     position_y_ = posy;
@@ -30,7 +30,7 @@ public:
     velocity_x_ = velx;
     velocity_y_ = vely;
 
-    dist_func_.SetParameters(position_x_, position_y_, velocity_x_, velocity_y_);
+    dist_func_.SetParameters(position_x_, position_y_, velocity_x_, velocity_y_, sig1, sig2);
     UpdateThreatDistribution();
   }
 
@@ -48,6 +48,6 @@ private:
         SetValueAtCoordinate(i, j, dist_func_(i, j));
   }
 };
-}
+} // namespace librav
 
 #endif /* TRAFFIC_PARTICIPANT_HPP */

@@ -16,7 +16,7 @@ int main()
 
     timer.tic();
 
-    traff_part.SetPositionVelocity(50, 50, 2, -1);
+    traff_part.SetParameters(50, 50, 2, -1, 15, 15);
     ScalarFieldMatrix mat = traff_part.GenerateFieldMatrix(0, 1, 0, 1, true);
 
     std::cout << "time elapsed: " << timer.toc() << std::endl;

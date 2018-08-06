@@ -41,7 +41,7 @@ int main()
     for (int i = 0; i < vnum; ++i)
     {
         auto tp = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-        tp->SetPositionVelocity(vdist * (i + 1), lane1_y, 15, 0);
+        tp->SetParameters(vdist * (i + 1), lane1_y, 15, 0);
 
         vehicle_group1.push_back(tp);
     }
@@ -51,7 +51,7 @@ int main()
     for (int i = 0; i < vnum; ++i)
     {
         auto tp = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-        tp->SetPositionVelocity(vdist * (i + 1), lane2_y, 15, 0);
+        tp->SetParameters(vdist * (i + 1), lane2_y, 15, 0);
 
         vehicle_group2.push_back(tp);
     }
@@ -61,7 +61,7 @@ int main()
     for (int i = 0; i < vnum; ++i)
     {
         auto tp = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-        tp->SetPositionVelocity(vdist * (i + 1), lane3_y, 15, 0);
+        tp->SetParameters(vdist * (i + 1), lane3_y, 15, 0);
 
         vehicle_group3.push_back(tp);
     }
@@ -71,7 +71,7 @@ int main()
     for (int i = 0; i < vnum; ++i)
     {
         auto tp = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-        tp->SetPositionVelocity(vdist * (i + 1), lane4_y, 15, 0);
+        tp->SetParameters(vdist * (i + 1), lane4_y, 15, 0);
 
         vehicle_group4.push_back(tp);
     }

@@ -23,7 +23,7 @@ int main()
 
     // add traffic participant
     auto pt0 = std::make_shared<CollisionField::TrafficParticipantType>(fsize_x, fsize_y);
-    pt0->SetPositionVelocity(220, 150, 1, -1);
+    pt0->SetParameters(220, 150, 1, -1, 15, 15);
 
     cfield.AddTrafficParticipant(0, pt0);
 

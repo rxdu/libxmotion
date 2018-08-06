@@ -40,9 +40,9 @@ class GaussianPositionVelocityThreat
 {
 public:
   GaussianPositionVelocityThreat() = default;
-  GaussianPositionVelocityThreat(double pos_x, double pos_y, double vel_x, double vel_y);
+  GaussianPositionVelocityThreat(double pos_x, double pos_y, double vel_x, double vel_y, double sig1, double sig2);
 
-  void SetParameters(double pos_x, double pos_y, double vel_x, double vel_y, double sigp = 10, double sigv = 10);
+  void SetParameters(double pos_x, double pos_y, double vel_x, double vel_y, double sigp, double sigv);
   double operator()(double x, double y);
 
 private:
@@ -66,9 +66,9 @@ class BiasedGaussianThreat
 {
 public:
   BiasedGaussianThreat() = default;
-  BiasedGaussianThreat(double pos_x, double pos_y, double vel_x, double vel_y);
+  BiasedGaussianThreat(double pos_x, double pos_y, double vel_x, double vel_y, double sig1, double sig2);
 
-  void SetParameters(double pos_x, double pos_y, double vel_x, double vel_y, double sigpx = 15, double sigpy = 15);
+  void SetParameters(double pos_x, double pos_y, double vel_x, double vel_y, double sigpx, double sigpy);
   double operator()(double x, double y);
 
 private:

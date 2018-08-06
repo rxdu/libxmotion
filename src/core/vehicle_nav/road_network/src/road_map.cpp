@@ -434,7 +434,7 @@ std::vector<int32_t> RoadMap::OccupiedLanelet(CartCooridnate pos)
     BoundingBox world(geo_pt);
 
     auto lanelets = lanelet_map_->query(world);
-    // std::cout << "Number of lanelets found at (" << pos.x << " , " << pos.y << ") : " << lanelets.size() << std::endl;
+    std::cout << "Number of lanelets found at (" << pos.x << " , " << pos.y << ") : " << lanelets.size() << std::endl;
     // return lanelets;
 
     std::vector<int32_t> ids;

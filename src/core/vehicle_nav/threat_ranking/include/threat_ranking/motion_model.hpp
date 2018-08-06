@@ -56,7 +56,9 @@ struct MMStateEst
 
 struct MMStatePrediction
 {
-  MMStatePrediction(double px, double py, double vx, double vy) : position_x(px), position_y(py), velocity_x(vx), velocity_y(vy) {}
+  MMStatePrediction(MMStateEst s, double px, double py, double vx, double vy) : base_state(s), position_x(px), position_y(py), velocity_x(vx), velocity_y(vy) {}
+
+  MMStateEst base_state;
 
   double position_x;
   double position_y;
@@ -74,7 +76,15 @@ struct MMStatePrediction
       return false;
   }
 
-  friend std::ostream& operator<<(std::ostream &os, const MMStatePrediction &data)
+  bool operator!=(const MMStatePrediction &other)
+  {
+    if (*this == other)
+      return false;
+    else
+      return true;
+  }
+
+  friend std::ostream &operator<<(std::ostream &os, const MMStatePrediction &data)
   {
     os << data.position_x << " , " << data.position_y << " , " << data.velocity_x << " , " << data.velocity_y;
     return os;

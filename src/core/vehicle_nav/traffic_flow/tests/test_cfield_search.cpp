@@ -21,7 +21,7 @@ int main()
     cfield->SetOriginCoordinate(0, 0);
 
     auto pt0 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    pt0->SetPositionVelocity(15, 15, 1, 1);
+    pt0->SetParameters(15, 15, 1, 1);
 
     cfield->AddTrafficParticipant(0, pt0);
     cfield->UpdateCollisionField();

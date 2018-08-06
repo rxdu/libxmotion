@@ -35,67 +35,67 @@ int main()
     // add traffic participant
     // cars on lane 1
     auto tp10 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp10->SetPositionVelocity(50, lane1_y, 15, 0);
+    tp10->SetParameters(50, lane1_y, 15, 0);
 
     auto tp11 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp11->SetPositionVelocity(150, lane1_y, 15, 0);
+    tp11->SetParameters(150, lane1_y, 15, 0);
 
     auto tp12 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp12->SetPositionVelocity(250, lane1_y, 15, 0);
+    tp12->SetParameters(250, lane1_y, 15, 0);
 
     auto tp13 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp13->SetPositionVelocity(350, lane1_y, 15, 0);
+    tp13->SetParameters(350, lane1_y, 15, 0);
 
     auto tp14 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp14->SetPositionVelocity(450, lane1_y, 15, 0);
+    tp14->SetParameters(450, lane1_y, 15, 0);
 
     // cars on lane 2
     auto tp20 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp20->SetPositionVelocity(50, lane2_y, 15, 0);
+    tp20->SetParameters(50, lane2_y, 15, 0);
 
     auto tp21 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp21->SetPositionVelocity(150, lane2_y, 15, 0);
+    tp21->SetParameters(150, lane2_y, 15, 0);
 
     auto tp22 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp22->SetPositionVelocity(250, lane2_y, 15, 0);
+    tp22->SetParameters(250, lane2_y, 15, 0);
 
     auto tp23 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp23->SetPositionVelocity(350, lane2_y, 15, 0);
+    tp23->SetParameters(350, lane2_y, 15, 0);
 
     auto tp24 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp24->SetPositionVelocity(450, lane2_y, 15, 0);
+    tp24->SetParameters(450, lane2_y, 15, 0);
 
     // cars on lane 3
     auto tp30 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp30->SetPositionVelocity(50, lane3_y, -15, 0);
+    tp30->SetParameters(50, lane3_y, -15, 0);
 
     auto tp31 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp31->SetPositionVelocity(150, lane3_y, -15, 0);
+    tp31->SetParameters(150, lane3_y, -15, 0);
 
     auto tp32 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp32->SetPositionVelocity(250, lane3_y, -15, 0);
+    tp32->SetParameters(250, lane3_y, -15, 0);
 
     auto tp33 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp33->SetPositionVelocity(350, lane3_y, -15, 0);
+    tp33->SetParameters(350, lane3_y, -15, 0);
 
     auto tp34 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp34->SetPositionVelocity(450, lane3_y, -15, 0);
+    tp34->SetParameters(450, lane3_y, -15, 0);
 
     // cars on lane 4
     auto tp40 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp40->SetPositionVelocity(50, lane4_y, -15, 0);
+    tp40->SetParameters(50, lane4_y, -15, 0);
 
     auto tp41 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp41->SetPositionVelocity(150, lane4_y, -15, 0);
+    tp41->SetParameters(150, lane4_y, -15, 0);
 
     auto tp42 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp42->SetPositionVelocity(250, lane4_y, -15, 0);
+    tp42->SetParameters(250, lane4_y, -15, 0);
 
     auto tp43 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp43->SetPositionVelocity(350, lane4_y, -15, 0);
+    tp43->SetParameters(350, lane4_y, -15, 0);
 
     auto tp44 = std::make_shared<TrafficParticipantType>(fsize_x, fsize_y);
-    tp44->SetPositionVelocity(450, lane4_y, -15, 0);
+    tp44->SetParameters(450, lane4_y, -15, 0);
 
     cfield->AddTrafficParticipant(10, tp10);
     // cfield->AddTrafficParticipant(11, tp11);

@@ -128,7 +128,6 @@ void MotionChain::FindStartingPoint()
             continue;
 
         double dist = GetPointLineDistance(start, end, pt);
-        std::cout << "distance: " << dist << std::endl;
         if (dist < shortest_dist)
         {
             shortest_dist = dist;
@@ -136,6 +135,7 @@ void MotionChain::FindStartingPoint()
             start_segment_idx_ = i;
         }
     }
+    std::cout << "shortest distance: " << shortest_dist << std::endl;
 
     double accumulated = 0;
     for (int i = 0; i < start_segment_idx_; ++i)
@@ -171,7 +171,6 @@ std::vector<MMStatePrediction> MotionChain::Propagate(double t)
             {
                 double rem_dist = total_dist - accumulated;
                 auto ps = CalculatePrediction(p0, p1, rem_dist);
-                std::cout << "created prediction: " << ps << std::endl;
                 candidates.push_back(ps);
                 break;
             }
@@ -184,7 +183,26 @@ std::vector<MMStatePrediction> MotionChain::Propagate(double t)
 
     std::vector<MMStatePrediction> predictions;
     for (auto &s : candidates)
-        predictions.push_back(s);
+    {
+        bool duplicated = false;
+        for (auto &ps : predictions)
+        {
+            if (s == ps)
+            {
+                duplicated = true;
+                break;
+            }
+        }
+
+        if (!duplicated)
+            predictions.push_back(s);
+    }
+
+    std::cout << "number of predicated states: " << predictions.size() << std::endl;
+    for (auto &ps : predictions)
+    {
+        std::cout << "- state: " << ps << std::endl;
+    }
 
     return predictions;
 }
@@ -198,7 +216,7 @@ void MotionChain::TraverseChain()
     {
         node = q.front();
         q.pop();
-        std::cout << "lanelet id: " << model_->road_map_->GetLaneletNameFromID(node->lanelet_id_) << " length: " << node->length_ << std::endl;
+        // std::cout << "lanelet id: " << model_->road_map_->GetLaneletNameFromID(node->lanelet_id_) << " length: " << node->length_ << std::endl;
         if (node->child_links.empty())
             leaf_links_.push_back(node);
         for (auto &nd : node->child_links)
@@ -253,7 +271,7 @@ MMStatePrediction MotionChain::CalculatePrediction(PolyLinePoint pt0, PolyLinePo
     double abs_vel = std::hypot(mp_pt_.estimate_.velocity_x, mp_pt_.estimate_.velocity_y);
     Eigen::Vector2d velocity = abs_vel * dir;
 
-    return MMStatePrediction(position(0), position(1), velocity(0), velocity(1));
+    return MMStatePrediction(mp_pt_.estimate_, position(0), position(1), velocity(0), velocity(1));
 }
 
 //-----------------------------------------------------------------------------------//
@@ -308,7 +326,7 @@ void MotionModel::MergePointsToNetwork()
             continue;
         }
 
-        std::cout << "occupied lanelet: " << lanelet_ids.size() << std::endl;
+        std::cout << "occupied lanelet number: " << lanelet_ids.size() << std::endl;
 
         auto pos = road_map_->coordinate_.ConvertToGridPixel(CartCooridnate(est.position_x, est.position_y));
         std::cout << "(x,y): " << pos << std::endl;
@@ -325,7 +343,9 @@ void MotionModel::MergePointsToNetwork()
 
             std::shared_ptr<MotionChain> chain = std::make_shared<MotionChain>(this, pt, id);
             chains_.push_back(chain);
+            std::cout << "------" << std::endl;
         }
+        std::cout << "total number of chains to be tracked: " << chains_.size() << std::endl;
     }
 }
 
@@ -338,7 +358,7 @@ void MotionModel::GenerateCollisionField()
     for (auto &pt : points_)
     {
         auto tf_pt = std::make_shared<CollisionField::TrafficParticipantType>(road_map_->grid_size_x_, road_map_->grid_size_y_);
-        tf_pt->SetPositionVelocity(pt.grid_position_.x, pt.grid_position_.y, pt.estimate_.velocity_x, pt.estimate_.velocity_y);
+        tf_pt->SetParameters(pt.grid_position_.x, pt.grid_position_.y, pt.estimate_.velocity_x, pt.estimate_.velocity_y, pt.estimate_.sigma_px, pt.estimate_.sigma_py);
         cfield_->AddTrafficParticipant(pt_count++, tf_pt);
     }
     cfield_->UpdateCollisionField();
@@ -356,7 +376,7 @@ void MotionModel::GeneratePredictedCollisionField(double t)
     {
         auto tf_pt = std::make_shared<CollisionField::TrafficParticipantType>(road_map_->grid_size_x_, road_map_->grid_size_y_);
         auto pos = road_map_->coordinate_.ConvertToGridPixel(CartCooridnate(ps.position_x, ps.position_y));
-        tf_pt->SetPositionVelocity(pos.x, pos.y, ps.velocity_x, ps.velocity_y);
+        tf_pt->SetParameters(pos.x, pos.y, ps.velocity_x, ps.velocity_y, ps.base_state.sigma_px, ps.base_state.sigma_py);
         cfield_->AddTrafficParticipant(pt_count++, tf_pt);
     }
     cfield_->UpdateCollisionField();

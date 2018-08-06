@@ -52,13 +52,15 @@ double GaussianPositionThreat::operator()(double x, double y)
 /*              GaussianPositionVelocityThreat                  */
 /****************************************************************/
 GaussianPositionVelocityThreat::GaussianPositionVelocityThreat(
-    double pos_x, double pos_y, double vel_x, double vel_y) : pos_x_(pos_x),
-                                                              pos_y_(pos_y),
-                                                              vel_x_(vel_x),
-                                                              vel_y_(vel_y)
+    double pos_x, double pos_y, double vel_x, double vel_y, double sig1, double sig2) : pos_x_(pos_x),
+                                                                                        pos_y_(pos_y),
+                                                                                        vel_x_(vel_x),
+                                                                                        vel_y_(vel_y),
+                                                                                        sigma_1_(sig1),
+                                                                                        sigma_2_(sig2)
 {
     // update coeff1_ and coeff2_
-    SetParameters(pos_x, pos_y, vel_x, vel_y);
+    SetParameters(pos_x, pos_y, vel_x, vel_y, sig1, sig2);
 }
 
 void GaussianPositionVelocityThreat::SetParameters(double pos_x, double pos_y, double vel_x, double vel_y, double sigp, double sigv)
@@ -98,13 +100,15 @@ double GaussianPositionVelocityThreat::operator()(double x, double y)
 /*                    BiasedGaussianThreat                      */
 /****************************************************************/
 BiasedGaussianThreat::BiasedGaussianThreat(
-    double pos_x, double pos_y, double vel_x, double vel_y) : pos_x_(pos_x),
-                                                              pos_y_(pos_y),
-                                                              vel_x_(vel_x),
-                                                              vel_y_(vel_y)
+    double pos_x, double pos_y, double vel_x, double vel_y, double sig1, double sig2) : pos_x_(pos_x),
+                                                                                               pos_y_(pos_y),
+                                                                                               vel_x_(vel_x),
+                                                                                               vel_y_(vel_y),
+                                                                                               sigma_1_(sig1),
+                                                                                               sigma_2_(sig2)
 {
     // update coeff1_ and coeff2_
-    SetParameters(pos_x, pos_y, vel_x, vel_y);
+    SetParameters(pos_x, pos_y, vel_x, vel_y, sig1, sig2);
 }
 
 void BiasedGaussianThreat::SetParameters(double pos_x, double pos_y, double vel_x, double vel_y, double sigpx, double sigpy)
