@@ -31,6 +31,3 @@ add_subdirectory(dubins_curves)
 add_subdirectory(liblanelet)
 add_subdirectory(gurobi_cpp)
 add_subdirectory(osqp)
-
-# set(CINDER_BOOST_USE_SYSTEM ON)
-# add_subdirectory(cinder)

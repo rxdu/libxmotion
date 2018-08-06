@@ -32,26 +32,26 @@ int main()
     MotionModel model(map);
 
     // good test case 1
-    // MMStateEst mpt0(70, 60, -1, -0.25, 15, 15);
-    // model.AddVehicleStateEstimate(mpt0);
+    MMStateEst mpt0(70, 60, -1, -0.25, 15, 15);
+    model.AddVehicleStateEstimate(mpt0);
 
     // good test case 2
     // MMStateEst mpt0(47, 58, 1, 0.25, 15, 15);
     // model.AddVehicleStateEstimate(mpt0);
 
-    MMStateEst mpt0(55, 56, 1, 0.25, 5, 5);
-    model.AddVehicleStateEstimate(mpt0);
+    // MMStateEst mpt0(55, 56, 1, 0.25, 5, 5);
+    // model.AddVehicleStateEstimate(mpt0);
 
     model.MergePointsToNetwork();
 
     model.GenerateCollisionField();
     LightViz::ShowMatrixAsColorMap(model.GetThreatFieldVisMatrix(), "tfield", true);
 
-    // for (int i = 0; i < 15; ++i)
-    // {
-    //     model.GeneratePredictedCollisionField(2.5 * (i + 1));
-    //     LightViz::ShowMatrixAsColorMap(model.GetThreatFieldVisMatrix(), "tfield", true);
-    // }
+    for (int i = 0; i < 10; ++i)
+    {
+        model.GeneratePredictedCollisionField(2 * (i + 1));
+        LightViz::ShowMatrixAsColorMap(model.GetThreatFieldVisMatrix(), "tfield"+std::to_string(i), true);
+    }
 
     // LightViz::ShowMatrixAsColorMap(map->GetFullLaneBoundaryGrid()->GetGridMatrix(true), "roadnetwork", true);
     // LightViz::ShowMatrixAsColorMap(map->GetFullCenterLineGrid()->GetGridMatrix(true) + map->GetFullDrivableAreaGrid()->GetGridMatrix(true), "centerline", true);

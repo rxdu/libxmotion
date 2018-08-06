@@ -1,5 +1,0 @@
-if( NOT TARGET cinder${CINDER_LIB_SUFFIX} )
-    include( ${PROJECT_BINARY_DIR}/${CINDER_LIB_DIRECTORY}/cinderTargets.cmake )
-endif()
-
-
