@@ -41,7 +41,6 @@ void PolyLine::AddPoint(double x, double y)
 {
     // points_.insert(std::make_pair(point_num_++, PolyLinePoint(x, y)));
     points_.emplace_back(x, y);
-    point_num_++;
 }
 
 void PolyLine::PrintPoints() const

@@ -12,6 +12,7 @@
 
 #include <memory>
 #include <string>
+#include <iostream>
 
 #include "graph/graph.hpp"
 #include "decomp/dense_grid.hpp"
@@ -23,6 +24,7 @@
 namespace librav
 {
 class MotionModel;
+class MotionChain;
 
 struct MMStateEst
 {
@@ -52,6 +54,35 @@ struct MMStateEst
 
 //-----------------------------------------------------------------------------------//
 
+struct MMStatePrediction
+{
+  MMStatePrediction(double px, double py, double vx, double vy) : position_x(px), position_y(py), velocity_x(vx), velocity_y(vy) {}
+
+  double position_x;
+  double position_y;
+  double velocity_x;
+  double velocity_y;
+
+  bool operator==(const MMStatePrediction &other)
+  {
+    if (this->position_x == other.position_x &&
+        this->position_y == other.position_y &&
+        this->velocity_x == other.velocity_x &&
+        this->velocity_y == other.velocity_y)
+      return true;
+    else
+      return false;
+  }
+
+  friend std::ostream& operator<<(std::ostream &os, const MMStatePrediction &data)
+  {
+    os << data.position_x << " , " << data.position_y << " , " << data.velocity_x << " , " << data.velocity_y;
+    return os;
+  }
+};
+
+//-----------------------------------------------------------------------------------//
+
 class MotionPoint
 {
 public:
@@ -69,27 +100,23 @@ public:
 
 //-----------------------------------------------------------------------------------//
 
-struct MChainLink
+class MChainLink
 {
-  MChainLink(int32_t id) : lanelet_id(id){};
-  ~MChainLink()
-  {
-    for (auto &child : child_links)
-      delete child;
-  }
+public:
+  MChainLink(int32_t id, PolyLine ln);
+  ~MChainLink();
 
-  int32_t lanelet_id;
-  PolyLine polyline;
-  double length;
+  int32_t lanelet_id_;
 
-  MChainLink *parent_link;
+  MotionPoint point_;
+  PolyLine polyline_;
+  double length_;
+
+  MChainLink *parent_link = nullptr;
   std::vector<MChainLink *> child_links;
 
-  double GetLength()
-  {
-    auto pts = polyline.points_;
-    return 0;
-  }
+private:
+  double GetLength();
 };
 
 class MotionChain
@@ -98,16 +125,27 @@ public:
   MotionChain(MotionModel *model, MotionPoint pt, int32_t start);
   ~MotionChain();
 
-  void TraverseChain();
+  void FindStartingPoint();
+  std::vector<MMStatePrediction> Propagate(double t);
 
 private:
   int32_t start_id_;
   int32_t chain_depth_;
   int32_t chain_width_;
 
+  int32_t start_segment_idx_ = 0;
+  double dist_before_start_ = 0;
+
   MotionModel *model_;
   MotionPoint mp_pt_;
   MChainLink *base_link_;
+  std::vector<MChainLink *> leaf_links_;
+  std::vector<PolyLine> chain_polylines_;
+
+  void TraverseChain();
+  void CreateChainPolylines();
+  double GetPointLineDistance(PolyLinePoint ln_pt0, PolyLinePoint ln_pt1, PolyLinePoint pt);
+  MMStatePrediction CalculatePrediction(PolyLinePoint pt0, PolyLinePoint pt1, double dist);
 };
 
 //-----------------------------------------------------------------------------------//
@@ -127,7 +165,9 @@ public:
 
   void MergePointsToNetwork();
   void GenerateCollisionField();
-  void PropagateMotionChains(double t);
+  void GeneratePredictedCollisionField(double t);
+
+  std::vector<MMStatePrediction> PropagateMotionChains(double t);
 
   Eigen::MatrixXd GetThreatFieldVisMatrix();
 

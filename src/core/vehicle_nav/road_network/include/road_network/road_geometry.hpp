@@ -41,21 +41,14 @@ private:
 
 ////////////////////////////////////////////////////////////
 
-class PolyLine
+struct PolyLine
 {
-public:
-  PolyLine() = default;
-
   std::vector<PolyLinePoint> points_;
 
   void AddPoint(double x, double y);
   void SetPoints(std::vector<PolyLinePoint> pts) { points_ = pts; }
-  // std::vector<PolyLinePoint> GetPoints() const { return points_; }
 
   void PrintPoints() const;
-
-private:
-  int32_t point_num_ = 0;
 };
 
 ////////////////////////////////////////////////////////////

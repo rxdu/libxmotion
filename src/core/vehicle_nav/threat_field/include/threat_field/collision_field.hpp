@@ -27,8 +27,8 @@ class CollisionField : public ScalarField
 public:
   CollisionField(int64_t size_x, int64_t size_y);
 
-  // typedef TrafficParticipant<GaussianPositionVelocityThreat> TrafficParticipantType;
-  typedef TrafficParticipant<BiasedGaussianThreat> TrafficParticipantType;
+  typedef TrafficParticipant<GaussianPositionVelocityThreat> TrafficParticipantType;
+  // typedef TrafficParticipant<BiasedGaussianThreat> TrafficParticipantType;
   
   void SetTrafficFlowMap(std::shared_ptr<TrafficFlowMap> map);
 

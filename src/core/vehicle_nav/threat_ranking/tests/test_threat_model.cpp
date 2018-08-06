@@ -35,7 +35,15 @@ int main()
     model.AddVehicleStateEstimate(mpt0);
 
     model.MergePointsToNetwork();
-    model.GenerateCollisionField();
+
+    // model.GenerateCollisionField();
+    // LightViz::ShowMatrixAsColorMap(model.GetThreatFieldVisMatrix(), "tfield", true);
+
+    for (int i = 0; i < 15; ++i)
+    {
+        model.GeneratePredictedCollisionField(2.5 * (i + 1));
+        LightViz::ShowMatrixAsColorMap(model.GetThreatFieldVisMatrix(), "tfield", true);
+    }
 
     // LightViz::ShowMatrixAsColorMap(map->GetFullLaneBoundaryGrid()->GetGridMatrix(true), "roadnetwork", true);
     // LightViz::ShowMatrixAsColorMap(map->GetFullCenterLineGrid()->GetGridMatrix(true) + map->GetFullDrivableAreaGrid()->GetGridMatrix(true), "centerline", true);
@@ -44,8 +52,6 @@ int main()
     // pt1->SetPositionVelocity(720, 120, -1, -0.25);
     // pt2->SetPositionVelocity(550, 95, -1, -0.25);
     // pt3->SetPositionVelocity(580, 125, -1, 0.4);
-
-    LightViz::ShowMatrixAsColorMap(model.GetThreatFieldVisMatrix(), "tfield", true);
 
     return 0;
 }

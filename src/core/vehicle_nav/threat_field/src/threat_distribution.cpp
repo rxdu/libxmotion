@@ -61,12 +61,14 @@ GaussianPositionVelocityThreat::GaussianPositionVelocityThreat(
     SetParameters(pos_x, pos_y, vel_x, vel_y);
 }
 
-void GaussianPositionVelocityThreat::SetParameters(double pos_x, double pos_y, double vel_x, double vel_y)
+void GaussianPositionVelocityThreat::SetParameters(double pos_x, double pos_y, double vel_x, double vel_y, double sigp, double sigv)
 {
     pos_x_ = pos_x;
     pos_y_ = pos_y;
     vel_x_ = vel_x;
     vel_y_ = vel_y;
+    sigma_1_ = sigp;
+    sigma_2_ = sigv;
     rho_ = 0;
 
     double one_minus_rho_s = std::sqrt(1 - rho_ * rho_);
