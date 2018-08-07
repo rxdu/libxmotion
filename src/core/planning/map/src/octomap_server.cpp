@@ -155,7 +155,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	octree->setClampingThresMax(0.97);
 
 	// get the transformation to transform points
-	octree_transf_.trans = TransformationMath::Translation3D(msg->pose.base_to_world.position[0],
+	octree_transf_.trans = TransMath::Translation3D(msg->pose.base_to_world.position[0],
 			msg->pose.base_to_world.position[1],
 			msg->pose.base_to_world.position[2]+msg->pose.laser_to_base.position[2]);
 	octree_transf_.quat = Eigen::Quaterniond(msg->pose.base_to_world.quaternion[0],
@@ -169,7 +169,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	{
 		octomap::point3d end_point;
 
-		Position3Dd end_w = TransformationMath::TransformPosition3D(octree_transf_, Position3Dd(pt.x, pt.y, pt.z));
+		Position3Dd end_w = TransMath::TransformPosition3D(octree_transf_, Position3Dd(pt.x, pt.y, pt.z));
 		end_point.x() = end_w.x;
 		end_point.y() = end_w.y;
 		end_point.z() = end_w.z;

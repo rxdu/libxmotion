@@ -19,7 +19,7 @@ void GeoMarkGraph::UpdateVehiclePose(Position3Dd pos, Eigen::Quaterniond quat)
 	pos_ = pos;
 	quat_ = quat;
 
-	transf_.trans = TransformationMath::Translation3D(pos.x,pos.y,pos.z);
+	transf_.trans = TransMath::Translation3D(pos.x,pos.y,pos.z);
 	transf_.quat = quat_;
 };
 

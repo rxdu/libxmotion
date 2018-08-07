@@ -40,7 +40,7 @@ private:
 
 	Graph_t<GeoMark> sgrid_geomark_graph_;
 
-	TransformationMath::Transform3D transf_;
+	TransMath::Transform3D transf_;
 public:
 	Position3Dd pos_;
 	Eigen::Quaterniond quat_;

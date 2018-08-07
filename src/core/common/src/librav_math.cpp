@@ -17,7 +17,7 @@ using namespace librav;
  * transform: the orientation of frame 1 defined in base_frame
  * return value: the interested position defined in base_frame
  */
-Position3Dd TransformationMath::TransformPosition3D(Transform3D transform, Position3Dd pos)
+Position3Dd TransMath::TransformPosition3D(Transform3D transform, Position3Dd pos)
 {
 	Eigen::Vector3d output = transform.trans * transform.quat * Eigen::Vector3d(pos.x, pos.y, pos.z);
 

@@ -38,6 +38,7 @@ if(ENABLE_LOGGING)
 target_compile_definitions(utilities PUBLIC -DENABLE_LOGGING)
 endif(ENABLE_LOGGING)
 target_link_libraries(utilities spdlog ${CMAKE_THREAD_LIBS_INIT})
+target_compile_options(utilities PUBLIC "-Wno-format-truncation")
 target_include_directories(utilities PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	$<INSTALL_INTERFACE:include>)

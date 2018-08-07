@@ -32,15 +32,15 @@ void LongitudinalDynamics::operator()(const asc::state_t &x, asc::state_t &xd, c
 
 //////////////////////////////////////////////////////////////////
 
-SteeringKinematics::SteeringKinematics(control_t u) : u_(u)
+BicycleKinematics::BicycleKinematics(control_t u) : u_(u)
 {
 }
 
 // x1 = x, x2 = y, x3 = v, x4 = theta
-void SteeringKinematics::operator()(const asc::state_t &x, asc::state_t &xd, const double)
+void BicycleKinematics::operator()(const asc::state_t &x, asc::state_t &xd, const double)
 {
     xd[0] = x[2] * std::cos(x[3]);
     xd[1] = x[2] * std::sin(x[3]);
-    xd[2] = u_[0];
-    xd[3] = x[2] / L * u_[1];
+    xd[2] = u_.accel;
+    xd[3] = x[2] / L * u_.steering;
 }

@@ -21,21 +21,19 @@
 
 namespace librav
 {
-
-namespace TransformationMath 
+namespace TransMath
 {
-    
-    typedef struct {
-        Eigen::Translation<double,3> trans;
-        Eigen::Quaterniond quat;
-    } Transform3D;
-    
-    typedef Eigen::Translation<double,3> Translation3D;
-    
-    Position3Dd TransformPosition3D(Transform3D transform, Position3Dd pos);
-    
-}
+typedef Eigen::Translation<double, 3> Translation3D;
 
-}
+struct Transform3D
+{
+    Translation3D trans;
+    Eigen::Quaterniond quat;
+};
+
+Position3Dd TransformPosition3D(Transform3D transform, Position3Dd pos);
+
+} // namespace TransMath
+} // namespace librav
 
 #endif /* LIBRAV_MATH_H */

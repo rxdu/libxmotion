@@ -45,6 +45,7 @@ add_subdirectory(traffic_flow)
 add_subdirectory(threat_field)
 add_subdirectory(threat_ranking)
 add_subdirectory(reachability)
+add_subdirectory(state_lattice)
 add_subdirectory(road_network)
 add_subdirectory(traffic_sim)
 

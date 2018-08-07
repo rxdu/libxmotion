@@ -15,6 +15,9 @@
 
 namespace librav
 {
+// Reference: 
+//  [1] Broadhurst, A., S. Baker, and T. Kanade. 2005. “Monte Carlo Road Safety Reasoning.” 
+//      In IEEE Proceedings. Intelligent Vehicles Symposium, 2005., 319–24.
 class LongitudinalDynamics
 {
 public:
@@ -30,11 +33,20 @@ private:
   static constexpr double a_max = 7;
 };
 
-class SteeringKinematics
+struct BicycleKinCtrlInput
+{
+  BicycleKinCtrlInput() : accel(0.0), steering(0.0) {}
+  BicycleKinCtrlInput(double acc, double ster) : accel(acc), steering(ster) {}
+
+  double accel;
+  double steering;
+};
+
+class BicycleKinematics
 {
 public:
-  using control_t = std::vector<double>;
-  SteeringKinematics(control_t u);
+  using control_t = BicycleKinCtrlInput;
+  BicycleKinematics(control_t u);
 
   // x1 = x, x2 = y, x3 = v, x4 = theta
   void operator()(const asc::state_t &x, asc::state_t &xd, const double);

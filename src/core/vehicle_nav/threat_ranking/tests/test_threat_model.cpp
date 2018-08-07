@@ -36,8 +36,8 @@ int main()
     model.AddVehicleStateEstimate(mpt0);
 
     // good test case 2
-    // MMStateEst mpt0(47, 58, 1, 0.25, 15, 15);
-    // model.AddVehicleStateEstimate(mpt0);
+    MMStateEst mpt1(47, 58, 1, 0.25, 15, 15);
+    model.AddVehicleStateEstimate(mpt1);
 
     // MMStateEst mpt0(55, 56, 1, 0.25, 5, 5);
     // model.AddVehicleStateEstimate(mpt0);

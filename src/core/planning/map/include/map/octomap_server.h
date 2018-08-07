@@ -38,7 +38,7 @@ public:
 	~OctomapServer();
 
 	std::shared_ptr<octomap::OcTree> octree_;
-	TransformationMath::Transform3D octree_transf_;
+	TransMath::Transform3D octree_transf_;
 
 public:
 	void SetOctreeResolution(double new_res) { octree_res_ = new_res; };
