@@ -1,0 +1,67 @@
+/* 
+ * lattice_planner.hpp
+ * 
+ * Created on: Aug 07, 2018 09:34
+ * Description: 
+ * 
+ * Copyright (c) 2018 Ruixiang Du (rdu)
+ */
+
+#ifndef LATTICE_PLANNER_HPP
+#define LATTICE_PLANNER_HPP
+
+#include <vector>
+#include <tuple>
+#include <queue>
+#include <functional>
+#include <utility>
+#include <cmath>
+#include <algorithm>
+#include <type_traits>
+#include <functional>
+#include <iostream>
+#include <memory>
+
+#include "graph/graph.hpp"
+#include "graph/details/priority_queue.hpp"
+
+#include "state_lattice/lattice_manager.hpp"
+
+namespace librav
+{
+struct LatticeNode
+{
+	LatticeNode(double _x, double _y, double _theta)
+		: x(_x), y(_y), theta(_theta) { id == (++instance_count); }
+	LatticeNode() { id == (++instance_count); }
+
+	static int64_t instance_count;
+
+	int64_t id;
+	double x = 0;
+	double y = 0;
+	double v = 0;
+	double theta = 0;
+
+	int64_t GetUniqueID() const { return id; }
+};
+
+class LatticePlanner
+{
+  public:
+	LatticePlanner() = default;
+	LatticePlanner(std::shared_ptr<LatticeManager> lm) : lattice_manager_(lm) {}
+
+	Path_t<LatticeNode> Search(LatticeNode start_state, LatticeNode goal_state);
+
+  private:
+	double threshold_ = 1.0;
+	std::shared_ptr<LatticeManager> lattice_manager_;
+
+	std::vector<LatticeNode> GenerateLattices(LatticeNode node);
+	double CalculateDistance(LatticeNode node0, LatticeNode node1);
+	static std::vector<Vertex_t<LatticeNode> *> ReconstructPath(Vertex_t<LatticeNode> *start_vtx, Vertex_t<LatticeNode> *goal_vtx);
+};
+} // namespace librav
+
+#endif /* LATTICE_PLANNER_HPP */
