@@ -66,7 +66,7 @@ Path_t<LatticeNode> LatticePlanner::Search(LatticeNode start_state, LatticeNode 
             if (successor->is_checked_ == false)
             {
                 // first set the parent of the adjacent vertex to be the current vertex
-                auto new_cost = current_vertex->g_cost_ + edge.cost_;
+                auto new_cost = current_vertex->g_cost_ + edge.cost_.length;
 
                 // if the vertex is not in open list
                 // or if the vertex is in open list but has a higher cost
@@ -97,15 +97,31 @@ Path_t<LatticeNode> LatticePlanner::Search(LatticeNode start_state, LatticeNode 
     return path;
 };
 
+std::vector<std::tuple<LatticeNode, MotionPrimitive>> LatticePlanner::GenerateLattices(LatticeNode node)
+{
+    PrimitiveNode new_base(node.x, node.y, 0, node.theta);
+    std::vector<MotionPrimitive> new_mps = lattice_manager_->TransformAllPrimitives(lattice_manager_->primitives_,
+                                                                                    new_base.x,
+                                                                                    new_base.y,
+                                                                                    new_base.theta);
+    std::vector<std::tuple<LatticeNode, MotionPrimitive>> neighbours;
+    for (auto &mp : new_mps)
+    {
+        LatticeNode lnode(mp.GetFinalNode().x, mp.GetFinalNode().y, mp.GetFinalNode().theta);
+        neighbours.push_back(std::make_pair(lnode, mp));
+    }
+    return neighbours;
+}
+
 double LatticePlanner::CalculateDistance(LatticeNode node0, LatticeNode node1)
 {
     return std::hypot(node0.x - node1.x, node0.y - node1.y);
 }
 
-std::vector<Vertex_t<LatticeNode> *> LatticePlanner::ReconstructPath(Vertex_t<LatticeNode> *start_vtx, Vertex_t<LatticeNode> *goal_vtx)
+std::vector<Vertex_t<LatticeNode, MotionPrimitive> *> LatticePlanner::ReconstructPath(Vertex_t<LatticeNode, MotionPrimitive> *start_vtx, Vertex_t<LatticeNode, MotionPrimitive> *goal_vtx)
 {
-    std::vector<Vertex_t<LatticeNode> *> path;
-    Vertex_t<LatticeNode> *waypoint = goal_vtx;
+    std::vector<Vertex_t<LatticeNode, MotionPrimitive> *> path;
+    Vertex_t<LatticeNode, MotionPrimitive> *waypoint = goal_vtx;
     while (waypoint != start_vtx)
     {
         path.push_back(waypoint);

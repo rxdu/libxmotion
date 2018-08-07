@@ -40,7 +40,7 @@ struct LatticeNode
 	int64_t id;
 	double x = 0;
 	double y = 0;
-	double v = 0;
+	// double v = 0;
 	double theta = 0;
 
 	int64_t GetUniqueID() const { return id; }
@@ -58,9 +58,9 @@ class LatticePlanner
 	double threshold_ = 1.0;
 	std::shared_ptr<LatticeManager> lattice_manager_;
 
-	std::vector<LatticeNode> GenerateLattices(LatticeNode node);
+	std::vector<std::tuple<LatticeNode, MotionPrimitive>> GenerateLattices(LatticeNode node);
 	double CalculateDistance(LatticeNode node0, LatticeNode node1);
-	static std::vector<Vertex_t<LatticeNode> *> ReconstructPath(Vertex_t<LatticeNode> *start_vtx, Vertex_t<LatticeNode> *goal_vtx);
+	static std::vector<Vertex_t<LatticeNode, MotionPrimitive> *> ReconstructPath(Vertex_t<LatticeNode, MotionPrimitive> *start_vtx, Vertex_t<LatticeNode, MotionPrimitive> *goal_vtx);
 };
 } // namespace librav
 
