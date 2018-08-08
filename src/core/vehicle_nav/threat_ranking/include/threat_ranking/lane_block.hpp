@@ -25,15 +25,15 @@ enum class LaneBockType
 
 struct LaneBlock
 {
-    LaneBlock() : id(-1), name("null"){};
-    LaneBlock(int32_t _id, std::string _name = "default") : id(_id), name(_name){};
-    LaneBlock(int32_t _id, LaneBockType _type, std::string _name = "default") : id(_id), name(_name), type(_type){};
+    LaneBlock() : id(-1), name("null"){}
+    LaneBlock(int32_t _id, std::string _name = "default") : id(_id), name(_name) {}
+    LaneBlock(int32_t _id, LaneBockType _type, std::string _name = "default") : id(_id), name(_name), type(_type) {}
 
     int32_t id;
     std::string name;
     LaneBockType type;
     PolyLine center_line;
-    
+
     int64_t GetUniqueID() const
     {
         return id;

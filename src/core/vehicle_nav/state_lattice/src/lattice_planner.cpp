@@ -162,7 +162,35 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
         std::vector<std::tuple<LatticeNode, MotionPrimitive>> neighbours = GenerateLattices(current_vertex->state_);
         for (auto &nb : neighbours)
         {
-            graph.AddEdge(current_vertex->state_, std::get<0>(nb), std::get<1>(nb));
+            // check collision
+            // auto grid_pos = road_map_->coordinate_.ConvertToGridPixel(CartCooridnate(std::get<0>(nb).x, std::get<0>(nb).y));
+            // std::cout << "checking pos: " << std::get<0>(nb).x << " , " << std::get<0>(nb).y << " , grid pos: " << grid_pos.x << " , " << grid_pos.y << std::endl;
+
+            // only check end point
+            // if (drivable_mask_->GetValueAtCoordinate(grid_pos.x, grid_pos.y) != 0)
+            //     continue;
+
+            if (road_map_ != nullptr)
+            {
+                bool occupied = false;
+                // check waypoints
+                for (auto &nd : std::get<1>(nb).nodes)
+                {
+                    auto grid_pos = road_map_->coordinate_.ConvertToGridPixel(CartCooridnate(nd.x, nd.y));
+                    if (drivable_mask_->GetValueAtCoordinate(grid_pos.x, grid_pos.y) != 0)
+                    {
+                        occupied = true;
+                        break;
+                    }
+                }
+
+                if (!occupied)
+                    graph.AddEdge(current_vertex->state_, std::get<0>(nb), std::get<1>(nb));
+            }
+            else
+            {
+                graph.AddEdge(current_vertex->state_, std::get<0>(nb), std::get<1>(nb));
+            }
             // std::cout << "state id: " << std::get<0>(nb).id << std::endl;
         }
         // std::cout << "number of edges_to_ : " << current_vertex->edges_to_.size() << std::endl;
@@ -231,12 +259,20 @@ std::vector<std::tuple<LatticeNode, MotionPrimitive>> LatticePlanner::GenerateLa
 
 double LatticePlanner::CalculateDistance(LatticeNode node0, LatticeNode node1)
 {
-    return std::hypot(node0.x - node1.x, node0.y - node1.y);
+    double x_err = node0.x - node1.x;
+    double y_err = node0.y - node1.y;
+    double theta_err = (node0.theta - node1.theta) * 10;
+    return std::sqrt(x_err * x_err + y_err * y_err + theta_err * theta_err);
 }
 
 double LatticePlanner::CalculateHeuristic(LatticeNode node0, LatticeNode node1)
 {
-    return std::hypot(node0.x - node1.x, node0.y - node1.y);
+    double x_err = node0.x - node1.x;
+    double y_err = node0.y - node1.y;
+    double theta_err = node0.theta - node1.theta;
+    return std::sqrt(x_err * x_err + y_err * y_err + theta_err * theta_err);
+
+    // return std::hypot(node0.x - node1.x, node0.y - node1.y);
 }
 
 std::vector<Vertex_t<LatticeNode, MotionPrimitive> *> LatticePlanner::ReconstructPath(Vertex_t<LatticeNode, MotionPrimitive> *start_vtx, Vertex_t<LatticeNode, MotionPrimitive> *goal_vtx)

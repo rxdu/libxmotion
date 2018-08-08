@@ -33,9 +33,8 @@ function draw_primitives_with_path(log_name, path_len)
     figure
     axis equal
     hold on;
-%     %plot(x,y,'b.')
-%     quiver(x0,y0,u0,v0, 'r')
-%     quiver(xf,yf,uf,vf,'r')
+    quiver(x0,y0,u0,v0, 'r')
+    quiver(xf,yf,uf,vf,'r')
     
     % draw paths
     for i = 1:mp_num
@@ -45,5 +44,4 @@ function draw_primitives_with_path(log_name, path_len)
         end
         plot(path(:,1),path(:,2),'b')
     end
-%     %plot(data(:,3),data(:,4),'r*')
 end

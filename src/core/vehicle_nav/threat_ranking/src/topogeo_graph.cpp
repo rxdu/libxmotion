@@ -64,6 +64,14 @@ void TopoGeoGraph::GenerateGraph()
     graph_->AddUndirectedEdge(lb11, lb11, 1.0);
     graph_->AddUndirectedEdge(lb7, lb10, 1.0);
     graph_->AddUndirectedEdge(lb9, lb12, 1.0);
+
+    // setup mapping relationships
+    for (auto it = graph_->vertex_begin(); it != graph_->vertex_end(); ++it)
+    {
+        auto s = it->state_;
+        ll_id_lookup_.insert(std::make_pair(s.name, s.id));
+        ll_name_lookup_.insert(std::make_pair(s.id, s.name));
+    }
 }
 
 std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
@@ -112,9 +120,9 @@ std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
     for (auto v : vertices)
     {
         names.push_back(v->state_.name);
-        std::cout << "name: " << v->state_.name << " , id: " << v->state_.id << std::endl;
+        // std::cout << "name: " << v->state_.name << " , id: " << v->state_.id << std::endl;
     }
-    std::cout << "total number: " << names.size() << std::endl;
+    // std::cout << "total number: " << names.size() << std::endl;
 
     return names;
 }

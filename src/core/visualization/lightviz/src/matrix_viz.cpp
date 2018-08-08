@@ -5,7 +5,7 @@
  * Description: 
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
- */ 
+ */
 
 #include "lightviz/matrix_viz.hpp"
 
@@ -36,7 +36,7 @@ cv::Mat CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix)
 
     return color_img;
 }
-}
+} // namespace
 
 void LightViz::ShowMatrixAsImage(const Eigen::MatrixXd &matrix, std::string window_name, bool save_img)
 {
@@ -49,5 +49,18 @@ void LightViz::ShowMatrixAsImage(const Eigen::MatrixXd &matrix, std::string wind
 void LightViz::ShowMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::string window_name, bool save_img)
 {
     cv::Mat color_img = CreateColorMapFromEigenMatrix(matrix);
+    ShowImage(color_img, window_name, save_img);
+}
+
+void LightViz::ShowPathOnMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::vector<GridCoordinate> waypoints, std::string window_name, bool save_img)
+{
+    cv::Mat color_img = CreateColorMapFromEigenMatrix(matrix);
+
+    for (int i = 0; i < waypoints.size() - 1; ++i)
+    {
+        DrawLine(color_img, cv::Point(waypoints[i].GetX(), waypoints[i].GetY()),
+                 cv::Point(waypoints[i + 1].GetX(), waypoints[i + 1].GetY()));
+    }
+
     ShowImage(color_img, window_name, save_img);
 }

@@ -55,7 +55,20 @@ CartCooridnate RoadCoordinateFrame::ConvertToCartesian(GeoCoordinate input)
 
 DenseGridPixel RoadCoordinateFrame::ConvertToGridPixel(CartCooridnate input)
 {
-    return DenseGridPixel(input.x * pixel_per_meter_, grid_size_y_ - input.y * pixel_per_meter_);
+    int32_t x = input.x * pixel_per_meter_;
+    int32_t y = grid_size_y_ - input.y * pixel_per_meter_;
+
+    if (x < 0)
+        x = 0;
+    if (y < 0)
+        y = 0;
+    if (x >= grid_size_x_)
+        x = grid_size_x_ - 1;
+    if (y >= grid_size_y_)
+        y = grid_size_y_ - 1;
+    return DenseGridPixel(x, y);
+
+    // return DenseGridPixel(input.x * pixel_per_meter_, grid_size_y_ - input.y * pixel_per_meter_);
 }
 
 CartCooridnate RoadCoordinateFrame::ConvertToCartesian(DenseGridPixel input)

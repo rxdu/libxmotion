@@ -14,6 +14,7 @@
 #include <string>
 #include <cstdint>
 #include <vector>
+#include <unordered_map>
 
 #include "graph/graph.hpp"
 #include "threat_ranking/lane_block.hpp"
@@ -22,16 +23,19 @@ namespace librav
 {
 class TopoGeoGraph
 {
-  public:
-    TopoGeoGraph() = default;
-    ~TopoGeoGraph() = default;
+public:
+  TopoGeoGraph() = default;
+  ~TopoGeoGraph() = default;
 
-    void GenerateGraph();
-    std::vector<std::string> BacktrackVertices(int32_t id);
-    std::vector<std::string> FindInteractingLanes(std::vector<int32_t> ids);
+  std::unordered_map<std::string, int32_t> ll_id_lookup_;
+  std::unordered_map<int32_t, std::string> ll_name_lookup_;
 
-  private:
-    std::shared_ptr<Graph_t<LaneBlock>> graph_;
+  void GenerateGraph();
+  std::vector<std::string> BacktrackVertices(int32_t id);
+  std::vector<std::string> FindInteractingLanes(std::vector<int32_t> ids);
+
+private:
+  std::shared_ptr<Graph_t<LaneBlock>> graph_;
 };
 } // namespace librav
 

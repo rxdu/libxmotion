@@ -25,6 +25,7 @@
 #include "graph/graph.hpp"
 #include "graph/details/priority_queue.hpp"
 
+#include "road_network/road_map.hpp"
 #include "state_lattice/lattice_manager.hpp"
 
 namespace librav
@@ -53,12 +54,17 @@ class LatticePlanner
   public:
 	LatticePlanner() = default;
 	LatticePlanner(std::shared_ptr<LatticeManager> lm) : lattice_manager_(lm) {}
+	LatticePlanner(std::shared_ptr<LatticeManager> lm, std::shared_ptr<RoadMap> map) : lattice_manager_(lm), road_map_(map) {}
+
+	void SetDrivableAreaMask(std::shared_ptr<DenseGrid> mask) { drivable_mask_ = mask; }
 
 	LatticePath Search(LatticeNode start_state, LatticeNode goal_state);
 	LatticePath AStarSearch(LatticeNode start_state, LatticeNode goal_state);
 
   private:
 	double threshold_ = 1.0;
+	std::shared_ptr<RoadMap> road_map_;
+	std::shared_ptr<DenseGrid> drivable_mask_;
 	std::shared_ptr<LatticeManager> lattice_manager_;
 
 	std::vector<std::tuple<LatticeNode, MotionPrimitive>> GenerateLattices(LatticeNode node);

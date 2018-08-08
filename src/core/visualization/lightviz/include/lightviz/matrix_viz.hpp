@@ -11,6 +11,7 @@
 #define MATRIX_VIZ_HPP
 
 #include <Eigen/Dense>
+#include "decomp/dense_grid.hpp"
 
 namespace librav
 {
@@ -18,7 +19,8 @@ namespace LightViz
 {
 void ShowMatrixAsImage(const Eigen::MatrixXd &matrix, std::string window_name = "Matrix Image", bool save_img = false);
 void ShowMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::string window_name = "Matrix Color Map", bool save_img = false);
-}
-}
+void ShowPathOnMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::vector<GridCoordinate> waypoints, std::string window_name = "Matrix Color Map", bool save_img = false);
+} // namespace LightViz
+} // namespace librav
 
 #endif /* MATRIX_VIZ_HPP */
