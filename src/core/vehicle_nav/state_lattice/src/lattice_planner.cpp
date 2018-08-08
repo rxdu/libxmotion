@@ -54,6 +54,12 @@ LatticePath LatticePlanner::Search(LatticeNode start_state, LatticeNode goal_sta
                       << current_vertex->state_.theta << std::endl;
             goal_vtx = current_vertex;
 
+            // found_path = true;
+            // break;
+        }
+
+        if (current_vertex == goal_vtx)
+        {
             found_path = true;
             break;
         }

@@ -46,8 +46,12 @@ int main()
 
     ranker.AddStateEstimations(ests);
     ranker.SetEgoDesiredPath("s4", "s1");
-    ranker.SetEgoStartState(57, 36, 80.0 / 180.0 * M_PI);
-    ranker.SetEgoGoalState(20, 66.5, 175.0 / 180.0 * M_PI);
+    // ranker.SetEgoStartState(57, 36, 80.0 / 180.0 * M_PI);
+    // ranker.SetEgoGoalState(20, 66.5, 175.0 / 180.0 * M_PI);
+
+    ranker.SetEgoStartState(57, 36, 85.0 / 180.0 * M_PI);
+    ranker.SetEgoGoalState(20, 66.5, 180.0 / 180.0 * M_PI);
+
     // ranker.SetEgoStartState(58, 49, 85.0 / 180.0 * M_PI);
     // ranker.SetEgoGoalState(10, 68, 175.0 / 180.0 * M_PI);
 

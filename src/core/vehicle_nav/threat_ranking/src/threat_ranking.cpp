@@ -9,6 +9,8 @@
 
 #include "threat_ranking/threat_ranking.hpp"
 
+#include "stopwatch/stopwatch.h"
+
 using namespace librav;
 
 ThreatRanking::ThreatRanking(std::shared_ptr<RoadMap> map) : road_map_(map)
@@ -75,7 +77,9 @@ void ThreatRanking::Analyze()
     std::cout << "--------------------------------" << std::endl;
     std::cout << "Searching for path ... " << std::endl;
     // auto path = planner.Search(start, goal);
-    path_ = planner_->AStarSearch(start, goal);
 
+    stopwatch::StopWatch timer;
+    path_ = planner_->AStarSearch(start, goal);
+    std::cout << "finished in " << timer.mtoc() << " seconds" << std::endl;
     lattice_manager_->SavePrimitivesToFile(path_, "path");
 }
