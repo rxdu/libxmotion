@@ -32,8 +32,8 @@ namespace librav
 struct LatticeNode
 {
 	LatticeNode(double _x, double _y, double _theta)
-		: x(_x), y(_y), theta(_theta) { id == (++instance_count); }
-	LatticeNode() { id == (++instance_count); }
+		: x(_x), y(_y), theta(_theta) { id = (++LatticeNode::instance_count); }
+	LatticeNode() { id = (++LatticeNode::instance_count); }
 
 	static int64_t instance_count;
 
@@ -46,13 +46,16 @@ struct LatticeNode
 	int64_t GetUniqueID() const { return id; }
 };
 
+using LatticePath = std::vector<MotionPrimitive>;
+
 class LatticePlanner
 {
   public:
 	LatticePlanner() = default;
 	LatticePlanner(std::shared_ptr<LatticeManager> lm) : lattice_manager_(lm) {}
 
-	Path_t<LatticeNode> Search(LatticeNode start_state, LatticeNode goal_state);
+	LatticePath Search(LatticeNode start_state, LatticeNode goal_state);
+	LatticePath AStarSearch(LatticeNode start_state, LatticeNode goal_state);
 
   private:
 	double threshold_ = 1.0;
@@ -60,6 +63,7 @@ class LatticePlanner
 
 	std::vector<std::tuple<LatticeNode, MotionPrimitive>> GenerateLattices(LatticeNode node);
 	double CalculateDistance(LatticeNode node0, LatticeNode node1);
+	double CalculateHeuristic(LatticeNode node0, LatticeNode node1);
 	static std::vector<Vertex_t<LatticeNode, MotionPrimitive> *> ReconstructPath(Vertex_t<LatticeNode, MotionPrimitive> *start_vtx, Vertex_t<LatticeNode, MotionPrimitive> *goal_vtx);
 };
 } // namespace librav

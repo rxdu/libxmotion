@@ -11,7 +11,7 @@ int main()
 {
     std::shared_ptr<LatticeManager> lm = std::make_shared<LatticeManager>();
 
-    lm->LoadPrimitivesFromFile("/home/rdu/mp.20180807061050.data");
+    lm->LoadPrimitivesFromFile("/home/rdu/mp.20180807231117.data");
 
     // auto new_base = lm->primitives_[35];
     // std::vector<MotionPrimitive> new_mps = lm->TransformAllPrimitives(lm->primitives_, new_base.GetFinalNode().x, new_base.GetFinalNode().y, new_base.GetFinalNode().theta);
@@ -22,7 +22,10 @@ int main()
     LatticeNode start(0, 0, 0);
     LatticeNode goal(20, 30, M_PI / 6.0);
 
-    auto path = planner.Search(start, goal);
+    // auto path = planner.Search(start, goal);
+    auto path = planner.AStarSearch(start, goal);
+
+    lm->SavePrimitivesToFile(path, "path");
 
     return 0;
 }

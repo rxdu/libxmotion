@@ -41,8 +41,9 @@ void LatticeManager::LoadPrimitivesFromFile(std::string file)
     PostProcessingPrimitives();
 }
 
-void LatticeManager::SavePrimitivesToFile(PrimitiveNode origin, std::vector<MotionPrimitive> mps, std::string file)
+void LatticeManager::SavePrimitivesToFile(std::vector<MotionPrimitive> mps, std::string file)
 {    
+    PrimitiveNode origin = mps.front().GetInitNode();
     for (const auto &mp : mps)
     {
         for (auto &nd : mp.nodes)
@@ -82,8 +83,11 @@ std::vector<MotionPrimitive> LatticeManager::TransformAllPrimitives(const std::v
 
 MotionPrimitive LatticeManager::TransformPrimitive(const MotionPrimitive &input, double dx, double dy, double dtheta)
 {
-    MotionPrimitive output(input.id);
+    // copy all data from input first
+    MotionPrimitive output = input;
 
+    // clear nodes and replace with transformed ones
+    output.nodes.clear();
     for (const auto &nd : input.nodes)
     {
         auto new_nd = TransformNode(nd, dx, dy, dtheta);

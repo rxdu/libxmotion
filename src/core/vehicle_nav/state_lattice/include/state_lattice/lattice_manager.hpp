@@ -48,7 +48,7 @@ class LatticeManager
     std::vector<MotionPrimitive> primitives_;
 
     void LoadPrimitivesFromFile(std::string file);
-    void SavePrimitivesToFile(PrimitiveNode origin, std::vector<MotionPrimitive> mps, std::string file);
+    void SavePrimitivesToFile(std::vector<MotionPrimitive> mps, std::string file);
 
     std::vector<MotionPrimitive> TransformAllPrimitives(const std::vector<MotionPrimitive> &input, double x, double y, double theta);
 
