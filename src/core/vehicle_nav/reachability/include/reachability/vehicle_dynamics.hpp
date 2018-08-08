@@ -54,6 +54,7 @@ public:
 private:
   control_t u_ = {0.0, 0.0};
   static constexpr double L = 2.4;
+  // static constexpr double L = 2.1;
 };
 }
 

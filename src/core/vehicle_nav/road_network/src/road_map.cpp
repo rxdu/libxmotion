@@ -430,16 +430,24 @@ PolyLine RoadMap::GetLaneCenterLine(std::string lane_name)
 
 std::vector<int32_t> RoadMap::OccupiedLanelet(CartCooridnate pos)
 {
-    point_with_id_t geo_pt = coordinate_.CreateLaneletPoint(pos);
-    BoundingBox world(geo_pt);
+    // point_with_id_t geo_pt = coordinate_.CreateLaneletPoint(pos);
+    // BoundingBox world(geo_pt);
 
-    auto lanelets = lanelet_map_->query(world);
-    std::cout << "Number of lanelets found at (" << pos.x << " , " << pos.y << ") : " << lanelets.size() << std::endl;
-    // return lanelets;
+    // auto lanelets = lanelet_map_->query(world);
+    // std::cout << "Number of lanelets found at (" << pos.x << " , " << pos.y << ") : " << lanelets.size() << std::endl;
+    // // return lanelets;
+
+    // std::vector<int32_t> ids;
+    // for (auto ll : lanelets)
+    //     ids.push_back(ll->id());
 
     std::vector<int32_t> ids;
-    for (auto ll : lanelets)
-        ids.push_back(ll->id());
+    auto grid_pt = coordinate_.ConvertToGridPixel(pos);
+    for (auto ll : ll_name_lookup_)
+    {
+        if (lane_drivable_grids_[ll.first]->GetValueAtCoordinate(grid_pt.x, grid_pt.y) == 1.0)
+            ids.push_back(ll.first);
+    }
 
     return ids;
 }

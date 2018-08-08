@@ -29,19 +29,38 @@ void LatticeGenerator::GenerateControlSet()
     std::vector<double> acc_set = {0};
     std::vector<double> ster_set; // = {-0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5};
 
-    for (int i = -20; i <= 20; ++i)
-    {
-        ster_set.push_back(i * 0.0245);
-    }
+    // 1. this set works
+    // for (int i = -20; i <= 20; ++i)
+    // {
+    //     ster_set.push_back(i * 0.0245);
+    // }
+
+    // 2. this set is slow
+    // ster_set.push_back(0);
+    // for (int i = 1; i <= 15; ++i)
+    // {
+    //     ster_set.push_back(i * 0.01);
+    //     ster_set.push_back(-i * 0.01);
+    // }
+    // for (int i = 16; i <= 25; ++i)
+    // {
+    //     ster_set.push_back(0.15 + 0.015 * (i - 15));
+    //     ster_set.push_back(-(0.15 + 0.015 * (i - 15)));
+    // }
+    // for (int i = 26; i <= 32; ++i)
+    // {
+    //     ster_set.push_back(0.3 + 0.025 * (i - 25));
+    //     ster_set.push_back(-(0.3 + 0.025 * (i - 25)));
+    // }
+
+    // 3. this set works and slower
+    for (int i = -49; i <= 49; ++i)
+        ster_set.push_back(i * 0.01);
 
     ctrl_set_.reserve(acc_set.size() * ster_set.size());
     for (auto acc : acc_set)
         for (auto ster : ster_set)
-        {
             ctrl_set_.push_back(BicycleKinematics::control_t(acc, ster));
-            // std::cout << "control input: " << acc << " , " << ster << std::endl;
-        }
-    std::cout << acc_set.size() << " , " << ster_set.size() << " , " << ctrl_set_.size() << std::endl;
 }
 
 asc::state_t LatticeGenerator::Propagate(asc::state_t init_state, BicycleKinematics::control_t u, double t0, double tf, double dt, int32_t idx)

@@ -137,7 +137,7 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
     // start search iterations
     bool found_path = false;
     GraphVertexType *current_vertex;
-    while (!openlist.empty() && found_path != true)
+    while (!openlist.empty() && found_path != true && openlist.size() < 1000000UL)
     {
         current_vertex = openlist.get();
         if (current_vertex->is_checked_)
@@ -145,8 +145,8 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
 
         if (CalculateDistance(current_vertex->state_, goal_vtx->state_) < threshold_)
         {
-            std::cout << "final dist error: " << CalculateDistance(current_vertex->state_, goal_vtx->state_) << std::endl;
-            std::cout << "current node: " << current_vertex->state_.x << " , "
+            std::cout << "final distance error: " << CalculateDistance(current_vertex->state_, goal_vtx->state_) << std::endl;
+            std::cout << "final state: " << current_vertex->state_.x << " , "
                       << current_vertex->state_.y << " , "
                       << current_vertex->state_.theta << std::endl;
             goal_vtx = current_vertex;
@@ -174,8 +174,10 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
             {
                 bool occupied = false;
                 // check waypoints
-                for (auto &nd : std::get<1>(nb).nodes)
+                // for (auto &nd : std::get<1>(nb).nodes)
+                for (int i = 0; i < std::get<1>(nb).nodes.size(); i = i + 2)
                 {
+                    auto nd = std::get<1>(nb).nodes[i];
                     auto grid_pos = road_map_->coordinate_.ConvertToGridPixel(CartCooridnate(nd.x, nd.y));
                     if (drivable_mask_->GetValueAtCoordinate(grid_pos.x, grid_pos.y) != 0)
                     {

@@ -22,7 +22,13 @@ ThreatRanking::ThreatRanking(std::shared_ptr<RoadMap> map) : road_map_(map)
 
     // create lattice planner
     lattice_manager_ = std::make_shared<LatticeManager>();
-    lattice_manager_->LoadPrimitivesFromFile("/home/rdu/Workspace/librav/data/lattice/primitives/mp.20180807231117.data");
+    // lattice_manager_->LoadPrimitivesFromFile("/home/rdu/Workspace/librav/data/lattice/primitives/mp.uniform.data");
+    lattice_manager_->LoadPrimitivesFromFile("/home/rdu/Workspace/librav/data/lattice/primitives/mp.three-level.data");
+    // lattice_manager_->LoadPrimitivesFromFile("/home/rdu/Workspace/librav/data/lattice/primitives/mp.uniform-dense.data");
+
+    // lattice_manager_->LoadPrimitivesFromFile("/home/rdu/Workspace/librav/data/lattice/primitives/mp.21-dense.data");
+    // lattice_manager_->LoadPrimitivesFromFile("/home/rdu/mp.20180808051727.data");
+
     planner_ = std::make_shared<LatticePlanner>(lattice_manager_, road_map_);
 }
 
@@ -66,6 +72,8 @@ void ThreatRanking::Analyze()
     LatticeNode start(start_x_, start_y_, start_theta_);
     LatticeNode goal(goal_x_, goal_y_, goal_theta_);
 
+    std::cout << "--------------------------------" << std::endl;
+    std::cout << "Searching for path ... " << std::endl;
     // auto path = planner.Search(start, goal);
     path_ = planner_->AStarSearch(start, goal);
 
