@@ -19,23 +19,21 @@
 
 #pragma once
 
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/filtered_graph.hpp>
-#include <boost/graph/astar_search.hpp>
-#include <boost/graph/dijkstra_shortest_paths.hpp>
-#include <boost/optional.hpp>
-
-#include <boost/foreach.hpp>
-
-#include <liblanelet/Lanelet.hpp>
-#include <common/LocalGeographicCS.hpp>
-#include <vector>
 #include <vector>
 #include <deque>
 #include <queue>
 #include <map>
 
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/filtered_graph.hpp>
+#include <boost/graph/astar_search.hpp>
+#include <boost/graph/dijkstra_shortest_paths.hpp>
+#include <boost/optional.hpp>
+#include <boost/foreach.hpp>
+
 #include <liblanelet/RTree.h>
+#include <liblanelet/Lanelet.hpp>
+#include <common/LocalGeographicCS.hpp>
 
 namespace LLet
 {

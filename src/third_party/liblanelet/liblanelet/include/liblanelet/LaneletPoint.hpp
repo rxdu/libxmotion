@@ -19,8 +19,10 @@
 
 #pragma once
 
-#include <boost/math/special_functions.hpp>
 #include <cmath>
+
+#include <boost/math/special_functions.hpp>
+
 #include <common/LocalGeographicCS.hpp>
 #include <common/normalize_angle.hpp>
 

@@ -19,12 +19,12 @@
 
 #pragma once
 
+#include <vector>
+#include <tuple>
+
 #include "RTree.h"
 #include "BoundingBox.hpp"
 #include "Lanelet.hpp"
-
-#include <vector>
-#include <tuple>
 
 /* Wraps the RTree and provides some smarter access methods. */
 

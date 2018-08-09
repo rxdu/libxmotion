@@ -42,4 +42,5 @@ add_subdirectory(librrt)
 add_subdirectory(geometry)
 add_subdirectory(planner)
 add_subdirectory(polyopt)
-
+add_subdirectory(polygon)
+add_subdirectory(collision)

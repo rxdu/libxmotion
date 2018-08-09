@@ -19,10 +19,10 @@
 
 #pragma once
 
+#include <tuple>
+
 #include "LaneletBase.hpp"
 #include "LineStrip.hpp"
-
-#include <tuple>
 
 namespace LLet
 {

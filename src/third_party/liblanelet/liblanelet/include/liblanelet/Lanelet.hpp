@@ -19,15 +19,15 @@
 
 #pragma once
 
+#include <tuple>
+#include <vector>
+
 #include "LaneletBase.hpp"
 #include "Attribute.hpp"
 #include "LineStrip.hpp"
 #include "LaneletPoint.hpp"
 #include "RegulatoryElement.hpp"
 #include "LaneletFwd.hpp"
-
-#include <tuple>
-#include <vector>
 
 namespace LLet
 {

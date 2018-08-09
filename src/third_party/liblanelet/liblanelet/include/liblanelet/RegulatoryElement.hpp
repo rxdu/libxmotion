@@ -18,10 +18,12 @@
  */
  
 #pragma once
-#include <boost/variant.hpp>
+
 #include <vector>
 #include <string>
 #include <memory>
+
+#include <boost/variant.hpp>
 
 #include "LaneletFwd.hpp"
 #include "LaneletPoint.hpp"

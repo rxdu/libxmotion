@@ -4,6 +4,7 @@
 # Add libraries
 set(LATTICE_LIB_SRC
   src/lattice_generator.cpp
+  src/lattice_graph.cpp
   src/lattice_manager.cpp
   src/lattice_planner.cpp
 )

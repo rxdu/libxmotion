@@ -20,8 +20,9 @@
 #pragma once
 
 #include <map>
-#include <boost/lexical_cast.hpp>
 #include <string>
+
+#include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>
 
 namespace LLet

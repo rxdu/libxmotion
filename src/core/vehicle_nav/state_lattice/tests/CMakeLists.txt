@@ -9,4 +9,7 @@ add_executable(test_lattice_manager test_lattice_manager.cpp)
 target_link_libraries(test_lattice_manager lattice)
 
 add_executable(test_lattice_planner test_lattice_planner.cpp)
-target_link_libraries(test_lattice_planner lattice)
+target_link_libraries(test_lattice_planner lattice road tfield lightviz utilities)
+
+add_executable(test_lattice_graph test_lattice_graph.cpp)
+target_link_libraries(test_lattice_graph lattice)

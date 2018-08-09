@@ -16,8 +16,6 @@ else()
 	message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++14 or C++11 support. Please use a different C++ compiler.")
 endif()
 
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fext-numeric-literals")
-
 ## Put all binary files into /bin and libraries into /lib
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
@@ -48,5 +46,7 @@ add_subdirectory(reachability)
 add_subdirectory(state_lattice)
 add_subdirectory(road_network)
 add_subdirectory(traffic_sim)
+
+add_subdirectory(road_map)
 
 

@@ -19,12 +19,13 @@
 
 #pragma once
 
-#include <liblanelet/Attribute.hpp>
-#include <liblanelet/LaneletPoint.hpp>
-#include <liblanelet/BoundingBox.hpp>
 #include <vector>
 #include <memory>
 #include <tuple>
+
+#include <liblanelet/Attribute.hpp>
+#include <liblanelet/LaneletPoint.hpp>
+#include <liblanelet/BoundingBox.hpp>
 
 namespace LLet
 {

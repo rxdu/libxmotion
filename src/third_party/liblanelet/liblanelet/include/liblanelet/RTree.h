@@ -59,6 +59,7 @@ o Minor updates for MSVC 2005/08 compilers
 #include <algorithm>
 
 #define ASSERT assert // RTree uses ASSERT( condition )
+
 #ifndef Min
 #define Min std::min
 #endif //Min

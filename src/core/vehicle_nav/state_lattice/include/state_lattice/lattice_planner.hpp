@@ -27,26 +27,10 @@
 
 #include "road_network/road_map.hpp"
 #include "state_lattice/lattice_manager.hpp"
+#include "state_lattice/lattice_node.hpp"
 
 namespace librav
 {
-struct LatticeNode
-{
-	LatticeNode(double _x, double _y, double _theta)
-		: x(_x), y(_y), theta(_theta) { id = (++LatticeNode::instance_count); }
-	LatticeNode() { id = (++LatticeNode::instance_count); }
-
-	static int64_t instance_count;
-
-	int64_t id;
-	double x = 0;
-	double y = 0;
-	// double v = 0;
-	double theta = 0;
-
-	int64_t GetUniqueID() const { return id; }
-};
-
 using LatticePath = std::vector<MotionPrimitive>;
 
 class LatticePlanner
@@ -62,7 +46,7 @@ class LatticePlanner
 	LatticePath AStarSearch(LatticeNode start_state, LatticeNode goal_state);
 
   private:
-	double threshold_ = 0.5;
+	double threshold_ = 1.0;
 	std::shared_ptr<RoadMap> road_map_;
 	std::shared_ptr<DenseGrid> drivable_mask_;
 	std::shared_ptr<LatticeManager> lattice_manager_;

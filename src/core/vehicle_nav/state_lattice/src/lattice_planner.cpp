@@ -121,6 +121,8 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
 {
     using GraphVertexType = Vertex_t<LatticeNode, MotionPrimitive>;
 
+    // std::vector<MotionPrimitive> mp_record;
+
     // create a new graph with only start and goal vertices
     Graph_t<LatticeNode, MotionPrimitive> graph;
     graph.AddVertex(start_state);
@@ -192,7 +194,10 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
                 }
 
                 if (!occupied)
+                {
                     graph.AddEdge(current_vertex->state_, std::get<0>(nb), std::get<1>(nb));
+                    // mp_record.push_back(std::get<1>(nb));
+                }
             }
             else
             {
@@ -244,6 +249,8 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
     }
     else
         std::cout << "failed to find a path" << std::endl;
+
+    // lattice_manager_->SavePrimitivesToFile(mp_record, "search");
 
     return path;
 }

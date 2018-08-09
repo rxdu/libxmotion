@@ -9,9 +9,9 @@ int main()
 {
     LatticeGenerator gen;
 
-    gen.SetInitialState(0, 0, 12, 0);
+    gen.SetInitialState(0, 0, 10, 0);
     gen.GenerateControlSet();
-    gen.RunSim(0,1.0,0.1);
+    gen.RunSim(0,1.0,0.2);
 
     return 0;
 }

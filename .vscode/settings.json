@@ -74,7 +74,8 @@
         "forward_list": "cpp",
         "filesystem": "cpp",
         "numeric": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "cassert": "cpp"
     },
     "git.ignoreLimitWarning": true
 }
