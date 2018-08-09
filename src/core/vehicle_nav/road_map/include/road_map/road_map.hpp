@@ -14,12 +14,11 @@
 #include <memory>
 #include <unordered_map>
 
-#include "decomp/dense_grid.hpp"
-
-#include "polygon/polygon.hpp"
-
 #include <liblanelet/Lanelet.hpp>
 #include <liblanelet/LaneletMap.hpp>
+
+#include "decomp/dense_grid.hpp"
+#include "polygon/polygon.hpp"
 
 #include "road_map/road_coordinate.hpp"
 

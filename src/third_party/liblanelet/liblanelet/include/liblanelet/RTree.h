@@ -50,22 +50,23 @@ o Minor updates for MSVC 2005/08 compilers
 // NOTE This file compiles under MSVC 6 SP5 and MSVC .Net 2003 it may not work on other compilers without modification.
 
 // NOTE These next few lines may be win32 specific, you may need to modify them to compile on other platform
-#include <stdio.h>
-#include <math.h>
-#include <assert.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cmath>
+#include <cstdlib>
+#include <cmath>
 #include <cassert>
 
 #include <algorithm>
 
 #define ASSERT assert // RTree uses ASSERT( condition )
 
-#ifndef Min
-#define Min std::min
-#endif //Min
-#ifndef Max
-#define Max std::max
-#endif //Max
+// Commented out for compatibility issues
+// #ifndef Min
+// #define Min std::min
+// #endif //Min
+// #ifndef Max
+// #define Max std::max
+// #endif //Max
 
 //
 // RTree.h
@@ -1176,8 +1177,8 @@ typename RTREE_QUAL::Rect RTREE_QUAL::CombineRect(const Rect* a_rectA, const Rec
 
   for(int index = 0; index < NUMDIMS; ++index)
     {
-      newRect.m_min[index] = Min(a_rectA->m_min[index], a_rectB->m_min[index]);
-      newRect.m_max[index] = Max(a_rectA->m_max[index], a_rectB->m_max[index]);
+      newRect.m_min[index] = std::min(a_rectA->m_min[index], a_rectB->m_min[index]);
+      newRect.m_max[index] = std::max(a_rectA->m_max[index], a_rectB->m_max[index]);
     }
 
   return newRect;
