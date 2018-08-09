@@ -46,6 +46,11 @@ LatticePath LatticePlanner::Search(LatticeNode start_state, LatticeNode goal_sta
         if (current_vertex->is_checked_)
             continue;
 
+        // if (current_vertex == goal_vtx)
+        // {
+        //     found_path = true;
+        //     break;
+        // }
         if (CalculateDistance(current_vertex->state_, goal_vtx->state_) < threshold_)
         {
             std::cout << "final dist error: " << CalculateDistance(current_vertex->state_, goal_vtx->state_) << std::endl;
@@ -54,12 +59,6 @@ LatticePath LatticePlanner::Search(LatticeNode start_state, LatticeNode goal_sta
                       << current_vertex->state_.theta << std::endl;
             goal_vtx = current_vertex;
 
-            // found_path = true;
-            // break;
-        }
-
-        if (current_vertex == goal_vtx)
-        {
             found_path = true;
             break;
         }

@@ -8,7 +8,7 @@ set(TRANKING_LIB_SRC
     src/threat_ranking.cpp
 )
 add_library(rank STATIC ${TRANKING_LIB_SRC})
-target_link_libraries(rank decomp graph road tflow lattice)
+target_link_libraries(rank decomp graph road tflow lattice lightviz)
 target_include_directories(rank PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

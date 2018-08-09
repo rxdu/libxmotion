@@ -13,6 +13,9 @@
 #include <queue>
 #include <set>
 
+#include "lightviz/matrix_viz.hpp"
+#include "lightviz/grid_viz.hpp"
+
 using namespace librav;
 
 MChainLink::MChainLink(int32_t id, PolyLine ln) : lanelet_id_(id), polyline_(ln)
@@ -366,6 +369,12 @@ void MotionModel::GenerateCollisionField()
 
 void MotionModel::GeneratePredictedCollisionField(double t)
 {
+    if (t == 0)
+    {
+        GenerateCollisionField();
+        return;
+    }
+
     cfield_ = std::make_shared<CollisionField>(road_map_->grid_size_x_, road_map_->grid_size_y_);
     cfield_->SetOriginCoordinate(0, 0);
 

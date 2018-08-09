@@ -59,7 +59,7 @@ void LightViz::ShowPathOnMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::ve
     for (int i = 0; i < waypoints.size() - 1; ++i)
     {
         DrawLine(color_img, cv::Point(waypoints[i].GetX(), waypoints[i].GetY()),
-                 cv::Point(waypoints[i + 1].GetX(), waypoints[i + 1].GetY()));
+                 cv::Point(waypoints[i + 1].GetX(), waypoints[i + 1].GetY()), cv::Scalar(244, 92, 66));
     }
 
     ShowImage(color_img, window_name, save_img);

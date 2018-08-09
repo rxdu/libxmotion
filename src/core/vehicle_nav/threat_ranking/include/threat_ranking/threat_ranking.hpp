@@ -26,6 +26,7 @@ public:
 
   std::shared_ptr<DenseGrid> drivable_mask_;
   LatticePath path_;
+  std::shared_ptr<MotionModel> motion_model_;
 
   void AddStateEstimations(std::vector<MMStateEst> ests);
   void SetEgoDesiredPath(std::string start, std::string goal);
@@ -41,7 +42,6 @@ private:
 
   // motion model
   std::shared_ptr<TopoGeoGraph> tg_graph_;
-  std::shared_ptr<MotionModel> motion_model_;
 
   // planner
   std::shared_ptr<LatticeManager> lattice_manager_;

@@ -9,6 +9,12 @@
 
 #include "threat_ranking/threat_ranking.hpp"
 
+#include <string>
+#include <cstdint>
+
+#include "lightviz/matrix_viz.hpp"
+#include "lightviz/grid_viz.hpp"
+
 #include "stopwatch/stopwatch.h"
 
 using namespace librav;
@@ -81,5 +87,21 @@ void ThreatRanking::Analyze()
     stopwatch::StopWatch timer;
     path_ = planner_->AStarSearch(start, goal);
     std::cout << "finished in " << timer.mtoc() << " seconds" << std::endl;
-    lattice_manager_->SavePrimitivesToFile(path_, "path");
+    // lattice_manager_->SavePrimitivesToFile(path_, "path");
+
+    // if (!path_.empty())
+    // {
+    //     for (int32_t i = 0; i < path_.size(); ++i)
+    //     {
+    //         std::vector<GridCoordinate> waypoints;
+
+    //         for (auto &nd : path_[i].nodes)
+    //         {
+    //             auto grid_pos = road_map_->coordinate_.ConvertToGridPixel(CartCooridnate(nd.x, nd.y));
+    //             waypoints.push_back(GridCoordinate(grid_pos.x, grid_pos.y));
+    //         }
+    //         motion_model_->GeneratePredictedCollisionField(i);
+    //         LightViz::ShowPathOnMatrixAsColorMap(motion_model_->GetThreatFieldVisMatrix(), waypoints, "ego_drivable" + std::to_string(i), true);
+    //     }
+    // }
 }

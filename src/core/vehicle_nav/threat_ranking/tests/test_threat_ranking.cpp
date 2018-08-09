@@ -37,11 +37,13 @@ int main()
     /********** create observations **********/
     std::vector<MMStateEst> ests;
     // good test case 1
-    MMStateEst mpt0(70, 60, -1, -0.25, 15, 15);
+    // MMStateEst mpt0(70, 60, -10, -2.5, 15, 15);//case 1
+    MMStateEst mpt0(70, 60, -10 / 2.5, -2.5 / 2.5, 15, 15);
     ests.push_back(mpt0);
 
     // good test case 2
-    MMStateEst mpt1(47, 58, 1, 0.25, 15, 15);
+    // MMStateEst mpt1(47, 58, 10, 2.5, 15, 15); // case 1
+    MMStateEst mpt1(47, 58, 10 * 1.3, 2.5 * 1.3, 15, 15);
     ests.push_back(mpt1);
 
     ranker.AddStateEstimations(ests);
@@ -72,14 +74,12 @@ int main()
         LightViz::ShowPathOnMatrixAsColorMap(ranker.drivable_mask_->GetGridMatrix(true), waypoints, "ego_drivable", true);
     }
 
-    // model.MergePointsToNetwork();
-
     // model.GenerateCollisionField();
     // LightViz::ShowMatrixAsColorMap(model.GetThreatFieldVisMatrix(), "tfield", true);
 
-    // for (int i = 0; i < 10; ++i)
+    // for (int i = 0; i < ranker.path_.size(); ++i)
     // {
-    //     model.GeneratePredictedCollisionField(2 * (i + 1));
+    //     model.GeneratePredictedCollisionField(i);
     //     LightViz::ShowMatrixAsColorMap(model.GetThreatFieldVisMatrix(), "tfield" + std::to_string(i), true);
     // }
 

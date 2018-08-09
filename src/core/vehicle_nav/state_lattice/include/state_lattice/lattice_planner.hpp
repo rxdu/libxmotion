@@ -62,7 +62,7 @@ class LatticePlanner
 	LatticePath AStarSearch(LatticeNode start_state, LatticeNode goal_state);
 
   private:
-	double threshold_ = 1.0;
+	double threshold_ = 0.5;
 	std::shared_ptr<RoadMap> road_map_;
 	std::shared_ptr<DenseGrid> drivable_mask_;
 	std::shared_ptr<LatticeManager> lattice_manager_;
