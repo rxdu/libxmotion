@@ -46,6 +46,7 @@ public:
 
   // Get left and right boundary polylines by lanelet name
   std::pair<Polyline, Polyline> GetLaneBoundaryLines(std::string lane_name);
+  Polygon GetLanePolygon(std::string lane_name);
 
   // Get centerline by lanelet name
   Polyline GetLaneCenterLine(std::string lane_name);
@@ -56,6 +57,7 @@ public:
 
   // Check occupied lanelets at given position
   std::vector<int32_t> OccupiedLanelet(CartCooridnate pos);
+  void CheckLaneletCollision();
 
 private:
   bool map_loaded_ = false;
@@ -82,6 +84,12 @@ private:
   // Both lanelets and centerlines are referenced by the corresponding lanelet id
   std::unordered_map<int32_t, std::pair<Polyline, Polyline>> lane_bounds_;
   std::unordered_map<int32_t, Polyline> lane_center_lines_;
+
+  // Polygon can be created from boundary polylines
+  std::unordered_map<int32_t, Polygon> lane_polygon_;
+
+  // Generate lane polygon from boundary lines
+  void GenerateLanePolygon();
 
   // Mapping between lanelet and centerline
   int32_t GetLaneletIDByCenterLineName(std::string cl_name);

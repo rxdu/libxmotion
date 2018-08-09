@@ -8,6 +8,7 @@ set(POLYGON_LIB_SRC
 )
 add_library(polygon STATIC ${POLYGON_LIB_SRC})
 target_link_libraries(polygon ${CGAL_LIBS})
+target_compile_options(polygon PUBLIC "-frounding-math")
 target_include_directories(polygon PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<BUILD_INTERFACE:${CGAL_INCLUDE_DIRS}>

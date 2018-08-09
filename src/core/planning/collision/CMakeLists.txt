@@ -6,7 +6,7 @@ set(COLLISION_LIB_SRC
   src/collision.cpp
 )
 add_library(collision STATIC ${COLLISION_LIB_SRC})
-#target_link_libraries(collision graph road reachability utilities)
+target_link_libraries(collision polygon)
 target_include_directories(collision PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>

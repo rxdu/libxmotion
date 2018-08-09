@@ -26,8 +26,8 @@ int main()
     // map.GenerateMapMasks(15);
     std::cout << "map loaded in " << timer.toc() << " seconds" << std::endl;
 
-    // auto ids = map.OccupiedLanelet(CartCooridnate(70, 60));
-    // std::cout << "occupied laneles: " << ids.size() << std::endl;
+    auto ids = map.OccupiedLanelet(CartCooridnate(55, 56));
+    std::cout << "occupied laneles: " << ids.size() << std::endl;
 
     /*
     LightViz::ShowMatrixAsColorMap(map.GetFullLaneBoundaryGrid()->GetGridMatrix(true), "roadnetwork", true);

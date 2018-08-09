@@ -12,6 +12,8 @@
 #include <cmath>
 #include <iostream>
 
+// #include "collision/collision.hpp"
+
 using namespace librav;
 using namespace LLet;
 
@@ -96,6 +98,9 @@ void RoadMap::LoadMapFile(std::string map_file)
     y_min_ = *(yrange.first);
     y_max_ = *(yrange.second);
 
+    // additional information
+    GenerateLanePolygon();
+
     // set loaded flag
     map_loaded_ = true;
 }
@@ -110,6 +115,16 @@ void RoadMap::PrintInfo() const
     }
 
     std::cout << "Map region coverage x * y: (" << x_min_ << " , " << x_max_ << ") * (" << y_min_ << " , " << y_max_ << ")" << std::endl;
+}
+
+void RoadMap::GenerateLanePolygon()
+{
+    for (auto &bd : lane_bounds_)
+    {
+        Polygon polygon(bd.second.first, bd.second.second);
+        polygon.ConvexDecomposition();
+        lane_polygon_.insert(std::make_pair(bd.first, polygon));
+    }
 }
 
 /// Returns the lanelet id corresponding to the given center line identified by its name
@@ -133,6 +148,11 @@ void RoadMap::SetTrafficSinkSource(std::vector<std::string> sink, std::vector<st
 std::pair<Polyline, Polyline> RoadMap::GetLaneBoundaryLines(std::string lane_name)
 {
     return lane_bounds_[ll_id_lookup_[lane_name]];
+}
+
+Polygon RoadMap::GetLanePolygon(std::string lane_name)
+{
+    return lane_polygon_[ll_id_lookup_[lane_name]];
 }
 
 Polyline RoadMap::GetLaneCenterLine(std::string lane_name)
@@ -166,24 +186,41 @@ std::vector<std::string> RoadMap::FindShortestRouteName(std::string start_name, 
 std::vector<int32_t> RoadMap::OccupiedLanelet(CartCooridnate pos)
 {
     // query from lanelet map
-    point_with_id_t geo_pt = coordinate_.CreateLaneletPoint(pos);
-    BoundingBox world(geo_pt);
+    // point_with_id_t geo_pt = coordinate_.CreateLaneletPoint(pos);
+    // BoundingBox world(geo_pt);
 
-    auto lanelets = lanelet_map_->query(world);
-    std::cout << "Number of lanelets found at (" << pos.x << " , " << pos.y << ") : " << lanelets.size() << std::endl;
-    // return lanelets;
-
-    std::vector<int32_t> ids;
-    for (auto ll : lanelets)
-        ids.push_back(ll->id());
+    // auto lanelets = lanelet_map_->query(world);
+    // std::cout << "Number of lanelets found at (" << pos.x << " , " << pos.y << ") : " << lanelets.size() << std::endl;
+    // // return lanelets;
 
     // std::vector<int32_t> ids;
-    // auto grid_pt = coordinate_.ConvertToGridPixel(pos);
-    // for (auto ll : ll_name_lookup_)
-    // {
-    //     if (lane_drivable_grids_[ll.first]->GetValueAtCoordinate(grid_pt.x, grid_pt.y) == 1.0)
-    //         ids.push_back(ll.first);
-    // }
+    // for (auto ll : lanelets)
+    //     ids.push_back(ll->id());
+
+    std::vector<int32_t> ids;
+    for (auto &ll : ll_name_lookup_)
+    {
+        Polygon polygon = GetLanePolygon(ll.second);
+        if (polygon.CheckInside(Polygon::Point(pos.x, pos.y)))
+        {
+            ids.push_back(ll.first);
+            // std::cout << "name: " << ll.second << std::endl;
+        }
+    }
 
     return ids;
+}
+
+void RoadMap::CheckLaneletCollision()
+{
+    for (auto &ll1 : ll_name_lookup_)
+    {
+        for (auto &ll2 : ll_name_lookup_)
+        {
+            Polygon p1 = GetLanePolygon(ll1.second);
+            Polygon p2 = GetLanePolygon(ll2.second);
+            // std::cout << "collision " << ll1.second << " - " << ll2.second << " : " << Collision::Check(p1, p2) << std::endl;
+            std::cout << "collision " << ll1.second << " - " << ll2.second << " : " << p1.Intersect(p2) << std::endl;
+        }
+    }
 }
