@@ -11,7 +11,7 @@ int main()
     polyline.AddPoint(240, 431);
     polyline.AddPoint(252, 340);
     polyline.AddPoint(374, 320);
-    
+
     polyline.PrintInfo();
 
     Polygon polygon;
@@ -38,6 +38,18 @@ int main()
     std::cout << "pt (200,180) is inside: " << polygon.CheckInside(Polygon::Point(200, 180)) << std::endl;
     std::cout << "pt (391,374) is inside: " << polygon.CheckInside(Polygon::Point(391, 374)) << std::endl;
     std::cout << "pt (0,0) is inside: " << polygon.CheckInside(Polygon::Point(0, 0)) << std::endl;
+
+    Polygon polygon2;
+    polygon2.AddPoint(0, 0);
+    polygon2.AddPoint(1, 0);
+    polygon2.AddPoint(1, 1);
+    polygon2.AddPoint(0, 1);
+    
+    auto trans1 = polygon2.TransformRT(1,1,M_PI/4.0);
+    trans1.PrintInfo();
+
+    auto trans2 = polygon2.TransformTR(1,1,M_PI/4.0);
+    trans2.PrintInfo();
 
     return 0;
 }

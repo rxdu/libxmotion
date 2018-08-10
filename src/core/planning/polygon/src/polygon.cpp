@@ -16,6 +16,7 @@
 #include <CGAL/Polygon_2_algorithms.h>
 #include <CGAL/partition_2.h>
 #include <CGAL/Boolean_set_operations_2.h>
+#include <CGAL/Point_2.h>
 
 using namespace librav;
 
@@ -36,25 +37,33 @@ Polygon::Polygon(Polyline left_bound, Polyline right_bound)
         data_.push_back(*it);
 }
 
-bool Polygon::Intersect(const Polygon &other)
-{
-    return CGAL::do_intersect(data_, other.data_);
-}
-
-Polygon Polygon::Transform(double dx, double dy, double dtheta)
+/// Polygon tranformation: rotate first, then translate
+Polygon Polygon::TransformRT(double dx, double dy, double dtheta)
 {
     Polygon new_polygon;
     for (auto it = data_.vertices_begin(); it != data_.vertices_end(); ++it)
     {
-    //     double x = (*it).x() * std::cos(dtheta) - (*it).y() * std::sin(dtheta) + dx;
-    //     double y = (*it).x() * std::sin(dtheta) + (*it).y() * std::cos(dtheta) + dy;
-    //     new_polygon.AddPoint(x, y);
-    std::cout << (*it).x();
+        double x = CGAL::to_double((*it).x()) * std::cos(dtheta) - CGAL::to_double((*it).y()) * std::sin(dtheta) + dx;
+        double y = CGAL::to_double((*it).x()) * std::sin(dtheta) + CGAL::to_double((*it).y()) * std::cos(dtheta) + dy;
+        new_polygon.AddPoint(x, y);
     }
     return new_polygon;
 }
 
-void Polygon::PrintInfo()
+/// Polygon tranformation: translate first, then rotate
+Polygon Polygon::TransformTR(double dx, double dy, double dtheta)
+{
+    Polygon new_polygon;
+    for (auto it = data_.vertices_begin(); it != data_.vertices_end(); ++it)
+    {
+        double x = CGAL::to_double((*it).x() + dx) * std::cos(dtheta) - CGAL::to_double((*it).y() + dy) * std::sin(dtheta);
+        double y = CGAL::to_double((*it).x() + dx) * std::sin(dtheta) + CGAL::to_double((*it).y() + dy) * std::cos(dtheta);
+        new_polygon.AddPoint(x, y);
+    }
+    return new_polygon;
+}
+
+void Polygon::PrintInfo() const
 {
     std::cout << "Polygon with " << data_.size() << " points" << std::endl;
     for (auto it = data_.vertices_begin(); it != data_.vertices_end(); ++it)
@@ -71,14 +80,14 @@ void Polygon::AddPoint(Point pt)
     data_.push_back(pt);
 }
 
-bool Polygon::CheckInside(Point pt)
+bool Polygon::CheckInside(Point pt) const
 {
     if (CGAL::bounded_side_2(data_.vertices_begin(), data_.vertices_end(), pt, K()) == CGAL::ON_BOUNDED_SIDE)
         return true;
     return false;
 }
 
-int32_t Polygon::CheckRelativePosition(Point pt)
+int32_t Polygon::CheckRelativePosition(Point pt) const
 {
     switch (CGAL::bounded_side_2(data_.vertices_begin(), data_.vertices_end(), pt, K()))
     {
@@ -89,6 +98,21 @@ int32_t Polygon::CheckRelativePosition(Point pt)
     case CGAL::ON_UNBOUNDED_SIDE:
         return -1;
     }
+}
+
+bool Polygon::Intersect(const Polygon &other) const
+{
+    return CGAL::do_intersect(data_, other.data_);
+}
+
+bool Polygon::Contain(const Polygon &other) const
+{
+    for (auto it = other.point_begin(); it != other.point_end(); ++it)
+    {
+        if (!CheckInside(*it))
+            return false;
+    }
+    return true;
 }
 
 void Polygon::ConvexDecomposition()

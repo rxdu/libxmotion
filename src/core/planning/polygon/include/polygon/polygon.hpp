@@ -46,8 +46,11 @@ public:
 
   using Point = Point_2;
   typedef Polygon_2::Vertex_iterator point_iterator;
+  typedef Polygon_2::Vertex_const_iterator point_const_iterator;
   point_iterator point_begin() { return data_.vertices_begin(); }
   point_iterator point_end() { return data_.vertices_end(); }
+  point_const_iterator point_begin() const { return data_.vertices_begin(); }
+  point_const_iterator point_end() const { return data_.vertices_end(); }
 
   std::vector<Polygon> convex_partitions_;
 
@@ -56,16 +59,18 @@ public:
   size_t GetPointNumer() { return data_.size(); }
   void ConvexDecomposition();
 
-  bool CheckInside(Point pt);
-  int32_t CheckRelativePosition(Point pt);
-  inline bool IsSimple() { return data_.is_simple(); }
-  inline bool IsConvex() { return data_.is_convex(); }
-  bool Intersect(const Polygon &other);
+  bool CheckInside(Point pt) const;
+  int32_t CheckRelativePosition(Point pt) const;
+  inline bool IsSimple() const { return data_.is_simple(); }
+  inline bool IsConvex() const { return data_.is_convex(); }
+  bool Intersect(const Polygon &other) const;
+  bool Contain(const Polygon &other) const;
 
-  Polygon Transform(double dx, double dy, double dtheta);
+  Polygon TransformRT(double dx, double dy, double dtheta);
+  Polygon TransformTR(double dx, double dy, double dtheta);
 
   // formated output
-  void PrintInfo();
+  void PrintInfo() const;
 
 private:
   Polygon_2 data_;

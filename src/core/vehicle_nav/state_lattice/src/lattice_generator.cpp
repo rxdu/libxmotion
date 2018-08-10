@@ -30,10 +30,10 @@ void LatticeGenerator::GenerateControlSet()
     std::vector<double> ster_set; // = {-0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5};
 
     // 1. this set works
-    for (int i = -20; i <= 20; ++i)
-    {
-        ster_set.push_back(i * 0.0245);
-    }
+    // for (int i = -20; i <= 20; ++i)
+    // {
+    //     ster_set.push_back(i * 0.0245);
+    // }
 
     // 2. this set is slow
     // ster_set.push_back(0);
@@ -54,8 +54,8 @@ void LatticeGenerator::GenerateControlSet()
     // }
 
     // 3. this set works and slower
-    // for (int i = -49; i <= 49; ++i)
-    //     ster_set.push_back(i * 0.01);
+    for (int i = -49; i <= 49; ++i)
+        ster_set.push_back(i * 0.01);
 
     ctrl_set_.reserve(acc_set.size() * ster_set.size());
     for (auto acc : acc_set)
