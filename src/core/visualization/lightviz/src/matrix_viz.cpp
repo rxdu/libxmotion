@@ -15,28 +15,10 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include "lightviz/cv_draw.hpp"
+#include "lightviz/details/matrix_draw.hpp"
 
 using namespace librav;
 using namespace cv;
-
-namespace
-{
-// Reference:
-//  [1] https://www.learnopencv.com/applycolormap-for-pseudocoloring-in-opencv-c-python/
-cv::Mat CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix)
-{
-    cv::Mat grey_img, color_img;
-
-    // scale matrix to 0-255
-    Eigen::MatrixXd scaled_matrix = (matrix + Eigen::MatrixXd::Ones(matrix.rows(), matrix.cols()) * matrix.minCoeff()) / (matrix.maxCoeff() - matrix.minCoeff()) * 255.0;
-    cv::eigen2cv(scaled_matrix, grey_img);
-
-    grey_img.convertTo(grey_img, CV_8U);
-    cv::applyColorMap(grey_img, color_img, COLORMAP_JET);
-
-    return color_img;
-}
-} // namespace
 
 void LightViz::ShowMatrixAsImage(const Eigen::MatrixXd &matrix, std::string window_name, bool save_img)
 {

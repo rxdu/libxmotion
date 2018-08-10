@@ -32,10 +32,14 @@ int main()
     planner.SetEgoPlanningRoute(ego_route);
 
     Polygon fp;
-    fp.AddPoint(0.6, 1.0);
-    fp.AddPoint(-0.6, 1.0);
-    fp.AddPoint(-0.6, -1.0);
-    fp.AddPoint(0.6, -1.0);
+    // fp.AddPoint(0.6, 1.0);
+    // fp.AddPoint(-0.6, 1.0);
+    // fp.AddPoint(-0.6, -1.0);
+    // fp.AddPoint(0.6, -1.0);
+    fp.AddPoint(0.5, 1.0);
+    fp.AddPoint(-0.5, 1.0);
+    fp.AddPoint(-0.5, -1.0);
+    fp.AddPoint(0.5, -1.0);
     planner.SetVehicleFootprint(fp);
 
     // LatticeNode start(0, 0, 0);
@@ -46,8 +50,8 @@ int main()
     // LatticeNode goal(23, 65.8, 180.0 / 180.0 * M_PI);
     LatticeNode goal(22, 66.8, 180.0 / 180.0 * M_PI);
 
-    auto path = planner.Search(start, 5);
-    // auto path = planner.AStarSearch(start, goal);
+    // auto path = planner.Search(start, 5);
+    auto path = planner.AStarSearch(start, goal);
 
     // lm->SavePrimitivesToFile(path, "path");
 

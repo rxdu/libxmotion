@@ -13,7 +13,7 @@
 #include <cstdint>
 
 #include "lightviz/cv_draw.hpp"
-#include "lightviz/grid_draw.hpp"
+#include "lightviz/details/grid_draw.hpp"
 
 #include "decomp/square_grid.hpp"
 #include "graph/graph.hpp"

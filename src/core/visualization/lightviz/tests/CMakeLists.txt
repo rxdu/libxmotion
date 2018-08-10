@@ -11,6 +11,9 @@ target_link_libraries(test_image_viz lightviz)
 add_executable(test_grid_viz test_grid_viz.cpp )
 target_link_libraries(test_grid_viz lightviz)
 
+add_executable(test_polygon_viz test_polygon_viz.cpp )
+target_link_libraries(test_polygon_viz lightviz)
+
 # add_executable(test_glfw_gui test_glfw_gui.cpp )
 # target_link_libraries(test_glfw_gui lightviz glfw)
 

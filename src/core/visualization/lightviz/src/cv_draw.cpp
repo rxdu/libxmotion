@@ -27,7 +27,25 @@ const cv::Scalar LVColors::obs_color = Scalar(Scalar(0, 102, 204));
 const cv::Scalar LVColors::aoi_color = Scalar(Scalar(0, 255, 255));
 const cv::Scalar LVColors::start_color = Scalar(0, 0, 255);
 const cv::Scalar LVColors::intermediate_color = cv::Scalar(255, 153, 51); //Scalar(0, 0, 255);
-const cv::Scalar LVColors::finish_color = Scalar(51, 153, 51);            //Scalar(153, 76, 0);
+const cv::Scalar LVColors::finish_color = Scalar(51, 153, 51);            //Scalar(153, 76, 0);\
+
+// Reference: https://www.rapidtables.com/web/color/RGB_Color.html
+const cv::Scalar LVColors::black_color = Scalar(0, 0, 0);
+const cv::Scalar LVColors::white_color = Scalar(255, 255, 255);
+const cv::Scalar LVColors::red_color = Scalar(0, 0, 255);
+const cv::Scalar LVColors::lime_color = Scalar(0, 255, 0);
+const cv::Scalar LVColors::blue_color = Scalar(255, 0, 0);
+const cv::Scalar LVColors::yellow_color = Scalar(0, 255, 255);
+const cv::Scalar LVColors::cyan_color = Scalar(255, 255, 0);
+const cv::Scalar LVColors::magenta_color = Scalar(255, 0, 255);
+const cv::Scalar LVColors::silver_color = Scalar(192, 192, 192);
+const cv::Scalar LVColors::gray_color = Scalar(128, 128, 128);
+const cv::Scalar LVColors::maroon_color = Scalar(0, 0, 128);
+const cv::Scalar LVColors::olive_color = Scalar(128, 128, 0);
+const cv::Scalar LVColors::green_color = Scalar(0, 128, 0);
+const cv::Scalar LVColors::purple_color = Scalar(128, 0, 128);
+const cv::Scalar LVColors::teal_color = Scalar(128, 128, 0);
+const cv::Scalar LVColors::navy_color = Scalar(128, 0, 0);
 
 /******************* Basic Input/Output *******************/
 cv::Mat LightViz::ReadImageFile(std::string img_file)
@@ -100,7 +118,7 @@ double JetBlue(double gray)
 {
     return JetBase(gray + 0.5) * 255;
 }
-}
+} // namespace
 
 // Input range: 0-1
 // Output range: 0-255 (OpenCV color)
@@ -117,9 +135,9 @@ void LightViz::JetPaletteTransform(double val, double &r, double &g, double &b)
 }
 
 /******************** Draw Primitives *********************/
-void LightViz::DrawPoint(cv::Mat img, cv::Point pos, const cv::Scalar &color)
+void LightViz::DrawPoint(cv::Mat img, cv::Point pos, const cv::Scalar &color, int thick)
 {
-    int thickness = -1;
+    int thickness = thick;
     int lineType = 8;
     Point center(pos.x, pos.y);
     circle(img,
@@ -130,9 +148,9 @@ void LightViz::DrawPoint(cv::Mat img, cv::Point pos, const cv::Scalar &color)
            lineType);
 }
 
-void LightViz::DrawLine(cv::Mat img, cv::Point pt1, cv::Point pt2, const cv::Scalar &color)
+void LightViz::DrawLine(cv::Mat img, cv::Point pt1, cv::Point pt2, const cv::Scalar &color, int thick)
 {
-    int thickness = 1;
+    int thickness = thick;
     int lineType = 8;
 
     line(img,
@@ -146,10 +164,10 @@ void LightViz::DrawLine(cv::Mat img, cv::Point pt1, cv::Point pt2, const cv::Sca
 // Source:
 //	* https://adishavit.github.io/2015/drawing-arrows-with-opencv/
 //	* http://docs.opencv.org/2.4/modules/core/doc/drawing_functions.html#arrowedline
-void LightViz::DrawArrow(cv::Mat img, cv::Point base_pt, double length, double angle, const cv::Scalar &color)
+void LightViz::DrawArrow(cv::Mat img, cv::Point base_pt, double length, double angle, const cv::Scalar &color, int thick)
 {
     int line_type = 8;
-    int thickness = 1;
+    int thickness = thick;
 
     double tip_size = length * 0.1;
     if (tip_size < 1)

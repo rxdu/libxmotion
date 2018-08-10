@@ -115,6 +115,12 @@ bool Polygon::Contain(const Polygon &other) const
     return true;
 }
 
+SimplePoint Polygon::GetPoint(std::size_t i) const
+{
+    assert(i < data_.size());
+    return SimplePoint(CGAL::to_double(data_[i].x()), CGAL::to_double(data_[i].y()));
+}
+
 void Polygon::ConvexDecomposition()
 {
     convex_partitions_.clear();

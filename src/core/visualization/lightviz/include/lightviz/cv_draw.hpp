@@ -29,6 +29,23 @@ struct LVColors
     static const cv::Scalar start_color;        // starting cell color
     static const cv::Scalar intermediate_color; // intermediate cell color
     static const cv::Scalar finish_color;       // finishing cell color
+
+    static const cv::Scalar black_color;
+    static const cv::Scalar white_color;
+    static const cv::Scalar red_color;
+    static const cv::Scalar lime_color;
+    static const cv::Scalar blue_color;
+    static const cv::Scalar yellow_color;
+    static const cv::Scalar cyan_color;
+    static const cv::Scalar magenta_color;
+    static const cv::Scalar silver_color;
+    static const cv::Scalar gray_color;
+    static const cv::Scalar maroon_color;
+    static const cv::Scalar olive_color;
+    static const cv::Scalar green_color;
+    static const cv::Scalar purple_color;
+    static const cv::Scalar teal_color;
+    static const cv::Scalar navy_color;
 };
 
 namespace LightViz
@@ -48,10 +65,10 @@ cv::Scalar JetPaletteTransform(double val);
 void JetPaletteTransform(double val, double &r, double &g, double &b);
 
 /******************** Draw Primitives *********************/
-void DrawPoint(cv::Mat img, cv::Point pos, const cv::Scalar &color = LVColors::default_pt_color);
-void DrawLine(cv::Mat img, cv::Point pt1, cv::Point pt2, const cv::Scalar &color = LVColors::default_ln_color);
-void DrawArrow(cv::Mat img, cv::Point base_pos, double length, double angle, const cv::Scalar &color = LVColors::default_pt_color);
-}
-}
+void DrawPoint(cv::Mat img, cv::Point pos, const cv::Scalar &color = LVColors::default_pt_color, int thick = 1);
+void DrawLine(cv::Mat img, cv::Point pt1, cv::Point pt2, const cv::Scalar &color = LVColors::default_ln_color, int thick = 1);
+void DrawArrow(cv::Mat img, cv::Point base_pos, double length, double angle, const cv::Scalar &color = LVColors::default_pt_color, int thick = 1);
+} // namespace LightViz
+} // namespace librav
 
 #endif /* CV_DRAW_HPP */

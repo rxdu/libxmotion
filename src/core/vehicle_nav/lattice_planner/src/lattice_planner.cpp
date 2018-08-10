@@ -82,6 +82,124 @@ LatticePath LatticePlanner::Search(LatticeNode start_state, int32_t horizon)
     return path;
 };
 
+LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goal_state)
+{
+    using GraphVertexType = Vertex_t<LatticeNode, MotionPrimitive>;
+
+    // std::vector<MotionPrimitive> mp_record;
+
+    // create a new graph with only start and goal vertices
+    Graph_t<LatticeNode, MotionPrimitive> graph;
+    graph.AddVertex(start_state);
+    graph.AddVertex(goal_state);
+
+    GraphVertexType *start_vtx = graph.GetVertex(start_state);
+    GraphVertexType *goal_vtx = graph.GetVertex(goal_state);
+
+    // open list - a list of vertices that need to be checked out
+    PriorityQueue<GraphVertexType *> openlist;
+
+    // begin with start vertex
+    openlist.put(start_vtx, 0);
+    start_vtx->is_in_openlist_ = true;
+    start_vtx->g_cost_ = 0;
+
+    int32_t candidate_num = 0;
+
+    // start search iterations
+    bool found_path = false;
+    GraphVertexType *current_vertex;
+    while (!openlist.empty() && found_path != true && openlist.size() < 1000000UL)
+    {
+        current_vertex = openlist.get();
+        if (current_vertex->is_checked_)
+            continue;
+
+        int level_count = 0;
+        GraphVertexType *cvp = current_vertex;
+        while (cvp->search_parent_ != nullptr)
+        {
+            ++level_count;
+            cvp = cvp->search_parent_;
+        }
+
+        if (level_count == 5)
+        // if (CalculateDistance(current_vertex->state_, goal_vtx->state_) < threshold_)
+        {
+            ++candidate_num;
+            // std::cout << "final distance error: " << CalculateDistance(current_vertex->state_, goal_vtx->state_) << std::endl;
+            std::cout << "final state: " << current_vertex->state_.x << " , "
+                      << current_vertex->state_.y << " , "
+                      << current_vertex->state_.theta << std::endl;
+            goal_vtx = current_vertex;
+
+            if (candidate_num > 20)
+            {
+                found_path = true;
+                break;
+            }
+        }
+
+        // std::cout << "checking ... " << std::endl;
+        current_vertex->is_in_openlist_ = false;
+        current_vertex->is_checked_ = true;
+
+        std::vector<std::tuple<LatticeNode, MotionPrimitive>> neighbours = GenerateLattices(current_vertex->state_);
+        for (auto &nb : neighbours)
+        {
+            graph.AddEdge(current_vertex->state_, std::get<0>(nb), std::get<1>(nb));
+            // std::cout << "state id: " << std::get<0>(nb).id << std::endl;
+        }
+        // std::cout << "number of edges_to_ : " << current_vertex->edges_to_.size() << std::endl;
+
+        // check all adjacent vertices (successors of current vertex)
+        for (auto &edge : current_vertex->edges_to_)
+        {
+            auto successor = edge.dst_;
+
+            // check if the vertex has been checked (in closed list)
+            if (successor->is_checked_ == false)
+            {
+                // first set the parent of the adjacent vertex to be the current vertex
+                auto new_cost = current_vertex->g_cost_ + edge.cost_.length;
+                // std::cout << "new cost: " << current_vertex->g_cost_ << " + " << edge.cost_.length
+                //           << " = " << new_cost << std::endl;
+
+                // if the vertex is not in open list
+                // or if the vertex is in open list but has a higher cost
+                if (successor->is_in_openlist_ == false || new_cost < successor->g_cost_)
+                {
+                    successor->search_parent_ = current_vertex;
+
+                    // update costs
+                    successor->g_cost_ = new_cost;
+                    successor->h_cost_ = CalculateHeuristic(successor->state_, goal_vtx->state_);
+                    successor->f_cost_ = successor->g_cost_ + successor->h_cost_;
+
+                    openlist.put(successor, successor->f_cost_);
+                    successor->is_in_openlist_ = true;
+                }
+            }
+        }
+    }
+
+    // reconstruct path from search
+    LatticePath path;
+    if (found_path)
+    {
+        std::cout << "path found with cost " << goal_vtx->g_cost_ << std::endl;
+        auto path_vtx = ReconstructPath(start_vtx, goal_vtx);
+        for (int i = 0; i < path_vtx.size() - 1; ++i)
+            path.push_back(path_vtx[i]->GetEdgeCost(path_vtx[i + 1]));
+    }
+    else
+        std::cout << "failed to find a path" << std::endl;
+
+    // lattice_manager_->SavePrimitivesToFile(mp_record, "search");
+
+    return path;
+}
+
 bool LatticePlanner::VehicleInsideDrivableArea(const Polygon &footprint)
 {
     for (auto &polygon : drivable_polygons_)

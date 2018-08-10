@@ -22,6 +22,7 @@
 #include <CGAL/Polygon_2.h>
 
 #include "polygon/polyline.hpp"
+#include "polygon/simple_point.hpp"
 
 namespace librav
 {
@@ -56,7 +57,8 @@ public:
 
   void AddPoint(double x, double y);
   void AddPoint(Point pt);
-  size_t GetPointNumer() { return data_.size(); }
+  std::size_t GetPointNumer() const { return data_.size(); }
+  SimplePoint GetPoint(std::size_t i) const;
   void ConvexDecomposition();
 
   bool CheckInside(Point pt) const;
@@ -65,6 +67,11 @@ public:
   inline bool IsConvex() const { return data_.is_convex(); }
   bool Intersect(const Polygon &other) const;
   bool Contain(const Polygon &other) const;
+
+  double GetMinX() const { return CGAL::to_double((*data_.left_vertex()).x()); }
+  double GetMaxX() const { return CGAL::to_double((*data_.right_vertex()).x()); }
+  double GetMinY() const { return CGAL::to_double((*data_.bottom_vertex()).y()); }
+  double GetMaxY() const { return CGAL::to_double((*data_.top_vertex()).y()); }
 
   Polygon TransformRT(double dx, double dy, double dtheta);
   Polygon TransformTR(double dx, double dy, double dtheta);

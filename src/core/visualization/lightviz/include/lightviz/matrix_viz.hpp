@@ -10,6 +10,7 @@
 #ifndef MATRIX_VIZ_HPP
 #define MATRIX_VIZ_HPP
 
+#include <vector>
 #include <Eigen/Dense>
 #include "decomp/dense_grid.hpp"
 

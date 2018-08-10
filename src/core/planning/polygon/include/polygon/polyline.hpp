@@ -15,6 +15,8 @@
 #include <CGAL/Partition_traits_2.h>
 #include <CGAL/polygon_function_objects.h>
 
+#include "polygon/simple_point.hpp"
+
 namespace librav
 {
 class Polyline
@@ -34,6 +36,9 @@ public:
 
   void AddPoint(double x, double y);
   void SetPoints(std::vector<Point_2> pts) { points_ = pts; }
+
+  std::size_t GetPointNumer() const { return points_.size(); }
+  SimplePoint GetPoint(std::size_t i) const;
   std::vector<Point_2> GetPoints() const { return points_; }
 
   void PrintInfo();
