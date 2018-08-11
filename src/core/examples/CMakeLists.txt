@@ -47,5 +47,5 @@ add_executable(simple_graph_example simple_graph_example.cpp)
 target_link_libraries(simple_graph_example graph)
 
 # add_executable(grid_graph grid_graph.cpp)
-# target_link_libraries(grid_graph graph planner map)
+# target_link_libraries(grid_graph graph planner legacy)
 

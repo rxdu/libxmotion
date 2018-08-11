@@ -35,4 +35,4 @@ endif()
 
 ## tests
 #add_executable(graph_example graph_example.cpp)
-#target_link_libraries(graph_example vis map)
+#target_link_libraries(graph_example vis legacy)

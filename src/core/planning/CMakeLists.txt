@@ -35,10 +35,8 @@ set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add other sub source directories
-add_subdirectory(map)
+add_subdirectory(legacy)
 add_subdirectory(decomp)
 add_subdirectory(libgraph)
 add_subdirectory(librrt)
-add_subdirectory(planner)
 add_subdirectory(polyopt)
-add_subdirectory(geometry)

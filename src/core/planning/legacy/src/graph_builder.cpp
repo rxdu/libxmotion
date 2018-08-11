@@ -10,7 +10,7 @@
 #include <iostream>
 #include <cmath>
 
-#include "planner/graph_builder.hpp"
+#include "map/graph_builder.hpp"
 
 using namespace librav;
 

@@ -15,10 +15,11 @@ set(MAP_LIB_SRC
   src/cube_array.cpp
   # src/quad_tree.cpp
   src/square_grid.cpp
+  src/graph_builder.cpp
 )
-add_library(map STATIC ${MAP_LIB_SRC})
-target_link_libraries(map common ${LCM_LIBRARIES} ${OpenCV_LIBS} ${OCTOMAP_LIBRARY})
-target_include_directories(map PUBLIC
+add_library(legacy STATIC ${MAP_LIB_SRC})
+target_link_libraries(legacy common graph decomp ${LCM_LIBRARIES} ${OpenCV_LIBS} ${OCTOMAP_LIBRARY})
+target_include_directories(legacy PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
   PRIVATE src)

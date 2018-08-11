@@ -6,6 +6,7 @@ add_subdirectory(common)
 add_subdirectory(interface)
 add_subdirectory(utilities)
 
+add_subdirectory(geometry)
 add_subdirectory(planning)
 add_subdirectory(lightviz)
 

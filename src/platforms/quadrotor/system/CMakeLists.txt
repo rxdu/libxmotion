@@ -19,9 +19,9 @@ set(QUAD_BASE_SRC
 )
 add_library(quad_sys STATIC ${QUAD_BASE_SRC})
 if (NOT GUROBI_FOUND)
-  target_link_libraries(quad_sys quad_ctrl map common  ${LCM_LIBRARIES})
+  target_link_libraries(quad_sys quad_ctrl legacy common  ${LCM_LIBRARIES})
 else()
-  target_link_libraries(quad_sys quad_ctrl quad_traj map common  ${LCM_LIBRARIES})
+  target_link_libraries(quad_sys quad_ctrl quad_traj legacy common  ${LCM_LIBRARIES})
 endif()
 target_include_directories(quad_sys PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
