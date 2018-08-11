@@ -14,7 +14,7 @@
 #include <octomap/octomap.h>
 #include <octomap/OcTree.h>
 
-#include "geometry/cube_array.hpp"
+#include "map/cube_array.hpp"
 
 namespace librav {
 

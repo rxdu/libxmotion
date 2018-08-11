@@ -20,7 +20,7 @@
 
 // #include "graph/graph.hpp"
 #include "common/librav_types.hpp"
-#include "geometry/square_grid.hpp"
+#include "map/square_grid.hpp"
 #include "map/map_info.h"
 
 namespace librav

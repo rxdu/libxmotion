@@ -23,7 +23,7 @@
 #include "lcmtypes/librav.hpp"
 
 #include "common/librav_types.hpp"
-#include "geometry/geo_mark.h"
+#include "map/geo_mark.h"
 
 namespace librav {
 

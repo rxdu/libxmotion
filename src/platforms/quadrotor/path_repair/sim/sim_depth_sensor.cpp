@@ -9,7 +9,7 @@
 
 #include "path_repair/sim/sim_depth_sensor.h"
 
-#include "geometry/cube_array_builder.h"
+#include "map/cube_array_builder.h"
 
 using namespace librav;
 

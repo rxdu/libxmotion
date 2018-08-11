@@ -23,11 +23,11 @@
 #include "map/map_config.h"
 #include "map/map_utils.h"
 
-#include "geometry/square_grid.h"
-#include "geometry/quad_tree.h"
-#include "geometry/sgrid_builder.h"
-#include "geometry/qtree_builder.h"
-#include "geometry/graph_builder.h"
+#include "map/square_grid.h"
+#include "map/quad_tree.h"
+#include "map/sgrid_builder.h"
+#include "map/qtree_builder.h"
+#include "map/graph_builder.h"
 
 #include "path_repair/sg_graph_planner.h"
 

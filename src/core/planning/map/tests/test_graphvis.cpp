@@ -21,8 +21,8 @@
 #include "planning/graph/astar.h"
 #include "vis/graph_vis.h"
 #include "vis/sgrid_vis.h"
-#include "geometry/graph_builder.h"
-#include "geometry/sgrid_builder.h"
+#include "map/graph_builder.h"
+#include "map/sgrid_builder.h"
 #include "map/map_type.h"
 #include "map/map_utils.h"
 

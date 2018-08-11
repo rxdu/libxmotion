@@ -17,9 +17,9 @@
 #include "path_repair/sim/sim_path_repair.h"
 #include "map/map_utils.h"
 
-#include "geometry/cube_array.h"
-#include "geometry/cube_array_builder.h"
-#include "geometry/graph_builder.h"
+#include "map/cube_array.h"
+#include "map/cube_array_builder.h"
+#include "map/graph_builder.h"
 
 #include "vis/sgrid_vis.h"
 #include "vis/graph_vis.h"

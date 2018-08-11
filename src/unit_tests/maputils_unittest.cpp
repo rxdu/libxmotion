@@ -19,8 +19,8 @@
 #include "common/librav_types.hpp"
 #include "map/map_utils.h"
 #include "map/map_type.h"
-#include "geometry/graph_builder.h"
-#include "geometry/sgrid_builder.h"
+#include "map/graph_builder.h"
+#include "map/sgrid_builder.h"
 
 using namespace cv;
 using namespace librav;

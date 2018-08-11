@@ -14,10 +14,10 @@
 
 #include "planning/graph/graph.h"
 #include "common/librav_types.hpp"
-#include "geometry/geo_mark.h"
+#include "legacy/geo_mark.h"
 #include "map/map_info.h"
 #include "map/map_utils.h"
-#include "geometry/cube_array/cube_array.h"
+#include "legacy/cube_array/cube_array.h"
 #include "polyopt/quad_polyopt.h"
 
 #include "common/librav_math.hpp"

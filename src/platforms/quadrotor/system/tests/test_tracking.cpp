@@ -23,11 +23,11 @@
 #include "opencv2/opencv.hpp"
 
 #include "path_repair/graph_combiner.h"
-#include "geometry/square_grid/square_grid.h"
-#include "geometry/cube_array/cube_array.h"
-#include "geometry/graph_builder.h"
-#include "geometry/sgrid_builder.h"
-#include "geometry/cube_array_builder.h"
+#include "map/square_grid/square_grid.h"
+#include "map/cube_array/cube_array.h"
+#include "map/graph_builder.h"
+#include "map/sgrid_builder.h"
+#include "map/cube_array_builder.h"
 #include "map/map_utils.h"
 #include "quad/quad_polyopt.h"
 

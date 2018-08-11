@@ -29,9 +29,9 @@
 #include "planning/graph/graph.h"
 #include "planning/graph/astar.h"
 #include "map/image_utils.h"
-#include "geometry/square_grid.h"
-#include "geometry/graph_builder.h"
-#include "geometry/sgrid_builder.h"
+#include "map/square_grid.h"
+#include "map/graph_builder.h"
+#include "map/sgrid_builder.h"
 
 #include "path_repair/nav_field.h"
 #include "path_repair/shortcut_eval.h"

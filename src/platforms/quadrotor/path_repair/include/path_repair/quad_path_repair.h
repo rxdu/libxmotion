@@ -20,7 +20,7 @@
 
 #include "map/map_info.h"
 #include "map/octomap_server.h"
-#include "geometry/geo_mark.h"
+#include "legacy/geo_mark.h"
 
 #include "path_repair/graph_planner.h"
 #include "path_repair/geo_mark_graph.h"

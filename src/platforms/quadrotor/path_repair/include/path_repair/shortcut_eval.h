@@ -12,7 +12,7 @@
 #include <cstdint>
 
 #include "planning/graph/graph.h"
-#include "geometry/square_grid.h"
+#include "legacy/square_grid.h"
 #include "path_repair/nav_field.h"
 
 namespace librav {

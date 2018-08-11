@@ -15,7 +15,7 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/librav.hpp"
 
-#include "geometry/cube_array.hpp"
+#include "legacy/cube_array.hpp"
 
 namespace librav
 {

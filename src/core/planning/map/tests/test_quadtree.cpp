@@ -21,8 +21,8 @@
 
 #include "map/map_type.h"
 #include "map/image_utils.h"
-#include "geometry/graph_builder.h"
-#include "geometry/qtree_builder.h"
+#include "map/graph_builder.h"
+#include "map/qtree_builder.h"
 
 using namespace cv;
 using namespace librav;

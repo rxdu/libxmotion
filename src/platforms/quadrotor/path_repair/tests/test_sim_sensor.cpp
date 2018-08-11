@@ -12,9 +12,9 @@
 #include "lcmtypes/librav.hpp"
 
 #include "path_repair/sim/sim_depth_sensor.cpp"
-#include "geometry/cube_array.h"
-#include "geometry/cube_array_builder.h"
-#include "geometry/graph_builder.h"
+#include "map/cube_array.h"
+#include "map/cube_array_builder.h"
+#include "map/graph_builder.h"
 
 using namespace librav;
 

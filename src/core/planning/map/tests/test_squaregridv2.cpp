@@ -19,8 +19,8 @@
 #include "vis/graph_vis.h"
 #include "vis/sgrid_vis.h"
 #include "map/image_utils.h"
-#include "geometry/graph_builder.h"
-#include "geometry/sgrid_builder.h"
+#include "map/graph_builder.h"
+#include "map/sgrid_builder.h"
 
 using namespace cv;
 using namespace librav;

@@ -24,15 +24,18 @@ else(ENABLE_LOGGING)
 endif(ENABLE_LOGGING)
 
 ## Add sub source directories
-add_subdirectory(examples)
-
+# Core packages of librav
 add_subdirectory(core)
-add_subdirectory(platforms)
 add_subdirectory(third_party)
 
+# Packages built on top of core
+add_subdirectory(vehicle_nav)
+add_subdirectory(platforms)
+
+# Experiment setups
 add_subdirectory(experiments)
 
 ## Add test source directories
-if(BUILD_TESTS)
+# if(BUILD_TESTS)
     # add_subdirectory(gtests) # broken
-endif()
+# endif()

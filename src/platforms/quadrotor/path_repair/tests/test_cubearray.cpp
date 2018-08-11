@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "geometry/cube_array/cube_array.h"
+#include "map/cube_array/cube_array.h"
 
 using namespace librav;
 

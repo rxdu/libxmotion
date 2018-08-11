@@ -30,16 +30,16 @@
 #include "planning/graph/astar.h"
 #include "vis/graph_vis.h"
 #include "vis/sgrid_vis.h"
-#include "geometry/graph_builder.h"
+#include "map/graph_builder.h"
 #include "map/image_utils.h"
-#include "geometry/sgrid_builder.h"
+#include "map/sgrid_builder.h"
 
 using namespace cv;
 using namespace librav;
 
 #include "path_repair/nav_field.h"
 #include "path_repair/shortcut_eval.h"
-#include "geometry/square_grid/square_grid.h"
+#include "map/square_grid/square_grid.h"
 
 int main(int argc, char* argv[])
 {

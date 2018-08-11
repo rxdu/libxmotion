@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "map/image_utils.h"
-#include "geometry/qtree_builder.h"
+#include "map/qtree_builder.h"
 
 using namespace librav;
 using namespace cv;

@@ -18,7 +18,7 @@
 #include "common/librav_types.hpp"
 #include "common/librav_types.hpp"
 
-#include "geometry/geo_mark.h"
+#include "legacy/geo_mark.h"
 // #include "map/map_info.h"
 
 #include "path_repair/sim/sim_depth_sensor.h"

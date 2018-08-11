@@ -19,8 +19,8 @@
 #include "map/map_type.h"
 #include "map/map_info.h"
 #include "map/map_utils.h"
-#include "geometry/geo_mark.h"
-#include "geometry/cube_array.h"
+#include "legacy/geo_mark.h"
+#include "legacy/cube_array.h"
 
 namespace librav
 {

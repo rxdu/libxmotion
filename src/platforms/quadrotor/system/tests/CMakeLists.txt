@@ -3,28 +3,28 @@
 
 # Add executables
 # add_executable(test_map_request test_map_request.cpp)
-# target_link_libraries(test_map_request geometry map vis ${LCM_LIBRARIES})
+# target_link_libraries(test_map_request  map vis ${LCM_LIBRARIES})
 
 # add_executable(test_sim_sensor test_sim_sensor.cpp)
-# target_link_libraries(test_sim_sensor pr_sim geometry)
+# target_link_libraries(test_sim_sensor pr_sim )
 
 #add_executable(graph_combine_exp tests/graph_combine_exp.cpp)
 #target_link_libraries(graph_combine_exp map utils ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 #add_executable(test_combiner tests/test_combiner.cpp)
-#target_link_libraries(test_combiner map geometry polyopt g3logger path_repair ${Octomap_LIBS} ${LCM_LIBRARIES})
+#target_link_libraries(test_combiner map  polyopt g3logger path_repair ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 #add_executable(test_combinerv2 tests/test_combiner_v2.cpp)
-#target_link_libraries(test_combinerv2 map geometry polyopt g3logger path_repair ${Octomap_LIBS} ${LCM_LIBRARIES})
+#target_link_libraries(test_combinerv2 map  polyopt g3logger path_repair ${Octomap_LIBS} ${LCM_LIBRARIES})
 
 #add_executable(test_tracking tests/test_tracking.cpp)
 #target_link_libraries(test_tracking polyopt ${LCM_LIBRARIES})
 
 #add_executable(test_cubearray tests/test_cubearray.cpp)
-#target_link_libraries(test_cubearray geometry)
+#target_link_libraries(test_cubearray )
 
 #add_executable(test_cubearray_builder tests/test_cubearray_builder.cpp)
-#target_link_libraries(test_cubearray_builder geometry  ${LCM_LIBRARIES})
+#target_link_libraries(test_cubearray_builder   ${LCM_LIBRARIES})
 
 #add_executable(graph_combine_exp tests/graph_combine_exp.cpp)
 #target_link_libraries(graph_combine_exp map utils ${Octomap_LIBS} ${LCM_LIBRARIES})

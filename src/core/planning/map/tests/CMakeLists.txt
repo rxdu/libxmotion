@@ -3,16 +3,16 @@
 # target_link_libraries(test_gridmap map fastplot)
 
 # add_executable(test_qtree test_quadtree.cpp)
-# target_link_libraries(test_qtree geometry vis map)
+# target_link_libraries(test_qtree  vis map)
 
 # add_executable(test_sgrid test_squaregrid.cpp)
-# target_link_libraries(test_sgrid geometry vis map)
+# target_link_libraries(test_sgrid  vis map)
 
 # add_executable(test_sgridv2 test_squaregridv2.cpp)
-# target_link_libraries(test_sgridv2 geometry vis map)
+# target_link_libraries(test_sgridv2  vis map)
 
 # add_executable(test_graphvis test_graphvis.cpp)
-# target_link_libraries(test_graphvis geometry vis map)
+# target_link_libraries(test_graphvis  vis map)
 
 # add_executable(test_image test_image.cpp)
 # target_link_libraries(test_image map vis)
@@ -30,4 +30,4 @@
 #target_link_libraries(test_octomap ${Octomap_LIBS})
 
 #add_executable(test_cubebuilder tests/test_cubebuilder.cpp)
-#target_link_libraries(test_cubebuilder map geometry ${LCM_LIBRARIES})
+#target_link_libraries(test_cubebuilder map  ${LCM_LIBRARIES})

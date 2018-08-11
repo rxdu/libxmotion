@@ -1,8 +1,15 @@
+## Polygon module
+
+This package provides a wrapper to the CGAL polygon class. To use this package, you have to add the following compile configuration to your module:
+
+```
+target_compile_options(your_module PUBLIC "-frounding-math")
+```
+
+A workaround for this requirement.
+```
+target_compile_definitions(polygon PUBLIC "-DCGAL_DISABLE_ROUNDING_MATH_CHECK")
+```
+
 Reference:
-
-Quadtree Implementation Reference:
-
-* http://devmag.org.za/2011/02/23/quadtrees-implementation/
-* https://github.com/DynamoSchrittmotor/CNC/blob/master/opencv/quadtree.h
-* https://gist.github.com/tomasbasham/10545966
-* http://www.gamedev.net/page/resources/_/technical/graphics-programming-and-theory/quadtrees-r1303
+* [1] https://github.com/cms-sw/cmssw/issues/14862

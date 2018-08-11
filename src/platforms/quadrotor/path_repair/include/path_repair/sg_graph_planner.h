@@ -23,11 +23,11 @@
 #include "map/map_config.h"
 #include "map/map_utils.h"
 
-#include "geometry/square_grid.h"
-#include "geometry/quad_tree.h"
-#include "geometry/sgrid_builder.h"
-#include "geometry/qtree_builder.h"
-#include "geometry/graph_builder.h"
+#include "legacy/square_grid.h"
+#include "legacy/quad_tree.h"
+#include "legacy/sgrid_builder.h"
+#include "legacy/qtree_builder.h"
+#include "legacy/graph_builder.h"
 
 namespace librav {
 
