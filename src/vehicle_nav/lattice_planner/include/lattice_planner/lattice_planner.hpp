@@ -37,6 +37,7 @@ class LatticePlanner
 	void SetEgoPlanningRoute(std::vector<std::string> ll);
 
 	LatticePath Search(LatticeNode start_state, int32_t horizon);
+	LatticePath BFSSearch(LatticeNode start_state, LatticeNode goal_state, int32_t horizon, int32_t min_candidate = 20);
 	LatticePath AStarSearch(LatticeNode start_state, LatticeNode goal_state, int32_t horizon, int32_t min_candidate = 20);
 
 	std::vector<Polyline> ConvertPathToPolyline(const LatticePath &path);

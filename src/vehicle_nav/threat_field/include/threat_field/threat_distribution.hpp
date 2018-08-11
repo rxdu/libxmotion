@@ -23,6 +23,9 @@ public:
   void SetParameters(double pos_x, double pos_y, double sigma1, double sigma2);
   double operator()(double x, double y);
 
+  double GetCenterPositionX() const { return pos_x_; }
+  double GetCenterPositionY() const { return pos_y_; }
+
 private:
   double pos_x_ = 0;
   double pos_y_ = 0;
@@ -44,6 +47,9 @@ public:
 
   void SetParameters(double pos_x, double pos_y, double vel_x, double vel_y, double sigp, double sigv);
   double operator()(double x, double y);
+
+  double GetCenterPositionX() const { return pos_x_; }
+  double GetCenterPositionY() const { return pos_y_; }
 
 private:
   double pos_x_ = 0;
@@ -70,6 +76,9 @@ public:
 
   void SetParameters(double pos_x, double pos_y, double vel_x, double vel_y, double sigpx, double sigpy);
   double operator()(double x, double y);
+
+  double GetCenterPositionX() const { return pos_x_; }
+  double GetCenterPositionY() const { return pos_y_; }
 
 private:
   double pos_x_ = 0;

@@ -28,6 +28,12 @@ void Polyline::AddPoint(double x, double y)
     points_.push_back(Point(x, y));
 }
 
+void Polyline::AddPoint(Point pt)
+{
+    UpdateXYMinMax(CGAL::to_double(pt.x()), CGAL::to_double(pt.y()));
+    points_.push_back(pt);
+}
+
 SimplePoint Polyline::GetPoint(std::size_t i) const
 {
     assert(i < points_.size());

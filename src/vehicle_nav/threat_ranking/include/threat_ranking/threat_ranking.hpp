@@ -12,10 +12,11 @@
 
 #include <memory>
 
-#include "road_network/road_map.hpp"
+#include "road_map/road_map.hpp"
+#include "lattice_planner/lattice_planner.hpp"
+
 #include "threat_ranking/topogeo_graph.hpp"
 #include "threat_ranking/motion_model.hpp"
-#include "state_lattice/lattice_planner.hpp"
 
 namespace librav
 {

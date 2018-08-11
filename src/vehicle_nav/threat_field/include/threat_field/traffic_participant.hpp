@@ -12,41 +12,19 @@
 
 #include <functional>
 
-#include "threat_field/scalar_field.hpp"
-
 namespace librav
 {
-template <typename DistributionT>
-class TrafficParticipant : public ScalarField
+struct TrafficParticipant
 {
-public:
-  TrafficParticipant(int64_t size_x = 0, int64_t size_y = 0) : ScalarField(size_x, size_y){};
+  TrafficParticipant() : position_x(0), position_y(0), velocity_x(0), velocity_y(0) {}
+  TrafficParticipant(double px, double py, double vx, double vy) : position_x(px), position_y(py), velocity_x(vx), velocity_y(vy) {}
 
-  void SetParameters(double posx, double posy, double velx, double vely, double sig1, double sig2)
-  {
-    position_x_ = posx;
-    position_y_ = posy;
+  double position_x;
+  double position_y;
+  double velocity_x;
+  double velocity_y;
 
-    velocity_x_ = velx;
-    velocity_y_ = vely;
-
-    dist_func_.SetParameters(position_x_, position_y_, velocity_x_, velocity_y_, sig1, sig2);
-    UpdateThreatDistribution();
-  }
-
-  double position_x_;
-  double position_y_;
-  double velocity_x_;
-  double velocity_y_;
-
-private:
-  DistributionT dist_func_;
-  void UpdateThreatDistribution()
-  {
-    for (int64_t i = 0; i < size_x_; ++i)
-      for (int64_t j = 0; j < size_y_; ++j)
-        SetValueAtCoordinate(i, j, dist_func_(i, j));
-  }
+  std::function<double(double, double)> threat_func;
 };
 } // namespace librav
 

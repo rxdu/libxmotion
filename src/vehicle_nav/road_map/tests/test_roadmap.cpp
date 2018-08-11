@@ -60,7 +60,10 @@ int main()
     // LightViz::ShowPolygon(map.GetAllLanePolygons(), 10);
     // LightViz::ShowPolyline(map.GetAllLaneBoundPolylines(), 10);
     // LightViz::ShowLanePolylines(map.GetAllLaneBoundPolylines(), map.GetAllLaneCenterPolylines());
-    LightViz::ShowPolylinePosition(map.GetAllLaneCenterPolylines(), 10);
+    // LightViz::ShowPolylinePosition(map.GetAllLaneCenterPolylines(), 10);
+    std::vector<Polygon> roi;
+    roi.push_back(map.GetLanePolygon("s1"));
+    LightViz::ShowFilledPolygon(roi, map.GetAllLanePolygons());
 
     return 0;
 }

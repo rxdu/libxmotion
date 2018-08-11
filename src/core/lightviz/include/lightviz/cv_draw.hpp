@@ -29,6 +29,7 @@ struct LVColors
     static const cv::Scalar start_color;        // starting cell color
     static const cv::Scalar intermediate_color; // intermediate cell color
     static const cv::Scalar finish_color;       // finishing cell color
+    static const cv::Scalar jet_colormap_lowest;
 
     static const cv::Scalar black_color;
     static const cv::Scalar white_color;

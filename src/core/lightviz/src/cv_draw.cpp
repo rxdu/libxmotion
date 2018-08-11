@@ -27,7 +27,8 @@ const cv::Scalar LVColors::obs_color = Scalar(Scalar(0, 102, 204));
 const cv::Scalar LVColors::aoi_color = Scalar(Scalar(0, 255, 255));
 const cv::Scalar LVColors::start_color = Scalar(0, 0, 255);
 const cv::Scalar LVColors::intermediate_color = cv::Scalar(255, 153, 51); //Scalar(0, 0, 255);
-const cv::Scalar LVColors::finish_color = Scalar(51, 153, 51);            //Scalar(153, 76, 0);\
+const cv::Scalar LVColors::finish_color = Scalar(51, 153, 51);            //Scalar(153, 76, 0);
+const cv::Scalar LVColors::jet_colormap_lowest = Scalar(128 , 0 , 0);
 
 // Reference: https://www.rapidtables.com/web/color/RGB_Color.html
 const cv::Scalar LVColors::black_color = Scalar(0, 0, 0);

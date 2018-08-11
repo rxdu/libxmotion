@@ -16,9 +16,12 @@
 
 #include "graph/graph.hpp"
 #include "decomp/dense_grid.hpp"
-#include "road_network/road_map.hpp"
+#include "road_map/road_map.hpp"
+#include "geometry/polyline.hpp"
+
 #include "threat_field/traffic_participant.hpp"
 #include "threat_field/collision_field.hpp"
+
 #include "threat_ranking/lane_block.hpp"
 
 namespace librav
@@ -113,13 +116,13 @@ public:
 class MChainLink
 {
 public:
-  MChainLink(int32_t id, PolyLine ln);
+  MChainLink(int32_t id, Polyline ln);
   ~MChainLink();
 
   int32_t lanelet_id_;
 
   MotionPoint point_;
-  PolyLine polyline_;
+  Polyline polyline_;
   double length_;
 
   MChainLink *parent_link = nullptr;
@@ -150,12 +153,12 @@ private:
   MotionPoint mp_pt_;
   MChainLink *base_link_;
   std::vector<MChainLink *> leaf_links_;
-  std::vector<PolyLine> chain_polylines_;
+  std::vector<Polyline> chain_polylines_;
 
   void TraverseChain();
   void CreateChainPolylines();
-  double GetPointLineDistance(PolyLinePoint ln_pt0, PolyLinePoint ln_pt1, PolyLinePoint pt);
-  MMStatePrediction CalculatePrediction(PolyLinePoint pt0, PolyLinePoint pt1, double dist);
+  double GetPointLineDistance(SimplePoint ln_pt0, SimplePoint ln_pt1, SimplePoint pt);
+  MMStatePrediction CalculatePrediction(SimplePoint pt0, SimplePoint pt1, double dist);
 };
 
 //-----------------------------------------------------------------------------------//

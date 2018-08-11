@@ -13,7 +13,7 @@
 #include <string>
 #include <cstdint>
 
-#include "road_network/road_geometry.hpp"
+#include "geometry/polyline.hpp"
 
 namespace librav
 {
@@ -32,7 +32,7 @@ struct LaneBlock
     int32_t id;
     std::string name;
     LaneBockType type;
-    PolyLine center_line;
+    Polyline center_line;
 
     int64_t GetUniqueID() const
     {

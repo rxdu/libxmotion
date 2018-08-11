@@ -35,6 +35,7 @@ public:
   using Line = Line_2;
 
   void AddPoint(double x, double y);
+  void AddPoint(Point pt);
   void SetPoints(std::vector<Point_2> pts) { points_ = pts; }
 
   std::size_t GetPointNumer() const { return points_.size(); }

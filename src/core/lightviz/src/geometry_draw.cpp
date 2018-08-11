@@ -16,7 +16,7 @@
 using namespace librav;
 using namespace LightViz;
 
-cv::Mat GeometryDraw::CreateCanvas(double xmin, double xmax, double ymin, double ymax)
+cv::Mat GeometryDraw::CreateCanvas(double xmin, double xmax, double ymin, double ymax, cv::Scalar bg_color)
 {
     assert(xmax > xmin && ymax > ymin);
 
@@ -31,7 +31,7 @@ cv::Mat GeometryDraw::CreateCanvas(double xmin, double xmax, double ymin, double
     canvas_size_x_ = xspan_ * pixel_per_meter;
     canvas_size_y_ = yspan_ * pixel_per_meter;
 
-    cv::Mat canvas(canvas_size_y_, canvas_size_x_, CV_8UC3, LVColors::bg_color);
+    cv::Mat canvas(canvas_size_y_, canvas_size_x_, CV_8UC3, bg_color);
 
     std::cout << "canvas size: " << canvas_size_x_ << " , " << canvas_size_y_ << std::endl;
 
@@ -112,14 +112,91 @@ cv::Mat GeometryDraw::DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool s
     return canvas;
 }
 
+cv::Mat GeometryDraw::DrawFilledPolygon(cv::Mat canvas, const Polygon &polygon, bool show_dot, cv::Scalar fill_color, cv::Scalar ln_color, int32_t ln_width)
+{
+    std::size_t pt_num = polygon.GetPointNumer();
+
+    if (pt_num < 3)
+        return canvas;
+
+    cv::Point pts[1][100];
+    for (int i = 0; i < polygon.GetPointNumer(); ++i)
+    {
+        auto pt1 = ConvertCartisianToPixel(polygon.GetPoint(i).x, polygon.GetPoint(i).y);
+        pts[0][i] = cv::Point(pt1.x, pt1.y);
+    }
+
+    const cv::Point *ppt[1] = {pts[0]};
+    int npt[] = {static_cast<int>(polygon.GetPointNumer())};
+
+    cv::fillPoly(canvas, ppt, npt, 1, fill_color);
+
+    return canvas;
+}
+
 cv::Mat GeometryDraw::WritePointPosition(cv::Mat canvas, const std::vector<SimplePoint> &points)
 {
-    for (auto& pt : points)
+    for (auto &pt : points)
     {
         auto pt1 = ConvertCartisianToPixel(pt.x, pt.y);
         std::string pos_str = "(" + std::to_string(static_cast<int32_t>(pt.x)) + "," + std::to_string(static_cast<int32_t>(pt.y)) + ")";
         WriteText(canvas, pos_str, cv::Point(pt1.x, pt1.y));
     }
+}
+
+cv::Mat GeometryDraw::DrawDistribution(cv::Mat canvas, double cx, double cy, double xspan, double yspan, std::function<double(double, double)> dist_fun)
+{
+    // distributions coverage x/y limits
+    double dxmin = cx - xspan / 2.0;
+    double dxmax = cx + xspan / 2.0;
+    double dymin = cy - yspan / 2.0;
+    double dymax = cy + yspan / 2.0;
+
+    // crop distribution to canvas area
+    if (dxmin < xmin_)
+        dxmin = xmin_;
+    if (dxmax > xmax_)
+        dxmax = xmax_;
+    if (dymin < ymin_)
+        dymin = ymin_;
+    if (dymax > ymax_)
+        dymax = ymax_;
+
+    double dxspan = dxmax - dxmin;
+    double dyspan = dymax - dymin;
+    int32_t x_size = dxspan * pixel_per_meter;
+    int32_t y_size = dyspan * pixel_per_meter;
+
+    Eigen::MatrixXd threat_matrix = Eigen::MatrixXd::Zero(y_size, x_size);
+    int32_t meter_per_pixel = 1 / pixel_per_meter;
+    for (int32_t i = 0; i < x_size; ++i)
+        for (int32_t j = 0; j < y_size; ++j)
+        {
+            // convert to cartisian coordinate
+            double x = dxmin + static_cast<double>(i) / pixel_per_meter;
+            double y = dymin + static_cast<double>(j) / pixel_per_meter;
+
+            threat_matrix(j, i) = dist_fun(x, y);
+        }
+
+    cv::Mat threat_vis = CreateColorMapFromEigenMatrix(threat_matrix);
+
+    // merge threat distribution to canvas
+    auto top_left_pixel = ConvertCartisianToPixel(dxmin, dymax); // y inverted in cartesian coordinate
+    threat_vis.copyTo(canvas(cv::Rect(top_left_pixel.x, top_left_pixel.y, threat_vis.cols, threat_vis.rows)));
+
+    std::cout << int32_t(threat_vis.at<cv::Vec3b>(0, 0)[0]) << " , "
+              << int32_t(threat_vis.at<cv::Vec3b>(0, 0)[1]) << " , "
+              << int32_t(threat_vis.at<cv::Vec3b>(0, 0)[2]) << std::endl;
+
+    std::cout << "------------" << std::endl;
+    std::cout << "dx: " << dxmin << " , " << dxmax << std::endl;
+    std::cout << "dy: " << dymin << " , " << dymax << std::endl;
+    std::cout << "size: " << x_size << " , " << y_size << std::endl;
+    std::cout << "threat: " << threat_vis.cols << " , " << threat_vis.rows << std::endl;
+    std::cout << "top left coordinate: " << top_left_pixel.x << " , " << top_left_pixel.y << std::endl;
+
+    return canvas;
 }
 
 SimplePoint GeometryDraw::ConvertCartisianToPixel(double xi, double yi)

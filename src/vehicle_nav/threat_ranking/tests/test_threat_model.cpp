@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "road_network/road_map.hpp"
+#include "road_map/road_map.hpp"
 
 #include "threat_field/collision_field.hpp"
 #include "threat_field/traffic_participant.hpp"
@@ -16,7 +16,7 @@ using namespace librav;
 
 int main()
 {
-    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_with_centerline.osm", 10);
+    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_with_centerline.osm");
 
     if (!map->MapReady())
     {
@@ -55,11 +55,11 @@ int main()
     // model.GenerateCollisionField();
     // LightViz::ShowMatrixAsColorMap(model.GetThreatFieldVisMatrix(), "tfield", true);
 
-    for (int i = 0; i < 10; ++i)
-    {
-        model.GeneratePredictedCollisionField(2 * (i + 1));
-        LightViz::ShowMatrixAsColorMap(model.GetThreatFieldVisMatrix(), "tfield"+std::to_string(i), true);
-    }
+    // for (int i = 0; i < 10; ++i)
+    // {
+    //     model.GeneratePredictedCollisionField(2 * (i + 1));
+    //     LightViz::ShowMatrixAsColorMap(model.GetThreatFieldVisMatrix(), "tfield"+std::to_string(i), true);
+    // }
 
     // LightViz::ShowMatrixAsColorMap(map->GetFullLaneBoundaryGrid()->GetGridMatrix(true), "roadnetwork", true);
     // LightViz::ShowMatrixAsColorMap(map->GetFullCenterLineGrid()->GetGridMatrix(true) + map->GetFullDrivableAreaGrid()->GetGridMatrix(true), "centerline", true);

@@ -18,7 +18,7 @@
 
 using namespace librav;
 
-MChainLink::MChainLink(int32_t id, PolyLine ln) : lanelet_id_(id), polyline_(ln)
+MChainLink::MChainLink(int32_t id, Polyline ln) : lanelet_id_(id), polyline_(ln)
 {
     length_ = GetLength();
 };
@@ -31,12 +31,11 @@ MChainLink::~MChainLink()
 
 double MChainLink::GetLength()
 {
-    auto pts = polyline_.points_;
     double len = 0;
-    for (auto it = pts.begin(); it != pts.end() - 1; ++it)
+    for (int i = 0; i < polyline_.GetPointNumer() - 1; ++i)
     {
-        double errx = (*it).x - (*(it + 1)).x;
-        double erry = (*it).y - (*(it + 1)).y;
+        double errx = polyline_.GetPoint(i).x - polyline_.GetPoint(i + 1).x;
+        double erry = polyline_.GetPoint(i).y - polyline_.GetPoint(i + 1).y;
 
         len += std::sqrt(errx * errx + erry * erry);
     }
@@ -114,14 +113,14 @@ MotionChain::~MotionChain()
 
 void MotionChain::FindStartingPoint()
 {
-    PolyLinePoint pt;
+    SimplePoint pt;
     double shortest_dist = std::numeric_limits<double>::max();
-    std::cout << "polyline point number: " << base_link_->polyline_.points_.size() << std::endl;
-    for (int32_t i = 0; i < base_link_->polyline_.points_.size() - 1; ++i)
+    std::cout << "polyline point number: " << base_link_->polyline_.GetPointNumer() << std::endl;
+    for (int32_t i = 0; i < base_link_->polyline_.GetPointNumer() - 1; ++i)
     {
-        auto start = base_link_->polyline_.points_[i];
-        auto end = base_link_->polyline_.points_[i + 1];
-        PolyLinePoint pt(mp_pt_.estimate_.position_x, mp_pt_.estimate_.position_y);
+        auto start = base_link_->polyline_.GetPoint(i);
+        auto end = base_link_->polyline_.GetPoint(i + 1);
+        SimplePoint pt(mp_pt_.estimate_.position_x, mp_pt_.estimate_.position_y);
 
         Eigen::Vector2d ref_vec(end.x - start.x, end.y - start.y);
         Eigen::Vector2d pt_vec(pt.x - start.x, pt.y - start.y);
@@ -143,8 +142,8 @@ void MotionChain::FindStartingPoint()
     double accumulated = 0;
     for (int i = 0; i < start_segment_idx_; ++i)
     {
-        auto start = base_link_->polyline_.points_[i];
-        auto end = base_link_->polyline_.points_[i + 1];
+        auto start = base_link_->polyline_.GetPoint(i);
+        auto end = base_link_->polyline_.GetPoint(i + 1);
         Eigen::Vector2d ref_vec(end.x - start.x, end.y - start.y);
 
         accumulated += ref_vec.dot(ref_vec.normalized());
@@ -163,10 +162,10 @@ std::vector<MMStatePrediction> MotionChain::Propagate(double t)
     {
         double accumulated = 0;
         // check each segment
-        for (int i = 0; i < line.points_.size() - 1; ++i)
+        for (int i = 0; i < line.GetPointNumer() - 1; ++i)
         {
-            auto p0 = line.points_[i];
-            auto p1 = line.points_[i + 1];
+            auto p0 = line.GetPoint(i);
+            auto p1 = line.GetPoint(i + 1);
             Eigen::Vector2d ref_vec(p1.x - p0.x, p1.y - p0.y);
             double segment_len = ref_vec.dot(ref_vec.normalized());
 
@@ -235,13 +234,13 @@ void MotionChain::CreateChainPolylines()
     chain_polylines_.clear();
     for (auto link : leaf_links_)
     {
-        PolyLine line;
+        Polyline line(link->polyline_.GetPoints());
         MChainLink *parent = link->parent_link;
-        line.points_ = link->polyline_.points_;
         while (parent != nullptr)
         {
-            line.points_.insert(line.points_.begin(),
-                                parent->polyline_.points_.begin(), parent->polyline_.points_.end());
+            auto parent_pts = parent->polyline_.GetPoints();
+            for(auto& pt : parent_pts)
+                line.AddPoint(pt);
             parent = parent->parent_link;
         }
         chain_polylines_.push_back(line);
@@ -249,7 +248,7 @@ void MotionChain::CreateChainPolylines()
     std::cout << "number of chain polylines: " << chain_polylines_.size() << std::endl;
 }
 
-double MotionChain::GetPointLineDistance(PolyLinePoint ln_pt1, PolyLinePoint ln_pt2, PolyLinePoint pt)
+double MotionChain::GetPointLineDistance(SimplePoint ln_pt1, SimplePoint ln_pt2, SimplePoint pt)
 {
     double x1 = ln_pt1.x;
     double y1 = ln_pt1.y;
@@ -263,7 +262,7 @@ double MotionChain::GetPointLineDistance(PolyLinePoint ln_pt1, PolyLinePoint ln_
     return std::abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) / std::sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
 }
 
-MMStatePrediction MotionChain::CalculatePrediction(PolyLinePoint pt0, PolyLinePoint pt1, double dist)
+MMStatePrediction MotionChain::CalculatePrediction(SimplePoint pt0, SimplePoint pt1, double dist)
 {
     Eigen::Vector2d base(pt1.x - pt0.x, pt1.y - pt0.y);
     double base_len = base.dot(base.normalized());
@@ -352,45 +351,6 @@ void MotionModel::MergePointsToNetwork()
     }
 }
 
-void MotionModel::GenerateCollisionField()
-{
-    cfield_ = std::make_shared<CollisionField>(road_map_->grid_size_x_, road_map_->grid_size_y_);
-    cfield_->SetOriginCoordinate(0, 0);
-
-    int32_t pt_count = 0;
-    for (auto &pt : points_)
-    {
-        auto tf_pt = std::make_shared<CollisionField::TrafficParticipantType>(road_map_->grid_size_x_, road_map_->grid_size_y_);
-        tf_pt->SetParameters(pt.grid_position_.x, pt.grid_position_.y, pt.estimate_.velocity_x, pt.estimate_.velocity_y, pt.estimate_.sigma_px, pt.estimate_.sigma_py);
-        cfield_->AddTrafficParticipant(pt_count++, tf_pt);
-    }
-    cfield_->UpdateCollisionField();
-}
-
-void MotionModel::GeneratePredictedCollisionField(double t)
-{
-    if (t == 0)
-    {
-        GenerateCollisionField();
-        return;
-    }
-
-    cfield_ = std::make_shared<CollisionField>(road_map_->grid_size_x_, road_map_->grid_size_y_);
-    cfield_->SetOriginCoordinate(0, 0);
-
-    auto predictions = PropagateMotionChains(t);
-
-    int32_t pt_count = 0;
-    for (auto &ps : predictions)
-    {
-        auto tf_pt = std::make_shared<CollisionField::TrafficParticipantType>(road_map_->grid_size_x_, road_map_->grid_size_y_);
-        auto pos = road_map_->coordinate_.ConvertToGridPixel(CartCooridnate(ps.position_x, ps.position_y));
-        tf_pt->SetParameters(pos.x, pos.y, ps.velocity_x, ps.velocity_y, ps.base_state.sigma_px, ps.base_state.sigma_py);
-        cfield_->AddTrafficParticipant(pt_count++, tf_pt);
-    }
-    cfield_->UpdateCollisionField();
-}
-
 std::vector<MMStatePrediction> MotionModel::PropagateMotionChains(double t)
 {
     std::vector<MMStatePrediction> predictions;
@@ -402,8 +362,47 @@ std::vector<MMStatePrediction> MotionModel::PropagateMotionChains(double t)
     return predictions;
 }
 
-Eigen::MatrixXd MotionModel::GetThreatFieldVisMatrix()
-{
-    return road_map_->GetFullCenterLineGrid()->GetGridMatrix(true) + road_map_->GetFullDrivableAreaGrid()->GetGridMatrix(true) +
-           cfield_->GetGridMatrix(true);
-}
+// void MotionModel::GenerateCollisionField()
+// {
+//     cfield_ = std::make_shared<CollisionField>(road_map_->grid_size_x_, road_map_->grid_size_y_);
+//     cfield_->SetOriginCoordinate(0, 0);
+
+//     int32_t pt_count = 0;
+//     for (auto &pt : points_)
+//     {
+//         auto tf_pt = std::make_shared<CollisionField::TrafficParticipantType>(road_map_->grid_size_x_, road_map_->grid_size_y_);
+//         tf_pt->SetParameters(pt.grid_position_.x, pt.grid_position_.y, pt.estimate_.velocity_x, pt.estimate_.velocity_y, pt.estimate_.sigma_px, pt.estimate_.sigma_py);
+//         cfield_->AddTrafficParticipant(pt_count++, tf_pt);
+//     }
+//     cfield_->UpdateCollisionField();
+// }
+
+// void MotionModel::GeneratePredictedCollisionField(double t)
+// {
+//     if (t == 0)
+//     {
+//         GenerateCollisionField();
+//         return;
+//     }
+
+//     cfield_ = std::make_shared<CollisionField>(road_map_->grid_size_x_, road_map_->grid_size_y_);
+//     cfield_->SetOriginCoordinate(0, 0);
+
+//     auto predictions = PropagateMotionChains(t);
+
+//     int32_t pt_count = 0;
+//     for (auto &ps : predictions)
+//     {
+//         auto tf_pt = std::make_shared<CollisionField::TrafficParticipantType>(road_map_->grid_size_x_, road_map_->grid_size_y_);
+//         auto pos = road_map_->coordinate_.ConvertToGridPixel(CartCooridnate(ps.position_x, ps.position_y));
+//         tf_pt->SetParameters(pos.x, pos.y, ps.velocity_x, ps.velocity_y, ps.base_state.sigma_px, ps.base_state.sigma_py);
+//         cfield_->AddTrafficParticipant(pt_count++, tf_pt);
+//     }
+//     cfield_->UpdateCollisionField();
+// }
+
+// Eigen::MatrixXd MotionModel::GetThreatFieldVisMatrix()
+// {
+//     return road_map_->GetFullCenterLineGrid()->GetGridMatrix(true) + road_map_->GetFullDrivableAreaGrid()->GetGridMatrix(true) +
+//            cfield_->GetGridMatrix(true);
+// }

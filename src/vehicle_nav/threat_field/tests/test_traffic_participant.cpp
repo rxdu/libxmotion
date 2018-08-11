@@ -10,19 +10,13 @@ using namespace librav;
 
 int main()
 {
-    TrafficParticipant<GaussianPositionVelocityThreat> traff_part(100, 100);
+    GaussianPositionVelocityThreat threat_model(50, 50, 2, -1, 15, 15);
 
-    stopwatch::StopWatch timer;
-
-    timer.tic();
-
-    traff_part.SetParameters(50, 50, 2, -1, 15, 15);
-    ScalarFieldMatrix mat = traff_part.GenerateFieldMatrix(0, 1, 0, 1, true);
-
-    std::cout << "time elapsed: " << timer.toc() << std::endl;
+    TrafficParticipant participant;
+    participant.threat_func = threat_model;
 
     // plot surface
-    LightViz::ShowMatrixAsColorMap(mat.z);
+    // LightViz::ShowMatrixAsColorMap(mat.z);
 
     return 0;
 }

@@ -162,6 +162,85 @@ void LightViz::ShowPolygon(const std::vector<Polygon> &polygons, int32_t pixel_p
     ShowImage(canvas, window_name, save_img);
 }
 
+void LightViz::ShowFilledPolygon(const std::vector<Polygon> &polygons, int32_t pixel_per_unit, std::string window_name, bool save_img)
+{
+    GeometryDraw gdraw(pixel_per_unit);
+
+    std::vector<double> xmins, xmaxs, ymins, ymaxs;
+
+    for (auto &polygon : polygons)
+    {
+        xmins.push_back(polygon.GetMinX());
+        xmaxs.push_back(polygon.GetMaxX());
+        ymins.push_back(polygon.GetMinY());
+        ymaxs.push_back(polygon.GetMaxY());
+    }
+    double bd_xl = *std::min_element(xmins.begin(), xmins.end());
+    double bd_xr = *std::max_element(xmaxs.begin(), xmaxs.end());
+    double bd_yb = *std::min_element(ymins.begin(), ymins.end());
+    double bd_yt = *std::max_element(ymaxs.begin(), ymaxs.end());
+
+    double xspan = bd_xr - bd_xl;
+    double yspan = bd_yt - bd_yb;
+
+    double xmin = bd_xl - xspan * 0.2;
+    double xmax = bd_xr + xspan * 0.2;
+    double ymin = bd_yb - yspan * 0.2;
+    double ymax = bd_yt + yspan * 0.2;
+
+    cv::Mat canvas = gdraw.CreateCanvas(xmin, xmax, ymin, ymax);
+
+    for (auto &polygon : polygons)
+        canvas = gdraw.DrawFilledPolygon(canvas, polygon);
+    for (auto &polygon : polygons)
+        canvas = gdraw.DrawPolygon(canvas, polygon);
+
+    ShowImage(canvas, window_name, save_img);
+}
+
+void LightViz::ShowFilledPolygon(const std::vector<Polygon> &polygons, const std::vector<Polygon> &bound_polygons, int32_t pixel_per_unit, std::string window_name, bool save_img)
+{
+    GeometryDraw gdraw(pixel_per_unit);
+
+    std::vector<double> xmins, xmaxs, ymins, ymaxs;
+
+    for (auto &polygon : polygons)
+    {
+        xmins.push_back(polygon.GetMinX());
+        xmaxs.push_back(polygon.GetMaxX());
+        ymins.push_back(polygon.GetMinY());
+        ymaxs.push_back(polygon.GetMaxY());
+    }
+    for (auto &polygon : bound_polygons)
+    {
+        xmins.push_back(polygon.GetMinX());
+        xmaxs.push_back(polygon.GetMaxX());
+        ymins.push_back(polygon.GetMinY());
+        ymaxs.push_back(polygon.GetMaxY());
+    }
+    double bd_xl = *std::min_element(xmins.begin(), xmins.end());
+    double bd_xr = *std::max_element(xmaxs.begin(), xmaxs.end());
+    double bd_yb = *std::min_element(ymins.begin(), ymins.end());
+    double bd_yt = *std::max_element(ymaxs.begin(), ymaxs.end());
+
+    double xspan = bd_xr - bd_xl;
+    double yspan = bd_yt - bd_yb;
+
+    double xmin = bd_xl - xspan * 0.2;
+    double xmax = bd_xr + xspan * 0.2;
+    double ymin = bd_yb - yspan * 0.2;
+    double ymax = bd_yt + yspan * 0.2;
+
+    cv::Mat canvas = gdraw.CreateCanvas(xmin, xmax, ymin, ymax);
+
+    for (auto &polygon : polygons)
+        canvas = gdraw.DrawFilledPolygon(canvas, polygon);
+    for (auto &polygon : bound_polygons)
+        canvas = gdraw.DrawPolygon(canvas, polygon);
+
+    ShowImage(canvas, window_name, save_img);
+}
+
 void LightViz::ShowLanePolylines(const std::vector<Polyline> &bounds, const std::vector<Polyline> &centers, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
     GeometryDraw gdraw(pixel_per_unit);
@@ -206,7 +285,7 @@ void LightViz::ShowLanePolylines(const std::vector<Polyline> &bounds, const std:
     ShowImage(canvas, window_name, save_img);
 }
 
-void LightViz::ShowPathInLane(const std::vector<Polyline> &bounds, const std::vector<Polyline> &centers, std::vector<Polyline> &path, int32_t pixel_per_unit, std::string window_name, bool save_img)
+void LightViz::ShowPathInLane(const std::vector<Polyline> &bounds, const std::vector<Polyline> &centers, std::vector<Polyline> &path, bool show_wp, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
     GeometryDraw gdraw(pixel_per_unit);
 
@@ -248,7 +327,7 @@ void LightViz::ShowPathInLane(const std::vector<Polyline> &bounds, const std::ve
         canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
 
     for (auto &polyline : path)
-        canvas = gdraw.DrawPolyline(canvas, polyline, true, LVColors::lime_color, 2);
+        canvas = gdraw.DrawPolyline(canvas, polyline, show_wp, LVColors::lime_color, 2);
 
     ShowImage(canvas, window_name, save_img);
 }

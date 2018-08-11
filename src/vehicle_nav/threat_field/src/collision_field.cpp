@@ -17,18 +17,15 @@
 using namespace librav;
 
 CollisionField::CollisionField(int64_t size_x, int64_t size_y)
-    : ScalarField(size_x, size_y)
 {
 }
 
-void CollisionField::AddTrafficParticipant(int32_t id, std::shared_ptr<TrafficParticipantType> tfield)
+void CollisionField::AddTrafficParticipant(int32_t id, std::shared_ptr<TrafficParticipant> tfield)
 {
-  assert(tfield->SizeX() == this->size_x_ && tfield->SizeY() == this->size_y_);
-
   traffic_participants_.emplace(std::make_pair(id, tfield));
 }
 
-std::shared_ptr<CollisionField::TrafficParticipantType> CollisionField::GetTrafficParticipant(int32_t id)
+std::shared_ptr<TrafficParticipant> CollisionField::GetTrafficParticipant(int32_t id)
 {
   assert(traffic_participants_.find(id) != traffic_participants_.end());
 
@@ -42,14 +39,14 @@ void CollisionField::RemoveTrafficParticipant(int32_t id)
 
 void CollisionField::UpdateCollisionField()
 {
-  for (int64_t i = 0; i < size_x_; ++i)
-    for (int64_t j = 0; j < size_y_; ++j)
-    {
-      double threat_val = 0; //lane_threat_matrix_(i, j);
-      for (const auto &tfd : traffic_participants_)
-        threat_val += tfd.second->GetValueAtCoordinate(i, j);
-      SetValueAtCoordinate(i, j, threat_val);
-    }
+  // for (int64_t i = 0; i < size_x_; ++i)
+  //   for (int64_t j = 0; j < size_y_; ++j)
+  //   {
+  //     double threat_val = 0; //lane_threat_matrix_(i, j);
+  //     for (const auto &tfd : traffic_participants_)
+  //       threat_val += tfd.second->GetValueAtCoordinate(i, j);
+  //     SetValueAtCoordinate(i, j, threat_val);
+  //   }
 
-  collision_threat_matrix_ = GenerateFieldMatrix(0, 0.1, 0, 0.1, true).z;
+  // collision_threat_matrix_ = GenerateFieldMatrix(0, 0.1, 0, 0.1, true).z;
 }
