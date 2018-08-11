@@ -16,7 +16,6 @@
 #include <cstdint>
 #include <unordered_map>
 
-#include "traffic_flow/traffic_flow_map.hpp"
 #include "threat_field/traffic_participant.hpp"
 #include "threat_field/threat_distribution.hpp"
 
@@ -30,8 +29,6 @@ public:
   typedef TrafficParticipant<GaussianPositionVelocityThreat> TrafficParticipantType;
   // typedef TrafficParticipant<BiasedGaussianThreat> TrafficParticipantType;
   
-  void SetTrafficFlowMap(std::shared_ptr<TrafficFlowMap> map);
-
   void AddTrafficParticipant(int32_t id, std::shared_ptr<TrafficParticipantType> participant);
   std::shared_ptr<TrafficParticipantType> GetTrafficParticipant(int32_t id);
   void RemoveTrafficParticipant(int32_t id);
@@ -41,7 +38,6 @@ public:
   Eigen::MatrixXd collision_threat_matrix_;
 
 private:
-  std::shared_ptr<TrafficFlowMap> tflow_map_;
   std::unordered_map<int32_t, std::shared_ptr<TrafficParticipantType>> traffic_participants_;
 };
 } // namespace librav

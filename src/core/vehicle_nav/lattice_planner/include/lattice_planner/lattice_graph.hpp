@@ -15,8 +15,8 @@
 
 #include "graph/graph.hpp"
 
-#include "lattice_planner/lattice_manager.hpp"
-#include "lattice_planner/lattice_node.hpp"
+#include "state_lattice/lattice_manager.hpp"
+#include "state_lattice/lattice_node.hpp"
 
 namespace librav
 {

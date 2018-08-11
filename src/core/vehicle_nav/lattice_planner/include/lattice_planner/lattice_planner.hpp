@@ -18,8 +18,8 @@
 #include "graph/details/priority_queue.hpp"
 
 #include "road_map/road_map.hpp"
-#include "lattice_planner/lattice_manager.hpp"
-#include "lattice_planner/lattice_node.hpp"
+#include "state_lattice/lattice_manager.hpp"
+#include "state_lattice/lattice_node.hpp"
 
 namespace librav
 {

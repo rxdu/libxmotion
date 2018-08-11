@@ -74,6 +74,8 @@ void RoadMap::LoadMapFile(std::string map_file)
         }
 
         lane_bounds_.insert(std::make_pair(lanelet->id(), std::make_pair(left_line, right_line)));
+        lane_bound_polylines_.push_back(left_line);
+        lane_bound_polylines_.push_back(right_line);
     }
 
     // extract center line points
@@ -86,6 +88,7 @@ void RoadMap::LoadMapFile(std::string map_file)
             line.AddPoint(cart.x, cart.y);
         }
         lane_center_lines_.insert(std::make_pair(GetLaneletIDByCenterLineName(ln.first), line));
+        lane_center_polylines_.push_back(line);
     }
 
     // find coordinate range
@@ -124,6 +127,7 @@ void RoadMap::GenerateLanePolygon()
         Polygon polygon(bd.second.first, bd.second.second);
         polygon.ConvexDecomposition();
         lane_polygon_.insert(std::make_pair(bd.first, polygon));
+        lane_polygons_.push_back(polygon);
     }
 }
 

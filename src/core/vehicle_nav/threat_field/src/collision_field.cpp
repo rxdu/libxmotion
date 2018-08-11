@@ -21,10 +21,6 @@ CollisionField::CollisionField(int64_t size_x, int64_t size_y)
 {
 }
 
-void CollisionField::SetTrafficFlowMap(std::shared_ptr<TrafficFlowMap> map)
-{
-}
-
 void CollisionField::AddTrafficParticipant(int32_t id, std::shared_ptr<TrafficParticipantType> tfield)
 {
   assert(tfield->SizeX() == this->size_x_ && tfield->SizeY() == this->size_y_);

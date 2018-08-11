@@ -42,7 +42,10 @@ void LatticeManager::LoadPrimitivesFromFile(std::string file)
 }
 
 void LatticeManager::SavePrimitivesToFile(std::vector<MotionPrimitive> mps, std::string file)
-{    
+{
+    if (mps.empty())
+        return;
+
     PrimitiveNode origin = mps.front().GetInitNode();
     for (const auto &mp : mps)
     {

@@ -4,6 +4,7 @@
 
 #include "lightviz/matrix_viz.hpp"
 #include "lightviz/grid_viz.hpp"
+#include "lightviz/polygon_viz.hpp"
 
 #include "stopwatch/stopwatch.h"
 
@@ -55,6 +56,10 @@ int main()
 
     // auto sgrid = SquareGrid(map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false), 10);
     // LightViz::ShowSquareGrid(&sgrid, 100, "Square Grid", true);
+
+    // LightViz::ShowPolygon(map.GetAllLanePolygons(), 10);
+    // LightViz::ShowPolyline(map.GetAllLaneBoundPolylines(), 10);
+    LightViz::ShowLanePolylines(map.GetAllLaneBoundPolylines(), map.GetAllLaneCenterPolylines());
 
     return 0;
 }

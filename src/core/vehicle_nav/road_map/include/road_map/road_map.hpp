@@ -48,6 +48,10 @@ public:
   std::pair<Polyline, Polyline> GetLaneBoundaryLines(std::string lane_name);
   Polygon GetLanePolygon(std::string lane_name);
 
+  std::vector<Polyline> GetAllLaneCenterPolylines() const { return lane_center_polylines_; }
+  std::vector<Polyline> GetAllLaneBoundPolylines() const { return lane_bound_polylines_; }
+  std::vector<Polygon> GetAllLanePolygons() const { return lane_polygons_; }
+
   // Get centerline by lanelet name
   Polyline GetLaneCenterLine(std::string lane_name);
 
@@ -87,6 +91,11 @@ private:
 
   // Polygon can be created from boundary polylines
   std::unordered_map<int32_t, Polygon> lane_polygon_;
+
+  // for convenience
+  std::vector<Polyline> lane_center_polylines_;
+  std::vector<Polyline> lane_bound_polylines_;
+  std::vector<Polygon> lane_polygons_;
 
   // Generate lane polygon from boundary lines
   void GenerateLanePolygon();

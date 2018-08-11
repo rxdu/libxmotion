@@ -29,7 +29,7 @@ class Polyline
 
 public:
   Polyline() = default;
-  Polyline(std::vector<Point_2> pts) { points_ = pts; }
+  Polyline(std::vector<Point_2> pts);
 
   using Point = Point_2;
   using Line = Line_2;
@@ -41,10 +41,22 @@ public:
   SimplePoint GetPoint(std::size_t i) const;
   std::vector<Point_2> GetPoints() const { return points_; }
 
+  inline double GetMinX() const { return xmin_; }
+  inline double GetMaxX() const { return xmax_; }
+  inline double GetMinY() const { return ymin_; }
+  inline double GetMaxY() const { return ymax_; }
+
   void PrintInfo();
 
 private:
   std::vector<Point_2> points_;
+
+  double xmin_;
+  double xmax_;
+  double ymin_;
+  double ymax_;
+
+  void UpdateXYMinMax(double x, double y);
 };
 } // namespace librav
 

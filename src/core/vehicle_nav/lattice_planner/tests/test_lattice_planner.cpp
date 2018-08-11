@@ -4,7 +4,6 @@
 
 #include "road_map/road_map.hpp"
 
-#include "lattice_planner/lattice_manager.hpp"
 #include "lattice_planner/lattice_planner.hpp"
 
 #include "lightviz/matrix_viz.hpp"

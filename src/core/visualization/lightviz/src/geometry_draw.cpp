@@ -46,7 +46,7 @@ cv::Mat GeometryDraw::CreateCanvasWithMatrixColorMap(const Eigen::MatrixXd &matr
     return color_img;
 }
 
-cv::Mat GeometryDraw::DrawPolyine(cv::Mat canvas, const Polyline &polyline, bool show_dot)
+cv::Mat GeometryDraw::DrawPolyline(cv::Mat canvas, const Polyline &polyline, bool show_dot, cv::Scalar ln_color)
 {
     std::size_t pt_num = polyline.GetPointNumer();
 
@@ -59,7 +59,7 @@ cv::Mat GeometryDraw::DrawPolyine(cv::Mat canvas, const Polyline &polyline, bool
         if (show_dot)
         {
             auto pt = ConvertCartisianToPixel(polyline.GetPoint(0).x, polyline.GetPoint(0).y);
-            DrawPoint(canvas, cv::Point(pt.x, pt.y), LVColors::red_color, 2);
+            DrawPoint(canvas, cv::Point(pt.x, pt.y), LVColors::red_color);
         }
     }
     else
@@ -68,14 +68,14 @@ cv::Mat GeometryDraw::DrawPolyine(cv::Mat canvas, const Polyline &polyline, bool
         {
             auto pt1 = ConvertCartisianToPixel(polyline.GetPoint(i).x, polyline.GetPoint(i).y);
             auto pt2 = ConvertCartisianToPixel(polyline.GetPoint(i + 1).x, polyline.GetPoint(i + 1).y);
-            DrawLine(canvas, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), LVColors::blue_color, 2);
+            DrawLine(canvas, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color);
         }
         if (show_dot)
         {
             for (std::size_t i = 0; i < pt_num; ++i)
             {
                 auto pt1 = ConvertCartisianToPixel(polyline.GetPoint(i).x, polyline.GetPoint(i).y);
-                DrawPoint(canvas, cv::Point(pt1.x, pt1.y), LVColors::red_color, 2);
+                DrawPoint(canvas, cv::Point(pt1.x, pt1.y), LVColors::red_color);
             }
         }
     }
@@ -83,7 +83,7 @@ cv::Mat GeometryDraw::DrawPolyine(cv::Mat canvas, const Polyline &polyline, bool
     return canvas;
 }
 
-cv::Mat GeometryDraw::DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool show_dot)
+cv::Mat GeometryDraw::DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool show_dot, cv::Scalar ln_color)
 {
     std::size_t pt_num = polygon.GetPointNumer();
 
@@ -94,18 +94,18 @@ cv::Mat GeometryDraw::DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool s
     {
         auto pt1 = ConvertCartisianToPixel(polygon.GetPoint(i).x, polygon.GetPoint(i).y);
         auto pt2 = ConvertCartisianToPixel(polygon.GetPoint(i + 1).x, polygon.GetPoint(i + 1).y);
-        DrawLine(canvas, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), LVColors::blue_color, 2);
+        DrawLine(canvas, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color);
     }
     auto last_pt = ConvertCartisianToPixel(polygon.GetPoint(pt_num - 1).x, polygon.GetPoint(pt_num - 1).y);
     auto first_pt = ConvertCartisianToPixel(polygon.GetPoint(0).x, polygon.GetPoint(0).y);
-    DrawLine(canvas, cv::Point(last_pt.x, last_pt.y), cv::Point(first_pt.x, first_pt.y), LVColors::blue_color, 2);
+    DrawLine(canvas, cv::Point(last_pt.x, last_pt.y), cv::Point(first_pt.x, first_pt.y), ln_color);
 
     if (show_dot)
     {
         for (std::size_t i = 0; i < pt_num; ++i)
         {
             auto pt1 = ConvertCartisianToPixel(polygon.GetPoint(i).x, polygon.GetPoint(i).y);
-            DrawPoint(canvas, cv::Point(pt1.x, pt1.y), LVColors::red_color, 2);
+            DrawPoint(canvas, cv::Point(pt1.x, pt1.y), LVColors::red_color);
         }
     }
     
