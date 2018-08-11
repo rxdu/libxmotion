@@ -39,6 +39,7 @@ int main()
     // fp.AddPoint(-0.5, 1.0);
     // fp.AddPoint(-0.5, -1.0);
     // fp.AddPoint(0.5, -1.0);
+    // this set works
     fp.AddPoint(0.55, 1.2);
     fp.AddPoint(-0.55, 1.2);
     fp.AddPoint(-0.55, -1.2);
@@ -51,10 +52,11 @@ int main()
     // LatticeNode goal(20, 66.5, M_PI);
     LatticeNode start(57, 36, 85.0 / 180.0 * M_PI);
     // LatticeNode goal(23, 65.8, 180.0 / 180.0 * M_PI);
-    LatticeNode goal(22, 66.8, 180.0 / 180.0 * M_PI);
+    // LatticeNode goal(22, 66.8, 180.0 / 180.0 * M_PI);
+    LatticeNode goal(4, 68, 180.0 / 170.0 * M_PI);
 
     // auto path = planner.Search(start, 5);
-    auto path = planner.AStarSearch(start, goal, 5);
+    auto path = planner.AStarSearch(start, goal, 8, 10);
 
     // lm->SavePrimitivesToFile(path, "path");
 

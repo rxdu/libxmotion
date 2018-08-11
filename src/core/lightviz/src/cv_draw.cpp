@@ -190,3 +190,8 @@ void LightViz::DrawArrow(cv::Mat img, cv::Point base_pt, double length, double a
     line(img, p, tip_pt, color, thickness, line_type);
     // arrowedLine(img, base_pt, tip_pt, color, thickness, line_type);
 }
+
+void LightViz::WriteText(cv::Mat img, std::string text, cv::Point pos, const cv::Scalar &color, double scale, int thick)
+{
+    putText(img, text, pos, FONT_HERSHEY_SIMPLEX, scale, color, thick);
+}

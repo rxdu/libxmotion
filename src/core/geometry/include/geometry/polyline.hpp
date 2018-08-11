@@ -40,6 +40,7 @@ public:
   std::size_t GetPointNumer() const { return points_.size(); }
   SimplePoint GetPoint(std::size_t i) const;
   std::vector<Point_2> GetPoints() const { return points_; }
+  std::vector<SimplePoint> GetSimplePoints() const;
 
   inline double GetMinX() const { return xmin_; }
   inline double GetMaxX() const { return xmax_; }

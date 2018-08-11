@@ -68,6 +68,8 @@ void JetPaletteTransform(double val, double &r, double &g, double &b);
 void DrawPoint(cv::Mat img, cv::Point pos, const cv::Scalar &color = LVColors::default_pt_color, int thick = 1);
 void DrawLine(cv::Mat img, cv::Point pt1, cv::Point pt2, const cv::Scalar &color = LVColors::default_ln_color, int thick = 1);
 void DrawArrow(cv::Mat img, cv::Point base_pos, double length, double angle, const cv::Scalar &color = LVColors::default_pt_color, int thick = 1);
+
+void WriteText(cv::Mat img, std::string text, cv::Point pos, const cv::Scalar &color = LVColors::black_color, double scale = 1, int thick = 1);
 } // namespace LightViz
 } // namespace librav
 

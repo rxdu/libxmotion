@@ -34,6 +34,14 @@ SimplePoint Polyline::GetPoint(std::size_t i) const
     return SimplePoint(CGAL::to_double(points_[i].x()), CGAL::to_double(points_[i].y()));
 }
 
+std::vector<SimplePoint> Polyline::GetSimplePoints() const
+{
+    std::vector<SimplePoint> pts;
+    for (std::size_t i = 0; i < points_.size(); ++i)
+        pts.push_back(SimplePoint(CGAL::to_double(points_[i].x()), CGAL::to_double(points_[i].y())));
+    return pts;
+}
+
 void Polyline::PrintInfo()
 {
     std::cout << "Polyline with " << points_.size() << " points" << std::endl;

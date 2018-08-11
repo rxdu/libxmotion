@@ -68,6 +68,48 @@ void LightViz::ShowPolyline(const std::vector<Polyline> &polylines, int32_t pixe
     ShowImage(canvas, window_name, save_img);
 }
 
+void LightViz::ShowPolylinePosition(const std::vector<Polyline> &polylines, int32_t pixel_per_unit, std::string window_name, bool save_img)
+{
+    GeometryDraw gdraw(pixel_per_unit);
+
+    std::vector<double> xmins, xmaxs, ymins, ymaxs;
+
+    for (auto &polyline : polylines)
+    {
+        xmins.push_back(polyline.GetMinX());
+        xmaxs.push_back(polyline.GetMaxX());
+        ymins.push_back(polyline.GetMinY());
+        ymaxs.push_back(polyline.GetMaxY());
+    }
+    double bd_xl = *std::min_element(xmins.begin(), xmins.end());
+    double bd_xr = *std::max_element(xmaxs.begin(), xmaxs.end());
+    double bd_yb = *std::min_element(ymins.begin(), ymins.end());
+    double bd_yt = *std::max_element(ymaxs.begin(), ymaxs.end());
+
+    double xspan = bd_xr - bd_xl;
+    double yspan = bd_yt - bd_yb;
+
+    double xmin = bd_xl - xspan * 0.2;
+    double xmax = bd_xr + xspan * 0.2;
+    double ymin = bd_yb - yspan * 0.2;
+    double ymax = bd_yt + yspan * 0.2;
+
+    cv::Mat canvas = gdraw.CreateCanvas(xmin, xmax, ymin, ymax);
+
+    std::vector<SimplePoint> points;
+    for (auto &polyline : polylines)
+    {
+        canvas = gdraw.DrawPolyline(canvas, polyline);
+        auto new_pts = polyline.GetSimplePoints();
+        // points.insert(points.end(), new_pts.begin(), new_pts.end());
+        points.push_back(new_pts.front());
+        points.push_back(new_pts.back());
+    }
+    gdraw.WritePointPosition(canvas, points);
+
+    ShowImage(canvas, window_name, save_img);
+}
+
 void LightViz::ShowPolygon(const Polygon &polygon, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
     GeometryDraw gdraw(pixel_per_unit);

@@ -31,6 +31,8 @@ struct GeometryDraw
     cv::Mat DrawPolyline(cv::Mat canvas, const Polyline &polyline, bool show_dot = false, cv::Scalar ln_color = LVColors::blue_color, int32_t ln_width = 1);
     cv::Mat DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool show_dot = false, cv::Scalar ln_color = LVColors::blue_color, int32_t ln_width = 1);
 
+    cv::Mat WritePointPosition(cv::Mat canvas, const std::vector<SimplePoint> &points);
+
     SimplePoint ConvertCartisianToPixel(double xi, double yi);
 
     int32_t pixel_per_meter = 100;

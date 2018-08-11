@@ -20,6 +20,7 @@ namespace LightViz
 {
 void ShowPolyline(const Polyline &polyline, int32_t pixel_per_unit = 10, std::string window_name = "Polyline Image", bool save_img = false);
 void ShowPolyline(const std::vector<Polyline> &polylines, int32_t pixel_per_unit = 10, std::string window_name = "Polyline Image", bool save_img = false);
+void ShowPolylinePosition(const std::vector<Polyline> &polylines, int32_t pixel_per_unit = 10, std::string window_name = "Polyline Image", bool save_img = false);
 
 void ShowPolygon(const Polygon &polygon, int32_t pixel_per_unit = 10, std::string window_name = "Polygon Image", bool save_img = false);
 void ShowPolygon(const std::vector<Polygon> &polygons, int32_t pixel_per_unit = 10, std::string window_name = "Polygon Image", bool save_img = false);

@@ -112,6 +112,16 @@ cv::Mat GeometryDraw::DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool s
     return canvas;
 }
 
+cv::Mat GeometryDraw::WritePointPosition(cv::Mat canvas, const std::vector<SimplePoint> &points)
+{
+    for (auto& pt : points)
+    {
+        auto pt1 = ConvertCartisianToPixel(pt.x, pt.y);
+        std::string pos_str = "(" + std::to_string(static_cast<int32_t>(pt.x)) + "," + std::to_string(static_cast<int32_t>(pt.y)) + ")";
+        WriteText(canvas, pos_str, cv::Point(pt1.x, pt1.y));
+    }
+}
+
 SimplePoint GeometryDraw::ConvertCartisianToPixel(double xi, double yi)
 {
     int32_t x = (xi - xmin_) / xspan_ * canvas_size_x_;
