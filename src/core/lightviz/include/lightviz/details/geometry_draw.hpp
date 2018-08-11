@@ -28,8 +28,8 @@ struct GeometryDraw
     cv::Mat CreateCanvas(double xmin, double xmax, double ymin, double ymax);
     cv::Mat CreateCanvasWithMatrixColorMap(const Eigen::MatrixXd &matrix, int32_t ppu);
 
-    cv::Mat DrawPolyline(cv::Mat canvas, const Polyline &polyline, bool show_dot = false, cv::Scalar ln_color = LVColors::blue_color);
-    cv::Mat DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool show_dot = false, cv::Scalar ln_color = LVColors::blue_color);
+    cv::Mat DrawPolyline(cv::Mat canvas, const Polyline &polyline, bool show_dot = false, cv::Scalar ln_color = LVColors::blue_color, int32_t ln_width = 1);
+    cv::Mat DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool show_dot = false, cv::Scalar ln_color = LVColors::blue_color, int32_t ln_width = 1);
 
     SimplePoint ConvertCartisianToPixel(double xi, double yi);
 

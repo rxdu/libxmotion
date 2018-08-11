@@ -46,7 +46,7 @@ cv::Mat GeometryDraw::CreateCanvasWithMatrixColorMap(const Eigen::MatrixXd &matr
     return color_img;
 }
 
-cv::Mat GeometryDraw::DrawPolyline(cv::Mat canvas, const Polyline &polyline, bool show_dot, cv::Scalar ln_color)
+cv::Mat GeometryDraw::DrawPolyline(cv::Mat canvas, const Polyline &polyline, bool show_dot, cv::Scalar ln_color, int32_t ln_width)
 {
     std::size_t pt_num = polyline.GetPointNumer();
 
@@ -68,7 +68,7 @@ cv::Mat GeometryDraw::DrawPolyline(cv::Mat canvas, const Polyline &polyline, boo
         {
             auto pt1 = ConvertCartisianToPixel(polyline.GetPoint(i).x, polyline.GetPoint(i).y);
             auto pt2 = ConvertCartisianToPixel(polyline.GetPoint(i + 1).x, polyline.GetPoint(i + 1).y);
-            DrawLine(canvas, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color);
+            DrawLine(canvas, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color, ln_width);
         }
         if (show_dot)
         {
@@ -83,7 +83,7 @@ cv::Mat GeometryDraw::DrawPolyline(cv::Mat canvas, const Polyline &polyline, boo
     return canvas;
 }
 
-cv::Mat GeometryDraw::DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool show_dot, cv::Scalar ln_color)
+cv::Mat GeometryDraw::DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool show_dot, cv::Scalar ln_color, int32_t ln_width)
 {
     std::size_t pt_num = polygon.GetPointNumer();
 
@@ -94,11 +94,11 @@ cv::Mat GeometryDraw::DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool s
     {
         auto pt1 = ConvertCartisianToPixel(polygon.GetPoint(i).x, polygon.GetPoint(i).y);
         auto pt2 = ConvertCartisianToPixel(polygon.GetPoint(i + 1).x, polygon.GetPoint(i + 1).y);
-        DrawLine(canvas, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color);
+        DrawLine(canvas, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color, ln_width);
     }
     auto last_pt = ConvertCartisianToPixel(polygon.GetPoint(pt_num - 1).x, polygon.GetPoint(pt_num - 1).y);
     auto first_pt = ConvertCartisianToPixel(polygon.GetPoint(0).x, polygon.GetPoint(0).y);
-    DrawLine(canvas, cv::Point(last_pt.x, last_pt.y), cv::Point(first_pt.x, first_pt.y), ln_color);
+    DrawLine(canvas, cv::Point(last_pt.x, last_pt.y), cv::Point(first_pt.x, first_pt.y), ln_color, ln_width);
 
     if (show_dot)
     {
@@ -108,7 +108,7 @@ cv::Mat GeometryDraw::DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool s
             DrawPoint(canvas, cv::Point(pt1.x, pt1.y), LVColors::red_color);
         }
     }
-    
+
     return canvas;
 }
 

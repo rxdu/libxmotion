@@ -15,11 +15,12 @@
 #include <cstdint>
 
 #include "graph/graph.hpp"
-#include "graph/details/priority_queue.hpp"
 
 #include "road_map/road_map.hpp"
 #include "state_lattice/lattice_manager.hpp"
 #include "state_lattice/lattice_node.hpp"
+
+#include "stopwatch/stopwatch.h"
 
 namespace librav
 {
@@ -36,10 +37,13 @@ class LatticePlanner
 	void SetEgoPlanningRoute(std::vector<std::string> ll);
 
 	LatticePath Search(LatticeNode start_state, int32_t horizon);
-	LatticePath AStarSearch(LatticeNode start_state, LatticeNode goal_state);
+	LatticePath AStarSearch(LatticeNode start_state, LatticeNode goal_state, int32_t horizon, int32_t min_candidate = 20);
+
+	std::vector<Polyline> ConvertPathToPolyline(const LatticePath &path);
 
   private:
 	double threshold_ = 1.0;
+	stopwatch::StopWatch timer_;
 
 	// vehicle footprint
 	Polygon footprint_;
@@ -52,9 +56,12 @@ class LatticePlanner
 
 	bool VehicleInsideDrivableArea(const Polygon &footprint);
 	bool IsCollisionFree(const MotionPrimitive &lattice);
-	std::vector<std::tuple<LatticeNode, MotionPrimitive>> GenerateLattices(LatticeNode node);
+
 	double CalculateDistance(LatticeNode node0, LatticeNode node1);
 	double CalculateHeuristic(LatticeNode node0, LatticeNode node1);
+	double EvaluateCandidate(LatticeNode candidate, LatticeNode desired);
+
+	std::vector<std::tuple<LatticeNode, MotionPrimitive>> GenerateLattices(LatticeNode node);
 	static std::vector<Vertex_t<LatticeNode, MotionPrimitive> *> ReconstructPath(Vertex_t<LatticeNode, MotionPrimitive> *start_vtx, Vertex_t<LatticeNode, MotionPrimitive> *goal_vtx);
 };
 } // namespace librav

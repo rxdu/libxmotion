@@ -19,6 +19,8 @@
 #include <functional>
 #include <iostream>
 
+#include "graph/details/priority_queue.hpp"
+
 using namespace librav;
 
 int64_t LatticeNode::instance_count = 0;
@@ -82,8 +84,11 @@ LatticePath LatticePlanner::Search(LatticeNode start_state, int32_t horizon)
     return path;
 };
 
-LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goal_state)
+LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goal_state, int32_t horizon, int32_t min_candidate)
 {
+    std::cout << "----------- search started ------------" << std::endl;
+    timer_.tic();
+
     using GraphVertexType = Vertex_t<LatticeNode, MotionPrimitive>;
 
     // std::vector<MotionPrimitive> mp_record;
@@ -98,6 +103,7 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
 
     // open list - a list of vertices that need to be checked out
     PriorityQueue<GraphVertexType *> openlist;
+    PriorityQueue<GraphVertexType *> candidate_vertices;
 
     // begin with start vertex
     openlist.put(start_vtx, 0);
@@ -115,7 +121,7 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
         if (current_vertex->is_checked_)
             continue;
 
-        int level_count = 0;
+        int32_t level_count = 0;
         GraphVertexType *cvp = current_vertex;
         while (cvp->search_parent_ != nullptr)
         {
@@ -123,18 +129,20 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
             cvp = cvp->search_parent_;
         }
 
-        if (level_count == 5)
+        if (current_vertex->GetDepth() == horizon)
         // if (CalculateDistance(current_vertex->state_, goal_vtx->state_) < threshold_)
         {
             ++candidate_num;
             // std::cout << "final distance error: " << CalculateDistance(current_vertex->state_, goal_vtx->state_) << std::endl;
-            std::cout << "final state: " << current_vertex->state_.x << " , "
-                      << current_vertex->state_.y << " , "
-                      << current_vertex->state_.theta << std::endl;
-            goal_vtx = current_vertex;
+            // std::cout << "final state: " << current_vertex->state_.x << " , "
+            //           << current_vertex->state_.y << " , "
+            //           << current_vertex->state_.theta << std::endl;
+            candidate_vertices.put(current_vertex, EvaluateCandidate(current_vertex->state_, goal_vtx->state_));
 
-            if (candidate_num > 20)
+            if (candidate_num > min_candidate)
             {
+                goal_vtx = candidate_vertices.get(); //current_vertex;
+
                 found_path = true;
                 break;
             }
@@ -187,15 +195,61 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
     LatticePath path;
     if (found_path)
     {
-        std::cout << "path found with cost " << goal_vtx->g_cost_ << std::endl;
+        std::cout << "cost of path: " << goal_vtx->g_cost_ << std::endl;
         auto path_vtx = ReconstructPath(start_vtx, goal_vtx);
         for (int i = 0; i < path_vtx.size() - 1; ++i)
             path.push_back(path_vtx[i]->GetEdgeCost(path_vtx[i + 1]));
+        std::cout << "number of segments: " << path.size() << std::endl;
     }
     else
         std::cout << "failed to find a path" << std::endl;
 
+    std::cout << "------ finished in " << timer_.mtoc() << " seconds ------" << std::endl;
+
     // lattice_manager_->SavePrimitivesToFile(mp_record, "search");
+
+    return path;
+}
+
+std::vector<std::tuple<LatticeNode, MotionPrimitive>> LatticePlanner::GenerateLattices(LatticeNode node)
+{
+    PrimitiveNode new_base(node.x, node.y, 0, node.theta);
+    std::vector<MotionPrimitive> new_mps = lattice_manager_->TransformAllPrimitives(lattice_manager_->primitives_,
+                                                                                    new_base.x,
+                                                                                    new_base.y,
+                                                                                    new_base.theta);
+    std::vector<std::tuple<LatticeNode, MotionPrimitive>> neighbours;
+    for (auto &mp : new_mps)
+    {
+        if (IsCollisionFree(mp))
+        {
+            LatticeNode lnode(mp.GetFinalNode().x, mp.GetFinalNode().y, mp.GetFinalNode().theta);
+            neighbours.push_back(std::make_pair(lnode, mp));
+        }
+    }
+    return neighbours;
+}
+
+std::vector<Vertex_t<LatticeNode, MotionPrimitive> *> LatticePlanner::ReconstructPath(Vertex_t<LatticeNode, MotionPrimitive> *start_vtx, Vertex_t<LatticeNode, MotionPrimitive> *goal_vtx)
+{
+    std::vector<Vertex_t<LatticeNode, MotionPrimitive> *> path;
+
+    Vertex_t<LatticeNode, MotionPrimitive> *waypoint = goal_vtx;
+    while (waypoint != start_vtx)
+    {
+        path.push_back(waypoint);
+        waypoint = waypoint->search_parent_;
+    }
+    // add the start node
+    path.push_back(waypoint);
+    std::reverse(path.begin(), path.end());
+
+    auto traj_s = path.begin();
+    auto traj_e = path.end() - 1;
+    // std::cout << "starting vertex id: " << (*traj_s)->vertex_id_ << std::endl;
+    // std::cout << "finishing vertex id: " << (*traj_e)->vertex_id_ << std::endl;
+    // std::cout << "number of path segments: " << path.size() << std::endl;
+    // std::cout << "total cost: " << path.back()->g_cost_ << std::endl;
 
     return path;
 }
@@ -228,25 +282,6 @@ bool LatticePlanner::IsCollisionFree(const MotionPrimitive &lattice)
     return true;
 }
 
-std::vector<std::tuple<LatticeNode, MotionPrimitive>> LatticePlanner::GenerateLattices(LatticeNode node)
-{
-    PrimitiveNode new_base(node.x, node.y, 0, node.theta);
-    std::vector<MotionPrimitive> new_mps = lattice_manager_->TransformAllPrimitives(lattice_manager_->primitives_,
-                                                                                    new_base.x,
-                                                                                    new_base.y,
-                                                                                    new_base.theta);
-    std::vector<std::tuple<LatticeNode, MotionPrimitive>> neighbours;
-    for (auto &mp : new_mps)
-    {
-        if (IsCollisionFree(mp))
-        {
-            LatticeNode lnode(mp.GetFinalNode().x, mp.GetFinalNode().y, mp.GetFinalNode().theta);
-            neighbours.push_back(std::make_pair(lnode, mp));
-        }
-    }
-    return neighbours;
-}
-
 double LatticePlanner::CalculateDistance(LatticeNode node0, LatticeNode node1)
 {
     double x_err = node0.x - node1.x;
@@ -265,26 +300,20 @@ double LatticePlanner::CalculateHeuristic(LatticeNode node0, LatticeNode node1)
     // return std::hypot(node0.x - node1.x, node0.y - node1.y);
 }
 
-std::vector<Vertex_t<LatticeNode, MotionPrimitive> *> LatticePlanner::ReconstructPath(Vertex_t<LatticeNode, MotionPrimitive> *start_vtx, Vertex_t<LatticeNode, MotionPrimitive> *goal_vtx)
+double LatticePlanner::EvaluateCandidate(LatticeNode candidate, LatticeNode desired)
 {
-    std::vector<Vertex_t<LatticeNode, MotionPrimitive> *> path;
+    double x_err = candidate.x - desired.x;
+    double y_err = candidate.y - desired.y;
+    double theta_err = (candidate.theta - desired.theta) * 10;
+    return std::sqrt(x_err * x_err + y_err * y_err + theta_err * theta_err);
+    // return std::sqrt(x_err * x_err + y_err * y_err + theta_err * theta_err);
+    // return std::sqrt(theta_err * theta_err);
+}
 
-    Vertex_t<LatticeNode, MotionPrimitive> *waypoint = goal_vtx;
-    while (waypoint != start_vtx)
-    {
-        path.push_back(waypoint);
-        waypoint = waypoint->search_parent_;
-    }
-    // add the start node
-    path.push_back(waypoint);
-    std::reverse(path.begin(), path.end());
-
-    auto traj_s = path.begin();
-    auto traj_e = path.end() - 1;
-    std::cout << "starting vertex id: " << (*traj_s)->vertex_id_ << std::endl;
-    std::cout << "finishing vertex id: " << (*traj_e)->vertex_id_ << std::endl;
-    std::cout << "path length: " << path.size() << std::endl;
-    std::cout << "total cost: " << path.back()->g_cost_ << std::endl;
-
-    return path;
+std::vector<Polyline> LatticePlanner::ConvertPathToPolyline(const LatticePath &path)
+{
+    std::vector<Polyline> polylines;
+    for (auto &mp : path)
+        polylines.push_back(mp.ToPolyline());
+    return polylines;
 }

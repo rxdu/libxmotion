@@ -34,10 +34,15 @@ int main()
     // fp.AddPoint(-0.6, 1.0);
     // fp.AddPoint(-0.6, -1.0);
     // fp.AddPoint(0.6, -1.0);
-    fp.AddPoint(0.5, 1.0);
-    fp.AddPoint(-0.5, 1.0);
-    fp.AddPoint(-0.5, -1.0);
-    fp.AddPoint(0.5, -1.0);
+    // this set works
+    // fp.AddPoint(0.5, 1.0);
+    // fp.AddPoint(-0.5, 1.0);
+    // fp.AddPoint(-0.5, -1.0);
+    // fp.AddPoint(0.5, -1.0);
+    fp.AddPoint(0.55, 1.2);
+    fp.AddPoint(-0.55, 1.2);
+    fp.AddPoint(-0.55, -1.2);
+    fp.AddPoint(0.55, -1.2);
     planner.SetVehicleFootprint(fp);
 
     // LatticeNode start(0, 0, 0);
@@ -49,7 +54,7 @@ int main()
     LatticeNode goal(22, 66.8, 180.0 / 180.0 * M_PI);
 
     // auto path = planner.Search(start, 5);
-    auto path = planner.AStarSearch(start, goal);
+    auto path = planner.AStarSearch(start, goal, 5);
 
     // lm->SavePrimitivesToFile(path, "path");
 
@@ -67,7 +72,10 @@ int main()
     //     }
     //     LightViz::ShowPathOnMatrixAsColorMap(drivable_mask->GetGridMatrix(true), waypoints, "lplanner", true);
     // }
-    LightViz::ShowLanePolylines(map->GetAllLaneBoundPolylines(), map->GetAllLaneCenterPolylines());
+
+    // LightViz::ShowLanePolylines(map->GetAllLaneBoundPolylines(), map->GetAllLaneCenterPolylines());
+    auto path_line = planner.ConvertPathToPolyline(path);
+    LightViz::ShowPathInLane(map->GetAllLaneBoundPolylines(), map->GetAllLaneCenterPolylines(), path_line);
 
     return 0;
 }
