@@ -25,15 +25,16 @@ class ThreatRanking
 public:
   ThreatRanking(std::shared_ptr<RoadMap> map);
 
-  std::shared_ptr<DenseGrid> drivable_mask_;
   LatticePath path_;
   std::shared_ptr<MotionModel> motion_model_;
 
   void AddStateEstimations(std::vector<MMStateEst> ests);
-  void SetEgoDesiredPath(std::string start, std::string goal);
 
+  void SetEgoVehicleFootprint(Polygon fp) { planner_->SetVehicleFootprint(fp); }
+  void SetEgoDesiredPath(std::string start, std::string goal);
   void SetEgoStartState(double x, double y, double theta);
   void SetEgoGoalState(double x, double y, double theta);
+
   void PerformEgoPathPlanning();
 
   void Analyze();
@@ -56,7 +57,6 @@ private:
   double goal_y_;
   double goal_theta_;
 
-  // std::vector<int32_t> ego_path_id_;
   std::vector<std::string> ego_path_;
   std::vector<std::string> active_lanelets_;
 };

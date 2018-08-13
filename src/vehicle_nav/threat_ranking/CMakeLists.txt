@@ -5,7 +5,7 @@
 set(TRANKING_LIB_SRC
     src/topogeo_graph.cpp
     src/motion_model.cpp
-    # src/threat_ranking.cpp
+    src/threat_ranking.cpp
 )
 add_library(rank STATIC ${TRANKING_LIB_SRC})
 target_link_libraries(rank decomp graph roadmap tfield lattice lattice_planner vehviz lightviz)
