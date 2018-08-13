@@ -13,8 +13,9 @@
 #include <queue>
 #include <set>
 
-#include "lightviz/matrix_viz.hpp"
-#include "lightviz/grid_viz.hpp"
+#include "threat_field/threat_distribution.hpp"
+
+#include "lightviz/lightviz.hpp"
 
 using namespace librav;
 
@@ -51,32 +52,6 @@ MotionChain::MotionChain(MotionModel *model, MotionPoint pt, int32_t start) : st
     base_link_ = new MChainLink(start_id_, pln);
 
     // create the chains
-    // auto start_vtx = model_->cline_graph_->GetVertex(start_id_);
-    // std::cout << "starting vertex: " << start_vtx->state_.name << std::endl;
-
-    // chain_depth_ = 1;
-    // auto neighbours = start_vtx->edges_to_;
-    // chain_width_ = neighbours.size();
-
-    // while (!neighbours.empty())
-    // {
-    //     std::vector<Graph_t<LaneBlock>::VertexType *> vertices;
-    //     for (auto &nb : neighbours)
-    //         vertices.push_back(nb.dst_);
-
-    //     neighbours.clear();
-    //     for (auto vt : vertices)
-    //     {
-    //         if (!vt->edges_to_.empty())
-    //             neighbours.insert(neighbours.end(), vt->edges_to_.begin(), vt->edges_to_.end());
-    //     }
-
-    //     if (neighbours.size() > chain_width_)
-    //         chain_width_ = neighbours.size();
-    //     ++chain_depth_;
-    // }
-    // std::cout << "chain depth: " << chain_depth_ << " , width: " << chain_width_ << std::endl;
-
     std::vector<MChainLink *> lks;
     lks.push_back(base_link_);
     while (!lks.empty())
@@ -115,7 +90,7 @@ void MotionChain::FindStartingPoint()
 {
     SimplePoint pt;
     double shortest_dist = std::numeric_limits<double>::max();
-    std::cout << "polyline point number: " << base_link_->polyline_.GetPointNumer() << std::endl;
+    std::cout << "base link polyline point number: " << base_link_->polyline_.GetPointNumer() << std::endl;
     for (int32_t i = 0; i < base_link_->polyline_.GetPointNumer() - 1; ++i)
     {
         auto start = base_link_->polyline_.GetPoint(i);
@@ -157,6 +132,8 @@ std::vector<MMStatePrediction> MotionChain::Propagate(double t)
     double dist_todo = std::hypot(mp_pt_.estimate_.velocity_x, mp_pt_.estimate_.velocity_y) * t;
     double total_dist = dist_before_start_ + dist_todo;
 
+    std::cout << "distance todo: " << dist_todo << " , " << total_dist << std::endl;
+
     std::vector<MMStatePrediction> candidates;
     for (auto &line : chain_polylines_)
     {
@@ -171,6 +148,7 @@ std::vector<MMStatePrediction> MotionChain::Propagate(double t)
 
             if (accumulated + segment_len > total_dist)
             {
+                std::cout << ">>>>>>>>>> stop search between " << i << " and " << i + 1 << " , seg len " << segment_len << std::endl;
                 double rem_dist = total_dist - accumulated;
                 auto ps = CalculatePrediction(p0, p1, rem_dist);
                 candidates.push_back(ps);
@@ -234,15 +212,19 @@ void MotionChain::CreateChainPolylines()
     chain_polylines_.clear();
     for (auto link : leaf_links_)
     {
-        Polyline line(link->polyline_.GetPoints());
         MChainLink *parent = link->parent_link;
+        std::vector<Polyline::Point> chain_pts;
+        chain_pts = link->polyline_.GetPoints();
         while (parent != nullptr)
         {
             auto parent_pts = parent->polyline_.GetPoints();
-            for(auto& pt : parent_pts)
-                line.AddPoint(pt);
+            // for (auto it = parent_pts.begin() + 1; it != parent_pts.end(); ++it)
+            //     line.AddPoint(*it);
+            chain_pts.insert(chain_pts.begin(), parent_pts.begin(), parent_pts.end());
             parent = parent->parent_link;
         }
+        Polyline line(chain_pts);
+        std::cout << "&&& total number of points: " << line.GetPointNumer() << std::endl;
         chain_polylines_.push_back(line);
     }
     std::cout << "number of chain polylines: " << chain_polylines_.size() << std::endl;
@@ -330,11 +312,7 @@ void MotionModel::MergePointsToNetwork()
 
         std::cout << "occupied lanelet number: " << lanelet_ids.size() << std::endl;
 
-        auto pos = road_map_->coordinate_.ConvertToGridPixel(CartCooridnate(est.position_x, est.position_y));
-        std::cout << "(x,y): " << pos << std::endl;
-
         MotionPoint pt(est);
-        pt.SetGridCoordinate(pos);
         points_.push_back(pt);
 
         // find the closest center line
@@ -359,50 +337,54 @@ std::vector<MMStatePrediction> MotionModel::PropagateMotionChains(double t)
         auto ps = chain->Propagate(t);
         predictions.insert(predictions.end(), ps.begin(), ps.end());
     }
+
+    std::cout << "number of predictions from all chains: " << predictions.size() << std::endl;
+
     return predictions;
 }
 
-// void MotionModel::GenerateCollisionField()
-// {
-//     cfield_ = std::make_shared<CollisionField>(road_map_->grid_size_x_, road_map_->grid_size_y_);
-//     cfield_->SetOriginCoordinate(0, 0);
+std::shared_ptr<CollisionField> MotionModel::GenerateCollisionField()
+{
+    std::shared_ptr<CollisionField> cfield = std::make_shared<CollisionField>(road_map_->xmin_, road_map_->xmax_, road_map_->ymin_, road_map_->ymax_);
 
-//     int32_t pt_count = 0;
-//     for (auto &pt : points_)
-//     {
-//         auto tf_pt = std::make_shared<CollisionField::TrafficParticipantType>(road_map_->grid_size_x_, road_map_->grid_size_y_);
-//         tf_pt->SetParameters(pt.grid_position_.x, pt.grid_position_.y, pt.estimate_.velocity_x, pt.estimate_.velocity_y, pt.estimate_.sigma_px, pt.estimate_.sigma_py);
-//         cfield_->AddTrafficParticipant(pt_count++, tf_pt);
-//     }
-//     cfield_->UpdateCollisionField();
-// }
+    int32_t pt_count = 0;
+    for (auto &pt : points_)
+    {
+        GaussianPositionVelocityThreat threat_model(pt.estimate_.position_x, pt.estimate_.position_y,
+                                                    pt.estimate_.velocity_x, pt.estimate_.velocity_y,
+                                                    pt.estimate_.sigma_px, pt.estimate_.sigma_py);
+        std::shared_ptr<TrafficParticipant> participant = std::make_shared<TrafficParticipant>(pt.estimate_.position_x, pt.estimate_.position_y,
+                                                                                               pt.estimate_.velocity_x, pt.estimate_.velocity_y);
+        participant->threat_func = threat_model;
+        cfield->AddTrafficParticipant(pt_count++, participant);
+    }
 
-// void MotionModel::GeneratePredictedCollisionField(double t)
-// {
-//     if (t == 0)
-//     {
-//         GenerateCollisionField();
-//         return;
-//     }
+    return cfield;
+}
 
-//     cfield_ = std::make_shared<CollisionField>(road_map_->grid_size_x_, road_map_->grid_size_y_);
-//     cfield_->SetOriginCoordinate(0, 0);
+std::shared_ptr<CollisionField> MotionModel::GeneratePredictedCollisionField(double t)
+{
+    if (t == 0)
+    {
+        return GenerateCollisionField();
+    }
 
-//     auto predictions = PropagateMotionChains(t);
+    std::shared_ptr<CollisionField> cfield = std::make_shared<CollisionField>(road_map_->xmin_, road_map_->xmax_, road_map_->ymin_, road_map_->ymax_);
 
-//     int32_t pt_count = 0;
-//     for (auto &ps : predictions)
-//     {
-//         auto tf_pt = std::make_shared<CollisionField::TrafficParticipantType>(road_map_->grid_size_x_, road_map_->grid_size_y_);
-//         auto pos = road_map_->coordinate_.ConvertToGridPixel(CartCooridnate(ps.position_x, ps.position_y));
-//         tf_pt->SetParameters(pos.x, pos.y, ps.velocity_x, ps.velocity_y, ps.base_state.sigma_px, ps.base_state.sigma_py);
-//         cfield_->AddTrafficParticipant(pt_count++, tf_pt);
-//     }
-//     cfield_->UpdateCollisionField();
-// }
+    auto predictions = PropagateMotionChains(t);
 
-// Eigen::MatrixXd MotionModel::GetThreatFieldVisMatrix()
-// {
-//     return road_map_->GetFullCenterLineGrid()->GetGridMatrix(true) + road_map_->GetFullDrivableAreaGrid()->GetGridMatrix(true) +
-//            cfield_->GetGridMatrix(true);
-// }
+    int32_t pt_count = 0;
+    for (auto &ps : predictions)
+    {
+        std::cout << "*** adding state: " << ps.position_x << " , " << ps.position_y << " , " << ps.velocity_x << " , " << ps.velocity_y << std::endl;
+        GaussianPositionVelocityThreat threat_model(ps.position_x, ps.position_y,
+                                                    ps.velocity_x, ps.velocity_y,
+                                                    ps.base_state.sigma_px, ps.base_state.sigma_py);
+        std::shared_ptr<TrafficParticipant> participant = std::make_shared<TrafficParticipant>(ps.position_x, ps.position_y,
+                                                                                               ps.velocity_x, ps.velocity_y);
+        participant->threat_func = threat_model;
+        cfield->AddTrafficParticipant(pt_count++, participant);
+    }
+
+    return cfield;
+}

@@ -16,6 +16,18 @@
 using namespace librav;
 using namespace LightViz;
 
+void LightViz::ShowFieldDistribution(double cx, double cy, std::function<double(double, double)> dist_fun,
+                         bool show_wp, int32_t pixel_per_unit, std::string window_name, bool save_img)
+{
+    GeometryDraw gdraw(pixel_per_unit);
+
+    cv::Mat canvas = gdraw.CreateCanvas(0, 80, 0, 60, LVColors::jet_colormap_lowest);
+
+    canvas = gdraw.DrawDistribution(canvas, cx, cy, 20, 20, dist_fun);
+
+    ShowImage(canvas, window_name, save_img);
+}
+
 void LightViz::ShowPathLaneInField(const std::vector<Polyline> &bounds, const std::vector<Polyline> &centers,
                                    std::vector<Polyline> &path,
                                    double cx, double cy, std::function<double(double, double)> dist_fun,

@@ -146,6 +146,10 @@ cv::Mat GeometryDraw::WritePointPosition(cv::Mat canvas, const std::vector<Simpl
 
 cv::Mat GeometryDraw::DrawDistribution(cv::Mat canvas, double cx, double cy, double xspan, double yspan, std::function<double(double, double)> dist_fun)
 {
+    std::cout << "distribution: " << cx << " , " << cy << " ; " << xmin_ << " , " << xmax_ << " , " << ymin_ << " , " << ymax_ << std::endl;
+
+    assert(cx >= xmin_ && cx < xmax_ && cy >= ymin_ && cy < ymax_);
+
     // distributions coverage x/y limits
     double dxmin = cx - xspan / 2.0;
     double dxmax = cx + xspan / 2.0;
@@ -179,7 +183,7 @@ cv::Mat GeometryDraw::DrawDistribution(cv::Mat canvas, double cx, double cy, dou
             threat_matrix(j, i) = dist_fun(x, y);
         }
 
-    cv::Mat threat_vis = CreateColorMapFromEigenMatrix(threat_matrix);
+    cv::Mat threat_vis = CreateColorMapFromEigenMatrix(threat_matrix, true);
 
     // merge threat distribution to canvas
     auto top_left_pixel = ConvertCartisianToPixel(dxmin, dymax); // y inverted in cartesian coordinate

@@ -21,7 +21,7 @@ namespace librav
 {
 namespace LightViz
 {
-cv::Mat CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix);
+cv::Mat CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix, bool invert_y = false);
 }
 }
 

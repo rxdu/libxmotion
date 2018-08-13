@@ -56,9 +56,9 @@ int main()
     GeometryDraw gdraw(10);
     cv::Mat canvas = gdraw.CreateCanvas(0, 100, 0, 80, LVColors::jet_colormap_lowest);
 
-    GaussianPositionThreat threat_model(50, 40, 2, 2);
+    GaussianPositionThreat threat_model(50, 60, 2, 2);
 
-    canvas = gdraw.DrawDistribution(canvas, 50, 40, 20, 20, threat_model);
+    canvas = gdraw.DrawDistribution(canvas, 50, 60, 20, 20, threat_model);
 
     LightViz::ShowImage(canvas, "test field viz");
 

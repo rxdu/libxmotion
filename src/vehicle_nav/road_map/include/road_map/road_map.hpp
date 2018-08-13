@@ -30,6 +30,12 @@ public:
   RoadMap(std::string map_osm = "");
   void LoadMapFile(std::string map_file);
 
+  // basic map size information
+  double xmin_ = 0.0;
+  double xmax_ = 0.0;
+  double ymin_ = 0.0;
+  double ymax_ = 0.0;
+
   // local reference frame
   RoadCoordinateFrame coordinate_;
 
@@ -65,12 +71,6 @@ public:
 
 private:
   bool map_loaded_ = false;
-
-  // basic map size information
-  double x_min_ = 0.0;
-  double x_max_ = 0.0;
-  double y_min_ = 0.0;
-  double y_max_ = 0.0;
 
   // origin of local reference frame
   LLet::point_with_id_t world_origin_;

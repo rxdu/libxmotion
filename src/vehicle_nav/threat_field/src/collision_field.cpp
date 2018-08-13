@@ -16,8 +16,17 @@
 
 using namespace librav;
 
-CollisionField::CollisionField(int64_t size_x, int64_t size_y)
+CollisionField::CollisionField(double xmin, double xmax, double ymin, double ymax)
+    : xmin_(xmin), xmax_(xmax), ymin_(ymin), ymax_(ymax)
 {
+}
+
+void CollisionField::SetSize(double xmin, double xmax, double ymin, double ymax)
+{
+  xmin_ = xmin;
+  xmax_ = xmax;
+  ymin_ = ymin;
+  ymax_ = ymax;
 }
 
 void CollisionField::AddTrafficParticipant(int32_t id, std::shared_ptr<TrafficParticipant> tfield)
@@ -37,16 +46,10 @@ void CollisionField::RemoveTrafficParticipant(int32_t id)
   traffic_participants_.erase(id);
 }
 
-void CollisionField::UpdateCollisionField()
+double CollisionField::operator()(double x, double y)
 {
-  // for (int64_t i = 0; i < size_x_; ++i)
-  //   for (int64_t j = 0; j < size_y_; ++j)
-  //   {
-  //     double threat_val = 0; //lane_threat_matrix_(i, j);
-  //     for (const auto &tfd : traffic_participants_)
-  //       threat_val += tfd.second->GetValueAtCoordinate(i, j);
-  //     SetValueAtCoordinate(i, j, threat_val);
-  //   }
-
-  // collision_threat_matrix_ = GenerateFieldMatrix(0, 0.1, 0, 0.1, true).z;
+  double val = 0;
+  for (auto tp : traffic_participants_)
+    val += tp.second->threat_func(x, y);
+  return val;
 }

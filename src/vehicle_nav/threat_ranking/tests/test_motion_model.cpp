@@ -7,8 +7,8 @@
 #include "threat_field/threat_distribution.hpp"
 #include "threat_ranking/motion_model.hpp"
 
-#include "lightviz/matrix_viz.hpp"
-#include "lightviz/grid_viz.hpp"
+#include "lightviz/lightviz.hpp"
+#include "vehicle_viz/vehicle_viz.hpp"
 
 #include "stopwatch/stopwatch.h"
 
@@ -31,16 +31,18 @@ int main()
 
     MotionModel model(map);
 
+    // MMStateEst mpt0(4, 68, -1, -0.25, 1, 1);
+
     // good test case 1
-    // MMStateEst mpt0(70, 60, -1, -0.25, 15, 15);
-    // model.AddVehicleStateEstimate(mpt0);
+    MMStateEst mpt0(70, 60, 5, 1, 1, 1);
+    model.AddVehicleStateEstimate(mpt0);
 
     // // good test case 2
     // MMStateEst mpt1(47, 58, 1, 0.25, 15, 15);
     // model.AddVehicleStateEstimate(mpt1);
 
     // debugging
-    MMStateEst mpt0(55, 56, 1, 0.25, 5, 5);
+    // MMStateEst mpt0(55, 56, 1, 0.25, 5, 5);
     // model.AddVehicleStateEstimate(mpt0);
 
     // good starting position (57, 36)
@@ -48,21 +50,26 @@ int main()
     // MMStateEst mpt0(10, 68.5, 1, 0.25, 5, 5);
     // MMStateEst mpt0(58, 49, 1, 0.25, 5, 5);
 
-    model.AddVehicleStateEstimate(mpt0);
+    // model.AddVehicleStateEstimate(mpt0);
 
     model.MergePointsToNetwork();
 
-    // model.GenerateCollisionField();
-    // LightViz::ShowMatrixAsColorMap(model.GetThreatFieldVisMatrix(), "tfield", true);
+    auto cfields = model.GenerateCollisionField();
+    // LightViz::ShowCollisionField(cfields);
+    LightViz::ShowCollisionFieldInRoadMap(cfields, map);
 
-    // for (int i = 0; i < 10; ++i)
-    // {
-    //     model.GeneratePredictedCollisionField(2 * (i + 1));
-    //     LightViz::ShowMatrixAsColorMap(model.GetThreatFieldVisMatrix(), "tfield"+std::to_string(i), true);
-    // }
+    // auto cfield = model.GeneratePredictedCollisionField(1.0);
+    // LightViz::ShowCollisionFieldInRoadMap(cfield, map);
 
-    // LightViz::ShowMatrixAsColorMap(map->GetFullLaneBoundaryGrid()->GetGridMatrix(true), "roadnetwork", true);
-    // LightViz::ShowMatrixAsColorMap(map->GetFullCenterLineGrid()->GetGridMatrix(true) + map->GetFullDrivableAreaGrid()->GetGridMatrix(true), "centerline", true);
+    // auto cfield2 = model.GeneratePredictedCollisionField(0.5);
+    // LightViz::ShowCollisionFieldInRoadMap(cfield2, map);
+
+    for (int i = 0; i < 10; ++i)
+    {
+        auto cfield = model.GeneratePredictedCollisionField(2 * (i + 1));
+        // LightViz::ShowCollisionField(cfield);
+        LightViz::ShowCollisionFieldInRoadMap(cfield, map);
+    }
 
     // pt0->SetParameters(700, 118, -1, -0.25);
     // pt1->SetParameters(720, 120, -1, -0.25);

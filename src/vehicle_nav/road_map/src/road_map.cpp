@@ -95,11 +95,11 @@ void RoadMap::LoadMapFile(std::string map_file)
     auto xrange = std::minmax_element(x_coordinates.begin(), x_coordinates.end());
     auto yrange = std::minmax_element(y_coordinates.begin(), y_coordinates.end());
 
-    x_min_ = *(xrange.first);
-    x_max_ = *(xrange.second);
+    xmin_ = *(xrange.first);
+    xmax_ = *(xrange.second);
 
-    y_min_ = *(yrange.first);
-    y_max_ = *(yrange.second);
+    ymin_ = *(yrange.first);
+    ymax_ = *(yrange.second);
 
     // additional information
     GenerateLanePolygon();
@@ -117,7 +117,7 @@ void RoadMap::PrintInfo() const
         std::cout << " - lanelet id: " << lanelet->id() << " , name: " << lanelet->attribute("name").as_string() << std::endl;
     }
 
-    std::cout << "Map region coverage x * y: (" << x_min_ << " , " << x_max_ << ") * (" << y_min_ << " , " << y_max_ << ")" << std::endl;
+    std::cout << "Map region coverage x * y: (" << xmin_ << " , " << xmax_ << ") * (" << ymin_ << " , " << ymax_ << ")" << std::endl;
 }
 
 void RoadMap::GenerateLanePolygon()

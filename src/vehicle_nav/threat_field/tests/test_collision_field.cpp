@@ -10,36 +10,28 @@
 #include "stopwatch/stopwatch.h"
 
 #include "lightviz/lightviz.hpp"
+#include "vehicle_viz/vehicle_viz.hpp"
 
 using namespace librav;
 
 int main()
 {
-    const int32_t fsize_x = 800;
-    const int32_t fsize_y = 600;
-
-    CollisionField cfield(fsize_x, fsize_y);
-    cfield.SetOriginCoordinate(0, 0);
+    std::shared_ptr<CollisionField> cfield = std::make_shared<CollisionField>(0, 80, 0, 60);
 
     // add traffic participant
-    auto pt0 = std::make_shared<CollisionField::TrafficParticipantType>(fsize_x, fsize_y);
-    pt0->SetParameters(220, 150, 1, -1, 15, 15);
+    GaussianPositionVelocityThreat threat_model(50, 50, 2, -1, 1, 1);
 
-    cfield.AddTrafficParticipant(0, pt0);
+    std::shared_ptr<TrafficParticipant> participant = std::make_shared<TrafficParticipant>(50, 50, 2, -1);
+    participant->threat_func = threat_model;
 
-    // update collision field before use
-    cfield.UpdateCollisionField();
+    cfield->AddTrafficParticipant(0, participant);
 
     std::cout << "collision field created" << std::endl;
 
-    ScalarFieldMatrix mat = cfield.GenerateFieldMatrix(0, 1, 0, 1, true);
-
     // plot surface
-    // FastPlot::ShowFieldSurface(mat.x, mat.y, mat.z, true);
-    // FastPlot::ShowFieldContour(mat.x, mat.y, mat.z, true);
-    // FastPlot::ShowMatrixAsImage(mat.z);
-    // LightViz::ShowMatrixAsImage(mat.z);
-    LightViz::ShowMatrixAsColorMap(mat.z);
+    // LightViz::ShowFieldDistribution(threat_model.GetCenterPositionX(), threat_model.GetCenterPositionY(), participant->threat_func);
+    LightViz::ShowTrafficParticipant(participant);
+    LightViz::ShowCollisionField(cfield);
 
     return 0;
 }

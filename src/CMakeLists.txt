@@ -23,6 +23,8 @@ else(ENABLE_LOGGING)
 	message( "-- Enable logging with spdlog -- No" )
 endif(ENABLE_LOGGING)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 ## Add sub source directories
 # Core packages of librav
 add_subdirectory(core)

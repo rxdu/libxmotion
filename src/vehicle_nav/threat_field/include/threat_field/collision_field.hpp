@@ -19,21 +19,58 @@
 #include "threat_field/traffic_participant.hpp"
 #include "threat_field/threat_distribution.hpp"
 
+#include "threat_field/threat_distribution.hpp"
+
 namespace librav
 {
+enum class ThreatType : int
+{
+  Vehicle = 0
+};
+
+/*
+ * Coordinate System:
+ *
+ *		y
+ *		^
+ *		|         
+ *		|         
+ *		|         
+ *		| 
+ *		|         
+ *		|         
+ *		|  
+ *		o ------------------> x         
+ *
+ * The coordinate system of the collision field is the consistent with 
+ *  the one for the traffic participants.
+ * 
+ */
+
 class CollisionField
 {
 public:
-  CollisionField(int64_t size_x, int64_t size_y);
+  CollisionField() = delete;
+  CollisionField(double xmin, double xmax, double ymin, double ymax);
 
-  // typedef TrafficParticipant<GaussianPositionVelocityThreat> TrafficParticipantType;
-  // typedef TrafficParticipant<BiasedGaussianThreat> TrafficParticipantType;
-  
+  double xmin_ = 0;
+  double xmax_ = 0;
+  double ymin_ = 0;
+  double ymax_ = 0;
+
+  void SetSize(double xmin, double xmax, double ymin, double ymax);
+  inline double GetCenterPositionX() { return (xmin_ + xmax_) / 2.0; }
+  inline double GetCenterPositionY() { return (ymin_ + ymax_) / 2.0; }
+  inline double GetSpanX() { return xmax_ - xmin_; }
+  inline double GetSpanY() { return ymax_ - ymin_; }
+
   void AddTrafficParticipant(int32_t id, std::shared_ptr<TrafficParticipant> participant);
   std::shared_ptr<TrafficParticipant> GetTrafficParticipant(int32_t id);
   void RemoveTrafficParticipant(int32_t id);
 
-  void UpdateCollisionField();
+  std::size_t GetTrafficParticipantNumber() const { return traffic_participants_.size(); };
+
+  double operator()(double x, double y);
 
 private:
   std::unordered_map<int32_t, std::shared_ptr<TrafficParticipant>> traffic_participants_;

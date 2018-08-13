@@ -2,14 +2,12 @@
 #find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
-set(TRANKING_LIB_SRC
-    src/topogeo_graph.cpp
-    src/motion_model.cpp
-    # src/threat_ranking.cpp
+set(VEH_VIZ_LIB_SRC
+    src/field_viz_ext.cpp
 )
-add_library(rank STATIC ${TRANKING_LIB_SRC})
-target_link_libraries(rank decomp graph roadmap tfield lattice lattice_planner vehviz lightviz)
-target_include_directories(rank PUBLIC
+add_library(vehviz STATIC ${VEH_VIZ_LIB_SRC})
+target_link_libraries(vehviz roadmap tfield lightviz)
+target_include_directories(vehviz PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)

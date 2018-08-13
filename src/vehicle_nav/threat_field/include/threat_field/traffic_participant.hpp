@@ -14,6 +14,25 @@
 
 namespace librav
 {
+
+/*
+ * Coordinate System:
+ *
+ *		y
+ *		^
+ *		|         
+ *		|         
+ *		|         
+ *		| 
+ *		|         
+ *		|         
+ *		|  
+ *		o ------------------> x         
+ *
+ * The coordinate system of the traffic participant is 
+ *  the same with that of the road map.
+ * 
+ */  
 struct TrafficParticipant
 {
   TrafficParticipant() : position_x(0), position_y(0), velocity_x(0), velocity_y(0) {}
