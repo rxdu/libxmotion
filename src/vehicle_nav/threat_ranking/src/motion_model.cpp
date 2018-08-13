@@ -132,8 +132,6 @@ std::vector<MMStatePrediction> MotionChain::Propagate(double t)
     double dist_todo = std::hypot(mp_pt_.estimate_.velocity_x, mp_pt_.estimate_.velocity_y) * t;
     double total_dist = dist_before_start_ + dist_todo;
 
-    std::cout << "distance todo: " << dist_todo << " , " << total_dist << std::endl;
-
     std::vector<MMStatePrediction> candidates;
     for (auto &line : chain_polylines_)
     {
@@ -148,7 +146,6 @@ std::vector<MMStatePrediction> MotionChain::Propagate(double t)
 
             if (accumulated + segment_len > total_dist)
             {
-                std::cout << ">>>>>>>>>> stop search between " << i << " and " << i + 1 << " , seg len " << segment_len << std::endl;
                 double rem_dist = total_dist - accumulated;
                 auto ps = CalculatePrediction(p0, p1, rem_dist);
                 candidates.push_back(ps);
@@ -224,7 +221,6 @@ void MotionChain::CreateChainPolylines()
             parent = parent->parent_link;
         }
         Polyline line(chain_pts);
-        std::cout << "&&& total number of points: " << line.GetPointNumer() << std::endl;
         chain_polylines_.push_back(line);
     }
     std::cout << "number of chain polylines: " << chain_polylines_.size() << std::endl;
@@ -376,7 +372,6 @@ std::shared_ptr<CollisionField> MotionModel::GeneratePredictedCollisionField(dou
     int32_t pt_count = 0;
     for (auto &ps : predictions)
     {
-        std::cout << "*** adding state: " << ps.position_x << " , " << ps.position_y << " , " << ps.velocity_x << " , " << ps.velocity_y << std::endl;
         GaussianPositionVelocityThreat threat_model(ps.position_x, ps.position_y,
                                                     ps.velocity_x, ps.velocity_y,
                                                     ps.base_state.sigma_px, ps.base_state.sigma_py);
