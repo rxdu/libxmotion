@@ -32,7 +32,7 @@ int main()
     std::vector<Polygon> left_roi;
     for (auto ll : left_lanelets)
         left_roi.push_back(map->GetLanePolygon(ll));
-    LightViz::ShowFilledPolygon(left_roi, map->GetAllLanePolygons());
+    LightViz::ShowFilledPolygon(left_roi, map->GetAllLanePolygons(), 10, "left turn", true);
 
     // auto left_matrix = map->GetLaneDrivableGrid(left_lanelets)->GetGridMatrix(false);
     // Eigen::MatrixXd left_vis_matrix = (boundary_matrix.array() > 0 || left_matrix.array() < 1).select(map->mask_zero_, map->mask_ones_);
@@ -49,7 +49,7 @@ int main()
     std::vector<Polygon> right_roi;
     for (auto ll : right_lanelets)
         right_roi.push_back(map->GetLanePolygon(ll));
-    LightViz::ShowFilledPolygon(right_roi, map->GetAllLanePolygons());
+    LightViz::ShowFilledPolygon(right_roi, map->GetAllLanePolygons(), 10, "right turn", true);
     // auto right_matrix = map->GetLaneDrivableGrid(right_lanelets)->GetGridMatrix(false);
     // Eigen::MatrixXd right_vis_matrix = (boundary_matrix.array() > 0 || right_matrix.array() < 1).select(map->mask_zero_, map->mask_ones_);
     // LightViz::ShowMatrixAsColorMap(right_vis_matrix, "right turn", true);

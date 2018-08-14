@@ -35,7 +35,7 @@ add_subdirectory(vehicle_nav)
 add_subdirectory(platforms)
 
 # Experiment setups
-add_subdirectory(experiments)
+add_subdirectory(publication)
 
 ## Add test source directories
 # if(BUILD_TESTS)

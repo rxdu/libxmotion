@@ -10,6 +10,8 @@
 #ifndef POLYLINE_HPP
 #define POLYLINE_HPP
 
+#include <vector>
+
 // #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Partition_traits_2.h>
@@ -33,6 +35,13 @@ public:
 
   using Point = Point_2;
   using Line = Line_2;
+
+  typedef std::vector<Point_2>::iterator point_iterator;
+  typedef std::vector<Point_2>::const_iterator point_const_iterator;
+  point_iterator point_begin() { return points_.begin(); }
+  point_iterator point_end() { return points_.end(); }
+  point_const_iterator point_begin() const { return points_.begin(); }
+  point_const_iterator point_end() const { return points_.end(); }
 
   void AddPoint(double x, double y);
   void AddPoint(Point pt);

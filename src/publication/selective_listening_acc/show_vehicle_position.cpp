@@ -30,29 +30,15 @@ int main()
 
     MotionModel model(map);
 
-    // MMStateEst mpt0(4, 68, -1, -0.25, 1, 1);
-
-    // good test case 1
-    MMStateEst mpt0(85, 53, 5, 1, 1, 1);
+    // ego vehicle
+    MMStateEst mpt0(57, 36, 5, 1, 1, 1);
     model.AddVehicleStateEstimate(mpt0);
 
-    MMStateEst mpt1(57, 36, 5, 1, 1, 1);
+    MMStateEst mpt1(85, 58, 5, 1, 1, 1);
     model.AddVehicleStateEstimate(mpt1);
 
-    // // good test case 2
-    // MMStateEst mpt1(47, 58, 1, 0.25, 15, 15);
-    // model.AddVehicleStateEstimate(mpt1);
-
-    // debugging
-    // MMStateEst mpt0(55, 56, 1, 0.25, 5, 5);
-    // model.AddVehicleStateEstimate(mpt0);
-
-    // good starting position (57, 36)
-    // good finishing position (20, 66.5)
-    // MMStateEst mpt0(10, 68.5, 1, 0.25, 5, 5);
-    // MMStateEst mpt0(58, 49, 1, 0.25, 5, 5);
-
-    // model.AddVehicleStateEstimate(mpt0);
+    MMStateEst mpt2(38, 59, 1, 0.25, 1, 1);
+    model.AddVehicleStateEstimate(mpt2);
 
     model.MergePointsToNetwork();
 
@@ -63,20 +49,12 @@ int main()
     // auto cfield = model.GeneratePredictedCollisionField(1.0);
     // LightViz::ShowCollisionFieldInRoadMap(cfield, map);
 
-    // auto cfield2 = model.GeneratePredictedCollisionField(0.5);
-    // LightViz::ShowCollisionFieldInRoadMap(cfield2, map);
-
     // for (int i = 0; i < 10; ++i)
     // {
     //     auto cfield = model.GeneratePredictedCollisionField(2 * (i + 1));
     //     // LightViz::ShowCollisionField(cfield);
     //     LightViz::ShowCollisionFieldInRoadMap(cfield, map);
     // }
-
-    // pt0->SetParameters(700, 118, -1, -0.25);
-    // pt1->SetParameters(720, 120, -1, -0.25);
-    // pt2->SetParameters(550, 95, -1, -0.25);
-    // pt3->SetParameters(580, 125, -1, 0.4);
 
     return 0;
 }

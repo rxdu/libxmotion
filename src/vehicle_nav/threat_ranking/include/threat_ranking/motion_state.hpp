@@ -38,6 +38,8 @@ struct MMStateEst
     double sigma_py;
     double sigma_vx;
     double sigma_vy;
+
+    int32_t id;
 };
 
 //-----------------------------------------------------------------------------------//

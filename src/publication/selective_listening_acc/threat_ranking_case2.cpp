@@ -33,18 +33,15 @@ int main()
     /********** create threat ranker **********/
 
     ThreatRanking ranker(map);
+    ranker.SetCaseLabel("theat-case2");
 
     /********** create observations **********/
     std::vector<MMStateEst> ests;
-    // good test case 1
-    MMStateEst mpt0(70, 60, -10, -2.5, 15, 15);//case 1
-    // MMStateEst mpt0(70, 60, -10 / 2.5, -2.5 / 2.5, 1, 1); // case 2
+    MMStateEst mpt0(85, 58, 6.5, -0, 1, 1);
     mpt0.id = 0;
     ests.push_back(mpt0);
 
-    // good test case 2
-    MMStateEst mpt1(47, 58, 10, 2.5, 15, 15); // case 1
-    // MMStateEst mpt1(47, 58, 10 * 1.3, 2.5 * 1.3, 1, 1); // case 2
+    MMStateEst mpt1(38, 59, 7.3, 0, 1, 1); 
     mpt1.id = 1;
     ests.push_back(mpt1);
 
@@ -61,16 +58,6 @@ int main()
     ranker.SetEgoDesiredPath("s4", "s1");
     ranker.SetEgoStartState(57, 36, 85.0 / 180.0 * M_PI);
     ranker.SetEgoGoalState(4, 68, 170.0 / 180.0 * M_PI);
-
-    // ranker.SetEgoStartState(57, 36, 80.0 / 180.0 * M_PI);
-    // ranker.SetEgoGoalState(20, 66.5, 175.0 / 180.0 * M_PI);
-    // LatticeNode start(57, 36, 85.0 / 180.0 * M_PI);
-    // LatticeNode goal(4, 68, 180.0 / 170.0 * M_PI);
-
-    // pt0->SetParameters(700, 118, -1, -0.25);
-    // pt1->SetParameters(720, 120, -1, -0.25);
-    // pt2->SetParameters(550, 95, -1, -0.25);
-    // pt3->SetParameters(580, 125, -1, 0.4);
 
     map->GetAllLaneBoundPolylines();
     map->GetAllLaneCenterPolylines();

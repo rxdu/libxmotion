@@ -351,6 +351,7 @@ std::shared_ptr<CollisionField> MotionModel::GenerateCollisionField()
                                                     pt.estimate_.sigma_px, pt.estimate_.sigma_py);
         std::shared_ptr<TrafficParticipant> participant = std::make_shared<TrafficParticipant>(pt.estimate_.position_x, pt.estimate_.position_y,
                                                                                                pt.estimate_.velocity_x, pt.estimate_.velocity_y);
+        participant->id = pt.estimate_.id;
         participant->threat_func = threat_model;
         cfield->AddTrafficParticipant(pt_count++, participant);
     }
@@ -377,6 +378,7 @@ std::shared_ptr<CollisionField> MotionModel::GeneratePredictedCollisionField(dou
                                                     ps.base_state.sigma_px, ps.base_state.sigma_py);
         std::shared_ptr<TrafficParticipant> participant = std::make_shared<TrafficParticipant>(ps.position_x, ps.position_y,
                                                                                                ps.velocity_x, ps.velocity_y);
+        participant->id = ps.base_state.id;
         participant->threat_func = threat_model;
         cfield->AddTrafficParticipant(pt_count++, participant);
     }

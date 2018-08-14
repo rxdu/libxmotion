@@ -33,11 +33,12 @@ int main()
     /********** create threat ranker **********/
 
     ThreatRanking ranker(map);
+    ranker.SetCaseLabel("theat-case3");
 
     /********** create observations **********/
     std::vector<MMStateEst> ests;
     // good test case 1
-    MMStateEst mpt0(70, 60, -10, -2.5, 15, 15);//case 1
+    MMStateEst mpt0(70, 60, -10, -2.5, 15, 15); //case 1
     // MMStateEst mpt0(70, 60, -10 / 2.5, -2.5 / 2.5, 1, 1); // case 2
     mpt0.id = 0;
     ests.push_back(mpt0);

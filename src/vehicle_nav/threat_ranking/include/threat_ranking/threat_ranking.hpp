@@ -11,6 +11,7 @@
 #define THREAT_RANKING_HPP
 
 #include <memory>
+#include <unordered_map>
 
 #include "road_map/road_map.hpp"
 #include "lattice_planner/lattice_planner.hpp"
@@ -28,6 +29,8 @@ public:
   LatticePath path_;
   std::shared_ptr<MotionModel> motion_model_;
 
+  void SetCaseLabel(std::string label) { case_label_ = label; }
+
   void AddStateEstimations(std::vector<MMStateEst> ests);
 
   void SetEgoVehicleFootprint(Polygon fp) { planner_->SetVehicleFootprint(fp); }
@@ -38,8 +41,10 @@ public:
   void PerformEgoPathPlanning();
 
   void Analyze();
+  void PrintCostInfo();
 
 private:
+  std::string case_label_ = "ranking";
   std::shared_ptr<RoadMap> road_map_;
 
   // motion model
@@ -59,6 +64,10 @@ private:
 
   std::vector<std::string> ego_path_;
   std::vector<std::string> active_lanelets_;
+
+  std::unordered_map<int32_t, double> threat_cost_;
+
+  void CalculateThreatExposure(const Polyline &line, std::shared_ptr<CollisionField> cfield);
 };
 } // namespace librav
 

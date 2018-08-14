@@ -87,8 +87,52 @@ void ThreatRanking::Analyze()
         auto full_path = planner_->ConvertPathToPolyline(path_);
         for (int32_t i = 0; i < path_.size(); ++i)
         {
-            // LightViz::ShowPathSegmentCollisionFieldWithRoadMap(path_[i].ToPolyline(), motion_model_->GeneratePredictedCollisionField(i), road_map_);
-            LightViz::ShowPathCollisionFieldWithRoadMap(path_[i].ToPolyline(), full_path, motion_model_->GeneratePredictedCollisionField(i), road_map_);
+            auto path_line = path_[i].ToPolyline();
+            auto cfield = motion_model_->GeneratePredictedCollisionField(i+1.0);
+            CalculateThreatExposure(path_line, cfield);
+            // LightViz::ShowPathSegmentCollisionFieldWithRoadMap(path_line, cfield, road_map_);
+            // LightViz::ShowPathCollisionFieldWithRoadMap(path_line, full_path, cfield, road_map_,
+            //                                             true, 10, case_label_ + "-" + std::to_string(i), true);
         }
+    }
+
+    PrintCostInfo();
+}
+
+void ThreatRanking::CalculateThreatExposure(const Polyline &line, std::shared_ptr<CollisionField> cfield)
+{
+    for (std::size_t i = 0; i < line.GetPointNumer(); ++i)
+    {
+        auto pt = line.GetPoint(i);
+        for (std::size_t j = 0; j < cfield->GetTrafficParticipantNumber(); ++j)
+        {
+            int32_t threat_id = cfield->GetTrafficParticipant(j)->id;
+            double pt_cost = cfield->GetTrafficParticipant(j)->GetThreatValue(pt.x, pt.y);
+            if (threat_cost_.find(threat_id) == threat_cost_.end())
+            {
+                threat_cost_.insert(std::make_pair(threat_id, pt_cost));
+            }
+            else
+            {
+                threat_cost_[threat_id] += pt_cost;
+            }
+        }
+    }
+}
+
+void ThreatRanking::PrintCostInfo()
+{
+    std::map<double, int32_t, std::greater<double>> threat_cost_map;
+
+    std::cout << "++++++++++++++++++++++++" << std::endl;
+    for (auto &tc : threat_cost_)
+    {
+        threat_cost_map.insert(std::make_pair(tc.second, tc.first));
+        std::cout << "traffic participant: " << tc.first << "  cost : " << tc.second << std::endl;
+    }
+    std::cout << "----> importance ranking: " << std::endl;
+    for (auto &tc : threat_cost_map)
+    {
+        std::cout << "traffic participant: " << tc.second << "  cost : " << tc.first << std::endl;
     }
 }
