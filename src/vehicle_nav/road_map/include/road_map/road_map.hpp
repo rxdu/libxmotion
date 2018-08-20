@@ -21,6 +21,7 @@
 #include "geometry/polygon.hpp"
 
 #include "road_map/road_coordinate.hpp"
+#include "road_map/topogeo_graph.hpp"
 
 namespace librav
 {
@@ -39,16 +40,15 @@ public:
   // local reference frame
   RoadCoordinateFrame coordinate_;
 
-  // sink and source lanelets in current map
-  std::vector<std::string> traffic_sinks_;
-  std::vector<std::string> traffic_sources_;
-
   bool MapReady() const { return map_loaded_; }
   void PrintInfo() const;
-  void SetTrafficSinkSource(std::vector<std::string> sink, std::vector<std::string> source);
+
+  std::vector<std::string> GetSinks() const { return tg_graph_->sinks_; }
+  std::vector<std::string> GetSources() const { return tg_graph_->sources_; }
 
   inline std::string GetLaneletNameFromID(int32_t id) { return ll_name_lookup_[id]; }
   inline int32_t GetLaneletIDFromName(std::string name) { return ll_id_lookup_[name]; }
+  inline std::unordered_map<int32_t, std::string> GetLaneletIDNameMap() { return ll_name_lookup_; }
 
   // Get left and right boundary polylines by lanelet name
   std::pair<Polyline, Polyline> GetLaneBoundaryLines(std::string lane_name);
@@ -67,6 +67,9 @@ public:
 
   // Check occupied lanelets at given position
   std::vector<int32_t> OccupiedLanelet(CartCooridnate pos);
+
+  std::vector<std::string> FindInteractingLanes(std::vector<std::string> names) { return tg_graph_->FindInteractingLanes(names); }
+  bool CheckLaneletCollision(std::string ll1, std::string ll2);
   void CheckLaneletCollision();
 
 private:
@@ -85,6 +88,8 @@ private:
   std::unordered_map<int32_t, std::string> ll_name_lookup_;
 
   // Extracted information of map
+  std::shared_ptr<TopoGeoGraph> tg_graph_;
+
   // Both lanelets and centerlines are referenced by the corresponding lanelet id
   std::unordered_map<int32_t, std::pair<Polyline, Polyline>> lane_bounds_;
   std::unordered_map<int32_t, Polyline> lane_center_lines_;

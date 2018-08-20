@@ -17,21 +17,21 @@
 
 namespace librav
 {
-enum class LaneBockType
+enum class LaneBlockType
 {
-    LaneSegment = 0,
-    LaneConnector
+    Isolated = 0,
+    Overlapped
 };
 
 struct LaneBlock
 {
     LaneBlock() : id(-1), name("null"){}
     LaneBlock(int32_t _id, std::string _name = "default") : id(_id), name(_name) {}
-    LaneBlock(int32_t _id, LaneBockType _type, std::string _name = "default") : id(_id), name(_name), type(_type) {}
+    LaneBlock(int32_t _id, LaneBlockType _type, std::string _name = "default") : id(_id), name(_name), type(_type) {}
 
     int32_t id;
     std::string name;
-    LaneBockType type;
+    LaneBlockType type = LaneBlockType::Isolated;
     Polyline center_line;
 
     int64_t GetUniqueID() const

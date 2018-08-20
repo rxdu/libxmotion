@@ -3,7 +3,6 @@
 
 # Add libraries
 set(TRANKING_LIB_SRC
-    src/topogeo_graph.cpp
     src/motion_model.cpp
     src/threat_ranking.cpp
 )

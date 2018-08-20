@@ -17,25 +17,32 @@
 #include <unordered_map>
 
 #include "graph/graph.hpp"
-#include "threat_ranking/lane_block.hpp"
+#include "road_map/lane_block.hpp"
 
 namespace librav
 {
+class RoadMap;
+
 class TopoGeoGraph
 {
 public:
-  TopoGeoGraph() = default;
-  ~TopoGeoGraph() = default;
+  TopoGeoGraph() = delete;
+  TopoGeoGraph(RoadMap *map);
+  ~TopoGeoGraph();
 
-  std::unordered_map<std::string, int32_t> ll_id_lookup_;
-  std::unordered_map<int32_t, std::string> ll_name_lookup_;
+  std::vector<std::string> sinks_;
+  std::vector<std::string> sources_;
 
-  void GenerateGraph();
-  std::vector<std::string> BacktrackVertices(int32_t id);
+  std::vector<std::string> FindInteractingLanes(std::vector<std::string> names);
   std::vector<std::string> FindInteractingLanes(std::vector<int32_t> ids);
 
 private:
-  std::shared_ptr<Graph_t<LaneBlock>> graph_;
+  RoadMap *road_map_;
+  std::shared_ptr<Graph_t<LaneBlock *>> graph_;
+  std::unordered_map<int32_t, LaneBlock *> lane_blocks_;
+
+  void ConstructGraph();
+  std::vector<std::string> BacktrackVertices(int32_t id);
 };
 } // namespace librav
 

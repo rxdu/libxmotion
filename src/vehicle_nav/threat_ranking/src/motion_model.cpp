@@ -63,7 +63,8 @@ MotionChain::MotionChain(MotionModel *model, MotionPoint pt, int32_t start) : st
         {
             for (auto &edge : model_->cline_graph_->GetVertex(lk->lanelet_id_)->edges_to_)
             {
-                auto pln = model_->road_map_->GetLaneCenterLine(model_->road_map_->GetLaneletNameFromID(edge.dst_->state_.id));
+                // auto pln = model_->road_map_->GetLaneCenterLine(model_->road_map_->GetLaneletNameFromID(edge.dst_->state_->id));
+                auto pln = edge.dst_->state_.center_line;
 
                 MChainLink *new_link = new MChainLink(edge.dst_->state_.id, pln);
                 new_link->parent_link = lk;
@@ -265,8 +266,8 @@ void MotionModel::ConstructLineNetwork()
 {
     cline_graph_ = std::make_shared<Graph_t<LaneBlock>>();
 
-    for (auto &source : road_map_->traffic_sources_)
-        for (auto &sink : road_map_->traffic_sinks_)
+    for (auto &source : road_map_->GetSources())
+        for (auto &sink : road_map_->GetSinks())
         {
             auto path = road_map_->FindShortestRoute(source, sink);
             if (!path.empty())

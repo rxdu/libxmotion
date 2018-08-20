@@ -24,9 +24,9 @@ int main()
         return -1;
     }
 
-    std::vector<std::string> sinks = {"s1", "s3", "s5"};
-    std::vector<std::string> sources = {"s2", "s4", "s6"};
-    map->SetTrafficSinkSource(sinks, sources);
+    // std::vector<std::string> sinks = {"s1", "s3", "s5"};
+    // std::vector<std::string> sources = {"s2", "s4", "s6"};
+    // map->SetTrafficSinkSource(sinks, sources);
 
     MotionModel model(map);
 

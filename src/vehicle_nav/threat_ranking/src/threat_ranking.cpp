@@ -21,10 +21,6 @@ using namespace librav;
 
 ThreatRanking::ThreatRanking(std::shared_ptr<RoadMap> map) : road_map_(map)
 {
-    // create togo-geographical graph
-    tg_graph_ = std::make_shared<TopoGeoGraph>();
-    tg_graph_->GenerateGraph();
-
     // create motion model
     motion_model_ = std::make_shared<MotionModel>(road_map_);
 
@@ -91,8 +87,8 @@ void ThreatRanking::Analyze()
             auto cfield = motion_model_->GeneratePredictedCollisionField(i+1.0);
             CalculateThreatExposure(path_line, cfield);
             // LightViz::ShowPathSegmentCollisionFieldWithRoadMap(path_line, cfield, road_map_);
-            // LightViz::ShowPathCollisionFieldWithRoadMap(path_line, full_path, cfield, road_map_,
-            //                                             true, 10, case_label_ + "-" + std::to_string(i), true);
+            LightViz::ShowPathCollisionFieldWithRoadMap(path_line, full_path, cfield, road_map_,
+                                                        true, 10, case_label_ + "-" + std::to_string(i), true);
         }
     }
 

@@ -2,9 +2,6 @@
 #find_package(LIBRARY_NAME REQUIRED)
 
 ## tests
-add_executable(test_topogeo_graph test_topogeo_graph.cpp)
-target_link_libraries(test_topogeo_graph rank lightviz utilities)
-
 add_executable(test_motion_model test_motion_model.cpp)
 target_link_libraries(test_motion_model rank lightviz utilities)
 

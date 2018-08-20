@@ -7,3 +7,6 @@ target_link_libraries(test_roadmap roadmap lightviz utilities)
 
 add_executable(test_lane_collision test_lane_collision.cpp)
 target_link_libraries(test_lane_collision roadmap lightviz utilities)
+
+add_executable(test_topogeo_graph test_topogeo_graph.cpp)
+target_link_libraries(test_topogeo_graph roadmap lightviz utilities)

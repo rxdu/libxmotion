@@ -104,6 +104,9 @@ void RoadMap::LoadMapFile(std::string map_file)
     // additional information
     GenerateLanePolygon();
 
+    // create topo-geometrical graph
+    tg_graph_ = std::make_shared<TopoGeoGraph>(this);
+
     // set loaded flag
     map_loaded_ = true;
 }
@@ -137,16 +140,6 @@ int32_t RoadMap::GetLaneletIDByCenterLineName(std::string cl_name)
     // remove "cl_" to get lanelet name
     cl_name.erase(0, 3);
     return ll_id_lookup_[cl_name];
-}
-
-void RoadMap::SetTrafficSinkSource(std::vector<std::string> sink, std::vector<std::string> source)
-{
-    // TODO: sinks and sources could be identified automatically by checking vertices
-    //  in the lanelet graph. A sink/source should have only incoming or outgoing connections
-    //  with other lanelets. The lanelet graph is a directed graph and the direction can be
-    //  used to check a node is sink or source.
-    traffic_sinks_ = sink;
-    traffic_sources_ = source;
 }
 
 std::pair<Polyline, Polyline> RoadMap::GetLaneBoundaryLines(std::string lane_name)
@@ -215,6 +208,13 @@ std::vector<int32_t> RoadMap::OccupiedLanelet(CartCooridnate pos)
     return ids;
 }
 
+bool RoadMap::CheckLaneletCollision(std::string ll1, std::string ll2)
+{
+    Polygon p1 = GetLanePolygon(ll1);
+    Polygon p2 = GetLanePolygon(ll2);
+    return p1.Intersect(p2);
+}
+
 void RoadMap::CheckLaneletCollision()
 {
     for (auto &ll1 : ll_name_lookup_)
@@ -223,7 +223,6 @@ void RoadMap::CheckLaneletCollision()
         {
             Polygon p1 = GetLanePolygon(ll1.second);
             Polygon p2 = GetLanePolygon(ll2.second);
-            // std::cout << "collision " << ll1.second << " - " << ll2.second << " : " << Collision::Check(p1, p2) << std::endl;
             std::cout << "collision " << ll1.second << " - " << ll2.second << " : " << p1.Intersect(p2) << std::endl;
         }
     }

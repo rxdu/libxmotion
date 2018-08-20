@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "threat_ranking/topogeo_graph.hpp"
+#include "road_map/topogeo_graph.hpp"
 #include "road_map/road_map.hpp"
 
 #include "lightviz/lightviz.hpp"
@@ -11,17 +11,8 @@ int main()
 {
     std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
 
-    TopoGeoGraph graph;
-
-    graph.GenerateGraph();
-
-    std::cout << "topo-geo graph generated" << std::endl;
-
-    std::vector<int32_t> left_path;
-    left_path.push_back(4);
-    left_path.push_back(7);
-    left_path.push_back(1);
-    std::vector<std::string> left_lanelets = graph.FindInteractingLanes(left_path);
+    auto left_path = map->FindShortestRouteName("s4", "s1");
+    std::vector<std::string> left_lanelets = map->FindInteractingLanes(left_path);
     std::vector<Polygon> left_roi;
     for (auto ll : left_lanelets)
         left_roi.push_back(map->GetLanePolygon(ll));
@@ -29,12 +20,8 @@ int main()
 
     std::cout << "----------------" << std::endl;
 
-    std::vector<int32_t> right_path;
-    right_path.push_back(4);
-    right_path.push_back(10);
-    right_path.push_back(3);
-    std::vector<std::string> right_lanelets = graph.FindInteractingLanes(right_path);
-
+    auto right_path = map->FindShortestRouteName("s4", "s3");
+    std::vector<std::string> right_lanelets = map->FindInteractingLanes(right_path);
     std::vector<Polygon> right_roi;
     for (auto ll : right_lanelets)
         right_roi.push_back(map->GetLanePolygon(ll));

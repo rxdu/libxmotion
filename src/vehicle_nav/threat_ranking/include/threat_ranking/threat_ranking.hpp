@@ -16,7 +16,7 @@
 #include "road_map/road_map.hpp"
 #include "lattice_planner/lattice_planner.hpp"
 
-#include "threat_ranking/topogeo_graph.hpp"
+#include "road_map/topogeo_graph.hpp"
 #include "threat_ranking/motion_model.hpp"
 
 namespace librav
@@ -44,16 +44,14 @@ public:
   void PrintCostInfo();
 
 private:
-  std::string case_label_ = "ranking";
+  // road map
   std::shared_ptr<RoadMap> road_map_;
-
-  // motion model
-  std::shared_ptr<TopoGeoGraph> tg_graph_;
 
   // planner
   std::shared_ptr<LatticeManager> lattice_manager_;
   std::shared_ptr<LatticePlanner> planner_;
 
+  // scenario information
   double start_x_;
   double start_y_;
   double start_theta_;
@@ -61,6 +59,8 @@ private:
   double goal_x_;
   double goal_y_;
   double goal_theta_;
+
+  std::string case_label_ = "ranking";
 
   std::vector<std::string> ego_path_;
   std::vector<std::string> active_lanelets_;

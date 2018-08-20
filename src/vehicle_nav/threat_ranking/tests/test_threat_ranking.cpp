@@ -26,9 +26,9 @@ int main()
         return -1;
     }
 
-    std::vector<std::string> sinks = {"s1", "s3", "s5"};
-    std::vector<std::string> sources = {"s2", "s4", "s6"};
-    map->SetTrafficSinkSource(sinks, sources);
+    // std::vector<std::string> sinks = {"s1", "s3", "s5"};
+    // std::vector<std::string> sources = {"s2", "s4", "s6"};
+    // map->SetTrafficSinkSource(sinks, sources);
 
     /********** create threat ranker **********/
 
@@ -37,13 +37,13 @@ int main()
     /********** create observations **********/
     std::vector<MMStateEst> ests;
     // good test case 1
-    MMStateEst mpt0(70, 60, -10, -2.5, 15, 15);//case 1
+    MMStateEst mpt0(70, 60, -10, -2.5, 1, 1);//case 1
     // MMStateEst mpt0(70, 60, -10 / 2.5, -2.5 / 2.5, 1, 1); // case 2
     mpt0.id = 0;
     ests.push_back(mpt0);
 
     // good test case 2
-    MMStateEst mpt1(47, 58, 10, 2.5, 15, 15); // case 1
+    MMStateEst mpt1(47, 58, 10, 2.5, 1, 1); // case 1
     // MMStateEst mpt1(47, 58, 10 * 1.3, 2.5 * 1.3, 1, 1); // case 2
     mpt1.id = 1;
     ests.push_back(mpt1);
