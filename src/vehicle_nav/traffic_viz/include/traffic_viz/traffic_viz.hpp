@@ -1,5 +1,5 @@
 /* 
- * vehicle_viz.hpp
+ * traffic_viz.hpp
  * 
  * Created on: Aug 13, 2018 04:53
  * Description: 
@@ -10,6 +10,7 @@
 #ifndef VEHICLE_VIZ_HPP
 #define VEHICLE_VIZ_HPP
 
-#include "vehicle_viz/field_viz_ext.hpp"
+#include "traffic_viz/field_viz_ext.hpp"
+#include "traffic_viz/roadmap_viz.hpp"
 
 #endif /* VEHICLE_VIZ_HPP */

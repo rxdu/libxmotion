@@ -36,6 +36,9 @@ void ShowPathSegmentCollisionFieldWithRoadMap(const Polyline &path_seg, std::sha
 
 void ShowPathCollisionFieldWithRoadMap(const Polyline &path_seg, const std::vector<Polyline> &path, std::shared_ptr<CollisionField> cfield, std::shared_ptr<RoadMap> map,
                                        bool show_wp = true, int32_t pixel_per_unit = 10, std::string window_name = "Field Image", bool save_img = false);
+
+void ShowVehicleFootprint(const Polygon &polygon, double x, double y, double theta, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
+
 } // namespace LightViz
 } // namespace librav
 

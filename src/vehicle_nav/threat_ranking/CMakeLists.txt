@@ -5,9 +5,10 @@
 set(TRANKING_LIB_SRC
     src/motion_model.cpp
     src/threat_ranking.cpp
+    src/traffic_flow_map.cpp
 )
 add_library(rank STATIC ${TRANKING_LIB_SRC})
-target_link_libraries(rank decomp graph roadmap tfield lattice lattice_planner vehviz lightviz)
+target_link_libraries(rank decomp graph roadmap tfield lattice lattice_planner trafficviz lightviz)
 target_include_directories(rank PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

@@ -4,10 +4,11 @@
 # Add libraries
 set(VEH_VIZ_LIB_SRC
     src/field_viz_ext.cpp
+    src/roadmap_viz.cpp
 )
-add_library(vehviz STATIC ${VEH_VIZ_LIB_SRC})
-target_link_libraries(vehviz roadmap tfield lightviz)
-target_include_directories(vehviz PUBLIC
+add_library(trafficviz STATIC ${VEH_VIZ_LIB_SRC})
+target_link_libraries(trafficviz roadmap tfield lightviz)
+target_include_directories(trafficviz PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)

@@ -24,38 +24,10 @@ int main()
 
     map.PrintInfo();
 
-    // map.GenerateMapMasks(15);
     std::cout << "map loaded in " << timer.toc() << " seconds" << std::endl;
 
     auto ids = map.OccupiedLanelet(CartCooridnate(55, 56));
     std::cout << "occupied laneles: " << ids.size() << std::endl;
-
-    /*
-    LightViz::ShowMatrixAsColorMap(map.GetFullLaneBoundaryGrid()->GetGridMatrix(true), "roadnetwork", true);
-    // LightViz::ShowMatrixAsColorMap(map.GetFullDrivableAreaGrid()->GetGridMatrix(true), "drivable", true);
-
-    // std::vector<std::string> lanelets;
-    // lanelets.push_back("s4");
-    // lanelets.push_back("icm2");
-    // lanelets.push_back("s1");
-    auto lanelets = map.FindShortestRoute("s4", "s1");
-    // LightViz::ShowMatrixAsColorMap(map.GetLaneBoundGrid(lanelets)->GetGridMatrix(true), "driving", true);
-
-    // auto drivable = map.GetLaneletDrivableArea("s3");
-    // auto drivable = map.GetFullDrivableAreaGrid();
-    // LightViz::ShowMatrixAsColorMap(drivable->GetGridMatrix(true), "drivable", true);
-
-    auto matrix = map.GetFullLaneBoundaryGrid()->GetGridMatrix(false);
-    // auto matrix = map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false);
-    auto sgrid = SquareGrid(matrix, 10);
-    LightViz::ShowSquareGrid(&sgrid, 100, "Square Grid", true);
-    */
-    // auto sgrid = map.GetLaneBoundGrid(lanelets)->ConvertToSquareGrid(5);
-    // auto sgrid = std::make_shared<SquareGrid>(map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false), 5);
-    // LightViz::ShowSquareGrid(sgrid.get(), 100, "Square Grid", true);
-
-    // auto sgrid = SquareGrid(map.GetLaneBoundGrid(lanelets)->GetGridMatrix(false), 10);
-    // LightViz::ShowSquareGrid(&sgrid, 100, "Square Grid", true);
 
     // LightViz::ShowPolygon(map.GetAllLanePolygons(), 10);
     // LightViz::ShowPolyline(map.GetAllLaneBoundPolylines(), 10);

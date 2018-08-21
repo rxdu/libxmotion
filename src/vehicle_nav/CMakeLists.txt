@@ -48,7 +48,7 @@ add_subdirectory(threat_ranking)
 # add_subdirectory(traffic_flow)
 add_subdirectory(traffic_sim)
 
-add_subdirectory(vehicle_viz)
+add_subdirectory(traffic_viz)
 
 
 

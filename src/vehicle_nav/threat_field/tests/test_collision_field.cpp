@@ -10,7 +10,7 @@
 #include "stopwatch/stopwatch.h"
 
 #include "lightviz/lightviz.hpp"
-#include "vehicle_viz/vehicle_viz.hpp"
+#include "traffic_viz/traffic_viz.hpp"
 
 using namespace librav;
 

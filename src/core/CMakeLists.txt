@@ -7,6 +7,7 @@ add_subdirectory(interface)
 add_subdirectory(utilities)
 
 add_subdirectory(geometry)
+add_subdirectory(polynomial)
 add_subdirectory(planning)
 add_subdirectory(lightviz)
 

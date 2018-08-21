@@ -8,7 +8,7 @@
 #include "threat_ranking/motion_model.hpp"
 
 #include "lightviz/lightviz.hpp"
-#include "vehicle_viz/vehicle_viz.hpp"
+#include "traffic_viz/traffic_viz.hpp"
 
 #include "stopwatch/stopwatch.h"
 

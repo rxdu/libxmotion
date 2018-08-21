@@ -13,7 +13,7 @@
 #include <cstdint>
 
 #include "lightviz/lightviz.hpp"
-#include "vehicle_viz/vehicle_viz.hpp"
+#include "traffic_viz/traffic_viz.hpp"
 
 #include "stopwatch/stopwatch.h"
 
@@ -105,13 +105,9 @@ void ThreatRanking::CalculateThreatExposure(const Polyline &line, std::shared_pt
             int32_t threat_id = cfield->GetTrafficParticipant(j)->id;
             double pt_cost = cfield->GetTrafficParticipant(j)->GetThreatValue(pt.x, pt.y);
             if (threat_cost_.find(threat_id) == threat_cost_.end())
-            {
                 threat_cost_.insert(std::make_pair(threat_id, pt_cost));
-            }
             else
-            {
                 threat_cost_[threat_id] += pt_cost;
-            }
         }
     }
 }

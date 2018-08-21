@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "vehicle_viz/field_viz_ext.hpp"
+#include "traffic_viz/field_viz_ext.hpp"
 
 #include <cmath>
 
@@ -194,6 +194,24 @@ void LightViz::ShowPathCollisionFieldWithRoadMap(const Polyline &path_seg, const
         canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::green_color, 2);
 
     canvas = gdraw.DrawPolyline(canvas, path_seg, show_wp, LVColors::lime_color, 2);
+
+    ShowImage(canvas, window_name, save_img);
+}
+
+void LightViz::ShowVehicleFootprint(const Polygon &polygon, double x, double y, double theta, int32_t pixel_per_unit, std::string window_name, bool save_img)
+{
+    GeometryDraw gdraw(pixel_per_unit);
+
+    double xspan = polygon.GetMaxX() - polygon.GetMinX();
+    double yspan = polygon.GetMaxY() - polygon.GetMinY();
+
+    double xmin = polygon.GetMinX() - xspan * 0.2;
+    double xmax = polygon.GetMaxX() + xspan * 0.2;
+    double ymin = polygon.GetMinY() - yspan * 0.2;
+    double ymax = polygon.GetMaxY() + yspan * 0.2;
+
+    cv::Mat canvas = gdraw.CreateCanvas(xmin, xmax, ymin, ymax);
+    canvas = gdraw.DrawPolygon(canvas, polygon);
 
     ShowImage(canvas, window_name, save_img);
 }

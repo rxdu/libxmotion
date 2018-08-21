@@ -9,7 +9,7 @@
 #include "threat_ranking/threat_ranking.hpp"
 
 #include "lightviz/lightviz.hpp"
-#include "vehicle_viz/vehicle_viz.hpp"
+#include "traffic_viz/traffic_viz.hpp"
 
 #include "stopwatch/stopwatch.h"
 
