@@ -89,10 +89,14 @@ int main()
     // fp.AddPoint(-0.5, -1.0);
     // fp.AddPoint(0.5, -1.0);
     // this set works
-    fp.AddPoint(0.55, 1.2);
-    fp.AddPoint(-0.55, 1.2);
-    fp.AddPoint(-0.55, -1.2);
-    fp.AddPoint(0.55, -1.2);
+    // fp.AddPoint(0.55, 1.2);
+    // fp.AddPoint(-0.55, 1.2);
+    // fp.AddPoint(-0.55, -1.2);
+    // fp.AddPoint(0.55, -1.2);
+    fp.AddPoint(1.2 * 2, 0.9);
+    fp.AddPoint(1.2 * 2, -0.9);
+    fp.AddPoint(-1.2 * 2, -0.9);
+    fp.AddPoint(-1.2 * 2, 0.9);
     planner.SetVehicleFootprint(fp);
 
     // LatticeNode start(0, 0, 0);

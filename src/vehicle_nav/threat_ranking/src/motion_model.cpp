@@ -246,7 +246,8 @@ MMStatePrediction MotionChain::CalculatePrediction(SimplePoint pt0, SimplePoint 
     Eigen::Vector2d base(pt1.x - pt0.x, pt1.y - pt0.y);
     double base_len = base.dot(base.normalized());
     Eigen::Vector2d ps = dist / base_len * base;
-    Eigen::Vector2d dir = ps.normalized();
+    // Eigen::Vector2d dir = ps.normalized();
+    Eigen::Vector2d dir = base.normalized();
 
     Eigen::Vector2d position = Eigen::Vector2d(pt0.x, pt0.y) + ps;
     double abs_vel = std::hypot(mp_pt_.estimate_.velocity_x, mp_pt_.estimate_.velocity_y);

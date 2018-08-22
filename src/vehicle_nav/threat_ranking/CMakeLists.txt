@@ -5,7 +5,8 @@
 set(TRANKING_LIB_SRC
     src/motion_model.cpp
     src/threat_ranking.cpp
-    src/traffic_flow_map.cpp
+    src/traffic_flow.cpp
+    src/traffic_map.cpp
 )
 add_library(rank STATIC ${TRANKING_LIB_SRC})
 target_link_libraries(rank decomp graph roadmap tfield lattice lattice_planner trafficviz lightviz)

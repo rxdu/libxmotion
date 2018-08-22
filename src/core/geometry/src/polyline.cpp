@@ -48,6 +48,30 @@ std::vector<SimplePoint> Polyline::GetSimplePoints() const
     return pts;
 }
 
+Polyline Polyline::Concatenate(const Polyline &other)
+{
+    assert(other.GetPointNumer() > 0);
+
+    std::vector<Point> points;
+    points.insert(points.end(), points_.begin(), points_.end());
+
+    auto other_pts = other.GetPoints();
+    points.insert(points.end(), other_pts.begin() + 1, other_pts.end());
+
+    return Polyline(points);
+}
+
+Polyline Polyline::operator+(const Polyline &other)
+{
+    std::vector<Point> points;
+    points.insert(points.end(), points_.begin(), points_.end());
+
+    auto other_pts = other.GetPoints();
+    points.insert(points.end(), other_pts.begin(), other_pts.end());
+
+    return Polyline(points);
+}
+
 void Polyline::PrintInfo()
 {
     std::cout << "Polyline with " << points_.size() << " points" << std::endl;

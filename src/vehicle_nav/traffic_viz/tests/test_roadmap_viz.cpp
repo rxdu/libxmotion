@@ -40,10 +40,14 @@ int main()
     fp.AddPoint(1.2 * 2, -0.9);
     fp.AddPoint(-1.2 * 2, -0.9);
     fp.AddPoint(-1.2 * 2, 0.9);
-    auto new_fp = fp.TransformRT(57, 36, 82 / 180.0 * M_PI);
-    // auto new_fp = fp.TransformRT(4, 68, 170.0 / 180.0 * M_PI);
+    auto fp_start = fp.TransformRT(57, 36, 82 / 180.0 * M_PI);
+    auto fp_final = fp.TransformRT(4, 68, 170.0 / 180.0 * M_PI);
+    std::vector<Polygon> polys;
+    polys.push_back(fp_start);
+    polys.push_back(fp_final);
 
-    RoadMapViz::ShowVehicle(new_fp);
+    // RoadMapViz::ShowVehicle(new_fp);
+    RoadMapViz::ShowVehicleFootprints(polys);
 
     // LightViz::ShowPolygon(map.GetAllLanePolygons(), 10);
     // LightViz::ShowPolyline(map.GetAllLaneBoundPolylines(), 10);
