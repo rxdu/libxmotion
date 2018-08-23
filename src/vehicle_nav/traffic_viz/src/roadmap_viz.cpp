@@ -100,6 +100,7 @@ void RoadMapViz::ShowVehicle(Polygon &polygon, int32_t pixel_per_unit, std::stri
         canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
 
     canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::cyan_color);
+    canvas = gdraw.DrawPolygonDirection(canvas, polygon);
 
     LightViz::ShowImage(canvas, window_name, save_img);
 }
@@ -119,7 +120,10 @@ void RoadMapViz::ShowVehicleFootprints(std::vector<Polygon> &polygons, int32_t p
         canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
 
     for (auto &polygon : polygons)
+    {
         canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::cyan_color);
+        canvas = gdraw.DrawPolygonDirection(canvas, polygon, LVColors::red_color, 2);
+    }
 
     LightViz::ShowImage(canvas, window_name, save_img);
 }

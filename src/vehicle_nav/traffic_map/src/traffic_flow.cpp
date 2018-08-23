@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "threat_ranking/traffic_flow.hpp"
+#include "traffic_map/traffic_flow.hpp"
 
 using namespace librav;
 

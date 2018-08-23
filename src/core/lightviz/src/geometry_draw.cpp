@@ -112,6 +112,39 @@ cv::Mat GeometryDraw::DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool s
     return canvas;
 }
 
+/* 
+ * Assumptions:
+ *  1. Convext polygon
+ *  2. Front line: first two points
+*/
+cv::Mat GeometryDraw::DrawPolygonDirection(cv::Mat canvas, const Polygon &polygon, cv::Scalar ln_color, int32_t ln_width)
+{
+    if(polygon.GetPointNumer() < 3)
+        return canvas;
+
+    std::vector<SimplePoint> points;
+    for (int i = 0; i < polygon.GetPointNumer(); ++i)
+        points.push_back(ConvertCartisianToPixel(polygon.GetPoint(i).x, polygon.GetPoint(i).y));
+
+    double center_x = 0;
+    double center_y = 0;
+
+    for (auto &pt : points)
+    {
+        center_x += pt.x;
+        center_y += pt.y;
+    }
+    center_x = center_x / polygon.GetPointNumer();
+    center_y = center_y / polygon.GetPointNumer();
+
+    double front_x = (points[0].x + points[1].x)/2.0;
+    double front_y = (points[0].y + points[1].y)/2.0;
+
+    DrawArrow(canvas, cv::Point(center_x, center_y), cv::Point(front_x, front_y), ln_color, ln_width);
+
+    return canvas;
+}
+
 cv::Mat GeometryDraw::DrawFilledPolygon(cv::Mat canvas, const Polygon &polygon, bool show_dot, cv::Scalar fill_color, cv::Scalar ln_color, int32_t ln_width)
 {
     std::size_t pt_num = polygon.GetPointNumer();

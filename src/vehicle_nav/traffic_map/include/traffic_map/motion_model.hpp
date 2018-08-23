@@ -23,7 +23,7 @@
 #include "threat_field/collision_field.hpp"
 
 #include "road_map/lane_block.hpp"
-#include "threat_ranking/motion_state.hpp"
+#include "traffic_map/motion_state.hpp"
 
 namespace librav
 {

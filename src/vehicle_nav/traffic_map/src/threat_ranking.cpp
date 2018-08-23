@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "threat_ranking/threat_ranking.hpp"
+#include "traffic_map/threat_ranking.hpp"
 
 #include <string>
 #include <cstdint>

@@ -1,11 +1,9 @@
 #include <iostream>
 
 #include "road_map/road_map.hpp"
+#include "traffic_map/motion_model.hpp"
 
 #include "threat_field/collision_field.hpp"
-#include "threat_field/traffic_participant.hpp"
-#include "threat_field/threat_distribution.hpp"
-#include "threat_ranking/motion_model.hpp"
 
 #include "lightviz/lightviz.hpp"
 #include "traffic_viz/traffic_viz.hpp"

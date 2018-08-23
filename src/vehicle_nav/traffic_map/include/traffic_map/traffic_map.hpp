@@ -28,6 +28,8 @@ struct TrafficRegion
   std::string name;
   Polyline center_line;
 
+  bool discretized = false;
+  double remainder = 0.0;
   std::vector<VehiclePose> anchor_points;
 
   int64_t GetUniqueID() const
@@ -50,19 +52,23 @@ public:
   TrafficMap(std::shared_ptr<RoadMap> map);
   ~TrafficMap();
 
-  std::vector<Polygon> DecomposeCenterlines(std::vector<std::string> lanelets, double step = 1.0);
+  // std::vector<Polygon> DecomposeCenterlines(std::vector<std::string> lanelets, double step = 1.0);
 
-private:
+// private:
+public:
   std::shared_ptr<RoadMap> road_map_;
 
   std::shared_ptr<Graph_t<TrafficRegion *>> graph_;
   std::unordered_map<int32_t, TrafficRegion *> flow_regions_;
 
-  void ConstructLaneGraph();
-  void BuildTrafficFlowMap();
-  void DecomposeRoadNetwork(double resolution);
+  Polygon lane_block_footprint_;
 
+  void ConstructLaneGraph();
+  std::vector<Polygon> DiscretizeRoadNetwork(double resolution);
+
+  std::vector<Polygon> DecomposeTrafficRegion(TrafficRegion *region, double last_remainder, double resolution);
   VehiclePose InterpolatePose(SimplePoint pt0, SimplePoint pt1, double s);
+  VehiclePose InterpolatePoseInversed(SimplePoint pt0, SimplePoint pt1, double s);
 };
 } // namespace librav
 

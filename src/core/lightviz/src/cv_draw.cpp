@@ -28,7 +28,7 @@ const cv::Scalar LVColors::aoi_color = Scalar(Scalar(0, 255, 255));
 const cv::Scalar LVColors::start_color = Scalar(0, 0, 255);
 const cv::Scalar LVColors::intermediate_color = cv::Scalar(255, 153, 51); //Scalar(0, 0, 255);
 const cv::Scalar LVColors::finish_color = Scalar(51, 153, 51);            //Scalar(153, 76, 0);
-const cv::Scalar LVColors::jet_colormap_lowest = Scalar(128 , 0 , 0);
+const cv::Scalar LVColors::jet_colormap_lowest = Scalar(128, 0, 0);
 
 // Reference: https://www.rapidtables.com/web/color/RGB_Color.html
 const cv::Scalar LVColors::black_color = Scalar(0, 0, 0);
@@ -190,6 +190,13 @@ void LightViz::DrawArrow(cv::Mat img, cv::Point base_pt, double length, double a
     p.y = cvRound(tip_pt.y + tip_size * sin(angle_l - CV_PI / 4));
     line(img, p, tip_pt, color, thickness, line_type);
     // arrowedLine(img, base_pt, tip_pt, color, thickness, line_type);
+}
+
+void LightViz::DrawArrow(cv::Mat img, cv::Point base_pos, cv::Point tip_pos, const cv::Scalar &color, int thick)
+{
+    int line_type = 8;
+    int thickness = thick;
+    cv::arrowedLine(img, base_pos, tip_pos, color, thickness, line_type);
 }
 
 void LightViz::WriteText(cv::Mat img, std::string text, cv::Point pos, const cv::Scalar &color, double scale, int thick)

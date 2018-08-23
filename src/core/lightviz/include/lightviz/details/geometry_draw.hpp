@@ -33,6 +33,7 @@ struct GeometryDraw
     cv::Mat DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool show_dot = false, cv::Scalar ln_color = LVColors::blue_color, int32_t ln_width = 1);
     cv::Mat DrawFilledPolygon(cv::Mat canvas, const Polygon &polygon, bool show_dot = false, cv::Scalar fill_color = LVColors::aoi_color, cv::Scalar ln_color = LVColors::blue_color, int32_t ln_width = 1);
 
+    cv::Mat DrawPolygonDirection(cv::Mat canvas, const Polygon &polygon, cv::Scalar ln_color = LVColors::blue_color, int32_t ln_width = 1);
     cv::Mat WritePointPosition(cv::Mat canvas, const std::vector<SimplePoint> &points);
 
     cv::Mat DrawDistribution(cv::Mat canvas, double cx, double cy, double xspan, double yspan, std::function<double(double, double)> dist_fun);
