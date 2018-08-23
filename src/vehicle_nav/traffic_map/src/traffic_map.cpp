@@ -16,13 +16,12 @@ using namespace librav;
 
 TrafficMap::TrafficMap(std::shared_ptr<RoadMap> map) : road_map_(map)
 {
-    lane_block_footprint_.AddPoint(1.2 * 2, 0.9);
-    lane_block_footprint_.AddPoint(1.2 * 2, -0.9);
-    lane_block_footprint_.AddPoint(-1.2 * 2, -0.9);
-    lane_block_footprint_.AddPoint(-1.2 * 2, 0.9);
+    lane_block_footprint_.AddPoint(1.2 * 2, 0.9 * 2);
+    lane_block_footprint_.AddPoint(1.2 * 2, -0.9 * 2);
+    lane_block_footprint_.AddPoint(-1.2 * 2, -0.9 * 2);
+    lane_block_footprint_.AddPoint(-1.2 * 2, 0.9 * 2);
 
     ConstructLaneGraph();
-    // DiscretizeRoadNetwork(1.0);
 }
 
 TrafficMap::~TrafficMap()
@@ -67,109 +66,77 @@ std::vector<Polygon> TrafficMap::DiscretizeRoadNetwork(double resolution)
 {
     std::vector<Polygon> fps;
     for (auto &source : road_map_->GetSources())
-    // std::string source = "s2";
-    for (auto &sink : road_map_->GetSinks())
-    //         std::string sink = "s1";
     {
-        auto path = road_map_->FindShortestRouteName(source, sink);
-        if (!path.empty())
+        // std::string source = "s2";
+        for (auto &sink : road_map_->GetSinks())
+        // std::string sink = "s1";
         {
-            std::cout << source << " ---> " << sink << std::endl;
-
-            int32_t path_index = 0;
-            double remainder = 0;
-            for (auto it = path.begin(); it != path.end(); ++it)
+            auto path = road_map_->FindShortestRouteName(source, sink);
+            if (!path.empty())
             {
-                auto region = graph_->GetVertex(road_map_->GetLaneletIDFromName(*it))->state_;
+                std::vector<TrafficRegion *> regions;
+                // std::cout << source << " ---> " << sink << std::endl;
 
-                if (path_index == 0)
-                    remainder = 0;
-                else
-                    remainder = graph_->GetVertex(road_map_->GetLaneletIDFromName(*(it - 1)))->state_->remainder;
-
-                if (!region->discretized)
+                int32_t path_index = 0;
+                double remainder = 0;
+                for (auto it = path.begin(); it != path.end(); ++it)
                 {
-                    std::cout << "decompose with remainder: " << remainder << std::endl;
-                    auto lfp = DecomposeTrafficRegion(region, remainder, resolution);
-                    fps.insert(fps.end(), lfp.begin(), lfp.end());
+                    auto region = graph_->GetVertex(road_map_->GetLaneletIDFromName(*it))->state_;
+
+                    if (path_index == 0)
+                        remainder = 0;
+                    else
+                        remainder = graph_->GetVertex(road_map_->GetLaneletIDFromName(*(it - 1)))->state_->remainder;
+
+                    if (!region->discretized)
+                    {
+                        // std::cout << "decompose with remainder: " << remainder << std::endl;
+                        auto lfp = DecomposeTrafficRegion(region, remainder, resolution);
+                        fps.insert(fps.end(), lfp.begin(), lfp.end());
+                    }
+                    ++path_index;
+
+                    regions.push_back(region);
                 }
-                // remainder = region->remainder;
-                ++path_index;
+                flow_channels_.insert(std::make_pair(std::make_pair(source, sink), TrafficChannel(source, sink, regions)));
             }
         }
     }
 
+    std::cout << "total number of channels: " << flow_channels_.size() << std::endl;
+    map_discretized_ = true;
+
     return fps;
 }
 
-// std::vector<Polygon> TrafficMap::DecomposeCenterlines(std::vector<std::string> lanelets, double step)
-// {
-//     std::vector<Polygon> fps;
+std::vector<TrafficChannel> TrafficMap::FindConflictingChannels(std::string src, std::string dst)
+{
+    std::vector<TrafficChannel> channels;
 
-//     Polygon fp;
-//     fp.AddPoint(1.2 * 2, 0.9);
-//     fp.AddPoint(1.2 * 2, -0.9);
-//     fp.AddPoint(-1.2 * 2, -0.9);
-//     fp.AddPoint(-1.2 * 2, 0.9);
+    if (!map_discretized_)
+        return channels;
 
-//     Polyline line = graph_->GetVertex(road_map_->GetLaneletIDFromName(lanelets.front()))->state_->center_line;
-//     for (auto it = lanelets.begin() + 1; it != lanelets.end(); ++it)
-//         line = line.Concatenate(graph_->GetVertex(road_map_->GetLaneletIDFromName(*it))->state_->center_line);
+    auto check_it = flow_channels_.find(std::make_pair(src, dst));
+    if (check_it == flow_channels_.end())
+        return channels;
 
-//     auto lpts = line.GetPoints();
-//     std::reverse(std::begin(lpts), std::end(lpts));
-//     Polyline rline(lpts);
-
-//     double remaining = 0;
-//     for (int i = 0; i < rline.GetPointNumer() - 1; ++i)
-//     {
-//         auto p0 = rline.GetPoint(i);
-//         auto p1 = rline.GetPoint(i + 1);
-//         Eigen::Vector2d ref_vec(p1.x - p0.x, p1.y - p0.y);
-//         double segment_len = ref_vec.dot(ref_vec.normalized());
-
-//         // add starting position
-//         if (i == 0)
-//         {
-//             VehiclePose new_pose = InterpolatePose(p0, p1, 0);
-//             fps.push_back(fp.TransformRT(new_pose.x, new_pose.y, new_pose.theta));
-//         }
-
-//         // add positions between subsequent points
-//         double accumulated = 0;
-//         if (remaining != 0)
-//         {
-//             // clear remaining first
-//             accumulated = step - remaining;
-//             VehiclePose new_pose = InterpolatePose(p0, p1, accumulated);
-//             fps.push_back(fp.TransformRT(new_pose.x, new_pose.y, new_pose.theta));
-//         }
-
-//         while (accumulated + step <= segment_len)
-//         {
-//             accumulated += step;
-
-//             VehiclePose new_pose = InterpolatePose(p0, p1, accumulated);
-//             // std::cout << "new pose: " << new_pose.x << " , " << new_pose.y << " , " << new_pose.theta << std::endl;
-//             fps.push_back(fp.TransformRT(new_pose.x, new_pose.y, new_pose.theta));
-//         }
-//         remaining = segment_len - accumulated;
-//     }
-
-//     return fps;
-// }
+    TrafficChannel check_chn = check_it->second;
+    for (auto &chn : flow_channels_)
+    {
+        if (chn.first.first == src && chn.first.second == dst)
+            continue;
+        if (check_chn.center_line.Intersect(chn.second.center_line))
+            channels.push_back(chn.second);
+    }
+    return channels;
+}
 
 std::vector<Polygon> TrafficMap::DecomposeTrafficRegion(TrafficRegion *region, double last_remainder, double resolution)
 {
     double remainder = last_remainder;
     std::vector<Polygon> fps;
 
-    // /* discretize from last point to first point to keep consistency in the discretization
-    //     by different paths: misalignment will be placed at source lanelets */
     Polyline line = region->center_line;
-    // auto lpts = line.GetPoints();
-    // std::reverse(std::begin(lpts), std::end(lpts));
-    // Polyline rline(lpts);
 
     for (int i = 0; i < line.GetPointNumer() - 1; ++i)
     {
@@ -181,7 +148,7 @@ std::vector<Polygon> TrafficMap::DecomposeTrafficRegion(TrafficRegion *region, d
 
         double accumulated = 0;
         // deal with remainder first
-        // 1. if previous segment has a small amount remaining (<resolution)
+        // 1. if previous segment has a small amount of distance remaining (<resolution)
         if (remainder > 0)
         {
             accumulated = -remainder;
@@ -235,7 +202,7 @@ std::vector<Polygon> TrafficMap::DecomposeTrafficRegion(TrafficRegion *region, d
     region->discretized = true;
     region->remainder = remainder;
 
-    std::cout << " > left: " << remainder << std::endl;
+    // std::cout << " > left: " << remainder << std::endl;
 
     for (auto &pt : region->anchor_points)
         fps.push_back(lane_block_footprint_.TransformRT(pt.x, pt.y, pt.theta));

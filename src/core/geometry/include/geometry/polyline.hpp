@@ -28,6 +28,7 @@ class Polyline
   typedef CGAL::Partition_traits_2<K> Traits;
   typedef Traits::Point_2 Point_2;
   typedef Traits::Line_2 Line_2;
+  typedef Traits::Segment_2 Segment_2;
 
 public:
   Polyline() = default;
@@ -35,6 +36,7 @@ public:
 
   using Point = Point_2;
   using Line = Line_2;
+  using Segment = Segment_2;
 
   typedef std::vector<Point_2>::iterator point_iterator;
   typedef std::vector<Point_2>::const_iterator point_const_iterator;
@@ -47,7 +49,9 @@ public:
   void AddPoint(Point pt);
   void SetPoints(std::vector<Point_2> pts) { points_ = pts; }
 
-  std::size_t GetPointNumer() const { return points_.size(); }
+  bool Intersect(const Polyline &other) const;
+
+  int32_t GetPointNumer() const { return points_.size(); }
   SimplePoint GetPoint(std::size_t i) const;
   std::vector<Point_2> GetPoints() const { return points_; }
   std::vector<SimplePoint> GetSimplePoints() const;

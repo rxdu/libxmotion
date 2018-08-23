@@ -12,59 +12,35 @@
 
 #include <memory>
 #include <vector>
+#include <map>
 
 #include "graph/graph.hpp"
 #include "road_map/road_map.hpp"
-#include "traffic_flow.hpp"
+#include "traffic_map/traffic_elements.hpp"
+#include "traffic_map/traffic_flow.hpp"
 
 namespace librav
 {
-struct TrafficRegion
-{
-  TrafficRegion() : id(-1), name("null") {}
-  explicit TrafficRegion(int32_t _id, std::string _name = "default") : id(_id), name(_name) {}
-
-  int32_t id;
-  std::string name;
-  Polyline center_line;
-
-  bool discretized = false;
-  double remainder = 0.0;
-  std::vector<VehiclePose> anchor_points;
-
-  int64_t GetUniqueID() const
-  {
-    return id;
-  }
-
-  bool operator==(const TrafficRegion &other)
-  {
-    if (other.id == this->id)
-      return true;
-    else
-      return false;
-  }
-};
-
 class TrafficMap
 {
 public:
   TrafficMap(std::shared_ptr<RoadMap> map);
   ~TrafficMap();
 
-  // std::vector<Polygon> DecomposeCenterlines(std::vector<std::string> lanelets, double step = 1.0);
+  std::vector<Polygon> DiscretizeRoadNetwork(double resolution);
+  std::vector<TrafficChannel> FindConflictingChannels(std::string src, std::string dst);
 
-// private:
-public:
+private:
   std::shared_ptr<RoadMap> road_map_;
+  bool map_discretized_ = false;
 
   std::shared_ptr<Graph_t<TrafficRegion *>> graph_;
   std::unordered_map<int32_t, TrafficRegion *> flow_regions_;
+  std::map<std::pair<std::string,std::string>, TrafficChannel> flow_channels_;
 
   Polygon lane_block_footprint_;
 
   void ConstructLaneGraph();
-  std::vector<Polygon> DiscretizeRoadNetwork(double resolution);
 
   std::vector<Polygon> DecomposeTrafficRegion(TrafficRegion *region, double last_remainder, double resolution);
   VehiclePose InterpolatePose(SimplePoint pt0, SimplePoint pt1, double s);

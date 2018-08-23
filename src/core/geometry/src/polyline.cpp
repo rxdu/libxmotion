@@ -34,6 +34,23 @@ void Polyline::AddPoint(Point pt)
     points_.push_back(pt);
 }
 
+bool Polyline::Intersect(const Polyline &other) const
+{
+    for (int32_t i = 0; i < GetPointNumer() - 1; ++i)
+    {
+        Segment seg1(points_[i], points_[i + 1]);
+        for (int32_t j = 0; j < other.GetPointNumer() - 1; ++j)
+        {
+            Segment seg2(other.GetPoints()[j], other.GetPoints()[j + 1]);
+            if (CGAL::do_intersect(seg1, seg2))
+                return true;
+        }
+    }
+    return false;
+
+    // return CGAL::do_intersect(data_, other.data_);
+}
+
 SimplePoint Polyline::GetPoint(std::size_t i) const
 {
     assert(i < points_.size());

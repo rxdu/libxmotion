@@ -11,18 +11,6 @@
 
 using namespace librav;
 
-TrafficFlow::TrafficFlow(std::vector<std::vector<std::string>> subflows) : subflows_(subflows)
+TrafficFlow::TrafficFlow(std::vector<TrafficChannel> channels) : channels_(channels)
 {
-    BuildTree();
-}
-
-void TrafficFlow::BuildTree()
-{
-    for(auto& path : subflows_)
-    {
-        for(auto& segment : path)
-        {
-
-        }
-    }
 }

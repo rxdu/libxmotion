@@ -57,7 +57,7 @@ public:
 
   void AddPoint(double x, double y);
   void AddPoint(Point pt);
-  std::size_t GetPointNumer() const { return data_.size(); }
+  int32_t GetPointNumer() const { return data_.size(); }
   SimplePoint GetPoint(std::size_t i) const;
   void ConvexDecomposition();
 

@@ -11,18 +11,10 @@
 #define TRAFFIC_FLOW_HPP
 
 #include "geometry/polygon.hpp"
+#include "traffic_map/traffic_elements.hpp"
 
 namespace librav
 {
-struct VehiclePose
-{
-    VehiclePose() : x(0), y(0), theta(0) {}
-    VehiclePose(double _x, double _y, double _theta) : x(_x), y(_y), theta(_theta) {}
-
-    double x;
-    double y;
-    double theta;
-};
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -47,14 +39,12 @@ class TrafficFlow
 {
   public:
     TrafficFlow() = default;
-    explicit TrafficFlow(std::vector<std::vector<std::string>> subflows);
+    TrafficFlow(std::vector<TrafficChannel> channels);
 
     FlowUnit *root_;
 
   private:
-    std::vector<std::vector<std::string>> subflows_;
-
-    void BuildTree();
+    std::vector<TrafficChannel> channels_;
 };
 } // namespace librav
 
