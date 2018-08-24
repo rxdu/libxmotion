@@ -37,14 +37,21 @@ int main()
     // auto fps = traffic_map->DecomposeTrafficRegion(region, remainder, 5.0);
     // RoadMapViz::ShowVehicleFootprints(fps, 10, "fp-decomp", false);
 
-    auto fps = traffic_map->DiscretizeRoadNetwork(1.2*4);
+    auto fps = traffic_map->DiscretizeRoadNetwork(1.2 * 4);
     // RoadMapViz::ShowVehicleFootprints(fps, 10, "fp-decomp", true);
 
     // auto chns = traffic_map->FindConflictingChannels("s4", "s1");
-    auto chns = traffic_map->FindConflictingChannels("s4", "s3");
-    for(auto& chn : chns)
-        std::cout << chn.source << " -> " << chn.sink << std::endl;
+    // auto chns = traffic_map->FindConflictingChannels("s4", "s3");
+    // for(auto& chn : chns)
+    //     std::cout << chn.source << " -> " << chn.sink << std::endl;
 
+    auto flows = traffic_map->GetConflictingFlows("s4", "s1");
+    std::cout << "number of flows: " << flows.size() << std::endl;
+    for(auto& tf:flows)
+    {
+        auto tfs = tf.GetAllLaneBlocks();
+        RoadMapViz::ShowVehicleFootprints(tfs, 10);
+    }
     // std::vector<std::string> lanelets;
     // lanelets.push_back("s4");
     // lanelets.push_back("icm2");

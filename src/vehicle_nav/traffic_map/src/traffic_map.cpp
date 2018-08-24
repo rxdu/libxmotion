@@ -10,6 +10,7 @@
 #include "traffic_map/traffic_map.hpp"
 
 #include <cmath>
+#include <cassert>
 #include <algorithm>
 
 using namespace librav;
@@ -75,6 +76,7 @@ std::vector<Polygon> TrafficMap::DiscretizeRoadNetwork(double resolution)
             if (!path.empty())
             {
                 std::vector<TrafficRegion *> regions;
+                std::vector<Polygon> blocks;
                 // std::cout << source << " ---> " << sink << std::endl;
 
                 int32_t path_index = 0;
@@ -94,11 +96,13 @@ std::vector<Polygon> TrafficMap::DiscretizeRoadNetwork(double resolution)
                         auto lfp = DecomposeTrafficRegion(region, remainder, resolution);
                         fps.insert(fps.end(), lfp.begin(), lfp.end());
                     }
+
                     ++path_index;
 
                     regions.push_back(region);
+                    blocks.insert(blocks.end(), region->lane_blocks.begin(), region->lane_blocks.end());
                 }
-                flow_channels_.insert(std::make_pair(std::make_pair(source, sink), TrafficChannel(source, sink, regions)));
+                flow_channels_.insert(std::make_pair(std::make_pair(source, sink), TrafficChannel(source, sink, regions, blocks)));
             }
         }
     }
@@ -107,6 +111,13 @@ std::vector<Polygon> TrafficMap::DiscretizeRoadNetwork(double resolution)
     map_discretized_ = true;
 
     return fps;
+}
+
+TrafficChannel TrafficMap::GetTrafficChannel(std::string src, std::string dst)
+{
+    auto check_it = flow_channels_.find(std::make_pair(src, dst));
+    assert(check_it != flow_channels_.end());
+    return check_it->second;
 }
 
 std::vector<TrafficChannel> TrafficMap::FindConflictingChannels(std::string src, std::string dst)
@@ -129,6 +140,25 @@ std::vector<TrafficChannel> TrafficMap::FindConflictingChannels(std::string src,
             channels.push_back(chn.second);
     }
     return channels;
+}
+
+std::vector<TrafficFlow> TrafficMap::GetConflictingFlows(std::string src, std::string dst)
+{
+    std::vector<TrafficFlow> flows;
+
+    std::vector<TrafficChannel> channels = FindConflictingChannels(src, dst);
+
+    std::map<std::string, std::vector<TrafficChannel>> chn_mapping;
+    for (auto &chn : channels)
+        chn_mapping[chn.source].push_back(chn);
+
+    for (auto &entry : chn_mapping)
+    {
+        if (entry.first != src)
+            flows.push_back(TrafficFlow(entry.first, entry.second));
+    }
+
+    return flows;
 }
 
 std::vector<Polygon> TrafficMap::DecomposeTrafficRegion(TrafficRegion *region, double last_remainder, double resolution)
@@ -206,6 +236,8 @@ std::vector<Polygon> TrafficMap::DecomposeTrafficRegion(TrafficRegion *region, d
 
     for (auto &pt : region->anchor_points)
         fps.push_back(lane_block_footprint_.TransformRT(pt.x, pt.y, pt.theta));
+
+    region->lane_blocks = fps;
 
     return fps;
 }

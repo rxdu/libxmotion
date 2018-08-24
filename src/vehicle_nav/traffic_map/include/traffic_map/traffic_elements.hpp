@@ -40,6 +40,7 @@ struct TrafficRegion
     bool discretized = false;
     double remainder = 0.0;
     std::vector<VehiclePose> anchor_points;
+    std::vector<Polygon> lane_blocks;
 
     int64_t GetUniqueID() const
     {
@@ -69,11 +70,18 @@ struct TrafficChannel
             center_line = center_line.Concatenate(region->center_line);
     }
 
+    TrafficChannel(std::string src, std::string dst, std::vector<TrafficRegion *> rgs, std::vector<Polygon> lbs) : source(src), sink(dst), regions(rgs), lane_blocks(lbs)
+    {
+        for (auto region : regions)
+            center_line = center_line.Concatenate(region->center_line);
+    }
+
     std::string source;
     std::string sink;
 
     std::vector<TrafficRegion *> regions;
     Polyline center_line;
+    std::vector<Polygon> lane_blocks;
 };
 } // namespace librav
 

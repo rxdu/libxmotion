@@ -9,7 +9,7 @@ set(TMAP_LIB_SRC
     src/traffic_map.cpp
 )
 add_library(trafficmap STATIC ${TMAP_LIB_SRC})
-target_link_libraries(trafficmap decomp graph roadmap tfield lattice lattice_planner trafficviz lightviz)
+target_link_libraries(trafficmap decomp graph tree roadmap tfield lattice lattice_planner trafficviz lightviz)
 target_include_directories(trafficmap PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

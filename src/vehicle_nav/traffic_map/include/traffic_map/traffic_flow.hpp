@@ -12,6 +12,7 @@
 
 #include "geometry/polygon.hpp"
 #include "traffic_map/traffic_elements.hpp"
+#include "tree/unique_tree.hpp"
 
 namespace librav
 {
@@ -20,31 +21,40 @@ namespace librav
 
 struct FlowUnit
 {
-    FlowUnit() = default;
-    FlowUnit(VehiclePose p, Polygon poly) : pose(p), footprint(poly) {}
-    explicit FlowUnit(Polygon poly) : footprint(poly) {}
+  Polygon footprint;
 
-    VehiclePose pose;
-    Polygon footprint;
-    std::string lanelet;
+  bool operator==(const FlowUnit &other)
+  {
+    if (footprint.GetPointNumer() != other.footprint.GetPointNumer())
+      return false;
+    for (int32_t i = 0; i < footprint.GetPointNumer(); ++i)
+    {
+      auto pt1 = footprint.GetPoint(i);
+      auto pt2 = other.footprint.GetPoint(i);
 
-    FlowUnit *parent;
-    // a flow unit may have multiple subsequent units at the point
-    //  where the lane diverges into multiple lanes
-    std::vector<FlowUnit *> children;
+      if ((pt1.x != pt2.x) || (pt1.y != pt2.y))
+        return false;
+    }
+    return true;
+  }
 };
 
 /// Traffic flow model: one source to multiple sinks
 class TrafficFlow
 {
-  public:
-    TrafficFlow() = default;
-    TrafficFlow(std::vector<TrafficChannel> channels);
+public:
+  TrafficFlow() = default;
+  TrafficFlow(std::string src, std::vector<TrafficChannel> channels);
+  ~TrafficFlow() = default;
 
-    FlowUnit *root_;
+  std::vector<Polygon> GetAllLaneBlocks() const;
+  void CheckConflicts(const TrafficChannel &other);
 
-  private:
-    std::vector<TrafficChannel> channels_;
+  UniqueTree<FlowUnit> BuildTree();
+
+private:
+  std::string source_;
+  std::vector<TrafficChannel> channels_;
 };
 } // namespace librav
 

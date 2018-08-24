@@ -29,6 +29,8 @@ public:
 
   std::vector<Polygon> DiscretizeRoadNetwork(double resolution);
   std::vector<TrafficChannel> FindConflictingChannels(std::string src, std::string dst);
+  TrafficChannel GetTrafficChannel(std::string src, std::string dst);
+  std::vector<TrafficFlow> GetConflictingFlows(std::string src, std::string dst);
 
 private:
   std::shared_ptr<RoadMap> road_map_;
