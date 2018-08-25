@@ -38,11 +38,22 @@ struct TrafficRegion
     Polyline center_line;
 
     bool discretized = false;
+
     double remainder = 0.0;
     std::vector<VehiclePose> anchor_points;
     std::vector<Polygon> lane_blocks;
 
-    std::map<std::string, std::vector<Polygon>> discrete_blocks;
+    std::map<std::string, std::vector<VehiclePose>> discrete_anchor_points;
+    std::map<std::string, std::vector<Polygon>> discrete_lane_blocks;
+    std::map<std::string, double> discrete_remainders;
+
+    bool IsDiscretized(std::string last_region)
+    {
+        if (discrete_anchor_points.find(last_region) != discrete_anchor_points.end())
+            return true;
+        else
+            return false;
+    }
 
     int64_t GetUniqueID() const
     {

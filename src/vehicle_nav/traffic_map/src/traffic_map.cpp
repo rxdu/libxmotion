@@ -27,7 +27,7 @@ TrafficMap::TrafficMap(std::shared_ptr<RoadMap> map) : road_map_(map)
 
 TrafficMap::~TrafficMap()
 {
-    for (auto &entry : flow_regions_)
+    for (auto &entry : traffic_regions_)
         delete entry.second;
 }
 
@@ -51,8 +51,8 @@ void TrafficMap::ConstructLaneGraph()
 
                     TrafficRegion *src_bk = new TrafficRegion(src_id, src_name);
                     TrafficRegion *dst_bk = new TrafficRegion(dst_id, dst_name);
-                    flow_regions_.insert(std::make_pair(src_id, src_bk));
-                    flow_regions_.insert(std::make_pair(dst_id, dst_bk));
+                    traffic_regions_.insert(std::make_pair(src_id, src_bk));
+                    traffic_regions_.insert(std::make_pair(dst_id, dst_bk));
 
                     src_bk->center_line = road_map_->GetLaneCenterLine(src_name);
                     dst_bk->center_line = road_map_->GetLaneCenterLine(dst_name);
@@ -63,7 +63,7 @@ void TrafficMap::ConstructLaneGraph()
         }
 }
 
-std::vector<Polygon> TrafficMap::DiscretizeRoadNetwork(double resolution)
+void TrafficMap::DiscretizeTrafficRegions(double resolution)
 {
     std::vector<Polygon> fps;
     for (auto &source : road_map_->GetSources())
@@ -85,38 +85,61 @@ std::vector<Polygon> TrafficMap::DiscretizeRoadNetwork(double resolution)
                 {
                     auto region = graph_->GetVertex(road_map_->GetLaneletIDFromName(*it))->state_;
 
+                    std::string prev_block_name;
                     if (path_index == 0)
-                        remainder = 0;
+                        prev_block_name = "none";
                     else
-                        remainder = graph_->GetVertex(road_map_->GetLaneletIDFromName(*(it - 1)))->state_->remainder;
+                        prev_block_name = *(it - 1);
 
-                    if (!region->discretized)
-                    {
-                        std::cout << "decompose " << region->name << " with remainder: " << remainder << std::endl;
-                        auto lfp = DecomposeTrafficRegion(region, remainder, resolution);
-                        fps.insert(fps.end(), lfp.begin(), lfp.end());
-                    }
+                    remainder = DecomposeTrafficRegion(region, prev_block_name, remainder, resolution);
+                    fps.insert(fps.end(), region->discrete_lane_blocks[prev_block_name].begin(), region->discrete_lane_blocks[prev_block_name].end());
 
                     ++path_index;
 
                     regions.push_back(region);
-                    blocks.insert(blocks.end(), region->lane_blocks.begin(), region->lane_blocks.end());
+                    blocks.insert(blocks.end(), region->discrete_lane_blocks[prev_block_name].begin(), region->discrete_lane_blocks[prev_block_name].end());
                 }
-                flow_channels_.insert(std::make_pair(std::make_pair(source, sink), TrafficChannel(source, sink, regions, blocks)));
+                traffic_channels_.insert(std::make_pair(std::make_pair(source, sink), TrafficChannel(source, sink, regions, blocks)));
             }
         }
     }
 
-    // std::cout << "total number of channels discretized: " << flow_channels_.size() << std::endl;
-    map_discretized_ = true;
+    ConstructTrafficFlows();
 
-    return fps;
+    // std::cout << "total number of channels discretized: " << traffic_channels_.size() << std::endl;
+    map_discretized_ = true;
+}
+
+void TrafficMap::ConstructTrafficFlows()
+{
+    std::map<std::string, std::vector<TrafficChannel>> chn_mapping;
+    for (auto &chn : traffic_channels_)
+        chn_mapping[chn.first.first].push_back(chn.second);
+
+    for (auto &entry : chn_mapping)
+        traffic_flows_.insert(std::make_pair(entry.first, TrafficFlow(entry.second)));
+}
+
+std::vector<TrafficChannel> TrafficMap::GetAllTrafficChannels()
+{
+    std::vector<TrafficChannel> chns;
+    for (auto &chn : traffic_channels_)
+        chns.push_back(chn.second);
+    return chns;
+}
+
+std::vector<TrafficFlow> TrafficMap::GetAllTrafficFlows()
+{
+    std::vector<TrafficFlow> flows;
+    for (auto &flow : traffic_flows_)
+        flows.push_back(flow.second);
+    return flows;
 }
 
 TrafficChannel TrafficMap::GetTrafficChannel(std::string src, std::string dst)
 {
-    auto check_it = flow_channels_.find(std::make_pair(src, dst));
-    assert(check_it != flow_channels_.end());
+    auto check_it = traffic_channels_.find(std::make_pair(src, dst));
+    assert(check_it != traffic_channels_.end());
     return check_it->second;
 }
 
@@ -127,12 +150,12 @@ std::vector<TrafficChannel> TrafficMap::FindConflictingChannels(std::string src,
     if (!map_discretized_)
         return channels;
 
-    auto check_it = flow_channels_.find(std::make_pair(src, dst));
-    if (check_it == flow_channels_.end())
+    auto check_it = traffic_channels_.find(std::make_pair(src, dst));
+    if (check_it == traffic_channels_.end())
         return channels;
 
     TrafficChannel check_chn = check_it->second;
-    for (auto &chn : flow_channels_)
+    for (auto &chn : traffic_channels_)
     {
         if (chn.first.first == src && chn.first.second == dst)
             continue;
@@ -161,14 +184,15 @@ std::vector<TrafficFlow> TrafficMap::GetConflictingFlows(std::string src, std::s
     return flows;
 }
 
-std::vector<Polygon> TrafficMap::DecomposeTrafficRegion(TrafficRegion *region, double last_remainder, double resolution)
+double TrafficMap::DecomposeTrafficRegion(TrafficRegion *region, std::string last_region, double last_remainder, double resolution)
 {
     double remainder = last_remainder;
     std::vector<Polygon> fps;
+    std::vector<VehiclePose> anchors;
 
     Polyline line = region->center_line;
 
-    std::cout << "decompose " << region->name << " with remainder " << last_remainder << std::endl;
+    // std::cout << "decompose " << region->name << " with remainder " << last_remainder << std::endl;
 
     for (int i = 0; i < line.GetPointNumer() - 1; ++i)
     {
@@ -198,7 +222,7 @@ std::vector<Polygon> TrafficMap::DecomposeTrafficRegion(TrafficRegion *region, d
             if (accumulated < segment_len)
             {
                 VehiclePose new_pose = InterpolatePose(p0, p1, accumulated);
-                region->anchor_points.push_back(new_pose);
+                anchors.push_back(new_pose);
             }
             else
             {
@@ -213,7 +237,7 @@ std::vector<Polygon> TrafficMap::DecomposeTrafficRegion(TrafficRegion *region, d
         else
         {
             VehiclePose new_pose = InterpolatePose(p0, p1, 0);
-            region->anchor_points.push_back(new_pose);
+            anchors.push_back(new_pose);
         }
 
         // continue decomposition
@@ -222,7 +246,7 @@ std::vector<Polygon> TrafficMap::DecomposeTrafficRegion(TrafficRegion *region, d
             accumulated += resolution;
 
             VehiclePose new_pose = InterpolatePose(p0, p1, accumulated);
-            region->anchor_points.push_back(new_pose);
+            anchors.push_back(new_pose);
         }
         if (accumulated + resolution == segment_len)
             remainder = 0;
@@ -234,14 +258,16 @@ std::vector<Polygon> TrafficMap::DecomposeTrafficRegion(TrafficRegion *region, d
     region->discretized = true;
     region->remainder = remainder;
 
-    std::cout << " > left: " << remainder << "  by " << region->name << std::endl;
+    region->discrete_anchor_points.insert(std::make_pair(last_region, anchors));
+    region->discrete_remainders.insert(std::make_pair(last_region, remainder));
 
-    for (auto &pt : region->anchor_points)
+    for (auto &pt : anchors)
         fps.push_back(lane_block_footprint_.TransformRT(pt.x, pt.y, pt.theta));
+    region->discrete_lane_blocks.insert(std::make_pair(last_region, fps));
 
-    region->lane_blocks = fps;
+    // std::cout << " > left  by " << region->name << " : " << remainder << std::endl;
 
-    return fps;
+    return remainder;
 }
 
 VehiclePose TrafficMap::InterpolatePose(SimplePoint pt0, SimplePoint pt1, double s)

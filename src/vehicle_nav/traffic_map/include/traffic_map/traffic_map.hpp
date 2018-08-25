@@ -27,11 +27,13 @@ public:
   TrafficMap(std::shared_ptr<RoadMap> map);
   ~TrafficMap();
 
-  std::vector<Polygon> DiscretizeRoadNetwork(double resolution);
+  void DiscretizeTrafficRegions(double resolution);
 
+  std::vector<TrafficChannel> GetAllTrafficChannels();
   TrafficChannel GetTrafficChannel(std::string src, std::string dst);
-  std::vector<TrafficChannel> FindConflictingChannels(std::string src, std::string dst);
 
+  std::vector<TrafficFlow> GetAllTrafficFlows();
+  std::vector<TrafficChannel> FindConflictingChannels(std::string src, std::string dst);
   std::vector<TrafficFlow> GetConflictingFlows(std::string src, std::string dst);
 
 private:
@@ -39,14 +41,16 @@ private:
   bool map_discretized_ = false;
 
   std::shared_ptr<Graph_t<TrafficRegion *>> graph_;
-  std::unordered_map<int32_t, TrafficRegion *> flow_regions_;
-  std::map<std::pair<std::string, std::string>, TrafficChannel> flow_channels_;
+  std::unordered_map<int32_t, TrafficRegion *> traffic_regions_;
+  std::map<std::pair<std::string, std::string>, TrafficChannel> traffic_channels_;
+  std::map<std::string, TrafficFlow> traffic_flows_;
 
   Polygon lane_block_footprint_;
 
   void ConstructLaneGraph();
+  void ConstructTrafficFlows();
 
-  std::vector<Polygon> DecomposeTrafficRegion(TrafficRegion *region, double last_remainder, double resolution);
+  double DecomposeTrafficRegion(TrafficRegion *region, std::string last_region, double last_remainder, double resolution);
   VehiclePose InterpolatePose(SimplePoint pt0, SimplePoint pt1, double s);
   VehiclePose InterpolatePoseInversed(SimplePoint pt0, SimplePoint pt1, double s);
 };

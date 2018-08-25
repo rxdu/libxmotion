@@ -38,8 +38,7 @@ int main()
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
 
-    auto fps = traffic_map->DiscretizeRoadNetwork(1.2 * 4);
-    // RoadMapViz::ShowVehicleFootprints(fps, 10, "fp-decomp", true);
+    traffic_map->DiscretizeTrafficRegions(1.2 * 4);
 
     auto cflows = traffic_map->GetConflictingFlows("s4", "s1");
     std::cout << "number of conflicting cflows: " << cflows.size() << std::endl;

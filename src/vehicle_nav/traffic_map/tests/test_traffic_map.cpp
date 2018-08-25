@@ -35,11 +35,23 @@ int main()
 
     std::cout << "traffic flow map constructed in " << timer.toc() << " seconds" << std::endl;
 
-    auto fps = traffic_map->DiscretizeRoadNetwork(1.2 * 4);
+    // auto fps = traffic_map->DiscretizeRoadNetwork(1.2 * 4);
     // RoadMapViz::ShowVehicleFootprints(fps, 10, "fp-decomp", true);
+    traffic_map->DiscretizeTrafficRegions(1.2 * 4);
 
-    auto chn = traffic_map->GetTrafficChannel("s4", "s1");
-    RoadMapViz::ShowVehicleFootprints(chn.lane_blocks, 10, "dbg-decomp", true);
+    // auto chn = traffic_map->GetTrafficChannel("s4", "s1");
+    // RoadMapViz::ShowVehicleFootprints(chn.lane_blocks, 10, "dbg-decomp", true);
+
+    auto chns = traffic_map->GetAllTrafficChannels();
+    for (auto &chn : chns)
+        RoadMapViz::ShowVehicleFootprints(chn.lane_blocks);
+
+    auto flows = traffic_map->GetAllTrafficFlows();
+    for (auto &flow : flows)
+    {
+        auto blks = flow.GetAllLaneBlocks();
+        RoadMapViz::ShowVehicleFootprints(blks);
+    }
 
     // auto chns = traffic_map->FindConflictingChannels("s4", "s1");
     // auto chns = traffic_map->FindConflictingChannels("s4", "s3");
