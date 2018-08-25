@@ -30,7 +30,7 @@ TrafficFlow::TrafficFlow(std::vector<TrafficChannel> channels) : channels_(chann
     flow_tree_ = BuildTree(channels_);
 }
 
-std::vector<Polygon> TrafficFlow::GetAllLaneBlocks()
+std::vector<Polygon> TrafficFlow::GetAllLaneBlocks() 
 {
     // std::vector<Polygon> blks;
     // for (auto &chn : channels_)
@@ -44,7 +44,7 @@ std::vector<Polygon> TrafficFlow::GetAllLaneBlocks()
     return blks;
 }
 
-std::vector<Polygon> TrafficFlow::GetConflictingLaneBlocks()
+std::vector<Polygon> TrafficFlow::GetConflictingLaneBlocks() 
 {
     auto all_units = Traversal::GetAllStatesBF(&flow_tree_);
     std::vector<Polygon> blks;
@@ -73,18 +73,18 @@ UniqueTree<FlowUnit> TrafficFlow::BuildTree(const std::vector<TrafficChannel> &c
     return tree;
 }
 
-void TrafficFlow::CheckConflicts(const std::vector<TrafficFlow> &flows)
+std::vector<TrafficFlow> TrafficFlow::CheckConflicts(const std::vector<TrafficFlow> &flows)
 {
-    // std::cout << "checking conflicts" << std::endl;
-    // UniqueTree<librav::FlowUnit> tree = BuildTree(channels_);
-    // UniqueTree<librav::FlowUnit> tree = BuildTree(channels_);
-
-    // for (auto &)
+    std::vector<TrafficFlow> labeled = flows;
+    for (auto &flow : labeled)
+    {
+        LabelConflictBlocks(&flow);
+    }
+    return labeled;
 }
 
-void TrafficFlow::CheckConflicts(TrafficFlow *flow)
+void TrafficFlow::LabelConflictBlocks(TrafficFlow *flow)
 {
-    std::cout << "checking conflicts" << std::endl;
     UniqueTree<FlowUnit> &ego_tree = flow_tree_;
     UniqueTree<FlowUnit> &other_tree = flow->flow_tree_;
 

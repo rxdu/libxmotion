@@ -20,7 +20,6 @@ namespace librav
 {
 
 ///////////////////////////////////////////////////////////////////////////
-
 struct FlowUnit
 {
   FlowUnit(Polygon py) : footprint(py) {}
@@ -71,8 +70,8 @@ public:
 
   void AssignSpeedProfile();
 
-  void CheckConflicts(TrafficFlow *other);
-  void CheckConflicts(const std::vector<TrafficFlow> &flows);
+  std::vector<TrafficFlow> CheckConflicts(const std::vector<TrafficFlow> &flows);
+  void LabelConflictBlocks(TrafficFlow *other);
 
   std::vector<Polygon> GetAllLaneBlocks();
   std::vector<Polygon> GetConflictingLaneBlocks();

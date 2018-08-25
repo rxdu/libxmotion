@@ -40,29 +40,42 @@ int main()
 
     traffic_map->DiscretizeTrafficRegions(1.2 * 4);
 
-    auto cflows = traffic_map->GetConflictingFlows("s4", "s1");
-    std::cout << "number of conflicting cflows: " << cflows.size() << std::endl;
-    for (auto &tf : cflows)
-    {
-        auto blks = tf.GetAllLaneBlocks();
-        std::cout << " - number of blocks: " << blks.size() << std::endl;
-        RoadMapViz::ShowVehicleFootprints(blks, 10);
-    }
-
     auto ego_chn = traffic_map->GetTrafficChannel("s4", "s1");
     auto ego_flow = TrafficFlow(ego_chn);
 
-    auto other_chn = traffic_map->GetTrafficChannel("s6", "s3");
-    auto other_flow = TrafficFlow(other_chn);
+    auto cflows = traffic_map->GetConflictingFlows("s4", "s1");
+    std::cout << "number of conflicting cflows: " << cflows.size() << std::endl;
+    // for (auto &tf : cflows)
+    // {
+    //     auto blks = tf.GetAllLaneBlocks();
+    //     std::cout << " - number of blocks: " << blks.size() << std::endl;
+    //     RoadMapViz::ShowVehicleFootprints(blks, 10);
+    // }
 
-    std::vector<Polygon> checked_lanes;
-    checked_lanes.insert(checked_lanes.end(), ego_chn.lane_blocks.begin(), ego_chn.lane_blocks.end());
-    checked_lanes.insert(checked_lanes.end(), other_chn.lane_blocks.begin(), other_chn.lane_blocks.end());
+    timer.tic();
+    auto labeled = ego_flow.CheckConflicts(cflows);
+    // auto cblks = other_flow.GetConflictingLaneBlocks();
+    std::cout << "conflict analysis finished in " << timer.toc() << " seconds" << std::endl;
+    // RoadMapViz::ShowLabledTrafficFlows(labeled);
+    RoadMapViz::ShowLabledTrafficFlows(ego_flow, labeled, 10, "collision", true);
 
-    ego_flow.CheckConflicts(&other_flow);
-    auto cblks = other_flow.GetConflictingLaneBlocks();
-    // RoadMapViz::ShowVehicleFootprints(cblks, 10);
-    RoadMapViz::ShowConflictingZone(cblks, checked_lanes);
+    // auto ego_chn = traffic_map->GetTrafficChannel("s4", "s1");
+    // auto ego_flow = TrafficFlow(ego_chn);
+
+    // auto other_chn = traffic_map->GetTrafficChannel("s2", "s1");
+    // auto other_flow = TrafficFlow(other_chn);
+
+    // std::vector<Polygon> checked_lanes;
+    // checked_lanes.insert(checked_lanes.end(), ego_chn.lane_blocks.begin(), ego_chn.lane_blocks.end());
+    // checked_lanes.insert(checked_lanes.end(), other_chn.lane_blocks.begin(), other_chn.lane_blocks.end());
+
+    // timer.tic();
+    // ego_flow.LabelConflictBlocks(&other_flow);
+    // auto cblks = other_flow.GetConflictingLaneBlocks();
+    // std::cout << "conflict analysis finished in " << timer.toc() << " seconds" << std::endl;
+
+    // // RoadMapViz::ShowVehicleFootprints(cblks, 10);
+    // RoadMapViz::ShowConflictingZone(cblks, checked_lanes);
 
     return 0;
 }

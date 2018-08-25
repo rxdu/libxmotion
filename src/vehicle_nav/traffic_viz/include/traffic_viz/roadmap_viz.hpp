@@ -18,6 +18,7 @@
 #include "geometry/polygon.hpp"
 
 #include "road_map/road_map.hpp"
+#include "traffic_map/traffic_flow.hpp"
 
 namespace librav
 {
@@ -31,7 +32,9 @@ public:
   static void ShowVehicle(Polygon& polygon, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
   static void ShowVehicleFootprints(std::vector<Polygon>& polygons, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
   static void ShowConflictingZone(std::vector<Polygon>& highlight, std::vector<Polygon>& polygons, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
-
+  
+  static void ShowLabledTrafficFlows(std::vector<TrafficFlow>& flows, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
+  static void ShowLabledTrafficFlows(TrafficFlow& ego_flow, std::vector<TrafficFlow>& flows, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
 
 private:
   static RoadMapViz &GetInstance();
