@@ -17,10 +17,10 @@ using namespace librav;
 
 TrafficMap::TrafficMap(std::shared_ptr<RoadMap> map) : road_map_(map)
 {
-    lane_block_footprint_.AddPoint(1.2 * 2, 0.9 * 2);
     lane_block_footprint_.AddPoint(1.2 * 2, -0.9 * 2);
-    lane_block_footprint_.AddPoint(-1.2 * 2, -0.9 * 2);
+    lane_block_footprint_.AddPoint(1.2 * 2, 0.9 * 2);
     lane_block_footprint_.AddPoint(-1.2 * 2, 0.9 * 2);
+    lane_block_footprint_.AddPoint(-1.2 * 2, -0.9 * 2);
 
     ConstructLaneGraph();
 }
@@ -92,7 +92,7 @@ std::vector<Polygon> TrafficMap::DiscretizeRoadNetwork(double resolution)
 
                     if (!region->discretized)
                     {
-                        // std::cout << "decompose with remainder: " << remainder << std::endl;
+                        std::cout << "decompose " << region->name << " with remainder: " << remainder << std::endl;
                         auto lfp = DecomposeTrafficRegion(region, remainder, resolution);
                         fps.insert(fps.end(), lfp.begin(), lfp.end());
                     }
@@ -168,6 +168,8 @@ std::vector<Polygon> TrafficMap::DecomposeTrafficRegion(TrafficRegion *region, d
 
     Polyline line = region->center_line;
 
+    std::cout << "decompose " << region->name << " with remainder " << last_remainder << std::endl;
+
     for (int i = 0; i < line.GetPointNumer() - 1; ++i)
     {
         auto p0 = line.GetPoint(i);
@@ -232,7 +234,7 @@ std::vector<Polygon> TrafficMap::DecomposeTrafficRegion(TrafficRegion *region, d
     region->discretized = true;
     region->remainder = remainder;
 
-    // std::cout << " > left: " << remainder << std::endl;
+    std::cout << " > left: " << remainder << "  by " << region->name << std::endl;
 
     for (auto &pt : region->anchor_points)
         fps.push_back(lane_block_footprint_.TransformRT(pt.x, pt.y, pt.theta));

@@ -127,3 +127,31 @@ void RoadMapViz::ShowVehicleFootprints(std::vector<Polygon> &polygons, int32_t p
 
     LightViz::ShowImage(canvas, window_name, save_img);
 }
+
+void RoadMapViz::ShowConflictingZone(std::vector<Polygon> &highlight, std::vector<Polygon> &polygons, int32_t pixel_per_unit, std::string window_name, bool save_img)
+{
+    RoadMapViz &viz = RoadMapViz::GetInstance();
+
+    GeometryDraw gdraw(pixel_per_unit);
+
+    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, LVColors::jet_colormap_lowest);
+
+    for (auto &polyline : viz.boundary_lines_)
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+
+    for (auto &polyline : viz.center_lines_)
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+
+    for (auto &polygon : highlight)
+    {
+        canvas = gdraw.DrawFilledPolygon(canvas, polygon, false, LVColors::olive_color);
+    }
+
+    for (auto &polygon : polygons)
+    {
+        canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::cyan_color);
+        canvas = gdraw.DrawPolygonDirection(canvas, polygon, LVColors::red_color, 2);
+    }
+
+    LightViz::ShowImage(canvas, window_name, save_img);
+}

@@ -40,6 +40,9 @@ struct Traversal
     template <typename Tree>
     static void BFS(Tree *tree)
     {
+        if (tree == nullptr)
+            return;
+
         typename Tree::NodeType *root = tree->GetRootNode();
 
         std::queue<typename Tree::NodeType *> q;
@@ -57,9 +60,11 @@ struct Traversal
     template <typename Tree>
     static std::vector<typename Tree::StateType> GetAllStatesBF(Tree *tree)
     {
-        typename Tree::NodeType *root = tree->GetRootNode();
-
         std::vector<typename Tree::StateType> states;
+        if (tree == nullptr)
+            return states;
+
+        typename Tree::NodeType *root = tree->GetRootNode();
         std::queue<typename Tree::NodeType *> q;
         q.push(root);
         while (!q.empty())

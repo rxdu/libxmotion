@@ -48,6 +48,9 @@ struct Search
     template <typename Tree, typename State>
     static typename Tree::NodeType *BFS(Tree *tree, State state)
     {
+        if (tree == nullptr)
+            return nullptr;
+
         typename Tree::NodeType *node = tree->GetRootNode();
 
         std::queue<typename Tree::NodeType *> q;

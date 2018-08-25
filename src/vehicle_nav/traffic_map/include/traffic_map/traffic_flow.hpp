@@ -71,10 +71,11 @@ public:
 
   void AssignSpeedProfile();
 
-  void CheckConflicts(const TrafficFlow &other);
+  void CheckConflicts(TrafficFlow *other);
   void CheckConflicts(const std::vector<TrafficFlow> &flows);
 
   std::vector<Polygon> GetAllLaneBlocks();
+  std::vector<Polygon> GetConflictingLaneBlocks();
 
 private:
   std::string source_;

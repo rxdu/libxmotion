@@ -53,7 +53,17 @@ int main()
     auto ego_chn = traffic_map->GetTrafficChannel("s4", "s1");
     auto ego_flow = TrafficFlow(ego_chn);
 
-    ego_flow.CheckConflicts(cflows);
+    auto other_chn = traffic_map->GetTrafficChannel("s6", "s3");
+    auto other_flow = TrafficFlow(other_chn);
+
+    std::vector<Polygon> checked_lanes;
+    checked_lanes.insert(checked_lanes.end(), ego_chn.lane_blocks.begin(), ego_chn.lane_blocks.end());
+    checked_lanes.insert(checked_lanes.end(), other_chn.lane_blocks.begin(), other_chn.lane_blocks.end());
+
+    ego_flow.CheckConflicts(&other_flow);
+    auto cblks = other_flow.GetConflictingLaneBlocks();
+    // RoadMapViz::ShowVehicleFootprints(cblks, 10);
+    RoadMapViz::ShowConflictingZone(cblks, checked_lanes);
 
     return 0;
 }

@@ -42,6 +42,8 @@ struct TrafficRegion
     std::vector<VehiclePose> anchor_points;
     std::vector<Polygon> lane_blocks;
 
+    std::map<std::string, std::vector<Polygon>> discrete_blocks;
+
     int64_t GetUniqueID() const
     {
         return id;
