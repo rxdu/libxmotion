@@ -58,12 +58,6 @@ struct TrafficRegion
 
 struct TrafficChannel
 {
-    TrafficChannel(std::vector<TrafficRegion *> rgs) : regions(rgs)
-    {
-        for (auto region : regions)
-            center_line = center_line.Concatenate(region->center_line);
-    }
-
     TrafficChannel(std::string src, std::string dst, std::vector<TrafficRegion *> rgs) : source(src), sink(dst), regions(rgs)
     {
         for (auto region : regions)

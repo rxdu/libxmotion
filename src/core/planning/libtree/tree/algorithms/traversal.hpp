@@ -11,6 +11,7 @@
 #define TRAVERSAL_HPP
 
 #include <iostream>
+#include <vector>
 
 namespace librav
 {
@@ -51,6 +52,26 @@ struct Traversal
             for (auto &nd : root->children)
                 q.push(nd.first);
         }
+    }
+
+    template <typename Tree>
+    static std::vector<typename Tree::StateType> GetAllStatesBF(Tree *tree)
+    {
+        typename Tree::NodeType *root = tree->GetRootNode();
+
+        std::vector<typename Tree::StateType> states;
+        std::queue<typename Tree::NodeType *> q;
+        q.push(root);
+        while (!q.empty())
+        {
+            root = q.front();
+            q.pop();
+            // std::cout << root->state << std::endl;
+            states.push_back(root->state);
+            for (auto &nd : root->children)
+                q.push(nd.first);
+        }
+        return states;
     }
 };
 } // namespace librav

@@ -11,19 +11,6 @@ int main()
 {
     UniqueTree<int32_t, double> tree;
 
-    // UniqueTree<int32_t, double>::NodeType *nodes[7];
-    // for (int i = 0; i < 7; ++i)
-    //     nodes[i] = new UniqueTree<int32_t, double>::NodeType(i);
-    // tree.SetRootNode(nodes[0]);
-    // tree.ConnectNodes(nodes[0], nodes[1], 1);
-    // tree.ConnectNodes(nodes[0], nodes[2], 1);
-    // tree.ConnectNodes(nodes[0], nodes[3], 1);
-    // tree.ConnectNodes(nodes[1], nodes[4], 1);
-    // tree.ConnectNodes(nodes[2], nodes[5], 1);
-    // tree.ConnectNodes(nodes[2], nodes[6], 1);
-    // for (int i = 0; i < 7; ++i)
-    //     std::cout << "node " << nodes[i]->state << " depth: " << nodes[i]->GetDepth() << std::endl;
-
     tree.ConnectNodes(0, 1, 1);
     tree.ConnectNodes(0, 2, 1);
     tree.ConnectNodes(0, 3, 1);
@@ -47,6 +34,24 @@ int main()
     //     std::cout << "found: " << nd->state << " depth: " << nd->GetDepth() << std::endl;
     // else
     //     std::cout << "not found" << std::endl;
+
+    std::cout << "--- copy ---" << std::endl;
+    UniqueTree<int32_t, double> tree2(tree);
+    Traversal::BFS(&tree2);
+
+    std::cout << "--- assign ---" << std::endl;
+    UniqueTree<int32_t, double> tree3;
+    tree3 = tree;
+    Traversal::BFS(&tree3);
+
+    std::cout << "--- move ---" << std::endl;
+    UniqueTree<int32_t, double> tree4(std::move(tree2));
+    Traversal::BFS(&tree4);
+
+    std::cout << "--- move assign ---" << std::endl;
+    UniqueTree<int32_t, double> tree5;
+    tree5 = std::move(tree3);
+    Traversal::BFS(&tree5);
 
     return 0;
 }

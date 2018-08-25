@@ -3,6 +3,7 @@
 #include "road_map/road_map.hpp"
 
 #include "traffic_map/traffic_map.hpp"
+#include "tree/algorithms/traversal.hpp"
 
 #include "lightviz/lightviz.hpp"
 #include "traffic_viz/traffic_viz.hpp"
@@ -32,6 +33,8 @@ int main()
 
     std::shared_ptr<TrafficMap> traffic_map = std::make_shared<TrafficMap>(map);
 
+    std::cout << "traffic flow map constructed in " << timer.toc() << " seconds" << std::endl;
+
     // double remainder = 0;
     // auto region = traffic_map->graph_->GetVertex(map->GetLaneletIDFromName("s1"))->state_;
     // auto fps = traffic_map->DecomposeTrafficRegion(region, remainder, 5.0);
@@ -45,13 +48,6 @@ int main()
     // for(auto& chn : chns)
     //     std::cout << chn.source << " -> " << chn.sink << std::endl;
 
-    auto flows = traffic_map->GetConflictingFlows("s4", "s1");
-    std::cout << "number of flows: " << flows.size() << std::endl;
-    for(auto& tf:flows)
-    {
-        auto tfs = tf.GetAllLaneBlocks();
-        RoadMapViz::ShowVehicleFootprints(tfs, 10);
-    }
     // std::vector<std::string> lanelets;
     // lanelets.push_back("s4");
     // lanelets.push_back("icm2");
@@ -70,8 +66,6 @@ int main()
     // all_fps.insert(all_fps.end(), fps.begin(), fps.end());
     // all_fps.insert(all_fps.end(), fps2.begin(), fps2.end());
     // RoadMapViz::ShowVehicleFootprints(all_fps, 10, "fp", true);
-
-    std::cout << "traffic flow map constructed in " << timer.toc() << " seconds" << std::endl;
 
     return 0;
 }

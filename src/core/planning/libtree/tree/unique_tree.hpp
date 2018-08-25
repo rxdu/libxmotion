@@ -26,9 +26,48 @@ class UniqueTree
 {
   public:
     using NodeType = typename TreeNode<State, Transition>::NodeType;
+    using StateType = State;
+    using TransitionType = Transition;
 
     UniqueTree() = default;
     ~UniqueTree() { delete root_; }
+
+    UniqueTree(const UniqueTree<State, Transition> &other)
+    {
+        NodeType *node = other.root_;
+
+        std::queue<NodeType *> q;
+        q.push(node);
+        while (!q.empty())
+        {
+            node = q.front();
+            q.pop();
+            for (auto &nd : node->children)
+            {
+                this->ConnectNodes(node->state, nd.first->state, nd.second);
+                q.push(nd.first);
+            }
+        }
+    }
+
+    UniqueTree<State, Transition> &operator=(const UniqueTree<State, Transition> &other)
+    {
+        UniqueTree temp = other;
+        std::swap(*this, temp);
+        return *this;
+    }
+
+    UniqueTree(UniqueTree<State, Transition> &&other)
+    {
+        root_ = other.root_;
+        other.root_ = nullptr;
+    }
+
+    UniqueTree<State, Transition> &operator=(UniqueTree<State, Transition> &&other)
+    {
+        std::swap(this->root_, other.root_);
+        return *this;
+    }
 
     NodeType *GetRootNode() { return root_; }
 
@@ -38,45 +77,47 @@ class UniqueTree
         root_->parent = nullptr;
     }
 
-    void ConnectNodes(State src, State dst, Transition trans)
+    void ConnectNodes(State src, State dst, Transition trans = 0.0)
     {
-        NodeType *src_nd;
-        NodeType *dst_nd;
-
         // set root if this is the very first connection in the tree
         if (root_ == nullptr)
         {
             NodeType *new_src = new NodeType(src);
             NodeType *new_dst = new NodeType(dst);
 
-            new_dst->parent = src_nd;
-            new_src->children.insert(std::make_pair(new_dst, trans));
+            new_dst->parent = new_src;
+            new_src->children.emplace(std::make_pair(new_dst, trans));
 
             SetRootNode(new_src);
-            return;
         }
         else
         {
-            src_nd = Search::BFS(this, src);
-            dst_nd = Search::BFS(this, dst);
-        }
+            NodeType *src_nd = Search::BFS(this, src);
+            NodeType *dst_nd = Search::BFS(this, dst);
 
-        if (src_nd == nullptr)
-        {
-            std::cerr << "non-existing src node in the tree" << std::endl;
-            return;
-        }
+            if (src_nd == nullptr)
+            {
+                std::cerr << "non-existing src node in the tree" << std::endl;
+                return;
+            }
 
-        if (dst_nd != nullptr && dst_nd->parent != src_nd)
-        {
-            std::cerr << "conflicting connection between src and dst nodes in the tree" << std::endl;
-            return;
-        }
+            if (dst_nd != nullptr)
+            {
+                if (dst_nd->parent != src_nd)
+                {
+                    std::cerr << "conflicting connection between src and dst nodes in the tree" << std::endl;
+                    std::cerr << " -- src: " << src_nd->state << std::endl;
+                    std::cerr << " -- dst: " << dst_nd->state << std::endl;
+                }
 
-        // Create new connection when: src_nd != nullptr && dst_nd == nullptr
-        NodeType *new_nd = new NodeType(dst);
-        new_nd->parent = src_nd;
-        src_nd->children.emplace(std::make_pair(new_nd, trans));
+                return;
+            }
+
+            // Create new connection when: src_nd != nullptr && dst_nd == nullptr
+            NodeType *new_dst = new NodeType(dst);
+            new_dst->parent = src_nd;
+            src_nd->children.emplace(std::make_pair(new_dst, trans));
+        }
     }
 
     void DisconnectNodes(State src, State dst)

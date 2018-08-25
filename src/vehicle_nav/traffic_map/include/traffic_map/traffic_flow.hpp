@@ -10,6 +10,8 @@
 #ifndef TRAFFIC_FLOW_HPP
 #define TRAFFIC_FLOW_HPP
 
+#include <iostream>
+
 #include "geometry/polygon.hpp"
 #include "traffic_map/traffic_elements.hpp"
 #include "tree/unique_tree.hpp"
@@ -21,7 +23,11 @@ namespace librav
 
 struct FlowUnit
 {
+  FlowUnit(Polygon py) : footprint(py) {}
+
   Polygon footprint;
+  double time_label = 0.0;
+  bool in_collision = false;
 
   bool operator==(const FlowUnit &other)
   {
@@ -37,24 +43,46 @@ struct FlowUnit
     }
     return true;
   }
+
+  friend std::ostream &operator<<(std::ostream &os, const FlowUnit &unit)
+  {
+    double x = 0;
+    double y = 0;
+    for (int32_t i = 0; i < unit.footprint.GetPointNumer(); ++i)
+    {
+      x += unit.footprint.GetPoint(i).x;
+      y += unit.footprint.GetPoint(i).y;
+    }
+    os << "(x,y): " << x / unit.footprint.GetPointNumer() << " , " << y / unit.footprint.GetPointNumer();
+    return os;
+  }
 };
 
 /// Traffic flow model: one source to multiple sinks
 class TrafficFlow
 {
 public:
-  TrafficFlow() = default;
-  TrafficFlow(std::string src, std::vector<TrafficChannel> channels);
+  TrafficFlow() = delete;
+  TrafficFlow(TrafficChannel channel);
+  TrafficFlow(std::vector<TrafficChannel> channels);
   ~TrafficFlow() = default;
 
-  std::vector<Polygon> GetAllLaneBlocks() const;
-  void CheckConflicts(const TrafficChannel &other);
+  UniqueTree<FlowUnit> flow_tree_;
 
-  UniqueTree<FlowUnit> BuildTree();
+  void AssignSpeedProfile();
+
+  void CheckConflicts(const TrafficFlow &other);
+  void CheckConflicts(const std::vector<TrafficFlow> &flows);
+
+  std::vector<Polygon> GetAllLaneBlocks();
 
 private:
   std::string source_;
   std::vector<TrafficChannel> channels_;
+
+  UniqueTree<FlowUnit> BuildTree(const std::vector<TrafficChannel> &chns);
+
+  void CheckCollision(UniqueTree<FlowUnit> *tree, const FlowUnit &other);
 };
 } // namespace librav
 

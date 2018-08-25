@@ -11,6 +11,7 @@
 #define POLYLINE_HPP
 
 #include <vector>
+#include <limits>
 
 // #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
@@ -69,10 +70,10 @@ public:
 private:
   std::vector<Point_2> points_;
 
-  double xmin_;
-  double xmax_;
-  double ymin_;
-  double ymax_;
+  double xmin_ = std::numeric_limits<double>::max();
+  double xmax_ = std::numeric_limits<double>::min();
+  double ymin_ = std::numeric_limits<double>::max();
+  double ymax_ = std::numeric_limits<double>::min();
 
   void UpdateXYMinMax(double x, double y);
 };

@@ -28,8 +28,10 @@ public:
   ~TrafficMap();
 
   std::vector<Polygon> DiscretizeRoadNetwork(double resolution);
-  std::vector<TrafficChannel> FindConflictingChannels(std::string src, std::string dst);
+
   TrafficChannel GetTrafficChannel(std::string src, std::string dst);
+  std::vector<TrafficChannel> FindConflictingChannels(std::string src, std::string dst);
+
   std::vector<TrafficFlow> GetConflictingFlows(std::string src, std::string dst);
 
 private:
@@ -38,7 +40,7 @@ private:
 
   std::shared_ptr<Graph_t<TrafficRegion *>> graph_;
   std::unordered_map<int32_t, TrafficRegion *> flow_regions_;
-  std::map<std::pair<std::string,std::string>, TrafficChannel> flow_channels_;
+  std::map<std::pair<std::string, std::string>, TrafficChannel> flow_channels_;
 
   Polygon lane_block_footprint_;
 

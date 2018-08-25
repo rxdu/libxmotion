@@ -47,8 +47,6 @@ bool Polyline::Intersect(const Polyline &other) const
         }
     }
     return false;
-
-    // return CGAL::do_intersect(data_, other.data_);
 }
 
 SimplePoint Polyline::GetPoint(std::size_t i) const

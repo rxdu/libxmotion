@@ -107,7 +107,7 @@ std::vector<Polygon> TrafficMap::DiscretizeRoadNetwork(double resolution)
         }
     }
 
-    std::cout << "total number of channels: " << flow_channels_.size() << std::endl;
+    // std::cout << "total number of channels discretized: " << flow_channels_.size() << std::endl;
     map_discretized_ = true;
 
     return fps;
@@ -155,7 +155,7 @@ std::vector<TrafficFlow> TrafficMap::GetConflictingFlows(std::string src, std::s
     for (auto &entry : chn_mapping)
     {
         if (entry.first != src)
-            flows.push_back(TrafficFlow(entry.first, entry.second));
+            flows.push_back(TrafficFlow(entry.second));
     }
 
     return flows;

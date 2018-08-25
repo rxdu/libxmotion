@@ -52,6 +52,7 @@ class Tree
 {
   public:
     using NodeType = Node<State>;
+    using StateType = State;
 
     Tree() = default;
     ~Tree() { delete root_; }

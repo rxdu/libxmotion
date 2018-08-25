@@ -28,14 +28,32 @@ int main()
 
     RoadMapViz::SetupRoadMapViz(map);
 
+    /********** create traffic map **********/
+
     timer.tic();
 
-    std::shared_ptr<TrafficMap> tflow_map = std::make_shared<TrafficMap>(map);
-
-    auto fps = tflow_map->DiscretizeRoadNetwork(1.2*4);
-    RoadMapViz::ShowVehicleFootprints(fps, 10, "fp-decomp", true);
+    std::shared_ptr<TrafficMap> traffic_map = std::make_shared<TrafficMap>(map);
 
     std::cout << "traffic flow map constructed in " << timer.toc() << " seconds" << std::endl;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+
+    auto fps = traffic_map->DiscretizeRoadNetwork(1.2 * 4);
+    // RoadMapViz::ShowVehicleFootprints(fps, 10, "fp-decomp", true);
+
+    auto cflows = traffic_map->GetConflictingFlows("s4", "s1");
+    std::cout << "number of conflicting cflows: " << cflows.size() << std::endl;
+    for (auto &tf : cflows)
+    {
+        auto blks = tf.GetAllLaneBlocks();
+        std::cout << " - number of blocks: " << blks.size() << std::endl;
+        RoadMapViz::ShowVehicleFootprints(blks, 10);
+    }
+
+    auto ego_chn = traffic_map->GetTrafficChannel("s4", "s1");
+    auto ego_flow = TrafficFlow(ego_chn);
+
+    ego_flow.CheckConflicts(cflows);
 
     return 0;
 }

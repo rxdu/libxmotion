@@ -25,6 +25,8 @@ class BasicTree
 {
   public:
     using NodeType = typename TreeNode<State, Transition>::NodeType;
+    using StateType = State;
+    using TransitionType = Transition;
 
     BasicTree() = default;
     ~BasicTree() { delete root_; }
