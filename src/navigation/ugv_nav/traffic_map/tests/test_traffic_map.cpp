@@ -49,7 +49,7 @@ int main()
     auto flows = traffic_map->GetAllTrafficFlows();
     for (auto &flow : flows)
     {
-        auto blks = flow.GetAllLaneBlocks();
+        auto blks = flow->GetAllLaneBlocks();
         RoadMapViz::ShowVehicleFootprints(blks);
     }
 

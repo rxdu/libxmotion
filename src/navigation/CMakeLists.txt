@@ -3,4 +3,4 @@ project(librav_nav)
 
 ## Add sub source directories
 add_subdirectory(ugv_nav)
-# add_subdirectory(uav_nav)
+add_subdirectory(uav_nav)

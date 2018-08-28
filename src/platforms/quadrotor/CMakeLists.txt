@@ -34,7 +34,6 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 add_subdirectory(apps)
 add_subdirectory(control)
 add_subdirectory(system)
-add_subdirectory(trajectory)
 
 # !!! path repair and relevant experiments are broken !!!
 # add_subdirectory(expts)

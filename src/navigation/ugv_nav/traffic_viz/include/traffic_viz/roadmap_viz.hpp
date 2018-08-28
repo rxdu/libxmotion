@@ -33,8 +33,8 @@ public:
   static void ShowVehicleFootprints(std::vector<Polygon>& polygons, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
   static void ShowConflictingZone(std::vector<Polygon>& highlight, std::vector<Polygon>& polygons, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
   
-  static void ShowLabledTrafficFlows(std::vector<TrafficFlow>& flows, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
-  static void ShowLabledTrafficFlows(TrafficFlow& ego_flow, std::vector<TrafficFlow>& flows, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
+  static void ShowLabledTrafficFlows(std::vector<TrafficFlow*>& flows, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
+  static void ShowLabledTrafficFlows(TrafficFlow* ego_flow, std::vector<TrafficFlow*>& flows, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
 
 private:
   static RoadMapViz &GetInstance();

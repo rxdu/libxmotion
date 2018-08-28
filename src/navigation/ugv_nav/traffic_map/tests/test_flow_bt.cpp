@@ -43,7 +43,7 @@ int main()
     auto ego_chn = traffic_map->GetTrafficChannel("s4", "s1");
     auto ego_flow = TrafficFlow(ego_chn);
 
-    // auto cflows = traffic_map->GetConflictingFlows("s4", "s1");
+    // auto cflows = traffic_map->FindConflictingFlows("s4", "s1");
     // std::cout << "number of conflicting cflows: " << cflows.size() << std::endl;
     // for (auto &tf : cflows)
     // {
@@ -58,10 +58,11 @@ int main()
     cflows.push_back(other_flow);
 
     timer.tic();
-    auto labeled = ego_flow.CheckConflicts(cflows);
+    // auto labeled = ego_flow.CheckConflicts(cflows);
+    auto labeled = traffic_map->CheckCollision(&ego_flow, &other_flow);
     std::cout << "conflict analysis finished in " << timer.toc() << " seconds" << std::endl;
 
-    RoadMapViz::ShowLabledTrafficFlows(ego_flow, labeled, 10, "collision", true);
+    RoadMapViz::ShowLabledTrafficFlows(&ego_flow, labeled, 10, "collision", true);
 
     return 0;
 }

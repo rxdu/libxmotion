@@ -156,7 +156,7 @@ void RoadMapViz::ShowConflictingZone(std::vector<Polygon> &highlight, std::vecto
     LightViz::ShowImage(canvas, window_name, save_img);
 }
 
-void RoadMapViz::ShowLabledTrafficFlows(std::vector<TrafficFlow> &flows, int32_t pixel_per_unit, std::string window_name, bool save_img)
+void RoadMapViz::ShowLabledTrafficFlows(std::vector<TrafficFlow*> &flows, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -174,10 +174,10 @@ void RoadMapViz::ShowLabledTrafficFlows(std::vector<TrafficFlow> &flows, int32_t
 
     for (auto &tf : flows)
     {
-        auto blks = tf.GetAllLaneBlocks();
+        auto blks = tf->GetAllLaneBlocks();
         all.insert(all.end(), blks.begin(), blks.end());
 
-        auto cblks = tf.GetConflictingLaneBlocks();
+        auto cblks = tf->GetConflictingLaneBlocks();
         highlight.insert(highlight.end(), cblks.begin(), cblks.end());
     }
 
@@ -195,7 +195,7 @@ void RoadMapViz::ShowLabledTrafficFlows(std::vector<TrafficFlow> &flows, int32_t
     LightViz::ShowImage(canvas, window_name, save_img);
 }
 
-void RoadMapViz::ShowLabledTrafficFlows(TrafficFlow &ego_flow, std::vector<TrafficFlow> &flows, int32_t pixel_per_unit, std::string window_name, bool save_img)
+void RoadMapViz::ShowLabledTrafficFlows(TrafficFlow *ego_flow, std::vector<TrafficFlow*> &flows, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -213,10 +213,10 @@ void RoadMapViz::ShowLabledTrafficFlows(TrafficFlow &ego_flow, std::vector<Traff
 
     for (auto &tf : flows)
     {
-        auto blks = tf.GetAllLaneBlocks();
+        auto blks = tf->GetAllLaneBlocks();
         all.insert(all.end(), blks.begin(), blks.end());
 
-        auto cblks = tf.GetConflictingLaneBlocks();
+        auto cblks = tf->GetConflictingLaneBlocks();
         highlight.insert(highlight.end(), cblks.begin(), cblks.end());
     }
 
@@ -231,7 +231,7 @@ void RoadMapViz::ShowLabledTrafficFlows(TrafficFlow &ego_flow, std::vector<Traff
         canvas = gdraw.DrawPolygonDirection(canvas, polygon, LVColors::red_color, 2);
     }
 
-    std::vector<Polygon> ego_polys = ego_flow.GetAllLaneBlocks();
+    std::vector<Polygon> ego_polys = ego_flow->GetAllLaneBlocks();
     for (auto &polygon : ego_polys)
     {
         canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::cyan_color);

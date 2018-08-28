@@ -31,10 +31,13 @@ public:
 
   std::vector<TrafficChannel> GetAllTrafficChannels();
   TrafficChannel GetTrafficChannel(std::string src, std::string dst);
-
-  std::vector<TrafficFlow> GetAllTrafficFlows();
   std::vector<TrafficChannel> FindConflictingChannels(std::string src, std::string dst);
-  std::vector<TrafficFlow> GetConflictingFlows(std::string src, std::string dst);
+
+  TrafficFlow *GetTrafficFlow(std::string source);
+  std::vector<TrafficFlow *> GetAllTrafficFlows();
+  
+  std::vector<TrafficFlow *> FindConflictingFlows(std::string src, std::string dst);
+  std::vector<TrafficFlow *> CheckCollision(TrafficFlow *scflow, TrafficFlow *flow);
 
 private:
   std::shared_ptr<RoadMap> road_map_;
@@ -43,16 +46,15 @@ private:
   std::shared_ptr<Graph_t<TrafficRegion *>> graph_;
   std::unordered_map<int32_t, TrafficRegion *> traffic_regions_;
   std::map<std::pair<std::string, std::string>, TrafficChannel> traffic_channels_;
-  std::map<std::string, TrafficFlow> traffic_flows_;
+  std::map<std::string, TrafficFlow *> traffic_flows_;
 
   Polygon lane_block_footprint_;
-
-  void ConstructLaneGraph();
-  void ConstructTrafficFlows();
 
   double DecomposeTrafficRegion(TrafficRegion *region, std::string last_region, double last_remainder, double resolution);
   VehiclePose InterpolatePose(SimplePoint pt0, SimplePoint pt1, double s);
   VehiclePose InterpolatePoseInversed(SimplePoint pt0, SimplePoint pt1, double s);
+
+  void LabelConflictBlocks(TrafficFlow *flow);
 };
 } // namespace librav
 

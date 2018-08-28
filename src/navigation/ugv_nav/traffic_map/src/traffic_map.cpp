@@ -22,17 +22,6 @@ TrafficMap::TrafficMap(std::shared_ptr<RoadMap> map) : road_map_(map)
     lane_block_footprint_.AddPoint(-1.2 * 2, 0.9 * 2);
     lane_block_footprint_.AddPoint(-1.2 * 2, -0.9 * 2);
 
-    ConstructLaneGraph();
-}
-
-TrafficMap::~TrafficMap()
-{
-    for (auto &entry : traffic_regions_)
-        delete entry.second;
-}
-
-void TrafficMap::ConstructLaneGraph()
-{
     graph_ = std::make_shared<Graph_t<TrafficRegion *>>();
 
     for (auto &source : road_map_->GetSources())
@@ -63,8 +52,18 @@ void TrafficMap::ConstructLaneGraph()
         }
 }
 
+TrafficMap::~TrafficMap()
+{
+    for (auto &entry : traffic_regions_)
+        delete entry.second;
+
+    for (auto &entry : traffic_flows_)
+        delete entry.second;
+}
+
 void TrafficMap::DiscretizeTrafficRegions(double resolution)
 {
+    /* Form traffic channels */
     std::vector<Polygon> fps;
     for (auto &source : road_map_->GetSources())
     {
@@ -104,20 +103,18 @@ void TrafficMap::DiscretizeTrafficRegions(double resolution)
         }
     }
 
-    ConstructTrafficFlows();
-
     // std::cout << "total number of channels discretized: " << traffic_channels_.size() << std::endl;
-    map_discretized_ = true;
-}
 
-void TrafficMap::ConstructTrafficFlows()
-{
+    /* Form traffic flows */
     std::map<std::string, std::vector<TrafficChannel>> chn_mapping;
     for (auto &chn : traffic_channels_)
         chn_mapping[chn.first.first].push_back(chn.second);
 
     for (auto &entry : chn_mapping)
-        traffic_flows_.insert(std::make_pair(entry.first, TrafficFlow(entry.second)));
+        traffic_flows_.insert(std::make_pair(entry.first, new TrafficFlow(entry.second)));
+
+    /* Set discretization flag */
+    map_discretized_ = true;
 }
 
 std::vector<TrafficChannel> TrafficMap::GetAllTrafficChannels()
@@ -128,9 +125,18 @@ std::vector<TrafficChannel> TrafficMap::GetAllTrafficChannels()
     return chns;
 }
 
-std::vector<TrafficFlow> TrafficMap::GetAllTrafficFlows()
+TrafficFlow *TrafficMap::GetTrafficFlow(std::string source)
 {
-    std::vector<TrafficFlow> flows;
+    auto it = traffic_flows_.find(source);
+    if (it != traffic_flows_.end())
+        return it->second;
+    else
+        return nullptr;
+}
+
+std::vector<TrafficFlow *> TrafficMap::GetAllTrafficFlows()
+{
+    std::vector<TrafficFlow *> flows;
     for (auto &flow : traffic_flows_)
         flows.push_back(flow.second);
     return flows;
@@ -165,9 +171,9 @@ std::vector<TrafficChannel> TrafficMap::FindConflictingChannels(std::string src,
     return channels;
 }
 
-std::vector<TrafficFlow> TrafficMap::GetConflictingFlows(std::string src, std::string dst)
+std::vector<TrafficFlow *> TrafficMap::FindConflictingFlows(std::string src, std::string dst)
 {
-    std::vector<TrafficFlow> flows;
+    std::vector<TrafficFlow *> flows;
 
     std::vector<TrafficChannel> channels = FindConflictingChannels(src, dst);
 
@@ -178,11 +184,27 @@ std::vector<TrafficFlow> TrafficMap::GetConflictingFlows(std::string src, std::s
     for (auto &entry : chn_mapping)
     {
         if (entry.first != src)
-            flows.push_back(TrafficFlow(entry.second));
+        {
+            TrafficFlow *fl = GetTrafficFlow(entry.first);
+            if (fl != nullptr)
+                flows.push_back(fl);
+        }
     }
 
     return flows;
 }
+
+std::vector<TrafficFlow *> TrafficMap::CheckCollision(TrafficFlow *scflow, TrafficFlow *flow)
+{
+    auto nodes = scflow->CheckSingleChannelCollision(flow);
+
+    std::vector<TrafficFlow *> labeled;
+    labeled.push_back(flow);
+
+    return labeled;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 double TrafficMap::DecomposeTrafficRegion(TrafficRegion *region, std::string last_region, double last_remainder, double resolution)
 {
@@ -296,4 +318,24 @@ VehiclePose TrafficMap::InterpolatePoseInversed(SimplePoint pt0, SimplePoint pt1
     double yaw = std::atan2(dir(1), dir(0));
 
     return VehiclePose(position(0), position(1), yaw);
+}
+
+void TrafficMap::LabelConflictBlocks(TrafficFlow *flow)
+{
+    // UniqueTree<FlowUnit> &ego_tree = flow_tree_;
+    // UniqueTree<FlowUnit> &other_tree = flow->flow_tree_;
+
+    // UniqueTree<FlowUnit>::NodeType *node = ego_tree.GetRootNode();
+
+    // std::queue<UniqueTree<FlowUnit>::NodeType *> q;
+    // q.push(node);
+    // while (!q.empty())
+    // {
+    //     node = q.front();
+    //     q.pop();
+    //     // std::cout << node->state << std::endl;
+    //     CheckCollision(&other_tree, node->state);
+    //     for (auto &nd : node->children)
+    //         q.push(nd.first);
+    // }
 }

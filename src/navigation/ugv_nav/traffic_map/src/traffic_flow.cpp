@@ -32,11 +32,6 @@ TrafficFlow::TrafficFlow(std::vector<TrafficChannel> channels) : channels_(chann
 
 std::vector<Polygon> TrafficFlow::GetAllLaneBlocks()
 {
-    // std::vector<Polygon> blks;
-    // for (auto &chn : channels_)
-    //     blks.insert(blks.end(), chn.lane_blocks.begin(), chn.lane_blocks.end());
-    // return blks;
-    // UniqueTree<librav::FlowUnit> tree = BuildTree(channels_);
     auto all_units = Traversal::GetAllStatesBF(&flow_tree_);
     std::vector<Polygon> blks;
     for (auto &fu : all_units)
@@ -73,39 +68,36 @@ UniqueTree<FlowUnit> TrafficFlow::BuildTree(const std::vector<TrafficChannel> &c
     return tree;
 }
 
-std::vector<TrafficFlow> TrafficFlow::CheckConflicts(const std::vector<TrafficFlow> &flows)
+std::vector<FlowUnit> TrafficFlow::CheckSingleChannelCollision(TrafficFlow *flow)
 {
-    std::vector<TrafficFlow> labeled = flows;
-    for (auto &flow : labeled)
+    std::vector<FlowUnit> cnodes;
+
+    // only when current flow is single-channel flow
+    if (channels_.size() != 1)
+        return cnodes;
+
+    UniqueTree<FlowUnit>::NodeType *node = flow_tree_.GetRootNode();
+    while (node != nullptr)
     {
-        LabelConflictBlocks(&flow);
+        auto nds = CheckUnitCollision(flow, node->state);
+        cnodes.insert(cnodes.end(), nds.begin(), nds.end());
+
+        if (node->children.empty())
+            node = nullptr;
+        else
+            node = (*node->children.begin()).first;
     }
-    return labeled;
+
+    std::cout << "collision number: " << cnodes.size() << std::endl;
+
+    return cnodes;
 }
 
-void TrafficFlow::LabelConflictBlocks(TrafficFlow *flow)
+std::vector<FlowUnit> TrafficFlow::CheckUnitCollision(TrafficFlow *flow, const FlowUnit &unit)
 {
-    UniqueTree<FlowUnit> &ego_tree = flow_tree_;
-    UniqueTree<FlowUnit> &other_tree = flow->flow_tree_;
+    std::vector<FlowUnit> cnodes;
 
-    UniqueTree<FlowUnit>::NodeType *node = ego_tree.GetRootNode();
-
-    std::queue<UniqueTree<FlowUnit>::NodeType *> q;
-    q.push(node);
-    while (!q.empty())
-    {
-        node = q.front();
-        q.pop();
-        // std::cout << node->state << std::endl;
-        CheckCollision(&other_tree, node->state);
-        for (auto &nd : node->children)
-            q.push(nd.first);
-    }
-}
-
-void TrafficFlow::CheckCollision(UniqueTree<FlowUnit> *tree, const FlowUnit &other)
-{
-    UniqueTree<FlowUnit>::NodeType *node = tree->GetRootNode();
+    UniqueTree<FlowUnit>::NodeType *node = flow->flow_tree_.GetRootNode();
 
     // BF traversal
     std::queue<UniqueTree<FlowUnit>::NodeType *> q;
@@ -114,15 +106,18 @@ void TrafficFlow::CheckCollision(UniqueTree<FlowUnit> *tree, const FlowUnit &oth
     {
         node = q.front();
         q.pop();
-        if (node->state.footprint.Intersect(other.footprint))
+        if (node->state.footprint.Intersect(unit.footprint))
         {
             node->state.in_collision = true;
-            node->state.time_label = other.time_label;
+            node->state.time_label = unit.time_label;
+            cnodes.push_back(node->state);
         }
-        // else
-        // {
+        else
+        {
             for (auto &nd : node->children)
                 q.push(nd.first);
-        // }
+        }
     }
+
+    return cnodes;
 }
