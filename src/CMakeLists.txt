@@ -31,7 +31,7 @@ add_subdirectory(core)
 add_subdirectory(third_party)
 
 # Packages built on top of core
-add_subdirectory(vehicle_nav)
+add_subdirectory(navigation)
 add_subdirectory(platforms)
 
 # Experiment setups
