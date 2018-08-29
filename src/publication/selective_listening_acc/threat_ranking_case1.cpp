@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "road_map/road_map.hpp"
-#include "threat_ranking/threat_ranking.hpp"
+#include "collision_threat/threat_ranking.hpp"
 
 #include "threat_field/collision_field.hpp"
 

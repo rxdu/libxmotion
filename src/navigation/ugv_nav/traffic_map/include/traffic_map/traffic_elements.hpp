@@ -83,12 +83,19 @@ struct TrafficChannel
             center_line = center_line.Concatenate(region->center_line);
     }
 
+    TrafficChannel(std::string src, std::string dst, std::vector<TrafficRegion *> rgs, std::vector<Polygon> lbs, std::vector<VehiclePose> poses) : source(src), sink(dst), regions(rgs), lane_blocks(lbs), block_poses(poses)
+    {
+        for (auto region : regions)
+            center_line = center_line.Concatenate(region->center_line);
+    }
+
     std::string source;
     std::string sink;
 
     std::vector<TrafficRegion *> regions;
     Polyline center_line;
     std::vector<Polygon> lane_blocks;
+    std::vector<VehiclePose> block_poses;
 };
 } // namespace librav
 

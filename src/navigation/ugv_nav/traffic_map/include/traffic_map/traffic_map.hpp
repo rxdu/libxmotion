@@ -35,9 +35,12 @@ public:
 
   TrafficFlow *GetTrafficFlow(std::string source);
   std::vector<TrafficFlow *> GetAllTrafficFlows();
-  
+
   std::vector<TrafficFlow *> FindConflictingFlows(std::string src, std::string dst);
-  std::vector<TrafficFlow *> CheckCollision(TrafficFlow *scflow, TrafficFlow *flow);
+  void CheckCollision(TrafficFlow *scflow, TrafficFlow *flow);
+
+  std::vector<FlowTrackPoint> BackTrackCollision(TrafficFlow *scflow, TrafficFlow *flow, double v);
+  std::vector<FlowTrackPoint> BackTrackCollision(TrafficFlow *scflow, std::vector<TrafficFlow *> flows, double v);
 
 private:
   std::shared_ptr<RoadMap> road_map_;
@@ -53,8 +56,6 @@ private:
   double DecomposeTrafficRegion(TrafficRegion *region, std::string last_region, double last_remainder, double resolution);
   VehiclePose InterpolatePose(SimplePoint pt0, SimplePoint pt1, double s);
   VehiclePose InterpolatePoseInversed(SimplePoint pt0, SimplePoint pt1, double s);
-
-  void LabelConflictBlocks(TrafficFlow *flow);
 };
 } // namespace librav
 

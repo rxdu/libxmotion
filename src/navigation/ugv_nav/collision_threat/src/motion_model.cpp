@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "threat_ranking/motion_model.hpp"
+#include "collision_threat/motion_model.hpp"
 
 #include <cmath>
 #include <queue>

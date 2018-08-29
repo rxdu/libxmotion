@@ -43,8 +43,9 @@ int main()
     auto ego_chn = traffic_map->GetTrafficChannel("s4", "s1");
     auto ego_flow = TrafficFlow(ego_chn);
 
-    auto cflows = traffic_map->FindConflictingFlows("s4", "s1");
+    auto cflows = traffic_map->FindConflictingFlows("s4", "s3");
     std::cout << "number of conflicting cflows: " << cflows.size() << std::endl;
+    RoadMapViz::ShowLabledTrafficFlows(cflows);
     // for (auto &tf : cflows)
     // {
     //     auto blks = tf.GetAllLaneBlocks();

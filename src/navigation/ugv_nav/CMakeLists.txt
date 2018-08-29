@@ -45,7 +45,7 @@ add_subdirectory(state_lattice)
 add_subdirectory(lattice_planner)
 add_subdirectory(traffic_map)
 add_subdirectory(traffic_sim)
-add_subdirectory(threat_ranking)
+add_subdirectory(collision_threat)
 
 add_subdirectory(traffic_viz)
 

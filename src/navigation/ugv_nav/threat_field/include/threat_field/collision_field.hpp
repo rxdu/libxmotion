@@ -69,6 +69,7 @@ public:
   void RemoveTrafficParticipant(int32_t id);
 
   std::size_t GetTrafficParticipantNumber() const { return traffic_participants_.size(); };
+  double GetCollisionThreat(double x, double y) { return (*this)(x, y); }
 
   double operator()(double x, double y);
 

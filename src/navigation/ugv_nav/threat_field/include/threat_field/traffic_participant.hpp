@@ -44,6 +44,7 @@ struct TrafficParticipant
   double position_y;
   double velocity_x;
   double velocity_y;
+  double time_stamp;
 
   std::function<double(double, double)> threat_func;
 

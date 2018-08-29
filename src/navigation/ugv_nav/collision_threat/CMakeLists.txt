@@ -4,11 +4,12 @@
 # Add libraries
 set(TMAP_LIB_SRC
     src/motion_model.cpp
+    src/collision_threat.cpp
     src/threat_ranking.cpp
 )
-add_library(threatrank STATIC ${TMAP_LIB_SRC})
-target_link_libraries(threatrank decomp graph tree roadmap trafficmap tfield lattice lattice_planner trafficviz lightviz)
-target_include_directories(threatrank PUBLIC
+add_library(cthreat STATIC ${TMAP_LIB_SRC})
+target_link_libraries(cthreat decomp graph tree roadmap trafficmap tfield lattice lattice_planner trafficviz lightviz)
+target_include_directories(cthreat PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)

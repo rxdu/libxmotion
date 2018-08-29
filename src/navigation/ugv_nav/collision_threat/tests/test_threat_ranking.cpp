@@ -6,7 +6,7 @@
 #include "threat_field/traffic_participant.hpp"
 #include "threat_field/threat_distribution.hpp"
 
-#include "threat_ranking/threat_ranking.hpp"
+#include "collision_threat/threat_ranking.hpp"
 
 #include "lightviz/lightviz.hpp"
 #include "traffic_viz/traffic_viz.hpp"

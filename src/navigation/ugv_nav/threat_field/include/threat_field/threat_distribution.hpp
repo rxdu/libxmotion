@@ -36,27 +36,31 @@ private:
   double coeff2_ = 1;
   double coeff3_ = 1;
 };
+/*-------------------------------------------------------------*/
 
 class GaussianVelocityThreat
 {
 public:
-  GaussianVelocityThreat(double vel_x, double vel_y, double sigma1, double sigma2);
+  GaussianVelocityThreat() = default;
+  GaussianVelocityThreat(double pos_x, double pos_y, double vel_x, double vel_y, double sig1, double sig2);
 
-  void SetParameters(double vel_x, double vel_y, double sigma1, double sigma2);
+  void SetParameters(double pos_x, double pos_y, double vel_x, double vel_y, double sigp, double sigv);
   double operator()(double x, double y);
 
-  double GetMeanX() const { return vel_x_; }
-  double GetMeanY() const { return vel_y_; }
+  double GetMeanX() const { return pos_x_; }
+  double GetMeanY() const { return pos_y_; }
 
 private:
+  double pos_x_ = 0;
+  double pos_y_ = 0;
   double vel_x_ = 0;
   double vel_y_ = 0;
-  double sigma_1_ = 1;
-  double sigma_2_ = 1;
+  double sigma_1_ = 10;
+  double sigma_2_ = 10;
+  double rho_ = 0;
 
   double coeff1_ = 0;
   double coeff2_ = 1;
-  double coeff3_ = 1;
 };
 
 /*-------------------------------------------------------------*/

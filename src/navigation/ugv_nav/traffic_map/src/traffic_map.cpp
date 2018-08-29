@@ -76,6 +76,7 @@ void TrafficMap::DiscretizeTrafficRegions(double resolution)
             {
                 std::vector<TrafficRegion *> regions;
                 std::vector<Polygon> blocks;
+                std::vector<VehiclePose> poses;
                 // std::cout << source << " ---> " << sink << std::endl;
 
                 int32_t path_index = 0;
@@ -97,8 +98,9 @@ void TrafficMap::DiscretizeTrafficRegions(double resolution)
 
                     regions.push_back(region);
                     blocks.insert(blocks.end(), region->discrete_lane_blocks[prev_block_name].begin(), region->discrete_lane_blocks[prev_block_name].end());
+                    poses.insert(poses.end(), region->discrete_anchor_points[prev_block_name].begin(), region->discrete_anchor_points[prev_block_name].end());
                 }
-                traffic_channels_.insert(std::make_pair(std::make_pair(source, sink), TrafficChannel(source, sink, regions, blocks)));
+                traffic_channels_.insert(std::make_pair(std::make_pair(source, sink), TrafficChannel(source, sink, regions, blocks, poses)));
             }
         }
     }
@@ -168,6 +170,7 @@ std::vector<TrafficChannel> TrafficMap::FindConflictingChannels(std::string src,
         if (check_chn.center_line.Intersect(chn.second.center_line))
             channels.push_back(chn.second);
     }
+    std::cout << "number of channels:" << channels.size() << std::endl;
     return channels;
 }
 
@@ -194,14 +197,30 @@ std::vector<TrafficFlow *> TrafficMap::FindConflictingFlows(std::string src, std
     return flows;
 }
 
-std::vector<TrafficFlow *> TrafficMap::CheckCollision(TrafficFlow *scflow, TrafficFlow *flow)
+std::vector<FlowTrackPoint> TrafficMap::BackTrackCollision(TrafficFlow *scflow, TrafficFlow *flow, double v)
 {
-    auto nodes = scflow->CheckSingleChannelCollision(flow);
+    return scflow->BackTrackSingleChannelCollision(flow, v);
+}
 
-    std::vector<TrafficFlow *> labeled;
-    labeled.push_back(flow);
+std::vector<FlowTrackPoint> TrafficMap::BackTrackCollision(TrafficFlow *scflow, std::vector<TrafficFlow *> flows, double v)
+{
+    std::vector<FlowTrackPoint> poses;
+    for (auto flow : flows)
+    {
+        auto ps = scflow->BackTrackSingleChannelCollision(flow, v);
+        poses.insert(poses.end(), ps.begin(), ps.end());
+    }
+    return poses;
+}
 
-    return labeled;
+void TrafficMap::CheckCollision(TrafficFlow *scflow, TrafficFlow *flow)
+{
+    // auto nodes = scflow->CheckSingleChannelCollision(flow);
+    // scflow->BackTrackSingleChannelCollision(flow, 10, 1);
+
+    // std::cout << "collision number: " << nodes.size() << std::endl;
+    // for(auto nd: nodes)
+    //     std::cout << "node: " << nd.pose.x << " , " << nd.pose.y << std::endl;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -318,24 +337,4 @@ VehiclePose TrafficMap::InterpolatePoseInversed(SimplePoint pt0, SimplePoint pt1
     double yaw = std::atan2(dir(1), dir(0));
 
     return VehiclePose(position(0), position(1), yaw);
-}
-
-void TrafficMap::LabelConflictBlocks(TrafficFlow *flow)
-{
-    // UniqueTree<FlowUnit> &ego_tree = flow_tree_;
-    // UniqueTree<FlowUnit> &other_tree = flow->flow_tree_;
-
-    // UniqueTree<FlowUnit>::NodeType *node = ego_tree.GetRootNode();
-
-    // std::queue<UniqueTree<FlowUnit>::NodeType *> q;
-    // q.push(node);
-    // while (!q.empty())
-    // {
-    //     node = q.front();
-    //     q.pop();
-    //     // std::cout << node->state << std::endl;
-    //     CheckCollision(&other_tree, node->state);
-    //     for (auto &nd : node->children)
-    //         q.push(nd.first);
-    // }
 }

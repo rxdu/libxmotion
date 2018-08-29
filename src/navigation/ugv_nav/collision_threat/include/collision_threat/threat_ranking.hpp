@@ -17,7 +17,7 @@
 #include "lattice_planner/lattice_planner.hpp"
 
 #include "road_map/topogeo_graph.hpp"
-#include "threat_ranking/motion_model.hpp"
+#include "collision_threat/motion_model.hpp"
 
 namespace librav
 {

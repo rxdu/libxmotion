@@ -179,7 +179,7 @@ cv::Mat GeometryDraw::WritePointPosition(cv::Mat canvas, const std::vector<Simpl
 
 cv::Mat GeometryDraw::DrawDistribution(cv::Mat canvas, double cx, double cy, double xspan, double yspan, std::function<double(double, double)> dist_fun)
 {
-    std::cout << "distribution: " << cx << " , " << cy << " ; " << xmin_ << " , " << xmax_ << " , " << ymin_ << " , " << ymax_ << std::endl;
+    // std::cout << "distribution: " << cx << " , " << cy << " ; " << xmin_ << " , " << xmax_ << " , " << ymin_ << " , " << ymax_ << std::endl;
 
     assert(cx >= xmin_ && cx < xmax_ && cy >= ymin_ && cy < ymax_);
 
@@ -226,12 +226,12 @@ cv::Mat GeometryDraw::DrawDistribution(cv::Mat canvas, double cx, double cy, dou
               << int32_t(threat_vis.at<cv::Vec3b>(0, 0)[1]) << " , "
               << int32_t(threat_vis.at<cv::Vec3b>(0, 0)[2]) << std::endl;
 
-    std::cout << "------------" << std::endl;
-    std::cout << "dx: " << dxmin << " , " << dxmax << std::endl;
-    std::cout << "dy: " << dymin << " , " << dymax << std::endl;
-    std::cout << "size: " << x_size << " , " << y_size << std::endl;
-    std::cout << "threat: " << threat_vis.cols << " , " << threat_vis.rows << std::endl;
-    std::cout << "top left coordinate: " << top_left_pixel.x << " , " << top_left_pixel.y << std::endl;
+    // std::cout << "------------" << std::endl;
+    // std::cout << "dx: " << dxmin << " , " << dxmax << std::endl;
+    // std::cout << "dy: " << dymin << " , " << dymax << std::endl;
+    // std::cout << "size: " << x_size << " , " << y_size << std::endl;
+    // std::cout << "threat: " << threat_vis.cols << " , " << threat_vis.rows << std::endl;
+    // std::cout << "top left coordinate: " << top_left_pixel.x << " , " << top_left_pixel.y << std::endl;
 
     return canvas;
 }

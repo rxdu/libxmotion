@@ -32,16 +32,17 @@ int main()
     timer.tic();
 
     std::shared_ptr<TrafficMap> traffic_map = std::make_shared<TrafficMap>(map);
+    traffic_map->DiscretizeTrafficRegions(1.2 * 4);
 
     std::cout << "traffic flow map constructed in " << timer.toc() << " seconds" << std::endl;
 
     // auto fps = traffic_map->DiscretizeRoadNetwork(1.2 * 4);
     // RoadMapViz::ShowVehicleFootprints(fps, 10, "fp-decomp", true);
-    traffic_map->DiscretizeTrafficRegions(1.2 * 4);
 
     // auto chn = traffic_map->GetTrafficChannel("s4", "s1");
     // RoadMapViz::ShowVehicleFootprints(chn.lane_blocks, 10, "dbg-decomp", true);
 
+    /*
     auto chns = traffic_map->GetAllTrafficChannels();
     for (auto &chn : chns)
         RoadMapViz::ShowVehicleFootprints(chn.lane_blocks);
@@ -52,11 +53,12 @@ int main()
         auto blks = flow->GetAllLaneBlocks();
         RoadMapViz::ShowVehicleFootprints(blks);
     }
+    */
 
-    // auto chns = traffic_map->FindConflictingChannels("s4", "s1");
+    auto chns = traffic_map->FindConflictingChannels("s4", "s1");
     // auto chns = traffic_map->FindConflictingChannels("s4", "s3");
-    // for(auto& chn : chns)
-    //     std::cout << chn.source << " -> " << chn.sink << std::endl;
+    for(auto& chn : chns)
+        std::cout << chn.source << " -> " << chn.sink << std::endl;
 
     // std::vector<Polygon> all_fps;
     // all_fps.insert(all_fps.end(), fps.begin(), fps.end());
