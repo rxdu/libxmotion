@@ -13,3 +13,12 @@ target_link_libraries(pub_threat_ranking_case1 cthreat roadmap trafficmap roadma
 
 add_executable(pub_threat_ranking_case2 threat_ranking_case2.cpp)
 target_link_libraries(pub_threat_ranking_case2 cthreat roadmap trafficmap roadmap tfield trafficviz lightviz utilities)
+
+add_executable(pub_threat_map_case1 threat_map_case1.cpp)
+target_link_libraries(pub_threat_map_case1 cthreat roadmap trafficmap roadmap tfield trafficviz lightviz utilities)
+
+add_executable(pub_threat_map_case2 threat_map_case2.cpp)
+target_link_libraries(pub_threat_map_case2 cthreat roadmap trafficmap roadmap tfield trafficviz lightviz utilities)
+
+add_executable(pub_threat_map_case3 threat_map_case3.cpp)
+target_link_libraries(pub_threat_map_case3 cthreat roadmap trafficmap roadmap tfield trafficviz lightviz utilities)
