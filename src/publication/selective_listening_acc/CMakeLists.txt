@@ -22,3 +22,6 @@ target_link_libraries(pub_threat_map_case2 cthreat roadmap trafficmap roadmap tf
 
 add_executable(pub_threat_map_case3 threat_map_case3.cpp)
 target_link_libraries(pub_threat_map_case3 cthreat roadmap trafficmap roadmap tfield trafficviz lightviz utilities)
+
+add_executable(pub_trafic_map gen_traffic_map.cpp)
+target_link_libraries(pub_trafic_map cthreat roadmap trafficmap roadmap tfield trafficviz lightviz utilities)

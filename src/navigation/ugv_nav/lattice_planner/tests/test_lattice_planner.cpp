@@ -134,8 +134,8 @@ int main()
     // LightViz::ShowPathInLane(map->GetAllLaneBoundPolylines(), map->GetAllLaneCenterPolylines(), path_line);
 
     GaussianPositionThreat threat_model(60, 60, 2, 2);
-    LightViz::ShowPathLaneInField(map->GetAllLaneBoundPolylines(), map->GetAllLaneCenterPolylines(), path_line,
-                                  threat_model.GetMeanX(), threat_model.GetMeanY(), threat_model);
+    // LightViz::ShowPathLaneInField(map->GetAllLaneBoundPolylines(), map->GetAllLaneCenterPolylines(), path_line,
+    //                               threat_model.GetMeanX(), threat_model.GetMeanY(), threat_model);
 
     return 0;
 }

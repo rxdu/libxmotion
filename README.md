@@ -86,9 +86,6 @@ $ cd librav/docs/doxygen
 $ doxygen Doxyfile
 ```
 
-## TODO List
-
-- [ ] Finish plotting of graph and square grid in FastPlot module
-- [ ] Fix path_repair module for quadrotors and clean up all relevant code
+## [TODO List](TODO.md)
 
 ## [Reference]
