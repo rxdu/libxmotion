@@ -25,7 +25,7 @@ class LatticeGraph
 public:
   LatticeGraph();
 
-  using GraphType = Graph_t<LatticeNode, MotionPrimitive>;
+  using GraphType = Graph<LatticeNode, MotionPrimitive>;
 
   void LoadMotionPrimitives(std::string file);
   void GenerateGraph(int32_t n_unit_time);

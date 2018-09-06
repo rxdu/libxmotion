@@ -29,7 +29,7 @@ TopoGeoGraph::~TopoGeoGraph()
 
 void TopoGeoGraph::ConstructGraph()
 {
-    graph_ = std::make_shared<Graph_t<LaneBlock *>>();
+    graph_ = std::make_shared<Graph<LaneBlock *>>();
 
     auto mapping = road_map_->GetLaneletIDNameMap();
     for (auto &entry : mapping)
@@ -75,20 +75,21 @@ void TopoGeoGraph::ConstructGraph()
 
 std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
 {
-    auto vtx = graph_->GetVertex(id);
+    auto vtx = graph_->FindVertex(id);
     std::vector<std::string> names;
 
-    std::set<Graph_t<LaneBlock *>::VertexType *> vertices;
+    // std::set<Graph<LaneBlock *>::vertex_iterator> vertices;
+    std::set<int64_t> vertices;
 
-    std::vector<Graph_t<LaneBlock *>::VertexType *> checked_vtx = vtx->vertices_from_;
+    std::vector<Graph<LaneBlock *>::vertex_iterator> checked_vtx = vtx->vertices_from_;
     // std::cout << "first level backtrack: " << checked_vtx.size() << std::endl;
     while (!checked_vtx.empty())
     {
         // vertices.insert(vertices.end(), checked_vtx.begin(), checked_vtx.end());
         for (auto cv : checked_vtx)
-            vertices.insert(cv);
+            vertices.insert(cv->GetVertexID());
 
-        std::vector<Graph_t<LaneBlock *>::VertexType *> inserted = checked_vtx;
+        std::vector<Graph<LaneBlock *>::vertex_iterator> inserted = checked_vtx;
         checked_vtx.clear();
         for (auto &v : inserted)
         {
@@ -98,14 +99,14 @@ std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
                 if (v->state_->type == LaneBlockType::Isolated)
                 {
                     if (vf->vertex_id_ != id &&
-                        std::find(vertices.begin(), vertices.end(), vf) == vertices.end())
+                        std::find(vertices.begin(), vertices.end(), vf->GetVertexID()) == vertices.end())
                         checked_vtx.push_back(vf);
                 }
                 else
                 {
                     if (vf->state_->type != LaneBlockType::Overlapped &&
                         vf->vertex_id_ != id &&
-                        std::find(vertices.begin(), vertices.end(), vf) == vertices.end())
+                        std::find(vertices.begin(), vertices.end(), vf->GetVertexID()) == vertices.end())
                         checked_vtx.push_back(vf);
                 }
             }
@@ -118,7 +119,7 @@ std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
     names.push_back(vtx->state_->name);
     for (auto v : vertices)
     {
-        names.push_back(v->state_->name);
+        names.push_back(graph_->FindVertex(v)->state_->name);
         // std::cout << "name: " << v->state_.name << " , id: " << v->state_.id << std::endl;
     }
     // std::cout << "total number: " << names.size() << std::endl;

@@ -22,7 +22,7 @@ TrafficMap::TrafficMap(std::shared_ptr<RoadMap> map) : road_map_(map)
     lane_block_footprint_.AddPoint(-1.2 * 2, 0.9 * 2);
     lane_block_footprint_.AddPoint(-1.2 * 2, -0.9 * 2);
 
-    graph_ = std::make_shared<Graph_t<TrafficRegion *>>();
+    graph_ = std::make_shared<Graph<TrafficRegion *>>();
 
     for (auto &source : road_map_->GetSources())
         for (auto &sink : road_map_->GetSinks())
@@ -83,7 +83,7 @@ void TrafficMap::DiscretizeTrafficRegions(double resolution)
                 double remainder = 0;
                 for (auto it = path.begin(); it != path.end(); ++it)
                 {
-                    auto region = graph_->GetVertex(road_map_->GetLaneletIDFromName(*it))->state_;
+                    auto region = graph_->FindVertex(road_map_->GetLaneletIDFromName(*it))->state_;
 
                     std::string prev_block_name;
                     if (path_index == 0)

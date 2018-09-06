@@ -110,7 +110,7 @@ int main(int argc, char** argv )
 
 	/*** Construct a graph from the square grid ***/
 	/*** the second argument determines if move along diagonal is allowed ***/
-	std::shared_ptr<Graph_t<SquareCell*>> graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);
+	std::shared_ptr<Graph<SquareCell*>> graph = GraphBuilder::BuildFromSquareGrid(sgrid_map.data_model,true);
 
 	/*** Search path in the graph ***/
 	Vertex_t<SquareCell*> * start_vertex;

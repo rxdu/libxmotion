@@ -14,9 +14,9 @@
 
 using namespace librav;
 
-std::shared_ptr<Graph_t<SquareCell *>> Planner::BuildGraphFromSquareGrid(std::shared_ptr<SquareGrid> grid, bool allow_diag_move)
+std::shared_ptr<Graph<SquareCell *>> Planner::BuildGraphFromSquareGrid(std::shared_ptr<SquareGrid> grid, bool allow_diag_move)
 {
-	std::shared_ptr<Graph_t<SquareCell *>> graph = std::make_shared<Graph_t<SquareCell *>>();
+	std::shared_ptr<Graph<SquareCell *>> graph = std::make_shared<Graph<SquareCell *>>();
 
 	for (int32_t i = 0; i < grid->SizeX(); ++i)
 		for (int32_t j = 0; j < grid->SizeY(); ++j)
