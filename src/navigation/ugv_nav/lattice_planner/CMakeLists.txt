@@ -3,7 +3,7 @@
 
 # Add libraries
 set(LATTICE_PLANNER_LIB_SRC
-  src/lattice_graph.cpp
+  # src/lattice_graph.cpp
   src/lattice_planner.cpp
 )
 add_library(lattice_planner STATIC ${LATTICE_PLANNER_LIB_SRC})

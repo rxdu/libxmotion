@@ -34,22 +34,21 @@ void LatticePlanner::SetEgoPlanningRoute(std::vector<std::string> ll)
 
 LatticePath LatticePlanner::Search(LatticeNode start_state, int32_t horizon)
 {
-    using GraphType = Graph_t<LatticeNode, MotionPrimitive>;
-    using GraphVertexType = Vertex_t<LatticeNode, MotionPrimitive>;
+    using GraphType = Graph<LatticeNode, MotionPrimitive>;
 
     auto graph = std::make_shared<GraphType>();
     std::vector<MotionPrimitive> mps;
 
     LatticeNode node(start_state.x, start_state.y, start_state.theta);
     graph->AddVertex(node);
-    auto vtx = graph->GetVertex(node.id);
+    auto vtx = graph->FindVertex(node.id);
 
-    std::vector<GraphType::VertexType *> last_level;
+    std::vector<GraphType::vertex_iterator> last_level;
     last_level.push_back(vtx);
 
     for (size_t i = 0; i < horizon; ++i)
     {
-        std::vector<GraphType::VertexType *> this_level;
+        std::vector<GraphType::vertex_iterator> this_level;
         for (auto vtx : last_level)
         {
             auto neighbours = GenerateLattices(vtx->state_);
@@ -58,7 +57,7 @@ LatticePath LatticePlanner::Search(LatticeNode start_state, int32_t horizon)
             {
                 graph->AddEdge(vtx->state_, std::get<0>(nb), std::get<1>(nb));
 
-                this_level.push_back(graph->GetVertex(std::get<0>(nb).id));
+                this_level.push_back(graph->FindVertex(std::get<0>(nb).id));
                 mps.push_back(std::get<1>(nb));
             }
         }
@@ -89,32 +88,32 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
     std::cout << "----------- search started ------------" << std::endl;
     timer_.tic();
 
-    using GraphVertexType = Vertex_t<LatticeNode, MotionPrimitive>;
+    using GraphType = Graph<LatticeNode, MotionPrimitive>;
 
     // std::vector<MotionPrimitive> mp_record;
 
     // create a new graph with only start and goal vertices
-    Graph_t<LatticeNode, MotionPrimitive> graph;
+    Graph<LatticeNode, MotionPrimitive> graph;
     graph.AddVertex(start_state);
     graph.AddVertex(goal_state);
 
-    GraphVertexType *start_vtx = graph.GetVertex(start_state);
-    GraphVertexType *goal_vtx = graph.GetVertex(goal_state);
+    GraphType::vertex_iterator start_vtx = graph.FindVertex(start_state);
+    GraphType::vertex_iterator goal_vtx = graph.FindVertex(goal_state);
 
     // open list - a list of vertices that need to be checked out
-    PriorityQueue<GraphVertexType *> openlist;
-    PriorityQueue<GraphVertexType *> candidate_vertices;
+    PriorityQueue<GraphType::vertex_iterator> openlist;
+    PriorityQueue<GraphType::vertex_iterator> candidate_vertices;
 
     // begin with start vertex
     openlist.put(start_vtx, 0);
     start_vtx->is_in_openlist_ = true;
-    start_vtx->g_cost_ = 0;
+    start_vtx->g_cost_.length = 0;
 
     int32_t candidate_num = 0;
 
     // start search iterations
     bool found_path = false;
-    GraphVertexType *current_vertex;
+    GraphType::vertex_iterator current_vertex;
     while (!openlist.empty() && found_path != true && openlist.size() < 1000000UL)
     {
         current_vertex = openlist.get();
@@ -122,8 +121,8 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
             continue;
 
         int32_t level_count = 0;
-        GraphVertexType *cvp = current_vertex;
-        while (cvp->search_parent_ != nullptr)
+        GraphType::vertex_iterator cvp = current_vertex;
+        while (cvp->search_parent_ != graph.vertex_end())
         {
             ++level_count;
             cvp = cvp->search_parent_;
@@ -160,20 +159,20 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
             if (successor->is_checked_ == false)
             {
                 // first set the parent of the adjacent vertex to be the current vertex
-                auto new_cost = current_vertex->g_cost_ + edge.cost_.length;
+                auto new_cost = current_vertex->g_cost_.length + edge.trans_.length;
 
                 // if the vertex is not in open list
                 // or if the vertex is in open list but has a higher cost
-                if (successor->is_in_openlist_ == false || new_cost < successor->g_cost_)
+                if (successor->is_in_openlist_ == false || new_cost < successor->g_cost_.length)
                 {
                     successor->search_parent_ = current_vertex;
 
                     // update costs
-                    successor->g_cost_ = new_cost;
-                    successor->h_cost_ = CalculateHeuristic(successor->state_, goal_vtx->state_);
-                    successor->f_cost_ = successor->g_cost_ + successor->h_cost_;
+                    successor->g_cost_.length = new_cost;
+                    successor->h_cost_.length = CalculateHeuristic(successor->state_, goal_vtx->state_);
+                    successor->f_cost_.length = successor->g_cost_.length + successor->h_cost_.length;
 
-                    openlist.put(successor, successor->f_cost_);
+                    openlist.put(successor, successor->f_cost_.length);
                     successor->is_in_openlist_ = true;
                 }
             }
@@ -184,10 +183,10 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
     LatticePath path;
     if (found_path)
     {
-        std::cout << "cost of path: " << goal_vtx->g_cost_ << std::endl;
-        auto path_vtx = ReconstructPath(start_vtx, goal_vtx);
+        std::cout << "cost of path: " << goal_vtx->g_cost_.length << std::endl;
+        auto path_vtx = ReconstructPath(&graph, start_vtx, goal_vtx);
         for (int i = 0; i < path_vtx.size() - 1; ++i)
-            path.push_back(path_vtx[i]->GetEdgeCost(path_vtx[i + 1]));
+            path.push_back(path_vtx[i]->FindEdge(path_vtx[i + 1]->state_)->trans_);
         std::cout << "number of segments: " << path.size() << std::endl;
     }
     else
@@ -205,32 +204,32 @@ LatticePath LatticePlanner::BFSSearch(LatticeNode start_state, LatticeNode goal_
     std::cout << "----------- search started ------------" << std::endl;
     timer_.tic();
 
-    using GraphVertexType = Vertex_t<LatticeNode, MotionPrimitive>;
+    using GraphType = Graph<LatticeNode, MotionPrimitive>;
 
     // std::vector<MotionPrimitive> mp_record;
 
     // create a new graph with only start and goal vertices
-    Graph_t<LatticeNode, MotionPrimitive> graph;
+    Graph<LatticeNode, MotionPrimitive> graph;
     graph.AddVertex(start_state);
     graph.AddVertex(goal_state);
 
-    GraphVertexType *start_vtx = graph.GetVertex(start_state);
-    GraphVertexType *goal_vtx = graph.GetVertex(goal_state);
+    GraphType::vertex_iterator start_vtx = graph.FindVertex(start_state);
+    GraphType::vertex_iterator goal_vtx = graph.FindVertex(goal_state);
 
     // open list - a list of vertices that need to be checked out
-    PriorityQueue<GraphVertexType *> openlist;
-    PriorityQueue<GraphVertexType *> candidate_vertices;
+    PriorityQueue<GraphType::vertex_iterator> openlist;
+    PriorityQueue<GraphType::vertex_iterator> candidate_vertices;
 
     // begin with start vertex
     openlist.put(start_vtx, 0);
     start_vtx->is_in_openlist_ = true;
-    start_vtx->g_cost_ = 0;
+    start_vtx->g_cost_.length = 0;
 
     int32_t candidate_num = 0;
 
     // start search iterations
     bool found_path = false;
-    GraphVertexType *current_vertex;
+    GraphType::vertex_iterator current_vertex;
     while (!openlist.empty() && found_path != true && openlist.size() < 1000000UL)
     {
         current_vertex = openlist.get();
@@ -238,8 +237,8 @@ LatticePath LatticePlanner::BFSSearch(LatticeNode start_state, LatticeNode goal_
             continue;
 
         int32_t level_count = 0;
-        GraphVertexType *cvp = current_vertex;
-        while (cvp->search_parent_ != nullptr)
+        GraphType::vertex_iterator cvp = current_vertex;
+        while (cvp->search_parent_ != graph.vertex_end())
         {
             ++level_count;
             cvp = cvp->search_parent_;
@@ -252,7 +251,7 @@ LatticePath LatticePlanner::BFSSearch(LatticeNode start_state, LatticeNode goal_
 
             if (candidate_num > min_candidate)
             {
-                goal_vtx = candidate_vertices.get(); 
+                goal_vtx = candidate_vertices.get();
 
                 found_path = true;
                 break;
@@ -275,20 +274,20 @@ LatticePath LatticePlanner::BFSSearch(LatticeNode start_state, LatticeNode goal_
             if (successor->is_checked_ == false)
             {
                 // first set the parent of the adjacent vertex to be the current vertex
-                auto new_cost = current_vertex->g_cost_ + edge.cost_.length;
+                auto new_cost = current_vertex->g_cost_.length + edge.trans_.length;
 
                 // if the vertex is not in open list
                 // or if the vertex is in open list but has a higher cost
-                if (successor->is_in_openlist_ == false || new_cost < successor->g_cost_)
+                if (successor->is_in_openlist_ == false || new_cost < successor->g_cost_.length)
                 {
                     successor->search_parent_ = current_vertex;
 
                     // update costs
-                    successor->g_cost_ = new_cost;
+                    successor->g_cost_.length = new_cost;
                     // successor->h_cost_ = CalculateHeuristic(successor->state_, goal_vtx->state_);
                     // successor->f_cost_ = successor->g_cost_ + successor->h_cost_;
 
-                    openlist.put(successor, successor->g_cost_);
+                    openlist.put(successor, successor->g_cost_.length);
                     successor->is_in_openlist_ = true;
                 }
             }
@@ -299,10 +298,10 @@ LatticePath LatticePlanner::BFSSearch(LatticeNode start_state, LatticeNode goal_
     LatticePath path;
     if (found_path)
     {
-        std::cout << "cost of path: " << goal_vtx->g_cost_ << std::endl;
-        auto path_vtx = ReconstructPath(start_vtx, goal_vtx);
+        std::cout << "cost of path: " << goal_vtx->g_cost_.length << std::endl;
+        auto path_vtx = ReconstructPath(&graph, start_vtx, goal_vtx);
         for (int i = 0; i < path_vtx.size() - 1; ++i)
-            path.push_back(path_vtx[i]->GetEdgeCost(path_vtx[i + 1]));
+            path.push_back(path_vtx[i]->FindEdge(path_vtx[i + 1]->state_)->trans_);
         std::cout << "number of segments: " << path.size() << std::endl;
     }
     else
@@ -334,11 +333,12 @@ std::vector<std::tuple<LatticeNode, MotionPrimitive>> LatticePlanner::GenerateLa
     return neighbours;
 }
 
-std::vector<Vertex_t<LatticeNode, MotionPrimitive> *> LatticePlanner::ReconstructPath(Vertex_t<LatticeNode, MotionPrimitive> *start_vtx, Vertex_t<LatticeNode, MotionPrimitive> *goal_vtx)
+std::vector<Graph<LatticeNode, MotionPrimitive>::vertex_iterator> LatticePlanner::ReconstructPath(Graph<LatticeNode, MotionPrimitive> *graph, Graph<LatticeNode, MotionPrimitive>::vertex_iterator start_vtx, Graph<LatticeNode, MotionPrimitive>::vertex_iterator goal_vtx)
 {
-    std::vector<Vertex_t<LatticeNode, MotionPrimitive> *> path;
+    using GraphType = Graph<LatticeNode, MotionPrimitive>;
+    std::vector<GraphType::vertex_iterator> path;
 
-    Vertex_t<LatticeNode, MotionPrimitive> *waypoint = goal_vtx;
+    GraphType::vertex_iterator waypoint = goal_vtx;
     while (waypoint != start_vtx)
     {
         path.push_back(waypoint);

@@ -19,7 +19,7 @@ namespace librav
 {
 namespace Planner
 {
-	std::shared_ptr<Graph_t<SquareCell *>> BuildGraphFromSquareGrid(std::shared_ptr<SquareGrid> grid, bool allow_diag_move = true);
+	std::shared_ptr<Graph<SquareCell *>> BuildGraphFromSquareGrid(std::shared_ptr<SquareGrid> grid, bool allow_diag_move = true);
 };
 }
 

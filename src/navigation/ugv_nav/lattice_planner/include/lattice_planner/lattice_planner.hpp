@@ -63,7 +63,7 @@ class LatticePlanner
 	double EvaluateCandidate(LatticeNode candidate, LatticeNode desired);
 
 	std::vector<std::tuple<LatticeNode, MotionPrimitive>> GenerateLattices(LatticeNode node);
-	static std::vector<Vertex_t<LatticeNode, MotionPrimitive> *> ReconstructPath(Vertex_t<LatticeNode, MotionPrimitive> *start_vtx, Vertex_t<LatticeNode, MotionPrimitive> *goal_vtx);
+	static std::vector<Graph<LatticeNode, MotionPrimitive>::vertex_iterator> ReconstructPath(Graph<LatticeNode, MotionPrimitive> *graph, Graph<LatticeNode, MotionPrimitive>::vertex_iterator start_vtx, Graph<LatticeNode, MotionPrimitive>::vertex_iterator goal_vtx);
 };
 } // namespace librav
 

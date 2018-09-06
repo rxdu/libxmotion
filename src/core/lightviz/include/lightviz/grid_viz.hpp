@@ -49,7 +49,7 @@ void ShowSquareGridPath(GridType *grid, const std::vector<GridCellType *> &path,
 }
 
 template <typename GridType, typename GridCellType>
-void ShowSquareGridGraph(GridType *grid, Graph_t<GridCellType *> *graph, int32_t pixel_per_unit = 100, std::string window_name = "Square Grid", bool save_img = false)
+void ShowSquareGridGraph(GridType *grid, Graph<GridCellType *> *graph, int32_t pixel_per_unit = 100, std::string window_name = "Square Grid", bool save_img = false)
 {
     SquareGridDraw gdraw(pixel_per_unit);
 
