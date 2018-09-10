@@ -28,6 +28,9 @@ namespace librav
  * Check std::shared_ptr
  * [3] https://stackoverflow.com/questions/10539305/generic-way-to-test-if-a-type-is-a-smart-pointer
  * 
+ * SFINAE:
+ * [4] https://cpppatterns.com/patterns/class-template-sfinae.html
+ * 
  */
 
 #define GENERATE_HAS_MEMBER(member)                                                   \
@@ -69,6 +72,7 @@ template <typename T>
 struct is_shared_ptr : std::false_type
 {
 };
+
 template <typename T>
 struct is_shared_ptr<std::shared_ptr<T>> : std::true_type
 {
@@ -77,6 +81,7 @@ struct is_shared_ptr<std::shared_ptr<T>> : std::true_type
 template <typename State, typename Enable = void>
 struct DefaultIndexer;
 
+// when State has a member "id_"
 template <typename State>
 struct DefaultIndexer<State, typename std::enable_if<has_member_id_<typename std::remove_pointer<typename std::remove_const<typename std::remove_reference<State>::type>::type>::type>::value>::type>
 {
@@ -87,6 +92,7 @@ struct DefaultIndexer<State, typename std::enable_if<has_member_id_<typename std
     int64_t operator()(State state) const { return static_cast<int64_t>(state->id_); }
 };
 
+// when State has a member "id"
 template <typename State>
 struct DefaultIndexer<State, typename std::enable_if<has_member_id<typename std::remove_pointer<typename std::remove_const<typename std::remove_reference<State>::type>::type>::type>::value>::type>
 {
