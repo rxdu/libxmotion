@@ -8,6 +8,9 @@ target_link_libraries(show_vehicle_position cthreat roadmap trafficmap lightviz 
 add_executable(pub_topogeo_graph gen_topogeo_graph.cpp)
 target_link_libraries(pub_topogeo_graph cthreat roadmap trafficmap lightviz utilities)
 
+add_executable(pub_topogeo_roundabout gen_topogeo_roundabout.cpp)
+target_link_libraries(pub_topogeo_roundabout cthreat roadmap trafficmap lightviz utilities)
+
 add_executable(pub_threat_ranking_case1 threat_ranking_case1.cpp)
 target_link_libraries(pub_threat_ranking_case1 cthreat roadmap trafficmap roadmap tfield trafficviz lightviz utilities)
 
