@@ -19,8 +19,8 @@ namespace librav
 {
 enum class LaneBlockType
 {
-    Isolated = 0,
-    Overlapped
+    TopoConnected = 0,
+    GeoConnected
 };
 
 struct LaneBlock
@@ -31,7 +31,7 @@ struct LaneBlock
 
     int32_t id;
     std::string name;
-    LaneBlockType type = LaneBlockType::Isolated;
+    LaneBlockType type = LaneBlockType::TopoConnected;
     Polyline center_line;
 
     int64_t GetUniqueID() const

@@ -54,9 +54,9 @@ void TopoGeoGraph::ConstructGraph()
                 // otherwise check collision
                 else if (road_map_->CheckLaneletCollision(ll1.second, ll2.second))
                 {
-                    lane_blocks_[ll1.first]->type = LaneBlockType::Overlapped;
-                    lane_blocks_[ll2.first]->type = LaneBlockType::Overlapped;
-                    graph_->AddUndirectedEdge(lane_blocks_[ll1.first], lane_blocks_[ll2.first], 1.0);
+                    lane_blocks_[ll1.first]->type = LaneBlockType::GeoConnected;
+                    lane_blocks_[ll2.first]->type = LaneBlockType::GeoConnected;
+                    graph_->AddUndirectedEdge(lane_blocks_[ll1.first], lane_blocks_[ll2.first], 0.0);
                 }
             }
         }
@@ -76,52 +76,70 @@ void TopoGeoGraph::ConstructGraph()
 std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
 {
     auto vtx = graph_->GetVertex(id);
-    std::vector<std::string> names;
 
-    std::set<Graph_t<LaneBlock *>::VertexType *> vertices;
+    // std::cout << "-----> back tracking lanelet " << vtx->state_->name << std::endl;
 
-    std::vector<Graph_t<LaneBlock *>::VertexType *> checked_vtx = vtx->vertices_from_;
-    // std::cout << "first level backtrack: " << checked_vtx.size() << std::endl;
-    while (!checked_vtx.empty())
+    // reset labels
+    for (auto it = graph_->vertex_begin(); it != graph_->vertex_end(); ++it)
+        it->state_->type = LaneBlockType::TopoConnected;
+
+    std::vector<Graph_t<LaneBlock *>::VertexType *> vertices;
+    std::vector<Graph_t<LaneBlock *>::VertexType *> vtx_candidates;
+    for (auto vf : vtx->vertices_from_)
     {
-        // vertices.insert(vertices.end(), checked_vtx.begin(), checked_vtx.end());
-        for (auto cv : checked_vtx)
-            vertices.insert(cv);
+        // std::cout << "added name: " << vf->state_->name << std::endl;
+        vertices.push_back(vf);
 
-        std::vector<Graph_t<LaneBlock *>::VertexType *> inserted = checked_vtx;
-        checked_vtx.clear();
-        for (auto &v : inserted)
+        if (vf->GetEdgeCost(vtx->vertex_id_) == 0.0)
+            vf->state_->type = LaneBlockType::GeoConnected;
+        else
+            vtx_candidates.push_back(vf);
+    }
+
+    // std::cout << ">>" << std::endl;
+
+    // std::cout << "first level backtrack: " << vtx_candidates.size() << std::endl;
+    while (!vtx_candidates.empty())
+    {
+        // for (auto cv : vtx_candidates)
+        //     vertices.push_back(cv);
+
+        std::vector<Graph_t<LaneBlock *>::VertexType *> candidates = vtx_candidates;
+        vtx_candidates.clear();
+        for (auto &v : candidates)
         {
             // std::cout << "id: " << v->vertex_id_ << " , num: " << v->vertices_from_.size() << std::endl;
-            for (auto vf : v->vertices_from_)
+            if (v->state_->type == LaneBlockType::TopoConnected)
             {
-                if (v->state_->type == LaneBlockType::Isolated)
+                for (auto vf : v->vertices_from_)
                 {
                     if (vf->vertex_id_ != id &&
                         std::find(vertices.begin(), vertices.end(), vf) == vertices.end())
-                        checked_vtx.push_back(vf);
-                }
-                else
-                {
-                    if (vf->state_->type != LaneBlockType::Overlapped &&
-                        vf->vertex_id_ != id &&
-                        std::find(vertices.begin(), vertices.end(), vf) == vertices.end())
-                        checked_vtx.push_back(vf);
+                    {
+                        // std::cout << "added name: " << vf->state_->name << std::endl;
+                        if (vf->GetEdgeCost(v->vertex_id_) != 0.0)
+                        {
+                            vertices.push_back(vf);
+                            vtx_candidates.push_back(vf);
+                        }
+                    }
                 }
             }
         }
-        // std::cout << "checked_vtx size: " << checked_vtx.size() << std::endl;
+        // std::cout << "vtx_candidates size: " << vtx_candidates.size() << std::endl;
     }
 
-    // std::cout << "back tracked vertex number: " << vertices.size() << std::endl;
+    std::vector<std::string> names;
     // add checked vertex first
     names.push_back(vtx->state_->name);
     for (auto v : vertices)
     {
         names.push_back(v->state_->name);
-        // std::cout << "name: " << v->state_.name << " , id: " << v->state_.id << std::endl;
+        // std::cout << "name: " << v->state_->name << " , id: " << v->state_->id << std::endl;
     }
     // std::cout << "total number: " << names.size() << std::endl;
+
+    // std::cout << "-------------------------" << std::endl;
 
     return names;
 }
@@ -129,7 +147,7 @@ std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
 std::vector<std::string> TopoGeoGraph::FindInteractingLanes(std::vector<std::string> names)
 {
     std::vector<int32_t> ids;
-    for(auto& name : names)
+    for (auto &name : names)
         ids.push_back(road_map_->GetLaneletIDFromName(name));
     return FindInteractingLanes(ids);
 }

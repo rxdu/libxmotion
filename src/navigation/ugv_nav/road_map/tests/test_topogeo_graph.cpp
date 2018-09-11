@@ -19,7 +19,8 @@ int main()
     std::vector<Polygon> left_roi;
     for (auto ll : left_lanelets)
         left_roi.push_back(map->GetLanePolygon(ll));
-    LightViz::ShowFilledPolygon(left_roi, map->GetAllLanePolygons(), 10, "left turn", true);
+    // LightViz::ShowFilledPolygon(left_roi, map->GetAllLanePolygons(), 10, "left turn", true);
+    LightViz::ShowFilledPolygon(left_roi, map->GetAllLanePolygons(), 10);
 
     std::cout << "----------------" << std::endl;
 
@@ -28,7 +29,8 @@ int main()
     std::vector<Polygon> right_roi;
     for (auto ll : right_lanelets)
         right_roi.push_back(map->GetLanePolygon(ll));
-    LightViz::ShowFilledPolygon(right_roi, map->GetAllLanePolygons(), 10, "right turn", true);
+    // LightViz::ShowFilledPolygon(right_roi, map->GetAllLanePolygons(), 10, "right turn", true);
+    LightViz::ShowFilledPolygon(right_roi, map->GetAllLanePolygons(), 10);
 
     return 0;
 }
