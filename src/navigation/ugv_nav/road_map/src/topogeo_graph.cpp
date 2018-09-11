@@ -49,10 +49,10 @@ void TopoGeoGraph::ConstructGraph()
                 // check if direct connection
                 if (route12.size() == 2)
                     graph_->AddEdge(lane_blocks_[ll1.first], lane_blocks_[ll2.first], 1.0);
-                if (route21.size() == 2)
+                else if (route21.size() == 2)
                     graph_->AddEdge(lane_blocks_[ll2.first], lane_blocks_[ll1.first], 1.0);
-
-                if (road_map_->CheckLaneletCollision(ll1.second, ll2.second))
+                // otherwise check collision
+                else if (road_map_->CheckLaneletCollision(ll1.second, ll2.second))
                 {
                     lane_blocks_[ll1.first]->type = LaneBlockType::Overlapped;
                     lane_blocks_[ll2.first]->type = LaneBlockType::Overlapped;

@@ -11,7 +11,7 @@ int main()
 {
     std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/natick_roundabout_full.osm");
 
-    auto left_path = map->FindShortestRouteName("s5", "s6");
+    auto left_path = map->FindShortestRouteName("s5", "s1");
     std::vector<std::string> left_lanelets = map->FindInteractingLanes(left_path);
     std::vector<Polygon> left_roi;
     for (auto ll : left_lanelets)
