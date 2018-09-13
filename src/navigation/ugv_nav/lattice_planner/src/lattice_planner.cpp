@@ -32,56 +32,56 @@ void LatticePlanner::SetEgoPlanningRoute(std::vector<std::string> ll)
         drivable_polygons_.push_back(road_map_->GetLanePolygon(name));
 }
 
-LatticePath LatticePlanner::Search(LatticeNode start_state, int32_t horizon)
-{
-    using GraphType = Graph<LatticeNode, MotionPrimitive>;
+// LatticePath LatticePlanner::Search(LatticeNode start_state, int32_t horizon)
+// {
+//     using GraphType = Graph<LatticeNode, MotionPrimitive>;
 
-    auto graph = std::make_shared<GraphType>();
-    std::vector<MotionPrimitive> mps;
+//     auto graph = std::make_shared<GraphType>();
+//     std::vector<MotionPrimitive> mps;
 
-    LatticeNode node(start_state.x, start_state.y, start_state.theta);
-    graph->AddVertex(node);
-    auto vtx = graph->FindVertex(node.id);
+//     LatticeNode node(start_state.x, start_state.y, start_state.theta);
+//     graph->AddVertex(node);
+//     auto vtx = graph->FindVertex(node.id);
 
-    std::vector<GraphType::vertex_iterator> last_level;
-    last_level.push_back(vtx);
+//     std::vector<GraphType::vertex_iterator> last_level;
+//     last_level.push_back(vtx);
 
-    for (size_t i = 0; i < horizon; ++i)
-    {
-        std::vector<GraphType::vertex_iterator> this_level;
-        for (auto vtx : last_level)
-        {
-            auto neighbours = GenerateLattices(vtx->state_);
-            std::cout << "neighbour size: " << neighbours.size() << std::endl;
-            for (auto &nb : neighbours)
-            {
-                graph->AddEdge(vtx->state_, std::get<0>(nb), std::get<1>(nb));
+//     for (size_t i = 0; i < horizon; ++i)
+//     {
+//         std::vector<GraphType::vertex_iterator> this_level;
+//         for (auto vtx : last_level)
+//         {
+//             auto neighbours = GenerateLattices(vtx->state_);
+//             std::cout << "neighbour size: " << neighbours.size() << std::endl;
+//             for (auto &nb : neighbours)
+//             {
+//                 graph->AddEdge(vtx->state_, std::get<0>(nb), std::get<1>(nb));
 
-                this_level.push_back(graph->FindVertex(std::get<0>(nb).id));
-                mps.push_back(std::get<1>(nb));
-            }
-        }
-        last_level = this_level;
-        std::cout << "time horizon " << i << " added edge number: " << this_level.size() << std::endl;
-    }
+//                 this_level.push_back(graph->FindVertex(std::get<0>(nb).id));
+//                 mps.push_back(std::get<1>(nb));
+//             }
+//         }
+//         last_level = this_level;
+//         std::cout << "time horizon " << i << " added edge number: " << this_level.size() << std::endl;
+//     }
 
-    if (!mps.empty())
-        lattice_manager_->SavePrimitivesToFile(mps, "graph");
+//     if (!mps.empty())
+//         lattice_manager_->SavePrimitivesToFile(mps, "graph");
 
-    // // reconstruct path from search
-    LatticePath path;
-    // if (found_path)
-    // {
-    //     std::cout << "path found with cost " << goal_vtx->g_cost_ << std::endl;
-    //     auto path_vtx = ReconstructPath(start_vtx, goal_vtx);
-    //     for (int i = 0; i < path_vtx.size() - 1; ++i)
-    //         path.push_back(path_vtx[i]->GetEdgeCost(path_vtx[i + 1]));
-    // }
-    // else
-    //     std::cout << "failed to find a path" << std::endl;
+//     // // reconstruct path from search
+//     LatticePath path;
+//     // if (found_path)
+//     // {
+//     //     std::cout << "path found with cost " << goal_vtx->g_cost_ << std::endl;
+//     //     auto path_vtx = ReconstructPath(start_vtx, goal_vtx);
+//     //     for (int i = 0; i < path_vtx.size() - 1; ++i)
+//     //         path.push_back(path_vtx[i]->GetEdgeCost(path_vtx[i + 1]));
+//     // }
+//     // else
+//     //     std::cout << "failed to find a path" << std::endl;
 
-    return path;
-};
+//     return path;
+// };
 
 LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goal_state, int32_t horizon, int32_t min_candidate)
 {
