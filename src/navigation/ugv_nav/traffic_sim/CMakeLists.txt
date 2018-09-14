@@ -7,7 +7,7 @@ set(TRAFFIC_SIM_LIB_SRC
     src/traffic_sim.cpp
 )
 add_library(trafficsim STATIC ${TRAFFIC_SIM_LIB_SRC})
-target_link_libraries(trafficsim common utilities)
+target_link_libraries(trafficsim roadmap utilities)
 target_include_directories(trafficsim PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
@@ -32,7 +32,3 @@ endif()
 
 # # This makes the project importable from the build directory
 # export(TARGETS lib FILE MyLibraryConfig.cmake)
-
-## tests
-#add_executable(graph_example graph_example.cpp)
-#target_link_libraries(graph_example vis legacy)
