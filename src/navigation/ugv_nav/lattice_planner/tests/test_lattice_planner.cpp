@@ -79,20 +79,41 @@ int main()
     planner.SetEgoPlanningRoute(ego_route);
 
     Polygon fp;
-    fp.AddPoint(1.2 , 0.9);
-    fp.AddPoint(1.2 , -0.9);
-    fp.AddPoint(-1.2 , -0.9);
-    fp.AddPoint(-1.2 , 0.9);
+    // fp.AddPoint(0.6, 1.0);
+    // fp.AddPoint(-0.6, 1.0);
+    // fp.AddPoint(-0.6, -1.0);
+    // fp.AddPoint(0.6, -1.0);
+    // this set works
+    // fp.AddPoint(0.5, 1.0);
+    // fp.AddPoint(-0.5, 1.0);
+    // fp.AddPoint(-0.5, -1.0);
+    // fp.AddPoint(0.5, -1.0);
+    // this set works
+    // fp.AddPoint(0.55, 1.2);
+    // fp.AddPoint(-0.55, 1.2);
+    // fp.AddPoint(-0.55, -1.2);
+    // fp.AddPoint(0.55, -1.2);
+    // fp.AddPoint(1.2 * 2, 0.9);
+    // fp.AddPoint(1.2 * 2, -0.9);
+    // fp.AddPoint(-1.2 * 2, -0.9);
+    // fp.AddPoint(-1.2 * 2, 0.9);
+    fp.AddPoint(0.55, 1.2);
+    fp.AddPoint(-0.55, 1.2);
+    fp.AddPoint(-0.55, -1.2);
+    fp.AddPoint(0.55, -1.2);
     planner.SetVehicleFootprint(fp);
 
     // LatticeNode start(0, 0, 0);
     // LatticeNode goal(20, 20, -M_PI / 6.0);
     // LatticeNode start(57, 36, 80.0 / 180.0 * M_PI);
     // LatticeNode goal(20, 66.5, M_PI);
-    LatticeNode start(57, 36, 85.0 / 180.0 * M_PI);
+    // LatticeNode start(57, 36, 85.0 / 180.0 * M_PI);
     // LatticeNode goal(23, 65.8, 180.0 / 180.0 * M_PI);
-    LatticeNode goal(22, 66.8, 180.0 / 180.0 * M_PI);
+    // LatticeNode goal(22, 66.8, 180.0 / 180.0 * M_PI);
     // LatticeNode goal(4, 68, 180.0 / 170.0 * M_PI);
+
+    LatticeNode start(57, 36, 85.0 / 180.0 * M_PI);
+    LatticeNode goal(4, 68, 170.0 / 180.0 * M_PI);
 
     // auto path = planner.Search(start, 5);
     auto path = planner.AStarSearch(start, goal, 8, 10);

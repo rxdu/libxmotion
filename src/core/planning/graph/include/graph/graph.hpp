@@ -174,9 +174,6 @@ public:
     /// Returns true if two vertices have the same id. Otherwise, return false.
     bool operator==(const Vertex &other);
 
-    /// Returns depth of a vertex after a search
-    int64_t GetDepth();
-
     /// Returns the id of current vertex.
     int64_t GetVertexID() const { return vertex_id_; }
 

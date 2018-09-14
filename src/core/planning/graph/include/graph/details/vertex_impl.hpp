@@ -21,22 +21,6 @@ bool Graph<State, Transition, StateIndexer>::Vertex::operator==(const Graph<Stat
 }
 
 template <typename State, typename Transition, typename StateIndexer>
-int64_t Graph<State, Transition, StateIndexer>::Vertex::GetDepth()
-{
-    // if (this->search_parent_ == Graph<State, Transition, StateIndexer>::vertex_end())
-	// 	return 0;
-
-	size_t depth_count = 1;
-	// Graph<State, Transition, StateIndexer>::vertex_iterator cvp = cvp->search_parent_;
-	// while (cvp->search_parent_ != Graph<State, Transition, StateIndexer>::vertex_end())
-	// {
-	// 	++depth_count;
-	// 	cvp = cvp->search_parent_;
-	// }
-	return depth_count;
-}
-
-template <typename State, typename Transition, typename StateIndexer>
 typename Graph<State, Transition, StateIndexer>::Vertex::edge_iterator Graph<State, Transition, StateIndexer>::Vertex::FindEdge(int64_t dst_id)
 {
     typename Graph<State, Transition, StateIndexer>::Vertex::edge_iterator it;
@@ -55,7 +39,7 @@ typename Graph<State, Transition, StateIndexer>::Vertex::edge_iterator Graph<Sta
     typename Graph<State, Transition, StateIndexer>::Vertex::edge_iterator it;
     for (it = edge_begin(); it != edge_end(); ++it)
     {
-        if (this->GetStateIndex(it->dst_->state_) == this->GetStateIndex(dst_state))
+        if(this->GetStateIndex(it->dst_->state_) == this->GetStateIndex(dst_state))
             return it;
     }
     return it;

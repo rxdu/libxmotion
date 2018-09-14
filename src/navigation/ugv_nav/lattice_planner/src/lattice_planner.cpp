@@ -57,7 +57,7 @@ void LatticePlanner::SetEgoPlanningRoute(std::vector<std::string> ll)
 //             {
 //                 graph->AddEdge(vtx->state_, std::get<0>(nb), std::get<1>(nb));
 
-//                 this_level.push_back(graph->FindVertex(std::get<0>(nb).id));
+//                 this_level.push_back(graph->GetVertex(std::get<0>(nb).id));
 //                 mps.push_back(std::get<1>(nb));
 //             }
 //         }
@@ -97,8 +97,8 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
     graph.AddVertex(start_state);
     graph.AddVertex(goal_state);
 
-    GraphType::vertex_iterator start_vtx = graph.FindVertex(start_state);
-    GraphType::vertex_iterator goal_vtx = graph.FindVertex(goal_state);
+    auto start_vtx = graph.FindVertex(start_state);
+    auto goal_vtx = graph.FindVertex(goal_state);
 
     // open list - a list of vertices that need to be checked out
     PriorityQueue<GraphType::vertex_iterator> openlist;
@@ -128,7 +128,7 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
             cvp = cvp->search_parent_;
         }
 
-        if (current_vertex->GetDepth() == horizon)
+        if (GetDepth(&graph, current_vertex) == horizon)
         {
             ++candidate_num;
             candidate_vertices.put(current_vertex, EvaluateCandidate(current_vertex->state_, goal_vtx->state_));
@@ -142,7 +142,6 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
             }
         }
 
-        // std::cout << "checking ... " << std::endl;
         current_vertex->is_in_openlist_ = false;
         current_vertex->is_checked_ = true;
 
@@ -213,8 +212,8 @@ LatticePath LatticePlanner::BFSSearch(LatticeNode start_state, LatticeNode goal_
     graph.AddVertex(start_state);
     graph.AddVertex(goal_state);
 
-    GraphType::vertex_iterator start_vtx = graph.FindVertex(start_state);
-    GraphType::vertex_iterator goal_vtx = graph.FindVertex(goal_state);
+    auto start_vtx = graph.FindVertex(start_state);
+    auto goal_vtx = graph.FindVertex(goal_state);
 
     // open list - a list of vertices that need to be checked out
     PriorityQueue<GraphType::vertex_iterator> openlist;
@@ -244,14 +243,14 @@ LatticePath LatticePlanner::BFSSearch(LatticeNode start_state, LatticeNode goal_
             cvp = cvp->search_parent_;
         }
 
-        if (current_vertex->GetDepth() == horizon)
+        if (GetDepth(&graph, current_vertex) == horizon)
         {
             ++candidate_num;
             candidate_vertices.put(current_vertex, EvaluateCandidate(current_vertex->state_, goal_vtx->state_));
 
             if (candidate_num > min_candidate)
             {
-                goal_vtx = candidate_vertices.get();
+                goal_vtx = candidate_vertices.get(); //current_vertex;
 
                 found_path = true;
                 break;
@@ -284,8 +283,9 @@ LatticePath LatticePlanner::BFSSearch(LatticeNode start_state, LatticeNode goal_
 
                     // update costs
                     successor->g_cost_.length = new_cost;
-                    // successor->h_cost_ = CalculateHeuristic(successor->state_, goal_vtx->state_);
-                    // successor->f_cost_ = successor->g_cost_ + successor->h_cost_;
+                    // successor->h_cost_.length = CalculateHeuristic(successor->state_, goal_vtx->state_);
+                    // successor->f_cost_.length = successor->g_cost_.length + successor->h_cost_.length;
+                    // openlist.put(successor, successor->f_cost_.length);
 
                     openlist.put(successor, successor->g_cost_.length);
                     successor->is_in_openlist_ = true;
@@ -333,12 +333,12 @@ std::vector<std::tuple<LatticeNode, MotionPrimitive>> LatticePlanner::GenerateLa
     return neighbours;
 }
 
-std::vector<Graph<LatticeNode, MotionPrimitive>::vertex_iterator> LatticePlanner::ReconstructPath(Graph<LatticeNode, MotionPrimitive> *graph, Graph<LatticeNode, MotionPrimitive>::vertex_iterator start_vtx, Graph<LatticeNode, MotionPrimitive>::vertex_iterator goal_vtx)
+std::vector<Graph<LatticeNode, MotionPrimitive>::vertex_iterator> LatticePlanner::ReconstructPath(Graph<LatticeNode, MotionPrimitive> *graph,
+                                                                                                  Graph<LatticeNode, MotionPrimitive>::vertex_iterator start_vtx, Graph<LatticeNode, MotionPrimitive>::vertex_iterator goal_vtx)
 {
-    using GraphType = Graph<LatticeNode, MotionPrimitive>;
-    std::vector<GraphType::vertex_iterator> path;
-
-    GraphType::vertex_iterator waypoint = goal_vtx;
+    using VertexIterator = Graph<LatticeNode, MotionPrimitive>::vertex_iterator;
+    std::vector<VertexIterator> path;
+    VertexIterator waypoint = goal_vtx;
     while (waypoint != start_vtx)
     {
         path.push_back(waypoint);
@@ -348,8 +348,8 @@ std::vector<Graph<LatticeNode, MotionPrimitive>::vertex_iterator> LatticePlanner
     path.push_back(waypoint);
     std::reverse(path.begin(), path.end());
 
-    auto traj_s = path.begin();
-    auto traj_e = path.end() - 1;
+    // auto traj_s = path.begin();
+    // auto traj_e = path.end() - 1;
     // std::cout << "starting vertex id: " << (*traj_s)->vertex_id_ << std::endl;
     // std::cout << "finishing vertex id: " << (*traj_e)->vertex_id_ << std::endl;
     // std::cout << "number of path segments: " << path.size() << std::endl;
@@ -420,4 +420,19 @@ std::vector<Polyline> LatticePlanner::ConvertPathToPolyline(const LatticePath &p
     for (auto &mp : path)
         polylines.push_back(mp.ToPolyline());
     return polylines;
+}
+
+int64_t LatticePlanner::GetDepth(Graph<LatticeNode, MotionPrimitive> *graph, Graph<LatticeNode, MotionPrimitive>::vertex_iterator vtx)
+{
+    if (vtx->search_parent_ == graph->vertex_end())
+        return 0;
+
+    int64_t depth_count = 0;
+    Graph<LatticeNode, MotionPrimitive>::vertex_iterator cvp = vtx->search_parent_;
+    while (cvp != graph->vertex_end())
+    {
+        ++depth_count;
+        cvp = cvp->search_parent_;
+    }
+    return depth_count;
 }

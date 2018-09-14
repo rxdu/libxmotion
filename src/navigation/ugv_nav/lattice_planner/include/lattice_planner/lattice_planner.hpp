@@ -58,6 +58,7 @@ class LatticePlanner
 	bool VehicleInsideDrivableArea(const Polygon &footprint);
 	bool IsCollisionFree(const MotionPrimitive &lattice);
 
+	int64_t GetDepth(Graph<LatticeNode, MotionPrimitive> *graph, Graph<LatticeNode, MotionPrimitive>::vertex_iterator vtx);
 	double CalculateDistance(LatticeNode node0, LatticeNode node1);
 	double CalculateHeuristic(LatticeNode node0, LatticeNode node1);
 	double EvaluateCandidate(LatticeNode candidate, LatticeNode desired);
