@@ -91,7 +91,7 @@ std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
         // std::cout << "added name: " << vf->state_->name << std::endl;
         vertices.push_back(vf);
 
-        if (vf->FindEdge(vtx->vertex_id_)->trans_ == 0.0)
+        if (vf->FindEdge(vtx->vertex_id_)->cost_ == 0.0)
             vf->state_->type = LaneBlockType::GeoConnected;
         else
             vtx_candidates.push_back(vf);
@@ -118,7 +118,7 @@ std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
                         std::find(vertices.begin(), vertices.end(), vf) == vertices.end())
                     {
                         // std::cout << "added name: " << vf->state_->name << std::endl;
-                        if (vf->FindEdge(v->vertex_id_)->trans_ != 0.0)
+                        if (vf->FindEdge(v->vertex_id_)->cost_ != 0.0)
                         {
                             vertices.push_back(vf);
                             vtx_candidates.push_back(vf);

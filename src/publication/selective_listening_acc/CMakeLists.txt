@@ -2,6 +2,9 @@
 #find_package(LIBRARY_NAME REQUIRED)
 
 # Add executables
+add_executable(gen_true_threat gen_true_threat.cpp)
+target_link_libraries(gen_true_threat tfield trafficviz lightviz utilities)
+
 add_executable(show_vehicle_position show_vehicle_position.cpp)
 target_link_libraries(show_vehicle_position cthreat roadmap trafficmap lightviz utilities)
 

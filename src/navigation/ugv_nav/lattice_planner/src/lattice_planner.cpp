@@ -158,7 +158,7 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
             if (successor->is_checked_ == false)
             {
                 // first set the parent of the adjacent vertex to be the current vertex
-                auto new_cost = current_vertex->g_cost_.length + edge.trans_.length;
+                auto new_cost = current_vertex->g_cost_.length + edge.cost_.length;
 
                 // if the vertex is not in open list
                 // or if the vertex is in open list but has a higher cost
@@ -185,7 +185,7 @@ LatticePath LatticePlanner::AStarSearch(LatticeNode start_state, LatticeNode goa
         std::cout << "cost of path: " << goal_vtx->g_cost_.length << std::endl;
         auto path_vtx = ReconstructPath(&graph, start_vtx, goal_vtx);
         for (int i = 0; i < path_vtx.size() - 1; ++i)
-            path.push_back(path_vtx[i]->FindEdge(path_vtx[i + 1]->state_)->trans_);
+            path.push_back(path_vtx[i]->FindEdge(path_vtx[i + 1]->state_)->cost_);
         std::cout << "number of segments: " << path.size() << std::endl;
     }
     else
@@ -273,7 +273,7 @@ LatticePath LatticePlanner::BFSSearch(LatticeNode start_state, LatticeNode goal_
             if (successor->is_checked_ == false)
             {
                 // first set the parent of the adjacent vertex to be the current vertex
-                auto new_cost = current_vertex->g_cost_.length + edge.trans_.length;
+                auto new_cost = current_vertex->g_cost_.length + edge.cost_.length;
 
                 // if the vertex is not in open list
                 // or if the vertex is in open list but has a higher cost
@@ -301,7 +301,7 @@ LatticePath LatticePlanner::BFSSearch(LatticeNode start_state, LatticeNode goal_
         std::cout << "cost of path: " << goal_vtx->g_cost_.length << std::endl;
         auto path_vtx = ReconstructPath(&graph, start_vtx, goal_vtx);
         for (int i = 0; i < path_vtx.size() - 1; ++i)
-            path.push_back(path_vtx[i]->FindEdge(path_vtx[i + 1]->state_)->trans_);
+            path.push_back(path_vtx[i]->FindEdge(path_vtx[i + 1]->state_)->cost_);
         std::cout << "number of segments: " << path.size() << std::endl;
     }
     else
