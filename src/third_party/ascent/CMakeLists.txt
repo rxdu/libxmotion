@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 2.8.7)
-project(ascent)
+cmake_minimum_required(VERSION 3.0.0)
+project(ascent_project)
 
 if(MSVC)
 	add_definitions(/bigobj) # For ChaiScript
@@ -15,14 +15,5 @@ endif()
 mark_as_advanced (CMAKE_CONFIGURATION_TYPES)
 mark_as_advanced (CMAKE_INSTALL_PREFIX)
 
-# Include path
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
-# Add libraries
-add_library(ascent INTERFACE)
-target_include_directories(ascent INTERFACE
-	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-	$<INSTALL_INTERFACE:include>)
-
-# Examples
+add_subdirectory(ascent)
 # add_subdirectory(examples)

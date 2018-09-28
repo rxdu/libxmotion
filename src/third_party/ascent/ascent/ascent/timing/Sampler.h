@@ -55,7 +55,7 @@ namespace asc
          if (event_time < t + dt - eps && event_time >= t + eps)
             dt = event_time - t;
 
-         if (fabs(event_time - t) < eps)
+         if (std::abs(event_time - t) < eps)
             return true;
 
          return false;
@@ -77,7 +77,7 @@ namespace asc
       }
 
    private:
-      static constexpr T eps = static_cast<T>(1.0e-10);
+      static constexpr T eps = static_cast<T>(1.0e-8);
       T& t;
       T& dt;
       T dt_base;

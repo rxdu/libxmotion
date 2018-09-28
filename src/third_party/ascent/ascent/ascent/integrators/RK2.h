@@ -16,12 +16,12 @@
 
 #include "ascent/Utility.h"
 
-// Fourth order, four pass Runge Kutta.
+// Second order, two pass Runge Kutta.
 
 namespace asc
 {
    template <typename state_t>
-   struct RK4T
+   struct RK2T
    {
       using value_t = typename state_t::value_type;
 
@@ -30,43 +30,27 @@ namespace asc
       {
          const value_t t0 = t;
          const value_t dt_2 = 0.5_v*dt;
-         const value_t dt_6 = cx(1.0 / 6.0)*dt;
 
          const size_t n = x.size();
          if (xd.size() < n)
-         {
             xd.resize(n);
-            xd_temp.resize(n);
-         }
 
          x0 = x;
-         system(x, xd, t);
+         system(x0, xd, t);
          size_t i{};
          for (; i < n; ++i)
             x[i] = dt_2 * xd[i] + x0[i];
          t += dt_2;
 
-         system(x, xd_temp, t);
+         system(x, xd, t);
          for (i = 0; i < n; ++i)
-         {
-            xd[i] += 2 * xd_temp[i];
-            x[i] = dt_2 * xd_temp[i] + x0[i];
-         }
-
-         system(x, xd_temp, t);
-         for (i = 0; i < n; ++i)
-         {
-            xd[i] += 2 * xd_temp[i];
-            x[i] = dt * xd_temp[i] + x0[i];
-         }
+            x[i] = dt * xd[i] + x0[i];
          t = t0 + dt;
-
-         system(x, xd_temp, t);
-         for (i = 0; i < n; ++i)
-            x[i] = dt_6 * (xd[i] + xd_temp[i]) + x0[i];
       }
 
+      state_t xd;
+
    private:
-      state_t x0, xd, xd_temp;
+      state_t x0;
    };
 }
