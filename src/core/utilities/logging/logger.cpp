@@ -15,30 +15,30 @@ using namespace librav;
 
 namespace
 {
-	// reference: https://stackoverflow.com/questions/22318389/pass-system-date-and-time-as-a-filename-in-c
-	std::string createLogFileName(std::string prefix, std::string path)
-	{
-		time_t t = time(0);   // get time now
-		struct tm * now = localtime( & t );
+// reference: https://stackoverflow.com/questions/22318389/pass-system-date-and-time-as-a-filename-in-c
+std::string createLogFileName(std::string prefix, std::string path)
+{
+	time_t t = time(0); // get time now
+	struct tm *now = localtime(&t);
 
-		char buffer [80];
-		strftime (buffer,80,"%Y%m%d%H%M%S",now);
-		std::string time_stamp(buffer);
+	char buffer[80];
+	strftime(buffer, 80, "%Y%m%d%H%M%S", now);
+	std::string time_stamp(buffer);
 
-		std::string filename = path + "/" + prefix + "." + time_stamp + ".data";
-		return filename;
-	}
+	std::string filename = path + "/" + prefix + "." + time_stamp + ".data";
+	return filename;
 }
+} // namespace
 
 std::string LoggerHelper::GetDefaultLogPath()
 {
-	char* home_path;
-	home_path = getenv ("HOME");
+	char *home_path;
+	home_path = getenv("HOME");
 	std::string log_path;
-	if (home_path!=NULL)
+	if (home_path != NULL)
 	{
 		std::string hm(home_path);
-		log_path = hm+"/Workspace/librav/data/log";
+		log_path = hm + "/Workspace/librav/data/log";
 	}
 	else
 	{
@@ -48,11 +48,10 @@ std::string LoggerHelper::GetDefaultLogPath()
 	return log_path;
 }
 
-CtrlLogger::CtrlLogger(std::string log_name_prefix, std::string log_save_path):
-				head_added_(false),
-				log_name_prefix_(log_name_prefix),
-				log_save_path_(log_save_path),
-				item_counter_(0)
+CtrlLogger::CtrlLogger(std::string log_name_prefix, std::string log_save_path) : head_added_(false),
+																				 log_name_prefix_(log_name_prefix),
+																				 log_save_path_(log_save_path),
+																				 item_counter_(0)
 {
 	// initialize logger
 #ifdef ENABLE_LOGGING
@@ -63,7 +62,7 @@ CtrlLogger::CtrlLogger(std::string log_name_prefix, std::string log_save_path):
 #endif
 }
 
-CtrlLogger& CtrlLogger::GetLogger(std::string log_name_prefix, std::string log_save_path)
+CtrlLogger &CtrlLogger::GetLogger(std::string log_name_prefix, std::string log_save_path)
 {
 	static CtrlLogger instance(log_name_prefix, log_save_path);
 
@@ -74,7 +73,8 @@ void CtrlLogger::AddItemNameToEntryHead(std::string name)
 {
 	auto it = entry_ids_.find(name);
 
-	if(it == entry_ids_.end()) {
+	if (it == entry_ids_.end())
+	{
 		entry_names_[item_counter_] = name;
 		entry_ids_[name] = item_counter_++;
 	}
@@ -82,7 +82,7 @@ void CtrlLogger::AddItemNameToEntryHead(std::string name)
 
 void CtrlLogger::AddItemDataToEntry(std::string item_name, std::string data_str)
 {
-	if(!head_added_)
+	if (!head_added_)
 	{
 		std::cerr << "No heading for log entries has been added, data ignored!" << std::endl;
 		return;
@@ -90,7 +90,7 @@ void CtrlLogger::AddItemDataToEntry(std::string item_name, std::string data_str)
 
 	auto it = entry_ids_.find(item_name);
 
-	if(it != entry_ids_.end())
+	if (it != entry_ids_.end())
 		item_data_[(*it).second] = data_str;
 	else
 		std::cerr << "Failed to find data entry!" << std::endl;
@@ -100,7 +100,7 @@ void CtrlLogger::AddItemDataToEntry(std::string item_name, std::string data_str)
 //	in this function.
 void CtrlLogger::AddItemDataToEntry(uint64_t item_id, std::string data_str)
 {
-	if(!head_added_)
+	if (!head_added_)
 		return;
 
 	item_data_[item_id] = data_str;
@@ -118,11 +118,11 @@ void CtrlLogger::AddItemDataToEntry(uint64_t item_id, double data)
 
 void CtrlLogger::PassEntryHeaderToLogger()
 {
-	if(item_counter_ == 0)
+	if (item_counter_ == 0)
 		return;
 
 	std::string head_str;
-	for(const auto& item:entry_names_)
+	for (const auto &item : entry_names_)
 		head_str += item.second + " , ";
 
 	std::size_t found = head_str.rfind(" , ");
@@ -141,43 +141,42 @@ void CtrlLogger::PassEntryDataToLogger()
 {
 	std::string log_entry;
 
-	for(auto it = item_data_.begin(); it != item_data_.end(); it++)
+	for (auto it = item_data_.begin(); it != item_data_.end(); it++)
 	{
 		std::string str;
 
-		if((*it).empty())
+		if ((*it).empty())
 			str = "0";
 		else
 			str = *it;
 
-		if(it != item_data_.end() - 1)
+		if (it != item_data_.end() - 1)
 			log_entry += str + " , ";
 		else
 			log_entry += str;
 	}
 
 #ifdef ENABLE_LOGGING
-	if(!log_entry.empty())
+	if (!log_entry.empty())
 		logger_->info(log_entry);
 #endif
 }
 
 /******************************* CSV Logger **********************************/
 
-CsvLogger::CsvLogger(std::string log_name_prefix, std::string log_save_path):
-				log_name_prefix_(log_name_prefix),
-				log_save_path_(log_save_path)
+CsvLogger::CsvLogger(std::string log_name_prefix, std::string log_save_path) : log_name_prefix_(log_name_prefix),
+																			   log_save_path_(log_save_path)
 {
 	// initialize logger
 #ifdef ENABLE_LOGGING
 	std::string filename = createLogFileName(log_name_prefix_, log_save_path_);
 	spdlog::set_async_mode(256);
-	logger_ = spdlog::basic_logger_mt("csv_logger_"+log_name_prefix_, filename);
+	logger_ = spdlog::basic_logger_mt("csv_logger_" + log_name_prefix_, filename);
 	logger_->set_pattern("%v");
 #endif
 }
 
-GlobalCsvLogger& GlobalCsvLogger::GetLogger(std::string log_name_prefix, std::string log_save_path)
+GlobalCsvLogger &GlobalCsvLogger::GetLogger(std::string log_name_prefix, std::string log_save_path)
 {
 	static GlobalCsvLogger instance(log_name_prefix, log_save_path);
 
@@ -192,8 +191,7 @@ EventLogger::EventLogger(std::string log_name_prefix, std::string log_save_path)
 #ifdef ENABLE_LOGGING
 	std::string filename = createLogFileName(log_name_prefix, log_save_path);
 	spdlog::set_async_mode(256);
-	logger_ = spdlog::basic_logger_mt("event_logger_"+log_name_prefix, filename);
+	logger_ = spdlog::basic_logger_mt("event_logger_" + log_name_prefix, filename);
 	logger_->set_pattern("%v");
 #endif
 }
-

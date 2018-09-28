@@ -94,7 +94,7 @@ struct StopWatch
     return std::chrono::duration_cast<std::chrono::microseconds>(Clock::now() - tic_point).count() / 1000000.0;
   };
 
-  // for second in different precisions
+  // toc() in different units
   double stoc()
   {
     return std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - tic_point).count();
@@ -102,17 +102,17 @@ struct StopWatch
 
   double mtoc()
   {
-    return std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - tic_point).count() / 1000.0;
+    return std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - tic_point).count();
   };
 
   double utoc()
   {
-    return std::chrono::duration_cast<std::chrono::microseconds>(Clock::now() - tic_point).count() / 1000000.0;
+    return std::chrono::duration_cast<std::chrono::microseconds>(Clock::now() - tic_point).count();
   };
 
   double ntoc()
   {
-    return std::chrono::duration_cast<std::chrono::nanoseconds>(Clock::now() - tic_point).count() / 1000000000.0;
+    return std::chrono::duration_cast<std::chrono::nanoseconds>(Clock::now() - tic_point).count();
   };
 
   // you have to call tic() before calling this function
