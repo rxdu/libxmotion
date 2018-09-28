@@ -78,6 +78,8 @@ void ThreatRanking::Analyze()
 
     // lattice_manager_->SavePrimitivesToFile(path_, "path");
 
+    RoadMapViz::SetupRoadMapViz(road_map_);
+
     if (!path_.empty())
     {
         auto full_path = planner_->ConvertPathToPolyline(path_);
@@ -87,7 +89,9 @@ void ThreatRanking::Analyze()
             auto cfield = motion_model_->GeneratePredictedCollisionField(i+1.0);
             CalculateThreatExposure(path_line, cfield);
             // LightViz::ShowPathSegmentCollisionFieldWithRoadMap(path_line, cfield, road_map_);
-            LightViz::ShowPathCollisionFieldWithRoadMap(path_line, full_path, cfield, road_map_,
+            // LightViz::ShowPathCollisionFieldWithRoadMap(path_line, full_path, cfield, road_map_,
+            //                                             true, 10, case_label_ + "-" + std::to_string(i), true);
+            RoadMapViz::ShowPathSegmentInCollisionField(path_line, full_path, cfield,
                                                         true, 10, case_label_ + "-" + std::to_string(i), true);
         }
     }

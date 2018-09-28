@@ -105,6 +105,32 @@ void RoadMapViz::ShowVehicle(Polygon &polygon, int32_t pixel_per_unit, std::stri
     LightViz::ShowImage(canvas, window_name, save_img);
 }
 
+void RoadMapViz::ShowVehiclePath(std::vector<Polyline> &path, std::vector<Polygon> polygons, int32_t pixel_per_unit, std::string window_name, bool save_img)
+{
+    RoadMapViz &viz = RoadMapViz::GetInstance();
+
+    GeometryDraw gdraw(pixel_per_unit);
+
+    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, LVColors::jet_colormap_lowest);
+
+    for (auto &polyline : viz.boundary_lines_)
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+
+    for (auto &polyline : viz.center_lines_)
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+
+    for (auto &polygon : polygons)
+    {
+        canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::cyan_color);
+        canvas = gdraw.DrawPolygonDirection(canvas, polygon, LVColors::red_color, 2);
+    }
+
+    for (auto &polyline : path)
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::lime_color, 2);
+
+    LightViz::ShowImage(canvas, window_name, save_img);
+}
+
 void RoadMapViz::ShowVehicleFootprints(std::vector<Polygon> &polygons, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
@@ -239,6 +265,50 @@ void RoadMapViz::ShowLabledTrafficFlows(TrafficFlow *ego_flow, std::vector<Traff
     }
 
     LightViz::ShowImage(canvas, window_name, save_img);
+}
+
+void RoadMapViz::ShowPathSegmentInCollisionField(const Polyline &path_seg, const std::vector<Polyline> &path, std::shared_ptr<CollisionField> cfield,
+                                                 bool show_wp, int32_t pixel_per_unit, std::string window_name, bool save_img)
+{
+    RoadMapViz &viz = RoadMapViz::GetInstance();
+
+    GeometryDraw gdraw(pixel_per_unit);
+
+    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, LVColors::jet_colormap_lowest);
+
+    canvas = gdraw.DrawDistribution(canvas, cfield->GetMeanX(), cfield->GetMeanY(), cfield->GetSpanX(), cfield->GetSpanY(), *cfield.get());
+
+    for (auto &polyline : viz.boundary_lines_)
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+
+    for (auto &polyline : viz.center_lines_)
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+
+    for (auto &polyline : path)
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::green_color, 2);
+
+    canvas = gdraw.DrawPolyline(canvas, path_seg, show_wp, LVColors::lime_color, 2);
+
+    LightViz::ShowImage(canvas, window_name, save_img);
+}
+
+void RoadMapViz::ShowCollisionField(std::shared_ptr<CollisionField> cfield, int32_t pixel_per_unit, std::string window_name, bool save_img)
+{
+    RoadMapViz &viz = RoadMapViz::GetInstance();
+
+    GeometryDraw gdraw(pixel_per_unit);
+
+    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, LVColors::jet_colormap_lowest);
+
+    canvas = gdraw.DrawDistribution(canvas, cfield->GetMeanX(), cfield->GetMeanY(), cfield->GetSpanX(), cfield->GetSpanY(), *cfield.get());
+
+    for (auto &polyline : viz.boundary_lines_)
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+
+    for (auto &polyline : viz.center_lines_)
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+
+    LightViz::ShowImage(canvas, window_name, save_img);  
 }
 
 void RoadMapViz::ShowCollisionFieldWithTrafficFlows(std::shared_ptr<CollisionField> cfield, TrafficFlow *ego_flow, std::vector<TrafficFlow *> &flows, int32_t pixel_per_unit, std::string window_name, bool save_img)

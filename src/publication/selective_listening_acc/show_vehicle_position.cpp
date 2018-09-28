@@ -22,6 +22,8 @@ int main()
         return -1;
     }
 
+    RoadMapViz::SetupRoadMapViz(map);
+
     // std::vector<std::string> sinks = {"s1", "s3", "s5"};
     // std::vector<std::string> sources = {"s2", "s4", "s6"};
     // map->SetTrafficSinkSource(sinks, sources);
@@ -41,18 +43,7 @@ int main()
     model.MergePointsToNetwork();
 
     auto cfields = model.GenerateCollisionField();
-    // LightViz::ShowCollisionField(cfields);
-    LightViz::ShowCollisionFieldInRoadMap(cfields, map);
-
-    // auto cfield = model.GeneratePredictedCollisionField(1.0);
-    // LightViz::ShowCollisionFieldInRoadMap(cfield, map);
-
-    // for (int i = 0; i < 10; ++i)
-    // {
-    //     auto cfield = model.GeneratePredictedCollisionField(2 * (i + 1));
-    //     // LightViz::ShowCollisionField(cfield);
-    //     LightViz::ShowCollisionFieldInRoadMap(cfield, map);
-    // }
+    RoadMapViz::ShowCollisionField(cfields);
 
     return 0;
 }
