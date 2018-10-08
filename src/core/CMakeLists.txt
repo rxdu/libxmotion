@@ -10,6 +10,8 @@ add_subdirectory(model)
 add_subdirectory(geometry)
 add_subdirectory(polynomial)
 add_subdirectory(planning)
+
 add_subdirectory(lightviz)
+add_subdirectory(fastdraw)
 
 add_subdirectory(examples)
