@@ -38,6 +38,6 @@ add_subdirectory(platforms)
 add_subdirectory(publication)
 
 ## Add test source directories
-# if(BUILD_TESTS)
-    # add_subdirectory(gtests) # broken
-# endif()
+if(BUILD_TESTS)
+    add_subdirectory(unit_tests) # broken
+endif()

@@ -1,22 +1,14 @@
-# Dependency libraries
-#find_package(LIBRARY_NAME REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
 
-# Add libraries
-#set(TESTCASES_SRC
-#    graph_unittest.cpp
-#)
-#add_library(testcases STATIC ${TESTCASES_SRC})
-#target_link_libraries(qtree ${OpenCV_LIBS})
-
-# Add executables
-set(TESTCASES_SRC
-    # frame_unittest.cpp
-    graph_unittest.cpp
-    typesize_unittest.cpp
-    maputils_unittest.cpp
+# Add test code
+set(GRAPH_GTEST_SRC
+    src/graph/graph_bigfive_test.cpp
+    src/graph/graph_type_test.cpp
+    src/graph/graph_mod_test.cpp
+    src/graph/graph_iter_test.cpp
+    src/graph/graph_search_test.cpp
+    src/graph/graph_search_inc_test.cpp
 )
-add_executable(utils_gtest_all start_tests.cpp ${TESTCASES_SRC})
-target_link_libraries(utils_gtest_all gtest utils)
 
-# add_executable(utils_gtest_frame start_tests.cpp frame_unittest.cpp)
-# target_link_libraries(utils_gtest_frame gtest utils)
+add_executable(gtest_all ${GRAPH_GTEST_SRC})
+target_link_libraries(gtest_all gtest gtest_main graph)
