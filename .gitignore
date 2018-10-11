@@ -64,6 +64,9 @@ tags
 *.swp
 */*.swp
 
+# vscode
+.vscode
+
 # Python
 *.pyc
 
