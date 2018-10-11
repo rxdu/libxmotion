@@ -1,4 +1,4 @@
-## Development Log
+## Change Log
 
 * 04/06/2018
     - Graph visualization with lightviz 
