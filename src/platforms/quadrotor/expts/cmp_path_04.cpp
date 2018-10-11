@@ -25,13 +25,13 @@
 #include "opencv2/opencv.hpp"
 
 // user
-#include "planning/graph/graph.h"
+#include "graph/graph.hpp"
 #include "planning/graph/astar.h"
 #include "vis/graph_vis.h"
 #include "vis/sgrid_vis.h"
-#include "geometry/square_grid.h"
-#include "geometry/graph_builder.h"
-#include "geometry/sgrid_builder.h"
+#include "map/square_grid.h"
+#include "map/graph_builder.h"
+#include "map/sgrid_builder.h"
 #include "map/image_utils.h"
 
 #include "path_repair/nav_field.h"

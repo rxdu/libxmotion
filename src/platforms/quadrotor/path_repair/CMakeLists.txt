@@ -1,8 +1,3 @@
-# Include path
-#include_directories(${CMAKE_SOURCE_DIR}/inc)
-include_directories(${CMAKE_SOURCE_DIR}/src)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
 # Dependency libraries
 #find_package(LIBRARY_NAME REQUIRED)
 
@@ -18,7 +13,7 @@ if (GUROBI_FOUND)
         geo_mark_graph.cpp    
     )
     add_library(path_repair STATIC ${PATH_REPAIR_LIB_SRC} ${PATH_REPAIR_COMMON_SRC})
-    target_link_libraries(path_repair map geometry quad_base polyopt common vis utility ${LCM_LIBRARIES})
+    target_link_libraries(path_repair legacy  quad_base polyopt common vis utilities ${LCM_LIBRARIES})
 endif()
 
 set(PATH_REPAIR_SIM_SRC
@@ -27,7 +22,7 @@ set(PATH_REPAIR_SIM_SRC
     sim/sim_depth_sensor.cpp
 )
 add_library(pr_sim STATIC ${PATH_REPAIR_SIM_SRC} ${PATH_REPAIR_COMMON_SRC})
-target_link_libraries(pr_sim utility map geometry vis ${LCM_LIBRARIES})
+target_link_libraries(pr_sim utilities legacy  vis ${LCM_LIBRARIES})
 
 # Add executables
 

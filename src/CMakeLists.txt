@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.0.0)
 project(librav)
 
 # cmake module path
@@ -9,9 +9,12 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 include(cmake/lcmtypes.cmake)
 lcmtypes_build()
 
+## Chosse build type
+# set(CMAKE_BUILD_TYPE Debug)
+
 ## Optionally built modules: on/off
 set(ENABLE_LOGGING on)
-set(BUILD_TESTS off)
+set(BUILD_TESTS on)
 
 if(ENABLE_LOGGING)
 	message( "-- Enable logging with spdlog -- Yes" )
@@ -20,28 +23,21 @@ else(ENABLE_LOGGING)
 	message( "-- Enable logging with spdlog -- No" )
 endif(ENABLE_LOGGING)
 
-## Config common include directories
-include_directories(${CMAKE_SOURCE_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/libraries/)
-include_directories(${CMAKE_SOURCE_DIR}/libraries/octomap-1.8.0/octomap/include)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(Octomap_LIBS octomap octomath)
+## Add sub source directories
+# Core packages of librav
+add_subdirectory(core)
+add_subdirectory(third_party)
 
-## Add other sub source directories
-# add_subdirectory(examples)
-# add_subdirectory(vtalk)
-add_subdirectory(libraries)
-add_subdirectory(common)
-add_subdirectory(control)
-add_subdirectory(planning)
-# add_subdirectory(planning_v2)
-add_subdirectory(utility)
-add_subdirectory(vis)
-# add_subdirectory(fastplot)
-add_subdirectory(platforms/quadrotor)
-# add_subdirectory(platforms/simulator)
+# Packages built on top of core
+add_subdirectory(navigation)
+add_subdirectory(platforms)
+
+# Experiment setups
+add_subdirectory(publication)
 
 ## Add test source directories
-if(BUILD_TESTS)
-    add_subdirectory(gtests)
-endif()
+# if(BUILD_TESTS)
+    # add_subdirectory(gtests) # broken
+# endif()

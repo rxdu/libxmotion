@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<josm-session version="0.1">
+    <viewport>
+        <center lat="42.27288801290298" lon="-71.81110181048513"/>
+        <scale meter-per-pixel="0.11046784985065634"/>
+    </viewport>
+    <projection>
+        <projection-choice>
+            <id>core:mercator</id>
+            <parameters/>
+        </projection-choice>
+        <code>EPSG:3857</code>
+    </projection>
+    <layers active="1">
+        <layer index="1" name="intersection_single_lane_full.osm" type="osm-data" version="0.1" visible="true">
+            <file>file:/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm</file>
+        </layer>
+        <layer index="2" name="Bing aerial imagery" type="imagery" version="0.1" visible="true">
+            <name>Bing aerial imagery</name>
+            <id>Bing</id>
+            <type>bing</type>
+            <url>https://www.bing.com/maps/</url>
+            <max-zoom>22</max-zoom>
+            <projections/>
+            <icon>data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAALVBMVEUMhIT///8jj4/Z7Ozl8vJUqal/vr6+3t6Tycmo1NQxl5dutbXz+flBn5/M5eX9gIKtAAAAjUlEQVR4XmMgD6gFoQkoC7eiCQgKK6AJiNBEQGkBmoBW5S40LROFZyugCMQICloEIQuoCwoKCicgCbAJCgoKGiEJMCWjCTAwpaAJsBaiCnC1CCILCCslCwoKijQgVKQLCgoKliLcAQbWCqgCFgin6wkKCgqevIDwHO8cQUHxAAYkwFoonMSAArS7GCgAAKZlGg8L4DPrAAAAAElFTkSuQmCC</icon>
+            <noTileHeaders>{"X-VE-Tile-Info":["no-tile"]}</noTileHeaders>
+            <metadataHeaders>{"X-VE-TILEMETA-CaptureDatesRange":"Capture Date"}</metadataHeaders>
+            <show-errors>true</show-errors>
+            <automatic-downloading>true</automatic-downloading>
+            <automatically-change-resolution>true</automatically-change-resolution>
+        </layer>
+        <layer index="3" name="Bing aerial imagery" type="imagery" version="0.1" visible="true">
+            <name>Bing aerial imagery</name>
+            <id>Bing</id>
+            <type>bing</type>
+            <url>https://www.bing.com/maps/</url>
+            <max-zoom>22</max-zoom>
+            <projections/>
+            <icon>data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAALVBMVEUMhIT///8jj4/Z7Ozl8vJUqal/vr6+3t6Tycmo1NQxl5dutbXz+flBn5/M5eX9gIKtAAAAjUlEQVR4XmMgD6gFoQkoC7eiCQgKK6AJiNBEQGkBmoBW5S40LROFZyugCMQICloEIQuoCwoKCicgCbAJCgoKGiEJMCWjCTAwpaAJsBaiCnC1CCILCCslCwoKijQgVKQLCgoKliLcAQbWCqgCFgin6wkKCgqevIDwHO8cQUHxAAYkwFoonMSAArS7GCgAAKZlGg8L4DPrAAAAAElFTkSuQmCC</icon>
+            <noTileHeaders>{"X-VE-Tile-Info":["no-tile"]}</noTileHeaders>
+            <metadataHeaders>{"X-VE-TILEMETA-CaptureDatesRange":"Capture Date"}</metadataHeaders>
+            <show-errors>true</show-errors>
+            <automatic-downloading>true</automatic-downloading>
+            <automatically-change-resolution>true</automatically-change-resolution>
+        </layer>
+    </layers>
+</josm-session>

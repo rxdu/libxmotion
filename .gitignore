@@ -11,7 +11,7 @@ build2
 
 # log
 *.log
-*.data
+#*.data
 
 # Doxygen
 docs/doxygen/html/

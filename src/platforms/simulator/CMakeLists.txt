@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.0.0)
 project(librav_sim)
 
 ## Set compiler to use c++ 11 features
@@ -43,7 +43,7 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add sub source directories
 add_subdirectory(apps)
-add_subdirectory(vrep_sim)
+add_subdirectory(sim_interface)
 add_subdirectory(quad_hbird_sim)
-add_subdirectory(quad_solo_sim)
-add_subdirectory(rc_car_sim)
+# add_subdirectory(quad_solo_sim)
+add_subdirectory(rc_tamiya_sim)

@@ -21,10 +21,7 @@
             "macFrameworkPath": [
                 "/System/Library/Frameworks",
                 "/Library/Frameworks"
-            ],
-            "compilerPath": "/usr/bin/clang",
-            "cStandard": "c11",
-            "cppStandard": "c++17"
+            ]
         },
         {
             "name": "Linux",
@@ -37,9 +34,9 @@
                 "/usr/include/linux",
                 "${workspaceRoot}",
                 "${workspaceRoot}/src",
-                "${workspaceRoot}/src/common",
-                "${workspaceRoot}/src/quadrotor",
-                "${workspaceRoot}/src/planning",
+                "${workspaceRoot}/src/core",
+                "${workspaceRoot}/src/core/*",
+                "${workspaceRoot}/src/platforms",
                 "${workspaceRoot}/build/include"
             ],
             "defines": [],
@@ -58,7 +55,8 @@
             },
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c11",
-            "cppStandard": "c++17"
+            "cppStandard": "c++17",
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
         },
         {
             "name": "Win32",
@@ -78,10 +76,7 @@
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
-            },
-            "compilerPath": "/usr/bin/clang",
-            "cStandard": "c11",
-            "cppStandard": "c++17"
+            }
         }
     ],
     "version": 4

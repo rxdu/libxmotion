@@ -17,11 +17,11 @@ using namespace librav;
 
 int main(int arc, char* argv[])
 {
-	std::shared_ptr<RCCarSimClient> client = std::make_shared<RCCarSimClient>();
-	std::shared_ptr<RCCarSimControl> control = std::make_shared<RCCarSimControl>();
+	std::shared_ptr<RCTamiyaSimClient> client = std::make_shared<RCTamiyaSimClient>();
+	std::shared_ptr<RCTamiyaSimControl> control = std::make_shared<RCTamiyaSimControl>();
 
 	// create a simulation process
-	RobotSimProcess<DataFromRCCarSim, DataToRCCarSim,RCCarState, RCCarCmd> process(client,control);
+	RobotSimProcess<DataFromRCTamiyaSim, DataToRCTamiyaSim,RCCarState, RCCarCmd> process(client,control);
 
 	// run the simulation in synchronous mode
 	if(process.ConnectToServer())

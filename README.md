@@ -1,6 +1,6 @@
-# Library for Research on Autonomous Vehicles (librav)
+# Library for Robotics and Autonomous Vehicles (librav)
 
-This repository contains a collection of software for research on autonomous vehicles.
+This repository contains a collection of software for research on robotics and autonomous vehicles.
 
 ## 1. Repository structure
 
@@ -10,9 +10,10 @@ This repository contains a collection of software for research on autonomous veh
 * **scripts** : shell scripts
 * **docs** : documentation of this project
 * **data** : map, experiment results, logs
-* **tools** : tool used for the development
 
 ## 2. Install dependencies
+
+Scripts in [this repository](https://github.com/rxdu/devel_setup) can be used to install all required dependencies (and other possibly useful software). For minimal dependency installation, you can follow instructions below.
 
 * Building tools, Git, CMake
 ```
@@ -25,6 +26,10 @@ $ sudo apt-get install cmake
 ```
 $ sudo apt-get install libopencv-dev python-opencv
 ```
+
+* VTK 7.1.1 (Recommended)
+
+VTK is required for advanced plotting features such as surface plot. It's recommended to compile and install from source. The default version from the package manager in Debian/Ubuntu may not work. Newer version >7.1.1 should also work.
 
 * LCM
 
@@ -42,7 +47,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/
 $ sudo apt-get install libboost-all-dev
 ```
 
-* Add environment variables
+* Add environment variables (to use LCM types in Python and Java)
 ```
 # librav
 export LIBRAV_HOME=$HOME/Workspace/librav
@@ -80,5 +85,7 @@ Then you can build the documentation from code.
 $ cd librav/docs/doxygen
 $ doxygen Doxyfile
 ```
+
+## [TODO List](TODO.md)
 
 ## [Reference]

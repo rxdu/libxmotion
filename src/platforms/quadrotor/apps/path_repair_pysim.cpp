@@ -19,8 +19,8 @@
 #include "map/map_utils.h"
 #include "map/map_config.h"
 #include "map/map_info.h"
-#include "geometry/graph_builder.h"
-#include "geometry/sgrid_builder.h"
+#include "map/graph_builder.h"
+#include "map/sgrid_builder.h"
 #include "path_repair/sim/virtual_quadrotor.h"
 
 using namespace librav;
