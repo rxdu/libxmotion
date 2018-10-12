@@ -13,5 +13,7 @@ if (UNIX)
 endif (UNIX)
 target_include_directories(sim_interface PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vrep_sim/vrep_lib/include>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vrep_sim/vrep_lib/remoteApi>
   $<INSTALL_INTERFACE:include>)
 
