@@ -8,7 +8,6 @@ add_subdirectory(utilities)
 
 add_subdirectory(model)
 add_subdirectory(geometry)
-add_subdirectory(polynomial)
 add_subdirectory(planning)
 add_subdirectory(lightviz)
 

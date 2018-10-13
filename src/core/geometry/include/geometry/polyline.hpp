@@ -2,7 +2,7 @@
  * polyline.hpp
  * 
  * Created on: Aug 09, 2018 06:42
- * Description: 
+ * Description: polyline wrapper around CGAL
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */

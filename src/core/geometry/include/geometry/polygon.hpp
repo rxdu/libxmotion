@@ -2,7 +2,7 @@
  * polygon.hpp
  * 
  * Created on: Aug 09, 2018 04:15
- * Description: 
+ * Description: polygon wrapper around CGAL
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
