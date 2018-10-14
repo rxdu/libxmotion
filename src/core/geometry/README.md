@@ -11,10 +11,5 @@ A workaround for this requirement.
 target_compile_definitions(geometry PUBLIC "-DCGAL_DISABLE_ROUNDING_MATH_CHECK")
 ```
 
-## Spline
-
-* Source: https://kluge.in-chemnitz.de/opensource/spline/
-* Released under the GPLv2 or above
-* 
 Reference:
 * [1] https://github.com/cms-sw/cmssw/issues/14862

@@ -11,6 +11,7 @@
 
 #include <memory>
 #include <algorithm>
+#include <cassert>
 
 using namespace librav;
 
@@ -77,11 +78,6 @@ CSpline &CSpline::operator=(CSpline &&other)
     return *this;
 }
 
-double CSpline::Evaluate(double x)
-{
-    return gsl_spline_eval(spline_, x, accel_);
-}
-
 void CSpline::Interpolate(const std::vector<Knot> &knots)
 {
     // destroy old spline if one already exists
@@ -99,4 +95,24 @@ void CSpline::Interpolate(const std::vector<Knot> &knots)
         y[i] = knots[i].y;
     }
     gsl_spline_init(spline_, x, y, knots.size());
+}
+
+double CSpline::Evaluate(double x)
+{
+    return gsl_spline_eval(spline_, x, accel_);
+}
+
+double CSpline::Evaluate(double x, int32_t derivative)
+{
+    assert(derivative <= 2);
+
+    switch (derivative)
+    {
+    case 0:
+        return Evaluate(x);
+    case 1:
+        return gsl_spline_eval_deriv(spline_, x, accel_);
+    case 2:
+        return gsl_spline_eval_deriv2(spline_, x, accel_);
+    }
 }

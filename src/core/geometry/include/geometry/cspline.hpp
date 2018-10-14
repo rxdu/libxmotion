@@ -39,6 +39,8 @@ public:
   CSpline &operator=(CSpline &&other);
 
   double Evaluate(double x);
+  double Evaluate(double x, int32_t derivative);
+
   void Interpolate(const std::vector<Knot> &knots);
 
 private:
