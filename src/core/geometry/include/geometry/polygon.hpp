@@ -44,6 +44,7 @@ public:
   Polygon() = default;
   Polygon(std::vector<Point_2> pts);
   Polygon(Polyline left_bound, Polyline right_bound);
+  ~Polygon() = default;
 
   using Point = Point_2;
   typedef Polygon_2::Vertex_iterator point_iterator;

@@ -34,6 +34,7 @@ class Polyline
 public:
   Polyline() = default;
   Polyline(std::vector<Point_2> pts);
+  ~Polyline() = default;
 
   using Point = Point_2;
   using Line = Line_2;
