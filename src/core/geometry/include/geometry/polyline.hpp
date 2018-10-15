@@ -36,6 +36,11 @@ public:
   Polyline(std::vector<Point_2> pts);
   ~Polyline() = default;
 
+  Polyline(const Polyline& other) = default;
+  Polyline(Polyline&& other) = default;
+  Polyline& operator=(const Polyline& other) = default;
+  Polyline& operator=(Polyline&& other) = default;
+
   using Point = Point_2;
   using Line = Line_2;
   using Segment = Segment_2;
