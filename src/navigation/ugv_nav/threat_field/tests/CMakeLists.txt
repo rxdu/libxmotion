@@ -7,3 +7,6 @@ target_link_libraries(test_traffic_participant tfield trafficviz lightviz utilit
 
 add_executable(test_collision_field test_collision_field.cpp)
 target_link_libraries(test_collision_field tfield trafficviz lightviz utilities)
+
+add_executable(test_true_threat test_true_threat.cpp)
+target_link_libraries(test_true_threat tfield trafficviz lightviz utilities)

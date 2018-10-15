@@ -38,7 +38,7 @@ public:
 
 private:
   RoadMap *road_map_;
-  std::shared_ptr<Graph_t<LaneBlock *>> graph_;
+  std::shared_ptr<Graph<LaneBlock *>> graph_;
   std::unordered_map<int32_t, LaneBlock *> lane_blocks_;
 
   void ConstructGraph();

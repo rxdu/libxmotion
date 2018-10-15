@@ -32,11 +32,17 @@ public:
 
   static void ShowVehicle(Polygon &polygon, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
   static void ShowVehicleFootprints(std::vector<Polygon> &polygons, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
+  static void ShowVehiclePath(std::vector<Polyline> &path, std::vector<Polygon> polygons = {}, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
+
   static void ShowConflictingZone(std::vector<Polygon> &highlight, std::vector<Polygon> &polygons, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
 
   static void ShowLabledTrafficFlows(std::vector<TrafficFlow *> &flows, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
   static void ShowLabledTrafficFlows(TrafficFlow *ego_flow, std::vector<TrafficFlow *> &flows, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
   
+  static void ShowPathSegmentInCollisionField(const Polyline &path_seg, const std::vector<Polyline> &path, std::shared_ptr<CollisionField> cfield,
+                                       bool show_wp = true, int32_t pixel_per_unit = 10, std::string window_name = "Field Image", bool save_img = false);
+
+  static void ShowCollisionField(std::shared_ptr<CollisionField> cfield, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
   static void ShowCollisionFieldWithTrafficFlows(std::shared_ptr<CollisionField> cfield, TrafficFlow *ego_flow, std::vector<TrafficFlow *> &flows, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
   static void ShowCollisionFieldWithTrafficFlows(Polygon& ego, std::shared_ptr<CollisionField> cfield, TrafficFlow *ego_flow, std::vector<TrafficFlow *> &flows, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
 

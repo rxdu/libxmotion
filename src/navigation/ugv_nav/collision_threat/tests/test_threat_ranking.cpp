@@ -37,13 +37,13 @@ int main()
     /********** create observations **********/
     std::vector<MMStateEst> ests;
     // good test case 1
-    MMStateEst mpt0(70, 60, -10, -2.5, 1, 1);//case 1
+    MMStateEst mpt0(70, 60, -10, -2.5, 2.4, 0.9);//case 1
     // MMStateEst mpt0(70, 60, -10 / 2.5, -2.5 / 2.5, 1, 1); // case 2
     mpt0.id = 0;
     ests.push_back(mpt0);
 
     // good test case 2
-    MMStateEst mpt1(47, 58, 10, 2.5, 1, 1); // case 1
+    MMStateEst mpt1(47, 58, 10, 2.5, 2.4, 0.9); // case 1
     // MMStateEst mpt1(47, 58, 10 * 1.3, 2.5 * 1.3, 1, 1); // case 2
     mpt1.id = 1;
     ests.push_back(mpt1);

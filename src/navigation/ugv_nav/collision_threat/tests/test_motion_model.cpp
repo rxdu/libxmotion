@@ -24,6 +24,8 @@ int main()
         return -1;
     }
 
+    RoadMapViz::SetupRoadMapViz(map);
+
     // std::vector<std::string> sinks = {"s1", "s3", "s5"};
     // std::vector<std::string> sources = {"s2", "s4", "s6"};
     // map->SetTrafficSinkSource(sinks, sources);
@@ -58,7 +60,8 @@ int main()
 
     auto cfields = model.GenerateCollisionField();
     // LightViz::ShowCollisionField(cfields);
-    LightViz::ShowCollisionFieldInRoadMap(cfields, map);
+    // LightViz::ShowCollisionFieldInRoadMap(cfields, map);
+    RoadMapViz::ShowCollisionField(cfields);
 
     // auto cfield = model.GeneratePredictedCollisionField(1.0);
     // LightViz::ShowCollisionFieldInRoadMap(cfield, map);

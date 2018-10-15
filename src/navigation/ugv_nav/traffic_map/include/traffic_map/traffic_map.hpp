@@ -27,6 +27,8 @@ public:
   TrafficMap(std::shared_ptr<RoadMap> map);
   ~TrafficMap();
 
+  std::shared_ptr<RoadMap> road_map_;
+
   void DiscretizeTrafficRegions(double resolution);
 
   std::vector<TrafficChannel> GetAllTrafficChannels();
@@ -43,10 +45,9 @@ public:
   std::vector<FlowTrackPoint> BackTrackCollision(TrafficFlow *scflow, std::vector<TrafficFlow *> flows, double v);
 
 private:
-  std::shared_ptr<RoadMap> road_map_;
   bool map_discretized_ = false;
 
-  std::shared_ptr<Graph_t<TrafficRegion *>> graph_;
+  std::shared_ptr<Graph<TrafficRegion *>> graph_;
   std::unordered_map<int32_t, TrafficRegion *> traffic_regions_;
   std::map<std::pair<std::string, std::string>, TrafficChannel> traffic_channels_;
   std::map<std::string, TrafficFlow *> traffic_flows_;

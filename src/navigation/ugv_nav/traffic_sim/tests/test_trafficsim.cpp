@@ -9,8 +9,18 @@ using namespace librav;
 
 int main()
 {
+    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_with_centerline.osm");
+
+    if (!map->MapReady())
+    {
+        std::cout << "map didn't load correctly" << std::endl;
+        return -1;
+    }
+
+    map->PrintInfo();
+
     std::cout << "started traffic sim" << std::endl;
-    TrafficSim sim;
+    TrafficSim sim(map);
 
     sim.SetDuration(180);
     sim.SetStartTime(0);

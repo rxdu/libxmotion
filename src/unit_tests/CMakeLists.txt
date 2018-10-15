@@ -1,22 +1,35 @@
-# Dependency libraries
-#find_package(LIBRARY_NAME REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
 
-# Add libraries
-#set(TESTCASES_SRC
-#    graph_unittest.cpp
-#)
-#add_library(testcases STATIC ${TESTCASES_SRC})
-#target_link_libraries(qtree ${OpenCV_LIBS})
-
-# Add executables
-set(TESTCASES_SRC
-    # frame_unittest.cpp
-    graph_unittest.cpp
-    typesize_unittest.cpp
-    maputils_unittest.cpp
+## Test modules
+# graph
+set(GRAPH_GTEST_SRC
+    src/graph/graph_bigfive_test.cpp
+    src/graph/graph_type_test.cpp
+    src/graph/graph_mod_test.cpp
+    src/graph/graph_iter_test.cpp
+    src/graph/graph_search_test.cpp
+    src/graph/graph_search_inc_test.cpp
 )
-add_executable(utils_gtest_all start_tests.cpp ${TESTCASES_SRC})
-target_link_libraries(utils_gtest_all gtest utils)
+set(GRAPH_GTEST_LIB graph)
+add_executable(gtest_graph ${GRAPH_GTEST_SRC})
+target_link_libraries(gtest_graph gtest gtest_main ${GRAPH_GTEST_LIB})
 
-# add_executable(utils_gtest_frame start_tests.cpp frame_unittest.cpp)
-# target_link_libraries(utils_gtest_frame gtest utils)
+# geometry
+set(GEOMETRY_GTEST_SRC
+    src/geometry/cspline_test.cpp
+)
+set(GEOMETRY_GTEST_LIB geometry)
+add_executable(gtest_geometry ${GEOMETRY_GTEST_SRC})
+target_link_libraries(gtest_geometry gtest gtest_main ${GEOMETRY_GTEST_LIB})
+
+# Group all tests 
+set(ALL_GTEST_SRC
+    ${GRAPH_GTEST_SRC} 
+    ${GEOMETRY_GTEST_SRC}
+)
+set(ALL_GTEST_LIBS
+    ${GRAPH_GTEST_LIB}
+    ${GEOMETRY_GTEST_LIB}
+)
+add_executable(gtest_all ${ALL_GTEST_SRC})
+target_link_libraries(gtest_all gtest gtest_main ${ALL_GTEST_LIBS})

@@ -34,12 +34,14 @@ int main()
 
     /********** create observations **********/
     std::vector<MMStateEst> ests;
-    
-    MMStateEst mpt0(85, 58, 8.5, -0, 1, 1);
+
+    // MMStateEst mpt0(85, 58, 8.5, -0, 1, 1);
+    MMStateEst mpt0(85, 58, 8.5, -0, 2.4, 0.9*1.2);
     mpt0.id = 0;
     ests.push_back(mpt0);
 
-    MMStateEst mpt1(38, 59, 7.5, 0, 1, 1); 
+    // MMStateEst mpt1(38, 59, 7.5, 0, 1, 1);
+    MMStateEst mpt1(38, 59, 7.5, 0, 2.4, 0.9*1.2);
     mpt1.id = 1;
     ests.push_back(mpt1);
 

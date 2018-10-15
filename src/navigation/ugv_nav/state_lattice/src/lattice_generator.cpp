@@ -82,7 +82,7 @@ void LatticeGenerator::RunSim(double t0, double tf, double dt)
     for (int32_t i = 0; i < ctrl_set_.size(); ++i)
     {
         GlobalCsvLogger::GetLogger("mp", "/home/rdu").LogData(i, init_x_, init_y_, init_v_, init_theta_, init_x_, init_y_, init_v_, init_theta_);
-        asc::state_t state = Propagate({init_x_, init_y_, init_v_, init_theta_}, {ctrl_set_[i].accel, ctrl_set_[i].steering}, t0, tf, dt, i);
+        asc::state_t state = Propagate({init_x_, init_y_, init_v_, init_theta_}, {ctrl_set_[i].a, ctrl_set_[i].delta}, t0, tf, dt, i);
     }
     std::cout << "Number of generated primitives: " << ctrl_set_.size() << std::endl;
 }

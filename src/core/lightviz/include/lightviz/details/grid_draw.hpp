@@ -135,7 +135,7 @@ struct SquareGridDraw
 
     // graph related drawing
     template <typename GridType, typename GridCellType>
-    cv::Mat DrawGridGraph(cv::Mat canvas, GridType *grid, Graph_t<GridCellType *> *graph)
+    cv::Mat DrawGridGraph(cv::Mat canvas, GridType *grid, Graph<GridCellType *> *graph)
     {
         // draw all edges
         auto edges = graph->GetAllEdges();

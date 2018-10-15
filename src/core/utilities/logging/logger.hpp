@@ -22,7 +22,6 @@
 
 namespace librav
 {
-
 namespace LoggerHelper
 {
 std::string GetDefaultLogPath();
@@ -30,15 +29,7 @@ std::string GetDefaultLogPath();
 
 class CtrlLogger
 {
-  private:
-	CtrlLogger() = delete;
-	CtrlLogger(std::string log_name_prefix, std::string log_save_path);
-
-	// prevent copy or assignment
-	CtrlLogger(const CtrlLogger &) = delete;
-	CtrlLogger &operator=(const CtrlLogger &) = delete;
-
-  public:
+public:
 	static CtrlLogger &GetLogger(std::string log_name_prefix = "", std::string log_save_path = "");
 
 	// basic functions
@@ -53,7 +44,7 @@ class CtrlLogger
 	void AddItemDataToEntry(std::string item_name, double data);
 	void AddItemDataToEntry(uint64_t item_id, double data);
 
-  private:
+private:
 	std::shared_ptr<spdlog::logger> logger_;
 
 	bool head_added_;
@@ -64,11 +55,18 @@ class CtrlLogger
 	std::map<std::string, uint64_t> entry_ids_;
 	std::atomic<uint64_t> item_counter_;
 	std::vector<std::string> item_data_;
+
+	CtrlLogger() = delete;
+	CtrlLogger(std::string log_name_prefix, std::string log_save_path);
+
+	// prevent copy or assignment
+	CtrlLogger(const CtrlLogger &) = delete;
+	CtrlLogger &operator=(const CtrlLogger &) = delete;
 };
 
 class CsvLogger
 {
-  public:
+public:
 	CsvLogger() = delete;
 	CsvLogger(std::string log_name_prefix, std::string log_save_path);
 
@@ -76,7 +74,6 @@ class CsvLogger
 	CsvLogger(const CsvLogger &) = delete;
 	CsvLogger &operator=(const CsvLogger &) = delete;
 
-  public:
 	// basic functions
 	void AddItemNameToEntryHead(std::string name);
 	void PassEntryHeaderToLogger();
@@ -97,7 +94,7 @@ class CsvLogger
 #endif
 	}
 
-  private:
+private:
 	std::shared_ptr<spdlog::logger> logger_;
 
 	std::string log_name_prefix_;
@@ -116,21 +113,21 @@ class CsvLogger
 
 class GlobalCsvLogger : public CsvLogger
 {
-  private:
+public:
+	static GlobalCsvLogger &GetLogger(std::string log_name_prefix = "", std::string log_save_path = "");
+
+private:
 	GlobalCsvLogger() = delete;
 	GlobalCsvLogger(std::string prefix, std::string path) : CsvLogger(prefix, path){};
 
 	// prevent copy or assignment
 	GlobalCsvLogger(const GlobalCsvLogger &) = delete;
 	GlobalCsvLogger &operator=(const GlobalCsvLogger &) = delete;
-
-  public:
-	static GlobalCsvLogger &GetLogger(std::string log_name_prefix = "", std::string log_save_path = "");
 };
 
 class EventLogger
 {
-  public:
+public:
 	EventLogger() = delete;
 	EventLogger(std::string log_name_prefix, std::string log_save_path);
 
@@ -138,7 +135,6 @@ class EventLogger
 	EventLogger(const EventLogger &) = delete;
 	EventLogger &operator=(const EventLogger &) = delete;
 
-  public:
 	// basic functions
 	template <class... T>
 	void LogEvent(const T &... value)
@@ -178,7 +174,7 @@ class EventLogger
 #endif
 	}
 
-  private:
+private:
 	std::shared_ptr<spdlog::logger> logger_;
 
 	inline void build_string(std::ostream &o) { (void)o; }
@@ -190,6 +186,6 @@ class EventLogger
 		build_string(o, rest...);
 	}
 };
-}
+} // namespace librav
 
 #endif /* LOGGER_HPP */

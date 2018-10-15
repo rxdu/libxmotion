@@ -98,7 +98,7 @@ public:
   ~MotionModel() = default;
 
   std::shared_ptr<RoadMap> road_map_;
-  std::shared_ptr<Graph_t<LaneBlock>> cline_graph_;
+  std::shared_ptr<Graph<LaneBlock>> cline_graph_;
 
   void AddVehicleStateEstimate(MMStateEst pt) { ests_.push_back(pt); }
   void SetVehicleStateEstimates(std::vector<MMStateEst> pts) { ests_ = pts; }

@@ -17,8 +17,7 @@
 #include "ascent/Ascent.h"
 #include "ascent/Utility.h"
 
-#include "reachability/vehicle_dynamics.hpp"
-#include "reachability/system_propagator.hpp"
+#include "model/bicycle_model.hpp"
 
 namespace librav
 {

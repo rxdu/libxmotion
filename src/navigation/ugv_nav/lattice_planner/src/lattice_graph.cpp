@@ -30,7 +30,7 @@ void LatticeGraph::GenerateGraph(int32_t n_unit_time)
 
     LatticeNode node(0, 0, 0);
     graph_->AddVertex(node);
-    auto vtx = graph_->GetVertex(node.id);
+    auto vtx = graph_->FindVertex(node.id);
 
     std::vector<GraphType::VertexType *> last_level;
     last_level.push_back(vtx);
@@ -45,7 +45,7 @@ void LatticeGraph::GenerateGraph(int32_t n_unit_time)
             {
                 graph_->AddEdge(vtx->state_, std::get<0>(nb), std::get<1>(nb));
 
-                this_level.push_back(graph_->GetVertex(std::get<0>(nb).id));
+                this_level.push_back(graph_->FindVertex(std::get<0>(nb).id));
                 mps.push_back(std::get<1>(nb));
             }
         }

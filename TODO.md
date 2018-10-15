@@ -22,3 +22,10 @@
 
 - [ ] Graph visualization using Cairo
 - [*] Better surface visualization
+
+## Misc
+
+* Cleanup dependencies on LCM, create a comm package 
+* ~~Update the command to invoke uavcan type generator~~
+* ~~Fix "ENABLE_LOGGING" macro definition~~
+* ~~Gurobi related code is broken under Ubuntu 16.04/Debian Stretch~~

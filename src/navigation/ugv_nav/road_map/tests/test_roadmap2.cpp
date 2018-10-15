@@ -33,7 +33,7 @@ int main()
     // std::cout << "occupied laneles: " << ids.size() << std::endl;
 
     RoadMapViz::SetupRoadMapViz(map);
-    RoadMapViz::ShowLanes(true, 5, "map-roundabout", true);
+    RoadMapViz::ShowLanes();
 
     // LightViz::ShowPolygon(map->GetAllLanePolygons(), 10);
     // LightViz::ShowPolyline(map->GetAllLaneBoundPolylines(), 10);

@@ -32,7 +32,7 @@ struct PrimitiveNode
 struct MotionPrimitive
 {
     MotionPrimitive() : id(-1) {}
-    MotionPrimitive(int32_t mpid) : id(mpid){};
+    explicit MotionPrimitive(int32_t mpid) : id(mpid){};
 
     int32_t id;
     double length;

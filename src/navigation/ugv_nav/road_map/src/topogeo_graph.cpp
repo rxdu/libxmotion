@@ -29,7 +29,7 @@ TopoGeoGraph::~TopoGeoGraph()
 
 void TopoGeoGraph::ConstructGraph()
 {
-    graph_ = std::make_shared<Graph_t<LaneBlock *>>();
+    graph_ = std::make_shared<Graph<LaneBlock *>>();
 
     auto mapping = road_map_->GetLaneletIDNameMap();
     for (auto &entry : mapping)
@@ -75,7 +75,8 @@ void TopoGeoGraph::ConstructGraph()
 
 std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
 {
-    auto vtx = graph_->GetVertex(id);
+    using GraphType = Graph<LaneBlock *>;
+    auto vtx = graph_->FindVertex(id);
 
     // std::cout << "-----> back tracking lanelet " << vtx->state_->name << std::endl;
 
@@ -83,14 +84,14 @@ std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
     for (auto it = graph_->vertex_begin(); it != graph_->vertex_end(); ++it)
         it->state_->type = LaneBlockType::TopoConnected;
 
-    std::vector<Graph_t<LaneBlock *>::VertexType *> vertices;
-    std::vector<Graph_t<LaneBlock *>::VertexType *> vtx_candidates;
+    std::vector<GraphType::vertex_iterator> vertices;
+    std::vector<GraphType::vertex_iterator> vtx_candidates;
     for (auto vf : vtx->vertices_from_)
     {
         // std::cout << "added name: " << vf->state_->name << std::endl;
         vertices.push_back(vf);
 
-        if (vf->GetEdgeCost(vtx->vertex_id_) == 0.0)
+        if (vf->FindEdge(vtx->vertex_id_)->cost_ == 0.0)
             vf->state_->type = LaneBlockType::GeoConnected;
         else
             vtx_candidates.push_back(vf);
@@ -104,7 +105,7 @@ std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
         // for (auto cv : vtx_candidates)
         //     vertices.push_back(cv);
 
-        std::vector<Graph_t<LaneBlock *>::VertexType *> candidates = vtx_candidates;
+        std::vector<GraphType::vertex_iterator> candidates = vtx_candidates;
         vtx_candidates.clear();
         for (auto &v : candidates)
         {
@@ -117,7 +118,7 @@ std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
                         std::find(vertices.begin(), vertices.end(), vf) == vertices.end())
                     {
                         // std::cout << "added name: " << vf->state_->name << std::endl;
-                        if (vf->GetEdgeCost(v->vertex_id_) != 0.0)
+                        if (vf->FindEdge(v->vertex_id_)->cost_ != 0.0)
                         {
                             vertices.push_back(vf);
                             vtx_candidates.push_back(vf);

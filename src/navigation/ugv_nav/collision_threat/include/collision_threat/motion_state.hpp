@@ -26,8 +26,8 @@ struct MMStateEst
                                                sigma_px(sig_px), sigma_py(sig_py), sigma_vx(sig_vx), sigma_vy(sig_vy) {}
     MMStateEst(double px, double py,
                double vx, double vy,
-               double sig_p, double sig_v) : position_x(px), position_y(py), velocity_x(vx), velocity_y(vy),
-                                             sigma_px(sig_p), sigma_py(sig_p), sigma_vx(sig_v), sigma_vy(sig_v) {}
+               double sig_x, double sig_y) : position_x(px), position_y(py), velocity_x(vx), velocity_y(vy),
+                                             sigma_px(sig_x), sigma_py(sig_y), sigma_vx(sig_x), sigma_vy(sig_y) {}
 
     double position_x;
     double position_y;

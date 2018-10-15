@@ -18,6 +18,11 @@ using namespace librav;
 // {
 // }
 
+TrafficSim::TrafficSim(std::shared_ptr<RoadMap> map):road_map_(map)
+{
+
+}
+
 bool TrafficSim::UpdateTraffic(int32_t period_ms)
 {
     timer_.tic();
@@ -26,8 +31,8 @@ bool TrafficSim::UpdateTraffic(int32_t period_ms)
         return true;
 
     // update states of traffic participants
-    vehicle_.Update(sim_t_, step_size_);
-    std::cout << "Vehicle position: " << vehicle_.GetPosition() << " ; vehicle velocity: " << vehicle_.GetVelocity() << std::endl; 
+    vehicle_.Update(sim_t_);
+    // std::cout << "Vehicle position: " << vehicle_.GetPosition() << " ; vehicle velocity: " << vehicle_.GetVelocity() << std::endl; 
 
     sim_t_ += step_size_;
 

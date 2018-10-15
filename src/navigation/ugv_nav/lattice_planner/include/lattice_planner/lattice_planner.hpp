@@ -36,7 +36,7 @@ class LatticePlanner
 	void SetVehicleFootprint(const Polygon &polygon) { footprint_ = polygon; }
 	void SetEgoPlanningRoute(std::vector<std::string> ll);
 
-	LatticePath Search(LatticeNode start_state, int32_t horizon);
+	// LatticePath Search(LatticeNode start_state, int32_t horizon);
 	LatticePath BFSSearch(LatticeNode start_state, LatticeNode goal_state, int32_t horizon, int32_t min_candidate = 20);
 	LatticePath AStarSearch(LatticeNode start_state, LatticeNode goal_state, int32_t horizon, int32_t min_candidate = 20);
 
@@ -58,12 +58,13 @@ class LatticePlanner
 	bool VehicleInsideDrivableArea(const Polygon &footprint);
 	bool IsCollisionFree(const MotionPrimitive &lattice);
 
+	int64_t GetDepth(Graph<LatticeNode, MotionPrimitive> *graph, Graph<LatticeNode, MotionPrimitive>::vertex_iterator vtx);
 	double CalculateDistance(LatticeNode node0, LatticeNode node1);
 	double CalculateHeuristic(LatticeNode node0, LatticeNode node1);
 	double EvaluateCandidate(LatticeNode candidate, LatticeNode desired);
 
 	std::vector<std::tuple<LatticeNode, MotionPrimitive>> GenerateLattices(LatticeNode node);
-	static std::vector<Vertex_t<LatticeNode, MotionPrimitive> *> ReconstructPath(Vertex_t<LatticeNode, MotionPrimitive> *start_vtx, Vertex_t<LatticeNode, MotionPrimitive> *goal_vtx);
+	static std::vector<Graph<LatticeNode, MotionPrimitive>::vertex_iterator> ReconstructPath(Graph<LatticeNode, MotionPrimitive> *graph, Graph<LatticeNode, MotionPrimitive>::vertex_iterator start_vtx, Graph<LatticeNode, MotionPrimitive>::vertex_iterator goal_vtx);
 };
 } // namespace librav
 

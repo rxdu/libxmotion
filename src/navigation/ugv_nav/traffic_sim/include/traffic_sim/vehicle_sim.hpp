@@ -10,24 +10,22 @@
 #ifndef VEHICLE_SIM_HPP
 #define VEHICLE_SIM_HPP
 
-#include "common/librav_types.hpp"
-#include "traffic_sim/traffic_participant.hpp"
-
 namespace librav
 {
 
-class VehicleSim : public TrafficParticipant
+class VehicleSim
 {
 public:
-  VehicleSim();
-  VehicleSim(Position2Dd init_pos);
+  VehicleSim() = default;
+  VehicleSim(double x, double y, double spd);
   ~VehicleSim() = default;
 
-public:
-  void Update(double t, double dt) override;
+  void Update(double t);
   
 private:
-  Position2Dd init_pos_;
+  double pos_x_ = 0.0;
+  double pos_y_ = 0.0;
+  double speed_ = 0.0;
 };
 
 }

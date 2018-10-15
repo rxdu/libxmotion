@@ -61,7 +61,7 @@ MotionChain::MotionChain(MotionModel *model, MotionPoint pt, int32_t start) : st
         // look for child links for each link at this depth
         for (auto &lk : lks)
         {
-            for (auto &edge : model_->cline_graph_->GetVertex(lk->lanelet_id_)->edges_to_)
+            for (auto &edge : model_->cline_graph_->FindVertex(lk->lanelet_id_)->edges_to_)
             {
                 // auto pln = model_->road_map_->GetLaneCenterLine(model_->road_map_->GetLaneletNameFromID(edge.dst_->state_->id));
                 auto pln = edge.dst_->state_.center_line;
@@ -265,7 +265,7 @@ MotionModel::MotionModel(std::shared_ptr<RoadMap> map) : road_map_(map)
 
 void MotionModel::ConstructLineNetwork()
 {
-    cline_graph_ = std::make_shared<Graph_t<LaneBlock>>();
+    cline_graph_ = std::make_shared<Graph<LaneBlock>>();
 
     for (auto &source : road_map_->GetSources())
         for (auto &sink : road_map_->GetSinks())

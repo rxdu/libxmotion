@@ -2,7 +2,7 @@
  * polyline.hpp
  * 
  * Created on: Aug 09, 2018 06:42
- * Description: 
+ * Description: polyline wrapper around CGAL
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
@@ -34,6 +34,12 @@ class Polyline
 public:
   Polyline() = default;
   Polyline(std::vector<Point_2> pts);
+  ~Polyline() = default;
+
+  Polyline(const Polyline& other) = default;
+  Polyline(Polyline&& other) = default;
+  Polyline& operator=(const Polyline& other) = default;
+  Polyline& operator=(Polyline&& other) = default;
 
   using Point = Point_2;
   using Line = Line_2;

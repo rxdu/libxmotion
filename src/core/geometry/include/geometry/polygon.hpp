@@ -2,7 +2,7 @@
  * polygon.hpp
  * 
  * Created on: Aug 09, 2018 04:15
- * Description: 
+ * Description: polygon wrapper around CGAL
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
@@ -44,6 +44,12 @@ public:
   Polygon() = default;
   Polygon(std::vector<Point_2> pts);
   Polygon(Polyline left_bound, Polyline right_bound);
+  ~Polygon() = default;
+
+  Polygon(const Polygon &other) = default;
+  Polygon(Polygon &&other) = default;
+  Polygon &operator=(const Polygon &other) = default;
+  Polygon &operator=(Polygon &&other) = default;
 
   using Point = Point_2;
   typedef Polygon_2::Vertex_iterator point_iterator;

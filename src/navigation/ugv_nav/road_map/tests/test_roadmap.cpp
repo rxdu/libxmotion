@@ -15,6 +15,7 @@ int main()
     stopwatch::StopWatch timer;
 
     RoadMap map("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_with_centerline.osm");
+    // RoadMap map("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full_with_ref.osm");
 
     if (!map.MapReady())
     {
@@ -30,9 +31,9 @@ int main()
     std::cout << "occupied laneles: " << ids.size() << std::endl;
 
     // LightViz::ShowPolygon(map.GetAllLanePolygons(), 10);
-    // LightViz::ShowPolyline(map.GetAllLaneBoundPolylines(), 10);
-    // LightViz::ShowLanePolylines(map.GetAllLaneBoundPolylines(), map.GetAllLaneCenterPolylines());
-    LightViz::ShowPolylinePosition(map.GetAllLaneCenterPolylines(), 10);
+    LightViz::ShowPolyline(map.GetAllLaneBoundPolylines(), 10);
+    LightViz::ShowLanePolylines(map.GetAllLaneBoundPolylines(), map.GetAllLaneCenterPolylines());
+    // LightViz::ShowPolylinePosition(map.GetAllLaneCenterPolylines(), 10);
 
     // std::vector<Polygon> roi;
     // roi.push_back(map.GetLanePolygon("s1"));

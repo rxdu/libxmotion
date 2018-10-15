@@ -3,11 +3,11 @@ project(librav_core)
 
 ## Add sub source directories
 add_subdirectory(common)
-add_subdirectory(interface)
+add_subdirectory(geometry)
+add_subdirectory(trajectory)
 add_subdirectory(utilities)
 
-add_subdirectory(geometry)
-add_subdirectory(polynomial)
+add_subdirectory(control)
 add_subdirectory(planning)
 add_subdirectory(lightviz)
 
