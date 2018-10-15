@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(librav_libs)
+project(librav_modules)
 
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
@@ -15,17 +15,14 @@ elseif(COMPILER_SUPPORTS_CXX0X)
 else()
 	message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++14 or C++11 support. Please use a different C++ compiler.")
 endif()
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 ## Put all binary files into /bin and libraries into /lib
-#set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Add sub source directories
-add_subdirectory(googletest)
-add_subdirectory(spdlog)
-add_subdirectory(ascent)
-add_subdirectory(liblanelet)
-add_subdirectory(gurobi_cpp)
-add_subdirectory(osqp)
+add_subdirectory(kindr)
+add_subdirectory(polynomial)
+add_subdirectory(dubins_curves)
+add_subdirectory(utilities)

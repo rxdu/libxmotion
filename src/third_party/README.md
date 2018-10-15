@@ -23,10 +23,6 @@ octovis
 
 * commit: e6cbc22da53bc807a6172a99cd6dc75534926b99
 
-### dubins_curves
-
-* minimal version for cleaner integration: https://github.com/rxdu/dubins_curves/tree/minimal
-
 ## Cinder
 
 * cinder/proj/cmake/platform_linux.cmake: line 194	
