@@ -22,7 +22,6 @@
 #include "threat_field/traffic_participant.hpp"
 #include "threat_field/collision_field.hpp"
 
-#include "road_map/lane_block.hpp"
 #include "collision_threat/motion_state.hpp"
 
 namespace librav
@@ -93,6 +92,30 @@ private:
 /// Motion model manages the evolution of detected traffic participants
 class MotionModel
 {
+public:
+  struct LaneBlock
+  {
+    LaneBlock() : id(-1), name("null") {}
+    LaneBlock(int32_t _id, std::string _name = "default") : id(_id), name(_name) {}
+
+    int32_t id;
+    std::string name;
+    Polyline center_line;
+
+    int64_t GetUniqueID() const
+    {
+      return id;
+    }
+
+    bool operator==(const LaneBlock &other)
+    {
+      if (other.id == this->id)
+        return true;
+      else
+        return false;
+    }
+  };
+
 public:
   MotionModel(std::shared_ptr<RoadMap> map);
   ~MotionModel() = default;

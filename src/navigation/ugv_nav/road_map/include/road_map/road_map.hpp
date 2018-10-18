@@ -20,8 +20,8 @@
 #include "decomp/dense_grid.hpp"
 #include "geometry/polygon.hpp"
 
-#include "road_map/road_coordinate.hpp"
-#include "road_map/topogeo_graph.hpp"
+#include "road_map/details/road_coordinate.hpp"
+#include "road_map/details/topogeo_graph.hpp"
 
 namespace librav
 {
@@ -68,7 +68,7 @@ public:
   // Check occupied lanelets at given position
   std::vector<int32_t> OccupiedLanelet(CartCooridnate pos);
 
-  std::vector<std::string> FindInteractingLanes(std::vector<std::string> names) { return tg_graph_->FindInteractingLanes(names); }
+  std::vector<std::string> FindConflictingLanes(std::vector<std::string> names) { return tg_graph_->FindConflictingLanes(names); }
   bool CheckLaneletCollision(std::string ll1, std::string ll2);
   void CheckLaneletCollision();
 

@@ -22,7 +22,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Add sub source directories
-add_subdirectory(kindr)
+# add_subdirectory(kindr)
 add_subdirectory(polynomial)
 add_subdirectory(dubins_curves)
 add_subdirectory(utilities)

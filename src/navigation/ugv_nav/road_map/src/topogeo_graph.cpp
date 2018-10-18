@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "road_map/topogeo_graph.hpp"
+#include "road_map/details/topogeo_graph.hpp"
 
 #include <set>
 #include <algorithm>
@@ -145,15 +145,15 @@ std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
     return names;
 }
 
-std::vector<std::string> TopoGeoGraph::FindInteractingLanes(std::vector<std::string> names)
+std::vector<std::string> TopoGeoGraph::FindConflictingLanes(std::vector<std::string> names)
 {
     std::vector<int32_t> ids;
     for (auto &name : names)
         ids.push_back(road_map_->GetLaneletIDFromName(name));
-    return FindInteractingLanes(ids);
+    return FindConflictingLanes(ids);
 }
 
-std::vector<std::string> TopoGeoGraph::FindInteractingLanes(std::vector<int32_t> ids)
+std::vector<std::string> TopoGeoGraph::FindConflictingLanes(std::vector<int32_t> ids)
 {
     std::set<std::string> lanes;
     // add lanes that are possible for interactions
@@ -170,4 +170,9 @@ std::vector<std::string> TopoGeoGraph::FindInteractingLanes(std::vector<int32_t>
         lane_names.push_back(n);
 
     return lane_names;
+}
+
+bool TopoGeoGraph::HasOnlyOneSubsequentLane(std::string name)
+{
+    
 }
