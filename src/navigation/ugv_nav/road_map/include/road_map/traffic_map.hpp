@@ -11,6 +11,7 @@
 #define TRAFFIC_MAP_HPP
 
 #include <vector>
+#include <map>
 
 #include "road_map/details/traffic_segment.hpp"
 #include "road_map/details/traffic_channel.hpp"
@@ -25,8 +26,12 @@ public:
   TrafficMap() = delete;
   TrafficMap(RoadMap *map);
 
+  std::vector<TrafficChannel> GetAllTrafficChannels();
+
 private:
   RoadMap *road_map_;
+
+  std::map<std::pair<std::string, std::string>, TrafficChannel> traffic_channels_;
 
   void IdentifyTrafficElements();
 };

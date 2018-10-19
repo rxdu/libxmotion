@@ -97,12 +97,12 @@ void CSpline::Interpolate(const std::vector<Knot> &knots)
     gsl_spline_init(spline_, x, y, knots.size());
 }
 
-double CSpline::Evaluate(double x)
+double CSpline::Evaluate(double x) const
 {
     return gsl_spline_eval(spline_, x, accel_);
 }
 
-double CSpline::Evaluate(double x, int32_t derivative)
+double CSpline::Evaluate(double x, int32_t derivative) const
 {
     assert(derivative <= 2);
 

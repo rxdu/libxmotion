@@ -63,7 +63,10 @@ std::vector<SimplePoint> Polyline::GetSimplePoints() const
     return pts;
 }
 
-Polyline Polyline::Concatenate(const Polyline &other)
+// Example:
+// Polyline1 = {pt1, pt2, pt3}, Polyline2 = {pt3, pt4, pt5}
+// Polyline1.SeriesConcatenate(Polyline2) = {pt1, pt2, pt3, pt4, pt5}
+Polyline Polyline::SeriesConcatenate(const Polyline &other)
 {
     assert(other.GetPointNumer() > 0);
 
@@ -71,7 +74,10 @@ Polyline Polyline::Concatenate(const Polyline &other)
     points.insert(points.end(), points_.begin(), points_.end());
 
     auto other_pts = other.GetPoints();
-    points.insert(points.end(), other_pts.begin() + 1, other_pts.end());
+    if (points_.empty())
+        points.insert(points.end(), other_pts.begin(), other_pts.end());
+    else
+        points.insert(points.end(), other_pts.begin() + 1, other_pts.end());
 
     return Polyline(points);
 }

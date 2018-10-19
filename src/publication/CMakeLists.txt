@@ -29,6 +29,5 @@ include_directories(${EIGEN3_INCLUDE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 ## Add other sub source directories
-add_subdirectory(selective_listening_acc)
-
-
+# add_subdirectory(selective_listening_acc)
+# add_subdirectory(connectivity_selection)

@@ -14,6 +14,9 @@ target_link_libraries(test_grid_viz lightviz)
 add_executable(test_polygon_viz test_polygon_viz.cpp )
 target_link_libraries(test_polygon_viz lightviz)
 
+add_executable(test_cspline_viz test_cspline_viz.cpp )
+target_link_libraries(test_cspline_viz lightviz)
+
 add_executable(test_field_viz test_field_viz.cpp )
 target_link_libraries(test_field_viz lightviz)
 

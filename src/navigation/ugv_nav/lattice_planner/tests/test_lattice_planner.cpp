@@ -7,7 +7,7 @@
 #include "lattice_planner/lattice_planner.hpp"
 
 #include "lightviz/lightviz.hpp"
-#include "traffic_viz/traffic_viz.hpp"
+#include "ugvnav_viz/ugvnav_viz.hpp"
 
 using namespace librav;
 

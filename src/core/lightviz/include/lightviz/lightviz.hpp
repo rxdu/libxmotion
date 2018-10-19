@@ -15,5 +15,6 @@
 #include "lightviz/matrix_viz.hpp"
 #include "lightviz/grid_viz.hpp"
 #include "lightviz/polygon_viz.hpp"
+#include "lightviz/spline_viz.hpp"
 
 #endif /* LIGHTVIZ_HPP */

@@ -15,9 +15,30 @@ using namespace librav;
 
 TrafficMap::TrafficMap(RoadMap *map) : road_map_(map)
 {
+    IdentifyTrafficElements();
 }
 
 void TrafficMap::IdentifyTrafficElements()
 {
-    auto sinks = road_map_->GetSinks();
+    // look for traffic channels
+    for (auto &source : road_map_->GetSources())
+    {
+        for (auto &sink : road_map_->GetSinks())
+        {
+            auto path = road_map_->FindShortestRouteName(source, sink);
+            if (!path.empty())
+            {
+                traffic_channels_.insert(std::make_pair(std::make_pair(source, sink), TrafficChannel(road_map_, source, sink, path)));
+            }
+        }
+    }
+    std::cout << "traffic channel num: " << traffic_channels_.size() << std::endl;
+}
+
+std::vector<TrafficChannel> TrafficMap::GetAllTrafficChannels()
+{
+    std::vector<TrafficChannel> chns;
+    for (auto &tchn : traffic_channels_)
+        chns.push_back(tchn.second);
+    return chns;
 }

@@ -106,6 +106,7 @@ void RoadMap::LoadMapFile(std::string map_file)
 
     // create topo-geometrical graph
     tg_graph_ = std::make_shared<TopoGeoGraph>(this);
+    traffic_map_ = std::make_shared<TrafficMap>(this);
 
     // set loaded flag
     map_loaded_ = true;

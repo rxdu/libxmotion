@@ -66,10 +66,10 @@ class ConventionTest {
     OtherRotation_ otherQuat2;
     RotationConversion<OtherRotation_, OtherVelocity_, PrimType_>::convertToOtherRotation(otherQuat2, kindrQuat2);
 
-    // Concatenate with Kindr
+    // SeriesConcatenate with Kindr
     kindr::RotationQuaternion<PrimType_> kindrQuatKindrConcat = kindrQuat2*kindrQuat1;
 
-    // Concatenate with other rotation
+    // SeriesConcatenate with other rotation
     OtherRotation_ otherQuatOtherConcat;
     RotationConversion<OtherRotation_, OtherVelocity_, PrimType_>::concatenate(otherQuatOtherConcat, otherQuat1, otherQuat2);
 

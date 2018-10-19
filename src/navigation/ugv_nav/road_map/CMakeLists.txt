@@ -5,6 +5,8 @@
 set(ROADMAP_LIB_SRC
 	src/road_coordinate.cpp
 	src/topogeo_graph.cpp
+	src/path_curve.cpp
+	src/traffic_channel.cpp
 	src/traffic_map.cpp
 	src/road_map.cpp
 )

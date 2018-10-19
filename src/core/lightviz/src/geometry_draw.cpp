@@ -83,6 +83,25 @@ cv::Mat GeometryDraw::DrawPolyline(cv::Mat canvas, const Polyline &polyline, boo
     return canvas;
 }
 
+cv::Mat GeometryDraw::DrawCubicSpline(cv::Mat canvas, const CSpline &spline, double step, cv::Scalar ln_color, int32_t ln_width)
+{
+    std::vector<cv::Point2d> pts;
+    std::vector<CSpline::Knot> knots(spline.GetAllKnots());
+    for (double x = knots.front().x; x < knots.back().x; x += step)
+        pts.emplace_back(x, spline.Evaluate(x));
+
+    std::cout << "intermediate points: " << pts.size() << std::endl;
+
+    for (std::size_t i = 0; i < pts.size() - 1; ++i)
+    {
+        auto pt1 = ConvertCartisianToPixel(pts[i].x, pts[i].y);
+        auto pt2 = ConvertCartisianToPixel(pts[i + 1].x, pts[i + 1].y);
+        DrawLine(canvas, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color, ln_width);
+    }
+
+    return canvas;
+}
+
 cv::Mat GeometryDraw::DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool show_dot, cv::Scalar ln_color, int32_t ln_width)
 {
     std::size_t pt_num = polygon.GetPointNumer();
@@ -119,7 +138,7 @@ cv::Mat GeometryDraw::DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool s
 */
 cv::Mat GeometryDraw::DrawPolygonDirection(cv::Mat canvas, const Polygon &polygon, cv::Scalar ln_color, int32_t ln_width)
 {
-    if(polygon.GetPointNumer() < 3)
+    if (polygon.GetPointNumer() < 3)
         return canvas;
 
     std::vector<SimplePoint> points;
@@ -137,8 +156,8 @@ cv::Mat GeometryDraw::DrawPolygonDirection(cv::Mat canvas, const Polygon &polygo
     center_x = center_x / polygon.GetPointNumer();
     center_y = center_y / polygon.GetPointNumer();
 
-    double front_x = (points[0].x + points[1].x)/2.0;
-    double front_y = (points[0].y + points[1].y)/2.0;
+    double front_x = (points[0].x + points[1].x) / 2.0;
+    double front_y = (points[0].y + points[1].y) / 2.0;
 
     DrawArrow(canvas, cv::Point(center_x, center_y), cv::Point(front_x, front_y), ln_color, ln_width);
 
@@ -250,6 +269,4 @@ SimplePoint GeometryDraw::ConvertCartisianToPixel(double xi, double yi)
     if (y >= canvas_size_y_)
         y = canvas_size_y_ - 1;
     return SimplePoint(x, y);
-
-    // return DenseGridPixel(input.x * pixel_per_meter, grid_size_y_ - input.y * pixel_per_meter);
 }

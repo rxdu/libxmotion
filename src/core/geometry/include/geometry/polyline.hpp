@@ -68,7 +68,7 @@ public:
   inline double GetMinY() const { return ymin_; }
   inline double GetMaxY() const { return ymax_; }
 
-  Polyline Concatenate(const Polyline &other);
+  Polyline SeriesConcatenate(const Polyline &other);
   Polyline operator+(const Polyline &other);
 
   void PrintInfo();

@@ -18,6 +18,7 @@
 
 // #include "decomp/dense_grid.hpp"
 #include "geometry/polygon.hpp"
+#include "geometry/cspline.hpp"
 #include "lightviz/cv_draw.hpp"
 
 namespace librav
@@ -30,6 +31,8 @@ struct GeometryDraw
     cv::Mat CreateCanvasWithMatrixColorMap(const Eigen::MatrixXd &matrix, int32_t ppu);
 
     cv::Mat DrawPolyline(cv::Mat canvas, const Polyline &polyline, bool show_dot = false, cv::Scalar ln_color = LVColors::blue_color, int32_t ln_width = 1);
+    cv::Mat DrawCubicSpline(cv::Mat canvas, const CSpline &spline, double step = 0.01, cv::Scalar ln_color = LVColors::blue_color, int32_t ln_width = 1);
+
     cv::Mat DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool show_dot = false, cv::Scalar ln_color = LVColors::blue_color, int32_t ln_width = 1);
     cv::Mat DrawFilledPolygon(cv::Mat canvas, const Polygon &polygon, bool show_dot = false, cv::Scalar fill_color = LVColors::aoi_color, cv::Scalar ln_color = LVColors::blue_color, int32_t ln_width = 1);
 

@@ -10,24 +10,34 @@
 #ifndef TRAFFIC_CHANNEL_HPP
 #define TRAFFIC_CHANNEL_HPP
 
+#include <vector>
 #include <string>
 #include <cstdint>
 
 #include "geometry/polyline.hpp"
+#include "road_map/path_curve.hpp"
 
 namespace librav
 {
+class RoadMap;
+
 class TrafficChannel
 {
-  public:
-    TrafficChannel(std::string src, std::string dst) : source(src), sink(dst)
-    {
-    }
+public:
+  TrafficChannel(RoadMap *map, std::string src, std::string dst, std::vector<std::string> lanes);
+  ~TrafficChannel() = default;
 
-    std::string source;
-    std::string sink;
+  std::string source_;
+  std::string sink_;
+  std::vector<std::string> lanes_;
 
-    Polyline center_line;
+  Polyline center_line_;
+  PathCurve center_curve_;
+
+private:
+  RoadMap *road_map_;
+
+  void FitCurve();
 };
 } // namespace librav
 

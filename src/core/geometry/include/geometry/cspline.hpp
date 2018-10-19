@@ -38,10 +38,12 @@ public:
   CSpline(CSpline &&other);
   CSpline &operator=(CSpline &&other);
 
-  double Evaluate(double x);
-  double Evaluate(double x, int32_t derivative);
+  double Evaluate(double x) const;
+  double Evaluate(double x, int32_t derivative) const;
 
   void Interpolate(const std::vector<Knot> &knots);
+
+  std::vector<Knot> GetAllKnots() const { return knots_; }
 
 private:
   gsl_interp_accel *accel_ = nullptr;
