@@ -1,16 +1,24 @@
 #include <iostream>
 #include <iomanip>
 
-#include "decomp/details/rect_grid_base.hpp"
+#include "decomp/curvilinear_grid.hpp"
 
 using namespace librav;
 
 int main()
 {
-    const int size_x = 10;
-    const int size_y = 12;
+    // generate a parametric curve
+    Polyline polyline;
+    polyline.AddPoint(0, 0);
+    polyline.AddPoint(0.5, 0.25);
+    polyline.AddPoint(1.0, 1.0);
+    polyline.AddPoint(1.5, 1.75);
+    polyline.AddPoint(2.0, 2);
 
-    GridBase<double> grid(size_x, size_y);
+    auto curve = CurveFitting::FitApproximateLengthCurve(polyline);
+
+    // create curvilinear grid
+    CurvilinearGrid grid(curve, 0.1, 0.1);
     // grid.SetOriginCoordinate(5, 6);
 
     // grid.SetTileAtGridCoordinate(-2, -1, -1.0);
@@ -18,15 +26,15 @@ int main()
     // grid.SetTileAtGridCoordinate(1, 2, 1.2);
     // grid.GetTileRefAtGridCoordinate(1, 2) = 1.3;
 
-    grid.PrintGrid();
+    // grid.PrintGrid();
 
-    std::cout << "after resize:\n"
-              << std::endl;
+    // std::cout << "after resize:\n"
+    //           << std::endl;
 
-    // grid.ResizeGrid(8, 9);   
-    grid.ResizeGrid(12, 15);
+    // // grid.ResizeGrid(8, 9);   
+    // grid.ResizeGrid(12, 15);
 
-    grid.PrintGrid();
+    // grid.PrintGrid();
 
     return 0;
 }

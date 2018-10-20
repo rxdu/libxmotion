@@ -5,7 +5,7 @@
  * Description: 
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
- */ 
+ */
 
 #ifndef CURVILINEAR_GRID_HPP
 #define CURVILINEAR_GRID_HPP
@@ -13,20 +13,20 @@
 #include <cstdint>
 #include <vector>
 
-#include "decomp/details/grid_base.hpp"
+#include "geometry/parametric_curve.hpp"
 
 namespace librav
 {
 /*
  * Coordinate System:
  * 
- *          s
- *          ^
- *          |
- *		      |
- *		      |
- *		      |
- *		      |
+ *               s
+ *               ^
+ *               |
+ *		          |
+ *		         |
+ *		        |     parametric curve
+ *		       |
  *		      |
  *		      |
  *	 <----- o ----- delta
@@ -34,60 +34,51 @@ namespace librav
 
 ////////////////////////////////////////////////////////////////////
 
+// x - longitudinal/tangential , y - lateral/normal
 class CurviGridIndex
 {
 public:
-  CurviGridIndex() : coordinate_s_(0), coordinate_delta_(0) {}
-  CurviGridIndex(int64_t s = 0, int64_t d = 0) : coordinate_s_(s), coordinate_delta_(d) {}
+  CurviGridIndex() : coordinate_x_(0), coordinate_y_(0) {}
+  CurviGridIndex(int64_t x = 0, int64_t y = 0) : coordinate_x_(x), coordinate_y_(y) {}
   ~CurviGridIndex() = default;
 
-  inline int64_t GetX() const { return coordinate_s_; };
-  inline int64_t GetY() const { return coordinate_delta_; };
-  inline void SetX(int64_t s) { coordinate_s_ = s; };
-  inline void SetY(int64_t d) { coordinate_delta_ = d; };
-  inline void SetXY(int64_t s, int64_t d)
+  inline int64_t GetX() const { return coordinate_x_; };
+  inline int64_t GetY() const { return coordinate_y_; };
+  inline void SetX(int64_t x) { coordinate_x_ = x; };
+  inline void SetY(int64_t y) { coordinate_y_ = y; };
+  inline void SetXY(int64_t x, int64_t y)
   {
-    coordinate_s_ = s;
-    coordinate_delta_ = d;
+    coordinate_x_ = x;
+    coordinate_y_ = y;
   };
 
 private:
-  int64_t coordinate_s_;
-  int64_t coordinate_delta_;
-};
-
-////////////////////////////////////////////////////////////////////
-
-enum class SquareCellLabel
-{
-  OCCUPIED,
-  FREE
-};
-
-struct GridPoint
-{
-  GridPoint(double xval = 0, double yval = 0) : x(xval), y(yval){};
-
-  double x;
-  double y;
+  int64_t coordinate_x_;
+  int64_t coordinate_y_;
 };
 
 ////////////////////////////////////////////////////////////////////
 
 template <typename AttributeType>
-struct SquareCellBase
+struct CurvilinearCellBase
 {
-  SquareCellBase(int32_t xval, int32_t yval, int64_t idval = -1) : x(xval),
-                                                                   y(yval),
-                                                                   id(idval) {}
+  struct GridPoint
+  {
+    GridPoint(double _s = 0, double _d = 0) : s(_s), delta(_d){};
+
+    double s;
+    double delta;
+  };
+
+  CurvilinearCellBase(int32_t xval, int32_t yval, int64_t idval = -1) : index(CurviGridIndex(xval, yval)),
+                                                                        id(idval) {}
+  ~CurvilinearCellBase() = default;
 
   // for easy reference, maybe unnecessary for some applications
   int64_t id = -1;
 
   // topological attributes
-  int32_t x;
-  int32_t y;
-  SquareCellLabel label = SquareCellLabel::FREE;
+  CurviGridIndex index;
 
   // geometrical attributes
   // 4 vertices in the order:
@@ -103,84 +94,95 @@ struct SquareCellBase
   // define extra attributes if the default ones are not enough
   AttributeType extra_attribute;
 
-  inline int64_t GetUniqueID() const { return id; }
+  inline int64_t GetUniqueID() const
+  {
+    return id;
+  }
 
   inline void UpdateGeometry(double size)
   {
-    vertices[0].x = size * x;
-    vertices[0].y = size * y;
+    // vertices[0].x = size * x;
+    // vertices[0].y = size * y;
 
-    vertices[1].x = size * (x + 1);
-    vertices[1].y = size * y;
+    // vertices[1].x = size * (x + 1);
+    // vertices[1].y = size * y;
 
-    vertices[2].x = size * x;
-    vertices[2].y = size * (y + 1);
+    // vertices[2].x = size * x;
+    // vertices[2].y = size * (y + 1);
 
-    vertices[3].x = size * (x + 1);
-    vertices[3].y = size * (y + 1);
+    // vertices[3].x = size * (x + 1);
+    // vertices[3].y = size * (y + 1);
 
-    center.x = vertices[0].x + size / 2.0;
-    center.y = vertices[0].y + size / 2.0;
+    // center.x = vertices[0].x + size / 2.0;
+    // center.y = vertices[0].y + size / 2.0;
   }
 
   inline void Print() const
   {
-    std::cout << "cell " << id << " : " << x << " , " << y 
-      << " ; center : " << center.x << " , " << center.y << std::endl;
+    // std::cout << "cell " << id << " : " << x << " , " << index
+    //           << " ; center : " << center.x << " , " << center.y << std::endl;
   }
 };
 
-using SquareCell = SquareCellBase<double>;
+using CurvilinearCell = CurvilinearCellBase<double>;
 
 ////////////////////////////////////////////////////////////////////
 
 template <typename T>
-class SquareGridBase : public GridBase<SquareCellBase<T> *>
+class CurvilinearGridBase
 {
 public:
-  SquareGridBase(int32_t size_x, int32_t size_y, double cell_size = 0.1);
-  SquareGridBase(const Eigen::MatrixXd &matrix, int32_t side_length, double cell_size = 0.1);
-  ~SquareGridBase();
+  CurvilinearGridBase(ParametricCurve pcurve, double s_step, double d_step);
+  ~CurvilinearGridBase() = default;
 
-  double GetCellSize() const { return cell_size_; }
+  using CellType = CurvilinearCellBase<T>;
 
-  inline CurviGridIndex GetCoordinateFromID(int64_t id) { return IDToCoordinate(id); }
-  inline int64_t GetIDFromCoordinate(int32_t x, int32_t y) { return CoordinateToID(x, y); }
+  // double GetCellSize() const { return cell_size_; }
 
-  SquareCellBase<T> *GetCell(int64_t id);
-  SquareCellBase<T> *GetCell(int32_t x, int32_t y);
+  // inline CurviGridIndex GetCoordinateFromID(int64_t id) { return IDToCoordinate(id); }
+  // inline int64_t GetIDFromCoordinate(int32_t x, int32_t y) { return CoordinateToID(x, y); }
 
-  std::vector<SquareCellBase<T> *> GetNeighbours(int32_t x, int32_t y, bool allow_diag);
-  std::vector<SquareCellBase<T> *> GetNeighbours(int64_t id, bool allow_diag = true);
+  // CurvilinearCellBase<T> *GetCell(int64_t id);
+  // CurvilinearCellBase<T> *GetCell(int32_t x, int32_t y);
 
-  inline void SetCellLabel(int32_t x, int32_t y, SquareCellLabel label)
-  {
-    GridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(x, y)->label = label;
-  }
+  // std::vector<SquareCellBase<T> *> GetNeighbours(int32_t x, int32_t y, bool allow_diag);
+  // std::vector<SquareCellBase<T> *> GetNeighbours(int64_t id, bool allow_diag = true);
 
-  inline void SetCellLabel(int64_t id, SquareCellLabel label)
-  {
-    auto coordinate = IDToCoordinate(id);
-    GridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(coordinate.GetX(), coordinate.GetY())->label = label;
-  }
+  // inline void SetCellLabel(int32_t x, int32_t y, SquareCellLabel label)
+  // {
+  //   GridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(x, y)->label = label;
+  // }
+
+  // inline void SetCellLabel(int64_t id, SquareCellLabel label)
+  // {
+  //   auto coordinate = IDToCoordinate(id);
+  //   GridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(coordinate.GetX(), coordinate.GetY())->label = label;
+  // }
 
 private:
-  double cell_size_;
+  ParametricCurve curve_;
+
+  double s_step_;
+  double delta_step_;
+
+  std::vector<std::vector<CellType>> grid_tiles_;
 
   // CoordinateToID() and IDToCoordinate() are the only places that define
   //  the mapping between coordinate and id
-  inline int64_t CoordinateToID(int32_t x, int32_t y)
-  {
-    return y * GridBase<SquareCellBase<T> *>::size_x_ + x;
-  }
+  // inline int64_t CoordinateToID(int32_t x, int32_t y)
+  // {
+  //   return y * GridBase<SquareCellBase<T> *>::size_x_ + x;
+  // }
 
-  inline CurviGridIndex IDToCoordinate(int64_t id)
-  {
-    return CurviGridIndex(id % GridBase<SquareCellBase<T> *>::size_x_, id / GridBase<SquareCellBase<T> *>::size_x_);
-  }
+  // inline CurviGridIndex IDToCoordinate(int64_t id)
+  // {
+  //   return CurviGridIndex(id % GridBase<SquareCellBase<T> *>::size_x_, id / GridBase<SquareCellBase<T> *>::size_x_);
+  // }
 };
-}
 
-#include "details/square_grid_base.hpp"
+using CurvilinearGrid = CurvilinearGridBase<double>;
+} // namespace librav
+
+#include "details/curvilinear_grid_impl.hpp"
 
 #endif /* CURVILINEAR_GRID_HPP */

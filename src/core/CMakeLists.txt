@@ -3,10 +3,9 @@ project(librav_core)
 
 ## Add sub source directories
 add_subdirectory(common)
-add_subdirectory(utilities)
-
 add_subdirectory(control)
 add_subdirectory(planning)
 add_subdirectory(lightviz)
+add_subdirectory(utilities)
 
 add_subdirectory(examples)

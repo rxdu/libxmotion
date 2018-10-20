@@ -39,22 +39,29 @@ enum class SquareCellLabel
   FREE
 };
 
-struct GridPoint
-{
-  GridPoint(double xval = 0, double yval = 0) : x(xval), y(yval){};
-
-  double x;
-  double y;
-};
-
 ////////////////////////////////////////////////////////////////////
 
 template <typename AttributeType>
 struct SquareCellBase
 {
+  struct GridPoint
+  {
+    GridPoint(double xval = 0, double yval = 0) : x(xval), y(yval){};
+
+    double x;
+    double y;
+  };
+
+  SquareCellBase() = default;
   SquareCellBase(int32_t xval, int32_t yval, int64_t idval = -1) : x(xval),
                                                                    y(yval),
                                                                    id(idval) {}
+
+  ~SquareCellBase() = default;
+  SquareCellBase(const SquareCellBase &other) = default;
+  SquareCellBase &operator=(const SquareCellBase &other) = default;
+  SquareCellBase(SquareCellBase &&other) = default;
+  SquareCellBase &operator=(SquareCellBase &&other) = default;
 
   // for easy reference, maybe unnecessary for some applications
   int64_t id = -1;
@@ -100,8 +107,8 @@ struct SquareCellBase
 
   inline void Print() const
   {
-    std::cout << "cell " << id << " : " << x << " , " << y 
-      << " ; center : " << center.x << " , " << center.y << std::endl;
+    std::cout << "cell " << id << " : " << x << " , " << y
+              << " ; center : " << center.x << " , " << center.y << std::endl;
   }
 };
 
@@ -156,7 +163,7 @@ private:
 };
 
 using SquareGrid = SquareGridBase<double>;
-}
+} // namespace librav
 
 #include "details/square_grid_impl.hpp"
 
