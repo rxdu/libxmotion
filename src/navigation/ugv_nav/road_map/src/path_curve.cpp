@@ -15,12 +15,42 @@ using namespace librav;
 
 PathCurve::PathCurve(Polyline center_polyline) : polyline_(center_polyline)
 {
+}
+
+PathCurve::PathCurve(CSpline xspline, CSpline yspline, double sf) : x_spline_(xspline), y_spline_(yspline), total_length_(sf)
+{
+}
+
+SimplePoint PathCurve::Evaluate(double s) const
+{
+    return SimplePoint(x_spline_.Evaluate(s), y_spline_.Evaluate(s));
+}
+
+SimplePoint PathCurve::Evaluate(double s, int32_t derivative) const
+{
+    return SimplePoint(x_spline_.Evaluate(s, derivative), y_spline_.Evaluate(s, derivative));
+}
+
+PathCurve CurveFitting::FitApproximateLengthCurve(Polyline polyline)
+{
     std::vector<double> distances;
     distances.push_back(0.0);
-    for (int32_t i = 0; i < polyline_.GetPointNumer() - 1; ++i)
+
+    double accumulated = 0.0;
+    for (int32_t i = 0; i < polyline.GetPointNumer() - 1; ++i)
     {
-        double dist = std::hypot(polyline_.GetPoint(i).x - polyline_.GetPoint(i + 1).x,
-                                 polyline_.GetPoint(i).y - polyline_.GetPoint(i + 1).y);
-        distances.push_back(dist);
+        double dist = std::hypot(polyline.GetPoint(i).x - polyline.GetPoint(i + 1).x,
+                                 polyline.GetPoint(i).y - polyline.GetPoint(i + 1).y);
+        accumulated += dist;
+        distances.push_back(accumulated);
     }
+
+    std::vector<CSpline::Knot> xknots, yknots;
+    for (int32_t i = 0; i < polyline.GetPointNumer(); ++i)
+    {
+        xknots.emplace_back(distances[i], polyline.GetPoint(i).x);
+        yknots.emplace_back(distances[i], polyline.GetPoint(i).y);
+    }
+
+    return PathCurve(CSpline(xknots), CSpline(yknots), accumulated);
 }

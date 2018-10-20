@@ -36,8 +36,6 @@ public:
 
 private:
   RoadMap *road_map_;
-
-  void FitCurve();
 };
 } // namespace librav
 

@@ -21,5 +21,5 @@ TrafficChannel::TrafficChannel(RoadMap *map, std::string src, std::string dst, s
         center_line_ = center_line_.SeriesConcatenate(road_map_->GetLaneCenterLine(lane));
     // std::cout << "channel " << source_ << " -> " << sink_ << " : " << center_line_.GetPointNumer() << std::endl;
 
-    center_curve_ = PathCurve(center_line_);
+    center_curve_ = CurveFitting::FitApproximateLengthCurve(center_line_);   
 }

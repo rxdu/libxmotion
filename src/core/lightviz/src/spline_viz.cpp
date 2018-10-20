@@ -32,3 +32,13 @@ void LightViz::ShowCubicSpline(const std::vector<CSpline> &splines, double step,
 void LightViz::ShowCubicSplinePosition(const std::vector<CSpline> &splines, double step, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
 }
+
+void LightViz::ShowCubicSplinePair(const CSpline &xspline, const CSpline &yspline, double sf, double step, int32_t pixel_per_unit, std::string window_name, bool save_img)
+{
+    GeometryDraw gdraw(pixel_per_unit);
+
+    cv::Mat canvas = gdraw.CreateCanvas(-15, 15, -10, 10);
+    canvas = gdraw.DrawCubicSplinePair(canvas, xspline, yspline, sf, step);
+
+    ShowImage(canvas, window_name, save_img);
+}

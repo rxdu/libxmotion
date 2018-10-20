@@ -43,7 +43,7 @@ CSpline::~CSpline()
         gsl_interp_accel_free(accel_);
 }
 
-CSpline::CSpline(const CSpline &other)
+CSpline::CSpline(const CSpline &other) : knots_(other.knots_)
 {
     accel_ = gsl_interp_accel_alloc();
     spline_ = gsl_spline_alloc(gsl_interp_cspline, other.knots_.size());
@@ -67,12 +67,14 @@ CSpline &CSpline::operator=(const CSpline &other)
 
 CSpline::CSpline(CSpline &&other)
 {
+    std::swap(this->knots_, other.knots_);
     std::swap(this->accel_, other.accel_);
     std::swap(this->spline_, other.spline_);
 }
 
 CSpline &CSpline::operator=(CSpline &&other)
 {
+    std::swap(this->knots_, other.knots_);
     std::swap(this->accel_, other.accel_);
     std::swap(this->spline_, other.spline_);
     return *this;

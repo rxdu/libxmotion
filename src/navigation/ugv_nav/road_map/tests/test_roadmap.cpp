@@ -13,8 +13,9 @@ int main()
 {
     stopwatch::StopWatch timer;
 
-    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_with_centerline.osm");
+    // std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_with_centerline.osm");
     // RoadMap map("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full_with_ref.osm");
+    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
 
     if (!map->MapReady())
     {
@@ -37,7 +38,10 @@ int main()
     // LightViz::ShowPolylinePosition(map->GetAllLaneCenterPolylines(), 10);
 
     for (auto &chn : map->traffic_map_->GetAllTrafficChannels())
-        RoadMapViz::ShowTrafficChannelCenterline(chn);
+    {
+        // RoadMapViz::ShowTrafficChannelCenterline(chn);
+        RoadMapViz::ShowTrafficChannel(chn);
+    }
     // std::vector<Polygon> roi;
     // roi.push_back(map->GetLanePolygon("s1"));
     // LightViz::ShowFilledPolygon(roi, map->GetAllLanePolygons());

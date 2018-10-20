@@ -102,6 +102,25 @@ cv::Mat GeometryDraw::DrawCubicSpline(cv::Mat canvas, const CSpline &spline, dou
     return canvas;
 }
 
+cv::Mat GeometryDraw::DrawCubicSplinePair(cv::Mat canvas, const CSpline &xspline, const CSpline &yspline, double sf, double step, cv::Scalar ln_color, int32_t ln_width)
+{
+    std::vector<cv::Point2d> pts;
+
+    for (double s = 0; s < sf; s += step)
+        pts.emplace_back(xspline.Evaluate(s), yspline.Evaluate(s));
+
+    std::cout << "intermediate points: " << pts.size() << std::endl;
+
+    for (std::size_t i = 0; i < pts.size() - 1; ++i)
+    {
+        auto pt1 = ConvertCartisianToPixel(pts[i].x, pts[i].y);
+        auto pt2 = ConvertCartisianToPixel(pts[i + 1].x, pts[i + 1].y);
+        DrawLine(canvas, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color, ln_width);
+    }
+
+    return canvas;
+}
+
 cv::Mat GeometryDraw::DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool show_dot, cv::Scalar ln_color, int32_t ln_width)
 {
     std::size_t pt_num = polygon.GetPointNumer();
