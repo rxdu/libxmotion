@@ -1,14 +1,14 @@
 /* 
- * grid_base.hpp
+ * rect_grid_base.hpp
  * 
  * Created on: Mar 28, 2018 23:34
- * Description: 
+ * Description: Base class for rectangular grid.
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#ifndef GRID_BASE_HPP
-#define GRID_BASE_HPP
+#ifndef RECT_GRID_BASE_HPP
+#define RECT_GRID_BASE_HPP
 
 #include <cstdint>
 #include <vector>
@@ -19,7 +19,7 @@
 
 #include <Eigen/Dense>
 
-#include "decomp/details/grid_base_tiles.hpp"
+#include "decomp/details/rect_grid_base_tiles.hpp"
 
 namespace librav
 {
@@ -59,12 +59,12 @@ namespace librav
 
 ////////////////////////////////////////////////////////////////////
 
-class GridCoordinate
+class RectGridIndex
 {
 public:
-  GridCoordinate() : coordinate_x_(0), coordinate_y_(0) {}
-  GridCoordinate(int64_t x = 0, int64_t y = 0) : coordinate_x_(x), coordinate_y_(y) {}
-  ~GridCoordinate() = default;
+  RectGridIndex() : coordinate_x_(0), coordinate_y_(0) {}
+  RectGridIndex(int64_t x = 0, int64_t y = 0) : coordinate_x_(x), coordinate_y_(y) {}
+  ~RectGridIndex() = default;
 
   inline int64_t GetX() const { return coordinate_x_; };
   inline int64_t GetY() const { return coordinate_y_; };
@@ -173,16 +173,16 @@ protected:
   }
 
   // convertion between two coordinates
-  inline GridCoordinate ConvertToRawCoordinate(int64_t x, int64_t y) const
+  inline RectGridIndex ConvertToRawCoordinate(int64_t x, int64_t y) const
   {
-    return GridCoordinate(x + origin_offset_x_, y + origin_offset_y_);
+    return RectGridIndex(x + origin_offset_x_, y + origin_offset_y_);
   }
 
-  inline GridCoordinate ConvertToGridCoordinate(int64_t x, int64_t y) const
+  inline RectGridIndex ConvertToGridCoordinate(int64_t x, int64_t y) const
   {
     assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
 
-    return GridCoordinate(x - origin_offset_x_, y - origin_offset_y_);
+    return RectGridIndex(x - origin_offset_x_, y - origin_offset_y_);
   }
 
 protected:
@@ -196,4 +196,4 @@ protected:
 };
 }
 
-#endif /* GRID_BASE_HPP */
+#endif /* RECT_GRID_BASE_HPP */

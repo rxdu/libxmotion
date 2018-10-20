@@ -1,12 +1,7 @@
 #include <iostream>
 
-#include "road_map/road_map.hpp"
-#include "road_map/path_curve.hpp"
-
+#include "geometry/parametric_curve.hpp"
 #include "lightviz/lightviz.hpp"
-#include "ugvnav_viz/ugvnav_viz.hpp"
-
-#include "stopwatch/stopwatch.h"
 
 using namespace librav;
 
@@ -24,7 +19,7 @@ int main()
     for (double i = 0; i < 2.0; i += 0.5)
         std::cout << " s = " << i << " , " << curve.Evaluate(i) << std::endl;
 
-    LightViz::ShowCubicSplinePair(curve.GetXSpline(), curve.GetYSpline(), curve.GetTotalLength());
+    LightViz::ShowParametricCurve(curve);
 
     return 0;
 }

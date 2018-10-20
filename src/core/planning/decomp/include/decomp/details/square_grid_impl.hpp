@@ -1,5 +1,5 @@
 /* 
- * square_grid_base.hpp
+ * square_grid_impl.hpp
  * 
  * Created on: Apr 08, 2018 18:01
  * Description: 
@@ -7,8 +7,8 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#ifndef SQUARE_GRID_BASE_HPP
-#define SQUARE_GRID_BASE_HPP
+#ifndef SQUARE_GRID_IMPL_HPP
+#define SQUARE_GRID_IMPL_HPP
 
 namespace librav
 {
@@ -136,7 +136,7 @@ SquareCellBase<T> *SquareGridBase<T>::GetCell(int32_t x, int32_t y)
 template <typename T>
 std::vector<SquareCellBase<T> *> SquareGridBase<T>::GetNeighbours(int32_t x, int32_t y, bool allow_diag)
 {
-    std::vector<GridCoordinate> candidates;
+    std::vector<RectGridIndex> candidates;
     if (allow_diag)
     {
         for (int32_t xi = x - 1; xi <= x + 1; ++xi)
@@ -175,4 +175,4 @@ std::vector<SquareCellBase<T> *> SquareGridBase<T>::GetNeighbours(int64_t id, bo
 }
 }
 
-#endif /* SQUARE_GRID_BASE_HPP */
+#endif /* SQUARE_GRID_IMPL_HPP */

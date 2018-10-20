@@ -1,35 +1,60 @@
 /* 
- * square_grid.hpp
+ * curvilinear_grid.hpp
  * 
- * Created on: Mar 28, 2018 23:07
+ * Created on: Oct 20, 2018 09:13
  * Description: 
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
- */
+ */ 
 
-#ifndef SQUARE_GRID_HPP
-#define SQUARE_GRID_HPP
+#ifndef CURVILINEAR_GRID_HPP
+#define CURVILINEAR_GRID_HPP
 
 #include <cstdint>
 #include <vector>
 
-#include "decomp/details/rect_grid_base.hpp"
+#include "decomp/details/grid_base.hpp"
 
 namespace librav
 {
 /*
  * Coordinate System:
- *
- *		o --------------------> x
- *		|
- *		|
- *		|
- *		|
- *		|
- *		|
- *		v
- *		y
+ * 
+ *          s
+ *          ^
+ *          |
+ *		      |
+ *		      |
+ *		      |
+ *		      |
+ *		      |
+ *		      |
+ *	 <----- o ----- delta
  */
+
+////////////////////////////////////////////////////////////////////
+
+class CurviGridIndex
+{
+public:
+  CurviGridIndex() : coordinate_s_(0), coordinate_delta_(0) {}
+  CurviGridIndex(int64_t s = 0, int64_t d = 0) : coordinate_s_(s), coordinate_delta_(d) {}
+  ~CurviGridIndex() = default;
+
+  inline int64_t GetX() const { return coordinate_s_; };
+  inline int64_t GetY() const { return coordinate_delta_; };
+  inline void SetX(int64_t s) { coordinate_s_ = s; };
+  inline void SetY(int64_t d) { coordinate_delta_ = d; };
+  inline void SetXY(int64_t s, int64_t d)
+  {
+    coordinate_s_ = s;
+    coordinate_delta_ = d;
+  };
+
+private:
+  int64_t coordinate_s_;
+  int64_t coordinate_delta_;
+};
 
 ////////////////////////////////////////////////////////////////////
 
@@ -119,7 +144,7 @@ public:
 
   double GetCellSize() const { return cell_size_; }
 
-  inline RectGridIndex GetCoordinateFromID(int64_t id) { return IDToCoordinate(id); }
+  inline CurviGridIndex GetCoordinateFromID(int64_t id) { return IDToCoordinate(id); }
   inline int64_t GetIDFromCoordinate(int32_t x, int32_t y) { return CoordinateToID(x, y); }
 
   SquareCellBase<T> *GetCell(int64_t id);
@@ -149,15 +174,13 @@ private:
     return y * GridBase<SquareCellBase<T> *>::size_x_ + x;
   }
 
-  inline RectGridIndex IDToCoordinate(int64_t id)
+  inline CurviGridIndex IDToCoordinate(int64_t id)
   {
-    return RectGridIndex(id % GridBase<SquareCellBase<T> *>::size_x_, id / GridBase<SquareCellBase<T> *>::size_x_);
+    return CurviGridIndex(id % GridBase<SquareCellBase<T> *>::size_x_, id / GridBase<SquareCellBase<T> *>::size_x_);
   }
 };
-
-using SquareGrid = SquareGridBase<double>;
 }
 
-#include "details/square_grid_impl.hpp"
+#include "details/square_grid_base.hpp"
 
-#endif /* SQUARE_GRID_HPP */
+#endif /* CURVILINEAR_GRID_HPP */

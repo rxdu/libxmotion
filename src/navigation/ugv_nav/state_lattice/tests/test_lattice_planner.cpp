@@ -56,14 +56,14 @@ int main()
 
     if (!path.empty())
     {
-        std::vector<GridCoordinate> waypoints;
+        std::vector<RectGridIndex> waypoints;
         for (auto &mp : path)
         {
             for (auto &nd : mp.nodes)
             {
                 auto grid_pos = map->coordinate_.ConvertToGridPixel(CartCooridnate(nd.x, nd.y));
 
-                waypoints.push_back(GridCoordinate(grid_pos.x, grid_pos.y));
+                waypoints.push_back(RectGridIndex(grid_pos.x, grid_pos.y));
             }
         }
         LightViz::ShowPathOnMatrixAsColorMap(drivable_mask->GetGridMatrix(true), waypoints, "lplanner", true);

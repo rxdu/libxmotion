@@ -34,7 +34,7 @@ void LightViz::ShowMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::string w
     ShowImage(color_img, window_name, save_img);
 }
 
-void LightViz::ShowPathOnMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::vector<GridCoordinate> waypoints, std::string window_name, bool save_img)
+void LightViz::ShowPathOnMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::vector<RectGridIndex> waypoints, std::string window_name, bool save_img)
 {
     cv::Mat color_img = CreateColorMapFromEigenMatrix(matrix);
 

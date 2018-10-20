@@ -20,7 +20,7 @@ namespace LightViz
 {
 void ShowMatrixAsImage(const Eigen::MatrixXd &matrix, std::string window_name = "Matrix Image", bool save_img = false);
 void ShowMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::string window_name = "Matrix Color Map", bool save_img = false);
-void ShowPathOnMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::vector<GridCoordinate> waypoints, std::string window_name = "Matrix Color Map", bool save_img = false);
+void ShowPathOnMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::vector<RectGridIndex> waypoints, std::string window_name = "Matrix Color Map", bool save_img = false);
 } // namespace LightViz
 } // namespace librav
 

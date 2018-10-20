@@ -1,5 +1,5 @@
 /* 
- * grid_base_tiles.hpp
+ * rect_grid_base_tiles.hpp
  * 
  * Created on: Mar 29, 2018 11:19
  * Description: 
@@ -7,8 +7,8 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#ifndef GRID_BASE_TILES_HPP
-#define GRID_BASE_TILES_HPP
+#ifndef RECT_GRID_BASE_TILES_HPP
+#define RECT_GRID_BASE_TILES_HPP
 
 #include <cstdint>
 #include <vector>
@@ -109,4 +109,4 @@ class GridTiles<T, std::enable_if_t<!std::is_floating_point<T>::value && !std::i
 };
 }
 
-#endif /* GRID_BASE_TILES_HPP */
+#endif /* RECT_GRID_BASE_TILES_HPP */

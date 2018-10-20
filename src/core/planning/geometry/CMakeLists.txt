@@ -7,6 +7,7 @@ set(GEOMETRY_LIB_SRC
 	src/polyline.cpp
 	src/polygon.cpp
 	src/cspline.cpp
+	src/parametric_curve.cpp
 )
 add_library(geometry STATIC ${GEOMETRY_LIB_SRC})
 target_link_libraries(geometry ${CGAL_LIBS} ${GSL_LIBRARIES})

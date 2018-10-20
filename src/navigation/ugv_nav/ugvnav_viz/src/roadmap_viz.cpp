@@ -98,8 +98,7 @@ void RoadMapViz::ShowTrafficChannel(TrafficChannel &channel, int32_t pixel_per_u
 
     // canvas = gdraw.DrawPolyline(canvas, channel.center_line_, true, LVColors::gray_color);
 
-    canvas = gdraw.DrawCubicSplinePair(canvas, channel.center_curve_.GetXSpline(), channel.center_curve_.GetYSpline(),
-                                       channel.center_curve_.GetTotalLength(), 0.1, LVColors::black_color);
+    canvas = gdraw.DrawParametricCurve(canvas, channel.center_curve_, 0.1, LVColors::black_color);
 
     LightViz::ShowImage(canvas, window_name, save_img);
 }

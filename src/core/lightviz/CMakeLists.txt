@@ -41,7 +41,7 @@ set(LIGHTVIZ_LIB_SRC
 	src/geometry_draw.cpp
 	src/matrix_viz.cpp
 	src/polygon_viz.cpp
-	src/spline_viz.cpp
+	src/curve_viz.cpp
 )
 add_library(lightviz STATIC ${LIGHTVIZ_LIB_SRC})
 target_link_libraries(lightviz decomp graph geometry ${OpenCV_LIBS})

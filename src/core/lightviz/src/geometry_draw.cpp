@@ -102,12 +102,12 @@ cv::Mat GeometryDraw::DrawCubicSpline(cv::Mat canvas, const CSpline &spline, dou
     return canvas;
 }
 
-cv::Mat GeometryDraw::DrawCubicSplinePair(cv::Mat canvas, const CSpline &xspline, const CSpline &yspline, double sf, double step, cv::Scalar ln_color, int32_t ln_width)
+cv::Mat GeometryDraw::DrawParametricCurve(cv::Mat canvas, const ParametricCurve& pcurve, double step, cv::Scalar ln_color, int32_t ln_width)
 {
     std::vector<cv::Point2d> pts;
 
-    for (double s = 0; s < sf; s += step)
-        pts.emplace_back(xspline.Evaluate(s), yspline.Evaluate(s));
+    for (double s = 0; s < pcurve.GetTotalLength(); s += step)
+        pts.emplace_back(pcurve.GetXSpline().Evaluate(s), pcurve.GetYSpline().Evaluate(s));
 
     std::cout << "intermediate points: " << pts.size() << std::endl;
 

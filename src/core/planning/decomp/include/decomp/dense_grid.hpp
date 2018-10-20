@@ -14,7 +14,7 @@
 #include <vector>
 #include <memory>
 
-#include "decomp/details/grid_base.hpp"
+#include "decomp/details/rect_grid_base.hpp"
 #include "decomp/square_grid.hpp"
 
 namespace librav

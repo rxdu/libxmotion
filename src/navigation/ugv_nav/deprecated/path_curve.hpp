@@ -29,15 +29,16 @@ public:
   PathCurve(PathCurve &&other) = default;
   PathCurve &operator=(PathCurve &&other) = default;
 
+  SimplePoint Evaluate(double s) const;
+  SimplePoint Evaluate(double s, int32_t derivative) const;
+
   double GetTotalLength() const { return total_length_; }
   CSpline GetXSpline() const { return x_spline_; }
   CSpline GetYSpline() const { return y_spline_; }
 
-  SimplePoint Evaluate(double s) const;
-  SimplePoint Evaluate(double s, int32_t derivative) const;
-
 private:
   double total_length_;
+
   CSpline x_spline_;
   CSpline y_spline_;
 

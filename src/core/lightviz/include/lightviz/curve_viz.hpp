@@ -1,5 +1,5 @@
 /* 
- * spline_viz.hpp
+ * curve_viz.hpp
  * 
  * Created on: Oct 19, 2018 11:21
  * Description: 
@@ -7,13 +7,14 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */ 
 
-#ifndef SPLINE_VIZ_HPP
-#define SPLINE_VIZ_HPP
+#ifndef CURVE_VIZ_HPP
+#define CURVE_VIZ_HPP
 
 #include <vector>
 #include <string>
 
 #include "geometry/cspline.hpp"
+#include "geometry/parametric_curve.hpp"
 
 namespace librav
 {
@@ -23,8 +24,8 @@ void ShowCubicSpline(const CSpline &spline, double step = 0.01, int32_t pixel_pe
 void ShowCubicSpline(const std::vector<CSpline> &splines, double step = 0.01, int32_t pixel_per_unit = 10, std::string window_name = "Spline Image", bool save_img = false);
 void ShowCubicSplinePosition(const std::vector<CSpline> &splines, double step = 0.01, int32_t pixel_per_unit = 10, std::string window_name = "Spline Image", bool save_img = false);
 
-void ShowCubicSplinePair(const CSpline &xspline, const CSpline &yspline, double sf, double step = 0.01, int32_t pixel_per_unit = 10, std::string window_name = "Spline Image", bool save_img = false);
+void ShowParametricCurve(const ParametricCurve &pcurve, double step = 0.01, int32_t pixel_per_unit = 10, std::string window_name = "Spline Image", bool save_img = false);
 } // namespace LightViz
 } // namespace librav
 
-#endif /* SPLINE_VIZ_HPP */
+#endif /* CURVE_VIZ_HPP */
