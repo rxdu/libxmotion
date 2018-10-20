@@ -36,8 +36,12 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add other sub source directories
 add_subdirectory(legacy)
+
+add_subdirectory(geometry)
 add_subdirectory(decomp)
 add_subdirectory(libtree)
 add_subdirectory(graph)
 add_subdirectory(librrt)
+
+add_subdirectory(trajectory)
 add_subdirectory(polyopt)
