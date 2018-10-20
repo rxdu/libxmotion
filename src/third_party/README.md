@@ -34,3 +34,11 @@ octovis
     - set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${ARG_APP_NAME} )
     - comment out: line 44-51 
 
+### dubins_curves 
+
+* minimal version for cleaner integration: https://github.com/rxdu/dubins_curves/tree/minimal
+
+### polynomial
+
+* adapted from code in repository https://github.com/ethz-asl/mav_trajectory_generation
+
