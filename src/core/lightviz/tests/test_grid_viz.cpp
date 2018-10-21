@@ -1,5 +1,5 @@
-#include "lightviz/grid_viz.hpp"
 #include "decomp/square_grid.hpp"
+#include "lightviz/square_grid_viz.hpp"
 
 using namespace librav;
 

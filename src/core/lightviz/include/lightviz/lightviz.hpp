@@ -13,7 +13,7 @@
 #include "lightviz/cv_draw.hpp"
 
 #include "lightviz/matrix_viz.hpp"
-#include "lightviz/grid_viz.hpp"
+#include "lightviz/square_grid_viz.hpp"
 #include "lightviz/polygon_viz.hpp"
 #include "lightviz/curve_viz.hpp"
 

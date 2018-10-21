@@ -18,8 +18,10 @@ int main()
     auto curve = CurveFitting::FitApproximateLengthCurve(polyline);
 
     // create curvilinear grid
-    CurvilinearGrid grid(curve, 0.1, 0.1);
+    CurvilinearGrid grid(curve, 0.5, 0.5, 2);
     // grid.SetOriginCoordinate(5, 6);
+
+    grid.PrintInfo();
 
     // grid.SetTileAtGridCoordinate(-2, -1, -1.0);
     // grid.SetTileAtGridCoordinate(0, 0, 1.0);

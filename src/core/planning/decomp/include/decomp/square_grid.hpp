@@ -105,7 +105,7 @@ struct SquareCellBase
     center.y = vertices[0].y + size / 2.0;
   }
 
-  inline void Print() const
+  inline void PrintInfo() const
   {
     std::cout << "cell " << id << " : " << x << " , " << y
               << " ; center : " << center.x << " , " << center.y << std::endl;
@@ -117,7 +117,7 @@ using SquareCell = SquareCellBase<double>;
 ////////////////////////////////////////////////////////////////////
 
 template <typename T>
-class SquareGridBase : public GridBase<SquareCellBase<T> *>
+class SquareGridBase : public RectGridBase<SquareCellBase<T> *>
 {
 public:
   SquareGridBase(int32_t size_x, int32_t size_y, double cell_size = 0.1);
@@ -126,8 +126,8 @@ public:
 
   double GetCellSize() const { return cell_size_; }
 
-  inline RectGridIndex GetCoordinateFromID(int64_t id) { return IDToCoordinate(id); }
-  inline int64_t GetIDFromCoordinate(int32_t x, int32_t y) { return CoordinateToID(x, y); }
+  inline RectGridIndex GetIndexFromID(int64_t id) { return IDToIndex(id); }
+  inline int64_t GetIDFromIndex(int32_t x, int32_t y) { return IndexToID(x, y); }
 
   SquareCellBase<T> *GetCell(int64_t id);
   SquareCellBase<T> *GetCell(int32_t x, int32_t y);
@@ -137,28 +137,28 @@ public:
 
   inline void SetCellLabel(int32_t x, int32_t y, SquareCellLabel label)
   {
-    GridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(x, y)->label = label;
+    RectGridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(x, y)->label = label;
   }
 
   inline void SetCellLabel(int64_t id, SquareCellLabel label)
   {
-    auto coordinate = IDToCoordinate(id);
-    GridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(coordinate.GetX(), coordinate.GetY())->label = label;
+    auto coordinate = IDToIndex(id);
+    RectGridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(coordinate.GetX(), coordinate.GetY())->label = label;
   }
 
 private:
   double cell_size_;
 
-  // CoordinateToID() and IDToCoordinate() are the only places that define
-  //  the mapping between coordinate and id
-  inline int64_t CoordinateToID(int32_t x, int32_t y)
+  // IndexToID() and IDToIndex() are the only places that define
+  //  the mapping between index and id
+  inline int64_t IndexToID(int32_t x, int32_t y)
   {
-    return y * GridBase<SquareCellBase<T> *>::size_x_ + x;
+    return y * RectGridBase<SquareCellBase<T> *>::size_x_ + x;
   }
 
-  inline RectGridIndex IDToCoordinate(int64_t id)
+  inline RectGridIndex IDToIndex(int64_t id)
   {
-    return RectGridIndex(id % GridBase<SquareCellBase<T> *>::size_x_, id / GridBase<SquareCellBase<T> *>::size_x_);
+    return RectGridIndex(id % RectGridBase<SquareCellBase<T> *>::size_x_, id / RectGridBase<SquareCellBase<T> *>::size_x_);
   }
 };
 

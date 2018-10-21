@@ -34,10 +34,10 @@ namespace librav
  *		y
  */
 
-class DenseGrid : public GridBase<double>
+class DenseGrid : public RectGridBase<double>
 {
 public:
-  DenseGrid(int32_t size_x = 0, int32_t size_y = 0) : GridBase<double>(size_x, size_y){};
+  DenseGrid(int32_t size_x = 0, int32_t size_y = 0) : RectGridBase<double>(size_x, size_y){};
   ~DenseGrid() = default;
 
   inline void SetupGridWithMatrix(const Eigen::MatrixXd &mat)
@@ -50,7 +50,7 @@ public:
 
   inline double GetValueAtCoordinate(int64_t x, int64_t y) { return GetTileAtGridCoordinate(x, y); }
 
-  // public functions inherited from GridBase
+  // public functions inherited from RectGridBase
   /****************************************************************
     void ResizeGrid(int64_t x, int64_t y);
     void SetOriginCoordinate(int64_t origin_x, int64_t origin_y);   

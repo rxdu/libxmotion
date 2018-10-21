@@ -13,7 +13,7 @@
 namespace librav
 {
 template <typename T>
-SquareGridBase<T>::SquareGridBase(int32_t size_x, int32_t size_y, double cell_size) : GridBase<SquareCellBase<T> *>(size_x, size_y),
+SquareGridBase<T>::SquareGridBase(int32_t size_x, int32_t size_y, double cell_size) : RectGridBase<SquareCellBase<T> *>(size_x, size_y),
                                                                                       cell_size_(cell_size)
 {
     assert((size_x > 0 && size_y > 0));
@@ -21,14 +21,14 @@ SquareGridBase<T>::SquareGridBase(int32_t size_x, int32_t size_y, double cell_si
     for (int32_t y = 0; y < size_y; y++)
         for (int32_t x = 0; x < size_x; x++)
         {
-            SquareCellBase<T> *new_cell = new SquareCellBase<T>(x, y, CoordinateToID(x, y));
+            SquareCellBase<T> *new_cell = new SquareCellBase<T>(x, y, IndexToID(x, y));
             new_cell->UpdateGeometry(cell_size);
-            GridBase<SquareCellBase<T> *>::SetTileAtRawCoordinate(x, y, new_cell);
+            RectGridBase<SquareCellBase<T> *>::SetTileAtRawCoordinate(x, y, new_cell);
         }
 }
 
 template <typename T>
-SquareGridBase<T>::SquareGridBase(const Eigen::MatrixXd &matrix, int32_t side_length, double cell_size) : GridBase<SquareCellBase<T> *>(0, 0),
+SquareGridBase<T>::SquareGridBase(const Eigen::MatrixXd &matrix, int32_t side_length, double cell_size) : RectGridBase<SquareCellBase<T> *>(0, 0),
                                                                                                           cell_size_(cell_size)
 {
     int32_t grid_size_x, grid_size_y;
@@ -75,20 +75,20 @@ SquareGridBase<T>::SquareGridBase(const Eigen::MatrixXd &matrix, int32_t side_le
     }
 
     // create new grid
-    GridBase<SquareCellBase<T> *>::ResizeGrid(grid_size_x, grid_size_y);
+    RectGridBase<SquareCellBase<T> *>::ResizeGrid(grid_size_x, grid_size_y);
     for (int32_t y = 0; y < grid_size_y; y++)
         for (int32_t x = 0; x < grid_size_x; x++)
         {
-            SquareCellBase<T> *new_cell = new SquareCellBase<T>(x, y, CoordinateToID(x, y));
+            SquareCellBase<T> *new_cell = new SquareCellBase<T>(x, y, IndexToID(x, y));
             new_cell->UpdateGeometry(cell_size);
-            GridBase<SquareCellBase<T> *>::SetTileAtRawCoordinate(x, y, new_cell);
+            RectGridBase<SquareCellBase<T> *>::SetTileAtRawCoordinate(x, y, new_cell);
         }
 
     // determine occupancy of grid
     int32_t half_size_x = grid_size_x / 2;
     int32_t half_size_y = grid_size_y / 2;
-    for (int64_t x = 0; x < GridBase<SquareCellBase<T> *>::SizeX(); ++x)
-        for (int64_t y = 0; y < GridBase<SquareCellBase<T> *>::SizeY(); ++y)
+    for (int64_t x = 0; x < RectGridBase<SquareCellBase<T> *>::SizeX(); ++x)
+        for (int64_t y = 0; y < RectGridBase<SquareCellBase<T> *>::SizeY(); ++y)
         {
             bool occupied = false;
             int32_t xmin = x * side_length;
@@ -115,22 +115,22 @@ SquareGridBase<T>::SquareGridBase(const Eigen::MatrixXd &matrix, int32_t side_le
 template <typename T>
 SquareGridBase<T>::~SquareGridBase()
 {
-    for (int32_t y = 0; y < GridBase<SquareCellBase<T> *>::size_y_; y++)
-        for (int32_t x = 0; x < GridBase<SquareCellBase<T> *>::size_x_; x++)
-            delete GridBase<SquareCellBase<T> *>::GetTileAtRawCoordinate(x, y);
+    for (int32_t y = 0; y < RectGridBase<SquareCellBase<T> *>::size_y_; y++)
+        for (int32_t x = 0; x < RectGridBase<SquareCellBase<T> *>::size_x_; x++)
+            delete RectGridBase<SquareCellBase<T> *>::GetTileAtRawCoordinate(x, y);
 }
 
 template <typename T>
 SquareCellBase<T> *SquareGridBase<T>::GetCell(int64_t id)
 {
-    auto coordinate = IDToCoordinate(id);
-    return GridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(coordinate.GetX(), coordinate.GetY());
+    auto coordinate = IDToIndex(id);
+    return RectGridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(coordinate.GetX(), coordinate.GetY());
 }
 
 template <typename T>
 SquareCellBase<T> *SquareGridBase<T>::GetCell(int32_t x, int32_t y)
 {
-    return GridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(x, y);
+    return RectGridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(x, y);
 }
 
 template <typename T>
@@ -160,8 +160,8 @@ std::vector<SquareCellBase<T> *> SquareGridBase<T>::GetNeighbours(int32_t x, int
     {
         int32_t xi = can.GetX();
         int32_t yi = can.GetY();
-        if (xi >= 0 && xi < GridBase<SquareCellBase<T> *>::size_x_ && yi >= 0 && yi < GridBase<SquareCellBase<T> *>::size_y_)
-            neighbours.push_back(GridBase<SquareCellBase<T> *>::GetTileAtRawCoordinate(xi, yi));
+        if (xi >= 0 && xi < RectGridBase<SquareCellBase<T> *>::size_x_ && yi >= 0 && yi < RectGridBase<SquareCellBase<T> *>::size_y_)
+            neighbours.push_back(RectGridBase<SquareCellBase<T> *>::GetTileAtRawCoordinate(xi, yi));
     }
 
     return neighbours;
@@ -170,7 +170,7 @@ std::vector<SquareCellBase<T> *> SquareGridBase<T>::GetNeighbours(int32_t x, int
 template <typename T>
 std::vector<SquareCellBase<T> *> SquareGridBase<T>::GetNeighbours(int64_t id, bool allow_diag)
 {
-    auto coordinate = IDToCoordinate(id);
+    auto coordinate = IDToIndex(id);
     return GetNeighbours(coordinate.GetX(), coordinate.GetY(), allow_diag);
 }
 }

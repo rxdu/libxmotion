@@ -1,5 +1,5 @@
 /* 
- * geometry_draw.cpp
+ * geometric_draw.cpp
  * 
  * Created on: Aug 10, 2018 09:18
  * Description: 
@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "lightviz/details/geometry_draw.hpp"
+#include "lightviz/details/geometric_draw.hpp"
 
 #include <cassert>
 
@@ -102,20 +102,54 @@ cv::Mat GeometryDraw::DrawCubicSpline(cv::Mat canvas, const CSpline &spline, dou
     return canvas;
 }
 
-cv::Mat GeometryDraw::DrawParametricCurve(cv::Mat canvas, const ParametricCurve& pcurve, double step, cv::Scalar ln_color, int32_t ln_width)
+cv::Mat GeometryDraw::DrawParametricCurve(cv::Mat canvas, const ParametricCurve &pcurve, double step, cv::Scalar ln_color, int32_t ln_width)
 {
     std::vector<cv::Point2d> pts;
 
     for (double s = 0; s < pcurve.GetTotalLength(); s += step)
         pts.emplace_back(pcurve.GetXSpline().Evaluate(s), pcurve.GetYSpline().Evaluate(s));
 
-    std::cout << "intermediate points: " << pts.size() << std::endl;
+    // std::cout << "intermediate points: " << pts.size() << std::endl;
 
     for (std::size_t i = 0; i < pts.size() - 1; ++i)
     {
         auto pt1 = ConvertCartisianToPixel(pts[i].x, pts[i].y);
         auto pt2 = ConvertCartisianToPixel(pts[i + 1].x, pts[i + 1].y);
         DrawLine(canvas, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color, ln_width);
+    }
+
+    return canvas;
+}
+
+cv::Mat GeometryDraw::DrawCurvilinearGrid(cv::Mat canvas, const CurvilinearGrid &grid, double step, bool show_center, cv::Scalar ln_color, int32_t ln_width)
+{
+    // draw center line
+    if (show_center)
+        canvas = DrawParametricCurve(canvas, grid.curve_, step, LVColors::gray_color, ln_width);
+
+    // draw normal lines
+    auto spt1 = ConvertCartisianToPixel(grid.grid_tiles_.front().back()->vertices[2].position.x, grid.grid_tiles_.front().back()->vertices[2].position.y);
+    auto spt2 = ConvertCartisianToPixel(grid.grid_tiles_.front().front()->vertices[3].position.x, grid.grid_tiles_.front().front()->vertices[3].position.y);
+    DrawLine(canvas, cv::Point(spt1.x, spt1.y), cv::Point(spt2.x, spt2.y), ln_color, ln_width);
+    for (auto &row : grid.grid_tiles_)
+    {
+        auto pt1 = ConvertCartisianToPixel(row.back()->vertices[0].position.x, row.back()->vertices[0].position.y);
+        auto pt2 = ConvertCartisianToPixel(row.front()->vertices[1].position.x, row.front()->vertices[1].position.y);
+        DrawLine(canvas, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color, ln_width);
+    }
+
+    // draw tangential lines
+    for (auto &row : grid.grid_tiles_)
+    {
+        for (auto &cell : row)
+        {
+            auto pt1 = ConvertCartisianToPixel(cell->vertices[1].position.x, cell->vertices[1].position.y);
+            auto pt2 = ConvertCartisianToPixel(cell->vertices[3].position.x, cell->vertices[3].position.y);
+            DrawLine(canvas, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color, ln_width);
+        }
+        auto fpt1 = ConvertCartisianToPixel(row.back()->vertices[0].position.x, row.back()->vertices[0].position.y);
+        auto fpt2 = ConvertCartisianToPixel(row.back()->vertices[2].position.x, row.back()->vertices[2].position.y);
+        DrawLine(canvas, cv::Point(fpt1.x, fpt1.y), cv::Point(fpt2.x, fpt2.y), ln_color, ln_width);
     }
 
     return canvas;

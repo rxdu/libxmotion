@@ -9,7 +9,7 @@
 
 #include "ugvnav_viz/roadmap_viz.hpp"
 
-#include "lightviz/details/geometry_draw.hpp"
+#include "lightviz/details/geometric_draw.hpp"
 
 using namespace librav;
 

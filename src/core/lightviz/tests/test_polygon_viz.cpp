@@ -1,5 +1,5 @@
 #include "lightviz/lightviz.hpp"
-#include "lightviz/details/geometry_draw.hpp"
+#include "lightviz/details/geometric_draw.hpp"
 #include "lightviz/polygon_viz.hpp"
 #include "geometry/polygon.hpp"
 

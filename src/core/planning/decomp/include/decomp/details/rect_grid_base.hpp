@@ -62,32 +62,32 @@ namespace librav
 class RectGridIndex
 {
 public:
-  RectGridIndex() : coordinate_x_(0), coordinate_y_(0) {}
-  RectGridIndex(int64_t x = 0, int64_t y = 0) : coordinate_x_(x), coordinate_y_(y) {}
+  RectGridIndex() : index_x_(0), index_y_(0) {}
+  RectGridIndex(int64_t x = 0, int64_t y = 0) : index_x_(x), index_y_(y) {}
   ~RectGridIndex() = default;
 
-  inline int64_t GetX() const { return coordinate_x_; };
-  inline int64_t GetY() const { return coordinate_y_; };
-  inline void SetX(int64_t x) { coordinate_x_ = x; };
-  inline void SetY(int64_t y) { coordinate_y_ = y; };
+  inline int64_t GetX() const { return index_x_; };
+  inline int64_t GetY() const { return index_y_; };
+  inline void SetX(int64_t x) { index_x_ = x; };
+  inline void SetY(int64_t y) { index_y_ = y; };
   inline void SetXY(int64_t x, int64_t y)
   {
-    coordinate_x_ = x;
-    coordinate_y_ = y;
+    index_x_ = x;
+    index_y_ = y;
   };
 
 private:
-  int64_t coordinate_x_;
-  int64_t coordinate_y_;
+  int64_t index_x_;
+  int64_t index_y_;
 };
 
 ////////////////////////////////////////////////////////////////////
 
 template <typename TileType>
-class GridBase : public GridTiles<TileType>
+class RectGridBase : public GridTiles<TileType>
 {
 public:
-  GridBase(int64_t size_x, int64_t size_y) : GridTiles<TileType>(size_x, size_y),
+  RectGridBase(int64_t size_x, int64_t size_y) : GridTiles<TileType>(size_x, size_y),
                                              size_x_(size_x),
                                              size_y_(size_y)
   {

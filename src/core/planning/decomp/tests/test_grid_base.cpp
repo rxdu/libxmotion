@@ -10,7 +10,7 @@ int main()
     const int size_x = 10;
     const int size_y = 12;
 
-    GridBase<double> grid(size_x, size_y);
+    RectGridBase<double> grid(size_x, size_y);
     // grid.SetOriginCoordinate(5, 6);
 
     // grid.SetTileAtGridCoordinate(-2, -1, -1.0);

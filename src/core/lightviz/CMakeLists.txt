@@ -38,7 +38,7 @@ include_directories(${EIGEN3_INCLUDE_DIR})
 set(LIGHTVIZ_LIB_SRC
 	src/cv_draw.cpp
 	src/matrix_draw.cpp
-	src/geometry_draw.cpp
+	src/geometric_draw.cpp
 	src/matrix_viz.cpp
 	src/polygon_viz.cpp
 	src/curve_viz.cpp

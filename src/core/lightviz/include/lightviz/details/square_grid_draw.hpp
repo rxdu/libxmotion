@@ -1,5 +1,5 @@
 /* 
- * grid_draw.hpp
+ * square_grid_draw.hpp
  * 
  * Created on: Apr 09, 2018 23:13
  * Description: this file defines a set of grid drawing primitives that can be used in grid_viz.hpp
@@ -7,8 +7,8 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#ifndef GRID_DRAW_HPP
-#define GRID_DRAW_HPP
+#ifndef SQUARE_GRID_DRAW_HPP
+#define SQUARE_GRID_DRAW_HPP
 
 #include <cstdint>
 
@@ -174,4 +174,4 @@ struct SquareGridDraw
 };
 }
 
-#endif /* GRID_DRAW_HPP */
+#endif /* SQUARE_GRID_DRAW_HPP */

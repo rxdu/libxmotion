@@ -2,9 +2,7 @@
 
 #include "road_map/road_map.hpp"
 
-#include "lightviz/matrix_viz.hpp"
-#include "lightviz/grid_viz.hpp"
-#include "lightviz/polygon_viz.hpp"
+#include "lightviz/lightviz.hpp"
 
 #include "stopwatch/stopwatch.h"
 
