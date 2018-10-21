@@ -107,6 +107,7 @@ std::vector<CurvilinearCellBase<T> *> CurvilinearGridBase<T>::GetNeighbours(int6
 template <typename T>
 SimplePoint CurvilinearGridBase<T>::ConvertToGlobalCoordinate(typename CurvilinearGridBase<T>::GridPoint pt)
 {
+    // TODO: calculation could be simplified
     Eigen::Matrix2d rotation_matrix;
     rotation_matrix << 0, -1, 1, 0;
 

@@ -184,6 +184,12 @@ public:
   std::vector<std::vector<CellType *>> grid_tiles_;
 
   /*--------------------------------------------------------------*/
+  
+  // local path coordinate
+  // - s: starts from 0
+  // - delta: positive - left, zero - on curve, negative -right
+  SimplePoint ConvertToGlobalCoordinate(GridPoint pt);
+
   double GetCellSizeS() const { return s_step_; }
   double GetCellSizeDelta() const { return delta_step_; }
 
@@ -213,11 +219,6 @@ private:
   int32_t delta_num_;
   int32_t delta_half_num_;
   bool center_cell_null_;
-
-  // local path coordinate
-  // - s: starts from 0
-  // - delta: positive - left, zero - on curve, negative -right
-  SimplePoint ConvertToGlobalCoordinate(GridPoint pt);
 
   // IndexToID() and IDToIndex() are the only places that define
   //  the mapping between index and id

@@ -89,7 +89,7 @@ MotionChain::~MotionChain()
 
 void MotionChain::FindStartingPoint()
 {
-    SimplePoint pt;
+    // SimplePoint pt;
     double shortest_dist = std::numeric_limits<double>::max();
     std::cout << "base link polyline point number: " << base_link_->polyline_.GetPointNumer() << std::endl;
     for (int32_t i = 0; i < base_link_->polyline_.GetPointNumer() - 1; ++i)

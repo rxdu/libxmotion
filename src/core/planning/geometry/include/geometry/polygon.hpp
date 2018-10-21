@@ -68,6 +68,7 @@ public:
   void ConvexDecomposition();
 
   bool CheckInside(Point pt) const;
+  bool CheckInside(double x, double y) const;
   int32_t CheckRelativePosition(Point pt) const;
   inline bool IsSimple() const { return data_.is_simple(); }
   inline bool IsConvex() const { return data_.is_convex(); }

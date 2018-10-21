@@ -87,6 +87,13 @@ bool Polygon::CheckInside(Point pt) const
     return false;
 }
 
+bool Polygon::CheckInside(double x, double y) const
+{
+    if (CGAL::bounded_side_2(data_.vertices_begin(), data_.vertices_end(), Point(x, y), K()) == CGAL::ON_BOUNDED_SIDE)
+        return true;
+    return false;
+}
+
 int32_t Polygon::CheckRelativePosition(Point pt) const
 {
     switch (CGAL::bounded_side_2(data_.vertices_begin(), data_.vertices_end(), pt, K()))

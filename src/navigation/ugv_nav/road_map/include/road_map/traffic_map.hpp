@@ -12,6 +12,9 @@
 
 #include <vector>
 #include <map>
+#include <memory>
+
+#include "decomp/curvilinear_grid.hpp"
 
 #include "road_map/details/traffic_segment.hpp"
 #include "road_map/details/traffic_channel.hpp"
@@ -26,12 +29,12 @@ public:
   TrafficMap() = delete;
   TrafficMap(RoadMap *map);
 
-  std::vector<TrafficChannel> GetAllTrafficChannels();
+  std::vector<std::shared_ptr<TrafficChannel>> GetAllTrafficChannels();
+  std::vector<std::shared_ptr<TrafficChannel>> FindTrafficChannels(SimplePoint pos);
 
 private:
   RoadMap *road_map_;
-
-  std::map<std::pair<std::string, std::string>, TrafficChannel> traffic_channels_;
+  std::map<std::pair<std::string, std::string>, std::shared_ptr<TrafficChannel>> traffic_channels_;
 
   void IdentifyTrafficElements();
 };

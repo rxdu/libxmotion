@@ -40,7 +40,8 @@ int main()
     for (auto &chn : map->traffic_map_->GetAllTrafficChannels())
     {
         // RoadMapViz::ShowTrafficChannelCenterline(chn);
-        RoadMapViz::ShowTrafficChannel(chn);
+        chn->PrintInfo();
+        RoadMapViz::ShowTrafficChannel(*chn.get());
     }
 
     // RoadMapViz::ShowTrafficChannel(map->traffic_map_->GetAllTrafficChannels().front());
