@@ -37,13 +37,13 @@ int main()
     // LightViz::ShowLanePolylines(map->GetAllLaneBoundPolylines(), map->GetAllLaneCenterPolylines());
     // LightViz::ShowPolylinePosition(map->GetAllLaneCenterPolylines(), 10);
 
-    // for (auto &chn : map->traffic_map_->GetAllTrafficChannels())
-    // {
-    //     // RoadMapViz::ShowTrafficChannelCenterline(chn);
-    //     RoadMapViz::ShowTrafficChannel(chn);
-    // }
+    for (auto &chn : map->traffic_map_->GetAllTrafficChannels())
+    {
+        // RoadMapViz::ShowTrafficChannelCenterline(chn);
+        RoadMapViz::ShowTrafficChannel(chn);
+    }
 
-    RoadMapViz::ShowTrafficChannel(map->traffic_map_->GetAllTrafficChannels().front());
+    // RoadMapViz::ShowTrafficChannel(map->traffic_map_->GetAllTrafficChannels().front());
 
     // std::vector<Polygon> roi;
     // roi.push_back(map->GetLanePolygon("s1"));

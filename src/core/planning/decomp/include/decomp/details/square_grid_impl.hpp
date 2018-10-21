@@ -170,8 +170,8 @@ std::vector<SquareCellBase<T> *> SquareGridBase<T>::GetNeighbours(int32_t x, int
 template <typename T>
 std::vector<SquareCellBase<T> *> SquareGridBase<T>::GetNeighbours(int64_t id, bool allow_diag)
 {
-    auto coordinate = IDToIndex(id);
-    return GetNeighbours(coordinate.GetX(), coordinate.GetY(), allow_diag);
+    auto index = IDToIndex(id);
+    return GetNeighbours(index.GetX(), index.GetY(), allow_diag);
 }
 }
 

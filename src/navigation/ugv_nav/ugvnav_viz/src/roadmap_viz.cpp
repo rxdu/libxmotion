@@ -97,6 +97,8 @@ void RoadMapViz::ShowTrafficChannel(TrafficChannel &channel, int32_t pixel_per_u
         canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
 
     // canvas = gdraw.DrawPolyline(canvas, channel.center_line_, true, LVColors::gray_color);
+    if (channel.grid_ != nullptr)
+        canvas = gdraw.DrawCurvilinearGrid(canvas, *channel.grid_.get());
 
     canvas = gdraw.DrawParametricCurve(canvas, channel.center_curve_, 0.1, LVColors::black_color);
 

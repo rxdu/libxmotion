@@ -41,7 +41,7 @@ CurvilinearGridBase<T>::CurvilinearGridBase(ParametricCurve pcurve, double s_ste
 
             CellType *cell = new CellType(x_idx, i, IndexToID(x_idx, i));
             cell->UpdateGeometry(s_step, d_step, center_cell_null_);
-            for(int i = 0; i < 4; ++i)
+            for (int i = 0; i < 4; ++i)
                 cell->vertices[i].position = ConvertToGlobalCoordinate(cell->vertices[i]);
             cell->center.position = ConvertToGlobalCoordinate(cell->center);
             rows.push_back(cell);
@@ -64,6 +64,47 @@ CurvilinearCellBase<T> *CurvilinearGridBase<T>::GetCell(int32_t x, int32_t y)
 }
 
 template <typename T>
+std::vector<CurvilinearCellBase<T> *> CurvilinearGridBase<T>::GetNeighbours(int32_t x, int32_t y, bool allow_diag)
+{
+    std::vector<CurviGridIndex> candidates;
+    if (allow_diag)
+    {
+        for (int32_t xi = x - 1; xi <= x + 1; ++xi)
+            for (int32_t yi = y - 1; yi <= y + 1; ++yi)
+            {
+                if (xi == x && yi == y)
+                    continue;
+                candidates.emplace_back(xi, yi);
+            }
+    }
+    else
+    {
+        candidates.emplace_back(x, y + 1);
+        candidates.emplace_back(x, y - 1);
+        candidates.emplace_back(x + 1, y);
+        candidates.emplace_back(x - 1, y);
+    }
+
+    std::vector<CurvilinearCellBase<T> *> neighbours;
+    for (auto &can : candidates)
+    {
+        int32_t xi = can.GetX();
+        int32_t yi = can.GetY();
+        if (xi >= 0 && xi < GetTangentialGridNum() && yi >= -delta_half_num_ && yi <= delta_half_num_)
+            neighbours.push_back(GetCell(xi, yi));
+    }
+
+    return neighbours;
+}
+
+template <typename T>
+std::vector<CurvilinearCellBase<T> *> CurvilinearGridBase<T>::GetNeighbours(int64_t id, bool allow_diag)
+{
+    auto index = IDToIndex(id);
+    return GetNeighbours(index.GetX(), index.GetY(), allow_diag);
+}
+
+template <typename T>
 SimplePoint CurvilinearGridBase<T>::ConvertToGlobalCoordinate(typename CurvilinearGridBase<T>::GridPoint pt)
 {
     Eigen::Matrix2d rotation_matrix;
@@ -74,7 +115,7 @@ SimplePoint CurvilinearGridBase<T>::ConvertToGlobalCoordinate(typename Curviline
 
     Eigen::Vector2d base_vec(base_pt.x, base_pt.y);
     Eigen::Vector2d vec_t(vel_vec.x, vel_vec.y);
-    Eigen::Vector2d vec_n  = rotation_matrix * vec_t;
+    Eigen::Vector2d vec_n = rotation_matrix * vec_t;
 
     Eigen::Vector2d offset = vec_n.normalized() * pt.delta;
     Eigen::Vector2d result = base_vec + offset;

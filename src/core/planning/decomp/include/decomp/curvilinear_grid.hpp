@@ -196,8 +196,8 @@ public:
   CurvilinearCellBase<T> *GetCell(int64_t id);
   CurvilinearCellBase<T> *GetCell(int32_t x, int32_t y);
 
-  // std::vector<SquareCellBase<T> *> GetNeighbours(int32_t x, int32_t y, bool allow_diag);
-  // std::vector<SquareCellBase<T> *> GetNeighbours(int64_t id, bool allow_diag = true);
+  std::vector<CurvilinearCellBase<T> *> GetNeighbours(int32_t x, int32_t y, bool allow_diag = true);
+  std::vector<CurvilinearCellBase<T> *> GetNeighbours(int64_t id, bool allow_diag = true);
 
   void PrintInfo()
   {
@@ -211,7 +211,6 @@ private:
   double s_step_;
   double delta_step_;
   int32_t delta_num_;
-
   int32_t delta_half_num_;
   bool center_cell_null_;
 
