@@ -17,14 +17,14 @@ int main()
 
     // create curvilinear grid
     // CurvilinearGrid grid(curve, 0.1, 0.5, 3);
-    CurvilinearGrid grid(curve, 0.5, 0.2, 3);
+    CurvilinearGrid grid(curve, 0.41, 0.2, 5);
 
     GeometryDraw gdraw(200);
 
-    cv::Mat canvas = gdraw.CreateCanvas(-1, 5, -1, 3);
-    canvas = gdraw.DrawCurvilinearGrid(canvas, grid);
+    cv::Mat canvas = gdraw.CreateCanvas(-1, 3, -1, 3);
+    canvas = gdraw.DrawCurvilinearGrid(canvas, grid, 0.1, true);
 
-    LightViz::ShowImage(canvas);
+    LightViz::ShowImage(canvas, "curvilinear_grid");
 
     return 0;
 }
