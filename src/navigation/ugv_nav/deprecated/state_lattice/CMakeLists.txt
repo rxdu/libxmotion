@@ -3,9 +3,8 @@
 
 # Add libraries
 set(LATTICE_LIB_SRC
-  # src/lattice_generator.cpp
-  # src/lattice_manager.cpp
-  src/primitive_generator.cpp
+  src/lattice_generator.cpp
+  src/lattice_manager.cpp
 )
 add_library(lattice STATIC ${LATTICE_LIB_SRC})
 target_link_libraries(lattice graph geometry model utilities)
@@ -15,5 +14,5 @@ target_include_directories(lattice PUBLIC
   PRIVATE src)
 
 if(BUILD_TESTS)
-  # add_subdirectory(tests)
+  add_subdirectory(tests)
 endif()

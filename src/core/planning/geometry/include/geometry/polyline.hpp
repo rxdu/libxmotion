@@ -34,19 +34,20 @@ class Polyline
 public:
   Polyline() = default;
   Polyline(std::vector<Point_2> pts);
+  Polyline(std::vector<SimplePoint> pts);
   ~Polyline() = default;
 
-  Polyline(const Polyline& other) = default;
-  Polyline(Polyline&& other) = default;
-  Polyline& operator=(const Polyline& other) = default;
-  Polyline& operator=(Polyline&& other) = default;
+  Polyline(const Polyline &other) = default;
+  Polyline(Polyline &&other) = default;
+  Polyline &operator=(const Polyline &other) = default;
+  Polyline &operator=(Polyline &&other) = default;
 
   using Point = Point_2;
   using Line = Line_2;
   using Segment = Segment_2;
 
-  typedef std::vector<Point_2>::iterator point_iterator;
-  typedef std::vector<Point_2>::const_iterator point_const_iterator;
+  typedef std::vector<Point>::iterator point_iterator;
+  typedef std::vector<Point>::const_iterator point_const_iterator;
   point_iterator point_begin() { return points_.begin(); }
   point_iterator point_end() { return points_.end(); }
   point_const_iterator point_begin() const { return points_.begin(); }
@@ -54,14 +55,14 @@ public:
 
   void AddPoint(double x, double y);
   void AddPoint(Point pt);
-  void SetPoints(std::vector<Point_2> pts) { points_ = pts; }
+  void SetPoints(std::vector<Point> pts) { points_ = pts; }
 
   bool Intersect(const Polyline &other) const;
 
   int32_t GetPointNumer() const { return points_.size(); }
   SimplePoint GetPoint(std::size_t i) const;
-  std::vector<Point_2> GetPoints() const { return points_; }
   std::vector<SimplePoint> GetSimplePoints() const;
+  std::vector<Point> GetPoints() const { return points_; }
 
   inline double GetMinX() const { return xmin_; }
   inline double GetMaxX() const { return xmax_; }
@@ -71,10 +72,11 @@ public:
   Polyline SeriesConcatenate(const Polyline &other);
   Polyline operator+(const Polyline &other);
 
-  void PrintInfo();
+  // formatted output
+  void PrintInfo() const;
 
 private:
-  std::vector<Point_2> points_;
+  std::vector<Point> points_;
 
   double xmin_ = std::numeric_limits<double>::max();
   double xmax_ = std::numeric_limits<double>::min();

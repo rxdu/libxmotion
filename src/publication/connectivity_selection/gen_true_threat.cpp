@@ -33,7 +33,7 @@ int main()
     fp.AddPoint(0.9, -2.4);
 
     // plot surface
-    LightViz::ShowTrafficParticipantThreat(participant, fp, 15, "true_threat", true);
+    // LightViz::ShowTrafficParticipantThreat(participant, fp, 15, "true_threat", true);
     // LightViz::ShowCollisionField(cfield);
 
     return 0;

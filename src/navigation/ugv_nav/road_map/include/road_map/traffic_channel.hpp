@@ -27,6 +27,19 @@ class RoadMap;
 class TrafficChannel
 {
 public:
+  using GridPointLocal = CurvilinearGrid::GridPoint;
+
+  struct GridPointGlobal
+  {
+    GridPointGlobal(double _x = 0, double _y = 0, double _t = 0, double _k = 0) : x(_x), y(_y), theta(_t), kappa(_k){};
+
+    double x;
+    double y;
+    double theta;
+    double kappa;
+  };
+
+public:
   TrafficChannel(RoadMap *map, std::string src, std::string dst, std::vector<std::string> lanes);
   ~TrafficChannel() = default;
 

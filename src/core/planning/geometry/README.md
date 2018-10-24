@@ -1,4 +1,6 @@
-## Polygon/polyline
+## 2D Gemoetry module
+
+### Polygon/polyline
 
 The two classes provide a wrapper to the CGAL data structures. You may need to add the following compile configuration to your module if depending on the two classes:
 

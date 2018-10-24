@@ -22,6 +22,15 @@ Polyline::Polyline(std::vector<Point_2> pts)
     }
 }
 
+Polyline::Polyline(std::vector<SimplePoint> pts)
+{
+    for (auto &pt : pts)
+    {
+        points_.push_back(Point_2(pt.x, pt.y));
+        UpdateXYMinMax(pt.x, pt.y);
+    }
+}
+
 void Polyline::AddPoint(double x, double y)
 {
     UpdateXYMinMax(x, y);
@@ -93,7 +102,7 @@ Polyline Polyline::operator+(const Polyline &other)
     return Polyline(points);
 }
 
-void Polyline::PrintInfo()
+void Polyline::PrintInfo() const
 {
     std::cout << "Polyline with " << points_.size() << " points" << std::endl;
     for (auto &pt : points_)

@@ -2,7 +2,7 @@
  * simple_point.hpp
  * 
  * Created on: Aug 10, 2018 10:56
- * Description: 
+ * Description: a convenient point type for the CGAL wrappers
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */

@@ -2,7 +2,7 @@
  * path_curve.hpp
  * 
  * Created on: Oct 19, 2018 11:47
- * Description: 
+ * Description: deprecated reason: developed a more general-purpose "class ParametricCurve" in geometry module
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */

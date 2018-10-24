@@ -17,6 +17,7 @@ target_link_libraries(gtest_graph gtest gtest_main ${GRAPH_GTEST_LIB})
 # geometry
 set(GEOMETRY_GTEST_SRC
     src/geometry/cspline_test.cpp
+    src/geometry/polynomial_test.cpp
 )
 set(GEOMETRY_GTEST_LIB geometry)
 add_executable(gtest_geometry ${GEOMETRY_GTEST_SRC})

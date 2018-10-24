@@ -83,7 +83,7 @@ public:
   Polygon TransformRT(double dx, double dy, double dtheta);
   Polygon TransformTR(double dx, double dy, double dtheta);
 
-  // formated output
+  // formatted output
   void PrintInfo() const;
 
 private:

@@ -5,11 +5,11 @@
  * Description: 
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
- */ 
+ */
 
 #include "geometry/parametric_curve.hpp"
 
-#include <vector>
+#include <cassert>
 
 using namespace librav;
 
@@ -30,6 +30,8 @@ SimplePoint ParametricCurve::Evaluate(double s, int32_t derivative) const
 {
     return SimplePoint(x_spline_.Evaluate(s, derivative), y_spline_.Evaluate(s, derivative));
 }
+
+/////////////////////////////////////////////////////////////////////////////////
 
 ParametricCurve CurveFitting::FitApproximateLengthCurve(Polyline polyline)
 {
@@ -53,4 +55,18 @@ ParametricCurve CurveFitting::FitApproximateLengthCurve(Polyline polyline)
     }
 
     return ParametricCurve(CSpline(xknots), CSpline(yknots), accumulated);
+}
+
+ParametricCurve CurveFitting::FitTimedCurve(std::vector<double> x, std::vector<double> y, std::vector<double> t)
+{
+    assert((t.size() > 2) && (x.size() == t.size()) && (y.size() == t.size()));
+
+    std::vector<CSpline::Knot> xknots, yknots;
+    for (int32_t i = 0; i < t.size(); ++i)
+    {
+        xknots.emplace_back(t[i], x[i]);
+        yknots.emplace_back(t[i], y[i]);
+    }
+
+    return ParametricCurve(CSpline(xknots), CSpline(yknots), t.back());
 }

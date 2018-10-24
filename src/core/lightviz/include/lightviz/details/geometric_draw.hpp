@@ -38,7 +38,7 @@ struct GeometryDraw
     cv::Mat DrawParametricCurve(cv::Mat canvas, const ParametricCurve &pcurve, double step = 0.1, cv::Scalar ln_color = LVColors::blue_color, int32_t ln_width = 1);
 
     // geometric grid
-    cv::Mat DrawCurvilinearGrid(cv::Mat canvas, const CurvilinearGrid &grid, double step = 0.1, bool show_center = false, cv::Scalar ln_color = LVColors::blue_color, int32_t ln_width = 1);
+    cv::Mat DrawCurvilinearGrid(cv::Mat canvas, const CurvilinearGrid &grid, double step = 0.1, bool show_center = false, cv::Scalar ln_color = LVColors::lime_color, int32_t ln_width = 1);
 
     // polygon
     cv::Mat DrawPolygon(cv::Mat canvas, const Polygon &polygon, bool show_dot = false, cv::Scalar ln_color = LVColors::blue_color, int32_t ln_width = 1);

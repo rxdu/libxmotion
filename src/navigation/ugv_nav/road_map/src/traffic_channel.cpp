@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "road_map/details/traffic_channel.hpp"
+#include "road_map/traffic_channel.hpp"
 
 #include <iostream>
 #include <algorithm>

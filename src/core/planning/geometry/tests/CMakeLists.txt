@@ -10,3 +10,6 @@ target_link_libraries(test_cspline geometry)
 
 add_executable(test_pcurve test_pcurve.cpp)
 target_link_libraries(test_pcurve geometry)
+
+add_executable(test_polynomial test_polynomial.cpp)
+target_link_libraries(test_polynomial geometry)

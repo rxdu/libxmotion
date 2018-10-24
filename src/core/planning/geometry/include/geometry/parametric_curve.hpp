@@ -2,13 +2,16 @@
  * parametric_curve.hpp
  * 
  * Created on: Oct 20, 2018 08:44
- * Description: 
+ * Description: parametric curve with each dimension represented 
+ *              as a cubic spline
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */ 
 
 #ifndef PARAMETRIC_CURVE_HPP
 #define PARAMETRIC_CURVE_HPP
+
+#include <vector>
 
 #include "geometry/polyline.hpp"
 #include "geometry/cspline.hpp"
@@ -50,6 +53,7 @@ private:
 namespace CurveFitting
 {
 ParametricCurve FitApproximateLengthCurve(Polyline polyline);
+ParametricCurve FitTimedCurve(std::vector<double> x, std::vector<double> y, std::vector<double> t);
 }
 } // namespace librav
 
