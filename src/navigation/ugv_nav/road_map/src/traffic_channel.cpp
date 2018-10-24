@@ -9,6 +9,7 @@
 
 #include "road_map/traffic_channel.hpp"
 
+#include <cmath>
 #include <iostream>
 #include <algorithm>
 
@@ -110,6 +111,21 @@ CurvilinearGrid::GridPoint TrafficChannel::ConvertToPathCoordinate(SimplePoint p
 SimplePoint TrafficChannel::ConvertToGlobalCoordinate(CurvilinearGrid::GridPoint pt)
 {
     return grid_->ConvertToGlobalCoordinate(pt);
+}
+
+TrafficChannel::GridPointGlobal TrafficChannel::MapLocalPointToGlobal(TrafficChannel::GridPointLocal pt)
+{
+    auto base_pt = center_curve_.Evaluate(pt.s);
+    auto vel_vec = center_curve_.Evaluate(pt.s, 1);
+    auto acc_vec = center_curve_.Evaluate(pt.s, 2);
+
+    double x_s = base_pt.x;
+    double y_s = base_pt.y;
+    double theta_s = std::atan2(vel_vec.y, vel_vec.x);
+    double kappa_s = std::hypot(acc_vec.x, acc_vec.y);
+
+    return GridPointGlobal(x_s + pt.delta * std::cos(pt.s), y_s + pt.delta * std::sin(theta_s),
+                           theta_s, 1.0 / (1.0 / kappa_s - pt.delta));
 }
 
 void TrafficChannel::PrintInfo()

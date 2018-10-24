@@ -31,7 +31,7 @@ public:
 
   struct GridPointGlobal
   {
-    GridPointGlobal(double _x = 0, double _y = 0, double _t = 0, double _k = 0) : x(_x), y(_y), theta(_t), kappa(_k){};
+    GridPointGlobal(double _x = 0, double _y = 0, double _theta = 0, double _kappa = 0) : x(_x), y(_y), theta(_theta), kappa(_kappa){};
 
     double x;
     double y;
@@ -61,6 +61,8 @@ public:
   bool CheckInside(SimplePoint pt);
   CurvilinearGrid::GridPoint ConvertToPathCoordinate(SimplePoint pt);
   SimplePoint ConvertToGlobalCoordinate(CurvilinearGrid::GridPoint pt);
+
+  GridPointGlobal MapLocalPointToGlobal(GridPointLocal pt);
 
   void PrintInfo();
 
