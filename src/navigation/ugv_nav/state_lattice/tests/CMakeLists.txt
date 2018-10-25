@@ -2,11 +2,17 @@
 #find_package(LIBRARY_NAME REQUIRED)
 
 ## tests
-add_executable(test_lattice_gen test_lattice_gen.cpp)
-target_link_libraries(test_lattice_gen lattice)
+# add_executable(test_lattice_gen test_lattice_gen.cpp)
+# target_link_libraries(test_lattice_gen lattice)
 
-add_executable(test_lattice_manager test_lattice_manager.cpp)
-target_link_libraries(test_lattice_manager lattice)
+# add_executable(test_lattice_manager test_lattice_manager.cpp)
+# target_link_libraries(test_lattice_manager lattice)
+
+add_executable(test_point_model test_point_model.cpp)
+target_link_libraries(test_point_model lattice)
+
+add_executable(test_primitive_gen test_primitive_gen.cpp)
+target_link_libraries(test_primitive_gen lattice)
 
 # add_executable(test_lattice_planner test_lattice_planner.cpp)
 # target_link_libraries(test_lattice_planner lattice road tfield lightviz utilities)

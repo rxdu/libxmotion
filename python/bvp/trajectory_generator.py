@@ -45,7 +45,7 @@ import motion_model
 # [1] is trivial to solve and we can easily get a = kappa(0)
 # [2] is a 4-D nonlinear system of equations
 #
-# Use Euler's method to solve:
+# Use Newton's method to solve:
 # [\partial/\partial q g(q)]\delta q = - g(q)
 # where q = [a, b, c, d, s_f]^T
 # => q_{n+1} = q_{n} + \delta q

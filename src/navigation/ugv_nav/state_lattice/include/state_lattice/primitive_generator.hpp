@@ -10,18 +10,32 @@
 #ifndef PRIMITIVE_GENERATOR_HPP
 #define PRIMITIVE_GENERATOR_HPP
 
+#include <cstdint>
+
 #include "state_lattice/motion_primitive.hpp"
+#include "state_lattice/details/point_kinematics.hpp"
 
 namespace librav
 {
 class PrimitiveGenerator
 {
 public:
-  PrimitiveGenerator() = default;
+  PrimitiveGenerator();
 
-  using State = MotionPrimitive::MotionState;
+  MotionPrimitive Calculate(MotionState state_s, MotionState state_f, PointKinematics::Param init_p);
 
-  MotionPrimitive Calculate(State ss, State sf);
+private:
+  const int32_t max_iter_ = 100;
+  const double cost_th_ = 0.1;
+  std::vector<double> scalers_;
+
+  StatePMatrix Je_;
+  PointKinematics model_;
+
+  StatePMatrix CalcDeltaX(StatePMatrix target, StatePMatrix xi);
+  JacobianMatrix CalcJacobian(MotionState init, MotionState target, PointKinematics::Param p);
+  MotionPrimitive ConstructMotionPrimitive(MotionState state_s, MotionState state_f, ParamPMatrix p);
+  double SelectParamScaler(StatePMatrix start, StatePMatrix target, PointKinematics::Param p, ParamPMatrix p_i, ParamPMatrix delta_pi);
 };
 } // namespace librav
 

@@ -9,6 +9,10 @@
 
 #include "state_lattice/primitive_generator.hpp"
 
+#include <numeric>
+
+#include <eigen3/Eigen/LU>
+
 using namespace librav;
 
 /*
@@ -61,15 +65,19 @@ using namespace librav;
  *  For the constraint satisfaction case, we have 2 BCs:
  *  (1) initial condition
  *      x_p(0) = [x0 y0 theta0 kappa0] 
- *      => p0 = kappa0     ... [1]
- *         p3 = kappaf     ... [2]
  *  (2) final condition
  *      x_p(sf) = [xf yf thetaf kappaf] = x_des
+ *   From (1)   
+ *      => p0 = kappa0     ... [1]
+ *         p3 = kappaf     ... [2]
+ *   From (2)
  *      => x_p(sf) = x_des ... [3]
- *  In total, 3 unkowns left with nonlinear system of equations [3] 
- *      the 3 unkowns {p1, p2 ,s_f}.
+ *  In total, 3 unkowns {p1, p2 ,s_f} left with 3 nonlinear system of equations 
+ *      - x_p(s) = \int_{0}^{s} cos(theta_p(s)) ds 
+ *      - y_p(s) = \int_{0}^{s} sin(theta_p(s)) ds
+ *      - theta_p(s) = a(p)s + b(p)s^2/2 + c(p)s^3/3 + d(p)s^4/4 
  * 
- *  Formulate as root finding problem and use Euler's method to solve:
+ *  Formulate as root finding problem and use Newton's method to solve:
  *      g(p) = h(p) - x_des = 0
  *  (h(p) is the same with x_p(sf) but p is treated as variables instead)
  *  => p_{n+1} = p_{n} + \delta p
@@ -77,6 +85,150 @@ using namespace librav;
  *  where  [\partial/\partial p g(p)]\delta p = - g(p)
  */
 
-MotionPrimitive PrimitiveGenerator::Calculate(State ss, State sf)
+PrimitiveGenerator::PrimitiveGenerator()
 {
+    Je_ << 0.02, 0.02, 0.02;
+
+    scalers_.push_back(1.0);
+    scalers_.push_back(2.0);
+    scalers_.push_back(0.5);
+}
+
+MotionPrimitive PrimitiveGenerator::ConstructMotionPrimitive(MotionState state_s, MotionState state_f, ParamPMatrix p)
+{
+    MotionPrimitive mp(state_s, state_f);
+    mp.kappa_s_.SetCoefficients(p);
+
+    return mp;
+}
+
+MotionPrimitive PrimitiveGenerator::Calculate(MotionState state_s, MotionState state_f, PointKinematics::Param init_p)
+{
+    PointKinematics::Param p;
+    p.p0 = state_s.kappa;
+    p.p3 = state_f.kappa;
+
+    StatePMatrix start;
+    start << state_s.x, state_s.y, state_s.theta;
+    StatePMatrix target;
+    target << state_f.x, state_f.y, state_f.theta;
+
+    ParamPMatrix p_i, delta_p_i;
+    p_i << init_p.p1, init_p.p2, init_p.sf;
+
+    StatePMatrix xp_i, xp_delta_i;
+    for (int32_t i = 0; i < max_iter_; ++i)
+    {
+        xp_i = model_.PropagateP(start, PointKinematics::Param(init_p.p0, p_i(0), init_p.p2, p_i(1), p_i(2)));
+        xp_delta_i = CalcDeltaX(target, xp_i);
+        double cost = xp_delta_i.norm();
+
+        // debugging print
+        // std::cout << "i = " << i << std::endl;
+        // std::cout << "x_p(i): \n"
+        //           << xp_i << std::endl;
+        // std::cout << "delta x_p(i): \n"
+        //           << xp_delta_i << std::endl;
+        std::cout << "--> cost <--: " << cost << std::endl;
+
+        if (cost <= cost_th_)
+        {
+            std::cout << "path found" << std::endl;
+            return ConstructMotionPrimitive(state_s, state_f, p_i);
+        }
+
+        JacobianMatrix J = CalcJacobian(state_s, state_f, PointKinematics::Param(init_p.p0, p_i(0), init_p.p2, p_i(1), p_i(2)));
+
+        Eigen::Matrix<double, 3, 3> J_inv = J.inverse();
+
+        if (J_inv.hasNaN())
+        {
+            std::cout << "failed to get inverse of J" << std::endl;
+            return MotionPrimitive();
+        }
+
+        delta_p_i = -J_inv * xp_delta_i;
+
+        double scaler = SelectParamScaler(start, target, init_p, p_i, delta_p_i);
+
+        p_i = p_i + scaler * delta_p_i;
+
+        // std::cout << "J: \n"
+        //           << J << std::endl;
+        // std::cout << "delta p_i: \n"
+        //           << delta_p_i << std::endl;
+
+        std::cout << "--------------------------------------" << std::endl;
+    }
+
+    std::cout << "failed to find a path" << std::endl;
+    return MotionPrimitive();
+}
+
+StatePMatrix PrimitiveGenerator::CalcDeltaX(StatePMatrix target, StatePMatrix xi)
+{
+    StatePMatrix err = target - xi;
+    return err;
+}
+
+JacobianMatrix PrimitiveGenerator::CalcJacobian(MotionState init, MotionState target, PointKinematics::Param p)
+{
+    StatePMatrix target_p;
+    target_p << target.x, target.y, target.theta;
+    StatePMatrix x_init;
+    x_init << init.x, init.y, init.theta;
+
+    // column: \partial x_p / \partial p1
+    StatePMatrix state_p1 = model_.PropagateP(x_init, PointKinematics::Param(p.p0, p.p1 + Je_(0), p.p2, p.p3, p.sf));
+    StatePMatrix state_n1 = model_.PropagateP(x_init, PointKinematics::Param(p.p0, p.p1 - Je_(0), p.p2, p.p3, p.sf));
+    StatePMatrix err_p1 = CalcDeltaX(target_p, state_p1);
+    StatePMatrix err_n1 = CalcDeltaX(target_p, state_n1);
+    StatePMatrix err1 = (err_p1 - err_n1) / (2.0 * Je_(0));
+
+    // column: \partial x_p / \partial p2
+    StatePMatrix state_p2 = model_.PropagateP(x_init, PointKinematics::Param(p.p0, p.p1, p.p2 + Je_(1), p.p3, p.sf));
+    StatePMatrix state_n2 = model_.PropagateP(x_init, PointKinematics::Param(p.p0, p.p1, p.p2 - Je_(1), p.p3, p.sf));
+    StatePMatrix err_p2 = CalcDeltaX(target_p, state_p2);
+    StatePMatrix err_n2 = CalcDeltaX(target_p, state_n2);
+    StatePMatrix err2 = (err_p2 - err_n2) / (2.0 * Je_(1));
+
+    // columm: \partial x_p / \partial sf
+    StatePMatrix state_p3 = model_.PropagateP(x_init, PointKinematics::Param(p.p0, p.p1, p.p2, p.p3, p.sf + Je_(2)));
+    StatePMatrix state_n3 = model_.PropagateP(x_init, PointKinematics::Param(p.p0, p.p1, p.p2, p.p3, p.sf - Je_(2)));
+    StatePMatrix err_p3 = CalcDeltaX(target_p, state_p3);
+    StatePMatrix err_n3 = CalcDeltaX(target_p, state_n3);
+    StatePMatrix err3 = (err_p3 - err_n3) / (2.0 * Je_(2));
+
+    JacobianMatrix J;
+
+    J.col(0) = err1.transpose();
+    J.col(1) = err2.transpose();
+    J.col(2) = err3.transpose();
+
+    return J;
+}
+
+double PrimitiveGenerator::SelectParamScaler(StatePMatrix start, StatePMatrix target, PointKinematics::Param p, ParamPMatrix p_i, ParamPMatrix delta_pi)
+{
+    double selected_scaler;
+    double min_cost = std::numeric_limits<double>::max();
+
+    for (auto &scaler : scalers_)
+    {
+        ParamPMatrix np_i = p_i + scaler * delta_pi;
+
+        StatePMatrix xp_i = model_.PropagateP(start, PointKinematics::Param(p.p0, np_i(0), p.p2, np_i(1), np_i(2)));
+        StatePMatrix xp_delta_i = CalcDeltaX(target, xp_i);
+        double cost = xp_delta_i.norm();
+        std::cout << "sclaer cost: " << cost << std::endl;
+        if (cost < min_cost)
+        {
+            min_cost = cost;
+            selected_scaler = scaler;
+        }
+    }
+
+    std::cout << "scaler: " << selected_scaler << std::endl;
+
+    return selected_scaler;
 }

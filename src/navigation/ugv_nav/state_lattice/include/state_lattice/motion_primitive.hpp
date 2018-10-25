@@ -23,26 +23,12 @@
 #include "geometry/polyline.hpp"
 #include "geometry/polynomial.hpp"
 
+#include "state_lattice/details/motion_state.hpp"
+
 namespace librav
 {
 class MotionPrimitive
 {
-public:
-  struct MotionState
-  {
-    MotionState() : x(0), y(0), theta(0), kappa(0) {}
-    MotionState(double _x, double _y, double _theta, double _k) : x(_x), y(_y), theta(_theta), kappa(_k) {}
-
-    double x;
-    double y;
-    double theta;
-    double kappa;
-  };
-
-  using State = MotionState;
-
-  /////////////////////////////////////////////////////////
-
 public:
   MotionPrimitive() : id_(-1) {}
   MotionPrimitive(MotionState ss, MotionState sf) : state_s_(ss), state_f_(sf) {}
