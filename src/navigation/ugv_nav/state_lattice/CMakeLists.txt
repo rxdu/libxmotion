@@ -3,8 +3,6 @@
 
 # Add libraries
 set(LATTICE_LIB_SRC
-  # src/lattice_generator.cpp
-  # src/lattice_manager.cpp
   src/point_kinematics.cpp
   src/primitive_generator.cpp
 )
