@@ -24,18 +24,19 @@
 #include "geometry/polynomial.hpp"
 
 #include "state_lattice/details/motion_state.hpp"
+#include "state_lattice/details/point_kinematics.hpp"
 
 namespace librav
 {
 class MotionPrimitive
 {
 public:
-  MotionPrimitive() : id_(-1) {}
-  MotionPrimitive(MotionState ss, MotionState sf) : state_s_(ss), state_f_(sf) {}
+  MotionPrimitive() = default;
+  MotionPrimitive(MotionState ss, MotionState sf, PointKinematics::Param p);
   explicit MotionPrimitive(int32_t mp_id) : id_(mp_id){};
   ~MotionPrimitive() = default;
 
-  int32_t id_;
+  int32_t id_ = -1;
 
   // characteristic parameters
   double sf_;
@@ -44,9 +45,13 @@ public:
   MotionState GetStartState() const { return state_s_; }
   MotionState GetFinalState() const { return state_f_; }
 
+  void SetParameters(PointKinematics::Param p);
+
 private:
   MotionState state_s_;
   MotionState state_f_;
+
+  PointKinematics::Param params_;
 };
 } // namespace librav
 

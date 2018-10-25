@@ -4,6 +4,7 @@
 # Add libraries
 set(LATTICE_LIB_SRC
   src/point_kinematics.cpp
+  src/motion_primitive.cpp
   src/primitive_generator.cpp
 )
 add_library(lattice STATIC ${LATTICE_LIB_SRC})

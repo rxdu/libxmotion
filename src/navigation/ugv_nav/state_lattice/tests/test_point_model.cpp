@@ -7,14 +7,15 @@ using namespace librav;
 
 int main()
 {
-    PointKinematics model;
+    // PointKinematics model;
+    // PointKinematics::Param param(1, 2, 1, 1, 1);
+    // MotionState init(0, 0, 0, 0);
+    // MotionState ss = model.Propagate(init, param);
+    // std::cout << ss << std::endl;
 
-    PointKinematics::Param param(1, 2, 1, 1, 1);
+    PointKinematics model(1, 0, 0, 0);
     MotionState init(0, 0, 0, 0);
-
-    MotionState ss = model.Propagate(init, param);
-
-    std::cout << ss << std::endl;
-
+    std::vector<MotionState> states = model.GenerateTrajectoryPoints(init, 5, 0.5);
+    
     return 0;
 }

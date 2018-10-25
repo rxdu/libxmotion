@@ -41,7 +41,7 @@ class PointKinematics
 
         friend std::ostream &operator<<(std::ostream &os, const Param &p)
         {
-            os << p.p0 << " , " << p.p1 << " , " << p.p2 << " , " << p.p3 << " , " << p.sf;
+            os << "(p0,p1,p2,p3,sf): " << p.p0 << " , " << p.p1 << " , " << p.p2 << " , " << p.p3 << " , " << p.sf;
             return os;
         }
     };
@@ -50,11 +50,17 @@ class PointKinematics
 
   public:
     PointKinematics() = default;
+    PointKinematics(double a, double b, double c, double d) : a_(a), b_(b), c_(c), d_(d){};
 
-    MotionState Propagate(MotionState init, Param p, double ds = 0.1);
-    StatePMatrix PropagateP(StatePMatrix init, Param p, double ds = 0.1);
+    // propagate system model
+    MotionState Propagate(const MotionState &init, const Param &p, double ds = 0.1);
+    StatePMatrix PropagateP(const StatePMatrix &init, const Param &p, double ds = 0.1);
 
-    // shall not be called by user, used for propagation by RK4 class
+    // The following functions could be called externally ONLY when a_,b_,c_,d_ have been set properly
+    inline MotionState Propagate(const MotionState &init, double sf, double ds = 0.1);
+    std::vector<MotionState> GenerateTrajectoryPoints(const MotionState &init, double sf, double step, double ds = 0.1);
+
+    // Shall not be called by user, used for propagation by RK4 class
     void operator()(const asc::state_t &x, asc::state_t &xd, const double s);
 
   private:
@@ -65,7 +71,7 @@ class PointKinematics
 
     asc::RK4 integrator_;
 
-    void CalculateIntermediateParams(Param p);
+    inline void CalculateIntermediateParams(const Param &p);
 };
 } // namespace librav
 

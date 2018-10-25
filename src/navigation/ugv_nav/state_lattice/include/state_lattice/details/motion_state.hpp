@@ -33,7 +33,7 @@ struct StateP
 struct MotionState
 {
     MotionState() : x(0), y(0), theta(0), kappa(0) {}
-    MotionState(double _x, double _y, double _theta, double _k) : x(_x), y(_y), theta(_theta), kappa(_k) {}
+    MotionState(double _x, double _y, double _theta = 0, double _k = 0) : x(_x), y(_y), theta(_theta), kappa(_k) {}
 
     double x;
     double y;

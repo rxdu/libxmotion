@@ -11,7 +11,7 @@
 
 using namespace librav;
 
-void PointKinematics::CalculateIntermediateParams(Param p)
+void PointKinematics::CalculateIntermediateParams(const Param &p)
 {
     // std::cout << "p: " << p << std::endl;
 
@@ -27,26 +27,24 @@ void PointKinematics::CalculateIntermediateParams(Param p)
 void PointKinematics::operator()(const asc::state_t &x, asc::state_t &xd, const double s)
 {
     double s_squared = s * s;
-    double theta_p = a_ * s + b_ * s_squared / 2.0 + c_ * s_squared * s / 3.0 + d_ * s_squared * s_squared;
+    double theta_p = a_ * s + b_ * s_squared / 2.0 + c_ * s_squared * s / 3.0 + d_ * s_squared * s_squared / 4.0;
 
     xd[0] = std::cos(theta_p);
     xd[1] = std::sin(theta_p);
 }
 
-MotionState PointKinematics::Propagate(MotionState init, Param p, double ds)
+MotionState PointKinematics::Propagate(const MotionState &init, double sf, double ds)
 {
-    CalculateIntermediateParams(p);
-
-    double sf_squared = p.sf * p.sf;
+    double sf_squared = sf * sf;
 
     // theta_p and kappa_p could be calculated analytically
-    double theta_p = a_ * p.sf + b_ * sf_squared / 2.0 + c_ * sf_squared * p.sf / 3.0 + d_ * sf_squared * sf_squared;
-    double kappa_p = a_ + b_ * p.sf + c_ * sf_squared + d_ * sf_squared * p.sf;
+    double theta_p = a_ * sf + b_ * sf_squared / 2.0 + c_ * sf_squared * sf / 3.0 + d_ * sf_squared * sf_squared / 4.0;
+    double kappa_p = a_ + b_ * sf + c_ * sf_squared + d_ * sf_squared * sf;
 
     // calculate x_p, y_p numerically
     double s = 0;
     asc::state_t xy_p = {init.x, init.y};
-    while (s < p.sf)
+    while (s <= sf)
     {
         integrator_(*this, xy_p, s, ds);
     }
@@ -54,26 +52,30 @@ MotionState PointKinematics::Propagate(MotionState init, Param p, double ds)
     return MotionState(xy_p[0], xy_p[1], theta_p, kappa_p);
 }
 
-StatePMatrix PointKinematics::PropagateP(StatePMatrix init, Param p, double ds)
+MotionState PointKinematics::Propagate(const MotionState &init, const Param &p, double ds)
 {
     CalculateIntermediateParams(p);
 
-    double sf_squared = p.sf * p.sf;
+    return Propagate(init, p.sf, ds);
+}
 
-    // theta_p and kappa_p could be calculated analytically
-    double theta_p = a_ * p.sf + b_ * sf_squared / 2.0 + c_ * sf_squared * p.sf / 3.0 + d_ * sf_squared * sf_squared;
-    double kappa_p = a_ + b_ * p.sf + c_ * sf_squared + d_ * sf_squared * p.sf;
-
-    // calculate x_p, y_p numerically
-    double s = 0;
-    asc::state_t xy_p = {init(0), init(1)};
-    while (s < p.sf)
-    {
-        integrator_(*this, xy_p, s, ds);
-    }
+StatePMatrix PointKinematics::PropagateP(const StatePMatrix &init, const Param &p, double ds)
+{
+    CalculateIntermediateParams(p);
+    MotionState state = Propagate(MotionState(init(0), init(1)), p.sf, ds);
 
     StatePMatrix xpm;
-    xpm << xy_p[0], xy_p[1], theta_p;
+    xpm << state.x, state.y, state.theta;
 
     return xpm;
+}
+
+std::vector<MotionState> PointKinematics::GenerateTrajectoryPoints(const MotionState &init, double sf, double step, double ds)
+{
+    std::vector<MotionState> states;
+
+    for (double s = 0; s <= sf; s += step)
+        states.push_back(Propagate(init, s, ds));
+
+    return states;
 }

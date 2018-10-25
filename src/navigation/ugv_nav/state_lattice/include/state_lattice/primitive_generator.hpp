@@ -34,7 +34,6 @@ private:
 
   StatePMatrix CalcDeltaX(StatePMatrix target, StatePMatrix xi);
   JacobianMatrix CalcJacobian(MotionState init, MotionState target, PointKinematics::Param p);
-  MotionPrimitive ConstructMotionPrimitive(MotionState state_s, MotionState state_f, ParamPMatrix p);
   double SelectParamScaler(StatePMatrix start, StatePMatrix target, PointKinematics::Param p, ParamPMatrix p_i, ParamPMatrix delta_pi);
 };
 } // namespace librav

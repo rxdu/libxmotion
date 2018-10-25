@@ -87,19 +87,11 @@ using namespace librav;
 
 PrimitiveGenerator::PrimitiveGenerator()
 {
-    Je_ << 0.02, 0.02, 0.02;
+    Je_ << 0.02, 0.02, 0.05;
 
     scalers_.push_back(1.0);
     scalers_.push_back(2.0);
     scalers_.push_back(0.5);
-}
-
-MotionPrimitive PrimitiveGenerator::ConstructMotionPrimitive(MotionState state_s, MotionState state_f, ParamPMatrix p)
-{
-    MotionPrimitive mp(state_s, state_f);
-    mp.kappa_s_.SetCoefficients(p);
-
-    return mp;
 }
 
 MotionPrimitive PrimitiveGenerator::Calculate(MotionState state_s, MotionState state_f, PointKinematics::Param init_p)
@@ -117,6 +109,7 @@ MotionPrimitive PrimitiveGenerator::Calculate(MotionState state_s, MotionState s
     p_i << init_p.p1, init_p.p2, init_p.sf;
 
     StatePMatrix xp_i, xp_delta_i;
+    double cost_prev = std::numeric_limits<double>::max();
     for (int32_t i = 0; i < max_iter_; ++i)
     {
         xp_i = model_.PropagateP(start, PointKinematics::Param(init_p.p0, p_i(0), init_p.p2, p_i(1), p_i(2)));
@@ -134,7 +127,7 @@ MotionPrimitive PrimitiveGenerator::Calculate(MotionState state_s, MotionState s
         if (cost <= cost_th_)
         {
             std::cout << "path found" << std::endl;
-            return ConstructMotionPrimitive(state_s, state_f, p_i);
+            return MotionPrimitive(state_s, state_f, PointKinematics::Param(init_p.p0, p_i(0), init_p.p2, p_i(1), p_i(2)));
         }
 
         JacobianMatrix J = CalcJacobian(state_s, state_f, PointKinematics::Param(init_p.p0, p_i(0), init_p.p2, p_i(1), p_i(2)));
@@ -149,9 +142,10 @@ MotionPrimitive PrimitiveGenerator::Calculate(MotionState state_s, MotionState s
 
         delta_p_i = -J_inv * xp_delta_i;
 
-        double scaler = SelectParamScaler(start, target, init_p, p_i, delta_p_i);
+        // double scaler = SelectParamScaler(start, target, init_p, p_i, delta_p_i);
+        // p_i = p_i + scaler * delta_p_i;
 
-        p_i = p_i + scaler * delta_p_i;
+        p_i = p_i + delta_p_i;
 
         // std::cout << "J: \n"
         //           << J << std::endl;
@@ -220,7 +214,7 @@ double PrimitiveGenerator::SelectParamScaler(StatePMatrix start, StatePMatrix ta
         StatePMatrix xp_i = model_.PropagateP(start, PointKinematics::Param(p.p0, np_i(0), p.p2, np_i(1), np_i(2)));
         StatePMatrix xp_delta_i = CalcDeltaX(target, xp_i);
         double cost = xp_delta_i.norm();
-        std::cout << "sclaer cost: " << cost << std::endl;
+        // std::cout << "sclaer cost: " << cost << std::endl;
         if (cost < min_cost)
         {
             min_cost = cost;
