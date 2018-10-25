@@ -10,6 +10,8 @@
 #ifndef LATTICE_VIZ_HPP
 #define LATTICE_VIZ_HPP
 
+#include <vector>
+
 #include "state_lattice/details/motion_state.hpp"
 
 namespace librav

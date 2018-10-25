@@ -1,0 +1,25 @@
+/* 
+ * lattice_draw.cpp
+ * 
+ * Created on: Oct 25, 2018 12:16
+ * Description: 
+ * 
+ * Copyright (c) 2018 Ruixiang Du (rdu)
+ */ 
+
+#include "ugvnav_viz/details/lattice_draw.hpp"
+
+using namespace librav;
+
+void LatticeDraw::DrawTrajectoryPoints(const std::vector<MotionState> &states)
+{
+    for (int32_t i = 0; i < states.size() - 1; ++i)
+    {
+        MotionState st1 = states[i];
+        MotionState st2 = states[i + 1];
+
+        auto pt1 = canvas_.ConvertCartisianToPixel(st1.x, st1.y);
+        auto pt2 = canvas_.ConvertCartisianToPixel(st2.x, st2.y);
+        LightViz::DrawLine(canvas_.paint_area, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y));
+    }
+}

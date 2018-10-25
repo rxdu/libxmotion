@@ -165,6 +165,7 @@ StatePMatrix PrimitiveGenerator::CalcDeltaX(StatePMatrix target, StatePMatrix xi
     return err;
 }
 
+// use central difference to approximate Jacobian matrix
 JacobianMatrix PrimitiveGenerator::CalcJacobian(MotionState init, MotionState target, PointKinematics::Param p)
 {
     StatePMatrix target_p;

@@ -5,6 +5,8 @@
 set(UGVNAV_VIZ_LIB_SRC
     # src/field_viz_ext.cpp
     src/roadmap_viz.cpp
+    src/lattice_draw.cpp
+    src/lattice_viz.cpp
     # src/threat_field_viz.cpp
 )
 add_library(ugvnav_viz STATIC ${UGVNAV_VIZ_LIB_SRC})

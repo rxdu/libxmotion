@@ -37,6 +37,7 @@ include_directories(${EIGEN3_INCLUDE_DIR})
 # LightViz library
 set(LIGHTVIZ_LIB_SRC
 	src/cv_draw.cpp
+	src/cartesian_canvas.cpp
 	src/matrix_draw.cpp
 	src/geometric_draw.cpp
 	src/matrix_viz.cpp
