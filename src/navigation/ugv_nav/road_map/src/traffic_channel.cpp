@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "road_map/traffic_channel.hpp"
+#include "road_map/details/traffic_channel.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -24,8 +24,11 @@ TrafficChannel::TrafficChannel(RoadMap *map, std::string src, std::string dst, s
     for (auto &lane : lanes)
         center_line_ = center_line_.SeriesConcatenate(road_map_->GetLaneCenterLine(lane));
     center_curve_ = CurveFitting::FitApproximateLengthCurve(center_line_);
-    // std::cout << "channel " << source_ << " -> " << sink_ << " : " << center_line_.GetPointNumer() << std::endl;
+
+    // default discretization
     DiscretizeChannel(5, 0.74, 5);
+
+    // std::cout << "channel " << source_ << " -> " << sink_ << " : " << center_line_.GetPointNumer() << std::endl;
 }
 
 TrafficChannel::TrafficChannel(RoadMap *map, std::string lane) : road_map_(map), source_(lane), sink_(lane), lanes_({lane})

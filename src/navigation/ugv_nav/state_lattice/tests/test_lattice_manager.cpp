@@ -14,8 +14,8 @@ int main()
 {
     // load map
     stopwatch::StopWatch timer;
-    // std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane_horizontal.osm");
-    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane.osm");
+    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane_horizontal.osm");
+    // std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane.osm");
 
     if (!map->MapReady())
     {
@@ -26,17 +26,20 @@ int main()
     std::cout << "map loaded in " << timer.toc() << " seconds" << std::endl;
     RoadMapViz::SetupRoadMapViz(map);
     // RoadMapViz::ShowLanes(true, 5, "test_lane", true);
-    RoadMapViz::ShowLanes(true, 5);
+    // for (auto &chn : map->traffic_map_->GetAllTrafficChannels())
+    // {
+    //     // RoadMapViz::ShowTrafficChannelCenterline(chn);
+    //     chn->PrintInfo();
+    //     RoadMapViz::ShowTrafficChannel(*chn.get(), 5);
+    // }
+
+    /****************************************************************************/
 
     // discretize lane
+    auto all_channels = map->traffic_map_->GetAllTrafficChannels();
+    all_channels[1]->DiscretizeChannel(5, 1.0, 6);
 
-
-    for (auto &chn : map->traffic_map_->GetAllTrafficChannels())
-    {
-        // RoadMapViz::ShowTrafficChannelCenterline(chn);
-        chn->PrintInfo();
-        RoadMapViz::ShowTrafficChannel(*chn.get(), 5);
-    }
+    RoadMapViz::ShowTrafficChannel(*all_channels[1].get(), 20, "horizontal_lane", true);
 
     return 0;
 }
