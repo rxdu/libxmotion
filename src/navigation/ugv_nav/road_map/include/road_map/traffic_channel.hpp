@@ -41,6 +41,7 @@ public:
 
 public:
   TrafficChannel(RoadMap *map, std::string src, std::string dst, std::vector<std::string> lanes);
+  TrafficChannel(RoadMap *map, std::string lane);
   ~TrafficChannel() = default;
 
   TrafficChannel(const TrafficChannel &other) = default;

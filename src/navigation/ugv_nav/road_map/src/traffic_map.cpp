@@ -32,7 +32,11 @@ void TrafficMap::IdentifyTrafficElements()
             }
         }
     }
-    std::cout << "traffic channel num: " << traffic_channels_.size() << std::endl;
+    for (auto &lane : road_map_->GetIsolatedLanes())
+    {
+        traffic_channels_.insert(std::make_pair(std::make_pair(lane, lane), std::make_shared<TrafficChannel>(road_map_, lane)));
+    }
+    // std::cout << "traffic channel num: " << traffic_channels_.size() << std::endl;
 }
 
 std::vector<std::shared_ptr<TrafficChannel>> TrafficMap::GetAllTrafficChannels()

@@ -63,6 +63,7 @@ public:
 
   std::vector<std::string> sinks_;
   std::vector<std::string> sources_;
+  std::vector<std::string> isolated_lanes_;
 
   std::vector<std::string> FindConflictingLanes(std::vector<std::string> names);
   std::vector<std::string> FindConflictingLanes(std::vector<int32_t> ids);

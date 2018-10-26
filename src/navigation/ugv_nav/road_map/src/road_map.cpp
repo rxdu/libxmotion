@@ -115,6 +115,7 @@ void RoadMap::LoadMapFile(std::string map_file)
 void RoadMap::PrintInfo() const
 {
     std::cout << "Number of lanelets: " << lanelets_.size() << std::endl;
+    std::cout << "Number of traffic channels: " << traffic_map_->GetAllTrafficChannels().size() << std::endl;
 
     for (auto &lanelet : lanelets_)
     {

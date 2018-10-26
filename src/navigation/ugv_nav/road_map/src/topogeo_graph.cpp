@@ -37,6 +37,7 @@ void TopoGeoGraph::ConstructGraph()
         auto new_block = new LaneBlock(entry.first, entry.second);
         new_block->center_line = road_map_->GetLaneCenterLine(entry.second);
         lane_blocks_.insert(std::make_pair(entry.first, new_block));
+        graph_->AddVertex(new_block);
     }
 
     for (auto &ll1 : mapping)
@@ -63,10 +64,12 @@ void TopoGeoGraph::ConstructGraph()
 
     for (auto it = graph_->vertex_begin(); it != graph_->vertex_end(); ++it)
     {
-        if (it->vertices_from_.empty())
+        if (it->vertices_from_.empty() && !it->edges_to_.empty())
             sources_.push_back(it->state_->name);
-        if (it->edges_to_.empty())
+        if (it->edges_to_.empty() && !it->vertices_from_.empty())
             sinks_.push_back(it->state_->name);
+        if (it->edges_to_.empty() && it->vertices_from_.empty())
+            isolated_lanes_.push_back(it->state_->name);
 
         // for (auto eit = it->edge_begin(); eit != it->edge_end(); ++eit)
         //     std::cout << "edge: " << eit->src_->state_->name << " -> " << eit->dst_->state_->name << std::endl;
@@ -174,5 +177,4 @@ std::vector<std::string> TopoGeoGraph::FindConflictingLanes(std::vector<int32_t>
 
 bool TopoGeoGraph::HasOnlyOneSubsequentLane(std::string name)
 {
-    
 }

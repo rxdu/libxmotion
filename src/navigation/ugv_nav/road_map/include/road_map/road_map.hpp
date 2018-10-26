@@ -49,6 +49,7 @@ public:
 
   std::vector<std::string> GetSinks() const { return tg_graph_->sinks_; }
   std::vector<std::string> GetSources() const { return tg_graph_->sources_; }
+  std::vector<std::string> GetIsolatedLanes() const { return tg_graph_->isolated_lanes_; }
 
   inline std::string GetLaneletNameFromID(int32_t id) { return ll_name_lookup_[id]; }
   inline int32_t GetLaneletIDFromName(std::string name) { return ll_id_lookup_[name]; }

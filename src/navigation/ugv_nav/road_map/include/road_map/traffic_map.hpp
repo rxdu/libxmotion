@@ -16,7 +16,6 @@
 
 #include "decomp/curvilinear_grid.hpp"
 
-#include "road_map/details/traffic_segment.hpp"
 #include "road_map/traffic_channel.hpp"
 
 namespace librav

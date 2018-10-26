@@ -28,6 +28,13 @@ TrafficChannel::TrafficChannel(RoadMap *map, std::string src, std::string dst, s
     DiscretizeChannel(5, 0.74, 5);
 }
 
+TrafficChannel::TrafficChannel(RoadMap *map, std::string lane) : road_map_(map), source_(lane), sink_(lane), lanes_({lane})
+{
+    center_line_ = road_map_->GetLaneCenterLine(lane);
+    center_curve_ = CurveFitting::FitApproximateLengthCurve(center_line_);
+    DiscretizeChannel(5, 0.74, 5);
+}
+
 void TrafficChannel::DiscretizeChannel(double step_t, double step_n, int32_t side_num)
 {
     grid_ = std::make_shared<CurvilinearGrid>(center_curve_, step_t, step_n, side_num);
