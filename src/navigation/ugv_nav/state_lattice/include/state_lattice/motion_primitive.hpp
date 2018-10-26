@@ -34,19 +34,21 @@ public:
   MotionPrimitive() = default;
   MotionPrimitive(MotionState ss, MotionState sf, PointKinematics::Param p);
   explicit MotionPrimitive(int32_t mp_id) : id_(mp_id){};
+
   ~MotionPrimitive() = default;
+  MotionPrimitive(const MotionPrimitive &other) = default;
+  MotionPrimitive &operator=(const MotionPrimitive &other) = default;
+  MotionPrimitive(MotionPrimitive &&other) = default;
+  MotionPrimitive &operator=(MotionPrimitive &&other) = default;
 
   int32_t id_ = -1;
-
-  // characteristic parameters
   double sf_;
-  Polynomial<4> kappa_s_;
+
   MotionState Evaluate(double s, double ds = 0.1);
 
   MotionState GetStartState() const { return state_s_; }
   MotionState GetFinalState() const { return state_f_; }
-
-  // void SetParameters(PointKinematics::Param p);
+  PointKinematics::Param GetParameters() const { return params_; }
 
 private:
   MotionState state_s_;

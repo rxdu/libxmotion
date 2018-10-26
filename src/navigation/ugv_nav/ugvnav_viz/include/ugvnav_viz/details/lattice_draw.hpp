@@ -24,6 +24,7 @@ class LatticeDraw
 
     void DrawTrajectoryPoints(const std::vector<MotionState> &states, cv::Scalar ln_color = LVColors::orange_color, int32_t ln_width = 1);
     void DrawMotionPrimitive(MotionPrimitive mp, double step = 0.1, cv::Scalar ln_color = LVColors::orange_color, int32_t ln_width = 1);
+    void DrawMotionPrimitive(std::vector<MotionPrimitive>& mps, double step = 0.1, cv::Scalar ln_color = LVColors::orange_color, int32_t ln_width = 2);
 
   private:
     CartesianCanvas &canvas_;

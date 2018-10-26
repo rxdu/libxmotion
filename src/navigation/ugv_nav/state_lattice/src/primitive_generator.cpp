@@ -15,6 +15,8 @@
 
 using namespace librav;
 
+#define ENABLE_SCALER_SELECTION
+
 /*
  * Reference: 
  *  [1] M. McNaughton and C. Urmson and J. M. Dolan and J. W. Lee. 2011. 
@@ -94,7 +96,7 @@ PrimitiveGenerator::PrimitiveGenerator()
     scalers_.push_back(0.5);
 }
 
-MotionPrimitive PrimitiveGenerator::Calculate(MotionState state_s, MotionState state_f, PointKinematics::Param init_p)
+bool PrimitiveGenerator::Calculate(MotionState state_s, MotionState state_f, PointKinematics::Param init_p, MotionPrimitive &mp)
 {
     PointKinematics::Param p;
     p.p0 = state_s.kappa;
@@ -122,12 +124,13 @@ MotionPrimitive PrimitiveGenerator::Calculate(MotionState state_s, MotionState s
         //           << xp_i << std::endl;
         // std::cout << "delta x_p(i): \n"
         //           << xp_delta_i << std::endl;
-        std::cout << "--> cost <--: " << cost << std::endl;
+        // std::cout << "--> cost <--: " << cost << std::endl;
 
         if (cost <= cost_th_)
         {
-            std::cout << "path found" << std::endl;
-            return MotionPrimitive(state_s, state_f, PointKinematics::Param(init_p.p0, p_i(0), init_p.p2, p_i(1), p_i(2)));
+            // std::cout << "path found" << std::endl;
+            mp = MotionPrimitive(state_s, state_f, PointKinematics::Param(init_p.p0, p_i(0), init_p.p2, p_i(1), p_i(2)));
+            return true;
         }
 
         JacobianMatrix J = CalcJacobian(state_s, state_f, PointKinematics::Param(init_p.p0, p_i(0), init_p.p2, p_i(1), p_i(2)));
@@ -136,27 +139,39 @@ MotionPrimitive PrimitiveGenerator::Calculate(MotionState state_s, MotionState s
 
         if (J_inv.hasNaN())
         {
-            std::cout << "failed to get inverse of J" << std::endl;
-            return MotionPrimitive();
+            // std::cout << "failed to get inverse of J" << std::endl;
+            return false;
         }
 
         delta_p_i = -J_inv * xp_delta_i;
 
-        // double scaler = SelectParamScaler(start, target, init_p, p_i, delta_p_i);
-        // p_i = p_i + scaler * delta_p_i;
-
+#ifdef ENABLE_SCALER_SELECTION
+        double scaler = SelectParamScaler(start, target, init_p, p_i, delta_p_i);
+        p_i = p_i + scaler * delta_p_i;
+        // std::cout << "scaler: " << scaler << std::endl;
+#else
         p_i = p_i + delta_p_i;
-
+#endif
         // std::cout << "J: \n"
         //           << J << std::endl;
         // std::cout << "delta p_i: \n"
         //           << delta_p_i << std::endl;
 
-        std::cout << "--------------------------------------" << std::endl;
+        // std::cout << "--------------------------------------" << std::endl;
     }
 
     std::cout << "failed to find a path" << std::endl;
-    return MotionPrimitive();
+
+    return false;
+}
+
+MotionPrimitive PrimitiveGenerator::Calculate(MotionState state_s, MotionState state_f, PointKinematics::Param init_p)
+{
+    MotionPrimitive mp;
+
+    Calculate(state_s, state_f, init_p, mp);
+
+    return mp;
 }
 
 StatePMatrix PrimitiveGenerator::CalcDeltaX(StatePMatrix target, StatePMatrix xi)
@@ -215,15 +230,12 @@ double PrimitiveGenerator::SelectParamScaler(StatePMatrix start, StatePMatrix ta
         StatePMatrix xp_i = model_.PropagateP(start, PointKinematics::Param(p.p0, np_i(0), p.p2, np_i(1), np_i(2)));
         StatePMatrix xp_delta_i = CalcDeltaX(target, xp_i);
         double cost = xp_delta_i.norm();
-        // std::cout << "sclaer cost: " << cost << std::endl;
         if (cost < min_cost)
         {
             min_cost = cost;
             selected_scaler = scaler;
         }
     }
-
-    std::cout << "scaler: " << selected_scaler << std::endl;
 
     return selected_scaler;
 }

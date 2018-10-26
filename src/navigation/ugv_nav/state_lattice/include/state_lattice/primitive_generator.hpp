@@ -23,6 +23,7 @@ public:
   PrimitiveGenerator();
 
   MotionPrimitive Calculate(MotionState state_s, MotionState state_f, PointKinematics::Param init_p);
+  bool Calculate(MotionState state_s, MotionState state_f, PointKinematics::Param init_p, MotionPrimitive& mp);
 
 private:
   const int32_t max_iter_ = 100;

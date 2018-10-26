@@ -21,6 +21,7 @@ namespace LightViz
 {
 void ShowMotionStateTrajectory(const std::vector<MotionState> &states, int32_t pixel_per_unit = 10, std::string window_name = "Lattice Image", bool save_img = false);
 void ShowMotionPrimitive(MotionPrimitive mp, double step = 0.1, int32_t pixel_per_unit = 10, std::string window_name = "Lattice Image", bool save_img = false);
+void ShowMotionPrimitive(std::vector<MotionPrimitive>& mps, double step = 0.1, int32_t pixel_per_unit = 50, std::string window_name = "Lattice Image", bool save_img = false);
 };
 } // namespace librav
 

@@ -29,9 +29,15 @@ void LatticeDraw::DrawMotionPrimitive(MotionPrimitive mp, double step, cv::Scala
     std::vector<MotionState> states;
 
     for (double s = 0; s <= mp.sf_; s += step)
-        states.push_back(mp.Evaluate(s, step/5.0));
+        states.push_back(mp.Evaluate(s, step / 5.0));
 
-    std::cout << "state size: " << states.size() << std::endl;
+    // std::cout << "state size: " << states.size() << std::endl;
 
     DrawTrajectoryPoints(states, ln_color, ln_width);
+}
+
+void LatticeDraw::DrawMotionPrimitive(std::vector<MotionPrimitive> &mps, double step, cv::Scalar ln_color, int32_t ln_width)
+{
+    for (auto &mp : mps)
+        DrawMotionPrimitive(mp, step, ln_color, ln_width);
 }

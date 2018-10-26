@@ -27,10 +27,21 @@ void LightViz::ShowMotionStateTrajectory(const std::vector<MotionState> &states,
 void LightViz::ShowMotionPrimitive(MotionPrimitive mp, double step, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
     CartesianCanvas canvas(pixel_per_unit);
-    canvas.SetupCanvas(-5, 15, -8, 8);
+    canvas.SetupCanvas(0, 32, -8, 8);
 
     LatticeDraw ldraw(canvas);
     ldraw.DrawMotionPrimitive(mp, step);
+
+    ShowImage(canvas.paint_area, window_name, save_img);
+}
+
+void LightViz::ShowMotionPrimitive(std::vector<MotionPrimitive>& mps, double step, int32_t pixel_per_unit, std::string window_name, bool save_img)
+{
+    CartesianCanvas canvas(pixel_per_unit);
+    canvas.SetupCanvas(0, 32, -8, 8);
+
+    LatticeDraw ldraw(canvas);
+    ldraw.DrawMotionPrimitive(mps, step);
 
     ShowImage(canvas.paint_area, window_name, save_img);
 }

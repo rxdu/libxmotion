@@ -18,14 +18,14 @@ void PointKinematics::SetParameters(const Param &p)
 
 void PointKinematics::CalculateIntermediateParams(const Param &p)
 {
-    std::cout << "p: " << p << std::endl;
+    // std::cout << "p: " << p << std::endl;
 
     a_ = p.p0;
     b_ = -(11 * p.p0 - 18 * p.p1 + 9 * p.p2 - 2 * p.p3) / (2.0 * p.sf);
     c_ = 9.0 * (2 * p.p0 - 5 * p.p1 + 4 * p.p2 - p.p3) / (2.0 * p.sf * p.sf);
     d_ = -9.0 * (p.p0 - 3 * p.p1 + 3 * p.p2 - p.p3) / (2.0 * p.sf * p.sf * p.sf);
 
-    std::cout << "(a,b,c,d): " << a_ << " , " << b_ << " , " << c_ << " , " << d_ << std::endl;
+    // std::cout << "(a,b,c,d): " << a_ << " , " << b_ << " , " << c_ << " , " << d_ << std::endl;
 }
 
 // x0 = x, x1 = y
