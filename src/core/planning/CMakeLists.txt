@@ -39,9 +39,7 @@ add_subdirectory(legacy)
 
 add_subdirectory(geometry)
 add_subdirectory(decomp)
-add_subdirectory(libtree)
+add_subdirectory(tree)
 add_subdirectory(graph)
-add_subdirectory(librrt)
-
+add_subdirectory(rrt_search)
 add_subdirectory(trajectory)
-add_subdirectory(polyopt)
