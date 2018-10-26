@@ -84,7 +84,7 @@ void LookupTable::GenerateLookupTable(bool save_to_file, std::string filename)
 
 void LookupTable::SaveLookupTableToFile(std::string filename)
 {
-    std::string location = "/home/rdu";
+    std::string location = LoggerHelper::GetDefaultLogPath();
     CsvLogger logger(filename, location);
 
     for (auto &entry : entries_)
@@ -94,7 +94,7 @@ void LookupTable::SaveLookupTableToFile(std::string filename)
                        entry.p.p0, entry.p.p1, entry.p.p2, entry.p.p3, entry.p.sf);
     }
 
-    std::cout << "lookup table saved to: " << location + "/" + filename << std::endl;
+    std::cout << "lookup table saved to: " << location << std::endl;
 }
 
 void LookupTable::LoadLookupTableFromFile(std::string filename)

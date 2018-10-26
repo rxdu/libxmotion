@@ -32,25 +32,27 @@ class MotionPrimitive
 {
 public:
   MotionPrimitive() = default;
-  MotionPrimitive(MotionState ss, MotionState sf, PointKinematics::Param p);
-  explicit MotionPrimitive(int32_t mp_id) : id_(mp_id){};
+  MotionPrimitive(MotionState state_s, MotionState state_f);
+  MotionPrimitive(MotionState state_s, MotionState state_f, PointKinematics::Param p);
 
+  // Defaulted big five
   ~MotionPrimitive() = default;
   MotionPrimitive(const MotionPrimitive &other) = default;
   MotionPrimitive &operator=(const MotionPrimitive &other) = default;
   MotionPrimitive(MotionPrimitive &&other) = default;
   MotionPrimitive &operator=(MotionPrimitive &&other) = default;
 
-  int32_t id_ = -1;
-  double sf_;
-
-  MotionState Evaluate(double s, double ds = 0.1);
-
+  // Characteristic parameters of the primitive
+  double GetLength() const { return sf_; }
   MotionState GetStartState() const { return state_s_; }
   MotionState GetFinalState() const { return state_f_; }
   PointKinematics::Param GetParameters() const { return params_; }
 
-private:
+  void SetParameters(const PointKinematics::Param &p);
+  virtual MotionState Evaluate(double s, double ds = 0.1);
+
+protected:
+  double sf_;
   MotionState state_s_;
   MotionState state_f_;
 

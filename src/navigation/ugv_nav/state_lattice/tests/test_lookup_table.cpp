@@ -8,10 +8,10 @@ using namespace librav;
 
 int main()
 {
-    // LookupTable table;
-    // table.GenerateLookupTable(true, "lookup_table");
+    LookupTable table;
+    table.GenerateLookupTable(true, "lookup_table");
 
-    LookupTable table("/home/rdu/lookup_table.20181026024917.data");
+    // LookupTable table("/home/rdu/lookup_table.20181026024917.data");
 
     auto mps = table.GetAllSeedPrimitives();
     LightViz::ShowMotionPrimitive(mps, 0.1, 50, "Lattice Lookup", true);

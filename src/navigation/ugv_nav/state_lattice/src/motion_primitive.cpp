@@ -11,8 +11,18 @@
 
 using namespace librav;
 
-MotionPrimitive::MotionPrimitive(MotionState ss, MotionState sf, PointKinematics::Param p) : state_s_(ss), state_f_(sf), sf_(p.sf), params_(p)
+MotionPrimitive::MotionPrimitive(MotionState state_s, MotionState state_f) : state_s_(state_s), state_f_(state_f)
 {
+}
+
+MotionPrimitive::MotionPrimitive(MotionState state_s, MotionState state_f, PointKinematics::Param p) : state_s_(state_s), state_f_(state_f), sf_(p.sf), params_(p)
+{
+    model_.SetParameters(p);
+}
+
+void MotionPrimitive::SetParameters(const PointKinematics::Param &p)
+{
+    sf_ = p.sf;
     model_.SetParameters(p);
 }
 

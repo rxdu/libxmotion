@@ -13,6 +13,8 @@
 
 #include <eigen3/Eigen/LU>
 
+#include "csv_parser/csv.h"
+
 using namespace librav;
 
 #define ENABLE_SCALER_SELECTION
@@ -93,10 +95,28 @@ using namespace librav;
 PrimitiveGenerator::PrimitiveGenerator()
 {
     Je_ << 0.02, 0.02, 0.05;
+}
 
-    scalers_.push_back(1.0);
-    scalers_.push_back(2.0);
-    scalers_.push_back(0.5);
+PrimitiveGenerator::PrimitiveGenerator(std::string lookup_file)
+{
+    Je_ << 0.02, 0.02, 0.05;
+
+    LoadLookupTable(lookup_file);
+}
+
+void PrimitiveGenerator::LoadLookupTable(std::string lookup_file)
+{
+    lookup_table_ = LookupTable(lookup_file);
+    lookup_available_ = true;
+}
+
+bool PrimitiveGenerator::Calculate(MotionState state_s, MotionState state_f, MotionPrimitive &mp)
+{
+    if (!lookup_available_)
+        return false;
+
+    auto init = lookup_table_.SearchNearest(state_f);
+    return Calculate(state_s, state_f, init.p, mp);
 }
 
 bool PrimitiveGenerator::Calculate(MotionState state_s, MotionState state_f, PointKinematics::Param init_p, MotionPrimitive &mp)

@@ -7,7 +7,7 @@ set(LATTICE_LIB_SRC
   src/motion_primitive.cpp
   src/lookup_table.cpp
   src/primitive_generator.cpp
-  src/lattice_manager.cpp
+  src/state_lattice.cpp
 )
 add_library(lattice STATIC ${LATTICE_LIB_SRC})
 target_link_libraries(lattice graph geometry model ascent utilities)
