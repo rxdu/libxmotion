@@ -202,8 +202,8 @@ public:
   CurvilinearCellBase<T> *GetCell(int64_t id);
   CurvilinearCellBase<T> *GetCell(int32_t x, int32_t y);
 
-  std::vector<CurvilinearCellBase<T> *> GetNeighbours(int32_t x, int32_t y, bool allow_diag = true);
-  std::vector<CurvilinearCellBase<T> *> GetNeighbours(int64_t id, bool allow_diag = true);
+  std::vector<CurvilinearCellBase<T> *> GetNeighbours(int32_t x, int32_t y, int32_t type = 0);
+  std::vector<CurvilinearCellBase<T> *> GetNeighbours(int64_t id, int32_t type = 0);
 
   void PrintInfo()
   {

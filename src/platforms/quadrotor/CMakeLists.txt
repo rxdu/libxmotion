@@ -32,7 +32,6 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add other sub source directories
 add_subdirectory(apps)
-add_subdirectory(control)
 add_subdirectory(system)
 
 # !!! path repair and relevant experiments are broken !!!

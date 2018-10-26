@@ -64,44 +64,31 @@ CurvilinearCellBase<T> *CurvilinearGridBase<T>::GetCell(int32_t x, int32_t y)
 }
 
 template <typename T>
-std::vector<CurvilinearCellBase<T> *> CurvilinearGridBase<T>::GetNeighbours(int32_t x, int32_t y, bool allow_diag)
+std::vector<CurvilinearCellBase<T> *> CurvilinearGridBase<T>::GetNeighbours(int32_t x, int32_t y, int32_t type)
 {
-    std::vector<CurviGridIndex> candidates;
-    if (allow_diag)
-    {
-        for (int32_t xi = x - 1; xi <= x + 1; ++xi)
-            for (int32_t yi = y - 1; yi <= y + 1; ++yi)
-            {
-                if (xi == x && yi == y)
-                    continue;
-                candidates.emplace_back(xi, yi);
-            }
-    }
-    else
-    {
-        candidates.emplace_back(x, y + 1);
-        candidates.emplace_back(x, y - 1);
-        candidates.emplace_back(x + 1, y);
-        candidates.emplace_back(x - 1, y);
-    }
-
     std::vector<CurvilinearCellBase<T> *> neighbours;
-    for (auto &can : candidates)
+
+    if (type == 0)
     {
-        int32_t xi = can.GetX();
-        int32_t yi = can.GetY();
-        if (xi >= 0 && xi < GetTangentialGridNum() && yi >= -delta_half_num_ && yi <= delta_half_num_)
-            neighbours.push_back(GetCell(xi, yi));
+        if (x + 1 < GetTangentialGridNum())
+        {
+            for (int32_t yi = -delta_half_num_; yi <= delta_half_num_; ++yi)
+            {
+                if (center_cell_null_ && yi == 0)
+                    continue;
+                neighbours.push_back(GetCell(x + 1, yi));
+            }
+        }
     }
 
     return neighbours;
 }
 
 template <typename T>
-std::vector<CurvilinearCellBase<T> *> CurvilinearGridBase<T>::GetNeighbours(int64_t id, bool allow_diag)
+std::vector<CurvilinearCellBase<T> *> CurvilinearGridBase<T>::GetNeighbours(int64_t id, int32_t type)
 {
     auto index = IDToIndex(id);
-    return GetNeighbours(index.GetX(), index.GetY(), allow_diag);
+    return GetNeighbours(index.GetX(), index.GetY(), type);
 }
 
 template <typename T>
