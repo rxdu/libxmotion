@@ -22,6 +22,9 @@ using namespace librav;
  *  [1] M. McNaughton and C. Urmson and J. M. Dolan and J. W. Lee. 2011. 
  *    “Motion Planning for Autonomous Driving with a Conformal Spatiotemporal Lattice.” 
  *    In 2011 IEEE International Conference on Robotics and Automation, 4889–95.
+ *  [2] Howard, Thomas M., and Alonzo Kelly. 2007. “Optimal Rough Terrain Trajectory Generation 
+ *      for Wheeled Mobile Robots.” The International Journal of Robotics Research 26 (2): 141–66.
+ *  [3] Python Robotics, https://github.com/AtsushiSakai/PythonRobotics
  * 
  *  System model
  *  System state: x = {x, y, theta, kappa}
