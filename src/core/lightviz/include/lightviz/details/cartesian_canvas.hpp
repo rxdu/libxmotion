@@ -25,8 +25,8 @@ struct CartesianCanvas
 {
     CartesianCanvas(int32_t ppu) : pixel_per_meter(ppu) {}
 
-    // create canvas
-    void CreateCanvas(double xmin, double xmax, double ymin, double ymax, cv::Scalar bg_color = LVColors::bg_color);
+    // setup canvas
+    void SetupCanvas(double xmin, double xmax, double ymin, double ymax, cv::Scalar bg_color = LVColors::bg_color);
 
     // coordinate conversion
     SimplePoint ConvertCartisianToPixel(double xi, double yi);

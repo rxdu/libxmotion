@@ -47,6 +47,8 @@ struct LVColors
     static const cv::Scalar purple_color;
     static const cv::Scalar teal_color;
     static const cv::Scalar navy_color;
+
+    static const cv::Scalar orange_color;
 };
 
 namespace LightViz

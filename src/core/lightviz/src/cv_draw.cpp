@@ -48,6 +48,8 @@ const cv::Scalar LVColors::purple_color = Scalar(128, 0, 128);
 const cv::Scalar LVColors::teal_color = Scalar(128, 128, 0);
 const cv::Scalar LVColors::navy_color = Scalar(128, 0, 0);
 
+const cv::Scalar LVColors::orange_color = Scalar(0, 165, 255);
+
 /******************* Basic Input/Output *******************/
 cv::Mat LightViz::ReadImageFile(std::string img_file)
 {

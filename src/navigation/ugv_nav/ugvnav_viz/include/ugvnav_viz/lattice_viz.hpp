@@ -13,12 +13,14 @@
 #include <vector>
 
 #include "state_lattice/details/motion_state.hpp"
+#include "state_lattice/motion_primitive.hpp"
 
 namespace librav
 {
 namespace LightViz
 {
 void ShowMotionStateTrajectory(const std::vector<MotionState> &states, int32_t pixel_per_unit = 10, std::string window_name = "Lattice Image", bool save_img = false);
+void ShowMotionPrimitive(MotionPrimitive mp, double step = 0.1, int32_t pixel_per_unit = 10, std::string window_name = "Lattice Image", bool save_img = false);
 };
 } // namespace librav
 

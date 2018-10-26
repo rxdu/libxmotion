@@ -16,7 +16,7 @@
 using namespace librav;
 using namespace LightViz;
 
-void CartesianCanvas::CreateCanvas(double xmin, double xmax, double ymin, double ymax, cv::Scalar bg_color)
+void CartesianCanvas::SetupCanvas(double xmin, double xmax, double ymin, double ymax, cv::Scalar bg_color)
 {
     assert(xmax > xmin && ymax > ymin);
 

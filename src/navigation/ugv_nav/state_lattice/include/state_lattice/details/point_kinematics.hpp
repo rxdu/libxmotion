@@ -52,15 +52,39 @@ class PointKinematics
     PointKinematics() = default;
     PointKinematics(double a, double b, double c, double d) : a_(a), b_(b), c_(c), d_(d){};
 
+    // calculate intermediate parameters
+    void SetParameters(const Param &p);
+
     // propagate system model
     MotionState Propagate(const MotionState &init, const Param &p, double ds = 0.1);
     StatePMatrix PropagateP(const StatePMatrix &init, const Param &p, double ds = 0.1);
 
-    // The following functions could be called externally ONLY when a_,b_,c_,d_ have been set properly
-    inline MotionState Propagate(const MotionState &init, double sf, double ds = 0.1);
+    // The following functions could be called externally ONLY when a_,b_,c_,d_ have been set properly by
+    //  (1) construct the model with: PointKinematics(double a, double b, double c, double d)
+    //  (2) default construct and then use SetParameters() to set parameters
+    inline MotionState Propagate(const MotionState &init, double sf, double ds)
+    {
+        {
+            double sf_squared = sf * sf;
+
+            // theta_p and kappa_p could be calculated analytically
+            double theta_p = a_ * sf + b_ * sf_squared / 2.0 + c_ * sf_squared * sf / 3.0 + d_ * sf_squared * sf_squared / 4.0;
+            double kappa_p = a_ + b_ * sf + c_ * sf_squared + d_ * sf_squared * sf;
+
+            // calculate x_p, y_p numerically
+            double s = 0;
+            asc::state_t xy_p = {init.x, init.y};
+            while (s <= sf)
+            {
+                integrator_(*this, xy_p, s, ds);
+            }
+
+            return MotionState(xy_p[0], xy_p[1], theta_p, kappa_p);
+        }
+    }
     std::vector<MotionState> GenerateTrajectoryPoints(const MotionState &init, double sf, double step, double ds = 0.1);
 
-    // Shall not be called by user, used for propagation by RK4 class
+    // Shall not be called by user, used for propagation by RK4 integrator class
     void operator()(const asc::state_t &x, asc::state_t &xd, const double s);
 
   private:

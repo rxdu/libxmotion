@@ -11,6 +11,12 @@
 
 using namespace librav;
 
-MotionPrimitive::MotionPrimitive(MotionState ss, MotionState sf, PointKinematics::Param p) : state_s_(ss), state_f_(sf), params_(p)
+MotionPrimitive::MotionPrimitive(MotionState ss, MotionState sf, PointKinematics::Param p) : state_s_(ss), state_f_(sf), sf_(p.sf), params_(p)
 {
+    model_.SetParameters(p);
+}
+
+MotionState MotionPrimitive::Evaluate(double s, double ds)
+{
+    return model_.Propagate(state_s_, s, ds);
 }

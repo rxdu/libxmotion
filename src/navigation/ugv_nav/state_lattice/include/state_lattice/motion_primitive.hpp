@@ -41,17 +41,19 @@ public:
   // characteristic parameters
   double sf_;
   Polynomial<4> kappa_s_;
+  MotionState Evaluate(double s, double ds = 0.1);
 
   MotionState GetStartState() const { return state_s_; }
   MotionState GetFinalState() const { return state_f_; }
 
-  void SetParameters(PointKinematics::Param p);
+  // void SetParameters(PointKinematics::Param p);
 
 private:
   MotionState state_s_;
   MotionState state_f_;
 
   PointKinematics::Param params_;
+  PointKinematics model_;
 };
 } // namespace librav
 
