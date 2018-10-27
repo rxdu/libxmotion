@@ -26,40 +26,40 @@ namespace librav
 {
 class StateLattice : public MotionPrimitive
 {
-public:
-  StateLattice() = default;
-  StateLattice(MotionState state_s, MotionState state_f);
+  public:
+    StateLattice() = default;
+    StateLattice(MotionState state_s, MotionState state_f);
 
-  // Defaulted big five
-  ~StateLattice() = default;
-  StateLattice(const StateLattice &other) = default;
-  StateLattice &operator=(const StateLattice &other) = default;
-  StateLattice(StateLattice &&other) = default;
-  StateLattice &operator=(StateLattice &&other) = default;
+    // Defaulted big five
+    ~StateLattice() = default;
+    StateLattice(const StateLattice &other) = default;
+    StateLattice &operator=(const StateLattice &other) = default;
+    StateLattice(StateLattice &&other) = default;
+    StateLattice &operator=(StateLattice &&other) = default;
 
-  // Characteristic parameters of the primitive
-  bool IsValid() const { return valid_; }
-  MotionState Evaluate(double s, double ds = 0.1) override;
+    // Characteristic parameters of the primitive
+    bool IsValid() const { return valid_; }
+    MotionState Evaluate(double s, double ds = 0.1) override;
 
-  /* Useful functions derived from parent class */
-  // double GetLength() const { return sf_; }
+    /* Useful functions derived from parent class */
+    // double GetLength() const { return sf_; }
 
-private:
-  static PrimitiveGenerator generator;
+  private:
+    static PrimitiveGenerator generator;
 
-  double dx_;
-  double dy_;
-  double dtheta_;
+    double dx_;
+    double dy_;
+    double dtheta_;
 
-  bool valid_ = false;
+    bool valid_ = false;
 
-  MotionState tstate_s_;
-  MotionState tstate_f_;
+    MotionState tstate_s_;
+    MotionState tstate_f_;
 
-  MotionState TransformToLocal(const MotionState &input);
-  MotionState TransformToGlobal(const MotionState &input);
-  // MotionPrimitive TransformPrimitive(const MotionPrimitive &input, double dx, double dy, double dtheta);
-  // PrimitiveNode TransformNode(const PrimitiveNode &input, double dx, double dy, double dtheta);
+    MotionState TransformToLocal(const MotionState &input);
+    MotionState TransformToGlobal(const MotionState &input);
+    // MotionPrimitive TransformPrimitive(const MotionPrimitive &input, double dx, double dy, double dtheta);
+    // PrimitiveNode TransformNode(const PrimitiveNode &input, double dx, double dy, double dtheta);
 };
 } // namespace librav
 

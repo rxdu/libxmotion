@@ -30,34 +30,34 @@ namespace librav
 {
 class MotionPrimitive
 {
-public:
-  MotionPrimitive() = default;
-  MotionPrimitive(MotionState state_s, MotionState state_f);
-  MotionPrimitive(MotionState state_s, MotionState state_f, PointKinematics::Param p);
+  public:
+    MotionPrimitive() = default;
+    MotionPrimitive(MotionState state_s, MotionState state_f);
+    MotionPrimitive(MotionState state_s, MotionState state_f, PointKinematics::Param p);
 
-  // Defaulted big five
-  ~MotionPrimitive() = default;
-  MotionPrimitive(const MotionPrimitive &other) = default;
-  MotionPrimitive &operator=(const MotionPrimitive &other) = default;
-  MotionPrimitive(MotionPrimitive &&other) = default;
-  MotionPrimitive &operator=(MotionPrimitive &&other) = default;
+    // Defaulted big five
+    ~MotionPrimitive() = default;
+    MotionPrimitive(const MotionPrimitive &other) = default;
+    MotionPrimitive &operator=(const MotionPrimitive &other) = default;
+    MotionPrimitive(MotionPrimitive &&other) = default;
+    MotionPrimitive &operator=(MotionPrimitive &&other) = default;
 
-  // Characteristic parameters of the primitive
-  double GetLength() const { return sf_; }
-  MotionState GetStartState() const { return state_s_; }
-  MotionState GetFinalState() const { return state_f_; }
-  PointKinematics::Param GetParameters() const { return params_; }
+    // Characteristic parameters of the primitive
+    double GetLength() const { return sf_; }
+    MotionState GetStartState() const { return state_s_; }
+    MotionState GetFinalState() const { return state_f_; }
+    PointKinematics::Param GetParameters() const { return params_; }
 
-  void SetParameters(const PointKinematics::Param &p);
-  virtual MotionState Evaluate(double s, double ds = 0.1);
+    void SetParameters(const PointKinematics::Param &p);
+    virtual MotionState Evaluate(double s, double ds = 0.1);
 
-protected:
-  double sf_;
-  MotionState state_s_;
-  MotionState state_f_;
+  protected:
+    double sf_;
+    MotionState state_s_;
+    MotionState state_f_;
 
-  PointKinematics::Param params_;
-  PointKinematics model_;
+    PointKinematics::Param params_;
+    PointKinematics model_;
 };
 } // namespace librav
 
