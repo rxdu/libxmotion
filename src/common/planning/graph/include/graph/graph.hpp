@@ -291,7 +291,7 @@ public:
   void ClearGraph();
   ///@}
 
-private:
+protected:
   /** @name Internal variables and functions.
    *  Internal variables and functions.
    */

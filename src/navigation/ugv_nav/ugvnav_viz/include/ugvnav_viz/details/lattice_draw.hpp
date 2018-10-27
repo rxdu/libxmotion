@@ -29,6 +29,7 @@ class LatticeDraw
     void DrawMotionPrimitive(std::vector<MotionPrimitive>& mps, double step = 0.1, cv::Scalar ln_color = LVColors::orange_color, int32_t ln_width = 2);
 
     void DrawStateLattice(StateLattice sl, double step = 0.1, cv::Scalar ln_color = LVColors::orange_color, int32_t ln_width = 1);
+    void DrawStateLattice(std::vector<StateLattice>& sls, double step = 0.1, cv::Scalar ln_color = LVColors::orange_color, int32_t ln_width = 1);
 
   private:
     CartesianCanvas &canvas_;

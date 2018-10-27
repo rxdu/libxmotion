@@ -53,3 +53,9 @@ void LatticeDraw::DrawStateLattice(StateLattice sl, double step, cv::Scalar ln_c
 
     DrawTrajectoryPoints(states, ln_color, ln_width);
 }
+
+void LatticeDraw::DrawStateLattice(std::vector<StateLattice> &sls, double step, cv::Scalar ln_color, int32_t ln_width)
+{
+    for (auto &sl : sls)
+        DrawStateLattice(sl, step, ln_color, ln_width);
+}

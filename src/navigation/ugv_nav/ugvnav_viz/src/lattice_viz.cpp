@@ -56,3 +56,15 @@ void LightViz::ShowStateLattice(StateLattice sl, double step, int32_t pixel_per_
 
     ShowImage(canvas.paint_area, window_name, save_img);
 }
+
+void LightViz::ShowStateLattice(std::vector<StateLattice> &sls, double step, int32_t pixel_per_unit, std::string window_name, bool save_img)
+{
+    CartesianCanvas canvas(pixel_per_unit);
+    // canvas.SetupCanvas(0, 32, -8, 8);
+    canvas.SetupCanvas(10, 20, 50, 60);
+
+    LatticeDraw ldraw(canvas);
+    ldraw.DrawStateLattice(sls, step);
+
+    ShowImage(canvas.paint_area, window_name, save_img);
+}

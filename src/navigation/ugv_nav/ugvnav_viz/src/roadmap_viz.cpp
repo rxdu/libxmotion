@@ -105,6 +105,44 @@ void RoadMapViz::ShowTrafficChannel(TrafficChannel &channel, int32_t pixel_per_u
     LightViz::ShowImage(canvas, window_name, save_img);
 }
 
+void RoadMapViz::ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel &channel, int32_t pixel_per_unit, std::string window_name, bool save_img)
+{
+    RoadMapViz &viz = RoadMapViz::GetInstance();
+
+    GeometryDraw gdraw(pixel_per_unit);
+
+    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, LVColors::jet_colormap_lowest);
+
+    for (auto &polyline : viz.boundary_lines_)
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+
+    // canvas = gdraw.DrawPolyline(canvas, channel.center_line_, true, LVColors::gray_color);
+    if (channel.grid_ != nullptr)
+        canvas = gdraw.DrawCurvilinearGrid(canvas, *channel.grid_.get());
+
+    canvas = gdraw.DrawParametricCurve(canvas, channel.center_curve_, 0.1, LVColors::black_color);
+
+    // draw state lattice
+    double step = 0.1;
+    for (auto &sl : lattice)
+    {
+        std::vector<MotionState> states;
+        for (double s = 0; s <= sl.GetLength(); s += step)
+            states.push_back(sl.Evaluate(s, step / 5.0));
+        for (int32_t i = 0; i < states.size() - 1; ++i)
+        {
+            MotionState st1 = states[i];
+            MotionState st2 = states[i + 1];
+
+            auto pt1 = gdraw.ConvertCartisianToPixel(st1.x, st1.y);
+            auto pt2 = gdraw.ConvertCartisianToPixel(st2.x, st2.y);
+            LightViz::DrawLine(canvas, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), LVColors::orange_color, 1);
+        }
+    }
+
+    LightViz::ShowImage(canvas, window_name, save_img);
+}
+
 void RoadMapViz::ShowTrafficChannelCenterline(TrafficChannel &channel, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();

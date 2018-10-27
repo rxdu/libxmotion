@@ -27,19 +27,6 @@ class RoadMap;
 class TrafficChannel
 {
 public:
-  using GridPointLocal = CurvilinearGrid::GridPoint;
-
-  struct GridPointGlobal
-  {
-    GridPointGlobal(double _x = 0, double _y = 0, double _theta = 0, double _kappa = 0) : x(_x), y(_y), theta(_theta), kappa(_kappa){};
-
-    double x;
-    double y;
-    double theta;
-    double kappa;
-  };
-
-public:
   TrafficChannel(RoadMap *map, std::string src, std::string dst, std::vector<std::string> lanes);
   TrafficChannel(RoadMap *map, std::string lane);
   ~TrafficChannel() = default;
@@ -60,10 +47,9 @@ public:
   void DiscretizeChannel(double step_t, double step_n, int32_t side_num);
 
   bool CheckInside(SimplePoint pt);
+
   CurvilinearGrid::GridPoint ConvertToPathCoordinate(SimplePoint pt);
   SimplePoint ConvertToGlobalCoordinate(CurvilinearGrid::GridPoint pt);
-
-  GridPointGlobal MapLocalPointToGlobal(GridPointLocal pt);
 
   void PrintInfo();
 

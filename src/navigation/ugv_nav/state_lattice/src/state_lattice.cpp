@@ -38,7 +38,7 @@ StateLattice::StateLattice(MotionState state_s, MotionState state_f) : MotionPri
 
     if (valid_)
     {
-        std::cout << "state lattice created" << std::endl;
+        // std::cout << "state lattice created" << std::endl;
         SetParameters(mp.GetParameters());
     }
     else

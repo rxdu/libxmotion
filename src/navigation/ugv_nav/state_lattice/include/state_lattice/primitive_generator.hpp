@@ -34,7 +34,7 @@ public:
 
 private:
   const int32_t max_iter_ = 100;
-  const double cost_th_ = 0.1;
+  const double cost_th_ = 0.05;
   std::vector<double> scalers_ = {1.0, 2.0, 0.5};
   StatePMatrix Je_;
 

@@ -13,6 +13,3 @@ target_link_libraries(test_lookup_table lattice ugvnav_viz)
 
 add_executable(test_state_lattice test_state_lattice.cpp)
 target_link_libraries(test_state_lattice lattice ugvnav_viz utilities)
-
-add_executable(test_lattice_graph test_lattice_graph.cpp)
-target_link_libraries(test_lattice_graph lattice ugvnav_viz utilities)

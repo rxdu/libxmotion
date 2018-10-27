@@ -18,6 +18,7 @@
 #include "geometry/polygon.hpp"
 
 #include "road_map/road_map.hpp"
+#include "state_lattice/state_lattice.hpp"
 
 namespace librav
 {
@@ -40,6 +41,8 @@ public:
 
   // static void ShowLabledTrafficFlows(std::vector<TrafficFlow *> &flows, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
   // static void ShowLabledTrafficFlows(TrafficFlow *ego_flow, std::vector<TrafficFlow *> &flows, int32_t pixel_per_unit = 10, std::string window_name = "Vehicle Image", bool save_img = false);
+
+  static void ShowLatticeInTrafficChannel(std::vector<StateLattice>& lattice, TrafficChannel &channel, int32_t pixel_per_unit = 10, std::string window_name = "Traffic Channel Image", bool save_img = false);
 
 private:
   static RoadMapViz &GetInstance();
