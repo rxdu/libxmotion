@@ -33,15 +33,17 @@ std::vector<MotionState> LookupTable::GenerateStateList()
         posx.push_back(s_interval_ * i);
 
     int32_t d_limit = static_cast<int32_t>(max_delta_ / delta_interval_);
-    for (int32_t i = -d_limit; i <= d_limit; ++i)
-    {
-        if (i == 0)
-            continue;
+    // add from center to side
+    for (int32_t i = 0; i <= d_limit; ++i)
         posy.push_back(delta_interval_ * i);
-    }
+    for (int32_t i = -1; i >= -d_limit; --i)
+        posy.push_back(delta_interval_ * i);
     std::cout << "s limit: " << s_limit << " , delta limit: " << d_limit << std::endl;
 
-    theta.push_back(0);
+    int32_t theta_limit = 3;
+    for (int32_t i = -theta_limit; i <= theta_limit; ++i)
+        theta.push_back(i * M_PI/18);
+
     kappa.push_back(0);
 
     for (auto &x : posx)

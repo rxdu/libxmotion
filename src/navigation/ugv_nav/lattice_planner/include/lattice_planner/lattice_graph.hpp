@@ -45,7 +45,7 @@ class LatticeGraph : public Graph<LatticeNode, StateLattice>
   public:
     LatticeGraph();
 
-    void Construct(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start, int32_t horizon = 2);
+    void Construct(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start, int32_t expansion_iter = 2);
 
   private:
     // std::shared_ptr<RoadMap> road_map_;

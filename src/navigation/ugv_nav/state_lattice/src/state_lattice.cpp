@@ -16,7 +16,8 @@
 
 using namespace librav;
 
-PrimitiveGenerator StateLattice::generator(LoggerHelper::GetDefaultLogPath() + "/lookup_table.20181026024917.data");
+// PrimitiveGenerator StateLattice::generator(LoggerHelper::GetDefaultLogPath() + "/lookup_table.20181026024917.data");
+PrimitiveGenerator StateLattice::generator(LoggerHelper::GetDefaultLogPath() + "/lookup_table.20181027112245.data");
 
 StateLattice::StateLattice(MotionState state_s, MotionState state_f) : MotionPrimitive(state_s, state_f)
 {

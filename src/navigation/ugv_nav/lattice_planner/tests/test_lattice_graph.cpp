@@ -14,9 +14,9 @@ int main()
 {
     // load map
     stopwatch::StopWatch timer;
-    // std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane_horizontal.osm");
+    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane_horizontal.osm");
     // std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane.osm");
-    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/short_segment.osm");
+    // std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/short_segment.osm");
 
     if (!map->MapReady())
     {
@@ -38,21 +38,23 @@ int main()
 
     // discretize lane
     auto all_channels = map->traffic_map_->GetAllTrafficChannels();
-    all_channels[1]->DiscretizeChannel(5, 1.0, 5);
+    all_channels[1]->DiscretizeChannel(5, 1.2, 5);
 
     // RoadMapViz::ShowTrafficChannel(*all_channels[1].get());
     // RoadMapViz::ShowTrafficChannel(*all_channels[1].get(), 20, "horizontal_lane", true);
 
     std::shared_ptr<LatticeGraph> graph = std::make_shared<LatticeGraph>();
 
-    graph->Construct(all_channels[1], {0, 0});
+    timer.tic();
+    graph->Construct(all_channels[1], {0, 0}, 8);
+    std::cout << "graph constructed in " << timer.toc() << " seconds" << std::endl;
 
     std::vector<StateLattice> lattices;
     for (auto &edge : graph->GetAllEdges())
         lattices.push_back(edge->cost_);
 
     // LightViz::ShowStateLattice(lattices);
-    RoadMapViz::ShowLatticeInTrafficChannel(lattices, *all_channels[1].get(), 30, "lattice graph", true);
+    RoadMapViz::ShowLatticeInTrafficChannel(lattices, *all_channels[1].get(), 10, "lattice graph", true);
 
     return 0;
 }

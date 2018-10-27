@@ -17,53 +17,71 @@ LatticeGraph::LatticeGraph()
 {
 }
 
-void LatticeGraph::Construct(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t horizon)
+void LatticeGraph::Construct(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t expansion_iter)
 {
+    int32_t min_h = 6;
+    int32_t max_h = 6;
+
+    // auto start_cell = channel->grid_->GetCell(start_index);
+    // LatticeNode start_node(start_cell, channel);
+    // auto nbs = channel->grid_->GetNeighbours(start_index.GetX(), start_index.GetY(), min_h, max_h);
+    // for (auto nb : nbs)
+    // {
+    //     LatticeNode next_node(nb, channel);
+    //     StateLattice new_lattice(start_node.state, next_node.state);
+    //     if (new_lattice.IsValid())
+    //         AddEdge(start_node, next_node, new_lattice);
+
+    //     // nb->PrintInfo();
+    //     // std::cout << next_node << std::endl;
+    //     // std::cout << "---" << std::endl;
+    // }
+
+    // for (int32_t h = start_index.GetX() + min_h; h <= horizon; h = h + min_h)
+    // {
+    //     for (int32_t w = -channel->grid_->GetOneSideGridNumber(); w <= channel->grid_->GetOneSideGridNumber(); ++w)
+    //     {
+    //         auto prev_cell = channel->grid_->GetCell(h, w);
+    //         LatticeNode prev_node(prev_cell, channel);
+
+    //         auto nbs = channel->grid_->GetNeighbours(h, w, min_h, max_h);
+    //         for (auto nb : nbs)
+    //         {
+    //             LatticeNode next_node(nb, channel);
+    //             StateLattice new_lattice(prev_node.state, next_node.state);
+    //             if (new_lattice.IsValid())
+    //                 AddEdge(prev_node, next_node, new_lattice);
+
+    //             // nb->PrintInfo();
+    //             // std::cout << next_node << std::endl;
+    //             // std::cout << "---" << std::endl;
+    //         }
+    //     }
+    // }
+
     auto start_cell = channel->grid_->GetCell(start_index);
     LatticeNode start_node(start_cell, channel);
 
-    // auto next_node = channel->grid_->GetCell(CurviGridIndex(start_index.GetX() + 1, start_index.GetY() - 1));
-    // next_node->PrintInfo();
-    // LatticeNode next_lattice_node(next_node, channel);
-    // StateLattice new_lattice(start_lattice_node.state, next_lattice_node.state);
-    // if (new_lattice.IsValid())
-    //     AddEdge(start_lattice_node, next_lattice_node, new_lattice);
-    // std::cout << start_lattice_node << std::endl;
-    // std::cout << next_lattice_node << std::endl;
-
-    auto nbs = channel->grid_->GetNeighbours(start_index.GetX(), start_index.GetY(), 2, 3);
-    std::cout << "size of neighbour: " << nbs.size() << std::endl;
-    for (auto nb : nbs)
+    std::vector<LatticeNode> candidates;
+    candidates.push_back(start_node);
+    for (int32_t iter = 0; iter < expansion_iter; ++iter)
     {
-        LatticeNode next_node(nb, channel);
-        StateLattice new_lattice(start_node.state, next_node.state);
-        if (new_lattice.IsValid())
-            AddEdge(start_node, next_node, new_lattice);
-
-        nb->PrintInfo();
-        std::cout << next_node << std::endl;
-        std::cout << "---" << std::endl;
-    }
-
-    for (int32_t h = start_index.GetX() + 2; h <= horizon; h = h + 2)
-    {
-        for (int32_t w = -channel->grid_->GetOneSideGridNumber(); w <= channel->grid_->GetOneSideGridNumber(); ++w)
+        std::cout << "candidation size at iteration " << iter << " : " << candidates.size() << std::endl;
+        std::vector<LatticeNode> added_nodes;
+        for (auto &candidate : candidates)
         {
-            auto prev_cell = channel->grid_->GetCell(h, w);
-            LatticeNode prev_node(prev_cell, channel);
-
-            auto nbs = channel->grid_->GetNeighbours(h, w, 2, 3);
+            auto nbs = channel->grid_->GetNeighbours(candidate.index.GetX(), candidate.index.GetY(), min_h, max_h);
             for (auto nb : nbs)
             {
                 LatticeNode next_node(nb, channel);
-                StateLattice new_lattice(prev_node.state, next_node.state);
+                StateLattice new_lattice(candidate.state, next_node.state);
                 if (new_lattice.IsValid())
-                    AddEdge(prev_node, next_node, new_lattice);
-
-                // nb->PrintInfo();
-                // std::cout << next_node << std::endl;
-                // std::cout << "---" << std::endl;
+                {
+                    AddEdge(candidate, next_node, new_lattice);
+                    added_nodes.push_back(next_node);
+                }
             }
         }
+        candidates = added_nodes;
     }
 }

@@ -183,7 +183,7 @@ bool PrimitiveGenerator::Calculate(MotionState state_s, MotionState state_f, Poi
         // std::cout << "--------------------------------------" << std::endl;
     }
 
-    std::cout << "failed to find a path" << std::endl;
+    // std::cout << "failed to find a path" << std::endl;
 
     return false;
 }
