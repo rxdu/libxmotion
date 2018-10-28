@@ -5,6 +5,7 @@ project(librav_core)
 add_subdirectory(common)
 add_subdirectory(control)
 add_subdirectory(planning)
+add_subdirectory(decision)
 add_subdirectory(lightviz)
 add_subdirectory(utilities)
 
