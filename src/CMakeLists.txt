@@ -30,10 +30,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_subdirectory(kernel)
 add_subdirectory(third_party)
 
-# # Packages built on top of core
-# add_subdirectory(mcontrol)
-# add_subdirectory(navigation)
-# add_subdirectory(platforms)
+# Packages built on top of core
+add_subdirectory(mcontrol)
+add_subdirectory(navigation)
+add_subdirectory(platforms)
 
 # # Publication-related code
 # add_subdirectory(publication)

@@ -6,15 +6,11 @@
 #include "lightviz/lightviz.hpp"
 #include "ugvnav_viz/ugvnav_viz.hpp"
 
-#include "stopwatch/stopwatch.h"
-
 using namespace librav;
 
 int main()
 {
-    stopwatch::StopWatch timer;
-
-    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_with_centerline.osm");
+    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
 
     if (!map->MapReady())
     {
@@ -24,39 +20,25 @@ int main()
 
     map->PrintInfo();
 
-    std::cout << "map loaded in " << timer.toc() << " seconds" << std::endl;
-
     ////////////////////////////////////////////////////////////////////////
 
-    RoadMapViz::SetupRoadMapViz(map);
-    // RoadMapViz::ShowLanes();
+    RoadMapViz::SetupRoadMapViz(map, 10);
+    RoadMapViz::ShowLanes();
 
     Polygon fp;
-    // fp.AddPoint(0.9, 1.2 * 2);
-    // fp.AddPoint(-0.9, 1.2 * 2);
-    // fp.AddPoint(-0.9, -1.2 * 2);
-    // fp.AddPoint(0.9, -1.2 * 2);
     fp.AddPoint(1.2 * 2, 0.9);
     fp.AddPoint(1.2 * 2, -0.9);
     fp.AddPoint(-1.2 * 2, -0.9);
     fp.AddPoint(-1.2 * 2, 0.9);
+
+    std::vector<Polygon> polys;
     auto fp_start = fp.TransformRT(57, 36, 82 / 180.0 * M_PI);
     auto fp_final = fp.TransformRT(4, 68, 170.0 / 180.0 * M_PI);
-    std::vector<Polygon> polys;
     polys.push_back(fp_start);
     polys.push_back(fp_final);
 
-    // RoadMapViz::ShowVehicle(new_fp);
+    RoadMapViz::ShowVehicle(fp);
     RoadMapViz::ShowVehicleFootprints(polys);
-
-    // LightViz::ShowPolygon(map.GetAllLanePolygons(), 10);
-    // LightViz::ShowPolyline(map.GetAllLaneBoundPolylines(), 10);
-    // LightViz::ShowLanePolylines(map.GetAllLaneBoundPolylines(), map.GetAllLaneCenterPolylines());
-    // LightViz::ShowPolylinePosition(map.GetAllLaneCenterPolylines(), 10);
-
-    // std::vector<Polygon> roi;
-    // roi.push_back(map.GetLanePolygon("s1"));
-    // LightViz::ShowFilledPolygon(roi, map.GetAllLanePolygons());
 
     return 0;
 }

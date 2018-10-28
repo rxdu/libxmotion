@@ -25,7 +25,7 @@ int main()
     }
     map->PrintInfo();
     std::cout << "map loaded in " << timer.toc() << " seconds" << std::endl;
-    RoadMapViz::SetupRoadMapViz(map);
+    RoadMapViz::SetupRoadMapViz(map, 10);
     // RoadMapViz::ShowLanes(true, 5, "test_lane", true);
     // for (auto &chn : map->traffic_map_->GetAllTrafficChannels())
     // {
@@ -54,7 +54,7 @@ int main()
     std::cout << "number of vertices: " << graph->GetGraphVertexNumber() << std::endl;
 
     // LightViz::ShowStateLattice(lattices);
-    RoadMapViz::ShowLatticeInTrafficChannel(lattices, *all_channels[1].get(), 10, "lattice graph", true);
+    RoadMapViz::ShowLatticeInTrafficChannel(lattices, *all_channels[1].get(), "lattice graph", true);
 
     return 0;
 }

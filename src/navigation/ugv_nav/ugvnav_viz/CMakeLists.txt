@@ -4,10 +4,11 @@
 # Add libraries
 set(UGVNAV_VIZ_LIB_SRC
     # src/field_viz_ext.cpp
-    src/roadmap_viz.cpp
-    src/lattice_draw.cpp
+    src/details/roadmap_draw.cpp
+    src/details/vehicle_draw.cpp
+    src/details/lattice_draw.cpp
     src/lattice_viz.cpp
-    # src/threat_field_viz.cpp
+    src/roadmap_viz.cpp
 )
 add_library(ugvnav_viz STATIC ${UGVNAV_VIZ_LIB_SRC})
 target_link_libraries(ugvnav_viz roadmap lattice lightviz)
