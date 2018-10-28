@@ -71,15 +71,15 @@ void RoadMapViz::ShowLanes(bool show_center_line, int32_t pixel_per_unit, std::s
 
     GeometryDraw gdraw(pixel_per_unit);
 
-    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, LVColors::jet_colormap_lowest);
+    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, CvDrawColors::jet_colormap_lowest);
 
     for (auto &polyline : viz.boundary_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::silver_color);
 
     if (show_center_line)
     {
         for (auto &polyline : viz.center_lines_)
-            canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+            canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::black_color);
     }
 
     LightViz::ShowImage(canvas, window_name, save_img);
@@ -91,15 +91,15 @@ void RoadMapViz::ShowVehicle(Polygon &polygon, int32_t pixel_per_unit, std::stri
 
     GeometryDraw gdraw(pixel_per_unit);
 
-    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, LVColors::jet_colormap_lowest);
+    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, CvDrawColors::jet_colormap_lowest);
 
     for (auto &polyline : viz.boundary_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::silver_color);
 
     for (auto &polyline : viz.center_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::black_color);
 
-    canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::cyan_color);
+    canvas = gdraw.DrawPolygon(canvas, polygon, false, CvDrawColors::cyan_color);
     canvas = gdraw.DrawPolygonDirection(canvas, polygon);
 
     LightViz::ShowImage(canvas, window_name, save_img);
@@ -111,22 +111,22 @@ void RoadMapViz::ShowVehiclePath(std::vector<Polyline> &path, std::vector<Polygo
 
     GeometryDraw gdraw(pixel_per_unit);
 
-    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, LVColors::jet_colormap_lowest);
+    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, CvDrawColors::jet_colormap_lowest);
 
     for (auto &polyline : viz.boundary_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::silver_color);
 
     for (auto &polyline : viz.center_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::black_color);
 
     for (auto &polygon : polygons)
     {
-        canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::cyan_color);
-        canvas = gdraw.DrawPolygonDirection(canvas, polygon, LVColors::red_color, 2);
+        canvas = gdraw.DrawPolygon(canvas, polygon, false, CvDrawColors::cyan_color);
+        canvas = gdraw.DrawPolygonDirection(canvas, polygon, CvDrawColors::red_color, 2);
     }
 
     for (auto &polyline : path)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::lime_color, 2);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::lime_color, 2);
 
     LightViz::ShowImage(canvas, window_name, save_img);
 }
@@ -137,18 +137,18 @@ void RoadMapViz::ShowVehicleFootprints(std::vector<Polygon> &polygons, int32_t p
 
     GeometryDraw gdraw(pixel_per_unit);
 
-    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, LVColors::jet_colormap_lowest);
+    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, CvDrawColors::jet_colormap_lowest);
 
     for (auto &polyline : viz.boundary_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::silver_color);
 
     for (auto &polyline : viz.center_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::black_color);
 
     for (auto &polygon : polygons)
     {
-        canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::cyan_color);
-        canvas = gdraw.DrawPolygonDirection(canvas, polygon, LVColors::red_color, 2);
+        canvas = gdraw.DrawPolygon(canvas, polygon, false, CvDrawColors::cyan_color);
+        canvas = gdraw.DrawPolygonDirection(canvas, polygon, CvDrawColors::red_color, 2);
     }
 
     LightViz::ShowImage(canvas, window_name, save_img);
@@ -160,23 +160,23 @@ void RoadMapViz::ShowConflictingZone(std::vector<Polygon> &highlight, std::vecto
 
     GeometryDraw gdraw(pixel_per_unit);
 
-    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, LVColors::jet_colormap_lowest);
+    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, CvDrawColors::jet_colormap_lowest);
 
     for (auto &polyline : viz.boundary_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::silver_color);
 
     for (auto &polyline : viz.center_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::black_color);
 
     for (auto &polygon : highlight)
     {
-        canvas = gdraw.DrawFilledPolygon(canvas, polygon, false, LVColors::olive_color);
+        canvas = gdraw.DrawFilledPolygon(canvas, polygon, false, CvDrawColors::olive_color);
     }
 
     for (auto &polygon : polygons)
     {
-        canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::cyan_color);
-        canvas = gdraw.DrawPolygonDirection(canvas, polygon, LVColors::red_color, 2);
+        canvas = gdraw.DrawPolygon(canvas, polygon, false, CvDrawColors::cyan_color);
+        canvas = gdraw.DrawPolygonDirection(canvas, polygon, CvDrawColors::red_color, 2);
     }
 
     LightViz::ShowImage(canvas, window_name, save_img);
@@ -188,13 +188,13 @@ void RoadMapViz::ShowLabledTrafficFlows(std::vector<TrafficFlow *> &flows, int32
 
     GeometryDraw gdraw(pixel_per_unit);
 
-    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, LVColors::jet_colormap_lowest);
+    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, CvDrawColors::jet_colormap_lowest);
 
     for (auto &polyline : viz.boundary_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::silver_color);
 
     for (auto &polyline : viz.center_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::black_color);
 
     std::vector<Polygon> highlight, all;
 
@@ -209,13 +209,13 @@ void RoadMapViz::ShowLabledTrafficFlows(std::vector<TrafficFlow *> &flows, int32
 
     for (auto &polygon : highlight)
     {
-        canvas = gdraw.DrawFilledPolygon(canvas, polygon, false, LVColors::olive_color);
+        canvas = gdraw.DrawFilledPolygon(canvas, polygon, false, CvDrawColors::olive_color);
     }
 
     for (auto &polygon : all)
     {
-        canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::cyan_color);
-        canvas = gdraw.DrawPolygonDirection(canvas, polygon, LVColors::red_color, 2);
+        canvas = gdraw.DrawPolygon(canvas, polygon, false, CvDrawColors::cyan_color);
+        canvas = gdraw.DrawPolygonDirection(canvas, polygon, CvDrawColors::red_color, 2);
     }
 
     LightViz::ShowImage(canvas, window_name, save_img);
@@ -227,13 +227,13 @@ void RoadMapViz::ShowLabledTrafficFlows(TrafficFlow *ego_flow, std::vector<Traff
 
     GeometryDraw gdraw(pixel_per_unit);
 
-    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, LVColors::jet_colormap_lowest);
+    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, CvDrawColors::jet_colormap_lowest);
 
     for (auto &polyline : viz.boundary_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::silver_color);
 
     for (auto &polyline : viz.center_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::black_color);
 
     std::vector<Polygon> highlight, all;
 
@@ -248,20 +248,20 @@ void RoadMapViz::ShowLabledTrafficFlows(TrafficFlow *ego_flow, std::vector<Traff
 
     for (auto &polygon : highlight)
     {
-        canvas = gdraw.DrawFilledPolygon(canvas, polygon, false, LVColors::olive_color);
+        canvas = gdraw.DrawFilledPolygon(canvas, polygon, false, CvDrawColors::olive_color);
     }
 
     for (auto &polygon : all)
     {
-        canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::cyan_color);
-        canvas = gdraw.DrawPolygonDirection(canvas, polygon, LVColors::red_color, 2);
+        canvas = gdraw.DrawPolygon(canvas, polygon, false, CvDrawColors::cyan_color);
+        canvas = gdraw.DrawPolygonDirection(canvas, polygon, CvDrawColors::red_color, 2);
     }
 
     std::vector<Polygon> ego_polys = ego_flow->GetAllLaneBlocks();
     for (auto &polygon : ego_polys)
     {
-        canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::cyan_color);
-        canvas = gdraw.DrawPolygonDirection(canvas, polygon, LVColors::green_color, 2);
+        canvas = gdraw.DrawPolygon(canvas, polygon, false, CvDrawColors::cyan_color);
+        canvas = gdraw.DrawPolygonDirection(canvas, polygon, CvDrawColors::green_color, 2);
     }
 
     LightViz::ShowImage(canvas, window_name, save_img);
@@ -274,20 +274,20 @@ void RoadMapViz::ShowPathSegmentInCollisionField(const Polyline &path_seg, const
 
     GeometryDraw gdraw(pixel_per_unit);
 
-    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, LVColors::jet_colormap_lowest);
+    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, CvDrawColors::jet_colormap_lowest);
 
     canvas = gdraw.DrawDistribution(canvas, cfield->GetMeanX(), cfield->GetMeanY(), cfield->GetSpanX(), cfield->GetSpanY(), *cfield.get());
 
     for (auto &polyline : viz.boundary_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::silver_color);
 
     for (auto &polyline : viz.center_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::black_color);
 
     for (auto &polyline : path)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::green_color, 2);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::green_color, 2);
 
-    canvas = gdraw.DrawPolyline(canvas, path_seg, show_wp, LVColors::lime_color, 2);
+    canvas = gdraw.DrawPolyline(canvas, path_seg, show_wp, CvDrawColors::lime_color, 2);
 
     LightViz::ShowImage(canvas, window_name, save_img);
 }
@@ -298,15 +298,15 @@ void RoadMapViz::ShowCollisionField(std::shared_ptr<CollisionField> cfield, int3
 
     GeometryDraw gdraw(pixel_per_unit);
 
-    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, LVColors::jet_colormap_lowest);
+    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, CvDrawColors::jet_colormap_lowest);
 
     canvas = gdraw.DrawDistribution(canvas, cfield->GetMeanX(), cfield->GetMeanY(), cfield->GetSpanX(), cfield->GetSpanY(), *cfield.get());
 
     for (auto &polyline : viz.boundary_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::silver_color);
 
     for (auto &polyline : viz.center_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::black_color);
 
     LightViz::ShowImage(canvas, window_name, save_img);  
 }
@@ -317,15 +317,15 @@ void RoadMapViz::ShowCollisionFieldWithTrafficFlows(std::shared_ptr<CollisionFie
 
     GeometryDraw gdraw(pixel_per_unit);
 
-    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, LVColors::jet_colormap_lowest);
+    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, CvDrawColors::jet_colormap_lowest);
 
     canvas = gdraw.DrawDistribution(canvas, cfield->GetMeanX(), cfield->GetMeanY(), cfield->GetSpanX(), cfield->GetSpanY(), *cfield.get());
 
     for (auto &polyline : viz.boundary_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::silver_color);
 
     for (auto &polyline : viz.center_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::black_color);
 
     std::vector<Polygon> highlight, all;
 
@@ -340,20 +340,20 @@ void RoadMapViz::ShowCollisionFieldWithTrafficFlows(std::shared_ptr<CollisionFie
 
     for (auto &polygon : highlight)
     {
-        canvas = gdraw.DrawFilledPolygon(canvas, polygon, false, LVColors::olive_color);
+        canvas = gdraw.DrawFilledPolygon(canvas, polygon, false, CvDrawColors::olive_color);
     }
 
     for (auto &polygon : all)
     {
-        canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::cyan_color);
-        canvas = gdraw.DrawPolygonDirection(canvas, polygon, LVColors::red_color, 2);
+        canvas = gdraw.DrawPolygon(canvas, polygon, false, CvDrawColors::cyan_color);
+        canvas = gdraw.DrawPolygonDirection(canvas, polygon, CvDrawColors::red_color, 2);
     }
 
     std::vector<Polygon> ego_polys = ego_flow->GetAllLaneBlocks();
     for (auto &polygon : ego_polys)
     {
-        canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::cyan_color);
-        canvas = gdraw.DrawPolygonDirection(canvas, polygon, LVColors::green_color, 2);
+        canvas = gdraw.DrawPolygon(canvas, polygon, false, CvDrawColors::cyan_color);
+        canvas = gdraw.DrawPolygonDirection(canvas, polygon, CvDrawColors::green_color, 2);
     }
 
     LightViz::ShowImage(canvas, window_name, save_img);
@@ -365,15 +365,15 @@ void RoadMapViz::ShowCollisionFieldWithTrafficFlows(Polygon &ego, std::shared_pt
 
     GeometryDraw gdraw(pixel_per_unit);
 
-    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, LVColors::jet_colormap_lowest);
+    cv::Mat canvas = gdraw.CreateCanvas(viz.xmin_, viz.xmax_, viz.ymin_, viz.ymax_, CvDrawColors::jet_colormap_lowest);
 
     canvas = gdraw.DrawDistribution(canvas, cfield->GetMeanX(), cfield->GetMeanY(), cfield->GetSpanX(), cfield->GetSpanY(), *cfield.get());
 
     for (auto &polyline : viz.boundary_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::silver_color);
 
     for (auto &polyline : viz.center_lines_)
-        canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+        canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::black_color);
 
     std::vector<Polygon> highlight, all;
 
@@ -388,22 +388,22 @@ void RoadMapViz::ShowCollisionFieldWithTrafficFlows(Polygon &ego, std::shared_pt
 
     for (auto &polygon : highlight)
     {
-        canvas = gdraw.DrawFilledPolygon(canvas, polygon, false, LVColors::olive_color);
+        canvas = gdraw.DrawFilledPolygon(canvas, polygon, false, CvDrawColors::olive_color);
     }
 
     for (auto &polygon : all)
     {
-        canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::cyan_color);
-        canvas = gdraw.DrawPolygonDirection(canvas, polygon, LVColors::red_color, 2);
+        canvas = gdraw.DrawPolygon(canvas, polygon, false, CvDrawColors::cyan_color);
+        canvas = gdraw.DrawPolygonDirection(canvas, polygon, CvDrawColors::red_color, 2);
     }
 
-    canvas = gdraw.DrawFilledPolygon(canvas, ego, false, LVColors::magenta_color);
+    canvas = gdraw.DrawFilledPolygon(canvas, ego, false, CvDrawColors::magenta_color);
 
     std::vector<Polygon> ego_polys = ego_flow->GetAllLaneBlocks();
     for (auto &polygon : ego_polys)
     {
-        canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::cyan_color);
-        canvas = gdraw.DrawPolygonDirection(canvas, polygon, LVColors::green_color, 2);
+        canvas = gdraw.DrawPolygon(canvas, polygon, false, CvDrawColors::cyan_color);
+        canvas = gdraw.DrawPolygonDirection(canvas, polygon, CvDrawColors::green_color, 2);
     }
 
     LightViz::ShowImage(canvas, window_name, save_img);

@@ -27,6 +27,14 @@ $ sudo apt-get install cmake
 $ sudo apt-get install libopencv-dev python-opencv
 ```
 
+* Cairo + FLTK
+
+```
+$ sudo apt-get install libcairo2 libcairo2-dev
+$ sudo apt-get install libfltk1.3 libfltk1.3-dev
+$ sudo apt-get install libfltk-cairo1.3
+```
+
 * VTK 7.1.1 (Recommended)
 
 VTK is required for advanced plotting features such as surface plot. It's recommended to compile and install from source. The default version from the package manager in Debian/Ubuntu may not work. Newer version >7.1.1 should also work.

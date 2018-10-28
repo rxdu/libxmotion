@@ -12,6 +12,7 @@
 #include "ugvnav_viz/details/lattice_draw.hpp"
 
 using namespace librav;
+using namespace CvDraw;
 
 void LightViz::ShowMotionStateTrajectory(const std::vector<MotionState> &states, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {

@@ -19,7 +19,7 @@ void LightViz::ShowTrafficParticipant(std::shared_ptr<TrafficParticipant> partic
 {
     GeometryDraw gdraw(pixel_per_unit);
 
-    cv::Mat canvas = gdraw.CreateCanvas(0, 80, 0, 60, LVColors::jet_colormap_lowest);
+    cv::Mat canvas = gdraw.CreateCanvas(0, 80, 0, 60, CvDrawColors::jet_colormap_lowest);
 
     canvas = gdraw.DrawDistribution(canvas, participant->position_x, participant->position_y, 20, 20, std::function<double(double, double)>(participant->threat_func));
 
@@ -30,7 +30,7 @@ void LightViz::ShowCollisionField(std::shared_ptr<CollisionField> cfield, bool s
 {
     GeometryDraw gdraw(pixel_per_unit);
 
-    cv::Mat canvas = gdraw.CreateCanvas(cfield->xmin_, cfield->xmax_, cfield->ymin_, cfield->ymax_, LVColors::jet_colormap_lowest);
+    cv::Mat canvas = gdraw.CreateCanvas(cfield->xmin_, cfield->xmax_, cfield->ymin_, cfield->ymax_, CvDrawColors::jet_colormap_lowest);
 
     std::cout << "params: " << cfield->GetMeanX() << " , " << cfield->GetMeanY() << " , " << cfield->GetSpanX() << " , " << cfield->GetSpanY() << std::endl;
 
@@ -52,10 +52,10 @@ void LightViz::ShowTrafficParticipantThreat(std::shared_ptr<TrafficParticipant> 
     // double ymax = polygon.GetMaxY() + yspan * 0.2;
 
     // cv::Mat canvas = gdraw.CreateCanvas(xmin, xmax, ymin, ymax);
-    cv::Mat canvas = gdraw.CreateCanvas(-12, 12, -15, 15, LVColors::jet_colormap_lowest);
+    cv::Mat canvas = gdraw.CreateCanvas(-12, 12, -15, 15, CvDrawColors::jet_colormap_lowest);
 
     canvas = gdraw.DrawDistribution(canvas, participant->position_x, participant->position_y, 20, 20, std::function<double(double, double)>(participant->threat_func));
-    canvas = gdraw.DrawPolygon(canvas, polygon, false, LVColors::black_color, 2);
+    canvas = gdraw.DrawPolygon(canvas, polygon, false, CvDrawColors::black_color, 2);
 
     ShowImage(canvas, window_name, save_img);
 }
@@ -96,18 +96,18 @@ void LightViz::ShowTrafficParticipantThreat(std::shared_ptr<TrafficParticipant> 
 //     double ymin = bd_yb - yspan * 0.1;
 //     double ymax = bd_yt + yspan * 0.1;
 
-//     cv::Mat canvas = gdraw.CreateCanvas(xmin, xmax, ymin, ymax, LVColors::jet_colormap_lowest);
+//     cv::Mat canvas = gdraw.CreateCanvas(xmin, xmax, ymin, ymax, CvDrawColors::jet_colormap_lowest);
 
 //     canvas = gdraw.DrawDistribution(canvas, cfield->GetMeanX(), cfield->GetMeanY(), cfield->GetSpanX(), cfield->GetSpanY(), *cfield.get());
 
 //     for (auto &polyline : bounds)
-//         canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+//         canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::silver_color);
 
 //     for (auto &polyline : centers)
-//         canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+//         canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::black_color);
 
 //     // for (auto &polyline : path)
-//     //     canvas = gdraw.DrawPolyline(canvas, polyline, show_wp, LVColors::lime_color, 2);
+//     //     canvas = gdraw.DrawPolyline(canvas, polyline, show_wp, CvDrawColors::lime_color, 2);
 
 //     ShowImage(canvas, window_name, save_img);
 // }
@@ -149,17 +149,17 @@ void LightViz::ShowTrafficParticipantThreat(std::shared_ptr<TrafficParticipant> 
 //     double ymin = bd_yb - yspan * 0.1;
 //     double ymax = bd_yt + yspan * 0.1;
 
-//     cv::Mat canvas = gdraw.CreateCanvas(xmin, xmax, ymin, ymax, LVColors::jet_colormap_lowest);
+//     cv::Mat canvas = gdraw.CreateCanvas(xmin, xmax, ymin, ymax, CvDrawColors::jet_colormap_lowest);
 
 //     canvas = gdraw.DrawDistribution(canvas, cfield->GetMeanX(), cfield->GetMeanY(), cfield->GetSpanX(), cfield->GetSpanY(), *cfield.get());
 
 //     for (auto &polyline : bounds)
-//         canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+//         canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::silver_color);
 
 //     for (auto &polyline : centers)
-//         canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+//         canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::black_color);
 
-//     canvas = gdraw.DrawPolyline(canvas, path_seg, show_wp, LVColors::lime_color, 2);
+//     canvas = gdraw.DrawPolyline(canvas, path_seg, show_wp, CvDrawColors::lime_color, 2);
 
 //     ShowImage(canvas, window_name, save_img);
 // }
@@ -201,20 +201,20 @@ void LightViz::ShowTrafficParticipantThreat(std::shared_ptr<TrafficParticipant> 
 //     double ymin = bd_yb - yspan * 0.1;
 //     double ymax = bd_yt + yspan * 0.1;
 
-//     cv::Mat canvas = gdraw.CreateCanvas(xmin, xmax, ymin, ymax, LVColors::jet_colormap_lowest);
+//     cv::Mat canvas = gdraw.CreateCanvas(xmin, xmax, ymin, ymax, CvDrawColors::jet_colormap_lowest);
 
 //     canvas = gdraw.DrawDistribution(canvas, cfield->GetMeanX(), cfield->GetMeanY(), cfield->GetSpanX(), cfield->GetSpanY(), *cfield.get());
 
 //     for (auto &polyline : bounds)
-//         canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::silver_color);
+//         canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::silver_color);
 
 //     for (auto &polyline : centers)
-//         canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::black_color);
+//         canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::black_color);
 
 //     for (auto &polyline : path)
-//         canvas = gdraw.DrawPolyline(canvas, polyline, false, LVColors::green_color, 2);
+//         canvas = gdraw.DrawPolyline(canvas, polyline, false, CvDrawColors::green_color, 2);
 
-//     canvas = gdraw.DrawPolyline(canvas, path_seg, show_wp, LVColors::lime_color, 2);
+//     canvas = gdraw.DrawPolyline(canvas, path_seg, show_wp, CvDrawColors::lime_color, 2);
 
 //     ShowImage(canvas, window_name, save_img);
 // }

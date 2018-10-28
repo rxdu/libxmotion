@@ -20,7 +20,7 @@ void LatticeDraw::DrawTrajectoryPoints(const std::vector<MotionState> &states, c
 
         auto pt1 = canvas_.ConvertCartisianToPixel(st1.x, st1.y);
         auto pt2 = canvas_.ConvertCartisianToPixel(st2.x, st2.y);
-        LightViz::DrawLine(canvas_.paint_area, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color, ln_width);
+        CvDraw::DrawLine(canvas_.paint_area, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color, ln_width);
     }
 }
 

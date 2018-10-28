@@ -6,7 +6,7 @@ add_subdirectory(common)
 add_subdirectory(control)
 add_subdirectory(decision)
 add_subdirectory(planning)
-add_subdirectory(visualization)
+add_subdirectory(vizcore)
 add_subdirectory(utilities)
 
 add_subdirectory(examples)
