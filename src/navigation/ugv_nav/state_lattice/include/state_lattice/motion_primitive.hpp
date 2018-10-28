@@ -2,7 +2,13 @@
  * motion_primitive.hpp
  * 
  * Created on: Aug 11, 2018 02:48
- * Description: 
+ * Description: A motion primitive is a cubic polynomial sprial 
+ *              connecting two states. 
+ * 
+ * Reference: 
+ *  [1] M. McNaughton and C. Urmson and J. M. Dolan and J. W. Lee. 2011. 
+ *    “Motion Planning for Autonomous Driving with a Conformal Spatiotemporal Lattice.” 
+ *    In 2011 IEEE International Conference on Robotics and Automation, 4889–95.
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
@@ -15,38 +21,43 @@
 #include <cstdint>
 
 #include "geometry/polyline.hpp"
+#include "geometry/polynomial.hpp"
+
+#include "state_lattice/details/motion_state.hpp"
+#include "state_lattice/details/point_kinematics.hpp"
 
 namespace librav
 {
-struct PrimitiveNode
+class MotionPrimitive
 {
-    PrimitiveNode() : x(0), y(0), v(0), theta(0) {}
-    PrimitiveNode(double _x, double _y, double _v, double _theta) : x(_x), y(_y), v(_v), theta(_theta) {}
+  public:
+    MotionPrimitive() = default;
+    MotionPrimitive(MotionState state_s, MotionState state_f);
+    MotionPrimitive(MotionState state_s, MotionState state_f, PointKinematics::Param p);
 
-    double x;
-    double y;
-    double v;
-    double theta;
-};
+    // Defaulted big five
+    ~MotionPrimitive() = default;
+    MotionPrimitive(const MotionPrimitive &other) = default;
+    MotionPrimitive &operator=(const MotionPrimitive &other) = default;
+    MotionPrimitive(MotionPrimitive &&other) = default;
+    MotionPrimitive &operator=(MotionPrimitive &&other) = default;
 
-struct MotionPrimitive
-{
-    MotionPrimitive() : id(-1) {}
-    explicit MotionPrimitive(int32_t mpid) : id(mpid){};
+    // Characteristic parameters of the primitive
+    double GetLength() const { return sf_; }
+    MotionState GetStartState() const { return state_s_; }
+    MotionState GetFinalState() const { return state_f_; }
+    PointKinematics::Param GetParameters() const { return params_; }
 
-    int32_t id;
-    double length;
-    std::vector<PrimitiveNode> nodes;
+    void SetParameters(const PointKinematics::Param &p);
+    virtual MotionState Evaluate(double s, double ds = 0.1);
 
-    PrimitiveNode GetInitNode() const { return nodes.front(); }
-    PrimitiveNode GetFinalNode() const { return nodes.back(); }
-    Polyline ToPolyline() const
-    {
-        Polyline line;
-        for (auto &node : nodes)
-            line.AddPoint(node.x, node.y);
-        return line;
-    }
+  protected:
+    double sf_;
+    MotionState state_s_;
+    MotionState state_f_;
+
+    PointKinematics::Param params_;
+    PointKinematics model_;
 };
 } // namespace librav
 

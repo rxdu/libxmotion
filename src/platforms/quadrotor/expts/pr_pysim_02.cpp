@@ -38,6 +38,9 @@ int main(int argc, char *argv[])
 	VirtualQuadrotor vquad(lcm);
 	vquad.Load_15by20_Config();
 	vquad.SetSensorRange(8);
+	vquad.SetSensorFOV(M_PI*5.0/9.0);
+	vquad.SetInitPosition(Position2Di(7, 0),2);
+	vquad.SetGoalPosition(Position2Di(7, 19),2);
 
 	// should not start simulation if configuration is not complete
 	if (!vquad.IsReady())
@@ -46,19 +49,19 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	stopwatch::StopWatch timer;
+	// stopwatch::StopWatch timer;
 
 	// simulation loop
 	while (true)
 	{		
-		timer.tic();
+		// timer.tic();
 
 		vquad.Step();
 		lcm->handleTimeout(0);
 	
-		int64_t duration = LOOP_PERIOD - static_cast<int64_t>(timer.mtoc());
+		// int64_t duration = LOOP_PERIOD - static_cast<int64_t>(timer.mtoc());
 		
-		if(duration > 0)
-			std::this_thread::sleep_for(std::chrono::milliseconds(duration));
+		// if(duration > 0)
+		// 	std::this_thread::sleep_for(std::chrono::milliseconds(duration));
 	}
 }

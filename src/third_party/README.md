@@ -23,10 +23,6 @@ octovis
 
 * commit: e6cbc22da53bc807a6172a99cd6dc75534926b99
 
-### dubins_curves
-
-* minimal version for cleaner integration: https://github.com/rxdu/dubins_curves/tree/minimal
-
 ## Cinder
 
 * cinder/proj/cmake/platform_linux.cmake: line 194	
@@ -37,4 +33,12 @@ octovis
 * cinder/proj/cmake/modules/cinderMakeApp.cmake: line 55
     - set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${ARG_APP_NAME} )
     - comment out: line 44-51 
+
+### dubins_curves 
+
+* minimal version for cleaner integration: https://github.com/rxdu/dubins_curves/tree/minimal
+
+### polynomial
+
+* adapted from code in repository https://github.com/ethz-asl/mav_trajectory_generation
 

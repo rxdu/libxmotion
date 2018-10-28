@@ -12,33 +12,37 @@
 
 #include <memory>
 #include <cstdint>
+#include <ostream>
 
 #include "graph/graph.hpp"
+#include "decomp/curvilinear_grid.hpp"
 
-#include "state_lattice/lattice_manager.hpp"
-#include "state_lattice/lattice_node.hpp"
+#include "road_map/road_map.hpp"
+#include "state_lattice/state_lattice.hpp"
 
 namespace librav
 {
-class LatticeGraph
+struct LatticeGraph
 {
-public:
-  LatticeGraph();
+    struct LatticeNode : CurvilinearCell
+    {
+        LatticeNode(CurvilinearCell *cell, std::shared_ptr<TrafficChannel> chn) : CurvilinearCell(*cell), channel(chn)
+        {
+            auto pt = channel->grid_->ConvertToCurvePoint(center);
+            state = MotionState(pt.x, pt.y, pt.theta, pt.kappa);
+        }
 
-  using GraphType = Graph<LatticeNode, MotionPrimitive>;
+        MotionState state;
+        std::shared_ptr<TrafficChannel> channel;
 
-  void LoadMotionPrimitives(std::string file);
-  void GenerateGraph(int32_t n_unit_time);
-
-  std::shared_ptr<GraphType> GetGraph() { return graph_; }
-
-private:
-  bool use_roadmap_ = false;
-  std::shared_ptr<LatticeManager> lattice_manager_;
-  std::shared_ptr<GraphType> graph_;
-  
-
-  std::vector<std::tuple<LatticeNode, MotionPrimitive>> GenerateLattices(LatticeNode node);
+        friend std::ostream &operator<<(std::ostream &os, const LatticeNode &node)
+        {
+            os << "Lattice node: " << node.state.x << " , " << node.state.y << " , " << node.state.theta << " , " << node.state.kappa;
+            return os;
+        }
+    };
+    
+    static std::shared_ptr<Graph<LatticeNode, StateLattice>> Construct(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start, int32_t expansion_iter = 2);
 };
 } // namespace librav
 

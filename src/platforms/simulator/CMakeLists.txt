@@ -21,15 +21,6 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-## Dependent module headers
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-# vrep interface
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/vrep_sim/vrep_lib/include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/vrep_sim/vrep_lib/remoteApi)
-# control module
-include_directories(${CMAKE_SOURCE_DIR}/control)
-include_directories(${CMAKE_SOURCE_DIR}/platforms/quadrotor)
-
 ## Find LCM
 find_package(LCM REQUIRED)
 

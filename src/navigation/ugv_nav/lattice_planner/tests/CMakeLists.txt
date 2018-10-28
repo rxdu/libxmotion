@@ -2,8 +2,8 @@
 #find_package(LIBRARY_NAME REQUIRED)
 
 ## tests
-add_executable(test_lattice_planner test_lattice_planner.cpp)
-target_link_libraries(test_lattice_planner lattice_planner tfield lightviz trafficviz utilities)
+# add_executable(test_lattice_planner test_lattice_planner.cpp)
+# target_link_libraries(test_lattice_planner lattice_planner tfield lightviz ugvnav_viz utilities)
 
-# add_executable(test_lattice_graph test_lattice_graph.cpp)
-# target_link_libraries(test_lattice_graph lattice)
+add_executable(test_lattice_graph test_lattice_graph.cpp)
+target_link_libraries(test_lattice_graph lattice lattice_planner ugvnav_viz utilities)

@@ -1,0 +1,45 @@
+# Dependency libraries
+#find_package(LIBRARY_NAME REQUIRED)
+
+# Add executables
+# add_executable(gen_true_threat gen_true_threat.cpp)
+# target_link_libraries(gen_true_threat tfield ugvnav_viz lightviz utilities)
+
+# add_executable(show_vehicle_position show_vehicle_position.cpp)
+# target_link_libraries(show_vehicle_position cthreat roadmap trafficmap lightviz utilities)
+
+# add_executable(pub_topogeo_graph gen_topogeo_graph.cpp)
+# target_link_libraries(pub_topogeo_graph cthreat roadmap trafficmap lightviz utilities)
+
+# add_executable(pub_topogeo_roundabout gen_topogeo_roundabout.cpp)
+# target_link_libraries(pub_topogeo_roundabout cthreat roadmap trafficmap lightviz utilities)
+
+add_executable(pub_roadmap_grid gen_roadmap_grid.cpp)
+target_link_libraries(pub_roadmap_grid roadmap lightviz ugvnav_viz utilities)
+
+# add_executable(pub_planning_true_field planning_true_field.cpp)
+# target_link_libraries(pub_planning_true_field cthreat roadmap trafficmap roadmap tfield ugvnav_viz lightviz utilities)
+
+# add_executable(pub_threat_ranking_case1 threat_ranking_case1.cpp)
+# target_link_libraries(pub_threat_ranking_case1 cthreat roadmap trafficmap roadmap tfield ugvnav_viz lightviz utilities)
+
+# add_executable(pub_threat_ranking_case2 threat_ranking_case2.cpp)
+# target_link_libraries(pub_threat_ranking_case2 cthreat roadmap trafficmap roadmap tfield ugvnav_viz lightviz utilities)
+
+# add_executable(pub_threat_map_case1 threat_map_case1.cpp)
+# target_link_libraries(pub_threat_map_case1 cthreat roadmap trafficmap roadmap tfield ugvnav_viz lightviz utilities)
+
+# add_executable(pub_threat_map_case2 threat_map_case2.cpp)
+# target_link_libraries(pub_threat_map_case2 cthreat roadmap trafficmap roadmap tfield ugvnav_viz lightviz utilities)
+
+# add_executable(pub_threat_map_case3 threat_map_case3.cpp)
+# target_link_libraries(pub_threat_map_case3 cthreat roadmap trafficmap roadmap tfield ugvnav_viz lightviz utilities)
+
+# add_executable(pub_threat_map_rb_case1 threat_map_rb_case1.cpp)
+# target_link_libraries(pub_threat_map_rb_case1 cthreat roadmap trafficmap roadmap tfield ugvnav_viz lightviz utilities)
+
+# add_executable(pub_threat_map_rb_case2 threat_map_rb_case2.cpp)
+# target_link_libraries(pub_threat_map_rb_case2 cthreat roadmap trafficmap roadmap tfield ugvnav_viz lightviz utilities)
+
+# add_executable(pub_trafic_map gen_traffic_map.cpp)
+# target_link_libraries(pub_trafic_map cthreat roadmap trafficmap roadmap tfield ugvnav_viz lightviz utilities)

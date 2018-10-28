@@ -7,14 +7,15 @@
 #include "lattice_planner/lattice_planner.hpp"
 
 #include "lightviz/lightviz.hpp"
-#include "traffic_viz/traffic_viz.hpp"
+#include "ugvnav_viz/ugvnav_viz.hpp"
 
 using namespace librav;
 
 int main()
 {
     /********** create road map **********/
-    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_with_centerline.osm");
+    // std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_with_centerline.osm");
+    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
 
     if (!map->MapReady())
     {
@@ -35,6 +36,24 @@ int main()
     planner.SetEgoPlanningRoute(ego_route);
 
     Polygon fp;
+    // fp.AddPoint(0.6, 1.0);
+    // fp.AddPoint(-0.6, 1.0);
+    // fp.AddPoint(-0.6, -1.0);
+    // fp.AddPoint(0.6, -1.0);
+    // this set works
+    // fp.AddPoint(0.5, 1.0);
+    // fp.AddPoint(-0.5, 1.0);
+    // fp.AddPoint(-0.5, -1.0);
+    // fp.AddPoint(0.5, -1.0);
+    // this set works
+    // fp.AddPoint(0.55, 1.2);
+    // fp.AddPoint(-0.55, 1.2);
+    // fp.AddPoint(-0.55, -1.2);
+    // fp.AddPoint(0.55, -1.2);
+    // fp.AddPoint(1.2 * 2, 0.9);
+    // fp.AddPoint(1.2 * 2, -0.9);
+    // fp.AddPoint(-1.2 * 2, -0.9);
+    // fp.AddPoint(-1.2 * 2, 0.9);
     fp.AddPoint(0.55, 1.2);
     fp.AddPoint(-0.55, 1.2);
     fp.AddPoint(-0.55, -1.2);

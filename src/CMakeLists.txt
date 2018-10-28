@@ -27,10 +27,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 ## Add sub source directories
 # Core packages of librav
-add_subdirectory(core)
+add_subdirectory(core_base)
 add_subdirectory(third_party)
 
 # Packages built on top of core
+add_subdirectory(robot_ctrl)
 add_subdirectory(navigation)
 add_subdirectory(platforms)
 
@@ -38,6 +39,6 @@ add_subdirectory(platforms)
 add_subdirectory(publication)
 
 ## Add test source directories
-# if(BUILD_TESTS)
-    # add_subdirectory(gtests) # broken
-# endif()
+if(BUILD_TESTS)
+    add_subdirectory(unit_tests) 
+endif()

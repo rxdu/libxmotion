@@ -1,23 +1,60 @@
 #include <iostream>
 #include <cstdint>
+#include <cmath>
 
+#include "road_map/road_map.hpp"
 #include "lattice_planner/lattice_graph.hpp"
+#include "ugvnav_viz/ugvnav_viz.hpp"
+
+#include "stopwatch/stopwatch.h"
 
 using namespace librav;
 
 int main()
 {
-    LatticeGraph lg;
+    // load map
+    stopwatch::StopWatch timer;
+    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane_horizontal.osm");
+    // std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane.osm");
+    // std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/short_segment.osm");
 
-    // lg.LoadMotionPrimitives("/home/rdu/Workspace/librav/data/lattice/primitives/mp.three-level.data");
-    lg.LoadMotionPrimitives("/home/rdu/mp.sparse.data");
+    if (!map->MapReady())
+    {
+        std::cout << "map didn't load correctly" << std::endl;
+        return -1;
+    }
+    map->PrintInfo();
+    std::cout << "map loaded in " << timer.toc() << " seconds" << std::endl;
+    RoadMapViz::SetupRoadMapViz(map);
+    // RoadMapViz::ShowLanes(true, 5, "test_lane", true);
+    // for (auto &chn : map->traffic_map_->GetAllTrafficChannels())
+    // {
+    //     // RoadMapViz::ShowTrafficChannelCenterline(chn);
+    //     chn->PrintInfo();
+    //     RoadMapViz::ShowTrafficChannel(*chn.get(), 5);
+    // }
 
-    lg.GenerateGraph(5);
+    /****************************************************************************/
 
-    // lm.LoadPrimitivesFromFile("/home/rdu/mp.20180807061050.data");
-    // auto new_base = lm.primitives_[35];
-    // std::vector<MotionPrimitive> new_mps = lm.TransformAllPrimitives(lm.primitives_, new_base.GetFinalNode().x, new_base.GetFinalNode().y, new_base.GetFinalNode().theta);
-    // lm.SavePrimitivesToFile(new_mps, "mp_trans");
+    // discretize lane
+    auto all_channels = map->traffic_map_->GetAllTrafficChannels();
+    // all_channels[1]->DiscretizeChannel(5, 1.2, 5);
+    all_channels[1]->DiscretizeChannel(5, 1.2, 5);
+
+    // RoadMapViz::ShowTrafficChannel(*all_channels[1].get());
+    // RoadMapViz::ShowTrafficChannel(*all_channels[1].get(), 20, "horizontal_lane", true);
+
+    timer.tic();
+    auto graph = LatticeGraph::Construct(all_channels[1], {0, 0}, 9);
+    std::cout << "graph constructed in " << timer.toc() << " seconds" << std::endl;
+
+    std::vector<StateLattice> lattices;
+    for (auto &edge : graph->GetAllEdges())
+        lattices.push_back(edge->cost_);
+    std::cout << "number of vertices: " << graph->GetGraphVertexNumber() << std::endl;
+
+    // LightViz::ShowStateLattice(lattices);
+    RoadMapViz::ShowLatticeInTrafficChannel(lattices, *all_channels[1].get(), 10, "lattice graph", true);
 
     return 0;
 }

@@ -39,15 +39,15 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add other sub source directories
 add_subdirectory(road_map)
-add_subdirectory(threat_field)
 add_subdirectory(reachability)
 add_subdirectory(state_lattice)
 add_subdirectory(lattice_planner)
-add_subdirectory(traffic_map)
-add_subdirectory(traffic_sim)
-add_subdirectory(collision_threat)
+# add_subdirectory(traffic_map)
+# add_subdirectory(traffic_sim)
+# add_subdirectory(threat_field)
+# add_subdirectory(collision_threat)
 
-add_subdirectory(traffic_viz)
+add_subdirectory(ugvnav_viz)
 
 
 

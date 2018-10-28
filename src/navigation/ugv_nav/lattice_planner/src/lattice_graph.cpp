@@ -9,64 +9,43 @@
 
 #include "lattice_planner/lattice_graph.hpp"
 
-#include <queue>
+#include <iostream>
+#include <unordered_map>
 
 using namespace librav;
 
-LatticeGraph::LatticeGraph()
+std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> LatticeGraph::Construct(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t expansion_iter)
 {
-    lattice_manager_ = std::make_shared<LatticeManager>();
-}
+    int32_t min_h = 4;
+    int32_t max_h = 4;
 
-void LatticeGraph::LoadMotionPrimitives(std::string file)
-{
-    lattice_manager_->LoadPrimitivesFromFile("/home/rdu/Workspace/librav/data/lattice/primitives/mp.three-level.data");
-}
+    std::shared_ptr<Graph<LatticeNode, StateLattice>> graph = std::make_shared<Graph<LatticeNode, StateLattice>>();
 
-void LatticeGraph::GenerateGraph(int32_t n_unit_time)
-{
-    graph_ = std::make_shared<GraphType>();
-    std::vector<MotionPrimitive> mps;
+    auto start_cell = channel->grid_->GetCell(start_index);
+    LatticeNode start_node(start_cell, channel);
 
-    LatticeNode node(0, 0, 0);
-    graph_->AddVertex(node);
-    auto vtx = graph_->FindVertex(node.id);
-
-    std::vector<GraphType::VertexType *> last_level;
-    last_level.push_back(vtx);
-
-    for (size_t i = 0; i < n_unit_time; ++i)
+    std::unordered_map<int32_t, LatticeNode> candidates;
+    candidates.insert(std::make_pair(start_node.id, start_node));
+    for (int32_t iter = 0; iter < expansion_iter; ++iter)
     {
-        std::vector<GraphType::VertexType *> this_level;
-        for (auto vtx : last_level)
+        std::cout << "candidation size at iteration " << iter << " : " << candidates.size() << std::endl;
+        std::unordered_map<int32_t, LatticeNode> added_nodes;
+        for (auto &candidate : candidates)
         {
-            auto neighbours = GenerateLattices(vtx->state_);
-            for (auto &nb : neighbours)
+            auto nbs = channel->grid_->GetNeighbours(candidate.second.index.GetX(), candidate.second.index.GetY(), min_h, max_h);
+            for (auto nb : nbs)
             {
-                graph_->AddEdge(vtx->state_, std::get<0>(nb), std::get<1>(nb));
-
-                this_level.push_back(graph_->FindVertex(std::get<0>(nb).id));
-                mps.push_back(std::get<1>(nb));
+                LatticeNode next_node(nb, channel);
+                StateLattice new_lattice(candidate.second.state, next_node.state);
+                if (new_lattice.IsValid())
+                {
+                    graph->AddEdge(candidate.second, next_node, new_lattice);
+                    added_nodes.insert(std::make_pair(next_node.id, next_node));
+                }
             }
         }
-        last_level = this_level;
+        candidates = added_nodes;
     }
 
-    lattice_manager_->SavePrimitivesToFile(mps, "graph");
-}
-
-std::vector<std::tuple<LatticeNode, MotionPrimitive>> LatticeGraph::GenerateLattices(LatticeNode node)
-{
-    PrimitiveNode new_base(node.x, node.y, 0, node.theta);
-    std::vector<MotionPrimitive> new_mps = lattice_manager_->TransformAllPrimitives(lattice_manager_->primitives_,
-                                                                                    new_base.x,
-                                                                                    new_base.y,
-                                                                                    new_base.theta);
-    std::vector<std::tuple<LatticeNode, MotionPrimitive>> neighbours;
-    for (auto &mp : new_mps)
-    {
-        LatticeNode lnode(mp.GetFinalNode().x, mp.GetFinalNode().y, mp.GetFinalNode().theta);
-        neighbours.push_back(std::make_pair(lnode, mp));
-    }
-    return neighbours;
+    return graph;
 }

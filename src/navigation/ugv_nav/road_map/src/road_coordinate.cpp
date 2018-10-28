@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "road_map/road_coordinate.hpp"
+#include "road_map/details/road_coordinate.hpp"
 
 #include <iostream>
 
