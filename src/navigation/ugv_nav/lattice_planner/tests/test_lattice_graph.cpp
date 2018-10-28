@@ -54,7 +54,7 @@ int main()
     std::cout << "number of vertices: " << graph->GetGraphVertexNumber() << std::endl;
 
     // LightViz::ShowStateLattice(lattices);
-    RoadMapViz::ShowLatticeInTrafficChannel(lattices, *all_channels[1].get(), "lattice graph", true);
+    // RoadMapViz::ShowLatticeInTrafficChannel(lattices, *all_channels[1].get(), "lattice graph", true);
 
     return 0;
 }

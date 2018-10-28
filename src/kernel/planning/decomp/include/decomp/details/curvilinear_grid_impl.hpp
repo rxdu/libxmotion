@@ -50,6 +50,64 @@ CurvilinearGridBase<T>::CurvilinearGridBase(ParametricCurve pcurve, double s_ste
         grid_tiles_.push_back(rows);
     }
 }
+
+template <typename T>
+CurvilinearGridBase<T>::~CurvilinearGridBase()
+{
+    for (auto &row : grid_tiles_)
+        for (auto &cell : row)
+            delete cell;
+}
+
+template <typename T>
+CurvilinearGridBase<T>::CurvilinearGridBase(const CurvilinearGridBase<T> &other)
+{
+    s_step_ = other.s_step_;
+    delta_step_ = other.delta_step_;
+    delta_num_ = other.delta_num_;
+    delta_half_num_ = other.delta_half_num_;
+    center_cell_null_ = other.center_cell_null_;
+    curve_ = other.curve_;
+
+    for (auto row : other.grid_tiles_)
+        for (auto cell : row)
+            grid_tiles_.push_back(new CellType(*cell));
+}
+
+template <typename T>
+CurvilinearGridBase<T> &CurvilinearGridBase<T>::operator=(const CurvilinearGridBase<T> &other)
+{
+    CurvilinearGridBase<T> tmp(other);
+    std::swap(*this, tmp);
+    return *this;
+}
+
+template <typename T>
+CurvilinearGridBase<T>::CurvilinearGridBase(CurvilinearGridBase<T> &&other)
+{
+    s_step_ = std::move(other.s_step_);
+    delta_step_ = std::move(other.delta_step_);
+    delta_num_ = std::move(other.delta_num_);
+    delta_half_num_ = std::move(other.delta_half_num_);
+    center_cell_null_ = std::move(other.center_cell_null_);
+    curve_ = std::move(other.curve_);
+    grid_tiles_ = std::move(other.grid_tiles_);
+}
+
+template <typename T>
+CurvilinearGridBase<T> &CurvilinearGridBase<T>::operator=(CurvilinearGridBase<T> &&other)
+{
+    s_step_ = std::move(other.s_step_);
+    delta_step_ = std::move(other.delta_step_);
+    delta_num_ = std::move(other.delta_num_);
+    delta_half_num_ = std::move(other.delta_half_num_);
+    center_cell_null_ = std::move(other.center_cell_null_);
+    curve_ = std::move(other.curve_);
+    grid_tiles_ = std::move(other.grid_tiles_);
+
+    return *this;
+}
+
 template <typename T>
 CurvilinearCellBase<T> *CurvilinearGridBase<T>::GetCell(int64_t id)
 {

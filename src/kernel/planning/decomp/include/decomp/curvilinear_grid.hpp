@@ -188,7 +188,12 @@ class CurvilinearGridBase
 
   public:
     CurvilinearGridBase(ParametricCurve pcurve, double s_step, double d_step, int32_t d_num);
-    ~CurvilinearGridBase() = default;
+    ~CurvilinearGridBase();
+
+    CurvilinearGridBase(const CurvilinearGridBase<T>& other);
+    CurvilinearGridBase& operator=(const CurvilinearGridBase<T>& other);
+    CurvilinearGridBase(CurvilinearGridBase<T>&& other);
+    CurvilinearGridBase& operator=(CurvilinearGridBase<T>&& other);
 
     using CellType = CurvilinearCellBase<T>;
     using GridPoint = typename CurvilinearCellBase<T>::GridPoint;

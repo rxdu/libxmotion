@@ -2,6 +2,7 @@
 
 ## Planning
 
+- [ ] Check possible memory leak issue of SquareGrid
 - [ ] Monte Carlo simulation for autonomous vehicles
 - [ ] Priority queue that supports element priority update
 - [ ] RRT and RRT* with Dubins model  
