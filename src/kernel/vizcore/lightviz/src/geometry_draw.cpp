@@ -123,13 +123,14 @@ void GeometryDraw::DrawPolygon(const Polygon &polygon, bool show_dot, cv::Scalar
     std::size_t pt_num = polygon.GetPointNumer();
 
     if (pt_num < 3)
-
-        for (std::size_t i = 0; i < pt_num - 1; ++i)
-        {
-            auto pt1 = canvas_.ConvertCartisianToPixel(polygon.GetPoint(i).x, polygon.GetPoint(i).y);
-            auto pt2 = canvas_.ConvertCartisianToPixel(polygon.GetPoint(i + 1).x, polygon.GetPoint(i + 1).y);
-            DrawLine(canvas_.paint_area, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color, ln_width);
-        }
+        return;
+        
+    for (std::size_t i = 0; i < pt_num - 1; ++i)
+    {
+        auto pt1 = canvas_.ConvertCartisianToPixel(polygon.GetPoint(i).x, polygon.GetPoint(i).y);
+        auto pt2 = canvas_.ConvertCartisianToPixel(polygon.GetPoint(i + 1).x, polygon.GetPoint(i + 1).y);
+        DrawLine(canvas_.paint_area, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color, ln_width);
+    }
     auto last_pt = canvas_.ConvertCartisianToPixel(polygon.GetPoint(pt_num - 1).x, polygon.GetPoint(pt_num - 1).y);
     auto first_pt = canvas_.ConvertCartisianToPixel(polygon.GetPoint(0).x, polygon.GetPoint(0).y);
     DrawLine(canvas_.paint_area, cv::Point(last_pt.x, last_pt.y), cv::Point(first_pt.x, first_pt.y), ln_color, ln_width);
