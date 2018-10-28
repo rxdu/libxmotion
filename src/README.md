@@ -1,39 +1,23 @@
 ## Code organization
 
-Configurations
+Main components of librav (C++)
 
 * **cmake**: cmake cofigurations
+* **core_base**
+    * common: code shared by multiple modules
+    * examples: example apps of basic functions
+    * device: linux hardware device drivers
+    * control: general control functions
+    * decision: general decision making building blocks
+    * planning: general motion planning algorithms
+    * visualization: core visualization
+    * utilities: tiny 3rd-party libraries and helper/wrappper classes implemented to simplify usage of external libraries
 * **lcmtypes**: type definitions of LCM
-
-Modules 
-
-* **examples**: example apps of basic functions
-* **common**: code shared by multiple modules
-* **control**: platform-dependent control algorithms
-* **planning**: general motion planning algorithms
-* **gtests**: google test code
-* **vis**: basic visualization
-
-Libraries
-
-* **libraries**: relative large 3rd-party libraries, could potentially be removed by using system-wide installations
-* **utility**: small 3rd-party libraries and helper/wrappper classes implemented to simplify usage of external libraries
-
-Platforms
-
-* **simulator**: V-REP simulatior for quadrotor and RC cars
-* **quadrotor**: applications of quadrotors
-* **rc_car**: applications of RC cars
-
-## LCM Channels
-
-### Quadrotor
-
-* quad_data/quad_transform: LIDAR to quadrotor base and base to world transformation
-* quad_data/laser_scan_points: laser scan points from onboard LIDAR
-* quad_data/system_time: system time of the quadrotor
-
-### Planner
-
-* quad_planner/goal_keyframe_set: keyframes generated from planner
-* quad_planner/trajectory_polynomial: optimized polynomial trajectory
+* **mcontrol**: platform-dependent motion control algorithms
+* **navigation**: high-level planning algorithms for applications
+* **platforms**
+    * simulator: V-REP simulator for quadrotor and RC cars
+    * quadrotor: applications of quadrotors
+    * rc_car: applications of RC cars
+* **third_party**: relative large 3rd-party libraries, could potentially be removed by using system-wide installations
+* **unit_tests**: google unit test code

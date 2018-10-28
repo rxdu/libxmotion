@@ -31,7 +31,7 @@ add_subdirectory(core_base)
 add_subdirectory(third_party)
 
 # Packages built on top of core
-add_subdirectory(robot_ctrl)
+add_subdirectory(robot_control)
 add_subdirectory(navigation)
 add_subdirectory(platforms)
 
