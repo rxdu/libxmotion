@@ -44,10 +44,8 @@ int main()
     // RoadMapViz::ShowTrafficChannel(*all_channels[1].get());
     // RoadMapViz::ShowTrafficChannel(*all_channels[1].get(), 20, "horizontal_lane", true);
 
-    std::shared_ptr<LatticeGraph> graph = std::make_shared<LatticeGraph>();
-
     timer.tic();
-    graph->Construct(all_channels[1], {0, 0}, 9);
+    auto graph = LatticeGraph::Construct(all_channels[1], {0, 0}, 9);
     std::cout << "graph constructed in " << timer.toc() << " seconds" << std::endl;
 
     std::vector<StateLattice> lattices;
