@@ -38,6 +38,7 @@ int main()
 
     // discretize lane
     auto all_channels = map->traffic_map_->GetAllTrafficChannels();
+    // all_channels[1]->DiscretizeChannel(5, 1.2, 5);
     all_channels[1]->DiscretizeChannel(5, 1.2, 5);
 
     // RoadMapViz::ShowTrafficChannel(*all_channels[1].get());
@@ -46,12 +47,13 @@ int main()
     std::shared_ptr<LatticeGraph> graph = std::make_shared<LatticeGraph>();
 
     timer.tic();
-    graph->Construct(all_channels[1], {0, 0}, 8);
+    graph->Construct(all_channels[1], {0, 0}, 9);
     std::cout << "graph constructed in " << timer.toc() << " seconds" << std::endl;
 
     std::vector<StateLattice> lattices;
     for (auto &edge : graph->GetAllEdges())
         lattices.push_back(edge->cost_);
+    std::cout << "number of vertices: " << graph->GetGraphVertexNumber() << std::endl;
 
     // LightViz::ShowStateLattice(lattices);
     RoadMapViz::ShowLatticeInTrafficChannel(lattices, *all_channels[1].get(), 10, "lattice graph", true);
