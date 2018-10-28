@@ -1,5 +1,5 @@
 #include "lightviz/lightviz.hpp"
-#include "lightviz/details/geometric_draw.hpp"
+#include "lightviz/details/geometry_draw.hpp"
 #include "lightviz/polygon_viz.hpp"
 #include "geometry/polygon.hpp"
 
@@ -17,7 +17,7 @@ int main()
     polygon.AddPoint(1, 0.6);
     polygon.AddPoint(0, 0.6);
 
-    // LightViz::ShowPolygon(polygon, 100);
+    LightViz::ShowPolygon(polygon, 100);
 
     auto trans1 = polygon.TransformRT(1, 1, M_PI / 4.0);
     trans1.PrintInfo();

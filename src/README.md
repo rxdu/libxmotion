@@ -3,7 +3,7 @@
 Main components of librav (C++)
 
 * **cmake**: cmake cofigurations
-* **core_base**
+* **kernel**
     * common: code shared by multiple modules
     * examples: example apps of basic functions
     * device: linux hardware device drivers
@@ -14,10 +14,10 @@ Main components of librav (C++)
     * utilities: tiny 3rd-party libraries and helper/wrappper classes implemented to simplify usage of external libraries
 * **lcmtypes**: type definitions of LCM
 * **mcontrol**: platform-dependent motion control algorithms
-* **navigation**: high-level planning algorithms for applications
+* **navigation**: high-level planning/navigation modules for applications
 * **platforms**
-    * simulator: V-REP simulator for quadrotor and RC cars
     * quadrotor: applications of quadrotors
     * rc_car: applications of RC cars
+    * simulator: V-REP simulator for quadrotor and RC cars
 * **third_party**: relative large 3rd-party libraries, could potentially be removed by using system-wide installations
 * **unit_tests**: google unit test code

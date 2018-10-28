@@ -5,8 +5,7 @@
  * Description: 
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
- */ 
-
+ */
 
 #ifndef CARTESIAN_CANVAS_HPP
 #define CARTESIAN_CANVAS_HPP
@@ -21,8 +20,9 @@
 
 namespace librav
 {
-struct CartesianCanvas
+class CartesianCanvas
 {
+  public:
     CartesianCanvas(int32_t ppu) : pixel_per_meter(ppu) {}
 
     // setup canvas
@@ -31,9 +31,10 @@ struct CartesianCanvas
     // coordinate conversion
     SimplePoint ConvertCartisianToPixel(double xi, double yi);
 
+    // the place for painting
     cv::Mat paint_area;
 
-    // internal parameters
+    // size parameters
     int32_t pixel_per_meter = 10;
     double xmin_;
     double xmax_;
