@@ -121,6 +121,44 @@ SquareGridBase<T>::~SquareGridBase()
 }
 
 template <typename T>
+SquareGridBase<T>::SquareGridBase(const SquareGridBase<T> &other) : RectGridBase<SquareCellBase<T> *>(other.SizeX(), other.SizeY()),
+                                                                      cell_size_(other.cell_size_)
+{
+    for (auto row : other.grid_tiles_)
+        for (auto cell : row)
+            RectGridBase<SquareCellBase<T> *>::SetTileAtRawCoordinate(cell->x, cell->y, new SquareCellBase<T>(*cell));
+}
+
+template <typename T>
+SquareGridBase<T> &SquareGridBase<T>::operator=(const SquareGridBase<T> &other)
+{
+    SquareGridBase<T> tmp(other);
+    *this = std::move(tmp);
+    return *this;
+}
+
+template <typename T>
+SquareGridBase<T>::SquareGridBase(SquareGridBase<T> &&other) : RectGridBase<SquareCellBase<T> *>(other.SizeX(), other.SizeY()),
+                                                               cell_size_(other.cell_size_)
+{
+    for (auto row : other.grid_tiles_)
+        for (auto cell : row)
+            RectGridBase<SquareCellBase<T> *>::SetTileAtRawCoordinate(cell->x, cell->y, cell);
+}
+
+template <typename T>
+SquareGridBase<T> &SquareGridBase<T>::operator=(SquareGridBase<T> &&other)
+{
+    RectGridBase<SquareCellBase<T> *>::ResizeGridTiles(other.size_x, other.size_y);
+    cell_size_ = std::move(other.cell_size);
+    for (auto row : other.grid_tiles_)
+        for (auto cell : row)
+            RectGridBase<SquareCellBase<T> *>::SetTileAtRawCoordinate(cell->x, cell->y, cell);
+
+    return *this;
+}
+
+template <typename T>
 SquareCellBase<T> *SquareGridBase<T>::GetCell(int64_t id)
 {
     auto coordinate = IDToIndex(id);
@@ -173,6 +211,6 @@ std::vector<SquareCellBase<T> *> SquareGridBase<T>::GetNeighbours(int64_t id, bo
     auto index = IDToIndex(id);
     return GetNeighbours(index.GetX(), index.GetY(), allow_diag);
 }
-}
+} // namespace librav
 
 #endif /* SQUARE_GRID_IMPL_HPP */

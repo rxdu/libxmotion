@@ -1,11 +1,15 @@
 # TODO List
 
+## Kernel
+
+- [ ] Add memory leak check tests for all modules in "kernel"
+
 ## Planning
 
-- [ ] Check possible memory leak issue of SquareGrid
 - [ ] Monte Carlo simulation for autonomous vehicles
 - [ ] Priority queue that supports element priority update
 - [ ] RRT and RRT* with Dubins model  
+- [*] Check possible memory leak issue of SquareGrid
 - [*] Remove the requirement of friendship inside Graph_t for search algorithms
 - [*] Remove dependency on OpenCV (now only visualization depends on OpenCV)
 - [*] Road network model

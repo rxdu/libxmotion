@@ -124,6 +124,11 @@ public:
   SquareGridBase(const Eigen::MatrixXd &matrix, int32_t side_length, double cell_size = 0.1);
   ~SquareGridBase();
 
+  SquareGridBase(const SquareGridBase<T> &other);
+  SquareGridBase<T> &operator=(const SquareGridBase<T> &other);
+  SquareGridBase(SquareGridBase<T> &&other);
+  SquareGridBase<T> &operator=(SquareGridBase<T> &&other);
+
   double GetCellSize() const { return cell_size_; }
 
   inline RectGridIndex GetIndexFromID(int64_t id) { return IDToIndex(id); }

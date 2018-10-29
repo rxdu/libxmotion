@@ -70,8 +70,12 @@ CurvilinearGridBase<T>::CurvilinearGridBase(const CurvilinearGridBase<T> &other)
     curve_ = other.curve_;
 
     for (auto row : other.grid_tiles_)
+    {
+        std::vector<CellType *> new_row;
         for (auto cell : row)
-            grid_tiles_.push_back(new CellType(*cell));
+            new_row.push_back(new CellType(*cell));
+        grid_tiles_.push_back(new_row);
+    }
 }
 
 template <typename T>
