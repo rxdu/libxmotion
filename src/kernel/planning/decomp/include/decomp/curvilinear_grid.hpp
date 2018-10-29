@@ -28,13 +28,13 @@ namespace librav
  *               s
  *               ^
  *               |
- *		          |
+ *		         |
  *		         |
  *		        |   s-axis defined by a parametric curve
  *		       |
  *		      |
  *		      |
- *	 <----- o ----- delta
+ *	   <----- o ----- delta
  */
 
 ////////////////////////////////////////////////////////////////////
@@ -190,10 +190,10 @@ class CurvilinearGridBase
     CurvilinearGridBase(ParametricCurve pcurve, double s_step, double d_step, int32_t d_num);
     ~CurvilinearGridBase();
 
-    CurvilinearGridBase(const CurvilinearGridBase<T>& other);
-    CurvilinearGridBase& operator=(const CurvilinearGridBase<T>& other);
-    CurvilinearGridBase(CurvilinearGridBase<T>&& other);
-    CurvilinearGridBase& operator=(CurvilinearGridBase<T>&& other);
+    CurvilinearGridBase(const CurvilinearGridBase<T> &other);
+    CurvilinearGridBase &operator=(const CurvilinearGridBase<T> &other);
+    CurvilinearGridBase(CurvilinearGridBase<T> &&other);
+    CurvilinearGridBase &operator=(CurvilinearGridBase<T> &&other);
 
     using CellType = CurvilinearCellBase<T>;
     using GridPoint = typename CurvilinearCellBase<T>::GridPoint;
