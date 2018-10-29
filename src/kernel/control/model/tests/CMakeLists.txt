@@ -2,5 +2,8 @@
 #find_package(LIBRARY_NAME REQUIRED)
 
 ## tests
-# add_executable(test_polygon test_polygon.cpp)
-# target_link_libraries(test_polygon geometry)
+add_executable(test_bicycle_kin test_bicycle_kin.cpp)
+target_link_libraries(test_bicycle_kin model)
+
+add_executable(test_propagator test_propagator.cpp)
+target_link_libraries(test_propagator model)

@@ -67,7 +67,7 @@ class MarkovChain
         return s;
     }
 
-  private:
+  protected:
     State state_;
     Transition transition_;
 
