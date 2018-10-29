@@ -17,7 +17,7 @@ int main()
     RK4 integrator;
     Recorder recorder;
 
-    while (t < t_end)
+    while (t <= t_end)
     {
         recorder({t, x[0], x[1], u.a, u.delta});
         integrator(BicycleKinematics(u), x, t, dt);

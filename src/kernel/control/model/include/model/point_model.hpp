@@ -22,7 +22,7 @@ class LongitudinalDynamics
 {
 public:
   using control_t = double;
-  LongitudinalDynamics(double u);
+  LongitudinalDynamics(control_t u);
 
   // x1 = s, x2 = v
   void operator()(const asc::state_t &x, asc::state_t &xd, const double);

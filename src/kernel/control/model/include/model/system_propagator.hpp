@@ -2,7 +2,8 @@
  * system_propagator.hpp
  * 
  * Created on: Mar 21, 2018 15:15
- * Description: 
+ * Description: a convenience wrapper to propogate system model 
+ *            with given control input
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
