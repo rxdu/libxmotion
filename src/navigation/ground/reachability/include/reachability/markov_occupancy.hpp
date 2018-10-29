@@ -27,7 +27,14 @@ class MarkovOccupancy
   private:
     static constexpr int32_t N = 10;
     static constexpr int32_t M = 6;
-    MarkovCommand<N, M> command_;
+
+    using CommandModel = MarkovCommand<N, M>;
+    using MotionModel = MarkovMotion<N, M>;
+
+    CommandModel command_;
+    MotionModel motion_;
+
+    void SetupCommandModel();
 };
 } // namespace librav
 

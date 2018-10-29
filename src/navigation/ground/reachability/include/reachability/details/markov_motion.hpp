@@ -19,6 +19,11 @@ namespace librav
 template <int32_t N, int32_t M>
 class MarkovMotion
 {
+  public:
+    using ConcatenatedTransition = Eigen::Matrix<double, M * N, M * N>;
+    using State = Eigen::Matrix<double, N, 1>;
+
+    MarkovMotion() = default;
 };
 } // namespace librav
 

@@ -12,10 +12,6 @@
 
 using namespace librav;
 
-// MonteCarloSim::MonteCarloSim()
-// {
-// }
-
 void MonteCarloSim::RunSim(double t0, double tf, double step, int32_t iter_num)
 {
     double x = 0, y = 0;

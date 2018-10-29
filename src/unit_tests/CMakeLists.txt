@@ -23,14 +23,24 @@ set(GEOMETRY_GTEST_LIB geometry)
 add_executable(gtest_geometry ${GEOMETRY_GTEST_SRC})
 target_link_libraries(gtest_geometry gtest gtest_main ${GEOMETRY_GTEST_LIB})
 
+# markov
+set(MARKOV_GTEST_SRC
+    src/markov/markov_chain_test.cpp
+)
+set(MARKOV_GTEST_LIB markov)
+add_executable(gtest_markov ${MARKOV_GTEST_SRC})
+target_link_libraries(gtest_markov gtest gtest_main ${MARKOV_GTEST_LIB})
+
 # Group all tests 
 set(ALL_GTEST_SRC
     ${GRAPH_GTEST_SRC} 
     ${GEOMETRY_GTEST_SRC}
+    ${MARKOV_GTEST_SRC}
 )
 set(ALL_GTEST_LIBS
     ${GRAPH_GTEST_LIB}
     ${GEOMETRY_GTEST_LIB}
+    ${MARKOV_GTEST_LIB}
 )
 add_executable(gtest_all ${ALL_GTEST_SRC})
 target_link_libraries(gtest_all gtest gtest_main ${ALL_GTEST_LIBS})
