@@ -4,6 +4,14 @@
  * Created on: Oct 29, 2018 06:56
  * Description: Markov-chain acceleration command model
  * 
+ * Reference:
+ *  [1] Althoff, M., and A. Mergel. 2011. “Comparison of Markov Chain Abstraction 
+ *      and Monte Carlo Simulation for the Safety Assessment of Autonomous Cars.” 
+ *      IEEE Transactions on Intelligent Transportation Systems 12 (4): 1237–47.
+ *  [2] Althoff, M., O. Stursberg, and M. Buss. 2009. “Model-Based Probabilistic 
+ *      Collision Detection in Autonomous Driving.” IEEE Transactions on Intelligent 
+ *      Transportation Systems 10 (2): 299–310.
+ * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
@@ -15,6 +23,8 @@
 #include <iostream>
 
 #include "markov/markov_chain.hpp"
+
+#define PRINT_MATRIX
 
 namespace librav
 {
@@ -39,8 +49,6 @@ class MarkovCommand : public MarkovChain<M * N>
         commands_ = cmds;
 
         Eigen::Matrix<double, M, M> lammda = m_.asDiagonal();
-        std::cout << "lammda: \n"
-                  << lammda << std::endl;
 
         // set initial state probability distribution
         Model::SetInitialState(init);
@@ -51,18 +59,22 @@ class MarkovCommand : public MarkovChain<M * N>
             for (int32_t beta = 0; beta < M; ++beta)
                 Psi(alpha, beta) = 1.0 / ((commands_(beta) - commands_(alpha)) * (commands_(beta) - commands_(alpha)) + gamma_);
         Psi.normalize();
+
+#ifdef PRINT_MATRIX
+        std::cout << "lammda: \n"
+                  << lammda << std::endl;
         std::cout << "Psi: \n"
                   << Psi << std::endl;
-
         std::cout << "block: \n"
                   << lammda * Psi << std::endl;
+#endif
 
         Transition trans;
         for (int32_t i = 0; i < N; ++i)
             trans.block(i * M, i * M, M, M) = lammda * Psi;
         trans.normalize();
-        std::cout << "Trans: \n"
-                  << trans << std::endl;
+        // std::cout << "Trans: \n"
+        //           << trans << std::endl;
 
         Model::SetTransitionMatrix(trans);
     }

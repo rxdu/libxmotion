@@ -23,8 +23,6 @@ namespace librav
 class MonteCarloSim
 {
   public:
-    MonteCarloSim() = default;
-
     void RunSim(double t0, double tf, double step, int32_t iter_num);
 
   private:

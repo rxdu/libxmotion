@@ -17,13 +17,18 @@ namespace librav
 // N: number of system states - i
 // M: number of control inputs - alpha, beta
 template <int32_t N, int32_t M>
-class MarkovMotion
+class MarkovMotion : public MarkovChain<M * N>
 {
   public:
-    using ConcatenatedTransition = Eigen::Matrix<double, M * N, M * N>;
-    using State = Eigen::Matrix<double, N, 1>;
+    using Model = MarkovChain<M * N>;
+    using State = typename MarkovChain<M * N>::State;
+    using Transition = typename MarkovChain<M * N>::Transition;
 
-    MarkovMotion() = default;
+  public:
+    void SetupModel(State init)
+    {
+        
+    }
 };
 } // namespace librav
 

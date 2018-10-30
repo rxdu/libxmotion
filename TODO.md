@@ -3,6 +3,7 @@
 ## Kernel
 
 - [ ] Add memory leak check tests for all modules in "kernel"
+- [ ] Cleanup dependencies on LCM, create a comm package 
 
 ## Planning
 
@@ -21,7 +22,7 @@
 
 ## Simulation
 
-- [ ] Finish RC Car simulation interface
+- [ ] Finish RC Car simulation interface with FastRTPS
 
 ## Visualization
 
@@ -30,7 +31,6 @@
 
 ## Misc
 
-* Cleanup dependencies on LCM, create a comm package 
-* ~~Update the command to invoke uavcan type generator~~
-* ~~Fix "ENABLE_LOGGING" macro definition~~
-* ~~Gurobi related code is broken under Ubuntu 16.04/Debian Stretch~~
+- ~~Update the command to invoke uavcan type generator~~
+- ~~Fix "ENABLE_LOGGING" macro definition~~
+- ~~Gurobi related code is broken under Ubuntu 16.04/Debian Stretch~~

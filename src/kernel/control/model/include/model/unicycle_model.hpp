@@ -18,16 +18,15 @@ namespace librav
 class UnicycleKinematics
 {
 public:
-  // using control_t = BicycleKinCtrlInput;
+  using control_t = double;
   UnicycleKinematics(control_t u);
 
   // x1 = x, x2 = y, x3 = v, x4 = theta
   void operator()(const asc::state_t &x, asc::state_t &xd, const double);
 
 private:
-  control_t u_ = {0.0, 0.0};
+  control_t u_ = 0;
   static constexpr double L = 2.4;
-  // static constexpr double L = 2.1;
 };
 } // namespace librav
 

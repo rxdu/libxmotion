@@ -8,7 +8,9 @@ using namespace librav;
 
 int main()
 {
-    MarkovOccupancy occupancy;
+    MarkovOccupancy<10,10> occupancy(0, 50, 0, 20);
+
+    occupancy.SetupMarkovModel();
 
     return 0;
 }
