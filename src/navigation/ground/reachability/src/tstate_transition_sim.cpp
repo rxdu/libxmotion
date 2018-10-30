@@ -14,25 +14,51 @@ using namespace librav;
 
 void TStateTransitionSim::SetupStateSpace(double smin, double smax, double vmin, double vmax, int32_t ssize, int32_t vsize)
 {
-    state_space_ = std::unique_ptr<TStateSpace>(new TStateSpace(smin, smax, vmin, vmax));
+    state_space_ = std::make_shared<TStateSpace>(smin, smax, vmin, vmax);
     state_space_->DiscretizeSpaceBySize(ssize, vsize);
 }
 
 void TStateTransitionSim::RunSim(double T)
 {
+    // init statistics
+    auto all_cells = state_space_->GetAllStateCells();
+    for (auto cell_row : all_cells)
+        for (auto cell : cell_row)
+            for (int i = 0; i < control_set_.size(); ++i)
+            {
+                cell->occupancy_stats[i] = 0;
+                cell->occupancy_probability[i] = 0.0;
+            }
+
+    // calculate Psi by running simulations
     auto cells = state_space_->GetStateCellsByS(0);
     std::cout << "number of cells: " << cells.size() << std::endl;
-
     auto cell = cells.front();
-    cell->PrintInfo();
-    auto samples = cell->GetUniformSamples(10, 10);
-    for (auto &sample : samples)
-    {
-        asc::state_t statef = propagator_.Propagate({sample.s, sample.v}, 0.5, 0, T, T / 10);
-        std::cout << "final state: " << statef[0] << " , " << statef[1] << std::endl;
-    }
     // for(auto cell : cells)
     // {
+    cell->PrintInfo();
+    auto samples = cell->GetUniformSamples(20, 30);
+
+    int i = 3;
+    // for (int i = 0; i < control_set_.size(); ++i)
+    // {
+    //     std::cout << "control: " << control_set_(i) << std::endl;
+    for (auto &sample : samples)
+    {
+        asc::state_t statef = propagator_.Propagate({sample.s, sample.v}, control_set_(i), 0, T, T / 10);
+        // std::cout << "final state: " << statef[0] << " , " << statef[1] << std::endl;
+        auto cell = state_space_->GetStateCell(statef[0], statef[1]);
+        if (cell != nullptr)
+        {
+            cell->count++;
+            cell->occupancy_stats[i]++;
+        }
+        else
+        {
+            std::cerr << "Out-of-bound error: consider increasing state space!" << std::endl;
+        }
+    }
+    // }
 
     // }
 }

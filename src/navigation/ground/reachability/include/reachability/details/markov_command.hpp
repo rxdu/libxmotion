@@ -53,25 +53,25 @@ class MarkovCommand : public MarkovChain<M * N>
         // set initial state probability distribution
         Model::SetInitialState(init);
 
-        // generate Psi
-        Eigen::Matrix<double, M, M> Psi;
+        // generate Phi
+        Eigen::Matrix<double, M, M> Phi;
         for (int32_t alpha = 0; alpha < M; ++alpha)
             for (int32_t beta = 0; beta < M; ++beta)
-                Psi(alpha, beta) = 1.0 / ((commands_(beta) - commands_(alpha)) * (commands_(beta) - commands_(alpha)) + gamma_);
-        Psi.normalize();
+                Phi(alpha, beta) = 1.0 / ((commands_(beta) - commands_(alpha)) * (commands_(beta) - commands_(alpha)) + gamma_);
+        Phi.normalize();
 
 #ifdef PRINT_MATRIX
         std::cout << "lammda: \n"
                   << lammda << std::endl;
-        std::cout << "Psi: \n"
-                  << Psi << std::endl;
+        std::cout << "Phi: \n"
+                  << Phi << std::endl;
         std::cout << "block: \n"
-                  << lammda * Psi << std::endl;
+                  << lammda * Phi << std::endl;
 #endif
 
         Transition trans;
         for (int32_t i = 0; i < N; ++i)
-            trans.block(i * M, i * M, M, M) = lammda * Psi;
+            trans.block(i * M, i * M, M, M) = lammda * Phi;
         trans.normalize();
         // std::cout << "Trans: \n"
         //           << trans << std::endl;

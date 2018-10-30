@@ -24,13 +24,14 @@ namespace librav
 class TStateTransitionSim
 {
 public:
+  std::shared_ptr<TStateSpace> state_space_;
+
   void SetupStateSpace(double smin, double smax, double vmin, double vmax, int32_t ssize, int32_t vsize);
   void SetControlSet(Eigen::VectorXd set) { control_set_ = set; }
 
   void RunSim(double T);
 
 private:
-  std::unique_ptr<TStateSpace> state_space_;
   Eigen::VectorXd control_set_;
 
   SystemPropagator<CarLongitudinalModel, CarLongitudinalModel::control_t> propagator_;

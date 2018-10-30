@@ -9,9 +9,10 @@ set(UGVNAV_VIZ_LIB_SRC
     src/details/lattice_draw.cpp
     src/lattice_viz.cpp
     src/roadmap_viz.cpp
+    src/reachability_viz.cpp
 )
 add_library(ugvnav_viz STATIC ${UGVNAV_VIZ_LIB_SRC})
-target_link_libraries(ugvnav_viz roadmap lattice lightviz)
+target_link_libraries(ugvnav_viz decomp roadmap lattice reachability lightviz)
 target_include_directories(ugvnav_viz PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

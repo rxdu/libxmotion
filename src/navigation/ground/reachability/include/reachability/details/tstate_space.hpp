@@ -49,7 +49,11 @@ class TStateSpace
         double cs_max = 0;
         double cv_min = 0;
         double cv_max = 0;
-        std::unordered_map<int32_t, int32_t> reachability_stats;
+        
+        int32_t count = 0;
+        // command index (alpha) - number of reach (N_{ij}^{alpha}) => i fixed for each simulation
+        std::unordered_map<int32_t, int32_t> occupancy_stats;
+        std::unordered_map<int32_t, int32_t> occupancy_probability;
 
         std::vector<State> GetUniformSamples(int32_t ssize, int32_t vsize)
         {
@@ -90,6 +94,10 @@ class TStateSpace
         v_max_ = vmax;
     }
 
+    int32_t GetSSize() const { return s_size_; }
+    int32_t GetVSize() const { return v_size_; }
+    double GetSStep() const { return s_step_; }
+    double GetVStep() const { return v_step_; }
     int32_t GetStateNumber() const { return s_size_ * v_size_; }
 
     StateCell *GetStateCell(double s, double v)
@@ -97,11 +105,13 @@ class TStateSpace
         int32_t s_idx = s / s_step_;
         int32_t v_idx = v / v_step_;
 
-        if ((s_idx >= s_size_) || (v_idx >= v_size_))
+        if ((s_idx < 0) || (s_idx >= s_size_) || (v_idx < 0) || (v_idx >= v_size_))
             return nullptr;
 
         return state_cells_[s_idx][v_idx];
     }
+
+    std::vector<std::vector<StateCell *>> GetAllStateCells() { return state_cells_; }
 
     std::vector<StateCell *> GetStateCellsByS(double s)
     {
@@ -160,11 +170,11 @@ class TStateSpace
     {
         int32_t cell_count = 0;
         state_cells_.clear();
-        state_cells_.reserve(s_size_);
+        // state_cells_.reserve(s_size_);
         for (int32_t i = 0; i < s_size_; ++i)
         {
             std::vector<StateCell *> cells;
-            cells.reserve(v_size_);
+            // cells.reserve(v_size_);
             double smin = s_min_ + i * s_step_;
             double smax = s_min_ + (i + 1) * s_step_;
             for (int32_t j = 0; j < v_size_; ++j)
