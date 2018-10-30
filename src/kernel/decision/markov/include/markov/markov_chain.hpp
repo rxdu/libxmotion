@@ -24,31 +24,31 @@ class MarkovChain
     using State = Eigen::Matrix<double, 1, N>;
     using Transition = Eigen::Matrix<double, N, N>;
 
-    MarkovChain() = delete;
+    MarkovChain() = default;
     MarkovChain(Transition trans) : transition_(trans) {}
 
-    MarkovChain(State st, Transition trans) : state_(st), transition_(trans)
+    MarkovChain(State st, Transition trans) : init_state_(st), transition_(trans)
     {
         states_.push_back(st);
     }
 
     void SetInitialState(State st)
     {
-        state_ = st;
-        states_.push_back(st);
+        init_state_ = st;
+        states_.push_back(init_state_);
     }
     void SetTransitionMatrix(Transition trans) { transition_ = trans; }
 
-    State GetInitialState() const { return state_; }
+    State GetInitialState() const { return init_state_; }
     Transition GetTransitionMatrix() const { return transition_; }
     int32_t GetStateNumber() const { return states_.size(); }
 
-    inline void Propogate() { states_.emplace_back(states_.back() * transition_); }
+    inline void Propagate() { states_.emplace_back(states_.back() * transition_); }
 
-    void Propogate(int32_t k_f)
+    void Propagate(int32_t k_f)
     {
         for (int32_t i = 0; i < k_f; ++i)
-            Propogate();
+            Propagate();
     }
 
     State operator[](int32_t k)
@@ -61,14 +61,14 @@ class MarkovChain
 
     State CalculateStateAt(int32_t k)
     {
-        State s = state_;
+        State s = init_state_;
         for (int32_t i = 0; i < k; ++i)
             s = s * transition_;
         return s;
     }
 
   protected:
-    State state_;
+    State init_state_;
     Transition transition_;
 
     std::vector<State> states_;

@@ -13,18 +13,16 @@
 #include <cmath>
 
 #include "model/bicycle_model.hpp"
+#include "model/system_propagator.hpp"
+
 #include "random/bigaussian_sampler.hpp"
 #include "random/gaussian_sampler.hpp"
-
-#include "model/system_propagator.hpp"
 
 namespace librav
 {
 class MonteCarloSim
 {
   public:
-    MonteCarloSim() = default;
-
     void RunSim(double t0, double tf, double step, int32_t iter_num);
 
   private:

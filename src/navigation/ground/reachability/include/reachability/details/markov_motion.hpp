@@ -17,8 +17,18 @@ namespace librav
 // N: number of system states - i
 // M: number of control inputs - alpha, beta
 template <int32_t N, int32_t M>
-class MarkovMotion
+class MarkovMotion : public MarkovChain<M * N>
 {
+  public:
+    using Model = MarkovChain<M * N>;
+    using State = typename MarkovChain<M * N>::State;
+    using Transition = typename MarkovChain<M * N>::Transition;
+
+  public:
+    void SetupModel(State init)
+    {
+        
+    }
 };
 } // namespace librav
 

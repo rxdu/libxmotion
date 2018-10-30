@@ -6,7 +6,6 @@ using namespace librav;
 
 int main()
 {
-
     MarkovChain<2>::State states;
     MarkovChain<2>::Transition trans;
 
@@ -19,14 +18,17 @@ int main()
               << mchain.CalculateStateAt(2) << std::endl;
     std::cout << "size: " << mchain.GetStateNumber() << std::endl;
 
-    mchain.Propogate(2);
+    mchain.Propagate(2);
 
-    // for(int32_t k = 0; k < mchain.GetStateNumber(); ++k)
-    //     std::cout << "k = " << k << "\n" << mchain[k] << std::endl;
     std::cout << "k = " << 2 << "\n"
               << mchain[2] << std::endl;
 
     std::cout << "size: " << mchain.GetStateNumber() << std::endl;
+
+    std::cout << "-----" << std::endl;
+    for (int32_t k = 0; k < mchain.GetStateNumber(); ++k)
+        std::cout << "k = " << k << "\n"
+                  << mchain[k] << std::endl;
 
     return 0;
 }

@@ -5,6 +5,7 @@
 set(MODEL_LIB_SRC
 	src/point_model.cpp
 	src/bicycle_model.cpp
+	src/car_longitudinal_model.cpp
 )
 add_library(model STATIC ${MODEL_LIB_SRC})
 target_link_libraries(model utilities ascent)
