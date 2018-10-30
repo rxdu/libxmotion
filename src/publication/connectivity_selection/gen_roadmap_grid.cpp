@@ -25,7 +25,7 @@ int main()
 
     std::cout << "map loaded in " << timer.toc() << " seconds" << std::endl;
 
-    RoadMapViz::SetupRoadMapViz(map);
+    RoadMapViz::SetupRoadMapViz(map, 10);
 
     auto ids = map->OccupiedLanelet(CartCooridnate(55, 56));
     std::cout << "occupied laneles: " << ids.size() << std::endl;
@@ -36,7 +36,7 @@ int main()
     //     RoadMapViz::ShowTrafficChannel(*chn.get());
     // }
 
-    RoadMapViz::ShowTrafficChannel(*map->traffic_map_->GetAllTrafficChannels()[4].get(), 10, "roadmap_grid", true);
+    RoadMapViz::ShowTrafficChannel(*map->traffic_map_->GetAllTrafficChannels()[4].get(), "roadmap_grid", true);
 
     return 0;
 }

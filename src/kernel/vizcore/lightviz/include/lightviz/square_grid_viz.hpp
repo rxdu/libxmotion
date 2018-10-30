@@ -25,55 +25,63 @@ namespace LightViz
 template <typename GridType>
 void ShowSquareGrid(GridType *grid, int32_t pixel_per_unit = 100, std::string window_name = "Square Grid", bool save_img = false)
 {
-    SquareGridDraw gdraw(pixel_per_unit);
+    CartesianCanvas canvas(pixel_per_unit);
+    SquareGridDraw gdraw(canvas);
 
-    cv::Mat canvas = gdraw.CreateGridCanvas(grid);
-    canvas = gdraw.DrawGridCell(canvas, grid);
-    canvas = gdraw.DrawGridNet(canvas, grid);
+    gdraw.SetupCanvas(grid, pixel_per_unit);
 
-    CvDraw::ShowImage(canvas, window_name, save_img);
+    gdraw.DrawGridCell(grid);
+    gdraw.DrawGridNet(grid);
+
+    CvDraw::ShowImage(canvas.paint_area, window_name, save_img);
 }
 
 template <typename GridType, typename GridCellType>
 void ShowSquareGridPath(GridType *grid, const std::vector<GridCellType *> &path, int32_t pixel_per_unit = 100, std::string window_name = "Square Grid", bool save_img = false)
 {
-    SquareGridDraw gdraw(pixel_per_unit);
+    CartesianCanvas canvas(pixel_per_unit);
+    SquareGridDraw gdraw(canvas);
 
-    cv::Mat canvas = gdraw.CreateGridCanvas(grid);
-    canvas = gdraw.DrawGridCell(canvas, grid);
-    canvas = gdraw.DrawGridPathStartGoal(canvas, path);
-    canvas = gdraw.DrawGridNet(canvas, grid);
-    canvas = gdraw.DrawGridPath(canvas, path);
+    gdraw.SetupCanvas(grid, pixel_per_unit);
 
-    CvDraw::ShowImage(canvas, window_name, save_img);
+    gdraw.DrawGridCell(grid);
+    gdraw.DrawGridPathStartGoal(path);
+    gdraw.DrawGridNet(grid);
+    gdraw.DrawGridPath(path);
+
+    CvDraw::ShowImage(canvas.paint_area, window_name, save_img);
 }
 
 template <typename GridType, typename GridCellType>
 void ShowSquareGridGraph(GridType *grid, Graph<GridCellType *> *graph, int32_t pixel_per_unit = 100, std::string window_name = "Square Grid", bool save_img = false)
 {
-    SquareGridDraw gdraw(pixel_per_unit);
+    CartesianCanvas canvas(pixel_per_unit);
+    SquareGridDraw gdraw(canvas);
 
-    cv::Mat canvas = gdraw.CreateGridCanvas(grid);
-    canvas = gdraw.DrawGridCell(canvas, grid);
-    canvas = gdraw.DrawGridNet(canvas, grid);
-    canvas = gdraw.DrawGridGraph(canvas, grid, graph);
+    gdraw.SetupCanvas(grid, pixel_per_unit);
 
-    CvDraw::ShowImage(canvas, window_name, save_img);
+    gdraw.DrawGridCell(grid);
+    gdraw.DrawGridNet(grid);
+    gdraw.DrawGridGraph(grid, graph);
+
+    CvDraw::ShowImage(canvas.paint_area, window_name, save_img);
 }
 
 template <typename GridType>
 void ShowSquareGridGraphCost(GridType *grid, int32_t pixel_per_unit = 100, std::string window_name = "Square Grid", bool save_img = false)
 {
-    SquareGridDraw gdraw(pixel_per_unit);
+    CartesianCanvas canvas(pixel_per_unit);
+    SquareGridDraw gdraw(canvas);
 
-    cv::Mat canvas = gdraw.CreateGridCanvas(grid);
-    canvas = gdraw.DrawGridCell(canvas, grid);
-    canvas = gdraw.DrawGridCost(canvas, grid);
-    canvas = gdraw.DrawGridNet(canvas, grid);
+    gdraw.SetupCanvas(grid, pixel_per_unit);
 
-    CvDraw::ShowImage(canvas, window_name, save_img);
+    gdraw.DrawGridCell(grid);
+    gdraw.DrawGridCost(grid);
+    gdraw.DrawGridNet(grid);
+
+    CvDraw::ShowImage(canvas.paint_area, window_name, save_img);
 }
-}
-}
+} // namespace LightViz
+} // namespace librav
 
 #endif /* GRID_VIZ_HPP */

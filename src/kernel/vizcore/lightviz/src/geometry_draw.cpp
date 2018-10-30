@@ -229,17 +229,17 @@ void GeometryDraw::DrawDistribution(double cx, double cy, double xspan, double y
 
     double dxspan = dxmax - dxmin;
     double dyspan = dymax - dymin;
-    int32_t x_size = dxspan * canvas_.pixel_per_meter;
-    int32_t y_size = dyspan * canvas_.pixel_per_meter;
+    int32_t x_size = dxspan * canvas_.ppu_;
+    int32_t y_size = dyspan * canvas_.ppu_;
 
     Eigen::MatrixXd threat_matrix = Eigen::MatrixXd::Zero(y_size, x_size);
-    int32_t meter_per_pixel = 1 / canvas_.pixel_per_meter;
+    int32_t meter_per_pixel = 1 / canvas_.ppu_;
     for (int32_t i = 0; i < x_size; ++i)
         for (int32_t j = 0; j < y_size; ++j)
         {
             // convert to cartisian coordinate
-            double x = dxmin + static_cast<double>(i) / canvas_.pixel_per_meter;
-            double y = dymin + static_cast<double>(j) / canvas_.pixel_per_meter;
+            double x = dxmin + static_cast<double>(i) / canvas_.ppu_;
+            double y = dymin + static_cast<double>(j) / canvas_.ppu_;
 
             threat_matrix(j, i) = dist_fun(x, y);
         }

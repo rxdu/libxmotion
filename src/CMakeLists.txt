@@ -36,7 +36,7 @@ add_subdirectory(navigation)
 add_subdirectory(platforms)
 
 # # Publication-related code
-# add_subdirectory(publication)
+add_subdirectory(publication)
 
 ## Add test source directories
 if(BUILD_TESTS)

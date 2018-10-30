@@ -20,13 +20,13 @@
 
 namespace librav
 {
-class CartesianCanvas
+struct CartesianCanvas
 {
-  public:
-    CartesianCanvas(int32_t ppu) : pixel_per_meter(ppu) {}
+    CartesianCanvas(int32_t ppu) : ppu_(ppu) {}
 
     // setup canvas
     void SetupCanvas(double xmin, double xmax, double ymin, double ymax, cv::Scalar bg_color = CvDrawColors::bg_color);
+    void SetupCanvas(int32_t xmax, int32_t ymax, cv::Scalar bg_color = CvDrawColors::bg_color);
 
     // coordinate conversion
     SimplePoint ConvertCartisianToPixel(double xi, double yi);
@@ -35,15 +35,15 @@ class CartesianCanvas
     cv::Mat paint_area;
 
     // size parameters
-    int32_t pixel_per_meter = 10;
-    double xmin_;
-    double xmax_;
-    double ymin_;
-    double ymax_;
-    double xspan_;
-    double yspan_;
-    int32_t canvas_size_x_;
-    int32_t canvas_size_y_;
+    int32_t ppu_ = 10;
+    double xmin_ = 0.0;
+    double xmax_ = 80.0;
+    double ymin_ = 0.0;
+    double ymax_ = 60.0;
+    double xspan_ = 80.0;
+    double yspan_ = 60.0;
+    int32_t canvas_size_x_ = 800;
+    int32_t canvas_size_y_ = 600;
 };
 } // namespace librav
 
