@@ -14,10 +14,8 @@
 
 #include <eigen3/Eigen/Dense>
 
-#include "model/system_propagator.hpp"
-#include "model/car_longitudinal_model.hpp"
-
 #include "reachability/details/tstate_space.hpp"
+#include "reachability/details/car_model_propagator.hpp"
 
 namespace librav
 {
@@ -34,7 +32,7 @@ public:
 private:
   Eigen::VectorXd control_set_;
 
-  SystemPropagator<CarLongitudinalModel, CarLongitudinalModel::control_t> propagator_;
+  CarModelPropagator propagator_;
 };
 } // namespace librav
 

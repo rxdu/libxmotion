@@ -81,6 +81,21 @@ void ShowSquareGridGraphCost(GridType *grid, int32_t pixel_per_unit = 100, std::
 
     CvDraw::ShowImage(canvas.paint_area, window_name, save_img);
 }
+
+template <typename GridType>
+void ShowSquareGridGraphCostOnly(GridType *grid, int32_t pixel_per_unit = 100, std::string window_name = "Square Grid", bool save_img = false)
+{
+    CartesianCanvas canvas(pixel_per_unit);
+    SquareGridDraw gdraw(canvas);
+
+    gdraw.SetupCanvas(grid, pixel_per_unit);
+
+    gdraw.DrawGridCell(grid);
+    gdraw.DrawGridCostOnly(grid);
+    gdraw.DrawGridNet(grid);
+
+    CvDraw::ShowImage(canvas.paint_area, window_name, save_img);
+}
 } // namespace LightViz
 } // namespace librav
 

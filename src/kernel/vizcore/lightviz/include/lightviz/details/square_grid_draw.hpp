@@ -70,6 +70,24 @@ class SquareGridDraw
     }
 
     template <typename GridType>
+    void DrawGridCostOnly(GridType *grid)
+    {
+        // draw cells
+        for (int32_t y = 0; y < grid->SizeY(); ++y)
+            for (int32_t x = 0; x < grid->SizeX(); ++x)
+            {
+                auto cell = grid->GetCell(x, y);
+                if (cell->label != SquareCellLabel::OCCUPIED)
+                {
+                    cv::Range rngx(cell->vertices[0].x * canvas_.ppu_, cell->vertices[1].x * canvas_.ppu_);
+                    cv::Range rngy(cell->vertices[0].y * canvas_.ppu_, cell->vertices[2].y * canvas_.ppu_);
+                    if (cell->cost_map != 0.0)
+                        canvas_.paint_area(rngy, rngx) = CvDraw::JetPaletteTransform(cell->cost_map);
+                }
+            }
+    }
+
+    template <typename GridType>
     void DrawGridNet(GridType *grid)
     {
         // draw horizontal lines

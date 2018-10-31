@@ -25,11 +25,20 @@ void LightViz::ShowTStateSpace(TStateSpace &space, int32_t pixel_per_unit, std::
             int32_t s_idx = cell->id / space.GetVSize();
             int32_t v_idx = cell->id % space.GetVSize();
             // std::cout << "viz idx: " << s_idx << " , " << v_idx << std::endl;
-            
-            // grid.GetCell(cell->id)->cost_map = cell->count / 100.0;
-            grid.GetCell(s_idx, space.GetVSize() - v_idx - 1)->cost_map = cell->count / 600.0;
-        }
 
-    ShowSquareGridGraphCost(&grid, pixel_per_unit, window_name, save_img);
+            // grid.GetCell(cell->id)->cost_map = cell->count / 100.0;
+            double cost = 0;
+            int32_t stat = 0;
+            for (int i = 0; i < cell->occupancy_stats.size(); ++i)
+                stat += cell->occupancy_stats[i];
+            cost = static_cast<double>(stat) / (space.sim_number_per_ctrl_ * space.control_set_size_);
+            // if (cost != 0)
+            //     std::cout << cost << "+";
+            grid.GetCell(s_idx, space.GetVSize() - v_idx - 1)->cost_map = cost;
+        }
+    // std::cout << std::endl;
+
+    ShowSquareGridGraphCostOnly(&grid, pixel_per_unit, window_name, save_img);
+    // ShowSquareGridGraphCost(&grid, pixel_per_unit, window_name, save_img);
     // ShowSquareGrid(&grid, pixel_per_unit, window_name, save_img);
 }

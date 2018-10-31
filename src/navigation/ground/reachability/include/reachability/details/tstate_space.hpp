@@ -53,7 +53,7 @@ class TStateSpace
         int32_t count = 0;
         // command index (alpha) - number of reach (N_{ij}^{alpha}) => i fixed for each simulation
         std::unordered_map<int32_t, int32_t> occupancy_stats;
-        std::unordered_map<int32_t, int32_t> occupancy_probability;
+        std::unordered_map<int32_t, double> occupancy_probability;
 
         std::vector<State> GetUniformSamples(int32_t ssize, int32_t vsize)
         {
@@ -85,6 +85,9 @@ class TStateSpace
     // copy and assignment of a state space is not allowed
     TStateSpace(const TStateSpace &other) = delete;
     TStateSpace &operator=(const TStateSpace &other) = delete;
+
+    int32_t control_set_size_ = 0;
+    int32_t sim_number_per_ctrl_ = 0;
 
     void SetRange(double smin, double smax, double vmin, double vmax)
     {

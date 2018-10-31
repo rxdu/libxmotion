@@ -9,11 +9,11 @@ int main()
 {
     TStateTransitionSim sim;
 
-    sim.SetupStateSpace(0, 100, 0, 20, 20, 20);
+    sim.SetupStateSpace(0, 200, 0, 20, 50, 10);
 
     Eigen::VectorXd control_set;
     control_set.setZero(6);
-    control_set << -1, -0.5, 0, 0.3, 0.6, 1.0;
+    control_set << -0.6, -0.3, 0, 0.3, 0.6, 0.8;
 
     std::cout << "constrol set: \n" << control_set.transpose() << std::endl; 
 

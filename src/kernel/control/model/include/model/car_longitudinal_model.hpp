@@ -24,16 +24,17 @@ class CarLongitudinalModel
   public:
     using control_t = double;
 
-    CarLongitudinalModel(control_t u);
+    CarLongitudinalModel(control_t u) : u_(u) {}
+
+    static constexpr double v_sw = 7.3;   // switching velocity
+    static constexpr double v_max = 18.0; // 18 m/s ~= 40 mph
+    static constexpr double a_max = 7.0;  // 7.0 m/s^2
 
     // x1 = s, x2 = v
     void operator()(const asc::state_t &x, asc::state_t &xd, const double);
 
   private:
     control_t u_ = 0;
-    static constexpr double v_sw = 7.3;   // switching velocity
-    static constexpr double v_max = 18.0; // 18 m/s ~= 40 mph
-    static constexpr double a_max = 7.0;  // 7.0 m/s^2
 };
 } // namespace librav
 #endif /* CAR_LONGITUDINAL_MODEL_HPP */

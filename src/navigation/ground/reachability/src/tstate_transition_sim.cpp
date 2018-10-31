@@ -30,6 +30,9 @@ void TStateTransitionSim::RunSim(double T)
                 cell->occupancy_probability[i] = 0.0;
             }
 
+    state_space_->control_set_size_ = 6;
+    state_space_->sim_number_per_ctrl_ = 20 * 30;
+
     // calculate Psi by running simulations
     auto cells = state_space_->GetStateCellsByS(0);
     std::cout << "number of cells: " << cells.size() << std::endl;
@@ -39,26 +42,26 @@ void TStateTransitionSim::RunSim(double T)
     cell->PrintInfo();
     auto samples = cell->GetUniformSamples(20, 30);
 
-    int i = 3;
-    // for (int i = 0; i < control_set_.size(); ++i)
-    // {
-    //     std::cout << "control: " << control_set_(i) << std::endl;
-    for (auto &sample : samples)
+    // int i = 3;
+    for (int i = 0; i < control_set_.size(); ++i)
     {
-        asc::state_t statef = propagator_.Propagate({sample.s, sample.v}, control_set_(i), 0, T, T / 10);
-        // std::cout << "final state: " << statef[0] << " , " << statef[1] << std::endl;
-        auto cell = state_space_->GetStateCell(statef[0], statef[1]);
-        if (cell != nullptr)
+        for (auto &sample : samples)
         {
-            cell->count++;
-            cell->occupancy_stats[i]++;
-        }
-        else
-        {
-            std::cerr << "Out-of-bound error: consider increasing state space!" << std::endl;
+            asc::state_t statef = propagator_.Propagate({sample.s, sample.v}, control_set_(i), 0, T, T / 10);
+            // std::cout << "control: " << control_set_(i) << " , final state: " << statef[0] << " , " << statef[1] << std::endl;
+            
+            auto cell = state_space_->GetStateCell(statef[0], statef[1]);
+            if (cell != nullptr)
+            {
+                cell->occupancy_stats[i]++;
+            }
+            else
+            {
+                std::cerr << "Out-of-bound error: consider increasing state space!" << std::endl;
+                std::cout << " -- (s,v)_0 : " << sample.s << " , " << sample.v << ", (s,v)_f : " << statef[0] << " , " << statef[1] << " , control : " << control_set_(i) << std::endl;
+            }
         }
     }
-    // }
 
     // }
 }

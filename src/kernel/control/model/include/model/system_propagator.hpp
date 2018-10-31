@@ -4,6 +4,8 @@
  * Created on: Mar 21, 2018 15:15
  * Description: a convenience wrapper to propogate system model 
  *            with given control input
+ * Note: this propagator doesn't consider any additional constraints
+ *            to system states, see comments below
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
@@ -31,6 +33,8 @@ public:
     while (t <= tf)
     {
       integrator_(SystemDynamics(u), x, t, dt);
+
+      // Note: you may need to add additional constraints to [x]
     }
 
     return x;
@@ -39,6 +43,6 @@ public:
 private:
   asc::RK4 integrator_;
 };
-}
+} // namespace librav
 
 #endif /* SYSTEM_PROPAGATOR_HPP */
