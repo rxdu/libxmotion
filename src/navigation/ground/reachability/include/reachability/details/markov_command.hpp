@@ -22,7 +22,7 @@
 #include <vector>
 #include <iostream>
 
-#include "markov/markov_chain.hpp"
+#include "markov/markov_chain_x.hpp"
 
 #define PRINT_MATRIX
 
@@ -31,16 +31,22 @@ namespace librav
 // N: number of system states - i
 // M: number of control inputs - alpha, beta
 template <int32_t N, int32_t M>
-class MarkovCommand : public MarkovChain<M * N>
+class MarkovCommand : public MarkovChainX<M * N>
 {
   public:
-    using Model = MarkovChain<M * N>;
-    using State = typename MarkovChain<M * N>::State;
-    using Transition = typename MarkovChain<M * N>::Transition;
+    using Model = MarkovChainX<M * N>;
+    using State = typename MarkovChainX<M * N>::State;
+    using Transition = typename MarkovChainX<M * N>::Transition;
 
-    using ControlSet = Eigen::Matrix<double, M, 1>;
-    using PriorityVector = Eigen::Matrix<double, M, 1>;
-    using InputDynamicMatrix = Eigen::Matrix<double, M, M>;
+    using ControlSet = Eigen::VectorXd;
+    using PriorityVector = Eigen::VectorXd;
+    using InputDynamicMatrix = Eigen::MatrixXd;
+
+    MarkovCommand() : MarkovChainX<M * N>()
+    {
+        commands_.resize(M);
+        m_.resize(M);
+    }
 
     void SetupModel(State init, ControlSet cmds, PriorityVector m, double gamma)
     {
@@ -70,6 +76,7 @@ class MarkovCommand : public MarkovChain<M * N>
 #endif
 
         Transition trans;
+        trans.resize(M * N, M * N);
         for (int32_t i = 0; i < N; ++i)
             trans.block(i * M, i * M, M, M) = lammda * Phi;
         trans.normalize();

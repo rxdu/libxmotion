@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <memory>
 
-#include "reachability/details/tstate_space.hpp"
+#include "reachability/tstate_space.hpp"
 #include "reachability/details/markov_command.hpp"
 #include "reachability/details/markov_motion.hpp"
 
@@ -53,12 +53,15 @@ class MarkovOccupancy
     void SetupCommandModel()
     {
         typename CommandModel::State init_state;
+        init_state.resize(6);
         init_state << 0, 0, 0.5, 0.5, 0, 0;
 
         typename CommandModel::ControlSet cmds;
+        cmds.resize(6);
         cmds << -1, -0.5, 0, 0.3, 0.6, 1.0;
 
         typename CommandModel::PriorityVector priority_vec;
+        priority_vec.resize(6);
         priority_vec << 0.01, 0.04, 0.25, 0.25, 0.4, 0.05;
 
         double gamma = 0.2;

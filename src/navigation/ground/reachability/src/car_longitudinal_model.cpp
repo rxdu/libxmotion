@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "model/car_longitudinal_model.hpp"
+#include "reachability/details/car_longitudinal_model.hpp"
 
 using namespace librav;
 

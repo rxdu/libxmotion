@@ -14,7 +14,7 @@
 
 #include <eigen3/Eigen/Dense>
 
-#include "reachability/details/tstate_space.hpp"
+#include "reachability/tstate_space.hpp"
 #include "reachability/details/car_model_propagator.hpp"
 
 namespace librav
@@ -27,7 +27,7 @@ public:
   void SetupStateSpace(double smin, double smax, double vmin, double vmax, int32_t ssize, int32_t vsize);
   void SetControlSet(Eigen::VectorXd set) { control_set_ = set; }
 
-  void RunSim(double T);
+  Eigen::MatrixXd RunSim(double T);
 
 private:
   Eigen::VectorXd control_set_;

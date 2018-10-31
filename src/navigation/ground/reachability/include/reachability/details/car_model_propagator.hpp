@@ -16,7 +16,7 @@
 #include "ascent/Ascent.h"
 #include "ascent/Utility.h"
 
-#include "model/car_longitudinal_model.hpp"
+#include "reachability/details/car_longitudinal_model.hpp"
 
 namespace librav
 {

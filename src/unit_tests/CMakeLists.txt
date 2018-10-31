@@ -26,6 +26,7 @@ target_link_libraries(gtest_geometry gtest gtest_main ${GEOMETRY_GTEST_LIB})
 # markov
 set(MARKOV_GTEST_SRC
     src/markov/markov_chain_test.cpp
+    src/markov/markov_chain_x_test.cpp
 )
 set(MARKOV_GTEST_LIB markov)
 add_executable(gtest_markov ${MARKOV_GTEST_SRC})

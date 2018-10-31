@@ -17,7 +17,7 @@
 #include <vector>
 #include <iostream>
 #include <cassert>
-#include <unordered_map>
+// #include <unordered_map>
 
 namespace librav
 {
@@ -50,10 +50,7 @@ class TStateSpace
         double cv_min = 0;
         double cv_max = 0;
         
-        int32_t count = 0;
-        // command index (alpha) - number of reach (N_{ij}^{alpha}) => i fixed for each simulation
-        std::unordered_map<int32_t, int32_t> occupancy_stats;
-        std::unordered_map<int32_t, double> occupancy_probability;
+        int32_t occupancy_stats;
 
         std::vector<State> GetUniformSamples(int32_t ssize, int32_t vsize)
         {

@@ -13,7 +13,7 @@
 #include <string>
 #include <cstdint>
 
-#include "reachability/details/tstate_space.hpp"
+#include "reachability/tstate_space.hpp"
 
 namespace librav
 {

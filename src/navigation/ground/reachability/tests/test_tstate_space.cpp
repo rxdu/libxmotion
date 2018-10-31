@@ -1,6 +1,7 @@
 #include <iostream>
 
-#include "reachability/details/tstate_space.hpp"
+#include "reachability/tstate_space.hpp"
+#include <eigen3/Eigen/Dense>
 
 using namespace librav;
 

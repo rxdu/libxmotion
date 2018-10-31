@@ -1,16 +1,18 @@
 /* 
- * markov_chain.hpp
+ * markov_chain_x.hpp
  * 
  * Created on: Oct 29, 2018 05:30
  * Description: a Markov chain model, state vector and transition
- *              matrix are represented as static dense matrices,  
- *              thus this model is not suitable for large Markov model
+ *              matrix are represented as dynamic dense matrices,
+ *              could be used for larger Markov model
+ * 
+ * Note: you have to resize any matrices before assigning values to them
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#ifndef MARKOV_CHAIN_HPP
-#define MARKOV_CHAIN_HPP
+#ifndef MARKOV_CHAIN_X_HPP
+#define MARKOV_CHAIN_X_HPP
 
 #include <cstdint>
 #include <vector>
@@ -20,17 +22,29 @@
 namespace librav
 {
 template <int32_t N>
-class MarkovChain
+class MarkovChainX
 {
   public:
-    using State = Eigen::Matrix<double, 1, N>;
-    using Transition = Eigen::Matrix<double, N, N>;
+    using State = Eigen::VectorXd;
+    using Transition = Eigen::MatrixXd;
 
-    MarkovChain() = default;
-    MarkovChain(Transition trans) : transition_(trans) {}
-
-    MarkovChain(State st, Transition trans) : init_state_(st), transition_(trans)
+    MarkovChainX()
     {
+        init_state_.resize(N);
+        transition_.resize(N, N);
+    }
+
+    MarkovChainX(Transition trans) : transition_(trans)
+    {
+        init_state_.resize(N);
+        transition_.resize(N, N);
+    }
+
+    MarkovChainX(State st, Transition trans) : init_state_(st), transition_(trans)
+    {
+        init_state_.resize(N);
+        transition_.resize(N, N);
+
         states_.push_back(st);
     }
 
@@ -77,4 +91,4 @@ class MarkovChain
 };
 } // namespace librav
 
-#endif /* MARKOV_CHAIN_HPP */
+#endif /* MARKOV_CHAIN_X_HPP */

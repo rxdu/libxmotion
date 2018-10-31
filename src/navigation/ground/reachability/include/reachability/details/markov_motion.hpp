@@ -12,17 +12,19 @@
 
 #include <cstdint>
 
+#include "markov/markov_chain_x.hpp"
+
 namespace librav
 {
 // N: number of system states - i
 // M: number of control inputs - alpha, beta
 template <int32_t N, int32_t M>
-class MarkovMotion : public MarkovChain<M * N>
+class MarkovMotion : public MarkovChainX<M * N>
 {
   public:
-    using Model = MarkovChain<M * N>;
-    using State = typename MarkovChain<M * N>::State;
-    using Transition = typename MarkovChain<M * N>::Transition;
+    using Model = MarkovChainX<M * N>;
+    using State = typename MarkovChainX<M * N>::State;
+    using Transition = typename MarkovChainX<M * N>::Transition;
 
   public:
     void SetupModel(State init)
