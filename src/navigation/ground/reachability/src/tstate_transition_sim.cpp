@@ -27,8 +27,8 @@ Eigen::MatrixXd TStateTransitionSim::RunSim(double T)
     auto all_cells = state_space_->GetAllStateCells();
 
     // init stats to be zero
-    for (auto cell_row : all_cells)
-        for (auto cell : cell_row)
+    for (auto cell_col : all_cells)
+        for (auto cell : cell_col)
             cell->occupancy_stats = 0;
 
     const int32_t cell_sample_s = 20;

@@ -64,26 +64,30 @@ class MarkovCommand : public MarkovChainX<M * N>
         for (int32_t alpha = 0; alpha < M; ++alpha)
             for (int32_t beta = 0; beta < M; ++beta)
                 Phi(alpha, beta) = 1.0 / ((commands_(beta) - commands_(alpha)) * (commands_(beta) - commands_(alpha)) + gamma_);
-        Phi.normalize();
+        Phi = Phi / Phi.sum();
+
+        Eigen::MatrixXd phi_block = lammda * Phi;
+        for (int i = 0; i < phi_block.cols(); ++i)
+            phi_block.col(i) = phi_block.col(i) / phi_block.col(i).sum();
 
 #ifdef PRINT_MATRIX
         std::cout << "lammda: \n"
                   << lammda << std::endl;
         std::cout << "Phi: \n"
                   << Phi << std::endl;
-        std::cout << "block: \n"
-                  << lammda * Phi << std::endl;
+        std::cout << "phi block: \n"
+                  << phi_block << std::endl;
 #endif
 
-        Transition trans;
-        trans.resize(M * N, M * N);
+        Transition state_trans;
+        state_trans.resize(M * N, M * N);
         for (int32_t i = 0; i < N; ++i)
-            trans.block(i * M, i * M, M, M) = lammda * Phi;
-        trans.normalize();
+            state_trans.block(i * M, i * M, M, M) = lammda * Phi;
+        state_trans = state_trans / state_trans.sum();
         // std::cout << "Trans: \n"
         //           << trans << std::endl;
 
-        Model::SetTransitionMatrix(trans);
+        Model::SetTransitionMatrix(state_trans);
     }
 
   private:

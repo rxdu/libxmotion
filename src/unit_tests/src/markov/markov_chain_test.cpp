@@ -39,13 +39,13 @@ TEST_F(MarkovChainTest, Propagate)
 {
 	auto res = mchain.CalculateStateAt(2);
 
-	ASSERT_TRUE(res(0) - 0.86 < sigma && res(1) - 0.14 < sigma);
+	ASSERT_TRUE(std::abs(res(0) - 0.86) < sigma && std::abs(res(1) - 0.14) < sigma);
 
 	ASSERT_TRUE(mchain.GetStateNumber() == 1);
 
 	mchain.Propagate(2);
 
-	ASSERT_TRUE(mchain[2](0) - 0.86 < sigma && mchain[2](1) - 0.14 < sigma);
+	ASSERT_TRUE(std::abs(mchain[2](0) - 0.86) < sigma && std::abs(mchain[2](1) - 0.14) < sigma);
 
 	ASSERT_TRUE(mchain.GetStateNumber() == 3);
 }
@@ -54,7 +54,7 @@ TEST_F(MarkovChainTest, Model)
 {
 	mchain.Propagate(2);
 
-	ASSERT_TRUE(mchain[0](0) - 1 < sigma && mchain[0](1) < sigma);
-	ASSERT_TRUE(mchain[1](0) - 0.9 < sigma && mchain[1](1) - 0.1 < sigma);
-	ASSERT_TRUE(mchain[2](0) - 0.86 < sigma && mchain[2](1) - 0.14 < sigma);
+	ASSERT_TRUE(std::abs(mchain[0](0) - 1) < std::abs(sigma && mchain[0](1)) < sigma);
+	ASSERT_TRUE(std::abs(mchain[1](0) - 0.9) < sigma && std::abs(mchain[1](1) - 0.1) < sigma);
+	ASSERT_TRUE(std::abs(mchain[2](0) - 0.86) < sigma && std::abs(mchain[2](1) - 0.14) < sigma);
 }

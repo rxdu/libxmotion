@@ -8,9 +8,15 @@ using namespace librav;
 
 int main()
 {
-    MarkovOccupancy<10,10> occupancy(0, 50, 0, 20);
+    MarkovOccupancy<10, 5> occupancy(0, 50, 0, 20);
 
-    occupancy.SetupMarkovModel();
+    occupancy.SetupMarkovModel(3, 3 * 3, 2, 1 * 1);
+
+    std::cout << "------------------------------" << std::endl;
+
+    for (int i = 0; i < 5; ++i)
+        std::cout << "Occupancy at t_(" << i << ") : \n"
+                  << occupancy.GetOccupancyDistribution(i) << "\n" << std::endl;
 
     return 0;
 }

@@ -24,6 +24,7 @@ class TStateTransitionSim
 public:
   std::shared_ptr<TStateSpace> state_space_;
 
+  void SetupStateSpace(std::shared_ptr<TStateSpace> space) { state_space_ = space; }
   void SetupStateSpace(double smin, double smax, double vmin, double vmax, int32_t ssize, int32_t vsize);
   void SetControlSet(Eigen::VectorXd set) { control_set_ = set; }
 

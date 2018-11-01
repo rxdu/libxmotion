@@ -49,8 +49,15 @@ class TStateSpace
         double cs_max = 0;
         double cv_min = 0;
         double cv_max = 0;
-        
+
+        // used for simulation
         int32_t occupancy_stats;
+
+        // used for probability calculation
+        double probability;
+
+        double GetSMiddle() const { return (cs_min + (cs_max - cs_min) / 2.0); }
+        double GetVMiddle() const { return (cv_min + (cv_max - cv_min) / 2.0); }
 
         std::vector<State> GetUniformSamples(int32_t ssize, int32_t vsize)
         {

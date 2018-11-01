@@ -14,5 +14,11 @@ target_link_libraries(test_tstate_sim reachability utilities ugvnav_viz)
 add_executable(test_markov_occupancy test_markov_occupancy.cpp)
 target_link_libraries(test_markov_occupancy reachability utilities)
 
+add_executable(test_markov_command test_markov_command.cpp)
+target_link_libraries(test_markov_command reachability utilities)
+
+add_executable(test_markov_command2 test_markov_command2.cpp)
+target_link_libraries(test_markov_command2 reachability utilities)
+
 add_executable(test_matrix test_matrix.cpp)
 # target_link_libraries(test_matrix)

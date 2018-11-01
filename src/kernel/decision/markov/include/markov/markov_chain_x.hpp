@@ -59,7 +59,7 @@ class MarkovChainX
     Transition GetTransitionMatrix() const { return transition_; }
     int32_t GetStateNumber() const { return states_.size(); }
 
-    inline void Propagate() { states_.emplace_back(states_.back() * transition_); }
+    inline void Propagate() { states_.emplace_back(states_.back().transpose() * transition_); }
 
     void Propagate(int32_t k_f)
     {
@@ -79,7 +79,11 @@ class MarkovChainX
     {
         State s = init_state_;
         for (int32_t i = 0; i < k; ++i)
-            s = s * transition_;
+        {
+            s = s.transpose() * transition_;
+            // normalize to avoid undersampling
+            s = s / s.sum();
+        }
         return s;
     }
 

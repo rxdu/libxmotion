@@ -16,6 +16,7 @@
 #include "reachability/tstate_space.hpp"
 #include "reachability/details/markov_command.hpp"
 #include "reachability/details/markov_motion.hpp"
+#include "reachability/details/tstate_transition_sim.hpp"
 
 namespace librav
 {
@@ -25,21 +26,6 @@ template <int32_t SSize, int32_t VSize>
 class MarkovOccupancy
 {
   public:
-    MarkovOccupancy(double smin, double smax, double vmin, double vmax) : state_space_(new TStateSpace(smin, smax, vmin, vmax)) {}
-
-    void SetupMarkovModel()
-    {
-        // discretize state space
-        state_space_->DiscretizeSpaceBySize(SSize, VSize);
-
-        SetupCommandModel();
-        SetupMotionModel();
-    }
-
-  private:
-    // Tangential state space
-    std::unique_ptr<TStateSpace> state_space_;
-
     // Markov model for occupancy estimation
     static constexpr int32_t N = SSize * VSize;
     static constexpr int32_t M = 6;
@@ -47,18 +33,56 @@ class MarkovOccupancy
     using CommandModel = MarkovCommand<N, M>;
     using MotionModel = MarkovMotion<N, M>;
 
-    CommandModel command_;
+  public:
+    MarkovOccupancy(double smin, double smax, double vmin, double vmax, double T = 0.5) : state_space_(std::make_shared<TStateSpace>(smin, smax, vmin, vmax)), T_(T) {}
+
+    void SetupMarkovModel(double s_mean, double s_var, double v_mean, double v_var)
+    {
+        // discretize state space
+        state_space_->DiscretizeSpaceBySize(SSize, VSize);
+
+        SetupCommandModel();
+
+        motion_.SetupModel(state_space_, Psi_, command_, s_mean, s_var, v_mean, v_var);
+    }
+
+    Eigen::VectorXd GetOccupancyDistribution(int32_t t_kp1)
+    {
+        Eigen::VectorXd pos_prob_vec;
+        pos_prob_vec.setZero(state_space_->GetSSize());
+
+        typename MotionModel::State statef = motion_.CalculateStateAt(t_kp1);
+        for (int i = 0; i < N; ++i)
+            for (int j = 0; j < M; ++j)
+                pos_prob_vec(i) += statef(i * M + j);
+        pos_prob_vec = pos_prob_vec / pos_prob_vec.sum();
+
+        return pos_prob_vec;
+    }
+
+  private:
+    // Tangential state space
+    std::shared_ptr<TStateSpace> state_space_;
+    // Markov model for motion and command
+    std::shared_ptr<CommandModel> command_;
     MotionModel motion_;
+    Eigen::MatrixXd Psi_;
+    // prediction step increment
+    double T_;
 
     void SetupCommandModel()
     {
+        // setup command Markov model
+        command_ = std::make_shared<CommandModel>();
+
         typename CommandModel::State init_state;
         init_state.resize(6);
         init_state << 0, 0, 0.5, 0.5, 0, 0;
 
         typename CommandModel::ControlSet cmds;
         cmds.resize(6);
-        cmds << -1, -0.5, 0, 0.3, 0.6, 1.0;
+        // cmds << -1, -0.5, 0, 0.3, 0.6, 1.0;
+        cmds << -0.6, -0.3, 0, 0.3, 0.6, 1.0;
 
         typename CommandModel::PriorityVector priority_vec;
         priority_vec.resize(6);
@@ -66,12 +90,19 @@ class MarkovOccupancy
 
         double gamma = 0.2;
 
-        command_.SetupModel(init_state, cmds, priority_vec, gamma);
-    }
+        command_->SetupModel(init_state, cmds, priority_vec, gamma);
 
-    void SetupMotionModel()
-    {
+        // std::cout << "---------------------------" << std::endl;
+        // for(int i = 0; i < 5; ++i)
+        //     std::cout << "Phi(" << i << ")\n" << command_->CalculateStateAt(i) << std::endl;
 
+        // calculate transition matrix
+        TStateTransitionSim sim;
+        sim.SetupStateSpace(state_space_);
+        sim.SetControlSet(cmds);
+        Psi_ = sim.RunSim(T_);
+
+        // std::cout << "Psi: \n" << Psi_ << std::endl;
     }
 };
 } // namespace librav
