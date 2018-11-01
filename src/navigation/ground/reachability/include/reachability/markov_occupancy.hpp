@@ -54,9 +54,9 @@ class MarkovOccupancy
         typename MotionModel::State statef = motion_.CalculateStateAt(t_kp1);
         for (int i = 0; i < N; ++i)
             for (int j = 0; j < M; ++j)
-                pos_prob_vec(i) += statef(i * M + j);
-        pos_prob_vec = pos_prob_vec / pos_prob_vec.sum();
-
+                pos_prob_vec(i / state_space_->GetVSize()) += statef(i * M + j);
+        // pos_prob_vec = pos_prob_vec / pos_prob_vec.sum();
+        std::cout << " - sum: " << pos_prob_vec.sum() << std::endl;
         return pos_prob_vec;
     }
 

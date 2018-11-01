@@ -88,6 +88,8 @@ class MarkovMotion : public MarkovChainX<M * N>
 
         Model::SetInitialState(GenerateInitState(s_mean, v_mean, s_var, v_var));
 
+        // std::cout << "model init state: \n" << Model::GetInitialState() << std::endl;
+
         state_transition_ = trans;
         Transition combined_trans = cmd_model_->GetTransitionMatrix() * state_transition_;
         // std::cout << "Combined transition matrix: \n" << combined_trans << std::endl;
@@ -103,14 +105,18 @@ class MarkovMotion : public MarkovChainX<M * N>
         State init_state;
         init_state.resize(M * N);
 
+        Eigen::VectorXd nc_state;
+        nc_state.resize(N);
+
         auto all_states = state_space_->GetAllStateCells();
         double cell_area = state_space_->GetSStep() * state_space_->GetVStep();
         for (auto &cell_col : all_states)
             for (auto cell : cell_col)
             {
                 cell->probability = dist(cell->GetSMiddle(), cell->GetVMiddle()) * cell_area;
-                if (cell->probability < 1e-8)
-                    cell->probability = 0;
+                nc_state[cell->id] = cell->probability;
+                // if (cell->probability < 1e-8)
+                //     cell->probability = 0;
                 // std::cout << "cell probability: " << cell->id << " , " << cell->probability << std::endl;
             }
 
@@ -131,7 +137,8 @@ class MarkovMotion : public MarkovChainX<M * N>
 
         for (int i = 0; i < N; ++i)
             for (int j = 0; j < M; ++j)
-                init_state(i * M + j) = pos_prob_vec(i) / M;
+                init_state(i * M + j) = nc_state(i) / M;
+        init_state = init_state / init_state.sum();
 
         // std::cout << "p(0): \n" << init_state << std::endl;
         // std::cout << "init sum: " << init_state.sum() << std::endl;

@@ -54,7 +54,7 @@ Eigen::MatrixXd TStateTransitionSim::RunSim(double T)
         {
             for (auto cell : cell_s_col)
             {
-                // cell->PrintInfo();
+                cell->PrintInfo();
                 auto samples = cell->GetUniformSamples(cell_sample_s, cell_sample_v);
 
                 std::unordered_map<int32_t, TStateSpace::StateCell *> nonezero_cells;

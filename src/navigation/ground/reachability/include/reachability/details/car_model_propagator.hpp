@@ -32,7 +32,7 @@ public:
     {
       integrator_(CarLongitudinalModel(u), x, t, dt);
 
-      // add additional constraint to s, v: s >= 0, v >=0, v < v_max
+      // add additional constraint to s, v: s >= s0, v >=0, v < v_max
       if(x[0] < init_state[0])
         x[0] = init_state[0];
       if (x[1] < 0)

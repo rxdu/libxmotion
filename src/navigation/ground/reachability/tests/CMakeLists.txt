@@ -20,5 +20,8 @@ target_link_libraries(test_markov_command reachability utilities)
 add_executable(test_markov_command2 test_markov_command2.cpp)
 target_link_libraries(test_markov_command2 reachability utilities)
 
+add_executable(test_markov_motion test_markov_motion.cpp)
+target_link_libraries(test_markov_motion reachability utilities)
+
 add_executable(test_matrix test_matrix.cpp)
 # target_link_libraries(test_matrix)
