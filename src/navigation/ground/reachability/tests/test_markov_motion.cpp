@@ -55,26 +55,39 @@ int main()
     //*******************************************************************
 
     MotionModel motion;
-    motion.SetupModel(state_space, Psi, command, 23, 3 * 3, 10, 1 * 1);
+    motion.SetupModel(state_space, Psi, command, 42, 3 * 3, 10, 1 * 1);
 
     std::cout << "s size: " << state_space->GetSSize() << std::endl;
     std::cout << "---------------------------" << std::endl;
 
-    for (int k = 0; k < 5; k++)
+    // for (int k = 0; k < 5; k++)
+    int step = 2;
+    for (int i = 0; i < 3; ++i)
     {
-         Eigen::VectorXd pos_prob_vec;
-        pos_prob_vec.setZero(state_space->GetSSize());
-
+        int k = i * step;
         typename MotionModel::State statef = motion.CalculateStateAt(k);
+
+        Eigen::VectorXd pos_prob_vec;
+        pos_prob_vec.setZero(state_space->GetSSize());
         for (int i = 0; i < N; ++i)
             for (int j = 0; j < M; ++j)
                 pos_prob_vec(i / state_space->GetVSize()) += statef(i * M + j);
-        // pos_prob_vec = pos_prob_vec / pos_prob_vec.sum();
-        std::cout << " - sum: " << pos_prob_vec.sum() << std::endl;
-        std::cout
-            << "position distribution k = " << k << " \n"
-            << pos_prob_vec << "\n"
-            << std::endl;
+
+        // Eigen::VectorXd state_prob_vec;
+        // state_prob_vec.setZero(N);
+        // std::cout << "state size: " << statef.size() << " , state vec size: " << state_prob_vec.size() << std::endl;
+        // for (int i = 0; i < N; ++i)
+        //     for (int j = 0; j < M; ++j)
+        //         state_prob_vec(i) += statef(i * M + j);
+        // Eigen::VectorXd pos_prob_vec;
+        // pos_prob_vec.setZero(state_space->GetSSize());
+        // for (int i = 0; i < N; ++i)
+        //     pos_prob_vec(i/state_space->GetVSize()) += state_prob_vec(i);
+
+        std::cout << "position distribution k = " << k << " \n"
+                  << pos_prob_vec << std::endl;
+        std::cout << " - sum: " << pos_prob_vec.sum() << "\n"
+                  << std::endl;
     }
 
     return 0;

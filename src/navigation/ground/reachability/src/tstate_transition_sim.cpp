@@ -54,7 +54,7 @@ Eigen::MatrixXd TStateTransitionSim::RunSim(double T)
         {
             for (auto cell : cell_s_col)
             {
-                cell->PrintInfo();
+                // cell->PrintInfo();
                 auto samples = cell->GetUniformSamples(cell_sample_s, cell_sample_v);
 
                 std::unordered_map<int32_t, TStateSpace::StateCell *> nonezero_cells;
@@ -84,7 +84,7 @@ Eigen::MatrixXd TStateTransitionSim::RunSim(double T)
                 {
                     double probability = tc.second->occupancy_stats / static_cast<double>(samples.size());
                     Psi(c_size * tc.second->id + c, c_size * cell->id + c) = probability;
-                    // std::cout << "id: " << tc.second->id << " , count: " << tc.second->occupancy_stats << " , probability = " << probability << std::endl;
+                    // std::cout << "row: " << c_size * tc.second->id << " , " << tc.second->id << " , col: " << c_size * cell->id << " , probability = " << probability << std::endl;
                     
                     // reset variable for next simulation
                     tc.second->occupancy_stats = 0;

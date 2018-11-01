@@ -42,9 +42,8 @@ add_subdirectory(road_map)
 add_subdirectory(reachability)
 add_subdirectory(state_lattice)
 add_subdirectory(lattice_planner)
-
+add_subdirectory(threat_field)
 # add_subdirectory(traffic_sim)
-# add_subdirectory(threat_field)
 
 add_subdirectory(ugvnav_viz)
 

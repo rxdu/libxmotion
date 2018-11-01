@@ -36,9 +36,6 @@ class GeometryDraw
     void DrawCubicSpline(const CSpline &spline, double step = 0.01, cv::Scalar ln_color = CvDrawColors::blue_color, int32_t ln_width = 1);
     void DrawParametricCurve(const ParametricCurve &pcurve, double step = 0.1, cv::Scalar ln_color = CvDrawColors::blue_color, int32_t ln_width = 1);
 
-    // geometric grid
-    void DrawCurvilinearGrid(const CurvilinearGrid &grid, double step = 0.1, bool show_center = false, cv::Scalar ln_color = CvDrawColors::lime_color, int32_t ln_width = 1);
-
     // polygon
     void DrawPolygon(const Polygon &polygon, bool show_dot = false, cv::Scalar ln_color = CvDrawColors::blue_color, int32_t ln_width = 1);
     void DrawFilledPolygon(const Polygon &polygon, bool show_dot = false, cv::Scalar fill_color = CvDrawColors::aoi_color, cv::Scalar ln_color = CvDrawColors::blue_color, int32_t ln_width = 1);

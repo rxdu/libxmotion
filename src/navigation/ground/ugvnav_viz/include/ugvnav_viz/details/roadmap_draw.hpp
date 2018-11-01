@@ -20,6 +20,7 @@
 #include "road_map/road_map.hpp"
 #include "lightviz/details/cartesian_canvas.hpp"
 #include "lightviz/details/geometry_draw.hpp"
+#include "lightviz/details/curvilinear_grid_draw.hpp"
 
 namespace librav
 {
@@ -37,6 +38,7 @@ public:
 private:
   CartesianCanvas canvas_;
   GeometryDraw gdraw_;
+  CurvilinearGridDraw cdraw_;
 
   std::shared_ptr<RoadMap> road_map_;
   std::vector<Polyline> boundary_lines_;

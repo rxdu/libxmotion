@@ -73,7 +73,7 @@ class TStateSpace
 
         void PrintInfo()
         {
-            std::cout << "cell: (" << cs_min << " , " << cv_min << ") - (" << cs_max << " , " << cv_max << ")" << std::endl;
+            std::cout << "cell " << id << " : (" << cs_min << " , " << cv_min << ") - (" << cs_max << " , " << cv_max << ")" << std::endl;
         }
     };
 

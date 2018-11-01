@@ -11,7 +11,7 @@
 
 using namespace librav;
 
-RoadMapDraw::RoadMapDraw(std::shared_ptr<RoadMap> map, CartesianCanvas canvas) : canvas_(canvas), gdraw_(canvas_), road_map_(map)
+RoadMapDraw::RoadMapDraw(std::shared_ptr<RoadMap> map, CartesianCanvas canvas) : canvas_(canvas), gdraw_(canvas_), cdraw_(canvas_), road_map_(map)
 {
     boundary_lines_ = map->GetAllLaneBoundPolylines();
     center_lines_ = map->GetAllLaneCenterPolylines();
@@ -32,7 +32,7 @@ void RoadMapDraw::DrawLanes(bool show_center_line)
 void RoadMapDraw::DrawTrafficChannelGrid(TrafficChannel &channel, bool show_center_line)
 {
     if (channel.grid_ != nullptr)
-        gdraw_.DrawCurvilinearGrid(*channel.grid_.get());
+        cdraw_.DrawCurvilinearGrid(*channel.grid_.get());
 
     gdraw_.DrawParametricCurve(channel.center_curve_, 0.1, CvDrawColors::black_color);
 

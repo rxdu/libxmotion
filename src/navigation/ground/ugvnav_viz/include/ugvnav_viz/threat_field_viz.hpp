@@ -1,5 +1,5 @@
 /* 
- * field_viz_ext.hpp
+ * threat_field_viz.hpp
  * 
  * Created on: Aug 13, 2018 01:11
  * Description: 
@@ -7,8 +7,8 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#ifndef FIELD_VIZ_EXT_HPP
-#define FIELD_VIZ_EXT_HPP
+#ifndef THREAT_FIELD_VIZ_HPP
+#define THREAT_FIELD_VIZ_HPP
 
 #include <vector>
 #include <memory>
@@ -32,4 +32,4 @@ void ShowTrafficParticipantThreat(std::shared_ptr<TrafficParticipant> participan
 } // namespace LightViz
 } // namespace librav
 
-#endif /* FIELD_VIZ_EXT_HPP */
+#endif /* THREAT_FIELD_VIZ_HPP */

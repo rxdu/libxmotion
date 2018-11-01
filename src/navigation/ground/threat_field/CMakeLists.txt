@@ -2,18 +2,13 @@
 #find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
-set(UGVNAV_VIZ_LIB_SRC
-    src/details/roadmap_draw.cpp
-    src/details/vehicle_draw.cpp
-    src/details/lattice_draw.cpp
-    src/lattice_viz.cpp
-    src/roadmap_viz.cpp
-    src/reachability_viz.cpp
-    src/threat_field_viz.cpp
+set(TFIELD_LIB_SRC
+    src/threat_distribution.cpp
+    src/collision_field.cpp
 )
-add_library(ugvnav_viz STATIC ${UGVNAV_VIZ_LIB_SRC})
-target_link_libraries(ugvnav_viz decomp roadmap lattice reachability tfield lightviz)
-target_include_directories(ugvnav_viz PUBLIC
+add_library(tfield STATIC ${TFIELD_LIB_SRC})
+target_link_libraries(tfield decomp graph reachability)
+target_include_directories(tfield PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)

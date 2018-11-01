@@ -1,5 +1,5 @@
 #include "decomp/curvilinear_grid.hpp"
-#include "lightviz/details/geometry_draw.hpp"
+#include "lightviz/details/curvilinear_grid_draw.hpp"
 
 using namespace librav;
 
@@ -22,8 +22,9 @@ int main()
     CartesianCanvas canvas(200);
     canvas.SetupCanvas(-1, 3, -1, 3);
 
-    GeometryDraw gdraw(canvas);
-    gdraw.DrawCurvilinearGrid(grid, 0.1, true);
+    CurvilinearGridDraw gdraw(canvas);
+    // gdraw.DrawCurvilinearGrid(grid, 0.1, false);
+    gdraw.DrawCurvilinearGridCost(grid, 0.1, true);
 
     CvDraw::ShowImage(canvas.paint_area, "curvilinear_grid");
 

@@ -117,7 +117,7 @@ struct CurvilinearCellBase
     GridPoint center;
 
     // other application specific attributes
-    // you can assign values to "cost_map" for visualization
+    // you can assign values to "cost_map" for visualization, cost_map \in [0,1]
     double cost_map = 0.0;
 
     // define extra attributes if the default ones are not enough
