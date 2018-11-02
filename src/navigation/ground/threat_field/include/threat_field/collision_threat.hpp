@@ -12,7 +12,7 @@
 
 #include <memory>
 
-#include "road_map/road_map.hpp"
+#include "traffic_map/traffic_map.hpp"
 #include "reachability/markov_occupancy.hpp"
 
 namespace librav

@@ -3,6 +3,8 @@
 #include <cmath>
 
 #include "road_map/road_map.hpp"
+#include "traffic_map/traffic_map.hpp"
+
 #include "lattice_planner/lattice_graph.hpp"
 #include "ugvnav_viz/ugvnav_viz.hpp"
 
@@ -36,8 +38,10 @@ int main()
 
     /****************************************************************************/
 
+    std::shared_ptr<TrafficMap> traffic_map = std::make_shared<TrafficMap>(map);
+
     // discretize lane
-    auto all_channels = map->traffic_map_->GetAllTrafficChannels();
+    auto all_channels = traffic_map->GetAllTrafficChannels();
     // all_channels[1]->DiscretizeChannel(5, 1.2, 5);
     all_channels[1]->DiscretizeChannel(5, 1.2, 5);
 

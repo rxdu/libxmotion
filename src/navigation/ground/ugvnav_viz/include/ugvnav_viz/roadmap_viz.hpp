@@ -18,6 +18,7 @@
 #include "geometry/polygon.hpp"
 
 #include "road_map/road_map.hpp"
+#include "traffic_map/traffic_map.hpp"
 #include "state_lattice/state_lattice.hpp"
 
 #include "lightviz/details/cartesian_canvas.hpp"

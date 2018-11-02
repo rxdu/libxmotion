@@ -7,7 +7,7 @@ set(LATTICE_PLANNER_LIB_SRC
   # src/lattice_planner.cpp
 )
 add_library(lattice_planner STATIC ${LATTICE_PLANNER_LIB_SRC})
-target_link_libraries(lattice_planner lattice graph decomp roadmap utilities)
+target_link_libraries(lattice_planner lattice graph decomp roadmap traffic utilities)
 target_include_directories(lattice_planner PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>

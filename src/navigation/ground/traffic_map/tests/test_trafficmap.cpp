@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "road_map/road_map.hpp"
+#include "traffic_map/traffic_map.hpp"
 
 #include "lightviz/lightviz.hpp"
 #include "ugvnav_viz/ugvnav_viz.hpp"
@@ -36,6 +37,17 @@ int main()
     // LightViz::ShowPolyline(map->GetAllLaneBoundPolylines(), 10);
     // LightViz::ShowLanePolylines(map->GetAllLaneBoundPolylines(), map->GetAllLaneCenterPolylines());
     // LightViz::ShowPolylinePosition(map->GetAllLaneCenterPolylines(), 10);
+
+    std::shared_ptr<TrafficMap> traffic_map = std::make_shared<TrafficMap>(map);
+
+    for (auto &chn : traffic_map->GetAllTrafficChannels())
+    {
+        // RoadMapViz::ShowTrafficChannelCenterline(chn);
+        chn->PrintInfo();
+        RoadMapViz::ShowTrafficChannel(*chn.get());
+    }
+
+    // RoadMapViz::ShowTrafficChannel(map->traffic_map_->GetAllTrafficChannels().front());
 
     // std::vector<Polygon> roi;
     // roi.push_back(map->GetLanePolygon("s1"));

@@ -106,7 +106,7 @@ void RoadMap::LoadMapFile(std::string map_file)
 
     // create topo-geometrical graph
     tg_graph_ = std::make_shared<TopoGeoGraph>(this);
-    traffic_map_ = std::make_shared<TrafficMap>(this);
+    // traffic_map_ = std::make_shared<TrafficMap>(this);
 
     // set loaded flag
     map_loaded_ = true;
@@ -115,7 +115,7 @@ void RoadMap::LoadMapFile(std::string map_file)
 void RoadMap::PrintInfo() const
 {
     std::cout << "Number of lanelets: " << lanelets_.size() << std::endl;
-    std::cout << "Number of traffic channels: " << traffic_map_->GetAllTrafficChannels().size() << std::endl;
+    // std::cout << "Number of traffic channels: " << traffic_map_->GetAllTrafficChannels().size() << std::endl;
 
     for (auto &lanelet : lanelets_)
     {

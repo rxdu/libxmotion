@@ -5,8 +5,8 @@
 set(ROADMAP_LIB_SRC
 	src/road_coordinate.cpp
 	src/topogeo_graph.cpp
-	src/traffic_channel.cpp
-	src/traffic_map.cpp
+	# src/traffic_channel.cpp
+	# src/traffic_map.cpp
 	src/road_map.cpp
 )
 add_library(roadmap STATIC ${ROADMAP_LIB_SRC})
@@ -18,5 +18,5 @@ target_include_directories(roadmap PUBLIC
 
 # Add executables
 if(BUILD_TESTS)
-add_subdirectory(tests)
+	add_subdirectory(tests)
 endif()

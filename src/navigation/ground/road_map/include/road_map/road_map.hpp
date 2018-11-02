@@ -22,7 +22,7 @@
 
 #include "road_map/details/road_coordinate.hpp"
 #include "road_map/details/topogeo_graph.hpp"
-#include "road_map/traffic_map.hpp"
+// #include "road_map/traffic_map.hpp"
 
 namespace librav
 {
@@ -39,7 +39,7 @@ public:
   double ymax_ = 0.0;
 
   // traffic layer information
-  std::shared_ptr<TrafficMap> traffic_map_;
+  // std::shared_ptr<TrafficMap> traffic_map_;
 
   // local reference frame
   RoadCoordinateFrame coordinate_;

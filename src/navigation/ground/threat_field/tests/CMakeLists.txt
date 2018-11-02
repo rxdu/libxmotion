@@ -12,4 +12,4 @@
 # target_link_libraries(test_true_threat tfield ugvnav_viz lightviz utilities)
 
 add_executable(test_lane_occupancy test_lane_occupancy.cpp)
-target_link_libraries(test_lane_occupancy tfield roadmap ugvnav_viz utilities)
+target_link_libraries(test_lane_occupancy tfield ugvnav_viz utilities)

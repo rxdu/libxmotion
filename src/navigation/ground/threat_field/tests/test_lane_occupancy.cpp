@@ -3,6 +3,7 @@
 #include <cmath>
 
 #include "road_map/road_map.hpp"
+#include "traffic_map/traffic_map.hpp"
 #include "reachability/markov_occupancy.hpp"
 
 #include "stopwatch/stopwatch.h"
@@ -36,8 +37,10 @@ int main()
 
     /****************************************************************************/
 
+    std::shared_ptr<TrafficMap> traffic_map = std::make_shared<TrafficMap>(map);
+
     // discretize lane
-    auto all_channels = map->traffic_map_->GetAllTrafficChannels();
+    auto all_channels = traffic_map->GetAllTrafficChannels();
     // all_channels[1]->DiscretizeChannel(5, 1.2, 5);
     auto target_channel = all_channels[1];
     target_channel->DiscretizeChannel(5, 1.2, 5);
