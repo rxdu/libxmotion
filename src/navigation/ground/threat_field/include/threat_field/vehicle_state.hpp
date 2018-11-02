@@ -13,22 +13,26 @@
 #include <cstdint>
 #include <functional>
 
+#include "common/librav_types.hpp"
+
 namespace librav
 {
 struct VehicleState
 {
-  VehicleState() : position_x(0), position_y(0), velocity(0) {}
-  VehicleState(double px, double py, double v, double v_var) : position_x(px), position_y(py), velocity(v) {}
+    VehicleState() = default;
+    VehicleState(double px, double py, double p_var, double v, double v_var) : position({px, py}), pos_var(p_var), velocity(v), vel_var(v_var) {}
 
-  double position_x;
-  double position_y;
-  double velocity;
-  double vel_var;
-  int32_t time_stamp;
+    TimeStamp time_stamp = 0;
 
-  std::function<double(double, double)> threat_func;
+    Position2d position;
+    double velocity = 0;
 
-  double GetThreatValue(double x, double y) { return threat_func(x, y); }
+    double pos_var = 0;
+    double vel_var = 0;
+
+    std::function<double(double, double)> threat_func;
+
+    double GetThreatValue(double x, double y) { return threat_func(x, y); }
 };
 } // namespace librav
 #endif /* VEHICLE_STATE_HPP */

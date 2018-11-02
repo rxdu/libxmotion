@@ -36,7 +36,7 @@ struct IMU9DOFData
 															   gyro(Point3d(gyro_x, gyro_y, gyro_z)),
 															   magn(Point3d(magn_x, magn_y, magn_z)){};
 
-	time_stamp mtime;
+	TimeStamp mtime;
 
 	Point3d gyro;
 	Point3d accel;
@@ -63,7 +63,7 @@ struct IMU6DOFData
 															   accel(Point3f(accel_x, accel_y, accel_z)),
 															   gyro(Point3f(gyro_x, gyro_y, gyro_z)){};
 
-	int64_t mtime;
+	TimeStamp mtime;
 	Point3f accel;
 	Point3f gyro;
 
@@ -72,24 +72,6 @@ struct IMU6DOFData
 		os << "time_stamp: " << data.mtime
 		   << " ; accel(x,y,z): " << data.accel.x << " , " << data.accel.y << " , " << data.accel.z
 		   << " ; gyro(x,y,z): " << data.gyro.x << " , " << data.gyro.y << " , " << data.gyro.z << std::endl;
-		return os;
-	}
-};
-
-struct CarSpeed
-{
-	CarSpeed() : mtime(0),
-				 speed(0.0){};
-
-	CarSpeed(int64_t time, float spd) : mtime(time),
-										speed(spd){};
-
-	int64_t mtime;
-	float speed;
-
-	friend std::ostream &operator<<(std::ostream &os, const CarSpeed &data)
-	{
-		os << "time_stamp: " << data.mtime << " ; speed: " << data.speed << std::endl;
 		return os;
 	}
 };

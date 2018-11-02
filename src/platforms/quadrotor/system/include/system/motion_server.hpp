@@ -39,7 +39,7 @@ class MotionServer
 
 	void SetMotionMode(MotionMode mode) { mode_ = mode; };
 	void LcmSysTimeHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const srcl_lcm_msgs::TimeStamp_t *msg);
-	UAVTrajectoryPoint GetCurrentDesiredState(time_stamp t);
+	UAVTrajectoryPoint GetCurrentDesiredState(TimeStamp t);
 
 	void LcmUserGoalHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const srcl_lcm_msgs::UAVTrajectory_t *msg);
 	void SetMotionGoal(UAVTrajectory &goal);
@@ -58,7 +58,7 @@ class MotionServer
 	UAVTrajectory active_goal_;
 	uint64_t ms_count_;
 	uint64_t waypoint_idx_;
-	time_stamp current_sys_time_;
+	TimeStamp current_sys_time_;
 
 	MotionMode mode_;
 

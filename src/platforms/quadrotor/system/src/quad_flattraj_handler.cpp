@@ -143,7 +143,7 @@ UAVTrajectoryPoint QuadFlatTrajHandler::GetDesiredTrajectoryPoint(time_t tstamp)
 	if(traj_available_)
 	{
 		// get current time
-		time_stamp time = tstamp - traj_start_time_;
+		TimeStamp time = tstamp - traj_start_time_;
 		double t = time / 1000.0 / scaling_factor_;
 
 		// check if traj is defined for the given time

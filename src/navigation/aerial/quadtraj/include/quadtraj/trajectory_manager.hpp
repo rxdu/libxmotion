@@ -30,7 +30,7 @@ class TrajectoryManager
 	TrajectoryManager(std::shared_ptr<lcm::LCM> lcm);
 	~TrajectoryManager() = default;
 
-	UAVTrajectoryPoint GetCurrentDesiredState(time_stamp t);
+	UAVTrajectoryPoint GetCurrentDesiredState(TimeStamp t);
 
   private:
 	std::shared_ptr<lcm::LCM> lcm_;
@@ -39,7 +39,7 @@ class TrajectoryManager
 	std::vector<Position3Dd> waypoints_;
 	QuadFlatTraj active_trajectory_;
 
-	time_stamp traj_start_time_ = 0;
+	TimeStamp traj_start_time_ = 0;
 	double remaining_dist_ = 0;
 	int next_wp_idx_ = 0;
 

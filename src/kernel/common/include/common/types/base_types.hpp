@@ -19,8 +19,8 @@
 namespace librav
 {
 
-// time_stamp starts from 0 when system initialized, increases at step 1 ms
-typedef uint64_t time_stamp;
+using TimeStamp = uint64_t;
+using CTimeStamp = double;
 
 template <typename T>
 struct value2d
@@ -70,6 +70,10 @@ struct value3d
 		return os;
 	}
 };
+
+using Point2f = value2d<float>;
+using Point2d = value2d<double>;
+using Point2i = value2d<int32_t>;
 
 using Point3f = value3d<float>;
 using Point3d = value3d<double>;

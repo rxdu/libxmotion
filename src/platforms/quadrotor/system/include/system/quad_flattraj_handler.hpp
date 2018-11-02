@@ -43,9 +43,9 @@ class QuadFlatTrajHandler
 	std::string poly_traj_topic_;
 
 	std::atomic<bool> traj_available_;
-	std::atomic<time_stamp> current_sys_time_;
+	std::atomic<TimeStamp> current_sys_time_;
 	std::vector<Position3Dd> waypoints_;
-	time_stamp traj_start_time_;
+	TimeStamp traj_start_time_;
 	double remaining_dist_;
 	int next_wp_idx_;
 	double scaling_factor_;

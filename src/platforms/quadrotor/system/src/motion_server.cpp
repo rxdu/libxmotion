@@ -216,7 +216,7 @@ UAVTrajectoryPoint MotionServer::GetCurrentUserDefinedPose()
 	return pt;
 }
 
-UAVTrajectoryPoint MotionServer::GetCurrentDesiredState(time_stamp t)
+UAVTrajectoryPoint MotionServer::GetCurrentDesiredState(TimeStamp t)
 {
 	UAVTrajectoryPoint pt;
 	pt.point_empty = true;

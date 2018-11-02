@@ -10,7 +10,7 @@
 #ifndef UGVNAV_VIZ_HPP
 #define UGVNAV_VIZ_HPP
 
-#include "ugvnav_viz/threat_field_viz.hpp"
+// #include "ugvnav_viz/threat_field_viz.hpp"
 #include "ugvnav_viz/lattice_viz.hpp"
 #include "ugvnav_viz/roadmap_viz.hpp"
 #include "ugvnav_viz/reachability_viz.hpp"

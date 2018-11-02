@@ -13,7 +13,7 @@
 
 #include "common/types/base_types.hpp"
 #include "common/types/sensor_types.hpp"
-#include "common/types/ctrl_types.hpp"
+#include "common/types/state_types.hpp"
 #include "common/types/nav_types.hpp"
 
 #endif /* LIBRAV_TYPES_H */

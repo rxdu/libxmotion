@@ -150,7 +150,7 @@ void TrajectoryManager::GenerateTrajectory(KeyframeSet &kfs, uint64_t traj_id)
 	}
 }
 
-UAVTrajectoryPoint TrajectoryManager::GetCurrentDesiredState(time_stamp t)
+UAVTrajectoryPoint TrajectoryManager::GetCurrentDesiredState(TimeStamp t)
 {
 	UAVTrajectoryPoint pt;
 
@@ -159,7 +159,7 @@ UAVTrajectoryPoint TrajectoryManager::GetCurrentDesiredState(time_stamp t)
 	if (traj_available_)
 	{
 		// get current time
-		time_stamp time = t - traj_start_time_;
+		TimeStamp time = t - traj_start_time_;
 		double t = time / 1000.0 / scaling_factor_;
 
 		// check if traj is defined for the given time

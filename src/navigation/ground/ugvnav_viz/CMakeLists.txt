@@ -9,7 +9,7 @@ set(UGVNAV_VIZ_LIB_SRC
     src/lattice_viz.cpp
     src/roadmap_viz.cpp
     src/reachability_viz.cpp
-    src/threat_field_viz.cpp
+    # src/threat_field_viz.cpp
 )
 add_library(ugvnav_viz STATIC ${UGVNAV_VIZ_LIB_SRC})
 target_link_libraries(ugvnav_viz decomp roadmap lattice reachability tfield lightviz)

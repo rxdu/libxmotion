@@ -33,10 +33,39 @@ struct Quaternion
 	float w;
 };
 
-struct Pose
+struct Pose3
 {
 	Point3f pos;
 	EulerAngle ori;
+};
+
+struct Pose2
+{
+	TimeStamp t;
+	Point2d position;
+	double theta;
+};
+
+using Position2d = Point2d;
+using Position2f = Point2f;
+using Position2i = Point2i;
+
+struct Speed
+{
+	Speed() : mtime(0),
+			  speed(0.0){};
+
+	Speed(int64_t time, float spd) : mtime(time),
+									 speed(spd){};
+
+	TimeStamp mtime;
+	float speed;
+
+	friend std::ostream &operator<<(std::ostream &os, const Speed &data)
+	{
+		os << "time_stamp: " << data.mtime << " ; speed: " << data.speed << std::endl;
+		return os;
+	}
 };
 
 struct UAVTrajectoryPoint
@@ -51,7 +80,7 @@ struct UAVTrajectoryPoint
 	uint64_t duration; // in milliseconds
 };
 
-typedef std::vector<UAVTrajectoryPoint> UAVTrajectory;
+using UAVTrajectory = std::vector<UAVTrajectoryPoint>;
 } // namespace librav
 
 #endif /* CTRL_TYPES_HPP */
