@@ -44,8 +44,16 @@ class VehicleEstimation
     VehicleEstimation() = default;
     VehicleEstimation(Pose2d _pose, double _speed);
 
+    // Note: use getter/setter for "pose" to make sure the footprint
+    //  is set properly when the pose changes
     void SetPose(Pose2d ps);
     Pose2d GetPose() const { return pose; }
+    void SetPositionVariance(CovarMatrix2d covar) { pos_var = covar; }
+
+    void SetSpeed(double spd) { speed = spd; }
+    double GetSpeed() const { return speed; }
+    void SetSpeedVariance(double var) { spd_var = var; }
+
     Polygon GetFootprint() const { return footprint.polygon; }
 
   private:
@@ -55,10 +63,6 @@ class VehicleEstimation
     double speed = 0;
     double spd_var = 0;
     VehicleFP footprint;
-
-    std::function<double(double, double)> threat_func;
-
-    double GetThreatValue(double x, double y) { return threat_func(x, y); }
 };
 } // namespace librav
 

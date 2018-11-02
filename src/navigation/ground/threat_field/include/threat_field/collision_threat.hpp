@@ -27,6 +27,8 @@ class CollisionThreat
     std::shared_ptr<TrafficChannel> traffic_chn_;
 
   private:
+    // Markov model covarage: 4m * 20 = 80m, 
+    MarkovOccupancy<10, 5> occupancy_;
     void SetupPredictionModel();
 };
 } // namespace librav
