@@ -78,7 +78,7 @@ bool QuadHbirdSimClient::ReceiveDataFromSimRobot(DataFromQuadSim *rdata)
 	//std::cout << "fetching new data"<<std::endl;
 
 	if(ReceiveGyroData(rdata->imu_data.gyro) &&
-			ReceiveAccData(rdata->imu_data.acc) &&
+			ReceiveAccData(rdata->imu_data.accel) &&
 			ReceiveQuadPosition(rdata->pos_i) &&
 			ReceiveQuadVelocity(rdata->vel_i) &&
 			ReceiveQuadOrientation(rdata->rot_i) &&

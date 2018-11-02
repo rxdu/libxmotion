@@ -15,7 +15,7 @@
 
 #include "eigen3/Eigen/Core"
 
-#include "common/quad_flattraj.hpp"
+#include "quadtraj/quad_flattraj.hpp"
 #include "polyopt/gurobi_solver/gurobi_polyopt.hpp"
 
 namespace librav

@@ -7,7 +7,7 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#include "common/quad_flattraj.hpp"
+#include "quadtraj/quad_flattraj.hpp"
 
 using namespace librav;
 

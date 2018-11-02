@@ -11,6 +11,7 @@ endif()
 if(GUROBI_FOUND)
 set(POLYOPT_LIB_SRC
     src/polyopt_math.cpp
+    src/poly_curve.cpp
     src/gurobi_solver/gurobi_utils.cpp
     src/gurobi_solver/gurobi_polyopt.cpp
     src/osqp_solver/osqp_polyopt.cpp

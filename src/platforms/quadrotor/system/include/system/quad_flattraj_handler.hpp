@@ -19,7 +19,7 @@
 #include "lcmtypes/librav.hpp"
 
 #include "common/librav_types.hpp"
-#include "common/quad_flattraj.hpp"
+#include "quadtraj/quad_flattraj.hpp"
 
 namespace librav
 {

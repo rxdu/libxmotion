@@ -9,7 +9,7 @@
 
 #include <ctime>
 
-#include "trajectory/quad_polyopt.hpp"
+#include "quadtraj/quad_polyopt.hpp"
 #include "polyopt/polyopt_math.hpp"
 
 using namespace librav;

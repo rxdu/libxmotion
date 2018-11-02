@@ -14,7 +14,7 @@
 
 #include "lcmtypes/librav.hpp"
 
-#include "common/poly_curve.hpp"
+#include "polyopt/poly_curve.hpp"
 
 namespace librav
 {

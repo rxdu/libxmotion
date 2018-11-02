@@ -21,7 +21,7 @@
 #include <octomap/OcTree.h>
 #include <octomap/ColorOcTree.h>
 
-#include "common/librav_math.hpp"
+#include "map/librav_math.hpp"
 
 namespace librav {
 

@@ -7,7 +7,7 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#include "common/poly_curve.hpp"
+#include "polyopt/poly_curve.hpp"
 
 using namespace librav;
 

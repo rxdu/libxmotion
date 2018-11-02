@@ -2,7 +2,7 @@
 #include <lcm/lcm-cpp.hpp>
 #include "lcmtypes/librav.hpp"
 
-#include "trajectory/trajectory_manager.hpp"
+#include "quadtraj/trajectory_manager.hpp"
 
 using namespace librav;
 

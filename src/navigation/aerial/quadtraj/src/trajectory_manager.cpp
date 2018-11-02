@@ -10,7 +10,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "trajectory/trajectory_manager.hpp"
+#include "quadtraj/trajectory_manager.hpp"
 
 using namespace librav;
 

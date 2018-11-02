@@ -16,6 +16,7 @@ set(MAP_LIB_SRC
   # src/quad_tree.cpp
   src/square_grid.cpp
   src/graph_builder.cpp
+  src/librav_math.cpp
 )
 add_library(legacy STATIC ${MAP_LIB_SRC})
 target_link_libraries(legacy common graph decomp ${LCM_LIBRARIES} ${OpenCV_LIBS} ${OCTOMAP_LIBRARY})

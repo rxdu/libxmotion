@@ -19,7 +19,7 @@ struct DataFromRCTamiyaSim
 {
 	// sensor data
 	unsigned char mono_image[IMG_RES_Y][IMG_RES_X];
-	IMUData imu_data;
+	IMU6DOFData imu_data;
 
 	float body_vel;
 	float driving_vel_right;

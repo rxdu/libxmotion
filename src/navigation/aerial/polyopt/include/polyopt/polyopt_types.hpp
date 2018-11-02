@@ -14,7 +14,7 @@
 #include <cstdint>
 #include <iostream>
 
-#include "common/poly_curve.hpp"
+#include "polyopt/poly_curve.hpp"
 
 namespace librav
 {

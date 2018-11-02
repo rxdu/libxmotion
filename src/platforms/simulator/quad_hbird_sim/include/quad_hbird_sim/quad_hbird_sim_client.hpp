@@ -39,7 +39,7 @@ class QuadHbirdSimClient : public VrepSimClient<DataFromQuadSim, DataToQuadSim>
 	simxInt ref_handle_;
 
 	// quadrotor kinematics/dynamics
-	IMUData imu_data;
+	IMU6DOFData imu_data;
 	simxFloat quad_pos[3];
 	simxFloat quad_linear_vel[3];
 	simxFloat quad_angular_vel[3];

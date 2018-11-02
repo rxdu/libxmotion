@@ -39,7 +39,7 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add other sub source directories
 add_subdirectory(polyopt)
-add_subdirectory(trajectory)
+add_subdirectory(quadtraj)
 # add_subdirectory(path_repair)
 
 

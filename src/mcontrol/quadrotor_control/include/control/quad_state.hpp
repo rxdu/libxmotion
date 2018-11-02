@@ -28,7 +28,7 @@ struct QuadSensorData
 	// sensor data
 	unsigned char mono_image[IMG_RES_Y][IMG_RES_X];
 	std::vector<Point3f> laser_points;
-	IMUData imu_data;
+	IMU6DOFData imu_data;
 
 	// data only available in simulator
 	Point3f pos_i;

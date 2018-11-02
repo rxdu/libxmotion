@@ -17,9 +17,9 @@
 #include "lcmtypes/librav.hpp"
 
 #include "common/librav_types.hpp"
-#include "common/quad_flattraj.hpp"
 
-#include "trajectory/quad_polyopt.hpp"
+#include "quadtraj/quad_flattraj.hpp"
+#include "quadtraj/quad_polyopt.hpp"
 
 namespace librav
 {
