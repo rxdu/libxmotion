@@ -40,7 +40,7 @@ class SVDistribution
         coeff3_ = 2 * M_PI * std::sqrt(s_var_ * v_var_);
 
         std::cout << "s-v distribution coefficients (us,uv,sigs,sigv);(3-temp): \n(" << s_mean_ << " , " << v_mean_ << " , " << s_var_ << " , " << v_var_
-                  << " );( " << coeff1_ << " , " << coeff2_ << " , " << coeff3_ << " )" << std::endl;
+                  << " );( " << coeff1_ << " , " << coeff2_ << " , " << coeff3_ << " )\n" << std::endl;
     }
 
     double operator()(double s, double v)
@@ -92,10 +92,9 @@ class MarkovMotion : public OccupancyMarkovChain<M * N>
 
         state_transition_ = trans;
         Transition combined_trans = cmd_model_->GetTransitionMatrix() * state_transition_;
-        // std::cout << "Combined transition matrix: \n" << combined_trans << std::endl;
         Model::SetTransitionMatrix(combined_trans);
 
-        // Model::SetTransitionMatrix(state_transition_);
+        // std::cout << "Combined transition matrix: \n" << combined_trans << std::endl;
     }
 
     State GenerateInitState(double s_mean, double v_mean, double s_var, double v_var)
@@ -131,9 +130,8 @@ class MarkovMotion : public OccupancyMarkovChain<M * N>
             // std::cout << "pos probability: " << col_probability << std::endl;
         }
         pos_prob_vec = pos_prob_vec / pos_prob_vec.sum();
-        // std::cout << "vector: " << pos_prob_vec.sum() << std::endl;
-        std::cout << "init position distribution: \n"
-                  << pos_prob_vec << std::endl;
+        // std::cout << "init position distribution: \n"
+        //           << pos_prob_vec << std::endl;
 
         for (int i = 0; i < N; ++i)
             for (int j = 0; j < M; ++j)

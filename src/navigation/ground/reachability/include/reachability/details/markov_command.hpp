@@ -24,7 +24,7 @@
 
 #include "markov/markov_chain_x.hpp"
 
-#define PRINT_MATRIX
+// #define PRINT_MATRIX
 
 namespace librav
 {
@@ -66,6 +66,7 @@ class MarkovCommand : public MarkovChainX<M * N>
                 Phi(alpha, beta) = 1.0 / ((commands_(beta) - commands_(alpha)) * (commands_(beta) - commands_(alpha)) + gamma_);
         Phi = Phi / Phi.sum();
 
+        // normalize by column, shall NOT normalize by whole matrix below
         Eigen::MatrixXd phi_block = lammda * Phi;
         for (int i = 0; i < phi_block.cols(); ++i)
             phi_block.col(i) = phi_block.col(i) / phi_block.col(i).sum();
@@ -83,7 +84,6 @@ class MarkovCommand : public MarkovChainX<M * N>
         state_trans.resize(M * N, M * N);
         for (int32_t i = 0; i < N; ++i)
             state_trans.block(i * M, i * M, M, M) = phi_block;
-        // state_trans = state_trans / state_trans.sum();
  
         // std::cout << "Trans: \n"
         //           << state_trans << std::endl;
