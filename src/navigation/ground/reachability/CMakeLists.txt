@@ -20,7 +20,7 @@ set(REACHABILITY_LIB_SRC
   src/car_longitudinal_model.cpp
 )
 add_library(reachability STATIC ${REACHABILITY_LIB_SRC})
-target_link_libraries(reachability decomp markov model random utilities ascent ${GSL_LIBRARIES})
+target_link_libraries(reachability markov model random utilities ascent ${GSL_LIBRARIES})
 # target_compile_definitions(reachability PUBLIC "-DEIGEN_STACK_ALLOCATION_LIMIT=0")
 target_include_directories(reachability PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
