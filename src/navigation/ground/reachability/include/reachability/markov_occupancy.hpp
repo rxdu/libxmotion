@@ -55,9 +55,9 @@ class MarkovOccupancy
         for (int i = 0; i < N; ++i)
             for (int j = 0; j < M; ++j)
                 pos_prob_vec(i / state_space_->GetVSize()) += statef(i * M + j);
-        
+
         // std::cout << " - sum: " << pos_prob_vec.sum() << std::endl;
-        
+
         return pos_prob_vec;
     }
 
@@ -77,7 +77,7 @@ class MarkovOccupancy
         command_ = std::make_shared<CommandModel>();
 
         typename CommandModel::State init_state;
-        init_state.resize(6);
+        init_state.resize(1, 6);
         init_state << 0, 0, 0.5, 0.5, 0, 0;
 
         typename CommandModel::ControlSet cmds;

@@ -13,9 +13,9 @@
 #include <cstdint>
 #include <memory>
 
-#include "markov/markov_chain_x.hpp"
 #include "reachability/tstate_space.hpp"
 #include "reachability/details/markov_command.hpp"
+#include "reachability/details/occupancy_markov_chain.hpp"
 
 namespace librav
 {
@@ -39,8 +39,8 @@ class SVDistribution
         coeff2_ = -(2 * v_var_);
         coeff3_ = 2 * M_PI * std::sqrt(s_var_ * v_var_);
 
-        std::cout << "coefficients: " << s_mean_ << " , " << v_mean_ << " , " << s_var_ << " , " << v_var_
-                  << " ; " << coeff1_ << " , " << coeff2_ << " , " << coeff3_ << std::endl;
+        std::cout << "s-v distribution coefficients (us,uv,sigs,sigv);(3-temp): \n(" << s_mean_ << " , " << v_mean_ << " , " << s_var_ << " , " << v_var_
+                  << " );( " << coeff1_ << " , " << coeff2_ << " , " << coeff3_ << " )" << std::endl;
     }
 
     double operator()(double s, double v)
@@ -72,13 +72,13 @@ class SVDistribution
 // N: number of system states - i
 // M: number of control inputs - alpha, beta
 template <int32_t N, int32_t M>
-class MarkovMotion : public MarkovChainX<M * N>
+class MarkovMotion : public OccupancyMarkovChain<M * N>
 {
   public:
-    using Model = MarkovChainX<M * N>;
+    using Model = OccupancyMarkovChain<M * N>;
+    using State = typename OccupancyMarkovChain<M * N>::State;
+    using Transition = typename OccupancyMarkovChain<M * N>::Transition;
     using CommandModel = MarkovCommand<N, M>;
-    using State = typename MarkovChainX<M * N>::State;
-    using Transition = typename MarkovChainX<M * N>::Transition;
 
   public:
     void SetupModel(std::shared_ptr<TStateSpace> space, Transition trans, std::shared_ptr<CommandModel> cmd_model, double s_mean, double s_var, double v_mean, double v_var)

@@ -65,7 +65,11 @@ class MarkovChain
     {
         State s = init_state_;
         for (int32_t i = 0; i < k; ++i)
+        {
             s = s * transition_;
+            // normalize to avoid undersampling
+            s = s / s.sum();
+        }
         return s;
     }
 

@@ -8,10 +8,10 @@ using namespace librav;
 
 int main()
 {
-    const int32_t SSize = 10;
-    const int32_t VSize = 5;
+    const int32_t SSize = 5;
+    const int32_t VSize = 1;
     const int32_t N = SSize * VSize;
-    const int32_t M = 6;
+    const int32_t M = 1;
 
     using CommandModel = MarkovCommand<N, M>;
     using MotionModel = MarkovMotion<N, M>;
@@ -20,19 +20,23 @@ int main()
     std::shared_ptr<CommandModel> command = std::make_shared<CommandModel>();
 
     typename CommandModel::State init_state;
-    init_state.resize(M);
-    init_state << 0, 0, 0.5, 0.5, 0, 0;
+    init_state.resize(1, M);
+    // init_state << 0, 0, 0.5, 0.5, 0, 0;
+    init_state << 1.0;
 
     typename CommandModel::ControlSet cmds;
     cmds.resize(M);
     // cmds << -1, -0.5, 0, 0.3, 0.6, 1.0;
-    cmds << -0.6, -0.3, 0, 0.3, 0.6, 1.0;
+    // cmds << -0.6, -0.3, 0, 0.3, 0.6, 1.0;
+    cmds << 0;
 
     typename CommandModel::PriorityVector priority_vec;
     priority_vec.resize(M);
-    priority_vec << 0.01, 0.04, 0.25, 0.25, 0.4, 0.05;
+    // priority_vec << 0.01, 0.04, 0.25, 0.25, 0.4, 0.05;
+    priority_vec << 1.0;
 
-    double gamma = 0.2;
+    // double gamma = 0.2;
+    double gamma = 1.0;
 
     command->SetupModel(init_state, cmds, priority_vec, gamma);
 
@@ -55,13 +59,13 @@ int main()
     //*******************************************************************
 
     MotionModel motion;
-    motion.SetupModel(state_space, Psi, command, 42, 3 * 3, 10, 1 * 1);
+    motion.SetupModel(state_space, Psi, command, 28, 3 * 3, 10, .1 * .1);
 
     std::cout << "s size: " << state_space->GetSSize() << std::endl;
     std::cout << "---------------------------" << std::endl;
 
     // for (int k = 0; k < 5; k++)
-    int step = 2;
+    int step = 1;
     for (int i = 0; i < 3; ++i)
     {
         int k = i * step;
@@ -84,9 +88,14 @@ int main()
         // for (int i = 0; i < N; ++i)
         //     pos_prob_vec(i/state_space->GetVSize()) += state_prob_vec(i);
 
+        // std::cout << "final state \n"
+        //           << statef << "\n"
+        //           << std::endl;
+
         std::cout << "position distribution k = " << k << " \n"
                   << pos_prob_vec << std::endl;
-        std::cout << " - sum: " << pos_prob_vec.sum() << "\n"
+        std::cout << " - sum: " << pos_prob_vec.sum() << std::endl;
+        std::cout << "\n*********\n"
                   << std::endl;
     }
 

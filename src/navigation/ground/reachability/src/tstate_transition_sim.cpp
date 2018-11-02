@@ -93,7 +93,7 @@ Eigen::MatrixXd TStateTransitionSim::RunSim(double T)
         }
     }
 
-    // std::cout << "Psi: \n" << Psi << std::endl;
+    std::cout << "Psi: \n" << Psi << std::endl;
 
     return Psi;
 }

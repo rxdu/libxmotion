@@ -22,9 +22,9 @@ struct MarkovChainXTest : testing::Test
 {
 	MarkovChainXTest()
 	{
-		states.resize(2);
-		trans.resize(2,2);
-		
+		states.resize(1, 2);
+		trans.resize(2, 2);
+
 		states << 1.0, 0.0;
 		trans << 0.9, 0.1, 0.5, 0.5;
 
@@ -38,7 +38,7 @@ struct MarkovChainXTest : testing::Test
 	const double sigma = 0.0000001;
 };
 
-TEST_F(MarkovChainXTest, Propagate)
+TEST_F(MarkovChainXTest, StateTransition)
 {
 	MarkovChainX<2>::State res = mchain.CalculateStateAt(2);
 	// std::cout << "result: \n" << res(0) << " , " << res(1) << std::endl;
@@ -46,15 +46,9 @@ TEST_F(MarkovChainXTest, Propagate)
 	ASSERT_TRUE((std::abs(res(0) - 0.86) < sigma) && (std::abs(res(1) - 0.14) < sigma));
 
 	ASSERT_TRUE(mchain.GetStateNumber() == 1);
-
-	mchain.Propagate(2);
-
-	ASSERT_TRUE(std::abs(mchain[2](0) - 0.86) < sigma && std::abs(mchain[2](1) - 0.14) < sigma);
-
-	ASSERT_TRUE(mchain.GetStateNumber() == 3);
 }
 
-TEST_F(MarkovChainXTest, Model)
+TEST_F(MarkovChainXTest, ModelPropagate)
 {
 	mchain.Propagate(2);
 

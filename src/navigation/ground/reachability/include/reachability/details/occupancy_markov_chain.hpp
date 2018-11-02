@@ -1,18 +1,20 @@
 /* 
- * markov_chain_x.hpp
+ * occupancy_markov_chain.hpp
  * 
  * Created on: Oct 29, 2018 05:30
- * Description: a Markov chain model, state vector and transition
- *              matrix are represented as dynamic dense matrices,
- *              could be used for larger Markov model
+ * Description: a Markov chain model based on MarkovChainX in "markov" module,
+ *              state vector and transition matrix are represented as dynamic 
+ *              dense matrices, thus could be used for larger Markov model
+ * 
+ * Note: the order of calculation is different from standard Markov chain
  * 
  * Note: you have to resize any matrices before assigning values to them
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#ifndef MARKOV_CHAIN_X_HPP
-#define MARKOV_CHAIN_X_HPP
+#ifndef OCCUPANCY_MARKOV_CHAIN_HPP
+#define OCCUPANCY_MARKOV_CHAIN_HPP
 
 #include <cstdint>
 #include <vector>
@@ -22,27 +24,27 @@
 namespace librav
 {
 template <int32_t N>
-class MarkovChainX
+class OccupancyMarkovChain
 {
   public:
-    using State = Eigen::MatrixXd;
+    using State = Eigen::VectorXd;
     using Transition = Eigen::MatrixXd;
 
-    MarkovChainX()
+    OccupancyMarkovChain()
     {
-        init_state_.resize(1, N);
+        init_state_.resize(N);
         transition_.resize(N, N);
     }
 
-    MarkovChainX(Transition trans) : transition_(trans)
+    OccupancyMarkovChain(Transition trans) : transition_(trans)
     {
-        init_state_.resize(1, N);
+        init_state_.resize(N);
         transition_.resize(N, N);
     }
 
-    MarkovChainX(State st, Transition trans) : init_state_(st), transition_(trans)
+    OccupancyMarkovChain(State st, Transition trans) : init_state_(st), transition_(trans)
     {
-        init_state_.resize(1, N);
+        init_state_.resize(N);
         transition_.resize(N, N);
 
         states_.push_back(st);
@@ -59,7 +61,7 @@ class MarkovChainX
     Transition GetTransitionMatrix() const { return transition_; }
     int32_t GetStateNumber() const { return states_.size(); }
 
-    inline void Propagate() { states_.emplace_back(states_.back() * transition_); }
+    inline void Propagate() { states_.emplace_back(transition_ * states_.back()); }
 
     void Propagate(int32_t k_f)
     {
@@ -81,7 +83,7 @@ class MarkovChainX
 
         for (int32_t i = 0; i < k; ++i)
         {
-            s = s * transition_;
+            s = transition_ * s;
             // normalize to avoid undersampling
             s = s / s.sum();
         }
@@ -96,4 +98,4 @@ class MarkovChainX
 };
 } // namespace librav
 
-#endif /* MARKOV_CHAIN_X_HPP */
+#endif /* OCCUPANCY_MARKOV_CHAIN_HPP */

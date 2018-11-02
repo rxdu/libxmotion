@@ -82,10 +82,11 @@ class MarkovCommand : public MarkovChainX<M * N>
         Transition state_trans;
         state_trans.resize(M * N, M * N);
         for (int32_t i = 0; i < N; ++i)
-            state_trans.block(i * M, i * M, M, M) = lammda * Phi;
-        state_trans = state_trans / state_trans.sum();
+            state_trans.block(i * M, i * M, M, M) = phi_block;
+        // state_trans = state_trans / state_trans.sum();
+ 
         // std::cout << "Trans: \n"
-        //           << trans << std::endl;
+        //           << state_trans << std::endl;
 
         Model::SetTransitionMatrix(state_trans);
     }

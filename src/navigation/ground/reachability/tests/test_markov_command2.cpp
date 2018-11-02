@@ -14,7 +14,7 @@ int main()
     std::shared_ptr<CommandModel> command = std::make_shared<CommandModel>();
 
     typename CommandModel::State init_state;
-    init_state.resize(6);
+    init_state.resize(1, 6);
     init_state << 0, 0, 0.5, 0.5, 0, 0;
 
     typename CommandModel::ControlSet cmds;
@@ -33,7 +33,8 @@ int main()
     std::cout << "---------------------------" << std::endl;
     for (int i = 0; i < 10; ++i)
         std::cout << "Phi(" << i << ")\n"
-                  << command->CalculateStateAt(i) << "\n"<< std::endl;
+                  << command->CalculateStateAt(i) << "\n"
+                  << std::endl;
 
     return 0;
 }

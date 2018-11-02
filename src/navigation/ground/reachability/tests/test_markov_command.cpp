@@ -14,7 +14,7 @@ int main()
     std::shared_ptr<CommandModel> command = std::make_shared<CommandModel>();
 
     typename CommandModel::State init_state;
-    init_state.resize(3);
+    init_state.resize(1, 3);
     init_state << 0, 0.8, 0.2;
 
     typename CommandModel::ControlSet cmds;
@@ -23,7 +23,7 @@ int main()
 
     typename CommandModel::PriorityVector priority_vec;
     priority_vec.resize(3);
-    priority_vec << 1.0/3.0, 1.0/3.0, 1.0/3.0;
+    priority_vec << 1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0;
 
     double gamma = 0.2;
 
