@@ -14,8 +14,6 @@
 #include <map>
 #include <memory>
 
-#include "decomp/curvilinear_grid.hpp"
-
 #include "road_map/road_map.hpp"
 #include "traffic_map/traffic_channel.hpp"
 

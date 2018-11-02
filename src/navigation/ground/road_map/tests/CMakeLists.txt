@@ -13,3 +13,6 @@ target_link_libraries(test_roadmap2 roadmap lightviz ugvnav_viz utilities)
 
 add_executable(test_topogeo_graph test_topogeo_graph.cpp)
 target_link_libraries(test_topogeo_graph roadmap lightviz utilities)
+
+# add_executable(test_lane_intersection test_lane_intersection.cpp)
+# target_link_libraries(test_lane_intersection roadmap lightviz utilities)

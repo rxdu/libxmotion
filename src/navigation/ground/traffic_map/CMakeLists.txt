@@ -7,7 +7,7 @@ set(TRAFFICMAP_LIB_SRC
 	src/traffic_map.cpp
 )
 add_library(traffic STATIC ${TRAFFICMAP_LIB_SRC})
-target_link_libraries(traffic roadmap)
+target_link_libraries(traffic roadmap utilities)
 target_include_directories(traffic PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>	

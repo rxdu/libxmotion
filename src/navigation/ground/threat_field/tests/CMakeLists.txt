@@ -13,3 +13,6 @@
 
 add_executable(test_lane_occupancy test_lane_occupancy.cpp)
 target_link_libraries(test_lane_occupancy tfield ugvnav_viz utilities)
+
+add_executable(test_collision_threat test_collision_threat.cpp)
+target_link_libraries(test_collision_threat tfield ugvnav_viz utilities)

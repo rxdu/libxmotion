@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 
-#include "road_map/road_map.hpp"
+#include "traffic_map/map_loader.hpp"
 
 #include "lightviz/lightviz.hpp"
 #include "ugvnav_viz/ugvnav_viz.hpp"
@@ -10,20 +10,14 @@ using namespace librav;
 
 int main()
 {
-    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
-
-    if (!map->MapReady())
-    {
-        std::cout << "map didn't load correctly" << std::endl;
-        return -1;
-    }
-
-    map->PrintInfo();
+    MapLoader loader("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
 
     ////////////////////////////////////////////////////////////////////////
 
-    RoadMapViz::SetupRoadMapViz(map, 10);
-    RoadMapViz::ShowLanes();
+    TrafficViz::SetupTrafficViz(loader.road_map, 10);
+    TrafficViz::ShowLanes();
+
+    TrafficViz::ShowLanes();
 
     Polygon fp;
     fp.AddPoint(1.2 * 2, 0.9);
@@ -37,8 +31,8 @@ int main()
     polys.push_back(fp_start);
     polys.push_back(fp_final);
 
-    RoadMapViz::ShowVehicle(fp);
-    RoadMapViz::ShowVehicle(polys);
+    TrafficViz::ShowVehicle(fp);
+    TrafficViz::ShowVehicle(polys);
 
     return 0;
 }

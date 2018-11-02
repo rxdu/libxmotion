@@ -12,7 +12,6 @@
 #include "lightviz/details/geometry_draw.hpp"
 #include "ugvnav_viz/details/roadmap_draw.hpp"
 #include "ugvnav_viz/details/vehicle_draw.hpp"
-#include "ugvnav_viz/details/lattice_draw.hpp"
 
 using namespace librav;
 using namespace CvDraw;
@@ -105,7 +104,7 @@ void RoadMapViz::ShowTrafficChannelCenterline(TrafficChannel &channel, std::stri
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void RoadMapViz::ShowVehicle(Polygon &polygon, std::string window_name, bool save_img)
+void RoadMapViz::ShowVehicle(Polygon polygon, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -119,7 +118,7 @@ void RoadMapViz::ShowVehicle(Polygon &polygon, std::string window_name, bool sav
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void RoadMapViz::ShowVehicleFootprints(std::vector<Polygon> &polygons, std::string window_name, bool save_img)
+void RoadMapViz::ShowVehicle(std::vector<Polygon> &polygons, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -129,23 +128,6 @@ void RoadMapViz::ShowVehicleFootprints(std::vector<Polygon> &polygons, std::stri
 
     road_draw.DrawLanes(true);
     veh_draw.DrawVehicle(polygons);
-
-    ShowImage(canvas.paint_area, window_name, save_img);
-}
-
-void RoadMapViz::ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel &channel, std::string window_name, bool save_img)
-{
-    RoadMapViz &viz = RoadMapViz::GetInstance();
-
-    CartesianCanvas canvas = viz.CreateCanvas();
-    RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
-    LatticeDraw lattice_draw = LatticeDraw(canvas);
-
-    road_draw.DrawLanes(true);
-    road_draw.DrawTrafficChannelGrid(channel, false);
-
-    // draw state lattice
-    lattice_draw.DrawStateLattice(lattice);
 
     ShowImage(canvas.paint_area, window_name, save_img);
 }

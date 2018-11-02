@@ -79,6 +79,8 @@ using Point3f = value3d<float>;
 using Point3d = value3d<double>;
 using Point3i = value3d<int32_t>;
 
+using CovarMatrix2d = Eigen::Matrix<double, 2, 2>;
+
 } // namespace librav
 
 #endif /* BASE_TYPES_HPP */

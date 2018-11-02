@@ -13,6 +13,7 @@
 #include <memory>
 
 #include "traffic_map/traffic_map.hpp"
+#include "threat_field/vehicle_estimation.hpp"
 #include "reachability/markov_occupancy.hpp"
 
 namespace librav
@@ -20,9 +21,13 @@ namespace librav
 class CollisionThreat
 {
   public:
-    CollisionThreat(std::shared_ptr<TrafficChannel> chn);
+    CollisionThreat(VehicleEstimation est, std::shared_ptr<TrafficChannel> chn);
 
+    VehicleEstimation vehicle_est_;
     std::shared_ptr<TrafficChannel> traffic_chn_;
+
+  private:
+    void SetupPredictionModel();
 };
 } // namespace librav
 

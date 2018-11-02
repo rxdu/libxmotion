@@ -33,14 +33,17 @@ struct Quaternion
 	float w;
 };
 
-struct Pose3
+struct Pose3f
 {
 	Point3f pos;
 	EulerAngle ori;
 };
 
-struct Pose2
+struct Pose2d
 {
+	Pose2d() = default;
+	Pose2d(double _x, double _y, double _theta, TimeStamp ts = 0) : position({_x, _y}), theta(_theta), t(ts) {}
+
 	TimeStamp t;
 	Point2d position;
 	double theta;
