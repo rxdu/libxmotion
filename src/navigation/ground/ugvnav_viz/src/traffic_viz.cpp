@@ -13,6 +13,7 @@
 #include "ugvnav_viz/details/roadmap_draw.hpp"
 #include "ugvnav_viz/details/vehicle_draw.hpp"
 #include "ugvnav_viz/details/lattice_draw.hpp"
+#include "lightviz/details/curvilinear_grid_draw.hpp"
 #include "ugvnav_viz/roadmap_viz.hpp"
 
 using namespace librav;
@@ -43,6 +44,21 @@ void TrafficViz::ShowVehicle(std::vector<Polygon> &polygons, std::string window_
     RoadMapViz::ShowVehicle(polygons, window_name, save_img);
 }
 
+void TrafficViz::ShowVehicleInChannel(Polygon polygon, TrafficChannel &channel, std::string window_name, bool save_img)
+{
+    RoadMapViz &viz = RoadMapViz::GetInstance();
+
+    CartesianCanvas canvas = viz.CreateCanvas();
+    RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
+    VehicleDraw veh_draw = VehicleDraw(canvas);
+
+    road_draw.DrawLanes(true);
+    road_draw.DrawTrafficChannelGrid(channel, false);
+    veh_draw.DrawVehicle(polygon);
+
+    ShowImage(canvas.paint_area, window_name, save_img);
+}
+
 void TrafficViz::ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel &channel, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
@@ -56,6 +72,24 @@ void TrafficViz::ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice,
 
     // draw state lattice
     lattice_draw.DrawStateLattice(lattice);
+
+    ShowImage(canvas.paint_area, window_name, save_img);
+}
+
+void TrafficViz::ShowVehicleCollisionThreat(std::shared_ptr<CollisionThreat> threat, std::string window_name, bool save_img)
+{
+    RoadMapViz &viz = RoadMapViz::GetInstance();
+
+    CartesianCanvas canvas = viz.CreateCanvas(false);
+    RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
+    VehicleDraw veh_draw = VehicleDraw(canvas);
+    CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
+
+    if (threat->occupancy_grid_ != nullptr)
+        cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));
+
+    road_draw.DrawLanes(true);
+    veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint());
 
     ShowImage(canvas.paint_area, window_name, save_img);
 }

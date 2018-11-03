@@ -53,7 +53,7 @@ private:
   double ymin_;
   double ymax_;
 
-  CartesianCanvas CreateCanvas();
+  CartesianCanvas CreateCanvas(bool use_jetcolor = true);
 };
 } // namespace librav
 

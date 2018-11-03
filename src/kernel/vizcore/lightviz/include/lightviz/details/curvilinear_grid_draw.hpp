@@ -32,6 +32,8 @@ class CurvilinearGridDraw
     // geometric grid
     void DrawCurvilinearGrid(const CurvilinearGrid &grid, double step = 0.1, bool show_center = false, cv::Scalar ln_color = CvDrawColors::lime_color, int32_t ln_width = 1);
     void DrawCurvilinearGridCost(const CurvilinearGrid &grid, double step = 0.1, bool show_center = false, cv::Scalar ln_color = CvDrawColors::lime_color, int32_t ln_width = 1);
+    void DrawCurvilinearGridCostOnly(const CurvilinearGrid &grid, double step = 0.1, bool show_center = false, cv::Scalar ln_color = CvDrawColors::lime_color, int32_t ln_width = 1);
+    void DrawCurvilinearGridGrayscaleCost(const CurvilinearGrid &grid, double step = 0.1, bool show_center = false, cv::Scalar ln_color = CvDrawColors::lime_color, int32_t ln_width = 1);
 
   private:
     // internal parameters

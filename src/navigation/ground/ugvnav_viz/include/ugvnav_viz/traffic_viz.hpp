@@ -20,6 +20,7 @@
 #include "road_map/road_map.hpp"
 #include "traffic_map/traffic_map.hpp"
 #include "state_lattice/state_lattice.hpp"
+#include "threat_field/collision_threat.hpp"
 
 #include "lightviz/details/cartesian_canvas.hpp"
 
@@ -35,8 +36,11 @@ public:
 
   static void ShowVehicle(Polygon polygon, std::string window_name = "Vehicle Image", bool save_img = false);
   static void ShowVehicle(std::vector<Polygon> &polygons, std::string window_name = "Vehicle Image", bool save_img = false);
+  static void ShowVehicleInChannel(Polygon polygon, TrafficChannel &channel, std::string window_name = "Vehicle Image", bool save_img = false);
 
   static void ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel &channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
+
+  static void ShowVehicleCollisionThreat(std::shared_ptr<CollisionThreat> threat, std::string window_name = "Vehicle Image", bool save_img = false);
 };
 } // namespace librav
 

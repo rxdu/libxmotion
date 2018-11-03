@@ -13,23 +13,27 @@ using namespace librav;
 int main()
 {
     MapLoader loader("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane_horizontal.osm");
-    RoadMapViz::SetupRoadMapViz(loader.road_map);
+    TrafficViz::SetupTrafficViz(loader.road_map);
 
-    CovarMatrix2d covar;
-    covar << 1, 0,
+    //////////////////////////////////////////////////
+
+    CovarMatrix2d pos_covar;
+    pos_covar << 1, 0,
         0, 1;
     VehicleEstimation veh1({35, 51.2, -10 / 180.0 * M_PI}, 10);
+    veh1.SetPositionVariance(pos_covar);
+    veh1.SetSpeedVariance(2 * 2);
 
-    auto ids = loader.road_map->OccupiedLanelet(CartCooridnate(55, 56));
-    std::cout << "occupied laneles: " << ids.size() << std::endl;
+    auto ego_chn = loader.traffic_map->GetAllTrafficChannels().back();
+    // TrafficViz::ShowVehicleInChannel(veh1.GetFootprint(), *ego_chn.get());
 
-    // for (auto &chn : loader.traffic_map->GetAllTrafficChannels())
-    // {
-    //     chn->PrintInfo();
-    //     RoadMapViz::ShowTrafficChannel(*chn.get());
-    // }
+    std::shared_ptr<CollisionThreat> ct1 = std::make_shared<CollisionThreat>(veh1, ego_chn);
 
-    RoadMapViz::ShowVehicle(veh1.GetFootprint());
+    std::cout << "--------------" << std::endl;
+
+    ct1->UpdateOccupancyDistribution(5);
+
+    TrafficViz::ShowVehicleCollisionThreat(ct1, "occupancy_estimation", true);
 
     return 0;
 }

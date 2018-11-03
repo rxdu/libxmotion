@@ -59,10 +59,15 @@ void RoadMapViz::SetupRoadMapViz(std::shared_ptr<RoadMap> map, int32_t pixel_per
     RoadMapViz &viz = RoadMapViz::GetInstance(map, pixel_per_unit);
 }
 
-CartesianCanvas RoadMapViz::CreateCanvas()
+CartesianCanvas RoadMapViz::CreateCanvas(bool use_jetcolor)
 {
     CartesianCanvas canvas(ppu_);
-    canvas.SetupCanvas(xmin_, xmax_, ymin_, ymax_, CvDrawColors::jet_colormap_lowest);
+    
+    if (use_jetcolor)
+        canvas.SetupCanvas(xmin_, xmax_, ymin_, ymax_, CvDrawColors::jet_colormap_lowest);
+    else
+        canvas.SetupCanvas(xmin_, xmax_, ymin_, ymax_);
+
     return canvas;
 }
 

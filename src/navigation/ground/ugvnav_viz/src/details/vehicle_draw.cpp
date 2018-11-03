@@ -11,10 +11,10 @@
 
 using namespace librav;
 
-void VehicleDraw::DrawVehicle(Polygon &polygon)
+void VehicleDraw::DrawVehicle(Polygon polygon)
 {
-    gdraw_.DrawPolygon(polygon, false, CvDrawColors::cyan_color);
-    gdraw_.DrawPolygonDirection(polygon);
+    gdraw_.DrawPolygon(polygon, false, CvDrawColors::orange_color, 2);
+    gdraw_.DrawPolygonDirection(polygon, CvDrawColors::orange_color, 2);
 }
 
 void VehicleDraw::DrawVehicle(std::vector<Polygon> &polygons)

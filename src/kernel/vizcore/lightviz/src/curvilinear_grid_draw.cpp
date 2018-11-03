@@ -67,3 +67,44 @@ void CurvilinearGridDraw::DrawCurvilinearGridCost(const CurvilinearGrid &grid, d
 
     DrawCurvilinearGrid(grid, step, show_center);
 }
+
+void CurvilinearGridDraw::DrawCurvilinearGridCostOnly(const CurvilinearGrid &grid, double step, bool show_center, cv::Scalar ln_color, int32_t ln_width)
+{
+    for (auto &tile_row : grid.grid_tiles_)
+    {
+        for (auto tile : tile_row)
+        {
+            Polygon polygon;
+            polygon.AddPoint(tile->vertices[0].position.x, tile->vertices[0].position.y);
+            polygon.AddPoint(tile->vertices[1].position.x, tile->vertices[1].position.y);
+            polygon.AddPoint(tile->vertices[3].position.x, tile->vertices[3].position.y);
+            polygon.AddPoint(tile->vertices[2].position.x, tile->vertices[2].position.y);
+            if (tile->cost_map != 0)
+                gdraw_.DrawFilledPolygon(polygon, false, CvDraw::JetPaletteTransform(tile->cost_map));
+        }
+    }
+
+    DrawCurvilinearGrid(grid, step, show_center);
+}
+
+void CurvilinearGridDraw::DrawCurvilinearGridGrayscaleCost(const CurvilinearGrid &grid, double step, bool show_center, cv::Scalar ln_color, int32_t ln_width)
+{
+    for (auto &tile_row : grid.grid_tiles_)
+    {
+        for (auto tile : tile_row)
+        {
+            Polygon polygon;
+            polygon.AddPoint(tile->vertices[0].position.x, tile->vertices[0].position.y);
+            polygon.AddPoint(tile->vertices[1].position.x, tile->vertices[1].position.y);
+            polygon.AddPoint(tile->vertices[3].position.x, tile->vertices[3].position.y);
+            polygon.AddPoint(tile->vertices[2].position.x, tile->vertices[2].position.y);
+            if (tile->cost_map != 0)
+            {
+                double color_val = (1.0 - tile->cost_map) * 255;
+                gdraw_.DrawFilledPolygon(polygon, false, cv::Scalar(color_val, color_val, color_val));
+            }
+        }
+    }
+
+    DrawCurvilinearGrid(grid, step, show_center);
+}

@@ -27,39 +27,40 @@ class RoadMap;
 
 class TrafficChannel
 {
-public:
-  TrafficChannel(std::shared_ptr<RoadMap> map, std::string src, std::string dst, std::vector<std::string> lanes);
-  TrafficChannel(std::shared_ptr<RoadMap> map, std::string lane);
-  ~TrafficChannel() = default;
+  public:
+    TrafficChannel(std::shared_ptr<RoadMap> map, std::string src, std::string dst, std::vector<std::string> lanes);
+    TrafficChannel(std::shared_ptr<RoadMap> map, std::string lane);
+    ~TrafficChannel() = default;
 
-  TrafficChannel(const TrafficChannel &other) = default;
-  TrafficChannel(TrafficChannel &&other) = default;
-  TrafficChannel &operator=(const TrafficChannel &other) = default;
-  TrafficChannel &operator=(TrafficChannel &&other) = default;
+    TrafficChannel(const TrafficChannel &other) = default;
+    TrafficChannel(TrafficChannel &&other) = default;
+    TrafficChannel &operator=(const TrafficChannel &other) = default;
+    TrafficChannel &operator=(TrafficChannel &&other) = default;
 
-  std::string source_;
-  std::string sink_;
-  std::vector<std::string> lanes_;
+    std::string source_;
+    std::string sink_;
+    std::vector<std::string> lanes_;
 
-  Polyline center_line_;
-  ParametricCurve center_curve_;
-  std::shared_ptr<CurvilinearGrid> grid_;
+    Polyline center_line_;
+    ParametricCurve center_curve_;
+    std::shared_ptr<CurvilinearGrid> grid_;
 
-  void DiscretizeChannel(double step_t, double step_n, int32_t side_num);
+    void DiscretizeChannel(double step_t, double step_n, int32_t side_num);
+    void DiscretizeChannel(double s_offset, double step_t, double step_n, int32_t side_num);
 
-  bool CheckInside(SimplePoint pt);
+    bool CheckInside(SimplePoint pt);
 
-  CurvilinearGrid::GridPoint ConvertToPathCoordinate(SimplePoint pt);
-  SimplePoint ConvertToGlobalCoordinate(CurvilinearGrid::GridPoint pt);
+    CurvilinearGrid::GridPoint ConvertToPathCoordinate(SimplePoint pt);
+    SimplePoint ConvertToGlobalCoordinate(CurvilinearGrid::GridPoint pt);
 
-  void PrintInfo();
+    void PrintInfo();
 
-private:
-  std::shared_ptr<RoadMap> road_map_;
-  double origin_offset_ = 0.0;
+  private:
+    std::shared_ptr<RoadMap> road_map_;
+    double origin_offset_ = 0.0;
 
-  double GetPointLineDistance(SimplePoint ln_pt1, SimplePoint ln_pt2, SimplePoint pt);
-  CurvilinearGrid::GridPoint FindApproximatePoint(SimplePoint pt);
+    double GetPointLineDistance(SimplePoint ln_pt1, SimplePoint ln_pt2, SimplePoint pt);
+    CurvilinearGrid::GridPoint FindApproximatePoint(SimplePoint pt);
 };
 } // namespace librav
 

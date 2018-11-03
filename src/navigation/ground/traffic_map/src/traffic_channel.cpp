@@ -41,6 +41,11 @@ void TrafficChannel::DiscretizeChannel(double step_t, double step_n, int32_t sid
     grid_ = std::make_shared<CurvilinearGrid>(center_curve_, step_t, step_n, side_num);
 }
 
+void TrafficChannel::DiscretizeChannel(double s_offset, double step_t, double step_n, int32_t side_num)
+{
+    grid_ = std::make_shared<CurvilinearGrid>(center_curve_, step_t, step_n, side_num, s_offset);
+}
+
 double TrafficChannel::GetPointLineDistance(SimplePoint ln_pt1, SimplePoint ln_pt2, SimplePoint pt)
 {
     double x1 = ln_pt1.x;

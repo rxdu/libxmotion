@@ -29,7 +29,7 @@ CurvilinearGridBase<T>::CurvilinearGridBase(ParametricCurve pcurve, double s_ste
     for (double s = s_offset_; s <= curve_.GetTotalLength(); s += s_step)
         sknots.push_back(s);
 
-    std::cout << "s knots added" << sknots.size() << std::endl;
+    // std::cout << "s knots added: " << sknots.size() << std::endl;
 
     assert(sknots.size() > 1);
 

@@ -130,8 +130,8 @@ class MarkovMotion : public OccupancyMarkovChain<M * N>
             // std::cout << "pos probability: " << col_probability << std::endl;
         }
         pos_prob_vec = pos_prob_vec / pos_prob_vec.sum();
-        // std::cout << "init position distribution: \n"
-        //           << pos_prob_vec << std::endl;
+        std::cout << "init position distribution: \n"
+                  << pos_prob_vec << std::endl;
 
         for (int i = 0; i < N; ++i)
             for (int j = 0; j < M; ++j)

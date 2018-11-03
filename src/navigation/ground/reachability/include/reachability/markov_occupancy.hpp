@@ -46,7 +46,7 @@ class MarkovOccupancy
         motion_.SetupModel(state_space_, Psi_, command_, s_mean, s_var, v_mean, v_var);
     }
 
-    Eigen::VectorXd GetOccupancyDistribution(int32_t t_kp1)
+    Eigen::VectorXd GetOccupancyDistribution(int32_t t_kp1, double min_p = 1e-2)
     {
         Eigen::VectorXd pos_prob_vec;
         pos_prob_vec.setZero(state_space_->GetSSize());
@@ -56,7 +56,12 @@ class MarkovOccupancy
             for (int j = 0; j < M; ++j)
                 pos_prob_vec(i / state_space_->GetVSize()) += statef(i * M + j);
 
-        // std::cout << " - sum: " << pos_prob_vec.sum() << std::endl;
+        for (int i = 0; i < state_space_->GetSSize(); ++i)
+        {
+            if(pos_prob_vec(i) < min_p)
+                pos_prob_vec(i) = 0;
+        }
+        pos_prob_vec = pos_prob_vec/pos_prob_vec.sum();
 
         return pos_prob_vec;
     }
