@@ -15,16 +15,20 @@ int main()
 
     auto curve = CurveFitting::FitApproximateLengthCurve(polyline);
 
+    std::cout << "curve length: " << curve.GetTotalLength() << std::endl;
+
     // create curvilinear grid
     // CurvilinearGrid grid(curve, 0.1, 0.5, 3);
-    CurvilinearGrid grid(curve, 0.41, 0.2, 5);
+    CurvilinearGrid grid(curve, 0.41, 0.2, 5, 0.2);
+
+    std::cout << "curvilinear grid created" << std::endl;
 
     CartesianCanvas canvas(200);
     canvas.SetupCanvas(-1, 3, -1, 3);
 
     CurvilinearGridDraw gdraw(canvas);
-    // gdraw.DrawCurvilinearGrid(grid, 0.1, false);
-    gdraw.DrawCurvilinearGridCost(grid, 0.1, true);
+    gdraw.DrawCurvilinearGrid(grid, 0.1, true);
+    // gdraw.DrawCurvilinearGridCost(grid, 0.1, true);
 
     CvDraw::ShowImage(canvas.paint_area, "curvilinear_grid");
 

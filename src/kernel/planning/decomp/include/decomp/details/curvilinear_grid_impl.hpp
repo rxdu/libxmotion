@@ -13,7 +13,7 @@
 namespace librav
 {
 template <typename T>
-CurvilinearGridBase<T>::CurvilinearGridBase(ParametricCurve pcurve, double s_step, double d_step, int32_t d_num) : curve_(pcurve), s_step_(s_step), delta_step_(d_step), delta_num_(d_num)
+CurvilinearGridBase<T>::CurvilinearGridBase(ParametricCurve pcurve, double s_step, double d_step, int32_t d_num, double s_offset) : curve_(pcurve), s_step_(s_step), delta_step_(d_step), delta_num_(d_num), s_offset_(s_offset)
 {
     assert(d_num >= 1);
     delta_half_num_ = delta_num_ / 2;
@@ -26,8 +26,12 @@ CurvilinearGridBase<T>::CurvilinearGridBase(ParametricCurve pcurve, double s_ste
     // defined in s-delta coordinate frame
     // generate knots along centerline
     std::vector<double> sknots;
-    for (double s = 0; s <= curve_.GetTotalLength(); s += s_step)
+    for (double s = s_offset_; s <= curve_.GetTotalLength(); s += s_step)
         sknots.push_back(s);
+
+    std::cout << "s knots added" << sknots.size() << std::endl;
+
+    assert(sknots.size() > 1);
 
     int32_t x_idx = 0;
     for (int32_t k = 0; k < sknots.size() - 1; ++k)
@@ -160,8 +164,9 @@ SimplePoint CurvilinearGridBase<T>::ConvertToGlobalCoordinate(typename Curviline
     Eigen::Matrix2d rotation_matrix;
     rotation_matrix << 0, -1, 1, 0;
 
-    auto base_pt = curve_.Evaluate(pt.s);
-    auto vel_vec = curve_.Evaluate(pt.s, 1);
+    double s_val = pt.s + s_offset_;
+    auto base_pt = curve_.Evaluate(s_val);
+    auto vel_vec = curve_.Evaluate(s_val, 1);
 
     Eigen::Vector2d base_vec(base_pt.x, base_pt.y);
     Eigen::Vector2d vec_t(vel_vec.x, vel_vec.y);
@@ -180,9 +185,10 @@ typename CurvilinearGridBase<T>::GridCurvePoint CurvilinearGridBase<T>::ConvertT
     Eigen::Matrix2d rotation_matrix;
     rotation_matrix << 0, -1, 1, 0;
 
-    auto base_pt = curve_.Evaluate(pt.s);
-    auto vel_vec = curve_.Evaluate(pt.s, 1);
-    auto acc_vec = curve_.Evaluate(pt.s, 2);
+    double s_val = pt.s + s_offset_;
+    auto base_pt = curve_.Evaluate(s_val);
+    auto vel_vec = curve_.Evaluate(s_val, 1);
+    auto acc_vec = curve_.Evaluate(s_val, 2);
 
     Eigen::Vector2d base_vec(base_pt.x, base_pt.y);
     Eigen::Vector2d vec_t(vel_vec.x, vel_vec.y);

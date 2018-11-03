@@ -187,7 +187,7 @@ class CurvilinearGridBase
     };
 
   public:
-    CurvilinearGridBase(ParametricCurve pcurve, double s_step, double d_step, int32_t d_num);
+    CurvilinearGridBase(ParametricCurve pcurve, double s_step, double d_step, int32_t d_num, double s_offset = 0);
     ~CurvilinearGridBase();
 
     CurvilinearGridBase(const CurvilinearGridBase<T> &other);
@@ -241,6 +241,8 @@ class CurvilinearGridBase
     double s_step_;
     double delta_step_;
     int32_t delta_num_;
+    double s_offset_;
+
     int32_t delta_half_num_;
     bool center_cell_null_;
 
