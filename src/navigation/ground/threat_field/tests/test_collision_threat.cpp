@@ -28,12 +28,13 @@ int main()
     // TrafficViz::ShowVehicleInChannel(veh1.GetFootprint(), *ego_chn.get());
 
     std::shared_ptr<CollisionThreat> ct1 = std::make_shared<CollisionThreat>(veh1, ego_chn);
+    ct1->PrecomputeParameters();
 
     std::cout << "--------------" << std::endl;
 
     ct1->UpdateOccupancyDistribution(5);
 
-    TrafficViz::ShowVehicleCollisionThreat(ct1, "occupancy_estimation", true);
+    TrafficViz::ShowVehicleCollisionThreat(ct1, "occupancy_estimation");
 
     return 0;
 }

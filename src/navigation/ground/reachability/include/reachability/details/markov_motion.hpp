@@ -40,7 +40,8 @@ class SVDistribution
         coeff3_ = 2 * M_PI * std::sqrt(s_var_ * v_var_);
 
         std::cout << "s-v distribution coefficients (us,uv,sigs,sigv);(3-temp): \n(" << s_mean_ << " , " << v_mean_ << " , " << s_var_ << " , " << v_var_
-                  << " );( " << coeff1_ << " , " << coeff2_ << " , " << coeff3_ << " )\n" << std::endl;
+                  << " );( " << coeff1_ << " , " << coeff2_ << " , " << coeff3_ << " )\n"
+                  << std::endl;
     }
 
     double operator()(double s, double v)
@@ -93,6 +94,20 @@ class MarkovMotion : public OccupancyMarkovChain<M * N>
         state_transition_ = trans;
         Transition combined_trans = cmd_model_->GetTransitionMatrix() * state_transition_;
         Model::SetTransitionMatrix(combined_trans);
+
+        // std::cout << "Combined transition matrix: \n" << combined_trans << std::endl;
+    }
+
+    void SetupPrecomputedModel(std::shared_ptr<TStateSpace> space, Transition trans, std::shared_ptr<CommandModel> cmd_model, double s_mean, double s_var, double v_mean, double v_var)
+    {
+        state_space_ = space;
+        cmd_model_ = cmd_model;
+
+        Model::SetInitialState(GenerateInitState(s_mean, v_mean, s_var, v_var));
+
+        // std::cout << "model init state: \n" << Model::GetInitialState() << std::endl;
+
+        Model::SetTransitionMatrix(trans);
 
         // std::cout << "Combined transition matrix: \n" << combined_trans << std::endl;
     }

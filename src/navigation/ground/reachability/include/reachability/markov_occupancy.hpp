@@ -18,6 +18,8 @@
 #include "reachability/details/markov_motion.hpp"
 #include "reachability/details/tstate_transition_sim.hpp"
 
+#include "matrix_io/matrix_io.hpp"
+
 namespace librav
 {
 // N: number of system states - i
@@ -34,16 +36,27 @@ class MarkovOccupancy
     using MotionModel = MarkovMotion<N, M>;
 
   public:
-    MarkovOccupancy(double smin, double smax, double vmin, double vmax, double T = 0.5) : state_space_(std::make_shared<TStateSpace>(smin, smax, vmin, vmax)), T_(T) {}
-
-    void SetupMarkovModel(double s_mean, double s_var, double v_mean, double v_var)
+    MarkovOccupancy(double smin, double smax, double vmin, double vmax, double T = 0.5) : state_space_(std::make_shared<TStateSpace>(smin, smax, vmin, vmax)), T_(T)
     {
         // discretize state space
         state_space_->DiscretizeSpaceBySize(SSize, VSize);
+    }
 
-        SetupCommandModel();
-
-        motion_.SetupModel(state_space_, Psi_, command_, s_mean, s_var, v_mean, v_var);
+    void SetupMarkovModel(double s_mean, double s_var, double v_mean, double v_var, bool trans_precomputed = false, std::string trans_file = "")
+    {
+        if (trans_precomputed)
+        {
+            SetupCommandModel();
+            Eigen::MatrixXd combined_transition;
+            MatrixIO::LoadMatrix(trans_file, combined_transition);
+            motion_.SetupPrecomputedModel(state_space_, combined_transition, command_, s_mean, s_var, v_mean, v_var);
+        }
+        else
+        {
+            // Psi_ computed in SetupCommandModel()
+            SetupCommandModel(true);
+            motion_.SetupModel(state_space_, Psi_, command_, s_mean, s_var, v_mean, v_var);
+        }
     }
 
     Eigen::VectorXd GetOccupancyDistribution(int32_t t_kp1, double min_p = 1e-2)
@@ -58,12 +71,27 @@ class MarkovOccupancy
 
         for (int i = 0; i < state_space_->GetSSize(); ++i)
         {
-            if(pos_prob_vec(i) < min_p)
+            if (pos_prob_vec(i) < min_p)
                 pos_prob_vec(i) = 0;
         }
-        pos_prob_vec = pos_prob_vec/pos_prob_vec.sum();
+        pos_prob_vec = pos_prob_vec / pos_prob_vec.sum();
 
         return pos_prob_vec;
+    }
+
+    void PrecomputeStateTransition(typename CommandModel::ControlSet cmds, std::string file_name)
+    {
+        // calculate transition matrix
+        TStateTransitionSim sim;
+        sim.SetupStateSpace(state_space_);
+        sim.SetControlSet(cmds);
+        Psi_ = sim.RunSim(T_);
+
+        SetupCommandModel();
+
+        typename MotionModel::Transition combined_trans = command_->GetTransitionMatrix() * Psi_;
+
+        MatrixIO::SaveMatrix(file_name, combined_trans, true);
     }
 
   private:
@@ -76,7 +104,7 @@ class MarkovOccupancy
     // prediction step increment
     double T_;
 
-    void SetupCommandModel()
+    void SetupCommandModel(bool compute_transition = false)
     {
         // setup command Markov model
         command_ = std::make_shared<CommandModel>();
@@ -102,13 +130,16 @@ class MarkovOccupancy
         // for(int i = 0; i < 5; ++i)
         //     std::cout << "Phi(" << i << ")\n" << command_->CalculateStateAt(i) << std::endl;
 
-        // calculate transition matrix
-        TStateTransitionSim sim;
-        sim.SetupStateSpace(state_space_);
-        sim.SetControlSet(cmds);
-        Psi_ = sim.RunSim(T_);
+        if (compute_transition)
+        {
+            // calculate transition matrix
+            TStateTransitionSim sim;
+            sim.SetupStateSpace(state_space_);
+            sim.SetControlSet(cmds);
+            Psi_ = sim.RunSim(T_);
 
-        // std::cout << "Psi: \n" << Psi_ << std::endl;
+            // std::cout << "Psi: \n" << Psi_ << std::endl;
+        }
     }
 };
 } // namespace librav

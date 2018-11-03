@@ -50,19 +50,9 @@ class CollisionThreat
             else
                 return 0;
         }
-
-        // static double GetProbability(double delta)
-        // {
-        //     if ((delta >= -DeltaStep / 2.0) && (delta <= DeltaStep / 2.0))
-        //         return 0.4;
-        //     else if ((delta < 0 && delta >= -DeltaStep) || (delta >0 && delta <= DeltaStep))
-        //         return 0.4;
-        //     else if ((delta < 0 && delta >= -DeltaStep * 2) || (delta >0 && delta <= DeltaStep * 2))
-        //         return 0.2;
-        //     else
-        //         return 0;
-        // }
     };
+
+    static void GenerateStateTransitionMatrix();
 
   public:
     CollisionThreat(VehicleEstimation est, std::shared_ptr<TrafficChannel> chn);
@@ -70,6 +60,14 @@ class CollisionThreat
     VehicleEstimation vehicle_est_;
     std::shared_ptr<TrafficChannel> traffic_chn_;
     std::shared_ptr<CurvilinearGrid> occupancy_grid_;
+
+    void PrecomputeParameters()
+    {
+        Eigen::VectorXd cmds;
+        cmds.resize(6);
+        cmds << -0.6, -0.3, 0, 0.3, 0.6, 1.0;
+        occupancy_->PrecomputeStateTransition(cmds, "combined_state_transition.data");
+    }
 
     void UpdateOccupancyDistribution(int32_t t_k);
 

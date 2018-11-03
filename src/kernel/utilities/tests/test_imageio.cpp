@@ -1,5 +1,5 @@
 #include <iostream>
-#include "image/image_io.hpp"
+#include "image_io/image_io.hpp"
 #include "lightviz/lightviz.hpp"
 
 using namespace librav;
