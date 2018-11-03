@@ -42,19 +42,24 @@ class MarkovOccupancy
         state_space_->DiscretizeSpaceBySize(SSize, VSize);
     }
 
+    void PrecomputeStateTransition(std::string file_name)
+    {
+        PrepareModelParams(true, true, file_name);
+    }
+
     void SetupMarkovModel(double s_mean, double s_var, double v_mean, double v_var, bool trans_precomputed = false, std::string trans_file = "")
     {
         if (trans_precomputed)
         {
-            SetupCommandModel();
+            PrepareModelParams();
             Eigen::MatrixXd combined_transition;
             MatrixIO::LoadMatrix(trans_file, combined_transition);
             motion_.SetupPrecomputedModel(state_space_, combined_transition, command_, s_mean, s_var, v_mean, v_var);
         }
         else
         {
-            // Psi_ computed in SetupCommandModel()
-            SetupCommandModel(true);
+            // Psi_ computed in PrepareModelParams()
+            PrepareModelParams(true);
             motion_.SetupModel(state_space_, Psi_, command_, s_mean, s_var, v_mean, v_var);
         }
     }
@@ -79,21 +84,6 @@ class MarkovOccupancy
         return pos_prob_vec;
     }
 
-    void PrecomputeStateTransition(typename CommandModel::ControlSet cmds, std::string file_name)
-    {
-        // calculate transition matrix
-        TStateTransitionSim sim;
-        sim.SetupStateSpace(state_space_);
-        sim.SetControlSet(cmds);
-        Psi_ = sim.RunSim(T_);
-
-        SetupCommandModel();
-
-        typename MotionModel::Transition combined_trans = command_->GetTransitionMatrix() * Psi_;
-
-        MatrixIO::SaveMatrix(file_name, combined_trans, true);
-    }
-
   private:
     // Tangential state space
     std::shared_ptr<TStateSpace> state_space_;
@@ -104,7 +94,7 @@ class MarkovOccupancy
     // prediction step increment
     double T_;
 
-    void SetupCommandModel(bool compute_transition = false)
+    void PrepareModelParams(bool compute_transition = false, bool save_to_file = false, std::string file_name = "")
     {
         // setup command Markov model
         command_ = std::make_shared<CommandModel>();
@@ -139,6 +129,13 @@ class MarkovOccupancy
             Psi_ = sim.RunSim(T_);
 
             // std::cout << "Psi: \n" << Psi_ << std::endl;
+
+            // save to file
+            if (save_to_file)
+            {
+                typename MotionModel::Transition combined_trans = command_->GetTransitionMatrix() * Psi_;
+                MatrixIO::SaveMatrix(file_name, combined_trans, true);
+            }
         }
     }
 };

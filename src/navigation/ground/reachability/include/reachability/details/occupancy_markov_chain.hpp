@@ -20,6 +20,9 @@
 #include <vector>
 
 #include <eigen3/Eigen/Dense>
+#include <eigen3/Eigen/Sparse>
+
+#include "stopwatch/stopwatch.h"
 
 namespace librav
 {
@@ -77,17 +80,34 @@ class OccupancyMarkovChain
         return CalculateStateAt(k);
     }
 
+    // State CalculateStateAt(int32_t k)
+    // {
+    //     State s = init_state_;
+
+    //     for (int32_t i = 0; i < k; ++i)
+    //     {
+    //         s = transition_ * s;
+    //         // normalize to avoid undersampling
+    //         s = s / s.sum();
+    //     }
+    //     return s;
+    // }
+
     State CalculateStateAt(int32_t k)
     {
-        State s = init_state_;
+        // stopwatch::StopWatch timer;
+
+        Eigen::SparseMatrix<double> sparse_s = init_state_.sparseView();
+        Eigen::SparseMatrix<double> sparse_trans = transition_.sparseView();
 
         for (int32_t i = 0; i < k; ++i)
         {
-            s = transition_ * s;
+            sparse_s = sparse_trans * sparse_s;
             // normalize to avoid undersampling
-            s = s / s.sum();
+            sparse_s = sparse_s / sparse_s.sum();
         }
-        return s;
+        // std::cout << "matrix calculation finished in " << timer.toc() << std::endl;
+        return State(sparse_s);
     }
 
   protected:

@@ -27,12 +27,15 @@ int main()
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels().back();
     // TrafficViz::ShowVehicleInChannel(veh1.GetFootprint(), *ego_chn.get());
 
+    stopwatch::StopWatch timer;
+
     std::shared_ptr<CollisionThreat> ct1 = std::make_shared<CollisionThreat>(veh1, ego_chn);
-    ct1->PrecomputeParameters();
 
-    std::cout << "--------------" << std::endl;
+    ct1->UpdateOccupancyDistribution(3);
 
-    ct1->UpdateOccupancyDistribution(5);
+    std::cout << "occupancy estimation calculated in " << timer.toc() << std::endl;
+
+    std::cout << "------------- all calculation finished -------------" << std::endl;
 
     TrafficViz::ShowVehicleCollisionThreat(ct1, "occupancy_estimation");
 

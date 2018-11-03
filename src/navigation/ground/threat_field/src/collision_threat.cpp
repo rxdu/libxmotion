@@ -28,9 +28,9 @@ void CollisionThreat::SetupPredictionModel()
     occupancy_ = std::unique_ptr<MarkovModel>(new MarkovModel(0, s_max_, 0, v_max_));
 
     s_offset_ = pose_pf.s - s_starting_;
-    occupancy_->SetupMarkovModel(s_starting_, 2 * 2, vehicle_est_.GetSpeed(), 1 * 1, true, Location::GetDefaultDataFolderPath() + "/reachability/combined_state_transition.data");
+    occupancy_->SetupMarkovModel(s_starting_, 2 * 2, vehicle_est_.GetSpeed(), 1 * 1, true, Location::GetDefaultDataFolderPath() + "/reachability/vehicle_threat_combined_state_transition.data");
     
-    std::cout << "finished setting up markov model" << std::endl;
+    // std::cout << "finished setting up markov model" << std::endl;
 }
 
 void CollisionThreat::UpdateOccupancyDistribution(int32_t t_k)

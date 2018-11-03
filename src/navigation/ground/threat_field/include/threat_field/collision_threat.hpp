@@ -61,12 +61,9 @@ class CollisionThreat
     std::shared_ptr<TrafficChannel> traffic_chn_;
     std::shared_ptr<CurvilinearGrid> occupancy_grid_;
 
-    void PrecomputeParameters()
+    void PrecomputeParameters(std::string file_name)
     {
-        Eigen::VectorXd cmds;
-        cmds.resize(6);
-        cmds << -0.6, -0.3, 0, 0.3, 0.6, 1.0;
-        occupancy_->PrecomputeStateTransition(cmds, "combined_state_transition.data");
+        occupancy_->PrecomputeStateTransition(file_name);
     }
 
     void UpdateOccupancyDistribution(int32_t t_k);
