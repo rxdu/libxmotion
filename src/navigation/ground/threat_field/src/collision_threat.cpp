@@ -9,7 +9,7 @@
 
 #include "threat_field/collision_threat.hpp"
 
-#include "location/file_location.hpp"
+#include "file_io/folder_path.hpp"
 
 using namespace librav;
 
@@ -28,7 +28,7 @@ void CollisionThreat::SetupPredictionModel()
     occupancy_ = std::unique_ptr<MarkovModel>(new MarkovModel(0, s_max_, 0, v_max_));
 
     s_offset_ = pose_pf.s - s_starting_;
-    occupancy_->SetupMarkovModel(s_starting_, 2 * 2, vehicle_est_.GetSpeed(), 1 * 1, true, Location::GetDefaultDataFolderPath() + "/reachability/vehicle_threat_combined_state_transition.data");
+    occupancy_->SetupMarkovModel(s_starting_, 2 * 2, vehicle_est_.GetSpeed(), 1 * 1, true, FolderPath::GetDataFolderPath() + "/reachability/vehicle_threat_combined_state_transition.data");
     
     // std::cout << "finished setting up markov model" << std::endl;
 }

@@ -18,7 +18,7 @@
 #include "reachability/details/markov_motion.hpp"
 #include "reachability/details/tstate_transition_sim.hpp"
 
-#include "matrix_io/matrix_io.hpp"
+#include "file_io/matrix_file.hpp"
 
 namespace librav
 {
@@ -53,7 +53,7 @@ class MarkovOccupancy
         {
             PrepareModelParams();
             Eigen::MatrixXd combined_transition;
-            MatrixIO::LoadMatrix(trans_file, combined_transition);
+            MatrixFile::LoadMatrix(trans_file, combined_transition);
             motion_.SetupPrecomputedModel(state_space_, combined_transition, command_, s_mean, s_var, v_mean, v_var);
         }
         else
@@ -134,7 +134,7 @@ class MarkovOccupancy
             if (save_to_file)
             {
                 typename MotionModel::Transition combined_trans = command_->GetTransitionMatrix() * Psi_;
-                MatrixIO::SaveMatrix(file_name, combined_trans, true);
+                MatrixFile::SaveMatrix(file_name, combined_trans, true);
             }
         }
     }

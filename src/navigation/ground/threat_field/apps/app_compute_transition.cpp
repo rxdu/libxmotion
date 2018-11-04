@@ -7,7 +7,7 @@
 
 #include "stopwatch/stopwatch.h"
 #include "ugvnav_viz/ugvnav_viz.hpp"
-#include "location/file_location.hpp"
+#include "file_io/folder_path.hpp"
 
 using namespace librav;
 
@@ -28,7 +28,7 @@ int main()
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels().back();
 
     std::shared_ptr<CollisionThreat> ct1 = std::make_shared<CollisionThreat>(veh1, ego_chn);
-    ct1->PrecomputeParameters(Location::GetDefaultDataFolderPath() + "/reachability/vehicle_threat_combined_state_transition.data");
+    ct1->PrecomputeParameters(FolderPath::GetDataFolderPath() + "/reachability/vehicle_threat_combined_state_transition.data");
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 

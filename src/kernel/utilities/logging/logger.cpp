@@ -16,7 +16,7 @@ using namespace librav;
 namespace
 {
 // reference: https://stackoverflow.com/questions/22318389/pass-system-date-and-time-as-a-filename-in-c
-std::string createLogFileName(std::string prefix, std::string path)
+std::string CreateLogFileName(std::string prefix, std::string path)
 {
 	time_t t = time(0); // get time now
 	struct tm *now = localtime(&t);
@@ -30,24 +30,6 @@ std::string createLogFileName(std::string prefix, std::string path)
 }
 } // namespace
 
-std::string LoggerHelper::GetDefaultLogPath()
-{
-	char *home_path;
-	home_path = getenv("HOME");
-	std::string log_path;
-	if (home_path != NULL)
-	{
-		std::string hm(home_path);
-		log_path = hm + "/Workspace/librav/data/log";
-	}
-	else
-	{
-		// default path
-		log_path = "/home/rdu/Workspace/librav/data/log";
-	}
-	return log_path;
-}
-
 CtrlLogger::CtrlLogger(std::string log_name_prefix, std::string log_save_path) : head_added_(false),
 																				 log_name_prefix_(log_name_prefix),
 																				 log_save_path_(log_save_path),
@@ -55,7 +37,7 @@ CtrlLogger::CtrlLogger(std::string log_name_prefix, std::string log_save_path) :
 {
 	// initialize logger
 #ifdef ENABLE_LOGGING
-	std::string filename = createLogFileName(log_name_prefix_, log_save_path_);
+	std::string filename = CreateLogFileName(log_name_prefix_, log_save_path_);
 	spdlog::set_async_mode(256);
 	logger_ = spdlog::basic_logger_mt("ctrl_logger", filename);
 	logger_->set_pattern("%v");
@@ -169,7 +151,7 @@ CsvLogger::CsvLogger(std::string log_name_prefix, std::string log_save_path) : l
 {
 	// initialize logger
 #ifdef ENABLE_LOGGING
-	std::string filename = createLogFileName(log_name_prefix_, log_save_path_);
+	std::string filename = CreateLogFileName(log_name_prefix_, log_save_path_);
 	spdlog::set_async_mode(256);
 	logger_ = spdlog::basic_logger_mt("csv_logger_" + log_name_prefix_, filename);
 	logger_->set_pattern("%v");
@@ -189,7 +171,7 @@ EventLogger::EventLogger(std::string log_name_prefix, std::string log_save_path)
 {
 	// initialize logger
 #ifdef ENABLE_LOGGING
-	std::string filename = createLogFileName(log_name_prefix, log_save_path);
+	std::string filename = CreateLogFileName(log_name_prefix, log_save_path);
 	spdlog::set_async_mode(256);
 	logger_ = spdlog::basic_logger_mt("event_logger_" + log_name_prefix, filename);
 	logger_->set_pattern("%v");

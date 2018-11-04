@@ -4,7 +4,7 @@
 
 - [ ] Add memory leak check tests for all modules in "kernel"
 - [ ] Cleanup dependencies on LCM, create a comm package 
-- [ ] Put all finding folder path function into one place 
+- [*] Put all finding folder path function into one place 
 
 ## Planning
 

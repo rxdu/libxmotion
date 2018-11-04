@@ -19,14 +19,10 @@
 #include <sstream>
 
 #include "spdlog/spdlog.h"
+#include "file_io/folder_path.hpp"
 
 namespace librav
 {
-namespace LoggerHelper
-{
-std::string GetDefaultLogPath();
-}
-
 class CtrlLogger
 {
 public:

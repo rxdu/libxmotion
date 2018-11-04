@@ -1,23 +1,23 @@
 /* 
- * file_location.hpp
+ * folder_path.hpp
  * 
- * Created on: Nov 03, 2018 11:04
- * Description: 
+ * Created on: Nov 03, 2018 23:00
+ * Description: convenience functions to get path of librav
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
- */
+ */ 
 
-#ifndef FILE_LOCATION_HPP
-#define FILE_LOCATION_HPP
+#ifndef FOLDER_PATH_HPP
+#define FOLDER_PATH_HPP
 
 #include <cstdlib>
 #include <string>
 
 namespace librav
 {
-namespace Location
+namespace FolderPath
 {
-inline std::string GetDefaultDataFolderPath()
+inline std::string GetDataFolderPath()
 {
     char *home_path;
     home_path = std::getenv("HOME");
@@ -34,7 +34,12 @@ inline std::string GetDefaultDataFolderPath()
     }
     return log_path;
 }
-} // namespace Folder
+
+inline std::string GetLogFolderPath()
+{
+    return GetDataFolderPath() + "/log";
+}
+} // namespace FolderPath
 } // namespace librav
 
-#endif /* FILE_LOCATION_HPP */
+#endif /* FOLDER_PATH_HPP */
