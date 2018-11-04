@@ -8,6 +8,7 @@
  */
 
 #include "ugvnav_viz/details/vehicle_draw.hpp"
+#include "geometry/simple_point.hpp"
 
 using namespace librav;
 
@@ -17,9 +18,24 @@ void VehicleDraw::DrawVehicle(Polygon polygon)
     gdraw_.DrawPolygonDirection(polygon, CvDrawColors::orange_color, 2);
 }
 
+void VehicleDraw::DrawVehicle(Polygon polygon, int32_t id)
+{
+    gdraw_.DrawPolygon(polygon, false, CvDrawColors::orange_color, 2);
+    gdraw_.DrawPolygonDirection(polygon, CvDrawColors::orange_color, 2);
+    SimplePoint pt;
+    for (int i = 0; i < 4; ++i)
+    {
+        pt.x += polygon.GetPoint(i).x;
+        pt.y += polygon.GetPoint(i).y;
+    }
+    pt.x = pt.x / 4.0;
+    pt.y = pt.y / 4.0;
+    gdraw_.WriteTextAtPosition(std::to_string(id), pt);
+}
+
 void VehicleDraw::DrawVehicle(std::vector<Polygon> &polygons)
 {
-    for(auto& poly : polygons)
+    for (auto &poly : polygons)
         DrawVehicle(poly);
 }
 

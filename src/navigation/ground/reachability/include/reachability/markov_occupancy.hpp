@@ -122,20 +122,25 @@ class MarkovOccupancy
 
         if (compute_transition)
         {
-            // calculate transition matrix
-            TStateTransitionSim sim;
-            sim.SetupStateSpace(state_space_);
-            sim.SetControlSet(cmds);
-            Psi_ = sim.RunSim(T_);
+            RunSimulation(state_space_, cmds, save_to_file, file_name);
+        }
+    }
 
-            // std::cout << "Psi: \n" << Psi_ << std::endl;
+    void RunSimulation(std::shared_ptr<TStateSpace> space, typename CommandModel::ControlSet cmds, bool save_to_file, std::string file_name)
+    {
+        // calculate transition matrix
+        TStateTransitionSim sim;
+        sim.SetupStateSpace(space);
+        sim.SetControlSet(cmds);
+        Psi_ = sim.RunSim(T_);
 
-            // save to file
-            if (save_to_file)
-            {
-                typename MotionModel::Transition combined_trans = command_->GetTransitionMatrix() * Psi_;
-                MatrixFile::SaveMatrix(file_name, combined_trans, true);
-            }
+        // std::cout << "Psi: \n" << Psi_ << std::endl;
+
+        // save to file
+        if (save_to_file)
+        {
+            typename MotionModel::Transition combined_trans = command_->GetTransitionMatrix() * Psi_;
+            MatrixFile::SaveMatrix(file_name, combined_trans, true);
         }
     }
 };

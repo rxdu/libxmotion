@@ -63,11 +63,11 @@ void TrafficViz::ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice,
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
-    CartesianCanvas canvas = viz.CreateCanvas();
+    CartesianCanvas canvas = viz.CreateCanvas(false);
     RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
     LatticeDraw lattice_draw = LatticeDraw(canvas);
 
-    road_draw.DrawLanes(true);
+    road_draw.DrawLanes(false);
     road_draw.DrawTrafficChannelGrid(channel, false);
 
     // draw state lattice
@@ -90,6 +90,59 @@ void TrafficViz::ShowVehicleCollisionThreat(std::shared_ptr<CollisionThreat> thr
 
     road_draw.DrawLanes(true);
     veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint());
+
+    ShowImage(canvas.paint_area, window_name, save_img);
+}
+
+void TrafficViz::ShowVehicleCollisionThreat(std::vector<std::shared_ptr<CollisionThreat>> threats, std::string window_name, bool save_img)
+{
+    RoadMapViz &viz = RoadMapViz::GetInstance();
+
+    CartesianCanvas canvas = viz.CreateCanvas(false);
+    RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
+    VehicleDraw veh_draw = VehicleDraw(canvas);
+    CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
+
+    for (auto threat : threats)
+    {
+        if (threat->occupancy_grid_ != nullptr)
+            cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));
+    }
+
+    road_draw.DrawLanes(true);
+
+    for (auto threat : threats)
+        veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint());
+
+    ShowImage(canvas.paint_area, window_name, save_img);
+}
+
+void TrafficViz::ShowThreatField(ThreatField &field, bool show_veh_id, std::string window_name, bool save_img)
+{
+    RoadMapViz &viz = RoadMapViz::GetInstance();
+
+    CartesianCanvas canvas = viz.CreateCanvas(false);
+    RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
+    VehicleDraw veh_draw = VehicleDraw(canvas);
+    CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
+
+    auto threats = field.GetAllCollisionThreats();
+
+    for (auto threat : threats)
+    {
+        if (threat->occupancy_grid_ != nullptr)
+            cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));
+    }
+
+    road_draw.DrawLanes(true);
+
+    for (auto threat : threats)
+    {
+        if (!show_veh_id)
+            veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint());
+        else
+            veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint(), threat->vehicle_est_.id_);
+    }
 
     ShowImage(canvas.paint_area, window_name, save_img);
 }

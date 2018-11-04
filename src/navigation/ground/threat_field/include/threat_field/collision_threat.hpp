@@ -12,6 +12,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <vector>
 
 #include "traffic_map/traffic_map.hpp"
 #include "threat_field/vehicle_estimation.hpp"
@@ -29,7 +30,7 @@ class CollisionThreat
     static constexpr int32_t VSize = 10;
     static constexpr int32_t SStartIndex = 3;
 
-    // lateral: slightly wider than standard width: 3.7m / 5 = 0.74
+    // lateral: slightly wider than standard width (standard: 3.7m / 5 = 0.74)
     //          NEED to adjust LateralDistribution accordingly
     static constexpr double DeltaStep = 0.8;
     static constexpr int32_t DeltaSize = 5;
@@ -59,7 +60,9 @@ class CollisionThreat
 
     VehicleEstimation vehicle_est_;
     std::shared_ptr<TrafficChannel> traffic_chn_;
+
     std::shared_ptr<CurvilinearGrid> occupancy_grid_;
+    std::vector<CurvilinearCell *> nz_cells_;
 
     void PrecomputeParameters(std::string file_name)
     {

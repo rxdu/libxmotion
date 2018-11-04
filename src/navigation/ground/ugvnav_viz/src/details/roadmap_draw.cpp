@@ -34,10 +34,11 @@ void RoadMapDraw::DrawTrafficChannelGrid(TrafficChannel &channel, bool show_cent
     if (channel.grid_ != nullptr)
         cdraw_.DrawCurvilinearGrid(*channel.grid_.get());
 
-    gdraw_.DrawParametricCurve(channel.center_curve_, 0.1, CvDrawColors::black_color);
-
     if (show_center_line)
+    {
+        gdraw_.DrawParametricCurve(channel.center_curve_, 0.1, CvDrawColors::black_color);
         gdraw_.DrawPolyline(channel.center_line_, true, CvDrawColors::black_color);
+    }
 }
 
 void RoadMapDraw::DrawTrafficChannelCenterline(TrafficChannel &channel)

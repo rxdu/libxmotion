@@ -24,6 +24,7 @@ class VehicleDraw
     VehicleDraw(CartesianCanvas &canvas) : canvas_(canvas), gdraw_(GeometryDraw(canvas_)){};
 
     void DrawVehicle(Polygon polygon);
+    void DrawVehicle(Polygon polygon, int32_t id);
     void DrawVehicle(std::vector<Polygon> &polygons);
     void DrawVehiclePath(std::vector<Polyline> &path, std::vector<Polygon> polygons = {});
 

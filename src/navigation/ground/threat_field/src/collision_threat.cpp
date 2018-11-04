@@ -26,16 +26,19 @@ void CollisionThreat::SetupPredictionModel()
 
     // instantiate Markov model
     occupancy_ = std::unique_ptr<MarkovModel>(new MarkovModel(0, s_max_, 0, v_max_));
+    auto s_var_matrix = vehicle_est_.GetPositionVariance();
+    double spd_var = vehicle_est_.GetSpeedVariance();
 
     s_offset_ = pose_pf.s - s_starting_;
-    occupancy_->SetupMarkovModel(s_starting_, 2 * 2, vehicle_est_.GetSpeed(), 1 * 1, true, FolderPath::GetDataFolderPath() + "/reachability/vehicle_threat_combined_state_transition.data");
-    
+    occupancy_->SetupMarkovModel(s_starting_, s_var_matrix(0, 0), vehicle_est_.GetSpeed(), spd_var, true, FolderPath::GetDataFolderPath() + "/reachability/vehicle_threat_combined_state_transition.data");
+
     // std::cout << "finished setting up markov model" << std::endl;
 }
 
 void CollisionThreat::UpdateOccupancyDistribution(int32_t t_k)
 {
     occupancy_grid_ = std::make_shared<CurvilinearGrid>(traffic_chn_->center_curve_, s_step_, delta_step_, delta_size_, s_offset_);
+    nz_cells_.clear();
 
     Eigen::VectorXd dist = occupancy_->GetOccupancyDistribution(t_k);
 
@@ -65,6 +68,7 @@ void CollisionThreat::UpdateOccupancyDistribution(int32_t t_k)
             {
                 occupancy_grid_->GetCell(i, j)->cost_map = occupancy_grid_->GetCell(i, j)->cost_map / probability_max;
                 // std::cout << "probability (i,j) " << i << "," << j << " = " << occupancy_grid_->GetCell(i, j)->cost_map << std::endl;
+                nz_cells_.push_back(occupancy_grid_->GetCell(i, j));
             }
         }
     }

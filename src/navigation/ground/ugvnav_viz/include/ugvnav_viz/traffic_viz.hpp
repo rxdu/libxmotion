@@ -21,6 +21,7 @@
 #include "traffic_map/traffic_map.hpp"
 #include "state_lattice/state_lattice.hpp"
 #include "threat_field/collision_threat.hpp"
+#include "threat_field/threat_field.hpp"
 
 #include "lightviz/details/cartesian_canvas.hpp"
 
@@ -28,19 +29,22 @@ namespace librav
 {
 class TrafficViz
 {
-public:
-  static void SetupTrafficViz(std::shared_ptr<RoadMap> map, int32_t pixel_per_unit = 10);
+  public:
+    static void SetupTrafficViz(std::shared_ptr<RoadMap> map, int32_t pixel_per_unit = 10);
 
-  static void ShowLanes(bool show_center_line = true, std::string window_name = "Lane Image", bool save_img = false);
-  static void ShowTrafficChannel(TrafficChannel &channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
+    static void ShowLanes(bool show_center_line = true, std::string window_name = "Lane Image", bool save_img = false);
+    static void ShowTrafficChannel(TrafficChannel &channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
 
-  static void ShowVehicle(Polygon polygon, std::string window_name = "Vehicle Image", bool save_img = false);
-  static void ShowVehicle(std::vector<Polygon> &polygons, std::string window_name = "Vehicle Image", bool save_img = false);
-  static void ShowVehicleInChannel(Polygon polygon, TrafficChannel &channel, std::string window_name = "Vehicle Image", bool save_img = false);
+    static void ShowVehicle(Polygon polygon, std::string window_name = "Vehicle Image", bool save_img = false);
+    static void ShowVehicle(std::vector<Polygon> &polygons, std::string window_name = "Vehicle Image", bool save_img = false);
+    static void ShowVehicleInChannel(Polygon polygon, TrafficChannel &channel, std::string window_name = "Vehicle Image", bool save_img = false);
 
-  static void ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel &channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
+    static void ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel &channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
 
-  static void ShowVehicleCollisionThreat(std::shared_ptr<CollisionThreat> threat, std::string window_name = "Vehicle Image", bool save_img = false);
+    static void ShowVehicleCollisionThreat(std::shared_ptr<CollisionThreat> threat, std::string window_name = "Collision Threat", bool save_img = false);
+    static void ShowVehicleCollisionThreat(std::vector<std::shared_ptr<CollisionThreat>> threats, std::string window_name = "Collision Threat", bool save_img = false);
+
+    static void ShowThreatField(ThreatField& field, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
 };
 } // namespace librav
 

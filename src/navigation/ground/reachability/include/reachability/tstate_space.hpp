@@ -136,11 +136,11 @@ class TStateSpace
         s_size_ = (s_max_ - s_min_) / s_step_;
         v_size_ = (v_max_ - v_min_) / v_step_;
 
-        std::cout << "state space discretization size: " << s_size_ << " , " << v_size_ << std::endl;
+        // std::cout << "state space discretization size: " << s_size_ << " , " << v_size_ << std::endl;
 
         DiscretizeSpace();
 
-        std::cout << "cell size: " << state_cells_.size() << " , " << state_cells_.front().size() << std::endl;
+        // std::cout << "cell size: " << state_cells_.size() << " , " << state_cells_.front().size() << std::endl;
     }
 
     // ssize, vsize: number of intervals
@@ -151,11 +151,11 @@ class TStateSpace
         s_size_ = ssize;
         v_size_ = vsize;
 
-        std::cout << "state space discretization size: " << s_size_ << " , " << v_size_ << std::endl;
+        // std::cout << "state space discretization size: " << s_size_ << " , " << v_size_ << std::endl;
 
         DiscretizeSpace();
 
-        std::cout << "cell size: " << state_cells_.size() << " , " << state_cells_.front().size() << std::endl;
+        // std::cout << "cell size: " << state_cells_.size() << " , " << state_cells_.front().size() << std::endl;
     }
 
   private:

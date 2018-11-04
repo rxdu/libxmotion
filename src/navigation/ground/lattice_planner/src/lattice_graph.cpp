@@ -16,8 +16,8 @@ using namespace librav;
 
 std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> LatticeGraph::Construct(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t expansion_iter)
 {
-    int32_t min_h = 4;
-    int32_t max_h = 4;
+    int32_t min_h = 1;
+    int32_t max_h = 1;
 
     std::shared_ptr<Graph<LatticeNode, StateLattice>> graph = std::make_shared<Graph<LatticeNode, StateLattice>>();
 

@@ -17,6 +17,7 @@
 
 #include "common/librav_types.hpp"
 #include "geometry/polygon.hpp"
+#include "traffic_map/traffic_channel.hpp"
 
 namespace librav
 {
@@ -41,22 +42,34 @@ struct VehicleFP
 class VehicleEstimation
 {
   public:
-    VehicleEstimation() = default;
+    VehicleEstimation();
     VehicleEstimation(Pose2d _pose, double _speed);
+    VehicleEstimation(Pose2d _pose, double _speed, std::shared_ptr<TrafficChannel> chn);
+    VehicleEstimation(Pose2d _pose, double _speed, std::vector<std::shared_ptr<TrafficChannel>> chns);
+
+    int32_t id_;
 
     // Note: use getter/setter for "pose" to make sure the footprint
     //  is set properly when the pose changes
     void SetPose(Pose2d ps);
     Pose2d GetPose() const { return pose; }
     void SetPositionVariance(CovarMatrix2d covar) { pos_var = covar; }
+    CovarMatrix2d GetPositionVariance() const { return pos_var; }
 
     void SetSpeed(double spd) { speed = spd; }
     double GetSpeed() const { return speed; }
     void SetSpeedVariance(double var) { spd_var = var; }
+    double GetSpeedVariance() const { return spd_var; }
+
+    void SetOccupiedChannels(std::vector<std::shared_ptr<TrafficChannel>> chns) { occupied_channels_ = chns; }
+    std::vector<std::shared_ptr<TrafficChannel>> GetOccupiedChannels() { return occupied_channels_; }
 
     Polygon GetFootprint() const { return footprint.polygon; }
 
   private:
+    static int32_t VehicleCount;
+    std::vector<std::shared_ptr<TrafficChannel>> occupied_channels_;
+
     Pose2d pose;
     CovarMatrix2d pos_var;
 

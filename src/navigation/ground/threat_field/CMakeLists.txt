@@ -5,6 +5,7 @@
 set(TFIELD_LIB_SRC
     src/vehicle_estimation.cpp
     src/collision_threat.cpp
+    src/threat_field.cpp
 )
 add_library(tfield STATIC ${TFIELD_LIB_SRC})
 target_link_libraries(tfield common decomp graph traffic reachability)

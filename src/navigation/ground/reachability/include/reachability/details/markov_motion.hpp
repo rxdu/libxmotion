@@ -39,9 +39,9 @@ class SVDistribution
         coeff2_ = -(2 * v_var_);
         coeff3_ = 2 * M_PI * std::sqrt(s_var_ * v_var_);
 
-        std::cout << "s-v distribution coefficients (us,uv,sigs,sigv);(3-temp): \n(" << s_mean_ << " , " << v_mean_ << " , " << s_var_ << " , " << v_var_
-                  << " );( " << coeff1_ << " , " << coeff2_ << " , " << coeff3_ << " )\n"
-                  << std::endl;
+        // std::cout << "s-v distribution coefficients (us,uv,sigs,sigv);(3-temp): \n(" << s_mean_ << " , " << v_mean_ << " , " << s_var_ << " , " << v_var_
+        //           << " );( " << coeff1_ << " , " << coeff2_ << " , " << coeff3_ << " )\n"
+        //           << std::endl;
     }
 
     double operator()(double s, double v)

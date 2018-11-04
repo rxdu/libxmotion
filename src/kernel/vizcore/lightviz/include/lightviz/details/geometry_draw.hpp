@@ -42,10 +42,13 @@ class GeometryDraw
 
     // annotations
     void DrawPolygonDirection(const Polygon &polygon, cv::Scalar ln_color = CvDrawColors::blue_color, int32_t ln_width = 1);
+    void WriteTextAtPosition(std::string txt, SimplePoint pt);
     void WritePointPosition(const std::vector<SimplePoint> &points);
 
     // distribution
     void DrawDistribution(double cx, double cy, double xspan, double yspan, std::function<double(double, double)> dist_fun);
+
+    cv::Mat GetPaintArea() { return canvas_.paint_area; }
 
   private:
     // internal parameters

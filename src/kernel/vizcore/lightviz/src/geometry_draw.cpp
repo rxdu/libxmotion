@@ -92,7 +92,7 @@ void GeometryDraw::DrawPolygon(const Polygon &polygon, bool show_dot, cv::Scalar
 
     if (pt_num < 3)
         return;
-        
+
     for (std::size_t i = 0; i < pt_num - 1; ++i)
     {
         auto pt1 = canvas_.ConvertCartisianToPixel(polygon.GetPoint(i).x, polygon.GetPoint(i).y);
@@ -171,6 +171,12 @@ void GeometryDraw::WritePointPosition(const std::vector<SimplePoint> &points)
         std::string pos_str = "(" + std::to_string(static_cast<int32_t>(pt.x)) + "," + std::to_string(static_cast<int32_t>(pt.y)) + ")";
         WriteText(canvas_.paint_area, pos_str, cv::Point(pt1.x, pt1.y));
     }
+}
+
+void GeometryDraw::WriteTextAtPosition(std::string txt, SimplePoint pt)
+{
+    auto pt1 = canvas_.ConvertCartisianToPixel(pt.x, pt.y);
+    WriteText(canvas_.paint_area, txt, cv::Point(pt1.x, pt1.y));
 }
 
 void GeometryDraw::DrawDistribution(double cx, double cy, double xspan, double yspan, std::function<double(double, double)> dist_fun)
