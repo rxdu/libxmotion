@@ -42,3 +42,12 @@ void VehicleDraw::DrawVehicle(std::vector<Polygon> &polygons)
 void VehicleDraw::DrawVehiclePath(std::vector<Polyline> &path, std::vector<Polygon> polygons)
 {
 }
+
+void VehicleDraw::DrawVehicleStaticCollision(VehicleStaticThreat threat, Polygon polygon)
+{
+    gdraw_.DrawDistribution(threat.pose.position.x, threat.pose.position.y, 20, 20,
+                            std::function<double(double, double)>(threat));
+                            
+    gdraw_.DrawPolygon(polygon, false, CvDrawColors::black_color, 2);
+    gdraw_.DrawPolygonDirection(polygon, CvDrawColors::orange_color, 2);
+}

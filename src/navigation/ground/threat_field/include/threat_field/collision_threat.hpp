@@ -13,10 +13,12 @@
 #include <cstdint>
 #include <memory>
 #include <vector>
+#include <cmath>
 
 #include "traffic_map/traffic_map.hpp"
-#include "threat_field/vehicle_estimation.hpp"
 #include "reachability/markov_occupancy.hpp"
+#include "threat_field/vehicle_estimation.hpp"
+#include "threat_field/static_threat.hpp"
 
 namespace librav
 {

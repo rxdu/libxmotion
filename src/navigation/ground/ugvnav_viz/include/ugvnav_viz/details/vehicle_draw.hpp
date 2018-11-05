@@ -12,6 +12,7 @@
 
 #include "geometry/polyline.hpp"
 #include "geometry/polygon.hpp"
+#include "threat_field/collision_threat.hpp"
 
 #include "lightviz/details/cartesian_canvas.hpp"
 #include "lightviz/details/geometry_draw.hpp"
@@ -27,6 +28,8 @@ class VehicleDraw
     void DrawVehicle(Polygon polygon, int32_t id);
     void DrawVehicle(std::vector<Polygon> &polygons);
     void DrawVehiclePath(std::vector<Polyline> &path, std::vector<Polygon> polygons = {});
+
+    void DrawVehicleStaticCollision(VehicleStaticThreat threat, Polygon polygon);
 
   private:
     CartesianCanvas &canvas_;

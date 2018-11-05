@@ -41,10 +41,13 @@ class TrafficViz
 
     static void ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel &channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
 
+    static void ShowVehicleStaticThreat(VehicleStaticThreat threat, std::string window_name = "Collision Threat", bool save_img = false);
+
     static void ShowVehicleCollisionThreat(std::shared_ptr<CollisionThreat> threat, std::string window_name = "Collision Threat", bool save_img = false);
     static void ShowVehicleCollisionThreat(std::vector<std::shared_ptr<CollisionThreat>> threats, std::string window_name = "Collision Threat", bool save_img = false);
 
-    static void ShowThreatField(ThreatField& field, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
+    static void ShowThreatField(ThreatField &field, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
+    static void ShowLatticeInThreatField(std::vector<StateLattice> &lattice, TrafficChannel &channel, ThreatField &field, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
 };
 } // namespace librav
 

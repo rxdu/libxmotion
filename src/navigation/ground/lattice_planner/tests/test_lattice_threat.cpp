@@ -2,24 +2,61 @@
 #include <cstdint>
 #include <cmath>
 
+#include "road_map/road_map.hpp"
 #include "traffic_map/map_loader.hpp"
-#include "threat_field/threat_field.hpp"
+
+#include "lattice_planner/lattice_graph.hpp"
+#include "ugvnav_viz/ugvnav_viz.hpp"
 
 #include "stopwatch/stopwatch.h"
-#include "ugvnav_viz/ugvnav_viz.hpp"
 
 using namespace librav;
 
 int main()
 {
+    // load map
     // MapLoader loader("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane_horizontal.osm");
+    // MapLoader loader("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane.osm");
+    // MapLoader loader("/home/rdu/Workspace/librav/data/road_map/short_segment.osm");
     MapLoader loader("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
 
-    TrafficViz::SetupTrafficViz(loader.road_map);
+    TrafficViz::SetupTrafficViz(loader.road_map, 10);
 
-    //////////////////////////////////////////////////
+    // TrafficViz::ShowLanes(true, 5, "test_lane", true);
+    // for (auto &chn : map->traffic_map_->GetAllTrafficChannels())
+    // {
+    //     // TrafficViz::ShowTrafficChannelCenterline(chn);
+    //     chn->PrintInfo();
+    //     TrafficViz::ShowTrafficChannel(*chn.get(), 5);
+    // }
 
-    // ------------------- vehicle 1 ---------------------- //
+    /****************************************************************************/
+
+    // discretize lane
+    auto all_channels = loader.traffic_map->GetAllTrafficChannels();
+    // all_channels[1]->DiscretizeChannel(5, 1.2, 5);
+    auto ego_chn = loader.traffic_map->GetAllTrafficChannels()[2];
+    ego_chn->DiscretizeChannel(10, 1.2, 5);
+
+    // TrafficViz::ShowTrafficChannel(*all_channels[1].get());
+    // TrafficViz::ShowTrafficChannel(*all_channels[1].get(), 20, "horizontal_lane", true);
+
+    stopwatch::StopWatch timer;
+
+    auto graph = LatticeGraph::Construct(ego_chn, {0, 0}, 11);
+    std::cout << "graph constructed in " << timer.toc() << " seconds" << std::endl;
+
+    std::vector<StateLattice> lattices;
+    for (auto &edge : graph->GetAllEdges())
+        lattices.push_back(edge->cost_);
+    std::cout << "number of vertices: " << graph->GetGraphVertexNumber() << std::endl;
+
+    // LightViz::ShowStateLattice(lattices);
+    // TrafficViz::ShowLatticeInTrafficChannel(lattices, *ego_chn.get(), "lattice graph", true);
+
+    /****************************************************************************/
+
+    // // ------------------- vehicle 1 ---------------------- //
 
     CovarMatrix2d pos_covar1;
     pos_covar1 << 2, 0,
@@ -83,28 +120,34 @@ int main()
     // for(auto chn : loader.traffic_map->GetAllTrafficChannels())
     //     TrafficViz::ShowVehicleInChannel(veh1.GetFootprint(), *chn.get());
 
-    //////////////////////////////////////////////////
+    /****************************************************************************/
 
-    stopwatch::StopWatch timer;
+    timer.tic();
 
     ThreatField field;
     field.AddVehicleEstimations({veh1, veh2, veh3, veh4, veh5});
 
     field.SetupThreatField();
 
-    // field.UpdateThreatField(2);
+    //////////////////////////////////////////////////
 
-    // std::cout << "occupancy estimation calculated in " << timer.toc() << std::endl;
+    field.UpdateThreatField(4);
 
-    // std::cout << "------------- all calculation finished -------------" << std::endl;
+    std::cout << "occupancy estimation calculated in " << timer.toc() << std::endl;
+
+    std::cout << "------------- all calculation finished -------------" << std::endl;
+
+    TrafficViz::ShowLatticeInThreatField(lattices, *ego_chn.get(), field, true, "lattice_in_threat_field", true);
+
+    //////////////////////////////////////////////////
 
     // TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(2), true);
 
-    for (int i = 0; i < 9; i++)
-    {
-        field.UpdateThreatField(i);
-        TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(i), true);
-    }
+    // for (int i = 0; i < 9; i++)
+    // {
+    //     field.UpdateThreatField(i);
+    //     TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(i), true);
+    // }
 
     return 0;
 }

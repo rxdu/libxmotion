@@ -66,9 +66,13 @@ void CollisionThreat::UpdateOccupancyDistribution(int32_t t_k)
         {
             for (int32_t j = -occupancy_grid_->GetOneSideGridNumber(); j <= occupancy_grid_->GetOneSideGridNumber(); ++j)
             {
-                occupancy_grid_->GetCell(i, j)->cost_map = occupancy_grid_->GetCell(i, j)->cost_map / probability_max;
-                // std::cout << "probability (i,j) " << i << "," << j << " = " << occupancy_grid_->GetCell(i, j)->cost_map << std::endl;
+                // Note: this is the true probability value
                 nz_cells_.push_back(occupancy_grid_->GetCell(i, j));
+
+                // values here are normalized for better visualization
+                occupancy_grid_->GetCell(i, j)->cost_map = occupancy_grid_->GetCell(i, j)->cost_map / probability_max;
+                
+                // std::cout << "probability (i,j) " << i << "," << j << " = " << occupancy_grid_->GetCell(i, j)->cost_map << std::endl;
             }
         }
     }
