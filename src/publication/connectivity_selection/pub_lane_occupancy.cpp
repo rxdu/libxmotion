@@ -35,7 +35,7 @@ int main()
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    TrafficViz::ShowVehicleCollisionThreat(ct1, "lane_occupancy", true);
+    TrafficViz::ShowVehicleOccupancyDistribution(ct1, "lane_occupancy", true);
 
     return 0;
 }

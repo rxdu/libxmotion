@@ -58,6 +58,7 @@ class CollisionThreat
     static void GenerateStateTransitionMatrix();
 
   public:
+    CollisionThreat() = default;
     CollisionThreat(VehicleEstimation est, std::shared_ptr<TrafficChannel> chn);
 
     VehicleEstimation vehicle_est_;
@@ -65,6 +66,7 @@ class CollisionThreat
 
     std::shared_ptr<CurvilinearGrid> occupancy_grid_;
     std::vector<CurvilinearCell *> nz_cells_;
+    std::vector<VehicleStaticThreat> sub_threats_;
 
     void PrecomputeParameters(std::string file_name)
     {
@@ -73,9 +75,30 @@ class CollisionThreat
 
     void UpdateOccupancyDistribution(int32_t t_k);
 
+    double operator()(double x, double y)
+    {
+        double threat = 0.0;
+        for (auto &sub : sub_threats_)
+            threat += sub(x, y) * sub.probability;
+        return threat;
+    }
+
+    Point2d GetThreatCenter()
+    {
+        Point2d pos(0, 0);
+        for (auto &sub : sub_threats_)
+        {
+            pos.x += sub.pose.position.x;
+            pos.y += sub.pose.position.y;
+        }
+        pos.x = pos.x / sub_threats_.size();
+        pos.y = pos.y / sub_threats_.size();
+        return pos;
+    }
+
   private:
     // Markov model covarage: SStep * SSize = 100m, 2m/s * 10 = 20m/s
-    std::unique_ptr<MarkovModel> occupancy_;
+    std::shared_ptr<MarkovModel> occupancy_;
     double s_offset_ = 0;
 
     // NO NEED TO BE MODIFIED MANUALLY

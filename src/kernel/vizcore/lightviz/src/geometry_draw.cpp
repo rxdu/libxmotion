@@ -223,10 +223,13 @@ void GeometryDraw::DrawDistribution(double cx, double cy, double xspan, double y
     // merge threat distribution to canvas
     auto top_left_pixel = canvas_.ConvertCartisianToPixel(dxmin, dymax); // y inverted in cartesian coordinate
     threat_vis.copyTo(canvas_.paint_area(cv::Rect(top_left_pixel.x, top_left_pixel.y, threat_vis.cols, threat_vis.rows)));
+    // cv::add(canvas_.paint_area(cv::Rect(top_left_pixel.x, top_left_pixel.y, threat_vis.cols, threat_vis.rows)),
+    //                 threat_vis,
+    //                 canvas_.paint_area(cv::Rect(top_left_pixel.x, top_left_pixel.y, threat_vis.cols, threat_vis.rows)));
 
-    std::cout << int32_t(threat_vis.at<cv::Vec3b>(0, 0)[0]) << " , "
-              << int32_t(threat_vis.at<cv::Vec3b>(0, 0)[1]) << " , "
-              << int32_t(threat_vis.at<cv::Vec3b>(0, 0)[2]) << std::endl;
+    // std::cout << int32_t(threat_vis.at<cv::Vec3b>(0, 0)[0]) << " , "
+    //           << int32_t(threat_vis.at<cv::Vec3b>(0, 0)[1]) << " , "
+    //           << int32_t(threat_vis.at<cv::Vec3b>(0, 0)[2]) << std::endl;
 
     // std::cout << "------------" << std::endl;
     // std::cout << "dx: " << dxmin << " , " << dxmax << std::endl;
