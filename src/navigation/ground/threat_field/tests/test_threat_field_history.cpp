@@ -87,10 +87,11 @@ int main()
 
     stopwatch::StopWatch timer;
 
-    ThreatField field;
+    ThreatField field(loader.road_map, loader.traffic_map);
     field.AddVehicleEstimations({veh1, veh2, veh3, veh4, veh5});
 
-    field.SetupThreatField();
+    auto ego_chn = loader.traffic_map->GetAllTrafficChannels()[2];
+    field.SetupThreatField(ego_chn);
 
     // field.UpdateThreatField(2);
 
@@ -110,7 +111,15 @@ int main()
         for (int j = 0; j < 200; ++j)
             std::cout << "query: " << field(50, 50, i) << std::endl;
 
-    std::cout << "query finished in average: " << timer.toc()/1000 << std::endl;;
+    std::cout << "query1 finished in average: " << timer.toc() / 1000 << std::endl;
+
+    timer.tic();
+    for (int i = 0; i < 5; i++)
+        for (int j = 0; j < 200; ++j)
+            std::cout << "query2: " << field(50, 50) << std::endl;
+
+    std::cout << "query2 finished in average: " << timer.toc() / 1000 << std::endl;
+    ;
 
     return 0;
 }

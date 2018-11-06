@@ -86,3 +86,51 @@ void CollisionThreat::UpdateOccupancyDistribution(int32_t t_k)
 
     threat_record_[t_k] = sub_threats_;
 }
+
+double CollisionThreat::operator()(double x, double y)
+{
+    double threat = 0.0;
+    for (auto &sub : sub_threats_)
+        threat += sub(x, y) * sub.probability;
+    return threat;
+}
+
+Point2d CollisionThreat::GetThreatCenter()
+{
+    Point2d pos(0, 0);
+    for (auto &sub : sub_threats_)
+    {
+        pos.x += sub.pose.position.x;
+        pos.y += sub.pose.position.y;
+    }
+    pos.x = pos.x / sub_threats_.size();
+    pos.y = pos.y / sub_threats_.size();
+    return pos;
+}
+
+double CollisionThreat::operator()(double x, double y, int32_t t_k)
+{
+    // assert(t_k < threat_record_.size());
+
+    auto threats = threat_record_[t_k];
+    double threat = 0.0;
+    for (auto &sub : threats)
+        threat += sub(x, y) * sub.probability;
+    return threat;
+}
+
+Point2d CollisionThreat::GetThreatCenter(int32_t t_k)
+{
+    // assert(t_k < threat_record_.size());
+
+    auto threats = threat_record_[t_k];
+    Point2d pos(0, 0);
+    for (auto &sub : threats)
+    {
+        pos.x += sub.pose.position.x;
+        pos.y += sub.pose.position.y;
+    }
+    pos.x = pos.x / threats.size();
+    pos.y = pos.y / threats.size();
+    return pos;
+}

@@ -124,10 +124,10 @@ int main()
 
     timer.tic();
 
-    ThreatField field;
+    ThreatField field(loader.road_map, loader.traffic_map);
     field.AddVehicleEstimations({veh1, veh2, veh3, veh4, veh5});
 
-    field.SetupThreatField();
+    field.SetupThreatField(ego_chn);
 
     //////////////////////////////////////////////////
 

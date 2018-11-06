@@ -16,7 +16,7 @@ int main()
 
     RoadMapViz::SetupRoadMapViz(loader.road_map);
 
-    auto ids = loader.road_map->OccupiedLanelet(CartCooridnate(55, 56));
+    auto ids = loader.road_map->FindOccupiedLanelet(CartCooridnate(55, 56));
     std::cout << "occupied laneles: " << ids.size() << std::endl;
 
     for (auto &chn : loader.traffic_map->GetAllTrafficChannels())

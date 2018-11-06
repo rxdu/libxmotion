@@ -300,7 +300,7 @@ void MotionModel::MergePointsToNetwork()
     for (auto &est : ests_)
     {
         // find occupied lanelets
-        auto lanelet_ids = road_map_->OccupiedLanelet(CartCooridnate(est.position_x, est.position_y));
+        auto lanelet_ids = road_map_->FindOccupiedLanelet(CartCooridnate(est.position_x, est.position_y));
 
         if (lanelet_ids.empty())
         {

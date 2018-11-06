@@ -66,7 +66,8 @@ class CollisionThreat
     VehicleEstimation vehicle_est_;
     std::shared_ptr<TrafficChannel> traffic_chn_;
 
-    // occupancy_grid_ and sub_threats_ only store latest threat information
+    // occupancy_grid_ and sub_threats_ only store latest threat information after
+    //  last time UpdateOccupancyDistribution() was called
     std::shared_ptr<CurvilinearGrid> occupancy_grid_;
     std::vector<VehicleStaticThreat> sub_threats_;
     // threat_record_ stores all history threat information
@@ -79,53 +80,12 @@ class CollisionThreat
 
     void UpdateOccupancyDistribution(int32_t t_k);
 
-    double operator()(double x, double y)
-    {
-        double threat = 0.0;
-        for (auto &sub : sub_threats_)
-            threat += sub(x, y) * sub.probability;
-        return threat;
-    }
+    // threat value query
+    double operator()(double x, double y);
+    Point2d GetThreatCenter();
 
-    Point2d GetThreatCenter()
-    {
-        Point2d pos(0, 0);
-        for (auto &sub : sub_threats_)
-        {
-            pos.x += sub.pose.position.x;
-            pos.y += sub.pose.position.y;
-        }
-        pos.x = pos.x / sub_threats_.size();
-        pos.y = pos.y / sub_threats_.size();
-        return pos;
-    }
-
-    double operator()(double x, double y, int32_t t_k)
-    {
-        assert(t_k < threat_record_.size());
-
-        auto threats = threat_record_[t_k];
-        double threat = 0.0;
-        for (auto &sub : threats)
-            threat += sub(x, y) * sub.probability;
-        return threat;
-    }
-
-    Point2d GetThreatCenter(int32_t t_k)
-    {
-        assert(t_k < threat_record_.size());
-
-        auto threats = threat_record_[t_k];
-        Point2d pos(0, 0);
-        for (auto &sub : threats)
-        {
-            pos.x += sub.pose.position.x;
-            pos.y += sub.pose.position.y;
-        }
-        pos.x = pos.x / threats.size();
-        pos.y = pos.y / threats.size();
-        return pos;
-    }
+    double operator()(double x, double y, int32_t t_k);
+    Point2d GetThreatCenter(int32_t t_k);
 
   private:
     // Markov model covarage: SStep * SSize = 100m, 2m/s * 10 = 20m/s

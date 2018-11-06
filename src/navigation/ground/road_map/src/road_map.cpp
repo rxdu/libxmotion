@@ -106,7 +106,6 @@ void RoadMap::LoadMapFile(std::string map_file)
 
     // create topo-geometrical graph
     tg_graph_ = std::make_shared<TopoGeoGraph>(this);
-    // traffic_map_ = std::make_shared<TrafficMap>(this);
 
     // set loaded flag
     map_loaded_ = true;
@@ -182,7 +181,7 @@ std::vector<std::string> RoadMap::FindShortestRouteName(std::string start_name, 
     return names;
 }
 
-std::vector<int32_t> RoadMap::OccupiedLanelet(CartCooridnate pos)
+std::vector<int32_t> RoadMap::FindOccupiedLanelet(CartCooridnate pos)
 {
     // query from lanelet map
     // point_with_id_t geo_pt = coordinate_.CreateLaneletPoint(pos);
@@ -208,6 +207,20 @@ std::vector<int32_t> RoadMap::OccupiedLanelet(CartCooridnate pos)
     }
 
     return ids;
+}
+
+std::vector<std::string> RoadMap::FindOccupiedLaneletNames(CartCooridnate pos)
+{
+    std::vector<std::string> names;
+
+    for (auto &ll : ll_name_lookup_)
+    {
+        Polygon polygon = GetLanePolygon(ll.second);
+        if (polygon.CheckInside(Polygon::Point(pos.x, pos.y)))
+            names.push_back(ll.second);
+    }
+
+    return names;
 }
 
 bool RoadMap::CheckLaneletCollision(std::string ll1, std::string ll2)

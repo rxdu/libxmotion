@@ -29,7 +29,7 @@ int main()
 
     RoadMapViz::SetupRoadMapViz(map);
 
-    auto ids = map->OccupiedLanelet(CartCooridnate(55, 56));
+    auto ids = map->FindOccupiedLanelet(CartCooridnate(55, 56));
     std::cout << "occupied laneles: " << ids.size() << std::endl;
 
     // LightViz::ShowPolygon(map->GetAllLanePolygons(), 10);

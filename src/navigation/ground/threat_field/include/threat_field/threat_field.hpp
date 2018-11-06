@@ -20,66 +20,34 @@ namespace librav
 class ThreatField
 {
   public:
-    ThreatField() = default;
+    ThreatField() = delete;
+    ThreatField(std::shared_ptr<RoadMap> rmap, std::shared_ptr<TrafficMap> tmap);
 
     void AddVehicleEstimations(std::vector<VehicleEstimation> ests);
 
-    void SetupThreatField();
+    void SetupThreatField(std::shared_ptr<TrafficChannel> ego_chn);
     void UpdateThreatField(int32_t t_k);
 
+    std::vector<VehicleEstimation> GetAllVehicleEstimations();
     std::vector<std::shared_ptr<CollisionThreat>> GetAllCollisionThreats();
 
-    double operator()(double x, double y)
-    {
-        double threat = 0.0;
-        for (auto &threat_entry : threats_)
-            for (auto sub : threat_entry.second)
-                threat += (*sub.get())(x, y);
-        return threat;
-    }
+    double operator()(double x, double y);
+    Point2d GetThreatCenter();
 
-    Point2d GetThreatCenter()
-    {
-        Point2d pos(0, 0);
-        for (auto &threat_entry : threats_)
-            for (auto sub : threat_entry.second)
-            {
-                auto c = sub->GetThreatCenter();
-                pos.x += c.x;
-                pos.y += c.y;
-            }
-        pos.x = pos.x / threats_.size();
-        pos.y = pos.y / threats_.size();
-        return pos;
-    }
-
-    double operator()(double x, double y, int32_t t_k)
-    {
-        double threat = 0.0;
-        for (auto &threat_entry : threats_)
-            for (auto sub : threat_entry.second)
-                threat += (*sub.get())(x, y, t_k);
-        return threat;
-    }
-
-    Point2d GetThreatCenter(int32_t t_k)
-    {
-        Point2d pos(0, 0);
-        for (auto &threat_entry : threats_)
-            for (auto sub : threat_entry.second)
-            {
-                auto c = sub->GetThreatCenter(t_k);
-                pos.x += c.x;
-                pos.y += c.y;
-            }
-        pos.x = pos.x / threats_.size();
-        pos.y = pos.y / threats_.size();
-        return pos;
-    }
+    double operator()(double x, double y, int32_t t_k);
+    Point2d GetThreatCenter(int32_t t_k);
 
   private:
+    std::shared_ptr<RoadMap> road_map_;
+    std::shared_ptr<TrafficMap> traffic_map_;
+
+    std::shared_ptr<TrafficChannel> ego_channel_;
+    std::vector<std::string> conflicting_lanes_;
+
     std::unordered_map<int32_t, VehicleEstimation> vehicles_;
     std::unordered_map<int32_t, std::vector<std::shared_ptr<CollisionThreat>>> threats_;
+
+    bool CheckInConflict(VehicleEstimation veh);
 };
 } // namespace librav
 

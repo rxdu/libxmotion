@@ -203,12 +203,12 @@ void TrafficViz::ShowThreatField(ThreatField &field, bool show_veh_id, std::stri
 
     road_draw.DrawLanes(true);
 
-    for (auto threat : threats)
+    for(auto& veh : field.GetAllVehicleEstimations())
     {
         if (!show_veh_id)
-            veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint());
+            veh_draw.DrawVehicle(veh.GetFootprint());
         else
-            veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint(), threat->vehicle_est_.id_);
+            veh_draw.DrawVehicle(veh.GetFootprint(), veh.id_);
     }
 
     ShowImage(canvas.paint_area, window_name, save_img);
@@ -231,12 +231,12 @@ void TrafficViz::ShowThreatField(ThreatField &field, int32_t t_k, bool show_veh_
 
     road_draw.DrawLanes(true);
 
-    for (auto threat : threats)
+    for(auto& veh : field.GetAllVehicleEstimations())
     {
         if (!show_veh_id)
-            veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint());
+            veh_draw.DrawVehicle(veh.GetFootprint());
         else
-            veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint(), threat->vehicle_est_.id_);
+            veh_draw.DrawVehicle(veh.GetFootprint(), veh.id_);
     }
 
     ShowImage(canvas.paint_area, window_name, save_img);
@@ -262,12 +262,12 @@ void TrafficViz::ShowLatticeInThreatField(std::vector<StateLattice> &lattice, Tr
 
     road_draw.DrawLanes(true);
 
-    for (auto threat : threats)
+    for(auto& veh : field.GetAllVehicleEstimations())
     {
         if (!show_veh_id)
-            veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint());
+            veh_draw.DrawVehicle(veh.GetFootprint());
         else
-            veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint(), threat->vehicle_est_.id_);
+            veh_draw.DrawVehicle(veh.GetFootprint(), veh.id_);
     }
 
     road_draw.DrawTrafficChannelGrid(channel, false);

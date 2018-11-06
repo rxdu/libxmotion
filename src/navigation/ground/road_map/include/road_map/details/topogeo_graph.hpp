@@ -68,8 +68,6 @@ public:
   std::vector<std::string> FindConflictingLanes(std::vector<std::string> names);
   std::vector<std::string> FindConflictingLanes(std::vector<int32_t> ids);
 
-  bool HasOnlyOneSubsequentLane(std::string name);
-
 private:
   RoadMap *road_map_;
   std::shared_ptr<Graph<LaneBlock *>> graph_;

@@ -54,11 +54,7 @@ void TopoGeoGraph::ConstructGraph()
                     graph_->AddEdge(lane_blocks_[ll2.first], lane_blocks_[ll1.first], 1.0);
                 // otherwise check collision
                 else if (road_map_->CheckLaneletCollision(ll1.second, ll2.second))
-                {
-                    lane_blocks_[ll1.first]->type = LaneBlockType::GeoConnected;
-                    lane_blocks_[ll2.first]->type = LaneBlockType::GeoConnected;
                     graph_->AddUndirectedEdge(lane_blocks_[ll1.first], lane_blocks_[ll2.first], 0.0);
-                }
             }
         }
 
@@ -70,9 +66,6 @@ void TopoGeoGraph::ConstructGraph()
             sinks_.push_back(it->state_->name);
         if (it->edges_to_.empty() && it->vertices_from_.empty())
             isolated_lanes_.push_back(it->state_->name);
-
-        // for (auto eit = it->edge_begin(); eit != it->edge_end(); ++eit)
-        //     std::cout << "edge: " << eit->src_->state_->name << " -> " << eit->dst_->state_->name << std::endl;
     }
 }
 
@@ -110,18 +103,18 @@ std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
 
         std::vector<GraphType::vertex_iterator> candidates = vtx_candidates;
         vtx_candidates.clear();
-        for (auto &v : candidates)
+        for (auto &candidate : candidates)
         {
-            // std::cout << "id: " << v->vertex_id_ << " , num: " << v->vertices_from_.size() << std::endl;
-            if (v->state_->type == LaneBlockType::TopoConnected)
+            // std::cout << "id: " << candidate->vertex_id_ << " , num: " << candidate->vertices_from_.size() << std::endl;
+            if (candidate->state_->type == LaneBlockType::TopoConnected)
             {
-                for (auto vf : v->vertices_from_)
+                for (auto vf : candidate->vertices_from_)
                 {
                     if (vf->vertex_id_ != id &&
                         std::find(vertices.begin(), vertices.end(), vf) == vertices.end())
                     {
                         // std::cout << "added name: " << vf->state_->name << std::endl;
-                        if (vf->FindEdge(v->vertex_id_)->cost_ != 0.0)
+                        if (vf->FindEdge(candidate->vertex_id_)->cost_ != 0.0)
                         {
                             vertices.push_back(vf);
                             vtx_candidates.push_back(vf);
@@ -173,8 +166,4 @@ std::vector<std::string> TopoGeoGraph::FindConflictingLanes(std::vector<int32_t>
         lane_names.push_back(n);
 
     return lane_names;
-}
-
-bool TopoGeoGraph::HasOnlyOneSubsequentLane(std::string name)
-{
 }

@@ -35,17 +35,10 @@ class VehicleStaticThreat
     {
         // transform position to align with velocity vector
         double theta = pose.theta;
-        double x_hat = (x - pose.position.x) * std::cos(theta) + (y - pose.position.y) * std::sin(theta);
-        double y_hat = -(x - pose.position.x) * std::sin(theta) + (y - pose.position.y) * std::cos(theta);
+        double x_err = (x - pose.position.x) * std::cos(theta) + (y - pose.position.y) * std::sin(theta);
+        double y_err = -(x - pose.position.x) * std::sin(theta) + (y - pose.position.y) * std::cos(theta);
 
-        double x_err = x_hat;
-        double y_err = y_hat;
-
-        // if (std::abs(y_err) < 1.8)
-        // val = std::exp(x_err * x_err / coeff2_ + x_err * y_err * coeff4_ + y_err * y_err / coeff3_) / coeff1_;
-        double val = std::exp(-x_err * x_err / sigma_f_hsquare - y_err * y_err / sigma_s_hsquare);
-
-        return val;
+        return std::exp(-x_err * x_err / sigma_f_hsquare - y_err * y_err / sigma_s_hsquare);
     }
 
     Pose2d pose;

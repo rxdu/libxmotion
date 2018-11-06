@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "traffic_map/map_loader.hpp"
 #include "traffic_sim/traffic_sim.hpp"
 #include "stopwatch/stopwatch.h"
 
@@ -9,15 +10,7 @@ using namespace librav;
 
 int main()
 {
-    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_with_centerline.osm");
-
-    if (!map->MapReady())
-    {
-        std::cout << "map didn't load correctly" << std::endl;
-        return -1;
-    }
-
-    map->PrintInfo();
+    MapLoader loader("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
 
     std::cout << "started traffic sim" << std::endl;
     TrafficSim sim(map);

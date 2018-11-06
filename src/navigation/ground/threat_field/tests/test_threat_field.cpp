@@ -87,24 +87,25 @@ int main()
 
     stopwatch::StopWatch timer;
 
-    ThreatField field;
+    ThreatField field(loader.road_map, loader.traffic_map);
     field.AddVehicleEstimations({veh1, veh2, veh3, veh4, veh5});
 
-    field.SetupThreatField();
+    auto ego_chn = loader.traffic_map->GetAllTrafficChannels()[2];
+    field.SetupThreatField(ego_chn);
 
-    // field.UpdateThreatField(2);
+    field.UpdateThreatField(2);
 
-    // std::cout << "occupancy estimation calculated in " << timer.toc() << std::endl;
+    std::cout << "occupancy estimation calculated in " << timer.toc() << std::endl;
 
-    // std::cout << "------------- all calculation finished -------------" << std::endl;
+    std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    // TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(2), true);
+    TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(2), false);
 
-    for (int i = 0; i < 9; i++)
-    {
-        field.UpdateThreatField(i);
-        TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(i), true);
-    }
+    // for (int i = 0; i < 9; i++)
+    // {
+    //     field.UpdateThreatField(i);
+    //     TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(i), true);
+    // }
 
     return 0;
 }
