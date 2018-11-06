@@ -52,7 +52,7 @@ void TopoGeoGraph::ConstructGraph()
                     graph_->AddEdge(lane_blocks_[ll1.first], lane_blocks_[ll2.first], 1.0);
                 else if (route21.size() == 2)
                     graph_->AddEdge(lane_blocks_[ll2.first], lane_blocks_[ll1.first], 1.0);
-                // otherwise check collision
+                // otherwise check collision for geometric connection
                 else if (road_map_->CheckLaneletCollision(ll1.second, ll2.second))
                     graph_->AddUndirectedEdge(lane_blocks_[ll1.first], lane_blocks_[ll2.first], 0.0);
             }
@@ -86,11 +86,10 @@ std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
     {
         // std::cout << "added name: " << vf->state_->name << std::endl;
         vertices.push_back(vf);
+        vtx_candidates.push_back(vf);
 
         if (vf->FindEdge(vtx->vertex_id_)->cost_ == 0.0)
             vf->state_->type = LaneBlockType::GeoConnected;
-        else
-            vtx_candidates.push_back(vf);
     }
 
     // std::cout << ">>" << std::endl;
@@ -98,27 +97,22 @@ std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
     // std::cout << "first level backtrack: " << vtx_candidates.size() << std::endl;
     while (!vtx_candidates.empty())
     {
-        // for (auto cv : vtx_candidates)
-        //     vertices.push_back(cv);
-
         std::vector<GraphType::vertex_iterator> candidates = vtx_candidates;
         vtx_candidates.clear();
         for (auto &candidate : candidates)
         {
             // std::cout << "id: " << candidate->vertex_id_ << " , num: " << candidate->vertices_from_.size() << std::endl;
-            if (candidate->state_->type == LaneBlockType::TopoConnected)
+            for (auto vf : candidate->vertices_from_)
             {
-                for (auto vf : candidate->vertices_from_)
+                if (vf->FindEdge(candidate->vertex_id_)->cost_ != 0.0)
                 {
                     if (vf->vertex_id_ != id &&
                         std::find(vertices.begin(), vertices.end(), vf) == vertices.end())
                     {
                         // std::cout << "added name: " << vf->state_->name << std::endl;
-                        if (vf->FindEdge(candidate->vertex_id_)->cost_ != 0.0)
-                        {
-                            vertices.push_back(vf);
-                            vtx_candidates.push_back(vf);
-                        }
+
+                        vertices.push_back(vf);
+                        vtx_candidates.push_back(vf);
                     }
                 }
             }
@@ -130,10 +124,8 @@ std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
     // add checked vertex first
     names.push_back(vtx->state_->name);
     for (auto v : vertices)
-    {
         names.push_back(v->state_->name);
-        // std::cout << "name: " << v->state_->name << " , id: " << v->state_->id << std::endl;
-    }
+        
     // std::cout << "total number: " << names.size() << std::endl;
 
     // std::cout << "-------------------------" << std::endl;

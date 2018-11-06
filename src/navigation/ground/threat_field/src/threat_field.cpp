@@ -27,11 +27,11 @@ void ThreatField::SetupThreatField(std::shared_ptr<TrafficChannel> ego_chn)
 
     conflicting_lanes_ = road_map_->FindConflictingLanes(ego_channel_->lanes_);
 
-    std::cout << "conflicting lanes:" << std::endl;
-    for(auto& lane : conflicting_lanes_)
-        std::cout << lane << std::endl;
+    // std::cout << "conflicting lanes:" << std::endl;
+    // for(auto& lane : conflicting_lanes_)
+    //     std::cout << lane << std::endl;
 
-    std::cout << "vehicle number: " << vehicles_.size() << std::endl;
+    // std::cout << "vehicle number: " << vehicles_.size() << std::endl;
     for (auto &entry : vehicles_)
     {
         if (!CheckInConflict(entry.second))
@@ -48,9 +48,9 @@ void ThreatField::SetupThreatField(std::shared_ptr<TrafficChannel> ego_chn)
 bool ThreatField::CheckInConflict(VehicleEstimation veh)
 {
     auto occupied_lanes = road_map_->FindOccupiedLaneletNames({veh.GetPose().position.x, veh.GetPose().position.y});
-    std::cout << "occupied lanes of vehicle " << veh.id_ << " : " << std::endl;
-    for(auto& lane : occupied_lanes)
-        std::cout << lane << std::endl; 
+    // std::cout << "occupied lanes of vehicle " << veh.id_ << " : " << std::endl;
+    // for(auto& lane : occupied_lanes)
+    //     std::cout << lane << std::endl; 
 
     for (auto &olane : occupied_lanes)
     {
