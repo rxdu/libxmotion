@@ -53,6 +53,30 @@ class ThreatField
         return pos;
     }
 
+    double operator()(double x, double y, int32_t t_k)
+    {
+        double threat = 0.0;
+        for (auto &threat_entry : threats_)
+            for (auto sub : threat_entry.second)
+                threat += (*sub.get())(x, y, t_k);
+        return threat;
+    }
+
+    Point2d GetThreatCenter(int32_t t_k)
+    {
+        Point2d pos(0, 0);
+        for (auto &threat_entry : threats_)
+            for (auto sub : threat_entry.second)
+            {
+                auto c = sub->GetThreatCenter(t_k);
+                pos.x += c.x;
+                pos.y += c.y;
+            }
+        pos.x = pos.x / threats_.size();
+        pos.y = pos.y / threats_.size();
+        return pos;
+    }
+
   private:
     std::unordered_map<int32_t, VehicleEstimation> vehicles_;
     std::unordered_map<int32_t, std::vector<std::shared_ptr<CollisionThreat>>> threats_;

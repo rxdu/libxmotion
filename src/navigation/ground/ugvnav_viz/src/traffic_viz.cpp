@@ -9,6 +9,8 @@
 
 #include "ugvnav_viz/traffic_viz.hpp"
 
+#include <functional>
+
 #include "lightviz/details/geometry_draw.hpp"
 #include "ugvnav_viz/details/roadmap_draw.hpp"
 #include "ugvnav_viz/details/vehicle_draw.hpp"
@@ -196,15 +198,36 @@ void TrafficViz::ShowThreatField(ThreatField &field, bool show_veh_id, std::stri
 
     auto threats = field.GetAllCollisionThreats();
 
-    // for (auto threat : threats)
-    // {
-    //     // if (threat->occupancy_grid_ != nullptr)
-    //     //     cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));
-    //     auto center = threat->GetThreatCenter();
-    //     gdraw.DrawDistribution(center.x, center.y, 50, 50, *threat.get());
-    // }
     auto center = field.GetThreatCenter();
     gdraw.DrawDistribution(center.x, center.y, 150, 120, field);
+
+    road_draw.DrawLanes(true);
+
+    for (auto threat : threats)
+    {
+        if (!show_veh_id)
+            veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint());
+        else
+            veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint(), threat->vehicle_est_.id_);
+    }
+
+    ShowImage(canvas.paint_area, window_name, save_img);
+}
+
+void TrafficViz::ShowThreatField(ThreatField &field, int32_t t_k, bool show_veh_id, std::string window_name, bool save_img)
+{
+    RoadMapViz &viz = RoadMapViz::GetInstance();
+
+    CartesianCanvas canvas = viz.CreateCanvas(true);
+    RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
+    VehicleDraw veh_draw = VehicleDraw(canvas);
+    CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
+    GeometryDraw gdraw = GeometryDraw(canvas);
+
+    auto threats = field.GetAllCollisionThreats();
+
+    auto center = field.GetThreatCenter(t_k);
+    gdraw.DrawDistribution(center.x, center.y, 150, 120, std::bind(field, std::placeholders::_1, std::placeholders::_2, t_k));
 
     road_draw.DrawLanes(true);
 

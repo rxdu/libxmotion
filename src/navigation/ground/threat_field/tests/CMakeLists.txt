@@ -14,11 +14,14 @@
 add_executable(test_collision_threat test_collision_threat.cpp)
 target_link_libraries(test_collision_threat tfield ugvnav_viz utilities)
 
+add_executable(test_static_threat test_static_threat.cpp)
+target_link_libraries(test_static_threat tfield ugvnav_viz utilities)
+
 add_executable(test_gaussian_cthreat test_gaussian_cthreat.cpp)
 target_link_libraries(test_gaussian_cthreat tfield ugvnav_viz utilities)
 
 add_executable(test_threat_field test_threat_field.cpp)
 target_link_libraries(test_threat_field tfield ugvnav_viz utilities)
 
-add_executable(test_static_threat test_static_threat.cpp)
-target_link_libraries(test_static_threat tfield ugvnav_viz utilities)
+add_executable(test_threat_field_history test_threat_field_history.cpp)
+target_link_libraries(test_threat_field_history tfield ugvnav_viz utilities)
