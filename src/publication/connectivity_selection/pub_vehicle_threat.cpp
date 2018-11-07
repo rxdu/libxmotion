@@ -25,7 +25,6 @@ int main()
     veh1.SetSpeedVariance(2 * 2);
 
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels().back();
-    // TrafficViz::ShowVehicleInChannel(veh1.GetFootprint(), *ego_chn.get());
 
     stopwatch::StopWatch timer;
 
@@ -37,8 +36,8 @@ int main()
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    TrafficViz::ShowVehicleOccupancyDistribution(ct1, "occupancy_estimation");
-    TrafficViz::ShowVehicleCollisionThreat(ct1, "occupancy_estimation");
+    TrafficViz::ShowVehicleOccupancyDistribution(ct1, "occupancy_estimation", true);
+    TrafficViz::ShowVehicleCollisionThreat(ct1, "vehicle_threat", true);
 
     return 0;
 }

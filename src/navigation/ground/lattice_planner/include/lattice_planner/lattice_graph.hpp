@@ -12,7 +12,8 @@
 
 #include <memory>
 #include <cstdint>
-#include <ostream>
+#include <vector>
+#include <iostream>
 
 #include "graph/graph.hpp"
 #include "decomp/curvilinear_grid.hpp"
@@ -22,8 +23,9 @@
 
 namespace librav
 {
-struct LatticeGraph
+class LatticeGraph
 {
+  public:
     struct LatticeNode : CurvilinearCell
     {
         LatticeNode(CurvilinearCell *cell, std::shared_ptr<TrafficChannel> chn) : CurvilinearCell(*cell), channel(chn)
@@ -41,8 +43,16 @@ struct LatticeGraph
             return os;
         }
     };
-    
-    static std::shared_ptr<Graph<LatticeNode, StateLattice>> Construct(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start, int32_t expansion_iter = 2);
+
+    static std::shared_ptr<Graph<LatticeNode, StateLattice>> Construct(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t expansion_iter = 2);
+    static std::vector<StateLattice> Search(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t expansion_iter = 2);
+
+  private:
+    static std::shared_ptr<Graph<LatticeNode, StateLattice>> Construct(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t expansion_iter, std::vector<int32_t> &final_nodes);
+
+    // lattice expansion horizon
+    static constexpr int32_t min_h = 1;
+    static constexpr int32_t max_h = 1;
 };
 } // namespace librav
 

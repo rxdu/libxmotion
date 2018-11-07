@@ -12,13 +12,12 @@
 #include <iostream>
 #include <unordered_map>
 
+#include "lattice_planner/lattice_dijkstra.hpp"
+
 using namespace librav;
 
-std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> LatticeGraph::Construct(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t expansion_iter)
+std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> LatticeGraph::Construct(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t expansion_iter, std::vector<int32_t> &final_nodes)
 {
-    int32_t min_h = 1;
-    int32_t max_h = 1;
-
     std::shared_ptr<Graph<LatticeNode, StateLattice>> graph = std::make_shared<Graph<LatticeNode, StateLattice>>();
 
     auto start_cell = channel->grid_->GetCell(start_index);
@@ -28,7 +27,7 @@ std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> LatticeGraph::Co
     candidates.insert(std::make_pair(start_node.id, start_node));
     for (int32_t iter = 0; iter < expansion_iter; ++iter)
     {
-        std::cout << "candidation size at iteration " << iter << " : " << candidates.size() << std::endl;
+        // std::cout << "candidation size at iteration " << iter << " : " << candidates.size() << std::endl;
         std::unordered_map<int32_t, LatticeNode> added_nodes;
         for (auto &candidate : candidates)
         {
@@ -44,8 +43,32 @@ std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> LatticeGraph::Co
                 }
             }
         }
+        
+        if (added_nodes.empty())
+            break;
+            
         candidates = added_nodes;
     }
 
+    final_nodes.clear();
+    for (auto &entry : candidates)
+        final_nodes.push_back(entry.second.id);
+
     return graph;
+}
+
+std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> LatticeGraph::Construct(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t expansion_iter)
+{
+    std::vector<int32_t> final_nodes;
+    return Construct(channel, start_index, expansion_iter, final_nodes);
+}
+
+std::vector<StateLattice> LatticeGraph::Search(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t expansion_iter)
+{
+    std::vector<int32_t> final_nodes;
+    auto graph = Construct(channel, start_index, expansion_iter, final_nodes);
+
+    auto start_cell = channel->grid_->GetCell(start_index);
+
+    return LatticeDijkstra::Search(graph.get(), start_cell->id, final_nodes);
 }

@@ -149,9 +149,9 @@ public:
     // attributes for search algorithms
     bool is_checked_ = false;
     bool is_in_openlist_ = false;
-    Transition f_cost_;// = std::numeric_limits<double>::max();
-    Transition g_cost_;// = std::numeric_limits<double>::max();
-    Transition h_cost_;// = std::numeric_limits<double>::max();
+    double f_cost_;// = std::numeric_limits<double>::max();
+    double g_cost_;// = std::numeric_limits<double>::max();
+    double h_cost_;// = std::numeric_limits<double>::max();
     vertex_iterator search_parent_;
 
     /** @name Edge access.
