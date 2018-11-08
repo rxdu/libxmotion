@@ -54,6 +54,7 @@ class TrafficViz
 
     static void ShowLatticeWithOccupancyDistribution(std::vector<StateLattice> &lattice, TrafficChannel &channel, ThreatField &field, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
     static void ShowLatticeInThreatField(std::vector<StateLattice> &lattice, TrafficChannel &channel, ThreatField &field, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
+    static void ShowTrafficChannelWithThreatField(TrafficChannel &channel, ThreatField &field, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
 };
 } // namespace librav
 

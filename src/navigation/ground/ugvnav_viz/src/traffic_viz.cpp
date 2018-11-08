@@ -332,3 +332,38 @@ void TrafficViz::ShowLatticeInThreatField(std::vector<StateLattice> &lattice, Tr
 
     ShowImage(canvas.paint_area, window_name, save_img);
 }
+
+void TrafficViz::ShowTrafficChannelWithThreatField(TrafficChannel &channel, ThreatField &field, bool show_veh_id, std::string window_name, bool save_img)
+{
+    RoadMapViz &viz = RoadMapViz::GetInstance();
+
+    CartesianCanvas canvas = viz.CreateCanvas(true);
+    RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
+    VehicleDraw veh_draw = VehicleDraw(canvas);
+    CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
+    LatticeDraw lattice_draw = LatticeDraw(canvas);
+    GeometryDraw gdraw = GeometryDraw(canvas);
+
+    // auto threats = field.GetAllCollisionThreats();
+    // for (auto threat : threats)
+    // {
+    //     if (threat->occupancy_grid_ != nullptr)
+    //         cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));
+    // }
+    auto center = field.GetThreatCenter();
+    gdraw.DrawDistribution(center.x, center.y, 150, 120, field);
+
+    road_draw.DrawLanes(true);
+
+    for (auto &veh : field.GetAllVehicleEstimations())
+    {
+        if (!show_veh_id)
+            veh_draw.DrawVehicle(veh.GetFootprint());
+        else
+            veh_draw.DrawVehicle(veh.GetFootprint(), veh.id_);
+    }
+
+    road_draw.DrawTrafficChannelGrid(channel, false);
+
+    ShowImage(canvas.paint_area, window_name, save_img);
+}
