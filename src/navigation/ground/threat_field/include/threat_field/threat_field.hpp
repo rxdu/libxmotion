@@ -25,7 +25,7 @@ class ThreatField
 
     void AddVehicleEstimations(std::vector<VehicleEstimation> ests);
     void SetupThreatField(std::shared_ptr<TrafficChannel> ego_chn);
-    void UpdateThreatField(int32_t t_k);
+    void ComputeThreatField(int32_t t_k);
 
     std::vector<VehicleEstimation> GetAllVehicleEstimations();
     std::vector<std::shared_ptr<CollisionThreat>> GetAllCollisionThreats();

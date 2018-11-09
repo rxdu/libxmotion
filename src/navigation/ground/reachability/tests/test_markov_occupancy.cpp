@@ -12,9 +12,12 @@ int main()
 
     occupancy.SetupMarkovModel(3, 3 * 3, 5, 1 * 1);
 
+    const int32_t max_i = 12;
+    occupancy.Propagate(max_i);
+
     std::cout << "------------------------------" << std::endl;
 
-    for (int i = 0; i < 12; i = i + 3)
+    for (int32_t i = 0; i < max_i; i = i + 3)
     {
         std::cout << "Occupancy at t_(" << i << ") : \n"
                   << occupancy.GetOccupancyDistribution(i) << "\n" << std::endl;

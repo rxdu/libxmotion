@@ -131,7 +131,7 @@ int main()
 
     //////////////////////////////////////////////////
 
-    field.UpdateThreatField(4);
+    field.ComputeThreatField(4);
 
     std::cout << "occupancy estimation calculated in " << timer.toc() << std::endl;
 

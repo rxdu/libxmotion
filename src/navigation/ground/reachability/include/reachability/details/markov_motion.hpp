@@ -108,6 +108,11 @@ class MarkovMotion : public OccupancyMarkovChain<M * N>
         // std::cout << "Combined transition matrix: \n" << combined_trans << std::endl;
     }
 
+    void Propagate(int32_t k)
+    {
+        Model::Propagate(k);
+    }
+
     State GenerateInitState(double s_mean, double v_mean, double s_var, double v_var)
     {
         SVDistribution dist(s_mean, v_mean, s_var, v_var);

@@ -51,6 +51,7 @@ class OccupancyMarkovChain
         transition_.resize(N, N);
 
         states_.push_back(st);
+        sparse_init_s_ = init_state_.sparseView();
     }
 
     void SetInitialState(State st)
@@ -58,7 +59,7 @@ class OccupancyMarkovChain
         init_state_ = st;
         states_.push_back(init_state_);
 
-        sparse_s_ = init_state_.sparseView();
+        sparse_init_s_ = init_state_.sparseView();
     }
 
     void SetTransitionMatrix(Transition trans)
@@ -85,11 +86,49 @@ class OccupancyMarkovChain
         return CalculateStateAt(k);
     }
 
+    State GetStateAt(int32_t k)
+    {
+        assert(states_.size() > k);
+
+        return states_[k];
+    }
+
+    State GetIntervalStateAt(int32_t km1_k)
+    {
+        assert(intv_states_.size() > km1_k);
+
+        return intv_states_[km1_k];
+    }
+
+    void Propagate(int32_t k)
+    {
+        // stopwatch::StopWatch timer;
+        states_.reserve(k + 1);
+        intv_states_.reserve(k);
+
+        // forward propagate for k steps
+        Eigen::SparseMatrix<double> sparse_s = sparse_init_s_;
+        for (int32_t i = 0; i < k; ++i)
+        {
+            // first calculate interval distribution before update p(t_k)
+            Eigen::SparseMatrix<double> intv_sparse_s = sparse_interval_trans_ * sparse_s;
+            intv_sparse_s = intv_sparse_s / intv_sparse_s.sum();
+            intv_states_.push_back(State(intv_sparse_s));
+
+            // then calculate p(t_{k+1})
+            sparse_s = sparse_trans_ * sparse_s;
+            sparse_s = sparse_s / sparse_s.sum();
+            states_.push_back(State(sparse_s));
+        }
+
+        // std::cout << "matrix calculation finished in " << timer.toc() << std::endl;
+    }
+
     State CalculateStateAt(int32_t k)
     {
         // stopwatch::StopWatch timer;
 
-        Eigen::SparseMatrix<double> sparse_s = sparse_s_;
+        Eigen::SparseMatrix<double> sparse_s = sparse_init_s_;
 
         for (int32_t i = 0; i < k; ++i)
         {
@@ -117,11 +156,12 @@ class OccupancyMarkovChain
     Transition interval_transition_;
 
     // sparse version
-    Eigen::SparseMatrix<double> sparse_s_;
+    Eigen::SparseMatrix<double> sparse_init_s_;
     Eigen::SparseMatrix<double> sparse_trans_;
     Eigen::SparseMatrix<double> sparse_interval_trans_;
 
     std::vector<State> states_;
+    std::vector<State> intv_states_;
 };
 } // namespace librav
 

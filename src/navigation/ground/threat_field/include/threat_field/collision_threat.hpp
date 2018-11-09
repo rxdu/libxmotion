@@ -15,6 +15,7 @@
 #include <vector>
 #include <cmath>
 #include <cassert>
+#include <iostream>
 
 #include "traffic_map/traffic_map.hpp"
 #include "reachability/markov_occupancy.hpp"
@@ -56,8 +57,6 @@ class CollisionThreat
         }
     };
 
-    static void GenerateStateTransitionMatrix();
-
   public:
     struct ThreatDist
     {
@@ -81,14 +80,15 @@ class CollisionThreat
     std::vector<VehicleStaticThreat> sub_int_threats_;
 
     // threat_record_ stores all history threat information
-    std::unordered_map<int32_t, std::vector<VehicleStaticThreat>> threat_record_;
+    std::unordered_map<int32_t, ThreatDist> threat_record_;
+    std::unordered_map<int32_t, ThreatDist> intv_threat_record_;
 
     void PrecomputeParameters(std::string file_name)
     {
-        occupancy_->PrecomputeStateTransition(file_name);
+        occupancy_model_->PrecomputeStateTransition(file_name);
     }
 
-    void UpdateOccupancyDistribution(int32_t t_k);
+    void ComputeOccupancyDistribution(int32_t k);
 
     // threat value query
     double operator()(double x, double y, bool is_interval = false);
@@ -99,7 +99,7 @@ class CollisionThreat
 
   private:
     // Markov model covarage: SStep * SSize = 100m, 2m/s * 10 = 20m/s
-    std::shared_ptr<MarkovModel> occupancy_;
+    std::shared_ptr<MarkovModel> occupancy_model_;
     double s_offset_ = 0;
 
     // NO NEED TO BE MODIFIED MANUALLY
@@ -116,6 +116,8 @@ class CollisionThreat
     /*****************************************************************/
 
     void SetupPredictionModel();
+    ThreatDist GetOccupancyDistributionAt(int32_t t_k);
+    ThreatDist GetIntervalOccupancyDistributionAt(int32_t t_k);
 };
 } // namespace librav
 

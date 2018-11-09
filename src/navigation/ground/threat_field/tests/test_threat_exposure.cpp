@@ -117,7 +117,7 @@ int main()
 
     //////////////////////////////////////////////////
 
-    field.UpdateThreatField(4);
+    field.ComputeThreatField(4);
 
     std::cout << "occupancy estimation calculated in " << timer.toc() << std::endl;
 
@@ -131,7 +131,7 @@ int main()
 
     // for (int i = 0; i < 9; i++)
     // {
-    //     field.UpdateThreatField(i);
+    //     field.ComputeThreatField(i);
     //     TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(i), true);
     // }
 

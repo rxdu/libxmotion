@@ -180,7 +180,7 @@ void TrafficViz::ShowVehicleCollisionThreat(std::shared_ptr<CollisionThreat> thr
     GeometryDraw gdraw = GeometryDraw(canvas);
 
     auto center = threat->GetThreatCenter();
-    gdraw.DrawDistribution(center.x, center.y, 50, 50, *threat.get());
+    gdraw.DrawDistribution(center.x, center.y, 100, 50, *threat.get());
 
     // if (threat->occupancy_grid_ != nullptr)
     //     cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));
@@ -203,7 +203,7 @@ void TrafficViz::ShowVehicleIntervalCollisionThreat(std::shared_ptr<CollisionThr
     GeometryDraw gdraw = GeometryDraw(canvas);
 
     auto center = threat->GetThreatCenter();
-    gdraw.DrawDistribution(center.x, center.y, 50, 50, std::bind(*threat.get(), std::placeholders::_1, std::placeholders::_2, true));
+    gdraw.DrawDistribution(center.x, center.y, 100, 50, std::bind(*threat.get(), std::placeholders::_1, std::placeholders::_2, true));
 
     // if (threat->occupancy_grid_ != nullptr)
     //     cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));

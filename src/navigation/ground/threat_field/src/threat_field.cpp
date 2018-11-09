@@ -64,12 +64,12 @@ bool ThreatField::CheckInConflict(VehicleEstimation veh)
     return false;
 }
 
-void ThreatField::UpdateThreatField(int32_t t_k)
+void ThreatField::ComputeThreatField(int32_t t_k)
 {
     for (auto &vehicle_threats : threats_)
     {
         for (auto threat : vehicle_threats.second)
-            threat->UpdateOccupancyDistribution(t_k);
+            threat->ComputeOccupancyDistribution(t_k);
     }
 }
 

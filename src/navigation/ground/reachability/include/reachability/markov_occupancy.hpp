@@ -66,46 +66,26 @@ class MarkovOccupancy
         }
     }
 
-    Eigen::VectorXd GetOccupancyDistribution(int32_t t_k, double min_p = 1e-2)
+    void Propagate(int32_t k)
     {
-        Eigen::VectorXd pos_prob_vec;
-        pos_prob_vec.setZero(state_space_->GetSSize());
-
-        typename MotionModel::State statef = motion_.CalculateStateAt(t_k);
-        for (int i = 0; i < N; ++i)
-            for (int j = 0; j < M; ++j)
-                pos_prob_vec(i / state_space_->GetVSize()) += statef(i * M + j);
-
-        for (int i = 0; i < state_space_->GetSSize(); ++i)
-        {
-            if (pos_prob_vec(i) < min_p)
-                pos_prob_vec(i) = 0;
-        }
-        pos_prob_vec = pos_prob_vec / pos_prob_vec.sum();
-
-        return pos_prob_vec;
+        motion_.Propagate(k);
     }
 
-    Eigen::VectorXd GetIntervalOccupancyDistribution(int32_t t_k, double min_p = 1e-2)
+    Eigen::VectorXd GetOccupancyDistribution(int32_t t_k, double min_p = 1e-3)
     {
-        Eigen::VectorXd pos_prob_vec;
-        pos_prob_vec.setZero(state_space_->GetSSize());
+        // typename MotionModel::State statef = motion_.CalculateStateAt(t_k);
+        typename MotionModel::State statef = motion_.GetStateAt(t_k);
 
-        typename MotionModel::State statef = motion_.CalculateStateAt(t_k - 1);
-        typename MotionModel::State statef_int = motion_.CalculateIntervalState(statef);
+        return ConvertToPositionDist(statef, min_p);
+    }
 
-        for (int i = 0; i < N; ++i)
-            for (int j = 0; j < M; ++j)
-                pos_prob_vec(i / state_space_->GetVSize()) += statef_int(i * M + j);
+    Eigen::VectorXd GetIntervalOccupancyDistribution(int32_t t_km1_t_k, double min_p = 1e-3)
+    {
+        // typename MotionModel::State statef = motion_.CalculateStateAt(t_k - 1);
+        // typename MotionModel::State statef_int = motion_.CalculateIntervalState(statef);
+        typename MotionModel::State statef_int = motion_.GetIntervalStateAt(t_km1_t_k);
 
-        for (int i = 0; i < state_space_->GetSSize(); ++i)
-        {
-            if (pos_prob_vec(i) < min_p)
-                pos_prob_vec(i) = 0;
-        }
-        pos_prob_vec = pos_prob_vec / pos_prob_vec.sum();
-
-        return pos_prob_vec;
+        return ConvertToPositionDist(statef_int, min_p);
     }
 
   private:
@@ -168,6 +148,25 @@ class MarkovOccupancy
             typename MotionModel::Transition combined_trans_T = command_->GetTransitionMatrix() * Psi_T_;
             MatrixFile::SaveMatrix(file_name + "_interval" + ".data", combined_trans_T, true);
         }
+    }
+
+    inline Eigen::VectorXd ConvertToPositionDist(typename MotionModel::State statef, double min_p)
+    {
+        Eigen::VectorXd pos_prob_vec;
+        pos_prob_vec.setZero(state_space_->GetSSize());
+
+        for (int i = 0; i < N; ++i)
+            for (int j = 0; j < M; ++j)
+                pos_prob_vec(i / state_space_->GetVSize()) += statef(i * M + j);
+
+        for (int i = 0; i < state_space_->GetSSize(); ++i)
+        {
+            if (pos_prob_vec(i) < min_p)
+                pos_prob_vec(i) = 0;
+        }
+        pos_prob_vec = pos_prob_vec / pos_prob_vec.sum();
+
+        return pos_prob_vec;
     }
 };
 } // namespace librav

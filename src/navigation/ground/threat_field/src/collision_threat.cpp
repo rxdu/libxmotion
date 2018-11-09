@@ -25,112 +25,136 @@ void CollisionThreat::SetupPredictionModel()
     auto pose_pf = traffic_chn_->ConvertToPathCoordinate(SimplePoint(pose_wf.position.x, pose_wf.position.y));
 
     // instantiate Markov model
-    occupancy_ = std::make_shared<MarkovModel>(0, s_max_, 0, v_max_);
+    occupancy_model_ = std::make_shared<MarkovModel>(0, s_max_, 0, v_max_);
     auto s_var_matrix = vehicle_est_.GetPositionVariance();
     double spd_var = vehicle_est_.GetSpeedVariance();
 
     s_offset_ = pose_pf.s - s_starting_;
-    // occupancy_->SetupMarkovModel(s_starting_, s_var_matrix(0, 0), vehicle_est_.GetSpeed(), spd_var, true, FolderPath::GetDataFolderPath() + "/reachability/vehicle_threat_combined_state_transition.data");
-    occupancy_->SetupMarkovModel(s_starting_, s_var_matrix(0, 0), vehicle_est_.GetSpeed(), spd_var, true,
-                                 FolderPath::GetDataFolderPath() + "/reachability/vehicle_threat_combined_transition.data",
-                                 FolderPath::GetDataFolderPath() + "/reachability/vehicle_threat_combined_transition_interval.data");
+    occupancy_model_->SetupMarkovModel(s_starting_, s_var_matrix(0, 0), vehicle_est_.GetSpeed(), spd_var, true,
+                                       FolderPath::GetDataFolderPath() + "/reachability/vehicle_threat_combined_transition.data",
+                                       FolderPath::GetDataFolderPath() + "/reachability/vehicle_threat_combined_transition_interval.data");
 
-    // std::cout << "finished setting up markov model" << std::endl;
+    std::cout << "finished setting up markov model" << std::endl;
 }
 
-void CollisionThreat::UpdateOccupancyDistribution(int32_t t_k)
+void CollisionThreat::ComputeOccupancyDistribution(int32_t k)
 {
-    occupancy_grid_ = std::make_shared<CurvilinearGrid>(traffic_chn_->center_curve_, s_step_, delta_step_, delta_size_, s_offset_);
-    sub_threats_.clear();
+    assert(k > 0);
 
-    Eigen::VectorXd dist = occupancy_->GetOccupancyDistribution(t_k);
+    // propagate for k steps from init state
+    //  => (k+1) states, k intervals
+    occupancy_model_->Propagate(k);
 
-    // std::cout << "dist size: " << dist.size() << " ; " << occupancy_grid_->GetTangentialGridNum() << std::endl;
+    std::cout << "finished model propagation" << std::endl;
+
+    for (int32_t i = 0; i < k; ++i)
+    {
+        threat_record_.insert(std::make_pair(i, GetOccupancyDistributionAt(i)));
+        intv_threat_record_.insert(std::make_pair(i, GetIntervalOccupancyDistributionAt(i)));
+    }
+    threat_record_.insert(std::make_pair(k, GetOccupancyDistributionAt(k)));
+
+    // save last record for visualization
+    occupancy_grid_ = threat_record_[k].occupancy_grid;
+    sub_threats_ = threat_record_[k].sub_threats;
+    interval_occupancy_grid_ = intv_threat_record_[k - 1].occupancy_grid;
+    sub_int_threats_ = intv_threat_record_[k - 1].sub_threats;
+
+    std::cout << "finished setting up threat" << std::endl;
+}
+
+CollisionThreat::ThreatDist CollisionThreat::GetOccupancyDistributionAt(int32_t t_k)
+{
+    ThreatDist dist_result;
+
+    dist_result.occupancy_grid = std::make_shared<CurvilinearGrid>(traffic_chn_->center_curve_, s_step_, delta_step_, delta_size_, s_offset_);
+    dist_result.sub_threats.clear();
+
+    Eigen::VectorXd dist = occupancy_model_->GetOccupancyDistribution(t_k);
 
     double probability_max = 0;
     for (std::size_t i = 0; i < dist.size(); ++i)
     {
-        if (i < occupancy_grid_->GetTangentialGridNum())
+        if (i < dist_result.occupancy_grid->GetTangentialGridNum())
         {
-            for (int32_t j = -occupancy_grid_->GetOneSideGridNumber(); j <= occupancy_grid_->GetOneSideGridNumber(); ++j)
+            for (int32_t j = -dist_result.occupancy_grid->GetOneSideGridNumber(); j <= dist_result.occupancy_grid->GetOneSideGridNumber(); ++j)
             {
-                occupancy_grid_->GetCell(i, j)->extra_attribute = dist(i) * LateralDistribution::GetProbability(j);
-                if (occupancy_grid_->GetCell(i, j)->extra_attribute > probability_max)
-                    probability_max = occupancy_grid_->GetCell(i, j)->extra_attribute;
-                // std::cout << "probability (i,j) " << i << "," << j << " = "
-                //           << dist(i) << " * " << LateralDistribution::GetProbability(j) << " = " << occupancy_grid_->GetCell(i, j)->cost_map << std::endl;
+                dist_result.occupancy_grid->GetCell(i, j)->extra_attribute = dist(i) * LateralDistribution::GetProbability(j);
+                if (dist_result.occupancy_grid->GetCell(i, j)->extra_attribute > probability_max)
+                    probability_max = dist_result.occupancy_grid->GetCell(i, j)->extra_attribute;
             }
         }
     }
 
     for (std::size_t i = 0; i < dist.size(); ++i)
     {
-        if (i < occupancy_grid_->GetTangentialGridNum())
+        if (i < dist_result.occupancy_grid->GetTangentialGridNum())
         {
-            for (int32_t j = -occupancy_grid_->GetOneSideGridNumber(); j <= occupancy_grid_->GetOneSideGridNumber(); ++j)
+            for (int32_t j = -dist_result.occupancy_grid->GetOneSideGridNumber(); j <= dist_result.occupancy_grid->GetOneSideGridNumber(); ++j)
             {
-                auto cell = occupancy_grid_->GetCell(i, j);
+                auto cell = dist_result.occupancy_grid->GetCell(i, j);
 
                 if (cell->extra_attribute > 0)
                 {
                     // Note: extra_attribute is the true probability value
-                    auto pt = occupancy_grid_->ConvertToCurvePoint(cell->center);
-                    sub_threats_.emplace_back(Pose2d(pt.x, pt.y, pt.theta), cell->extra_attribute);
+                    auto pt = dist_result.occupancy_grid->ConvertToCurvePoint(cell->center);
+                    dist_result.sub_threats.emplace_back(Pose2d(pt.x, pt.y, pt.theta), cell->extra_attribute);
 
                     // values here are normalized for better visualization
                     cell->cost_map = cell->extra_attribute / probability_max;
-
-                    // std::cout << "probability (i,j) " << i << "," << j << " = " << occupancy_grid_->GetCell(i, j)->cost_map << std::endl;
                 }
             }
         }
     }
 
-    threat_record_[t_k] = sub_threats_;
+    return dist_result;
+}
 
-    ////////////////////////////////////////////////////////////////////////////////////
+CollisionThreat::ThreatDist CollisionThreat::GetIntervalOccupancyDistributionAt(int32_t t_k)
+{
+    ThreatDist dist_result;
 
-    interval_occupancy_grid_ = std::make_shared<CurvilinearGrid>(traffic_chn_->center_curve_, s_step_, delta_step_, delta_size_, s_offset_);
-    sub_int_threats_.clear();
+    dist_result.occupancy_grid = std::make_shared<CurvilinearGrid>(traffic_chn_->center_curve_, s_step_, delta_step_, delta_size_, s_offset_);
+    dist_result.sub_threats.clear();
 
-    Eigen::VectorXd dist_interval = occupancy_->GetIntervalOccupancyDistribution(t_k);
+    Eigen::VectorXd dist_interval = occupancy_model_->GetIntervalOccupancyDistribution(t_k);
 
-    probability_max = 0;
+    double probability_max = 0;
     for (std::size_t i = 0; i < dist_interval.size(); ++i)
     {
-        if (i < interval_occupancy_grid_->GetTangentialGridNum())
+        if (i < dist_result.occupancy_grid->GetTangentialGridNum())
         {
-            for (int32_t j = -interval_occupancy_grid_->GetOneSideGridNumber(); j <= interval_occupancy_grid_->GetOneSideGridNumber(); ++j)
+            for (int32_t j = -dist_result.occupancy_grid->GetOneSideGridNumber(); j <= dist_result.occupancy_grid->GetOneSideGridNumber(); ++j)
             {
-                interval_occupancy_grid_->GetCell(i, j)->extra_attribute = dist_interval(i) * LateralDistribution::GetProbability(j);
-                if (interval_occupancy_grid_->GetCell(i, j)->extra_attribute > probability_max)
-                    probability_max = interval_occupancy_grid_->GetCell(i, j)->extra_attribute;
+                dist_result.occupancy_grid->GetCell(i, j)->extra_attribute = dist_interval(i) * LateralDistribution::GetProbability(j);
+                if (dist_result.occupancy_grid->GetCell(i, j)->extra_attribute > probability_max)
+                    probability_max = dist_result.occupancy_grid->GetCell(i, j)->extra_attribute;
             }
         }
     }
 
     for (std::size_t i = 0; i < dist_interval.size(); ++i)
     {
-        if (i < interval_occupancy_grid_->GetTangentialGridNum())
+        if (i < dist_result.occupancy_grid->GetTangentialGridNum())
         {
-            for (int32_t j = -interval_occupancy_grid_->GetOneSideGridNumber(); j <= interval_occupancy_grid_->GetOneSideGridNumber(); ++j)
+            for (int32_t j = -dist_result.occupancy_grid->GetOneSideGridNumber(); j <= dist_result.occupancy_grid->GetOneSideGridNumber(); ++j)
             {
-                auto cell = interval_occupancy_grid_->GetCell(i, j);
+                auto cell = dist_result.occupancy_grid->GetCell(i, j);
 
                 if (cell->extra_attribute > 0)
                 {
                     // Note: extra_attribute is the true probability value
-                    auto pt = interval_occupancy_grid_->ConvertToCurvePoint(cell->center);
-                    sub_int_threats_.emplace_back(Pose2d(pt.x, pt.y, pt.theta), cell->extra_attribute);
+                    auto pt = dist_result.occupancy_grid->ConvertToCurvePoint(cell->center);
+                    dist_result.sub_threats.emplace_back(Pose2d(pt.x, pt.y, pt.theta), cell->extra_attribute);
 
                     // values here are normalized for better visualization
                     cell->cost_map = cell->extra_attribute / probability_max;
-
-                    // std::cout << "probability (i,j) " << i << "," << j << " = " << interval_occupancy_grid_->GetCell(i, j)->cost_map << std::endl;
                 }
             }
         }
     }
+
+    return dist_result;
 }
 
 double CollisionThreat::operator()(double x, double y, bool is_interval)
@@ -168,7 +192,7 @@ double CollisionThreat::operator()(double x, double y, int32_t t_k)
 {
     // assert(t_k < threat_record_.size());
 
-    auto threats = threat_record_[t_k];
+    auto threats = threat_record_[t_k].sub_threats;
     double threat = 0.0;
     for (auto &sub : threats)
         threat += sub(x, y) * sub.probability;
@@ -179,7 +203,7 @@ Point2d CollisionThreat::GetThreatCenter(int32_t t_k)
 {
     // assert(t_k < threat_record_.size());
 
-    auto threats = threat_record_[t_k];
+    auto threats = threat_record_[t_k].sub_threats;
     Point2d pos(0, 0);
     for (auto &sub : threats)
     {
