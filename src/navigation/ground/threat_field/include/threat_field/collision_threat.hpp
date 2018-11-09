@@ -74,10 +74,10 @@ class CollisionThreat
 
     // occupancy_grid_ and sub_threats_ only store latest threat information after
     //  last time UpdateOccupancyDistribution() was called
-    std::shared_ptr<CurvilinearGrid> occupancy_grid_;
-    std::vector<VehicleStaticThreat> sub_threats_;
-    std::shared_ptr<CurvilinearGrid> interval_occupancy_grid_;
-    std::vector<VehicleStaticThreat> sub_int_threats_;
+    // std::shared_ptr<CurvilinearGrid> occupancy_grid_;
+    // std::vector<VehicleStaticThreat> sub_threats_;
+    // std::shared_ptr<CurvilinearGrid> interval_occupancy_grid_;
+    // std::vector<VehicleStaticThreat> sub_int_threats_;
 
     // threat_record_ stores all history threat information
     std::unordered_map<int32_t, ThreatDist> threat_record_;
@@ -91,11 +91,19 @@ class CollisionThreat
     void ComputeOccupancyDistribution(int32_t k, bool calc_interval_dist = false);
 
     // threat value query
-    double operator()(double x, double y, bool is_interval = false);
-    Point2d GetThreatCenter();
-
     double operator()(double x, double y, int32_t t_k);
     Point2d GetThreatCenter(int32_t t_k);
+    ThreatDist GetThreatDistribution(int32_t t_k) { return threat_record_[t_k]; }
+    ThreatDist GetIntervalThreatDistribution(int32_t t_k) { return intv_threat_record_[t_k]; }
+
+    // for visualization only
+    void SetVisParams(bool is_interval, int32_t t_k)
+    {
+        get_interval_dist_ = is_interval;
+        vis_t_k_ = t_k;
+    }
+    double operator()(double x, double y);
+    Point2d GetThreatCenter();
 
   private:
     // Markov model covarage: SStep * SSize = 100m, 2m/s * 10 = 20m/s
@@ -114,6 +122,10 @@ class CollisionThreat
     const double delta_step_ = DeltaStep;
     const int32_t delta_size_ = DeltaSize;
     /*****************************************************************/
+
+    // visualization
+    bool get_interval_dist_ = false;
+    int32_t vis_t_k_ = 0;
 
     void SetupPredictionModel();
     ThreatDist GetOccupancyDistributionAt(int32_t t_k);

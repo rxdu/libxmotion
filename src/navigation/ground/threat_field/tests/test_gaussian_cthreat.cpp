@@ -39,7 +39,7 @@ int main()
 
     // TrafficViz::ShowVehicleOccupancyDistribution(ct1, "occupancy_estimation");
     TrafficViz::ShowVehicleCollisionThreat(ct1, 5, "occupancy_estimation", false);
-    TrafficViz::ShowVehicleIntervalCollisionThreat(ct1, "occupancy_estimation_interval", false);
+    TrafficViz::ShowVehicleIntervalCollisionThreat(ct1, 4, "occupancy_estimation_interval", false);
 
     // for (int i = 0; i < 5; ++i)
     // TrafficViz::ShowVehicleCollisionThreat(ct1, i, "occupancy_estimation", false);

@@ -37,8 +37,8 @@ int main()
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    TrafficViz::ShowVehicleOccupancyDistribution(ct1, "occupancy_estimation");
-    TrafficViz::ShowVehicleIntervalOccupancyDistribution(ct1, "interval_occupancy_estimation");
+    TrafficViz::ShowVehicleOccupancyDistribution(ct1, 5, "occupancy_estimation");
+    TrafficViz::ShowVehicleIntervalOccupancyDistribution(ct1, 4, "interval_occupancy_estimation");
 
     return 0;
 }

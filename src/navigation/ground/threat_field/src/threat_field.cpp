@@ -50,7 +50,7 @@ bool ThreatField::CheckInConflict(VehicleEstimation veh)
     auto occupied_lanes = road_map_->FindOccupiedLaneletNames({veh.GetPose().position.x, veh.GetPose().position.y});
     // std::cout << "occupied lanes of vehicle " << veh.id_ << " : " << std::endl;
     // for(auto& lane : occupied_lanes)
-    //     std::cout << lane << std::endl; 
+    //     std::cout << lane << std::endl;
 
     for (auto &olane : occupied_lanes)
     {
@@ -100,26 +100,12 @@ std::vector<std::shared_ptr<CollisionThreat>> ThreatField::GetAllCollisionThreat
 
 double ThreatField::operator()(double x, double y)
 {
-    double threat = 0.0;
-    for (auto &threat_entry : threats_)
-        for (auto sub : threat_entry.second)
-            threat += (*sub.get())(x, y);
-    return threat;
+    return (*this)(x, y, vis_t_k_);
 }
 
 Point2d ThreatField::GetThreatCenter()
 {
-    Point2d pos(0, 0);
-    for (auto &threat_entry : threats_)
-        for (auto sub : threat_entry.second)
-        {
-            auto c = sub->GetThreatCenter();
-            pos.x += c.x;
-            pos.y += c.y;
-        }
-    pos.x = pos.x / threats_.size();
-    pos.y = pos.y / threats_.size();
-    return pos;
+    return GetThreatCenter(vis_t_k_);
 }
 
 double ThreatField::operator()(double x, double y, int32_t t_k)

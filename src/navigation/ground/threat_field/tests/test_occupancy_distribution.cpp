@@ -37,7 +37,7 @@ int main()
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    TrafficViz::ShowVehicleOccupancyDistribution(ct1, "occupancy_estimation");
+    TrafficViz::ShowVehicleOccupancyDistribution(ct1, 3, "occupancy_estimation");
 
     return 0;
 }

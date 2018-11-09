@@ -123,7 +123,7 @@ int main()
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    TrafficViz::ShowLatticeInThreatField(lattices, *ego_chn.get(), field, true, "lattice_in_threat_field", true);
+    TrafficViz::ShowLatticeInThreatField(lattices, *ego_chn.get(), field, 4, true, "lattice_in_threat_field", true);
 
     //////////////////////////////////////////////////
 
@@ -135,7 +135,7 @@ int main()
     //     TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(i), true);
     // }
 
-    TrafficViz::ShowTrafficChannelWithThreatField(*ego_chn.get(), field, true, "lattice_in_threat_field", true);
+    TrafficViz::ShowTrafficChannelWithThreatField(*ego_chn.get(), field, 4, true, "lattice_in_threat_field", true);
 
     return 0;
 }

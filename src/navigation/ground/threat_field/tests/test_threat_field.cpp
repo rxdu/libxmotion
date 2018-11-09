@@ -93,19 +93,16 @@ int main()
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels()[2];
     field.SetupThreatField(ego_chn);
 
-    field.ComputeThreatField(2);
+    field.ComputeThreatField(9);
 
     std::cout << "occupancy estimation calculated in " << timer.toc() << std::endl;
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(2), false);
+    TrafficViz::ShowThreatField(field, 3, true, "occupancy_estimation", false);
 
     // for (int i = 0; i < 9; i++)
-    // {
-    //     field.ComputeThreatField(i);
-    //     TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(i), true);
-    // }
+    //     TrafficViz::ShowThreatField(field, i, true, "occupancy_estimation" + std::to_string(i), true);
 
     return 0;
 }

@@ -54,13 +54,13 @@ void CollisionThreat::ComputeOccupancyDistribution(int32_t k, bool calc_interval
     threat_record_.insert(std::make_pair(k, GetOccupancyDistributionAt(k)));
 
     // save last record for visualization
-    occupancy_grid_ = threat_record_[k].occupancy_grid;
-    sub_threats_ = threat_record_[k].sub_threats;
-    if (calc_interval_dist)
-    {
-        interval_occupancy_grid_ = intv_threat_record_[k - 1].occupancy_grid;
-        sub_int_threats_ = intv_threat_record_[k - 1].sub_threats;
-    }
+    // occupancy_grid_ = threat_record_[k].occupancy_grid;
+    // sub_threats_ = threat_record_[k].sub_threats;
+    // if (calc_interval_dist)
+    // {
+    //     interval_occupancy_grid_ = intv_threat_record_[k - 1].occupancy_grid;
+    //     sub_int_threats_ = intv_threat_record_[k - 1].sub_threats;
+    // }
 }
 
 CollisionThreat::ThreatDist CollisionThreat::GetOccupancyDistributionAt(int32_t t_k)
@@ -157,37 +157,6 @@ CollisionThreat::ThreatDist CollisionThreat::GetIntervalOccupancyDistributionAt(
     return dist_result;
 }
 
-double CollisionThreat::operator()(double x, double y, bool is_interval)
-{
-    double threat = 0.0;
-
-    if (!is_interval)
-    {
-        for (auto &sub : sub_threats_)
-            threat += sub(x, y) * sub.probability;
-    }
-    else
-    {
-        for (auto &sub : sub_int_threats_)
-            threat += sub(x, y) * sub.probability;
-    }
-
-    return threat;
-}
-
-Point2d CollisionThreat::GetThreatCenter()
-{
-    Point2d pos(0, 0);
-    for (auto &sub : sub_threats_)
-    {
-        pos.x += sub.pose.position.x;
-        pos.y += sub.pose.position.y;
-    }
-    pos.x = pos.x / sub_threats_.size();
-    pos.y = pos.y / sub_threats_.size();
-    return pos;
-}
-
 double CollisionThreat::operator()(double x, double y, int32_t t_k)
 {
     // assert(t_k < threat_record_.size());
@@ -213,4 +182,29 @@ Point2d CollisionThreat::GetThreatCenter(int32_t t_k)
     pos.x = pos.x / threats.size();
     pos.y = pos.y / threats.size();
     return pos;
+}
+
+double CollisionThreat::operator()(double x, double y)
+{
+    double threat = 0.0;
+
+    if (!get_interval_dist_)
+    {
+        auto threats = threat_record_[vis_t_k_].sub_threats;
+        for (auto &sub : threats)
+            threat += sub(x, y) * sub.probability;
+    }
+    else
+    {
+        auto threats = intv_threat_record_[vis_t_k_].sub_threats;
+        for (auto &sub : threats)
+            threat += sub(x, y) * sub.probability;
+    }
+
+    return threat;
+}
+
+Point2d CollisionThreat::GetThreatCenter()
+{
+    return GetThreatCenter(vis_t_k_);
 }

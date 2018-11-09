@@ -93,7 +93,7 @@ int main()
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels()[2];
     field.SetupThreatField(ego_chn);
 
-    // field.ComputeThreatField(2);
+    field.ComputeThreatField(5);
 
     // std::cout << "occupancy estimation calculated in " << timer.toc() << std::endl;
 
@@ -101,23 +101,22 @@ int main()
 
     // TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(2), true);
 
-    for (int i = 0; i < 5; i++)
-        field.ComputeThreatField(i);
-
     // for (int i = 0; i < 5; i++)
     //     TrafficViz::ShowThreatField(field, i, true, "occupancy_estimation" + std::to_string(i), false);
     timer.tic();
     for (int i = 0; i < 5; i++)
         for (int j = 0; j < 200; ++j)
-            std::cout << "query: " << field(50, 50, i) << std::endl;
+            // std::cout << "query: " << field(50, 50, i) << std::endl;
+            field(50, 50, i);
 
     std::cout << "query1 finished in average: " << timer.toc() / 1000 << std::endl;
 
     timer.tic();
     for (int i = 0; i < 5; i++)
         for (int j = 0; j < 200; ++j)
-            std::cout << "query2: " << field(50, 50) << std::endl;
-
+            // std::cout << "query2: " << field(50, 50) << std::endl;
+            field(50, 50);
+            
     std::cout << "query2 finished in average: " << timer.toc() / 1000 << std::endl;
     ;
 

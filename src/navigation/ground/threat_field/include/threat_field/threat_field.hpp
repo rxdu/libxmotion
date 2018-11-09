@@ -30,13 +30,14 @@ class ThreatField
     std::vector<VehicleEstimation> GetAllVehicleEstimations();
     std::vector<std::shared_ptr<CollisionThreat>> GetAllCollisionThreats();
 
-    double operator()(double x, double y);
-    Point2d GetThreatCenter();
-
     double operator()(double x, double y, int32_t t_k);
+    double GetCollisionThreat(double x, double y, int32_t t_k) { return (*this)(x, y, t_k); };
     Point2d GetThreatCenter(int32_t t_k);
 
-    double GetCollisionThreat(double x, double y, int32_t t_k) { return (*this)(x,y,t_k);};
+    // for visualization, use the above functions to query threat value
+    void SetVisTimeStep(int32_t t_k) { vis_t_k_ = t_k; }
+    double operator()(double x, double y);
+    Point2d GetThreatCenter();
 
   private:
     std::shared_ptr<RoadMap> road_map_;
@@ -47,6 +48,8 @@ class ThreatField
 
     std::unordered_map<int32_t, VehicleEstimation> vehicles_;
     std::unordered_map<int32_t, std::vector<std::shared_ptr<CollisionThreat>>> threats_;
+
+    int32_t vis_t_k_ = 0;
 
     bool CheckInConflict(VehicleEstimation veh);
 };
