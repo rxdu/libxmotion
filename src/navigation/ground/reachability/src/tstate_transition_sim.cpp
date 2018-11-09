@@ -85,7 +85,7 @@ Eigen::MatrixXd TStateTransitionSim::RunSim(double T)
                     double probability = tc.second->occupancy_stats / static_cast<double>(samples.size());
                     Psi(c_size * tc.second->id + c, c_size * cell->id + c) = probability;
                     // std::cout << "row: " << c_size * tc.second->id << " , " << tc.second->id << " , col: " << c_size * cell->id << " , probability = " << probability << std::endl;
-                    
+
                     // reset variable for next simulation
                     tc.second->occupancy_stats = 0;
                 }
@@ -96,4 +96,27 @@ Eigen::MatrixXd TStateTransitionSim::RunSim(double T)
     // std::cout << "Psi: \n" << Psi << std::endl;
 
     return Psi;
+}
+
+Eigen::MatrixXd TStateTransitionSim::RunIntervalSim(double T, int32_t n)
+{
+    double r = T / n;
+
+    int32_t d_size = state_space_->GetStateNumber();
+    int32_t c_size = control_set_.size();
+
+    int32_t psi_block_size = d_size * c_size;
+
+    Eigen::MatrixXd Psi_T;
+    Psi_T.setZero(psi_block_size, psi_block_size);
+
+    for (int32_t i = 0; i < n; ++i)
+    {
+        Eigen::MatrixXd Psi_r = RunSim((i + 1) * r);
+        Psi_T += Psi_r;
+    }
+
+    Psi_T = Psi_T / n;
+
+    return Psi_T;
 }

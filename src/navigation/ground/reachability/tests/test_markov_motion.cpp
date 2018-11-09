@@ -55,11 +55,12 @@ int main()
     sim.SetupStateSpace(state_space);
     sim.SetControlSet(cmds);
     Eigen::MatrixXd Psi = sim.RunSim(0.5);
+    Eigen::MatrixXd Psi_T = sim.RunIntervalSim(0.5, 10);
 
     //*******************************************************************
 
     MotionModel motion;
-    motion.SetupModel(state_space, Psi, command, 28, 3 * 3, 10, .1 * .1);
+    motion.SetupModel(state_space, Psi, Psi_T, command, 28, 3 * 3, 10, .1 * .1);
 
     std::cout << "s size: " << state_space->GetSSize() << std::endl;
     std::cout << "---------------------------" << std::endl;

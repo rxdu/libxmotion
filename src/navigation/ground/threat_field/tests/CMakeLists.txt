@@ -11,8 +11,11 @@
 # add_executable(test_true_threat test_true_threat.cpp)
 # target_link_libraries(test_true_threat tfield ugvnav_viz lightviz utilities)
 
-add_executable(test_collision_threat test_collision_threat.cpp)
-target_link_libraries(test_collision_threat tfield ugvnav_viz utilities)
+add_executable(test_occupancy_distribution test_occupancy_distribution.cpp)
+target_link_libraries(test_occupancy_distribution tfield ugvnav_viz utilities)
+
+add_executable(test_occupancy_interval test_occupancy_interval.cpp)
+target_link_libraries(test_occupancy_interval tfield ugvnav_viz utilities)
 
 add_executable(test_static_threat test_static_threat.cpp)
 target_link_libraries(test_static_threat tfield ugvnav_viz utilities)
@@ -22,6 +25,9 @@ target_link_libraries(test_gaussian_cthreat tfield ugvnav_viz utilities)
 
 add_executable(test_threat_field test_threat_field.cpp)
 target_link_libraries(test_threat_field tfield ugvnav_viz utilities)
+
+add_executable(test_threat_field_interval test_threat_field_interval.cpp)
+target_link_libraries(test_threat_field_interval tfield ugvnav_viz utilities)
 
 add_executable(test_threat_field_history test_threat_field_history.cpp)
 target_link_libraries(test_threat_field_history tfield ugvnav_viz utilities)

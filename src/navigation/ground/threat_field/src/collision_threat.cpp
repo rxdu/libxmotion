@@ -30,7 +30,10 @@ void CollisionThreat::SetupPredictionModel()
     double spd_var = vehicle_est_.GetSpeedVariance();
 
     s_offset_ = pose_pf.s - s_starting_;
-    occupancy_->SetupMarkovModel(s_starting_, s_var_matrix(0, 0), vehicle_est_.GetSpeed(), spd_var, true, FolderPath::GetDataFolderPath() + "/reachability/vehicle_threat_combined_state_transition.data");
+    // occupancy_->SetupMarkovModel(s_starting_, s_var_matrix(0, 0), vehicle_est_.GetSpeed(), spd_var, true, FolderPath::GetDataFolderPath() + "/reachability/vehicle_threat_combined_state_transition.data");
+    occupancy_->SetupMarkovModel(s_starting_, s_var_matrix(0, 0), vehicle_est_.GetSpeed(), spd_var, true,
+                                 FolderPath::GetDataFolderPath() + "/reachability/vehicle_threat_combined_transition.data",
+                                 FolderPath::GetDataFolderPath() + "/reachability/vehicle_threat_combined_transition_interval.data");
 
     // std::cout << "finished setting up markov model" << std::endl;
 }
@@ -54,7 +57,6 @@ void CollisionThreat::UpdateOccupancyDistribution(int32_t t_k)
                 occupancy_grid_->GetCell(i, j)->extra_attribute = dist(i) * LateralDistribution::GetProbability(j);
                 if (occupancy_grid_->GetCell(i, j)->extra_attribute > probability_max)
                     probability_max = occupancy_grid_->GetCell(i, j)->extra_attribute;
-
                 // std::cout << "probability (i,j) " << i << "," << j << " = "
                 //           << dist(i) << " * " << LateralDistribution::GetProbability(j) << " = " << occupancy_grid_->GetCell(i, j)->cost_map << std::endl;
             }
@@ -85,13 +87,67 @@ void CollisionThreat::UpdateOccupancyDistribution(int32_t t_k)
     }
 
     threat_record_[t_k] = sub_threats_;
+
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    interval_occupancy_grid_ = std::make_shared<CurvilinearGrid>(traffic_chn_->center_curve_, s_step_, delta_step_, delta_size_, s_offset_);
+    sub_int_threats_.clear();
+
+    Eigen::VectorXd dist_interval = occupancy_->GetIntervalOccupancyDistribution(t_k);
+
+    probability_max = 0;
+    for (std::size_t i = 0; i < dist_interval.size(); ++i)
+    {
+        if (i < interval_occupancy_grid_->GetTangentialGridNum())
+        {
+            for (int32_t j = -interval_occupancy_grid_->GetOneSideGridNumber(); j <= interval_occupancy_grid_->GetOneSideGridNumber(); ++j)
+            {
+                interval_occupancy_grid_->GetCell(i, j)->extra_attribute = dist_interval(i) * LateralDistribution::GetProbability(j);
+                if (interval_occupancy_grid_->GetCell(i, j)->extra_attribute > probability_max)
+                    probability_max = interval_occupancy_grid_->GetCell(i, j)->extra_attribute;
+            }
+        }
+    }
+
+    for (std::size_t i = 0; i < dist_interval.size(); ++i)
+    {
+        if (i < interval_occupancy_grid_->GetTangentialGridNum())
+        {
+            for (int32_t j = -interval_occupancy_grid_->GetOneSideGridNumber(); j <= interval_occupancy_grid_->GetOneSideGridNumber(); ++j)
+            {
+                auto cell = interval_occupancy_grid_->GetCell(i, j);
+
+                if (cell->extra_attribute > 0)
+                {
+                    // Note: extra_attribute is the true probability value
+                    auto pt = interval_occupancy_grid_->ConvertToCurvePoint(cell->center);
+                    sub_int_threats_.emplace_back(Pose2d(pt.x, pt.y, pt.theta), cell->extra_attribute);
+
+                    // values here are normalized for better visualization
+                    cell->cost_map = cell->extra_attribute / probability_max;
+
+                    // std::cout << "probability (i,j) " << i << "," << j << " = " << interval_occupancy_grid_->GetCell(i, j)->cost_map << std::endl;
+                }
+            }
+        }
+    }
 }
 
-double CollisionThreat::operator()(double x, double y)
+double CollisionThreat::operator()(double x, double y, bool is_interval)
 {
     double threat = 0.0;
-    for (auto &sub : sub_threats_)
-        threat += sub(x, y) * sub.probability;
+
+    if (!is_interval)
+    {
+        for (auto &sub : sub_threats_)
+            threat += sub(x, y) * sub.probability;
+    }
+    else
+    {
+        for (auto &sub : sub_int_threats_)
+            threat += sub(x, y) * sub.probability;
+    }
+
     return threat;
 }
 

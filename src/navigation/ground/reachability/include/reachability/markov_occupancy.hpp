@@ -47,32 +47,56 @@ class MarkovOccupancy
         PrepareModelParams(true, true, file_name);
     }
 
-    void SetupMarkovModel(double s_mean, double s_var, double v_mean, double v_var, bool trans_precomputed = false, std::string trans_file = "")
+    void SetupMarkovModel(double s_mean, double s_var, double v_mean, double v_var, bool trans_precomputed = false, std::string trans_file = "", std::string int_trans_file = "")
     {
         if (trans_precomputed)
         {
             PrepareModelParams();
-            Eigen::MatrixXd combined_transition;
-            MatrixFile::LoadMatrix(trans_file, combined_transition);
-            motion_.SetupPrecomputedModel(state_space_, combined_transition, command_, s_mean, s_var, v_mean, v_var);
+            // load Psi_,Psi_T_ from files
+            Eigen::MatrixXd Psi, Psi_T;
+            MatrixFile::LoadMatrix(trans_file, Psi);
+            MatrixFile::LoadMatrix(int_trans_file, Psi_T);
+            motion_.SetupPrecomputedModel(state_space_, Psi, Psi_T, command_, s_mean, s_var, v_mean, v_var);
         }
         else
         {
-            // Psi_ computed in PrepareModelParams()
             PrepareModelParams(true);
-            motion_.SetupModel(state_space_, Psi_, command_, s_mean, s_var, v_mean, v_var);
+            // Psi_,Psi_T_ computed in PrepareModelParams()
+            motion_.SetupModel(state_space_, Psi_, Psi_T_, command_, s_mean, s_var, v_mean, v_var);
         }
     }
 
-    Eigen::VectorXd GetOccupancyDistribution(int32_t t_kp1, double min_p = 1e-2)
+    Eigen::VectorXd GetOccupancyDistribution(int32_t t_k, double min_p = 1e-2)
     {
         Eigen::VectorXd pos_prob_vec;
         pos_prob_vec.setZero(state_space_->GetSSize());
 
-        typename MotionModel::State statef = motion_.CalculateStateAt(t_kp1);
+        typename MotionModel::State statef = motion_.CalculateStateAt(t_k);
         for (int i = 0; i < N; ++i)
             for (int j = 0; j < M; ++j)
                 pos_prob_vec(i / state_space_->GetVSize()) += statef(i * M + j);
+
+        for (int i = 0; i < state_space_->GetSSize(); ++i)
+        {
+            if (pos_prob_vec(i) < min_p)
+                pos_prob_vec(i) = 0;
+        }
+        pos_prob_vec = pos_prob_vec / pos_prob_vec.sum();
+
+        return pos_prob_vec;
+    }
+
+    Eigen::VectorXd GetIntervalOccupancyDistribution(int32_t t_k, double min_p = 1e-2)
+    {
+        Eigen::VectorXd pos_prob_vec;
+        pos_prob_vec.setZero(state_space_->GetSSize());
+
+        typename MotionModel::State statef = motion_.CalculateStateAt(t_k - 1);
+        typename MotionModel::State statef_int = motion_.CalculateIntervalState(statef);
+
+        for (int i = 0; i < N; ++i)
+            for (int j = 0; j < M; ++j)
+                pos_prob_vec(i / state_space_->GetVSize()) += statef_int(i * M + j);
 
         for (int i = 0; i < state_space_->GetSSize(); ++i)
         {
@@ -91,6 +115,7 @@ class MarkovOccupancy
     std::shared_ptr<CommandModel> command_;
     MotionModel motion_;
     Eigen::MatrixXd Psi_;
+    Eigen::MatrixXd Psi_T_;
     // prediction step increment
     double T_;
 
@@ -116,10 +141,6 @@ class MarkovOccupancy
 
         command_->SetupModel(init_state, cmds, priority_vec, gamma);
 
-        // std::cout << "---------------------------" << std::endl;
-        // for(int i = 0; i < 5; ++i)
-        //     std::cout << "Phi(" << i << ")\n" << command_->CalculateStateAt(i) << std::endl;
-
         if (compute_transition)
         {
             RunSimulation(state_space_, cmds, save_to_file, file_name);
@@ -133,14 +154,19 @@ class MarkovOccupancy
         sim.SetupStateSpace(space);
         sim.SetControlSet(cmds);
         Psi_ = sim.RunSim(T_);
+        Psi_T_ = sim.RunIntervalSim(T_, 10);
 
         // std::cout << "Psi: \n" << Psi_ << std::endl;
+        // std::cout << "Psi_T: \n" << Psi_T_ << std::endl;
 
         // save to file
         if (save_to_file)
         {
             typename MotionModel::Transition combined_trans = command_->GetTransitionMatrix() * Psi_;
-            MatrixFile::SaveMatrix(file_name, combined_trans, true);
+            MatrixFile::SaveMatrix(file_name + ".data", combined_trans, true);
+
+            typename MotionModel::Transition combined_trans_T = command_->GetTransitionMatrix() * Psi_T_;
+            MatrixFile::SaveMatrix(file_name + "_interval" + ".data", combined_trans_T, true);
         }
     }
 };

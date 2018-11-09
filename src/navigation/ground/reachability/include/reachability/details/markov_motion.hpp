@@ -82,29 +82,27 @@ class MarkovMotion : public OccupancyMarkovChain<M * N>
     using CommandModel = MarkovCommand<N, M>;
 
   public:
-    void SetupModel(std::shared_ptr<TStateSpace> space, Transition trans, std::shared_ptr<CommandModel> cmd_model, double s_mean, double s_var, double v_mean, double v_var)
+    void SetupModel(std::shared_ptr<TStateSpace> space, Transition trans, Transition int_trans, std::shared_ptr<CommandModel> cmd_model, double s_mean, double s_var, double v_mean, double v_var)
     {
         state_space_ = space;
         cmd_model_ = cmd_model;
 
         Model::SetInitialState(GenerateInitState(s_mean, v_mean, s_var, v_var));
+        Model::SetTransitionMatrix(cmd_model_->GetTransitionMatrix() * trans);
+        Model::SetIntervalTransitionMatrix(cmd_model_->GetTransitionMatrix() * int_trans);
 
         // std::cout << "model init state: \n" << Model::GetInitialState() << std::endl;
-
-        state_transition_ = trans;
-        Transition combined_trans = cmd_model_->GetTransitionMatrix() * state_transition_;
-        Model::SetTransitionMatrix(combined_trans);
-
         // std::cout << "Combined transition matrix: \n" << combined_trans << std::endl;
     }
 
-    void SetupPrecomputedModel(std::shared_ptr<TStateSpace> space, Transition trans, std::shared_ptr<CommandModel> cmd_model, double s_mean, double s_var, double v_mean, double v_var)
+    void SetupPrecomputedModel(std::shared_ptr<TStateSpace> space, Transition trans, Transition int_trans, std::shared_ptr<CommandModel> cmd_model, double s_mean, double s_var, double v_mean, double v_var)
     {
         state_space_ = space;
         cmd_model_ = cmd_model;
 
         Model::SetInitialState(GenerateInitState(s_mean, v_mean, s_var, v_var));
         Model::SetTransitionMatrix(trans);
+        Model::SetIntervalTransitionMatrix(int_trans);
 
         // std::cout << "model init state: \n" << Model::GetInitialState() << std::endl;
         // std::cout << "Combined transition matrix: \n" << combined_trans << std::endl;
@@ -160,7 +158,6 @@ class MarkovMotion : public OccupancyMarkovChain<M * N>
   private:
     std::shared_ptr<TStateSpace> state_space_;
     std::shared_ptr<CommandModel> cmd_model_;
-    Transition state_transition_;
 };
 } // namespace librav
 

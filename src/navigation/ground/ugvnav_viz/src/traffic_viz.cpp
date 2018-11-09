@@ -127,6 +127,24 @@ void TrafficViz::ShowVehicleOccupancyDistribution(std::shared_ptr<CollisionThrea
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
+void TrafficViz::ShowVehicleIntervalOccupancyDistribution(std::shared_ptr<CollisionThreat> threat, std::string window_name, bool save_img)
+{
+    RoadMapViz &viz = RoadMapViz::GetInstance();
+
+    CartesianCanvas canvas = viz.CreateCanvas(false);
+    RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
+    VehicleDraw veh_draw = VehicleDraw(canvas);
+    CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
+
+    if (threat->interval_occupancy_grid_ != nullptr)
+        cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->interval_occupancy_grid_.get()));
+
+    road_draw.DrawLanes(true);
+    veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint());
+
+    ShowImage(canvas.paint_area, window_name, save_img);
+}
+
 void TrafficViz::ShowVehicleOccupancyDistribution(std::vector<std::shared_ptr<CollisionThreat>> threats, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
@@ -163,6 +181,29 @@ void TrafficViz::ShowVehicleCollisionThreat(std::shared_ptr<CollisionThreat> thr
 
     auto center = threat->GetThreatCenter();
     gdraw.DrawDistribution(center.x, center.y, 50, 50, *threat.get());
+
+    // if (threat->occupancy_grid_ != nullptr)
+    //     cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));
+
+    road_draw.DrawLanes(true);
+    veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint());
+
+    ShowImage(canvas.paint_area, window_name, save_img);
+}
+
+void TrafficViz::ShowVehicleIntervalCollisionThreat(std::shared_ptr<CollisionThreat> threat, std::string window_name, bool save_img)
+{
+    RoadMapViz &viz = RoadMapViz::GetInstance();
+
+    CartesianCanvas canvas = viz.CreateCanvas(true);
+
+    RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
+    VehicleDraw veh_draw = VehicleDraw(canvas);
+    // CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
+    GeometryDraw gdraw = GeometryDraw(canvas);
+
+    auto center = threat->GetThreatCenter();
+    gdraw.DrawDistribution(center.x, center.y, 50, 50, std::bind(*threat.get(), std::placeholders::_1, std::placeholders::_2, true));
 
     // if (threat->occupancy_grid_ != nullptr)
     //     cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));

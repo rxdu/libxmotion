@@ -29,6 +29,7 @@ public:
   void SetControlSet(Eigen::VectorXd set) { control_set_ = set; }
 
   Eigen::MatrixXd RunSim(double T);
+  Eigen::MatrixXd RunIntervalSim(double T, int32_t n);
 
 private:
   Eigen::VectorXd control_set_;

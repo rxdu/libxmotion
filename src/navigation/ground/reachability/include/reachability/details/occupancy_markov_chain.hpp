@@ -57,20 +57,25 @@ class OccupancyMarkovChain
     {
         init_state_ = st;
         states_.push_back(init_state_);
+
+        sparse_s_ = init_state_.sparseView();
     }
-    void SetTransitionMatrix(Transition trans) { transition_ = trans; }
+
+    void SetTransitionMatrix(Transition trans)
+    {
+        transition_ = trans;
+        sparse_trans_ = transition_.sparseView();
+    }
+
+    void SetIntervalTransitionMatrix(Transition trans)
+    {
+        interval_transition_ = trans;
+        sparse_interval_trans_ = interval_transition_.sparseView();
+    }
 
     State GetInitialState() const { return init_state_; }
     Transition GetTransitionMatrix() const { return transition_; }
     int32_t GetStateNumber() const { return states_.size(); }
-
-    inline void Propagate() { states_.emplace_back(transition_ * states_.back()); }
-
-    void Propagate(int32_t k_f)
-    {
-        for (int32_t i = 0; i < k_f; ++i)
-            Propagate();
-    }
 
     State operator[](int32_t k)
     {
@@ -80,29 +85,15 @@ class OccupancyMarkovChain
         return CalculateStateAt(k);
     }
 
-    // State CalculateStateAt(int32_t k)
-    // {
-    //     State s = init_state_;
-
-    //     for (int32_t i = 0; i < k; ++i)
-    //     {
-    //         s = transition_ * s;
-    //         // normalize to avoid undersampling
-    //         s = s / s.sum();
-    //     }
-    //     return s;
-    // }
-
     State CalculateStateAt(int32_t k)
     {
         // stopwatch::StopWatch timer;
 
-        Eigen::SparseMatrix<double> sparse_s = init_state_.sparseView();
-        Eigen::SparseMatrix<double> sparse_trans = transition_.sparseView();
+        Eigen::SparseMatrix<double> sparse_s = sparse_s_;
 
         for (int32_t i = 0; i < k; ++i)
         {
-            sparse_s = sparse_trans * sparse_s;
+            sparse_s = sparse_trans_ * sparse_s;
             // normalize to avoid undersampling
             sparse_s = sparse_s / sparse_s.sum();
         }
@@ -110,9 +101,25 @@ class OccupancyMarkovChain
         return State(sparse_s);
     }
 
+    State CalculateIntervalState(State p_tk)
+    {
+        Eigen::SparseMatrix<double> sparse_s = p_tk.sparseView();
+
+        sparse_s = sparse_interval_trans_ * sparse_s;
+        sparse_s = sparse_s / sparse_s.sum();
+
+        return State(sparse_s);
+    }
+
   protected:
     State init_state_;
     Transition transition_;
+    Transition interval_transition_;
+
+    // sparse version
+    Eigen::SparseMatrix<double> sparse_s_;
+    Eigen::SparseMatrix<double> sparse_trans_;
+    Eigen::SparseMatrix<double> sparse_interval_trans_;
 
     std::vector<State> states_;
 };

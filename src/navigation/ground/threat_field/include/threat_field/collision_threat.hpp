@@ -59,6 +59,13 @@ class CollisionThreat
     static void GenerateStateTransitionMatrix();
 
   public:
+    struct ThreatDist
+    {
+        std::shared_ptr<CurvilinearGrid> occupancy_grid;
+        std::vector<VehicleStaticThreat> sub_threats;
+    };
+
+  public:
     CollisionThreat() = default;
     CollisionThreat(VehicleEstimation est, std::shared_ptr<TrafficChannel> chn);
 
@@ -70,6 +77,9 @@ class CollisionThreat
     //  last time UpdateOccupancyDistribution() was called
     std::shared_ptr<CurvilinearGrid> occupancy_grid_;
     std::vector<VehicleStaticThreat> sub_threats_;
+    std::shared_ptr<CurvilinearGrid> interval_occupancy_grid_;
+    std::vector<VehicleStaticThreat> sub_int_threats_;
+
     // threat_record_ stores all history threat information
     std::unordered_map<int32_t, std::vector<VehicleStaticThreat>> threat_record_;
 
@@ -81,7 +91,7 @@ class CollisionThreat
     void UpdateOccupancyDistribution(int32_t t_k);
 
     // threat value query
-    double operator()(double x, double y);
+    double operator()(double x, double y, bool is_interval = false);
     Point2d GetThreatCenter();
 
     double operator()(double x, double y, int32_t t_k);

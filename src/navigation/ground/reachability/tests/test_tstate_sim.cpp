@@ -25,14 +25,16 @@ int main()
     stopwatch::StopWatch timer;
 
     Eigen::MatrixXd Psi = sim.RunSim(5);
+    Eigen::MatrixXd Psi_T = sim.RunIntervalSim(5, 10);
 
     std::cout << "generated Psi in " << timer.toc() << " seconds." << std::endl;
 
     std::cout << "Psi size: " << Psi.rows() << " by " << Psi.cols() << std::endl;
 
     // LightViz::ShowTStateSpace(*sim.state_space_.get());
-    LightViz::ShowMatrixAsColorMap(Psi, "Psi_matrix", true);
+    LightViz::ShowMatrixAsColorMap(Psi, "Psi_matrix", false);
     // LightViz::ShowMatrixAsImage(Psi);
+    LightViz::ShowMatrixAsColorMap(Psi_T, "Psi_T_matrix", false);
 
     return 0;
 }

@@ -24,7 +24,6 @@ class ThreatField
     ThreatField(std::shared_ptr<RoadMap> rmap, std::shared_ptr<TrafficMap> tmap);
 
     void AddVehicleEstimations(std::vector<VehicleEstimation> ests);
-
     void SetupThreatField(std::shared_ptr<TrafficChannel> ego_chn);
     void UpdateThreatField(int32_t t_k);
 
