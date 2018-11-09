@@ -37,30 +37,30 @@ void CollisionThreat::SetupPredictionModel()
     std::cout << "finished setting up markov model" << std::endl;
 }
 
-void CollisionThreat::ComputeOccupancyDistribution(int32_t k)
+void CollisionThreat::ComputeOccupancyDistribution(int32_t k, bool calc_interval_dist)
 {
     assert(k > 0);
 
     // propagate for k steps from init state
     //  => (k+1) states, k intervals
-    occupancy_model_->Propagate(k);
-
-    std::cout << "finished model propagation" << std::endl;
+    occupancy_model_->Propagate(k, calc_interval_dist);
 
     for (int32_t i = 0; i < k; ++i)
     {
         threat_record_.insert(std::make_pair(i, GetOccupancyDistributionAt(i)));
-        intv_threat_record_.insert(std::make_pair(i, GetIntervalOccupancyDistributionAt(i)));
+        if (calc_interval_dist)
+            intv_threat_record_.insert(std::make_pair(i, GetIntervalOccupancyDistributionAt(i)));
     }
     threat_record_.insert(std::make_pair(k, GetOccupancyDistributionAt(k)));
 
     // save last record for visualization
     occupancy_grid_ = threat_record_[k].occupancy_grid;
     sub_threats_ = threat_record_[k].sub_threats;
-    interval_occupancy_grid_ = intv_threat_record_[k - 1].occupancy_grid;
-    sub_int_threats_ = intv_threat_record_[k - 1].sub_threats;
-
-    std::cout << "finished setting up threat" << std::endl;
+    if (calc_interval_dist)
+    {
+        interval_occupancy_grid_ = intv_threat_record_[k - 1].occupancy_grid;
+        sub_int_threats_ = intv_threat_record_[k - 1].sub_threats;
+    }
 }
 
 CollisionThreat::ThreatDist CollisionThreat::GetOccupancyDistributionAt(int32_t t_k)

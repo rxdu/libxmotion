@@ -31,7 +31,7 @@ int main()
 
     std::shared_ptr<CollisionThreat> ct1 = std::make_shared<CollisionThreat>(veh1, ego_chn);
 
-    ct1->ComputeOccupancyDistribution(5);
+    ct1->ComputeOccupancyDistribution(5, true);
 
     std::cout << "occupancy estimation calculated in " << timer.toc() << std::endl;
 

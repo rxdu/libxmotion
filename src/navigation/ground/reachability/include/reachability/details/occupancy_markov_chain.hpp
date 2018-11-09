@@ -104,6 +104,24 @@ class OccupancyMarkovChain
     {
         // stopwatch::StopWatch timer;
         states_.reserve(k + 1);
+
+        // forward propagate for k steps
+        Eigen::SparseMatrix<double> sparse_s = sparse_init_s_;
+        for (int32_t i = 0; i < k; ++i)
+        {
+            // then calculate p(t_{k+1})
+            sparse_s = sparse_trans_ * sparse_s;
+            sparse_s = sparse_s / sparse_s.sum();
+            states_.push_back(State(sparse_s));
+        }
+
+        // std::cout << "matrix calculation finished in " << timer.toc() << std::endl;
+    }
+
+    void PropagateWithIntervalDist(int32_t k)
+    {
+        // stopwatch::StopWatch timer;
+        states_.reserve(k + 1);
         intv_states_.reserve(k);
 
         // forward propagate for k steps

@@ -88,7 +88,7 @@ class CollisionThreat
         occupancy_model_->PrecomputeStateTransition(file_name);
     }
 
-    void ComputeOccupancyDistribution(int32_t k);
+    void ComputeOccupancyDistribution(int32_t k, bool calc_interval_dist = false);
 
     // threat value query
     double operator()(double x, double y, bool is_interval = false);

@@ -168,7 +168,7 @@ void TrafficViz::ShowVehicleOccupancyDistribution(std::vector<std::shared_ptr<Co
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowVehicleCollisionThreat(std::shared_ptr<CollisionThreat> threat, std::string window_name, bool save_img)
+void TrafficViz::ShowVehicleCollisionThreat(std::shared_ptr<CollisionThreat> threat, int32_t t_k, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -180,7 +180,8 @@ void TrafficViz::ShowVehicleCollisionThreat(std::shared_ptr<CollisionThreat> thr
     GeometryDraw gdraw = GeometryDraw(canvas);
 
     auto center = threat->GetThreatCenter();
-    gdraw.DrawDistribution(center.x, center.y, 100, 50, *threat.get());
+    gdraw.DrawDistribution(center.x, center.y, 100, 50,
+                           std::bind(*threat.get(), std::placeholders::_1, std::placeholders::_2, t_k));
 
     // if (threat->occupancy_grid_ != nullptr)
     //     cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));

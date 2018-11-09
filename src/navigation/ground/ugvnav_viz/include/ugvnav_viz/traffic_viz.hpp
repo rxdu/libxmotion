@@ -44,7 +44,7 @@ class TrafficViz
     static void ShowVehicleIntervalOccupancyDistribution(std::shared_ptr<CollisionThreat> threat, std::string window_name = "Collision Threat", bool save_img = false);
 
     static void ShowVehicleStaticThreat(VehicleStaticThreat threat, std::string window_name = "Collision Threat", bool save_img = false);
-    static void ShowVehicleCollisionThreat(std::shared_ptr<CollisionThreat> threat, std::string window_name = "Collision Threat", bool save_img = false);
+    static void ShowVehicleCollisionThreat(std::shared_ptr<CollisionThreat> threat, int32_t t_k, std::string window_name = "Collision Threat", bool save_img = false);
     static void ShowVehicleIntervalCollisionThreat(std::shared_ptr<CollisionThreat> threat, std::string window_name = "Collision Threat", bool save_img = false);
 
     static void ShowOccupancyField(ThreatField &field, bool show_veh_id = false, std::string window_name = "Occupancy Field", bool save_img = false);

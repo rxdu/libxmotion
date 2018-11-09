@@ -91,7 +91,7 @@ int main()
     auto all_channels = loader.traffic_map->GetAllTrafficChannels();
     // all_channels[1]->DiscretizeChannel(5, 1.2, 5);
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels()[2];
-    ego_chn->DiscretizeChannel(3, 0.74, 5);
+    ego_chn->DiscretizeChannel(10, 0.74, 5);
 
     stopwatch::StopWatch timer;
 
@@ -123,7 +123,7 @@ int main()
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    // TrafficViz::ShowLatticeInThreatField(lattices, *ego_chn.get(), field, true, "lattice_in_threat_field", true);
+    TrafficViz::ShowLatticeInThreatField(lattices, *ego_chn.get(), field, true, "lattice_in_threat_field", true);
 
     //////////////////////////////////////////////////
 

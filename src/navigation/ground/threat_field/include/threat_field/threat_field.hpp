@@ -36,6 +36,8 @@ class ThreatField
     double operator()(double x, double y, int32_t t_k);
     Point2d GetThreatCenter(int32_t t_k);
 
+    double GetCollisionThreat(double x, double y, int32_t t_k) { return (*this)(x,y,t_k);};
+
   private:
     std::shared_ptr<RoadMap> road_map_;
     std::shared_ptr<TrafficMap> traffic_map_;

@@ -31,15 +31,18 @@ int main()
 
     std::shared_ptr<CollisionThreat> ct1 = std::make_shared<CollisionThreat>(veh1, ego_chn);
 
-    ct1->ComputeOccupancyDistribution(5);
+    ct1->ComputeOccupancyDistribution(5, true);
 
     std::cout << "occupancy estimation calculated in " << timer.toc() << std::endl;
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    TrafficViz::ShowVehicleOccupancyDistribution(ct1, "occupancy_estimation");
-    TrafficViz::ShowVehicleCollisionThreat(ct1, "occupancy_estimation", true);
-    TrafficViz::ShowVehicleIntervalCollisionThreat(ct1, "occupancy_estimation_interval", true);
+    // TrafficViz::ShowVehicleOccupancyDistribution(ct1, "occupancy_estimation");
+    TrafficViz::ShowVehicleCollisionThreat(ct1, 5, "occupancy_estimation", false);
+    TrafficViz::ShowVehicleIntervalCollisionThreat(ct1, "occupancy_estimation_interval", false);
+
+    // for (int i = 0; i < 5; ++i)
+    // TrafficViz::ShowVehicleCollisionThreat(ct1, i, "occupancy_estimation", false);
 
     return 0;
 }

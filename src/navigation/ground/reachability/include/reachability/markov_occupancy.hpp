@@ -66,9 +66,12 @@ class MarkovOccupancy
         }
     }
 
-    void Propagate(int32_t k)
+    void Propagate(int32_t k, bool calc_interval_dist = false)
     {
-        motion_.Propagate(k);
+        if(!calc_interval_dist)
+            motion_.Propagate(k);
+        else
+            motion_.PropagateWithIntervalDist(k);
     }
 
     Eigen::VectorXd GetOccupancyDistribution(int32_t t_k, double min_p = 1e-3)
