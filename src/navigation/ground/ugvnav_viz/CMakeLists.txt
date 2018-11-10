@@ -6,6 +6,7 @@ set(UGVNAV_VIZ_LIB_SRC
     src/details/roadmap_draw.cpp
     src/details/vehicle_draw.cpp
     src/details/lattice_draw.cpp
+    src/details/threat_draw.cpp
     src/lattice_viz.cpp
     src/roadmap_viz.cpp
     src/reachability_viz.cpp

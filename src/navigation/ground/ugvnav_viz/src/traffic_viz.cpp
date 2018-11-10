@@ -15,6 +15,7 @@
 #include "ugvnav_viz/details/roadmap_draw.hpp"
 #include "ugvnav_viz/details/vehicle_draw.hpp"
 #include "ugvnav_viz/details/lattice_draw.hpp"
+#include "ugvnav_viz/details/threat_draw.hpp"
 #include "lightviz/details/curvilinear_grid_draw.hpp"
 #include "ugvnav_viz/roadmap_viz.hpp"
 
@@ -154,11 +155,11 @@ void TrafficViz::ShowVehicleCollisionThreat(std::shared_ptr<CollisionThreat> thr
     RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
     VehicleDraw veh_draw = VehicleDraw(canvas);
     // CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
-    GeometryDraw gdraw = GeometryDraw(canvas);
+    ThreatDraw tdraw = ThreatDraw(canvas);
 
     auto center = threat->GetThreatCenter(t_k);
     threat->SetVisParams(false, t_k);
-    gdraw.DrawDistributionFast(center.x, center.y, 120, 50, *threat.get());
+    tdraw.DrawCollisionThreat(*threat.get(), center.x, center.y, 120, 50);
 
     // if (threat->occupancy_grid_ != nullptr)
     //     cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));
@@ -178,11 +179,11 @@ void TrafficViz::ShowVehicleIntervalCollisionThreat(std::shared_ptr<CollisionThr
     RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
     VehicleDraw veh_draw = VehicleDraw(canvas);
     // CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
-    GeometryDraw gdraw = GeometryDraw(canvas);
+    ThreatDraw tdraw = ThreatDraw(canvas);
 
     threat->SetVisParams(true, t_k);
     auto center = threat->GetThreatCenter(t_k);
-    gdraw.DrawDistributionFast(center.x, center.y, 120, 50, *threat.get());
+    tdraw.DrawCollisionThreat(*threat.get(), center.x, center.y, 120, 50);
 
     // if (threat->occupancy_grid_ != nullptr)
     //     cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));
@@ -231,13 +232,13 @@ void TrafficViz::ShowThreatField(ThreatField &field, int32_t t_k, bool show_veh_
     RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
     VehicleDraw veh_draw = VehicleDraw(canvas);
     CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
-    GeometryDraw gdraw = GeometryDraw(canvas);
+    ThreatDraw tdraw = ThreatDraw(canvas);
 
     auto threats = field.GetAllCollisionThreats();
 
     auto center = field.GetThreatCenter(t_k);
     field.SetVisTimeStep(t_k);
-    gdraw.DrawDistributionFast(center.x, center.y, 120, 50, field);
+    tdraw.DrawCollisionThreatField(field, center.x, center.y, 120, 50);
 
     road_draw.DrawLanes(true);
 
@@ -297,7 +298,7 @@ void TrafficViz::ShowLatticeInThreatField(std::vector<StateLattice> &lattice, Tr
     VehicleDraw veh_draw = VehicleDraw(canvas);
     CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
     LatticeDraw lattice_draw = LatticeDraw(canvas);
-    GeometryDraw gdraw = GeometryDraw(canvas);
+    ThreatDraw tdraw = ThreatDraw(canvas);
 
     // auto threats = field.GetAllCollisionThreats();
     // for (auto threat : threats)
@@ -306,9 +307,8 @@ void TrafficViz::ShowLatticeInThreatField(std::vector<StateLattice> &lattice, Tr
     //         cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));
     // }
     auto center = field.GetThreatCenter(t_k);
-    // gdraw.DrawDistribution(center.x, center.y, 150, 120, field);
     field.SetVisTimeStep(t_k);
-    gdraw.DrawDistributionFast(center.x, center.y, 150, 120, field);
+    tdraw.DrawCollisionThreatField(field, center.x, center.y, 120, 50);
 
     road_draw.DrawLanes(true);
 
@@ -337,8 +337,8 @@ void TrafficViz::ShowTrafficChannelWithThreatField(TrafficChannel &channel, Thre
     VehicleDraw veh_draw = VehicleDraw(canvas);
     CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
     LatticeDraw lattice_draw = LatticeDraw(canvas);
-    GeometryDraw gdraw = GeometryDraw(canvas);
-
+    ThreatDraw tdraw = ThreatDraw(canvas);
+    
     // auto threats = field.GetAllCollisionThreats();
     // for (auto threat : threats)
     // {
@@ -347,7 +347,7 @@ void TrafficViz::ShowTrafficChannelWithThreatField(TrafficChannel &channel, Thre
     // }
     auto center = field.GetThreatCenter(t_k);
     field.SetVisTimeStep(t_k);
-    gdraw.DrawDistributionFast(center.x, center.y, 150, 120, field);
+    tdraw.DrawCollisionThreatField(field, center.x, center.y, 120, 50);
 
     road_draw.DrawLanes(true);
 
