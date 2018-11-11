@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "traffic_map/map_loader.hpp"
-#include "threat_field/collision_threat.hpp"
+#include "threat_field/dynamic_threat_model.hpp"
 
 #include "stopwatch/stopwatch.h"
 #include "ugvnav_viz/ugvnav_viz.hpp"

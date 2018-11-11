@@ -41,7 +41,7 @@ int main()
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
 
-    CollisionThreat threat(road_map, traffic_map);
+    DynamicThreatModel threat(road_map, traffic_map);
 
     int32_t ego_id = 9;
     double average_spd = 10;

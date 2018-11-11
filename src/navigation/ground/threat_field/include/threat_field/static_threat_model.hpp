@@ -1,5 +1,5 @@
 /* 
- * static_threat.hpp
+ * static_threat_model.hpp
  * 
  * Created on: Nov 05, 2018 11:16
  * Description: 
@@ -7,8 +7,9 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#ifndef STATIC_THREAT_HPP
-#define STATIC_THREAT_HPP
+
+#ifndef STATIC_THREAT_MODEL_HPP
+#define STATIC_THREAT_MODEL_HPP
 
 #include "common/librav_types.hpp"
 
@@ -57,4 +58,4 @@ class VehicleStaticThreat
 };
 } // namespace librav
 
-#endif /* STATIC_THREAT_HPP */
+#endif /* STATIC_THREAT_MODEL_HPP */

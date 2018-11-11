@@ -15,5 +15,5 @@ target_include_directories(traffic PUBLIC
 
 # Add executables
 if(BUILD_TESTS)
-	add_subdirectory(tests)
+	# add_subdirectory(tests)
 endif()

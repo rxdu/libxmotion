@@ -11,11 +11,11 @@
 
 using namespace librav;
 
-CollisionThreat::CollisionThreat(std::shared_ptr<RoadMap> map, std::shared_ptr<TrafficMap> tmap) : road_map_(map), traffic_map_(tmap)
+DynamicThreatModel::DynamicThreatModel(std::shared_ptr<RoadMap> map, std::shared_ptr<TrafficMap> tmap) : road_map_(map), traffic_map_(tmap)
 {
 }
 
-std::shared_ptr<CollisionField> CollisionThreat::EvaluateThreat(double ave_spd)
+std::shared_ptr<CollisionField> DynamicThreatModel::EvaluateThreat(double ave_spd)
 {
     std::string source = ego_flow_->GetFlowSource();
     std::string sink = ego_flow_->GetSingleSourceFlowSink();
@@ -29,14 +29,14 @@ std::shared_ptr<CollisionField> CollisionThreat::EvaluateThreat(double ave_spd)
     return GenerateCollisionField();
 }
 
-void CollisionThreat::GenerateCollisionRegions(const std::vector<FlowTrackPoint> &centers, double spd)
+void DynamicThreatModel::GenerateCollisionRegions(const std::vector<FlowTrackPoint> &centers, double spd)
 {
     regions_.clear();
     for (auto &center : centers)
         regions_.push_back(CollisionRegion(center.pose, spd, center.time_stamp));
 }
 
-std::shared_ptr<CollisionField> CollisionThreat::GenerateCollisionField()
+std::shared_ptr<CollisionField> DynamicThreatModel::GenerateCollisionField()
 {
     std::shared_ptr<CollisionField> cfield = std::make_shared<CollisionField>(road_map_->xmin_, road_map_->xmax_, road_map_->ymin_, road_map_->ymax_);
 
@@ -57,7 +57,7 @@ std::shared_ptr<CollisionField> CollisionThreat::GenerateCollisionField()
     return cfield;
 }
 
-double CollisionThreat::CalculateThreatLevel(std::shared_ptr<CollisionField> cfield, double posx, double posy, double velx, double vely)
+double DynamicThreatModel::CalculateThreatLevel(std::shared_ptr<CollisionField> cfield, double posx, double posy, double velx, double vely)
 {
     double cost = cfield->GetCollisionThreat(posx, posy);
 

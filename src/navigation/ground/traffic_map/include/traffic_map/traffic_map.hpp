@@ -23,18 +23,19 @@ class RoadMap;
 
 class TrafficMap
 {
-public:
-  TrafficMap() = delete;
-  TrafficMap(std::shared_ptr<RoadMap> map);
+  public:
+    TrafficMap() = delete;
+    TrafficMap(std::shared_ptr<RoadMap> map);
 
-  std::vector<std::shared_ptr<TrafficChannel>> GetAllTrafficChannels();
-  std::vector<std::shared_ptr<TrafficChannel>> FindTrafficChannels(SimplePoint pos);
+    std::shared_ptr<RoadMap> road_map_;
 
-private:
-  std::shared_ptr<RoadMap> road_map_;
-  std::map<std::pair<std::string, std::string>, std::shared_ptr<TrafficChannel>> traffic_channels_;
+    std::vector<std::shared_ptr<TrafficChannel>> GetAllTrafficChannels();
+    std::vector<std::shared_ptr<TrafficChannel>> FindTrafficChannels(SimplePoint pos);
 
-  void IdentifyTrafficElements();
+  private:
+    std::map<std::pair<std::string, std::string>, std::shared_ptr<TrafficChannel>> traffic_channels_;
+
+    void IdentifyTrafficElements();
 };
 } // namespace librav
 

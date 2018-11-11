@@ -23,26 +23,21 @@ void ThreatField::AddVehicleEstimations(std::vector<VehicleEstimation> ests)
 
 void ThreatField::SetupThreatField(std::shared_ptr<TrafficChannel> ego_chn)
 {
-    ego_channel_ = ego_chn;
+    // ego_channel_ = ego_chn;
 
-    conflicting_lanes_ = road_map_->FindConflictingLanes(ego_channel_->lanes_);
+    // conflicting_lanes_ = road_map_->FindConflictingLanes(ego_channel_->lanes_);
 
-    // std::cout << "conflicting lanes:" << std::endl;
-    // for(auto& lane : conflicting_lanes_)
-    //     std::cout << lane << std::endl;
+    // for (auto &entry : vehicles_)
+    // {
+    //     if (!CheckInConflict(entry.second))
+    //         continue;
 
-    // std::cout << "vehicle number: " << vehicles_.size() << std::endl;
-    for (auto &entry : vehicles_)
-    {
-        if (!CheckInConflict(entry.second))
-            continue;
+    //     std::vector<std::shared_ptr<DynamicThreatModel>> threats;
 
-        std::vector<std::shared_ptr<CollisionThreat>> threats;
-
-        for (auto chn : entry.second.GetOccupiedChannels())
-            threats.push_back(std::make_shared<CollisionThreat>(entry.second, chn));
-        threats_.insert(std::make_pair(entry.second.id_, threats));
-    }
+    //     for (auto chn : entry.second.GetOccupiedChannels())
+    //         threats.push_back(std::make_shared<DynamicThreatModel>(entry.second, chn));
+    //     threats_.insert(std::make_pair(entry.second.id_, threats));
+    // }
 }
 
 bool ThreatField::CheckInConflict(VehicleEstimation veh)
@@ -85,9 +80,9 @@ std::vector<VehicleEstimation> ThreatField::GetAllVehicleEstimations()
     return vehs;
 }
 
-std::vector<std::shared_ptr<CollisionThreat>> ThreatField::GetAllCollisionThreats()
+std::vector<std::shared_ptr<DynamicThreatModel>> ThreatField::GetAllCollisionThreats()
 {
-    std::vector<std::shared_ptr<CollisionThreat>> threats;
+    std::vector<std::shared_ptr<DynamicThreatModel>> threats;
 
     for (auto &vehicle_threats : threats_)
     {

@@ -110,7 +110,7 @@ void TrafficViz::ShowVehicleStaticThreat(VehicleStaticThreat threat, std::string
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowVehicleOccupancyDistribution(std::shared_ptr<CollisionThreat> threat, int32_t t_k, std::string window_name, bool save_img)
+void TrafficViz::ShowVehicleOccupancyDistribution(std::shared_ptr<DynamicThreatModel> threat, int32_t t_k, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -128,7 +128,7 @@ void TrafficViz::ShowVehicleOccupancyDistribution(std::shared_ptr<CollisionThrea
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowVehicleIntervalOccupancyDistribution(std::shared_ptr<CollisionThreat> threat, int32_t t_k, std::string window_name, bool save_img)
+void TrafficViz::ShowVehicleIntervalOccupancyDistribution(std::shared_ptr<DynamicThreatModel> threat, int32_t t_k, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -146,7 +146,7 @@ void TrafficViz::ShowVehicleIntervalOccupancyDistribution(std::shared_ptr<Collis
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowVehicleCollisionThreat(std::shared_ptr<CollisionThreat> threat, int32_t t_k, std::string window_name, bool save_img)
+void TrafficViz::ShowVehicleCollisionThreat(std::shared_ptr<DynamicThreatModel> threat, int32_t t_k, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -170,7 +170,7 @@ void TrafficViz::ShowVehicleCollisionThreat(std::shared_ptr<CollisionThreat> thr
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowVehicleIntervalCollisionThreat(std::shared_ptr<CollisionThreat> threat, int32_t t_k, std::string window_name, bool save_img)
+void TrafficViz::ShowVehicleIntervalCollisionThreat(std::shared_ptr<DynamicThreatModel> threat, int32_t t_k, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -364,7 +364,7 @@ void TrafficViz::ShowTrafficChannelWithThreatField(TrafficChannel &channel, Thre
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-// void TrafficViz::ShowVehicleOccupancyDistribution(std::vector<std::shared_ptr<CollisionThreat>> threats, std::string window_name, bool save_img)
+// void TrafficViz::ShowVehicleOccupancyDistribution(std::vector<std::shared_ptr<DynamicThreatModel>> threats, std::string window_name, bool save_img)
 // {
 //     RoadMapViz &viz = RoadMapViz::GetInstance();
 

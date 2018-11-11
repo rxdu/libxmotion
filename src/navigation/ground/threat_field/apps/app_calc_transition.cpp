@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "traffic_map/map_loader.hpp"
-#include "threat_field/collision_threat.hpp"
+#include "threat_field/dynamic_threat_model.hpp"
 
 #include "stopwatch/stopwatch.h"
 #include "ugvnav_viz/ugvnav_viz.hpp"
@@ -27,7 +27,7 @@ int main()
 
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels().back();
 
-    std::shared_ptr<CollisionThreat> ct1 = std::make_shared<CollisionThreat>(veh1, ego_chn);
+    std::shared_ptr<DynamicThreatModel> ct1 = std::make_shared<DynamicThreatModel>(veh1, ego_chn);
     ct1->PrecomputeParameters(FolderPath::GetDataFolderPath() + "/reachability/vehicle_threat_combined_state_transition2.data");
 
     std::cout << "------------- all calculation finished -------------" << std::endl;

@@ -12,7 +12,7 @@
 
 #include "geometry/polyline.hpp"
 #include "geometry/polygon.hpp"
-#include "threat_field/collision_threat.hpp"
+#include "threat_field/dynamic_threat_model.hpp"
 
 #include "lightviz/details/cartesian_canvas.hpp"
 #include "lightviz/details/geometry_draw.hpp"

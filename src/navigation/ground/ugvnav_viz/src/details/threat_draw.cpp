@@ -12,7 +12,7 @@
 
 using namespace librav;
 
-void ThreatDraw::DrawCollisionThreat(CollisionThreat &threat, double cx, double cy, double xspan, double yspan)
+void ThreatDraw::DrawCollisionThreat(DynamicThreatModel &threat, double cx, double cy, double xspan, double yspan)
 {
     assert(cx >= canvas_.xmin_ && cx < canvas_.xmax_ && cy >= canvas_.ymin_ && cy < canvas_.ymax_);
 

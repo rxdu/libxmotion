@@ -1,5 +1,5 @@
 /* 
- * collision_threat.hpp
+ * dynamic_threat_model.hpp
  * 
  * Created on: Nov 02, 2018 01:37
  * Description: collision threat \psi_i for vehicle_i
@@ -7,8 +7,8 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#ifndef COLLISION_THREAT_HPP
-#define COLLISION_THREAT_HPP
+#ifndef DYNAMIC_THREAT_MODEL_HPP
+#define DYNAMIC_THREAT_MODEL_HPP
 
 #include <cstdint>
 #include <memory>
@@ -17,14 +17,13 @@
 #include <cassert>
 #include <iostream>
 
-#include "traffic_map/traffic_map.hpp"
 #include "reachability/markov_occupancy.hpp"
 #include "threat_field/vehicle_estimation.hpp"
-#include "threat_field/static_threat.hpp"
+#include "threat_field/static_threat_model.hpp"
 
 namespace librav
 {
-class CollisionThreat
+class DynamicThreatModel
 {
     /************************* Parameters ****************************/
     // longitudinal: vehicle centered at cell: SStartIndex
@@ -57,49 +56,42 @@ class CollisionThreat
         }
     };
 
-  public:
-    struct ThreatDist
-    {
-        std::shared_ptr<CurvilinearGrid> occupancy_grid;
-        std::vector<VehicleStaticThreat> sub_threats;
-    };
+    friend class VehicleThreat;
+
+//   public:
+//     struct ThreatDist
+//     {
+//         std::shared_ptr<CurvilinearGrid> occupancy_grid;
+//         std::vector<VehicleStaticThreat> sub_threats;
+//     };
 
   public:
-    CollisionThreat() = default;
-    CollisionThreat(VehicleEstimation est, std::shared_ptr<TrafficChannel> chn);
-    // CollisionThreat(VehicleEstimation est, std::vector<std::shared_ptr<TrafficChannel>> chn);
+    DynamicThreatModel() = default;
+    DynamicThreatModel(VehicleEstimation est);
 
     // basic threat information
     VehicleEstimation vehicle_est_;
-    std::shared_ptr<TrafficChannel> traffic_chn_;
+    // std::shared_ptr<TrafficChannel> traffic_chn_;
+    // std::vector<std::shared_ptr<TrafficChannel>> traffic_chns_;
 
     // threat_record_ stores all history threat information
-    std::unordered_map<int32_t, ThreatDist> threat_record_;
-    std::unordered_map<int32_t, ThreatDist> intv_threat_record_;
+    // std::unordered_map<int32_t, ThreatDist> threat_record_;
+    // std::unordered_map<int32_t, ThreatDist> intv_threat_record_;
 
     void PrecomputeParameters(std::string file_name)
     {
         occupancy_model_->PrecomputeStateTransition(file_name);
     }
 
-    void ComputeOccupancyDistribution(int32_t k, bool calc_interval_dist = false);
+    // void ComputeOccupancyDistribution(int32_t k, bool calc_interval_dist = false);
 
     // threat value query
-    double operator()(double x, double y, int32_t t_k);
-    Point2d GetThreatCenter(int32_t t_k);
-    ThreatDist GetThreatDistribution(int32_t t_k) { return threat_record_[t_k]; }
-    ThreatDist GetIntervalThreatDistribution(int32_t t_k) { return intv_threat_record_[t_k]; }
+    // double operator()(double x, double y, int32_t t_k);
+    // Point2d GetThreatCenter(int32_t t_k);
+    // ThreatDist GetThreatDistribution(int32_t t_k) { return threat_record_[t_k]; }
+    // ThreatDist GetIntervalThreatDistribution(int32_t t_k) { return intv_threat_record_[t_k]; }
 
-    double GetVehicleTotalThreat(double x, double y, int32_t t_k);
-
-    // for visualization only
-    void SetVisParams(bool is_interval, int32_t t_k)
-    {
-        get_interval_dist_ = is_interval;
-        vis_t_k_ = t_k;
-    }
-    double operator()(double x, double y);
-    Point2d GetThreatCenter();
+    // double GetVehicleTotalThreat(double x, double y, int32_t t_k);
 
   private:
     // Markov model covarage: SStep * SSize = 100m, 2m/s * 10 = 20m/s
@@ -119,14 +111,10 @@ class CollisionThreat
     const int32_t delta_size_ = DeltaSize;
     /*****************************************************************/
 
-    // visualization
-    bool get_interval_dist_ = false;
-    int32_t vis_t_k_ = 0;
-
     void SetupPredictionModel();
-    ThreatDist GetOccupancyDistributionAt(int32_t t_k);
-    ThreatDist GetIntervalOccupancyDistributionAt(int32_t t_k);
+    // ThreatDist GetOccupancyDistributionAt(int32_t t_k);
+    // ThreatDist GetIntervalOccupancyDistributionAt(int32_t t_k);
 };
 } // namespace librav
 
-#endif /* COLLISION_THREAT_HPP */
+#endif /* DYNAMIC_THREAT_MODEL_HPP */

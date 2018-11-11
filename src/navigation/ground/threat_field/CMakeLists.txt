@@ -4,8 +4,9 @@
 # Add libraries
 set(TFIELD_LIB_SRC
     src/vehicle_estimation.cpp
-    src/collision_threat.cpp
-    src/threat_field.cpp
+    src/dynamic_threat_model.cpp
+    src/vehicle_threat.cpp
+    # src/threat_field.cpp
 )
 add_library(tfield STATIC ${TFIELD_LIB_SRC})
 target_link_libraries(tfield common decomp graph traffic reachability)
@@ -14,7 +15,7 @@ target_include_directories(tfield PUBLIC
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 
-add_subdirectory(apps)
+# add_subdirectory(apps)
 
 if(BUILD_TESTS)
     add_subdirectory(tests)

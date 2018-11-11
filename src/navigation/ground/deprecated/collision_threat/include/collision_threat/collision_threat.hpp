@@ -38,10 +38,10 @@ struct CollisionRegion
   double sigma_y = 0.5;
 };
 
-class CollisionThreat
+class DynamicThreatModel
 {
 public:
-  CollisionThreat(std::shared_ptr<RoadMap> map, std::shared_ptr<TrafficMap> tmap);
+  DynamicThreatModel(std::shared_ptr<RoadMap> map, std::shared_ptr<TrafficMap> tmap);
 
   void SetEgoTrafficFlow(TrafficFlow *flow) { ego_flow_ = flow; }
 

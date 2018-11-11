@@ -44,38 +44,33 @@ class VehicleEstimation
   public:
     VehicleEstimation();
     VehicleEstimation(Pose2d _pose, double _speed);
-    VehicleEstimation(Pose2d _pose, double _speed, std::shared_ptr<TrafficChannel> chn);
-    VehicleEstimation(Pose2d _pose, double _speed, std::vector<std::shared_ptr<TrafficChannel>> chns);
+    VehicleEstimation(Pose2d _pose, CovarMatrix2d _pos_var, double _speed, double _spd_var);
 
     int32_t id_;
 
-    // Note: use getter/setter for "pose" to make sure the footprint
+    // Note: use getter/setter for "pose" to make sure the footprint_
     //  is set properly when the pose changes
     void SetPose(Pose2d ps);
-    Pose2d GetPose() const { return pose; }
-    void SetPositionVariance(CovarMatrix2d covar) { pos_var = covar; }
-    CovarMatrix2d GetPositionVariance() const { return pos_var; }
+    Pose2d GetPose() const { return pose_; }
+    void SetPositionVariance(CovarMatrix2d covar) { pos_var_ = covar; }
+    CovarMatrix2d GetPositionVariance() const { return pos_var_; }
 
-    void SetSpeed(double spd) { speed = spd; }
-    double GetSpeed() const { return speed; }
-    void SetSpeedVariance(double var) { spd_var = var; }
-    double GetSpeedVariance() const { return spd_var; }
+    void SetSpeed(double spd) { speed_ = spd; }
+    double GetSpeed() const { return speed_; }
+    void SetSpeedVariance(double var) { spd_var_ = var; }
+    double GetSpeedVariance() const { return spd_var_; }
 
-    void SetOccupiedChannels(std::vector<std::shared_ptr<TrafficChannel>> chns) { occupied_channels_ = chns; }
-    std::vector<std::shared_ptr<TrafficChannel>> GetOccupiedChannels() { return occupied_channels_; }
-
-    Polygon GetFootprint() const { return footprint.polygon; }
+    Polygon GetFootprint() const { return footprint_.polygon; }
 
   private:
     static int32_t VehicleCount;
-    std::vector<std::shared_ptr<TrafficChannel>> occupied_channels_;
 
-    Pose2d pose;
-    CovarMatrix2d pos_var;
+    Pose2d pose_;
+    CovarMatrix2d pos_var_;
 
-    double speed = 0;
-    double spd_var = 0;
-    VehicleFP footprint;
+    double speed_ = 0;
+    double spd_var_ = 0;
+    VehicleFP footprint_;
 };
 } // namespace librav
 
