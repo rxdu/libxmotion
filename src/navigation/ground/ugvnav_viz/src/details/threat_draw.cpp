@@ -88,8 +88,8 @@ void ThreatDraw::DrawCollisionThreatField(ThreatField &field, double cx, double 
     std::cout << "draw size: " << x_size << " , " << y_size << std::endl;
 
     double ppu = canvas_.ppu_;
-    for (int32_t i = 0; i < x_size; i = i + 2)
-        for (int32_t j = 0; j < y_size; j = j + 2)
+    for (int32_t i = 0; i < x_size; i = i + 1)
+        for (int32_t j = 0; j < y_size; j = j + 1)
         {
             // convert to cartisian coordinate then evaluate
             threat_matrix(j, i) = field(dxmin + i / ppu, dymin + j / ppu);

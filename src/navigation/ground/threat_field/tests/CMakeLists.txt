@@ -28,6 +28,3 @@ target_link_libraries(test_threat_field tfield ugvnav_viz utilities)
 
 add_executable(test_threat_query test_threat_query.cpp)
 target_link_libraries(test_threat_query tfield ugvnav_viz utilities)
-
-add_executable(test_threat_exposure test_threat_exposure.cpp)
-target_link_libraries(test_threat_exposure tfield lattice_planner ugvnav_viz utilities)

@@ -19,6 +19,15 @@ namespace librav
 {
 class ThreatField
 {
+    struct ThreatRecord
+    {
+        ThreatRecord() = default;
+        ThreatRecord(int32_t id, double c) : vehicle_id(id), cost(c) {}
+
+        int32_t vehicle_id = -1;
+        double cost = 0;
+    };
+
   public:
     ThreatField() = delete;
     ThreatField(std::shared_ptr<RoadMap> rmap, std::shared_ptr<TrafficMap> tmap);
@@ -31,8 +40,8 @@ class ThreatField
     std::vector<std::shared_ptr<CollisionThreat>> GetAllCollisionThreats();
 
     double operator()(double x, double y, int32_t t_k);
-    double GetCollisionThreat(double x, double y, int32_t t_k) { return (*this)(x, y, t_k); };
     Point2d GetThreatCenter(int32_t t_k);
+    double GetCollisionThreat(double x, double y, int32_t t_k) { return (*this)(x, y, t_k); };
 
     // for visualization, use the above functions to query threat value
     void SetVisTimeStep(int32_t t_k) { vis_t_k_ = t_k; }

@@ -18,6 +18,10 @@ CollisionThreat::CollisionThreat(VehicleEstimation est, std::shared_ptr<TrafficC
     SetupPredictionModel();
 }
 
+// CollisionThreat::CollisionThreat(VehicleEstimation est, std::vector<std::shared_ptr<TrafficChannel>> chn): vehicle_est_(est), traffic_chn_(chn)
+// {
+// }
+
 void CollisionThreat::SetupPredictionModel()
 {
     // convert vehicle pose info from world frame to path frame
@@ -183,6 +187,17 @@ Point2d CollisionThreat::GetThreatCenter(int32_t t_k)
     pos.y = pos.y / threats.size();
     return pos;
 }
+
+double CollisionThreat::GetVehicleTotalThreat(double x, double y, int32_t t_k)
+{
+    auto threats = threat_record_[t_k].sub_threats;
+    double threat = 0.0;
+    for (auto &sub : threats)
+        threat += sub(x, y) * sub.probability;
+    return threat;
+}
+
+//////////////////////////////////////////////////////////////////////
 
 double CollisionThreat::operator()(double x, double y)
 {

@@ -36,7 +36,7 @@ int main()
     auto all_channels = loader.traffic_map->GetAllTrafficChannels();
     // all_channels[1]->DiscretizeChannel(5, 1.2, 5);
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels()[2];
-    ego_chn->DiscretizeChannel(10, 1.2, 5);
+    ego_chn->DiscretizeChannel(10, 1.2, 1);
 
     // TrafficViz::ShowTrafficChannel(*all_channels[1].get());
     // TrafficViz::ShowTrafficChannel(*all_channels[1].get(), 20, "horizontal_lane", true);
