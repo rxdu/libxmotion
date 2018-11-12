@@ -26,7 +26,7 @@ int main()
         0, 2;
     auto ego_chn1 = loader.traffic_map->GetAllTrafficChannels()[4];
 
-    VehicleEstimation veh1({35, 59, -7 / 180.0 * M_PI}, 10, ego_chn1);
+    VehicleEstimation veh1({35, 59, -7 / 180.0 * M_PI}, 10);
     veh1.SetPositionVariance(pos_covar1);
     veh1.SetSpeedVariance(3 * 3);
 
@@ -37,7 +37,7 @@ int main()
         0, 1;
     auto ego_chn2 = loader.traffic_map->GetAllTrafficChannels()[4];
 
-    VehicleEstimation veh2({89, 52, -7 / 180.0 * M_PI}, 10, ego_chn2);
+    VehicleEstimation veh2({89, 52, -7 / 180.0 * M_PI}, 10);
     veh2.SetPositionVariance(pos_covar2);
     veh2.SetSpeedVariance(2 * 2);
 
@@ -48,7 +48,7 @@ int main()
         0, 0.25;
     auto ego_chn3 = loader.traffic_map->GetAllTrafficChannels()[0];
 
-    VehicleEstimation veh3({80, 59, 170 / 180.0 * M_PI}, 10, ego_chn3);
+    VehicleEstimation veh3({80, 59, 170 / 180.0 * M_PI}, 10);
     veh3.SetPositionVariance(pos_covar3);
     veh3.SetSpeedVariance(1 * 1);
 
@@ -59,7 +59,7 @@ int main()
         0, 1;
     auto ego_chn4 = loader.traffic_map->GetAllTrafficChannels()[5];
 
-    VehicleEstimation veh4({52, 35, -95 / 180.0 * M_PI}, 10, ego_chn4);
+    VehicleEstimation veh4({52, 35, -95 / 180.0 * M_PI}, 10);
     veh4.SetPositionVariance(pos_covar4);
     veh4.SetSpeedVariance(2 * 2);
 
@@ -70,7 +70,7 @@ int main()
         0, 1;
     auto ego_chn5 = loader.traffic_map->GetAllTrafficChannels()[0];
 
-    VehicleEstimation veh5({40, 64, 171 / 180.0 * M_PI}, 10, ego_chn5);
+    VehicleEstimation veh5({40, 64, 171 / 180.0 * M_PI}, 10);
     veh5.SetPositionVariance(pos_covar5);
     veh5.SetSpeedVariance(2 * 2);
 
@@ -99,10 +99,10 @@ int main()
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    TrafficViz::ShowThreatField(field, 3, true, "occupancy_estimation", false);
+    // TrafficViz::ShowThreatField(field, 3, true, "occupancy_estimation", false);
 
-    // for (int i = 0; i < 9; i++)
-    //     TrafficViz::ShowThreatField(field, i, true, "occupancy_estimation" + std::to_string(i), true);
+    for (int i = 0; i < 9; i++)
+        TrafficViz::ShowThreatField(field, i, true, "occupancy_estimation_new" + std::to_string(i), true);
 
     return 0;
 }

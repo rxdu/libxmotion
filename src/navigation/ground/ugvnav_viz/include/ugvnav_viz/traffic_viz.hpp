@@ -20,7 +20,7 @@
 #include "road_map/road_map.hpp"
 #include "traffic_map/traffic_map.hpp"
 #include "state_lattice/state_lattice.hpp"
-#include "threat_field/dynamic_threat_model.hpp"
+#include "threat_field/vehicle_threat.hpp"
 #include "threat_field/threat_field.hpp"
 
 #include "lightviz/details/cartesian_canvas.hpp"
@@ -41,25 +41,21 @@ class TrafficViz
 
     static void ShowVehicleStaticThreat(VehicleStaticThreat threat, std::string window_name = "Collision Threat", bool save_img = false);
 
-    static void ShowVehicleOccupancyDistribution(std::shared_ptr<DynamicThreatModel> threat, int32_t t_k, std::string window_name = "Collision Threat", bool save_img = false);
-    static void ShowVehicleIntervalOccupancyDistribution(std::shared_ptr<DynamicThreatModel> threat, int32_t t_k, std::string window_name = "Collision Threat", bool save_img = false);
+    static void ShowVehicleOccupancyDistribution(std::shared_ptr<VehicleThreat> threat, int32_t t_k, std::string window_name = "Collision Threat", bool save_img = false);
+    static void ShowVehicleIntervalOccupancyDistribution(std::shared_ptr<VehicleThreat> threat, int32_t t_k, std::string window_name = "Collision Threat", bool save_img = false);
 
-    static void ShowVehicleCollisionThreat(std::shared_ptr<DynamicThreatModel> threat, int32_t t_k, std::string window_name = "Collision Threat", bool save_img = false);
-    static void ShowVehicleIntervalCollisionThreat(std::shared_ptr<DynamicThreatModel> threat, int32_t t_k, std::string window_name = "Collision Threat", bool save_img = false);
+    static void ShowVehicleCollisionThreat(std::shared_ptr<VehicleThreat> threat, int32_t t_k, std::string window_name = "Collision Threat", bool save_img = false);
+    static void ShowVehicleIntervalCollisionThreat(std::shared_ptr<VehicleThreat> threat, int32_t t_k, std::string window_name = "Collision Threat", bool save_img = false);
+
+    static void ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel &channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
+    static void ShowLatticePathInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel &channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
 
     static void ShowOccupancyField(ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Occupancy Field", bool save_img = false);
     static void ShowThreatField(ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
 
-    static void ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel &channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
-    static void ShowLatticePathInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel &channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
-    
     static void ShowLatticeWithOccupancyDistribution(std::vector<StateLattice> &lattice, TrafficChannel &channel, ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
     static void ShowLatticeInThreatField(std::vector<StateLattice> &lattice, TrafficChannel &channel, ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
     static void ShowTrafficChannelWithThreatField(TrafficChannel &channel, ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
-
-    // deprecated
-    // static void ShowVehicleOccupancyDistribution(std::vector<std::shared_ptr<DynamicThreatModel>> threats, std::string window_name = "Collision Threat", bool save_img = false);
-    // static void ShowThreatField(ThreatField &field, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
 };
 } // namespace librav
 

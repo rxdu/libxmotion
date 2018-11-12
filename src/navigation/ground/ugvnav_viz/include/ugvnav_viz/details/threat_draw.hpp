@@ -12,7 +12,7 @@
 
 #include "lightviz/details/cartesian_canvas.hpp"
 
-#include "threat_field/dynamic_threat_model.hpp"
+#include "threat_field/vehicle_threat.hpp"
 #include "threat_field/threat_field.hpp"
 
 namespace librav
@@ -22,8 +22,8 @@ class ThreatDraw
   public:
     ThreatDraw(CartesianCanvas &canvas) : canvas_(canvas){};
 
-    void DrawCollisionThreat(DynamicThreatModel& threat,double cx, double cy, double xspan, double yspan);
-    void DrawCollisionThreatField(ThreatField& field,double cx, double cy, double xspan, double yspan);
+    void DrawCollisionThreat(VehicleThreat& threat,int32_t t_k,double cx, double cy, double xspan, double yspan);
+    void DrawCollisionThreatField(ThreatField& field,int32_t t_k,double cx, double cy, double xspan, double yspan);
 
   private:
     CartesianCanvas &canvas_;

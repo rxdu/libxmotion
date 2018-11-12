@@ -66,7 +66,7 @@ class DynamicThreatModel
 //     };
 
   public:
-    DynamicThreatModel() = default;
+    DynamicThreatModel() = delete;
     DynamicThreatModel(VehicleEstimation est);
 
     // basic threat information

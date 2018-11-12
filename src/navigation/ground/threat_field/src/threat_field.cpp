@@ -23,29 +23,24 @@ void ThreatField::AddVehicleEstimations(std::vector<VehicleEstimation> ests)
 
 void ThreatField::SetupThreatField(std::shared_ptr<TrafficChannel> ego_chn)
 {
-    // ego_channel_ = ego_chn;
+    ego_channel_ = ego_chn;
 
-    // conflicting_lanes_ = road_map_->FindConflictingLanes(ego_channel_->lanes_);
+    conflicting_lanes_ = road_map_->FindConflictingLanes(ego_channel_->lanes_);
 
-    // for (auto &entry : vehicles_)
-    // {
-    //     if (!CheckInConflict(entry.second))
-    //         continue;
+    for (auto &entry : vehicles_)
+    {
+        if (!CheckInConflict(entry.second))
+            continue;
 
-    //     std::vector<std::shared_ptr<DynamicThreatModel>> threats;
+        std::shared_ptr<VehicleThreat> threat = std::make_shared<VehicleThreat>(entry.second, traffic_map_);
 
-    //     for (auto chn : entry.second.GetOccupiedChannels())
-    //         threats.push_back(std::make_shared<DynamicThreatModel>(entry.second, chn));
-    //     threats_.insert(std::make_pair(entry.second.id_, threats));
-    // }
+        threats_.insert(std::make_pair(entry.second.id_, threat));
+    }
 }
 
 bool ThreatField::CheckInConflict(VehicleEstimation veh)
 {
     auto occupied_lanes = road_map_->FindOccupiedLaneletNames({veh.GetPose().position.x, veh.GetPose().position.y});
-    // std::cout << "occupied lanes of vehicle " << veh.id_ << " : " << std::endl;
-    // for(auto& lane : occupied_lanes)
-    //     std::cout << lane << std::endl;
 
     for (auto &olane : occupied_lanes)
     {
@@ -61,11 +56,8 @@ bool ThreatField::CheckInConflict(VehicleEstimation veh)
 
 void ThreatField::ComputeThreatField(int32_t t_k)
 {
-    for (auto &vehicle_threats : threats_)
-    {
-        for (auto threat : vehicle_threats.second)
-            threat->ComputeOccupancyDistribution(t_k);
-    }
+    for (auto &vehicle_threat : threats_)
+        vehicle_threat.second->ComputeOccupancyDistribution(t_k);
 }
 
 std::vector<VehicleEstimation> ThreatField::GetAllVehicleEstimations()
@@ -73,42 +65,26 @@ std::vector<VehicleEstimation> ThreatField::GetAllVehicleEstimations()
     std::vector<VehicleEstimation> vehs;
 
     for (auto &veh_entry : vehicles_)
-    {
         vehs.push_back(veh_entry.second);
-    }
 
     return vehs;
 }
 
-std::vector<std::shared_ptr<DynamicThreatModel>> ThreatField::GetAllCollisionThreats()
+std::vector<std::shared_ptr<VehicleThreat>> ThreatField::GetAllCollisionThreats()
 {
-    std::vector<std::shared_ptr<DynamicThreatModel>> threats;
+    std::vector<std::shared_ptr<VehicleThreat>> threats;
 
     for (auto &vehicle_threats : threats_)
-    {
-        for (auto threat : vehicle_threats.second)
-            threats.push_back(threat);
-    }
+        threats.push_back(vehicle_threats.second);
 
     return threats;
-}
-
-double ThreatField::operator()(double x, double y)
-{
-    return (*this)(x, y, vis_t_k_);
-}
-
-Point2d ThreatField::GetThreatCenter()
-{
-    return GetThreatCenter(vis_t_k_);
 }
 
 double ThreatField::operator()(double x, double y, int32_t t_k)
 {
     double threat = 0.0;
     for (auto &threat_entry : threats_)
-        for (auto sub : threat_entry.second)
-            threat += (*sub.get())(x, y, t_k);
+        threat += (*threat_entry.second.get())(x, y, t_k);
     return threat;
 }
 
@@ -116,12 +92,11 @@ Point2d ThreatField::GetThreatCenter(int32_t t_k)
 {
     Point2d pos(0, 0);
     for (auto &threat_entry : threats_)
-        for (auto sub : threat_entry.second)
-        {
-            auto c = sub->GetThreatCenter(t_k);
-            pos.x += c.x;
-            pos.y += c.y;
-        }
+    {
+        auto c = threat_entry.second->GetThreatCenter(t_k);
+        pos.x += c.x;
+        pos.y += c.y;
+    }
     pos.x = pos.x / threats_.size();
     pos.y = pos.y / threats_.size();
     return pos;

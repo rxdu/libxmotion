@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "traffic_map/map_loader.hpp"
-#include "threat_field/dynamic_threat_model.hpp"
+#include "threat_field/vehicle_threat.hpp"
 
 #include "stopwatch/stopwatch.h"
 #include "ugvnav_viz/ugvnav_viz.hpp"
@@ -29,7 +29,7 @@ int main()
 
     stopwatch::StopWatch timer;
 
-    std::shared_ptr<DynamicThreatModel> ct1 = std::make_shared<DynamicThreatModel>(veh1, ego_chn);
+    std::shared_ptr<VehicleThreat> ct1 = std::make_shared<VehicleThreat>(veh1, loader.traffic_map);
 
     ct1->ComputeOccupancyDistribution(5, true);
 
@@ -38,7 +38,7 @@ int main()
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
     // TrafficViz::ShowVehicleOccupancyDistribution(ct1, "occupancy_estimation");
-    TrafficViz::ShowVehicleCollisionThreat(ct1, 5, "occupancy_estimation", false);
+    TrafficViz::ShowVehicleCollisionThreat(ct1, 4, "occupancy_estimation", false);
     TrafficViz::ShowVehicleIntervalCollisionThreat(ct1, 4, "occupancy_estimation_interval", false);
 
     // for (int i = 0; i < 5; ++i)

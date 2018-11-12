@@ -14,7 +14,7 @@
 #include <unordered_map>
 
 #include "traffic_map/traffic_map.hpp"
-#include "threat_field/dynamic_threat_model.hpp"
+#include "threat_field/vehicle_threat.hpp"
 
 namespace librav
 {
@@ -38,16 +38,11 @@ class ThreatField
     void ComputeThreatField(int32_t t_k);
 
     std::vector<VehicleEstimation> GetAllVehicleEstimations();
-    std::vector<std::shared_ptr<DynamicThreatModel>> GetAllCollisionThreats();
+    std::vector<std::shared_ptr<VehicleThreat>> GetAllCollisionThreats();
 
     double operator()(double x, double y, int32_t t_k);
     Point2d GetThreatCenter(int32_t t_k);
     double GetCollisionThreat(double x, double y, int32_t t_k) { return (*this)(x, y, t_k); };
-
-    // for visualization, use the above functions to query threat value
-    void SetVisTimeStep(int32_t t_k) { vis_t_k_ = t_k; }
-    double operator()(double x, double y);
-    Point2d GetThreatCenter();
 
   private:
     std::shared_ptr<RoadMap> road_map_;
@@ -57,9 +52,7 @@ class ThreatField
     std::vector<std::string> conflicting_lanes_;
 
     std::unordered_map<int32_t, VehicleEstimation> vehicles_;
-    std::unordered_map<int32_t, std::vector<std::shared_ptr<DynamicThreatModel>>> threats_;
-
-    int32_t vis_t_k_ = 0;
+    std::unordered_map<int32_t, std::shared_ptr<VehicleThreat>> threats_;
 
     bool CheckInConflict(VehicleEstimation veh);
 };

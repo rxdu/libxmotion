@@ -12,7 +12,7 @@
 
 using namespace librav;
 
-void ThreatDraw::DrawCollisionThreat(DynamicThreatModel &threat, double cx, double cy, double xspan, double yspan)
+void ThreatDraw::DrawCollisionThreat(VehicleThreat &threat, int32_t t_k, double cx, double cy, double xspan, double yspan)
 {
     assert(cx >= canvas_.xmin_ && cx < canvas_.xmax_ && cy >= canvas_.ymin_ && cy < canvas_.ymax_);
 
@@ -47,7 +47,7 @@ void ThreatDraw::DrawCollisionThreat(DynamicThreatModel &threat, double cx, doub
         for (int32_t j = 0; j < y_size; j = j + 2)
         {
             // convert to cartisian coordinate then evaluate
-            threat_matrix(j, i) = threat(dxmin + i / ppu, dymin + j / ppu);
+            threat_matrix(j, i) = threat(dxmin + i / ppu, dymin + j / ppu, t_k);
         }
 
     cv::Mat threat_vis = LightViz::CreateColorMapFromEigenMatrix(threat_matrix, true);
@@ -57,7 +57,7 @@ void ThreatDraw::DrawCollisionThreat(DynamicThreatModel &threat, double cx, doub
     threat_vis.copyTo(canvas_.paint_area(cv::Rect(top_left_pixel.x, top_left_pixel.y, threat_vis.cols, threat_vis.rows)));
 }
 
-void ThreatDraw::DrawCollisionThreatField(ThreatField &field, double cx, double cy, double xspan, double yspan)
+void ThreatDraw::DrawCollisionThreatField(ThreatField &field,int32_t t_k, double cx, double cy, double xspan, double yspan)
 {
     assert(cx >= canvas_.xmin_ && cx < canvas_.xmax_ && cy >= canvas_.ymin_ && cy < canvas_.ymax_);
 
@@ -88,11 +88,11 @@ void ThreatDraw::DrawCollisionThreatField(ThreatField &field, double cx, double 
     std::cout << "draw size: " << x_size << " , " << y_size << std::endl;
 
     double ppu = canvas_.ppu_;
-    for (int32_t i = 0; i < x_size; i = i + 1)
-        for (int32_t j = 0; j < y_size; j = j + 1)
+    for (int32_t i = 0; i < x_size; i = i + 2)
+        for (int32_t j = 0; j < y_size; j = j + 2)
         {
             // convert to cartisian coordinate then evaluate
-            threat_matrix(j, i) = field(dxmin + i / ppu, dymin + j / ppu);
+            threat_matrix(j, i) = field(dxmin + i / ppu, dymin + j / ppu, t_k);
         }
 
     cv::Mat threat_vis = LightViz::CreateColorMapFromEigenMatrix(threat_matrix, true);

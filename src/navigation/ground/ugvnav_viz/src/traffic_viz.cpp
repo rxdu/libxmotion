@@ -110,7 +110,7 @@ void TrafficViz::ShowVehicleStaticThreat(VehicleStaticThreat threat, std::string
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowVehicleOccupancyDistribution(std::shared_ptr<DynamicThreatModel> threat, int32_t t_k, std::string window_name, bool save_img)
+void TrafficViz::ShowVehicleOccupancyDistribution(std::shared_ptr<VehicleThreat> threat, int32_t t_k, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -119,8 +119,11 @@ void TrafficViz::ShowVehicleOccupancyDistribution(std::shared_ptr<DynamicThreatM
     VehicleDraw veh_draw = VehicleDraw(canvas);
     CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
 
-    if (threat->GetThreatDistribution(t_k).occupancy_grid != nullptr)
-        cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->GetThreatDistribution(t_k).occupancy_grid.get()));
+    for (auto &tcase : threat->possible_cases_)
+    {
+        if (tcase.threat_record_[t_k].occupancy_grid != nullptr)
+            cdraw.DrawCurvilinearGridGrayscaleCost(*(tcase.threat_record_[t_k].occupancy_grid.get()));
+    }
 
     road_draw.DrawLanes(true);
     veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint());
@@ -128,7 +131,7 @@ void TrafficViz::ShowVehicleOccupancyDistribution(std::shared_ptr<DynamicThreatM
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowVehicleIntervalOccupancyDistribution(std::shared_ptr<DynamicThreatModel> threat, int32_t t_k, std::string window_name, bool save_img)
+void TrafficViz::ShowVehicleIntervalOccupancyDistribution(std::shared_ptr<VehicleThreat> threat, int32_t t_k, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -137,8 +140,11 @@ void TrafficViz::ShowVehicleIntervalOccupancyDistribution(std::shared_ptr<Dynami
     VehicleDraw veh_draw = VehicleDraw(canvas);
     CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
 
-    if (threat->GetIntervalThreatDistribution(t_k).occupancy_grid != nullptr)
-        cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->GetIntervalThreatDistribution(t_k).occupancy_grid.get()));
+    for (auto &tcase : threat->possible_cases_)
+    {
+        if (tcase.intv_threat_record_[t_k].occupancy_grid != nullptr)
+            cdraw.DrawCurvilinearGridGrayscaleCost(*(tcase.threat_record_[t_k].occupancy_grid.get()));
+    }
 
     road_draw.DrawLanes(true);
     veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint());
@@ -146,7 +152,7 @@ void TrafficViz::ShowVehicleIntervalOccupancyDistribution(std::shared_ptr<Dynami
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowVehicleCollisionThreat(std::shared_ptr<DynamicThreatModel> threat, int32_t t_k, std::string window_name, bool save_img)
+void TrafficViz::ShowVehicleCollisionThreat(std::shared_ptr<VehicleThreat> threat, int32_t t_k, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -158,8 +164,7 @@ void TrafficViz::ShowVehicleCollisionThreat(std::shared_ptr<DynamicThreatModel> 
     ThreatDraw tdraw = ThreatDraw(canvas);
 
     auto center = threat->GetThreatCenter(t_k);
-    threat->SetVisParams(false, t_k);
-    tdraw.DrawCollisionThreat(*threat.get(), center.x, center.y, 120, 50);
+    tdraw.DrawCollisionThreat(*threat.get(), t_k, center.x, center.y, 120, 50);
 
     // if (threat->occupancy_grid_ != nullptr)
     //     cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));
@@ -170,7 +175,7 @@ void TrafficViz::ShowVehicleCollisionThreat(std::shared_ptr<DynamicThreatModel> 
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowVehicleIntervalCollisionThreat(std::shared_ptr<DynamicThreatModel> threat, int32_t t_k, std::string window_name, bool save_img)
+void TrafficViz::ShowVehicleIntervalCollisionThreat(std::shared_ptr<VehicleThreat> threat, int32_t t_k, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -181,9 +186,8 @@ void TrafficViz::ShowVehicleIntervalCollisionThreat(std::shared_ptr<DynamicThrea
     // CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
     ThreatDraw tdraw = ThreatDraw(canvas);
 
-    threat->SetVisParams(true, t_k);
     auto center = threat->GetThreatCenter(t_k);
-    tdraw.DrawCollisionThreat(*threat.get(), center.x, center.y, 120, 50);
+    tdraw.DrawCollisionThreat(*threat.get(), t_k, center.x, center.y, 120, 50);
 
     // if (threat->occupancy_grid_ != nullptr)
     //     cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));
@@ -207,18 +211,21 @@ void TrafficViz::ShowOccupancyField(ThreatField &field, int32_t t_k, bool show_v
 
     for (auto threat : threats)
     {
-        if (threat->GetThreatDistribution(t_k).occupancy_grid != nullptr)
-            cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->GetThreatDistribution(t_k).occupancy_grid.get()));
+        for (auto &tcase : threat->possible_cases_)
+        {
+            if (tcase.intv_threat_record_[t_k].occupancy_grid != nullptr)
+                cdraw.DrawCurvilinearGridGrayscaleCost(*(tcase.threat_record_[t_k].occupancy_grid.get()));
+        }
     }
 
     road_draw.DrawLanes(true);
 
-    for (auto threat : threats)
+    for (auto &veh : field.GetAllVehicleEstimations())
     {
         if (!show_veh_id)
-            veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint());
+            veh_draw.DrawVehicle(veh.GetFootprint());
         else
-            veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint(), threat->vehicle_est_.id_);
+            veh_draw.DrawVehicle(veh.GetFootprint(), veh.id_);
     }
 
     ShowImage(canvas.paint_area, window_name, save_img);
@@ -237,8 +244,7 @@ void TrafficViz::ShowThreatField(ThreatField &field, int32_t t_k, bool show_veh_
     auto threats = field.GetAllCollisionThreats();
 
     auto center = field.GetThreatCenter(t_k);
-    field.SetVisTimeStep(t_k);
-    tdraw.DrawCollisionThreatField(field, center.x, center.y, 120, 50);
+    tdraw.DrawCollisionThreatField(field, t_k, center.x, center.y, 150, 60);
 
     road_draw.DrawLanes(true);
 
@@ -267,8 +273,11 @@ void TrafficViz::ShowLatticeWithOccupancyDistribution(std::vector<StateLattice> 
 
     for (auto threat : threats)
     {
-        if (threat->GetThreatDistribution(t_k).occupancy_grid != nullptr)
-            cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->GetThreatDistribution(t_k).occupancy_grid.get()));
+        for (auto &tcase : threat->possible_cases_)
+        {
+            if (tcase.intv_threat_record_[t_k].occupancy_grid != nullptr)
+                cdraw.DrawCurvilinearGridGrayscaleCost(*(tcase.threat_record_[t_k].occupancy_grid.get()));
+        }
     }
 
     road_draw.DrawLanes(true);
@@ -303,12 +312,15 @@ void TrafficViz::ShowLatticeInThreatField(std::vector<StateLattice> &lattice, Tr
     // auto threats = field.GetAllCollisionThreats();
     // for (auto threat : threats)
     // {
-    //     if (threat->occupancy_grid_ != nullptr)
-    //         cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));
+    //     for (auto &tcase : threat->possible_cases_)
+    //     {
+    //         if (tcase.intv_threat_record_[t_k].occupancy_grid != nullptr)
+    //             cdraw.DrawCurvilinearGridGrayscaleCost(*(tcase.threat_record_[t_k].occupancy_grid.get()));
+    //     }
     // }
+
     auto center = field.GetThreatCenter(t_k);
-    field.SetVisTimeStep(t_k);
-    tdraw.DrawCollisionThreatField(field, center.x, center.y, 120, 50);
+    tdraw.DrawCollisionThreatField(field, t_k, center.x, center.y, 120, 50);
 
     road_draw.DrawLanes(true);
 
@@ -338,16 +350,19 @@ void TrafficViz::ShowTrafficChannelWithThreatField(TrafficChannel &channel, Thre
     CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
     LatticeDraw lattice_draw = LatticeDraw(canvas);
     ThreatDraw tdraw = ThreatDraw(canvas);
-    
+
     // auto threats = field.GetAllCollisionThreats();
     // for (auto threat : threats)
     // {
-    //     if (threat->occupancy_grid_ != nullptr)
-    //         cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));
+    //     for (auto &tcase : threat->possible_cases_)
+    //     {
+    //         if (tcase.intv_threat_record_[t_k].occupancy_grid != nullptr)
+    //             cdraw.DrawCurvilinearGridGrayscaleCost(*(tcase.threat_record_[t_k].occupancy_grid.get()));
+    //     }
     // }
+
     auto center = field.GetThreatCenter(t_k);
-    field.SetVisTimeStep(t_k);
-    tdraw.DrawCollisionThreatField(field, center.x, center.y, 120, 50);
+    tdraw.DrawCollisionThreatField(field, t_k, center.x, center.y, 120, 50);
 
     road_draw.DrawLanes(true);
 
@@ -363,54 +378,3 @@ void TrafficViz::ShowTrafficChannelWithThreatField(TrafficChannel &channel, Thre
 
     ShowImage(canvas.paint_area, window_name, save_img);
 }
-
-// void TrafficViz::ShowVehicleOccupancyDistribution(std::vector<std::shared_ptr<DynamicThreatModel>> threats, std::string window_name, bool save_img)
-// {
-//     RoadMapViz &viz = RoadMapViz::GetInstance();
-
-//     CartesianCanvas canvas = viz.CreateCanvas(false);
-//     RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
-//     VehicleDraw veh_draw = VehicleDraw(canvas);
-//     CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
-
-//     for (auto threat : threats)
-//     {
-//         if (threat->occupancy_grid_ != nullptr)
-//             cdraw.DrawCurvilinearGridGrayscaleCost(*(threat->occupancy_grid_.get()));
-//     }
-
-//     road_draw.DrawLanes(true);
-
-//     for (auto threat : threats)
-//         veh_draw.DrawVehicle(threat->vehicle_est_.GetFootprint());
-
-//     ShowImage(canvas.paint_area, window_name, save_img);
-// }
-
-// void TrafficViz::ShowThreatField(ThreatField &field, bool show_veh_id, std::string window_name, bool save_img)
-// {
-//     RoadMapViz &viz = RoadMapViz::GetInstance();
-
-//     CartesianCanvas canvas = viz.CreateCanvas(true);
-//     RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
-//     VehicleDraw veh_draw = VehicleDraw(canvas);
-//     CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
-//     GeometryDraw gdraw = GeometryDraw(canvas);
-
-//     auto threats = field.GetAllCollisionThreats();
-
-//     auto center = field.GetThreatCenter();
-//     gdraw.DrawDistribution(center.x, center.y, 150, 120, field);
-
-//     road_draw.DrawLanes(true);
-
-//     for (auto &veh : field.GetAllVehicleEstimations())
-//     {
-//         if (!show_veh_id)
-//             veh_draw.DrawVehicle(veh.GetFootprint());
-//         else
-//             veh_draw.DrawVehicle(veh.GetFootprint(), veh.id_);
-//     }
-
-//     ShowImage(canvas.paint_area, window_name, save_img);
-// }

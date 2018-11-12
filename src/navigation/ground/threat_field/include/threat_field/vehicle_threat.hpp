@@ -27,6 +27,13 @@ namespace librav
 {
 class VehicleThreat
 {
+  public:
+    struct ThreatRecord
+    {
+        std::shared_ptr<CurvilinearGrid> occupancy_grid;
+        std::vector<VehicleStaticThreat> sub_threats;
+    };
+
     struct ThreatCase
     {
         ThreatCase(std::shared_ptr<TrafficChannel> chn, double offset) : channel(chn),
@@ -34,13 +41,10 @@ class VehicleThreat
 
         std::shared_ptr<TrafficChannel> channel;
         double start_offset;
-    };
 
-  public:
-    struct ThreatDist
-    {
-        std::shared_ptr<CurvilinearGrid> occupancy_grid;
-        std::vector<VehicleStaticThreat> sub_threats;
+        // stores all history threat information for inquiry
+        std::unordered_map<int32_t, ThreatRecord> threat_record_;
+        std::unordered_map<int32_t, ThreatRecord> intv_threat_record_;
     };
 
   public:
@@ -50,10 +54,7 @@ class VehicleThreat
     // basic threat information
     VehicleEstimation vehicle_est_;
     std::vector<std::shared_ptr<TrafficChannel>> traffic_chns_;
-
-    // threat_record_ stores all history threat information
-    std::unordered_map<int32_t, ThreatDist> threat_record_;
-    std::unordered_map<int32_t, ThreatDist> intv_threat_record_;
+    std::vector<ThreatCase> possible_cases_;
 
     void ComputeOccupancyDistribution(int32_t k, bool calc_interval_dist = false);
 
@@ -61,22 +62,21 @@ class VehicleThreat
     double operator()(double x, double y, int32_t t_k);
     Point2d GetThreatCenter(int32_t t_k);
 
-    ThreatDist GetThreatDistribution(int32_t t_k) { return threat_record_[t_k]; }
-    ThreatDist GetIntervalThreatDistribution(int32_t t_k) { return intv_threat_record_[t_k]; }
+    void PrintThreatRecordInfo();
+
+    // ThreatDist GetThreatDistribution(int32_t t_k) { return threat_record_[t_k]; }
+    // ThreatDist GetIntervalThreatDistribution(int32_t t_k) { return intv_threat_record_[t_k]; }
 
   private:
     std::shared_ptr<TrafficMap> traffic_map_;
     DynamicThreatModel threat_model_;
-    std::vector<ThreatCase> possible_cases_;
 
-    // visualization
-    bool get_interval_dist_ = false;
-    int32_t vis_t_k_ = 0;
-
-    void SetupPredictionModel();
     void ExtractTrafficInfo();
-    ThreatDist GetOccupancyDistributionAt(int32_t t_k);
-    ThreatDist GetIntervalOccupancyDistributionAt(int32_t t_k);
+    // ThreatDist GetOccupancyDistributionAt(int32_t t_k);
+    // ThreatDist GetIntervalOccupancyDistributionAt(int32_t t_k);
+
+    void ComputeOccupancyRecord(int32_t t_k);
+    void ComputeIntervalOccupancyRecord(int32_t t_k);
 };
 } // namespace librav
 
