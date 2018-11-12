@@ -27,7 +27,7 @@ int main()
 
     stopwatch::StopWatch timer;
 
-    std::shared_ptr<DynamicThreatModel> ct1 = std::make_shared<DynamicThreatModel>(veh1, ego_chn);
+    std::shared_ptr<VehicleThreat> ct1 = std::make_shared<VehicleThreat>(veh1, loader.traffic_map);
 
     // ct1->GetOccupancyDistributionAt(2);
     ct1->ComputeOccupancyDistribution(2);

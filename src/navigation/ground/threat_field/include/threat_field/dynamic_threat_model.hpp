@@ -58,40 +58,17 @@ class DynamicThreatModel
 
     friend class VehicleThreat;
 
-//   public:
-//     struct ThreatDist
-//     {
-//         std::shared_ptr<CurvilinearGrid> occupancy_grid;
-//         std::vector<VehicleStaticThreat> sub_threats;
-//     };
-
   public:
     DynamicThreatModel() = delete;
     DynamicThreatModel(VehicleEstimation est);
 
     // basic threat information
     VehicleEstimation vehicle_est_;
-    // std::shared_ptr<TrafficChannel> traffic_chn_;
-    // std::vector<std::shared_ptr<TrafficChannel>> traffic_chns_;
-
-    // threat_record_ stores all history threat information
-    // std::unordered_map<int32_t, ThreatDist> threat_record_;
-    // std::unordered_map<int32_t, ThreatDist> intv_threat_record_;
 
     void PrecomputeParameters(std::string file_name)
     {
         occupancy_model_->PrecomputeStateTransition(file_name);
     }
-
-    // void ComputeOccupancyDistribution(int32_t k, bool calc_interval_dist = false);
-
-    // threat value query
-    // double operator()(double x, double y, int32_t t_k);
-    // Point2d GetThreatCenter(int32_t t_k);
-    // ThreatDist GetThreatDistribution(int32_t t_k) { return threat_record_[t_k]; }
-    // ThreatDist GetIntervalThreatDistribution(int32_t t_k) { return intv_threat_record_[t_k]; }
-
-    // double GetVehicleTotalThreat(double x, double y, int32_t t_k);
 
   private:
     // Markov model covarage: SStep * SSize = 100m, 2m/s * 10 = 20m/s
@@ -112,8 +89,6 @@ class DynamicThreatModel
     /*****************************************************************/
 
     void SetupPredictionModel();
-    // ThreatDist GetOccupancyDistributionAt(int32_t t_k);
-    // ThreatDist GetIntervalOccupancyDistributionAt(int32_t t_k);
 };
 } // namespace librav
 

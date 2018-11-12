@@ -23,7 +23,7 @@ void VehicleThreat::ExtractTrafficInfo()
     auto vpose = vehicle_est_.GetPose();
     traffic_chns_ = traffic_map_->FindTrafficChannels(SimplePoint(vpose.position.x, vpose.position.y));
 
-    std::cout << "occupied traffic channel num: " << traffic_chns_.size() << std::endl;
+    // std::cout << "occupied traffic channel num: " << traffic_chns_.size() << std::endl;
 
     for (auto &chn : traffic_chns_)
     {
@@ -33,7 +33,7 @@ void VehicleThreat::ExtractTrafficInfo()
         double offset = pose_pf.s - threat_model_.s_starting_;
         possible_cases_.emplace_back(chn, offset);
 
-        std::cout << "chn: " << chn->source_ << " -> " << chn->sink_ << " ; offset: " << offset << std::endl;
+        // std::cout << "chn: " << chn->source_ << " -> " << chn->sink_ << " ; offset: " << offset << std::endl;
     }
 }
 
@@ -201,111 +201,3 @@ Point2d VehicleThreat::GetThreatCenter(int32_t t_k)
 
     return pos;
 }
-
-// VehicleThreat::ThreatDist VehicleThreat::GetOccupancyDistributionAt(int32_t t_k)
-// {
-//     ThreatDist dist_result;
-
-//     for (auto &tcase : possible_cases_)
-//     {
-//         dist_result.occupancy_grid = std::make_shared<CurvilinearGrid>(tcase.channel->center_curve_,
-//                                                                        threat_model_.s_step_,
-//                                                                        threat_model_.delta_step_,
-//                                                                        threat_model_.delta_size_,
-//                                                                        tcase.start_offset);
-//         dist_result.sub_threats.clear();
-
-//         Eigen::VectorXd dist = threat_model_.occupancy_model_->GetOccupancyDistribution(t_k);
-
-//         double probability_max = 0;
-//         for (std::size_t i = 0; i < dist.size(); ++i)
-//         {
-//             if (i < dist_result.occupancy_grid->GetTangentialGridNum())
-//             {
-//                 for (int32_t j = -dist_result.occupancy_grid->GetOneSideGridNumber(); j <= dist_result.occupancy_grid->GetOneSideGridNumber(); ++j)
-//                 {
-//                     dist_result.occupancy_grid->GetCell(i, j)->extra_attribute = dist(i) * DynamicThreatModel::LateralDistribution::GetProbability(j);
-//                     if (dist_result.occupancy_grid->GetCell(i, j)->extra_attribute > probability_max)
-//                         probability_max = dist_result.occupancy_grid->GetCell(i, j)->extra_attribute;
-//                 }
-//             }
-//         }
-
-//         for (std::size_t i = 0; i < dist.size(); ++i)
-//         {
-//             if (i < dist_result.occupancy_grid->GetTangentialGridNum())
-//             {
-//                 for (int32_t j = -dist_result.occupancy_grid->GetOneSideGridNumber(); j <= dist_result.occupancy_grid->GetOneSideGridNumber(); ++j)
-//                 {
-//                     auto cell = dist_result.occupancy_grid->GetCell(i, j);
-
-//                     if (cell->extra_attribute > 0)
-//                     {
-//                         // Note: extra_attribute is the true probability value
-//                         auto pt = dist_result.occupancy_grid->ConvertToCurvePoint(cell->center);
-//                         dist_result.sub_threats.emplace_back(Pose2d(pt.x, pt.y, pt.theta), cell->extra_attribute);
-
-//                         // values here are normalized for better visualization
-//                         cell->cost_map = cell->extra_attribute / probability_max;
-//                     }
-//                 }
-//             }
-//         }
-//     }
-
-//     return dist_result;
-// }
-
-// VehicleThreat::ThreatDist VehicleThreat::GetIntervalOccupancyDistributionAt(int32_t t_k)
-// {
-//     ThreatDist dist_result;
-
-//     for (auto &tcase : possible_cases_)
-//     {
-
-//         dist_result.occupancy_grid = std::make_shared<CurvilinearGrid>(tcase.channel->center_curve_,
-//                                                                        threat_model_.s_step_,
-//                                                                        threat_model_.delta_step_,
-//                                                                        threat_model_.delta_size_,
-//                                                                        tcase.start_offset);
-
-//         Eigen::VectorXd dist_interval = threat_model_.occupancy_model_->GetIntervalOccupancyDistribution(t_k);
-
-//         double probability_max = 0;
-//         for (std::size_t i = 0; i < dist_interval.size(); ++i)
-//         {
-//             if (i < dist_result.occupancy_grid->GetTangentialGridNum())
-//             {
-//                 for (int32_t j = -dist_result.occupancy_grid->GetOneSideGridNumber(); j <= dist_result.occupancy_grid->GetOneSideGridNumber(); ++j)
-//                 {
-//                     dist_result.occupancy_grid->GetCell(i, j)->extra_attribute = dist_interval(i) * DynamicThreatModel::LateralDistribution::GetProbability(j);
-//                     if (dist_result.occupancy_grid->GetCell(i, j)->extra_attribute > probability_max)
-//                         probability_max = dist_result.occupancy_grid->GetCell(i, j)->extra_attribute;
-//                 }
-//             }
-//         }
-
-//         for (std::size_t i = 0; i < dist_interval.size(); ++i)
-//         {
-//             if (i < dist_result.occupancy_grid->GetTangentialGridNum())
-//             {
-//                 for (int32_t j = -dist_result.occupancy_grid->GetOneSideGridNumber(); j <= dist_result.occupancy_grid->GetOneSideGridNumber(); ++j)
-//                 {
-//                     auto cell = dist_result.occupancy_grid->GetCell(i, j);
-
-//                     if (cell->extra_attribute > 0)
-//                     {
-//                         // Note: extra_attribute is the true probability value
-//                         auto pt = dist_result.occupancy_grid->ConvertToCurvePoint(cell->center);
-//                         dist_result.sub_threats.emplace_back(Pose2d(pt.x, pt.y, pt.theta), cell->extra_attribute);
-
-//                         // values here are normalized for better visualization
-//                         cell->cost_map = cell->extra_attribute / probability_max;
-//                     }
-//                 }
-//             }
-//         }
-//     }
-
-//     return dist_result;
-// }
