@@ -10,7 +10,7 @@
 #include "ugvnav_viz/details/threat_draw.hpp"
 
 #include "lightviz/details/matrix_draw.hpp"
-#include "ugvnav_viz/details/parallel_for.h"
+#include "lightviz/details/parallel_for.h"
 
 using namespace librav;
 

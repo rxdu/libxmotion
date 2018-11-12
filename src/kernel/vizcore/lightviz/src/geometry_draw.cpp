@@ -8,6 +8,7 @@
  */
 
 #include "lightviz/details/geometry_draw.hpp"
+#include "lightviz/details/parallel_for.h"
 
 #include <cassert>
 
@@ -207,15 +208,30 @@ void GeometryDraw::DrawDistribution(double cx, double cy, double xspan, double y
     Eigen::MatrixXd threat_matrix = Eigen::MatrixXd::Zero(y_size, x_size);
     int32_t meter_per_pixel = 1 / canvas_.ppu_;
     double ppu = canvas_.ppu_;
-    for (int32_t i = 0; i < x_size; ++i)
-        for (int32_t j = 0; j < y_size; ++j)
-        {
-            // convert to cartisian coordinate
-            double x = dxmin + i / ppu;
-            double y = dymin + j / ppu;
+    // for (int32_t i = 0; i < x_size; ++i)
+    //     for (int32_t j = 0; j < y_size; ++j)
+    //     {
+    //         // convert to cartisian coordinate
+    //         double x = dxmin + i / ppu;
+    //         double y = dymin + j / ppu;
 
-            threat_matrix(j, i) = dist_fun(x, y);
-        }
+    //         threat_matrix(j, i) = dist_fun(x, y);
+    //     }
+
+    int64_t pixel_num = x_size * y_size;
+
+    // OpenMP version
+    // #pragma omp parallel for
+    //     for (int64_t k = 0; k < pixel_num; ++k)
+    //     {
+    //         threat_matrix(k % y_size, k / y_size) = threat(dxmin + (k / y_size) / ppu, dymin + (k % y_size) / ppu, t_k);
+    //     }
+
+    // parallel version
+    const auto &fill_threat_matrix = [&dist_fun, &threat_matrix, x_size, y_size, dxmin, dymin, ppu](int64_t k) {
+        threat_matrix(k % y_size, k / y_size) = dist_fun(dxmin + (k / y_size) / ppu, dymin + (k % y_size) / ppu);
+    };
+    igl::parallel_for(pixel_num, fill_threat_matrix, 100);
 
     cv::Mat threat_vis = CreateColorMapFromEigenMatrix(threat_matrix, true);
 

@@ -14,7 +14,7 @@ set(LIGHTVIZ_LIB_SRC
 	src/curve_viz.cpp
 )
 add_library(lightviz STATIC ${LIGHTVIZ_LIB_SRC})
-target_link_libraries(lightviz decomp graph geometry canvas)
+target_link_libraries(lightviz decomp graph geometry canvas pthread)
 target_include_directories(lightviz PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>	
