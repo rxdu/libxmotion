@@ -62,19 +62,15 @@ class VehicleThreat
     double operator()(double x, double y, int32_t t_k);
     Point2d GetThreatCenter(int32_t t_k);
 
-    void PrintThreatRecordInfo();
+    double GetThreatValueAt(double x, double y, int32_t t_k) { return (*this)(x, y, t_k); }
 
-    // ThreatDist GetThreatDistribution(int32_t t_k) { return threat_record_[t_k]; }
-    // ThreatDist GetIntervalThreatDistribution(int32_t t_k) { return intv_threat_record_[t_k]; }
+    void PrintThreatRecordInfo();
 
   private:
     std::shared_ptr<TrafficMap> traffic_map_;
     DynamicThreatModel threat_model_;
 
     void ExtractTrafficInfo();
-    // ThreatDist GetOccupancyDistributionAt(int32_t t_k);
-    // ThreatDist GetIntervalOccupancyDistributionAt(int32_t t_k);
-
     void ComputeOccupancyRecord(int32_t t_k);
     void ComputeIntervalOccupancyRecord(int32_t t_k);
 };

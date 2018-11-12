@@ -99,6 +99,8 @@ int main()
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
+    // TrafficViz::ShowThreatField(field, 4, true, "occupancy_estimation", true);
+
     // TrafficViz::ShowThreatField(field, 3, true, "occupancy_estimation", false);
 
     for (int i = 0; i < 9; i++)

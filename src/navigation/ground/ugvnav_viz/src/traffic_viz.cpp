@@ -104,7 +104,7 @@ void TrafficViz::ShowVehicleStaticThreat(VehicleStaticThreat threat, std::string
     RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
     VehicleDraw veh_draw = VehicleDraw(canvas);
 
-    veh_draw.DrawVehicleStaticCollision(threat, threat.footprint.polygon);
+    // veh_draw.DrawVehicleStaticCollision(threat, threat.footprint.polygon);
     road_draw.DrawLanes(false);
 
     ShowImage(canvas.paint_area, window_name, save_img);
@@ -244,7 +244,7 @@ void TrafficViz::ShowThreatField(ThreatField &field, int32_t t_k, bool show_veh_
     auto threats = field.GetAllCollisionThreats();
 
     auto center = field.GetThreatCenter(t_k);
-    tdraw.DrawCollisionThreatField(field, t_k, center.x, center.y, 150, 60);
+    tdraw.DrawCollisionThreatField(field, t_k, center.x, center.y, 160, 100);
 
     road_draw.DrawLanes(true);
 

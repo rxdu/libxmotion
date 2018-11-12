@@ -1,5 +1,5 @@
 # Dependency libraries
-#find_package(LIBRARY_NAME REQUIRED)
+# find_package(OpenMP REQUIRED)
 
 # Add libraries
 set(UGVNAV_VIZ_LIB_SRC
@@ -15,6 +15,8 @@ set(UGVNAV_VIZ_LIB_SRC
 )
 add_library(ugvnav_viz STATIC ${UGVNAV_VIZ_LIB_SRC})
 target_link_libraries(ugvnav_viz decomp roadmap traffic lattice reachability tfield lightviz)
+# target_link_libraries(ugvnav_viz decomp roadmap traffic lattice reachability tfield lightviz ${OpenMP_CXX_LIBRARIES})
+# target_compile_options(ugvnav_viz PUBLIC ${OpenMP_CXX_FLAGS})
 target_include_directories(ugvnav_viz PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

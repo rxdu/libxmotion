@@ -7,7 +7,6 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-
 #ifndef STATIC_THREAT_MODEL_HPP
 #define STATIC_THREAT_MODEL_HPP
 
@@ -19,17 +18,12 @@ class VehicleStaticThreat
 {
   public:
     VehicleStaticThreat() = default;
-    VehicleStaticThreat(Pose2d _pose, double _probability) : pose(_pose), probability(_probability)
-    {
-        footprint.TransformRT(pose.position.x, pose.position.y, pose.theta);
-    };
+    VehicleStaticThreat(Pose2d _pose, double _probability) : pose(_pose), probability(_probability){};
 
     void SetParameters(Pose2d _pose, double _probability)
     {
         pose = _pose;
         probability = _probability;
-
-        footprint.TransformRT(pose.position.x, pose.position.y, pose.theta);
     }
 
     double operator()(double x, double y)
@@ -44,7 +38,6 @@ class VehicleStaticThreat
 
     Pose2d pose;
     double probability;
-    VehicleFP footprint;
 
   private:
     // Note: hard-coded here, could be defined on the fly in
