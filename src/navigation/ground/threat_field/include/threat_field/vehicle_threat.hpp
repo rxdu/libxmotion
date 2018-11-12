@@ -10,9 +10,6 @@
 #ifndef VEHICLE_THREAT_HPP
 #define VEHICLE_THREAT_HPP
 
-#ifndef DYNAMIC_THREAT_HPP
-#define DYNAMIC_THREAT_HPP
-
 #include <cstdint>
 #include <memory>
 #include <vector>
@@ -75,7 +72,5 @@ class VehicleThreat
     void ComputeIntervalOccupancyRecord(int32_t t_k);
 };
 } // namespace librav
-
-#endif /* DYNAMIC_THREAT_HPP */
 
 #endif /* VEHICLE_THREAT_HPP */

@@ -80,6 +80,19 @@ std::vector<std::shared_ptr<VehicleThreat>> ThreatField::GetAllCollisionThreats(
     return threats;
 }
 
+ThreatField::ThreatComponent ThreatField::GetThreatComponentAt(double x, double y, int32_t t_k)
+{
+    ThreatComponent comp;
+
+    for (auto &threat_entry : threats_)
+    {
+        double threat = (*threat_entry.second.get())(x, y, t_k);
+        comp.insert(std::make_pair(threat_entry.first, threat));
+    }
+
+    return comp;
+}
+
 double ThreatField::operator()(double x, double y, int32_t t_k)
 {
     double threat = 0.0;

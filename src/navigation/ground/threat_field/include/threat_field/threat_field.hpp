@@ -11,6 +11,7 @@
 #define THREAT_FIELD_HPP
 
 #include <memory>
+#include <vector>
 #include <unordered_map>
 
 #include "traffic_map/traffic_map.hpp"
@@ -30,6 +31,9 @@ class ThreatField
     };
 
   public:
+    using ThreatComponent = std::unordered_map<int32_t, double>;
+
+  public:
     ThreatField() = delete;
     ThreatField(std::shared_ptr<RoadMap> rmap, std::shared_ptr<TrafficMap> tmap);
 
@@ -42,7 +46,9 @@ class ThreatField
 
     double operator()(double x, double y, int32_t t_k);
     Point2d GetThreatCenter(int32_t t_k);
+
     double GetCollisionThreat(double x, double y, int32_t t_k) { return (*this)(x, y, t_k); };
+    ThreatComponent GetThreatComponentAt(double x, double y, int32_t t_k);
 
   private:
     std::shared_ptr<RoadMap> road_map_;
