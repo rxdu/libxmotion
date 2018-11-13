@@ -10,7 +10,8 @@
 #include "ugvnav_viz/details/threat_draw.hpp"
 
 #include "lightviz/details/matrix_draw.hpp"
-#include "lightviz/details/parallel_for.h"
+
+#include <tbb/tbb.h>
 
 using namespace librav;
 
@@ -67,7 +68,7 @@ void ThreatDraw::DrawCollisionThreat(VehicleThreat &threat, int32_t t_k, double 
     const auto &fill_threat_matrix = [&threat, &threat_matrix, x_size, y_size, t_k, dxmin, dymin, ppu](int64_t k) {
         threat_matrix(k % y_size, k / y_size) = threat.GetThreatValueAt(dxmin + (k / y_size) / ppu, dymin + (k % y_size) / ppu, t_k);
     };
-    igl::parallel_for(pixel_num, fill_threat_matrix, 100);
+    tbb::parallel_for(size_t(0), size_t(pixel_num), fill_threat_matrix);
 
     cv::Mat threat_vis = LightViz::CreateColorMapFromEigenMatrix(threat_matrix, true);
 
@@ -124,11 +125,11 @@ void ThreatDraw::DrawCollisionThreatField(ThreatField &field, int32_t t_k, doubl
     //     }
 
     // parallel version
-    const auto &fill_threat_matrix = [&field, &threat_matrix, x_size, y_size, t_k, dxmin, dymin, ppu](int64_t k) {
+    const auto &fill_threat_matrix = [&field, &threat_matrix, x_size, y_size, t_k, dxmin, dymin, ppu](size_t k) {
         threat_matrix(k % y_size, k / y_size) = field(dxmin + (k / y_size) / ppu, dymin + (k % y_size) / ppu, t_k);
     };
     int64_t pixel_num = x_size * y_size;
-    igl::parallel_for(pixel_num, fill_threat_matrix, 100);
+    tbb::parallel_for(size_t(0), size_t(pixel_num), fill_threat_matrix);
 
     cv::Mat threat_vis = LightViz::CreateColorMapFromEigenMatrix(threat_matrix, true);
 

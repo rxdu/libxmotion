@@ -8,9 +8,10 @@
  */
 
 #include "lightviz/details/geometry_draw.hpp"
-#include "lightviz/details/parallel_for.h"
 
 #include <cassert>
+
+#include <tbb/tbb.h>
 
 using namespace librav;
 using namespace LightViz;
@@ -208,6 +209,8 @@ void GeometryDraw::DrawDistribution(double cx, double cy, double xspan, double y
     Eigen::MatrixXd threat_matrix = Eigen::MatrixXd::Zero(y_size, x_size);
     int32_t meter_per_pixel = 1 / canvas_.ppu_;
     double ppu = canvas_.ppu_;
+
+    // serial version
     // for (int32_t i = 0; i < x_size; ++i)
     //     for (int32_t j = 0; j < y_size; ++j)
     //     {
@@ -228,10 +231,14 @@ void GeometryDraw::DrawDistribution(double cx, double cy, double xspan, double y
     //     }
 
     // parallel version
-    const auto &fill_threat_matrix = [&dist_fun, &threat_matrix, x_size, y_size, dxmin, dymin, ppu](int64_t k) {
+    // const auto &fill_threat_matrix = [&dist_fun, &threat_matrix, x_size, y_size, dxmin, dymin, ppu](int64_t k) {
+    //     threat_matrix(k % y_size, k / y_size) = dist_fun(dxmin + (k / y_size) / ppu, dymin + (k % y_size) / ppu);
+    // };
+    // igl::parallel_for(pixel_num, fill_threat_matrix, 100);
+    const auto &fill_threat_matrix2 = [&dist_fun, &threat_matrix, x_size, y_size, dxmin, dymin, ppu](size_t k) {
         threat_matrix(k % y_size, k / y_size) = dist_fun(dxmin + (k / y_size) / ppu, dymin + (k % y_size) / ppu);
     };
-    igl::parallel_for(pixel_num, fill_threat_matrix, 100);
+    tbb::parallel_for(size_t(0), size_t(pixel_num), fill_threat_matrix2);
 
     cv::Mat threat_vis = CreateColorMapFromEigenMatrix(threat_matrix, true);
 
@@ -253,49 +260,3 @@ void GeometryDraw::DrawDistribution(double cx, double cy, double xspan, double y
     // std::cout << "threat: " << threat_vis.cols << " , " << threat_vis.rows << std::endl;
     // std::cout << "top left coordinate: " << top_left_pixel.x << " , " << top_left_pixel.y << std::endl;
 }
-
-// template <typename T>
-// void GeometryDraw::DrawDistributionFast(double cx, double cy, double xspan, double yspan, T dist_fun)
-// {
-//     assert(cx >= canvas_.xmin_ && cx < canvas_.xmax_ && cy >= canvas_.ymin_ && cy < canvas_.ymax_);
-
-//     // distributions coverage x/y limits
-//     double dxmin = cx - xspan / 2.0;
-//     double dxmax = cx + xspan / 2.0;
-//     double dymin = cy - yspan / 2.0;
-//     double dymax = cy + yspan / 2.0;
-
-//     // crop distribution to canvas area
-//     if (dxmin < canvas_.xmin_)
-//         dxmin = canvas_.xmin_;
-//     if (dxmax > canvas_.xmax_)
-//         dxmax = canvas_.xmax_;
-//     if (dymin < canvas_.ymin_)
-//         dymin = canvas_.ymin_;
-//     if (dymax > canvas_.ymax_)
-//         dymax = canvas_.ymax_;
-
-//     double dxspan = dxmax - dxmin;
-//     double dyspan = dymax - dymin;
-//     int32_t x_size = dxspan * canvas_.ppu_;
-//     int32_t y_size = dyspan * canvas_.ppu_;
-
-//     Eigen::MatrixXd threat_matrix = Eigen::MatrixXd::Zero(y_size, x_size);
-//     int32_t meter_per_pixel = 1 / canvas_.ppu_;
-
-//     for (int32_t i = 0; i < x_size; ++i)
-//         for (int32_t j = 0; j < y_size; ++j)
-//         {
-//             // convert to cartisian coordinate
-//             double x = dxmin + static_cast<double>(i) / canvas_.ppu_;
-//             double y = dymin + static_cast<double>(j) / canvas_.ppu_;
-
-//             threat_matrix(j, i) = dist_fun(x, y);
-//         }
-
-//     cv::Mat threat_vis = CreateColorMapFromEigenMatrix(threat_matrix, true);
-
-//     // merge threat distribution to canvas
-//     auto top_left_pixel = canvas_.ConvertCartisianToPixel(dxmin, dymax); // y inverted in cartesian coordinate
-//     threat_vis.copyTo(canvas_.paint_area(cv::Rect(top_left_pixel.x, top_left_pixel.y, threat_vis.cols, threat_vis.rows)));
-// }
