@@ -12,16 +12,16 @@
 
 using namespace librav;
 
-void VehicleDraw::DrawVehicle(Polygon polygon)
+void VehicleDraw::DrawVehicle(Polygon polygon,cv::Scalar ln_color, int32_t ln_width)
 {
-    gdraw_.DrawPolygon(polygon, false, CvDrawColors::orange_color, 2);
-    gdraw_.DrawPolygonDirection(polygon, CvDrawColors::orange_color, 2);
+    gdraw_.DrawPolygon(polygon, false, ln_color, ln_width);
+    gdraw_.DrawPolygonDirection(polygon, ln_color, ln_width);
 }
 
-void VehicleDraw::DrawVehicle(Polygon polygon, int32_t id)
+void VehicleDraw::DrawVehicle(Polygon polygon, int32_t id,cv::Scalar ln_color, int32_t ln_width)
 {
-    gdraw_.DrawPolygon(polygon, false, CvDrawColors::orange_color, 2);
-    gdraw_.DrawPolygonDirection(polygon, CvDrawColors::orange_color, 2);
+    gdraw_.DrawPolygon(polygon, false, ln_color, ln_width);
+    gdraw_.DrawPolygonDirection(polygon, ln_color, ln_width);
     SimplePoint pt;
     for (int i = 0; i < 4; ++i)
     {
@@ -33,7 +33,7 @@ void VehicleDraw::DrawVehicle(Polygon polygon, int32_t id)
     gdraw_.WriteTextAtPosition(std::to_string(id), pt);
 }
 
-void VehicleDraw::DrawVehicle(std::vector<Polygon> &polygons)
+void VehicleDraw::DrawVehicle(std::vector<Polygon> &polygons,cv::Scalar ln_color, int32_t ln_width)
 {
     for (auto &poly : polygons)
         DrawVehicle(poly);

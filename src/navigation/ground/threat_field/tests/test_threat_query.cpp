@@ -90,8 +90,9 @@ int main()
     ThreatField field(loader.road_map, loader.traffic_map);
     field.AddVehicleEstimations({veh1, veh2, veh3, veh4, veh5});
 
+    Pose2d ego_pose(57, 36, 85.0 / 180.0 * M_PI);
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels()[2];
-    field.SetupThreatField(ego_chn);
+    field.SetupThreatField(ego_pose, ego_chn);
 
     field.ComputeThreatField(5);
 

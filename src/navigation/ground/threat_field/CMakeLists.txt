@@ -1,5 +1,6 @@
 # Dependency libraries
-#find_package(LIBRARY_NAME REQUIRED)
+find_package(TBB REQUIRED)
+include_directories(${TBB_INCLUDE_DIRS})
 
 # Add libraries
 set(TFIELD_LIB_SRC
@@ -9,13 +10,13 @@ set(TFIELD_LIB_SRC
     src/threat_field.cpp
 )
 add_library(tfield STATIC ${TFIELD_LIB_SRC})
-target_link_libraries(tfield common decomp graph traffic reachability)
+target_link_libraries(tfield common decomp graph traffic reachability ${TBB_LIBRARIES})
 target_include_directories(tfield PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 
-# add_subdirectory(apps)
+add_subdirectory(apps)
 
 if(BUILD_TESTS)
     add_subdirectory(tests)

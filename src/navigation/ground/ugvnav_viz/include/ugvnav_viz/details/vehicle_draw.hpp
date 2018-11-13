@@ -24,9 +24,9 @@ class VehicleDraw
   public:
     VehicleDraw(CartesianCanvas &canvas) : canvas_(canvas), gdraw_(GeometryDraw(canvas_)){};
 
-    void DrawVehicle(Polygon polygon);
-    void DrawVehicle(Polygon polygon, int32_t id);
-    void DrawVehicle(std::vector<Polygon> &polygons);
+    void DrawVehicle(Polygon polygon, cv::Scalar ln_color = CvDrawColors::orange_color, int32_t ln_width = 1);
+    void DrawVehicle(Polygon polygon, int32_t id, cv::Scalar ln_color = CvDrawColors::orange_color, int32_t ln_width = 1);
+    void DrawVehicle(std::vector<Polygon> &polygons, cv::Scalar ln_color = CvDrawColors::orange_color, int32_t ln_width = 1);
     void DrawVehiclePath(std::vector<Polyline> &path, std::vector<Polygon> polygons = {});
 
     void DrawVehicleStaticCollision(VehicleStaticThreat threat, Polygon polygon);

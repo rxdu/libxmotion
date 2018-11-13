@@ -31,6 +31,15 @@ struct VehicleFP
         polygon.AddPoint(-2.4, -0.9);
     }
 
+    VehicleFP(Pose2d pose)
+    {
+        polygon.AddPoint(2.4, -0.9);
+        polygon.AddPoint(2.4, 0.9);
+        polygon.AddPoint(-2.4, 0.9);
+        polygon.AddPoint(-2.4, -0.9);
+        polygon = polygon.TransformRT(pose.position.x, pose.position.y, pose.theta);
+    }
+
     void TransformRT(double dx, double dy, double dtheta)
     {
         polygon = polygon.TransformRT(dx, dy, dtheta);

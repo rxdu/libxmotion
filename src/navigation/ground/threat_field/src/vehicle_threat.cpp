@@ -9,6 +9,8 @@
 
 #include "threat_field/vehicle_threat.hpp"
 
+#include <tbb/tbb.h>
+
 using namespace librav;
 
 VehicleThreat::VehicleThreat(VehicleEstimation est, std::shared_ptr<TrafficMap> tmap) : vehicle_est_(est),
@@ -45,8 +47,9 @@ void VehicleThreat::ComputeOccupancyDistribution(int32_t k, bool calc_interval_d
     //  => (k+1) states, k intervals
     threat_model_.occupancy_model_->Propagate(k, calc_interval_dist);
 
-    for (int32_t i = 0; i < k + 1; ++i)
-        ComputeOccupancyRecord(i);
+    // for (int32_t i = 0; i < k + 1; ++i)
+    //     ComputeOccupancyRecord(i);
+    tbb::parallel_for(size_t(0), size_t(k+1), std::bind(&VehicleThreat::ComputeOccupancyRecord, this, std::placeholders::_1));
 
     if (calc_interval_dist)
     {

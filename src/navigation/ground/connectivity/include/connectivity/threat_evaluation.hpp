@@ -25,12 +25,15 @@ class ThreatEvaluation
 
     ThreatField field_;
 
+    void SetTrafficConfiguration(VehicleEstimation ego_veh, std::vector<VehicleEstimation> ests);
     void SetTrafficConfiguration(std::vector<VehicleEstimation> ests, std::shared_ptr<TrafficChannel> ego_chn);
     void Evaluate(int32_t step);
 
   private:
     std::shared_ptr<RoadMap> road_map_;
     std::shared_ptr<TrafficMap> traffic_map_;
+
+    VehicleEstimation ego_vehicle_state_;
 };
 } // namespace librav
 

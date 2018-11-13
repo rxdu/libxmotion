@@ -23,6 +23,7 @@ std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> LatticeGraph::Co
     auto start_cell = channel->grid_->GetCell(start_index);
     LatticeNode start_node(start_cell, channel);
 
+    // TODO: parallelize the graph constrution process (spiral solving)
     std::unordered_map<int32_t, LatticeNode> candidates;
     candidates.insert(std::make_pair(start_node.id, start_node));
     for (int32_t iter = 0; iter < expansion_iter; ++iter)

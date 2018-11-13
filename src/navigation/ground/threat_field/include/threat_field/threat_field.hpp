@@ -37,8 +37,11 @@ class ThreatField
     ThreatField() = delete;
     ThreatField(std::shared_ptr<RoadMap> rmap, std::shared_ptr<TrafficMap> tmap);
 
+    Pose2d ego_pose_;
+    std::shared_ptr<TrafficChannel> ego_channel_;
+
     void AddVehicleEstimations(std::vector<VehicleEstimation> ests);
-    void SetupThreatField(std::shared_ptr<TrafficChannel> ego_chn);
+    void SetupThreatField(Pose2d ego_pose, std::shared_ptr<TrafficChannel> ego_chn);
     void ComputeThreatField(int32_t t_k);
 
     std::vector<VehicleEstimation> GetAllVehicleEstimations();
@@ -54,7 +57,6 @@ class ThreatField
     std::shared_ptr<RoadMap> road_map_;
     std::shared_ptr<TrafficMap> traffic_map_;
 
-    std::shared_ptr<TrafficChannel> ego_channel_;
     std::vector<std::string> conflicting_lanes_;
 
     std::unordered_map<int32_t, VehicleEstimation> vehicles_;

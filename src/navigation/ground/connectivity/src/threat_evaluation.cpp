@@ -19,11 +19,17 @@ ThreatEvaluation::ThreatEvaluation(std::shared_ptr<RoadMap> rmap, std::shared_pt
 
 void ThreatEvaluation::SetTrafficConfiguration(std::vector<VehicleEstimation> ests, std::shared_ptr<TrafficChannel> ego_chn)
 {
+    Pose2d ego_pose(57, 36, 85.0 / 180.0 * M_PI);
     field_.AddVehicleEstimations(ests);
-    field_.SetupThreatField(ego_chn);
+    field_.SetupThreatField(ego_pose, ego_chn);
 }
 
 void ThreatEvaluation::Evaluate(int32_t step)
 {
     field_.ComputeThreatField(step);
+
+    for(int i = 0; i <= step; ++i)
+    {
+
+    }
 }

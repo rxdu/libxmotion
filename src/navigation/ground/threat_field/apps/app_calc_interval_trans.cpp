@@ -27,7 +27,7 @@ int main()
 
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels().back();
 
-    std::shared_ptr<DynamicThreatModel> ct1 = std::make_shared<DynamicThreatModel>(veh1, ego_chn);
+    std::shared_ptr<DynamicThreatModel> ct1 = std::make_shared<DynamicThreatModel>(veh1);
     ct1->PrecomputeParameters(FolderPath::GetDataFolderPath() + "/reachability/vehicle_threat_combined_transition");
 
     std::cout << "------------- all calculation finished -------------" << std::endl;

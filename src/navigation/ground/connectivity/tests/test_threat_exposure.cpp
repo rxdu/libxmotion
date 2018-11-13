@@ -26,55 +26,35 @@ int main()
     CovarMatrix2d pos_covar1;
     pos_covar1 << 2, 0,
         0, 2;
-    auto ego_chn1 = loader.traffic_map->GetAllTrafficChannels()[4];
-
-    VehicleEstimation veh1({35, 59, -7 / 180.0 * M_PI}, 10, ego_chn1);
-    veh1.SetPositionVariance(pos_covar1);
-    veh1.SetSpeedVariance(3 * 3);
+    VehicleEstimation veh1({35, 59, -7 / 180.0 * M_PI}, pos_covar1, 10, 3 * 3);
 
     // ------------------- vehicle 2 ---------------------- //
 
     CovarMatrix2d pos_covar2;
     pos_covar2 << 1, 0,
         0, 1;
-    auto ego_chn2 = loader.traffic_map->GetAllTrafficChannels()[4];
-
-    VehicleEstimation veh2({89, 52, -7 / 180.0 * M_PI}, 10, ego_chn2);
-    veh2.SetPositionVariance(pos_covar2);
-    veh2.SetSpeedVariance(2 * 2);
+    VehicleEstimation veh2({89, 52, -7 / 180.0 * M_PI}, pos_covar2, 10, 2 * 2);
 
     // ------------------- vehicle 3 ---------------------- //
 
     CovarMatrix2d pos_covar3;
     pos_covar3 << 0.25, 0,
         0, 0.25;
-    auto ego_chn3 = loader.traffic_map->GetAllTrafficChannels()[0];
-
-    VehicleEstimation veh3({80, 59, 170 / 180.0 * M_PI}, 10, ego_chn3);
-    veh3.SetPositionVariance(pos_covar3);
-    veh3.SetSpeedVariance(1 * 1);
+    VehicleEstimation veh3({80, 59, 170 / 180.0 * M_PI}, pos_covar3, 10, 1 * 1);
 
     // ------------------- vehicle 4 ---------------------- //
 
     CovarMatrix2d pos_covar4;
     pos_covar4 << 1, 0,
         0, 1;
-    auto ego_chn4 = loader.traffic_map->GetAllTrafficChannels()[5];
-
-    VehicleEstimation veh4({52, 35, -95 / 180.0 * M_PI}, 10, ego_chn4);
-    veh4.SetPositionVariance(pos_covar4);
-    veh4.SetSpeedVariance(2 * 2);
+    VehicleEstimation veh4({52, 35, -95 / 180.0 * M_PI}, pos_covar4, 10, 2 * 2);
 
     // ------------------- vehicle 5 ---------------------- //
 
     CovarMatrix2d pos_covar5;
     pos_covar5 << 1, 0,
         0, 1;
-    auto ego_chn5 = loader.traffic_map->GetAllTrafficChannels()[0];
-
-    VehicleEstimation veh5({40, 64, 171 / 180.0 * M_PI}, 10, ego_chn5);
-    veh5.SetPositionVariance(pos_covar5);
-    veh5.SetSpeedVariance(2 * 2);
+    VehicleEstimation veh5({40, 64, 171 / 180.0 * M_PI}, pos_covar5, 10, 2 * 2);
 
     // std::vector<Polygon> vehs = {veh1.GetFootprint(), veh2.GetFootprint(), veh3.GetFootprint(), veh4.GetFootprint(), veh5.GetFootprint()};
     // TrafficViz::ShowVehicle(vehs);
@@ -113,7 +93,8 @@ int main()
     ThreatField field(loader.road_map, loader.traffic_map);
     field.AddVehicleEstimations({veh1, veh2, veh3, veh4, veh5});
 
-    field.SetupThreatField(ego_chn);
+    Pose2d ego_pose(57, 36, 85.0 / 180.0 * M_PI);
+    field.SetupThreatField(ego_pose, ego_chn);
 
     //////////////////////////////////////////////////
 

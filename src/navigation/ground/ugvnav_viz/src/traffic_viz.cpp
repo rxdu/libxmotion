@@ -256,6 +256,10 @@ void TrafficViz::ShowThreatField(ThreatField &field, int32_t t_k, bool show_veh_
             veh_draw.DrawVehicle(veh.GetFootprint(), veh.id_);
     }
 
+    // draw ego vehicle
+    VehicleFP ego_veh(field.ego_pose_);
+    veh_draw.DrawVehicle(ego_veh.polygon, CvDrawColors::cyan_color);
+
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 

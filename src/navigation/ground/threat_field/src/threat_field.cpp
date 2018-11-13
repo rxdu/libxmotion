@@ -9,6 +9,8 @@
 
 #include "threat_field/threat_field.hpp"
 
+#include <tbb/tbb.h>
+
 using namespace librav;
 
 ThreatField::ThreatField(std::shared_ptr<RoadMap> rmap, std::shared_ptr<TrafficMap> tmap) : road_map_(rmap), traffic_map_(tmap)
@@ -21,21 +23,34 @@ void ThreatField::AddVehicleEstimations(std::vector<VehicleEstimation> ests)
         vehicles_.insert(std::make_pair(est.id_, est));
 }
 
-void ThreatField::SetupThreatField(std::shared_ptr<TrafficChannel> ego_chn)
+void ThreatField::SetupThreatField(Pose2d ego_pose, std::shared_ptr<TrafficChannel> ego_chn)
 {
+    ego_pose_ = ego_pose;
     ego_channel_ = ego_chn;
 
     conflicting_lanes_ = road_map_->FindConflictingLanes(ego_channel_->lanes_);
 
+    // for (auto &entry : vehicles_)
+    // {
+    //     if (!CheckInConflict(entry.second))
+    //         continue;
+
+    //     std::shared_ptr<VehicleThreat> threat = std::make_shared<VehicleThreat>(entry.second, traffic_map_);
+
+    //     threats_.insert(std::make_pair(entry.second.id_, threat));
+    // }
+
+    std::vector<int32_t> veh_ids;
     for (auto &entry : vehicles_)
-    {
-        if (!CheckInConflict(entry.second))
-            continue;
+        veh_ids.push_back(entry.first);
 
-        std::shared_ptr<VehicleThreat> threat = std::make_shared<VehicleThreat>(entry.second, traffic_map_);
-
-        threats_.insert(std::make_pair(entry.second.id_, threat));
-    }
+    const auto &init_vehicle_threat = [this, &veh_ids](size_t i) {
+        if (!this->CheckInConflict(this->vehicles_[veh_ids[i]]))
+            return;
+        std::shared_ptr<VehicleThreat> threat = std::make_shared<VehicleThreat>(this->vehicles_[veh_ids[i]], this->traffic_map_);
+        this->threats_.insert(std::make_pair(this->vehicles_[veh_ids[i]].id_, threat));
+    };
+    tbb::parallel_for(size_t(0), size_t(veh_ids.size()), init_vehicle_threat);
 }
 
 bool ThreatField::CheckInConflict(VehicleEstimation veh)
