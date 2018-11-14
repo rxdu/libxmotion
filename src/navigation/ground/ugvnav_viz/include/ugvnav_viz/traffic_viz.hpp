@@ -22,7 +22,7 @@
 #include "state_lattice/state_lattice.hpp"
 #include "threat_field/vehicle_threat.hpp"
 #include "threat_field/threat_field.hpp"
-#include "lattice_planner/lattice_graph.hpp"
+#include "local_planner/lattice_graph.hpp"
 
 #include "lightviz/details/cartesian_canvas.hpp"
 

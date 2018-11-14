@@ -6,7 +6,7 @@
 #include "traffic_map/map_loader.hpp"
 #include "connectivity/threat_evaluation.hpp"
 
-#include "lattice_planner/lattice_graph.hpp"
+#include "local_planner/lattice_graph.hpp"
 #include "ugvnav_viz/ugvnav_viz.hpp"
 
 #include "stopwatch/stopwatch.h"

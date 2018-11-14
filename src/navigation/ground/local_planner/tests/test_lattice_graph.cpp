@@ -16,15 +16,28 @@ int main()
 {
     // load map
     MapLoader loader("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane_horizontal.osm");
+    // MapLoader loader("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane.osm");
+    // MapLoader loader("/home/rdu/Workspace/librav/data/road_map/short_segment.osm");
 
-    TrafficViz::SetupTrafficViz(loader.road_map, 15);
+    TrafficViz::SetupTrafficViz(loader.road_map, 10);
+
+    // TrafficViz::ShowLanes(true, 5, "test_lane", true);
+    // for (auto &chn : map->traffic_map_->GetAllTrafficChannels())
+    // {
+    //     // TrafficViz::ShowTrafficChannelCenterline(chn);
+    //     chn->PrintInfo();
+    //     TrafficViz::ShowTrafficChannel(*chn.get(), 5);
+    // }
 
     /****************************************************************************/
 
     // discretize lane
     auto all_channels = loader.traffic_map->GetAllTrafficChannels();
     // all_channels[1]->DiscretizeChannel(5, 1.2, 5);
-    all_channels[1]->DiscretizeChannel(18, 1.2, 5);
+    all_channels[1]->DiscretizeChannel(5, 1.2, 5);
+
+    // TrafficViz::ShowTrafficChannel(*all_channels[1].get());
+    // TrafficViz::ShowTrafficChannel(*all_channels[1].get(), 20, "horizontal_lane", true);
 
     stopwatch::StopWatch timer;
     auto graph = LatticeGraph::Construct(all_channels[1], {0, 0}, 9);
@@ -35,6 +48,7 @@ int main()
         lattices.push_back(edge->cost_);
     std::cout << "number of vertices: " << graph->GetGraphVertexNumber() << std::endl;
 
+    // LightViz::ShowStateLattice(lattices);
     TrafficViz::ShowLatticeInTrafficChannel(lattices, *all_channels[1].get(), "lattice graph", true);
 
     return 0;
