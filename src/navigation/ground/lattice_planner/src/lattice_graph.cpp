@@ -44,10 +44,10 @@ std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> LatticeGraph::Co
                 }
             }
         }
-        
+
         if (added_nodes.empty())
             break;
-            
+
         candidates = added_nodes;
     }
 
@@ -72,4 +72,15 @@ std::vector<StateLattice> LatticeGraph::Search(std::shared_ptr<TrafficChannel> c
     auto start_cell = channel->grid_->GetCell(start_index);
 
     return LatticeDijkstra::Search(graph.get(), start_cell->id, final_nodes);
+}
+
+std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> LatticeGraph::Search(std::vector<StateLattice> &path, std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t expansion_iter)
+{
+    std::vector<int32_t> final_nodes;
+    auto graph = Construct(channel, start_index, expansion_iter, final_nodes);
+
+    auto start_cell = channel->grid_->GetCell(start_index);
+    path = LatticeDijkstra::Search(graph.get(), start_cell->id, final_nodes);
+
+    return graph;
 }

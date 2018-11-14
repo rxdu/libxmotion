@@ -10,7 +10,7 @@ include(cmake/lcmtypes.cmake)
 lcmtypes_build()
 
 ## Chosse build type
-# set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Release)
 # set(CMAKE_BUILD_TYPE Debug)
 
 ## Optionally built modules: on/off

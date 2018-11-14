@@ -17,33 +17,24 @@ int main()
     // load map
     MapLoader loader("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
 
-    TrafficViz::SetupTrafficViz(loader.road_map, 10);
+    TrafficViz::SetupTrafficViz(loader.road_map, 15);
 
     /****************************************************************************/
 
     // discretize lane
     auto all_channels = loader.traffic_map->GetAllTrafficChannels();
-    // all_channels[1]->DiscretizeChannel(5, 1.2, 5);
+
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels()[2];
-    ego_chn->DiscretizeChannel(10, 0.74, 1);
+    ego_chn->DiscretizeChannel(2, 0.74, 3);
 
     /****************************************************************************/
 
-    // stopwatch::StopWatch timer;
-    // auto graph = LatticeGraph::Construct(ego_chn, {0, 0}, 9);
-    // std::cout << "graph constructed in " << timer.toc() << " seconds" << std::endl;
-    // std::vector<StateLattice> lattices;
-    // for (auto &edge : graph->GetAllEdges())
-    //     lattices.push_back(edge->cost_);
-    // std::cout << "number of vertices: " << graph->GetGraphVertexNumber() << std::endl;
+    stopwatch::StopWatch timer;
+    std::vector<StateLattice> path;
+    auto graph = LatticeGraph::Search(path, ego_chn, {2, 0}, 8);
+    std::cout << "search finished in " << timer.toc() << " seconds" << std::endl;
 
-    // TrafficViz::ShowLatticeInTrafficChannel(lattices, *ego_chn.get(), "lattice graph", true);
-
-    /****************************************************************************/
-
-    auto path = LatticeGraph::Search(ego_chn, {2, 0}, 8);
-
-    TrafficViz::ShowLatticePathInTrafficChannel(path, *ego_chn.get(), "lattice graph path", false);
+    TrafficViz::ShowLatticePathInTrafficChannel(graph, path, *ego_chn.get(), "lattice graph path", true);
 
     return 0;
 }

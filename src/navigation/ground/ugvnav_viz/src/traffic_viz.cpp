@@ -79,7 +79,7 @@ void TrafficViz::ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice,
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowLatticePathInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel &channel, std::string window_name, bool save_img)
+void TrafficViz::ShowLatticePathInTrafficChannel(std::vector<StateLattice> &path, TrafficChannel &channel, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -91,7 +91,29 @@ void TrafficViz::ShowLatticePathInTrafficChannel(std::vector<StateLattice> &latt
     // road_draw.DrawTrafficChannelGrid(channel, false);
 
     // draw state lattice
-    lattice_draw.DrawStateLattice(lattice);
+    lattice_draw.DrawStateLattice(path);
+
+    ShowImage(canvas.paint_area, window_name, save_img);
+}
+
+void TrafficViz::ShowLatticePathInTrafficChannel(std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> graph, std::vector<StateLattice> &path, TrafficChannel &channel, std::string window_name, bool save_img)
+{
+    RoadMapViz &viz = RoadMapViz::GetInstance();
+
+    CartesianCanvas canvas = viz.CreateCanvas(false);
+    RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
+    LatticeDraw lattice_draw = LatticeDraw(canvas);
+
+    road_draw.DrawLanes(false);
+    road_draw.DrawTrafficChannelGrid(channel, false);
+
+    std::vector<StateLattice> lattices;
+    for (auto &edge : graph->GetAllEdges())
+        lattices.push_back(edge->cost_);
+    lattice_draw.DrawStateLattice(lattices);
+
+    // draw state lattice
+    lattice_draw.DrawStateLattice(path, 0.1, CvDrawColors::cyan_color, 2);
 
     ShowImage(canvas.paint_area, window_name, save_img);
 }

@@ -52,7 +52,7 @@ class MotionPrimitive
     virtual MotionState Evaluate(double s, double ds = 0.1);
 
   protected:
-    double sf_;
+    double sf_ = 0;
     MotionState state_s_;
     MotionState state_f_;
 

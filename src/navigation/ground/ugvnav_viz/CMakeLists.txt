@@ -14,7 +14,7 @@ set(UGVNAV_VIZ_LIB_SRC
     # src/threat_field_viz.cpp
 )
 add_library(ugvnav_viz STATIC ${UGVNAV_VIZ_LIB_SRC})
-target_link_libraries(ugvnav_viz decomp roadmap traffic lattice reachability tfield lightviz)
+target_link_libraries(ugvnav_viz decomp roadmap traffic lattice lattice_planner reachability tfield lightviz)
 # target_link_libraries(ugvnav_viz decomp roadmap traffic lattice reachability tfield lightviz ${OpenMP_CXX_LIBRARIES})
 # target_compile_options(ugvnav_viz PUBLIC ${OpenMP_CXX_FLAGS})
 target_include_directories(ugvnav_viz PUBLIC

@@ -34,9 +34,32 @@ namespace librav
 class LatticeDijkstra
 {
     using GraphType = Graph<LatticeGraph::LatticeNode, StateLattice>;
+    using VertexType = Graph<LatticeGraph::LatticeNode, StateLattice>::Vertex;
     using PathType = std::vector<StateLattice>;
 
   public:
+    static PathType Search(GraphType *graph, int32_t start, int32_t goal)
+    {
+        // reset last search information
+        graph->ResetGraphVertices();
+
+        auto start_it = graph->FindVertex(start);
+
+        std::vector<GraphType::vertex_iterator> goal_its;
+        auto goal_it = graph->FindVertex(goal);
+        if (goal_it != graph->vertex_end())
+            goal_its.push_back(goal_it);
+        std::cout << "size of goal: " << goal_its.size() << std::endl;
+
+        PathType empty;
+
+        // start a new search and return result
+        if (start_it != graph->vertex_end() && !goal_its.empty())
+            return PerformSearch(graph, start_it, goal_its);
+        else
+            return empty;
+    }
+
     static PathType Search(GraphType *graph, int32_t start, std::vector<int32_t> goals)
     {
         // reset last search information
@@ -71,6 +94,12 @@ class LatticeDijkstra
 
         typename GraphType::vertex_iterator goal_vtx;
 
+        LatticeGraph::LatticeNode virtual_node(std::numeric_limits<int64_t>::max());
+
+        for (auto &goal : goal_vtxs)
+            graph->AddEdge(goal->state_, virtual_node, {});
+        goal_vtx = graph->FindVertex(virtual_node.id);
+
         // open list - a list of vertices that need to be checked out
         PriorityQueue<VertexIterator> openlist;
 
@@ -88,10 +117,8 @@ class LatticeDijkstra
             if (current_vertex->is_checked_)
                 continue;
 
-            auto check_goal = std::find(goal_vtxs.begin(), goal_vtxs.end(), current_vertex);
-            if (check_goal != goal_vtxs.end())
+            if (current_vertex == goal_vtx)
             {
-                goal_vtx = *check_goal;
                 found_path = true;
                 break;
             }
@@ -141,7 +168,7 @@ class LatticeDijkstra
     static PathType ReconstructPath(GraphType *graph, GraphType::vertex_iterator start_vtx, GraphType::vertex_iterator goal_vtx)
     {
         PathType path;
-        GraphType::vertex_iterator waypoint = goal_vtx;
+        GraphType::vertex_iterator waypoint = goal_vtx->search_parent_;
         while (waypoint != start_vtx)
         {
             path.push_back(waypoint->search_parent_->FindEdge(waypoint->state_)->cost_);
