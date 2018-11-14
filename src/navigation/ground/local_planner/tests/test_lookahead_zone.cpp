@@ -6,7 +6,8 @@
 #include "traffic_map/map_loader.hpp"
 
 #include "local_planner/lattice_graph.hpp"
-#include "local_planner/lattice_trajectory.hpp"
+#include "local_planner/reference_trajectory.hpp"
+#include "local_planner/lookahead_zone.hpp"
 #include "ugvnav_viz/ugvnav_viz.hpp"
 
 #include "stopwatch/stopwatch.h"
@@ -37,8 +38,10 @@ int main()
 
     TrafficViz::ShowLatticePathInTrafficChannel(graph, path, *ego_chn.get(), "lattice graph path", true);
 
-    LatticeTrajectory traj(path);
+    ReferenceTrajectory traj(path);
     traj.GenerateConstantSpeedProfile(15);
+
+    LookaheadZone zone(traj);
 
     return 0;
 }

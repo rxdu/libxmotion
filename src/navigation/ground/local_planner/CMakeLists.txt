@@ -3,9 +3,12 @@
 
 # Add libraries
 set(LATTICE_PLANNER_LIB_SRC
+  # lattice planner
   src/lattice_graph.cpp
-  src/lattice_trajectory.cpp
-  # src/local_planner.cpp
+  src/reference_trajectory.cpp
+  # src/lattice_planner.cpp
+  # threat evaluation
+  src/lookahead_zone.cpp
 )
 add_library(local_planner STATIC ${LATTICE_PLANNER_LIB_SRC})
 target_link_libraries(local_planner lattice graph traffic tfield utilities)
