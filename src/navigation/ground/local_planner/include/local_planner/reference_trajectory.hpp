@@ -23,11 +23,11 @@ class ReferenceTrajectory
     {
         RefPoint() : x(0), y(0), theta(0), kappa(0), speed(0), accel(0) {}
         RefPoint(double _x, double _y, double _theta = 0, double _kappa = 0, double _speed = 0, double _accel = 0) : x(_x),
-                                                                                                                 y(_y),
-                                                                                                                 theta(_theta),
-                                                                                                                 kappa(_kappa),
-                                                                                                                 speed(_speed),
-                                                                                                                 accel(_accel) {}
+                                                                                                                     y(_y),
+                                                                                                                     theta(_theta),
+                                                                                                                     kappa(_kappa),
+                                                                                                                     speed(_speed),
+                                                                                                                     accel(_accel) {}
 
         double x;
         double y;
@@ -58,6 +58,11 @@ class ReferenceTrajectory
     void GenerateConstantSpeedProfile(double speed);
 
     RefPoint GetDesiredState(double t);
+
+    // functions that are required for creating curvilinear grid
+    double GetTotalLength() const { return total_length_; }
+    MotionState Evaluate(double s);
+    void GetTangentVector(double s, double &x, double &y);
 
   private:
     std::vector<StateLattice> path_;

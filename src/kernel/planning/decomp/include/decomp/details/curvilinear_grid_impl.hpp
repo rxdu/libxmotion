@@ -12,8 +12,8 @@
 
 namespace librav
 {
-template <typename T>
-CurvilinearGridBase<T>::CurvilinearGridBase(ParametricCurve pcurve, double s_step, double d_step, int32_t d_num, double s_offset) : curve_(pcurve), s_step_(s_step), delta_step_(d_step), delta_num_(d_num), s_offset_(s_offset)
+template <typename T, typename CurveType>
+CurvilinearGridBase<T, CurveType>::CurvilinearGridBase(CurveType pcurve, double s_step, double d_step, int32_t d_num, double s_offset) : curve_(pcurve), s_step_(s_step), delta_step_(d_step), delta_num_(d_num), s_offset_(s_offset)
 {
     assert(d_num >= 1);
     delta_half_num_ = delta_num_ / 2;
@@ -55,16 +55,16 @@ CurvilinearGridBase<T>::CurvilinearGridBase(ParametricCurve pcurve, double s_ste
     }
 }
 
-template <typename T>
-CurvilinearGridBase<T>::~CurvilinearGridBase()
+template <typename T, typename CurveType>
+CurvilinearGridBase<T, CurveType>::~CurvilinearGridBase()
 {
     for (auto &row : grid_tiles_)
         for (auto &cell : row)
             delete cell;
 }
 
-template <typename T>
-CurvilinearGridBase<T>::CurvilinearGridBase(const CurvilinearGridBase<T> &other)
+template <typename T, typename CurveType>
+CurvilinearGridBase<T, CurveType>::CurvilinearGridBase(const CurvilinearGridBase<T, CurveType> &other)
 {
     s_step_ = other.s_step_;
     delta_step_ = other.delta_step_;
@@ -82,16 +82,16 @@ CurvilinearGridBase<T>::CurvilinearGridBase(const CurvilinearGridBase<T> &other)
     }
 }
 
-template <typename T>
-CurvilinearGridBase<T> &CurvilinearGridBase<T>::operator=(const CurvilinearGridBase<T> &other)
+template <typename T, typename CurveType>
+CurvilinearGridBase<T, CurveType> &CurvilinearGridBase<T, CurveType>::operator=(const CurvilinearGridBase<T, CurveType> &other)
 {
-    CurvilinearGridBase<T> tmp(other);
+    CurvilinearGridBase<T, CurveType> tmp(other);
     std::swap(*this, tmp);
     return *this;
 }
 
-template <typename T>
-CurvilinearGridBase<T>::CurvilinearGridBase(CurvilinearGridBase<T> &&other)
+template <typename T, typename CurveType>
+CurvilinearGridBase<T, CurveType>::CurvilinearGridBase(CurvilinearGridBase<T, CurveType> &&other)
 {
     s_step_ = std::move(other.s_step_);
     delta_step_ = std::move(other.delta_step_);
@@ -102,8 +102,8 @@ CurvilinearGridBase<T>::CurvilinearGridBase(CurvilinearGridBase<T> &&other)
     grid_tiles_ = std::move(other.grid_tiles_);
 }
 
-template <typename T>
-CurvilinearGridBase<T> &CurvilinearGridBase<T>::operator=(CurvilinearGridBase<T> &&other)
+template <typename T, typename CurveType>
+CurvilinearGridBase<T, CurveType> &CurvilinearGridBase<T, CurveType>::operator=(CurvilinearGridBase<T, CurveType> &&other)
 {
     s_step_ = std::move(other.s_step_);
     delta_step_ = std::move(other.delta_step_);
@@ -116,21 +116,21 @@ CurvilinearGridBase<T> &CurvilinearGridBase<T>::operator=(CurvilinearGridBase<T>
     return *this;
 }
 
-template <typename T>
-CurvilinearCellBase<T> *CurvilinearGridBase<T>::GetCell(int64_t id)
+template <typename T, typename CurveType>
+CurvilinearCellBase<T> *CurvilinearGridBase<T, CurveType>::GetCell(int64_t id)
 {
     auto idx = IDToIndex(id);
     return GetCell(idx);
 }
 
-template <typename T>
-CurvilinearCellBase<T> *CurvilinearGridBase<T>::GetCell(int32_t x, int32_t y)
+template <typename T, typename CurveType>
+CurvilinearCellBase<T> *CurvilinearGridBase<T, CurveType>::GetCell(int32_t x, int32_t y)
 {
     return grid_tiles_[x][y + delta_half_num_];
 }
 
-template <typename T>
-std::vector<CurvilinearCellBase<T> *> CurvilinearGridBase<T>::GetNeighbours(int32_t x, int32_t y, int32_t min_h, int32_t max_h)
+template <typename T, typename CurveType>
+std::vector<CurvilinearCellBase<T> *> CurvilinearGridBase<T, CurveType>::GetNeighbours(int32_t x, int32_t y, int32_t min_h, int32_t max_h)
 {
     std::vector<CurvilinearCellBase<T> *> neighbours;
 
@@ -150,15 +150,15 @@ std::vector<CurvilinearCellBase<T> *> CurvilinearGridBase<T>::GetNeighbours(int3
     return neighbours;
 }
 
-template <typename T>
-std::vector<CurvilinearCellBase<T> *> CurvilinearGridBase<T>::GetNeighbours(int64_t id, int32_t min_h, int32_t max_h)
+template <typename T, typename CurveType>
+std::vector<CurvilinearCellBase<T> *> CurvilinearGridBase<T, CurveType>::GetNeighbours(int64_t id, int32_t min_h, int32_t max_h)
 {
     auto index = IDToIndex(id);
     return GetNeighbours(index.GetX(), index.GetY(), min_h, max_h);
 }
 
-template <typename T>
-SimplePoint CurvilinearGridBase<T>::ConvertToGlobalCoordinate(typename CurvilinearGridBase<T>::GridPoint pt)
+template <typename T, typename CurveType>
+SimplePoint CurvilinearGridBase<T, CurveType>::ConvertToGlobalCoordinate(typename CurvilinearGridBase<T, CurveType>::GridPoint pt)
 {
     // TODO: calculation could be simplified
     Eigen::Matrix2d rotation_matrix;
@@ -166,54 +166,18 @@ SimplePoint CurvilinearGridBase<T>::ConvertToGlobalCoordinate(typename Curviline
 
     double s_val = pt.s + s_offset_;
     auto base_pt = curve_.Evaluate(s_val);
-    auto vel_vec = curve_.Evaluate(s_val, 1);
+    // auto vel_vec = curve_.Evaluate(s_val, 1);
+    double vdir_x, vdir_y;
+    curve_.GetTangentVector(s_val, vdir_x, vdir_y);
 
     Eigen::Vector2d base_vec(base_pt.x, base_pt.y);
-    Eigen::Vector2d vec_t(vel_vec.x, vel_vec.y);
+    Eigen::Vector2d vec_t(vdir_x, vdir_y);
     Eigen::Vector2d vec_n = rotation_matrix * vec_t;
 
     Eigen::Vector2d offset = vec_n.normalized() * pt.delta;
     Eigen::Vector2d result = base_vec + offset;
 
     return SimplePoint(result.x(), result.y());
-}
-
-template <typename T>
-typename CurvilinearGridBase<T>::GridCurvePoint CurvilinearGridBase<T>::ConvertToCurvePoint(GridPoint pt)
-{
-    // TODO: calculation could be simplified
-    Eigen::Matrix2d rotation_matrix;
-    rotation_matrix << 0, -1, 1, 0;
-
-    double s_val = pt.s + s_offset_;
-    auto base_pt = curve_.Evaluate(s_val);
-    auto vel_vec = curve_.Evaluate(s_val, 1);
-    auto acc_vec = curve_.Evaluate(s_val, 2);
-
-    Eigen::Vector2d base_vec(base_pt.x, base_pt.y);
-    Eigen::Vector2d vec_t(vel_vec.x, vel_vec.y);
-    Eigen::Vector2d vec_n = rotation_matrix * vec_t;
-
-    // position vector
-    Eigen::Vector2d offset = vec_n.normalized() * pt.delta;
-    Eigen::Vector2d result = base_vec + offset;
-
-    // theta the same
-    double theta_s = std::atan2(vel_vec.y, vel_vec.x);
-
-    // kappa calculation (signed)
-    double kappa_s = std::hypot(acc_vec.x, acc_vec.y);
-    Eigen::Vector3d vec_acc(acc_vec.x, acc_vec.y, 0);
-    Eigen::Vector3d vec_t3(vel_vec.x, vel_vec.y, 0);
-    Eigen::Vector3d k_sign_vec = vec_acc.cross(vec_t3);
-
-    double kappa_result;
-    if (k_sign_vec(2) >= 0)
-        kappa_result = 1.0 / (1.0 / kappa_s + pt.delta);
-    else
-        kappa_result = 1.0 / (1.0 / kappa_s - pt.delta);
-
-    return GridCurvePoint(result.x(), result.y(), theta_s, kappa_result);
 }
 } // namespace librav
 

@@ -54,6 +54,13 @@ MotionState StateLattice::Evaluate(double s, double ds)
     return TransformToGlobal(local_state);
 }
 
+void StateLattice::GetTangentVector(double s, double &x, double &y)
+{
+    auto state = Evaluate(s);
+    x = std::cos(state.theta);
+    y = std::sin(state.theta);
+}
+
 MotionState StateLattice::TransformToLocal(const MotionState &input)
 {
     MotionState output;

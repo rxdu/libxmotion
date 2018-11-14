@@ -37,6 +37,8 @@ public:
   SimplePoint Evaluate(double s) const;
   SimplePoint Evaluate(double s, int32_t derivative) const;
 
+  void GetTangentVector(double s, double& x, double &y) const;
+
   double GetTotalLength() const { return total_length_; }
   CSpline GetXSpline() const { return x_spline_; }
   CSpline GetYSpline() const { return y_spline_; }

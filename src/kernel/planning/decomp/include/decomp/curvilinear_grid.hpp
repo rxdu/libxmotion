@@ -172,7 +172,7 @@ using CurvilinearCell = CurvilinearCellBase<double>;
 
 ////////////////////////////////////////////////////////////////////
 
-template <typename T>
+template <typename T, typename CurveType = ParametricCurve>
 class CurvilinearGridBase
 {
   public:
@@ -187,18 +187,18 @@ class CurvilinearGridBase
     };
 
   public:
-    CurvilinearGridBase(ParametricCurve pcurve, double s_step, double d_step, int32_t d_num, double s_offset = 0);
+    CurvilinearGridBase(CurveType pcurve, double s_step, double d_step, int32_t d_num, double s_offset = 0);
     ~CurvilinearGridBase();
 
-    CurvilinearGridBase(const CurvilinearGridBase<T> &other);
-    CurvilinearGridBase &operator=(const CurvilinearGridBase<T> &other);
-    CurvilinearGridBase(CurvilinearGridBase<T> &&other);
-    CurvilinearGridBase &operator=(CurvilinearGridBase<T> &&other);
+    CurvilinearGridBase(const CurvilinearGridBase<T, CurveType> &other);
+    CurvilinearGridBase &operator=(const CurvilinearGridBase<T, CurveType> &other);
+    CurvilinearGridBase(CurvilinearGridBase<T, CurveType> &&other);
+    CurvilinearGridBase &operator=(CurvilinearGridBase<T, CurveType> &&other);
 
     using CellType = CurvilinearCellBase<T>;
     using GridPoint = typename CurvilinearCellBase<T>::GridPoint;
 
-    ParametricCurve curve_;
+    CurveType curve_;
     std::vector<std::vector<CellType *>> grid_tiles_;
 
     /*--------------------------------------------------------------*/
@@ -207,7 +207,6 @@ class CurvilinearGridBase
     // - s: starts from 0
     // - delta: positive - left, zero - on curve, negative -right
     SimplePoint ConvertToGlobalCoordinate(GridPoint pt);
-    GridCurvePoint ConvertToCurvePoint(GridPoint pt);
 
     double GetCellSizeS() const { return s_step_; }
     double GetCellSizeDelta() const { return delta_step_; }
@@ -237,7 +236,7 @@ class CurvilinearGridBase
                 cell->PrintInfo();
     }
 
-  private:
+  protected:
     double s_step_;
     double delta_step_;
     int32_t delta_num_;
@@ -275,7 +274,54 @@ class CurvilinearGridBase
     }
 };
 
-using CurvilinearGrid = CurvilinearGridBase<double>;
+template <typename T>
+class PCurveCurvilinearGrid : public CurvilinearGridBase<T, ParametricCurve>
+{
+  public:
+    PCurveCurvilinearGrid(ParametricCurve pcurve, double s_step, double d_step, int32_t d_num, double s_offset = 0) : CurvilinearGridBase<T, ParametricCurve>(pcurve, s_step, d_step, d_num, s_offset) {}
+
+    // local path coordinate
+    // - s: starts from 0
+    // - delta: positive - left, zero - on curve, negative -right
+    typename CurvilinearGridBase<T, ParametricCurve>::GridCurvePoint ConvertToCurvePoint(typename CurvilinearGridBase<T, ParametricCurve>::GridPoint pt)
+    {
+        // TODO: calculation could be simplified
+        Eigen::Matrix2d rotation_matrix;
+        rotation_matrix << 0, -1, 1, 0;
+
+        double s_val = pt.s + CurvilinearGridBase<T, ParametricCurve>::s_offset_;
+        auto base_pt = CurvilinearGridBase<T, ParametricCurve>::curve_.Evaluate(s_val);
+        auto vel_vec = CurvilinearGridBase<T, ParametricCurve>::curve_.Evaluate(s_val, 1);
+        auto acc_vec = CurvilinearGridBase<T, ParametricCurve>::curve_.Evaluate(s_val, 2);
+
+        Eigen::Vector2d base_vec(base_pt.x, base_pt.y);
+        Eigen::Vector2d vec_t(vel_vec.x, vel_vec.y);
+        Eigen::Vector2d vec_n = rotation_matrix * vec_t;
+
+        // position vector
+        Eigen::Vector2d offset = vec_n.normalized() * pt.delta;
+        Eigen::Vector2d result = base_vec + offset;
+
+        // theta the same
+        double theta_s = std::atan2(vel_vec.y, vel_vec.x);
+
+        // kappa calculation (signed)
+        double kappa_s = std::hypot(acc_vec.x, acc_vec.y);
+        Eigen::Vector3d vec_acc(acc_vec.x, acc_vec.y, 0);
+        Eigen::Vector3d vec_t3(vel_vec.x, vel_vec.y, 0);
+        Eigen::Vector3d k_sign_vec = vec_acc.cross(vec_t3);
+
+        double kappa_result;
+        if (k_sign_vec(2) >= 0)
+            kappa_result = 1.0 / (1.0 / kappa_s + pt.delta);
+        else
+            kappa_result = 1.0 / (1.0 / kappa_s - pt.delta);
+
+        return typename CurvilinearGridBase<T, ParametricCurve>::GridCurvePoint(result.x(), result.y(), theta_s, kappa_result);
+    }
+};
+
+using CurvilinearGrid = PCurveCurvilinearGrid<double>;
 } // namespace librav
 
 #include "details/curvilinear_grid_impl.hpp"

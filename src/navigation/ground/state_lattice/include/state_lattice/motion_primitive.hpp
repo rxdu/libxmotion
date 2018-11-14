@@ -20,8 +20,8 @@
 #include <vector>
 #include <cstdint>
 
-#include "geometry/polyline.hpp"
-#include "geometry/polynomial.hpp"
+// #include "geometry/polyline.hpp"
+// #include "geometry/polynomial.hpp"
 
 #include "state_lattice/details/motion_state.hpp"
 #include "state_lattice/details/point_kinematics.hpp"
