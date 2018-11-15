@@ -40,10 +40,12 @@ class StateLattice : public MotionPrimitive
     // Characteristic parameters of the primitive
     bool IsValid() const { return valid_; }
     MotionState Evaluate(double s, double ds = 0.1) override;
-    void GetTangentVector(double s, double& x, double &y);
 
     /* Useful functions derived from parent class */
     // double GetLength() const { return sf_; }
+
+    void GetPositionVector(double s, double &x, double &y);
+    void GetTangentVector(double s, double &x, double &y);
 
   private:
     static PrimitiveGenerator generator;

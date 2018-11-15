@@ -10,14 +10,16 @@
 #ifndef LOOKAHEAD_ZONE_HPP
 #define LOOKAHEAD_ZONE_HPP
 
+#include "decomp/curvilinear_grid.hpp"
 #include "local_planner/reference_trajectory.hpp"
 
 namespace librav
 {
-class LookaheadZone
+class LookaheadZone: public CurvilinearGridBase<double, ReferenceTrajectory>
 {
   public:
-    LookaheadZone(ReferenceTrajectory traj);
+    // LookaheadZone(ReferenceTrajectory traj);
+    LookaheadZone(ReferenceTrajectory curve, double s_step = 2.0, double d_step = 1.0, int32_t d_num = 3, double s_offset = 0);
 
   private:
     ReferenceTrajectory trajectory_;

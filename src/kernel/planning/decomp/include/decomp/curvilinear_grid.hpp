@@ -2,7 +2,16 @@
  * curvilinear_grid.hpp
  * 
  * Created on: Oct 20, 2018 09:13
- * Description: 
+ * Description: this class template provides an implmenetaion of
+ *              curvilinear grid based on ParametricCurve by default. 
+ * 
+ *              If you want to create curvilinear grid with a curve
+ *              other than ParametricCurve, you need to have the the
+ *              following functions exist:
+ * 
+ *   double GetLength();
+ *   void GetPositionVector(double s, double &x, double &y);
+ *   void GetTangentVector(double s, double &x, double &y);
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
@@ -273,6 +282,8 @@ class CurvilinearGridBase
         return CurviGridIndex(idx_x, idx_y);
     }
 };
+
+////////////////////////////////////////////////////////////////////
 
 template <typename T>
 class PCurveCurvilinearGrid : public CurvilinearGridBase<T, ParametricCurve>

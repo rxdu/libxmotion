@@ -35,7 +35,7 @@ int main()
     auto graph = LatticeGraph::Search(path, ego_chn, {2, 0}, 8);
     std::cout << "search finished in " << timer.toc() << " seconds" << std::endl;
 
-    TrafficViz::ShowLatticePathInTrafficChannel(graph, path, *ego_chn.get(), "lattice graph path", true);
+    // TrafficViz::ShowLatticePathInTrafficChannel(graph, path, *ego_chn.get(), "lattice graph path", true);
 
     ReferenceTrajectory traj(path);
     traj.GenerateConstantSpeedProfile(15);

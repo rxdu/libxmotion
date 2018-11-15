@@ -54,6 +54,13 @@ MotionState StateLattice::Evaluate(double s, double ds)
     return TransformToGlobal(local_state);
 }
 
+void StateLattice::GetPositionVector(double s, double &x, double &y)
+{
+    auto state = Evaluate(s);
+    x = state.x;
+    y = state.y;
+}
+
 void StateLattice::GetTangentVector(double s, double &x, double &y)
 {
     auto state = Evaluate(s);

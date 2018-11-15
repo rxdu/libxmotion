@@ -15,7 +15,7 @@ int main()
 
     auto curve = CurveFitting::FitApproximateLengthCurve(polyline);
 
-    std::cout << "curve length: " << curve.GetTotalLength() << std::endl;
+    std::cout << "curve length: " << curve.GetLength() << std::endl;
 
     // create curvilinear grid
     // CurvilinearGrid grid(curve, 0.1, 0.5, 3);

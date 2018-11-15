@@ -31,6 +31,13 @@ SimplePoint ParametricCurve::Evaluate(double s, int32_t derivative) const
     return SimplePoint(x_spline_.Evaluate(s, derivative), y_spline_.Evaluate(s, derivative));
 }
 
+void ParametricCurve::GetPositionVector(double s, double &x, double &y) const
+{
+    auto state = Evaluate(s);
+    x = state.x;
+    y = state.y;
+}
+
 void ParametricCurve::GetTangentVector(double s, double &x, double &y) const
 {
     double vx = x_spline_.Evaluate(s, 1);

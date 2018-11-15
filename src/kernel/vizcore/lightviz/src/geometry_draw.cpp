@@ -73,7 +73,7 @@ void GeometryDraw::DrawParametricCurve(const ParametricCurve &pcurve, double ste
 {
     std::vector<cv::Point2d> pts;
 
-    for (double s = 0; s < pcurve.GetTotalLength(); s += step)
+    for (double s = 0; s < pcurve.GetLength(); s += step)
         pts.emplace_back(pcurve.GetXSpline().Evaluate(s), pcurve.GetYSpline().Evaluate(s));
 
     // std::cout << "intermediate points: " << pts.size() << std::endl;

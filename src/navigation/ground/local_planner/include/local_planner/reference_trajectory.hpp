@@ -60,8 +60,8 @@ class ReferenceTrajectory
     RefPoint GetDesiredState(double t);
 
     // functions that are required for creating curvilinear grid
-    double GetTotalLength() const { return total_length_; }
-    MotionState Evaluate(double s);
+    double GetLength() const { return total_length_; }
+    void GetPositionVector(double s, double &x, double &y);
     void GetTangentVector(double s, double &x, double &y);
 
   private:
@@ -69,6 +69,7 @@ class ReferenceTrajectory
     double total_length_;
     SpeedProfileIF *speed_profile_;
 
+    void FindPathSegment(const double s, StateLattice &lattice, double &s_offset);
     double AccumulatedDistance(double t);
 };
 } // namespace librav

@@ -26,7 +26,7 @@ CurvilinearGridBase<T, CurveType>::CurvilinearGridBase(CurveType pcurve, double 
     // defined in s-delta coordinate frame
     // generate knots along centerline
     std::vector<double> sknots;
-    for (double s = s_offset_; s <= curve_.GetTotalLength(); s += s_step)
+    for (double s = s_offset_; s <= curve_.GetLength(); s += s_step)
         sknots.push_back(s);
 
     // std::cout << "s knots added: " << sknots.size() << std::endl;
@@ -165,12 +165,14 @@ SimplePoint CurvilinearGridBase<T, CurveType>::ConvertToGlobalCoordinate(typenam
     rotation_matrix << 0, -1, 1, 0;
 
     double s_val = pt.s + s_offset_;
-    auto base_pt = curve_.Evaluate(s_val);
+    // auto base_pt = curve_.Evaluate(s_val);
     // auto vel_vec = curve_.Evaluate(s_val, 1);
+    double pos_x, pos_y;
+    curve_.GetPositionVector(s_val, pos_x, pos_y);
     double vdir_x, vdir_y;
     curve_.GetTangentVector(s_val, vdir_x, vdir_y);
 
-    Eigen::Vector2d base_vec(base_pt.x, base_pt.y);
+    Eigen::Vector2d base_vec(pos_x, pos_y);
     Eigen::Vector2d vec_t(vdir_x, vdir_y);
     Eigen::Vector2d vec_n = rotation_matrix * vec_t;
 
