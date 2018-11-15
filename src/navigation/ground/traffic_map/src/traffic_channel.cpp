@@ -64,6 +64,7 @@ CurvilinearGrid::GridPoint TrafficChannel::FindApproximatePoint(SimplePoint pt)
 {
     double dist_before_start;
     int32_t start_segment_idx;
+    int32_t normal_dist_sign = 1;
 
     double shortest_dist = std::numeric_limits<double>::max();
     for (int32_t i = 0; i < center_line_.GetPointNumer() - 1; ++i)
@@ -85,6 +86,14 @@ CurvilinearGrid::GridPoint TrafficChannel::FindApproximatePoint(SimplePoint pt)
             shortest_dist = dist;
             dist_before_start = pt_vec.dot(ref_vec.normalized());
             start_segment_idx = i;
+
+            // check normal distance sign
+            Eigen::Vector3d seg_vec(ref_vec(0), ref_vec(1), 0);
+            Eigen::Vector3d dir_vec(pt_vec(0), pt_vec(1), 0);
+            Eigen::Vector3d sign_vec = dir_vec.cross(seg_vec);
+
+            if (sign_vec(2) >= 0)
+                normal_dist_sign = -1;
         }
     }
     // std::cout << "shortest distance: " << shortest_dist << std::endl;
@@ -101,7 +110,7 @@ CurvilinearGrid::GridPoint TrafficChannel::FindApproximatePoint(SimplePoint pt)
     dist_before_start += accumulated;
     // std::cout << "path segment: " << start_segment_idx << " , traveled: " << dist_before_start << std::endl;
 
-    return CurvilinearGrid::GridPoint(dist_before_start, shortest_dist);
+    return CurvilinearGrid::GridPoint(dist_before_start, shortest_dist * normal_dist_sign);
 }
 
 bool TrafficChannel::CheckInside(SimplePoint pt)
@@ -124,6 +133,13 @@ CurvilinearGrid::GridPoint TrafficChannel::ConvertToPathCoordinate(SimplePoint p
 SimplePoint TrafficChannel::ConvertToGlobalCoordinate(CurvilinearGrid::GridPoint pt)
 {
     return grid_->ConvertToGlobalCoordinate(pt);
+}
+
+CurviGridIndex TrafficChannel::GetIndexFromPosition(SimplePoint pt)
+{
+    auto path_pos = ConvertToPathCoordinate(pt);
+    std::cout << "position in path coordinate: " << path_pos.s << " , " << path_pos.delta << std::endl;
+    return grid_->GetIndexFromPathCoordinate(path_pos.s, path_pos.delta);
 }
 
 void TrafficChannel::PrintInfo()

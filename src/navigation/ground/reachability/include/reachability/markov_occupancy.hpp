@@ -68,7 +68,7 @@ class MarkovOccupancy
 
     void Propagate(int32_t k, bool calc_interval_dist = false)
     {
-        if(!calc_interval_dist)
+        if (!calc_interval_dist)
             motion_.Propagate(k);
         else
             motion_.PropagateWithIntervalDist(k);
@@ -90,6 +90,8 @@ class MarkovOccupancy
 
         return ConvertToPositionDist(statef_int, min_p);
     }
+
+    double GetPrecitionStepIncrement() const { return T_; }
 
   private:
     // Tangential state space

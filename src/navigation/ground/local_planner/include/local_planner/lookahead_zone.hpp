@@ -15,14 +15,21 @@
 
 namespace librav
 {
-class LookaheadZone: public CurvilinearGridBase<double, ReferenceTrajectory>
+class LookaheadZone : public CurvilinearGridBase<double, ReferenceTrajectory>
 {
   public:
-    LookaheadZone(ReferenceTrajectory curve, double s_step = 2.0, double d_step = 0.7, int32_t d_num = 3, double s_offset = 0);
+    LookaheadZone() = default;
+    LookaheadZone(ReferenceTrajectory curve, double s_step = 2.0);
+
+    ReferenceTrajectory trajectory_;
+
+    // call this function to setup the lookahead zone if it's not setup properly during construction
+    void SetupLookaheadZone(ReferenceTrajectory curve, double s_step = 2.0);
 
   private:
-    ReferenceTrajectory trajectory_;
-    
+    static constexpr double DStep = 0.7;
+    static constexpr double DNum = 3.0;
+    static constexpr double SOffset = 0.0;
 };
 } // namespace librav
 

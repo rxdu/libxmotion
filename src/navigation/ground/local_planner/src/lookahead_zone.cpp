@@ -11,6 +11,13 @@
 
 using namespace librav;
 
-LookaheadZone::LookaheadZone(ReferenceTrajectory curve, double s_step, double d_step, int32_t d_num, double s_offset) : CurvilinearGridBase<double, ReferenceTrajectory>(curve, s_step, d_step, d_num, s_offset)
+LookaheadZone::LookaheadZone(ReferenceTrajectory curve, double s_step) : CurvilinearGridBase<double, ReferenceTrajectory>(curve, s_step, DStep, DNum, SOffset),
+                                                                         trajectory_(curve)
 {
+}
+
+void LookaheadZone::SetupLookaheadZone(ReferenceTrajectory curve, double s_step)
+{
+    trajectory_ = curve;
+    SetupGrid(curve, s_step, DStep, DNum, SOffset);
 }

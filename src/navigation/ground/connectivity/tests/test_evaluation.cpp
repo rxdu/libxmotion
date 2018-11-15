@@ -59,35 +59,42 @@ int main()
 
     /****************************************************************************/
 
-    // discretize lane
+    // trajectory planning for ego vehicle
     auto all_channels = loader.traffic_map->GetAllTrafficChannels();
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels()[2];
-    ego_chn->DiscretizeChannel(10, 0.74, 5);
+    ego_chn->DiscretizeChannel(2, 0.74, 3);
+
+    VehicleEstimation ego_veh({56.5, 36, 85.0 / 180.0 * M_PI}, 15);
 
     stopwatch::StopWatch timer;
+    std::vector<StateLattice> path;
+    // auto graph = LatticeGraph::Search(path, ego_chn, {2, 0}, 8);
+    auto graph = LatticeGraph::Search(path, ego_chn, ego_veh.GetPose(), 8);
+    std::cout << "search finished in " << timer.toc() << " seconds" << std::endl;
 
-    auto graph = LatticeGraph::Construct(ego_chn, {0, 0}, 11);
-    std::cout << "graph constructed in " << timer.toc() << " seconds" << std::endl;
+    if (path.empty())
+    {
+        std::cout << "failed to find a path" << std::endl;
+        return -1;
+    }
 
-    std::vector<StateLattice> lattices;
-    for (auto &edge : graph->GetAllEdges())
-        lattices.push_back(edge->cost_);
-    std::cout << "number of vertices: " << graph->GetGraphVertexNumber() << std::endl;
+    ReferenceTrajectory traj(path);
+    traj.GenerateConstantSpeedProfile(ego_veh.GetSpeed());
 
-    // LightViz::ShowStateLattice(lattices);
-    // TrafficViz::ShowLatticeInTrafficChannel(lattices, *ego_chn.get(), "lattice graph", true);
+    LookaheadZone zone(traj);
+
+    TrafficViz::ShowLatticePathWithLookaheadZone(path, zone, *ego_chn.get(), "path with lookahead");
 
     /****************************************************************************/
 
     timer.tic();
-
     ThreatEvaluation ranker(loader.road_map, loader.traffic_map);
-    ranker.SetTrafficConfiguration({veh1, veh2, veh3, veh4, veh5}, ego_chn);
-    ranker.Evaluate(4);
-
+    ranker.SetTrafficConfiguration({veh1, veh2, veh3, veh4, veh5});
+    ranker.SetEgoConfiguration(ego_veh, ego_chn, zone);
+    ranker.Evaluate(6);
     std::cout << "evaluation finished in " << timer.toc() << " seconds" << std::endl;
 
-    TrafficViz::ShowTrafficChannelWithThreatField(*ego_chn.get(), ranker.field_, 4, true, "lattice_in_threat_field", true);
+    // TrafficViz::ShowTrafficChannelWithThreatField(*ego_chn.get(), ranker.field_, 4, true, "lattice_in_threat_field", true);
 
     return 0;
 }

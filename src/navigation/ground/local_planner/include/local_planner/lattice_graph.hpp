@@ -15,6 +15,7 @@
 #include <vector>
 #include <iostream>
 
+#include "common/librav_types.hpp"
 #include "graph/graph.hpp"
 #include "decomp/curvilinear_grid.hpp"
 
@@ -48,6 +49,7 @@ class LatticeGraph
     static std::shared_ptr<Graph<LatticeNode, StateLattice>> Construct(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t expansion_iter = 2);
     static std::vector<StateLattice> Search(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t expansion_iter = 2);
     static std::shared_ptr<Graph<LatticeNode, StateLattice>> Search(std::vector<StateLattice> &path, std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t expansion_iter = 2);
+    static std::shared_ptr<Graph<LatticeNode, StateLattice>> Search(std::vector<StateLattice> &path, std::shared_ptr<TrafficChannel> channel, Pose2d pose, int32_t expansion_iter = 2);
 
   private:
     static std::shared_ptr<Graph<LatticeNode, StateLattice>> Construct(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t expansion_iter, std::vector<int32_t> &final_nodes);

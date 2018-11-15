@@ -40,8 +40,13 @@ int main()
     ReferenceTrajectory traj(path);
     traj.GenerateConstantSpeedProfile(15);
 
-    for(double t = 0; t < 3; t += 1.0)
+    for (double t = 0; t < 3; t += 1.0)
         std::cout << traj.GetDesiredState(t) << std::endl;
+
+    ReferenceTrajectory traj2 = traj;
+    ReferenceTrajectory traj3(traj);
+    ReferenceTrajectory traj4;
+    traj4 = traj;
 
     return 0;
 }

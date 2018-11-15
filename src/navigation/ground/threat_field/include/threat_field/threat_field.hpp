@@ -53,9 +53,12 @@ class ThreatField
     double GetCollisionThreat(double x, double y, int32_t t_k) { return (*this)(x, y, t_k); };
     ThreatComponent GetThreatComponentAt(double x, double y, int32_t t_k);
 
+    double GetPrecitionStepIncrement() const { return step_increment_; }
+
   private:
     std::shared_ptr<RoadMap> road_map_;
     std::shared_ptr<TrafficMap> traffic_map_;
+    double step_increment_ = 0.5;
 
     std::vector<std::string> conflicting_lanes_;
 

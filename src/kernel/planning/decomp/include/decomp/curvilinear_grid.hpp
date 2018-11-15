@@ -196,6 +196,7 @@ class CurvilinearGridBase
     };
 
   public:
+    CurvilinearGridBase() = default;
     CurvilinearGridBase(CurveType pcurve, double s_step, double d_step, int32_t d_num, double s_offset = 0);
     virtual ~CurvilinearGridBase();
 
@@ -210,6 +211,8 @@ class CurvilinearGridBase
     CurveType curve_;
     std::vector<std::vector<CellType *>> grid_tiles_;
 
+    void SetupGrid(CurveType pcurve, double s_step, double d_step, int32_t d_num, double s_offset = 0);
+
     /*--------------------------------------------------------------*/
 
     // local path coordinate
@@ -223,6 +226,11 @@ class CurvilinearGridBase
     int32_t GetTangentialGridNum() const { return grid_tiles_.size(); }
     int32_t GetNormalGridNum() const { return grid_tiles_.front().size(); }
     int32_t GetOneSideGridNumber() const { return delta_half_num_; }
+
+    inline CurviGridIndex GetIndexFromPathCoordinate(double s, double delta)
+    {
+        return GridPointToIndex({s, delta});
+    }
 
     inline CurviGridIndex GetIndexFromID(int64_t id) { return IDToIndex(id); }
     inline int64_t GetIDFromIndex(int32_t x, int32_t y) { return IndexToID(x, y); }
@@ -259,7 +267,7 @@ class CurvilinearGridBase
     int64_t IndexToID(int32_t x, int32_t y)
     {
         // id is offset by delta_half_num_ so that it starts from 0
-        if (center_cell_null_ == 0)
+        if (!center_cell_null_)
             return x * delta_num_ + y + delta_half_num_;
         else
             return x * (delta_num_ + 1) + y + delta_half_num_;
@@ -269,7 +277,7 @@ class CurvilinearGridBase
     {
         int32_t idx_x, idx_y;
 
-        if (center_cell_null_ == 0)
+        if (!center_cell_null_)
         {
             idx_x = id / delta_num_;
             idx_y = id % delta_num_ - delta_half_num_;
@@ -280,6 +288,33 @@ class CurvilinearGridBase
             idx_y = id % (delta_num_ + 1) - delta_half_num_;
         }
         return CurviGridIndex(idx_x, idx_y);
+    }
+
+    inline CurviGridIndex GridPointToIndex(GridPoint pt)
+    {
+        int32_t x = (pt.s - s_offset_) / s_step_;
+
+        int32_t y;
+        if (center_cell_null_)
+        {
+            if (pt.delta == 0)
+                y = 0;
+            else if (pt.delta > 0)
+                y = pt.delta / delta_step_ + 1;
+            else if (pt.delta < 0)
+                y = pt.delta / delta_step_ - 1;
+        }
+        else
+        {
+            if ((pt.delta > -(delta_step_ / 2)) && (pt.delta < (delta_step_ / 2)))
+                y = 0;
+            else if (pt.delta >= (delta_step_ / 2))
+                y = (pt.delta - delta_step_ / 2) / delta_step_ + 1;
+            else if (pt.delta <= -(delta_step_ / 2))
+                y = (pt.delta + delta_step_ / 2) / delta_step_ - 1;
+        }
+
+        return CurviGridIndex(x, y);
     }
 };
 

@@ -24,13 +24,16 @@ ReferenceTrajectory::~ReferenceTrajectory()
 ReferenceTrajectory::ReferenceTrajectory(const ReferenceTrajectory &other) : path_(other.path_),
                                                                              total_length_(other.total_length_)
 {
-    this->speed_profile_ = other.speed_profile_->GetCopy();
+    if (other.speed_profile_ != nullptr)
+        this->speed_profile_ = other.speed_profile_->GetCopy();
 }
 
 ReferenceTrajectory &ReferenceTrajectory::operator=(const ReferenceTrajectory &other)
 {
-    ReferenceTrajectory temp(other);
-    *this = std::move(temp);
+    ReferenceTrajectory tmp(other);
+    *this = std::move(tmp);
+    tmp.speed_profile_ = nullptr;
+
     return *this;
 }
 
@@ -38,6 +41,7 @@ ReferenceTrajectory::ReferenceTrajectory(ReferenceTrajectory &&other) : path_(ot
                                                                         total_length_(other.total_length_)
 {
     this->speed_profile_ = std::move(other.speed_profile_);
+    other.speed_profile_ = nullptr;
 }
 
 ReferenceTrajectory &ReferenceTrajectory::operator=(ReferenceTrajectory &&other)
@@ -45,6 +49,7 @@ ReferenceTrajectory &ReferenceTrajectory::operator=(ReferenceTrajectory &&other)
     this->path_ = std::move(other.path_);
     this->total_length_ = other.total_length_;
     this->speed_profile_ = std::move(other.speed_profile_);
+    other.speed_profile_ = nullptr;
 
     return *this;
 }

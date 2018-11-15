@@ -43,7 +43,7 @@ int main()
 
     LookaheadZone zone(traj);
 
-    TrafficViz::ShowLatticePathWithLookaheadZone(path, zone, *ego_chn.get(), "path with lookahead");
+    // TrafficViz::ShowLatticePathWithLookaheadZone(path, zone, *ego_chn.get(), "path with lookahead");
 
     return 0;
 }

@@ -84,3 +84,18 @@ std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> LatticeGraph::Se
 
     return graph;
 }
+
+std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> LatticeGraph::Search(std::vector<StateLattice> &path, std::shared_ptr<TrafficChannel> channel, Pose2d pose, int32_t expansion_iter)
+{
+    auto start_index = channel->GetIndexFromPosition({pose.position.x, pose.position.y});
+
+    std::cout << "starting index: " << start_index << std::endl;
+
+    std::vector<int32_t> final_nodes;
+    auto graph = Construct(channel, start_index, expansion_iter, final_nodes);
+
+    auto start_cell = channel->grid_->GetCell(start_index);
+    path = LatticeDijkstra::Search(graph.get(), start_cell->id, final_nodes);
+
+    return graph;
+}

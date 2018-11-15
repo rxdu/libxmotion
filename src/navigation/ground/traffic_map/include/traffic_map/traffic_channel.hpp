@@ -52,6 +52,7 @@ class TrafficChannel
 
     CurvilinearGrid::GridPoint ConvertToPathCoordinate(SimplePoint pt);
     SimplePoint ConvertToGlobalCoordinate(CurvilinearGrid::GridPoint pt);
+    CurviGridIndex GetIndexFromPosition(SimplePoint pt);
 
     void PrintInfo();
 

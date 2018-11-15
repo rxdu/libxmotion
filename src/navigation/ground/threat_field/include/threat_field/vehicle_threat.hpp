@@ -62,6 +62,7 @@ class VehicleThreat
     double GetThreatValueAt(double x, double y, int32_t t_k) { return (*this)(x, y, t_k); }
 
     void PrintThreatRecordInfo();
+    double GetPrecitionStepIncrement() const { return threat_model_.GetPrecitionStepIncrement(); }
 
   private:
     std::shared_ptr<TrafficMap> traffic_map_;

@@ -70,6 +70,8 @@ class DynamicThreatModel
         occupancy_model_->PrecomputeStateTransition(file_name);
     }
 
+    double GetPrecitionStepIncrement() const { return occupancy_model_->GetPrecitionStepIncrement(); }
+
   private:
     // Markov model covarage: SStep * SSize = 100m, 2m/s * 10 = 20m/s
     std::shared_ptr<MarkovModel> occupancy_model_;

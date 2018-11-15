@@ -17,19 +17,26 @@ ThreatEvaluation::ThreatEvaluation(std::shared_ptr<RoadMap> rmap, std::shared_pt
 {
 }
 
-void ThreatEvaluation::SetTrafficConfiguration(std::vector<VehicleEstimation> ests, std::shared_ptr<TrafficChannel> ego_chn)
+void ThreatEvaluation::SetEgoConfiguration(VehicleEstimation ego_est, std::shared_ptr<TrafficChannel> ego_chn, LookaheadZone ego_lookahead)
 {
-    Pose2d ego_pose(57, 36, 85.0 / 180.0 * M_PI);
+    ego_lookehead_ = ego_lookahead;
+
+    field_.SetupThreatField(ego_est.GetPose(), ego_chn);
+}
+
+void ThreatEvaluation::SetTrafficConfiguration(std::vector<VehicleEstimation> ests)
+{
     field_.AddVehicleEstimations(ests);
-    field_.SetupThreatField(ego_pose, ego_chn);
 }
 
 void ThreatEvaluation::Evaluate(int32_t step)
 {
     field_.ComputeThreatField(step);
-
-    for(int i = 0; i <= step; ++i)
+    double T = field_.GetPrecitionStepIncrement();
+    std::cout << "prediction time increment: " << T << std::endl;
+    for (int i = 0; i <= step; ++i)
     {
-
+        double t = i * T;
+        std::cout << "time: " << t << " , " << ego_lookehead_.trajectory_.GetDesiredState(t) << std::endl;
     }
 }

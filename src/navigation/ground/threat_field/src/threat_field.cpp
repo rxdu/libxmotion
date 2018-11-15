@@ -48,6 +48,7 @@ void ThreatField::SetupThreatField(Pose2d ego_pose, std::shared_ptr<TrafficChann
         if (!this->CheckInConflict(this->vehicles_[veh_ids[i]]))
             return;
         std::shared_ptr<VehicleThreat> threat = std::make_shared<VehicleThreat>(this->vehicles_[veh_ids[i]], this->traffic_map_);
+        this->step_increment_ = threat->GetPrecitionStepIncrement();
         this->threats_.insert(std::make_pair(this->vehicles_[veh_ids[i]].id_, threat));
     };
     tbb::parallel_for(size_t(0), size_t(veh_ids.size()), init_vehicle_threat);
