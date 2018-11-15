@@ -12,10 +12,11 @@
 
 #include "decomp/curvilinear_grid.hpp"
 #include "local_planner/reference_trajectory.hpp"
+#include "threat_field/threat_field.hpp"
 
 namespace librav
 {
-class LookaheadZone : public CurvilinearGridBase<double, ReferenceTrajectory>
+class LookaheadZone : public CurvilinearGridBase<ThreatField::ThreatComponent, ReferenceTrajectory>
 {
   public:
     LookaheadZone() = default;

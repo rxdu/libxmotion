@@ -32,11 +32,34 @@ void ThreatEvaluation::SetTrafficConfiguration(std::vector<VehicleEstimation> es
 void ThreatEvaluation::Evaluate(int32_t step)
 {
     field_.ComputeThreatField(step);
+
     double T = field_.GetPrecitionStepIncrement();
     std::cout << "prediction time increment: " << T << std::endl;
-    for (int i = 0; i <= step; ++i)
+
+    std::vector<ThreatField::ThreatComponent> threat_record;
+    for (int k = 0; k <= step; ++k)
     {
-        double t = i * T;
+        double t = k * T;
+        auto dstate = ego_lookehead_.trajectory_.GetDesiredState(t);
+        auto threat_comp = field_.GetThreatComponentAt(dstate.x, dstate.y, k);
+        threat_record.push_back(threat_comp);
+
         std::cout << "time: " << t << " , " << ego_lookehead_.trajectory_.GetDesiredState(t) << std::endl;
+        std::cout << "threat component: " << std::endl;
+        for (auto &entry : threat_comp)
+            std::cout << entry.first << " : " << entry.second << std::endl;
+        std::cout << "----------------------------------------" << std::endl;
     }
+
+    std::unordered_map<int32_t, double> total_threat;
+    for (auto &entry : total_threat)
+        entry.second = 0.0;
+    for (auto &record : threat_record)
+    {
+        for (auto &entry : record)
+            total_threat[entry.first] += entry.second;
+    }
+    std::cout << "sorted threat exposure: " << std::endl;
+    for (auto &entry : total_threat)
+        std::cout << entry.first << " : " << entry.second << std::endl;
 }
