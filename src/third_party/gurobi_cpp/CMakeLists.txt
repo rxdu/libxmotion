@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(gurobi_cpp)
 
-# cmake module path
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
-
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
@@ -25,9 +22,6 @@ set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -m64 -O")
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-
-## Include directories
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 ## Dependency libraries
 ## Find Gurobi
