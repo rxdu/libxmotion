@@ -23,6 +23,7 @@
 #include "threat_field/vehicle_threat.hpp"
 #include "threat_field/threat_field.hpp"
 #include "local_planner/lattice_graph.hpp"
+#include "local_planner/lookahead_zone.hpp"
 
 #include "lightviz/details/cartesian_canvas.hpp"
 
@@ -51,6 +52,8 @@ class TrafficViz
     static void ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel &channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
     static void ShowLatticePathInTrafficChannel(std::vector<StateLattice> &path, TrafficChannel &channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
     static void ShowLatticePathInTrafficChannel(std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> graph, std::vector<StateLattice> &path, TrafficChannel &channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
+
+    static void ShowLatticePathWithLookaheadZone(std::vector<StateLattice> &path, LookaheadZone &zone, TrafficChannel &channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
 
     static void ShowOccupancyField(ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Occupancy Field", bool save_img = false);
     static void ShowThreatField(ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);

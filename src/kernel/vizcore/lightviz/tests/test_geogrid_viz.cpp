@@ -27,7 +27,7 @@ int main()
     canvas.SetupCanvas(-1, 3, -1, 3);
 
     CurvilinearGridDraw gdraw(canvas);
-    gdraw.DrawCurvilinearGrid(grid, 0.1, true);
+    gdraw.DrawCurvilinearGrid(grid, 0.1);
     // gdraw.DrawCurvilinearGridCost(grid, 0.1, true);
 
     CvDraw::ShowImage(canvas.paint_area, "curvilinear_grid");

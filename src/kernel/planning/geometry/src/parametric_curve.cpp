@@ -42,7 +42,7 @@ void ParametricCurve::GetTangentVector(double s, double &x, double &y) const
 {
     double vx = x_spline_.Evaluate(s, 1);
     double vy = y_spline_.Evaluate(s, 1);
-    double norm = std::hypot(x, y);
+    double norm = std::hypot(vx, vy);
     x = vx / norm;
     y = vy / norm;
 }

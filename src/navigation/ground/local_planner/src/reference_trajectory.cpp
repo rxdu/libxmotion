@@ -17,7 +17,8 @@ ReferenceTrajectory::ReferenceTrajectory(std::vector<StateLattice> path) : path_
 
 ReferenceTrajectory::~ReferenceTrajectory()
 {
-    delete speed_profile_;
+    if (speed_profile_ != nullptr)
+        delete speed_profile_;
 }
 
 ReferenceTrajectory::ReferenceTrajectory(const ReferenceTrajectory &other) : path_(other.path_),

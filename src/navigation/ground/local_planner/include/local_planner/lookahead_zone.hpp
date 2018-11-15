@@ -18,8 +18,7 @@ namespace librav
 class LookaheadZone: public CurvilinearGridBase<double, ReferenceTrajectory>
 {
   public:
-    // LookaheadZone(ReferenceTrajectory traj);
-    LookaheadZone(ReferenceTrajectory curve, double s_step = 2.0, double d_step = 1.0, int32_t d_num = 3, double s_offset = 0);
+    LookaheadZone(ReferenceTrajectory curve, double s_step = 2.0, double d_step = 0.7, int32_t d_num = 3, double s_offset = 0);
 
   private:
     ReferenceTrajectory trajectory_;

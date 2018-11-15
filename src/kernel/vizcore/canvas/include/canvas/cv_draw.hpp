@@ -49,6 +49,8 @@ struct CvDrawColors
     static const cv::Scalar navy_color;
 
     static const cv::Scalar orange_color;
+    static const cv::Scalar honeydew_color;
+    static const cv::Scalar palegreen_color;
 };
 
 namespace CvDraw
@@ -74,7 +76,7 @@ void DrawArrow(cv::Mat img, cv::Point base_pos, double length, double angle, con
 void DrawArrow(cv::Mat img, cv::Point base_pos, cv::Point tip_pos, const cv::Scalar &color = CvDrawColors::red_color, int thick = 1);
 
 void WriteText(cv::Mat img, std::string text, cv::Point pos, const cv::Scalar &color = CvDrawColors::black_color, double scale = 1, int thick = 1);
-} // namespace LightViz
+} // namespace CvDraw
 } // namespace librav
 
 #endif /* CV_DRAW_HPP */

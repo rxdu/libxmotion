@@ -93,6 +93,8 @@ public:
   {
   }
 
+  virtual ~RectGridBase() = default;
+
   int64_t SizeX() const { return size_x_; };
   int64_t SizeY() const { return size_y_; };
 

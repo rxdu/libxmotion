@@ -197,7 +197,7 @@ class CurvilinearGridBase
 
   public:
     CurvilinearGridBase(CurveType pcurve, double s_step, double d_step, int32_t d_num, double s_offset = 0);
-    ~CurvilinearGridBase();
+    virtual ~CurvilinearGridBase();
 
     CurvilinearGridBase(const CurvilinearGridBase<T, CurveType> &other);
     CurvilinearGridBase &operator=(const CurvilinearGridBase<T, CurveType> &other);

@@ -28,7 +28,7 @@ class LatticeGraph
   public:
     struct LatticeNode : CurvilinearCell
     {
-        LatticeNode(int64_t _id) : CurvilinearCell(-1, -1, id){};
+        LatticeNode(int64_t _id) : CurvilinearCell(-1, -1, _id){};
         LatticeNode(CurvilinearCell *cell, std::shared_ptr<TrafficChannel> chn) : CurvilinearCell(*cell), channel(chn)
         {
             auto pt = channel->grid_->ConvertToCurvePoint(center);

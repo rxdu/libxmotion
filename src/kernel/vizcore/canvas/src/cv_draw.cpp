@@ -49,6 +49,8 @@ const cv::Scalar CvDrawColors::teal_color = Scalar(128, 128, 0);
 const cv::Scalar CvDrawColors::navy_color = Scalar(128, 0, 0);
 
 const cv::Scalar CvDrawColors::orange_color = Scalar(0, 165, 255);
+const cv::Scalar CvDrawColors::honeydew_color = Scalar(240, 255, 240);
+const cv::Scalar CvDrawColors::palegreen_color = Scalar(152, 251, 152);
 
 /******************* Basic Input/Output *******************/
 cv::Mat CvDraw::ReadImageFile(std::string img_file)

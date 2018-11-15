@@ -66,8 +66,8 @@ class ReferenceTrajectory
 
   private:
     std::vector<StateLattice> path_;
-    double total_length_;
-    SpeedProfileIF *speed_profile_;
+    double total_length_ = 0;
+    SpeedProfileIF *speed_profile_ = nullptr;
 
     void FindPathSegment(const double s, StateLattice &lattice, double &s_offset);
     double AccumulatedDistance(double t);

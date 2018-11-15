@@ -97,7 +97,7 @@ class LatticeDijkstra
         LatticeGraph::LatticeNode virtual_node(std::numeric_limits<int64_t>::max());
 
         for (auto &goal : goal_vtxs)
-            graph->AddEdge(goal->state_, virtual_node, {});
+            graph->AddEdge(goal->state_, virtual_node, StateLattice());
         goal_vtx = graph->FindVertex(virtual_node.id);
 
         // open list - a list of vertices that need to be checked out

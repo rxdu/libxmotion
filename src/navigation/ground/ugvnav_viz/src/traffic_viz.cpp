@@ -118,6 +118,26 @@ void TrafficViz::ShowLatticePathInTrafficChannel(std::shared_ptr<Graph<LatticeGr
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
+void TrafficViz::ShowLatticePathWithLookaheadZone(std::vector<StateLattice> &path, LookaheadZone &zone, TrafficChannel &channel, std::string window_name, bool save_img)
+{
+    RoadMapViz &viz = RoadMapViz::GetInstance();
+
+    CartesianCanvas canvas = viz.CreateCanvas(false);
+    RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
+    LatticeDraw lattice_draw = LatticeDraw(canvas);
+    CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
+
+    road_draw.DrawLanes(false);
+    // road_draw.DrawTrafficChannelGrid(channel, false);
+    cdraw.DrawFilledCurvilinearGrid(zone, CvDrawColors::palegreen_color);
+    // cdraw.DrawCurvilinearGrid(zone);
+
+    // draw state lattice
+    lattice_draw.DrawStateLattice(path, 0.1, CvDrawColors::lime_color, 2);
+
+    ShowImage(canvas.paint_area, window_name, save_img);
+}
+
 void TrafficViz::ShowVehicleStaticThreat(VehicleStaticThreat threat, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
