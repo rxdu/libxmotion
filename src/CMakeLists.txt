@@ -31,12 +31,13 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_subdirectory(kernel)
 add_subdirectory(third_party)
 
-# Packages built on top of core
+# Packages built on top of kernel
 add_subdirectory(mcontrol)
 add_subdirectory(navigation)
 add_subdirectory(platforms)
+add_subdirectory(rav_viewer)
 
-# # Publication-related code
+# Publication-related code
 add_subdirectory(publication)
 
 ## Add test source directories
