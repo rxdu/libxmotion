@@ -6,6 +6,6 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 #find_package(LIBRARY_NAME REQUIRED)
 
 ## tests
-add_subdirectory(fltk)
-add_subdirectory(cairo)
+# add_subdirectory(fltk)
+# add_subdirectory(cairo)
 add_subdirectory(opencv)
