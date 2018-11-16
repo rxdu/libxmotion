@@ -17,16 +17,11 @@ ThreatEvaluation::ThreatEvaluation(std::shared_ptr<RoadMap> rmap, std::shared_pt
 {
 }
 
-void ThreatEvaluation::SetEgoConfiguration(VehicleEstimation ego_est, std::shared_ptr<TrafficChannel> ego_chn, LookaheadZone ego_lookahead)
+void ThreatEvaluation::SetTrafficConfiguration(VehicleEstimation ego_est, std::shared_ptr<TrafficChannel> ego_chn, LookaheadZone ego_lookahead, std::vector<VehicleEstimation> ests)
 {
     ego_lookehead_ = ego_lookahead;
-
-    field_.SetupThreatField(ego_est.GetPose(), ego_chn);
-}
-
-void ThreatEvaluation::SetTrafficConfiguration(std::vector<VehicleEstimation> ests)
-{
     field_.AddVehicleEstimations(ests);
+    field_.SetupThreatField(ego_est.GetPose(), ego_chn);
 }
 
 void ThreatEvaluation::Evaluate(int32_t step)

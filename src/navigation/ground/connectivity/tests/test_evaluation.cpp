@@ -83,18 +83,28 @@ int main()
 
     LookaheadZone zone(traj);
 
-    TrafficViz::ShowLatticePathWithLookaheadZone(path, zone, *ego_chn.get(), "path with lookahead");
+    // TrafficViz::ShowLatticePathWithLookaheadZone(path, zone, *ego_chn.get(), "path with lookahead");
 
     /****************************************************************************/
 
+    const int32_t eval_horizon = 8;
+
     timer.tic();
     ThreatEvaluation ranker(loader.road_map, loader.traffic_map);
-    ranker.SetTrafficConfiguration({veh1, veh2, veh3, veh4, veh5});
-    ranker.SetEgoConfiguration(ego_veh, ego_chn, zone);
-    ranker.Evaluate(6);
+    ranker.SetTrafficConfiguration(ego_veh, ego_chn, zone, {veh1, veh2, veh3, veh4, veh5});
+    ranker.Evaluate(eval_horizon);
     std::cout << "evaluation finished in " << timer.toc() << " seconds" << std::endl;
 
     // TrafficViz::ShowTrafficChannelWithThreatField(*ego_chn.get(), ranker.field_, 4, true, "lattice_in_threat_field", true);
+
+    for (int i = 0; i <= eval_horizon; i++)
+        TrafficViz::ShowThreatField(ranker.field_, i, true, "occupancy_estimation_new" + std::to_string(i), false);
+
+    for (int32_t i = 0; i <= eval_horizon; ++i)
+    {
+        std::cout << "passing in: " << i << std::endl;
+        TrafficViz::ShowPathWithThreatField(path, zone, ranker.field_, i, 0.5, "threat_exposure" + std::to_string(i), true);
+    }
 
     return 0;
 }

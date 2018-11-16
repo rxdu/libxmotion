@@ -23,6 +23,7 @@
 #include "threat_field/vehicle_threat.hpp"
 #include "threat_field/threat_field.hpp"
 #include "local_planner/lattice_graph.hpp"
+#include "local_planner/reference_trajectory.hpp"
 #include "local_planner/lookahead_zone.hpp"
 
 #include "lightviz/details/cartesian_canvas.hpp"
@@ -61,6 +62,7 @@ class TrafficViz
     static void ShowLatticeWithOccupancyDistribution(std::vector<StateLattice> &lattice, TrafficChannel &channel, ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
     static void ShowLatticeInThreatField(std::vector<StateLattice> &lattice, TrafficChannel &channel, ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
     static void ShowTrafficChannelWithThreatField(TrafficChannel &channel, ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
+    static void ShowPathWithThreatField(std::vector<StateLattice> &path, LookaheadZone &zone, ThreatField &field, int32_t t_k, double T = 0.5, std::string window_name = "Traffic Channel Image", bool save_img = false);
 };
 } // namespace librav
 
