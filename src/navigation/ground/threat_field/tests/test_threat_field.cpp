@@ -74,8 +74,8 @@ int main()
     veh5.SetPositionVariance(pos_covar5);
     veh5.SetSpeedVariance(2 * 2);
 
-    // std::vector<Polygon> vehs = {veh1.GetFootprint(), veh2.GetFootprint(), veh3.GetFootprint(), veh4.GetFootprint(), veh5.GetFootprint()};
-    // TrafficViz::ShowVehicle(vehs);
+    std::vector<Polygon> vehs = {veh1.GetFootprint(), veh2.GetFootprint(), veh3.GetFootprint(), veh4.GetFootprint(), veh5.GetFootprint()};
+    TrafficViz::ShowVehicle(vehs, "vehicle_config", true);
 
     // for(auto& veh:vehs)
     //     TrafficViz::ShowVehicleInChannel(veh, *ego_chn1.get());
