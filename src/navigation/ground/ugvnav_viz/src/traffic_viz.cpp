@@ -285,8 +285,11 @@ void TrafficViz::ShowThreatField(ThreatField &field, int32_t t_k, bool show_veh_
 
     auto threats = field.GetAllCollisionThreats();
 
-    auto center = field.GetThreatCenter(t_k);
-    tdraw.DrawCollisionThreatField(field, t_k, center.x, center.y, 160, 100);
+    // auto center = field.GetThreatCenter(t_k);
+    // tdraw.DrawCollisionThreatField(field, t_k, center.x, center.y, 160, 100);
+    double cx = (canvas.xmax_ + canvas.xmin_) / 2.0;
+    double cy = (canvas.ymax_ + canvas.ymin_) / 2.0;
+    tdraw.DrawCollisionThreatField(field, t_k, cx, cy, canvas.xspan_, canvas.yspan_);
 
     road_draw.DrawLanes(true);
 
@@ -440,8 +443,12 @@ void TrafficViz::ShowPathWithThreatField(std::vector<StateLattice> &path, Lookah
     CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
     ThreatDraw tdraw = ThreatDraw(canvas);
 
-    auto center = field.GetThreatCenter(t_k);
-    tdraw.DrawCollisionThreatField(field, t_k, center.x, center.y, 150, 120);
+    // auto center = field.GetThreatCenter(t_k);
+    // tdraw.DrawCollisionThreatField(field, t_k, center.x, center.y, 150, 120);
+
+    double cx = (canvas.xmax_ + canvas.xmin_) / 2.0;
+    double cy = (canvas.ymax_ + canvas.ymin_) / 2.0;
+    tdraw.DrawCollisionThreatField(field, t_k, cx, cy, canvas.xspan_, canvas.yspan_);
 
     road_draw.DrawLanes(false);
     // road_draw.DrawTrafficChannelGrid(channel, false);

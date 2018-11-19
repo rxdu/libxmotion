@@ -26,6 +26,15 @@ target_link_libraries(pub_vehicle_threat traffic ugvnav_viz)
 add_executable(pub_lattice_graph pub_lattice_graph.cpp)
 target_link_libraries(pub_lattice_graph lattice local_planner ugvnav_viz utilities)
 
+add_executable(pub_evaluation1 pub_evaluation1.cpp)
+target_link_libraries(pub_evaluation1 connectivity ugvnav_viz utilities)
+
+add_executable(pub_evaluation2 pub_evaluation2.cpp)
+target_link_libraries(pub_evaluation2 connectivity ugvnav_viz utilities)
+
+add_executable(pub_evaluation3 pub_evaluation3.cpp)
+target_link_libraries(pub_evaluation3 connectivity ugvnav_viz utilities)
+
 # add_executable(pub_planning_true_field planning_true_field.cpp)
 # target_link_libraries(pub_planning_true_field cthreat roadmap trafficmap roadmap tfield ugvnav_viz lightviz utilities)
 
