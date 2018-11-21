@@ -63,7 +63,7 @@ void MissionTracker::UpdateCurrentPosition(Position3Dd pos)
 void MissionTracker::LcmMissionInfoHandler(
 		const lcm::ReceiveBuffer* rbuf,
 		const std::string& chan,
-		const srcl_lcm_msgs::MissionInfo_t* msg)
+		const librav_lcm_msgs::MissionInfo_t* msg)
 {
 	std::cout << "mission info received" << std::endl;
 	if(msg->trajectory_id == path_id_)

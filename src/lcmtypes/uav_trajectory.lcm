@@ -1,4 +1,4 @@
-package srcl_lcm_msgs;
+package librav_lcm_msgs;
 
 struct UAVTrajectoryPoint_t
 {    
@@ -10,4 +10,10 @@ struct UAVTrajectoryPoint_t
 	float yaw;
 	float yaw_rate;
 	int64_t duration;
+}
+
+struct UAVTrajectory_t
+{    
+	int64_t waypoint_num;
+	UAVTrajectoryPoint_t trajectory[waypoint_num];
 }

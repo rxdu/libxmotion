@@ -101,12 +101,12 @@ int main(int argc, char* argv[])
 
 	////////////////////////////////////////////////////////////////////////////////////////////
 	// send data for visualization
-//	srcl_lcm_msgs::Path_t path_msg;
+//	librav_lcm_msgs::Path_t path_msg;
 //
 //	path_msg.waypoint_num = comb_path.size();
 //	for(auto& wp : comb_path_pos)
 //	{
-//		srcl_lcm_msgs::WayPoint_t waypoint;
+//		librav_lcm_msgs::WayPoint_t waypoint;
 //		waypoint.positions[0] = wp.x;
 //		waypoint.positions[1] = wp.y;
 //		waypoint.positions[2] = wp.z;
@@ -115,14 +115,14 @@ int main(int argc, char* argv[])
 //	}
 //
 //	lcm->publish("quad_planner/geo_mark_graph_path", &path_msg);
-	srcl_lcm_msgs::KeyframeSet_t kf_cmd;
+	librav_lcm_msgs::KeyframeSet_t kf_cmd;
 
 	Eigen::Vector3d goal_vec(selected_wps.back().x, selected_wps.back().y, 0);
 
 	kf_cmd.kf_num = selected_wps.size();
 	for(auto& wp:selected_wps)
 	{
-		srcl_lcm_msgs::Keyframe_t kf;
+		librav_lcm_msgs::Keyframe_t kf;
 		kf.vel_constr = false;
 
 		kf.positions[0] = wp.x;

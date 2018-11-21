@@ -1,0 +1,44 @@
+package librav_lcm_msgs;
+
+struct Point3Df_t 
+{
+	float x;
+	float y;
+	float z;
+}
+
+struct LaserScanPoints_t
+{    
+	Pose_t trans_sensor2world;
+	int64_t point_num;
+	Point3Df_t points[point_num];
+	
+	QuadrotorTransform pose;
+}
+
+struct Octomap_t
+{
+	boolean binary;
+	string id;
+	double resolution;
+	int32_t data_size;
+	int8_t data[data_size];
+}
+
+struct QuadrotorTransform
+{
+	Pose_t base_to_world;
+	Pose_t laser_to_base;	
+}
+
+struct NewDataReady_t 
+{
+	boolean new_data_ready_;
+}
+
+struct MissionInfo_t
+{    
+	double dist_to_goal;
+	int32_t next_wp_id;
+	int64_t trajectory_id;
+}

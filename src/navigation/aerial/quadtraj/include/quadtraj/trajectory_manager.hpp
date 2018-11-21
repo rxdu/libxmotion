@@ -53,8 +53,8 @@ class TrajectoryManager
 	void SendActiveTrajectoryToLCM();
 	void GenerateTrajectory(KeyframeSet &kfs, uint64_t traj_id);
 
-	void LcmWaypointsHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const srcl_lcm_msgs::Path_t *msg);
-	void LcmKeyframeSetHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const srcl_lcm_msgs::KeyframeSet_t *msg);
+	void LcmWaypointsHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::Path_t *msg);
+	void LcmKeyframeSetHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::KeyframeSet_t *msg);
 };
 }
 

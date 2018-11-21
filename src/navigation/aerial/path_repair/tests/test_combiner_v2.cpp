@@ -127,12 +127,12 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	srcl_lcm_msgs::Graph_t graph_msg3;
+	librav_lcm_msgs::Graph_t graph_msg3;
 
 	graph_msg3.vertex_num = combiner.combined_graph_.GetGraphVertices().size();
 	for(auto& vtx : combiner.combined_graph_.GetGraphVertices())
 	{
-		srcl_lcm_msgs::Vertex_t vertex;
+		librav_lcm_msgs::Vertex_t vertex;
 		vertex.id = vtx->vertex_id_;
 
 		vertex.position[0] = vtx->bundled_data_.position.x;
@@ -145,7 +145,7 @@ int main(int argc, char* argv[])
 	graph_msg3.edge_num = combiner.combined_graph_.GetGraphUndirectedEdges().size();
 	for(auto& eg : combiner.combined_graph_.GetGraphUndirectedEdges())
 	{
-		srcl_lcm_msgs::Edge_t edge;
+		librav_lcm_msgs::Edge_t edge;
 		edge.id_start = eg.src_->vertex_id_;
 		edge.id_end = eg.dst_->vertex_id_;
 
@@ -155,7 +155,7 @@ int main(int argc, char* argv[])
 //	graph_msg3.vertex_num = cubegraph->GetGraphVertices().size();
 //	for(auto& vtx : cubegraph->GetGraphVertices())
 //	{
-//		srcl_lcm_msgs::Vertex_t vertex;
+//		librav_lcm_msgs::Vertex_t vertex;
 //		vertex.id = vtx->vertex_id_;
 //
 //		vertex.position[0] = vtx->bundled_data_.location_.x;
@@ -168,7 +168,7 @@ int main(int argc, char* argv[])
 //	graph_msg3.edge_num = cubegraph->GetGraphUndirectedEdges().size();
 //	for(auto& eg : cubegraph->GetGraphUndirectedEdges())
 //	{
-//		srcl_lcm_msgs::Edge_t edge;
+//		librav_lcm_msgs::Edge_t edge;
 //		edge.id_start = eg.src_->vertex_id_;
 //		edge.id_end = eg.dst_->vertex_id_;
 //
@@ -178,12 +178,12 @@ int main(int argc, char* argv[])
 	lcm->publish("quad_planner/geo_mark_graph", &graph_msg3);
 
 //	if(!comb_path.empty()) {
-//		srcl_lcm_msgs::Path_t path_msg;
+//		librav_lcm_msgs::Path_t path_msg;
 //
 //		path_msg.waypoint_num = comb_path.size();
 //		for(auto& wp : comb_path_pos)
 //		{
-//			srcl_lcm_msgs::WayPoint_t waypoint;
+//			librav_lcm_msgs::WayPoint_t waypoint;
 //			waypoint.positions[0] = wp.x;
 //			waypoint.positions[1] = wp.y;
 //			waypoint.positions[2] = wp.z;

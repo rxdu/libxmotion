@@ -247,13 +247,13 @@ UAVTrajectoryPoint TrajectoryManager::GetCurrentDesiredState(TimeStamp t)
 
 void TrajectoryManager::SendActiveTrajectoryToLCM()
 {
-	srcl_lcm_msgs::PolynomialCurve_t poly_msg;
+	librav_lcm_msgs::PolynomialCurve_t poly_msg;
 
 	// copy waypoints
 	poly_msg.wp_num = waypoints_.size();
 	for (auto &wp : waypoints_)
 	{
-		srcl_lcm_msgs::WayPoint_t wpoint;
+		librav_lcm_msgs::WayPoint_t wpoint;
 		wpoint.positions[0] = wp.x;
 		wpoint.positions[1] = wp.y;
 		wpoint.positions[2] = wp.z;
@@ -264,7 +264,7 @@ void TrajectoryManager::SendActiveTrajectoryToLCM()
 	poly_msg.seg_num = active_trajectory_.traj_segs_.size();
 	for (auto &seg : active_trajectory_.traj_segs_)
 	{
-		srcl_lcm_msgs::PolyCurveSegment_t seg_msg;
+		librav_lcm_msgs::PolyCurveSegment_t seg_msg;
 
 		seg_msg.coeffsize_x = seg.seg_x.param_.coeffs.size();
 		seg_msg.coeffsize_y = seg.seg_y.param_.coeffs.size();
@@ -294,7 +294,7 @@ void TrajectoryManager::SendActiveTrajectoryToLCM()
 	lcm_->publish("quad_planner/trajectory_polynomial", &poly_msg);
 }
 
-void TrajectoryManager::LcmWaypointsHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const srcl_lcm_msgs::Path_t *msg)
+void TrajectoryManager::LcmWaypointsHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::Path_t *msg)
 {
 	std::cout << "waypoints received: " << msg->waypoint_num << std::endl;
 
@@ -315,7 +315,7 @@ void TrajectoryManager::LcmWaypointsHandler(const lcm::ReceiveBuffer *rbuf, cons
 	GenerateTrajectory(new_kfs, user_path_id_++);
 }
 
-void TrajectoryManager::LcmKeyframeSetHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const srcl_lcm_msgs::KeyframeSet_t *msg)
+void TrajectoryManager::LcmKeyframeSetHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::KeyframeSet_t *msg)
 {
 	std::cout << "keyframes received: " << msg->kf_num << std::endl;
 
@@ -344,7 +344,7 @@ void TrajectoryManager::ReportProgress(void)
 {
 	if (traj_available_)
 	{
-		srcl_lcm_msgs::MissionInfo_t info_msg;
+		librav_lcm_msgs::MissionInfo_t info_msg;
 
 		info_msg.trajectory_id = traj_id_;
 		info_msg.dist_to_goal = remaining_dist_;

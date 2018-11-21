@@ -367,9 +367,9 @@ void VirtualQuadrotor::PublishState()
 {
     //std::cout << "** traveled distance: " << traveled_distance_ << std::endl;
 
-    srcl_lcm_msgs::QuadrotorTransform trans_msg;
-    srcl_lcm_msgs::Pose_t trans_base2world;
-    srcl_lcm_msgs::Pose_t trans_laser2base;
+    librav_lcm_msgs::QuadrotorTransform trans_msg;
+    librav_lcm_msgs::Pose_t trans_base2world;
+    librav_lcm_msgs::Pose_t trans_laser2base;
 
     Eigen::Quaterniond quat(Eigen::AngleAxisd(current_heading_, Eigen::Vector3d::UnitZ()));
     trans_base2world.position[0] = current_pos_.x + 0.5;

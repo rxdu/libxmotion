@@ -50,7 +50,7 @@ private:
 	int64_t trajectory_id_;
 
 	double CalcRemainingPathLenght(uint32_t current_idx);
-	void LcmMissionInfoHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::MissionInfo_t* msg);
+	void LcmMissionInfoHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const librav_lcm_msgs::MissionInfo_t* msg);
 };
 
 }

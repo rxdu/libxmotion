@@ -10,6 +10,14 @@ struct MapRequest_t
     int8_t map_type;
 }
 
+struct ScalarField_t
+{
+    int32_t size_x;
+    int32_t size_y;
+
+	double value[size_x][size_y];
+}
+
 struct Cell_t
 {
     int32_t id;
@@ -55,7 +63,7 @@ struct QuadPose_t
 }
 
 // PATH
-struct Waypoint_t
+struct GridWaypoint_t
 {
     int32_t x;
     int32_t y;
@@ -65,8 +73,8 @@ struct Waypoint_t
     int32_t id;
 }
 
-struct Path_t
+struct GridPath_t
 {
     int32_t pt_num;
-    Waypoint_t points[pt_num];
+    GridWaypoint_t points[pt_num];
 }

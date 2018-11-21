@@ -17,9 +17,9 @@
 
 using namespace librav;
 
-srcl_lcm_msgs::UAVTrajectory_t GenerateTestTrajectory()
+librav_lcm_msgs::UAVTrajectory_t GenerateTestTrajectory()
 {
-	srcl_lcm_msgs::UAVTrajectory_t test_traj;
+	librav_lcm_msgs::UAVTrajectory_t test_traj;
 
 	int time_stamp1 = 50;
 	int time_stamp2 = time_stamp1 + 150;
@@ -27,7 +27,7 @@ srcl_lcm_msgs::UAVTrajectory_t GenerateTestTrajectory()
 
 	for(int i = 0; i < final_time_stamp; i++)
 	{
-		srcl_lcm_msgs::UAVTrajectoryPoint_t pt;
+		librav_lcm_msgs::UAVTrajectoryPoint_t pt;
 		pt.point_empty = false;
 
 		double height = 0.5;
@@ -93,7 +93,7 @@ int main(int argc, char ** argv)
     if(!lcm.good())
         return 1;
 
-    srcl_lcm_msgs::UAVTrajectory_t traj = GenerateTestTrajectory();
+    librav_lcm_msgs::UAVTrajectory_t traj = GenerateTestTrajectory();
 
     std::cout << "sending request" << std::endl;
 

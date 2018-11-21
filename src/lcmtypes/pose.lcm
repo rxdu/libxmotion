@@ -1,4 +1,4 @@
-package srcl_lcm_msgs;
+package librav_lcm_msgs;
 
 struct Pose_t
 {

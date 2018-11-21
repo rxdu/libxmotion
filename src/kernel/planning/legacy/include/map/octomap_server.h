@@ -46,8 +46,8 @@ public:
 	void SaveTreeToFile(std::string file_name);
 	bool IsPositionOccupied(Position3Dd pos);
 
-	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::QuadrotorTransform* msg);
-	void LcmLaserScanPointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::LaserScanPoints_t* msg);
+	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const librav_lcm_msgs::QuadrotorTransform* msg);
+	void LcmLaserScanPointsHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const librav_lcm_msgs::LaserScanPoints_t* msg);
 
 protected:
 	inline static void updateMinKey(const octomap::OcTreeKey& in, octomap::OcTreeKey& min) {

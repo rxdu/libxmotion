@@ -97,13 +97,13 @@ UAVTrajectory MotionServer::GenerateTestTrajectory()
 	return test_traj;
 }
 
-void MotionServer::LcmSysTimeHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::TimeStamp_t* msg)
+void MotionServer::LcmSysTimeHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const librav_lcm_msgs::TimeStamp_t* msg)
 {
 	current_sys_time_ = msg->time_stamp;
 	polytraj_handler_->UpdateSystemTime(current_sys_time_);
 }
 
-void MotionServer::LcmUserGoalHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::UAVTrajectory_t* msg)
+void MotionServer::LcmUserGoalHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const librav_lcm_msgs::UAVTrajectory_t* msg)
 {
 	std::cout << "motion service request received!" << std::endl;
 

@@ -33,7 +33,7 @@ class QuadFlatTrajHandler
 
 	friend class MotionServer;
 
-	void LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const srcl_lcm_msgs::PolynomialCurve_t *msg);
+	void LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::PolynomialCurve_t *msg);
 	UAVTrajectoryPoint GetDesiredTrajectoryPoint(time_t tstamp);
 
 	void ReportProgress(void);

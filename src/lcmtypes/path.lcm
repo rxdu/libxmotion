@@ -1,4 +1,10 @@
-package srcl_lcm_msgs;
+package librav_lcm_msgs;
+
+struct WayPoint_t 
+{
+	float positions[3];
+	float yaw;
+}
 
 struct Path_t 
 {

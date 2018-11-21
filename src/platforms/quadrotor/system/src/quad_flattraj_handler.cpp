@@ -95,7 +95,7 @@ int32_t QuadFlatTrajHandler::FindFurthestPointWithinRadius(std::vector<Position3
 	return goal_idx;
 }
 
-void QuadFlatTrajHandler::LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::PolynomialCurve_t* msg)
+void QuadFlatTrajHandler::LcmPolyTrajMsgHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const librav_lcm_msgs::PolynomialCurve_t* msg)
 {
 	//std::cout << "polynomial msg received" << std::endl;
 	//std::cout << "current time: " << current_sys_time_ << std::endl;
@@ -273,7 +273,7 @@ void QuadFlatTrajHandler::ReportProgress(void)
 {
 	if(traj_available_)
 	{
-		srcl_lcm_msgs::MissionInfo_t info_msg;
+		librav_lcm_msgs::MissionInfo_t info_msg;
 
 		info_msg.trajectory_id = traj_id_;
 		info_msg.dist_to_goal = remaining_dist_;

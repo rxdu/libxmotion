@@ -32,14 +32,14 @@ using namespace cv;
 using namespace librav;
 
 template<typename PlannerType>
-srcl_lcm_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner)
+librav_lcm_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner)
 {
-	srcl_lcm_msgs::Graph_t graph_msg;
+	librav_lcm_msgs::Graph_t graph_msg;
 
 	graph_msg.vertex_num = planner.graph_->GetGraphVertices().size();
 	for(auto& vtx : planner.graph_->GetGraphVertices())
 	{
-		srcl_lcm_msgs::Vertex_t vertex;
+		librav_lcm_msgs::Vertex_t vertex;
 		vertex.id = vtx->vertex_id_;
 
 		Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(vtx->bundled_data_->location_, planner.map_.info);
@@ -52,7 +52,7 @@ srcl_lcm_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner)
 	graph_msg.edge_num = planner.graph_->GetGraphUndirectedEdges().size();
 	for(auto& eg : planner.graph_->GetGraphUndirectedEdges())
 	{
-		srcl_lcm_msgs::Edge_t edge;
+		librav_lcm_msgs::Edge_t edge;
 		edge.id_start = eg.src_->vertex_id_;
 		edge.id_end = eg.dst_->vertex_id_;
 
@@ -118,17 +118,17 @@ int main(int argc, char** argv )
 		return -1;
 	}
 
-	srcl_lcm_msgs::Graph_t graph_msg = GetLcmGraphFromPlanner(sgrid_planner);
+	librav_lcm_msgs::Graph_t graph_msg = GetLcmGraphFromPlanner(sgrid_planner);
 	lcm->publish("quad_planner/quad_planner_graph", &graph_msg);
 
 	if(!path.empty())
 	{
-		srcl_lcm_msgs::Path_t path_msg;
+		librav_lcm_msgs::Path_t path_msg;
 
 		path_msg.waypoint_num = path.size();
 		for(auto& wp : path)
 		{
-			srcl_lcm_msgs::WayPoint_t waypoint;
+			librav_lcm_msgs::WayPoint_t waypoint;
 			waypoint.positions[0] = wp->bundled_data_->location_.x;
 			waypoint.positions[1] = wp->bundled_data_->location_.y;
 			waypoint.positions[2] = 0.1;

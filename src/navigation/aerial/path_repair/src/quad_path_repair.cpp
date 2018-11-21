@@ -75,7 +75,7 @@ void QuadPathRepair::ConfigGraphPlanner(MapConfig config, double world_size_x, d
 	geomark_graph_.UpdateSquareGridInfo(sgrid_planner_.graph_, sgrid_planner_.map_);
 	octomap_server_.SetOctreeResolution(sgrid_planner_.map_.info.resolution);
 
-//	srcl_lcm_msgs::Graph_t graph_msg = GenerateLcmGraphMsg();
+//	librav_lcm_msgs::Graph_t graph_msg = GenerateLcmGraphMsg();
 //	lcm_->publish("quad_planner/quad_planner_graph", &graph_msg);
 }
 
@@ -155,7 +155,7 @@ std::vector<Position2Di> QuadPathRepair::UpdateGlobalPath()
 	for(auto& wp:traj_vtx)
 		waypoints.push_back(wp->bundled_data_->location_);
 
-	srcl_lcm_msgs::Path_t path_msg = GenerateLcmPathMsg(waypoints);
+	librav_lcm_msgs::Path_t path_msg = GenerateLcmPathMsg(waypoints);
 	lcm_->publish("quad_planner/quad_planner_graph_path", &path_msg);
 
 	update_global_plan_ = false;
@@ -194,7 +194,7 @@ MapInfo QuadPathRepair::GetActiveMapInfo()
 void QuadPathRepair::LcmTransformHandler(
 		const lcm::ReceiveBuffer* rbuf,
 		const std::string& chan,
-		const srcl_lcm_msgs::QuadrotorTransform* msg)
+		const librav_lcm_msgs::QuadrotorTransform* msg)
 {
 	Position2Dd rpos;
 	rpos.x = msg->base_to_world.position[0];
@@ -211,7 +211,7 @@ void QuadPathRepair::LcmTransformHandler(
 void QuadPathRepair::LcmSysTimeHandler(
 		const lcm::ReceiveBuffer* rbuf,
 		const std::string& chan,
-		const srcl_lcm_msgs::TimeStamp_t* msg)
+		const librav_lcm_msgs::TimeStamp_t* msg)
 {
 	current_sys_time_ = msg->time_stamp;
 }
@@ -291,7 +291,7 @@ int32_t QuadPathRepair::FindFurthestPointWithinRadius(std::vector<Position3Dd>& 
 //void QuadPathRepair::LcmOctomapHandler(
 //		const lcm::ReceiveBuffer* rbuf,
 //		const std::string& chan,
-//		const srcl_lcm_msgs::NewDataReady_t* msg)
+//		const librav_lcm_msgs::NewDataReady_t* msg)
 //{
 //	std::cout << "\n---------------------- New Iteration -------------------------" << std::endl;
 //
@@ -305,7 +305,7 @@ int32_t QuadPathRepair::FindFurthestPointWithinRadius(std::vector<Position3Dd>& 
 //	}
 //
 //	static int count = 0;
-//	srcl_lcm_msgs::KeyframeSet_t kf_cmd;
+//	librav_lcm_msgs::KeyframeSet_t kf_cmd;
 //
 //	// record the planning time
 //	kf_cmd.sys_time.time_stamp = current_sys_time_;
@@ -389,7 +389,7 @@ int32_t QuadPathRepair::FindFurthestPointWithinRadius(std::vector<Position3Dd>& 
 //	 	int32_t wp_cnt = 0;
 //	 	for(auto& wp:selected_wps)
 //	 	{
-//	 		srcl_lcm_msgs::Keyframe_t kf;
+//	 		librav_lcm_msgs::Keyframe_t kf;
 //	 		kf.vel_constr = false;
 //
 //	 		kf.positions[0] = wp.x;
@@ -423,13 +423,13 @@ int32_t QuadPathRepair::FindFurthestPointWithinRadius(std::vector<Position3Dd>& 
 ////	{
 ////		Send3DSearchPathToVis(selected_wps);
 ////
-////		srcl_lcm_msgs::Graph_t graph_msg;
+////		librav_lcm_msgs::Graph_t graph_msg;
 ////
 ////		// combined graph
 ////		graph_msg.vertex_num = gcombiner_.combined_graph_.GetGraphVertices().size();
 ////		for(auto& vtx : gcombiner_.combined_graph_.GetGraphVertices())
 ////		{
-////			srcl_lcm_msgs::Vertex_t vertex;
+////			librav_lcm_msgs::Vertex_t vertex;
 ////			vertex.id = vtx->vertex_id_;
 ////
 ////			vertex.position[0] = vtx->bundled_data_.position.x;
@@ -442,7 +442,7 @@ int32_t QuadPathRepair::FindFurthestPointWithinRadius(std::vector<Position3Dd>& 
 ////		graph_msg.edge_num = gcombiner_.combined_graph_.GetGraphUndirectedEdges().size();
 ////		for(auto& eg : gcombiner_.combined_graph_.GetGraphUndirectedEdges())
 ////		{
-////			srcl_lcm_msgs::Edge_t edge;
+////			librav_lcm_msgs::Edge_t edge;
 ////			edge.id_start = eg.src_->vertex_id_;
 ////			edge.id_end = eg.dst_->vertex_id_;
 ////
@@ -453,7 +453,7 @@ int32_t QuadPathRepair::FindFurthestPointWithinRadius(std::vector<Position3Dd>& 
 //////		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
 //////		for(auto& vtx : cubegraph->GetGraphVertices())
 //////		{
-//////			srcl_lcm_msgs::Vertex_t vertex;
+//////			librav_lcm_msgs::Vertex_t vertex;
 //////			vertex.id = vtx->vertex_id_;
 //////
 //////			vertex.position[0] = vtx->bundled_data_.location_.x;
@@ -466,7 +466,7 @@ int32_t QuadPathRepair::FindFurthestPointWithinRadius(std::vector<Position3Dd>& 
 //////		graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
 //////		for(auto& eg : cubegraph->GetGraphUndirectedEdges())
 //////		{
-//////			srcl_lcm_msgs::Edge_t edge;
+//////			librav_lcm_msgs::Edge_t edge;
 //////			edge.id_start = eg.src_->vertex_id_;
 //////			edge.id_end = eg.dst_->vertex_id_;
 //////
@@ -482,7 +482,7 @@ int32_t QuadPathRepair::FindFurthestPointWithinRadius(std::vector<Position3Dd>& 
 void QuadPathRepair::LcmOctomapHandler(
 		const lcm::ReceiveBuffer* rbuf,
 		const std::string& chan,
-		const srcl_lcm_msgs::NewDataReady_t* msg)
+		const librav_lcm_msgs::NewDataReady_t* msg)
 {
 	std::cout << "\n---------------------- New Iteration -------------------------" << std::endl;
 
@@ -496,7 +496,7 @@ void QuadPathRepair::LcmOctomapHandler(
 	}
 
 	static int count = 0;
-	srcl_lcm_msgs::KeyframeSet_t kf_cmd;
+	librav_lcm_msgs::KeyframeSet_t kf_cmd;
 
 	// record the planning time
 	kf_cmd.sys_time.time_stamp = current_sys_time_;
@@ -566,7 +566,7 @@ void QuadPathRepair::LcmOctomapHandler(
 		double last_yaw = 0;
 		for(auto& wp:selected_wps)
 		{
-			srcl_lcm_msgs::Keyframe_t kf;
+			librav_lcm_msgs::Keyframe_t kf;
 			kf.vel_constr = false;
 
 			kf.position[0] = wp.x;
@@ -602,13 +602,13 @@ void QuadPathRepair::LcmOctomapHandler(
 //		{
 //			Send3DSearchPathToVis(selected_wps);
 //
-//			srcl_lcm_msgs::Graph_t graph_msg;
+//			librav_lcm_msgs::Graph_t graph_msg;
 //
 //			// combined graph
 //			graph_msg.vertex_num = geomark_graph_.combined_graph_base_.GetGraphVertices().size();
 //			for(auto& vtx : geomark_graph_.combined_graph_base_.GetGraphVertices())
 //			{
-//				srcl_lcm_msgs::Vertex_t vertex;
+//				librav_lcm_msgs::Vertex_t vertex;
 //				vertex.id = vtx->vertex_id_;
 //
 //				vertex.position[0] = vtx->bundled_data_.position.x;
@@ -621,7 +621,7 @@ void QuadPathRepair::LcmOctomapHandler(
 //			graph_msg.edge_num = geomark_graph_.combined_graph_base_.GetGraphUndirectedEdges().size();
 //			for(auto& eg : geomark_graph_.combined_graph_base_.GetGraphUndirectedEdges())
 //			{
-//				srcl_lcm_msgs::Edge_t edge;
+//				librav_lcm_msgs::Edge_t edge;
 //				edge.id_start = eg.src_->vertex_id_;
 //				edge.id_end = eg.dst_->vertex_id_;
 //
@@ -632,7 +632,7 @@ void QuadPathRepair::LcmOctomapHandler(
 	//		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
 	//		for(auto& vtx : cubegraph->GetGraphVertices())
 	//		{
-	//			srcl_lcm_msgs::Vertex_t vertex;
+	//			librav_lcm_msgs::Vertex_t vertex;
 	//			vertex.id = vtx->vertex_id_;
 	//
 	//			vertex.position[0] = vtx->bundled_data_.location_.x;
@@ -645,7 +645,7 @@ void QuadPathRepair::LcmOctomapHandler(
 	//		graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
 	//		for(auto& eg : cubegraph->GetGraphUndirectedEdges())
 	//		{
-	//			srcl_lcm_msgs::Edge_t edge;
+	//			librav_lcm_msgs::Edge_t edge;
 	//			edge.id_start = eg.src_->vertex_id_;
 	//			edge.id_end = eg.dst_->vertex_id_;
 	//
@@ -659,14 +659,14 @@ void QuadPathRepair::LcmOctomapHandler(
 }
 
 template<typename PlannerType>
-srcl_lcm_msgs::Graph_t QuadPathRepair::GetLcmGraphFromPlanner(const PlannerType& planner)
+librav_lcm_msgs::Graph_t QuadPathRepair::GetLcmGraphFromPlanner(const PlannerType& planner)
 {
-	srcl_lcm_msgs::Graph_t graph_msg;
+	librav_lcm_msgs::Graph_t graph_msg;
 
 	graph_msg.vertex_num = planner.graph_->GetGraphVertices().size();
 	for(auto& vtx : planner.graph_->GetGraphVertices())
 	{
-		srcl_lcm_msgs::Vertex_t vertex;
+		librav_lcm_msgs::Vertex_t vertex;
 		vertex.id = vtx->vertex_id_;
 
 		Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(vtx->bundled_data_->location_, planner.map_.info);
@@ -679,7 +679,7 @@ srcl_lcm_msgs::Graph_t QuadPathRepair::GetLcmGraphFromPlanner(const PlannerType&
 	graph_msg.edge_num = planner.graph_->GetGraphUndirectedEdges().size();
 	for(auto& eg : planner.graph_->GetGraphUndirectedEdges())
 	{
-		srcl_lcm_msgs::Edge_t edge;
+		librav_lcm_msgs::Edge_t edge;
 		edge.id_start = eg.src_->vertex_id_;
 		edge.id_end = eg.dst_->vertex_id_;
 
@@ -689,24 +689,24 @@ srcl_lcm_msgs::Graph_t QuadPathRepair::GetLcmGraphFromPlanner(const PlannerType&
 	return graph_msg;
 }
 
-srcl_lcm_msgs::Graph_t QuadPathRepair::GenerateLcmGraphMsg()
+librav_lcm_msgs::Graph_t QuadPathRepair::GenerateLcmGraphMsg()
 {
-	srcl_lcm_msgs::Graph_t graph_msg;
+	librav_lcm_msgs::Graph_t graph_msg;
 
 	graph_msg = GetLcmGraphFromPlanner(this->sgrid_planner_);
 
 	return graph_msg;
 }
 
-srcl_lcm_msgs::Path_t QuadPathRepair::GenerateLcmPathMsg(std::vector<Position2Di> waypoints)
+librav_lcm_msgs::Path_t QuadPathRepair::GenerateLcmPathMsg(std::vector<Position2Di> waypoints)
 {
-	srcl_lcm_msgs::Path_t path_msg;
+	librav_lcm_msgs::Path_t path_msg;
 
 	path_msg.waypoint_num = waypoints.size();
 	for(auto& wp : waypoints)
 	{
 		Position2Dd ref_world_pos = MapUtils::CoordinatesFromMapPaddedToRefWorld(wp, this->sgrid_planner_.map_.info);
-		srcl_lcm_msgs::WayPoint_t waypoint;
+		librav_lcm_msgs::WayPoint_t waypoint;
 		waypoint.positions[0] = ref_world_pos.x;
 		waypoint.positions[1] = ref_world_pos.y;
 
@@ -720,12 +720,12 @@ void QuadPathRepair::Send3DSearchPathToVis(std::vector<Position3Dd> path)
 {
 	if(path.size() > 0)
 	{
-		srcl_lcm_msgs::Path_t path_msg;
+		librav_lcm_msgs::Path_t path_msg;
 
 		path_msg.waypoint_num = path.size();
 		for(auto& wp : path)
 		{
-			srcl_lcm_msgs::WayPoint_t waypoint;
+			librav_lcm_msgs::WayPoint_t waypoint;
 			waypoint.positions[0] = wp.x;
 			waypoint.positions[1] = wp.y;
 			waypoint.positions[2] = wp.z;

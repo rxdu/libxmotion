@@ -126,13 +126,13 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	srcl_lcm_msgs::PolynomialCurve_t poly_msg;
+	librav_lcm_msgs::PolynomialCurve_t poly_msg;
 	//poly_msg = opt.flat_traj_.GenerateNonDimPolyCurveLCMMsg();
 
 	poly_msg.seg_num = opt.flat_traj_.traj_segs_.size();
 	for(auto& seg : opt.flat_traj_.traj_segs_)
 	{
-		srcl_lcm_msgs::PolyCurveSegment_t seg_msg;
+		librav_lcm_msgs::PolyCurveSegment_t seg_msg;
 
 		seg_msg.coeffsize_x = seg.seg_x.param_.coeffs.size();
 		seg_msg.coeffsize_y = seg.seg_y.param_.coeffs.size();

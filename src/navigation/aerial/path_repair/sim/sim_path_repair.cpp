@@ -370,7 +370,7 @@ SimPath SimPathRepair::UpdatePath(Position2Di pos, int32_t height, double headin
 	{
 		path_3d_cost_ = path.back()->GetAStarGCost();
 
-		librav_lcm_msgs::Path_t path_msg;
+		librav_lcm_msgs::GridPath_t path_msg;
 		path_msg.pt_num = path.size();
 		// double prev_heading = 0;
 		for (auto &cell : path)
@@ -391,7 +391,7 @@ SimPath SimPathRepair::UpdatePath(Position2Di pos, int32_t height, double headin
 				// heading = prev_heading;
 			}
 
-			librav_lcm_msgs::Waypoint_t wp;
+			librav_lcm_msgs::GridWaypoint_t wp;
 			wp.id = cell->bundled_data_.data_id_;
 			wp.x = cell->bundled_data_.index_.x;
 			wp.y = cell->bundled_data_.index_.y;
@@ -427,12 +427,12 @@ void SimPathRepair::Send3DSearchPathToVis(Path_t<CubeCell &> &path)
 {
 	if (path.size() > 0)
 	{
-		srcl_lcm_msgs::Path_t path_msg;
+		librav_lcm_msgs::GridPath_t path_msg;
 
 		path_msg.waypoint_num = path.size();
 		for (auto &wp : path)
 		{
-			srcl_lcm_msgs::WayPoint_t waypoint;
+			librav_lcm_msgs::WayPoint_t waypoint;
 			waypoint.positions[0] = wp->bundled_data_.location_.x;
 			waypoint.positions[1] = wp->bundled_data_.location_.y;
 			waypoint.positions[2] = wp->bundled_data_.location_.z;
@@ -447,12 +447,12 @@ void SimPathRepair::Send3DSearchPathToVis(Path_t<CubeCell &> &path)
 void SimPathRepair::SendCubeArrayGraphToVis(std::shared_ptr<Graph_t<CubeCell &>> cubegraph)
 {
 	// cube graph
-	srcl_lcm_msgs::Graph_t graph_msg;
+	librav_lcm_msgs::Graph_t graph_msg;
 
 	graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
 	for (auto &vtx : cubegraph->GetGraphVertices())
 	{
-		srcl_lcm_msgs::Vertex_t vertex;
+		librav_lcm_msgs::Vertex_t vertex;
 		vertex.id = vtx->vertex_id_;
 
 		vertex.position[0] = vtx->bundled_data_.location_.x;
@@ -464,7 +464,7 @@ void SimPathRepair::SendCubeArrayGraphToVis(std::shared_ptr<Graph_t<CubeCell &>>
 	graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
 	for (auto &eg : cubegraph->GetGraphUndirectedEdges())
 	{
-		srcl_lcm_msgs::Edge_t edge;
+		librav_lcm_msgs::Edge_t edge;
 		edge.id_start = eg.src_->vertex_id_;
 		edge.id_end = eg.dst_->vertex_id_;
 

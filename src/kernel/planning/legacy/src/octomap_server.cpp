@@ -143,7 +143,7 @@ void OctomapServer::insertScan(const PointCloudSnap& pcs, std::shared_ptr<octoma
 void OctomapServer::LcmLaserScanPointsHandler(
 		const lcm::ReceiveBuffer* rbuf,
 		const std::string& chan,
-		const srcl_lcm_msgs::LaserScanPoints_t* msg)
+		const librav_lcm_msgs::LaserScanPoints_t* msg)
 {
 	std::cout << msg->points.size() << " points received " << std::endl;
 
@@ -207,7 +207,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 	// %10 : 10ms * 10 - 10 Hz update rate
 	if(loop_count_++ % 10)
 	{
-		srcl_lcm_msgs::Octomap_t octomap_msg;
+		librav_lcm_msgs::Octomap_t octomap_msg;
 
 		octomap_msg.binary = true;
 		octomap_msg.resolution = octree_res_;
@@ -222,7 +222,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 			octomap_msg.data_size = octomap_msg.data.size();
 		}
 
-		srcl_lcm_msgs::NewDataReady_t notice_msg;
+		librav_lcm_msgs::NewDataReady_t notice_msg;
 		notice_msg.new_data_ready_ = 1;
 		lcm_->publish("quad_planner/new_octomap_ready", &notice_msg);
 
@@ -251,12 +251,12 @@ void OctomapServer::LcmLaserScanPointsHandler(
 //		else
 //			std::cout << "****************************** error ******************************" << std::endl;
 
-//		srcl_lcm_msgs::Graph_t graph_msg;
+//		librav_lcm_msgs::Graph_t graph_msg;
 //
 //		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
 //		for(auto& vtx : cubegraph->GetGraphVertices())
 //		{
-//			srcl_lcm_msgs::Vertex_t vertex;
+//			librav_lcm_msgs::Vertex_t vertex;
 //			vertex.id = vtx->vertex_id_;
 //
 ////			Position3Dd start_w = utils::Transformation::TransformPosition3D(transf_, Position3Dd(vtx->bundled_data_.location_.x,
@@ -275,7 +275,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 //		graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
 //		for(auto& eg : cubegraph->GetGraphUndirectedEdges())
 //		{
-//			srcl_lcm_msgs::Edge_t edge;
+//			librav_lcm_msgs::Edge_t edge;
 //			edge.id_start = eg.src_->vertex_id_;
 //			edge.id_end = eg.dst_->vertex_id_;
 //
@@ -296,7 +296,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 //void OctomapServer::LcmLaserScanPointsHandler(
 //		const lcm::ReceiveBuffer* rbuf,
 //		const std::string& chan,
-//		const srcl_lcm_msgs::LaserScanPoints_t* msg)
+//		const librav_lcm_msgs::LaserScanPoints_t* msg)
 //{
 //	std::cout << msg->points.size() << " points received " << std::endl;
 //
@@ -403,7 +403,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 //	// %10 : 10ms * 10 - 10 Hz update rate
 //	if(loop_count_++ % 10)
 //	{
-//		srcl_lcm_msgs::Octomap_t octomap_msg;
+//		librav_lcm_msgs::Octomap_t octomap_msg;
 //
 //		octomap_msg.binary = true;
 //		octomap_msg.resolution = octree_res_;
@@ -418,7 +418,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 //			octomap_msg.data_size = octomap_msg.data.size();
 //		}
 //
-//		srcl_lcm_msgs::NewDataReady_t notice_msg;
+//		librav_lcm_msgs::NewDataReady_t notice_msg;
 //		notice_msg.new_data_ready_ = 1;
 //		lcm_->publish("quad_planner/new_octomap_ready", &notice_msg);
 //
@@ -431,12 +431,12 @@ void OctomapServer::LcmLaserScanPointsHandler(
 //////		std::cout << "tree cube array size: " << cubearray->cubes_.size() << std::endl;
 //////		std::cout << "tree graph size: " << cubegraph->GetGraphVertices().size() << std::endl;
 ////
-////		srcl_lcm_msgs::Graph_t graph_msg;
+////		librav_lcm_msgs::Graph_t graph_msg;
 ////
 ////		graph_msg.vertex_num = cubegraph->GetGraphVertices().size();
 ////		for(auto& vtx : cubegraph->GetGraphVertices())
 ////		{
-////			srcl_lcm_msgs::Vertex_t vertex;
+////			librav_lcm_msgs::Vertex_t vertex;
 ////			vertex.id = vtx->vertex_id_;
 ////
 ////			Position3Dd start_w = utils::Transformation::TransformPosition3D(transf_, Position3Dd(vtx->bundled_data_.location_.x,
@@ -455,7 +455,7 @@ void OctomapServer::LcmLaserScanPointsHandler(
 ////		graph_msg.edge_num = cubegraph->GetGraphUndirectedEdges().size();
 ////		for(auto& eg : cubegraph->GetGraphUndirectedEdges())
 ////		{
-////			srcl_lcm_msgs::Edge_t edge;
+////			librav_lcm_msgs::Edge_t edge;
 ////			edge.id_start = eg.src_->vertex_id_;
 ////			edge.id_end = eg.dst_->vertex_id_;
 ////

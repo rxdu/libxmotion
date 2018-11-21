@@ -29,9 +29,9 @@ void QuadDataBroadcaster::SendQuadStateData(const QuadState& rs)
 
 void QuadDataBroadcaster::SendQuadTransform(Point3f pos, Eigen::Quaterniond quat)
 {
-	srcl_lcm_msgs::QuadrotorTransform trans_msg;
-	srcl_lcm_msgs::Pose_t trans_base2world;
-	srcl_lcm_msgs::Pose_t trans_laser2base;
+	librav_lcm_msgs::QuadrotorTransform trans_msg;
+	librav_lcm_msgs::Pose_t trans_base2world;
+	librav_lcm_msgs::Pose_t trans_laser2base;
 
 	trans_base2world.position[0] = pos.x;
 	trans_base2world.position[1] = pos.y;
@@ -59,8 +59,8 @@ void QuadDataBroadcaster::SendQuadTransform(Point3f pos, Eigen::Quaterniond quat
 
 void QuadDataBroadcaster::SendLaserPoints(const std::vector<Point3f>& pts)
 {
-	srcl_lcm_msgs::LaserScanPoints_t pts_msg;
-	srcl_lcm_msgs::Point3Df_t point;
+	librav_lcm_msgs::LaserScanPoints_t pts_msg;
+	librav_lcm_msgs::Point3Df_t point;
 
 	// assign values to msg
 	for(auto& pt:pts)
@@ -78,8 +78,8 @@ void QuadDataBroadcaster::SendLaserPoints(const std::vector<Point3f>& pts)
 
 void QuadDataBroadcaster::SendLaserPoints(const std::vector<Point3f>& pts, Point3f pos, Eigen::Quaterniond quat)
 {
-	srcl_lcm_msgs::LaserScanPoints_t pts_msg;
-	srcl_lcm_msgs::Point3Df_t point;
+	librav_lcm_msgs::LaserScanPoints_t pts_msg;
+	librav_lcm_msgs::Point3Df_t point;
 
 	// assign values to msg
 	for(auto& pt:pts)
@@ -92,8 +92,8 @@ void QuadDataBroadcaster::SendLaserPoints(const std::vector<Point3f>& pts, Point
 	}
 	pts_msg.point_num = pts_msg.points.size();
 
-	srcl_lcm_msgs::Pose_t trans_base2world;
-	srcl_lcm_msgs::Pose_t trans_laser2base;
+	librav_lcm_msgs::Pose_t trans_base2world;
+	librav_lcm_msgs::Pose_t trans_laser2base;
 
 	trans_base2world.position[0] = pos.x;
 	trans_base2world.position[1] = pos.y;
@@ -121,7 +121,7 @@ void QuadDataBroadcaster::SendLaserPoints(const std::vector<Point3f>& pts, Point
 
 void QuadDataBroadcaster::SendSystemTime(uint64_t sys_t)
 {
-	srcl_lcm_msgs::TimeStamp_t t_msg;
+	librav_lcm_msgs::TimeStamp_t t_msg;
 
 	t_msg.time_stamp = sys_t;
 

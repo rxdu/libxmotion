@@ -74,7 +74,7 @@ public:
 
 private:
 	template<typename PlannerType>
-	srcl_lcm_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner);
+	librav_lcm_msgs::Graph_t GetLcmGraphFromPlanner(const PlannerType& planner);
 	bool EvaluateNewPath(std::vector<Position3Dd>& new_path);
 	bool CheckPathSafety(std::shared_ptr<CubeArray> cube_array);
 	int32_t FindFurthestPointWithinRadius(std::vector<Position3Dd>& new_path, double radius) const;
@@ -99,9 +99,9 @@ public:
 
 private:
 	// lcm
-	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::QuadrotorTransform* msg);
-	void LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::NewDataReady_t* msg);
-	void LcmSysTimeHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const srcl_lcm_msgs::TimeStamp_t* msg);
+	void LcmTransformHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const librav_lcm_msgs::QuadrotorTransform* msg);
+	void LcmOctomapHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const librav_lcm_msgs::NewDataReady_t* msg);
+	void LcmSysTimeHandler(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const librav_lcm_msgs::TimeStamp_t* msg);
 
 	// set start and goal on map (internal use)
 	void SetStartMapPosition(Position2Di pos);
@@ -110,8 +110,8 @@ private:
 	// helper functions
 	cv::Mat GetActiveMap();
 	MapInfo GetActiveMapInfo();
-	srcl_lcm_msgs::Graph_t GenerateLcmGraphMsg();
-	srcl_lcm_msgs::Path_t GenerateLcmPathMsg(std::vector<Position2Di> waypoints);
+	librav_lcm_msgs::Graph_t GenerateLcmGraphMsg();
+	librav_lcm_msgs::Path_t GenerateLcmPathMsg(std::vector<Position2Di> waypoints);
 	void Send3DSearchPathToVis(std::vector<Position3Dd> path);
 };
 

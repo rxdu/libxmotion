@@ -38,10 +38,10 @@ class MotionServer
 	~MotionServer() = default;
 
 	void SetMotionMode(MotionMode mode) { mode_ = mode; };
-	void LcmSysTimeHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const srcl_lcm_msgs::TimeStamp_t *msg);
+	void LcmSysTimeHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::TimeStamp_t *msg);
 	UAVTrajectoryPoint GetCurrentDesiredState(TimeStamp t);
 
-	void LcmUserGoalHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const srcl_lcm_msgs::UAVTrajectory_t *msg);
+	void LcmUserGoalHandler(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::UAVTrajectory_t *msg);
 	void SetMotionGoal(UAVTrajectory &goal);
 	void AbortActiveMotion();
 	double ReportActiveMotionProgress();

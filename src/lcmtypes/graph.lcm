@@ -5,3 +5,18 @@ struct Edge_t
 	int64_t id_start;
 	int64_t id_end;
 }
+
+struct Vertex_t 
+{
+	int64_t id;
+	float position[3];
+}
+
+struct Graph_t
+{
+	int64_t edge_num;
+	int64_t vertex_num;
+	
+	Vertex_t vertices[vertex_num];
+	Edge_t edges[edge_num];
+}
