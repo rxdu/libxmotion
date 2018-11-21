@@ -26,9 +26,9 @@ class ThreatEvaluation
 
     ThreatField field_;
 
-    void SetEgoConfiguration(VehicleEstimation ego_est, std::shared_ptr<TrafficChannel> ego_chn, LookaheadZone ego_lookahead);
-    void SetTrafficConfiguration(std::vector<VehicleEstimation> ests);
-    
+    void SetTrafficConfiguration(VehicleEstimation ego_est, std::shared_ptr<TrafficChannel> ego_chn,
+                                 LookaheadZone ego_lookahead, std::vector<VehicleEstimation> ests);
+
     void Evaluate(int32_t step);
 
   private:

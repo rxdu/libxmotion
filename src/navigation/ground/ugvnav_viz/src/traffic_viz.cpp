@@ -285,8 +285,11 @@ void TrafficViz::ShowThreatField(ThreatField &field, int32_t t_k, bool show_veh_
 
     auto threats = field.GetAllCollisionThreats();
 
-    auto center = field.GetThreatCenter(t_k);
-    tdraw.DrawCollisionThreatField(field, t_k, center.x, center.y, 160, 100);
+    // auto center = field.GetThreatCenter(t_k);
+    // tdraw.DrawCollisionThreatField(field, t_k, center.x, center.y, 160, 100);
+    double cx = (canvas.xmax_ + canvas.xmin_) / 2.0;
+    double cy = (canvas.ymax_ + canvas.ymin_) / 2.0;
+    tdraw.DrawCollisionThreatField(field, t_k, cx, cy, canvas.xspan_, canvas.yspan_);
 
     road_draw.DrawLanes(true);
 
@@ -421,6 +424,49 @@ void TrafficViz::ShowTrafficChannelWithThreatField(TrafficChannel &channel, Thre
     }
 
     road_draw.DrawTrafficChannelGrid(channel, false);
+
+    ShowImage(canvas.paint_area, window_name, save_img);
+}
+
+void TrafficViz::ShowPathWithThreatField(std::vector<StateLattice> &path, LookaheadZone &zone, ThreatField &field, int32_t t_k, double T, std::string window_name, bool save_img)
+{
+    RoadMapViz &viz = RoadMapViz::GetInstance();
+
+    std::cout << "t_k: " << t_k << std::endl;
+
+    CartesianCanvas canvas = viz.CreateCanvas(true);
+    RoadMapDraw road_draw = RoadMapDraw(viz.road_map_, canvas);
+
+    GeometryDraw gdraw(canvas);
+    LatticeDraw lattice_draw = LatticeDraw(canvas);
+    VehicleDraw veh_draw = VehicleDraw(canvas);
+    CurvilinearGridDraw cdraw = CurvilinearGridDraw(canvas);
+    ThreatDraw tdraw = ThreatDraw(canvas);
+
+    // auto center = field.GetThreatCenter(t_k);
+    // tdraw.DrawCollisionThreatField(field, t_k, center.x, center.y, 150, 120);
+
+    double cx = (canvas.xmax_ + canvas.xmin_) / 2.0;
+    double cy = (canvas.ymax_ + canvas.ymin_) / 2.0;
+    tdraw.DrawCollisionThreatField(field, t_k, cx, cy, canvas.xspan_, canvas.yspan_);
+
+    road_draw.DrawLanes(false);
+    // road_draw.DrawTrafficChannelGrid(channel, false);
+    // cdraw.DrawFilledCurvilinearGrid(zone, CvDrawColors::palegreen_color);
+    // cdraw.DrawCurvilinearGrid(zone);
+
+    for (auto &veh : field.GetAllVehicleEstimations())
+        veh_draw.DrawVehicle(veh.GetFootprint(), veh.id_);
+
+    // draw state lattice
+    lattice_draw.DrawStateLattice(path, 0.1, CvDrawColors::lime_color, 2);
+
+    auto dstate = zone.trajectory_.GetDesiredState(t_k * T);
+    gdraw.DrawLabelPoint(dstate.x, dstate.y, CvDrawColors::red_color, 2);
+
+    // draw ego vehicle
+    VehicleFP ego_veh({dstate.x, dstate.y, dstate.theta});
+    veh_draw.DrawVehicle(ego_veh.polygon, CvDrawColors::cyan_color);
 
     ShowImage(canvas.paint_area, window_name, save_img);
 }

@@ -86,6 +86,12 @@ void GeometryDraw::DrawParametricCurve(const ParametricCurve &pcurve, double ste
     }
 }
 
+void GeometryDraw::DrawLabelPoint(double x, double y, cv::Scalar ln_color, int32_t ln_width)
+{
+    auto pt1 = canvas_.ConvertCartisianToPixel(x, y);
+    DrawPoint(canvas_.paint_area, cv::Point(pt1.x, pt1.y), ln_color, ln_width);
+}
+
 void GeometryDraw::DrawPolygon(const Polygon &polygon, bool show_dot, cv::Scalar ln_color, int32_t ln_width)
 {
     std::size_t pt_num = polygon.GetPointNumer();

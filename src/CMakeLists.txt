@@ -13,9 +13,9 @@ lcmtypes_build()
 set(CMAKE_BUILD_TYPE Release)
 # set(CMAKE_BUILD_TYPE Debug)
 
-## Optionally built modules: on/off
-set(ENABLE_LOGGING on)
-set(BUILD_TESTS on)
+## Optionally built modules: ON/OFF
+set(ENABLE_LOGGING ON)
+set(BUILD_TESTS ON)
 
 if(ENABLE_LOGGING)
 	message( "-- Enable logging with spdlog -- Yes" )

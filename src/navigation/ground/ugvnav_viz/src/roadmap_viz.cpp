@@ -132,7 +132,7 @@ void RoadMapViz::ShowVehicle(std::vector<Polygon> &polygons, std::string window_
     VehicleDraw veh_draw = VehicleDraw(canvas);
 
     road_draw.DrawLanes(true);
-    veh_draw.DrawVehicle(polygons);
+    veh_draw.DrawVehicle(polygons); 
 
     ShowImage(canvas.paint_area, window_name, save_img);
 }

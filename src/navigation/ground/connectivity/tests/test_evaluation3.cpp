@@ -25,37 +25,37 @@ int main()
     // ------------------- vehicle 1 ---------------------- //
 
     CovarMatrix2d pos_covar1;
-    pos_covar1 << 2, 0,
-        0, 2;
-    VehicleEstimation veh1({35, 59, -7 / 180.0 * M_PI}, pos_covar1, 10, 3 * 3);
+    pos_covar1 << 0.25, 0,
+        0, 0.25;
+    VehicleEstimation veh1({35, 59, -7 / 180.0 * M_PI}, pos_covar1, 15, 1 * 1);
 
     // ------------------- vehicle 2 ---------------------- //
 
     CovarMatrix2d pos_covar2;
-    pos_covar2 << 1, 0,
-        0, 1;
-    VehicleEstimation veh2({89, 52, -7 / 180.0 * M_PI}, pos_covar2, 10, 2 * 2);
+    pos_covar2 << 0.25, 0,
+        0, 0.25;
+    VehicleEstimation veh2({89, 52, -7 / 180.0 * M_PI}, pos_covar2, 10, 1 * 1);
 
     // ------------------- vehicle 3 ---------------------- //
 
     CovarMatrix2d pos_covar3;
     pos_covar3 << 0.25, 0,
         0, 0.25;
-    VehicleEstimation veh3({80, 59, 170 / 180.0 * M_PI}, pos_covar3, 10, 1 * 1);
+    VehicleEstimation veh3({80, 59, 170 / 180.0 * M_PI}, pos_covar3, 12, 1 * 1);
 
     // ------------------- vehicle 4 ---------------------- //
 
     CovarMatrix2d pos_covar4;
-    pos_covar4 << 1, 0,
-        0, 1;
-    VehicleEstimation veh4({52, 35, -95 / 180.0 * M_PI}, pos_covar4, 10, 2 * 2);
+    pos_covar4 << 0.25, 0,
+        0, 0.25;
+    VehicleEstimation veh4({52, 35, -95 / 180.0 * M_PI}, pos_covar4, 18, 1 * 1);
 
     // ------------------- vehicle 5 ---------------------- //
 
     CovarMatrix2d pos_covar5;
-    pos_covar5 << 1, 0,
-        0, 1;
-    VehicleEstimation veh5({40, 64, 171 / 180.0 * M_PI}, pos_covar5, 10, 2 * 2);
+    pos_covar5 << 0.25, 0,
+        0, 0.25;
+    VehicleEstimation veh5({40, 64, 171 / 180.0 * M_PI}, pos_covar5, 16, 1 * 1);
 
     /****************************************************************************/
 
@@ -64,7 +64,7 @@ int main()
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels()[2];
     ego_chn->DiscretizeChannel(2, 0.74, 3);
 
-    VehicleEstimation ego_veh({56.5, 36, 85.0 / 180.0 * M_PI}, 15);
+    VehicleEstimation ego_veh({56.5, 36, 85.0 / 180.0 * M_PI}, 12);
 
     stopwatch::StopWatch timer;
     std::vector<StateLattice> path;
@@ -97,8 +97,8 @@ int main()
 
     // TrafficViz::ShowTrafficChannelWithThreatField(*ego_chn.get(), ranker.field_, 4, true, "lattice_in_threat_field", true);
 
-    for (int i = 0; i <= eval_horizon; i++)
-        TrafficViz::ShowThreatField(ranker.field_, i, true, "occupancy_estimation_new" + std::to_string(i), false);
+    // for (int i = 0; i <= eval_horizon; i++)
+    //     TrafficViz::ShowThreatField(ranker.field_, i, true, "occupancy_estimation_new" + std::to_string(i), false);
 
     for (int32_t i = 0; i <= eval_horizon; ++i)
     {

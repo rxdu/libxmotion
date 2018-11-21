@@ -38,6 +38,7 @@ class GeometryDraw
     void DrawParametricCurve(const ParametricCurve &pcurve, double step = 0.1, cv::Scalar ln_color = CvDrawColors::blue_color, int32_t ln_width = 1);
 
     // polygon
+    void DrawLabelPoint(double x, double y, cv::Scalar ln_color = CvDrawColors::blue_color, int32_t ln_width = 1);
     void DrawPolygon(const Polygon &polygon, bool show_dot = false, cv::Scalar ln_color = CvDrawColors::blue_color, int32_t ln_width = 1);
     void DrawFilledPolygon(const Polygon &polygon, bool show_dot = false, cv::Scalar fill_color = CvDrawColors::aoi_color, cv::Scalar ln_color = CvDrawColors::blue_color, int32_t ln_width = 1);
 
