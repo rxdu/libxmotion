@@ -3,3 +3,5 @@ project(librav_viewer)
 
 ## Add sub source directories
 add_subdirectory(lightview)
+add_subdirectory(ugv_viz)
+
