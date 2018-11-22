@@ -1,6 +1,5 @@
 ## Dependency libraries
 find_package(OpenCV REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIR})
 
 # find_package(FLTK REQUIRED)
 # include_directories(${FLTK_INCLUDE_DIR})

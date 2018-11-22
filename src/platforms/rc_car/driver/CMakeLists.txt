@@ -1,12 +1,9 @@
-## Include directories
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
 # Add libraries
 set(RCCAR_DRIVER_LIB_SRC
 	src/imu_neo.cpp
 )
 add_library(rccar_driver STATIC ${RCCAR_DRIVER_LIB_SRC})
-target_link_libraries(rccar_driver common sensors utilities datalink)
+target_link_libraries(rccar_driver common sensors utils datalink)
 target_include_directories(rccar_driver PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
   $<INSTALL_INTERFACE:include>

@@ -1,6 +1,5 @@
 # Dependency libraries
 find_package(TBB REQUIRED)
-include_directories(${TBB_INCLUDE_DIRS})
 
 # Add libraries
 set(TFIELD_LIB_SRC
@@ -13,6 +12,7 @@ add_library(tfield STATIC ${TFIELD_LIB_SRC})
 target_link_libraries(tfield common decomp graph traffic reachability ${TBB_LIBRARIES})
 target_include_directories(tfield PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${TBB_INCLUDE_DIRS}>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 

@@ -1,6 +1,5 @@
 # Dependency libraries
-find_package(GSL REQUIRED)
-include_directories(${GSL_INCLUDE_DIRS})
+# find_package(GSL REQUIRED)
 
 # Eigen Flags
 # EIGEN_STACK_ALLOCATION_LIMIT=0 => no limit on stack size
@@ -20,7 +19,7 @@ set(REACHABILITY_LIB_SRC
   src/car_longitudinal_model.cpp
 )
 add_library(reachability STATIC ${REACHABILITY_LIB_SRC})
-target_link_libraries(reachability markov model random utilities ascent ${GSL_LIBRARIES})
+target_link_libraries(reachability markov model random utils ascent)
 # target_compile_definitions(reachability PUBLIC "-DEIGEN_STACK_ALLOCATION_LIMIT=0")
 target_include_directories(reachability PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

@@ -3,4 +3,4 @@
 
 ## tests
 add_executable(test_bigaussian test_bigaussian.cpp)
-target_link_libraries(test_bigaussian random utilities)
+target_link_libraries(test_bigaussian random utils)

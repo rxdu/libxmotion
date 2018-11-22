@@ -1,5 +1,6 @@
 # Dependency libraries
-# find_package(LIBRARY_NAME REQUIRED)
+## Find Eigen3
+find_package(Eigen3 REQUIRED)
 
 set(ENABLE_CURVILINEAR_GRID on)
 

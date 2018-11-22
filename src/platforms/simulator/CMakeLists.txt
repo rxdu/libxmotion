@@ -16,10 +16,6 @@ else()
 	message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++14 or C++11 support. Please use a different C++ compiler.")
 endif()
 
-# Include files for LCM
-set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
-include_directories(${LCM_GENERATED_HEADER_PATH})
-
 ## Add sub source directories
 add_subdirectory(apps)
 add_subdirectory(sim_interface)

@@ -6,7 +6,7 @@ set(CONNECTIVITY_LIB_SRC
     src/threat_evaluation.cpp
 )
 add_library(connectivity STATIC ${CONNECTIVITY_LIB_SRC})
-target_link_libraries(connectivity traffic tfield local_planner utilities)
+target_link_libraries(connectivity traffic tfield local_planner utils)
 target_include_directories(connectivity PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

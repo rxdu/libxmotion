@@ -22,26 +22,13 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 # Dependency libraries
-#find_package(LIBRARY_NAME REQUIRED)
+## Find Eigen3
+find_package(Eigen3 REQUIRED)
 
 # Add libraries
-# set(COMMON_LIB_SRC
-#     src/poly_curve.cpp
-#     src/quad_flattraj.cpp
-# )
-# add_library(common STATIC ${COMMON_LIB_SRC})
-# if(ENABLE_LOGGING)
-# 	add_definitions(-DENABLE_LOGGING)
-# 	target_compile_definitions(common PUBLIC ENABLE_LOGGING=1)
-# 	target_link_libraries(common -lpthread)
-# endif(ENABLE_LOGGING)
-# target_include_directories(common PUBLIC
-# 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-# 	$<INSTALL_INTERFACE:include>
-# 	PRIVATE src)
-
 add_library(common INTERFACE)
 target_include_directories(common INTERFACE
-	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>
 	$<INSTALL_INTERFACE:include>)
 

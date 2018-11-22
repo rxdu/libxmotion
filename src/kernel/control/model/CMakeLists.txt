@@ -7,7 +7,7 @@ set(MODEL_LIB_SRC
 	src/bicycle_model.cpp
 )
 add_library(model STATIC ${MODEL_LIB_SRC})
-target_link_libraries(model utilities ascent)
+target_link_libraries(model utils ascent)
 target_include_directories(model PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>	

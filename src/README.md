@@ -11,7 +11,7 @@ Main components of librav (C++)
     * decision: general decision making building blocks
     * planning: general motion planning algorithms
     * visualization: core visualization
-    * utilities: tiny 3rd-party libraries and helper/wrappper classes implemented to simplify usage of external libraries
+    * utils: tiny 3rd-party libraries and helper/wrappper classes implemented to simplify usage of external libraries
 * **lcmtypes**: type definitions of LCM
 * **mcontrol**: platform-dependent motion control algorithms
 * **navigation**: high-level planning/navigation modules for applications

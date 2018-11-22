@@ -13,7 +13,7 @@ if (GUROBI_FOUND)
         geo_mark_graph.cpp    
     )
     add_library(path_repair STATIC ${PATH_REPAIR_LIB_SRC} ${PATH_REPAIR_COMMON_SRC})
-    target_link_libraries(path_repair legacy  quad_base polyopt common vis utilities datalink)
+    target_link_libraries(path_repair legacy  quad_base polyopt common vis utils datalink)
 endif()
 
 set(PATH_REPAIR_SIM_SRC
@@ -22,7 +22,6 @@ set(PATH_REPAIR_SIM_SRC
     sim/sim_depth_sensor.cpp
 )
 add_library(pr_sim STATIC ${PATH_REPAIR_SIM_SRC} ${PATH_REPAIR_COMMON_SRC})
-target_link_libraries(pr_sim utilities legacy  vis datalink)
+target_link_libraries(pr_sim utils legacy  vis datalink)
 
-# Add executables
 

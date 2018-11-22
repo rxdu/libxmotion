@@ -1,5 +1,5 @@
 # ⏱️ stopwatch
-Single-header C++11 RDTSCP clock and timing utilities released into the public domain.
+Single-header C++11 RDTSCP clock and timing utils released into the public domain.
 
 # why
 While developing games, I have wanted the following features which are not provided by `std::chrono`:

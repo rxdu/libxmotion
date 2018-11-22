@@ -7,7 +7,6 @@ if (NOT GUROBI_FOUND)
   message("-- Gurobi not found. Trajectory generation will not be built. Make sure you have set the GUROBI_HOME variable")
 else()
   # message("-- Gurobi found")
-  include_directories(${GUROBI_INCLUDE_DIRS})
 endif()
 
 # Add libraries

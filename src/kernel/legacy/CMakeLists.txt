@@ -1,8 +1,6 @@
 # Dependency libraries
 find_package(OpenCV REQUIRED)
-
 find_package(Octomap REQUIRED)
-include_directories(${OCTOMAP_INCLUDE_DIRS})
 
 # Add libraries
 set(MAP_LIB_SRC
@@ -22,6 +20,7 @@ add_library(legacy STATIC ${MAP_LIB_SRC})
 target_link_libraries(legacy common graph decomp datalink ${OpenCV_LIBS} ${OCTOMAP_LIBRARY})
 target_include_directories(legacy PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<BUILD_INTERFACE:${OCTOMAP_INCLUDE_DIRS}>
   $<INSTALL_INTERFACE:include>
   PRIVATE src)
 

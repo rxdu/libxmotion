@@ -1,9 +1,6 @@
 ## Dependency libraries
 find_package(Eigen3 REQUIRED)
-include_directories(${EIGEN3_INCLUDE_DIR})
-
 find_package(TBB REQUIRED)
-include_directories(${TBB_INCLUDE_DIRS})
 
 ## Add libraries
 # LightViz library
@@ -19,7 +16,9 @@ set(LIGHTVIZ_LIB_SRC
 add_library(lightviz STATIC ${LIGHTVIZ_LIB_SRC})
 target_link_libraries(lightviz decomp graph geometry canvas pthread ${TBB_LIBRARIES})
 target_include_directories(lightviz PUBLIC
-	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${TBB_INCLUDE_DIRS}>
 	$<INSTALL_INTERFACE:include>	
 	PRIVATE src)
 

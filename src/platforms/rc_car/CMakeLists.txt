@@ -21,10 +21,6 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-# Include files for LCM
-set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
-include_directories(${LCM_GENERATED_HEADER_PATH})
-
 ## Add other sub source directories
 add_subdirectory(apps)
 add_subdirectory(system)
