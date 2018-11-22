@@ -19,7 +19,7 @@ set(MAP_LIB_SRC
   src/librav_math.cpp
 )
 add_library(legacy STATIC ${MAP_LIB_SRC})
-target_link_libraries(legacy common graph decomp ${LCM_LIBRARIES} ${OpenCV_LIBS} ${OCTOMAP_LIBRARY})
+target_link_libraries(legacy common graph decomp datalink ${OpenCV_LIBS} ${OCTOMAP_LIBRARY})
 target_include_directories(legacy PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>

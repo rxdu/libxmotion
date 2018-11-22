@@ -7,7 +7,7 @@ set(RCCARSIM_LIB_SRC
     src/rc_tamiya_sim_control.cpp
 )
 add_library(rccar_sim STATIC ${RCCARSIM_LIB_SRC})
-target_link_libraries(rccar_sim sim_interface common utilities ${LCM_LIBRARIES})
+target_link_libraries(rccar_sim sim_interface common utilities datalink)
 target_include_directories(rccar_sim PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>

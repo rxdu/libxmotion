@@ -21,10 +21,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-## Find Eigen3
-find_package(Eigen3 REQUIRED)
-include_directories(${EIGEN3_INCLUDE_DIR})
-
+## Dependency libraries
 ## Find LCM
 find_package(LCM REQUIRED)
 if(LCM_NOT_FOUND)
@@ -34,5 +31,19 @@ endif(LCM_NOT_FOUND)
 set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 
-## Add other sub source directories
-add_subdirectory(lcm_link)
+## Add libraries
+set(LCMIPC_LIB_SRC
+	src/lcm_ipc.cpp
+)
+add_library(datalink STATIC ${LCMIPC_LIB_SRC})
+target_link_libraries(datalink ${LCM_LIBRARIES})
+target_include_directories(datalink PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${LCM_GENERATED_HEADER_PATH}>
+	$<INSTALL_INTERFACE:include>	
+	PRIVATE src)
+
+# Add executables
+if(BUILD_TESTS)
+	add_subdirectory(tests)
+endif()

@@ -21,15 +21,6 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-## Find LCM
-#find_package(PkgConfig REQUIRED)
-#pkg_search_module(LCM REQUIRED lcm)
-find_package(LCM REQUIRED)
-
-if(LCM_NOT_FOUND)
-  message(STATUS "LCM is not found. Inter-process communication depends on LCM.")
-endif(LCM_NOT_FOUND)
-
 # Include files for LCM
 set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})

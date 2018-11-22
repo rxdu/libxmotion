@@ -14,7 +14,7 @@ set(QUADCON_LIB_SRC
     src/quad_mixer.cpp    
 )
 add_library(quad_ctrl STATIC ${QUADCON_LIB_SRC})
-target_link_libraries(quad_ctrl librav_if common utilities ${LCM_LIBRARIES})
+target_link_libraries(quad_ctrl librav_if common utilities datalink)
 target_include_directories(quad_ctrl PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
@@ -22,4 +22,4 @@ target_include_directories(quad_ctrl PUBLIC
 
 # Add executables
 #add_executable(quad_motion_client motion_server/motion_client.cpp)
-#target_link_libraries(quad_motion_client ${LCM_LIBRARIES})
+#target_link_libraries(quad_motion_client datalink)

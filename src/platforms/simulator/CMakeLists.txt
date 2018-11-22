@@ -16,18 +16,6 @@ else()
 	message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++14 or C++11 support. Please use a different C++ compiler.")
 endif()
 
-## Put all binary files into /bin and libraries into /lib
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
-set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-
-## Find LCM
-find_package(LCM REQUIRED)
-
-if(LCM_NOT_FOUND)
-  message(STATUS "LCM is not found. Inter-process communication depends on LCM.")
-endif(LCM_NOT_FOUND)
-
 # Include files for LCM
 set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})

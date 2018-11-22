@@ -7,7 +7,11 @@ add_subdirectory(device)
 add_subdirectory(control)
 add_subdirectory(decision)
 add_subdirectory(planning)
+add_subdirectory(datalink)
 add_subdirectory(vizcore)
 add_subdirectory(utilities)
 
 add_subdirectory(examples)
+
+# to be deprecated
+add_subdirectory(legacy)

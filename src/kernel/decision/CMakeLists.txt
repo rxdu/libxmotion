@@ -25,14 +25,5 @@ set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 
-## Find LCM
-find_package(LCM REQUIRED)
-if(LCM_NOT_FOUND)
-  message(STATUS "LCM is not found. Inter-process communication depends on LCM.")
-endif(LCM_NOT_FOUND)
-# Include files for LCM
-set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
-include_directories(${LCM_GENERATED_HEADER_PATH})
-
 ## Add other sub source directories
 add_subdirectory(markov)

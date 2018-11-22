@@ -21,7 +21,7 @@ add_executable(test_osqp osqp_demo.cpp)
 target_link_libraries(test_osqp osqp)
 
 #add_executable(test_corridor tests/test_corridor.cpp)
-#target_link_libraries(test_corridor polyopt ${GUROBI_LIBRARIES} ${LCM_LIBRARIES})
+#target_link_libraries(test_corridor polyopt ${GUROBI_LIBRARIES} datalink)
 
 #add_executable(test_cgal_qp test_cgal_qp.cpp)
 #target_link_libraries(test_cgal_qp polyopt ${CGAL_LIBRARIES} ${GMP_LIBRARIES})

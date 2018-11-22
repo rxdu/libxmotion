@@ -6,7 +6,7 @@ set(UGVVIZ_LIB_SRC
     src/traffic_viewer.cpp
 )
 add_library(ugvviz STATIC ${UGVVIZ_LIB_SRC})
-target_link_libraries(ugvviz common traffic lightview lightviz ugvnav_viz utilities ${OpenCV_LIBS} ${LCM_LIBRARIES})
+target_link_libraries(ugvviz common traffic lightview lightviz ugvnav_viz utilities datalink ${OpenCV_LIBS})
 target_include_directories(ugvviz PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>

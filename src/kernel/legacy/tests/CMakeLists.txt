@@ -30,4 +30,4 @@
 #target_link_libraries(test_octomap ${Octomap_LIBS})
 
 #add_executable(test_cubebuilder tests/test_cubebuilder.cpp)
-#target_link_libraries(test_cubebuilder map  ${LCM_LIBRARIES})
+#target_link_libraries(test_cubebuilder map datalink)

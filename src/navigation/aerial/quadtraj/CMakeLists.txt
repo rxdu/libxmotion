@@ -19,7 +19,7 @@ set(TRAJ_SRC
     src/trajectory_manager.cpp
 )
 add_library(quad_traj STATIC ${TRAJ_SRC})
-target_link_libraries(quad_traj polyopt common ${LCM_LIBRARIES})
+target_link_libraries(quad_traj polyopt common datalink)
 target_include_directories(quad_traj PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
@@ -28,7 +28,7 @@ endif()
 
 # Add executables
 #add_executable(quad_motion_client motion_server/motion_client.cpp)
-#target_link_libraries(quad_motion_client ${LCM_LIBRARIES})
+#target_link_libraries(quad_motion_client datalink)
 
 if(BUILD_TESTS)
   add_subdirectory(tests)
