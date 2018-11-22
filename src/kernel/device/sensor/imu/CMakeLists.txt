@@ -12,7 +12,7 @@ set(SENSORS_LIB_SRC
 add_library(sensors STATIC ${SENSORS_LIB_SRC})
 target_link_libraries(sensors i2cbus)
 target_include_directories(sensors PUBLIC
-	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>
 	private src)
 

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(librav_sys)
+project(librav_device)
 
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
@@ -22,8 +22,8 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Add sub source directories
-add_subdirectory(i2c-bus)
-add_subdirectory(socketcan)
-add_subdirectory(sensors)
-# add_subdirectory(camera)
+add_subdirectory(driver/i2c-bus)
+add_subdirectory(driver/socketcan)
+add_subdirectory(sensor/imu)
+# add_subdirectory(sensor/camera)
 # add_subdirectory(tools)
