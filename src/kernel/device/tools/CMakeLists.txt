@@ -16,8 +16,9 @@ set(TOOLS_LIB_SRC
 add_library(tools STATIC ${TOOLS_LIB_SRC})
 # target_link_libraries(tools -lpthread)
 target_include_directories(tools PUBLIC
-	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
-	$<INSTALL_INTERFACE:include>)
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+    private src)
 
 add_subdirectory(tests)
 
