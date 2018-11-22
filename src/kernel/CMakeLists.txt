@@ -3,6 +3,7 @@ project(librav_core)
 
 ## Add sub source directories
 add_subdirectory(common)
+add_subdirectory(device)
 add_subdirectory(control)
 add_subdirectory(decision)
 add_subdirectory(planning)

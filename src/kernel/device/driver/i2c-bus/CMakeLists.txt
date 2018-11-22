@@ -11,7 +11,7 @@ set(I2CBUS_LIB_SRC
 add_library(i2cbus STATIC ${I2CBUS_LIB_SRC})
 # target_link_libraries(i2cbus -lpthread)
 target_include_directories(i2cbus PUBLIC
-	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>
 	private src)
 
