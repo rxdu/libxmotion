@@ -7,7 +7,7 @@
  */
 
 #include "system/lcm_messenger.hpp"
-#include "system/lcm_channels.hpp"
+#include "params/lcm_channels.hpp"
 
 using namespace librav;
 
@@ -49,7 +49,7 @@ void LCMMessenger::republishRawIMUData(const IMU9DOFData &msg)
 //     lcm_->publish(LCM_CHANNELS::CAR_RAW_MAG_CHANNEL, &mag_msg);
 // }
 
-void LCMMessenger::republishRawSpeedData(const CarSpeed &msg)
+void LCMMessenger::republishRawSpeedData(const Speed &msg)
 {
     librav_lcm_msgs::CarRawSpeed_t spd_msg;
 
@@ -76,7 +76,7 @@ void LCMMessenger::republishRawSpeedData(const CarSpeed &msg)
 //     lcm_->publish(LCM_CHANNELS::CAR_CALIB_IMU_CHANNEL, &imu_msg);
 // }
 
-void LCMMessenger::publishConvertedSpeedData(const CarSpeed &spd)
+void LCMMessenger::publishConvertedSpeedData(const Speed &spd)
 {
     librav_lcm_msgs::CarRawSpeed_t spd_msg;
 

@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "sensors/fxas21002c.hpp"
+#include "imu/fxas21002c.hpp"
 
 using namespace librav;
 

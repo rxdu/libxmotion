@@ -13,56 +13,69 @@
 #include <cstdint>
 
 #include "common/librav_types.hpp"
+#include "datalink/lcm_link.hpp"
 
 #include "rc_tamiya_sim/rc_tamiya_sim_types.hpp"
+#include "rc_tamiya_sim/rc_tamiya_sim_coordinator.hpp"
 #include "vrep_interface/vrep_sim_client.hpp"
 
 namespace librav
 {
-
 class RCTamiyaSimClient : public VrepSimClient<DataFromRCTamiyaSim, DataToRCTamiyaSim>
 {
   public:
-	RCTamiyaSimClient();
-	~RCTamiyaSimClient();
+    RCTamiyaSimClient();
+    RCTamiyaSimClient(std::shared_ptr<LCMLink> lcm);
 
-	virtual bool ReceiveDataFromSimRobot(DataFromRCTamiyaSim *rdata) override;
-	virtual void UpdateCtrlLoop(const DataFromRCTamiyaSim &rdata, DataToRCTamiyaSim *rcmd) override;
-	virtual void SendDataToSimRobot(const DataToRCTamiyaSim &rcmd) override;
+    ~RCTamiyaSimClient();
+
+    virtual bool ReceiveDataFromSimRobot(DataFromRCTamiyaSim *rdata) override;
+    virtual void UpdateCtrlLoop(const DataFromRCTamiyaSim &rdata, DataToRCTamiyaSim *rcmd) override;
+    virtual void SendDataToSimRobot(const DataToRCTamiyaSim &rcmd) override;
 
   private:
-	simxInt car_handle_;
-	simxInt camera_handle_;
-	simxInt steering_right_;
-	simxInt steering_left_;
-	simxInt driving_front_right_;
-	simxInt driving_front_left_;
-	simxInt driving_rear_right_;
-	simxInt driving_rear_left_;
+    std::shared_ptr<LCMLink> lcm_;
+    RCTamiyaSimCoordinator coordinator_;
 
-	float body_lin_vel_[3];
-	float body_ang_vel_[3];
-	float body_vel_;
+    // sim variables
+    simxInt car_handle_;
+    simxInt sensor_ref_handle_;
+    simxInt camera_handle_;
+    simxInt steering_right_;
+    simxInt steering_left_;
+    simxInt driving_front_right_;
+    simxInt driving_front_left_;
+    simxInt driving_rear_right_;
+    simxInt driving_rear_left_;
 
-	float driving_right_vel_;
-	float driving_left_vel_;
-	float steering_angle_;
-	float steering_vel_;
+    float body_lin_vel_[3];
+    float body_ang_vel_[3];
+    float body_vel_;
 
-	simxUChar *image_raw_;
-	int img_res[2];
+    float body_position_[3];
+    float body_orientation_[3];
 
-	virtual void ConfigDataStreaming(void) override;
+    float driving_right_vel_;
+    float driving_left_vel_;
+    float steering_angle_;
+    float steering_vel_;
 
-	bool GetCarDrivingVel(float &rvel, float &lvel, float &body_vel);
-	bool GetCarSteeringAngle(float &data);
-	bool GetVisionImage(simxUChar img[IMG_RES_Y][IMG_RES_X]);
+    simxUChar *image_raw_;
+    int img_res[2];
 
-	void SetCarSteeringAngle(float cmd);
-	void SetCarSteeringVelocity(float cmd);
-	void SetCarDrivingVel(float cmd);
+    void SetupSim();
+    virtual void ConfigDataStreaming(void) override;
 
+    bool GetCarDrivingSpeed(float &rvel, float &lvel, float &body_speed);
+    bool GetCarSteeringAngle(float &data);
+    bool GetCarPose(float &x, float &y, float &theta);
+
+    bool GetVisionImage(simxUChar img[RS_RGB_IMG_RES_Y][RS_RGB_IMG_RES_X]);
+
+    void SetCarSteeringAngle(float cmd);
+    void SetCarSteeringVelocity(float cmd);
+    void SetCarDrivingSpeed(float cmd);
 };
-}
+} // namespace librav
 
 #endif /* RC_TAMIYA_SIM_CLIENT_HPP */

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "sensors/fxas21002c.hpp"
+#include "imu/fxas21002c.hpp"
 #include "stopwatch/stopwatch.h"
 
 using namespace librav;

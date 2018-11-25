@@ -101,7 +101,7 @@ void NerveSystem::ReceiveIMUData()
     //     lcm_messenger_.republishRawMagData(msg);
 }
 
-void NerveSystem::ReceiveHallSpeedData(const CarSpeed &spd_msg)
+void NerveSystem::ReceiveHallSpeedData(const Speed &spd_msg)
 {
     std::cout << "Speed: " << spd_msg.speed << std::endl;
 
@@ -110,7 +110,7 @@ void NerveSystem::ReceiveHallSpeedData(const CarSpeed &spd_msg)
 #endif
     lcm_messenger_.republishRawSpeedData(spd_msg);
 
-    // CarSpeed car_speed(msg.time_stamp, msg.speed_estimate);
+    // Speed car_speed(msg.time_stamp, msg.speed_estimate);
     // lcm_messenger_.publishConvertedSpeedData(car_speed);
 }
 

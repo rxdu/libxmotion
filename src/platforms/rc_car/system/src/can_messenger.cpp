@@ -34,7 +34,7 @@ CANMessenger::~CANMessenger()
     socketcanClose(&socketcan_inst_);
 }
 
-void CANMessenger::SetupSpeedSubscriber(std::function<void(const CarSpeed &spd_msg)> callback)
+void CANMessenger::SetupSpeedSubscriber(std::function<void(const Speed &spd_msg)> callback)
 {
     spd_callback_ = callback;
 }
@@ -57,7 +57,7 @@ void CANMessenger::handleTimeout(int32_t timeout_ms)
 
 void CANMessenger::ProcessCANFrame(const CanardCANFrame &frame)
 {
-    static CarSpeed spd_msg;
+    static Speed spd_msg;
     uint32_t spd_temp = 0;
 
     switch (frame.id)

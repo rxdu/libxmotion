@@ -2,13 +2,14 @@
 #find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
-set(SENSORS_LIB_SRC
+set(IMU_LIB_SRC
+    src/i2c.cpp
 	src/fxos8700cq.cpp
 	src/fxas21002c.cpp
 )
-add_library(sensors STATIC ${SENSORS_LIB_SRC})
-target_link_libraries(sensors i2cbus)
-target_include_directories(sensors PUBLIC
+add_library(imu STATIC ${IMU_LIB_SRC})
+target_link_libraries(imu i2cbus)
+target_include_directories(imu PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>
 	private src)

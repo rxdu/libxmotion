@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "sensors/fxos8700cq.hpp"
+#include "imu/fxos8700cq.hpp"
 
 using namespace librav;
 

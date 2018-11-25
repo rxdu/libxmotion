@@ -22,7 +22,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Add other sub source directories
-add_subdirectory(apps)
+# add_subdirectory(apps)
+add_subdirectory(params)
 add_subdirectory(system)
 add_subdirectory(driver)
-# add_subdirectory(tests)

@@ -20,15 +20,15 @@
 
 namespace librav
 {
-using Position2Di = value2d<int32_t>;
-using Position2Dd = value2d<double>;
-using Position3Di = value3d<int32_t>;
-using Position3Dd = value3d<double>;
+using Position2Di = value2<int32_t>;
+using Position2Dd = value2<double>;
+using Position3Di = value3<int32_t>;
+using Position3Dd = value3<double>;
 
-using Velocity2Di = value2d<int32_t>;
-using Velocity2Dd = value2d<double>;
-using Velocity3Di = value3d<int32_t>;
-using Velocity3Dd = value3d<double>;
+using Velocity2Di = value2<int32_t>;
+using Velocity2Dd = value2<double>;
+using Velocity3Di = value3<int32_t>;
+using Velocity3Dd = value3<double>;
 
 enum class OccupancyType
 {

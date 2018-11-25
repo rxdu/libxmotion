@@ -33,7 +33,7 @@ include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add libraries
 set(LCMIPC_LIB_SRC
-	src/lcm_ipc.cpp
+	src/lcm_link.cpp
 )
 add_library(datalink STATIC ${LCMIPC_LIB_SRC})
 target_link_libraries(datalink ${LCM_LIBRARIES})

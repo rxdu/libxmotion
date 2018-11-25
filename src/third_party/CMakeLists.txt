@@ -7,6 +7,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Add sub source directories
+add_subdirectory(asio)
 add_subdirectory(googletest)
 add_subdirectory(spdlog)
 add_subdirectory(ascent)
@@ -18,3 +19,4 @@ add_subdirectory(imgui)
 # add_subdirectory(kindr)
 # add_subdirectory(polynomial)
 add_subdirectory(dubins_curves)
+add_subdirectory(nema_tode)

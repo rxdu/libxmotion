@@ -14,5 +14,4 @@ target_include_directories(quad_sim_solo PUBLIC
   PRIVATE src)
 
 # Add executables
-#add_executable(quadsim_demo quadsim_demo.cpp)
-#target_link_libraries(quadsim_demo quadsim quad_ctrl)
+add_subdirectory(apps)

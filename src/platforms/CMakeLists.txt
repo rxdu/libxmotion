@@ -3,5 +3,5 @@ project(librav_platforms)
 
 ## Add sub source directories
 add_subdirectory(quadrotor)
-# add_subdirectory(rc_car)
+add_subdirectory(rc_car)
 add_subdirectory(simulator)

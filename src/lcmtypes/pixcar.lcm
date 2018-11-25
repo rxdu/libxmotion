@@ -6,12 +6,13 @@ struct CarRawIMU_t
     int64_t mtime;
     float gyro[3];
     float accel[3];
+    float magn[3];
 } 
 
 struct CarRawMag_t
 {
     int64_t mtime;
-    float mag[3];
+    float magn[3];
 } 
 
 struct CarRawSpeed_t
@@ -21,9 +22,18 @@ struct CarRawSpeed_t
     float speed;
 } 
 
+struct CarPose_t
+{
+    int64_t mtime;
+    Vector2 position;
+    double theta;
+} 
+
 // command range: [-1,1]
 struct CarCommand_t
 {
-    int8_t servo;
-    int8_t motor;
+    boolean update_servo;
+    boolean update_motor;
+    float servo;
+    float motor;
 } 

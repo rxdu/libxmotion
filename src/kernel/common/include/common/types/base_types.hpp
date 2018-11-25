@@ -23,15 +23,15 @@ using TimeStamp = uint64_t;
 using CTimeStamp = double;
 
 template <typename T>
-struct value2d
+struct value2
 {
-	value2d() : x(0), y(0) {}
-	value2d(T _x, T _y) : x(_x), y(_y) {}
+	value2() : x(0), y(0) {}
+	value2(T _x, T _y) : x(_x), y(_y) {}
 
 	T x;
 	T y;
 
-	bool operator==(const struct value2d &other) const
+	bool operator==(const struct value2 &other) const
 	{
 		if (this->x == other.x && this->y == other.y)
 			return true;
@@ -39,7 +39,7 @@ struct value2d
 			return false;
 	}
 
-	friend std::ostream &operator<<(std::ostream &os, const struct value2d &pos)
+	friend std::ostream &operator<<(std::ostream &os, const struct value2 &pos)
 	{
 		os << pos.x << " , " << pos.y;
 		return os;
@@ -47,16 +47,16 @@ struct value2d
 };
 
 template <typename T>
-struct value3d
+struct value3
 {
-	value3d() : x(0), y(0), z(0) {}
-	value3d(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {}
+	value3() : x(0), y(0), z(0) {}
+	value3(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {}
 
 	T x;
 	T y;
 	T z;
 
-	bool operator==(const struct value3d &other) const
+	bool operator==(const struct value3 &other) const
 	{
 		if (this->x == other.x && this->y == other.y && this->z == other.z)
 			return true;
@@ -64,20 +64,20 @@ struct value3d
 			return false;
 	}
 
-	friend std::ostream &operator<<(std::ostream &os, const struct value3d &pos)
+	friend std::ostream &operator<<(std::ostream &os, const struct value3 &pos)
 	{
 		os << pos.x << " , " << pos.y << " , " << pos.z;
 		return os;
 	}
 };
 
-using Point2f = value2d<float>;
-using Point2d = value2d<double>;
-using Point2i = value2d<int32_t>;
+using Point2f = value2<float>;
+using Point2d = value2<double>;
+using Point2i = value2<int32_t>;
 
-using Point3f = value3d<float>;
-using Point3d = value3d<double>;
-using Point3i = value3d<int32_t>;
+using Point3f = value3<float>;
+using Point3d = value3<double>;
+using Point3i = value3<int32_t>;
 
 using CovarMatrix2d = Eigen::Matrix<double, 2, 2>;
 

@@ -1,6 +1,6 @@
 #include <iostream>
-#include "sensors/fxos8700cq.hpp"
-#include "sensors/fxas21002c.hpp"
+#include "imu/fxos8700cq.hpp"
+#include "imu/fxas21002c.hpp"
 #include "stopwatch/stopwatch.h"
 
 using namespace librav;
