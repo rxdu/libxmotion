@@ -24,7 +24,7 @@ def test_image():
     ctx.line_to(0.802, 0.3)
     ctx.stroke()
 
-    image = cairo.ImageSurface.create_from_png("resource/red_car.png")
+    image = cairo.ImageSurface.create_from_png("resource/yellow_car.png")
     ctx.set_source_surface(image, 10, 0)
     ctx.paint()
 

@@ -16,5 +16,5 @@ target_include_directories(roadmap PUBLIC
 
 # Add executables
 if(BUILD_TESTS)
-	# add_subdirectory(tests)
+	add_subdirectory(tests)
 endif()

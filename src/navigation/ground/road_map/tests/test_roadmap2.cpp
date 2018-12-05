@@ -14,7 +14,8 @@ int main()
 {
     stopwatch::StopWatch timer;
 
-    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/natick_roundabout_full.osm");
+    // std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/natick_roundabout_full.osm");
+    std::shared_ptr<RoadMap> map = std::make_shared<RoadMap>("/home/rdu/Workspace/librav/data/road_map/local_intersection_merge.osm");
 
     if (!map->MapReady())
     {
@@ -29,7 +30,7 @@ int main()
     // auto ids = map->FindOccupiedLanelet(CartCooridnate(55, 56));
     // std::cout << "occupied laneles: " << ids.size() << std::endl;
 
-    RoadMapViz::SetupRoadMapViz(map);
+    RoadMapViz::SetupRoadMapViz(map, 5);
     RoadMapViz::ShowLanes();
 
     // LightViz::ShowPolygon(map->GetAllLanePolygons(), 10);
