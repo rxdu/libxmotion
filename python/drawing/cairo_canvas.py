@@ -13,14 +13,17 @@ class CanvasType(Enum):
 
 class CairoCanvas:
     '''
-    A canvas whose coordinates are mapped to [0,1]. 
-    
+    Description: A canvas whose coordinates are mapped to [0,1]. 
+
     Note: The canvas is always created as a square to keep the right aspect ratio and only
         the part spcified by [0, width] * [0, height] are visible to user. 
         Internally the size of the square is equal to either width or height, whichever is 
         larger, which also means the point at [1,1] may be outside the visible part of canvas.            
+    
+    Author: Ruixiang Du
     '''
-    def __init__(self, width=600, height=400, name="cairo_default", add_boundary = True, type=CanvasType.IMAGE):
+
+    def __init__(self, width=600, height=400, name="cairo_default", add_boundary=True, type=CanvasType.IMAGE):
         self.dwidth = width
         self.dheight = height
 
@@ -67,6 +70,20 @@ class CairoCanvas:
 
     def get_context(self):
         return self.context
+
+    def translate_rotate(self, dx, dy, dtheta):
+        self.context.translate(dx, dy)
+        self.context.rotate(dtheta)
+
+    def reverse_translate_rotate(self, dx, dy, dtheta):
+        self.context.rotate(-dtheta)
+        self.context.translate(-dx, -dy)
+
+    def enable_clear_mode(self):
+        self.context.set_operator(cairo.Operator.CLEAR)
+    
+    def disable_clear_mode(self):
+        self.context.set_operator(cairo.Operator.OVER)
 
     def draw_reference_boundary(self):
         ctx = self.context

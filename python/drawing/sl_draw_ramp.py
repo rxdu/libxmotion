@@ -2,70 +2,92 @@
 
 import math
 import cairo
+import cairo_canvas as cc
+
 
 def draw_ramp():
+    canvas = cc.CairoCanvas(600, 300, "ramp_example",
+                            True, cc.CanvasType.IMAGE)
+    ctx = canvas.get_context()
 
-    WIDTH, HEIGHT = 800, 800
+    ##################
+    #   draw here
+    ##################
 
-    surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
-    # surface = cairo.PSSurface("eps_example.eps", WIDTH, HEIGHT)
-    # surface.set_eps(True)
-    ctx = cairo.Context(surface)
-
-    ctx.scale(WIDTH, HEIGHT)  # Normalizing the canvas
-
-    # pat = cairo.LinearGradient(0.0, 0.0, 0.0, 1.0)
-    # pat.add_color_stop_rgba(1, 0.7, 0, 0, 0.5)  # First stop, 50% opacity
-    # pat.add_color_stop_rgba(0, 0.9, 0.7, 0.2, 1)  # Last stop, 100% opacity
-
-    # ctx.rectangle(0, 0, 1, 1)  # Rectangle(x0, y0, x1, y1)
-    # ctx.set_source(pat)
-    # ctx.fill()
-
-    # ctx.translate(0.1, 0.1)  # Changing the current transformation matrix
-
-    # ctx.move_to(0, 0)
-    # # Arc(cx, cy, radius, start_angle, stop_angle)
-    # ctx.arc(0.2, 0.1, 0.1, -math.pi / 2, 0)
-    # ctx.line_to(0.5, 0.1)  # Line to (x,y)
-    # # Curve(x1, y1, x2, y2, x3, y3)
-    # ctx.curve_to(0.5, 0.2, 0.5, 0.4, 0.2, 0.8)
-    # ctx.close_path()
-
-    ctx.rectangle(0, 0, 1, 1)
-    ctx.set_line_width(0.01)
-    ctx.set_source_rgb(0, 0, 0)
-    ctx.stroke()
-
-    ctx.rectangle(0.1, 0.2, 0.8, 0.2)
+    ctx.rectangle(0.05, 0.1, 0.9, 0.12)
     ctx.set_source_rgb(169/255.0, 169/255.0, 169/255.0)
     ctx.fill()
 
     ctx.set_source_rgb(1, 1, 1)
     ctx.set_line_width(0.005)
-    ctx.move_to(0.1, 0.22)
-    ctx.line_to(0.9, 0.22)
+    ctx.move_to(0.05, 0.11)
+    ctx.line_to(0.95, 0.11)
     ctx.stroke()
 
     ctx.set_source_rgb(1, 1, 1)
     ctx.set_line_width(0.005)
-    ctx.move_to(0.1, 0.38)
-    ctx.line_to(0.9, 0.38)
+    ctx.move_to(0.05, 0.21)
+    ctx.line_to(0.95, 0.21)
     ctx.stroke()
 
-    ctx.translate(0.2, 0.55)
-    # ctx.rotate(-20/180.0*math.pi)
-    ctx.rotate(math.radians(-30))
-    ctx.set_source_rgb(169/255.0, 169/255.0, 169/255.0)
-    # ctx.rectangle(0.1, 0.5, 0.6, 0.15)
-    ctx.rectangle(0.0, 0.0, 0.6, 0.15)
-    ctx.fill()  
+    #---------------------------------#
 
-    surface.write_to_png("example.png")  # Output to PNG
+    dx = 0.15
+    dy = 0.355
+    dtheta = math.radians(-20)
+
+    canvas.translate_rotate(dx, dy, dtheta)
+    ctx.set_source_rgb(169/255.0, 169/255.0, 169/255.0)
+    ctx.rectangle(0.0, 0.0, 0.7, 0.1)
+    ctx.fill()
+
+    ctx.set_source_rgb(1, 1, 1)
+    ctx.set_line_width(0.005)
+    ctx.move_to(0.0, 0.01)
+    ctx.line_to(0.45, 0.01)
+    ctx.stroke()
+
+    ctx.set_source_rgb(1, 1, 1)
+    ctx.set_line_width(0.005)
+    ctx.move_to(0.0, 0.09)
+    ctx.line_to(0.67, 0.09)
+    ctx.stroke()
+
+    #---------------------------------#
+
+    canvas.reverse_translate_rotate(dx, dy, dtheta)
+
+    ctx.set_source_rgb(1, 1, 1)
+    ctx.set_line_width(0.005)
+    ctx.move_to(0.05, 0.21)
+    ctx.line_to(0.95, 0.21)
+    ctx.stroke()
+
+    ctx.set_source_rgb(169/255.0, 169/255.0, 169/255.0)
+    ctx.set_line_width(0.008)
+    ctx.move_to(0.58, 0.21)
+    ctx.line_to(0.802, 0.21)
+    ctx.stroke()
+
+    red_car_suf = cairo.ImageSurface.create_from_png("resource/red_car.png")
+    width = red_car_suf.get_width()
+    height = red_car_suf.get_height()
+    
+    ctx.rectangle(0, 0, 250, 250)
+    ctx.move_to(0,0)
+    ctx.set_source_surface(red_car_suf, width/2, height/2)
+    ctx.fill()
+    # ctx.clip()
+    # ctx.paint()
+    # ctx.restore()
+
+    ##################
+
+    canvas.save_to_file()
 
 
 def main():
-    print("selective listening drawing: " + __file__)
+    print("librav pycairo drawing: " + __file__)
 
     draw_ramp()
 
