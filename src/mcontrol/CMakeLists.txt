@@ -3,4 +3,4 @@ project(librav_controller)
 
 ## Add sub source directories
 add_subdirectory(quadrotor_control)
-# add_subdirectory(rccar_control)
+add_subdirectory(rccar_control)
