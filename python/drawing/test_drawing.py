@@ -11,17 +11,31 @@ def test_canvas():
     draw_something(ctx)
     canvas.save_to_file()
 
+
 def test_image():
     print("test image")
 
     canvas = cc.CairoCanvas(800, 600, "test_image", True, cc.CanvasType.IMAGE)
     ctx = canvas.get_context()
 
+    ctx.set_source_rgb(169/255.0, 169/255.0, 169/255.0)
+    ctx.set_line_width(0.008)
+    ctx.move_to(0.28, 0.3)
+    ctx.line_to(0.802, 0.3)
+    ctx.stroke()
+
     image = cairo.ImageSurface.create_from_png("resource/red_car.png")
-    ctx.set_source_surface(image)
+    ctx.set_source_surface(image, 10, 0)
     ctx.paint()
 
+    ctx.set_source_rgb(169/255.0, 169/255.0, 169/255.0)
+    ctx.set_line_width(0.008)
+    ctx.move_to(0.58, 0.21)
+    ctx.line_to(0.802, 0.21)
+    ctx.stroke()
+
     canvas.save_to_file()
+
 
 def draw_something(ctx):
 
@@ -55,7 +69,7 @@ def main():
 
     # test_canvas()
     test_image()
-    
+
 
 if __name__ == '__main__':
     main()

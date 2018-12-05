@@ -32,6 +32,8 @@ def draw_ramp():
 
     #---------------------------------#
 
+    ctx.save()
+
     dx = 0.15
     dy = 0.355
     dtheta = math.radians(-20)
@@ -53,9 +55,9 @@ def draw_ramp():
     ctx.line_to(0.67, 0.09)
     ctx.stroke()
 
-    #---------------------------------#
+    ctx.restore()
 
-    canvas.reverse_translate_rotate(dx, dy, dtheta)
+    #---------------------------------#
 
     ctx.set_source_rgb(1, 1, 1)
     ctx.set_line_width(0.005)

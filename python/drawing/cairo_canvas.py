@@ -75,10 +75,10 @@ class CairoCanvas:
         self.context.translate(dx, dy)
         self.context.rotate(dtheta)
 
-    def reverse_translate_rotate(self, dx, dy, dtheta):
-        self.context.rotate(-dtheta)
-        self.context.translate(-dx, -dy)
-
+    def rotate_translate(self, dx, dy, dtheta):
+        self.context.rotate(dtheta)
+        self.context.translate(dx, dy)
+        
     def enable_clear_mode(self):
         self.context.set_operator(cairo.Operator.CLEAR)
     
