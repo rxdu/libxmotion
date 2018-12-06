@@ -24,3 +24,4 @@ set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 ## Add other sub source directories
 add_subdirectory(canvas)
 add_subdirectory(lightviz)
+add_subdirectory(lightview)

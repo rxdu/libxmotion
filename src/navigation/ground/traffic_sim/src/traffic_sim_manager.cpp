@@ -16,7 +16,7 @@
 
 using namespace librav;
 
-TrafficSimManager::TrafficSimManager(TrafficSimConfig config) : config_(config)
+TrafficSimManager::TrafficSimManager(TrafficSimConfig config) : config_(config), map_loader_(config.map)
 {
     // setup communication link
     data_link_ = std::make_shared<LCMLink>();
@@ -29,10 +29,12 @@ TrafficSimManager::TrafficSimManager(TrafficSimConfig config) : config_(config)
 
 bool TrafficSimManager::ValidateSimConfig()
 {
-    // MapLoader loader("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
-
     // check datalink status
     if (!data_link_ready_)
+        return false;
+
+    // check if map loaded successfully
+    if (!map_loader_.map_ready)
         return false;
 
     return true;
@@ -43,6 +45,23 @@ void TrafficSimManager::HandleLCMMessage_SyncTrigger(const librav::ReceiveBuffer
     sync_trigger_ready_ = msg->trigger_ready;
 }
 
+void TrafficSimManager::UpdateSimState(double t)
+{
+    std::cout << "simulation time: " << t << std::endl;
+
+    // broadcast simulation updates to LCM
+    librav_lcm_msgs::VehicleState state;
+    state.position[0] = 1;
+    state.position[1] = 2;
+    state.theta = M_PI * 30.0 / 180.0;
+
+    librav_lcm_msgs::VehicleEstimations ests_msg;
+    ests_msg.vehicle_num = 1;
+    ests_msg.estimations.push_back(state);
+
+    data_link_->publish(CAV_COMMON_CHANNELS::VEHICLE_ESTIMATIONS_CHANNEL, &ests_msg);
+}
+
 void TrafficSimManager::RunSim(bool sync_mode)
 {
     std::cout << "INFO: simulation started..." << std::endl;
@@ -51,23 +70,13 @@ void TrafficSimManager::RunSim(bool sync_mode)
     double t = config_.t0;
     while (t < config_.tf)
     {
+        // label starting time of current sim iteration
         sim_stopwatch_.tic();
 
-        std::cout << "simulation time: " << t << std::endl;
-        // sim.UpdateTraffic(LOOP_PERIOD);
+        // main simulation calculation happens here
+        UpdateSimState(t);
 
-        // broadcast simulation updates to LCM
-        librav_lcm_msgs::VehicleState state;
-        state.position[0] = 1;
-        state.position[1] = 2;
-        state.theta = M_PI * 30.0 / 180.0;
-
-        librav_lcm_msgs::VehicleEstimations ests_msg;
-        ests_msg.vehicle_num = 1;
-        ests_msg.estimations.push_back(state);
-
-        data_link_->publish(CAV_COMMON_CHANNELS::VEHICLE_ESTIMATIONS_CHANNEL, &ests_msg);
-
+        // handle LCM callbacks
         data_link_->handleTimeout(0);
 
         // check if sync_mode, enable this if planner runs too slow

@@ -37,6 +37,10 @@ void TrafficMap::IdentifyTrafficElements()
     // std::cout << "traffic channel num: " << traffic_channels_.size() << std::endl;
 }
 
+std::shared_ptr<TrafficChannel> TrafficMap::GetTrafficChannel(std::string src, std::string dst)
+{
+}
+
 std::vector<std::shared_ptr<TrafficChannel>> TrafficMap::GetAllTrafficChannels()
 {
     std::vector<std::shared_ptr<TrafficChannel>> chns;

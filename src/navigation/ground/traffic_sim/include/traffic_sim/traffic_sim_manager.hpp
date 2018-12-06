@@ -13,11 +13,12 @@
 #include <memory>
 
 #include "datalink/lcm_link.hpp"
-#include "traffic_sim/traffic_sim_config.hpp"
-#include "traffic_sim/map_manager.hpp"
 #include "stopwatch/stopwatch.h"
 
-#include "lcmtypes/librav.hpp"
+#include "traffic_map/map_loader.hpp"
+
+#include "traffic_sim/traffic_sim_config.hpp"
+#include "traffic_sim/vehicle_manager.hpp"
 
 namespace librav
 {
@@ -27,18 +28,20 @@ class TrafficSimManager
     TrafficSimManager(TrafficSimConfig config);
 
     bool ValidateSimConfig();
-    void RunSim(bool sync_mode = true);
+    void RunSim(bool sync_mode = false);
 
   private:
     TrafficSimConfig config_;
 
-    stopwatch::StopWatch sim_stopwatch_;
     std::shared_ptr<LCMLink> data_link_;
+    stopwatch::StopWatch sim_stopwatch_;
     bool data_link_ready_ = false;
-
-    MapManager map_manager_;
-
     bool sync_trigger_ready_ = false;
+
+    MapLoader map_loader_;
+    VehicleManager vehicle_manager_;
+
+    void UpdateSimState(double t);
 
     void HandleLCMMessage_SyncTrigger(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg);
 };

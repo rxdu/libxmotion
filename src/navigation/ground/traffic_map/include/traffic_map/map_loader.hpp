@@ -31,7 +31,7 @@ struct MapLoader
 
         if (!road_map->MapReady())
         {
-            std::cerr << "map didn't load correctly" << std::endl;
+            std::cerr << "ERROR: map didn't load correctly" << std::endl;
             return;
         }
 
@@ -39,8 +39,11 @@ struct MapLoader
 
         traffic_map = std::make_shared<TrafficMap>(road_map);
 
-        std::cout << "map loaded in " << timer.toc() << " seconds" << std::endl;
+        std::cout << "INFO: map loaded in " << timer.toc() << " seconds" << std::endl;
+        map_ready = true;
     }
+
+    bool map_ready = false;
 
     std::shared_ptr<RoadMap> road_map;
     std::shared_ptr<TrafficMap> traffic_map;

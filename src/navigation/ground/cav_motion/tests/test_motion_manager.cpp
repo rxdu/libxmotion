@@ -12,17 +12,15 @@ using namespace librav;
 
 int main()
 {
-    // std::shared_ptr<LCMLink> data_link_ = std::make_shared<LCMLink>();
-    // if (!data_link_->good())
-    //     std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
+    CAVMotionManager manager;
 
-    CAVMotionManager planner;
-
-    if (!planner.IsReady())
+    if (!manager.IsReady())
     {
         std::cerr << "ERROR: planner is not set up properly" << std::endl;
         return -1;
     }
+
+    manager.Run();
 
     return 0;
 }

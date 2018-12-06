@@ -3,9 +3,9 @@
 
 # Add libraries
 set(TRAFFIC_SIM_LIB_SRC
-    src/vehicle_sim.cpp
-    src/traffic_sim.cpp
     src/vehicle_motion.cpp
+    src/vehicle_manager.cpp
+    src/traffic_sim_config.cpp
     src/traffic_sim_manager.cpp
 )
 add_library(trafficsim STATIC ${TRAFFIC_SIM_LIB_SRC})

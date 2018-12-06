@@ -13,13 +13,23 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <atomic>
 
 namespace librav
 {
 struct VehicleInfo
 {
-    // id of ego vehicle reserved to be -1
+    VehicleInfo() = default;
+    VehicleInfo(double init_s)
+    {
+        id = VehicleInfo::Count;
+        VehicleInfo::Count.fetch_add(1);
+    }
+
     int32_t id;
+
+    // id of ego vehicle reserved to be -1
+    static std::atomic<int32_t> Count;
 };
 
 struct TrafficSimConfig
@@ -30,8 +40,8 @@ struct TrafficSimConfig
     double dt = 1;
 
     /* estimation broadcasting timing */
-    // default: broadcast after every simulation update 
-    int32_t dtk = 1;    
+    // default: broadcast after every simulation update
+    int32_t dtk = 1;
 
     /* map */
     std::string map;

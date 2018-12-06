@@ -29,3 +29,8 @@ bool CAVMotionManager::IsReady()
 
     return true;
 }
+
+void CAVMotionManager::Run()
+{
+    std::cout << "INFO: motion manager started..." << std::endl;
+}

@@ -13,7 +13,6 @@
 #include <memory>
 
 #include "datalink/lcm_link.hpp"
-#include "lcmtypes/librav.hpp"
 
 namespace librav
 {
@@ -23,6 +22,7 @@ class CAVMotionManager
     CAVMotionManager();
 
     bool IsReady();
+    void Run();
 
   private:
     std::shared_ptr<LCMLink> data_link_;
