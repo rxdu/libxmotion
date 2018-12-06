@@ -6,9 +6,10 @@ set(TRAFFIC_SIM_LIB_SRC
     src/vehicle_sim.cpp
     src/traffic_sim.cpp
     src/vehicle_motion.cpp
+    src/traffic_sim_manager.cpp
 )
 add_library(trafficsim STATIC ${TRAFFIC_SIM_LIB_SRC})
-target_link_libraries(trafficsim roadmap traffic utils)
+target_link_libraries(trafficsim cav_common roadmap traffic datalink utils)
 target_include_directories(trafficsim PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

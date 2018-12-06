@@ -1,0 +1,15 @@
+package librav_lcm_msgs;
+
+struct VehicleState
+{
+    double position[2];
+    double theta;
+
+    double speed;
+}
+
+struct VehicleEstimations
+{
+    int64_t vehicle_num;
+    VehicleState estimations[vehicle_num];
+}

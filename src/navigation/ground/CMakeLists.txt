@@ -22,6 +22,9 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Add other sub source directories
+add_subdirectory(cav_common)
+add_subdirectory(cav_planner)
+
 add_subdirectory(road_map)
 add_subdirectory(traffic_map)
 add_subdirectory(reachability)
@@ -29,7 +32,7 @@ add_subdirectory(state_lattice)
 add_subdirectory(local_planner)
 add_subdirectory(threat_field)
 add_subdirectory(connectivity)
-# add_subdirectory(traffic_sim)
+add_subdirectory(traffic_sim)
 
 add_subdirectory(ugvnav_viz)
 
