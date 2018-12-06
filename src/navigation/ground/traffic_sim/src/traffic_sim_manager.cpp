@@ -38,7 +38,7 @@ bool TrafficSimManager::ValidateSimConfig()
     return true;
 }
 
-void TrafficSimManager::HandleLCMMessage_SyncTrigger(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg)
+void TrafficSimManager::HandleLCMMessage_SyncTrigger(const lcm_link::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg)
 {
     sync_trigger_ready_ = msg->trigger_ready;
 }

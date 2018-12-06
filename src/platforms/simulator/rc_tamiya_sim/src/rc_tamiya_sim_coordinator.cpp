@@ -57,7 +57,7 @@ void RCTamiyaSimCoordinator::ExchangeData(const DataFromRCTamiyaSim &rdata, Data
     }
 }
 
-void RCTamiyaSimCoordinator::HandleLCMMessage_CarCmd(const lcm::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::CarCommand_t *msg)
+void RCTamiyaSimCoordinator::HandleLCMMessage_CarCmd(const lcm_link::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::CarCommand_t *msg)
 {
     std::cout << "received command: " << msg->servo << " , " << msg->motor << std::endl;
 

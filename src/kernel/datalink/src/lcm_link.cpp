@@ -11,6 +11,6 @@
 
 using namespace librav;
 
-LCMLink::LCMLink(std::string lcm_url) : lcm::LCM(lcm_url)
+LCMLink::LCMLink(std::string lcm_url) : lcm_link::LCM(lcm_url)
 {
 }
