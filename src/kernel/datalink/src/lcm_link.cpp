@@ -8,9 +8,3 @@
  */
 
 #include "datalink/lcm_link.hpp"
-
-using namespace librav;
-
-LCMLink::LCMLink(std::string lcm_url) : lcm_link::LCM(lcm_url)
-{
-}

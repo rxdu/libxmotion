@@ -17,7 +17,7 @@ CAVMotionManager::CAVMotionManager()
 {
     // setup communication link
     data_link_ = std::make_shared<LCMLink>();
-    if (!data_link_->IsGood())
+    if (!data_link_->good())
         std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
     data_link_ready_ = true;
 }

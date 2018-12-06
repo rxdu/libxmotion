@@ -32,16 +32,12 @@ set(LCM_GENERATED_HEADER_PATH ${CMAKE_BINARY_DIR}/include)
 include_directories(${LCM_GENERATED_HEADER_PATH})
 
 ## Add libraries
-set(LCMIPC_LIB_SRC
-	src/lcm_link.cpp
-)
-add_library(datalink STATIC ${LCMIPC_LIB_SRC})
-target_link_libraries(datalink ${LCM_LIBRARIES})
-target_include_directories(datalink PUBLIC
+add_library(datalink INTERFACE)
+target_link_libraries(datalink INTERFACE ${LCM_LIBRARIES})
+target_include_directories(datalink INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${LCM_GENERATED_HEADER_PATH}>
-	$<INSTALL_INTERFACE:include>	
-	PRIVATE src)
+	$<INSTALL_INTERFACE:include>)
 
 # Add executables
 if(BUILD_TESTS)

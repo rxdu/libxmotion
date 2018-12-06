@@ -20,7 +20,7 @@ TrafficSimManager::TrafficSimManager(TrafficSimConfig config) : config_(config)
 {
     // setup communication link
     data_link_ = std::make_shared<LCMLink>();
-    if (!data_link_->IsGood())
+    if (!data_link_->good())
         std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
     data_link_ready_ = true;
 
@@ -38,7 +38,7 @@ bool TrafficSimManager::ValidateSimConfig()
     return true;
 }
 
-void TrafficSimManager::HandleLCMMessage_SyncTrigger(const lcm_link::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg)
+void TrafficSimManager::HandleLCMMessage_SyncTrigger(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg)
 {
     sync_trigger_ready_ = msg->trigger_ready;
 }

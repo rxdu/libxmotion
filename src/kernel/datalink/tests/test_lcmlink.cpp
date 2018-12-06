@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 {
     std::shared_ptr<LCMLink> link = std::make_shared<LCMLink>();
 
-    if (!link->IsGood())
+    if (!link->good())
     {
         std::cout << "ERROR: Failed to initialize LCM." << std::endl;
         return -1;

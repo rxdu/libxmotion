@@ -18,13 +18,13 @@
 #include <functional>
 #endif
 
-namespace lcm_link {
+namespace librav {
 
 /**
  * @defgroup LcmCpp C++ API Reference
  *
- * THe %LCM C++ API provides classes and data structures for communicating with
- * other %LCM clients, as well as reading and writing %LCM log files.  It is a
+ * THe %LCMLink C++ API provides classes and data structures for communicating with
+ * other %LCMLink clients, as well as reading and writing %LCMLink log files.  It is a
  * pure header wrapper around the C API, and has the same linking requirements
  * as the C API.
  *
@@ -40,35 +40,35 @@ struct ReceiveBuffer;
  *
  * @headerfile lcm/lcm-cpp.hpp
  */
-class LCM {
+class LCMLink {
   public:
     /**
      * @brief Constructor.
      *
-     * Initializes the LCM instance and connects it to the specified LCM
+     * Initializes the LCMLink instance and connects it to the specified LCMLink
      * network.  See the documentation on lcm_create() in the C API for
      * details on how lcm_url is formatted.
      *
      * @sa lcm_create()
      */
-    inline LCM(std::string lcm_url = "");
+    inline LCMLink(std::string lcm_url = "");
 
     /**
      * @brief Constructor.
      *
-     * Initializes the c++ LCM instance from an existing C instance.
+     * Initializes the c++ LCMLink instance from an existing C instance.
      *
      * @sa lcm_create()
      */
-    inline LCM(lcm_t *lcm_in);
+    inline LCMLink(lcm_t *lcm_in);
 
     /**
      * @brief Destructor.
      *
-     * Disconnects from the LCM network, and destroys all outstanding
+     * Disconnects from the LCMLink network, and destroys all outstanding
      * Subscription objects.
      */
-    inline ~LCM();
+    inline ~LCMLink();
 
     /**
      * @brief Checks if initialization succeeded during object
@@ -109,7 +109,7 @@ class LCM {
      * @c select(), @c poll(), or other event loops for asynchronous
      * notification of incoming messages.
      *
-     * This method is useful when integrating LCM into another event loop,
+     * This method is useful when integrating LCMLink into another event loop,
      * such as the Qt event loop (via QSocketNotifier), the GLib event loop
      * (via GIOChannel), a custom @c select() @c - or @c poll() @c -based event loop, or any other
      * event loop that supports file descriptors.
@@ -133,7 +133,7 @@ class LCM {
     /**
      * @brief Waits for and dispatches messages, with a timeout.
      *
-     * New in LCM 1.1.0.
+     * New in LCMLink 1.1.0.
      *
      * @return >0 if a message was handled, 0 if the function timed out,
      * and <0 if an error occured.
@@ -149,16 +149,16 @@ class LCM {
      * @c lcm-gen @c .
      *
      * The callback method will be invoked on the object when a message
-     * arrives on the specified channel.  Prior to method invocation, LCM
+     * arrives on the specified channel.  Prior to method invocation, LCMLink
      * will attempt to automatically decode the message to the specified
      * message type @c MessageType @c , which should be a class generated
      * by @c lcm-gen @c .  If message
      * decoding fails, the callback method is not invoked and an error
      * message is printed to stderr.
      *
-     * The callback method is invoked during calls to LCM::handle().
+     * The callback method is invoked during calls to LCMLink::handle().
      * Callback methods are invoked by the same thread that invokes
-     * LCM::handle(), in the order that they were subscribed.
+     * LCMLink::handle(), in the order that they were subscribed.
      *
      * For example:
      *
@@ -174,7 +174,7 @@ class LCM {
      * };
      *
      * int main(int argc, char** argv) {
-     *   lcm::LCM lcm;
+     *   lcm::LCMLink lcm;
      *   MyMessageHandler handler;
      *   lcm.subscribe("CHANNEL", &MyMessageHandler::onMessage, &handler);
      *   while(true)
@@ -192,7 +192,7 @@ class LCM {
      *
      * @return a Subscription object that can be used to adjust the
      * subscription and unsubscribe.  The Subscription object is managed by
-     * the LCM class, and is automatically destroyed when its LCM instance
+     * the LCMLink class, and is automatically destroyed when its LCMLink instance
      * is destroyed.
      */
     template <class MessageType, class MessageHandlerClass>
@@ -211,8 +211,8 @@ class LCM {
      *
      * The callback method will be invoked on the object when a message
      * arrives on the specified channel.  Callback methods are invoked
-     * during calls to LCM::handle(), by the same thread that calls
-     * LCM::handle().  Callbacks are invoked in the order that they were
+     * during calls to LCMLink::handle(), by the same thread that calls
+     * LCMLink::handle().  Callbacks are invoked in the order that they were
      * subscribed.
      *
      * For example:
@@ -228,7 +228,7 @@ class LCM {
      * };
      *
      * int main(int argc, char** argv) {
-     *   lcm::LCM lcm;
+     *   lcm::LCMLink lcm;
      *   MyMessageHandler handler;
      *   lcm.subscribe("CHANNEL", &MyMessageHandler::onMessage, &handler);
      *   while(true)
@@ -246,7 +246,7 @@ class LCM {
      *
      * @return a Subscription object that can be used to adjust the
      * subscription and unsubscribe.  The Subscription object is managed by
-     * the LCM class, and is automatically destroyed when its LCM instance
+     * the LCMLink class, and is automatically destroyed when its LCMLink instance
      * is destroyed.
      */
     template <class MessageHandlerClass>
@@ -263,15 +263,15 @@ class LCM {
      * C-style functions.
      *
      * The callback function will be invoked on the object when a message
-     * arrives on the specified channel.  Prior to callback invocation, LCM
+     * arrives on the specified channel.  Prior to callback invocation, LCMLink
      * will attempt to automatically decode the message to the specified
      * message type @c MessageType @c , which should be a class generated
      * by @c lcm-gen @c .  If message decoding fails, the callback function
      * is not invoked and an error message is printed to stderr.
      *
-     * The callback function is invoked during calls to LCM::handle().
+     * The callback function is invoked during calls to LCMLink::handle().
      * Callbacks are invoked by the same thread that invokes
-     * LCM::handle(), in the order that they were subscribed.
+     * LCMLink::handle(), in the order that they were subscribed.
      *
      * For example:
      *
@@ -280,7 +280,7 @@ class LCM {
      *
      * class State {
      * public:
-     *   lcm::LCM lcm;
+     *   lcm::LCMLink lcm;
      *   int usefulVariable;
      * };
      *
@@ -310,7 +310,7 @@ class LCM {
      *
      * @return a Subscription object that can be used to adjust the
      * subscription and unsubscribe.  The Subscription object is managed by
-     * the LCM class, and is automatically destroyed when its LCM instance
+     * the LCMLink class, and is automatically destroyed when its LCMLink instance
      * is destroyed.
      */
     template <class MessageType, class ContextClass>
@@ -338,7 +338,7 @@ class LCM {
      * }
      *
      * int main(int argc, char** argv) {
-     *   LCM::lcm lcm;
+     *   LCMLink::lcm lcm;
      *   lcm.subscribe("CHANNEL", onMessage, NULL);
      *   while(true)
      *     lcm.handle();
@@ -357,7 +357,7 @@ class LCM {
      *
      * @return a Subscription object that can be used to adjust the
      * subscription and unsubscribe.  The Subscription object is managed by
-     * the LCM class, and is automatically destroyed when its LCM instance
+     * the LCMLink class, and is automatically destroyed when its LCMLink instance
      * is destroyed.
      */
     template <class ContextClass>
@@ -382,16 +382,16 @@ class LCM {
      * @c lcm-gen @c .
      *
      * The callback function will be invoked on the object when a message
-     * arrives on the specified channel.  Prior to method invocation, LCM
+     * arrives on the specified channel.  Prior to method invocation, LCMLink
      * will attempt to automatically decode the message to the specified
      * message type @c MessageType @c , which should be a class generated
      * by @c lcm-gen @c .  If message
      * decoding fails, the callback function is not invoked and an error
      * message is printed to stderr.
      *
-     * The callback function is invoked during calls to LCM::handle().
+     * The callback function is invoked during calls to LCMLink::handle().
      * Callback methods are invoked by the same thread that invokes
-     * LCM::handle(), in the order that they were subscribed.
+     * LCMLink::handle(), in the order that they were subscribed.
      *
      * For example:
      *
@@ -400,8 +400,8 @@ class LCM {
      * #include <lcm/lcm-cpp.hpp>
      *
      * int main(int argc, char** argv) {
-     *   lcm::LCM lcm;
-     *   lcm::LCM::HandlerFunction<exlcm::example_t> func;
+     *   lcm::LCMLink lcm;
+     *   lcm::LCMLink::HandlerFunction<exlcm::example_t> func;
      *   func = [](const lcm::ReceiveBuffer* rbuf, const std::string& channel,
      *             const exlcm::example_t* msg) {
      *       // do something with the message
@@ -419,7 +419,7 @@ class LCM {
      *
      * @return a Subscription object that can be used to adjust the
      * subscription and unsubscribe.  The Subscription object is managed by
-     * the LCM class, and is automatically destroyed when its LCM instance
+     * the LCMLink class, and is automatically destroyed when its LCMLink instance
      * is destroyed.
      */
     template <class MessageType>
@@ -488,10 +488,10 @@ struct ReceiveBuffer {
  * and set options.
  *
  * This class is not meant to be instantiated by the user, and instead is
- * constructed and returned by a call to LCM::subscribe() or
- * LCM::subscribeFunction().
+ * constructed and returned by a call to LCMLink::subscribe() or
+ * LCMLink::subscribeFunction().
  *
- * To unsubscribe, pass the instance to LCM::unsubscribe().  Once unsubscribed,
+ * To unsubscribe, pass the instance to LCMLink::unsubscribe().  Once unsubscribed,
  * the object is destroyed and can not be used anymore.
  *
  * @headerfile lcm/lcm-cpp.hpp
@@ -521,7 +521,7 @@ class Subscription {
      */
     inline int getQueueSize() const;
 
-    friend class LCM;
+    friend class LCMLink;
 
   protected:
     Subscription(){};
@@ -546,7 +546,7 @@ class Subscription {
 struct LogEvent {
     /**
      * Monotically increasing counter identifying the event number.  This field
-     * is managed by LCM, and there should be no need to ever set it manually.
+     * is managed by LCMLink, and there should be no need to ever set it manually.
      */
     int64_t eventnum;
     /**
@@ -555,7 +555,7 @@ struct LogEvent {
      */
     int64_t timestamp;
     /**
-     * The LCM channel on which the message was received.
+     * The LCMLink channel on which the message was received.
      */
     std::string channel;
     /**
@@ -569,7 +569,7 @@ struct LogEvent {
 };
 
 /**
- * @brief Read and write %LCM log files.
+ * @brief Read and write %LCMLink log files.
  *
  * This class is the C++ counterpart for lcm_eventlog_t.
  *

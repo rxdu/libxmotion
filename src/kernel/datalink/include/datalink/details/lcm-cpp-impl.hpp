@@ -18,7 +18,7 @@ int Subscription::getQueueSize() const
 
 template <class MessageType, class ContextClass>
 class LCMTypedSubscription : public Subscription {
-    friend class LCM;
+    friend class LCMLink;
 
   private:
     ContextClass context;
@@ -41,7 +41,7 @@ class LCMTypedSubscription : public Subscription {
 
 template <class ContextClass>
 class LCMUntypedSubscription : public Subscription {
-    friend class LCM;
+    friend class LCMLink;
 
   private:
     ContextClass context;
@@ -57,7 +57,7 @@ class LCMUntypedSubscription : public Subscription {
 
 template <class MessageType, class MessageHandlerClass>
 class LCMMHSubscription : public Subscription {
-    friend class LCM;
+    friend class LCMLink;
 
   private:
     MessageHandlerClass *handler;
@@ -81,7 +81,7 @@ class LCMMHSubscription : public Subscription {
 
 template <class MessageHandlerClass>
 class LCMMHUntypedSubscription : public Subscription {
-    friend class LCM;
+    friend class LCMLink;
 
   private:
     MessageHandlerClass *handler;
@@ -100,10 +100,10 @@ class LCMMHUntypedSubscription : public Subscription {
 #if LCM_CXX_11_ENABLED
 template <class MessageType>
 class LCMLambdaSubscription : public Subscription {
-    friend class LCM;
+    friend class LCMLink;
 
   private:
-    using HandlerFunction = typename LCM::HandlerFunction<MessageType>;
+    using HandlerFunction = typename LCMLink::HandlerFunction<MessageType>;
     HandlerFunction handler;
     static void cb_func(const lcm_recv_buf_t *rbuf, const char *channel, void *user_data)
     {
@@ -122,22 +122,22 @@ class LCMLambdaSubscription : public Subscription {
 };
 #endif
 
-inline LCM::LCM(std::string lcm_url) : owns_lcm(true)
+inline LCMLink::LCMLink(std::string lcm_url) : owns_lcm(true)
 {
     this->lcm = lcm_create(lcm_url.c_str());
 }
 
-inline LCM::LCM(lcm_t *lcm_in) : owns_lcm(false)
+inline LCMLink::LCMLink(lcm_t *lcm_in) : owns_lcm(false)
 {
     this->lcm = lcm_in;
 }
 
-inline bool LCM::good() const
+inline bool LCMLink::good() const
 {
     return this->lcm != NULL;
 }
 
-inline LCM::~LCM()
+inline LCMLink::~LCMLink()
 {
     for (int i = 0, n = subscriptions.size(); i < n; i++) {
         delete subscriptions[i];
@@ -147,17 +147,17 @@ inline LCM::~LCM()
     }
 }
 
-inline int LCM::publish(const std::string &channel, const void *data, unsigned int datalen)
+inline int LCMLink::publish(const std::string &channel, const void *data, unsigned int datalen)
 {
     if (!this->lcm) {
-        fprintf(stderr, "LCM instance not initialized.  Ignoring call to publish()\n");
+        fprintf(stderr, "LCMLink instance not initialized.  Ignoring call to publish()\n");
         return -1;
     }
     return lcm_publish(this->lcm, channel.c_str(), data, datalen);
 }
 
 template <class MessageType>
-inline int LCM::publish(const std::string &channel, const MessageType *msg)
+inline int LCMLink::publish(const std::string &channel, const MessageType *msg)
 {
     unsigned int datalen = msg->getEncodedSize();
     uint8_t *buf = new uint8_t[datalen];
@@ -167,10 +167,10 @@ inline int LCM::publish(const std::string &channel, const MessageType *msg)
     return status;
 }
 
-inline int LCM::unsubscribe(Subscription *subscription)
+inline int LCMLink::unsubscribe(Subscription *subscription)
 {
     if (!this->lcm) {
-        fprintf(stderr, "LCM instance not initialized.  Ignoring call to unsubscribe()\n");
+        fprintf(stderr, "LCMLink instance not initialized.  Ignoring call to unsubscribe()\n");
         return -1;
     }
     std::vector<Subscription *>::iterator iter;
@@ -186,42 +186,42 @@ inline int LCM::unsubscribe(Subscription *subscription)
     return -1;
 }
 
-inline int LCM::getFileno()
+inline int LCMLink::getFileno()
 {
     if (!this->lcm) {
-        fprintf(stderr, "LCM instance not initialized.  Ignoring call to fileno()\n");
+        fprintf(stderr, "LCMLink instance not initialized.  Ignoring call to fileno()\n");
         return -1;
     }
     return lcm_get_fileno(this->lcm);
 }
 
-inline int LCM::handle()
+inline int LCMLink::handle()
 {
     if (!this->lcm) {
-        fprintf(stderr, "LCM instance not initialized.  Ignoring call to handle()\n");
+        fprintf(stderr, "LCMLink instance not initialized.  Ignoring call to handle()\n");
         return -1;
     }
     return lcm_handle(this->lcm);
 }
 
-inline int LCM::handleTimeout(int timeout_millis)
+inline int LCMLink::handleTimeout(int timeout_millis)
 {
     if (!this->lcm) {
-        fprintf(stderr, "LCM instance not initialized.  Ignoring call to handle()\n");
+        fprintf(stderr, "LCMLink instance not initialized.  Ignoring call to handle()\n");
         return -1;
     }
     return lcm_handle_timeout(this->lcm, timeout_millis);
 }
 
 template <class MessageType, class MessageHandlerClass>
-Subscription *LCM::subscribe(const std::string &channel,
+Subscription *LCMLink::subscribe(const std::string &channel,
                              void (MessageHandlerClass::*handlerMethod)(const ReceiveBuffer *rbuf,
                                                                         const std::string &channel,
                                                                         const MessageType *msg),
                              MessageHandlerClass *handler)
 {
     if (!this->lcm) {
-        fprintf(stderr, "LCM instance not initialized.  Ignoring call to subscribe()\n");
+        fprintf(stderr, "LCMLink instance not initialized.  Ignoring call to subscribe()\n");
         return NULL;
     }
     LCMMHSubscription<MessageType, MessageHandlerClass> *subs =
@@ -236,13 +236,13 @@ Subscription *LCM::subscribe(const std::string &channel,
 }
 
 template <class MessageHandlerClass>
-Subscription *LCM::subscribe(const std::string &channel,
+Subscription *LCMLink::subscribe(const std::string &channel,
                              void (MessageHandlerClass::*handlerMethod)(const ReceiveBuffer *rbuf,
                                                                         const std::string &channel),
                              MessageHandlerClass *handler)
 {
     if (!this->lcm) {
-        fprintf(stderr, "LCM instance not initialized.  Ignoring call to subscribe()\n");
+        fprintf(stderr, "LCMLink instance not initialized.  Ignoring call to subscribe()\n");
         return NULL;
     }
     LCMMHUntypedSubscription<MessageHandlerClass> *subs =
@@ -256,14 +256,14 @@ Subscription *LCM::subscribe(const std::string &channel,
 }
 
 template <class MessageType, class ContextClass>
-Subscription *LCM::subscribeFunction(const std::string &channel,
+Subscription *LCMLink::subscribeFunction(const std::string &channel,
                                      void (*handler)(const ReceiveBuffer *rbuf,
                                                      const std::string &channel,
                                                      const MessageType *msg, ContextClass context),
                                      ContextClass context)
 {
     if (!this->lcm) {
-        fprintf(stderr, "LCM instance not initialized.  Ignoring call to subscribeFunction()\n");
+        fprintf(stderr, "LCMLink instance not initialized.  Ignoring call to subscribeFunction()\n");
         return NULL;
     }
     typedef LCMTypedSubscription<MessageType, ContextClass> SubsClass;
@@ -276,14 +276,14 @@ Subscription *LCM::subscribeFunction(const std::string &channel,
 }
 
 template <class ContextClass>
-Subscription *LCM::subscribeFunction(const std::string &channel,
+Subscription *LCMLink::subscribeFunction(const std::string &channel,
                                      void (*handler)(const ReceiveBuffer *rbuf,
                                                      const std::string &channel,
                                                      ContextClass context),
                                      ContextClass context)
 {
     if (!this->lcm) {
-        fprintf(stderr, "LCM instance not initialized.  Ignoring call to subscribeFunction()\n");
+        fprintf(stderr, "LCMLink instance not initialized.  Ignoring call to subscribeFunction()\n");
         return NULL;
     }
     typedef LCMUntypedSubscription<ContextClass> SubsClass;
@@ -297,10 +297,10 @@ Subscription *LCM::subscribeFunction(const std::string &channel,
 
 #if LCM_CXX_11_ENABLED
 template <class MessageType>
-Subscription *LCM::subscribe(const std::string &channel, LCM::HandlerFunction<MessageType> handler)
+Subscription *LCMLink::subscribe(const std::string &channel, LCMLink::HandlerFunction<MessageType> handler)
 {
     if (!this->lcm) {
-        fprintf(stderr, "LCM instance not initialized.  Ignoring call to subscribe()\n");
+        fprintf(stderr, "LCMLink instance not initialized.  Ignoring call to subscribe()\n");
         return NULL;
     }
     LCMLambdaSubscription<MessageType> *subs = new LCMLambdaSubscription<MessageType>();
@@ -312,7 +312,7 @@ Subscription *LCM::subscribe(const std::string &channel, LCM::HandlerFunction<Me
 }
 #endif
 
-lcm_t *LCM::getUnderlyingLCM()
+lcm_t *LCMLink::getUnderlyingLCM()
 {
     return this->lcm;
 }

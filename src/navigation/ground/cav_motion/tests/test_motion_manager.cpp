@@ -13,7 +13,7 @@ using namespace librav;
 int main()
 {
     // std::shared_ptr<LCMLink> data_link_ = std::make_shared<LCMLink>();
-    // if (!data_link_->IsGood())
+    // if (!data_link_->good())
     //     std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
 
     CAVMotionManager planner;

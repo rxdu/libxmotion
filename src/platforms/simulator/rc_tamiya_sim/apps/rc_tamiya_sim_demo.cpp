@@ -20,7 +20,7 @@ int main(int arc, char* argv[])
 {
     std::shared_ptr<LCMLink> lcm = std::make_shared<LCMLink>();
 
-    if (!lcm->IsGood())
+    if (!lcm->good())
     {
         std::cout << "ERROR: Failed to initialize LCM." << std::endl;
         return -1;

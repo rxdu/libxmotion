@@ -33,7 +33,7 @@ class RCTamiyaSimCoordinator
     std::shared_ptr<LCMLink> lcm_;
     int32_t cmd_timeout_counter_ = 0;
 
-    void HandleLCMMessage_CarCmd(const lcm_link::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::CarCommand_t *msg);
+    void HandleLCMMessage_CarCmd(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::CarCommand_t *msg);
 
     void PublishRawIMUData(const IMU6DOFData &msg);
     void PublishBodyPose(const Pose2f &msg);

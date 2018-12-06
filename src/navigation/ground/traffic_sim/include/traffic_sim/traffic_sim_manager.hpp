@@ -40,7 +40,7 @@ class TrafficSimManager
 
     bool sync_trigger_ready_ = false;
 
-    void HandleLCMMessage_SyncTrigger(const lcm_link::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg);
+    void HandleLCMMessage_SyncTrigger(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg);
 };
 } // namespace librav
 
