@@ -23,7 +23,7 @@ set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Add other sub source directories
 add_subdirectory(cav_common)
-add_subdirectory(cav_planner)
+# add_subdirectory(cav_motion)
 
 add_subdirectory(road_map)
 add_subdirectory(traffic_map)
