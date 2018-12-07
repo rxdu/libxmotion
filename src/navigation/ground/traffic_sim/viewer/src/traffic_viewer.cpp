@@ -12,6 +12,7 @@
 #include <cassert>
 
 #include "lightview/viewer_utils.hpp"
+#include "lightview/lightwidgets.hpp"
 #include "lightviz/details/cartesian_canvas.hpp"
 #include "ugvnav_viz/details/roadmap_draw.hpp"
 #include "ugvnav_viz/details/vehicle_draw.hpp"
@@ -70,30 +71,6 @@ void TrafficViewer::CalcCanvasSize(std::shared_ptr<RoadMap> map)
     xmax_ = bd_xr + xspan * 0.1;
     ymin_ = bd_yb - yspan * 0.1;
     ymax_ = bd_yt + yspan * 0.1;
-}
-
-// Source: https://blog.csdn.net/weixin_43007275/article/details/82590530
-void TrafficViewer::DrawOpenCVImage(cv::Mat img)
-{
-    ImGuiIO &io = ImGui::GetIO();
-    ImGui::SetNextWindowPos(ImVec2(0, 0), 0, ImVec2(0, 0));
-    ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x, io.DisplaySize.y));
-    ImGui::SetNextWindowBgAlpha(0);
-
-    static unsigned int tex_id;
-    ViewerUtils::ConvertMatToGL(img, &tex_id);
-
-    ImTextureID bg_tex_id;
-    bg_tex_id = reinterpret_cast<GLuint *>(tex_id);
-
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
-
-    ImGui::Begin("Canvas", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
-    ImGui::Image(bg_tex_id, ImGui::GetContentRegionAvail());
-
-    ImGui::End();
-    ImGui::PopStyleVar(2);
 }
 
 void TrafficViewer::HandleLCMMessage_VehicleEstimations(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg)
@@ -175,7 +152,7 @@ void TrafficViewer::Start()
         // draw image to window
         // cv::Mat vis_img = cv::imread("/home/rdu/Pictures/lanelets_light.png");
         cv::Mat vis_img = canvas.paint_area;
-        DrawOpenCVImage(vis_img);
+        LightWidget::DrawOpenCVImageToBackground(vis_img);
 
         // save image if requested
         if (save_image)

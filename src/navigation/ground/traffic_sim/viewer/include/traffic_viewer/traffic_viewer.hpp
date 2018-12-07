@@ -49,7 +49,6 @@ class TrafficViewer : public LightViewer
     std::vector<VehicleState> surrounding_vehicles_;
 
     void CalcCanvasSize(std::shared_ptr<RoadMap> road_map);
-    void DrawOpenCVImage(cv::Mat img);
 
     void HandleLCMMessage_VehicleEstimations(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg);
 };

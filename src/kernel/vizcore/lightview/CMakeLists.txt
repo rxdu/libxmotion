@@ -4,6 +4,7 @@ find_package(OpenCV REQUIRED)
 # Add libraries
 set(LIGHTVIEW_LIB_SRC
     src/viewer_utils.cpp
+    src/lightwidgets.cpp
     src/lightviewer.cpp
 )
 add_library(lightview STATIC ${LIGHTVIEW_LIB_SRC})
