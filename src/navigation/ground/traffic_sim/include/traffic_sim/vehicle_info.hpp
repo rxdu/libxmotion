@@ -48,12 +48,19 @@ struct VehicleInfo
         VehicleInfo::Count.fetch_add(1);
     }
 
+    VehicleInfo(std::pair<std::string, std::string> chn, double init_distance, double speed, double start_time) : channel_name(chn), init_s(init_distance), init_t(start_time), init_speed(speed)
+    {
+        id = VehicleInfo::Count;
+        VehicleInfo::Count.fetch_add(1);
+    }
+
     // id of ego vehicle reserved to be -1
     int32_t id = -1;
 
     // information to be set by users
     std::pair<std::string, std::string> channel_name;
     double init_s = 0.0;
+    double init_t = 0.0;
     double init_speed = 0.0;
     DriveMode drive_mode = DriveMode::ConstantSpeed;
 

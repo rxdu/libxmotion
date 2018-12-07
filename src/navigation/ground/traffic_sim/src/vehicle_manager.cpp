@@ -34,7 +34,7 @@ std::vector<VehicleState> VehicleManager::GetVehicleStatesAt(double t)
     std::vector<VehicleState> states;
     for (auto &sveh : surrounding_vehicles_)
     {
-        if (!sveh.second.IsOutOfScope())
+        if (t >= sveh.first.init_t && !sveh.second.IsOutOfScope())
             states.push_back(sveh.second.GetStateAt(t));
     }
     return states;

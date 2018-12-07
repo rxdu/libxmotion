@@ -17,6 +17,7 @@ target_include_directories(trafficsim PUBLIC
     PRIVATE src)
 
 add_subdirectory(viewer)
+add_subdirectory(apps)
 
 if(BUILD_TESTS)
     add_subdirectory(tests)

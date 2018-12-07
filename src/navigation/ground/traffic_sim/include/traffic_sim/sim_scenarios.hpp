@@ -17,6 +17,7 @@ namespace librav
 namespace SimScenario
 {
 TrafficSimConfig GenerateScenarioCase1();
+TrafficSimConfig GenerateScenarioCase2();
 }
 } // namespace librav
 

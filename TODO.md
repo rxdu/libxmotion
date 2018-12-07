@@ -9,6 +9,7 @@
 
 ## Planning
 
+- [ ] Extend roadmap and traffic sim to support definition of path in osm file
 - [ ] Memory management of ReferenceTrajectory/LookaheadZone
 - [ ] Monte Carlo simulation for autonomous vehicles
 - [ ] Priority queue that supports element priority update
@@ -25,7 +26,7 @@
 
 ## Simulation
 
-- [ ] Finish RC Car simulation interface with FastRTPS
+- [*] Finish RC Car simulation interface with LCM/FastRTPS
 
 ## Visualization
 

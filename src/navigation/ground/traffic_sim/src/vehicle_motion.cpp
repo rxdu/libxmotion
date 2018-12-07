@@ -26,7 +26,7 @@ VehicleState VehicleMotion::GetStateAt(double t)
 
 VehicleState VehicleMotion::PropagateConstSpeedModel(double t)
 {
-    double distance = vehicle_info_.init_s + vehicle_info_.init_speed * t;
+    double distance = vehicle_info_.init_s + vehicle_info_.init_speed * (t - vehicle_info_.init_t);
 
     if (distance > vehicle_info_.channel->GetLength())
     {
