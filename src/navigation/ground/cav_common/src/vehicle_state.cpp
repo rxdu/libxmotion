@@ -14,6 +14,15 @@ namespace librav
 
 std::atomic<int32_t> VehicleState::Count = {0};
 
+VehicleState::VehicleState(int32_t id, Pose2d _pose, double _speed, CovarMatrix2d _pos_var, double _spd_var) : id_(id),
+                                                                                                               pose_(_pose),
+                                                                                                               pos_var_(_pos_var),
+                                                                                                               speed_(_speed),
+                                                                                                               spd_var_(_spd_var)
+{
+    footprint_.TransformRT(pose_.position.x, pose_.position.y, pose_.theta);
+}
+
 VehicleState::VehicleState(Pose2d _pose, double _speed, CovarMatrix2d _pos_var, double _spd_var) : pose_(_pose),
                                                                                                    pos_var_(_pos_var),
                                                                                                    speed_(_speed),
@@ -30,4 +39,4 @@ void VehicleState::SetPose(Pose2d ps)
     footprint_.TransformRT(pose_.position.x, pose_.position.y, pose_.theta);
 }
 
-}
+} // namespace librav

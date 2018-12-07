@@ -1,11 +1,20 @@
 package librav_lcm_msgs;
 
+struct VehicleFootprint
+{
+    Vector2 points[4];
+}
+
 struct VehicleState
 {
+    int64_t id;
+
     double position[2];
     double theta;
 
     double speed;
+
+    VehicleFootprint footprint;
 }
 
 struct VehicleEstimations

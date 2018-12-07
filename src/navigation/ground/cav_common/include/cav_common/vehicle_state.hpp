@@ -21,9 +21,9 @@
 
 namespace librav
 {
-struct VehicleFP
+struct VehicleFootprint
 {
-    VehicleFP()
+    VehicleFootprint()
     {
         polygon.AddPoint(2.4, -0.9);
         polygon.AddPoint(2.4, 0.9);
@@ -31,7 +31,7 @@ struct VehicleFP
         polygon.AddPoint(-2.4, -0.9);
     }
 
-    VehicleFP(Pose2d pose)
+    VehicleFootprint(Pose2d pose)
     {
         polygon.AddPoint(2.4, -0.9);
         polygon.AddPoint(2.4, 0.9);
@@ -52,6 +52,8 @@ class VehicleState
 {
   public:
     VehicleState() = default;
+    VehicleState(int32_t id, Pose2d _pose, double _speed, CovarMatrix2d _pos_var = {}, double _spd_var = 0);
+
     // id is automatically managed if state is created with this constructor
     VehicleState(Pose2d _pose, double _speed, CovarMatrix2d _pos_var = {}, double _spd_var = 0);
 
@@ -61,13 +63,13 @@ class VehicleState
     //  is set properly when the pose changes
     void SetPose(Pose2d ps);
     Pose2d GetPose() const { return pose_; }
-    
+
     void SetPositionVariance(CovarMatrix2d covar) { pos_var_ = covar; }
     CovarMatrix2d GetPositionVariance() const { return pos_var_; }
 
     void SetSpeed(double spd) { speed_ = spd; }
     double GetSpeed() const { return speed_; }
-    
+
     void SetSpeedVariance(double var) { spd_var_ = var; }
     double GetSpeedVariance() const { return spd_var_; }
 
@@ -81,8 +83,8 @@ class VehicleState
 
     double speed_ = 0;
     double spd_var_ = 0;
-    
-    VehicleFP footprint_;
+
+    VehicleFootprint footprint_;
 };
 } // namespace librav
 

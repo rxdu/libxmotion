@@ -62,10 +62,21 @@ void TrafficSimManager::UpdateSimState(double t)
     for (auto &state : states)
     {
         librav_lcm_msgs::VehicleState state_msg;
+
         auto pose = state.GetPose();
+        auto fp = state.GetFootprint();
+        state_msg.id = state.id_;
         state_msg.position[0] = pose.position.x;
         state_msg.position[1] = pose.position.y;
         state_msg.theta = pose.theta;
+        state_msg.speed = state.GetSpeed();
+        for (int i = 0; i < 4; ++i)
+        {
+            auto pt = fp.GetPoint(i);
+            state_msg.footprint.points[i].x = pt.x;
+            state_msg.footprint.points[i].y = pt.y;
+        }
+
         ests_msg.estimations.push_back(state_msg);
     }
     data_link_->publish(CAV_COMMON_CHANNELS::VEHICLE_ESTIMATIONS_CHANNEL, &ests_msg);

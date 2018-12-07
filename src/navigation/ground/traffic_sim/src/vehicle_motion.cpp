@@ -38,5 +38,5 @@ VehicleState VehicleMotion::PropagateConstSpeedModel(double t)
 
     std::cout << "distance: " << distance << " position: " << cpoint.x << " , " << cpoint.y << std::endl;
 
-    return VehicleState({cpoint.x, cpoint.y, cpoint.theta}, vehicle_info_.init_speed);
+    return VehicleState(vehicle_info_.id, {cpoint.x, cpoint.y, cpoint.theta}, vehicle_info_.init_speed);
 }
