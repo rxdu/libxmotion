@@ -21,7 +21,7 @@
 
 using namespace librav;
 
-TrafficViewer::TrafficViewer(std::string map_file, int32_t ppu) : ppu_(ppu)
+TrafficViewer::TrafficViewer(std::string map_file, int32_t ppu) : LightViewer(), ppu_(ppu)
 {
     MapLoader loader(map_file);
     road_map_ = loader.road_map;
@@ -80,10 +80,10 @@ void TrafficViewer::DrawOpenCVImage(cv::Mat img)
     ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x, io.DisplaySize.y));
     ImGui::SetNextWindowBgAlpha(0);
 
-    ImTextureID bg_tex_id;
-    // bg_tex_id = (GLuint *)loadTexture(cvLoadImage("Template/bg2.jpg"));
-    unsigned int tex_id;
+    static unsigned int tex_id;
     ViewerUtils::ConvertMatToGL(img, &tex_id);
+
+    ImTextureID bg_tex_id;
     bg_tex_id = reinterpret_cast<GLuint *>(tex_id);
 
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
@@ -134,7 +134,7 @@ void TrafficViewer::Start()
         ImGui::SetNextWindowPos(ImVec2(0, 0), 0, ImVec2(0, 0));
         ImGui::SetNextWindowSize(ImVec2(100, 700), ImGuiCond_FirstUseEver);
 
-        ImGui::Begin("Settings!");
+        ImGui::Begin("Settings:");
 
         ImGui::Text("Road Map:");
         ImGui::Checkbox("Show Centerline", &show_center_line);
@@ -184,6 +184,8 @@ void TrafficViewer::Start()
             cv::imwrite(name + ".png", vis_img);
             save_image = false;
         }
+
+        vis_img.release();
 
         //-------------------------------------------------------------//
 

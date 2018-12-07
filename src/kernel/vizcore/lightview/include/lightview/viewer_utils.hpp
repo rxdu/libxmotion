@@ -17,7 +17,7 @@ namespace librav
 namespace ViewerUtils
 {
 void ConvertMatToGL(const cv::Mat &src, unsigned int *texID);
-}
+} // namespace ViewerUtils
 } // namespace librav
 
 #endif /* VIEWER_UTILS_HPP */

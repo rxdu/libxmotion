@@ -17,6 +17,8 @@
 using namespace librav;
 
 // Source: https://gist.github.com/saccadic/2a40b09e3fc4623cb14c02cac3ddbe6c
+// Reference:
+//  [1] https://stackoverflow.com/questions/11217121/how-to-manage-memory-with-texture-in-opengl
 void ViewerUtils::ConvertMatToGL(const cv::Mat &src, unsigned int *texID)
 {
     if (src.empty() == true)

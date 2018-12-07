@@ -27,7 +27,7 @@ class LightViewer
 {
   public:
     LightViewer() = default;
-    ~LightViewer();
+    virtual ~LightViewer();
 
     // copy is not allowed
     LightViewer(const LightViewer &other) = delete;

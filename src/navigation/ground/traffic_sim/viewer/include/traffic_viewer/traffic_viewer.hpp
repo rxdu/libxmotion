@@ -29,6 +29,7 @@ class TrafficViewer : public LightViewer
   public:
     TrafficViewer() = default;
     TrafficViewer(std::string map_file, int32_t ppu = 10);
+
     void Start() override;
 
   private:
