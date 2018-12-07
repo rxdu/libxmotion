@@ -17,7 +17,6 @@
 
 #include "common/librav_types.hpp"
 #include "geometry/polygon.hpp"
-#include "traffic_map/traffic_channel.hpp"
 
 namespace librav
 {

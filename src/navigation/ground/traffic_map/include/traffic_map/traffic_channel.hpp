@@ -45,14 +45,18 @@ class TrafficChannel
     ParametricCurve center_curve_;
     std::shared_ptr<CurvilinearGrid> grid_;
 
+    double GetLength() const { return center_curve_.GetLength(); }
+
     void DiscretizeChannel(double step_t, double step_n, int32_t side_num);
     void DiscretizeChannel(double s_offset, double step_t, double step_n, int32_t side_num);
 
     bool CheckInside(SimplePoint pt);
 
-    CurvilinearGrid::GridPoint ConvertToPathCoordinate(SimplePoint pt);
-    SimplePoint ConvertToGlobalCoordinate(CurvilinearGrid::GridPoint pt);
     CurviGridIndex GetIndexFromPosition(SimplePoint pt);
+    CurvilinearGrid::GridPoint ConvertToPathCoordinate(SimplePoint pt);
+
+    SimplePoint ConvertToGlobalCoordinate(CurvilinearGrid::GridPoint pt);
+    CurvilinearGrid::GridCurvePoint ConvertToCurvePoint(CurvilinearGrid::GridPoint pt);
 
     void PrintInfo();
 

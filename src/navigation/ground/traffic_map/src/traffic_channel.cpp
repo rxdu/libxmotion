@@ -142,6 +142,11 @@ CurviGridIndex TrafficChannel::GetIndexFromPosition(SimplePoint pt)
     return grid_->GetIndexFromPathCoordinate(path_pos.s, path_pos.delta);
 }
 
+CurvilinearGrid::GridCurvePoint TrafficChannel::ConvertToCurvePoint(CurvilinearGrid::GridPoint pt)
+{
+    return grid_->ConvertToCurvePoint(pt);
+}
+
 void TrafficChannel::PrintInfo()
 {
     std::cout << "Traffic channel " << source_ << " -> " << sink_;

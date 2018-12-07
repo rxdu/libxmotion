@@ -25,9 +25,9 @@ VehicleEstimation::VehicleEstimation(Pose2d _pose, double _speed) : pose_(_pose)
 }
 
 VehicleEstimation::VehicleEstimation(Pose2d _pose, CovarMatrix2d _pos_var, double _speed, double _spd_var) : pose_(_pose),
-                                                                                          pos_var_(_pos_var),
-                                                                                          speed_(_speed),
-                                                                                          spd_var_(_spd_var)
+                                                                                                             pos_var_(_pos_var),
+                                                                                                             speed_(_speed),
+                                                                                                             spd_var_(_spd_var)
 {
     id_ = ++VehicleEstimation::VehicleCount;
     footprint_.TransformRT(pose_.position.x, pose_.position.y, pose_.theta);

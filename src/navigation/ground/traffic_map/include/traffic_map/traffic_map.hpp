@@ -29,8 +29,9 @@ class TrafficMap
 
     std::shared_ptr<RoadMap> road_map_;
 
-    std::shared_ptr<TrafficChannel> GetTrafficChannel(std::string src, std::string dst);
     std::vector<std::shared_ptr<TrafficChannel>> GetAllTrafficChannels();
+
+    std::shared_ptr<TrafficChannel> FindTrafficChannel(std::string src, std::string dst);
     std::vector<std::shared_ptr<TrafficChannel>> FindTrafficChannels(SimplePoint pos);
 
   private:

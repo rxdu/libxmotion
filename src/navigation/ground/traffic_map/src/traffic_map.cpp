@@ -37,16 +37,20 @@ void TrafficMap::IdentifyTrafficElements()
     // std::cout << "traffic channel num: " << traffic_channels_.size() << std::endl;
 }
 
-std::shared_ptr<TrafficChannel> TrafficMap::GetTrafficChannel(std::string src, std::string dst)
-{
-}
-
 std::vector<std::shared_ptr<TrafficChannel>> TrafficMap::GetAllTrafficChannels()
 {
     std::vector<std::shared_ptr<TrafficChannel>> chns;
     for (auto &tchn : traffic_channels_)
         chns.push_back(tchn.second);
     return chns;
+}
+
+std::shared_ptr<TrafficChannel> TrafficMap::FindTrafficChannel(std::string src, std::string dst)
+{
+    auto it = traffic_channels_.find(std::make_pair(src, dst));
+    if (it == traffic_channels_.end())
+        return nullptr;
+    return it->second;
 }
 
 std::vector<std::shared_ptr<TrafficChannel>> TrafficMap::FindTrafficChannels(SimplePoint pos)

@@ -13,25 +13,11 @@
 #include <cstdint>
 #include <string>
 #include <vector>
-#include <atomic>
+
+#include "traffic_sim/vehicle_info.hpp"
 
 namespace librav
 {
-struct VehicleInfo
-{
-    VehicleInfo() = default;
-    VehicleInfo(double init_s)
-    {
-        id = VehicleInfo::Count;
-        VehicleInfo::Count.fetch_add(1);
-    }
-
-    int32_t id;
-
-    // id of ego vehicle reserved to be -1
-    static std::atomic<int32_t> Count;
-};
-
 struct TrafficSimConfig
 {
     /* sim timing */

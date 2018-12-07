@@ -37,6 +37,10 @@ bool TrafficSimManager::ValidateSimConfig()
     if (!map_loader_.map_ready)
         return false;
 
+    // add vehicle init states
+    vehicle_manager_ = std::make_shared<VehicleManager>(map_loader_.traffic_map);
+    vehicle_manager_->AddVehicles(config_.surrounding_vehicles);
+
     return true;
 }
 
@@ -47,18 +51,23 @@ void TrafficSimManager::HandleLCMMessage_SyncTrigger(const librav::ReceiveBuffer
 
 void TrafficSimManager::UpdateSimState(double t)
 {
+    std::vector<VehicleState> states = vehicle_manager_->GetVehicleStatesAt(t);
+
     std::cout << "simulation time: " << t << std::endl;
 
     // broadcast simulation updates to LCM
-    librav_lcm_msgs::VehicleState state;
-    state.position[0] = 1;
-    state.position[1] = 2;
-    state.theta = M_PI * 30.0 / 180.0;
-
     librav_lcm_msgs::VehicleEstimations ests_msg;
-    ests_msg.vehicle_num = 1;
-    ests_msg.estimations.push_back(state);
 
+    ests_msg.vehicle_num = states.size();
+    for (auto &state : states)
+    {
+        librav_lcm_msgs::VehicleState state_msg;
+        auto pose = state.GetPose();
+        state_msg.position[0] = pose.position.x;
+        state_msg.position[1] = pose.position.y;
+        state_msg.theta = pose.theta;
+        ests_msg.estimations.push_back(state_msg);
+    }
     data_link_->publish(CAV_COMMON_CHANNELS::VEHICLE_ESTIMATIONS_CHANNEL, &ests_msg);
 }
 

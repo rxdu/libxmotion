@@ -39,7 +39,7 @@ class TrafficSimManager
     bool sync_trigger_ready_ = false;
 
     MapLoader map_loader_;
-    VehicleManager vehicle_manager_;
+    std::shared_ptr<VehicleManager> vehicle_manager_;
 
     void UpdateSimState(double t);
 

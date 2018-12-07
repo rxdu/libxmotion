@@ -10,14 +10,24 @@
 #ifndef VEHICLE_MOTION_HPP
 #define VEHICLE_MOTION_HPP
 
+#include "traffic_sim/vehicle_info.hpp"
+#include "cav_common/vehicle_state.hpp"
+
 namespace librav
 {
 class VehicleMotion
 {
   public:
-    VehicleMotion(double s_init);
-    
+    VehicleMotion(VehicleInfo info);
+
+    bool IsOutOfScope() const { return out_of_scope_; }
+    VehicleState GetStateAt(double t);
+
   private:
+    VehicleInfo vehicle_info_;
+    bool out_of_scope_ = false;
+
+    VehicleState PropagateConstSpeedModel(double t);
 };
 } // namespace librav
 
