@@ -36,7 +36,6 @@ add_subdirectory(third_party)
 add_subdirectory(mcontrol)
 add_subdirectory(navigation)
 add_subdirectory(platforms)
-add_subdirectory(rav_viewer)
 
 # Publication-related code
 add_subdirectory(publication)

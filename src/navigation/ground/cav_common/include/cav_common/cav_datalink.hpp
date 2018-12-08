@@ -16,6 +16,7 @@ namespace librav
 {
 struct CAV_COMMON_CHANNELS
 {
+    static constexpr auto EGO_VEHICLE_STATE = "ego_vehicle_state";
     static constexpr auto VEHICLE_ESTIMATIONS_CHANNEL = "vehicle_estimations";
 };
 

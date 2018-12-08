@@ -36,7 +36,8 @@ TrafficViewer::TrafficViewer(std::string map_file, int32_t ppu) : LightViewer(),
         std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
     data_link_ready_ = true;
 
-    data_link_->subscribe(CAV_COMMON_CHANNELS::VEHICLE_ESTIMATIONS_CHANNEL, &TrafficViewer::HandleLCMMessage_VehicleEstimations, this);
+    data_link_->subscribe(CAV_COMMON_CHANNELS::VEHICLE_ESTIMATIONS_CHANNEL, &TrafficViewer::HandleVehicleEstimationsMsg, this);
+    data_link_->subscribe(CAV_COMMON_CHANNELS::EGO_VEHICLE_STATE, &TrafficViewer::HandleEgoVehicleStateMsg, this);
 }
 
 void TrafficViewer::CalcCanvasSize(std::shared_ptr<RoadMap> map)
@@ -73,7 +74,13 @@ void TrafficViewer::CalcCanvasSize(std::shared_ptr<RoadMap> map)
     ymax_ = bd_yt + yspan * 0.1;
 }
 
-void TrafficViewer::HandleLCMMessage_VehicleEstimations(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg)
+void TrafficViewer::HandleEgoVehicleStateMsg(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleState *msg)
+{
+    ego_vehicle_state_ = VehicleState(msg->id, {msg->position[0], msg->position[1], msg->theta}, msg->speed);
+    ego_state_updated_ = true;
+}
+
+void TrafficViewer::HandleVehicleEstimationsMsg(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg)
 {
     surrounding_vehicles_.clear();
     for (int i = 0; i < msg->vehicle_num; ++i)
@@ -102,7 +109,7 @@ void TrafficViewer::Start()
         static float f = 0.0f;
         static int counter = 0;
 
-        static bool show_center_line = true;
+        static bool show_center_line = false;
         static bool use_jetcolor_bg = false;
         static bool save_image = false;
 
@@ -145,6 +152,12 @@ void TrafficViewer::Start()
         {
             Polygon fp = VehicleFootprint(veh.GetPose()).polygon;
             veh_draw.DrawVehicle(fp, veh.id_);
+        }
+
+        if(ego_state_updated_)
+        {
+            Polygon fp = VehicleFootprint(ego_vehicle_state_.GetPose()).polygon;
+            veh_draw.DrawVehicle(fp, CvDrawColors::cyan_color);
         }
 
         //-------------------------------------------------------------//

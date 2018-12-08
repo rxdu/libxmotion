@@ -35,7 +35,7 @@ TrafficSimConfig SimScenario::GenerateScenarioCase2()
 {
     TrafficSimConfig config;
 
-    config.tf = 15.0;
+    config.tf = 10.0;
     config.dt = 0.1;
 
     config.map = "/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm";

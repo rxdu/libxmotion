@@ -46,11 +46,14 @@ class TrafficViewer : public LightViewer
     double ymin_ = 0;
     double ymax_ = 200;
 
+    bool ego_state_updated_ = false;
+    VehicleState ego_vehicle_state_;
     std::vector<VehicleState> surrounding_vehicles_;
 
     void CalcCanvasSize(std::shared_ptr<RoadMap> road_map);
 
-    void HandleLCMMessage_VehicleEstimations(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg);
+    void HandleEgoVehicleStateMsg(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleState *msg);
+    void HandleVehicleEstimationsMsg(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg);
 };
 } // namespace librav
 

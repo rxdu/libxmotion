@@ -42,10 +42,10 @@ RoadMapViz::RoadMapViz(std::shared_ptr<RoadMap> map, int32_t ppu) : road_map_(ma
     double xspan = bd_xr - bd_xl;
     double yspan = bd_yt - bd_yb;
 
-    xmin_ = bd_xl - xspan * 0.1;
-    xmax_ = bd_xr + xspan * 0.1;
-    ymin_ = bd_yb - yspan * 0.1;
-    ymax_ = bd_yt + yspan * 0.1;
+    xmin_ = bd_xl - xspan * 0.05;
+    xmax_ = bd_xr + xspan * 0.05;
+    ymin_ = bd_yb - yspan * 0.05;
+    ymax_ = bd_yt + yspan * 0.05;
 }
 
 RoadMapViz &RoadMapViz::GetInstance(std::shared_ptr<RoadMap> map, int32_t pixel_per_unit)

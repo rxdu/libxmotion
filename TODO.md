@@ -14,6 +14,7 @@
 - [ ] Monte Carlo simulation for autonomous vehicles
 - [ ] Priority queue that supports element priority update
 - [ ] RRT and RRT* with Dubins model  
+- [*] Use line strip instead of points to represent center line (strip won't work due to ambiguity in direction)
 - [*] Check possible memory leak issue of SquareGrid
 - [*] Remove the requirement of friendship inside Graph_t for search algorithms
 - [*] Remove dependency on OpenCV (now only visualization depends on OpenCV)
