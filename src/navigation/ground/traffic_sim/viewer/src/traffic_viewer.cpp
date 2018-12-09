@@ -37,7 +37,7 @@ TrafficViewer::TrafficViewer(std::string map_file, int32_t ppu) : LightViewer(),
     data_link_ready_ = true;
 
     data_link_->subscribe(CAV_COMMON_CHANNELS::VEHICLE_ESTIMATIONS_CHANNEL, &TrafficViewer::HandleVehicleEstimationsMsg, this);
-    data_link_->subscribe(CAV_COMMON_CHANNELS::EGO_VEHICLE_STATE, &TrafficViewer::HandleEgoVehicleStateMsg, this);
+    data_link_->subscribe(CAV_COMMON_CHANNELS::EGO_VEHICLE_STATE_CHANNEL, &TrafficViewer::HandleEgoVehicleStateMsg, this);
 }
 
 void TrafficViewer::CalcCanvasSize(std::shared_ptr<RoadMap> map)
@@ -72,6 +72,36 @@ void TrafficViewer::CalcCanvasSize(std::shared_ptr<RoadMap> map)
     xmax_ = bd_xr + xspan * 0.1;
     ymin_ = bd_yb - yspan * 0.1;
     ymax_ = bd_yt + yspan * 0.1;
+
+    x_span_ = xmax_ - xmin_;
+    y_span_ = ymax_ - ymin_;
+    aspect_ratio_ = y_span_ / x_span_;
+}
+
+cv::Mat TrafficViewer::CropImageToROI(cv::Mat img, double cx, double cy, double xspan, double yspan)
+{
+    double rxmin = cx - xspan / 2.0;
+    double rxmax = cx + xspan / 2.0;
+    double rymin = cy - yspan / 2.0;
+    double rymax = cy + yspan / 2.0;
+
+    if (rxmin < xmin_)
+        rxmin = xmin_;
+    if (rxmax > xmax_)
+        rxmax = xmax_;
+    if (rymin < ymin_)
+        rymin = ymin_;
+    if (rymax > ymax_)
+        rymax = ymax_;
+
+    std::cout << "canvas size: " << xmin_ << " , " << xmax_ << " , " << ymin_ << " , " << ymax_ << std::endl;
+
+    int tl_x = rxmin * ppu_;
+    int tl_y = rymin * ppu_;
+    int width = (rxmax - rxmin) * ppu_;
+    int height = (rymax - rymin) * ppu_;
+
+    return img(cv::Rect(tl_x, tl_y, width, height));
 }
 
 void TrafficViewer::HandleEgoVehicleStateMsg(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleState *msg)
@@ -111,6 +141,8 @@ void TrafficViewer::Start()
 
         static bool show_center_line = false;
         static bool use_jetcolor_bg = false;
+        static bool centered_at_ego_vehicle = true;
+        static float zoom_in_ratio = 0.56f;
         static bool save_image = false;
 
         //-------------------------------------------------------------//
@@ -124,6 +156,9 @@ void TrafficViewer::Start()
         ImGui::Checkbox("Show Centerline", &show_center_line);
         ImGui::Checkbox("Jetcolor Map", &use_jetcolor_bg);
 
+        ImGui::Text("Traffic:");
+        ImGui::Checkbox("Centered at Ego Vehicle", &centered_at_ego_vehicle);
+        ImGui::SliderFloat("Zoom-in Ratio", &zoom_in_ratio, 0.0f, 1.0f);
         ImGui::Text("Save Result:");
         static char img_name_buf[32] = "traffic_viewer";
         ImGui::InputText("", img_name_buf, IM_ARRAYSIZE(img_name_buf));
@@ -154,17 +189,30 @@ void TrafficViewer::Start()
             veh_draw.DrawVehicle(fp, veh.id_);
         }
 
-        if(ego_state_updated_)
+        if (ego_state_updated_)
         {
             Polygon fp = VehicleFootprint(ego_vehicle_state_.GetPose()).polygon;
-            veh_draw.DrawVehicle(fp, CvDrawColors::cyan_color);
+            veh_draw.DrawVehicle(fp, CvDrawColors::blue_color);
         }
 
         //-------------------------------------------------------------//
 
         // draw image to window
         // cv::Mat vis_img = cv::imread("/home/rdu/Pictures/lanelets_light.png");
-        cv::Mat vis_img = canvas.paint_area;
+        // cv::Mat vis_img = canvas.paint_area;
+        // cv::Mat vis_img = canvas.GetROIofPaintArea(80, 100, 100, 100);
+
+        cv::Mat vis_img;
+        if (centered_at_ego_vehicle && ego_state_updated_)
+        {
+            auto pos = ego_vehicle_state_.GetPose().position;
+            vis_img = canvas.GetROIofPaintArea(pos.x, pos.y, zoom_in_ratio);
+        }
+        else
+        {
+            vis_img = canvas.paint_area;
+        }
+
         LightWidget::DrawOpenCVImageToBackground(vis_img);
 
         // save image if requested

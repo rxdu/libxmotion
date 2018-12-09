@@ -83,7 +83,7 @@ void RoadMapViz::ShowLanes(bool show_center_line, std::string window_name, bool 
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void RoadMapViz::ShowTrafficChannel(TrafficChannel &channel, std::string window_name, bool save_img)
+void RoadMapViz::ShowTrafficChannel(TrafficChannel *channel, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -96,7 +96,7 @@ void RoadMapViz::ShowTrafficChannel(TrafficChannel &channel, std::string window_
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void RoadMapViz::ShowTrafficChannelCenterline(TrafficChannel &channel, std::string window_name, bool save_img)
+void RoadMapViz::ShowTrafficChannelCenterline(TrafficChannel *channel, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 

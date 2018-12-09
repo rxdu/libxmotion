@@ -37,7 +37,7 @@ int main()
     auto graph = LatticeGraph::Search(path, ego_chn, ego_veh.GetPose(), 8);
     std::cout << "search finished in " << timer.toc() << " seconds" << std::endl;
 
-    TrafficViz::ShowLatticePathInTrafficChannel(graph, path, *ego_chn.get(), "lattice graph path", true);
+    TrafficViz::ShowLatticePathInTrafficChannel(graph, path, ego_chn.get(), "lattice graph path", true);
 
     return 0;
 }

@@ -32,7 +32,7 @@ void TrafficViz::ShowLanes(bool show_center_line, std::string window_name, bool 
     RoadMapViz::ShowLanes(show_center_line, window_name, save_img);
 }
 
-void TrafficViz::ShowTrafficChannel(TrafficChannel &channel, std::string window_name, bool save_img)
+void TrafficViz::ShowTrafficChannel(TrafficChannel *channel, std::string window_name, bool save_img)
 {
     RoadMapViz::ShowTrafficChannel(channel, window_name, save_img);
 }
@@ -47,7 +47,7 @@ void TrafficViz::ShowVehicle(std::vector<Polygon> &polygons, std::string window_
     RoadMapViz::ShowVehicle(polygons, window_name, save_img);
 }
 
-void TrafficViz::ShowVehicleInChannel(Polygon polygon, TrafficChannel &channel, std::string window_name, bool save_img)
+void TrafficViz::ShowVehicleInChannel(Polygon polygon, TrafficChannel *channel, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -62,7 +62,7 @@ void TrafficViz::ShowVehicleInChannel(Polygon polygon, TrafficChannel &channel, 
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel &channel, std::string window_name, bool save_img)
+void TrafficViz::ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel *channel, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -79,7 +79,7 @@ void TrafficViz::ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice,
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowLatticePathInTrafficChannel(std::vector<StateLattice> &path, TrafficChannel &channel, std::string window_name, bool save_img)
+void TrafficViz::ShowLatticePathInTrafficChannel(std::vector<StateLattice> &path, TrafficChannel *channel, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -96,7 +96,7 @@ void TrafficViz::ShowLatticePathInTrafficChannel(std::vector<StateLattice> &path
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowLatticePathInTrafficChannel(std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> graph, std::vector<StateLattice> &path, TrafficChannel &channel, std::string window_name, bool save_img)
+void TrafficViz::ShowLatticePathInTrafficChannel(std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> graph, std::vector<StateLattice> &path, TrafficChannel *channel, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -118,7 +118,7 @@ void TrafficViz::ShowLatticePathInTrafficChannel(std::shared_ptr<Graph<LatticeGr
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowLatticePathWithLookaheadZone(std::vector<StateLattice> &path, LookaheadZone &zone, TrafficChannel &channel, std::string window_name, bool save_img)
+void TrafficViz::ShowLatticePathWithLookaheadZone(std::vector<StateLattice> &path, LookaheadZone &zone, TrafficChannel *channel, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -308,7 +308,7 @@ void TrafficViz::ShowThreatField(ThreatField &field, int32_t t_k, bool show_veh_
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowLatticeWithOccupancyDistribution(std::vector<StateLattice> &lattice, TrafficChannel &channel, ThreatField &field, int32_t t_k, bool show_veh_id, std::string window_name, bool save_img)
+void TrafficViz::ShowLatticeWithOccupancyDistribution(std::vector<StateLattice> &lattice, TrafficChannel *channel, ThreatField &field, int32_t t_k, bool show_veh_id, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -347,7 +347,7 @@ void TrafficViz::ShowLatticeWithOccupancyDistribution(std::vector<StateLattice> 
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowLatticeInThreatField(std::vector<StateLattice> &lattice, TrafficChannel &channel, ThreatField &field, int32_t t_k, bool show_veh_id, std::string window_name, bool save_img)
+void TrafficViz::ShowLatticeInThreatField(std::vector<StateLattice> &lattice, TrafficChannel *channel, ThreatField &field, int32_t t_k, bool show_veh_id, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 
@@ -389,7 +389,7 @@ void TrafficViz::ShowLatticeInThreatField(std::vector<StateLattice> &lattice, Tr
     ShowImage(canvas.paint_area, window_name, save_img);
 }
 
-void TrafficViz::ShowTrafficChannelWithThreatField(TrafficChannel &channel, ThreatField &field, int32_t t_k, bool show_veh_id, std::string window_name, bool save_img)
+void TrafficViz::ShowTrafficChannelWithThreatField(TrafficChannel *channel, ThreatField &field, int32_t t_k, bool show_veh_id, std::string window_name, bool save_img)
 {
     RoadMapViz &viz = RoadMapViz::GetInstance();
 

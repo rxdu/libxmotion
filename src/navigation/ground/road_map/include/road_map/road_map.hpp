@@ -67,7 +67,9 @@ class RoadMap
     Polyline GetLaneCenterLine(std::string lane_name);
 
     // Find shortest route between two lanelets
+    std::vector<int32_t> FindShortestRoute(int32_t start_id, int32_t goal_id);
     std::vector<int32_t> FindShortestRoute(std::string start_name, std::string goal_name);
+    std::vector<std::string> FindShortestRouteName(int32_t start_id, int32_t goal_id);
     std::vector<std::string> FindShortestRouteName(std::string start_name, std::string goal_name);
 
     // Check occupied lanelets at given position

@@ -49,7 +49,7 @@ int main()
     std::cout << "number of vertices: " << graph->GetGraphVertexNumber() << std::endl;
 
     // LightViz::ShowStateLattice(lattices);
-    TrafficViz::ShowLatticeInTrafficChannel(lattices, *all_channels[1].get(), "lattice graph", true);
+    TrafficViz::ShowLatticeInTrafficChannel(lattices, all_channels[1].get(), "lattice graph", true);
 
     return 0;
 }

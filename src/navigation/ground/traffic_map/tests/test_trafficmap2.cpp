@@ -22,7 +22,8 @@ int main()
     for (auto &chn : loader.traffic_map->GetAllTrafficChannels())
     {
         chn->PrintInfo();
-        RoadMapViz::ShowTrafficChannel(*chn.get());
+        chn->DiscretizeChannel(5, 0.74, 5);
+        RoadMapViz::ShowTrafficChannel(chn.get());
     }
 
     // RoadMapViz::ShowTrafficChannel(map->traffic_map_->GetAllTrafficChannels().front());

@@ -138,7 +138,7 @@ int main()
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    TrafficViz::ShowLatticeInThreatField(lattices, *ego_chn.get(), field, 4, true, "lattice_in_threat_field", true);
+    TrafficViz::ShowLatticeInThreatField(lattices, ego_chn.get(), field, 4, true, "lattice_in_threat_field", true);
 
     //////////////////////////////////////////////////
 

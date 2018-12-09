@@ -5,5 +5,5 @@
 add_executable(test_motion_manager test_motion_manager.cpp)
 target_link_libraries(test_motion_manager cav_motion ugvnav_viz utils)
 
-# add_executable(test_lookahead_zone test_lookahead_zone.cpp)
-# target_link_libraries(test_lookahead_zone local_planner ugvnav_viz utils)
+add_executable(test_route_planner test_route_planner.cpp)
+target_link_libraries(test_route_planner cav_motion ugvnav_viz utils)

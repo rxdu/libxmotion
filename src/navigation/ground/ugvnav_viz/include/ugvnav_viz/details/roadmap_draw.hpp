@@ -33,8 +33,8 @@ public:
   CartesianCanvas &GetRoadCanvas() { return canvas_; }
 
   void DrawLanes(bool show_center_line = true);
-  void DrawTrafficChannelGrid(TrafficChannel &channel, bool show_center_line = true);
-  void DrawTrafficChannelCenterline(TrafficChannel &channel);
+  void DrawTrafficChannelGrid(TrafficChannel *channel, bool show_center_line = true);
+  void DrawTrafficChannelCenterline(TrafficChannel *channel);
 
 private:
   CartesianCanvas canvas_;

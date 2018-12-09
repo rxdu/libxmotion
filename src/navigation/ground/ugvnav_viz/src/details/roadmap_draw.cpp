@@ -29,19 +29,19 @@ void RoadMapDraw::DrawLanes(bool show_center_line)
     }
 }
 
-void RoadMapDraw::DrawTrafficChannelGrid(TrafficChannel &channel, bool show_center_line)
+void RoadMapDraw::DrawTrafficChannelGrid(TrafficChannel *channel, bool show_center_line)
 {
-    if (channel.grid_ != nullptr)
-        cdraw_.DrawCurvilinearGrid(*channel.grid_.get());
+    if (channel->grid_ != nullptr)
+        cdraw_.DrawCurvilinearGrid(*channel->grid_.get());
 
     if (show_center_line)
     {
-        gdraw_.DrawParametricCurve(channel.center_curve_, 0.1, CvDrawColors::black_color);
-        gdraw_.DrawPolyline(channel.center_line_, true, CvDrawColors::black_color);
+        gdraw_.DrawParametricCurve(channel->center_curve_, 0.1, CvDrawColors::black_color);
+        gdraw_.DrawPolyline(channel->center_line_, true, CvDrawColors::black_color);
     }
 }
 
-void RoadMapDraw::DrawTrafficChannelCenterline(TrafficChannel &channel)
+void RoadMapDraw::DrawTrafficChannelCenterline(TrafficChannel *channel)
 {
-    gdraw_.DrawPolyline(channel.center_line_, true, CvDrawColors::black_color);
+    gdraw_.DrawPolyline(channel->center_line_, true, CvDrawColors::black_color);
 }

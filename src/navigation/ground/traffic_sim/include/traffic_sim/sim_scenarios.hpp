@@ -16,9 +16,13 @@ namespace librav
 {
 namespace SimScenario
 {
+// "intersection_single_lane_full"
 TrafficSimConfig GenerateScenarioCase1();
 TrafficSimConfig GenerateScenarioCase2();
-}
+
+// "urban_single_lane_loop_full"
+TrafficSimConfig GenerateScenarioCase3();
+} // namespace SimScenario
 } // namespace librav
 
 #endif /* SIM_SCENARIOS_HPP */

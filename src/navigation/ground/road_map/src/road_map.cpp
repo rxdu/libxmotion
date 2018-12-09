@@ -158,6 +158,19 @@ Polyline RoadMap::GetLaneCenterLine(std::string lane_name)
     return lane_center_lines_[ll_id_lookup_[lane_name]];
 }
 
+std::vector<int32_t> RoadMap::FindShortestRoute(int32_t start_id, int32_t goal_id)
+{
+    auto start = lanelet_map_->lanelet_by_id(start_id);
+    auto dest = lanelet_map_->lanelet_by_id(goal_id);
+    std::vector<lanelet_ptr_t> path = lanelet_map_->shortest_path(start, dest);
+
+    std::vector<int32_t> ids;
+    for (auto wp : path)
+        ids.push_back(wp->id());
+
+    return ids;
+}
+
 std::vector<int32_t> RoadMap::FindShortestRoute(std::string start_name, std::string goal_name)
 {
     auto start = lanelet_map_->lanelet_by_id(ll_id_lookup_[start_name]);
@@ -169,6 +182,16 @@ std::vector<int32_t> RoadMap::FindShortestRoute(std::string start_name, std::str
         ids.push_back(wp->id());
 
     return ids;
+}
+
+std::vector<std::string> RoadMap::FindShortestRouteName(int32_t start_id, int32_t goal_id)
+{
+    auto ids = FindShortestRoute(start_id, goal_id);
+    std::vector<std::string> names;
+    for (auto wp : ids)
+        names.push_back(ll_name_lookup_[wp]);
+
+    return names;
 }
 
 std::vector<std::string> RoadMap::FindShortestRouteName(std::string start_name, std::string goal_name)

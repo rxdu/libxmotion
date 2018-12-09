@@ -64,3 +64,70 @@ SimplePoint CartesianCanvas::ConvertCartisianToPixel(double xi, double yi)
         y = canvas_size_y_ - 1;
     return SimplePoint(x, y);
 }
+
+cv::Mat CartesianCanvas::GetROIofPaintArea(double cx, double cy, double xspan, double yspan)
+{
+    double rxmin = cx - xspan / 2.0;
+    double rxmax = cx + xspan / 2.0;
+    double rymin = cy - yspan / 2.0;
+    double rymax = cy + yspan / 2.0;
+
+    // std::cout << rxmin << " , " << rxmax << " ; " << rymin << " , " << rymax << std::endl;
+
+    SimplePoint tl_pt = ConvertCartisianToPixel(rxmin, rymax);
+    SimplePoint br_pt = ConvertCartisianToPixel(rxmax, rymin);
+
+    // std::cout << "tl: " << tl_pt.x << " , " << tl_pt.y << std::endl;
+    // std::cout << "br: " << br_pt.x << " , " << br_pt.y << std::endl;
+
+    int width = br_pt.x - tl_pt.x;
+    int height = br_pt.y - tl_pt.y;
+
+    double aspct_ratio = canvas_size_y_ / canvas_size_x_;
+    int height2 = static_cast<int>(width * aspct_ratio);
+
+    // std::cout << "width: " << width << " , height: " << height << std::endl;
+
+    cv::Mat roiImage = paint_area(cv::Rect(tl_pt.x, tl_pt.y, width, height2));
+
+    cv::Mat output;
+    roiImage.copyTo(output);
+
+    return output;
+}
+
+cv::Mat CartesianCanvas::GetROIofPaintArea(double cx, double cy, double ratio)
+{
+    double xspan = (xmax_ - xmin_) * ratio;
+    double yspan = (ymax_ - ymin_) * ratio;
+
+    double rxmin = cx - xspan / 2.0;
+    double rxmax = cx + xspan / 2.0;
+    double rymin = cy - yspan / 2.0;
+    double rymax = cy + yspan / 2.0;
+
+    // std::cout << rxmin << " , " << rxmax << " ; " << rymin << " , " << rymax << std::endl;
+
+    SimplePoint tl_pt = ConvertCartisianToPixel(rxmin, rymax);
+    SimplePoint br_pt = ConvertCartisianToPixel(rxmax, rymin);
+
+    // std::cout << "tl: " << tl_pt.x << " , " << tl_pt.y << std::endl;
+    // std::cout << "br: " << br_pt.x << " , " << br_pt.y << std::endl;
+
+    int width = br_pt.x - tl_pt.x;
+    int height = br_pt.y - tl_pt.y;
+
+    // std::cout << "width: " << width << " , height: " << height << std::endl;
+
+    if (tl_pt.x + width > canvas_size_x_)
+        tl_pt.x = canvas_size_x_ - width - 1;
+    if (tl_pt.y + height > canvas_size_y_)
+        tl_pt.y = canvas_size_y_ - height - 1;
+
+    cv::Mat roiImage = paint_area(cv::Rect(tl_pt.x, tl_pt.y, width, height));
+
+    cv::Mat output;
+    roiImage.copyTo(output);
+
+    return output;
+}

@@ -28,6 +28,7 @@ class RoadMap;
 class TrafficChannel
 {
   public:
+    TrafficChannel() = default;
     TrafficChannel(std::shared_ptr<RoadMap> map, std::string src, std::string dst, std::vector<std::string> lanes);
     TrafficChannel(std::shared_ptr<RoadMap> map, std::string lane);
     ~TrafficChannel() = default;
@@ -60,7 +61,7 @@ class TrafficChannel
 
     void PrintInfo();
 
-  private:
+  protected:
     std::shared_ptr<RoadMap> road_map_;
     double origin_offset_ = 0.0;
 

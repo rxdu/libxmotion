@@ -26,34 +26,34 @@ namespace librav
 {
 class RoadMapViz
 {
-public:
-  static void SetupRoadMapViz(std::shared_ptr<RoadMap> map, int32_t pixel_per_unit = 10);
+  public:
+    static void SetupRoadMapViz(std::shared_ptr<RoadMap> map, int32_t pixel_per_unit = 10);
 
-  static void ShowLanes(bool show_center_line = true, std::string window_name = "Lane Image", bool save_img = false);
+    static void ShowLanes(bool show_center_line = true, std::string window_name = "Lane Image", bool save_img = false);
 
-  static void ShowTrafficChannel(TrafficChannel &channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
-  static void ShowTrafficChannelCenterline(TrafficChannel &channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
+    static void ShowTrafficChannel(TrafficChannel *channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
+    static void ShowTrafficChannelCenterline(TrafficChannel *channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
 
-  static void ShowVehicle(Polygon polygon, std::string window_name = "Vehicle Image", bool save_img = false);
-  static void ShowVehicle(std::vector<Polygon> &polygons, std::string window_name = "Vehicle Image", bool save_img = false);
+    static void ShowVehicle(Polygon polygon, std::string window_name = "Vehicle Image", bool save_img = false);
+    static void ShowVehicle(std::vector<Polygon> &polygons, std::string window_name = "Vehicle Image", bool save_img = false);
 
-private:
-  friend class TrafficViz;
+  private:
+    friend class TrafficViz;
 
-  static RoadMapViz &GetInstance(std::shared_ptr<RoadMap> map = nullptr, int32_t pixel_per_unit = 10);
+    static RoadMapViz &GetInstance(std::shared_ptr<RoadMap> map = nullptr, int32_t pixel_per_unit = 10);
 
-  // private constructor
-  RoadMapViz(std::shared_ptr<RoadMap> map, int32_t ppu);
+    // private constructor
+    RoadMapViz(std::shared_ptr<RoadMap> map, int32_t ppu);
 
-  std::shared_ptr<RoadMap> road_map_;
-  int32_t ppu_;
+    std::shared_ptr<RoadMap> road_map_;
+    int32_t ppu_;
 
-  double xmin_;
-  double xmax_;
-  double ymin_;
-  double ymax_;
+    double xmin_;
+    double xmax_;
+    double ymin_;
+    double ymax_;
 
-  CartesianCanvas CreateCanvas(bool use_jetcolor = true);
+    CartesianCanvas CreateCanvas(bool use_jetcolor = true);
 };
 } // namespace librav
 

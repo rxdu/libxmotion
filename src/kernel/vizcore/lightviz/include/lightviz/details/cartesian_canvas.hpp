@@ -30,6 +30,8 @@ struct CartesianCanvas
 
     // coordinate conversion
     SimplePoint ConvertCartisianToPixel(double xi, double yi);
+    cv::Mat GetROIofPaintArea(double cx, double cy, double xspan, double yspan);
+    cv::Mat GetROIofPaintArea(double cx, double cy, double ratio);
 
     // the place for painting
     cv::Mat paint_area;

@@ -5,8 +5,14 @@
 add_executable(app_traffic_viewer app_traffic_viewer.cpp)
 target_link_libraries(app_traffic_viewer sim_viewer)
 
+add_executable(app_traffic_viewer_loop app_traffic_viewer_loop.cpp)
+target_link_libraries(app_traffic_viewer_loop sim_viewer)
+
 add_executable(app_sim_scenario1 app_sim_scenario1.cpp)
 target_link_libraries(app_sim_scenario1 sim_viewer)
 
 add_executable(app_sim_scenario2 app_sim_scenario2.cpp)
 target_link_libraries(app_sim_scenario2 sim_viewer)
+
+add_executable(app_sim_scenario3 app_sim_scenario3.cpp)
+target_link_libraries(app_sim_scenario3 sim_viewer)
