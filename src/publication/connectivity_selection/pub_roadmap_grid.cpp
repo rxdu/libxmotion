@@ -15,7 +15,7 @@ int main()
 
     RoadMapViz::SetupRoadMapViz(loader.road_map, 10);
 
-    RoadMapViz::ShowTrafficChannel(*loader.traffic_map->GetAllTrafficChannels()[4].get(), "roadmap_grid", true);
+    RoadMapViz::ShowTrafficChannel(loader.traffic_map->GetAllTrafficChannels()[4].get(), "roadmap_grid", true);
 
     return 0;
 }

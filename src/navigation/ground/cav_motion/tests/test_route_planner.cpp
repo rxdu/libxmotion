@@ -30,7 +30,7 @@ int main()
     route.PrintInfo();
 
     RoadMapViz::SetupRoadMapViz(loader.road_map, 3);
-    // RoadMapViz::ShowTrafficChannel(*chn.get());    
+    RoadMapViz::ShowTrafficChannel(&route);
 
     return 0;
 }

@@ -35,7 +35,7 @@ int main()
         lattices.push_back(edge->cost_);
     std::cout << "number of vertices: " << graph->GetGraphVertexNumber() << std::endl;
 
-    TrafficViz::ShowLatticeInTrafficChannel(lattices, *all_channels[1].get(), "lattice graph", true);
+    TrafficViz::ShowLatticeInTrafficChannel(lattices, all_channels[1].get(), "lattice graph", true);
 
     return 0;
 }
