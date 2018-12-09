@@ -9,6 +9,8 @@
 
 #include "cav_motion/route_planner.hpp"
 
+#include <limits>
+
 namespace librav
 {
 RoutePlanner::RoutePlanner(std::shared_ptr<RoadMap> rmap, std::shared_ptr<TrafficMap> tmap) : road_map_(rmap),
@@ -49,6 +51,21 @@ bool RoutePlanner::SearchRoute(Position2d start, Position2d goal, ReferenceRoute
     }
     else
     {
+        std::vector<ReferenceRoute> routes;
+        for (auto &candidate : route_candidates)
+            routes.push_back(ReferenceRoute(road_map_, start, goal, candidate.lanelet_s, candidate.lanelet_g, candidate.route));
+        int min_idx = 0;
+        double min_length = std::numeric_limits<double>::max();
+        for (int i = 0; i < routes.size(); ++i)
+        {
+            auto rt = routes[i];
+            if (rt.GetLength() < min_length)
+            {
+                min_idx = i;
+                min_length = rt.GetLength();
+            }
+        }
+        *route = routes[min_idx];
     }
 
     return true;

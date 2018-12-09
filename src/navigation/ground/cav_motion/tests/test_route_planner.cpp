@@ -14,7 +14,7 @@ int main()
 {
     MapLoader loader("/home/rdu/Workspace/librav/data/road_map/urban_single_lane_loop_full.osm");
 
-    auto start_point = loader.traffic_map->FindTrafficChannel("s1", "s2")->ConvertToGlobalCoordinate({150, 0});
+    auto start_point = loader.traffic_map->FindTrafficChannel("s1", "s2")->ConvertToGlobalCoordinate({180, 0});
     auto goal_point = loader.traffic_map->FindTrafficChannel("s1", "s8")->ConvertToGlobalCoordinate({250, 0});
 
     // VehicleState start_state(-1, {start_point.x, start_point.y, start_point.theta}, 0);
