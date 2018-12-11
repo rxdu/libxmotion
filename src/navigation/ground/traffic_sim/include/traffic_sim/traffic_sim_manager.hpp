@@ -43,7 +43,7 @@ class TrafficSimManager
 
     void UpdateSimState(double t);
 
-    void HandleLCMMessage_SyncTrigger(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg);
+    void HandleSyncTriggerMsg(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg);
 };
 } // namespace librav
 

@@ -1,5 +1,5 @@
 /* 
- * cav_virtual_controller.hpp
+ * virtual_controller.hpp
  * 
  * Created on: Dec 09, 2018 04:38
  * Description: 
@@ -7,8 +7,8 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#ifndef CAV_VIRTUAL_CONTROLLER_HPP
-#define CAV_VIRTUAL_CONTROLLER_HPP
+#ifndef VIRTUAL_CONTROLLER_HPP
+#define VIRTUAL_CONTROLLER_HPP
 
 #include <memory>
 
@@ -16,10 +16,10 @@
 
 namespace librav
 {
-class CAVVirtualController
+class VirtualController
 {
   public:
-    CAVVirtualController(std::shared_ptr<LCMLink> link);
+    VirtualController(std::shared_ptr<LCMLink> link);
 
   private:
     std::shared_ptr<LCMLink> data_link_;
@@ -28,4 +28,4 @@ class CAVVirtualController
 };
 } // namespace librav
 
-#endif /* CAV_VIRTUAL_CONTROLLER_HPP */
+#endif /* VIRTUAL_CONTROLLER_HPP */

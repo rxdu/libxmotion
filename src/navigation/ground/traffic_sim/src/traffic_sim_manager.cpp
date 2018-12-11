@@ -24,7 +24,7 @@ TrafficSimManager::TrafficSimManager(TrafficSimConfig config) : config_(config),
         std::cerr << "ERROR: Failed to initialize LCM." << std::endl;
     data_link_ready_ = true;
 
-    data_link_->subscribe(CAV_SIM_CHANNELS::SIM_SYNC_TRIGGER_CHANNEL, &TrafficSimManager::HandleLCMMessage_SyncTrigger, this);
+    data_link_->subscribe(CAV_SIM_CHANNELS::SIM_SYNC_TRIGGER_CHANNEL, &TrafficSimManager::HandleSyncTriggerMsg, this);
 }
 
 bool TrafficSimManager::ValidateSimConfig()
@@ -44,7 +44,7 @@ bool TrafficSimManager::ValidateSimConfig()
     return true;
 }
 
-void TrafficSimManager::HandleLCMMessage_SyncTrigger(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg)
+void TrafficSimManager::HandleSyncTriggerMsg(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg)
 {
     sync_trigger_ready_ = msg->trigger_ready;
 }

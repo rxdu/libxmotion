@@ -22,3 +22,16 @@ struct VehicleEstimations
     int64_t vehicle_num;
     VehicleState estimations[vehicle_num];
 }
+
+struct CAVMissionInfo
+{
+    // mission types
+    const int32_t MT_NEW_MISSION_REQUEST = 1;
+    const int32_t MT_ABORT_CURRENT_MISSION = 2;
+
+    int64_t id;
+    int32_t mission_type;
+
+    VehicleState start_state;
+    VehicleState goal_state;
+}

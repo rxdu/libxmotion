@@ -21,6 +21,8 @@ struct CAV_COMMON_CHANNELS
     static constexpr auto EGO_VEHICLE_STATE_CHANNEL = "ego_vehicle_state";
     static constexpr auto VEHICLE_ESTIMATIONS_CHANNEL = "vehicle_estimations";
 
+    static constexpr auto CAV_MISSION_INFO_CHANNEL = "cav_mission_info";
+
     static constexpr auto DESIRED_TRAJECTORY_CHANNEL = "desired_trajectory";
 };
 

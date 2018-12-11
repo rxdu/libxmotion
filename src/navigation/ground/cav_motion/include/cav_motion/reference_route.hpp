@@ -25,6 +25,8 @@ class ReferenceRoute : public TrafficChannel
     ReferenceRoute(std::shared_ptr<RoadMap> map, Position2d ps, Position2d pg,
                    std::string src, std::string dst, std::vector<std::string> lanes);
 
+    bool valid = false;
+
     Position2d position_s;
     Position2d position_g;
 

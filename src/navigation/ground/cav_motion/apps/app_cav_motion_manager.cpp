@@ -16,7 +16,7 @@ int main()
 
     if (!manager.IsReady())
     {
-        std::cerr << "ERROR: planner is not set up properly" << std::endl;
+        std::cerr << "ERROR: motion manager is not set up properly" << std::endl;
         return -1;
     }
 
