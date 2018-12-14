@@ -22,5 +22,4 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Add other sub source directories
-# add_subdirectory(selective_listening_acc)
-add_subdirectory(connectivity_selection)
+add_subdirectory(connectivity_selection_rev)

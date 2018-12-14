@@ -31,6 +31,7 @@ add_subdirectory(reachability)
 add_subdirectory(state_lattice)
 add_subdirectory(local_planner)
 add_subdirectory(threat_field)
+add_subdirectory(field_decomp)
 add_subdirectory(connectivity)
 add_subdirectory(traffic_sim)
 
