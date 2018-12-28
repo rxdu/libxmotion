@@ -1,7 +1,6 @@
 # Temp files
 */Debug
 build
-build2
 */build
 *~
 */~
@@ -21,7 +20,10 @@ docs/doxygen/latex
 pc/visualization/CMakeLists.txt.user
 
 # VS Code
-#.vscode
+.vscode
+
+# CLion
+.idea/
 
 # LCM
 src/lcmtypes/c
