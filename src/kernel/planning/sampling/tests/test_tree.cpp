@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdint>
 
-#include "rrt/tree.hpp"
+#include "sampling/tree.hpp"
 
 using namespace librav;
 
