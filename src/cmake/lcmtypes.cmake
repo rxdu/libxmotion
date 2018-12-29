@@ -102,7 +102,7 @@ include(cmake/pods.cmake)
 
 macro(lcmtypes_get_types msgvar)
     # get a list of all LCM types
-    file(GLOB __tmplcmtypes "${CMAKE_SOURCE_DIR}/lcmtypes/*.lcm")
+    file(GLOB __tmplcmtypes "${CMAKE_SOURCE_DIR}/src/lcmtypes/*.lcm")
     set(${msgvar} "")
     foreach(_msg ${__tmplcmtypes})
         # Try to filter out temporary and backup files

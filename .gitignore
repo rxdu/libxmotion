@@ -1,7 +1,11 @@
-# Temp files
+# build
 */Debug
 build
 */build
+cmake-build-debug
+cmake-build-release/
+
+# Temp files
 *~
 */~
 */*.*~
