@@ -51,7 +51,7 @@
 #include <random>
 #include <memory>
 
-#include "sampling/details/rng_seed_gen.hpp"
+#include "sampling/details/sampler/rng_seed_gen.hpp"
 
 namespace librav
 {

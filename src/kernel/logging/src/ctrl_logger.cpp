@@ -23,8 +23,9 @@ CtrlLogger::CtrlLogger(std::string log_name_prefix, std::string log_save_path) :
     // initialize logger
 #ifdef ENABLE_LOGGING
     std::string filename = CreateLogFileName(log_name_prefix_, log_save_path_);
-    spdlog::set_async_mode(256);
-    logger_ = spdlog::basic_logger_mt("ctrl_logger", filename);
+    // spdlog::set_async_mode(256);
+    spdlog::installCrashHandlerOnce();
+    logger_ = spdlog::basic_logger_mt<spdlog::async_factory>("ctrl_logger", filename);
     logger_->set_pattern("%v");
 #endif
 }

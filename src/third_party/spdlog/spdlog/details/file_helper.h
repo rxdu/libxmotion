@@ -5,12 +5,12 @@
 
 #pragma once
 
-// Helper class for file sink
-// When failing to open a file, retry several times(5) with small delay between the tries(10 ms)
-// Throw spdlog_ex exception on errors
+// Helper class for file sinks.
+// When failing to open a file, retry several times(5) with a delay interval(10 ms).
+// Throw spdlog_ex exception on errors.
 
-#include "../details/log_msg.h"
-#include "../details/os.h"
+#include "spdlog/details/log_msg.h"
+#include "spdlog/details/os.h"
 
 #include <cerrno>
 #include <chrono>
@@ -46,7 +46,7 @@ public:
         _filename = fname;
         for (int tries = 0; tries < open_tries; ++tries)
         {
-            if (!os::fopen_s(&_fd, fname, mode))
+            if (!os::fopen_s(&fd_, fname, mode))
             {
                 return;
             }
@@ -68,23 +68,23 @@ public:
 
     void flush()
     {
-        std::fflush(_fd);
+        std::fflush(fd_);
     }
 
     void close()
     {
-        if (_fd != nullptr)
+        if (fd_ != nullptr)
         {
-            std::fclose(_fd);
-            _fd = nullptr;
+            std::fclose(fd_);
+            fd_ = nullptr;
         }
     }
 
-    void write(const log_msg &msg)
+    void write(const fmt::memory_buffer &buf)
     {
-        size_t msg_size = msg.formatted.size();
-        auto data = msg.formatted.data();
-        if (std::fwrite(data, 1, msg_size, _fd) != msg_size)
+        size_t msg_size = buf.size();
+        auto data = buf.data();
+        if (std::fwrite(data, 1, msg_size, fd_) != msg_size)
         {
             throw spdlog_ex("Failed writing to file " + os::filename_to_str(_filename), errno);
         }
@@ -92,11 +92,11 @@ public:
 
     size_t size() const
     {
-        if (_fd == nullptr)
+        if (fd_ == nullptr)
         {
             throw spdlog_ex("Cannot use size() on closed file " + os::filename_to_str(_filename));
         }
-        return os::filesize(_fd);
+        return os::filesize(fd_);
     }
 
     const filename_t &filename() const
@@ -126,7 +126,8 @@ public:
     {
         auto ext_index = fname.rfind('.');
 
-        // no valid extension found - return whole path and empty string as extension
+        // no valid extension found - return whole path and empty string as
+        // extension
         if (ext_index == filename_t::npos || ext_index == 0 || ext_index == fname.size() - 1)
         {
             return std::make_tuple(fname, spdlog::filename_t());
@@ -134,7 +135,7 @@ public:
 
         // treat casese like "/etc/rc.d/somelogfile or "/abc/.hiddenfile"
         auto folder_index = fname.rfind(details::os::folder_sep);
-        if (folder_index != fname.npos && folder_index >= ext_index - 1)
+        if (folder_index != filename_t::npos && folder_index >= ext_index - 1)
         {
             return std::make_tuple(fname, spdlog::filename_t());
         }
@@ -144,7 +145,7 @@ public:
     }
 
 private:
-    FILE *_fd{nullptr};
+    std::FILE *fd_{nullptr};
     filename_t _filename;
 };
 } // namespace details

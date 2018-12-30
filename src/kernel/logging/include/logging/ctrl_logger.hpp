@@ -18,8 +18,8 @@
 #include <atomic>
 #include <sstream>
 
-#include "spdlog/spdlog.h"
-#include "logging/logging_utils.hpp"
+#include "logging/details/spdlog_headers.hpp"
+#include "logging/details/logging_utils.hpp"
 
 namespace librav
 {

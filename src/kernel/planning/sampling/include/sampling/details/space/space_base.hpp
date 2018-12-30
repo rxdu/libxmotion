@@ -14,15 +14,15 @@
 
 namespace librav
 {
-class State
+class StateBase
 {
   public:
-    State() = default;
-    virtual ~State() = default;
+    StateBase() = default;
+    virtual ~StateBase() = default;
 
     // non-copyable
-    State(const State &other) = delete;
-    State &operator=(const State &other) = delete;
+    StateBase(const StateBase &other) = delete;
+    StateBase &operator=(const StateBase &other) = delete;
 };
 
 class SpaceBase
@@ -39,9 +39,9 @@ class SpaceBase
     virtual int32_t GetDimension() const = 0;
 
     // sampling
-    virtual State *SampleUniform() = 0;
-    virtual State *SampleUniformNear(const State *near, double distance) = 0;
-    virtual State *SampleGaussian(const State *mean, double stdDev) = 0;
+    virtual StateBase *SampleUniform() = 0;
+    virtual StateBase *SampleUniformNear(const StateBase *near, double distance) = 0;
+    virtual StateBase *SampleGaussian(const StateBase *mean, double stdDev) = 0;
 };
 } // namespace librav
 

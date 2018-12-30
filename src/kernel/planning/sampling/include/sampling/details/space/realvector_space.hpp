@@ -24,7 +24,12 @@ template <int32_t N>
 class RealVectorSpace : public SpaceBase
 {
   public:
-    RealVectorSpace()
+    class State : public StateBase
+    {
+
+    };
+
+    public : RealVectorSpace()
     {
         bounds_.resize(N);
     }
@@ -61,9 +66,9 @@ class RealVectorSpace : public SpaceBase
         return vol;
     }
 
-    State *SampleUniform() override{};
-    State *SampleUniformNear(const State *near, double distance) override{};
-    State *SampleGaussian(const State *mean, double stdDev) override{};
+    StateBase *SampleUniform() override{};
+    StateBase *SampleUniformNear(const StateBase *near, double distance) override{};
+    StateBase *SampleGaussian(const StateBase *mean, double stdDev) override{};
 
     void PrintInfo()
     {

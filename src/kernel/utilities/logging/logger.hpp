@@ -18,7 +18,10 @@
 #include <atomic>
 #include <sstream>
 
+#include "spdlog/async.h"
 #include "spdlog/spdlog.h"
+#include "spdlog/signal_handler.h"
+#include "spdlog/sinks/basic_file_sink.h"
 #include "file_io/folder_path.hpp"
 
 namespace librav

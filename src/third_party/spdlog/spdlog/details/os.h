@@ -57,7 +57,7 @@ namespace spdlog {
 namespace details {
 namespace os {
 
-inline spdlog::log_clock::time_point now()
+inline spdlog::log_clock::time_point now() SPDLOG_NOEXCEPT
 {
 
 #if defined __linux__ && defined SPDLOG_CLOCK_COARSE
@@ -70,7 +70,7 @@ inline spdlog::log_clock::time_point now()
     return log_clock::now();
 #endif
 }
-inline std::tm localtime(const std::time_t &time_tt)
+inline std::tm localtime(const std::time_t &time_tt) SPDLOG_NOEXCEPT
 {
 
 #ifdef _WIN32
@@ -83,13 +83,13 @@ inline std::tm localtime(const std::time_t &time_tt)
     return tm;
 }
 
-inline std::tm localtime()
+inline std::tm localtime() SPDLOG_NOEXCEPT
 {
     std::time_t now_t = time(nullptr);
     return localtime(now_t);
 }
 
-inline std::tm gmtime(const std::time_t &time_tt)
+inline std::tm gmtime(const std::time_t &time_tt) SPDLOG_NOEXCEPT
 {
 
 #ifdef _WIN32
@@ -102,20 +102,10 @@ inline std::tm gmtime(const std::time_t &time_tt)
     return tm;
 }
 
-inline std::tm gmtime()
+inline std::tm gmtime() SPDLOG_NOEXCEPT
 {
     std::time_t now_t = time(nullptr);
     return gmtime(now_t);
-}
-inline bool operator==(const std::tm &tm1, const std::tm &tm2)
-{
-    return (tm1.tm_sec == tm2.tm_sec && tm1.tm_min == tm2.tm_min && tm1.tm_hour == tm2.tm_hour && tm1.tm_mday == tm2.tm_mday &&
-            tm1.tm_mon == tm2.tm_mon && tm1.tm_year == tm2.tm_year && tm1.tm_isdst == tm2.tm_isdst);
-}
-
-inline bool operator!=(const std::tm &tm1, const std::tm &tm2)
-{
-    return !(tm1 == tm2);
 }
 
 // eol definition
@@ -159,9 +149,9 @@ inline bool fopen_s(FILE **fp, const filename_t &filename, const filename_t &mod
 {
 #ifdef _WIN32
 #ifdef SPDLOG_WCHAR_FILENAMES
-    *fp = _wfsopen((filename.c_str()), mode.c_str(), _SH_DENYWR);
+    *fp = _wfsopen((filename.c_str()), mode.c_str(), _SH_DENYNO);
 #else
-    *fp = _fsopen((filename.c_str()), mode.c_str(), _SH_DENYWR);
+    *fp = _fsopen((filename.c_str()), mode.c_str(), _SH_DENYNO);
 #endif
 #else // unix
     *fp = fopen((filename.c_str()), mode.c_str());
@@ -176,7 +166,7 @@ inline bool fopen_s(FILE **fp, const filename_t &filename, const filename_t &mod
     return *fp == nullptr;
 }
 
-inline int remove(const filename_t &filename)
+inline int remove(const filename_t &filename) SPDLOG_NOEXCEPT
 {
 #if defined(_WIN32) && defined(SPDLOG_WCHAR_FILENAMES)
     return _wremove(filename.c_str());
@@ -185,7 +175,7 @@ inline int remove(const filename_t &filename)
 #endif
 }
 
-inline int rename(const filename_t &filename1, const filename_t &filename2)
+inline int rename(const filename_t &filename1, const filename_t &filename2) SPDLOG_NOEXCEPT
 {
 #if defined(_WIN32) && defined(SPDLOG_WCHAR_FILENAMES)
     return _wrename(filename1.c_str(), filename2.c_str());
@@ -195,7 +185,7 @@ inline int rename(const filename_t &filename1, const filename_t &filename2)
 }
 
 // Return if file exists
-inline bool file_exists(const filename_t &filename)
+inline bool file_exists(const filename_t &filename)  SPDLOG_NOEXCEPT
 {
 #ifdef _WIN32
 #ifdef SPDLOG_WCHAR_FILENAMES
@@ -236,7 +226,7 @@ inline size_t filesize(FILE *f)
 
 #else // unix
     int fd = fileno(f);
-    // 64 bits(but not in osx or cygwin, where fstat64 is deprecated)
+// 64 bits(but not in osx or cygwin, where fstat64 is deprecated)
 #if !defined(__FreeBSD__) && !defined(__APPLE__) && (defined(__x86_64__) || defined(__ppc64__)) && !defined(__CYGWIN__)
     struct stat64 st;
     if (fstat64(fd, &st) == 0)
@@ -245,6 +235,7 @@ inline size_t filesize(FILE *f)
     }
 #else // unix 32 bits or cygwin
     struct stat st;
+
     if (fstat(fd, &st) == 0)
     {
         return static_cast<size_t>(st.st_size);
@@ -281,7 +272,7 @@ inline int utc_minutes_offset(const std::tm &tm = details::os::localtime())
     return offset;
 #else
 
-#if defined(sun) || defined(__sun)
+#if defined(sun) || defined(__sun) || defined(_AIX)
     // 'tm_gmtoff' field is BSD extension and it's missing on SunOS/Solaris
     struct helper
     {
@@ -320,8 +311,9 @@ inline int utc_minutes_offset(const std::tm &tm = details::os::localtime())
 }
 
 // Return current thread id as size_t
-// It exists because the std::this_thread::get_id() is much slower(especially under VS 2013)
-inline size_t _thread_id()
+// It exists because the std::this_thread::get_id() is much slower(especially
+// under VS 2013)
+inline size_t _thread_id() SPDLOG_NOEXCEPT
 {
 #ifdef _WIN32
     return static_cast<size_t>(::GetCurrentThreadId());
@@ -344,7 +336,7 @@ inline size_t _thread_id()
 }
 
 // Return current thread id as size_t (from thread local storage)
-inline size_t thread_id()
+inline size_t thread_id() SPDLOG_NOEXCEPT
 {
 #if defined(SPDLOG_DISABLE_TID_CACHING) || (defined(_MSC_VER) && (_MSC_VER < 1900)) || defined(__cplusplus_winrt) ||                       \
     (defined(__clang__) && !__has_feature(cxx_thread_local))
@@ -357,7 +349,7 @@ inline size_t thread_id()
 
 // This is avoid msvc issue in sleep_for that happens if the clock changes.
 // See https://github.com/gabime/spdlog/issues/609
-inline void sleep_for_millis(int milliseconds)
+inline void sleep_for_millis(int milliseconds) SPDLOG_NOEXCEPT
 {
 #if defined(_WIN32)
     ::Sleep(milliseconds);
@@ -382,54 +374,6 @@ inline std::string filename_to_str(const filename_t &filename)
 }
 #endif
 
-inline std::string errno_to_string(char[256], char *res)
-{
-    return std::string(res);
-}
-
-inline std::string errno_to_string(char buf[256], int res)
-{
-    if (res == 0)
-    {
-        return std::string(buf);
-    }
-    return "Unknown error";
-}
-
-// Return errno string (thread safe)
-inline std::string errno_str(int err_num)
-{
-    char buf[256];
-    SPDLOG_CONSTEXPR auto buf_size = sizeof(buf);
-
-#ifdef _WIN32
-    if (strerror_s(buf, buf_size, err_num) == 0)
-    {
-        return std::string(buf);
-    }
-    else
-    {
-        return "Unknown error";
-    }
-
-#elif defined(__FreeBSD__) || defined(__APPLE__) || defined(ANDROID) || defined(__SUNPRO_CC) ||                                            \
-    ((_POSIX_C_SOURCE >= 200112L) && !defined(_GNU_SOURCE)) // posix version
-
-    if (strerror_r(err_num, buf, buf_size) == 0)
-    {
-        return std::string(buf);
-    }
-    else
-    {
-        return "Unknown error";
-    }
-
-#else // gnu version (might not use the given buf, so its retval pointer must be used)
-    auto err = strerror_r(err_num, buf, buf_size); // let compiler choose type
-    return errno_to_string(buf, err);              // use overloading to select correct stringify function
-#endif
-}
-
 inline int pid()
 {
 
@@ -442,7 +386,7 @@ inline int pid()
 
 // Determine if the terminal supports colors
 // Source: https://github.com/agauniyal/rang/
-inline bool is_color_terminal()
+inline bool is_color_terminal() SPDLOG_NOEXCEPT
 {
 #ifdef _WIN32
     return true;
@@ -464,7 +408,7 @@ inline bool is_color_terminal()
 
 // Detrmine if the terminal attached
 // Source: https://github.com/agauniyal/rang/
-inline bool in_terminal(FILE *file)
+inline bool in_terminal(FILE *file) SPDLOG_NOEXCEPT
 {
 
 #ifdef _WIN32

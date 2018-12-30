@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <map>
 
-#include "sampling/details/rand_num_gen.hpp"
+#include "sampling/details/sampler/rand_num_gen.hpp"
 
 using namespace librav;
 
