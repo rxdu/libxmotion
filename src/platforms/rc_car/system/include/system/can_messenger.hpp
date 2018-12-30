@@ -16,7 +16,7 @@
 #include "common/librav_types.hpp"
 #include "socketcan/socketcan.h"
 
-#include "logging/logger.hpp"
+#include "logging/loggers.hpp"
 
 namespace librav
 {

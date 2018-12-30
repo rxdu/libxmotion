@@ -3,9 +3,7 @@ find_package(Threads REQUIRED)
 
 # Add libraries
 set(LOGGING_LIB_SRC
-    src/csv_logger.cpp
     src/ctrl_logger.cpp
-	src/event_logger.cpp
 )
 add_library(logging STATIC ${LOGGING_LIB_SRC})
 if(ENABLE_LOGGING)

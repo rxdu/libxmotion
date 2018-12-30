@@ -18,16 +18,15 @@
 #include <atomic>
 #include <sstream>
 
-#include "logging/details/spdlog_headers.hpp"
-#include "logging/details/logging_utils.hpp"
+#include "logging/details/specialized_logger.hpp"
 
 namespace librav
 {
-class EventLogger
+class EventLogger : public SpecializedLogger
 {
   public:
     EventLogger() = delete;
-    EventLogger(std::string log_name_prefix, std::string log_save_path);
+    EventLogger(std::string logfile_prefix, std::string logfile_path) : SpecializedLogger(logfile_prefix, logfile_path) {}
 
     // prevent copy or assignment
     EventLogger(const EventLogger &) = delete;
@@ -44,9 +43,7 @@ class EventLogger
         std::string data = o.str();
         data.pop_back();
 
-        logger_->info(o.str());
-#else
-        return;
+        logger_->info(data);
 #endif
     }
 
@@ -73,8 +70,6 @@ class EventLogger
     }
 
   private:
-    std::shared_ptr<spdlog::logger> logger_;
-
     inline void build_string(std::ostream &o) { (void)o; }
     template <class First, class... Rest>
     inline void build_string(std::ostream &o, const First &value, const Rest &... rest)

@@ -14,7 +14,7 @@ set(QUADCON_LIB_SRC
     src/quad_mixer.cpp    
 )
 add_library(quad_ctrl STATIC ${QUADCON_LIB_SRC})
-target_link_libraries(quad_ctrl ctrl_if common utils datalink)
+target_link_libraries(quad_ctrl ctrl_if common logging utils datalink)
 target_include_directories(quad_ctrl PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>

@@ -6,7 +6,7 @@ find_package(Eigen3 REQUIRED)
 
 # Add libraries
 set(UTILITY_LIB_SRC
-	logging/logger.cpp
+	# logging/logger.cpp
 	image_io/image_io.cpp
 )
 add_library(utils STATIC ${UTILITY_LIB_SRC})

@@ -12,7 +12,7 @@
 
 #include "eigen3/Eigen/Geometry"
 
-#include "logging/logger.hpp"
+#include "logging/loggers.hpp"
 
 #include "path_repair/sim/sim_path_repair.h"
 #include "map/map_utils.h"

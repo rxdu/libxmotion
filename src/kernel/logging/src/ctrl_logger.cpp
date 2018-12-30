@@ -15,24 +15,15 @@
 
 namespace librav
 {
-CtrlLogger::CtrlLogger(std::string log_name_prefix, std::string log_save_path) : head_added_(false),
-                                                                                 log_name_prefix_(log_name_prefix),
-                                                                                 log_save_path_(log_save_path),
-                                                                                 item_counter_(0)
+CtrlLogger::CtrlLogger(std::string logfile_prefix, std::string logfile_path) : SpecializedLogger(logfile_prefix, logfile_path),
+                                                                               head_added_(false),
+                                                                               item_counter_(0)
 {
-    // initialize logger
-#ifdef ENABLE_LOGGING
-    std::string filename = CreateLogFileName(log_name_prefix_, log_save_path_);
-    // spdlog::set_async_mode(256);
-    spdlog::installCrashHandlerOnce();
-    logger_ = spdlog::basic_logger_mt<spdlog::async_factory>("ctrl_logger", filename);
-    logger_->set_pattern("%v");
-#endif
 }
 
-CtrlLogger &CtrlLogger::GetLogger(std::string log_name_prefix, std::string log_save_path)
+CtrlLogger &CtrlLogger::GetLogger(std::string logfile_prefix, std::string logfile_path)
 {
-    static CtrlLogger instance(log_name_prefix, log_save_path);
+    static CtrlLogger instance(logfile_prefix, logfile_path);
 
     return instance;
 }

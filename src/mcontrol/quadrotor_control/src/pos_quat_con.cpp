@@ -13,7 +13,7 @@
 #include "eigen3/Eigen/Core"
 #include "eigen3/Eigen/Geometry"
 
-#include "logging/logger.hpp"
+#include "logging/loggers.hpp"
 #include "control/pos_quat_con.hpp"
 
 using namespace librav;

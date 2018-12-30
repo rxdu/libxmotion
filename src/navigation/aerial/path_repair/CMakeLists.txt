@@ -13,7 +13,7 @@ if (GUROBI_FOUND)
         geo_mark_graph.cpp    
     )
     add_library(path_repair STATIC ${PATH_REPAIR_LIB_SRC} ${PATH_REPAIR_COMMON_SRC})
-    target_link_libraries(path_repair legacy  quad_base polyopt common vis utils datalink)
+    target_link_libraries(path_repair legacy  quad_base polyopt common vis utils logging datalink)
 endif()
 
 set(PATH_REPAIR_SIM_SRC

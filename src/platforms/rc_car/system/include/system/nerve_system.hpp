@@ -19,7 +19,7 @@
 #include "system/lcm_messenger.hpp"
 #include "params/lcm_channels.hpp"
 
-#include "logging/logger.hpp"
+#include "logging/loggers.hpp"
 #include "stopwatch/stopwatch.h"
 
 namespace librav

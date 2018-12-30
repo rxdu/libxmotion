@@ -10,7 +10,7 @@
 #include <iostream>
 
 #include "quad_hbird_sim/quad_hbird_sim_control.hpp"
-#include "logging/logger.hpp"
+#include "logging/loggers.hpp"
 
 using namespace librav;
 
@@ -71,7 +71,7 @@ QuadHbirdSimControl::QuadHbirdSimControl():
 
 void  QuadHbirdSimControl::InitLogger(std::string log_name_prefix, std::string log_save_path)
 {
-	CtrlLogger& logging_helper = CtrlLogger::GetLogger(log_name_prefix, FolderPath::GetLogFolderPath()+log_save_path);
+	CtrlLogger& logging_helper = CtrlLogger::GetLogger(log_name_prefix, GetLogFolderPath()+log_save_path);
 
 	logging_helper.AddItemNameToEntryHead("pos_x");
 	logging_helper.AddItemNameToEntryHead("pos_y");

@@ -16,7 +16,7 @@
 #include "lcmtypes/librav.hpp"
 
 #include "common/librav_types.hpp"
-#include "logging/logger.hpp"
+#include "logging/loggers.hpp"
 #include "stopwatch/stopwatch.h"
 #include "path_repair/sim/virtual_quadrotor.h"
 

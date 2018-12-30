@@ -5,7 +5,7 @@
 // #include <gsl/gsl_randist.h>
 #include "random/bigaussian_sampler.hpp"
 
-#include <logging/logger.hpp>
+#include "logging/loggers.hpp"
 
 using namespace librav;
 

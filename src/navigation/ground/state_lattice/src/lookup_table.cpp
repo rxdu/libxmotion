@@ -13,7 +13,7 @@
 
 #include "state_lattice/primitive_generator.hpp"
 
-#include "logging/logger.hpp"
+#include "logging/loggers.hpp"
 #include "csv_parser/csv.h"
 
 using namespace librav;
@@ -86,7 +86,7 @@ void LookupTable::GenerateLookupTable(bool save_to_file, std::string filename)
 
 void LookupTable::SaveLookupTableToFile(std::string filename)
 {
-    std::string location = FolderPath::GetLogFolderPath();
+    std::string location = GetLogFolderPath();
     CsvLogger logger(filename, location);
 
     for (auto &entry : entries_)

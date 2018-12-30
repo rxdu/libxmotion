@@ -10,7 +10,7 @@ set(LATTICE_LIB_SRC
   src/state_lattice.cpp
 )
 add_library(lattice STATIC ${LATTICE_LIB_SRC})
-target_link_libraries(lattice model ascent utils)
+target_link_libraries(lattice model ascent logging utils)
 target_include_directories(lattice PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>

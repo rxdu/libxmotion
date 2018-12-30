@@ -18,24 +18,18 @@
 #include <atomic>
 #include <sstream>
 
-#include "logging/details/spdlog_headers.hpp"
-#include "logging/details/logging_utils.hpp"
+#include "logging/details/specialized_logger.hpp"
 
 namespace librav
 {
-class CsvLogger
+class CsvLogger : public SpecializedLogger
 {
   public:
-    CsvLogger() = delete;
-    CsvLogger(std::string log_name_prefix, std::string log_save_path);
+    CsvLogger(std::string logfile_prefix, std::string logfile_path) : SpecializedLogger(logfile_prefix, logfile_path) {}
 
-    // prevent copy or assignment
+    // non-copyable
     CsvLogger(const CsvLogger &) = delete;
     CsvLogger &operator=(const CsvLogger &) = delete;
-
-    // basic functions
-    void AddItemNameToEntryHead(std::string name);
-    void PassEntryHeaderToLogger();
 
     template <class... T>
     void LogData(const T &... value)
@@ -48,36 +42,20 @@ class CsvLogger
         data.pop_back();
 
         logger_->info(data);
-#else
-        return;
 #endif
-    }
-
-  private:
-    std::shared_ptr<spdlog::logger> logger_;
-
-    std::string log_name_prefix_;
-    std::string log_save_path_;
-
-    std::map<uint64_t, std::string> entry_names_;
-
-    inline void build_string(std::ostream &o) { (void)o; }
-    template <class First, class... Rest>
-    inline void build_string(std::ostream &o, const First &value, const Rest &... rest)
-    {
-        o << std::to_string(value) + ",";
-        build_string(o, rest...);
     }
 };
 
 class GlobalCsvLogger : public CsvLogger
 {
-  public:
-    static GlobalCsvLogger &GetLogger(std::string log_name_prefix = "", std::string log_save_path = "");
-
-  private:
-    GlobalCsvLogger() = delete;
     GlobalCsvLogger(std::string prefix, std::string path) : CsvLogger(prefix, path){};
+
+  public:
+    static GlobalCsvLogger &GetLogger(std::string logfile_prefix = "", std::string logfile_path = "")
+    {
+        static GlobalCsvLogger instance(logfile_prefix, logfile_path);
+        return instance;
+    }
 
     // prevent copy or assignment
     GlobalCsvLogger(const GlobalCsvLogger &) = delete;

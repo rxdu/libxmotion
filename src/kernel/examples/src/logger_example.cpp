@@ -9,7 +9,7 @@
 
 #include <memory>
 
-#include "logging/logger.hpp"
+#include "logging/loggers.hpp"
 
 using namespace librav;
 

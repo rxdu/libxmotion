@@ -8,7 +8,7 @@
  */
 
 #include "reachability/monte_carlo_sim.hpp"
-#include "logging/logger.hpp"
+#include "logging/loggers.hpp"
 
 using namespace librav;
 

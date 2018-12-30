@@ -6,7 +6,7 @@ add_executable(lcm_publisher_cpp src/lcm_publisher.cpp)
 target_link_libraries(lcm_publisher_cpp datalink)
 
 add_executable(logger_example src/logger_example.cpp)
-target_link_libraries(logger_example utils)
+target_link_libraries(logger_example logging)
 
 # add_executable(stopwatch_example src/stopwatch_example.cpp)
 # target_link_libraries(stopwatch_example utils)

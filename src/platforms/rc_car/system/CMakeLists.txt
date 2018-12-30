@@ -8,7 +8,7 @@ set(COMM_LIB_SRC
 	# src/lcm_channels.cpp
 )
 add_library(rccar STATIC ${COMM_LIB_SRC})
-target_link_libraries(rccar common socketcan rccar_param rccar_driver utils ${LCM_LIBRARIES})
+target_link_libraries(rccar common socketcan rccar_param rccar_driver logging utils ${LCM_LIBRARIES})
 target_include_directories(rccar PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>

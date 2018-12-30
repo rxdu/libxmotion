@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-#include "utility/logging/logger.hpp"
+#include "logging/loggers.hpp"
 
 using namespace librav;
 

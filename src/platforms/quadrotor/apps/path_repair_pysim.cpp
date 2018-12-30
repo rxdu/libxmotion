@@ -14,8 +14,8 @@
 #include "lcmtypes/librav.hpp"
 
 #include "common/librav_types.hpp"
-#include "utility/logging/logger.hpp"
-#include "utility/stopwatch/stopwatch.h"
+#include "logging/loggers.hpp"
+#include "stopwatch/stopwatch.h"
 #include "map/map_utils.h"
 #include "map/map_config.h"
 #include "map/map_info.h"

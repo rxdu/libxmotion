@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-#include "logging/logger.hpp"
+#include "logging/loggers.hpp"
 #include "params/lcm_channels.hpp"
 
 using namespace librav;
