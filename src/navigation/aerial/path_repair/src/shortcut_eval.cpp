@@ -138,7 +138,7 @@ void ShortcutEval::EvaluateGridShortcutPotential(uint16_t sensor_range)
 
 Path_t<SquareCell*> ShortcutEval::SearchInNavField(Vertex_t<SquareCell*>* start_vtx, Vertex_t<SquareCell*>* goal_vtx)
 {
-	nav_field_->field_graph_->ResetGraphVertices();
+	nav_field_->field_graph_->ResetAllVertices();
 
 	bool found_path = false;
 	Path_t<SquareCell*> path;

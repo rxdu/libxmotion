@@ -11,5 +11,5 @@
 
 namespace librav
 {
-std::atomic<int32_t> VehicleInfo::Count = {0};
+std::atomic<int32_t> VehicleInfo::count = {0};
 }

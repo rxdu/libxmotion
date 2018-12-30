@@ -12,10 +12,12 @@
 
 #include <cstdint>
 #include <cassert>
+#include <atomic>
 #include <vector>
+#include <iostream>
 #include <unordered_map>
 
-#include "sampling/details/space/space_base.hpp"
+#include "sampling/details/base/space_base.hpp"
 #include "sampling/details/space/realvector_bound.hpp"
 
 namespace librav
@@ -24,12 +26,51 @@ template <int32_t N>
 class RealVectorSpace : public SpaceBase
 {
   public:
-    class State : public StateBase
+    class StateType : public State
     {
+      public:
+        StateType() : State(StateType::count)
+        {
+            StateType::count.fetch_add(1);
+        };
 
+        StateType(std::initializer_list<double> vals) : State(StateType::count)
+        {
+            int32_t i = 0;
+            for (auto &val : vals)
+                values_[i++] = val;
+            StateType::count.fetch_add(1);
+        }
+
+        double values_[N];
+
+        double operator[](unsigned int i) const
+        {
+            assert(i < N);
+            return values_[i];
+        }
+
+        double &operator[](unsigned int i)
+        {
+            assert(i < N);
+            return values_[i];
+        }
+
+        friend std::ostream &operator<<(std::ostream &os, const StateType &other)
+        {
+            os << "[ ";
+            for (int i = 0; i < N; ++i)
+                os << other.values_[i] << " ";
+            os << "]";
+            return os;
+        }
+
+        // statistics
+        static std::atomic<std::size_t> count;
     };
 
-    public : RealVectorSpace()
+  public:
+    RealVectorSpace()
     {
         bounds_.resize(N);
     }
@@ -41,6 +82,32 @@ class RealVectorSpace : public SpaceBase
         int32_t i = 0;
         for (auto &bd : bounds)
             bounds_[i++] = bd;
+    }
+
+    ~RealVectorSpace()
+    {
+        for (auto &state : all_states_)
+            delete state.second;
+    }
+
+    RealVectorSpace(RealVectorSpace &&other)
+    {
+        bounds_ = std::move(other.bounds_);
+        all_states_ = std::move(other.all_states_);
+        // to avoid the destructor free memory multiple times
+        for (auto &state : other.all_states_)
+            state.second = nullptr;
+    }
+
+    RealVectorSpace &operator=(RealVectorSpace &&other)
+    {
+        for (auto &state : all_states_)
+            delete state.second;
+        this->bounds_ = std::move(other.bounds_);
+        this->all_states_ = std::move(other.all_states_);
+        for (auto &state : other.all_states_)
+            state.second = nullptr;
+        return *this;
     }
 
     void SetBound(int32_t dim, double min, double max)
@@ -66,9 +133,42 @@ class RealVectorSpace : public SpaceBase
         return vol;
     }
 
-    StateBase *SampleUniform() override{};
-    StateBase *SampleUniformNear(const StateBase *near, double distance) override{};
-    StateBase *SampleGaussian(const StateBase *mean, double stdDev) override{};
+    StateType *SampleUniform() override
+    {
+        StateType *new_state = new StateType();
+        for (unsigned int i = 0; i < N; ++i)
+            new_state->values_[i] = rng_.UniformReal(bounds_[i].GetLow(), bounds_[i].GetHigh());
+        all_states_[new_state->id_] = new_state;
+        return new_state;
+    };
+
+    StateType *SampleUniformNear(const State *near, double distance) override
+    {
+        const StateType *near_state = static_cast<const StateType *>(near);
+        StateType *new_state = new StateType();
+        for (unsigned int i = 0; i < N; ++i)
+            new_state->values_[i] = rng_.UniformReal(std::max(bounds_[i].GetLow(), near_state->values_[i] - distance),
+                                                     std::min(bounds_[i].GetHigh(), near_state->values_[i] + distance));
+        all_states_[new_state->id_] = new_state;
+        return new_state;
+    };
+
+    StateType *SampleGaussian(const State *mean, double stdDev) override
+    {
+        const StateType *mean_state = static_cast<const StateType *>(mean);
+        StateType *new_state = new StateType();
+        for (unsigned int i = 0; i < N; ++i)
+        {
+            double v = rng_.Gaussian(mean_state->values_[i], stdDev);
+            if (v < bounds_[i].GetLow())
+                v = bounds_[i].GetLow();
+            else if (v > bounds_[i].GetHigh())
+                v = bounds_[i].GetHigh();
+            new_state->values_[i] = v;
+        }
+        all_states_[new_state->id_] = new_state;
+        return new_state;
+    };
 
     void PrintInfo()
     {
@@ -80,7 +180,11 @@ class RealVectorSpace : public SpaceBase
 
   private:
     std::vector<RealVectorBound> bounds_;
+    std::unordered_map<std::size_t, StateType *> all_states_;
 };
+
+template <int32_t N>
+std::atomic<std::size_t> RealVectorSpace<N>::StateType::count = {0};
 } // namespace librav
 
 #endif /* REALVECTOR_SPACE_HPP */

@@ -1,8 +1,8 @@
 /* 
  * rrt_star.hpp
  * 
- * Created on: Nov 22, 2018 09:00
- * Description: 
+ * Created on: Dec 30, 2018 06:01
+ * Description: RRT* algorithm
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */ 

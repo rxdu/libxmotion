@@ -58,7 +58,7 @@ void GeoMarkGraph::UpdateSquareGridInfo(std::shared_ptr<Graph_t<SquareCell*>> gr
 int64_t GeoMarkGraph::MergeCubeArrayInfo(std::shared_ptr<Graph<CubeCell&>> cg, std::shared_ptr<CubeArray> ca)
 {
 	// update 2D geomark
-	combined_graph_.ClearGraph();
+	combined_graph_.ClearAll();
 	for(auto& edge : combined_graph_base_.GetGraphEdges()) {
 		edge.src_->bundled_data_.position.z = pos_.z;
 		edge.dst_->bundled_data_.position.z = pos_.z;

@@ -12,6 +12,13 @@
 
 namespace librav
 {
-}
+template <typename Space>
+class PlannerBase
+{
+    // , typename Steer, typename ValidityChecker
+  public:
+    using StateType = typename Space::StateType;
+};
+} // namespace librav
 
 #endif /* PLANNER_BASE_HPP */

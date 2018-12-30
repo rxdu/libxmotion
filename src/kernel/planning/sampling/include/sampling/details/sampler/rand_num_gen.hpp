@@ -59,7 +59,7 @@ class RandNumGen
 {
   public:
     RandNumGen() : local_seed_(RNGSeedGenerator::getRNGSeedGenerator().nextSeed()), generator_(local_seed_){};
-    RandNumGen(std::uint_fast32_t localSeed) : local_seed_(localSeed), generator_(localSeed) {}
+    explicit RandNumGen(std::uint_fast32_t localSeed) : local_seed_(localSeed), generator_(localSeed) {}
 
     // seeding functions
     static void SetSeed(std::uint_fast32_t seed) { RNGSeedGenerator::getRNGSeedGenerator().setSeed(seed); }

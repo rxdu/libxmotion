@@ -9,6 +9,8 @@ set(GRAPH_GTEST_SRC
     src/graph/graph_iter_test.cpp
     src/graph/graph_search_test.cpp
     src/graph/graph_search_inc_test.cpp
+    src/graph/tree_bigfive_test.cpp
+    src/graph/tree_mod_test.cpp
 )
 set(GRAPH_GTEST_LIB graph)
 add_executable(gtest_graph ${GRAPH_GTEST_SRC})

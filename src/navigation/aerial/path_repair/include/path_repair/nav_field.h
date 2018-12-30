@@ -44,7 +44,7 @@ private:
 	void ConstructNavField(Vertex_t<GraphNodeType> *goal_vtx)
 	{
 		field_center_ = goal_vtx;
-		field_graph_->ResetGraphVertices();
+		field_graph_->ResetAllVertices();
 
 		bool found_path = false;
 		Vertex_t<GraphNodeType> *current_vertex;

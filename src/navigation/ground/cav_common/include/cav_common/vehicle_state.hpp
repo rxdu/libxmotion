@@ -76,7 +76,7 @@ class VehicleState
     Polygon GetFootprint() const { return footprint_.polygon; }
 
   private:
-    static std::atomic<int32_t> Count;
+    static std::atomic<int32_t> count;
 
     Pose2d pose_;
     CovarMatrix2d pos_var_;

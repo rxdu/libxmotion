@@ -41,7 +41,7 @@ class LatticeDijkstra
     static PathType Search(GraphType *graph, int32_t start, int32_t goal)
     {
         // reset last search information
-        graph->ResetGraphVertices();
+        graph->ResetAllVertices();
 
         auto start_it = graph->FindVertex(start);
 
@@ -63,7 +63,7 @@ class LatticeDijkstra
     static PathType Search(GraphType *graph, int32_t start, std::vector<int32_t> goals)
     {
         // reset last search information
-        graph->ResetGraphVertices();
+        graph->ResetAllVertices();
 
         auto start_it = graph->FindVertex(start);
 

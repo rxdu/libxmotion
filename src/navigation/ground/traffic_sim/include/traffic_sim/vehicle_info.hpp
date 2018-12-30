@@ -32,26 +32,26 @@ struct VehicleInfo
 
     VehicleInfo(double init_distance) : init_s(init_distance)
     {
-        id = VehicleInfo::Count;
-        VehicleInfo::Count.fetch_add(1);
+        id = VehicleInfo::count;
+        VehicleInfo::count.fetch_add(1);
     }
 
     VehicleInfo(std::pair<std::string, std::string> chn, double init_distance) : channel_name(chn), init_s(init_distance)
     {
-        id = VehicleInfo::Count;
-        VehicleInfo::Count.fetch_add(1);
+        id = VehicleInfo::count;
+        VehicleInfo::count.fetch_add(1);
     }
 
     VehicleInfo(std::pair<std::string, std::string> chn, double init_distance, double speed) : channel_name(chn), init_s(init_distance), init_speed(speed)
     {
-        id = VehicleInfo::Count;
-        VehicleInfo::Count.fetch_add(1);
+        id = VehicleInfo::count;
+        VehicleInfo::count.fetch_add(1);
     }
 
     VehicleInfo(std::pair<std::string, std::string> chn, double init_distance, double speed, double start_time) : channel_name(chn), init_s(init_distance), init_t(start_time), init_speed(speed)
     {
-        id = VehicleInfo::Count;
-        VehicleInfo::Count.fetch_add(1);
+        id = VehicleInfo::count;
+        VehicleInfo::count.fetch_add(1);
     }
 
     // id of ego vehicle reserved to be -1
@@ -69,7 +69,7 @@ struct VehicleInfo
     std::shared_ptr<TrafficChannel> channel;
 
     // used to generate id automatically
-    static std::atomic<int32_t> Count;
+    static std::atomic<int32_t> count;
 };
 } // namespace librav
 

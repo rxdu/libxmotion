@@ -46,7 +46,7 @@ int main()
     std::vector<StateLattice> lattices;
     for (auto &edge : graph->GetAllEdges())
         lattices.push_back(edge->cost_);
-    std::cout << "number of vertices: " << graph->GetGraphVertexNumber() << std::endl;
+    std::cout << "number of vertices: " << graph->GetTotalVertexNumber() << std::endl;
 
     // LightViz::ShowStateLattice(lattices);
     TrafficViz::ShowLatticeInTrafficChannel(lattices, all_channels[1].get(), "lattice graph", true);

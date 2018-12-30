@@ -12,17 +12,21 @@
 
 #include <cstdint>
 
+#include "sampling/details/sampler/rand_num_gen.hpp"
+
 namespace librav
 {
-class StateBase
+class State
 {
   public:
-    StateBase() = default;
-    virtual ~StateBase() = default;
+    explicit State(int64_t id) : id_(id){};
+    virtual ~State() = default;
 
     // non-copyable
-    StateBase(const StateBase &other) = delete;
-    StateBase &operator=(const StateBase &other) = delete;
+    State(const State &other) = delete;
+    State &operator=(const State &other) = delete;
+
+    int64_t id_;
 };
 
 class SpaceBase
@@ -39,9 +43,12 @@ class SpaceBase
     virtual int32_t GetDimension() const = 0;
 
     // sampling
-    virtual StateBase *SampleUniform() = 0;
-    virtual StateBase *SampleUniformNear(const StateBase *near, double distance) = 0;
-    virtual StateBase *SampleGaussian(const StateBase *mean, double stdDev) = 0;
+    virtual State *SampleUniform() = 0;
+    virtual State *SampleUniformNear(const State *near, double distance) = 0;
+    virtual State *SampleGaussian(const State *mean, double stdDev) = 0;
+
+  protected:
+    RandNumGen rng_;
 };
 } // namespace librav
 

@@ -101,7 +101,7 @@ public:
 		uint64_t start_id;
 
 		// TODO possible improvement: only erase newly added vertices in the last iteration
-		combined_graph_.ClearGraph();
+		combined_graph_.ClearAll();
 		for(auto& edge : combined_graph_base_.GetGraphEdges()) {
 			edge.src_->bundled_data_.position.z = desired_height_;//pos_.z;
 			edge.dst_->bundled_data_.position.z = desired_height_;//pos_.z;
