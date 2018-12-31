@@ -30,6 +30,7 @@ struct TreeAdapter
     // check if Space is derived from SpaceBase
     static_assert(std::is_base_of<SpaceBase, Space>::value,
                   "Space should inherit from SpaceBase to ensure interface compatibility");
+    /*******************************************************/
 
     TreeAdapter(Space *s) : space(s) {}
 

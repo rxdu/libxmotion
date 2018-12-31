@@ -32,6 +32,7 @@ class PlannerBase
     // check if the tree interface is satisfied
     static_assert(std::is_base_of<TreeAdapter<Space>, Tree>::value,
                   "Tree should inherit from TreeAdapter to enforce interface compatibility");
+    /*******************************************************/
 
   public:
     PlannerBase(Space *s) : space_(s), tree_(space_) {}
