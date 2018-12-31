@@ -11,6 +11,7 @@
 #define SPACE_BASE_HPP
 
 #include <cstdint>
+#include <functional>
 
 #include "sampling/details/sampler/rand_num_gen.hpp"
 
@@ -39,10 +40,13 @@ class SpaceBase
     SpaceBase(const SpaceBase &other) = delete;
     SpaceBase &operator=(const SpaceBase &other) = delete;
 
-    // basic info
+    // common interface for space
     virtual int32_t GetDimension() const = 0;
+    virtual double EvaluateDistance(const State *sstate, const State *dstate) = 0;
 
-    // sampling
+    virtual State *CreateState(std::initializer_list<double> elements) = 0;
+    virtual State *CreateState(const Eigen::MatrixXd &elements) = 0;
+
     virtual State *SampleUniform() = 0;
     virtual State *SampleUniformNear(const State *near, double distance) = 0;
     virtual State *SampleGaussian(const State *mean, double stdDev) = 0;

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdint>
 
-#include "sampling/details/space/realvector_space.hpp"
+#include "sampling/space/realvector_space.hpp"
 #include "stopwatch/stopwatch.h"
 
 using namespace librav;

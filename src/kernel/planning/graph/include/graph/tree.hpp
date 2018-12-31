@@ -45,7 +45,7 @@ template <typename State, typename Transition = double, typename StateIndexer = 
 class Tree : public Graph<State, Transition, StateIndexer>
 {
   public:
-    // derive constructor
+    // inherite constructor
     using Graph<State, Transition, StateIndexer>::Graph;
 
     using Edge = typename Graph<State, Transition, StateIndexer>::Edge;
@@ -119,7 +119,7 @@ class Tree : public Graph<State, Transition, StateIndexer>
     void ClearAll();
     ///@}
 
-  private:
+  protected:
     vertex_iterator root_{vertex_iterator(TreeType::vertex_map_.end())};
 };
 

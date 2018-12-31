@@ -14,17 +14,22 @@
 #include <cassert>
 #include <atomic>
 #include <vector>
+#include <cmath>
 #include <iostream>
 #include <unordered_map>
 
+#include <eigen3/Eigen/Dense>
+
 #include "sampling/details/base/space_base.hpp"
-#include "sampling/details/space/realvector_bound.hpp"
+#include "sampling/space/realvector_bound.hpp"
 
 namespace librav
 {
 template <int32_t N>
 class RealVectorSpace : public SpaceBase
 {
+    using BaseType = SpaceBase;
+
   public:
     class StateType : public State
     {
@@ -133,11 +138,49 @@ class RealVectorSpace : public SpaceBase
         return vol;
     }
 
+    double EvaluateDistance(const State *sstate, const State *dstate) override
+    {
+        const StateType *first = static_cast<const StateType *>(sstate);
+        const StateType *second = static_cast<const StateType *>(dstate);
+
+        // 2-norm distance
+        double se_sum = 0;
+        for (int i = 0; i < N; ++i)
+        {
+            double err = first->values_[i] - second->values_[i];
+            se_sum += err * err;
+        }
+        return std::sqrt(se_sum);
+    }
+
+    StateType *CreateState(std::initializer_list<double> elements) override
+    {
+        assert(elements.size() >= N);
+
+        StateType *new_state = new StateType();
+        int i = 0;
+        for (auto &element : elements)
+            new_state->values_[i++] = element;
+        all_states_[new_state->id_] = new_state;
+        return new_state;
+    }
+
+    StateType *CreateState(const Eigen::MatrixXd &elements) override
+    {
+        assert(elements.size() >= N);
+
+        StateType *new_state = new StateType();
+        for (int i = 0; i < N; ++i)
+            new_state->values_[i] = elements(i);
+        all_states_[new_state->id_] = new_state;
+        return new_state;
+    }
+
     StateType *SampleUniform() override
     {
         StateType *new_state = new StateType();
-        for (unsigned int i = 0; i < N; ++i)
-            new_state->values_[i] = rng_.UniformReal(bounds_[i].GetLow(), bounds_[i].GetHigh());
+        for (int i = 0; i < N; ++i)
+            new_state->values_[i] = BaseType::rng_.UniformReal(bounds_[i].GetLow(), bounds_[i].GetHigh());
         all_states_[new_state->id_] = new_state;
         return new_state;
     };
@@ -146,9 +189,9 @@ class RealVectorSpace : public SpaceBase
     {
         const StateType *near_state = static_cast<const StateType *>(near);
         StateType *new_state = new StateType();
-        for (unsigned int i = 0; i < N; ++i)
-            new_state->values_[i] = rng_.UniformReal(std::max(bounds_[i].GetLow(), near_state->values_[i] - distance),
-                                                     std::min(bounds_[i].GetHigh(), near_state->values_[i] + distance));
+        for (int i = 0; i < N; ++i)
+            new_state->values_[i] = BaseType::rng_.UniformReal(std::max(bounds_[i].GetLow(), near_state->values_[i] - distance),
+                                                               std::min(bounds_[i].GetHigh(), near_state->values_[i] + distance));
         all_states_[new_state->id_] = new_state;
         return new_state;
     };
@@ -157,9 +200,9 @@ class RealVectorSpace : public SpaceBase
     {
         const StateType *mean_state = static_cast<const StateType *>(mean);
         StateType *new_state = new StateType();
-        for (unsigned int i = 0; i < N; ++i)
+        for (int i = 0; i < N; ++i)
         {
-            double v = rng_.Gaussian(mean_state->values_[i], stdDev);
+            double v = BaseType::rng_.Gaussian(mean_state->values_[i], stdDev);
             if (v < bounds_[i].GetLow())
                 v = bounds_[i].GetLow();
             else if (v > bounds_[i].GetHigh())

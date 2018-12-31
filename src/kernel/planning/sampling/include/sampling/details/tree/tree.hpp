@@ -18,7 +18,6 @@
 
 namespace librav
 {
-
 template <typename State, typename Transition = double>
 struct Node
 {

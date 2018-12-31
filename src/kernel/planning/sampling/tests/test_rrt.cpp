@@ -1,8 +1,10 @@
 #include <iostream>
 #include <cstdint>
 
-#include "sampling/details/space/realvector_space.hpp"
 #include "sampling/rrt.hpp"
+#include "sampling/space/realvector_space.hpp"
+#include "sampling/steer/rv_straight_steer.hpp"
+
 #include "stopwatch/stopwatch.h"
 
 using namespace librav;
@@ -11,14 +13,10 @@ int main()
 {
     RealVectorSpace<3> rvspace;
 
-    rvspace.SetBound(0, 1, 1.5);
-    rvspace.SetBound(1, 2, 3.5);
-    rvspace.SetBound(2, 3, 4.5);
+    rvspace.SetBound(0, 1, 25);
+    rvspace.SetBound(0, 2, 15);
 
     rvspace.PrintInfo();
-
-    // RealVectorSpace<2> rvspace2({{1, 1.5}, {1, 1.5}});
-    // rvspace2.PrintInfo();
 
     // std::cout << "sampling states: " << std::endl;
     // stopwatch::StopWatch sw;
@@ -29,7 +27,14 @@ int main()
     // }
     // std::cout << "finished in " << sw.toc() << std::endl;
 
-    RRT<RealVectorSpace<3>> rrt;
+    RRT<RealVectorSpace<3>> rrt(&rvspace);
+
+    auto sstate = rvspace.SampleUniform();
+    auto gstate = rvspace.SampleUniform();
+
+    rrt.SetSteerFunction(RVStraightSteer<3>(&rvspace, 1));
+
+    rrt.Search(sstate, gstate, 5000);
 
     return 0;
 }
