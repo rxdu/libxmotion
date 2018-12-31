@@ -36,8 +36,8 @@ struct TreeAdapter
     Space *space;
 
     // common interface for tree
-    virtual void AddVertex(StateType *sstate) = 0;
-    virtual void AddEdge(StateType *sstate, StateType *dstate, double dist) = 0;
+    virtual void AddTreeNode(StateType *sstate) = 0;
+    virtual void ConnectTreeNodes(StateType *sstate, StateType *dstate, double dist) = 0;
     virtual PathType TraceBackToRoot(StateType *state) = 0;
 
     virtual StateType *FindNearest(StateType *state) = 0;

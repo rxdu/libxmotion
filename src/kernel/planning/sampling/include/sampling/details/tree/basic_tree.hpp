@@ -19,34 +19,38 @@
 namespace librav
 {
 template <typename Space>
-class BasicTree : public TreeAdapter<Space>
+class BasicTree : public Tree<typename Space::StateType *, double>, public TreeAdapter<Space>
 {
   public:
+    using TreeType = Tree<typename Space::StateType *, double>;
     using BaseType = TreeAdapter<Space>;
     using StateType = typename TreeAdapter<Space>::StateType;
     using PathType = typename TreeAdapter<Space>::PathType;
+
+    // inherite constructors
+    using Tree<typename Space::StateType *, double>::Tree;
     using TreeAdapter<Space>::TreeAdapter;
 
   public:
-    void AddVertex(StateType *sstate) final
+    void AddTreeNode(StateType *sstate) final
     {
-        tree_.AddVertex(sstate);
+        TreeType::AddVertex(sstate);
     }
 
-    void AddEdge(StateType *sstate, StateType *dstate, double dist) final
+    void ConnectTreeNodes(StateType *sstate, StateType *dstate, double dist) final
     {
-        tree_.AddEdge(sstate, dstate, dist);
+        TreeType::AddEdge(sstate, dstate, dist);
     }
 
     PathType TraceBackToRoot(StateType *state) final
     {
         PathType path;
         path.push_back(state);
-        auto parent = tree_.GetParentVertex(state);
-        while (parent != tree_.vertex_end())
+        auto parent = TreeType::GetParentVertex(state);
+        while (parent != TreeType::vertex_end())
         {
             path.push_back(parent->state_);
-            parent = tree_.GetParentVertex(parent->vertex_id_);
+            parent = TreeType::GetParentVertex(parent->vertex_id_);
         }
         std::reverse(path.begin(), path.end());
         return path;
@@ -56,7 +60,7 @@ class BasicTree : public TreeAdapter<Space>
     {
         double min_dist = std::numeric_limits<double>::max();
         StateType *min_state = nullptr;
-        for (auto it = tree_.vertex_begin(); it != tree_.vertex_end(); ++it)
+        for (auto it = TreeType::vertex_begin(); it != TreeType::vertex_end(); ++it)
         {
             double dist = BaseType::space->EvaluateDistance(state, it->state_);
             if (dist < min_dist)
@@ -72,10 +76,8 @@ class BasicTree : public TreeAdapter<Space>
     {
     }
 
-    Tree<StateType *, double> *GetInternalTree() { return &tree_; }
-
   private:
-    Tree<StateType *, double> tree_;
+    // Tree<StateType *, double> tree_;
 };
 } // namespace librav
 

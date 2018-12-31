@@ -56,7 +56,7 @@ class RRT : public PlannerBase<Space, Tree>
             iter_num = iter;
 
         // add start state to tree
-        BaseType::tree_.AddVertex(start);
+        BaseType::tree_.AddTreeNode(start);
 
         PathType path;
         // grow tree and look for goal state
@@ -78,7 +78,7 @@ class RRT : public PlannerBase<Space, Tree>
             {
                 // 5. Add the new collision-free trajectory to the tree
                 // TODO do not need to calculate distance twice, should retrieve info from Steer
-                BaseType::tree_.AddEdge(nearest, new_state, BaseType::space_->EvaluateDistance(nearest, new_state));
+                BaseType::tree_.ConnectTreeNodes(nearest, new_state, BaseType::space_->EvaluateDistance(nearest, new_state));
 
 #ifdef SHOW_TREE_GROWTH
                 // rrtdraw.DrawTree(&(BaseType::tree_));
@@ -88,7 +88,7 @@ class RRT : public PlannerBase<Space, Tree>
 
                 if (BaseType::CheckGoal(new_state, goal, 1))
                 {
-                    BaseType::tree_.AddEdge(new_state, goal, BaseType::space_->EvaluateDistance(new_state, goal));
+                    BaseType::tree_.ConnectTreeNodes(new_state, goal, BaseType::space_->EvaluateDistance(new_state, goal));
 
                     std::cout << "path found at iteration " << k << std::endl;
                     path = BaseType::tree_.TraceBackToRoot(goal);
@@ -98,6 +98,7 @@ class RRT : public PlannerBase<Space, Tree>
 
 #ifdef SHOW_TREE_GROWTH
                     rrtdraw.DrawStraightBranch(new_state, goal);
+                    rrtdraw.DrawStraightPath(path);
                     CvDraw::ShowImageFrame(canvas.paint_area, "RRT", 0);
 #endif
                     break;

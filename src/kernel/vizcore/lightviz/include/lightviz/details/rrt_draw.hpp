@@ -28,7 +28,7 @@ class RRTDraw
     template <typename TreeType>
     void DrawTree(TreeType *tree)
     {
-        for (auto it = tree->GetInternalTree()->vertex_begin(); it != tree->GetInternalTree()->vertex_end(); ++it)
+        for (auto it = tree->vertex_begin(); it != tree->vertex_end(); ++it)
         {
             for (auto child : it->GetNeighbours())
             {
@@ -48,18 +48,23 @@ class RRTDraw
     }
 
     template <typename StateType>
-    void DrawTreeStraightPath(std::vector<StateType *> path)
+    void DrawStraightPath(std::vector<StateType *> path)
     {
-        // for (auto it = tree->GetInternalTree()->vertex_begin(); it != tree->GetInternalTree()->vertex_end(); ++it)
-        // for (auto &state : path)
-        // {
-        //     for (auto child : it->GetNeighbours())
-        //     {
-        //         auto pt1 = canvas_.ConvertCartisianToPixel(it->state_->values_[0], it->state_->values_[1]);
-        //         auto pt2 = canvas_.ConvertCartisianToPixel(child->state_->values_[0], child->state_->values_[1]);
-        //         CvDraw::DrawLine(canvas_.paint_area, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y));
-        //     }
-        // }
+        for (int i = 0; i < path.size() - 1; ++i)
+        {
+            auto start = path[i];
+            auto end = path[i + 1];
+            auto pt1 = canvas_.ConvertCartisianToPixel(start->values_[0], start->values_[1]);
+            auto pt2 = canvas_.ConvertCartisianToPixel(end->values_[0], end->values_[1]);
+            CvDraw::DrawLine(canvas_.paint_area, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), CvDrawColors::blue_color, 2);
+        }
+
+        auto start = path.front();
+        auto end = path.back();
+        auto pt1 = canvas_.ConvertCartisianToPixel(start->values_[0], start->values_[1]);
+        auto pt2 = canvas_.ConvertCartisianToPixel(end->values_[0], end->values_[1]);
+        CvDraw::DrawPoint(canvas_.paint_area, cv::Point(pt1.x, pt1.y), CvDrawColors::start_color, 3);
+        CvDraw::DrawPoint(canvas_.paint_area, cv::Point(pt2.x, pt2.y), CvDrawColors::finish_color, 3);
     }
 
   private:
