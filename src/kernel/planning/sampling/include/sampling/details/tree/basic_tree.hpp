@@ -11,6 +11,7 @@
 #define BASIC_TREE_HPP
 
 #include <limits>
+#include <algorithm>
 
 #include "graph/tree.hpp"
 #include "sampling/details/base/tree_adapter.hpp"
@@ -39,7 +40,16 @@ class BasicTree : public TreeAdapter<Space>
 
     PathType TraceBackToRoot(StateType *state) final
     {
-        
+        PathType path;
+        path.push_back(state);
+        auto parent = tree_.GetParentVertex(state);
+        while (parent != tree_.vertex_end())
+        {
+            path.push_back(parent->state_);
+            parent = tree_.GetParentVertex(parent->vertex_id_);
+        }
+        std::reverse(path.begin(), path.end());
+        return path;
     }
 
     StateType *FindNearest(StateType *state) final

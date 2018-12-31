@@ -24,7 +24,7 @@ template <typename Space>
 struct TreeAdapter
 {
     using StateType = typename Space::StateType;
-    using PathType = std::vector<StateType>;
+    using PathType = std::vector<StateType *>;
 
     /****************** type sanity check ******************/
     // check if Space is derived from SpaceBase

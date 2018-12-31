@@ -32,6 +32,9 @@ int main()
     auto sstate = rvspace.SampleUniform();
     auto gstate = rvspace.SampleUniform();
 
+    std::cout << "start: " << *sstate << std::endl;
+    std::cout << "goal: " << *gstate << std::endl;
+
     rrt.SetSteerFunction(RVStraightSteer<3>(&rvspace, 1));
 
     rrt.Search(sstate, gstate, 5000);

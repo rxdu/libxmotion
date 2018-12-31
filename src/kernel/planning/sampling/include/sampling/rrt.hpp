@@ -47,7 +47,7 @@ class RRT : public PlannerBase<Space, Tree>
         // grow tree and look for goal state
         for (int32_t k = 0; k < iter_num; ++k)
         {
-            std::cout << "iteration: " << k << std::endl;
+            // std::cout << "iteration: " << k << std::endl;
 
             // 1. Sample a new state from the obstacle-free space
             auto rand_state = BaseType::space_->SampleUniform();
@@ -71,7 +71,14 @@ class RRT : public PlannerBase<Space, Tree>
 
                 if (BaseType::CheckGoal(new_state, goal, 1))
                 {
-                    std::cout << "path found" << std::endl;
+                    BaseType::tree_.AddEdge(new_state, goal, BaseType::space_->EvaluateDistance(new_state, goal));
+
+                    std::cout << "path found at iteration " << k << std::endl;
+                    auto path = BaseType::tree_.TraceBackToRoot(goal);
+
+                    for (auto &wp : path)
+                        std::cout << *wp << std::endl;
+
                     break;
                 }
             }
