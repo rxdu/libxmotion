@@ -81,6 +81,12 @@ void CvDraw::ShowImage(cv::Mat img, std::string window_name, bool save_img)
     destroyWindow(window_name);
 }
 
+void CvDraw::ShowImageFrame(cv::Mat img, std::string window_name, int32_t frame_period_ms)
+{
+    imshow(window_name, img); // Show our image inside it.
+    waitKey(frame_period_ms); // Wait for a keystroke in the window
+}
+
 void CvDraw::ShowImage(std::string file_name, std::string window_name)
 {
     cv::Mat img = imread(file_name);

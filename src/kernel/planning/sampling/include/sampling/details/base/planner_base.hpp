@@ -22,6 +22,7 @@ class PlannerBase
 {
   public:
     using StateType = typename Space::StateType;
+    using PathType = typename Tree::PathType;
 
     using SteerFunc = std::function<StateType *(StateType *, StateType *)>;
     using StateValidityCheckFunc = std::function<bool(StateType *state)>;
@@ -58,7 +59,7 @@ class PlannerBase
     }
 
     // common interface for planner
-    virtual int Search(StateType *start, StateType *goal, int32_t iter = -1) = 0;
+    virtual PathType Search(StateType *start, StateType *goal, int32_t iter = -1) = 0;
 
     // default validity check function - always valid
     bool DefaultStateValidityCheck(StateType *state) { return true; }

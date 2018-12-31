@@ -23,6 +23,9 @@ target_link_libraries(test_pcurve_viz lightviz)
 add_executable(test_geogrid_viz test_geogrid_viz.cpp)
 target_link_libraries(test_geogrid_viz lightviz)
 
+# add_executable(test_rrt_viz test_rrt_viz.cpp)
+# target_link_libraries(test_rrt_viz lightviz)
+
 # add_executable(test_glfw_gui test_glfw_gui.cpp )
 # target_link_libraries(test_glfw_gui lightviz glfw)
 

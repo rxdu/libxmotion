@@ -33,7 +33,6 @@ class RealVectorSpace : public SpaceBase
   public:
     class StateType : public State
     {
-      public:
         StateType() : State(StateType::count)
         {
             StateType::count.fetch_add(1);
@@ -47,6 +46,10 @@ class RealVectorSpace : public SpaceBase
             StateType::count.fetch_add(1);
         }
 
+        template <int32_t M>
+        friend class RealVectorSpace;
+
+      public:
         double values_[N];
 
         double operator[](unsigned int i) const

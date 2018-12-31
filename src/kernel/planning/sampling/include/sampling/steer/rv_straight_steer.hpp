@@ -35,12 +35,16 @@ class RVStraightSteer
         if (distance < max_dist_)
             return goal;
 
+        Eigen::Matrix<double, N, 1> base;
         Eigen::Matrix<double, N, 1> direction;
         for (int i = 0; i < N; ++i)
+        {
+            base[i] = (*start)[i];
             direction(i) = (*goal)[i] - (*start)[i];
+        }
         direction.normalize();
         // std::cout << "direction: \n" << direction << std::endl;
-        Eigen::Matrix<double, N, 1> end_state = direction * max_dist_;
+        Eigen::Matrix<double, N, 1> end_state = base + direction * max_dist_;
 
         return space_->CreateState(end_state);
     }

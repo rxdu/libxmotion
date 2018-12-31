@@ -72,6 +72,8 @@ class BasicTree : public TreeAdapter<Space>
     {
     }
 
+    Tree<StateType *, double> *GetInternalTree() { return &tree_; }
+
   private:
     Tree<StateType *, double> tree_;
 };

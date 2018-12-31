@@ -64,6 +64,7 @@ cv::Mat ReadGrayscaleImage(std::string img_file);
 // Display image
 void ShowImage(std::string file_name, std::string window_name = "Image");
 void ShowImage(cv::Mat img, std::string window_name = "Image", bool save_img = false);
+void ShowImageFrame(cv::Mat img, std::string window_name = "Image", int32_t frame_period_ms = 50);
 
 /******************** Transformations *********************/
 cv::Scalar JetPaletteTransform(double val);

@@ -20,6 +20,12 @@
 #include "sampling/details/base/planner_base.hpp"
 #include "sampling/details/tree/basic_tree.hpp"
 
+// #define SHOW_TREE_GROWTH
+
+#ifdef SHOW_TREE_GROWTH
+#include "lightviz/details/rrt_draw.hpp"
+#endif
+
 namespace librav
 {
 template <typename Space, typename Tree = BasicTree<Space>>
@@ -28,14 +34,22 @@ class RRT : public PlannerBase<Space, Tree>
   public:
     using BaseType = PlannerBase<Space, Tree>;
     using StateType = typename Space::StateType;
+    using PathType = typename BaseType::PathType;
 
     // inerit base constructor
     using PlannerBase<Space, Tree>::PlannerBase;
 
   public:
-    int Search(StateType *start, StateType *goal, int32_t iter = -1) override
+    PathType Search(StateType *start, StateType *goal, int32_t iter = -1) override
     {
         assert(BaseType::Steer != nullptr);
+
+#ifdef SHOW_TREE_GROWTH
+        CartesianCanvas canvas(50);
+        canvas.SetupCanvas(BaseType::space_->GetBounds()[0].GetLow(), BaseType::space_->GetBounds()[0].GetHigh(),
+                           BaseType::space_->GetBounds()[1].GetLow(), BaseType::space_->GetBounds()[1].GetHigh());
+        RRTDraw rrtdraw(canvas);
+#endif
 
         int32_t iter_num = 10000;
         if (iter > 0)
@@ -44,11 +58,10 @@ class RRT : public PlannerBase<Space, Tree>
         // add start state to tree
         BaseType::tree_.AddVertex(start);
 
+        PathType path;
         // grow tree and look for goal state
         for (int32_t k = 0; k < iter_num; ++k)
         {
-            // std::cout << "iteration: " << k << std::endl;
-
             // 1. Sample a new state from the obstacle-free space
             auto rand_state = BaseType::space_->SampleUniform();
             if (!BaseType::CheckStateValidity(rand_state))
@@ -56,7 +69,6 @@ class RRT : public PlannerBase<Space, Tree>
 
             // 2. Find the nearest vertex
             auto nearest = BaseType::tree_.FindNearest(rand_state);
-            // std::cout << "nearest id: " << nearest->id_ << std::endl;
 
             // 3. Extend the nearest vertex towards the sample
             auto new_state = BaseType::Steer(nearest, rand_state);
@@ -67,25 +79,33 @@ class RRT : public PlannerBase<Space, Tree>
                 // 5. Add the new collision-free trajectory to the tree
                 // TODO do not need to calculate distance twice, should retrieve info from Steer
                 BaseType::tree_.AddEdge(nearest, new_state, BaseType::space_->EvaluateDistance(nearest, new_state));
-                // std::cout << "added node: " << new_state->id_ << std::endl;
+
+#ifdef SHOW_TREE_GROWTH
+                // rrtdraw.DrawTree(&(BaseType::tree_));
+                rrtdraw.DrawStraightBranch(nearest, new_state);
+                CvDraw::ShowImageFrame(canvas.paint_area, "RRT");
+#endif
 
                 if (BaseType::CheckGoal(new_state, goal, 1))
                 {
                     BaseType::tree_.AddEdge(new_state, goal, BaseType::space_->EvaluateDistance(new_state, goal));
 
                     std::cout << "path found at iteration " << k << std::endl;
-                    auto path = BaseType::tree_.TraceBackToRoot(goal);
+                    path = BaseType::tree_.TraceBackToRoot(goal);
 
                     for (auto &wp : path)
                         std::cout << *wp << std::endl;
 
+#ifdef SHOW_TREE_GROWTH
+                    rrtdraw.DrawStraightBranch(new_state, goal);
+                    CvDraw::ShowImageFrame(canvas.paint_area, "RRT", 0);
+#endif
                     break;
                 }
             }
         }
 
-        // Exit with error
-        return 0;
+        return path;
     }
 };
 } // namespace librav
