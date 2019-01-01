@@ -1,9 +1,12 @@
 #include <iostream>
 #include <cstdint>
 
+#define SHOW_TREE_GROWTH
+
 #include "sampling/rrt.hpp"
 #include "sampling/space/realvector_space.hpp"
 #include "sampling/steer/rv_straight_steer.hpp"
+#include "sampling/validity/rv_polygon_validity_checker.hpp"
 
 #include "stopwatch/stopwatch.h"
 
@@ -29,7 +32,10 @@ int main()
     std::cout << "goal: " << *gstate << std::endl;
 
     rrt.SetSteerFunction(RVStraightSteer<2>(&rvspace, 1));
-    // rrt.SetValidityChecker();
+
+    RVPolygonValidityChecker checker;
+    rrt.SetStateValidityChecker(checker);
+    rrt.SetPathValidityChecker(checker);
 
     rrt.Search(sstate, gstate, 5000);
 

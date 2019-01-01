@@ -64,21 +64,23 @@ class RRT : public PlannerBase<Space, Tree>
         {
             // 1. Sample a new state from the obstacle-free space
             auto rand_state = BaseType::space_->SampleUniform();
-            if (!BaseType::validity_checker_->CheckStateValidity(rand_state))
+            if (!BaseType::CheckStateValidity(rand_state))
                 continue;
 
             // 2. Find the nearest vertex
             auto nearest = BaseType::tree_.FindNearest(rand_state);
 
             // 3. Extend the nearest vertex towards the sample
-            auto new_state = BaseType::Steer(nearest, rand_state);
+            auto new_state_pair = BaseType::Steer(nearest, rand_state);
+            auto new_state = new_state_pair.first;
+            auto nearest_to_new_dist = new_state_pair.second;
 
             // 4. Check the new trajectory for collision
-            if (BaseType::validity_checker_->CheckPathValidity(nearest, new_state))
+            if (BaseType::CheckPathValidity(nearest, new_state))
             {
                 // 5. Add the new collision-free trajectory to the tree
                 // TODO do not need to calculate distance twice, should retrieve info from Steer
-                BaseType::tree_.ConnectTreeNodes(nearest, new_state, BaseType::space_->EvaluateDistance(nearest, new_state));
+                BaseType::tree_.ConnectTreeNodes(nearest, new_state, nearest_to_new_dist);
 
 #ifdef SHOW_TREE_GROWTH
                 // rrtdraw.DrawTree(&(BaseType::tree_));

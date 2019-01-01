@@ -10,6 +10,8 @@
 #ifndef RV_STRAIGHT_STEER_HPP
 #define RV_STRAIGHT_STEER_HPP
 
+#include <utility>
+
 #include "sampling/space/realvector_space.hpp"
 
 #include <eigen3/Eigen/Core>
@@ -29,11 +31,11 @@ class RVStraightSteer
     SpaceType *space_;
     double max_dist_;
 
-    StateType *operator()(StateType *start, StateType *goal)
+    std::pair<StateType *, double> operator()(StateType *start, StateType *goal)
     {
         double distance = space_->EvaluateDistance(start, goal);
         if (distance < max_dist_)
-            return goal;
+            return std::make_pair(goal, distance);
 
         Eigen::Matrix<double, N, 1> base;
         Eigen::Matrix<double, N, 1> direction;
@@ -45,7 +47,7 @@ class RVStraightSteer
         direction.normalize();
         Eigen::Matrix<double, N, 1> end_state = base + direction * max_dist_;
 
-        return space_->CreateState(end_state);
+        return std::make_pair(space_->CreateState(end_state), max_dist_);
     }
 };
 } // namespace librav

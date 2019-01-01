@@ -75,9 +75,6 @@ class BasicTree : public Tree<typename Space::StateType *, double>, public TreeA
     std::vector<StateType *> FindNear(StateType *state) final
     {
     }
-
-  private:
-    // Tree<StateType *, double> tree_;
 };
 } // namespace librav
 

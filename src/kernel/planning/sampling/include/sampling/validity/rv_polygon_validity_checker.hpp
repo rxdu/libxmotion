@@ -18,23 +18,29 @@
 
 namespace librav
 {
-class RVPolygonStateValidityChecker
+class RVPolygonValidityChecker
 {
   public:
     using SpaceType = RealVectorSpace<2>;
     using StateType = typename SpaceType::StateType;
 
   public:
-    // RVPolygonStateValidityChecker();
+    bool operator()(StateType *state)
+    {
+        return true;
+    }
+
+    bool operator()(StateType *sstate, StateType *dstate)
+    {
+        return true;
+    }
+
+    void AddCollisionPolygon()
+    {
+    }
 
   private:
     std::vector<Polygon> collisions_;
-};
-
-class RVPolygonPathValidityChecker
-{
-  public:
-    //   RVPolygonPathValidityChecker(RVPolygonStateValidityChecker)
 };
 } // namespace librav
 
