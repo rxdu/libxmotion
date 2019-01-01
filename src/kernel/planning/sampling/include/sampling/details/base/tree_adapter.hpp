@@ -2,10 +2,12 @@
  * tree_adapter.hpp
  * 
  * Created on: Dec 30, 2018 21:38
- * Description: a tree used for sampling-based planning should 
- *      satisfy the following conditions:
- *      1. The Tree is built within a Space, which is derived from SpaceBase
- *      2. Basic operations: AddEdge(), FindNearest(), FindNear() 
+ * Description: a tree for sampling-based planning should satisfy
+ *       the following conditions:
+ *      1. The "Space" type should be derived from SpaceBase
+ *      2. Provide implementations to all pure virual functions
+ * 
+ *      See "sampling/details/tree/basic_tree.hpp" for an example
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
@@ -34,8 +36,10 @@ struct TreeAdapter
 
     TreeAdapter(Space *s) : space(s) {}
 
+    // tree is built inside a given space
     Space *space;
 
+    /****************** To Be Implemented ******************/
     // common interface for tree
     virtual void AddTreeNode(StateType *sstate) = 0;
     virtual void ConnectTreeNodes(StateType *sstate, StateType *dstate, double dist) = 0;
@@ -43,6 +47,7 @@ struct TreeAdapter
 
     virtual StateType *FindNearest(StateType *state) = 0;
     virtual std::vector<StateType *> FindNear(StateType *state) = 0;
+    /*******************************************************/
 };
 } // namespace librav
 

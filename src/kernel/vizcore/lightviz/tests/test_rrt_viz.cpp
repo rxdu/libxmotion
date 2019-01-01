@@ -35,13 +35,13 @@ int main()
 
     /////////////////////////////////////////////
 
-    // CartesianCanvas canvas(50);
-    // canvas.SetupCanvas(-2, 22, -2, 12);
+    CartesianCanvas canvas(50);
+    canvas.SetupCanvas(-2, 22, -2, 12);
 
-    // RRTDraw rrtdraw(canvas);
-    // rrtdraw.DrawTree(&rrt.tree_);
-    // // gdraw.DrawCurvilinearGrid(grid, 0.1);
-    // CvDraw::ShowImage(canvas.paint_area, "rrt");
+    RRTDraw rrtdraw(canvas);
+    rrtdraw.DrawTree(&rrt.tree_);
+    // gdraw.DrawCurvilinearGrid(grid, 0.1);
+    CvDraw::ShowImage(canvas.paint_area, "rrt");
 
     return 0;
 }

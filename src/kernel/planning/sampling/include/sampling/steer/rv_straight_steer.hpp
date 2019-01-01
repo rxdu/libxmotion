@@ -43,7 +43,6 @@ class RVStraightSteer
             direction(i) = (*goal)[i] - (*start)[i];
         }
         direction.normalize();
-        // std::cout << "direction: \n" << direction << std::endl;
         Eigen::Matrix<double, N, 1> end_state = base + direction * max_dist_;
 
         return space_->CreateState(end_state);

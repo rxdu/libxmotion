@@ -13,6 +13,8 @@
 #include <cstdint>
 #include <functional>
 
+#include "eigen3/Eigen/Dense"
+
 #include "sampling/details/sampler/rand_num_gen.hpp"
 
 namespace librav
@@ -40,6 +42,7 @@ class SpaceBase
     SpaceBase(const SpaceBase &other) = delete;
     SpaceBase &operator=(const SpaceBase &other) = delete;
 
+    /****************** To Be Implemented ******************/
     // common interface for space
     virtual int32_t GetDimension() const = 0;
     virtual double EvaluateDistance(const State *sstate, const State *dstate) = 0;
@@ -50,6 +53,7 @@ class SpaceBase
     virtual State *SampleUniform() = 0;
     virtual State *SampleUniformNear(const State *near, double distance) = 0;
     virtual State *SampleGaussian(const State *mean, double stdDev) = 0;
+    /*******************************************************/
 
   protected:
     RandNumGen rng_;

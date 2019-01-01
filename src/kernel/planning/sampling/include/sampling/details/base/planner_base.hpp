@@ -14,20 +14,21 @@
 #include <type_traits>
 
 #include "sampling/details/base/tree_adapter.hpp"
+#include "sampling/details/base/validity_checker_base.hpp"
 
 namespace librav
 {
 template <typename Space, typename Tree>
 class PlannerBase
 {
+    struct DefaultValidityChecker;
+
   public:
     using StateType = typename Space::StateType;
     using PathType = typename Tree::PathType;
 
     using SteerFunc = std::function<StateType *(StateType *, StateType *)>;
-    using StateValidityCheckFunc = std::function<bool(StateType *state)>;
-    using PathValidityCheckFunc = std::function<bool(StateType *sstate, StateType *dstate)>;
-
+    
     /****************** type sanity check ******************/
     // check if the tree interface is satisfied
     static_assert(std::is_base_of<TreeAdapter<Space>, Tree>::value,
@@ -35,21 +36,28 @@ class PlannerBase
     /*******************************************************/
 
   public:
-    PlannerBase(Space *s) : space_(s), tree_(space_) {}
+    PlannerBase(Space *s) : space_(s), tree_(space_),
+                            default_validity_checker_(new DefaultValidityChecker())
+    {
+        validity_checker_ = default_validity_checker_;
+    }
+
+    virtual ~PlannerBase()
+    {
+        // note: planner will only deallocated the default validity checker
+        //      the user is responsible for any external checkers
+        delete default_validity_checker_;
+    }
 
     Space *space_;
     Tree tree_;
 
     SteerFunc Steer = nullptr;
-    StateValidityCheckFunc CheckStateValidity =
-        std::bind(&PlannerBase<Space, Tree>::DefaultStateValidityCheck, this, std::placeholders::_1);
-    PathValidityCheckFunc CheckPathValidity =
-        std::bind(&PlannerBase<Space, Tree>::DefaultPathValidityCheck, this, std::placeholders::_1, std::placeholders::_2);
+    ValidityCheckerBase<Space> *validity_checker_ = nullptr;
 
     // helper functions
     void SetSteerFunction(SteerFunc func) { Steer = func; }
-    void SetStateValidityChecker(StateValidityCheckFunc func) { CheckStateValidity = func; }
-    void SetPathValidityChecker(PathValidityCheckFunc func) { CheckPathValidity = func; }
+    void SetValidityChecker(ValidityCheckerBase<Space> *validity_checker) { validity_checker_ = validity_checker; }
 
     bool CheckGoal(StateType *state, StateType *goal, double dist)
     {
@@ -59,12 +67,19 @@ class PlannerBase
             return false;
     }
 
+    /****************** To Be Implemented ******************/
     // common interface for planner
     virtual PathType Search(StateType *start, StateType *goal, int32_t iter = -1) = 0;
+    /*******************************************************/
 
-    // default validity check function - always valid
-    bool DefaultStateValidityCheck(StateType *state) { return true; }
-    bool DefaultPathValidityCheck(StateType *sstate, StateType *dstate) { return true; }
+  private:
+    DefaultValidityChecker *default_validity_checker_ = nullptr;
+
+    struct DefaultValidityChecker : public ValidityCheckerBase<Space>
+    {
+        bool CheckStateValidity(StateType *state) final { return true; };
+        bool CheckPathValidity(StateType *sstate, StateType *dstate) final { return true; };
+    };
 };
 } // namespace librav
 
