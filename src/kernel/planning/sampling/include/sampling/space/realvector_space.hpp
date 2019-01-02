@@ -52,13 +52,13 @@ class RealVectorSpace : public SpaceBase
       public:
         double values_[N];
 
-        double operator[](unsigned int i) const
+        double operator[](int32_t i) const override
         {
             assert(i < N);
             return values_[i];
         }
 
-        double &operator[](unsigned int i)
+        double &operator[](int32_t i) override
         {
             assert(i < N);
             return values_[i];
@@ -124,6 +124,7 @@ class RealVectorSpace : public SpaceBase
         bounds_[dim] = RealVectorBound(min, max);
     }
 
+    static constexpr int32_t DimensionSize = N;
     int32_t GetDimension() const override { return N; }
     std::vector<RealVectorBound> GetBounds() const { return bounds_; }
 

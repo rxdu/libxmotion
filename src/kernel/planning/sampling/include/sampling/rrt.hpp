@@ -19,6 +19,7 @@
 
 #include "sampling/details/base/planner_base.hpp"
 #include "sampling/details/tree/basic_tree.hpp"
+#include "sampling/details/tree/kd_tree.hpp"
 
 // #define SHOW_TREE_GROWTH
 
@@ -79,7 +80,6 @@ class RRT : public PlannerBase<Space, Tree>
             if (BaseType::CheckPathValidity(nearest, new_state))
             {
                 // 5. Add the new collision-free trajectory to the tree
-                // TODO do not need to calculate distance twice, should retrieve info from Steer
                 BaseType::tree_.ConnectTreeNodes(nearest, new_state, nearest_to_new_dist);
 
 #ifdef SHOW_TREE_GROWTH

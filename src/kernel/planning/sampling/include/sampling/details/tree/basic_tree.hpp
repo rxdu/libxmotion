@@ -23,7 +23,7 @@ class BasicTree : public Tree<typename Space::StateType *, double>, public TreeA
 {
   public:
     using TreeType = Tree<typename Space::StateType *, double>;
-    using BaseType = TreeAdapter<Space>;
+    using AdapterType = TreeAdapter<Space>;
     using StateType = typename TreeAdapter<Space>::StateType;
     using PathType = typename TreeAdapter<Space>::PathType;
 
@@ -62,7 +62,7 @@ class BasicTree : public Tree<typename Space::StateType *, double>, public TreeA
         StateType *min_state = nullptr;
         for (auto it = TreeType::vertex_begin(); it != TreeType::vertex_end(); ++it)
         {
-            double dist = BaseType::space->EvaluateDistance(state, it->state_);
+            double dist = AdapterType::space->EvaluateDistance(state, it->state_);
             if (dist < min_dist)
             {
                 min_dist = dist;

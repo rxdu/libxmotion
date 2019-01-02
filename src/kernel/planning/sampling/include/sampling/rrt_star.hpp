@@ -40,13 +40,6 @@ class RRTStar : public PlannerBase<Space, Tree>
     {
         assert(BaseType::Steer != nullptr);
 
-#ifdef SHOW_TREE_GROWTH
-        CartesianCanvas canvas(50);
-        canvas.SetupCanvas(BaseType::space_->GetBounds()[0].GetLow(), BaseType::space_->GetBounds()[0].GetHigh(),
-                           BaseType::space_->GetBounds()[1].GetLow(), BaseType::space_->GetBounds()[1].GetHigh());
-        RRTDraw rrtdraw(canvas);
-#endif
-
         int32_t iter_num = 10000;
         if (iter > 0)
             iter_num = iter;
@@ -55,54 +48,65 @@ class RRTStar : public PlannerBase<Space, Tree>
         BaseType::tree_.AddTreeNode(start);
 
         PathType path;
+        std::vector<StateType*> state_to_goal_candidates;
+
         // grow tree and look for goal state
         for (int32_t k = 0; k < iter_num; ++k)
         {
-            // 1. Sample a new state from the obstacle-free space
+
+            // 1. Sample a new state
             auto rand_state = BaseType::space_->SampleUniform();
             if (!BaseType::CheckStateValidity(rand_state))
                 continue;
 
-            // 2. Find the nearest vertex
-            auto nearest = BaseType::tree_.FindNearest(rand_state);
+            // 2. Compute the set of all near vertices
+            auto near_states = BaseType::tree_.FindNear(rand_state);
 
-            // 3. Extend the nearest vertex towards the sample
-            auto new_state = BaseType::Steer(nearest, rand_state);
+            // 3. Find the best parent and extend from that parent
+            StateType *min_state_candidate;
+            if (near_states.empty())
+                // 3.a extend the nearest if near state set is empty
+                min_state_candidate = BaseType::tree_.FindNearest(rand_state);
+            else
+                // 3.b extend the best parent within the near vertices
+                min_state_candidate = FindBestParent(new_state, near_states);
+            std::pair<StateType *, double> min_state_pair;
+            auto min_state_pair = BaseType::Steer(min_state_candidate, rand_state);
+            auto min_state = new_state_pair.first;
+            auto nearest_to_min_dist = new_state_pair.second;
 
-            // 4. Check the new trajectory for collision
-            if (BaseType::CheckPathValidity(nearest, new_state))
+            // 3.c add the trajectory from the best parent to the tree
+            if (BaseType::CheckPathValidity(min_state, new_state))
             {
-                // 5. Add the new collision-free trajectory to the tree
-                // TODO do not need to calculate distance twice, should retrieve info from Steer
-                BaseType::tree_.ConnectTreeNodes(nearest, new_state, BaseType::space_->EvaluateDistance(nearest, new_state));
-
-#ifdef SHOW_TREE_GROWTH
-                // rrtdraw.DrawTree(&(BaseType::tree_));
-                rrtdraw.DrawStraightBranch(nearest, new_state);
-                CvDraw::ShowImageFrame(canvas.paint_area, "RRT");
-#endif
+                BaseType::tree_.ConnectTreeNodes(min_state, new_state, nearest_to_min_dist);
 
                 if (BaseType::CheckGoal(new_state, goal, 1))
                 {
-                    BaseType::tree_.ConnectTreeNodes(new_state, goal, BaseType::space_->EvaluateDistance(new_state, goal));
+                    // BaseType::tree_.ConnectTreeNodes(new_state, goal, BaseType::space_->EvaluateDistance(new_state, goal));
+                    // path = BaseType::tree_.TraceBackToRoot(goal);
+                    state_to_goal_candidates.push_back(new_state);
 
-                    std::cout << "path found at iteration " << k << std::endl;
-                    path = BaseType::tree_.TraceBackToRoot(goal);
+                    std::cout << "candidate path found at iteration " << k << std::endl;
+                    // for (auto &wp : path)
+                    //     std::cout << *wp << std::endl;
 
-                    for (auto &wp : path)
-                        std::cout << *wp << std::endl;
-
-#ifdef SHOW_TREE_GROWTH
-                    rrtdraw.DrawStraightBranch(new_state, goal);
-                    rrtdraw.DrawStraightPath(path);
-                    CvDraw::ShowImageFrame(canvas.paint_area, "RRT", 0);
-#endif
                     break;
                 }
             }
-        }
 
-        return path;
+            // 4. Rewire the tree
+            if (!near_states.empty())
+                RewireBranches(new_state, near_states);
+        }
+    }
+
+  private:
+    StateType *FindBestParent(StateType *state, const std::vector<StateType *> &near)
+    {
+    }
+
+    void RewireBranches(StateType *new_state, const std::vector<StateType *> &near)
+    {
     }
 };
 } // namespace librav

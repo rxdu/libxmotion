@@ -21,7 +21,8 @@ int main()
 
     rvspace.PrintInfo();
 
-    RRT<RealVectorSpace<2>> rrt(&rvspace);
+    // RRT<RealVectorSpace<2>> rrt(&rvspace);
+    RRT<RealVectorSpace<2>, KdTree<RealVectorSpace<2>>> rrt(&rvspace);
 
     // auto sstate = rvspace.SampleUniform();
     // auto gstate = rvspace.SampleUniform();

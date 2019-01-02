@@ -30,6 +30,11 @@ class State
     State &operator=(const State &other) = delete;
 
     int64_t id_;
+
+    /****************** To Be Implemented ******************/
+    virtual double operator[](int32_t i) const = 0;
+    virtual double &operator[](int32_t i) = 0;
+    /*******************************************************/
 };
 
 class SpaceBase
