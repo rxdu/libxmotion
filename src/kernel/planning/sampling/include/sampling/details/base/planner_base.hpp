@@ -43,6 +43,8 @@ class PlannerBase
     void SetStateValidityChecker(StateValidityCheckFunc func) { CheckStateValidity = func; }
     void SetPathValidityChecker(PathValidityCheckFunc func) { CheckPathValidity = func; }
 
+    void SetExtendStepSize(double size) { extend_step_size_ = size; }
+
     /****************** To Be Implemented ******************/
     // common interface for planner
     virtual PathType Search(StateType *start, StateType *goal, int32_t iter = -1) = 0;
@@ -51,6 +53,7 @@ class PlannerBase
   protected:
     Space *space_;
     Tree tree_;
+    double extend_step_size_ = 1.0;
 
     SteerFunc Steer = nullptr;
     StateValidityCheckFunc CheckStateValidity =

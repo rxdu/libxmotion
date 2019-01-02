@@ -83,12 +83,11 @@ class RRT : public PlannerBase<Space, Tree>
                 BaseType::tree_.ConnectTreeNodes(nearest, new_state, nearest_to_new_dist);
 
 #ifdef SHOW_TREE_GROWTH
-                // rrtdraw.DrawTree(&(BaseType::tree_));
                 rrtdraw.DrawStraightBranch(nearest, new_state);
                 CvDraw::ShowImageFrame(canvas.paint_area, "RRT");
 #endif
 
-                if (BaseType::CheckGoal(new_state, goal, 1))
+                if (BaseType::CheckGoal(new_state, goal, BaseType::extend_step_size_))
                 {
                     BaseType::tree_.ConnectTreeNodes(new_state, goal, BaseType::space_->EvaluateDistance(new_state, goal));
                     path = BaseType::tree_.TraceBackToRoot(goal);

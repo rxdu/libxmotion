@@ -27,7 +27,7 @@ class BasicTree : public Tree<typename Space::StateType *, double>, public TreeA
     using StateType = typename TreeAdapter<Space>::StateType;
     using PathType = typename TreeAdapter<Space>::PathType;
 
-    // inherite constructors
+    // inherit constructors
     using Tree<typename Space::StateType *, double>::Tree;
     using TreeAdapter<Space>::TreeAdapter;
 
@@ -40,6 +40,16 @@ class BasicTree : public Tree<typename Space::StateType *, double>, public TreeA
     void ConnectTreeNodes(StateType *sstate, StateType *dstate, double dist) final
     {
         TreeType::AddEdge(sstate, dstate, dist);
+    }
+
+    void DisconnectTreeNodes(StateType *sstate, StateType *dstate) final
+    {
+        TreeType::RemoveEdge(sstate, dstate);
+    }
+
+    std::size_t GetTotalTreeNodeNumber() final
+    {
+        return TreeType::GetTotalVertexNumber();
     }
 
     PathType TraceBackToRoot(StateType *state) final
@@ -72,7 +82,7 @@ class BasicTree : public Tree<typename Space::StateType *, double>, public TreeA
         return min_state;
     }
 
-    std::vector<StateType *> FindNear(StateType *state) final
+    std::vector<StateType *> FindNear(StateType *state, double radius) final
     {
     }
 };

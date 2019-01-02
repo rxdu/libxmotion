@@ -13,3 +13,9 @@ target_link_libraries(test_rrt sampling utils)
 
 add_executable(test_kdtree test_kdtree.cpp)
 target_link_libraries(test_kdtree sampling utils)
+
+add_executable(test_rrg test_rrg.cpp)
+target_link_libraries(test_rrg sampling utils)
+
+add_executable(test_rrts test_rrts.cpp)
+target_link_libraries(test_rrts sampling utils)

@@ -43,10 +43,13 @@ struct TreeAdapter
     // common interface for tree
     virtual void AddTreeNode(StateType *sstate) = 0;
     virtual void ConnectTreeNodes(StateType *sstate, StateType *dstate, double dist) = 0;
+    virtual void DisconnectTreeNodes(StateType *sstate, StateType *dstate) = 0;
+
+    virtual std::size_t GetTotalTreeNodeNumber() = 0;
     virtual PathType TraceBackToRoot(StateType *state) = 0;
 
     virtual StateType *FindNearest(StateType *state) = 0;
-    virtual std::vector<StateType *> FindNear(StateType *state) = 0;
+    virtual std::vector<StateType *> FindNear(StateType *state, double radius) = 0;
     /*******************************************************/
 };
 } // namespace librav

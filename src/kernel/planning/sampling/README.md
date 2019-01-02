@@ -3,9 +3,9 @@
 ## Steps to perform search with a planner
 
 1. Define the planning space
-2. Specify start and goal state (region)
-3. Specify Steer function and StateValidityCheck/PathValidityCheck function
-4. Perfrom search
+2. Specify goal region radius (normally should equal to max steering distance)
+3. Specify "Steer" function and "StateValidityCheck"/"PathValidityCheck" function
+4. Specify start and goal state and perfrom search
 
 ## Steps to construct a new planner
 

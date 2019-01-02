@@ -1,14 +1,15 @@
 /* 
- * kd_tree.hpp
+ * kd_graph.hpp
  * 
- * Created on: Dec 31, 2018 10:27
- * Description: 
+ * Created on: Jan 02, 2019 09:36
+ * Description: a graph with a internal kd-tree to support NN queries
+ *              used for RRG algorithm
  * 
- * Copyright (c) 2018 Ruixiang Du (rdu)
+ * Copyright (c) 2019 Ruixiang Du (rdu)
  */
 
-#ifndef KD_TREE_HPP
-#define KD_TREE_HPP
+#ifndef KD_GRAPH_HPP
+#define KD_GRAPH_HPP
 
 #include <limits>
 #include <algorithm>
@@ -17,22 +18,22 @@
 #include "spatial/point_multiset.hpp"
 #include "spatial/neighbor_iterator.hpp"
 
-#include "graph/tree.hpp"
+#include "graph/graph.hpp"
 #include "sampling/details/base/tree_adapter.hpp"
 
 namespace librav
 {
 template <typename Space>
-class KdTree : public Tree<typename Space::StateType *, double>, public TreeAdapter<Space>
+class KdGraph : public Graph<typename Space::StateType *, double>, public TreeAdapter<Space>
 {
   public:
-    using TreeType = Tree<typename Space::StateType *, double>;
+    using TreeType = Graph<typename Space::StateType *, double>;
     using AdapterType = TreeAdapter<Space>;
     using StateType = typename TreeAdapter<Space>::StateType;
     using PathType = typename TreeAdapter<Space>::PathType;
 
     // inherit constructors
-    using Tree<typename Space::StateType *, double>::Tree;
+    using Graph<typename Space::StateType *, double>::Graph;
     using TreeAdapter<Space>::TreeAdapter;
 
     // setup Kd-tree types
@@ -57,14 +58,14 @@ class KdTree : public Tree<typename Space::StateType *, double>, public TreeAdap
 
     void ConnectTreeNodes(StateType *sstate, StateType *dstate, double dist) final
     {
-        TreeType::AddEdge(sstate, dstate, dist);
+        TreeType::AddUndirectedEdge(sstate, dstate, dist);
         kdtree_.insert(sstate);
         kdtree_.insert(dstate);
     }
 
     void DisconnectTreeNodes(StateType *sstate, StateType *dstate) final
     {
-        TreeType::RemoveEdge(sstate, dstate);
+        TreeType::RemoveUndirectedEdge(sstate, dstate);
     }
 
     std::size_t GetTotalTreeNodeNumber() final
@@ -72,17 +73,18 @@ class KdTree : public Tree<typename Space::StateType *, double>, public TreeAdap
         return TreeType::GetTotalVertexNumber();
     }
 
+    // Note: this function is ill-defined for a graph, can be ignored
     PathType TraceBackToRoot(StateType *state) final
     {
         PathType path;
-        path.push_back(state);
-        auto parent = TreeType::GetParentVertex(state);
-        while (parent != TreeType::vertex_end())
-        {
-            path.push_back(parent->state_);
-            parent = TreeType::GetParentVertex(parent->vertex_id_);
-        }
-        std::reverse(path.begin(), path.end());
+        // path.push_back(state);
+        // auto parent = TreeType::GetParentVertex(state);
+        // while (parent != TreeType::vertex_end())
+        // {
+        //     path.push_back(parent->state_);
+        //     parent = TreeType::GetParentVertex(parent->vertex_id_);
+        // }
+        // std::reverse(path.begin(), path.end());
         return path;
     }
 
@@ -114,4 +116,4 @@ class KdTree : public Tree<typename Space::StateType *, double>, public TreeAdap
 };
 } // namespace librav
 
-#endif /* KD_TREE_HPP */
+#endif /* KD_GRAPH_HPP */

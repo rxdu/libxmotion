@@ -1,7 +1,9 @@
 #include <iostream>
 #include <cstdint>
 
-#include "sampling/rrt_star.hpp"
+#define SHOW_TREE_GROWTH
+
+#include "sampling/rrg.hpp"
 #include "sampling/space/realvector_space.hpp"
 #include "sampling/steer/rv_straight_steer.hpp"
 #include "sampling/validity/rv_polygon_validity_checker.hpp"
@@ -21,7 +23,7 @@ int main()
 
     rvspace.PrintInfo();
 
-    RRTStar<RealVectorSpace<N>> rrts(&rvspace);
+    RRG<RealVectorSpace<N>> rrg(&rvspace);
 
     // auto sstate = rvspace.SampleUniform();
     // auto gstate = rvspace.SampleUniform();
@@ -31,23 +33,21 @@ int main()
     std::cout << "start: " << *sstate << std::endl;
     std::cout << "goal: " << *gstate << std::endl;
 
-    rrts.SetExtendStepSize(3.0);
-    rrts.SetSteerFunction(RVStraightSteer<N>(&rvspace, 3.0));
+    rrg.SetExtendStepSize(3.0);
+    rrg.SetSteerFunction(RVStraightSteer<N>(&rvspace, 3.0));
 
     RVPolygonValidityChecker checker;
-    rrts.SetStateValidityChecker(checker);
-    rrts.SetPathValidityChecker(checker);
+    rrg.SetStateValidityChecker(checker);
+    rrg.SetPathValidityChecker(checker);
 
-    rrts.SetOptimizationConstant(3);
+    rrg.SetOptimizationConstant(3);
 
-    auto path = rrts.Search(sstate, gstate, 5000);
+    auto path = rrg.Search(sstate, gstate, 5000);
 
     double distance = 0;
     for (int i = 0; i < path.size() - 1; ++i)
         distance += rvspace.EvaluateDistance(path[i], path[i + 1]);
     std::cout << "path length: " << distance << std::endl;
-
-    return 0;
 
     return 0;
 }
