@@ -16,6 +16,7 @@
 #include "sampling/details/base/planner_base.hpp"
 #include "sampling/details/tree/basic_tree.hpp"
 #include "sampling/details/tree/kd_tree.hpp"
+#include "sampling/details/tree/kd_tree_motion.hpp"
 
 // #define SHOW_TREE_GROWTH
 
@@ -25,7 +26,7 @@
 
 namespace librav
 {
-template <typename Space, typename Tree = KdTree<Space>>
+template <typename Space, typename Tree = KdTreeMotion<Space>>
 class RRTStar : public PlannerBase<Space, Tree>
 {
   public:
@@ -67,55 +68,60 @@ class RRTStar : public PlannerBase<Space, Tree>
             if (!BaseType::CheckStateValidity(rand_state))
                 continue;
 
-            // 2. Compute the set of all near vertices
-            double radius;
-            if (!use_fixed_radius_)
+            // 2. Find and extend the nearest vertex towards the sample
+            auto nearest = BaseType::tree_.FindNearest(rand_state);
+
+            auto new_state_pair = BaseType::Steer(nearest, rand_state);
+            auto new_state = new_state_pair.first;
+            auto nearest_to_new_dist = new_state_pair.second;
+
+            if (BaseType::CheckPathValidity(nearest, new_state))
             {
-                double num_vertices = BaseType::tree_.GetTotalTreeNodeNumber();
-                radius = gamma_ * std::pow(std::log(num_vertices) / num_vertices, 1.0 / (static_cast<double>(Space::DimensionSize)));
-                if (radius > BaseType::extend_step_size_)
-                        radius = BaseType::extend_step_size_;
-            }
-            else
-                radius = fixed_radius_;
-            auto near_states = BaseType::tree_.FindNear(rand_state, radius);
+                auto min_state = nearest;
+                auto min_dist = nearest_to_new_dist;
 
-            // 3. Find the best parent and extend from that parent
-            StateType *min_state_candidate;
-            if (near_states.empty())
-                // 3.a extend the nearest if near state set is empty
-                min_state_candidate = BaseType::tree_.FindNearest(rand_state);
-            else
-                // 3.b extend the best parent within the near vertices
-                min_state_candidate = FindBestParent(rand_state, near_states);
-
-            std::pair<StateType *, double> min_state_pair;
-            min_state_pair = BaseType::Steer(min_state_candidate, rand_state);
-            auto min_state = min_state_pair.first;
-            auto nearest_to_min_dist = min_state_pair.second;
-
-            // 3.c add the trajectory from the best parent to the tree
-            if (BaseType::CheckPathValidity(min_state, rand_state))
-            {
-                BaseType::tree_.ConnectTreeNodes(min_state, rand_state, nearest_to_min_dist);
-
-                if (BaseType::CheckGoal(rand_state, goal, 1))
+                // 3. Compute the set of all near vertices and find the best parent vertex for new_state
+                double radius;
+                if (!use_fixed_radius_)
                 {
-                    // BaseType::tree_.ConnectTreeNodes(rand_state, goal, BaseType::space_->EvaluateDistance(rand_state, goal));
-                    // path = BaseType::tree_.TraceBackToRoot(goal);
-                    state_to_goal_candidates.push_back(rand_state);
-
-                    std::cout << "candidate path found at iteration " << k << std::endl;
-                    // for (auto &wp : path)
-                    //     std::cout << *wp << std::endl;
-
-                    break;
+                    double num_vertices = BaseType::tree_.GetTotalTreeNodeNumber();
+                    radius = gamma_ * std::pow(std::log(num_vertices) / num_vertices, 1.0 / (static_cast<double>(Space::DimensionSize)));
+                    if (radius > BaseType::extend_step_size_)
+                        radius = BaseType::extend_step_size_;
                 }
-            }
+                else
+                    radius = fixed_radius_;
+                auto near_states = BaseType::tree_.FindNear(new_state, radius);
+                // check if there is a better min_state if near state set is non-empty
+                std::pair<StateType *, double> best_parent_pair;
+                if (!near_states.empty())
+                    best_parent_pair = FindBestParent(new_state, near_states, min_state, min_dist);
+                min_state = best_parent_pair.first;
+                min_dist = best_parent_pair.second;
 
-            // 4. Rewire the tree
-            if (!near_states.empty())
-                RewireBranches(rand_state, near_states);
+                // 4. Add the path from the best parent to the tree
+                if (BaseType::CheckPathValidity(min_state, new_state))
+                {
+                    BaseType::tree_.ConnectTreeNodes(min_state, new_state, min_dist);
+
+                    if (BaseType::CheckGoal(new_state, goal, BaseType::extend_step_size_))
+                    {
+                        // BaseType::tree_.ConnectTreeNodes(rand_state, goal, BaseType::space_->EvaluateDistance(rand_state, goal));
+                        // path = BaseType::tree_.TraceBackToRoot(goal);
+                        state_to_goal_candidates.push_back(rand_state);
+
+                        std::cout << "candidate path found at iteration " << k << std::endl;
+                        // for (auto &wp : path)
+                        //     std::cout << *wp << std::endl;
+
+                        break;
+                    }
+                }
+
+                // 5. Rewire the tree
+                if (!near_states.empty())
+                    RewireBranches(new_state, min_state, near_states);
+            }
         }
     }
 
@@ -124,12 +130,45 @@ class RRTStar : public PlannerBase<Space, Tree>
     double fixed_radius_ = 0.0;
     double gamma_ = 1.0;
 
-    StateType *FindBestParent(StateType *state, const std::vector<StateType *> &near)
+    std::pair<StateType *, double> FindBestParent(StateType *new_state, const std::vector<StateType *> &near, StateType *min_state, double min_dist)
     {
+        StateType *output_min_state = min_state;
+        double output_min_dist = min_dist;
+
+        double cost_new = BaseType::tree_.GetStateCost(new_state);
+        for (auto near_state : near)
+        {
+            if (BaseType::CheckPathValidity(near_state, new_state))
+            {
+                double edge_cost = BaseType::space_->EvaluateDistance(near_state, new_state);
+                double combined_cost = BaseType::tree_.GetStateCost(near_state) + edge_cost;
+                if (combined_cost < cost_new)
+                {
+                    cost_new = combined_cost;
+                    output_min_state = near_state;
+                    output_min_dist = edge_cost;
+                }
+            }
+        }
+        return std::make_pair(output_min_state, output_min_dist);
     }
 
-    void RewireBranches(StateType *state, const std::vector<StateType *> &near)
+    void RewireBranches(StateType *new_state, StateType *min_state, const std::vector<StateType *> &near)
     {
+        for (auto near_state : near)
+        {
+            if (near_state == min_state)
+                continue;
+
+            if (BaseType::CheckPathValidity(new_state, near_state))
+            {
+                double cost_near = BaseType::tree_.GetStateCost(near_state);
+                double new_dist = BaseType::space_->EvaluateDistance(new_state, near_state);
+                double combined_cost = BaseType::tree_.GetStateCost(new_state) + new_dist;
+                if (cost_near > combined_cost)
+                    BaseType::tree_.ReconnectTreeNodes(new_state, near_state, new_dist);
+            }
+        }
     }
 };
 } // namespace librav
