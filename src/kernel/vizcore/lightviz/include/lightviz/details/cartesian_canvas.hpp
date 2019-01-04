@@ -27,6 +27,8 @@ struct CartesianCanvas
     // setup canvas
     void SetupCanvas(double xmin, double xmax, double ymin, double ymax, cv::Scalar bg_color = CvDrawColors::bg_color);
     void SetupCanvas(int32_t xmax, int32_t ymax, cv::Scalar bg_color = CvDrawColors::bg_color);
+    
+    void ClearCanvas(cv::Scalar bg_color = CvDrawColors::bg_color);
 
     // coordinate conversion
     SimplePoint ConvertCartisianToPixel(double xi, double yi);

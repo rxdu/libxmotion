@@ -49,6 +49,13 @@ void CartesianCanvas::SetupCanvas(int32_t xmax, int32_t ymax, cv::Scalar bg_colo
     // std::cout << "canvas size: " << canvas_size_x_ << " , " << canvas_size_y_ << std::endl;
 }
 
+void CartesianCanvas::ClearCanvas(cv::Scalar bg_color)
+{
+    paint_area.release();
+    cv::Mat canvas(canvas_size_y_, canvas_size_x_, CV_8UC3, bg_color);
+    paint_area = canvas;
+}
+
 SimplePoint CartesianCanvas::ConvertCartisianToPixel(double xi, double yi)
 {
     int32_t x = (xi - xmin_) / xspan_ * canvas_size_x_;

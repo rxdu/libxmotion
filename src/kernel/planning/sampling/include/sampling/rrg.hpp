@@ -93,7 +93,7 @@ class RRG : public PlannerBase<Space, Tree>
 
 #ifdef SHOW_TREE_GROWTH
                 rrtdraw.DrawStraightBranch(nearest, new_state);
-                CvDraw::ShowImageFrame(canvas.paint_area, "RRT");
+                CvDraw::ShowImageFrame(canvas.paint_area, "RRG");
 #endif
 
                 // 6. Make connections with vertices that lie within a ball of certain radius
@@ -120,7 +120,7 @@ class RRG : public PlannerBase<Space, Tree>
                     }
 #ifdef SHOW_TREE_GROWTH
                     rrtdraw.DrawStraightBranch(ns, new_state);
-                    CvDraw::ShowImageFrame(canvas.paint_area, "RRT");
+                    CvDraw::ShowImageFrame(canvas.paint_area, "RRG");
 #endif
                 }
 
@@ -138,7 +138,7 @@ class RRG : public PlannerBase<Space, Tree>
 #ifdef SHOW_TREE_GROWTH
                     rrtdraw.DrawStraightBranch(new_state, goal);
                     // rrtdraw.DrawStraightPath(path);
-                    CvDraw::ShowImageFrame(canvas.paint_area, "RRT");
+                    CvDraw::ShowImageFrame(canvas.paint_area, "RRG");
 #endif
                 }
             }
@@ -151,7 +151,7 @@ class RRG : public PlannerBase<Space, Tree>
             path = Dijkstra::Search(&(BaseType::tree_), start, goal);
 #ifdef SHOW_TREE_GROWTH
             rrtdraw.DrawStraightPath(path);
-            CvDraw::ShowImageFrame(canvas.paint_area, "RRT", 0);
+            CvDraw::ShowImageFrame(canvas.paint_area, "RRG", 0);
 #endif
             for (auto &wp : path)
                 std::cout << *wp << std::endl;

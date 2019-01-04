@@ -40,7 +40,7 @@ int main()
     rrg.SetStateValidityChecker(checker);
     rrg.SetPathValidityChecker(checker);
 
-    rrg.SetOptimizationConstant(3);
+    rrg.SetOptimizationConstant(30);
 
     auto path = rrg.Search(sstate, gstate, 1000);
 

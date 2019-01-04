@@ -10,6 +10,7 @@
 #ifndef RRT_STAR_HPP
 #define RRT_STAR_HPP
 
+#include <map>
 #include <cstdint>
 #include <cassert>
 
@@ -49,6 +50,13 @@ class RRTStar : public PlannerBase<Space, Tree>
     PathType Search(StateType *start, StateType *goal, int32_t iter = -1) override
     {
         assert(BaseType::Steer != nullptr);
+
+#ifdef SHOW_TREE_GROWTH
+        CartesianCanvas canvas(50);
+        canvas.SetupCanvas(BaseType::space_->GetBounds()[0].GetLow(), BaseType::space_->GetBounds()[0].GetHigh(),
+                           BaseType::space_->GetBounds()[1].GetLow(), BaseType::space_->GetBounds()[1].GetHigh());
+        RRTDraw rrtdraw(canvas);
+#endif
 
         int32_t iter_num = 10000;
         if (iter > 0)
@@ -95,26 +103,28 @@ class RRTStar : public PlannerBase<Space, Tree>
                 // check if there is a better min_state if near state set is non-empty
                 std::pair<StateType *, double> best_parent_pair;
                 if (!near_states.empty())
+                {
                     best_parent_pair = FindBestParent(new_state, near_states, min_state, min_dist);
-                min_state = best_parent_pair.first;
-                min_dist = best_parent_pair.second;
+                    min_state = best_parent_pair.first;
+                    min_dist = best_parent_pair.second;
+                }
 
                 // 4. Add the path from the best parent to the tree
                 if (BaseType::CheckPathValidity(min_state, new_state))
                 {
                     BaseType::tree_.ConnectTreeNodes(min_state, new_state, min_dist);
 
+#ifdef SHOW_TREE_GROWTH
+                    // rrtdraw.DrawStraightBranch(nearest, new_state);
+                    canvas.ClearCanvas();
+                    rrtdraw.DrawTree(&(BaseType::tree_));
+                    CvDraw::ShowImageFrame(canvas.paint_area, "RRT*");
+#endif
+
                     if (BaseType::CheckGoal(new_state, goal, BaseType::extend_step_size_))
                     {
-                        // BaseType::tree_.ConnectTreeNodes(rand_state, goal, BaseType::space_->EvaluateDistance(rand_state, goal));
-                        // path = BaseType::tree_.TraceBackToRoot(goal);
                         state_to_goal_candidates.push_back(rand_state);
-
                         std::cout << "candidate path found at iteration " << k << std::endl;
-                        // for (auto &wp : path)
-                        //     std::cout << *wp << std::endl;
-
-                        break;
                     }
                 }
 
@@ -123,6 +133,34 @@ class RRTStar : public PlannerBase<Space, Tree>
                     RewireBranches(new_state, min_state, near_states);
             }
         }
+
+        if (!state_to_goal_candidates.empty())
+        {
+            std::map<double, StateType *> candidate_map;
+
+            for (auto candidate : state_to_goal_candidates)
+            {
+                double cost_to_go = BaseType::space_->EvaluateDistance(candidate, goal);
+                double total_cost = BaseType::tree_.GetStateCost(candidate) + cost_to_go;
+                candidate_map.insert(std::make_pair(total_cost, candidate));
+            }
+
+            auto best_candidate = candidate_map.begin()->second;
+            BaseType::tree_.ConnectTreeNodes(best_candidate, goal, BaseType::space_->EvaluateDistance(best_candidate, goal));
+            path = BaseType::tree_.TraceBackToRoot(goal);
+
+            for (auto &wp : path)
+                std::cout << *wp << std::endl;
+        }
+
+#ifdef SHOW_TREE_GROWTH
+        canvas.ClearCanvas();
+        rrtdraw.DrawTree(&(BaseType::tree_));
+        rrtdraw.DrawStraightPath(path);
+        CvDraw::ShowImageFrame(canvas.paint_area, "RRT*", 0);
+#endif
+
+        return path;
     }
 
   private:
@@ -155,6 +193,7 @@ class RRTStar : public PlannerBase<Space, Tree>
 
     void RewireBranches(StateType *new_state, StateType *min_state, const std::vector<StateType *> &near)
     {
+        static int32_t count = 0;
         for (auto near_state : near)
         {
             if (near_state == min_state)

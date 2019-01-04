@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstdint>
 
+#define SHOW_TREE_GROWTH
+
 #include "sampling/rrt_star.hpp"
 #include "sampling/space/realvector_space.hpp"
 #include "sampling/steer/rv_straight_steer.hpp"
@@ -31,23 +33,21 @@ int main()
     std::cout << "start: " << *sstate << std::endl;
     std::cout << "goal: " << *gstate << std::endl;
 
-    rrts.SetExtendStepSize(3.0);
-    rrts.SetSteerFunction(RVStraightSteer<N>(&rvspace, 3.0));
+    rrts.SetExtendStepSize(5.0);
+    rrts.SetSteerFunction(RVStraightSteer<N>(&rvspace, 5.0));
 
     RVPolygonValidityChecker checker;
     rrts.SetStateValidityChecker(checker);
     rrts.SetPathValidityChecker(checker);
 
-    rrts.SetOptimizationConstant(3);
+    rrts.SetOptimizationConstant(50);
 
-    auto path = rrts.Search(sstate, gstate, 5000);
+    auto path = rrts.Search(sstate, gstate, 1200);
 
     double distance = 0;
     for (int i = 0; i < path.size() - 1; ++i)
         distance += rvspace.EvaluateDistance(path[i], path[i + 1]);
     std::cout << "path length: " << distance << std::endl;
-
-    return 0;
 
     return 0;
 }
