@@ -114,12 +114,11 @@ class RRTStar : public PlannerBase<Space, Tree>
                 {
                     BaseType::tree_.ConnectTreeNodes(min_state, new_state, min_dist);
 
-#ifdef SHOW_TREE_GROWTH
-                    // rrtdraw.DrawStraightBranch(nearest, new_state);
-                    canvas.ClearCanvas();
-                    rrtdraw.DrawTree(&(BaseType::tree_));
-                    CvDraw::ShowImageFrame(canvas.paint_area, "RRT*");
-#endif
+// #ifdef SHOW_TREE_GROWTH
+//                     canvas.ClearCanvas();
+//                     rrtdraw.DrawTree(&(BaseType::tree_));
+//                     CvDraw::ShowImageFrame(canvas.paint_area, "RRT*");
+// #endif
 
                     if (BaseType::CheckGoal(new_state, goal, BaseType::extend_step_size_))
                     {

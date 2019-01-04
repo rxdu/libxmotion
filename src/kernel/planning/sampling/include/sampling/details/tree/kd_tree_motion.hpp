@@ -116,9 +116,11 @@ class KdTreeMotion : public Tree<typename Space::StateType *, double>, public Tr
         PathType path;
         path.push_back(state);
         auto parent = TreeType::GetParentVertex(state);
+        int i = 0;
         while (parent != TreeType::vertex_end())
         {
             path.push_back(parent->state_);
+            std::cout << "backtracking " << i++ << std::endl;
             parent = TreeType::GetParentVertex(parent->vertex_id_);
         }
         std::reverse(path.begin(), path.end());

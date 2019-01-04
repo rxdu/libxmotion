@@ -42,7 +42,7 @@ int main()
 
     rrts.SetOptimizationConstant(50);
 
-    auto path = rrts.Search(sstate, gstate, 1200);
+    auto path = rrts.Search(sstate, gstate, 500);
 
     double distance = 0;
     for (int i = 0; i < path.size() - 1; ++i)
