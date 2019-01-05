@@ -10,6 +10,10 @@
 #ifndef CV_CANVAS_HPP
 #define CV_CANVAS_HPP
 
+#include <vector>
+#include <utility>
+#include <functional>
+
 #include "cvdraw/details/cvdraw_headers.hpp"
 #include "cvdraw/details/cv_colors.hpp"
 
@@ -28,10 +32,18 @@ struct CPoint
     }
 };
 
+struct CRange
+{
+    CRange(double min = 0, double step = 0, double max = 0) : min_value(min), inc_value(step), max_value(max) {}
+    double min_value = 0.0;
+    double inc_value = 0.0;
+    double max_value = 0.0;
+};
+
 class CvCanvas
 {
   public:
-    enum DrawMode
+    enum class DrawMode
     {
         Raster,
         Vector,
@@ -56,8 +68,10 @@ class CvCanvas
 
     void SetMode(DrawMode mode) { draw_mode_ = mode; }
 
+    // draw primitives
     void DrawPoint(CPoint center, int radius = 3, const cv::Scalar &color = CvColors::default_pt_color, int line_type = cv::LINE_AA);
     void DrawCircle(CPoint center, int radius, const cv::Scalar &color = CvColors::default_pt_color, int thickness = 1, int line_type = cv::LINE_AA);
+    void DrawCircularArc(CPoint center, double radius, double start_angle, double end_angle, const cv::Scalar &color = CvColors::default_ln_color, int thickness = 1, int line_type = cv::LINE_AA);
     void DrawLine(CPoint pt1, CPoint pt2, const cv::Scalar &color = CvColors::default_ln_color, int thickness = 1, int line_type = cv::LINE_AA);
     void DrawArrowedLine(CPoint pt1, CPoint pt2, double tip_length = 0.1, const cv::Scalar &color = CvColors::default_ln_color, int thickness = 1, int line_type = cv::LINE_AA);
 
@@ -68,7 +82,14 @@ class CvCanvas
     void FillConvexPoly(const std::vector<CPoint> &points, const cv::Scalar &color = CvColors::default_ln_color, int line_type = cv::LINE_AA);
     void FillPoly(const std::vector<CPoint> &points, const cv::Scalar &color = CvColors::default_ln_color, int line_type = cv::LINE_AA);
 
-    void WriteText(const std::string& text, CPoint pos, double font_scale = 1, const cv::Scalar &color = CvColors::black_color, int thickness = 1, int line_type = cv::LINE_AA);
+    void WriteText(const std::string &text, CPoint pos, double font_scale = 1, const cv::Scalar &color = CvColors::black_color, int thickness = 1, int line_type = cv::LINE_AA);
+
+    // function plotting
+    void DrawXYAxis(double arrow_size = 0.01, const cv::Scalar &color = CvColors::black_color);
+    void DrawReferenceGrid(double spacing_unit = 10, const cv::Scalar &color = CvColors::gray_color);
+    void DrawDataPoints(const std::vector<std::pair<double, double>> &data_points, const cv::Scalar &color = CvColors::default_ln_color, int thickness = 1, int line_type = cv::LINE_AA);
+    void DrawCurveFunction(CRange range, std::function<double(double)> func, const cv::Scalar &color = CvColors::default_ln_color, int thickness = 1, int line_type = cv::LINE_AA);
+    void DrawParametricCurve(CRange range, std::function<double(double)> funcx, std::function<double(double)> funcy, const cv::Scalar &color = CvColors::default_ln_color, int thickness = 1, int line_type = cv::LINE_AA);
 
   private:
     int32_t ppu_ = 10;
@@ -94,6 +115,8 @@ class CvCanvas
     static constexpr int max_polygon_pt_num = 100;
 
     void InitCanvas();
+    cv::Point ConvertGeometryPointToPixel(double xi, double yi);
+    cv::Point ConvertNormalizedPointToPixel(double xi, double yi);
 
     inline void ClampToCanvasSize(int32_t &x, int32_t y)
     {
@@ -109,32 +132,27 @@ class CvCanvas
 
     inline cv::Point ConvertCvPointToPixel(CPoint pt)
     {
+        int32_t x, y;
+
         if (draw_mode_ == DrawMode::Raster)
         {
-            return cv::Point(pt.x, pt.y);
+            x = static_cast<int32_t>(pt.x);
+            y = static_cast<int32_t>(pt.y);
         }
         else if (draw_mode_ == DrawMode::Geometry)
         {
-            int32_t x = (pt.x - xmin_) / xspan_ * canvas_size_x_;
-            int32_t y = canvas_size_y_ - (pt.y - ymin_) / yspan_ * canvas_size_y_;
-
-            ClampToCanvasSize(x, y);
-
-            return cv::Point(x, y);
+            x = (pt.x - xmin_) / xspan_ * canvas_size_x_;
+            y = canvas_size_y_ - (pt.y - ymin_) / yspan_ * canvas_size_y_;
         }
         else // if (draw_mode_ == DrawMode::Vector)
         {
-            int32_t x = pt.x * canvas_size_x_;
-            int32_t y = pt.y * canvas_size_y_;
-
-            ClampToCanvasSize(x, y);
-
-            return cv::Point(x, y);
+            x = pt.x * canvas_size_x_;
+            y = pt.y * canvas_size_y_;
         }
-    }
 
-    cv::Point ConvertGeometryPointToPixel(double xi, double yi);
-    cv::Point ConvertNormalizedPointToPixel(double xi, double yi);
+        ClampToCanvasSize(x, y);
+        return cv::Point(x, y);
+    }
 };
 } // namespace librav
 

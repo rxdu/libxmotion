@@ -9,6 +9,7 @@
 
 #include "cvdraw/cv_canvas.hpp"
 
+#include <cmath>
 #include <cassert>
 
 namespace librav
@@ -180,6 +181,16 @@ void CvCanvas::DrawCircle(CPoint center, int radius, const cv::Scalar &color, in
     circle(paint_area_, cv_center, radius, color, thickness, line_type);
 }
 
+void CvCanvas::DrawCircularArc(CPoint center, double radius, double start_angle, double end_angle, const cv::Scalar &color, int thickness, int line_type)
+{
+    // cv::Point cv_center = ConvertCvPointToPixel(center);
+    // std::cout << "cv_center: " << cv_center.x << " , " << cv_center.y << std::endl;
+    DrawParametricCurve({start_angle / 180.0 * M_PI, 0.1 / 180.0 * M_PI, end_angle / 180.0 * M_PI},
+                        [center, radius](double s) -> double { return (radius * std::cos(s) + center.x); },
+                        [center, radius](double s) -> double { return (radius * std::sin(s) + center.y); },
+                        color, thickness, line_type);
+}
+
 void CvCanvas::DrawLine(CPoint pt1, CPoint pt2, const cv::Scalar &color, int thickness, int line_type)
 {
     cv::Point cv_pt1 = ConvertCvPointToPixel(pt1);
@@ -249,5 +260,85 @@ void CvCanvas::WriteText(const std::string &text, CPoint pos, double font_scale,
 {
     cv::Point text_pos = ConvertCvPointToPixel(pos);
     putText(paint_area_, text, text_pos, FONT_HERSHEY_SIMPLEX, font_scale, color, thickness, line_type);
+}
+
+void CvCanvas::DrawXYAxis(double arrow_size, const cv::Scalar &color)
+{
+    DrawArrowedLine({xmin_ + 1, 0}, {xmax_ - 1, 0}, arrow_size, color);
+    DrawArrowedLine({0, ymin_ + 1}, {0, ymax_ - 1}, arrow_size * xspan_ / yspan_, color);
+}
+
+void CvCanvas::DrawReferenceGrid(double spacing_unit, const cv::Scalar &color)
+{
+    double xspacing = spacing_unit;
+    double yspacing = spacing_unit;
+
+    // draw vertical lines
+    double xpos = 0;
+    while (xpos < xmax_)
+    {
+        if (xpos != 0)
+            DrawLine({xpos, ymin_ + 1.0}, {xpos, ymax_ - 1.0}, color);
+        xpos += xspacing;
+    }
+    xpos = 0;
+    while (xpos > xmin_)
+    {
+        if (xpos != 0)
+            DrawLine({xpos, ymin_ + 1.0}, {xpos, ymax_ - 1.0}, color);
+        xpos -= xspacing;
+    }
+
+    // draw horizontal lines
+    double ypos = 0;
+    while (ypos < xmax_)
+    {
+        if (ypos != 0)
+            DrawLine({xmin_ + 1, ypos}, {xmax_ - 1, ypos}, color);
+        ypos += yspacing;
+    }
+    ypos = 0;
+    while (ypos > xmin_)
+    {
+        if (ypos != 0)
+            DrawLine({xmin_ + 1, ypos}, {xmax_ - 1, ypos}, color);
+        ypos -= yspacing;
+    }
+}
+
+void CvCanvas::DrawDataPoints(const std::vector<std::pair<double, double>> &data_points, const cv::Scalar &color, int thickness, int line_type)
+{
+    for (std::size_t i = 0; i < data_points.size() - 1; ++i)
+    {
+        DrawLine({data_points[i].first, data_points[i].second},
+                 {data_points[i + 1].first, data_points[i + 1].second}, color, thickness, line_type);
+    }
+}
+
+void CvCanvas::DrawCurveFunction(CRange range, std::function<double(double)> func, const cv::Scalar &color, int thickness, int line_type)
+{
+    assert(range.min_value >= xmin_ && range.max_value <= xmax_);
+
+    std::vector<std::pair<double, double>> data_points;
+    double x = range.min_value;
+    while (x < range.max_value)
+    {
+        data_points.emplace_back(x, func(x));
+        x += range.inc_value;
+    }
+
+    DrawDataPoints(data_points, color, thickness, line_type);
+}
+
+void CvCanvas::DrawParametricCurve(CRange range, std::function<double(double)> funcx, std::function<double(double)> funcy, const cv::Scalar &color, int thickness, int line_type)
+{
+    std::vector<std::pair<double, double>> data_points;
+    double s = range.min_value;
+    while (s < range.max_value)
+    {
+        data_points.emplace_back(funcx(s), funcy(s));
+        s += range.inc_value;
+    }
+    DrawDataPoints(data_points, color, thickness, line_type);
 }
 } // namespace librav
