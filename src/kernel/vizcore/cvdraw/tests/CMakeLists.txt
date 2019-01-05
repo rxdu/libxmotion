@@ -9,8 +9,8 @@
 # add_executable(test_cv_cairo test_cv_cairo.cpp)
 # target_link_libraries(test_cv_cairo canvas)
 
-add_executable(test_cv_utils test_cv_utils.cpp)
-target_link_libraries(test_cv_utils cvdraw)
-
 add_executable(test_cv_canvas test_cv_canvas.cpp)
 target_link_libraries(test_cv_canvas cvdraw)
+
+add_executable(test_cv_drawmode test_cv_drawmode.cpp)
+target_link_libraries(test_cv_drawmode cvdraw)

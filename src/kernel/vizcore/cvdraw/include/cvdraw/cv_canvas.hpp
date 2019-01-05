@@ -15,21 +15,60 @@
 
 namespace librav
 {
+struct CPoint
+{
+    CPoint(double _x = 0, double _y = 0) : x(_x), y(_y) {}
+    double x;
+    double y;
+
+    friend std::ostream &operator<<(std::ostream &os, const CPoint &pos)
+    {
+        os << "pixel (x, y): " << pos.x << " , " << pos.y;
+        return os;
+    }
+};
+
 class CvCanvas
 {
   public:
+    enum DrawMode
+    {
+        Raster,
+        Vector,
+        Geometry
+    };
+
+  public:
     CvCanvas(cv::Mat background, std::string name = "CvCanvas");
-    CvCanvas(int32_t ppu, std::string name = "CvCanvas") : ppu_(ppu), canvas_name_(name) {}
     CvCanvas(int32_t px, int32_t py, cv::Scalar bg_color = CvColors::bg_color, std::string name = "CvCanvas");
+    CvCanvas(int32_t ppu, cv::Scalar bg_color = CvColors::bg_color, std::string name = "CvCanvas");
 
-    void SetupCanvas(double xmin, double xmax, double ymin, double ymax, cv::Scalar bg_color = CvColors::bg_color);
-    void ClearCanvas(cv::Scalar bg_color);
+    void Clear();
+    void Resize(double px, double py);
+    void Resize(double xmin, double xmax, double ymin, double ymax);
+    void FillBackgroundColor(cv::Scalar bg_color);
 
+    void SavePaint(std::string filename);
     cv::Mat GetPaintArea() { return paint_area_; }
 
-    void Save(std::string filename);
     void Show(bool use_img_size = false);
     void ShowFrame(int32_t frame_period_ms = 0);
+
+    void SetMode(DrawMode mode) { draw_mode_ = mode; }
+
+    void DrawPoint(CPoint center, int radius = 3, const cv::Scalar &color = CvColors::default_pt_color, int line_type = cv::LINE_AA);
+    void DrawCircle(CPoint center, int radius, const cv::Scalar &color = CvColors::default_pt_color, int thickness = 1, int line_type = cv::LINE_AA);
+    void DrawLine(CPoint pt1, CPoint pt2, const cv::Scalar &color = CvColors::default_ln_color, int thickness = 1, int line_type = cv::LINE_AA);
+    void DrawArrowedLine(CPoint pt1, CPoint pt2, double tip_length = 0.1, const cv::Scalar &color = CvColors::default_ln_color, int thickness = 1, int line_type = cv::LINE_AA);
+
+    void DrawRectangle(CPoint pt1, CPoint pt2, const cv::Scalar &color = CvColors::default_ln_color, int thickness = 1, int line_type = cv::LINE_AA);
+    void DrawPolyline(const std::vector<CPoint> &points, bool isClosed, const cv::Scalar &color = CvColors::default_ln_color, int thickness = 1, int line_type = cv::LINE_AA);
+    void DrawEllipse(CPoint center, cv::Size axes, double angle, double start_angle, double end_angle, const cv::Scalar &color = CvColors::default_ln_color, int thickness = 1, int line_type = cv::LINE_AA);
+
+    void FillConvexPoly(const std::vector<CPoint> &points, const cv::Scalar &color = CvColors::default_ln_color, int line_type = cv::LINE_AA);
+    void FillPoly(const std::vector<CPoint> &points, const cv::Scalar &color = CvColors::default_ln_color, int line_type = cv::LINE_AA);
+
+    void WriteText(const std::string& text, CPoint pos, double font_scale = 1, const cv::Scalar &color = CvColors::black_color, int thickness = 1, int line_type = cv::LINE_AA);
 
   private:
     int32_t ppu_ = 10;
@@ -45,10 +84,57 @@ class CvCanvas
     int32_t canvas_size_y_ = 600;
 
     cv::Mat paint_area_;
+    cv::Mat init_paint_;
     cv::Scalar bg_color_;
     std::string canvas_name_;
 
+    DrawMode draw_mode_ = DrawMode::Raster;
+
+    bool img_bg_mode_ = false;
+    static constexpr int max_polygon_pt_num = 100;
+
     void InitCanvas();
+
+    inline void ClampToCanvasSize(int32_t &x, int32_t y)
+    {
+        if (x < 0)
+            x = 0;
+        if (y < 0)
+            y = 0;
+        if (x >= canvas_size_x_)
+            x = canvas_size_x_ - 1;
+        if (y >= canvas_size_y_)
+            y = canvas_size_y_ - 1;
+    }
+
+    inline cv::Point ConvertCvPointToPixel(CPoint pt)
+    {
+        if (draw_mode_ == DrawMode::Raster)
+        {
+            return cv::Point(pt.x, pt.y);
+        }
+        else if (draw_mode_ == DrawMode::Geometry)
+        {
+            int32_t x = (pt.x - xmin_) / xspan_ * canvas_size_x_;
+            int32_t y = canvas_size_y_ - (pt.y - ymin_) / yspan_ * canvas_size_y_;
+
+            ClampToCanvasSize(x, y);
+
+            return cv::Point(x, y);
+        }
+        else // if (draw_mode_ == DrawMode::Vector)
+        {
+            int32_t x = pt.x * canvas_size_x_;
+            int32_t y = pt.y * canvas_size_y_;
+
+            ClampToCanvasSize(x, y);
+
+            return cv::Point(x, y);
+        }
+    }
+
+    cv::Point ConvertGeometryPointToPixel(double xi, double yi);
+    cv::Point ConvertNormalizedPointToPixel(double xi, double yi);
 };
 } // namespace librav
 

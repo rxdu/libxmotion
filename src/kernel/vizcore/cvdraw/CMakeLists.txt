@@ -15,6 +15,7 @@ set(CVDRAW_LIB_SRC
 	src/cv_colors.cpp
     src/color_maps.cpp
     src/cv_canvas.cpp
+    src/cv_draw.cpp
 )
 add_library(cvdraw STATIC ${CVDRAW_LIB_SRC})
 # target_link_libraries(canvas ${X11_LIBRARIES} ${FLTK_LIBRARIES} ${CAIRO_LIBRARIES} ${OpenCV_LIBS})
