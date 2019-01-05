@@ -15,7 +15,7 @@
 #include <functional>
 
 #include "cvdraw/details/cvdraw_headers.hpp"
-#include "cvdraw/details/cv_colors.hpp"
+#include "cvdraw/cv_colors.hpp"
 
 namespace librav
 {
@@ -59,9 +59,11 @@ class CvCanvas
     void Resize(double px, double py);
     void Resize(double xmin, double xmax, double ymin, double ymax);
     void FillBackgroundColor(cv::Scalar bg_color);
+   
+    int32_t GetPPU() const { return ppu_; }
+    cv::Mat GetPaintArea() { return paint_area_; }
 
     void SavePaint(std::string filename);
-    cv::Mat GetPaintArea() { return paint_area_; }
 
     void Show(bool use_img_size = false);
     void ShowFrame(int32_t frame_period_ms = 0);

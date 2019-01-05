@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "cvdraw/cv_draw.hpp"
+#include "cvdraw/cvdraw.hpp"
 
 using namespace librav;
 
@@ -32,7 +32,7 @@ int main()
 
     canvas.DrawCircularArc({0, 0}, 15, 45, 315, CvColors::maroon_color);
 
-    CvDraw::ShowImage(canvas.GetPaintArea());
+    CvIO::ShowImage(canvas.GetPaintArea());
     // canvas.Show();
     canvas.SavePaint("function_plot_demo");
 

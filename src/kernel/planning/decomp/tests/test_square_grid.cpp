@@ -1,5 +1,5 @@
 #include "decomp/square_grid.hpp"
-#include "lightviz/square_grid_viz.hpp"
+// #include "lightviz/square_grid_viz.hpp"
 
 using namespace librav;
 
@@ -23,7 +23,7 @@ int main()
     // path.push_back(grid.GetCell(18));
     // path.push_back(grid.GetCell(48));
 
-    LightViz::ShowSquareGrid(&grid, 500, "square_grid.png");
+    // LightViz::ShowSquareGrid(&grid, 500, "square_grid.png");
     // LightViz::ShowSquareGridPath(&grid, path, 100);
 
     return 0;

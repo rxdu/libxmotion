@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(librav_vizcore)
+project(librav_visual)
 
 ## Set compiler to use c++ 11 features
 include(CheckCXXCompilerFlag)
@@ -24,5 +24,6 @@ set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 ## Add other sub source directories
 add_subdirectory(canvas)
 add_subdirectory(cvdraw)
-add_subdirectory(lightviz)
+add_subdirectory(coreviz)
+# add_subdirectory(lightviz)
 add_subdirectory(lightview)

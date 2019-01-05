@@ -2,7 +2,7 @@
 #include <iomanip>
 
 #include "decomp/dense_grid.hpp"
-#include "lightviz/matrix_viz.hpp"
+// #include "lightviz/matrix_viz.hpp"
 
 using namespace librav;
 
@@ -33,8 +33,8 @@ int main()
     // grid.ResizeGrid(3, 3);
     // grid.PrintGrid();
 
-    LightViz::ShowMatrixAsImage(grid.GetGridMatrix(true)*128);
-    LightViz::ShowMatrixAsColorMap(grid.GetGridMatrix(true));
+    // LightViz::ShowMatrixAsImage(grid.GetGridMatrix(true)*128);
+    // LightViz::ShowMatrixAsColorMap(grid.GetGridMatrix(true));
 
     // std::cout << "value " << grid.GetValueAtCoordinate(0,1)  << " , " << grid.GetValueAtCoordinate(1,2) << std::endl;
 

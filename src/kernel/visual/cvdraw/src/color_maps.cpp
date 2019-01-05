@@ -7,11 +7,7 @@
  * Copyright (c) 2019 Ruixiang Du (rdu)
  */
 
-#include "cvdraw/details/color_maps.hpp"
-
-// #include <opencv2/core/core.hpp>
-// #include <opencv2/imgproc/imgproc.hpp>
-// #include <opencv2/highgui/highgui.hpp>
+#include "cvdraw/color_maps.hpp"
 
 using namespace cv;
 

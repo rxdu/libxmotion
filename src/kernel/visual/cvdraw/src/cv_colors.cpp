@@ -7,7 +7,7 @@
  * Copyright (c) 2019 Ruixiang Du (rdu)
  */ 
 
-#include "cvdraw/details/cv_colors.hpp"
+#include "cvdraw/cv_colors.hpp"
 
 using namespace librav;
 using namespace cv;

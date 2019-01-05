@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "cvdraw/cv_canvas.hpp"
+#include "cvdraw/cvdraw.hpp"
 
 using namespace librav;
 

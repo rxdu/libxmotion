@@ -1,5 +1,5 @@
 /* 
- * cv_draw.cpp
+ * cv_io.cpp
  * 
  * Created on: Mar 28, 2018 14:47
  * Description: 
@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "cvdraw/cv_draw.hpp"
+#include "cvdraw/cv_io.hpp"
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -16,22 +16,22 @@
 using namespace librav;
 using namespace cv;
 
-cv::Mat CvDraw::ReadImageFile(std::string img_file)
+cv::Mat CvIO::ReadImageFile(std::string img_file)
 {
     return imread(img_file);
 }
 
-cv::Mat CvDraw::ReadColorImage(std::string img_file)
+cv::Mat CvIO::ReadColorImage(std::string img_file)
 {
     return imread(img_file, CV_LOAD_IMAGE_COLOR);
 }
 
-cv::Mat CvDraw::ReadGrayscaleImage(std::string img_file)
+cv::Mat CvIO::ReadGrayscaleImage(std::string img_file)
 {
     return imread(img_file, CV_LOAD_IMAGE_GRAYSCALE);
 }
 
-void CvDraw::ShowImage(cv::Mat img, std::string window_name, bool save_img)
+void CvIO::ShowImage(cv::Mat img, std::string window_name, bool save_img)
 {
     namedWindow(window_name, WINDOW_NORMAL); // Create a window for display.
     imshow(window_name, img);                // Show our image inside it.
@@ -44,13 +44,13 @@ void CvDraw::ShowImage(cv::Mat img, std::string window_name, bool save_img)
     destroyWindow(window_name);
 }
 
-void CvDraw::ShowImageFrame(cv::Mat img, std::string window_name, int32_t frame_period_ms)
+void CvIO::ShowImageFrame(cv::Mat img, std::string window_name, int32_t frame_period_ms)
 {
     imshow(window_name, img); // Show our image inside it.
     waitKey(frame_period_ms); // Wait for a keystroke in the window
 }
 
-void CvDraw::ShowImage(std::string file_name, std::string window_name)
+void CvIO::ShowImage(std::string file_name, std::string window_name)
 {
     cv::Mat img = imread(file_name);
     ShowImage(img, window_name, false);
