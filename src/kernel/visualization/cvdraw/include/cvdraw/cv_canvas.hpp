@@ -64,6 +64,7 @@ class CvCanvas
     int32_t GetPPU() const { return ppu_; }
     int32_t GetCanvasSizeX() const { return canvas_size_x_; }
     int32_t GetCanvasSizeY() const { return canvas_size_y_; }
+    void GetCanvasSpan(double &xspan, double &yspan);
     void GetCanvasRange(double &xmin, double &xmax, double &ymin, double &ymax);
 
     cv::Mat GetPaintArea() { return paint_area_; }

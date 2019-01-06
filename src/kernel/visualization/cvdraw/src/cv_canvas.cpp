@@ -104,6 +104,12 @@ void CvCanvas::FillBackgroundColor(cv::Scalar bg_color)
     InitCanvas();
 }
 
+void CvCanvas::GetCanvasSpan(double &xspan, double &yspan)
+{
+    xspan = xspan_;
+    yspan = yspan_;
+}
+
 void CvCanvas::GetCanvasRange(double &xmin, double &xmax, double &ymin, double &ymax)
 {
     xmin = xmin_;

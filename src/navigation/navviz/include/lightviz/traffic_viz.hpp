@@ -37,24 +37,21 @@ void ShowVehicleInChannel(std::shared_ptr<RoadMap> map, Polygon polygon, Traffic
 void ShowVehicleStaticThreat(std::shared_ptr<RoadMap> map, VehicleStaticThreat threat, std::string window_name = "Collision Threat", bool save_img = false);
 
 void ShowVehicleOccupancyDistribution(std::shared_ptr<RoadMap> map, std::shared_ptr<VehicleThreat> threat, int32_t t_k, std::string window_name = "Collision Threat", bool save_img = false);
-void ShowVehicleIntervalOccupancyDistribution(std::shared_ptr<RoadMap> map, std::shared_ptr<VehicleThreat> threat, int32_t t_k, std::string window_name = "Collision Threat", bool save_img = false);
-
-// void ShowVehicleCollisionThreat(std::shared_ptr<VehicleThreat> threat, int32_t t_k, std::string window_name = "Collision Threat", bool save_img = false);
-// void ShowVehicleIntervalCollisionThreat(std::shared_ptr<VehicleThreat> threat, int32_t t_k, std::string window_name = "Collision Threat", bool save_img = false);
+void ShowVehicleCollisionThreat(std::shared_ptr<RoadMap> map, std::shared_ptr<VehicleThreat> threat, int32_t t_k, std::string window_name = "Collision Threat", bool save_img = false);
 
 // void ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel *channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
-// void ShowLatticePathInTrafficChannel(std::vector<StateLattice> &path, TrafficChannel *channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
-// void ShowLatticePathInTrafficChannel(std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> graph, std::vector<StateLattice> &path, TrafficChannel *channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
+void ShowLatticePathInTrafficChannel(std::shared_ptr<RoadMap> map, std::vector<StateLattice> &path, TrafficChannel *channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
+void ShowLatticePathInTrafficChannel(std::shared_ptr<RoadMap> map, std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> graph, std::vector<StateLattice> &path, TrafficChannel *channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
 
-// void ShowLatticePathWithLookaheadZone(std::vector<StateLattice> &path, LookaheadZone &zone, TrafficChannel *channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
+void ShowLatticePathWithLookaheadZone(std::shared_ptr<RoadMap> map, std::vector<StateLattice> &path, LookaheadZone &zone, TrafficChannel *channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
 
-// void ShowOccupancyField(ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Occupancy Field", bool save_img = false);
-// void ShowThreatField(ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
+void ShowOccupancyField(std::shared_ptr<RoadMap> map, ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Occupancy Field", bool save_img = false);
+void ShowThreatField(std::shared_ptr<RoadMap> map, ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
 
-// void ShowLatticeWithOccupancyDistribution(std::vector<StateLattice> &lattice, TrafficChannel *channel, ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
-// void ShowLatticeInThreatField(std::vector<StateLattice> &lattice, TrafficChannel *channel, ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
-// void ShowTrafficChannelWithThreatField(TrafficChannel *channel, ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
-// void ShowPathWithThreatField(std::vector<StateLattice> &path, LookaheadZone &zone, ThreatField &field, int32_t t_k, double T = 0.5, std::string window_name = "Traffic Channel Image", bool save_img = false);
+void ShowLatticeWithOccupancyDistribution(std::shared_ptr<RoadMap> map, std::vector<StateLattice> &lattice, TrafficChannel *channel, ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
+void ShowLatticeInThreatField(std::shared_ptr<RoadMap> map, std::vector<StateLattice> &lattice, TrafficChannel *channel, ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
+void ShowTrafficChannelWithThreatField(std::shared_ptr<RoadMap> map, TrafficChannel *channel, ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
+void ShowPathWithThreatField(std::shared_ptr<RoadMap> map, std::vector<StateLattice> &path, LookaheadZone &zone, ThreatField &field, int32_t t_k, double T = 0.5, std::string window_name = "Traffic Channel Image", bool save_img = false);
 }; // namespace UGVNavViz
 } // namespace librav
 
