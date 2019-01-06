@@ -16,32 +16,27 @@
 #include <opencv2/opencv.hpp>
 #include <Eigen/Dense>
 
-#include "lightviz/details/cartesian_canvas.hpp"
-#include "lightviz/details/geometry_draw.hpp"
-
 #include "decomp/curvilinear_grid.hpp"
-#include "canvas/cv_draw.hpp"
+#include "cvdraw/cvdraw.hpp"
+#include "coreviz/geometry_draw.hpp"
 
 namespace librav
 {
-class CurvilinearGridDraw
+struct CurvilinearGridDraw
 {
-  public:
-    CurvilinearGridDraw(CartesianCanvas &canvas) : canvas_(canvas), gdraw_(canvas){};
-
     // geometric grid
     template <typename GridType>
-    void DrawCurvilinearGrid(const GridType &grid, cv::Scalar ln_color = CvDrawColors::lime_color, int32_t ln_width = 1)
+    static void DrawCurvilinearGrid(CvCanvas &canvas, const GridType &grid, cv::Scalar ln_color = CvColors::lime_color, int32_t thickness = 1)
     {
         // draw normal lines
-        auto spt1 = canvas_.ConvertCartisianToPixel(grid.grid_tiles_.front().back()->vertices[2].position.x, grid.grid_tiles_.front().back()->vertices[2].position.y);
-        auto spt2 = canvas_.ConvertCartisianToPixel(grid.grid_tiles_.front().front()->vertices[3].position.x, grid.grid_tiles_.front().front()->vertices[3].position.y);
-        CvDraw::DrawLine(canvas_.paint_area, cv::Point(spt1.x, spt1.y), cv::Point(spt2.x, spt2.y), ln_color, ln_width);
+        CPoint spt1(grid.grid_tiles_.front().back()->vertices[2].position.x, grid.grid_tiles_.front().back()->vertices[2].position.y);
+        CPoint spt2(grid.grid_tiles_.front().front()->vertices[3].position.x, grid.grid_tiles_.front().front()->vertices[3].position.y);
+        canvas.DrawLine(spt1, spt2, ln_color, thickness);
         for (auto &row : grid.grid_tiles_)
         {
-            auto pt1 = canvas_.ConvertCartisianToPixel(row.back()->vertices[0].position.x, row.back()->vertices[0].position.y);
-            auto pt2 = canvas_.ConvertCartisianToPixel(row.front()->vertices[1].position.x, row.front()->vertices[1].position.y);
-            CvDraw::DrawLine(canvas_.paint_area, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color, ln_width);
+            CPoint pt1(row.back()->vertices[0].position.x, row.back()->vertices[0].position.y);
+            CPoint pt2(row.front()->vertices[1].position.x, row.front()->vertices[1].position.y);
+            canvas.DrawLine(pt1, pt2, ln_color, thickness);
         }
 
         // draw tangential lines
@@ -49,18 +44,18 @@ class CurvilinearGridDraw
         {
             for (auto &cell : row)
             {
-                auto pt1 = canvas_.ConvertCartisianToPixel(cell->vertices[1].position.x, cell->vertices[1].position.y);
-                auto pt2 = canvas_.ConvertCartisianToPixel(cell->vertices[3].position.x, cell->vertices[3].position.y);
-                CvDraw::DrawLine(canvas_.paint_area, cv::Point(pt1.x, pt1.y), cv::Point(pt2.x, pt2.y), ln_color, ln_width);
+                CPoint pt1(cell->vertices[1].position.x, cell->vertices[1].position.y);
+                CPoint pt2(cell->vertices[3].position.x, cell->vertices[3].position.y);
+                canvas.DrawLine(pt1, pt2, ln_color, thickness);
             }
-            auto fpt1 = canvas_.ConvertCartisianToPixel(row.back()->vertices[0].position.x, row.back()->vertices[0].position.y);
-            auto fpt2 = canvas_.ConvertCartisianToPixel(row.back()->vertices[2].position.x, row.back()->vertices[2].position.y);
-            CvDraw::DrawLine(canvas_.paint_area, cv::Point(fpt1.x, fpt1.y), cv::Point(fpt2.x, fpt2.y), ln_color, ln_width);
+            CPoint fpt1(row.back()->vertices[0].position.x, row.back()->vertices[0].position.y);
+            CPoint fpt2(row.back()->vertices[2].position.x, row.back()->vertices[2].position.y);
+            canvas.DrawLine(fpt1, fpt2, ln_color, thickness);
         }
     }
 
     template <typename GridType>
-    void DrawFilledCurvilinearGrid(const GridType &grid, cv::Scalar fill_color = CvDrawColors::lime_color, int32_t ln_width = 1)
+    static void FillCurvilinearGrid(CvCanvas &canvas, const GridType &grid, cv::Scalar fill_color = CvColors::lime_color, int32_t thickness = 1)
     {
         Polygon polygon;
 
@@ -83,11 +78,11 @@ class CurvilinearGridDraw
         auto last_left_tile = grid.grid_tiles_.front().back();
         polygon.AddPoint(last_left_tile->vertices[2].position.x, last_left_tile->vertices[2].position.y);
 
-        gdraw_.DrawFilledPolygon(polygon, false, fill_color);
+        GeometryDraw::FillPolygon(canvas, polygon, false, fill_color);
     }
 
     template <typename GridType>
-    void DrawCurvilinearGridCost(const GridType &grid, cv::Scalar ln_color = CvDrawColors::lime_color, int32_t ln_width = 1)
+    static void DrawCurvilinearGridCost(CvCanvas &canvas, const GridType &grid, cv::Scalar ln_color = CvColors::lime_color, int32_t thickness = 1)
     {
         for (auto &tile_row : grid.grid_tiles_)
         {
@@ -98,15 +93,15 @@ class CurvilinearGridDraw
                 polygon.AddPoint(tile->vertices[1].position.x, tile->vertices[1].position.y);
                 polygon.AddPoint(tile->vertices[3].position.x, tile->vertices[3].position.y);
                 polygon.AddPoint(tile->vertices[2].position.x, tile->vertices[2].position.y);
-                gdraw_.DrawFilledPolygon(polygon, false, CvDraw::JetPaletteTransform(tile->cost_map));
+                GeometryDraw::FillPolygon(canvas, polygon, false, JetColorMap::Transform(tile->cost_map));
             }
         }
 
-        DrawCurvilinearGrid(grid);
+        CurvilinearGridDraw::DrawCurvilinearGrid(canvas, grid);
     }
 
     template <typename GridType>
-    void DrawCurvilinearGridCostOnly(const GridType &grid, cv::Scalar ln_color = CvDrawColors::lime_color, int32_t ln_width = 1)
+    static void DrawCurvilinearGridCostOnly(CvCanvas &canvas, const GridType &grid, cv::Scalar ln_color = CvColors::lime_color, int32_t thickness = 1)
     {
         for (auto &tile_row : grid.grid_tiles_)
         {
@@ -118,15 +113,15 @@ class CurvilinearGridDraw
                 polygon.AddPoint(tile->vertices[3].position.x, tile->vertices[3].position.y);
                 polygon.AddPoint(tile->vertices[2].position.x, tile->vertices[2].position.y);
                 if (tile->cost_map != 0)
-                    gdraw_.DrawFilledPolygon(polygon, false, CvDraw::JetPaletteTransform(tile->cost_map));
+                    GeometryDraw::FillPolygon(canvas, polygon, false, JetColorMap::Transform(tile->cost_map));
             }
         }
 
-        DrawCurvilinearGrid(grid);
+        CurvilinearGridDraw::DrawCurvilinearGrid(canvas, grid);
     }
 
     template <typename GridType>
-    void DrawCurvilinearGridGrayscaleCost(const GridType &grid, cv::Scalar ln_color = CvDrawColors::lime_color, int32_t ln_width = 1)
+    static void DrawCurvilinearGridGrayscaleCost(CvCanvas &canvas, const GridType &grid, cv::Scalar ln_color = CvColors::lime_color, int32_t thickness = 1)
     {
         for (auto &tile_row : grid.grid_tiles_)
         {
@@ -140,20 +135,13 @@ class CurvilinearGridDraw
                 if (tile->cost_map != 0)
                 {
                     double color_val = (1.0 - tile->cost_map) * 255;
-                    gdraw_.DrawFilledPolygon(polygon, false, cv::Scalar(color_val, color_val, color_val));
+                    GeometryDraw::FillPolygon(canvas, polygon, false, cv::Scalar(color_val, color_val, color_val));
                 }
             }
         }
 
-        DrawCurvilinearGrid(grid);
+        CurvilinearGridDraw::DrawCurvilinearGrid(canvas, grid);
     }
-
-    cv::Mat GetPaintArea() { return canvas_.paint_area; }
-
-  private:
-    // internal parameters
-    CartesianCanvas &canvas_;
-    GeometryDraw gdraw_;
 }; // namespace librav
 } // namespace librav
 

@@ -44,6 +44,7 @@ class PlannerBase
     void SetPathValidityChecker(PathValidityCheckFunc func) { CheckPathValidity = func; }
 
     void SetExtendStepSize(double size) { extend_step_size_ = size; }
+    Tree *GetTree() { return &tree_; }
 
     /****************** To Be Implemented ******************/
     // common interface for planner

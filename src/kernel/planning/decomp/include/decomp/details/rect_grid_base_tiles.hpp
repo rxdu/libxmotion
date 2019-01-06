@@ -87,7 +87,6 @@ class GridTiles<T, std::enable_if_t<!std::is_floating_point<T>::value && !std::i
     {
         grid_tiles_.resize(y);
         for (auto &tile_array : grid_tiles_)
-            for (int64_t i = 0; i < y; ++i)
                 tile_array.resize(x);
     }
 

@@ -12,6 +12,10 @@
 
 #include "cvdraw/cvdraw.hpp"
 
+#include "coreviz/matrix_draw.hpp"
+#include "coreviz/rrt_draw.hpp"
+#include "coreviz/geometry_draw.hpp"
 #include "coreviz/square_grid_draw.hpp"
+#include "coreviz/curvilinear_grid_draw.hpp"
 
 #endif /* COREVIZ_HPP */

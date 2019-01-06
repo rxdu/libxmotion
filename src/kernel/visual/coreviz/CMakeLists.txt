@@ -6,7 +6,7 @@ find_package(TBB REQUIRED)
 # LightViz library
 set(COREVIZ_LIB_SRC
 	src/matrix_draw.cpp
-	# src/geometry_draw.cpp
+	src/geometry_draw.cpp
 	# src/curvilinear_grid_draw.cpp
 )
 add_library(coreviz STATIC ${COREVIZ_LIB_SRC})

@@ -16,7 +16,7 @@ using namespace librav;
 
 // Reference:
 //  [1] https://www.learnopencv.com/applycolormap-for-pseudocoloring-in-opencv-c-python/
-cv::Mat LightViz::CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix, bool invert_y)
+cv::Mat MatrixDraw::CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix, bool invert_y)
 {
     cv::Mat grey_img, color_img;
 

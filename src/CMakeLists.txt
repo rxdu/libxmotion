@@ -12,7 +12,7 @@ add_subdirectory(kernel)
 add_subdirectory(third_party)
 
 # Packages built on top of kernel
-# add_subdirectory(mcontrol)
+add_subdirectory(mcontrol)
 # add_subdirectory(navigation)
 # add_subdirectory(platforms)
 # add_subdirectory(viewers)

@@ -10,7 +10,7 @@
 #ifndef LIGHTVIZ_HPP
 #define LIGHTVIZ_HPP
 
-#include "canvas/cv_draw.hpp"
+#include "cvdraw/cvdraw.hpp"
 
 #include "lightviz/matrix_viz.hpp"
 #include "lightviz/square_grid_viz.hpp"

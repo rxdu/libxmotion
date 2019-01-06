@@ -3,11 +3,7 @@
 #include <cmath>
 
 #include "geometry/cspline.hpp"
-
-#include "lightviz/lightviz.hpp"
-#include "lightviz/details/geometry_draw.hpp"
-#include "lightviz/polygon_viz.hpp"
-#include "geometry/polygon.hpp"
+#include "coreviz/geometry_draw.hpp"
 
 using namespace librav;
 
@@ -20,7 +16,13 @@ int main()
 
     CSpline spline(knots);
 
-    LightViz::ShowCubicSpline(spline, 0.01, 10);
+    CvCanvas canvas(100);
+    canvas.Resize(-1, 10, -10, 10);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
+
+    GeometryDraw::DrawCubicSpline(canvas, spline);
+
+    canvas.Show();
 
     return 0;
 }

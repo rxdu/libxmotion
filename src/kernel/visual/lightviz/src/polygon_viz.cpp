@@ -11,15 +11,14 @@
 
 #include <cmath>
 
-#include "lightviz/details/geometry_draw.hpp"
+#include "coreviz/coreviz.hpp"
 
 using namespace librav;
 using namespace LightViz;
-using namespace CvDraw;
 
 void LightViz::ShowPolyline(const Polyline &polyline, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
-    CartesianCanvas canvas(pixel_per_unit);
+    CvCanvas canvas(pixel_per_unit);
 
     double xspan = polyline.GetMaxX() - polyline.GetMinX();
     double yspan = polyline.GetMaxY() - polyline.GetMinY();
@@ -28,18 +27,17 @@ void LightViz::ShowPolyline(const Polyline &polyline, int32_t pixel_per_unit, st
     double ymin = polyline.GetMinY() - yspan * 0.2;
     double ymax = polyline.GetMaxY() + yspan * 0.2;
 
-    canvas.SetupCanvas(xmin, xmax, ymin, ymax);
+    canvas.Resize(xmin, xmax, ymin, ymax);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
 
-    GeometryDraw gdraw(canvas);
+    GeometryDraw::DrawPolyline(canvas, polyline);
 
-    gdraw.DrawPolyline(polyline);
-
-    ShowImage(canvas.paint_area, window_name, save_img);
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 
 void LightViz::ShowPolyline(const std::vector<Polyline> &polylines, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
-    CartesianCanvas canvas(pixel_per_unit);
+    CvCanvas canvas(pixel_per_unit);
 
     std::vector<double> xmins, xmaxs, ymins, ymaxs;
 
@@ -63,19 +61,19 @@ void LightViz::ShowPolyline(const std::vector<Polyline> &polylines, int32_t pixe
     double ymin = bd_yb - yspan * 0.2;
     double ymax = bd_yt + yspan * 0.2;
 
-    canvas.SetupCanvas(xmin, xmax, ymin, ymax);
-
-    GeometryDraw gdraw(canvas);
+    canvas.Resize(xmin, xmax, ymin, ymax);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
 
     for (auto &polyline : polylines)
-        gdraw.DrawPolyline(polyline);
+        GeometryDraw::DrawPolyline(canvas, polyline);
+    ;
 
-    ShowImage(canvas.paint_area, window_name, save_img);
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 
 void LightViz::ShowPolylinePosition(const std::vector<Polyline> &polylines, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
-    CartesianCanvas canvas(pixel_per_unit);
+    CvCanvas canvas(pixel_per_unit);
 
     std::vector<double> xmins, xmaxs, ymins, ymaxs;
 
@@ -99,27 +97,27 @@ void LightViz::ShowPolylinePosition(const std::vector<Polyline> &polylines, int3
     double ymin = bd_yb - yspan * 0.2;
     double ymax = bd_yt + yspan * 0.2;
 
-    canvas.SetupCanvas(xmin, xmax, ymin, ymax);
-
-    GeometryDraw gdraw(canvas);
+    canvas.Resize(xmin, xmax, ymin, ymax);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
 
     std::vector<SimplePoint> points;
     for (auto &polyline : polylines)
     {
-        gdraw.DrawPolyline(polyline);
+        GeometryDraw::DrawPolyline(canvas, polyline);
+        ;
         auto new_pts = polyline.GetSimplePoints();
         // points.insert(points.end(), new_pts.begin(), new_pts.end());
         points.push_back(new_pts.front());
         points.push_back(new_pts.back());
     }
-    gdraw.WritePointPosition(points);
+    GeometryDraw::WritePointPosition(canvas, points);
 
-    ShowImage(canvas.paint_area, window_name, save_img);
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 
 void LightViz::ShowPolygon(const Polygon &polygon, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
-    CartesianCanvas canvas(pixel_per_unit);
+    CvCanvas canvas(pixel_per_unit);
 
     double xspan = polygon.GetMaxX() - polygon.GetMinX();
     double yspan = polygon.GetMaxY() - polygon.GetMinY();
@@ -129,18 +127,17 @@ void LightViz::ShowPolygon(const Polygon &polygon, int32_t pixel_per_unit, std::
     double ymin = polygon.GetMinY() - yspan * 0.2;
     double ymax = polygon.GetMaxY() + yspan * 0.2;
 
-    canvas.SetupCanvas(xmin, xmax, ymin, ymax);
+    canvas.Resize(xmin, xmax, ymin, ymax);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
 
-    GeometryDraw gdraw(canvas);
+    GeometryDraw::DrawPolygon(canvas, polygon);
 
-    gdraw.DrawPolygon(polygon);
-
-    ShowImage(canvas.paint_area, window_name, save_img);
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 
 void LightViz::ShowPolygon(const std::vector<Polygon> &polygons, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
-    CartesianCanvas canvas(pixel_per_unit);
+    CvCanvas canvas(pixel_per_unit);
 
     std::vector<double> xmins, xmaxs, ymins, ymaxs;
 
@@ -164,18 +161,18 @@ void LightViz::ShowPolygon(const std::vector<Polygon> &polygons, int32_t pixel_p
     double ymin = bd_yb - yspan * 0.2;
     double ymax = bd_yt + yspan * 0.2;
 
-    canvas.SetupCanvas(xmin, xmax, ymin, ymax);
-    GeometryDraw gdraw(canvas);
+    canvas.Resize(xmin, xmax, ymin, ymax);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
 
     for (auto &polygon : polygons)
-        gdraw.DrawPolygon(polygon);
+        GeometryDraw::DrawPolygon(canvas, polygon);
 
-    ShowImage(canvas.paint_area, window_name, save_img);
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 
 void LightViz::ShowFilledPolygon(const std::vector<Polygon> &polygons, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
-    CartesianCanvas canvas(pixel_per_unit);
+    CvCanvas canvas(pixel_per_unit);
 
     std::vector<double> xmins, xmaxs, ymins, ymaxs;
 
@@ -199,20 +196,20 @@ void LightViz::ShowFilledPolygon(const std::vector<Polygon> &polygons, int32_t p
     double ymin = bd_yb - yspan * 0.2;
     double ymax = bd_yt + yspan * 0.2;
 
-    canvas.SetupCanvas(xmin, xmax, ymin, ymax);
-    GeometryDraw gdraw(canvas);
+    canvas.Resize(xmin, xmax, ymin, ymax);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
 
     for (auto &polygon : polygons)
-        gdraw.DrawFilledPolygon(polygon);
+        GeometryDraw::FillPolygon(canvas, polygon);
     for (auto &polygon : polygons)
-        gdraw.DrawPolygon(polygon);
+        GeometryDraw::DrawPolygon(canvas, polygon);
 
-    ShowImage(canvas.paint_area, window_name, save_img);
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 
 void LightViz::ShowFilledPolygon(const std::vector<Polygon> &polygons, const std::vector<Polygon> &bound_polygons, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
-    CartesianCanvas canvas(pixel_per_unit);
+    CvCanvas canvas(pixel_per_unit);
 
     std::vector<double> xmins, xmaxs, ymins, ymaxs;
 
@@ -243,20 +240,20 @@ void LightViz::ShowFilledPolygon(const std::vector<Polygon> &polygons, const std
     double ymin = bd_yb - yspan * 0.2;
     double ymax = bd_yt + yspan * 0.2;
 
-    canvas.SetupCanvas(xmin, xmax, ymin, ymax);
-    GeometryDraw gdraw(canvas);
+    canvas.Resize(xmin, xmax, ymin, ymax);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
 
     for (auto &polygon : polygons)
-        gdraw.DrawFilledPolygon(polygon);
+        GeometryDraw::FillPolygon(canvas, polygon);
     for (auto &polygon : bound_polygons)
-        gdraw.DrawPolygon(polygon);
+        GeometryDraw::DrawPolygon(canvas, polygon);
 
-    ShowImage(canvas.paint_area, window_name, save_img);
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 
 void LightViz::ShowLanePolylines(const std::vector<Polyline> &bounds, const std::vector<Polyline> &centers, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
-    CartesianCanvas canvas(pixel_per_unit);
+    CvCanvas canvas(pixel_per_unit);
 
     std::vector<double> xmins, xmaxs, ymins, ymaxs;
 
@@ -287,21 +284,21 @@ void LightViz::ShowLanePolylines(const std::vector<Polyline> &bounds, const std:
     double ymin = bd_yb - yspan * 0.2;
     double ymax = bd_yt + yspan * 0.2;
 
-    canvas.SetupCanvas(xmin, xmax, ymin, ymax);
-    GeometryDraw gdraw(canvas);
+    canvas.Resize(xmin, xmax, ymin, ymax);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
 
     for (auto &polyline : bounds)
-        gdraw.DrawPolyline(polyline, false);
+        GeometryDraw::DrawPolyline(canvas, polyline, false);
 
     for (auto &polyline : centers)
-        gdraw.DrawPolyline(polyline, false, CvDrawColors::silver_color);
+        GeometryDraw::DrawPolyline(canvas, polyline, false, CvColors::silver_color);
 
-    ShowImage(canvas.paint_area, window_name, save_img);
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 
 void LightViz::ShowPathInLane(const std::vector<Polyline> &bounds, const std::vector<Polyline> &centers, std::vector<Polyline> &path, bool show_wp, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
-    CartesianCanvas canvas(pixel_per_unit);
+    CvCanvas canvas(pixel_per_unit);
 
     std::vector<double> xmins, xmaxs, ymins, ymaxs;
 
@@ -332,17 +329,17 @@ void LightViz::ShowPathInLane(const std::vector<Polyline> &bounds, const std::ve
     double ymin = bd_yb - yspan * 0.2;
     double ymax = bd_yt + yspan * 0.2;
 
-    canvas.SetupCanvas(xmin, xmax, ymin, ymax);
-    GeometryDraw gdraw(canvas);
+    canvas.Resize(xmin, xmax, ymin, ymax);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
 
     for (auto &polyline : bounds)
-        gdraw.DrawPolyline(polyline, false);
+        GeometryDraw::DrawPolyline(canvas, polyline, false);
 
     for (auto &polyline : centers)
-        gdraw.DrawPolyline(polyline, false, CvDrawColors::silver_color);
+        GeometryDraw::DrawPolyline(canvas, polyline, false, CvColors::silver_color);
 
     for (auto &polyline : path)
-        gdraw.DrawPolyline(polyline, show_wp, CvDrawColors::lime_color, 2);
+        GeometryDraw::DrawPolyline(canvas, polyline, show_wp, CvColors::lime_color, 2);
 
-    ShowImage(canvas.paint_area, window_name, save_img);
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }

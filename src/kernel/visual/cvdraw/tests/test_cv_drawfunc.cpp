@@ -8,7 +8,8 @@ int main()
 {
     CvCanvas canvas(10);
     canvas.Resize(-60, 60, -20, 20);
-
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
+    
     canvas.DrawXYAxis();
     canvas.DrawReferenceGrid();
 

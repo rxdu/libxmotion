@@ -1,6 +1,4 @@
-#include "lightviz/lightviz.hpp"
-#include "lightviz/details/geometry_draw.hpp"
-#include "lightviz/polygon_viz.hpp"
+#include "coreviz/geometry_draw.hpp"
 #include "geometry/polygon.hpp"
 
 using namespace librav;
@@ -17,8 +15,6 @@ int main()
     polygon.AddPoint(1, 0.6);
     polygon.AddPoint(0, 0.6);
 
-    LightViz::ShowPolygon(polygon, 100);
-
     auto trans1 = polygon.TransformRT(1, 1, M_PI / 4.0);
     trans1.PrintInfo();
 
@@ -29,7 +25,17 @@ int main()
     polys.push_back(polygon);
     polys.push_back(trans1);
     polys.push_back(trans2);
-    LightViz::ShowPolygon(polys, 200);
+
+    CvCanvas canvas(200);
+    canvas.Resize(-1, 3, -1, 3);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
+
+    GeometryDraw::DrawPolygon(canvas, polygon);
+    GeometryDraw::DrawPolygonDirection(canvas, trans1);
+    GeometryDraw::FillPolygon(canvas, trans2);
+    GeometryDraw::DrawPolygon(canvas, trans2, true, CvColors::red_color);
+
+    canvas.Show();
 
     return 0;
 }

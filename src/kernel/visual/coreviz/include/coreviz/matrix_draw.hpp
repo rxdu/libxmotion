@@ -15,10 +15,10 @@
 
 namespace librav
 {
-namespace LightViz
+struct MatrixDraw
 {
-cv::Mat CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix, bool invert_y = false);
-}
+static cv::Mat CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix, bool invert_y = false);
+};
 } // namespace librav
 
 #endif /* MATRIX_DRAW_HPP */

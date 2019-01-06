@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "geometry/parametric_curve.hpp"
-#include "lightviz/lightviz.hpp"
+#include "coreviz/geometry_draw.hpp"
 
 using namespace librav;
 
@@ -19,7 +19,14 @@ int main()
     for (double i = 0; i < 2.0; i += 0.5)
         std::cout << " s = " << i << " , " << curve.Evaluate(i) << std::endl;
 
-    LightViz::ShowParametricCurve(curve);
+    CvCanvas canvas(100);
+    canvas.Resize(-1, 3, -1, 3);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
+
+    GeometryDraw::DrawPolyline(canvas, polyline);
+    GeometryDraw::DrawParametricCurve(canvas, curve, 0.1, CvColors::red_color);
+
+    canvas.Show();
 
     return 0;
 }

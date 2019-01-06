@@ -1,7 +1,4 @@
-#include "canvas/cv_draw.hpp"
-#include "lightviz/lightviz.hpp"
-#include "lightviz/details/geometry_draw.hpp"
-#include "lightviz/polygon_viz.hpp"
+#include "coreviz/geometry_draw.hpp"
 #include "geometry/polygon.hpp"
 
 using namespace librav;
@@ -53,16 +50,16 @@ class GaussianPositionThreat
 
 int main()
 {
-    CartesianCanvas canvas(10);
-    canvas.SetupCanvas(0, 100, 0, 80, CvDrawColors::jet_colormap_lowest);
+    CvCanvas canvas(10, CvColors::jet_colormap_lowest);
+    canvas.Resize(0, 100, 0, 80);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
 
-    GeometryDraw gdraw(canvas);
+    GeometryDraw::DrawDistribution(canvas, 60, 30, 40, 40, GaussianPositionThreat(60, 30, 5, 5));
+    GeometryDraw::DrawDistribution(canvas, 30, 60, 40, 20, GaussianPositionThreat(30, 60, 5, 2));
+    GeometryDraw::DrawDistribution(canvas, 80, 60, 20, 20, GaussianPositionThreat(80, 60, 2, 2));
+    GeometryDraw::DrawDistribution(canvas, 30, 20, 20, 20, GaussianPositionThreat(30, 20, 2, 2));
 
-    GaussianPositionThreat threat_model(50, 60, 2, 2);
-
-    gdraw.DrawDistribution(50, 60, 20, 20, threat_model);
-
-    CvDraw::ShowImage(canvas.paint_area, "test field viz");
+    canvas.Show();
 
     return 0;
 }

@@ -47,7 +47,8 @@ class CvCanvas
     {
         Raster,
         Vector,
-        Geometry
+        Geometry,
+        GeometryInvertedY
     };
 
   public:
@@ -59,9 +60,16 @@ class CvCanvas
     void Resize(double px, double py);
     void Resize(double xmin, double xmax, double ymin, double ymax);
     void FillBackgroundColor(cv::Scalar bg_color);
-   
+
     int32_t GetPPU() const { return ppu_; }
+    int32_t GetCanvasSizeX() const { return canvas_size_x_; }
+    int32_t GetCanvasSizeY() const { return canvas_size_y_; }
+    void GetCanvasRange(double &xmin, double &xmax, double &ymin, double &ymax);
+    
     cv::Mat GetPaintArea() { return paint_area_; }
+    
+    cv::Point ConvertGeometryPointToPixel(double xi, double yi);
+    cv::Point ConvertNormalizedPointToPixel(double xi, double yi);
 
     void SavePaint(std::string filename);
 
@@ -117,8 +125,6 @@ class CvCanvas
     static constexpr int max_polygon_pt_num = 100;
 
     void InitCanvas();
-    cv::Point ConvertGeometryPointToPixel(double xi, double yi);
-    cv::Point ConvertNormalizedPointToPixel(double xi, double yi);
 
     inline void ClampToCanvasSize(int32_t &x, int32_t y)
     {
@@ -142,6 +148,11 @@ class CvCanvas
             y = static_cast<int32_t>(pt.y);
         }
         else if (draw_mode_ == DrawMode::Geometry)
+        {
+            x = (pt.x - xmin_) / xspan_ * canvas_size_x_;
+            y = (pt.y - ymin_) / yspan_ * canvas_size_y_;
+        }
+        else if (draw_mode_ == DrawMode::GeometryInvertedY)
         {
             x = (pt.x - xmin_) / xspan_ * canvas_size_x_;
             y = canvas_size_y_ - (pt.y - ymin_) / yspan_ * canvas_size_y_;

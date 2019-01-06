@@ -4,9 +4,7 @@
 
 #include "geometry/cspline.hpp"
 
-#include "lightviz/lightviz.hpp"
-#include "lightviz/details/geometry_draw.hpp"
-#include "lightviz/polygon_viz.hpp"
+#include "lightviz/curve_viz.hpp"
 #include "geometry/polygon.hpp"
 
 using namespace librav;

@@ -11,21 +11,19 @@
 
 #include <cmath>
 
-#include "lightviz/details/geometry_draw.hpp"
+#include "coreviz/coreviz.hpp"
 
 using namespace librav;
-using namespace CvDraw;
 
 void LightViz::ShowCubicSpline(const CSpline &spline, double step, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
-    CartesianCanvas canvas(pixel_per_unit);
-    canvas.SetupCanvas(-15, 15, -10, 10);
+    CvCanvas canvas(pixel_per_unit);
+    canvas.Resize(-15, 15, -10, 10);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
 
-    GeometryDraw gdraw(canvas);
+    GeometryDraw::DrawCubicSpline(canvas, spline, step);
 
-    gdraw.DrawCubicSpline(spline, step);
-
-    ShowImage(canvas.paint_area, window_name, save_img);
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 
 void LightViz::ShowCubicSpline(const std::vector<CSpline> &splines, double step, int32_t pixel_per_unit, std::string window_name, bool save_img)
@@ -38,12 +36,11 @@ void LightViz::ShowCubicSplinePosition(const std::vector<CSpline> &splines, doub
 
 void LightViz::ShowParametricCurve(const ParametricCurve &pcurve, double step, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {
-    CartesianCanvas canvas(pixel_per_unit);
-    canvas.SetupCanvas(-15, 15, -10, 10);
+    CvCanvas canvas(pixel_per_unit);
+    canvas.Resize(-15, 15, -10, 10);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
 
-    GeometryDraw gdraw(canvas);
+    GeometryDraw::DrawParametricCurve(canvas, pcurve, step);
 
-    gdraw.DrawParametricCurve(pcurve, step);
-
-    ShowImage(canvas.paint_area, window_name, save_img);
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }

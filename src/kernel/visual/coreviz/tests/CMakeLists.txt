@@ -2,32 +2,26 @@
 #find_package(LIBRARY_NAME REQUIRED)
 
 ## tests
-add_executable(test_image_viz test_image_viz.cpp)
-target_link_libraries(test_image_viz coreviz)
+add_executable(test_sgrid_draw test_sgrid_draw.cpp )
+target_link_libraries(test_sgrid_draw coreviz)
 
-add_executable(test_grid_viz test_grid_viz.cpp )
-target_link_libraries(test_grid_viz coreviz)
+add_executable(test_polyline_draw test_polyline_draw.cpp )
+target_link_libraries(test_polyline_draw coreviz)
 
-# add_executable(test_polygon_viz test_polygon_viz.cpp )
-# target_link_libraries(test_polygon_viz coreviz)
+add_executable(test_pcurve_draw test_pcurve_draw.cpp)
+target_link_libraries(test_pcurve_draw coreviz)
 
-# add_executable(test_cspline_viz test_cspline_viz.cpp )
-# target_link_libraries(test_cspline_viz coreviz)
+add_executable(test_cspline_draw test_cspline_draw.cpp )
+target_link_libraries(test_cspline_draw coreviz)
 
-# add_executable(test_field_viz test_field_viz.cpp )
-# target_link_libraries(test_field_viz coreviz)
+add_executable(test_polygon_draw test_polygon_draw.cpp )
+target_link_libraries(test_polygon_draw coreviz)
 
-# add_executable(test_pcurve_viz test_pcurve_viz.cpp)
-# target_link_libraries(test_pcurve_viz coreviz)
+add_executable(test_dist_draw test_dist_draw.cpp )
+target_link_libraries(test_dist_draw coreviz)
 
-# add_executable(test_geogrid_viz test_geogrid_viz.cpp)
-# target_link_libraries(test_geogrid_viz coreviz)
+add_executable(test_cgrid_draw test_cgrid_draw.cpp)
+target_link_libraries(test_cgrid_draw coreviz)
 
-# add_executable(test_rrt_viz test_rrt_viz.cpp)
-# target_link_libraries(test_rrt_viz coreviz)
-
-# add_executable(test_glfw_gui test_glfw_gui.cpp )
-# target_link_libraries(test_glfw_gui coreviz glfw)
-
-# add_executable(test_imglfw opengl3/main.cpp opengl3/gl3w.c opengl3/imgui_impl_glfw_gl3.cpp opengl3/imgui_impl_glfw_gl3.h)
-# target_link_libraries(test_imglfw coreviz glfw)
+add_executable(test_rrt_draw test_rrt_draw.cpp)
+target_link_libraries(test_rrt_draw coreviz)

@@ -1,5 +1,5 @@
 #include "decomp/curvilinear_grid.hpp"
-#include "lightviz/details/curvilinear_grid_draw.hpp"
+#include "coreviz/curvilinear_grid_draw.hpp"
 
 using namespace librav;
 
@@ -23,14 +23,14 @@ int main()
 
     std::cout << "curvilinear grid created" << std::endl;
 
-    CartesianCanvas canvas(200);
-    canvas.SetupCanvas(-1, 3, -1, 3);
+    CvCanvas canvas(100);
+    canvas.Resize(-1, 3, -1, 3);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
 
-    CurvilinearGridDraw gdraw(canvas);
-    gdraw.DrawCurvilinearGrid(grid, 0.1);
-    // gdraw.DrawCurvilinearGridCost(grid, 0.1, true);
+    CurvilinearGridDraw::FillCurvilinearGrid(canvas, grid);
+    CurvilinearGridDraw::DrawCurvilinearGrid(canvas, grid, CvColors::black_color);
 
-    CvDraw::ShowImage(canvas.paint_area, "curvilinear_grid");
+    canvas.Show();
 
     return 0;
 }

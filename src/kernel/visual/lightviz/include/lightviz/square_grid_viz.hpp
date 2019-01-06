@@ -12,8 +12,8 @@
 
 #include <cstdint>
 
-#include "canvas/cv_draw.hpp"
-#include "lightviz/details/square_grid_draw.hpp"
+#include "cvdraw/cvdraw.hpp"
+#include "coreviz/coreviz.hpp"
 
 #include "decomp/square_grid.hpp"
 #include "graph/graph.hpp"
@@ -25,76 +25,61 @@ namespace LightViz
 template <typename GridType>
 void ShowSquareGrid(GridType *grid, int32_t pixel_per_unit = 100, std::string window_name = "Square Grid", bool save_img = false)
 {
-    CartesianCanvas canvas(pixel_per_unit);
-    SquareGridDraw gdraw(canvas);
+    CvCanvas canvas = SquareGridDraw::CreateCanvas(grid, pixel_per_unit);
 
-    gdraw.SetupCanvas(grid, pixel_per_unit);
+    SquareGridDraw::DrawGridCell(canvas, grid);
+    SquareGridDraw::DrawGridNet(canvas, grid);
 
-    gdraw.DrawGridCell(grid);
-    gdraw.DrawGridNet(grid);
-
-    CvDraw::ShowImage(canvas.paint_area, window_name, save_img);
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 
 template <typename GridType, typename GridCellType>
 void ShowSquareGridPath(GridType *grid, const std::vector<GridCellType *> &path, int32_t pixel_per_unit = 100, std::string window_name = "Square Grid", bool save_img = false)
 {
-    CartesianCanvas canvas(pixel_per_unit);
-    SquareGridDraw gdraw(canvas);
+    CvCanvas canvas = SquareGridDraw::CreateCanvas(grid, pixel_per_unit);
 
-    gdraw.SetupCanvas(grid, pixel_per_unit);
+    SquareGridDraw::DrawGridCell(canvas, grid);
+    SquareGridDraw::DrawGridPathStartGoal(canvas, path);
+    SquareGridDraw::DrawGridNet(canvas, grid);
+    SquareGridDraw::DrawGridPath(canvas, path);
 
-    gdraw.DrawGridCell(grid);
-    gdraw.DrawGridPathStartGoal(path);
-    gdraw.DrawGridNet(grid);
-    gdraw.DrawGridPath(path);
-
-    CvDraw::ShowImage(canvas.paint_area, window_name, save_img);
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 
 template <typename GridType, typename GridCellType>
 void ShowSquareGridGraph(GridType *grid, Graph<GridCellType *> *graph, int32_t pixel_per_unit = 100, std::string window_name = "Square Grid", bool save_img = false)
 {
-    CartesianCanvas canvas(pixel_per_unit);
-    SquareGridDraw gdraw(canvas);
+    CvCanvas canvas = SquareGridDraw::CreateCanvas(grid, pixel_per_unit);
 
-    gdraw.SetupCanvas(grid, pixel_per_unit);
+    SquareGridDraw::DrawGridCell(canvas, grid);
+    SquareGridDraw::DrawGridNet(canvas, grid);
+    SquareGridDraw::DrawGridGraph(canvas, grid, graph);
 
-    gdraw.DrawGridCell(grid);
-    gdraw.DrawGridNet(grid);
-    gdraw.DrawGridGraph(grid, graph);
-
-    CvDraw::ShowImage(canvas.paint_area, window_name, save_img);
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 
 template <typename GridType>
 void ShowSquareGridGraphCost(GridType *grid, int32_t pixel_per_unit = 100, std::string window_name = "Square Grid", bool save_img = false)
 {
-    CartesianCanvas canvas(pixel_per_unit);
-    SquareGridDraw gdraw(canvas);
+    CvCanvas canvas = SquareGridDraw::CreateCanvas(grid, pixel_per_unit);
 
-    gdraw.SetupCanvas(grid, pixel_per_unit);
+    SquareGridDraw::DrawGridCell(canvas, grid);
+    SquareGridDraw::DrawGridCost(canvas, grid);
+    SquareGridDraw::DrawGridNet(canvas, grid);
 
-    gdraw.DrawGridCell(grid);
-    gdraw.DrawGridCost(grid);
-    gdraw.DrawGridNet(grid);
-
-    CvDraw::ShowImage(canvas.paint_area, window_name, save_img);
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 
 template <typename GridType>
 void ShowSquareGridGraphCostOnly(GridType *grid, int32_t pixel_per_unit = 100, std::string window_name = "Square Grid", bool save_img = false)
 {
-    CartesianCanvas canvas(pixel_per_unit);
-    SquareGridDraw gdraw(canvas);
+    CvCanvas canvas = SquareGridDraw::CreateCanvas(grid, pixel_per_unit);
 
-    gdraw.SetupCanvas(grid, pixel_per_unit);
+    SquareGridDraw::DrawGridCell(canvas, grid);
+    SquareGridDraw::DrawGridCostOnly(canvas, grid);
+    SquareGridDraw::DrawGridNet(canvas, grid);
 
-    gdraw.DrawGridCell(grid);
-    gdraw.DrawGridCostOnly(grid);
-    gdraw.DrawGridNet(grid);
-
-    CvDraw::ShowImage(canvas.paint_area, window_name, save_img);
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 } // namespace LightViz
 } // namespace librav

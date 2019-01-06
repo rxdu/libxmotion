@@ -7,11 +7,14 @@ int main()
 {
     SquareGrid grid(30, 20);
 
-    // for (int i = 0; i < 30; ++i)
-    //     grid.SetCellLabel(i, 0, SquareCellLabel::OCCUPIED);
+    for (int i = 0; i < 30; ++i)
+        grid.SetCellLabel(i, 0, SquareCellLabel::OCCUPIED);
 
-    for (int i = 0; i < 15; ++i)
-        grid.SetCellLabel(i, 5, SquareCellLabel::OCCUPIED);
+    for (int i = 15; i < 19; ++i)
+        grid.SetCellLabel(i, 3, SquareCellLabel::OCCUPIED);
+
+    for (int i = 0; i < 20; ++i)
+        grid.SetCellLabel(20, i, SquareCellLabel::OCCUPIED);
 
     for (int i = 0; i < 15; ++i)
         grid.SetCellLabel(i, 19, SquareCellLabel::OCCUPIED);
@@ -24,12 +27,11 @@ int main()
     path.push_back(grid.GetCell(48));
 
     auto canvas = SquareGridDraw::CreateCanvas(&grid);
-    SquareGridDraw::DrawGridNet(canvas, &grid);
     SquareGridDraw::DrawGridCell(canvas, &grid);
+    SquareGridDraw::DrawGridPathStartGoal(canvas, path);
+    SquareGridDraw::DrawGridNet(canvas, &grid);
+    SquareGridDraw::DrawGridPath(canvas, path);
     canvas.Show();
-
-    // LightViz::ShowSquareGrid(&grid, 200);
-    // LightViz::ShowSquareGridPath(&grid, path, 200);
 
     return 0;
 }

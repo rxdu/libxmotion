@@ -104,32 +104,23 @@ void CvCanvas::FillBackgroundColor(cv::Scalar bg_color)
     InitCanvas();
 }
 
-// cv::Point CvCanvas::ConvertCvPointToPixel(CPoint pt)
-// {
-//     if (draw_mode_ == DrawMode::Raster)
-//         return cv::Point(pt.x, pt.y);
-//     else if (draw_mode_ == DrawMode::Geometry)
-//         return ConvertGeometryPointToPixel(pt.x, pt.y);
-//     else // if (draw_mode_ == DrawMode::Vector)
-//         return ConvertNormalizedPointToPixel(pt.x, pt.y);
-// }
+void CvCanvas::GetCanvasRange(double &xmin, double &xmax, double &ymin, double &ymax)
+{
+    xmin = xmin_;
+    ymin = ymin_;
 
-// void CvCanvas::ClampToCanvasSize(int32_t &x, int32_t y)
-// {
-//     if (x < 0)
-//         x = 0;
-//     if (y < 0)
-//         y = 0;
-//     if (x >= canvas_size_x_)
-//         x = canvas_size_x_ - 1;
-//     if (y >= canvas_size_y_)
-//         y = canvas_size_y_ - 1;
-// }
+    xmax = xmax_;
+    ymax = ymax_;
+}
 
 cv::Point CvCanvas::ConvertGeometryPointToPixel(double xi, double yi)
 {
     int32_t x = (xi - xmin_) / xspan_ * canvas_size_x_;
-    int32_t y = canvas_size_y_ - (yi - ymin_) / yspan_ * canvas_size_y_;
+    int32_t y;
+    if (draw_mode_ != DrawMode::GeometryInvertedY)
+        y = (yi - ymin_) / yspan_ * canvas_size_y_;
+    else
+        y = canvas_size_y_ - (yi - ymin_) / yspan_ * canvas_size_y_;
 
     ClampToCanvasSize(x, y);
 
