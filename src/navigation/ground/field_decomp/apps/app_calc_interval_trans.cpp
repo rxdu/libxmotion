@@ -6,7 +6,7 @@
 #include "threat_field/dynamic_threat_model.hpp"
 
 #include "stopwatch/stopwatch.h"
-#include "ugvnav_viz/ugvnav_viz.hpp"
+#include "navviz/navviz.hpp"
 #include "file_io/folder_path.hpp"
 
 using namespace librav;

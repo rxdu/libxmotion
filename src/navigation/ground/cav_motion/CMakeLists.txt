@@ -20,8 +20,8 @@ target_include_directories(cav_motion PUBLIC
   $<INSTALL_INTERFACE:include>
   PRIVATE src)
 
-add_subdirectory(apps)
+# add_subdirectory(apps)
 
 if(BUILD_TESTS)
-  add_subdirectory(tests)
+#   add_subdirectory(tests)
 endif()

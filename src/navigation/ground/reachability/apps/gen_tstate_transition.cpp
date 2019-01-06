@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "reachability/details/tstate_transition_sim.hpp"
-#include "ugvnav_viz/ugvnav_viz.hpp"
+#include "navviz/navviz.hpp"
 
 using namespace librav;
 

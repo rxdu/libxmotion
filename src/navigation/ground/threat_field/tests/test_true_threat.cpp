@@ -8,7 +8,7 @@
 #include "stopwatch/stopwatch.h"
 
 #include "lightviz/lightviz.hpp"
-#include "ugvnav_viz/ugvnav_viz.hpp"
+#include "navviz/navviz.hpp"
 
 using namespace librav;
 

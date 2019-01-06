@@ -8,7 +8,7 @@
 #include "local_planner/lattice_graph.hpp"
 #include "local_planner/reference_trajectory.hpp"
 #include "local_planner/lookahead_zone.hpp"
-#include "ugvnav_viz/ugvnav_viz.hpp"
+#include "navviz/navviz.hpp"
 
 #include "stopwatch/stopwatch.h"
 

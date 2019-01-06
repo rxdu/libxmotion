@@ -1,8 +1,8 @@
 #include <iostream>
 
 #include "reachability/details/tstate_transition_sim.hpp"
-#include "lightviz/lightviz.hpp"
-#include "ugvnav_viz/ugvnav_viz.hpp"
+// #include "lightviz/lightviz.hpp"
+// #include "navviz/navviz.hpp"
 #include "stopwatch/stopwatch.h"
 
 using namespace librav;
@@ -32,9 +32,9 @@ int main()
     std::cout << "Psi size: " << Psi.rows() << " by " << Psi.cols() << std::endl;
 
     // LightViz::ShowTStateSpace(*sim.state_space_.get());
-    LightViz::ShowMatrixAsColorMap(Psi, "Psi_matrix", false);
+    // LightViz::ShowMatrixAsColorMap(Psi, "Psi_matrix", false);
     // LightViz::ShowMatrixAsImage(Psi);
-    LightViz::ShowMatrixAsColorMap(Psi_T, "Psi_T_matrix", false);
+    // LightViz::ShowMatrixAsColorMap(Psi_T, "Psi_T_matrix", false);
 
     return 0;
 }

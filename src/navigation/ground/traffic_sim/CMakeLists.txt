@@ -16,8 +16,8 @@ target_include_directories(trafficsim PUBLIC
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 
-add_subdirectory(viewer)
-add_subdirectory(apps)
+# add_subdirectory(viewer)
+# add_subdirectory(apps)
 
 if(BUILD_TESTS)
     add_subdirectory(tests)

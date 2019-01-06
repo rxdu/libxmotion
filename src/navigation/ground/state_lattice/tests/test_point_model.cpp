@@ -2,7 +2,7 @@
 #include <cstdint>
 
 #include "state_lattice/details/point_kinematics.hpp"
-#include "ugvnav_viz/ugvnav_viz.hpp"
+// #include "navviz/navviz.hpp"
 
 using namespace librav;
 
@@ -18,7 +18,7 @@ int main()
     MotionState init(0, 0, 0, 0);
     std::vector<MotionState> states = model.GenerateTrajectoryPoints(init, M_PI, 0.1, 0.01);
 
-    LightViz::ShowMotionStateTrajectory(states, 50);
+    // LightViz::ShowMotionStateTrajectory(states, 50);
 
     return 0;
 }

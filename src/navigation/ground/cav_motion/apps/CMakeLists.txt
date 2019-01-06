@@ -3,7 +3,7 @@
 
 # tests
 add_executable(app_cav_mission_control app_cav_mission_control.cpp)
-target_link_libraries(app_cav_mission_control cav_motion ugvnav_viz utils)
+target_link_libraries(app_cav_mission_control cav_motion navviz utils)
 
 add_executable(app_cav_motion_manager app_cav_motion_manager.cpp)
-target_link_libraries(app_cav_motion_manager cav_motion ugvnav_viz utils)
+target_link_libraries(app_cav_motion_manager cav_motion navviz utils)

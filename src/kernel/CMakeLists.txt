@@ -9,8 +9,8 @@ add_subdirectory(control)
 add_subdirectory(decision)
 add_subdirectory(planning)
 add_subdirectory(datalink)
-add_subdirectory(visual)
 add_subdirectory(utilities)
+add_subdirectory(visualization)
 
 add_subdirectory(examples)
 

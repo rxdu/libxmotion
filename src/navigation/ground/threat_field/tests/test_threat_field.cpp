@@ -6,7 +6,7 @@
 #include "threat_field/threat_field.hpp"
 
 #include "stopwatch/stopwatch.h"
-#include "ugvnav_viz/ugvnav_viz.hpp"
+#include "navviz/navviz.hpp"
 
 using namespace librav;
 

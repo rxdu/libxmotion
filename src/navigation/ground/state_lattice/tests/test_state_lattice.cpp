@@ -4,7 +4,7 @@
 
 #include "state_lattice/state_lattice.hpp"
 
-#include "ugvnav_viz/ugvnav_viz.hpp"
+// #include "navviz/navviz.hpp"
 #include "stopwatch/stopwatch.h"
 
 using namespace librav;
@@ -16,8 +16,8 @@ int main()
 
     StateLattice lattice(start, target);
 
-    if (lattice.IsValid())
-        LightViz::ShowStateLattice(lattice, 0.1, 50);
+    // if (lattice.IsValid())
+    //     LightViz::ShowStateLattice(lattice, 0.1, 50);
 
     return 0;
 }

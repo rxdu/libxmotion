@@ -4,7 +4,7 @@
 #include "traffic_map/map_loader.hpp"
 
 #include "lightviz/lightviz.hpp"
-#include "ugvnav_viz/ugvnav_viz.hpp"
+#include "navviz/navviz.hpp"
 
 #include "stopwatch/stopwatch.h"
 

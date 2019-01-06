@@ -14,8 +14,8 @@
 #include "lightview/viewer_utils.hpp"
 #include "lightview/lightwidgets.hpp"
 #include "lightviz/details/cartesian_canvas.hpp"
-#include "ugvnav_viz/details/roadmap_draw.hpp"
-#include "ugvnav_viz/details/vehicle_draw.hpp"
+#include "navviz/details/roadmap_draw.hpp"
+#include "navviz/details/vehicle_draw.hpp"
 
 #include "traffic_map/map_loader.hpp"
 #include "cav_common/cav_datalink.hpp"
