@@ -19,6 +19,3 @@ target_link_libraries(test_square_grid decomp lightviz)
 
 add_executable(test_decomp_memory test_decomp_memory.cpp)
 target_link_libraries(test_decomp_memory decomp)
-
-# add_executable(test_decomposer test_decomposer.cpp)
-# target_link_libraries(test_decomposer decomp lightviz)

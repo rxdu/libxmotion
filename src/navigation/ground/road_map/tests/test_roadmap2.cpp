@@ -2,11 +2,13 @@
 #include <iostream>
 
 #include "road_map/road_map.hpp"
-
-#include "lightviz/lightviz.hpp"
-#include "navviz/navviz.hpp"
-
 #include "stopwatch/stopwatch.h"
+
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
@@ -32,8 +34,9 @@ int main()
     // auto ids = map->FindOccupiedLanelet(CartCooridnate(55, 56));
     // std::cout << "occupied laneles: " << ids.size() << std::endl;
 
-    RoadMapViz::SetupRoadMapViz(map, 10);
-    RoadMapViz::ShowLanes(true, "exam_map_completeness", true);
+#ifdef ENABLE_VIZ
+    // UGVNavViz::SetupRoadMapViz(map, 10);
+    UGVNavViz::ShowLanes(map, true, "exam_map_completeness", true);
 
     // LightViz::ShowPolygon(map->GetAllLanePolygons(), 10);
     // LightViz::ShowPolyline(map->GetAllLaneBoundPolylines(), 10);
@@ -43,6 +46,7 @@ int main()
     // std::vector<Polygon> roi;
     // roi.push_back(map->GetLanePolygon("s1"));
     // LightViz::ShowFilledPolygon(roi, map->GetAllLanePolygons());
+#endif
 
     return 0;
 }

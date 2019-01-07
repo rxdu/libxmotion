@@ -6,7 +6,7 @@
 #include "traffic_map/map_loader.hpp"
 
 #include "local_planner/lattice_graph.hpp"
-#include "navviz/navviz.hpp"
+#include "lightviz/navviz.hpp"
 
 #include "stopwatch/stopwatch.h"
 

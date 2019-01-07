@@ -6,9 +6,13 @@
 #include "traffic_map/map_loader.hpp"
 
 #include "local_planner/lattice_graph.hpp"
-#include "navviz/navviz.hpp"
-
 #include "stopwatch/stopwatch.h"
+
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
@@ -16,9 +20,7 @@ int main()
 {
     // load map
     MapLoader loader("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
-
-    TrafficViz::SetupTrafficViz(loader.road_map, 10);
-
+    
     /****************************************************************************/
 
     // discretize lane
@@ -37,7 +39,9 @@ int main()
     auto graph = LatticeGraph::Search(path, ego_chn, ego_veh.GetPose(), 8);
     std::cout << "search finished in " << timer.toc() << " seconds" << std::endl;
 
-    TrafficViz::ShowLatticePathInTrafficChannel(graph, path, ego_chn.get(), "lattice graph path", true);
+#ifdef ENABLE_VIZ
+    UGVNavViz::ShowLatticePathInTrafficChannel(loader.road_map, graph, path, ego_chn.get(), "lattice graph path", true);
+#endif 
 
     return 0;
 }

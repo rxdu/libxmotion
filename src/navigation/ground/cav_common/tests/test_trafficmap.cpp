@@ -2,11 +2,13 @@
 
 // #include "road_map/road_map.hpp"
 #include "traffic_map/map_loader.hpp"
-
-#include "lightviz/lightviz.hpp"
-#include "navviz/navviz.hpp"
-
 #include "stopwatch/stopwatch.h"
+
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
@@ -14,7 +16,7 @@ int main()
 {
     MapLoader loader("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
 
-    RoadMapViz::SetupRoadMapViz(loader.road_map);
+    // RoadMapViz::SetupRoadMapViz(loader.road_map);
 
     auto ids = loader.road_map->FindOccupiedLanelet(CartCooridnate(55, 56));
     std::cout << "occupied laneles: " << ids.size() << std::endl;
@@ -22,7 +24,9 @@ int main()
     for (auto &chn : loader.traffic_map->GetAllTrafficChannels())
     {
         chn->PrintInfo();
-        RoadMapViz::ShowTrafficChannel(*chn.get());
+#ifdef ENABLE_VIZ
+        UGVNavViz::ShowTrafficChannel(loader.road_map, chn.get());
+#endif
     }
 
     // RoadMapViz::ShowTrafficChannel(map->traffic_map_->GetAllTrafficChannels().front());

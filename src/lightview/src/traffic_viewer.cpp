@@ -11,11 +11,9 @@
 
 #include <cassert>
 
-#include "lightview/viewer_utils.hpp"
-#include "lightview/lightwidgets.hpp"
-#include "lightviz/details/cartesian_canvas.hpp"
-#include "navviz/details/roadmap_draw.hpp"
-#include "navviz/details/vehicle_draw.hpp"
+#include "coreviz/coreviz.hpp"
+#include "navviz/roadmap_draw.hpp"
+#include "navviz/vehicle_draw.hpp"
 
 #include "traffic_map/map_loader.hpp"
 #include "cav_common/cav_datalink.hpp"
@@ -173,33 +171,30 @@ void TrafficViewer::Start()
 
         //-------------------------------------------------------------//
 
-        CartesianCanvas canvas(ppu_);
+        CvCanvas canvas(ppu_);
+        canvas.Resize(xmin_, xmax_, ymin_, ymax_);
         if (use_jetcolor_bg)
-            canvas.SetupCanvas(xmin_, xmax_, ymin_, ymax_, CvDrawColors::jet_colormap_lowest);
-        else
-            canvas.SetupCanvas(xmin_, xmax_, ymin_, ymax_);
+            canvas.FillBackgroundColor(CvColors::jet_colormap_lowest);
 
-        RoadMapDraw road_draw(road_map_, canvas);
-        road_draw.DrawLanes(show_center_line);
+        RoadMapViz::DrawLanes(canvas, road_map_, show_center_line);
 
-        VehicleDraw veh_draw(canvas);
         for (auto &veh : surrounding_vehicles_)
         {
             Polygon fp = VehicleFootprint(veh.GetPose()).polygon;
-            veh_draw.DrawVehicle(fp, veh.id_);
+            VehicleViz::DrawVehicle(canvas, fp, veh.id_);
         }
 
         if (ego_state_updated_)
         {
             Polygon fp = VehicleFootprint(ego_vehicle_state_.GetPose()).polygon;
-            veh_draw.DrawVehicle(fp, CvDrawColors::blue_color);
+            VehicleViz::DrawVehicle(canvas, fp, CvColors::blue_color);
         }
 
         //-------------------------------------------------------------//
 
         // draw image to window
         // cv::Mat vis_img = cv::imread("/home/rdu/Pictures/lanelets_light.png");
-        // cv::Mat vis_img = canvas.paint_area;
+        // cv::Mat vis_img = canvas.GetPaintArea();
         // cv::Mat vis_img = canvas.GetROIofPaintArea(80, 100, 100, 100);
 
         cv::Mat vis_img;
@@ -210,7 +205,7 @@ void TrafficViewer::Start()
         }
         else
         {
-            vis_img = canvas.paint_area;
+            vis_img = canvas.GetPaintArea();
         }
 
         LightWidget::DrawOpenCVImageToBackground(vis_img);

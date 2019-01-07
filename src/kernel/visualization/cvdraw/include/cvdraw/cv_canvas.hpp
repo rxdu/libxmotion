@@ -68,6 +68,8 @@ class CvCanvas
     void GetCanvasRange(double &xmin, double &xmax, double &ymin, double &ymax);
 
     cv::Mat GetPaintArea() { return paint_area_; }
+    cv::Mat GetROIofPaintArea(double cx, double cy, double xspan, double yspan);
+    cv::Mat GetROIofPaintArea(double cx, double cy, double ratio);
 
     cv::Point ConvertGeometryPointToPixel(double xi, double yi);
     cv::Point ConvertNormalizedPointToPixel(double xi, double yi);

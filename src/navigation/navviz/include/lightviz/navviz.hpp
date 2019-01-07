@@ -12,4 +12,9 @@
 
 #include "lightviz/lightviz.hpp"
 
+#include "lightviz/lattice_viz.hpp"
+#include "lightviz/reachability_viz.hpp"
+#include "lightviz/roadmap_viz.hpp"
+#include "lightviz/traffic_viz.hpp"
+
 #endif /* NAVVIZ_HPP */

@@ -6,7 +6,6 @@
 #include "threat_field/dynamic_threat_model.hpp"
 
 #include "stopwatch/stopwatch.h"
-#include "navviz/navviz.hpp"
 #include "file_io/folder_path.hpp"
 
 using namespace librav;
@@ -14,7 +13,7 @@ using namespace librav;
 int main()
 {
     MapLoader loader("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane_horizontal.osm");
-    TrafficViz::SetupTrafficViz(loader.road_map);
+    // UGVNavViz::SetupTrafficViz(loader.road_map);
 
     //////////////////////////////////////////////////
 
@@ -32,7 +31,7 @@ int main()
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    // TrafficViz::ShowVehicleOccupancyDistribution(ct1, "occupancy_estimation");
+    // UGVNavViz::ShowVehicleOccupancyDistribution(ct1, "occupancy_estimation");
 
     return 0;
 }

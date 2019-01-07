@@ -3,7 +3,12 @@
 #include <cmath>
 
 #include "state_lattice/primitive_generator.hpp"
-// #include "navviz/navviz.hpp"
+
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
@@ -25,10 +30,13 @@ int main()
 
     MotionPrimitive mp;
     bool result = gen.Calculate(start, target, init_p, mp);
-    // if (result)
-    //     LightViz::ShowMotionPrimitive(mp, 0.1, 20);
-    // else
-    //     std::cout << "--> Failed to find a path <--" << std::endl;
+
+#ifdef ENABLE_VIZ
+    if (result)
+        LightViz::ShowMotionPrimitive(mp, 0.1, 20);
+    else
+        std::cout << "--> Failed to find a path <--" << std::endl;
+#endif 
 
     return 0;
 }

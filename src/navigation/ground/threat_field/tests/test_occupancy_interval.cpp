@@ -6,14 +6,18 @@
 #include "threat_field/dynamic_threat_model.hpp"
 
 #include "stopwatch/stopwatch.h"
-#include "navviz/navviz.hpp"
+
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
 int main()
 {
     MapLoader loader("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane_horizontal.osm");
-    TrafficViz::SetupTrafficViz(loader.road_map);
 
     //////////////////////////////////////////////////
 
@@ -25,7 +29,7 @@ int main()
     veh1.SetSpeedVariance(2 * 2);
 
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels().back();
-    // TrafficViz::ShowVehicleInChannel(veh1.GetFootprint(), *ego_chn.get());
+    // UGVNavViz::ShowVehicleInChannel(veh1.GetFootprint(), *ego_chn.get());
 
     stopwatch::StopWatch timer;
 
@@ -38,8 +42,10 @@ int main()
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    TrafficViz::ShowVehicleOccupancyDistribution(ct1, 4, "occupancy_estimation");
-    TrafficViz::ShowVehicleIntervalOccupancyDistribution(ct1, 4, "interval_occupancy_estimation");
+#ifdef ENABLE_VIZ
+    UGVNavViz::ShowVehicleOccupancyDistribution(loader.road_map, ct1, 4, "occupancy_estimation");
+    // UGVNavViz::ShowVehicleIntervalOccupancyDistribution(ct1, 4, "interval_occupancy_estimation");
+#endif
 
     return 0;
 }

@@ -4,9 +4,13 @@
 
 #include "traffic_map/map_loader.hpp"
 #include "cav_motion/route_planner.hpp"
-#include "navviz/navviz.hpp"
-
 #include "stopwatch/stopwatch.h"
+
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
@@ -29,8 +33,9 @@ int main()
     bool res = rplanner.SearchRoute({start_point.x, start_point.y}, {goal_point.x, goal_point.y}, &route);
     route.PrintInfo();
 
-    RoadMapViz::SetupRoadMapViz(loader.road_map, 3);
-    RoadMapViz::ShowTrafficChannel(&route);
+#ifdef ENABLE_VIZ
+    UGVNavViz::ShowTrafficChannel(loader.road_map, &route);
+#endif 
 
     return 0;
 }

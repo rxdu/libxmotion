@@ -3,7 +3,11 @@
 #include "road_map/details/topogeo_graph.hpp"
 #include "road_map/road_map.hpp"
 
-#include "lightviz/lightviz.hpp"
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
@@ -19,8 +23,10 @@ int main()
     std::vector<Polygon> left_roi;
     for (auto ll : left_lanelets)
         left_roi.push_back(map->GetLanePolygon(ll));
+#ifdef ENABLE_VIZ
     // LightViz::ShowFilledPolygon(left_roi, map->GetAllLanePolygons(), 10, "left turn", true);
     LightViz::ShowFilledPolygon(left_roi, map->GetAllLanePolygons(), 10);
+#endif
 
     std::cout << "----------------" << std::endl;
 
@@ -29,8 +35,10 @@ int main()
     std::vector<Polygon> right_roi;
     for (auto ll : right_lanelets)
         right_roi.push_back(map->GetLanePolygon(ll));
+#ifdef ENABLE_VIZ
     // LightViz::ShowFilledPolygon(right_roi, map->GetAllLanePolygons(), 10, "right turn", true);
     LightViz::ShowFilledPolygon(right_roi, map->GetAllLanePolygons(), 10);
+#endif 
 
     return 0;
 }

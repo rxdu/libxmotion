@@ -4,11 +4,14 @@
 
 #include "road_map/road_map.hpp"
 #include "traffic_map/map_loader.hpp"
-
 #include "local_planner/lattice_graph.hpp"
-#include "navviz/navviz.hpp"
-
 #include "stopwatch/stopwatch.h"
+
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
@@ -19,14 +22,12 @@ int main()
     // MapLoader loader("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane.osm");
     // MapLoader loader("/home/rdu/Workspace/librav/data/road_map/short_segment.osm");
 
-    TrafficViz::SetupTrafficViz(loader.road_map, 10);
-
-    // TrafficViz::ShowLanes(true, 5, "test_lane", true);
+    // UGVNavViz::ShowLanes(true, 5, "test_lane", true);
     // for (auto &chn : map->traffic_map_->GetAllTrafficChannels())
     // {
-    //     // TrafficViz::ShowTrafficChannelCenterline(chn);
+    //     // UGVNavViz::ShowTrafficChannelCenterline(chn);
     //     chn->PrintInfo();
-    //     TrafficViz::ShowTrafficChannel(*chn.get(), 5);
+    //     UGVNavViz::ShowTrafficChannel(*chn.get(), 5);
     // }
 
     /****************************************************************************/
@@ -36,8 +37,8 @@ int main()
     // all_channels[1]->DiscretizeChannel(5, 1.2, 5);
     all_channels[1]->DiscretizeChannel(5, 1.2, 5);
 
-    // TrafficViz::ShowTrafficChannel(*all_channels[1].get());
-    // TrafficViz::ShowTrafficChannel(*all_channels[1].get(), 20, "horizontal_lane", true);
+    // UGVNavViz::ShowTrafficChannel(*all_channels[1].get());
+    // UGVNavViz::ShowTrafficChannel(*all_channels[1].get(), 20, "horizontal_lane", true);
 
     stopwatch::StopWatch timer;
     auto graph = LatticeGraph::Construct(all_channels[1], {0, 0}, 9);
@@ -48,8 +49,10 @@ int main()
         lattices.push_back(edge->cost_);
     std::cout << "number of vertices: " << graph->GetTotalVertexNumber() << std::endl;
 
-    // LightViz::ShowStateLattice(lattices);
-    TrafficViz::ShowLatticeInTrafficChannel(lattices, all_channels[1].get(), "lattice graph", true);
+#ifdef ENABLE_VIZ
+    // UGVNavViz::ShowStateLattice(loader.road_map, lattices);
+    // UGVNavViz::ShowLatticeInTrafficChannel(loader.road_map, lattices, all_channels[1].get(), "lattice graph", true);
+#endif 
 
     return 0;
 }

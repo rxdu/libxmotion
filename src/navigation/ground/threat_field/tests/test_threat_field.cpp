@@ -6,7 +6,12 @@
 #include "threat_field/threat_field.hpp"
 
 #include "stopwatch/stopwatch.h"
-#include "navviz/navviz.hpp"
+
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
@@ -14,8 +19,6 @@ int main()
 {
     // MapLoader loader("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane_horizontal.osm");
     MapLoader loader("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
-
-    TrafficViz::SetupTrafficViz(loader.road_map);
 
     //////////////////////////////////////////////////
 
@@ -75,13 +78,16 @@ int main()
     veh5.SetSpeedVariance(2 * 2);
 
     std::vector<Polygon> vehs = {veh1.GetFootprint(), veh2.GetFootprint(), veh3.GetFootprint(), veh4.GetFootprint(), veh5.GetFootprint()};
-    TrafficViz::ShowVehicle(vehs, "vehicle_config", true);
+    
+#ifdef ENABLE_VIZ
+    UGVNavViz::ShowVehicleOnMap(loader.road_map, vehs, "vehicle_config", true);
 
     // for(auto& veh:vehs)
-    //     TrafficViz::ShowVehicleInChannel(veh, *ego_chn1.get());
+    //     UGVNavViz::ShowVehicleInChannel(veh, *ego_chn1.get());
 
     // for(auto chn : loader.traffic_map->GetAllTrafficChannels())
-    //     TrafficViz::ShowVehicleInChannel(veh1.GetFootprint(), *chn.get());
+    //     UGVNavViz::ShowVehicleInChannel(veh1.GetFootprint(), *chn.get());
+#endif
 
     //////////////////////////////////////////////////
 
@@ -100,12 +106,14 @@ int main()
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    // TrafficViz::ShowThreatField(field, 4, true, "occupancy_estimation", true);
+#ifdef ENABLE_VIZ
+    // UGVNavViz::ShowThreatField(field, 4, true, "occupancy_estimation", true);
 
-    // TrafficViz::ShowThreatField(field, 3, true, "occupancy_estimation", false);
+    // UGVNavViz::ShowThreatField(field, 3, true, "occupancy_estimation", false);
 
     for (int i = 0; i < 9; i++)
-        TrafficViz::ShowThreatField(field, i, true, "occupancy_estimation_new" + std::to_string(i), true);
+        UGVNavViz::ShowThreatField(loader.road_map, field, i, true, "occupancy_estimation_new" + std::to_string(i), true);
+#endif
 
     return 0;
 }

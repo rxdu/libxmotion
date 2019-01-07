@@ -4,11 +4,14 @@
 
 #include "road_map/road_map.hpp"
 #include "traffic_map/map_loader.hpp"
-
 #include "local_planner/lattice_graph.hpp"
-#include "navviz/navviz.hpp"
-
 #include "stopwatch/stopwatch.h"
+
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
@@ -17,7 +20,7 @@ int main()
     // load map
     MapLoader loader("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
 
-    TrafficViz::SetupTrafficViz(loader.road_map, 10);
+    // 
 
     /****************************************************************************/
 
@@ -57,13 +60,13 @@ int main()
     VehicleEstimation veh5({40, 64, 171 / 180.0 * M_PI}, pos_covar5, 10, 2 * 2);
 
     // std::vector<Polygon> vehs = {veh1.GetFootprint(), veh2.GetFootprint(), veh3.GetFootprint(), veh4.GetFootprint(), veh5.GetFootprint()};
-    // TrafficViz::ShowVehicle(vehs);
+    // UGVNavViz::ShowVehicle(vehs);
 
     // for(auto& veh:vehs)
-    //     TrafficViz::ShowVehicleInChannel(veh, *ego_chn1.get());
+    //     UGVNavViz::ShowVehicleInChannel(veh, *ego_chn1.get());
 
     // for(auto chn : loader.traffic_map->GetAllTrafficChannels())
-    //     TrafficViz::ShowVehicleInChannel(veh1.GetFootprint(), *chn.get());
+    //     UGVNavViz::ShowVehicleInChannel(veh1.GetFootprint(), *chn.get());
 
     /****************************************************************************/
 
@@ -84,7 +87,7 @@ int main()
     std::cout << "number of vertices: " << graph->GetTotalVertexNumber() << std::endl;
 
     // LightViz::ShowStateLattice(lattices);
-    // TrafficViz::ShowLatticeInTrafficChannel(lattices, *ego_chn.get(), "lattice graph", true);
+    // UGVNavViz::ShowLatticeInTrafficChannel(lattices, *ego_chn.get(), "lattice graph", true);
 
     /****************************************************************************/
 
@@ -104,19 +107,19 @@ int main()
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    TrafficViz::ShowLatticeInThreatField(lattices, ego_chn.get(), field, 4, true, "lattice_in_threat_field", true);
+    // UGVNavViz::ShowLatticeInThreatField(lattices, ego_chn.get(), field, 4, true, "lattice_in_threat_field", true);
 
     //////////////////////////////////////////////////
 
-    // TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(2), true);
+    // UGVNavViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(2), true);
 
     // for (int i = 0; i < 9; i++)
     // {
     //     field.ComputeThreatField(i);
-    //     TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(i), true);
+    //     UGVNavViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(i), true);
     // }
 
-    TrafficViz::ShowTrafficChannelWithThreatField(ego_chn.get(), field, 4, true, "lattice_in_threat_field", true);
+    // UGVNavViz::ShowTrafficChannelWithThreatField(ego_chn.get(), field, 4, true, "lattice_in_threat_field", true);
 
     return 0;
 }

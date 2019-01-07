@@ -17,6 +17,7 @@
 
 #include "datalink/lcm_link.hpp"
 #include "lightview/lightviewer.hpp"
+#include "lightview/lightwidgets.hpp"
 
 #include "cav_common/vehicle_state.hpp"
 #include "road_map/road_map.hpp"

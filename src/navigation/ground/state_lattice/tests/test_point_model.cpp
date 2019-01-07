@@ -2,7 +2,12 @@
 #include <cstdint>
 
 #include "state_lattice/details/point_kinematics.hpp"
-// #include "navviz/navviz.hpp"
+
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 

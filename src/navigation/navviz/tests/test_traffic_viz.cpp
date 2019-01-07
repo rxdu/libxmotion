@@ -4,7 +4,7 @@
 #include "traffic_map/map_loader.hpp"
 
 #include "lightviz/lightviz.hpp"
-#include "navviz/navviz.hpp"
+#include "lightviz/navviz.hpp"
 
 using namespace librav;
 

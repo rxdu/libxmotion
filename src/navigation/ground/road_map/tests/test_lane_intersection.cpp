@@ -1,9 +1,6 @@
 #include <iostream>
 
 #include "road_map/road_map.hpp"
-
-#include "lightviz/lightviz.hpp"
-
 #include "stopwatch/stopwatch.h"
 
 using namespace librav;

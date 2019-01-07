@@ -6,7 +6,7 @@
 #include "threat_field/vehicle_threat.hpp"
 
 #include "stopwatch/stopwatch.h"
-// #include "navviz/navviz.hpp"
+// #include "lightviz/navviz.hpp"
 
 using namespace librav;
 
@@ -23,9 +23,7 @@ int main()
 
     stopwatch::StopWatch timer;
     vthreat.ComputeOccupancyDistribution(5);
-    std::cout << "propagation finished in " << timer.toc() << " seconds." << std::endl;
-
-    
+    std::cout << "propagation finished in " << timer.toc() << " seconds." << std::endl;   
 
     vthreat.PrintThreatRecordInfo();
 }

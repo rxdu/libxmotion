@@ -22,7 +22,9 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## Add other sub source directories
-add_subdirectory(cairodraw)
 add_subdirectory(cvdraw)
 add_subdirectory(coreviz)
 add_subdirectory(lightviz)
+# experimental (optinal)
+add_subdirectory(cairodraw)
+# add_subdirectory(vtkdraw)

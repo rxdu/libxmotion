@@ -7,7 +7,7 @@
 #include "connectivity/threat_evaluation.hpp"
 
 #include "local_planner/lattice_graph.hpp"
-#include "navviz/navviz.hpp"
+#include "lightviz/navviz.hpp"
 
 #include "stopwatch/stopwatch.h"
 

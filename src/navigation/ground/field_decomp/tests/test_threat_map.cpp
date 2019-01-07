@@ -2,13 +2,14 @@
 #include <cstdint>
 #include <cmath>
 
-#include "canvas/cv_draw.hpp"
-#include "lightviz/lightviz.hpp"
-#include "lightviz/details/geometry_draw.hpp"
-#include "lightviz/polygon_viz.hpp"
 #include "geometry/polygon.hpp"
-
 #include "field_decomp/threat_map.hpp"
+
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
@@ -17,14 +18,15 @@ int main()
     ThreatMap tmap(0.0, 0.0);
 
     ///////////////////////////////////////////////////////////
+ #ifdef ENABLE_VIZ
     // setup canvas
-    CartesianCanvas canvas(10);
-    canvas.SetupCanvas(-50, 50, -50, 50, CvDrawColors::jet_colormap_lowest);
-    GeometryDraw gdraw(canvas);
+    CvCanvas canvas(10, CvColors::jet_colormap_lowest);
+    canvas.Resize(-50, 50, -50, 50);
 
     // draw distribution
-    gdraw.DrawDistribution(0, 0, 50, 50, std::bind(tmap, std::placeholders::_1, std::placeholders::_2, -5, -20));
-    CvDraw::ShowImage(canvas.paint_area, "test field viz");
+    GeometryViz::DrawDistribution(canvas, 0, 0, 50, 50, std::bind(tmap, std::placeholders::_1, std::placeholders::_2, -5, -20));
+    CvIO::ShowImage(canvas.GetPaintArea(), "test field viz");
+#endif 
 
     return 0;
 }

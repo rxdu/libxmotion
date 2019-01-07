@@ -6,9 +6,13 @@
 #include "traffic_map/map_loader.hpp"
 
 #include "local_planner/lattice_graph.hpp"
-#include "navviz/navviz.hpp"
-
 #include "stopwatch/stopwatch.h"
+
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
@@ -18,16 +22,14 @@ int main()
     // MapLoader loader("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane_horizontal.osm");
     // MapLoader loader("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane.osm");
     // MapLoader loader("/home/rdu/Workspace/librav/data/road_map/short_segment.osm");
-    MapLoader loader("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
+    MapLoader loader("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");  
 
-    TrafficViz::SetupTrafficViz(loader.road_map, 10);
-
-    // TrafficViz::ShowLanes(true, 5, "test_lane", true);
+    // UGVNavViz::ShowLanes(true, 5, "test_lane", true);
     // for (auto &chn : map->traffic_map_->GetAllTrafficChannels())
     // {
-    //     // TrafficViz::ShowTrafficChannelCenterline(chn);
+    //     // UGVNavViz::ShowTrafficChannelCenterline(chn);
     //     chn->PrintInfo();
-    //     TrafficViz::ShowTrafficChannel(*chn.get(), 5);
+    //     UGVNavViz::ShowTrafficChannel(*chn.get(), 5);
     // }
 
     /****************************************************************************/
@@ -38,8 +40,8 @@ int main()
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels()[2];
     ego_chn->DiscretizeChannel(10, 1.2, 1);
 
-    // TrafficViz::ShowTrafficChannel(*all_channels[1].get());
-    // TrafficViz::ShowTrafficChannel(*all_channels[1].get(), 20, "horizontal_lane", true);
+    // UGVNavViz::ShowTrafficChannel(*all_channels[1].get());
+    // UGVNavViz::ShowTrafficChannel(*all_channels[1].get(), 20, "horizontal_lane", true);
 
     stopwatch::StopWatch timer;
 
@@ -52,7 +54,7 @@ int main()
     std::cout << "number of vertices: " << graph->GetTotalVertexNumber() << std::endl;
 
     // LightViz::ShowStateLattice(lattices);
-    // TrafficViz::ShowLatticeInTrafficChannel(lattices, *ego_chn.get(), "lattice graph", true);
+    // UGVNavViz::ShowLatticeInTrafficChannel(lattices, *ego_chn.get(), "lattice graph", true);
 
     /****************************************************************************/
 
@@ -112,13 +114,13 @@ int main()
     veh5.SetSpeedVariance(2 * 2);
 
     // std::vector<Polygon> vehs = {veh1.GetFootprint(), veh2.GetFootprint(), veh3.GetFootprint(), veh4.GetFootprint(), veh5.GetFootprint()};
-    // TrafficViz::ShowVehicle(vehs);
+    // UGVNavViz::ShowVehicle(vehs);
 
     // for(auto& veh:vehs)
-    //     TrafficViz::ShowVehicleInChannel(veh, *ego_chn1.get());
+    //     UGVNavViz::ShowVehicleInChannel(veh, *ego_chn1.get());
 
     // for(auto chn : loader.traffic_map->GetAllTrafficChannels())
-    //     TrafficViz::ShowVehicleInChannel(veh1.GetFootprint(), *chn.get());
+    //     UGVNavViz::ShowVehicleInChannel(veh1.GetFootprint(), *chn.get());
 
     /****************************************************************************/
 
@@ -138,16 +140,18 @@ int main()
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    TrafficViz::ShowLatticeInThreatField(lattices, ego_chn.get(), field, 4, true, "lattice_in_threat_field", true);
+#ifdef ENABLE_VIZ
+    UGVNavViz::ShowLatticeInThreatField(loader.road_map, lattices, ego_chn.get(), field, 4, true, "lattice_in_threat_field", true);
+#endif 
 
     //////////////////////////////////////////////////
 
-    // TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(2), true);
+    // UGVNavViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(2), true);
 
     // for (int i = 0; i < 9; i++)
     // {
     //     field.UpdateThreatField(i);
-    //     TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(i), true);
+    //     UGVNavViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(i), true);
     // }
 
     return 0;

@@ -6,7 +6,12 @@
 #include "threat_field/threat_field.hpp"
 
 #include "stopwatch/stopwatch.h"
-#include "navviz/navviz.hpp"
+
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
@@ -14,8 +19,6 @@ int main()
 {
     // MapLoader loader("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane_horizontal.osm");
     MapLoader loader("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
-
-    TrafficViz::SetupTrafficViz(loader.road_map);
 
     //////////////////////////////////////////////////
 
@@ -75,13 +78,13 @@ int main()
     veh5.SetSpeedVariance(2 * 2);
 
     // std::vector<Polygon> vehs = {veh1.GetFootprint(), veh2.GetFootprint(), veh3.GetFootprint(), veh4.GetFootprint(), veh5.GetFootprint()};
-    // TrafficViz::ShowVehicle(vehs);
+    // UGVNavViz::ShowVehicle(vehs);
 
     // for(auto& veh:vehs)
-    //     TrafficViz::ShowVehicleInChannel(veh, *ego_chn1.get());
+    //     UGVNavViz::ShowVehicleInChannel(veh, *ego_chn1.get());
 
     // for(auto chn : loader.traffic_map->GetAllTrafficChannels())
-    //     TrafficViz::ShowVehicleInChannel(veh1.GetFootprint(), *chn.get());
+    //     UGVNavViz::ShowVehicleInChannel(veh1.GetFootprint(), *chn.get());
 
     //////////////////////////////////////////////////
 
@@ -100,10 +103,10 @@ int main()
 
     // std::cout << "------------- all calculation finished -------------" << std::endl;
 
-    // TrafficViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(2), true);
+    // UGVNavViz::ShowThreatField(field, true, "occupancy_estimation" + std::to_string(2), true);
 
     // for (int i = 0; i < 5; i++)
-    //     TrafficViz::ShowThreatField(field, i, true, "occupancy_estimation" + std::to_string(i), false);
+    //     UGVNavViz::ShowThreatField(field, i, true, "occupancy_estimation" + std::to_string(i), false);
     timer.tic();
     for (int i = 0; i < 5; i++)
         for (int j = 0; j < 200; ++j)
@@ -119,7 +122,6 @@ int main()
             field(50, 50, 1);
             
     std::cout << "query2 finished in average: " << timer.toc() / 1000 << std::endl;
-    ;
 
     return 0;
 }

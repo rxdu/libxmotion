@@ -5,11 +5,15 @@
 #include "road_map/road_map.hpp"
 #include "traffic_map/map_loader.hpp"
 #include "connectivity/threat_evaluation.hpp"
-
 #include "local_planner/lattice_graph.hpp"
-#include "navviz/navviz.hpp"
 
 #include "stopwatch/stopwatch.h"
+
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
@@ -17,8 +21,6 @@ int main()
 {
     // load map
     MapLoader loader("/home/rdu/Workspace/librav/data/road_map/intersection_single_lane_full.osm");
-
-    TrafficViz::SetupTrafficViz(loader.road_map, 10);
 
     /****************************************************************************/
 
@@ -83,7 +85,7 @@ int main()
 
     LookaheadZone zone(traj);
 
-    // TrafficViz::ShowLatticePathWithLookaheadZone(path, zone, *ego_chn.get(), "path with lookahead");
+    // UGVNavViz::ShowLatticePathWithLookaheadZone(path, zone, *ego_chn.get(), "path with lookahead");
 
     /****************************************************************************/
 
@@ -95,16 +97,18 @@ int main()
     ranker.Evaluate(eval_horizon);
     std::cout << "evaluation finished in " << timer.toc() << " seconds" << std::endl;
 
-    // TrafficViz::ShowTrafficChannelWithThreatField(*ego_chn.get(), ranker.field_, 4, true, "lattice_in_threat_field", true);
+#ifdef ENABLE_VIZ
+    // UGVNavViz::ShowTrafficChannelWithThreatField(*ego_chn.get(), ranker.field_, 4, true, "lattice_in_threat_field", true);
 
     for (int i = 0; i <= eval_horizon; i++)
-        TrafficViz::ShowThreatField(ranker.field_, i, true, "occupancy_estimation_new" + std::to_string(i), false);
+        UGVNavViz::ShowThreatField(loader.road_map, ranker.field_, i, true, "occupancy_estimation_new" + std::to_string(i), false);
 
     for (int32_t i = 0; i <= eval_horizon; ++i)
     {
         std::cout << "passing in: " << i << std::endl;
-        TrafficViz::ShowPathWithThreatField(path, zone, ranker.field_, i, 0.5, "threat_exposure" + std::to_string(i), true);
+        UGVNavViz::ShowPathWithThreatField(loader.road_map, path, zone, ranker.field_, i, 0.5, "threat_exposure" + std::to_string(i), true);
     }
+#endif
 
     return 0;
 }

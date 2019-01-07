@@ -1,7 +1,12 @@
 #include <iostream>
 
 #include "reachability/details/tstate_transition_sim.hpp"
-#include "navviz/navviz.hpp"
+
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
@@ -21,7 +26,9 @@ int main()
 
     sim.RunSim(5);
 
+#ifdef ENABLE_VIZ
     LightViz::ShowTStateSpace(*sim.state_space_.get());
+#endif
 
     return 0;
 }

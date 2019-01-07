@@ -7,8 +7,11 @@
 
 #include "stopwatch/stopwatch.h"
 
-#include "lightviz/lightviz.hpp"
-#include "navviz/navviz.hpp"
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
@@ -29,8 +32,10 @@ int main()
     fp.AddPoint(-0.9, -2.4);
     fp.AddPoint(0.9, -2.4);
 
+#ifdef ENABLE_VIZ
     // plot surface
     LightViz::ShowTrafficParticipantThreat(participant, fp, 15);//, "true_threat", true);
+#endif
 
     return 0;
 }

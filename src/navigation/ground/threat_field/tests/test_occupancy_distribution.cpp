@@ -4,16 +4,18 @@
 
 #include "traffic_map/map_loader.hpp"
 #include "threat_field/vehicle_threat.hpp"
-
 #include "stopwatch/stopwatch.h"
-#include "navviz/navviz.hpp"
 
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 using namespace librav;
 
 int main()
 {
     MapLoader loader("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane_horizontal.osm");
-    TrafficViz::SetupTrafficViz(loader.road_map);
 
     //////////////////////////////////////////////////
 
@@ -25,7 +27,7 @@ int main()
     veh1.SetSpeedVariance(2 * 2);
 
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels().back();
-    // TrafficViz::ShowVehicleInChannel(veh1.GetFootprint(), *ego_chn.get());
+    // UGVNavViz::ShowVehicleInChannel(veh1.GetFootprint(), *ego_chn.get());
 
     stopwatch::StopWatch timer;
 
@@ -38,8 +40,10 @@ int main()
 
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
+#ifdef ENABLE_VIZ
     for (int i = 0; i < 4; ++i)
-        TrafficViz::ShowVehicleOccupancyDistribution(ct1, i, "occupancy_estimation");
+        UGVNavViz::ShowVehicleOccupancyDistribution(loader.road_map, ct1, i, "occupancy_estimation");
+#endif 
 
     return 0;
 }

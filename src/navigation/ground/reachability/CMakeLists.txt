@@ -26,6 +26,8 @@ target_include_directories(reachability PUBLIC
   $<INSTALL_INTERFACE:include>
   PRIVATE src)
 
+add_subdirectory(apps)
+
 if(BUILD_TESTS)
   add_subdirectory(tests)
 endif()
