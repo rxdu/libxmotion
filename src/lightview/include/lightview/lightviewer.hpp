@@ -18,7 +18,12 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-#include <GL/gl3w.h>
+// #include <GL/gl3w.h>
+// #include <GL/gl.h>
+#include <GL/glew.h>
+#include <GL/glu.h>
+
+// Include glfw3.h after OpenGL definitions
 #include <GLFW/glfw3.h>
 
 namespace librav
@@ -46,6 +51,9 @@ class LightViewer
 
     void PreHouseKeeping();
     void PostHousekeeping();
+    // Note: PostHousekeeping() = PrepareOpenGLDraw() + RenderData()
+    void PrepareOpenGLDraw(int &display_w, int &display_h);
+    void RenderData();
 };
 } // namespace librav
 

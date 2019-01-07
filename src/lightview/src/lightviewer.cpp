@@ -70,7 +70,8 @@ bool LightViewer::SetupViewer(int width, int hight, std::string title, bool dark
     glfwSwapInterval(1); // Enable vsync
 
     // Initialize OpenGL loader
-    if (gl3wInit() != 0)
+    // if (gl3wInit() != 0)
+    if (glewInit() != GLEW_OK)
     {
         std::cerr << "Failed to initialize OpenGL loader!" << std::endl;
         return false;
@@ -120,6 +121,25 @@ void LightViewer::PostHousekeeping()
     glViewport(0, 0, display_w, display_h);
     glClearColor(clear_color_.x, clear_color_.y, clear_color_.z, clear_color_.w);
     glClear(GL_COLOR_BUFFER_BIT);
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    glfwMakeContextCurrent(window_);
+    glfwSwapBuffers(window_);
+}
+
+void LightViewer::PrepareOpenGLDraw(int &display_w, int &display_h)
+{
+    ImGui::Render();
+    // int display_w, display_h;
+    glfwMakeContextCurrent(window_);
+    glfwGetFramebufferSize(window_, &display_w, &display_h);
+    glViewport(0, 0, display_w, display_h);
+    glClearColor(clear_color_.x, clear_color_.y, clear_color_.z, clear_color_.w);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void LightViewer::RenderData()
+{
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     glfwMakeContextCurrent(window_);
