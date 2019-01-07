@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdint>
 
-// #define SHOW_TREE_GROWTH
+#define SHOW_TREE_GROWTH
 
 #include "sampling/rrg.hpp"
 #include "sampling/space/realvector_space.hpp"

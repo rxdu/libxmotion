@@ -24,7 +24,7 @@
 // #define SHOW_TREE_GROWTH
 
 #ifdef SHOW_TREE_GROWTH
-#include "lightviz/details/rrt_draw.hpp"
+#include "coreviz/rrt_draw.hpp"
 #endif
 
 namespace librav
@@ -54,10 +54,9 @@ class RRG : public PlannerBase<Space, Tree>
         assert(BaseType::Steer != nullptr);
 
 #ifdef SHOW_TREE_GROWTH
-        CartesianCanvas canvas(50);
-        canvas.SetupCanvas(BaseType::space_->GetBounds()[0].GetLow(), BaseType::space_->GetBounds()[0].GetHigh(),
+        CvCanvas canvas(50);
+        canvas.Resize(BaseType::space_->GetBounds()[0].GetLow(), BaseType::space_->GetBounds()[0].GetHigh(),
                            BaseType::space_->GetBounds()[1].GetLow(), BaseType::space_->GetBounds()[1].GetHigh());
-        RRTDraw rrtdraw(canvas);
 #endif
 
         int32_t iter_num = 10000;
@@ -92,8 +91,8 @@ class RRG : public PlannerBase<Space, Tree>
                 BaseType::tree_.ConnectTreeNodes(nearest, new_state, nearest_to_new_dist);
 
 #ifdef SHOW_TREE_GROWTH
-                rrtdraw.DrawStraightBranch(nearest, new_state);
-                CvDraw::ShowImageFrame(canvas.paint_area, "RRG");
+                RRTViz::DrawStraightBranch(canvas, nearest, new_state);
+                CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG");
 #endif
 
                 // 6. Make connections with vertices that lie within a ball of certain radius
@@ -119,8 +118,8 @@ class RRG : public PlannerBase<Space, Tree>
                         BaseType::tree_.ConnectTreeNodes(ns, new_state, nearest_to_new_dist);
                     }
 #ifdef SHOW_TREE_GROWTH
-                    rrtdraw.DrawStraightBranch(ns, new_state);
-                    CvDraw::ShowImageFrame(canvas.paint_area, "RRG");
+                    RRTViz::DrawStraightBranch(canvas, ns, new_state);
+                    CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG");
 #endif
                 }
 
@@ -136,9 +135,9 @@ class RRG : public PlannerBase<Space, Tree>
                     std::cout << "candidate path found at iteration " << k << std::endl;
 
 #ifdef SHOW_TREE_GROWTH
-                    rrtdraw.DrawStraightBranch(new_state, goal);
-                    // rrtdraw.DrawStraightPath(path);
-                    CvDraw::ShowImageFrame(canvas.paint_area, "RRG");
+                    RRTViz::DrawStraightBranch(canvas, new_state, goal);
+                    // RRTViz::DrawStraightPath(canvas, path);
+                    CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG");
 #endif
                 }
             }
@@ -150,8 +149,8 @@ class RRG : public PlannerBase<Space, Tree>
             // reconstructing path
             path = Dijkstra::Search(&(BaseType::tree_), start, goal);
 #ifdef SHOW_TREE_GROWTH
-            rrtdraw.DrawStraightPath(path);
-            CvDraw::ShowImageFrame(canvas.paint_area, "RRG", 0);
+            RRTViz::DrawStraightPath(canvas, path);
+            CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG", 0);
 #endif
             for (auto &wp : path)
                 std::cout << *wp << std::endl;

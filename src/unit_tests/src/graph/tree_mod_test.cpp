@@ -121,10 +121,10 @@ TEST_F(TreeModificationTest, EdgeMod)
     ASSERT_EQ(edges.size(), 1) << "Wrong number of edges added to vertex in pointer-type tree";
     ASSERT_EQ(edges.front()->src_->vertex_id_, 0) << "Wrong src of edges added to vertex in pointer-type tree";
     ASSERT_EQ(edges.front()->dst_->vertex_id_, 1) << "Wrong dst of edges added to vertex in pointer-type tree";
-    ASSERT_EQ(edges.front()->cost_, 1.2) << "Wrong cost of edges added to vertex in pointer-type tree";
+    ASSERT_EQ(edges.front()->trans_, 1.2) << "Wrong cost of edges added to vertex in pointer-type tree";
 
     ASSERT_EQ(tree.FindVertex(nodes[1])->edges_to_.size(), 1) << "Failed to add edge to vertex";
-    ASSERT_EQ(tree.FindVertex(nodes[2])->vertices_from_.size(), 1) << "Failed to maintain list of vertices_from_";
+    ASSERT_EQ(tree.FindVertex(nodes[2])->parent_vertex_, tree.FindVertex(nodes[1])) << "Failed to maintain parent_vertex_";
 
     tree.RemoveEdge(nodes[1], nodes[2]);
 
@@ -151,15 +151,15 @@ TEST_F(TreeModificationTest, EdgeMod)
     edges.clear();
     for (auto it = tree.FindVertex(0)->edge_begin(); it != tree.FindVertex(0)->edge_end(); ++it)
         edges.push_back(it);
-    bool edge_intact = (edges.size() == 1) && (edges.front()->src_->vertex_id_ == 0) && (edges.front()->dst_->vertex_id_ == 1) && (edges.front()->cost_ == 1.2);
+    bool edge_intact = (edges.size() == 1) && (edges.front()->src_->vertex_id_ == 0) && (edges.front()->dst_->vertex_id_ == 1) && (edges.front()->trans_ == 1.2);
     ASSERT_TRUE(edge_intact) << "A wrong edge is removed from pointer-type tree";
 
-    tree.AddUndirectedEdge(nodes[3], nodes[4], 1.8);
-    tree.AddUndirectedEdge(nodes[4], nodes[5], 2.0);
-    ASSERT_EQ(tree.GetTotalEdgeNumber(), 5) << "Failed to add a unedge from pointer-type tree";
+    tree.AddEdge(nodes[3], nodes[4], 1.8);
+    tree.AddEdge(nodes[4], nodes[5], 2.0);
+    ASSERT_EQ(tree.GetTotalEdgeNumber(), 5) << "Failed to add a edge from pointer-type tree";
 
-    tree.RemoveUndirectedEdge(nodes[4], nodes[5]);
-    ASSERT_EQ(tree.GetTotalEdgeNumber(), 4) << "Failed to remove a unedge from pointer-type tree";
+    tree.RemoveEdge(nodes[4], nodes[5]);
+    ASSERT_EQ(tree.GetTotalEdgeNumber(), 4) << "Failed to remove a edge from pointer-type tree";
 }
 
 TEST_F(TreeModificationTest, SubtreeMod)
@@ -236,9 +236,9 @@ TEST_F(TreeModificationTest, VertexAccessEdge)
     ASSERT_TRUE(nids.size() == 3) << "Tree should have 3 neighbors";
     ASSERT_TRUE(nids == nc) << "Tree should have 3 neighbors";
 
-    auto edge_cost1 = tree.FindVertex(0)->FindEdge(1)->cost_;
-    auto edge_cost2 = tree.FindVertex(0)->FindEdge(2)->cost_;
-    auto edge_cost3 = tree.FindVertex(0)->FindEdge(3)->cost_;
+    auto edge_cost1 = tree.FindVertex(0)->FindEdge(1)->trans_;
+    auto edge_cost2 = tree.FindVertex(0)->FindEdge(2)->trans_;
+    auto edge_cost3 = tree.FindVertex(0)->FindEdge(3)->trans_;
 
     ASSERT_TRUE(edge_cost1 == 1.2) << "Edge cost to vertex 1 should be 1.2";
     ASSERT_TRUE(edge_cost2 == 1.5) << "Edge cost to vertex 2 should be 1.5";

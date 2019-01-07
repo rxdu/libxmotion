@@ -312,8 +312,8 @@ template <typename State, typename Transition = double, typename StateIndexer = 
 using Graph_t = Graph<State, Transition, StateIndexer>;
 } // namespace librav
 
-#include "graph/details/edge_impl.hpp"
-#include "graph/details/vertex_impl.hpp"
-#include "graph/details/graph_impl.hpp"
+#include "graph/details/graph/graph_edge_impl.hpp"
+#include "graph/details/graph/graph_vertex_impl.hpp"
+#include "graph/details/graph/graph_impl.hpp"
 
 #endif /* GRAPH_HPP */

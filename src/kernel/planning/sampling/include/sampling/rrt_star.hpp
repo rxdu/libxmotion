@@ -22,7 +22,7 @@
 // #define SHOW_TREE_GROWTH
 
 #ifdef SHOW_TREE_GROWTH
-#include "lightviz/details/rrt_draw.hpp"
+#include "coreviz/rrt_draw.hpp"
 #endif
 
 namespace librav
@@ -52,10 +52,9 @@ class RRTStar : public PlannerBase<Space, Tree>
         assert(BaseType::Steer != nullptr);
 
 #ifdef SHOW_TREE_GROWTH
-        CartesianCanvas canvas(50);
-        canvas.SetupCanvas(BaseType::space_->GetBounds()[0].GetLow(), BaseType::space_->GetBounds()[0].GetHigh(),
+        CvCanvas canvas(50);
+        canvas.Resize(BaseType::space_->GetBounds()[0].GetLow(), BaseType::space_->GetBounds()[0].GetHigh(),
                            BaseType::space_->GetBounds()[1].GetLow(), BaseType::space_->GetBounds()[1].GetHigh());
-        RRTDraw rrtdraw(canvas);
 #endif
 
         int32_t iter_num = 10000;
@@ -115,9 +114,9 @@ class RRTStar : public PlannerBase<Space, Tree>
                     BaseType::tree_.ConnectTreeNodes(min_state, new_state, min_dist);
 
 // #ifdef SHOW_TREE_GROWTH
-//                     canvas.ClearCanvas();
-//                     rrtdraw.DrawTree(&(BaseType::tree_));
-//                     CvDraw::ShowImageFrame(canvas.paint_area, "RRT*");
+//                     canvas.Clear();
+//                     RRTViz::DrawTree(canvas, &(BaseType::tree_));
+//                     CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRT*");
 // #endif
 
                     if (BaseType::CheckGoal(new_state, goal, BaseType::extend_step_size_))
@@ -153,10 +152,10 @@ class RRTStar : public PlannerBase<Space, Tree>
         }
 
 #ifdef SHOW_TREE_GROWTH
-        canvas.ClearCanvas();
-        rrtdraw.DrawTree(&(BaseType::tree_));
-        rrtdraw.DrawStraightPath(path);
-        CvDraw::ShowImageFrame(canvas.paint_area, "RRT*", 0);
+        canvas.Clear();
+        RRTViz::DrawTree(canvas, &(BaseType::tree_));
+        RRTViz::DrawStraightPath(canvas, path);
+        CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRT*", 0);
 #endif
 
         return path;

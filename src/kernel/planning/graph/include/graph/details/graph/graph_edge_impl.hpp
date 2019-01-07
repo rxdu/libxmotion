@@ -1,5 +1,5 @@
 /* 
- * edge_impl.hpp
+ * graph_edge_impl.hpp
  * 
  * Created on: Sep 04, 2018 01:37
  * Description: 
@@ -7,8 +7,8 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#ifndef EDGE_IMPL_HPP
-#define EDGE_IMPL_HPP
+#ifndef GRAPH_EDGE_IMPL_HPP
+#define GRAPH_EDGE_IMPL_HPP
 
 namespace librav
 {
@@ -28,4 +28,4 @@ void Graph<State, Transition, StateIndexer>::Edge::PrintEdge()
 
 } // namespace librav
 
-#endif /* EDGE_IMPL_HPP */
+#endif /* GRAPH_EDGE_IMPL_HPP */
