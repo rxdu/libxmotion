@@ -33,16 +33,16 @@ int main()
     std::cout << "start: " << *sstate << std::endl;
     std::cout << "goal: " << *gstate << std::endl;
 
-    rrg.SetExtendStepSize(3.0);
-    rrg.SetSteerFunction(RVStraightSteer<N>(&rvspace, 3.0));
+    rrg.SetExtendStepSize(5.0);
+    rrg.SetSteerFunction(RVStraightSteer<N>(&rvspace, 5.0));
 
     RVPolygonValidityChecker checker;
     rrg.SetStateValidityChecker(checker);
     rrg.SetPathValidityChecker(checker);
 
-    rrg.SetOptimizationConstant(30);
+    rrg.SetOptimizationConstant(50);
 
-    auto path = rrg.Search(sstate, gstate, 1000);
+    auto path = rrg.Search(sstate, gstate, 200);
 
     double distance = 0;
     for (int i = 0; i < path.size() - 1; ++i)

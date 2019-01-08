@@ -35,6 +35,31 @@ void DrawTree(CvCanvas &canvas, TreeType *tree)
     }
 }
 
+template <typename GraphType>
+void DrawGraph(CvCanvas &canvas, GraphType *graph)
+{
+    // draw all vertices
+    for (auto vertex = graph->vertex_begin(); vertex != graph->vertex_end(); ++vertex)
+    {
+        // current vertex center coordinate
+        int32_t loc_x = vertex->state_->values_[0];
+        int32_t loc_y = vertex->state_->values_[1];
+        CPoint center(loc_x, loc_y);
+        canvas.DrawPoint(center, 2, CvColors::green_color);
+    }
+
+    // draw all edges
+    auto edges = graph->GetAllEdges();
+    for (auto &edge_it : edges)
+    {
+        auto edge = *edge_it;
+        CPoint pt1(edge.src_->state_->values_[0], edge.src_->state_->values_[1]);
+        CPoint pt2(edge.dst_->state_->values_[0], edge.dst_->state_->values_[1]);
+        // canvas.DrawLine(pt1, pt2, cv::Scalar(237, 149, 100));
+        canvas.DrawLine(pt1, pt2, CvColors::silver_color);
+    }
+}
+
 template <typename StateType>
 void DrawStraightBranch(CvCanvas &canvas, StateType *start, StateType *end)
 {

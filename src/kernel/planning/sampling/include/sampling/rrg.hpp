@@ -56,7 +56,7 @@ class RRG : public PlannerBase<Space, Tree>
 #ifdef SHOW_TREE_GROWTH
         CvCanvas canvas(50);
         canvas.Resize(BaseType::space_->GetBounds()[0].GetLow(), BaseType::space_->GetBounds()[0].GetHigh(),
-                           BaseType::space_->GetBounds()[1].GetLow(), BaseType::space_->GetBounds()[1].GetHigh());
+                      BaseType::space_->GetBounds()[1].GetLow(), BaseType::space_->GetBounds()[1].GetHigh());
 #endif
 
         int32_t iter_num = 10000;
@@ -91,8 +91,8 @@ class RRG : public PlannerBase<Space, Tree>
                 BaseType::tree_.ConnectTreeNodes(nearest, new_state, nearest_to_new_dist);
 
 #ifdef SHOW_TREE_GROWTH
-                RRTViz::DrawStraightBranch(canvas, nearest, new_state);
-                CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG");
+                // RRTViz::DrawStraightBranch(canvas, nearest, new_state);
+                // CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG");
 #endif
 
                 // 6. Make connections with vertices that lie within a ball of certain radius
@@ -106,7 +106,7 @@ class RRG : public PlannerBase<Space, Tree>
                 }
                 else
                     radius = fixed_radius_;
-                auto near_states = BaseType::tree_.FindNear(rand_state, radius);
+                auto near_states = BaseType::tree_.FindNear(new_state, radius);
 
                 for (auto &ns : near_states)
                 {
@@ -115,32 +115,30 @@ class RRG : public PlannerBase<Space, Tree>
 
                     if (BaseType::CheckPathValidity(nearest, new_state))
                     {
-                        BaseType::tree_.ConnectTreeNodes(ns, new_state, nearest_to_new_dist);
-                    }
+                        BaseType::tree_.ConnectTreeNodes(ns, new_state, BaseType::space_->EvaluateDistance(ns, new_state));
 #ifdef SHOW_TREE_GROWTH
-                    RRTViz::DrawStraightBranch(canvas, ns, new_state);
-                    CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG");
+                        // RRTViz::DrawStraightBranch(canvas, ns, new_state);
+                        // CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG");
 #endif
+                    }
                 }
-
-                if (k % 100 == 0)
-                    std::cout << "iteration passed: " << k << std::endl;
 
                 // check goal
                 if (BaseType::CheckGoal(new_state, goal, BaseType::extend_step_size_))
                 {
                     BaseType::tree_.ConnectTreeNodes(new_state, goal, BaseType::space_->EvaluateDistance(new_state, goal));
-                    state_to_goal_candidates.push_back(rand_state);
+                    state_to_goal_candidates.push_back(new_state);
 
                     std::cout << "candidate path found at iteration " << k << std::endl;
 
 #ifdef SHOW_TREE_GROWTH
-                    RRTViz::DrawStraightBranch(canvas, new_state, goal);
-                    // RRTViz::DrawStraightPath(canvas, path);
-                    CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG");
+                    // RRTViz::DrawStraightBranch(canvas, new_state, goal);
+                    // CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG");
 #endif
                 }
             }
+
+            // BaseType::tree_.PrintTreeInfo();
         }
 
         PathType path;
@@ -149,6 +147,8 @@ class RRG : public PlannerBase<Space, Tree>
             // reconstructing path
             path = Dijkstra::Search(&(BaseType::tree_), start, goal);
 #ifdef SHOW_TREE_GROWTH
+            canvas.Clear();
+            RRTViz::DrawGraph(canvas, &(BaseType::tree_));
             RRTViz::DrawStraightPath(canvas, path);
             CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG", 0);
 #endif

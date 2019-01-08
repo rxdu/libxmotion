@@ -58,14 +58,21 @@ class KdGraph : public Graph<typename Space::StateType *, double>, public TreeAd
 
     void ConnectTreeNodes(StateType *sstate, StateType *dstate, double dist) final
     {
+        if (TreeType::FindVertex(sstate) == TreeType::vertex_end())
+            kdtree_.insert(sstate);
+        if (TreeType::FindVertex(dstate) == TreeType::vertex_end())
+            kdtree_.insert(dstate);
         TreeType::AddUndirectedEdge(sstate, dstate, dist);
-        kdtree_.insert(sstate);
-        kdtree_.insert(dstate);
     }
 
     void DisconnectTreeNodes(StateType *sstate, StateType *dstate) final
     {
         TreeType::RemoveUndirectedEdge(sstate, dstate);
+    }
+
+    void PrintTreeInfo()
+    {
+        std::cout << "nodes in graph: " << TreeType::GetTotalVertexNumber() << " , nodes in kd tree: " << kdtree_.size() << std::endl;
     }
 
     std::size_t GetTotalTreeNodeNumber() final
