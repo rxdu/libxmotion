@@ -23,5 +23,8 @@ target_link_libraries(test_markov_command2 reachability utils)
 add_executable(test_markov_motion test_markov_motion.cpp)
 target_link_libraries(test_markov_motion reachability utils)
 
+add_executable(test_bigaussian test_bigaussian.cpp)
+target_link_libraries(test_bigaussian reachability logging)
+
 add_executable(test_matrix test_matrix.cpp)
 # target_link_libraries(test_matrix)
