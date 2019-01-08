@@ -29,7 +29,8 @@ void DrawTree(CvCanvas &canvas, TreeType *tree)
         {
             CPoint pt1(it->state_->values_[0], it->state_->values_[1]);
             CPoint pt2(child->state_->values_[0], child->state_->values_[1]);
-            canvas.DrawLine(pt1, pt2);
+            canvas.DrawLine(pt1, pt2, CvColors::silver_color);
+            canvas.DrawPoint(pt2, 2, CvColors::green_color);
         }
     }
 }
@@ -39,7 +40,8 @@ void DrawStraightBranch(CvCanvas &canvas, StateType *start, StateType *end)
 {
     CPoint pt1(start->values_[0], start->values_[1]);
     CPoint pt2(end->values_[0], end->values_[1]);
-    canvas.DrawLine(pt1, pt2);
+    canvas.DrawLine(pt1, pt2, CvColors::silver_color);
+    canvas.DrawPoint(pt2, 2, CvColors::green_color);
 }
 
 template <typename StateType>
@@ -58,8 +60,8 @@ void DrawStraightPath(CvCanvas &canvas, std::vector<StateType *> path)
     auto end = path.back();
     CPoint pt1(start->values_[0], start->values_[1]);
     CPoint pt2(end->values_[0], end->values_[1]);
-    canvas.DrawPoint(pt1, 3, CvColors::start_color);
-    canvas.DrawPoint(pt2, 3, CvColors::finish_color);
+    canvas.DrawPoint(pt1, 5, CvColors::start_color);
+    canvas.DrawPoint(pt2, 5, CvColors::finish_color);
 }
 }; // namespace RRTViz
 } // namespace librav

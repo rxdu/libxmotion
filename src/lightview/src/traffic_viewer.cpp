@@ -11,7 +11,7 @@
 
 #include <cassert>
 
-#include "coreviz/coreviz.hpp"
+#include "cvdraw/cvdraw.hpp"
 #include "navviz/roadmap_draw.hpp"
 #include "navviz/vehicle_draw.hpp"
 

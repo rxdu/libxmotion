@@ -50,7 +50,7 @@ class KdGraph : public Graph<typename Space::StateType *, double>, public TreeAd
                                                spatial::accessor_less<StateAccessor, StateType *>>;
 
   public:
-    void AddTreeNode(StateType *sstate) final
+    void AddTreeRootNode(StateType *sstate) final
     {
         TreeType::AddVertex(sstate);
         kdtree_.insert(sstate);

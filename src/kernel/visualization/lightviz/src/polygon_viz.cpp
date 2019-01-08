@@ -11,7 +11,7 @@
 
 #include <cmath>
 
-#include "coreviz/coreviz.hpp"
+#include "coreviz/geometry_draw.hpp"
 
 using namespace librav;
 using namespace LightViz;

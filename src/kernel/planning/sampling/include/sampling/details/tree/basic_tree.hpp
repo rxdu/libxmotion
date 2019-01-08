@@ -32,7 +32,7 @@ class BasicTree : public Tree<typename Space::StateType *, double>, public TreeA
     using TreeAdapter<Space>::TreeAdapter;
 
   public:
-    void AddTreeNode(StateType *sstate) final
+    void AddTreeRootNode(StateType *sstate) final
     {
         TreeType::AddVertex(sstate);
     }

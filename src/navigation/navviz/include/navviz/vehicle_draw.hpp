@@ -14,7 +14,7 @@
 #include "geometry/polygon.hpp"
 #include "threat_field/dynamic_threat_model.hpp"
 
-#include "coreviz/coreviz.hpp"
+#include "cvdraw/cvdraw.hpp"
 
 namespace librav
 {

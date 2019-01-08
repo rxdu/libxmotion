@@ -11,11 +11,6 @@
 
 #include <cassert>
 
-#include "coreviz/coreviz.hpp"
-#include "navviz/roadmap_draw.hpp"
-#include "navviz/vehicle_draw.hpp"
-
-#include "traffic_map/map_loader.hpp"
 #include "cav_common/cav_datalink.hpp"
 
 #include "drawstuff/drawstuff.h"

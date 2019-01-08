@@ -9,6 +9,7 @@
 
 #include "navviz/vehicle_draw.hpp"
 #include "geometry/simple_point.hpp"
+#include "coreviz/geometry_draw.hpp"
 
 namespace librav
 {

@@ -1,6 +1,6 @@
 #include <iostream>
 #include "image_io/image_io.hpp"
-#include "lightviz/lightviz.hpp"
+#include "cvdraw/cvdraw.hpp"
 
 using namespace librav;
 

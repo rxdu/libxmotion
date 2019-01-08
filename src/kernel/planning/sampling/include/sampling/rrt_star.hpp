@@ -52,9 +52,9 @@ class RRTStar : public PlannerBase<Space, Tree>
         assert(BaseType::Steer != nullptr);
 
 #ifdef SHOW_TREE_GROWTH
-        CvCanvas canvas(50);
+        CvCanvas canvas(80);
         canvas.Resize(BaseType::space_->GetBounds()[0].GetLow(), BaseType::space_->GetBounds()[0].GetHigh(),
-                           BaseType::space_->GetBounds()[1].GetLow(), BaseType::space_->GetBounds()[1].GetHigh());
+                      BaseType::space_->GetBounds()[1].GetLow(), BaseType::space_->GetBounds()[1].GetHigh());
 #endif
 
         int32_t iter_num = 10000;
@@ -62,7 +62,7 @@ class RRTStar : public PlannerBase<Space, Tree>
             iter_num = iter;
 
         // add start state to tree
-        BaseType::tree_.AddTreeNode(start);
+        BaseType::tree_.AddTreeRootNode(start);
 
         PathType path;
         std::vector<StateType *> state_to_goal_candidates;
@@ -84,10 +84,10 @@ class RRTStar : public PlannerBase<Space, Tree>
 
             if (BaseType::CheckPathValidity(nearest, new_state))
             {
+                // 3. Find the best parent vertex for new_state from neare vertices
                 auto min_state = nearest;
                 auto min_dist = nearest_to_new_dist;
 
-                // 3. Compute the set of all near vertices and find the best parent vertex for new_state
                 double radius;
                 if (!use_fixed_radius_)
                 {
@@ -99,41 +99,41 @@ class RRTStar : public PlannerBase<Space, Tree>
                 else
                     radius = fixed_radius_;
                 auto near_states = BaseType::tree_.FindNear(new_state, radius);
-                // check if there is a better min_state if near state set is non-empty
-                std::pair<StateType *, double> best_parent_pair;
+
+                // only check if there is a better min_state if near state set is non-empty
                 if (!near_states.empty())
                 {
-                    best_parent_pair = FindBestParent(new_state, near_states, min_state, min_dist);
+                    auto best_parent_pair = FindBestParent(new_state, near_states, min_state, min_dist);
                     min_state = best_parent_pair.first;
                     min_dist = best_parent_pair.second;
                 }
 
                 // 4. Add the path from the best parent to the tree
-                if (BaseType::CheckPathValidity(min_state, new_state))
-                {
-                    BaseType::tree_.ConnectTreeNodes(min_state, new_state, min_dist);
-
-// #ifdef SHOW_TREE_GROWTH
-//                     canvas.Clear();
-//                     RRTViz::DrawTree(canvas, &(BaseType::tree_));
-//                     CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRT*");
-// #endif
-
-                    if (BaseType::CheckGoal(new_state, goal, BaseType::extend_step_size_))
-                    {
-                        state_to_goal_candidates.push_back(rand_state);
-                        std::cout << "candidate path found at iteration " << k << std::endl;
-                    }
-                }
+                BaseType::tree_.ConnectTreeNodes(min_state, new_state, min_dist);
 
                 // 5. Rewire the tree
                 if (!near_states.empty())
                     RewireBranches(new_state, min_state, near_states);
+
+                // check if new state is near goal
+                if (BaseType::CheckGoal(new_state, goal, BaseType::extend_step_size_))
+                {
+                    state_to_goal_candidates.push_back(new_state);
+                    // std::cout << "candidate path found at iteration " << k << std::endl;
+                }
+
+#ifdef SHOW_TREE_GROWTH
+                canvas.Clear();
+                RRTViz::DrawTree(canvas, &(BaseType::tree_));
+                CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRT*");
+#endif
             }
         }
 
         if (!state_to_goal_candidates.empty())
         {
+            std::cout << "number of candidates: " << state_to_goal_candidates.size() << std::endl;
+
             std::map<double, StateType *> candidate_map;
 
             for (auto candidate : state_to_goal_candidates)
@@ -141,6 +141,9 @@ class RRTStar : public PlannerBase<Space, Tree>
                 double cost_to_go = BaseType::space_->EvaluateDistance(candidate, goal);
                 double total_cost = BaseType::tree_.GetStateCost(candidate) + cost_to_go;
                 candidate_map.insert(std::make_pair(total_cost, candidate));
+
+                // std::cout << "candidate: " << total_cost << " , " << *(candidate) << " , "
+                //           << (BaseType::tree_.GetParentVertex(candidate->id_) == BaseType::tree_.vertex_end()) << std::endl;
             }
 
             auto best_candidate = candidate_map.begin()->second;
@@ -153,8 +156,8 @@ class RRTStar : public PlannerBase<Space, Tree>
 
 #ifdef SHOW_TREE_GROWTH
         canvas.Clear();
-        RRTViz::DrawTree(canvas, &(BaseType::tree_));
         RRTViz::DrawStraightPath(canvas, path);
+        RRTViz::DrawTree(canvas, &(BaseType::tree_));
         CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRT*", 0);
 #endif
 
@@ -191,7 +194,6 @@ class RRTStar : public PlannerBase<Space, Tree>
 
     void RewireBranches(StateType *new_state, StateType *min_state, const std::vector<StateType *> &near)
     {
-        static int32_t count = 0;
         for (auto near_state : near)
         {
             if (near_state == min_state)

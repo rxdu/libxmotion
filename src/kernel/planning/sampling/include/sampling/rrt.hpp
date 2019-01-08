@@ -56,7 +56,7 @@ class RRT : public PlannerBase<Space, Tree>
             iter_num = iter;
 
         // add start state to tree
-        BaseType::tree_.AddTreeNode(start);
+        BaseType::tree_.AddTreeRootNode(start);
 
         PathType path;
         // grow tree and look for goal state

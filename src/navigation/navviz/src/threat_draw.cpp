@@ -8,7 +8,7 @@
  */
 
 #include "navviz/threat_draw.hpp"
-
+#include "coreviz/geometry_draw.hpp"
 // #include <tbb/tbb.h>
 
 namespace librav

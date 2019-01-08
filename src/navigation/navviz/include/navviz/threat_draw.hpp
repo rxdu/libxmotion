@@ -10,10 +10,10 @@
 #ifndef THREAT_DRAW_HPP
 #define THREAT_DRAW_HPP
 
-#include "coreviz/coreviz.hpp"
-
 #include "threat_field/vehicle_threat.hpp"
 #include "threat_field/threat_field.hpp"
+
+#include "cvdraw/cvdraw.hpp"
 
 namespace librav
 {

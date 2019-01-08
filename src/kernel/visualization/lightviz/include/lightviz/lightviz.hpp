@@ -10,6 +10,9 @@
 #ifndef LIGHTVIZ_HPP
 #define LIGHTVIZ_HPP
 
+// Note: only include this header when absolutely necessary as this header
+//  includes all header files of this module. Potentially this could invoke
+//  recompilation of many targets whenever a change is made inside this module
 #include "cvdraw/cvdraw.hpp"
 
 #include "lightviz/matrix_viz.hpp"

@@ -64,7 +64,7 @@ class RRG : public PlannerBase<Space, Tree>
             iter_num = iter;
 
         // add start state to tree
-        BaseType::tree_.AddTreeNode(start);
+        BaseType::tree_.AddTreeRootNode(start);
 
         std::vector<StateType *> state_to_goal_candidates;
 

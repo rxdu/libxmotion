@@ -41,7 +41,7 @@ struct TreeAdapter
 
     /****************** To Be Implemented ******************/
     // common interface for tree
-    virtual void AddTreeNode(StateType *sstate) = 0;
+    virtual void AddTreeRootNode(StateType *sstate) = 0;
     virtual void ConnectTreeNodes(StateType *sstate, StateType *dstate, double dist) = 0;
     virtual void DisconnectTreeNodes(StateType *sstate, StateType *dstate) = 0;
 

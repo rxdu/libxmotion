@@ -9,7 +9,8 @@
 
 #include "navviz/roadmap_draw.hpp"
 
-#include "coreviz/coreviz.hpp"
+#include "coreviz/geometry_draw.hpp"
+#include "coreviz/curvilinear_grid_draw.hpp"
 
 using namespace librav;
 

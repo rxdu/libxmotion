@@ -20,7 +20,7 @@
 #include "road_map/road_map.hpp"
 #include "traffic_map/traffic_map.hpp"
 
-#include "coreviz/coreviz.hpp"
+#include "cvdraw/cvdraw.hpp"
 
 namespace librav
 {

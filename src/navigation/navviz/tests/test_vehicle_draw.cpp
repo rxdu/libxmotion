@@ -3,7 +3,6 @@
 
 #include "traffic_map/map_loader.hpp"
 
-// #include "lightviz/lightviz.hpp"
 #include "navviz/vehicle_draw.hpp"
 
 using namespace librav;

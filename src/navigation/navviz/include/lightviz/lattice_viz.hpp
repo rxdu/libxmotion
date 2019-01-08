@@ -16,8 +16,6 @@
 #include "state_lattice/motion_primitive.hpp"
 #include "state_lattice/state_lattice.hpp"
 
-#include "coreviz/coreviz.hpp"
-
 namespace librav
 {
 namespace LightViz

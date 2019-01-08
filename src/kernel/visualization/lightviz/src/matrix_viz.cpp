@@ -10,7 +10,7 @@
 #include "lightviz/matrix_viz.hpp"
 
 #include "cvdraw/cvdraw.hpp"
-#include "coreviz/coreviz.hpp"
+#include "coreviz/matrix_draw.hpp"
 
 #include <opencv2/core/eigen.hpp>
 #include <opencv2/imgproc/imgproc.hpp>

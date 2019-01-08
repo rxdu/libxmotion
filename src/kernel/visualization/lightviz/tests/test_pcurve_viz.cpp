@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "geometry/parametric_curve.hpp"
-#include "lightviz/lightviz.hpp"
+#include "lightviz/curve_viz.hpp"
 
 using namespace librav;
 

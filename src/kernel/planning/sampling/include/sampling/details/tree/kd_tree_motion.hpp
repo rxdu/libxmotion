@@ -50,7 +50,7 @@ class KdTreeMotion : public Tree<typename Space::StateType *, double>, public Tr
                                                spatial::accessor_less<StateAccessor, StateType *>>;
 
   public:
-    void AddTreeNode(StateType *sstate) final
+    void AddTreeRootNode(StateType *sstate) final
     {
         TreeType::AddVertex(sstate);
         kdtree_.insert(sstate);

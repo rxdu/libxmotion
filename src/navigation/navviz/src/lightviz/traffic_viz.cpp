@@ -12,8 +12,8 @@
 #include <functional>
 
 #include "cav_common/vehicle_state.hpp"
-#include "coreviz/coreviz.hpp"
 
+#include "coreviz/curvilinear_grid_draw.hpp"
 #include "navviz/roadmap_draw.hpp"
 #include "navviz/vehicle_draw.hpp"
 #include "navviz/lattice_draw.hpp"

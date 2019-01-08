@@ -1,5 +1,5 @@
 #include "decomp/square_grid.hpp"
-#include "coreviz/coreviz.hpp"
+#include "coreviz/square_grid_draw.hpp"
 
 using namespace librav;
 

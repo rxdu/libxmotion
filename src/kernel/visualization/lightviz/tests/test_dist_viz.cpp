@@ -1,8 +1,6 @@
 #include "canvas/cv_draw.hpp"
-#include "lightviz/lightviz.hpp"
-#include "lightviz/details/geometry_draw.hpp"
-#include "lightviz/polygon_viz.hpp"
 #include "geometry/polygon.hpp"
+#include "coreviz/geometry_draw.hpp"
 
 using namespace librav;
 
