@@ -5,6 +5,7 @@
  * Description: changed RNGSeedGenerator to singleton
  *              commented out OMPL messages
  * 
+ * Copyright (c) 2008, Willow Garage, Inc.
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 

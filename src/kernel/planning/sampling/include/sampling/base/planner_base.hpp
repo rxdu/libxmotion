@@ -14,7 +14,7 @@
 #include <type_traits>
 #include <utility>
 
-#include "sampling/details/base/tree_adapter.hpp"
+#include "sampling/base/tree_adapter.hpp"
 
 namespace librav
 {

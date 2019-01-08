@@ -20,7 +20,7 @@
 
 #include <eigen3/Eigen/Dense>
 
-#include "sampling/details/base/space_base.hpp"
+#include "sampling/base/space_base.hpp"
 #include "sampling/space/realvector_bound.hpp"
 
 namespace librav

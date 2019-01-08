@@ -4,6 +4,10 @@
  * Created on: Dec 30, 2018 06:00
  * Description: RRG algorithm
  * 
+* Reference:
+ *  [1] Karaman, S., and E. Frazzoli. 2010. “Incremental Sampling-Based 
+ *      Algorithms for Optimal Motion Planning.” Robotics Science and Systems VI.
+ * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
@@ -14,10 +18,8 @@
 #include <cstdint>
 #include <cassert>
 
-#include "sampling/details/base/planner_base.hpp"
-#include "sampling/details/tree/basic_tree.hpp"
-#include "sampling/details/tree/kd_tree.hpp"
-#include "sampling/details/tree/kd_graph.hpp"
+#include "sampling/base/planner_base.hpp"
+#include "sampling/tree/kd_graph.hpp"
 
 #include "graph/algorithms/dijkstra.hpp"
 
@@ -25,14 +27,16 @@
 
 #ifdef SHOW_TREE_GROWTH
 #include "coreviz/rrt_draw.hpp"
+// #define SHOW_INTERMEDIATE_STEPS
 #endif
 
 namespace librav
 {
-template <typename Space, typename Tree = KdGraph<Space>>
-class RRG : public PlannerBase<Space, Tree>
+template <typename Space>
+class RRG : public PlannerBase<Space, KdGraph<Space>>
 {
   public:
+    using Tree = KdGraph<Space>;
     using BaseType = PlannerBase<Space, Tree>;
     using StateType = typename Space::StateType;
     using PathType = typename BaseType::PathType;
@@ -91,8 +95,10 @@ class RRG : public PlannerBase<Space, Tree>
                 BaseType::tree_.ConnectTreeNodes(nearest, new_state, nearest_to_new_dist);
 
 #ifdef SHOW_TREE_GROWTH
-                // RRTViz::DrawStraightBranch(canvas, nearest, new_state);
-                // CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG");
+#ifdef SHOW_INTERMEDIATE_STEPS
+                RRTViz::DrawStraightBranch(canvas, nearest, new_state);
+                CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG");
+#endif
 #endif
 
                 // 6. Make connections with vertices that lie within a ball of certain radius
@@ -117,8 +123,10 @@ class RRG : public PlannerBase<Space, Tree>
                     {
                         BaseType::tree_.ConnectTreeNodes(ns, new_state, BaseType::space_->EvaluateDistance(ns, new_state));
 #ifdef SHOW_TREE_GROWTH
-                        // RRTViz::DrawStraightBranch(canvas, ns, new_state);
-                        // CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG");
+#ifdef SHOW_INTERMEDIATE_STEPS
+                        RRTViz::DrawStraightBranch(canvas, ns, new_state);
+                        CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG");
+#endif
 #endif
                     }
                 }
@@ -129,11 +137,13 @@ class RRG : public PlannerBase<Space, Tree>
                     BaseType::tree_.ConnectTreeNodes(new_state, goal, BaseType::space_->EvaluateDistance(new_state, goal));
                     state_to_goal_candidates.push_back(new_state);
 
-                    std::cout << "candidate path found at iteration " << k << std::endl;
+                    // std::cout << "candidate path found at iteration " << k << std::endl;
 
 #ifdef SHOW_TREE_GROWTH
-                    // RRTViz::DrawStraightBranch(canvas, new_state, goal);
-                    // CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG");
+#ifdef SHOW_INTERMEDIATE_STEPS
+                    RRTViz::DrawStraightBranch(canvas, new_state, goal);
+                    CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG");
+#endif
 #endif
                 }
             }

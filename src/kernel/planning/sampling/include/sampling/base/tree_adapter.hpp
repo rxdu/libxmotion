@@ -7,7 +7,7 @@
  *      1. The "Space" type should be derived from SpaceBase
  *      2. Provide implementations to all pure virual functions
  * 
- *      See "sampling/details/tree/basic_tree.hpp" for an example
+ *      See "sampling/base/tree/basic_tree.hpp" for an example
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */

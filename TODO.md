@@ -4,7 +4,7 @@
 
 - [ ] Remove CGAL dependency if possible
 - [ ] Add memory leak check tests for all modules in "kernel"
-- [ ] Cleanup dependencies on LCM, create a comm package 
+- [*] Cleanup dependencies on LCM, create a comm package 
 - [*] Put all finding folder path function into one place 
 
 ## Planning
@@ -31,8 +31,8 @@
 
 ## Visualization
 
-- [ ] Graph visualization using Cairo
-- [*] Better surface visualization
+- [ ] Better surface visualization
+- [*] ~~Graph visualization using Cairo~~ new visualization is now built on top of CvDraw
 
 ## Misc
 

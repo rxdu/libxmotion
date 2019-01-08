@@ -15,7 +15,7 @@
 
 #include "eigen3/Eigen/Dense"
 
-#include "sampling/details/sampler/rand_num_gen.hpp"
+#include "sampling/base/rand_num/rand_num_gen.hpp"
 
 namespace librav
 {

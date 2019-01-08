@@ -19,7 +19,7 @@
 #include "spatial/neighbor_iterator.hpp"
 
 #include "graph/tree.hpp"
-#include "sampling/details/base/tree_adapter.hpp"
+#include "sampling/base/tree_adapter.hpp"
 
 namespace librav
 {

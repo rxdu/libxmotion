@@ -4,7 +4,7 @@
  * Created on: Dec 29, 2018 08:32
  * Description: adapted from RandomNumbers in OMPL
  * 
- * 
+ * Copyright (c) 2008, Willow Garage, Inc.
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
@@ -51,7 +51,7 @@
 #include <random>
 #include <memory>
 
-#include "sampling/details/sampler/rng_seed_gen.hpp"
+#include "sampling/base/rand_num/rng_seed_gen.hpp"
 
 namespace librav
 {

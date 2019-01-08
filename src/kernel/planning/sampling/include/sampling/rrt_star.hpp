@@ -3,6 +3,11 @@
  * 
  * Created on: Dec 30, 2018 06:01
  * Description: RRT* algorithm
+ *
+ * Reference:
+ *  [1] SMP by Sertac Karaman: http://karaman.mit.edu/software.html
+ *  [2] Karaman, S., and E. Frazzoli. 2010. “Incremental Sampling-Based 
+ *      Algorithms for Optimal Motion Planning.” Robotics Science and Systems VI.
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
@@ -14,15 +19,14 @@
 #include <cstdint>
 #include <cassert>
 
-#include "sampling/details/base/planner_base.hpp"
-#include "sampling/details/tree/basic_tree.hpp"
-#include "sampling/details/tree/kd_tree.hpp"
-#include "sampling/details/tree/kd_tree_motion.hpp"
+#include "sampling/base/planner_base.hpp"
+#include "sampling/tree/kd_tree_motion.hpp"
 
 // #define SHOW_TREE_GROWTH
 
 #ifdef SHOW_TREE_GROWTH
 #include "coreviz/rrt_draw.hpp"
+// #define SHOW_INTERMEDIATE_STEPS
 #endif
 
 namespace librav
@@ -52,7 +56,7 @@ class RRTStar : public PlannerBase<Space, Tree>
         assert(BaseType::Steer != nullptr);
 
 #ifdef SHOW_TREE_GROWTH
-        CvCanvas canvas(80);
+        CvCanvas canvas(50);
         canvas.Resize(BaseType::space_->GetBounds()[0].GetLow(), BaseType::space_->GetBounds()[0].GetHigh(),
                       BaseType::space_->GetBounds()[1].GetLow(), BaseType::space_->GetBounds()[1].GetHigh());
 #endif
@@ -123,9 +127,11 @@ class RRTStar : public PlannerBase<Space, Tree>
                 }
 
 #ifdef SHOW_TREE_GROWTH
+#ifdef SHOW_INTERMEDIATE_STEPS
                 canvas.Clear();
                 RRTViz::DrawTree(canvas, &(BaseType::tree_));
                 CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRT*");
+#endif
 #endif
             }
         }
@@ -141,9 +147,6 @@ class RRTStar : public PlannerBase<Space, Tree>
                 double cost_to_go = BaseType::space_->EvaluateDistance(candidate, goal);
                 double total_cost = BaseType::tree_.GetStateCost(candidate) + cost_to_go;
                 candidate_map.insert(std::make_pair(total_cost, candidate));
-
-                // std::cout << "candidate: " << total_cost << " , " << *(candidate) << " , "
-                //           << (BaseType::tree_.GetParentVertex(candidate->id_) == BaseType::tree_.vertex_end()) << std::endl;
             }
 
             auto best_candidate = candidate_map.begin()->second;
@@ -156,8 +159,8 @@ class RRTStar : public PlannerBase<Space, Tree>
 
 #ifdef SHOW_TREE_GROWTH
         canvas.Clear();
-        RRTViz::DrawStraightPath(canvas, path);
         RRTViz::DrawTree(canvas, &(BaseType::tree_));
+        RRTViz::DrawStraightPath(canvas, path);
         CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRT*", 0);
 #endif
 

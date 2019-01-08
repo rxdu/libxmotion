@@ -7,6 +7,8 @@
  * Reference:
  *  [1] http://msl.cs.illinois.edu/~lavalle/sub/rrt.py
  *  [2] SMP by Sertac Karaman: http://karaman.mit.edu/software.html
+ *  [3] Karaman, S., and E. Frazzoli. 2010. “Incremental Sampling-Based 
+ *      Algorithms for Optimal Motion Planning.” Robotics Science and Systems VI.
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
@@ -17,14 +19,15 @@
 #include <cstdint>
 #include <cassert>
 
-#include "sampling/details/base/planner_base.hpp"
-#include "sampling/details/tree/basic_tree.hpp"
-#include "sampling/details/tree/kd_tree.hpp"
+#include "sampling/base/planner_base.hpp"
+#include "sampling/tree/basic_tree.hpp"
+#include "sampling/tree/kd_tree.hpp"
 
 // #define SHOW_TREE_GROWTH
 
 #ifdef SHOW_TREE_GROWTH
 #include "coreviz/rrt_draw.hpp"
+#define SHOW_INTERMEDIATE_STEPS
 #endif
 
 namespace librav
@@ -82,8 +85,10 @@ class RRT : public PlannerBase<Space, Tree>
                 BaseType::tree_.ConnectTreeNodes(nearest, new_state, nearest_to_new_dist);
 
 #ifdef SHOW_TREE_GROWTH
+#ifdef SHOW_INTERMEDIATE_STEPS
                 RRTViz::DrawStraightBranch(canvas, nearest, new_state);
                 CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRT");
+#endif
 #endif
 
                 if (BaseType::CheckGoal(new_state, goal, BaseType::extend_step_size_))
