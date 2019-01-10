@@ -177,8 +177,6 @@ struct CurvilinearCellBase
     }
 };
 
-using CurvilinearCell = CurvilinearCellBase<double>;
-
 ////////////////////////////////////////////////////////////////////
 
 template <typename T, typename CurveType = ParametricCurve>
@@ -367,6 +365,7 @@ class PCurveCurvilinearGrid : public CurvilinearGridBase<T, ParametricCurve>
     }
 };
 
+using CurvilinearCell = CurvilinearCellBase<double>;
 using CurvilinearGrid = PCurveCurvilinearGrid<double>;
 } // namespace librav
 

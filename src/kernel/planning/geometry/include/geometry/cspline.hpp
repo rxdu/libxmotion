@@ -20,36 +20,36 @@ namespace librav
 {
 class CSpline
 {
-public:
-  struct Knot
-  {
-    Knot(double _x = 0, double _y = 0) : x(_x), y(_y) {}
-    double x;
-    double y;
-  };
+  public:
+    struct Knot
+    {
+        Knot(double _x = 0, double _y = 0) : x(_x), y(_y) {}
+        double x;
+        double y;
+    };
 
-public:
-  CSpline();
-  explicit CSpline(const std::vector<Knot> &knots);
-  ~CSpline();
+  public:
+    CSpline();
+    explicit CSpline(const std::vector<Knot> &knots);
+    ~CSpline();
 
-  CSpline(const CSpline &other);
-  CSpline &operator=(const CSpline &other);
-  CSpline(CSpline &&other);
-  CSpline &operator=(CSpline &&other);
+    CSpline(const CSpline &other);
+    CSpline &operator=(const CSpline &other);
+    CSpline(CSpline &&other);
+    CSpline &operator=(CSpline &&other);
 
-  double Evaluate(double x) const;
-  double Evaluate(double x, int32_t derivative) const;
+    double Evaluate(double x) const;
+    double Evaluate(double x, int32_t derivative) const;
 
-  void Interpolate(const std::vector<Knot> &knots);
+    void Interpolate(const std::vector<Knot> &knots);
 
-  std::vector<Knot> GetAllKnots() const { return knots_; }
+    std::vector<Knot> GetAllKnots() const { return knots_; }
 
-private:
-  gsl_interp_accel *accel_ = nullptr;
-  gsl_spline *spline_ = nullptr;
+  private:
+    gsl_interp_accel *accel_ = nullptr;
+    gsl_spline *spline_ = nullptr;
 
-  std::vector<Knot> knots_;
+    std::vector<Knot> knots_;
 };
 } // namespace librav
 

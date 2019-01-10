@@ -15,45 +15,6 @@ namespace librav
 template <typename T, typename CurveType>
 CurvilinearGridBase<T, CurveType>::CurvilinearGridBase(CurveType pcurve, double s_step, double d_step, int32_t d_num, double s_offset) : curve_(pcurve), s_step_(s_step), delta_step_(d_step), delta_num_(d_num), s_offset_(s_offset)
 {
-    // assert(d_num >= 1);
-    // delta_half_num_ = delta_num_ / 2;
-
-    // if (delta_num_ % 2 == 0)
-    //     center_cell_null_ = true;
-    // else
-    //     center_cell_null_ = false;
-
-    // // defined in s-delta coordinate frame
-    // // generate knots along centerline
-    // std::vector<double> sknots;
-    // for (double s = s_offset_; s <= curve_.GetLength(); s += s_step)
-    //     sknots.push_back(s);
-
-    // // std::cout << "s knots added: " << sknots.size() << std::endl;
-
-    // assert(sknots.size() > 1);
-
-    // int32_t x_idx = 0;
-    // for (int32_t k = 0; k < sknots.size() - 1; ++k)
-    // {
-    //     std::vector<CellType *> rows;
-    //     // generate knots along lateral direction
-    //     for (int32_t i = -delta_half_num_; i <= delta_half_num_; ++i)
-    //     {
-    //         if (center_cell_null_ && (i == 0))
-    //             continue;
-
-    //         CellType *cell = new CellType(x_idx, i, IndexToID(x_idx, i));
-    //         cell->UpdateGeometry(s_step, d_step, center_cell_null_);
-    //         for (int i = 0; i < 4; ++i)
-    //             cell->vertices[i].position = ConvertToGlobalCoordinate(cell->vertices[i]);
-    //         cell->center.position = ConvertToGlobalCoordinate(cell->center);
-    //         rows.push_back(cell);
-    //     }
-    //     ++x_idx;
-    //     grid_tiles_.push_back(rows);
-    // }
-
     SetupGrid(pcurve, s_step, d_step, d_num, s_offset);
 }
 

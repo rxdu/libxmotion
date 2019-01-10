@@ -122,7 +122,7 @@ SquareGridBase<T>::~SquareGridBase()
 
 template <typename T>
 SquareGridBase<T>::SquareGridBase(const SquareGridBase<T> &other) : RectGridBase<SquareCellBase<T> *>(other.SizeX(), other.SizeY()),
-                                                                      cell_size_(other.cell_size_)
+                                                                    cell_size_(other.cell_size_)
 {
     for (auto row : other.grid_tiles_)
         for (auto cell : row)

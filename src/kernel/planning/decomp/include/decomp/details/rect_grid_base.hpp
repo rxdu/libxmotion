@@ -61,24 +61,24 @@ namespace librav
 
 class RectGridIndex
 {
-public:
-  RectGridIndex() : index_x_(0), index_y_(0) {}
-  RectGridIndex(int64_t x = 0, int64_t y = 0) : index_x_(x), index_y_(y) {}
-  ~RectGridIndex() = default;
+  public:
+    RectGridIndex() : index_x_(0), index_y_(0) {}
+    RectGridIndex(int64_t x = 0, int64_t y = 0) : index_x_(x), index_y_(y) {}
+    ~RectGridIndex() = default;
 
-  inline int64_t GetX() const { return index_x_; };
-  inline int64_t GetY() const { return index_y_; };
-  inline void SetX(int64_t x) { index_x_ = x; };
-  inline void SetY(int64_t y) { index_y_ = y; };
-  inline void SetXY(int64_t x, int64_t y)
-  {
-    index_x_ = x;
-    index_y_ = y;
-  };
+    inline int64_t GetX() const { return index_x_; };
+    inline int64_t GetY() const { return index_y_; };
+    inline void SetX(int64_t x) { index_x_ = x; };
+    inline void SetY(int64_t y) { index_y_ = y; };
+    inline void SetXY(int64_t x, int64_t y)
+    {
+        index_x_ = x;
+        index_y_ = y;
+    };
 
-private:
-  int64_t index_x_;
-  int64_t index_y_;
+  private:
+    int64_t index_x_;
+    int64_t index_y_;
 };
 
 ////////////////////////////////////////////////////////////////////
@@ -86,116 +86,116 @@ private:
 template <typename TileType>
 class RectGridBase : public GridTiles<TileType>
 {
-public:
-  RectGridBase(int64_t size_x, int64_t size_y) : GridTiles<TileType>(size_x, size_y),
-                                             size_x_(size_x),
-                                             size_y_(size_y)
-  {
-  }
-
-  virtual ~RectGridBase() = default;
-
-  int64_t SizeX() const { return size_x_; };
-  int64_t SizeY() const { return size_y_; };
-
-  // Note: resizing the grid may invalidate the reference to grid elements
-  //    acquired from GetTileRefAtRawCoordinate() and GetTileRefAtGridCoordinate()
-  void ResizeGrid(int64_t x, int64_t y)
-  {
-    if (x == size_x_ && y == size_y_)
-      return;
-
-    assert(x > origin_offset_x_ && y > origin_offset_y_);
-
-    GridTiles<TileType>::ResizeGridTiles(x, y);
-    size_x_ = x;
-    size_y_ = y;
-  }
-
-  void SetOriginCoordinate(int64_t origin_x, int64_t origin_y)
-  {
-    origin_offset_x_ = origin_x;
-    origin_offset_y_ = origin_y;
-  }
-
-  template <typename T = TileType, typename std::enable_if<std::is_floating_point<T>::value || std::is_integral<T>::value>::type * = nullptr>
-  void PrintGrid() const
-  {
-    for (int64_t y = 0; y < size_y_; ++y)
+  public:
+    RectGridBase(int64_t size_x, int64_t size_y) : GridTiles<TileType>(size_x, size_y),
+                                                   size_x_(size_x),
+                                                   size_y_(size_y)
     {
-      for (int64_t x = 0; x < size_x_; ++x)
-        std::cout << std::setw(6) << GridTiles<TileType>::GetTileAtCoordinate(x, y);
-      std::cout << std::endl;
     }
-  }
 
-protected:
-  // operations WRT coordinate of internal data structure directly
-  void SetTileAtRawCoordinate(int64_t x, int64_t y, TileType tile)
-  {
-    assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
+    virtual ~RectGridBase() = default;
 
-    GridTiles<TileType>::SetTileAtCoordinate(x, y, tile);
-  }
+    int64_t SizeX() const { return size_x_; };
+    int64_t SizeY() const { return size_y_; };
 
-  TileType GetTileAtRawCoordinate(int64_t x, int64_t y) const
-  {
-    assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
+    // Note: resizing the grid may invalidate the reference to grid elements
+    //    acquired from GetTileRefAtRawCoordinate() and GetTileRefAtGridCoordinate()
+    void ResizeGrid(int64_t x, int64_t y)
+    {
+        if (x == size_x_ && y == size_y_)
+            return;
 
-    return GridTiles<TileType>::GetTileAtCoordinate(x, y);
-  }
+        assert(x > origin_offset_x_ && y > origin_offset_y_);
 
-  TileType &GetTileRefAtRawCoordinate(int64_t x, int64_t y)
-  {
-    assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
+        GridTiles<TileType>::ResizeGridTiles(x, y);
+        size_x_ = x;
+        size_y_ = y;
+    }
 
-    return GridTiles<TileType>::GetTileRefAtCoordinate(x, y);
-  }
+    void SetOriginCoordinate(int64_t origin_x, int64_t origin_y)
+    {
+        origin_offset_x_ = origin_x;
+        origin_offset_y_ = origin_y;
+    }
 
-  // operations WRT coordinate of field
-  void SetTileAtGridCoordinate(int64_t x, int64_t y, TileType tile)
-  {
-    auto internal_coordinate = ConvertToRawCoordinate(x, y);
+    template <typename T = TileType, typename std::enable_if<std::is_floating_point<T>::value || std::is_integral<T>::value>::type * = nullptr>
+    void PrintGrid() const
+    {
+        for (int64_t y = 0; y < size_y_; ++y)
+        {
+            for (int64_t x = 0; x < size_x_; ++x)
+                std::cout << std::setw(6) << GridTiles<TileType>::GetTileAtCoordinate(x, y);
+            std::cout << std::endl;
+        }
+    }
 
-    SetTileAtRawCoordinate(internal_coordinate.GetX(), internal_coordinate.GetY(), tile);
-  }
+  protected:
+    // operations WRT coordinate of internal data structure directly
+    void SetTileAtRawCoordinate(int64_t x, int64_t y, TileType tile)
+    {
+        assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
 
-  TileType GetTileAtGridCoordinate(int64_t x, int64_t y) const
-  {
-    auto internal_coordinate = ConvertToRawCoordinate(x, y);
+        GridTiles<TileType>::SetTileAtCoordinate(x, y, tile);
+    }
 
-    return GetTileAtRawCoordinate(internal_coordinate.GetX(), internal_coordinate.GetY());
-  }
+    TileType GetTileAtRawCoordinate(int64_t x, int64_t y) const
+    {
+        assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
 
-  TileType &GetTileRefAtGridCoordinate(int64_t x, int64_t y)
-  {
-    auto internal_coordinate = ConvertToRawCoordinate(x, y);
+        return GridTiles<TileType>::GetTileAtCoordinate(x, y);
+    }
 
-    return GetTileRefAtRawCoordinate(internal_coordinate.GetX(), internal_coordinate.GetY());
-  }
+    TileType &GetTileRefAtRawCoordinate(int64_t x, int64_t y)
+    {
+        assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
 
-  // convertion between two coordinates
-  inline RectGridIndex ConvertToRawCoordinate(int64_t x, int64_t y) const
-  {
-    return RectGridIndex(x + origin_offset_x_, y + origin_offset_y_);
-  }
+        return GridTiles<TileType>::GetTileRefAtCoordinate(x, y);
+    }
 
-  inline RectGridIndex ConvertToGridCoordinate(int64_t x, int64_t y) const
-  {
-    assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
+    // operations WRT coordinate of field
+    void SetTileAtGridCoordinate(int64_t x, int64_t y, TileType tile)
+    {
+        auto internal_coordinate = ConvertToRawCoordinate(x, y);
 
-    return RectGridIndex(x - origin_offset_x_, y - origin_offset_y_);
-  }
+        SetTileAtRawCoordinate(internal_coordinate.GetX(), internal_coordinate.GetY(), tile);
+    }
 
-protected:
-  // internal data structure for a 2D field
-  int64_t size_x_ = 0;
-  int64_t size_y_ = 0;
+    TileType GetTileAtGridCoordinate(int64_t x, int64_t y) const
+    {
+        auto internal_coordinate = ConvertToRawCoordinate(x, y);
 
-  // origin offset
-  int64_t origin_offset_x_ = 0;
-  int64_t origin_offset_y_ = 0;
+        return GetTileAtRawCoordinate(internal_coordinate.GetX(), internal_coordinate.GetY());
+    }
+
+    TileType &GetTileRefAtGridCoordinate(int64_t x, int64_t y)
+    {
+        auto internal_coordinate = ConvertToRawCoordinate(x, y);
+
+        return GetTileRefAtRawCoordinate(internal_coordinate.GetX(), internal_coordinate.GetY());
+    }
+
+    // convertion between two coordinates
+    inline RectGridIndex ConvertToRawCoordinate(int64_t x, int64_t y) const
+    {
+        return RectGridIndex(x + origin_offset_x_, y + origin_offset_y_);
+    }
+
+    inline RectGridIndex ConvertToGridCoordinate(int64_t x, int64_t y) const
+    {
+        assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
+
+        return RectGridIndex(x - origin_offset_x_, y - origin_offset_y_);
+    }
+
+  protected:
+    // internal data structure for a 2D field
+    int64_t size_x_ = 0;
+    int64_t size_y_ = 0;
+
+    // origin offset
+    int64_t origin_offset_x_ = 0;
+    int64_t origin_offset_y_ = 0;
 };
-}
+} // namespace librav
 
 #endif /* RECT_GRID_BASE_HPP */

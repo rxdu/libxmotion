@@ -87,7 +87,7 @@ class GridTiles<T, std::enable_if_t<!std::is_floating_point<T>::value && !std::i
     {
         grid_tiles_.resize(y);
         for (auto &tile_array : grid_tiles_)
-                tile_array.resize(x);
+            tile_array.resize(x);
     }
 
     T GetTileAtCoordinate(int64_t x, int64_t y) const
@@ -106,6 +106,6 @@ class GridTiles<T, std::enable_if_t<!std::is_floating_point<T>::value && !std::i
         grid_tiles_[y][x] = tile;
     }
 };
-}
+} // namespace librav
 
 #endif /* RECT_GRID_BASE_TILES_HPP */
