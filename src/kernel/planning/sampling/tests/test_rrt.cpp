@@ -36,6 +36,8 @@ int main()
     rrt.SetSteerFunction(RVStraightSteer<2>(&rvspace, 1.0));
 
     RVPolygonValidityChecker checker;
+    Polygon collision{{5, 3}, {15, 3}, {15, 7}, {5, 7}};
+    checker.AddCollisionPolygon(collision);
     rrt.SetStateValidityChecker(checker);
     rrt.SetPathValidityChecker(checker);
 

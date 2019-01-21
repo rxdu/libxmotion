@@ -1,0 +1,18 @@
+# Dependency libraries
+#find_package(LIBRARY_NAME REQUIRED)
+
+## tests
+add_executable(test_lattice_graph test_lattice_graph.cpp)
+target_link_libraries(test_lattice_graph local_planner navviz utils)
+
+add_executable(test_lattice_graph_search test_lattice_graph_search.cpp)
+target_link_libraries(test_lattice_graph_search local_planner navviz utils)
+
+add_executable(test_lattice_threat test_lattice_threat.cpp)
+target_link_libraries(test_lattice_threat local_planner navviz utils)
+
+add_executable(test_reference_trajectory test_reference_trajectory.cpp)
+target_link_libraries(test_reference_trajectory local_planner navviz utils)
+
+add_executable(test_lookahead_zone test_lookahead_zone.cpp)
+target_link_libraries(test_lookahead_zone local_planner navviz utils)

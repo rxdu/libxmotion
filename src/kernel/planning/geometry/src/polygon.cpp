@@ -20,6 +20,12 @@
 
 using namespace librav;
 
+Polygon::Polygon(std::initializer_list<SimplePoint> pts)
+{
+    for (auto &pt : pts)
+        AddPoint(pt.x, pt.y);
+}
+
 Polygon::Polygon(std::vector<Point_2> pts)
 {
     for (auto &pt : pts)

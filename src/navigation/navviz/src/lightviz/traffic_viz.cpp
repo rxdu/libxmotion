@@ -70,6 +70,19 @@ void UGVNavViz::ShowVehicleCollisionThreat(std::shared_ptr<RoadMap> map, std::sh
     CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 
+void UGVNavViz::ShowLatticeInTrafficChannel(std::shared_ptr<RoadMap> map, std::vector<StateLattice> &lattice, TrafficChannel *channel, std::string window_name, bool save_img)
+{
+    auto canvas = UGVNavViz::CreateCanvas(map);
+
+    RoadMapViz::DrawLanes(canvas, map, true);
+    RoadMapViz::DrawTrafficChannelGrid(canvas, map, channel, false);
+
+    // draw state lattice
+    LatticeViz::DrawStateLattice(canvas,lattice);
+
+    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
+}
+
 void UGVNavViz::ShowLatticePathInTrafficChannel(std::shared_ptr<RoadMap> map, std::vector<StateLattice> &path, TrafficChannel *channel, std::string window_name, bool save_img)
 {
     auto canvas = UGVNavViz::CreateCanvas(map);

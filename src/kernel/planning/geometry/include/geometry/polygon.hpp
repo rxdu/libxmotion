@@ -42,6 +42,7 @@ class Polygon
 
 public:
   Polygon() = default;
+  Polygon(std::initializer_list<SimplePoint> pts);
   Polygon(std::vector<Point_2> pts);
   Polygon(Polyline left_bound, Polyline right_bound);
   ~Polygon() = default;

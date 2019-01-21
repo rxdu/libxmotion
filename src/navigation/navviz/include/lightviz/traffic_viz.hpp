@@ -39,7 +39,7 @@ void ShowVehicleStaticThreat(std::shared_ptr<RoadMap> map, VehicleStaticThreat t
 void ShowVehicleOccupancyDistribution(std::shared_ptr<RoadMap> map, std::shared_ptr<VehicleThreat> threat, int32_t t_k, std::string window_name = "Collision Threat", bool save_img = false);
 void ShowVehicleCollisionThreat(std::shared_ptr<RoadMap> map, std::shared_ptr<VehicleThreat> threat, int32_t t_k, std::string window_name = "Collision Threat", bool save_img = false);
 
-// void ShowLatticeInTrafficChannel(std::vector<StateLattice> &lattice, TrafficChannel *channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
+void ShowLatticeInTrafficChannel(std::shared_ptr<RoadMap> map, std::vector<StateLattice> &lattice, TrafficChannel *channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
 void ShowLatticePathInTrafficChannel(std::shared_ptr<RoadMap> map, std::vector<StateLattice> &path, TrafficChannel *channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
 void ShowLatticePathInTrafficChannel(std::shared_ptr<RoadMap> map, std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> graph, std::vector<StateLattice> &path, TrafficChannel *channel, std::string window_name = "Traffic Channel Image", bool save_img = false);
 
