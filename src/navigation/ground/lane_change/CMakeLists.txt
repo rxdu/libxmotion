@@ -11,7 +11,7 @@ set(LANECHANGE_LIB_SRC
 #   src/lookahead_zone.cpp
 )
 add_library(lanechange STATIC ${LANECHANGE_LIB_SRC})
-target_link_libraries(lanechange common decomp lattice graph traffic tfield utils)
+target_link_libraries(lanechange common decomp lattice graph traffic threatdist utils)
 target_include_directories(lanechange PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>

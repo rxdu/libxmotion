@@ -2,20 +2,23 @@ close all; clear; clc;
 
 %log_name = "/home/rdu/monte_carlo_sim.20190120231844.data"; % v in one
 %direction
-log_name = "/home/rdu/monte_carlo_sim.20190121060351.data";
+% log_name = "/home/rdu/monte_carlo_sim.20190121060351.data";
 %log_name = "/home/rdu/monte_carlo_sim.20190121080417.data"; % offset by 20
+% log_name = "/home/rdu/monte_carlo_sim.20190121115441.data";
+log_name = "/home/rdu/monte_carlo_sim.20190122042127.data";
+
 data = csvread(log_name);
 n_mcs = size(data, 1)
 
 y = data(:,5);
 
-% figure
-% plot(data(:,1), data(:,2), 'c*')
-% pbaspect([1 1 1])
-% 
-% figure
-% plot(data(:,3), data(:,4), 'g+')
-% pbaspect([1 1 1])
+figure
+plot(data(:,1), data(:,2), 'c*')
+pbaspect([1 1 1])
+
+figure
+plot(data(:,3), data(:,4), 'g+')
+pbaspect([1 1 1])
 
 figure
 n_bins = 50;

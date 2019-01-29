@@ -1,5 +1,5 @@
 ## Dependency libraries
-find_package(OpenCV REQUIRED)
+find_package(VTK REQUIRED)
 
 # ## Add libraries
 # set(CVDRAW_LIB_SRC
@@ -16,4 +16,4 @@ find_package(OpenCV REQUIRED)
 # 	PRIVATE src)
 
 # Add executables
-add_subdirectory(tests)
+# add_subdirectory(tests)

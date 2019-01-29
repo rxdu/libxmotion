@@ -27,4 +27,4 @@ add_executable(test_lattice_threat_viz test_lattice_threat_viz.cpp)
 target_link_libraries(test_lattice_threat_viz navviz utils)
 
 # add_executable(test_traffic_viz test_traffic_viz.cpp)
-# target_link_libraries(test_traffic_viz tfield navviz lightviz utils)
+# target_link_libraries(test_traffic_viz threatdist navviz lightviz utils)

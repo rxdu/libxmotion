@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 2.8)
+
+add_subdirectory(./1-LogScaling/)
+add_subdirectory(./2-CodingEffortComparison/)
+add_subdirectory(./3-3dPlot/)
+add_subdirectory(./4-NonPosLogData/)
+add_subdirectory(./5-FPlot/)
+add_subdirectory(./6-AutoLineStyles/)
+add_subdirectory(./7-Spy/)
+add_subdirectory(./8-Triplot/)
+add_subdirectory(./9-Bar/)

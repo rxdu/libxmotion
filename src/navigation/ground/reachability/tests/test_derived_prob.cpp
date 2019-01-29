@@ -43,8 +43,11 @@ int main()
     CsvLogger logger("monte_carlo_sim", "/home/rdu");
 
     TransformFunc trans;
-    BiGaussianSampler pos_sampler(10, 10, 0);
-    BiGaussianSampler vel_sampler(15, 12, 0);
+    // BiGaussianSampler pos_sampler(10, 10, 0);
+    // BiGaussianSampler pos_sampler(3, 3, 0);
+    // BiGaussianSampler vel_sampler(2, 1, 0);
+    BiGaussianSampler pos_sampler(2, 2, 0);
+    BiGaussianSampler vel_sampler(1.0, 0.5, 0);
 
     const int32_t sim_num = 10000;
     std::vector<std::pair<double, double>> pos_samples;
@@ -60,12 +63,14 @@ int main()
         pos_samples.emplace_back(std::make_pair(posx, posy));
         vel_samples.emplace_back(std::make_pair(velx, vely));
 
-        double y = trans(posx, posy, velx, vely);
+        // double y = trans(5 + posx, 1 + posy, 10 + velx, 2 + vely);
+        // double y = trans(posx, posy, 10 + velx, 2 + vely);
+        double y = trans(5 + posx, 5 + posy, 10 + velx, 2 + vely);
         results.emplace_back(y);
 
-        logger.LogData(posx - 25, posy - 25, velx, vely, y);
+        logger.LogData(posx, posy, velx, vely, y);
     }
     std::cout << "simulation finished in " << timer.toc() << " seconds, sample size: " << pos_samples.size() << " , " << vel_samples.size() << std::endl;
- 
+
     return 0;
 }

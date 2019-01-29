@@ -21,8 +21,8 @@ int main()
     {
         std::cout << "Occupancy at t_(" << i << ") : \n"
                   << occupancy.GetOccupancyDistribution(i) << "\n" << std::endl;
-        std::cout << "Interval occupancy at t_(" << i << ") : \n"
-                  << occupancy.GetIntervalOccupancyDistribution(i) << "\n" << std::endl;
+        // std::cout << "Interval occupancy at t_(" << i << ") : \n"
+        //           << occupancy.GetIntervalOccupancyDistribution(i) << "\n" << std::endl;
     }
 
     return 0;

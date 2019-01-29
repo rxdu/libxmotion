@@ -4,7 +4,7 @@
 
 #include "coreviz/geometry_draw.hpp"
 #include "geometry/polygon.hpp"
-#include "field_decomp/threat_map.hpp"
+#include "threat_field/threat_map.hpp"
 
 using namespace librav;
 

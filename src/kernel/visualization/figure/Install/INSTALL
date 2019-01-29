@@ -1,0 +1,20 @@
+===================== INSTALLATION OF FIGURE LIBRARY =====================
+
+1. Possibility -- local installation:
+To install the Figure library correctly with CMake follow these steps:
+(Make sure you have CMake installed!)
+
+Linux/Mac:
+   $ mkdir build
+   $ cd build
+   $ cmake ..
+   $ sudo make install
+
+Windows:
+   Almost same procedure as above:
+   - open a terminal with administrator rights
+   - do the same as above but without the 'sudo'
+
+2. Possibility -- no installation:
+
+As this is a header only library it is enough to include the file called 'Figure' from the 'src' directory when you're compiling your projects.

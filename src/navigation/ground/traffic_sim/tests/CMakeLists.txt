@@ -9,4 +9,4 @@ add_executable(test_ego_state test_ego_state.cpp)
 target_link_libraries(test_ego_state trafficsim utils)
 
 # add_executable(test_trafficsim test_trafficsim.cpp)
-# target_link_libraries(test_trafficsim tfield trafficsim utils)
+# target_link_libraries(test_trafficsim threatdist trafficsim utils)

@@ -2,21 +2,17 @@
 find_package(TBB REQUIRED)
 
 # Add libraries
-set(TFIELD_LIB_SRC
-    src/vehicle_estimation.cpp
-    src/dynamic_threat_model.cpp
-    src/vehicle_threat.cpp
-    src/threat_field.cpp
+set(FIELD_DECOMP_LIB_SRC
+    src/field_basis.cpp
+    src/threat_map.cpp
 )
-add_library(tfield STATIC ${TFIELD_LIB_SRC})
-target_link_libraries(tfield common decomp graph traffic reachability ${TBB_LIBRARIES})
+add_library(tfield STATIC ${FIELD_DECOMP_LIB_SRC})
+target_link_libraries(tfield common ${TBB_LIBRARIES})
 target_include_directories(tfield PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${TBB_INCLUDE_DIRS}>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
-
-add_subdirectory(apps)
 
 if(BUILD_TESTS)
     add_subdirectory(tests)
