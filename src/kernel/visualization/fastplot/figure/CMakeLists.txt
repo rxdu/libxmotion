@@ -6,13 +6,13 @@ find_package(Eigen3 REQUIRED)
 find_package(MathGL2 2.0.0 REQUIRED)
 
 #  patch mgl2/config.h
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/mathgl_patched_headers/mgl2)
-file(READ ${MATHGL2_INCLUDE_DIRS}/mgl2/config.h MATHGL_PATCHED_CONFIG_H)
-STRING(REGEX REPLACE "#define MGL_HAVE_TYPEOF[ \t]+1" "#define MGL_HAVE_TYPEOF 0 // patched"
-                     MATHGL_PATCHED_CONFIG_H ${MATHGL_PATCHED_CONFIG_H})
-STRING(REGEX REPLACE "#define MGL_HAVE_C99_COMPLEX[ \t]+1" "#define MGL_HAVE_C99_COMPLEX 0 // patched"
-                     MATHGL_PATCHED_CONFIG_H ${MATHGL_PATCHED_CONFIG_H})
-file(WRITE ${CMAKE_BINARY_DIR}/include/mathgl_patched_headers/mgl2/config.h ${MATHGL_PATCHED_CONFIG_H} )
+# file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/mathgl_patched_headers/mgl2)
+# file(READ ${MATHGL2_INCLUDE_DIRS}/mgl2/config.h MATHGL_PATCHED_CONFIG_H)
+# STRING(REGEX REPLACE "#define MGL_HAVE_TYPEOF[ \t]+1" "#define MGL_HAVE_TYPEOF 0 // patched"
+#                      MATHGL_PATCHED_CONFIG_H ${MATHGL_PATCHED_CONFIG_H})
+# STRING(REGEX REPLACE "#define MGL_HAVE_C99_COMPLEX[ \t]+1" "#define MGL_HAVE_C99_COMPLEX 0 // patched"
+#                      MATHGL_PATCHED_CONFIG_H ${MATHGL_PATCHED_CONFIG_H})
+# file(WRITE ${CMAKE_BINARY_DIR}/include/mathgl_patched_headers/mgl2/config.h ${MATHGL_PATCHED_CONFIG_H} )
 
 
 ## Add libraries
