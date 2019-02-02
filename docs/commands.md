@@ -11,7 +11,7 @@ $ convert -delay 120 -loop 0 *.png animated.gif
 ```
 $ sudo apt install cloc
 $ cd ~/Workspace/librav/src
-$ cloc --exclude-dir=lcmtypes,third_party .
+$ cloc --exclude-dir=cmake,lcmtypes,third_party .
 ```
 
 ## git subtree

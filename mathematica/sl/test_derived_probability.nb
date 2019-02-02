@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      7075,        219]
-NotebookOptionsPosition[      6560,        202]
-NotebookOutlinePosition[      6898,        217]
-CellTagsIndexPosition[      6855,        214]
+NotebookDataLength[      7877,        242]
+NotebookOptionsPosition[      7456,        226]
+NotebookOutlinePosition[      7794,        241]
+CellTagsIndexPosition[      7751,        238]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -134,25 +134,44 @@ Cell[BoxData[{
            RowBox[{"-", "alpha"}], "*", 
            RowBox[{
             RowBox[{"Transpose", "[", "vi", "]"}], ".", "pi"}]}], "]"}]}], 
-        ")"}]}], " ", "\[Equal]", " ", "c"}], ",", " ", "p1"}], "]"}], 
+        ")"}]}], " ", "\[Equal]", " ", "c"}], ",", " ", "p1"}], "]"}], "*)"}],
+   "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"Solve", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"Exp", "[", 
+        RowBox[{"-", 
+         RowBox[{
+          RowBox[{"Transpose", "[", "pi", "]"}], ".", "pi"}]}], "]"}], "/", 
+       RowBox[{"(", 
+        RowBox[{"1", " ", "+", " ", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"-", "alpha"}], "*", 
+           RowBox[{
+            RowBox[{"Transpose", "[", "vi", "]"}], ".", "pi"}]}], "]"}]}], 
+        ")"}]}], " ", "\[Equal]", " ", "c"}], ",", " ", "p1"}], "]"}], "*)"}],
+   "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"Solve", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Exp", "[", 
+       RowBox[{"-", 
+        RowBox[{
+         RowBox[{"Transpose", "[", "pi", "]"}], ".", "Omega", ".", "pi"}]}], 
+       "]"}], " ", "\[Equal]", " ", "c"}], ",", " ", "p1"}], "]"}], 
    "*)"}]}], "\[IndentingNewLine]", 
  RowBox[{"Solve", "[", 
   RowBox[{
    RowBox[{
-    RowBox[{
-     RowBox[{"Exp", "[", 
-      RowBox[{"-", 
-       RowBox[{
-        RowBox[{"Transpose", "[", "pi", "]"}], ".", "pi"}]}], "]"}], "/", 
-     RowBox[{"(", 
-      RowBox[{"1", " ", "+", " ", 
-       RowBox[{"Exp", "[", 
-        RowBox[{
-         RowBox[{"-", "alpha"}], "*", 
-         RowBox[{
-          RowBox[{"Transpose", "[", "vi", "]"}], ".", "pi"}]}], "]"}]}], 
-      ")"}]}], " ", "\[Equal]", " ", "c"}], ",", " ", "p1"}], "]"}]}], "Input",\
-
+    RowBox[{"Exp", "[", 
+     RowBox[{"-", 
+      RowBox[{
+       RowBox[{"Transpose", "[", "pi", "]"}], ".", "pi"}]}], "]"}], " ", 
+    "\[Equal]", " ", "c"}], ",", " ", "p1"}], "]"}]}], "Input",
  CellChangeTimes->{{3.756900696357624*^9, 3.75690070397997*^9}, {
    3.7569007439037037`*^9, 3.7569011878395157`*^9}, 3.756901240968555*^9, {
    3.756901278488126*^9, 3.756901283634583*^9}, {3.756901332534877*^9, 
@@ -161,47 +180,52 @@ Cell[BoxData[{
    3.756901586868462*^9}, {3.756901635726282*^9, 3.756901708858076*^9}, {
    3.756902593388876*^9, 3.756902597563781*^9}, {3.7569593865357113`*^9, 
    3.756959424294714*^9}, {3.75695955632729*^9, 3.756959570170559*^9}, {
-   3.7569606796522512`*^9, 3.756960685782433*^9}},
- CellLabel->"In[28]:=",ExpressionUUID->"4970b88d-2227-4d40-8413-ac0bad74516a"],
+   3.7569606796522512`*^9, 3.756960685782433*^9}, {3.757915277463849*^9, 
+   3.7579152967382593`*^9}, {3.757918748295105*^9, 3.757918781816448*^9}},
+ CellLabel->"In[10]:=",ExpressionUUID->"4970b88d-2227-4d40-8413-ac0bad74516a"],
 
 Cell[BoxData[
- TemplateBox[{
-  "Solve","nsmet",
-   "\"This system cannot be solved with the methods available to Solve.\"",2,
-   36,7,16512025749240996812,"Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{3.756959595831464*^9, 3.756960689247802*^9},
- CellLabel->
-  "During evaluation of \
-In[28]:=",ExpressionUUID->"0f20ebc9-5ddb-4d6e-9d2f-1781b7c5556d"],
-
-Cell[BoxData[
- RowBox[{"Solve", "[", 
+ RowBox[{"{", 
   RowBox[{
-   RowBox[{
-    RowBox[{"{", 
-     RowBox[{"{", 
-      FractionBox[
-       SuperscriptBox["\[ExponentialE]", 
+   RowBox[{"{", 
+    RowBox[{"p1", "\[Rule]", 
+     RowBox[{"ConditionalExpression", "[", 
+      RowBox[{
+       RowBox[{"-", 
+        SqrtBox[
+         RowBox[{
+          RowBox[{"-", 
+           SuperscriptBox["p2", "2"]}], "+", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "\[Pi]", " ", 
+           RowBox[{"C", "[", "1", "]"}]}], "+", 
+          RowBox[{"Log", "[", 
+           FractionBox["1", "c"], "]"}]}]]}], ",", 
+       RowBox[{
+        RowBox[{"C", "[", "1", "]"}], "\[Element]", 
+        TemplateBox[{},
+         "Integers"]}]}], "]"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"p1", "\[Rule]", 
+     RowBox[{"ConditionalExpression", "[", 
+      RowBox[{
+       SqrtBox[
         RowBox[{
          RowBox[{"-", 
-          SuperscriptBox["p1", "2"]}], "-", 
-         SuperscriptBox["p2", "2"]}]], 
-       RowBox[{"1", "+", 
-        SuperscriptBox["\[ExponentialE]", 
-         RowBox[{
-          RowBox[{"-", "alpha"}], " ", 
-          RowBox[{"(", 
-           RowBox[{
-            RowBox[{"p1", " ", "v1"}], "+", 
-            RowBox[{"p2", " ", "v2"}]}], ")"}]}]]}]], "}"}], "}"}], 
-    "\[Equal]", "c"}], ",", "p1"}], "]"}]], "Output",
- CellChangeTimes->{3.7569595958328*^9, 3.756960689257285*^9},
- CellLabel->"Out[36]=",ExpressionUUID->"1d6eaf7d-4735-47db-9d7d-41511c045299"]
+          SuperscriptBox["p2", "2"]}], "+", 
+         RowBox[{"2", " ", "\[ImaginaryI]", " ", "\[Pi]", " ", 
+          RowBox[{"C", "[", "1", "]"}]}], "+", 
+         RowBox[{"Log", "[", 
+          FractionBox["1", "c"], "]"}]}]], ",", 
+       RowBox[{
+        RowBox[{"C", "[", "1", "]"}], "\[Element]", 
+        TemplateBox[{},
+         "Integers"]}]}], "]"}]}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.757918757242125*^9, 3.757918784725569*^9}},
+ CellLabel->"Out[18]=",ExpressionUUID->"49f9dbf0-40ea-4779-881a-dc5ab64af154"]
 }, Open  ]]
 },
-WindowSize->{1600, 872},
-WindowMargins->{{-1600, Automatic}, {67, Automatic}},
+WindowSize->{1920, 1052},
+WindowMargins->{{-1920, Automatic}, {0, Automatic}},
 FrontEndVersion->"11.3 for Linux x86 (64-bit) (March 6, 2018)",
 StyleDefinitions->"Default.nb"
 ]
@@ -217,9 +241,8 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 4821, 142, 262, "Input",ExpressionUUID->"4970b88d-2227-4d40-8413-ac0bad74516a"],
-Cell[5404, 166, 374, 9, 22, "Message",ExpressionUUID->"0f20ebc9-5ddb-4d6e-9d2f-1781b7c5556d"],
-Cell[5781, 177, 763, 22, 98, "Output",ExpressionUUID->"1d6eaf7d-4735-47db-9d7d-41511c045299"]
+Cell[580, 22, 5550, 162, 308, "Input",ExpressionUUID->"4970b88d-2227-4d40-8413-ac0bad74516a"],
+Cell[6133, 186, 1307, 37, 61, "Output",ExpressionUUID->"49f9dbf0-40ea-4779-881a-dc5ab64af154"]
 }, Open  ]]
 }
 ]

@@ -5,9 +5,10 @@ find_package(TBB REQUIRED)
 set(FIELD_DECOMP_LIB_SRC
     src/field_basis.cpp
     src/threat_map.cpp
+    src/tfield_ws.cpp
 )
 add_library(tfield STATIC ${FIELD_DECOMP_LIB_SRC})
-target_link_libraries(tfield common ${TBB_LIBRARIES})
+target_link_libraries(tfield common geometry ${TBB_LIBRARIES})
 target_include_directories(tfield PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${TBB_INCLUDE_DIRS}>

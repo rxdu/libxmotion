@@ -23,8 +23,7 @@ class FieldBasis
     double operator()(double x, double y);
     void PrintInfo();
 
-    static constexpr double sigma_x = (4.8 / 2) * (4.8 / 2);
-    static constexpr double sigma_y = (1.8 * 4 / 5) * (1.8 * 4 / 5);
+    static constexpr double sigma_n = 1;
 
   private:
     double cx_ = 0.0;
