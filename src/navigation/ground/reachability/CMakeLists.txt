@@ -14,6 +14,7 @@ find_package(Eigen3 REQUIRED)
 # Add libraries
 set(REACHABILITY_LIB_SRC
     # random number sampler
+    src/random/uniform_sampler.cpp
     src/random/gaussian_sampler.cpp
 	src/random/bigaussian_sampler.cpp
     # Monte-Carlo based occupancy

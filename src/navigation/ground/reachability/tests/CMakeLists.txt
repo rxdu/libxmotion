@@ -5,9 +5,6 @@
 add_executable(test_mc_sim test_mc_sim.cpp)
 target_link_libraries(test_mc_sim reachability utils)
 
-add_executable(test_derived_prob test_derived_prob.cpp)
-target_link_libraries(test_derived_prob reachability utils)
-
 add_executable(test_tstate_space test_tstate_space.cpp)
 target_link_libraries(test_tstate_space reachability utils navviz)
 

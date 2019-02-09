@@ -21,7 +21,7 @@ cv::Mat MatrixViz::CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix, 
     cv::Mat grey_img, color_img;
 
     // scale matrix to 0-255
-    Eigen::MatrixXd scaled_matrix = (matrix + Eigen::MatrixXd::Ones(matrix.rows(), matrix.cols()) * matrix.minCoeff()) / (matrix.maxCoeff() - matrix.minCoeff()) * 255.0;
+    Eigen::MatrixXd scaled_matrix = (matrix - Eigen::MatrixXd::Ones(matrix.rows(), matrix.cols()) * matrix.minCoeff()) / (matrix.maxCoeff() - matrix.minCoeff()) * 255.0;
 
     Eigen::MatrixXd inverted_matrix = Eigen::MatrixXd::Zero(matrix.rows(), matrix.cols());
     if (invert_y)

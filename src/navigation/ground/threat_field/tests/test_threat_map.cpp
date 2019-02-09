@@ -19,15 +19,15 @@ int main()
     ThreatMap tmap(50.0, 50.0);
 
     ///////////////////////////////////////////////////////////
- #ifdef ENABLE_VIZ
+#ifdef ENABLE_VIZ
     // setup canvas
     CvCanvas canvas(10, CvColors::jet_colormap_lowest);
     canvas.Resize(0, 100, 0, 100);
 
     // draw distribution
     GeometryViz::DrawDistribution(canvas, 50, 50, 100, 100, std::bind(tmap, std::placeholders::_1, std::placeholders::_2, 15, 15));
-    CvIO::ShowImage(canvas.GetPaintArea(), "skewed_gaussian3", true);
-#endif 
+    CvIO::ShowImage(canvas.GetPaintArea(), "skewed_gaussian3");
+#endif
 
     return 0;
 }

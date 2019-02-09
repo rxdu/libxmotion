@@ -55,7 +55,8 @@ double ThreatMap::operator()(double x, double y, double vx, double vy)
 
     // return std::exp(res1);// / (x * y);
     // return std::exp(res1) / (1.0 + std::exp(res2));
-    return std::exp(res1) * (1 + 2.0 / M_PI * std::atan(-res2 * 0.5));
+    // return std::exp(res1) * (1 + 2.0 / M_PI * std::atan(-res2 * 0.5));
+    return - ((x - cx_) * (x - cx_) + (y - cy_) * (y - cy_));
 }
 
 /* bivariate lognormal */

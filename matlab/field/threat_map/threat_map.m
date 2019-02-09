@@ -9,7 +9,7 @@ function res = threat_map(x, y, px, py, vx, vy)
     omega = R*[sigma_x 0; 0 sigma_y]*R';
     alpha = 0.05;
     
-    pos_err = [x-px ; y-py]
+    pos_err = [x-px ; y-py];
     v_vec = [vx; vy];
     
     % a different way of getting bias
