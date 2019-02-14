@@ -26,7 +26,7 @@ int main()
 
     // draw distribution
     GeometryViz::DrawDistribution(canvas, 50, 50, 100, 100, std::bind(tmap, std::placeholders::_1, std::placeholders::_2, 15, 15));
-    CvIO::ShowImage(canvas.GetPaintArea(), "skewed_gaussian3");
+    CvIO::ShowImage(canvas.GetPaintArea(), "skewed_quadratic2",true);
 #endif
 
     return 0;
