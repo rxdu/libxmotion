@@ -16,14 +16,14 @@ using namespace librav;
 
 void RoadMapViz::DrawLanes(CvCanvas &canvas, std::shared_ptr<RoadMap> map, bool show_center_line)
 {
-    for (auto &polyline : map->GetAllLaneBoundPolylines())
-        GeometryViz::DrawPolyline(canvas, polyline, false, CvColors::silver_color);
-
     if (show_center_line)
     {
         for (auto &polyline : map->GetAllLaneCenterPolylines())
             GeometryViz::DrawPolyline(canvas, polyline, false, CvColors::black_color);
     }
+
+    for (auto &polyline : map->GetAllLaneBoundPolylines())
+        GeometryViz::DrawPolyline(canvas, polyline, false, CvColors::silver_color);
 }
 
 void RoadMapViz::DrawTrafficChannelGrid(CvCanvas &canvas, std::shared_ptr<RoadMap> map, TrafficChannel *channel, bool show_center_line)

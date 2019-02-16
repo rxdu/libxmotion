@@ -13,7 +13,7 @@ For example:
 * center line
   * type - center_line 
   * name - cl_s1
-  * specify "points" of the center line in the right order
+  * specify "point"s of the center line in the right order
 * reference frame
   * type - reference
   * specify a point as "origin"

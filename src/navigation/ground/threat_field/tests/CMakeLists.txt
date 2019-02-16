@@ -14,3 +14,6 @@ target_link_libraries(test_derived_prob reachability utils)
 
 add_executable(test_derived_prob2 test_derived_prob2.cpp)
 target_link_libraries(test_derived_prob2 reachability utils)
+
+add_executable(test_field_scenario test_field_scenario.cpp)
+target_link_libraries(test_field_scenario roadmap navviz utils)

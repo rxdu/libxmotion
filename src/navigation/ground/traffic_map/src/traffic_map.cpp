@@ -25,9 +25,7 @@ void TrafficMap::IdentifyTrafficElements()
         {
             auto path = road_map_->FindShortestRouteName(source, sink);
             if (!path.empty())
-            {
                 traffic_channels_.insert(std::make_pair(std::make_pair(source, sink), std::make_shared<TrafficChannel>(road_map_, source, sink, path)));
-            }
         }
     }
     for (auto &lane : road_map_->GetIsolatedLanes())

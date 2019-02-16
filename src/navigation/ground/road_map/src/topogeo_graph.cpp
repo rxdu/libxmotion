@@ -10,6 +10,7 @@
 #include "road_map/details/topogeo_graph.hpp"
 
 #include <set>
+#include <unordered_map>
 #include <algorithm>
 
 #include "road_map/road_map.hpp"
@@ -27,6 +28,49 @@ TopoGeoGraph::~TopoGeoGraph()
         delete entry.second;
 }
 
+// void TopoGeoGraph::ConstructGraph()
+// {
+//     graph_ = std::make_shared<Graph<LaneBlock *>>();
+
+//     auto mapping = road_map_->GetLaneletIDNameMap();
+//     for (auto &entry : mapping)
+//     {
+//         auto new_block = new LaneBlock(entry.first, entry.second);
+//         new_block->center_line = road_map_->GetLaneCenterLine(entry.second);
+//         lane_blocks_.insert(std::make_pair(entry.first, new_block));
+//         graph_->AddVertex(new_block);
+//     }
+
+//     for (auto &ll1 : mapping)
+//         for (auto &ll2 : mapping)
+//         {
+//             if (ll1.first != ll2.first)
+//             {
+//                 auto route12 = road_map_->FindShortestRoute(ll1.second, ll2.second);
+//                 auto route21 = road_map_->FindShortestRoute(ll2.second, ll1.second);
+
+//                 // check direct connection of two lanelets
+//                 if (route12.size() == 2)
+//                     graph_->AddEdge(lane_blocks_[ll1.first], lane_blocks_[ll2.first], 1.0);
+//                 else if (route21.size() == 2)
+//                     graph_->AddEdge(lane_blocks_[ll2.first], lane_blocks_[ll1.first], 1.0);
+//                 // otherwise check collision for geometric connection
+//                 else if (road_map_->CheckLaneletCollision(ll1.second, ll2.second))
+//                     graph_->AddUndirectedEdge(lane_blocks_[ll1.first], lane_blocks_[ll2.first], 0.0);
+//             }
+//         }
+
+//     for (auto it = graph_->vertex_begin(); it != graph_->vertex_end(); ++it)
+//     {
+//         if (it->vertices_from_.empty() && !it->edges_to_.empty())
+//             sources_.push_back(it->state_->name);
+//         if (it->edges_to_.empty() && !it->vertices_from_.empty())
+//             sinks_.push_back(it->state_->name);
+//         if (it->edges_to_.empty() && it->vertices_from_.empty())
+//             isolated_lanes_.push_back(it->state_->name);
+//     }
+// }
+
 void TopoGeoGraph::ConstructGraph()
 {
     graph_ = std::make_shared<Graph<LaneBlock *>>();
@@ -40,6 +84,8 @@ void TopoGeoGraph::ConstructGraph()
         graph_->AddVertex(new_block);
     }
 
+    // look for sinks and sources
+    std::unordered_map<int32_t, int32_t> overlapped_lane_pairs;
     for (auto &ll1 : mapping)
         for (auto &ll2 : mapping)
         {
@@ -47,19 +93,32 @@ void TopoGeoGraph::ConstructGraph()
             {
                 auto route12 = road_map_->FindShortestRoute(ll1.second, ll2.second);
                 auto route21 = road_map_->FindShortestRoute(ll2.second, ll1.second);
-                // check if direct connection
+
+                // check direct connection of two lanelets
                 if (route12.size() == 2)
                     graph_->AddEdge(lane_blocks_[ll1.first], lane_blocks_[ll2.first], 1.0);
                 else if (route21.size() == 2)
                     graph_->AddEdge(lane_blocks_[ll2.first], lane_blocks_[ll1.first], 1.0);
                 // otherwise check collision for geometric connection
                 else if (road_map_->CheckLaneletCollision(ll1.second, ll2.second))
-                    graph_->AddUndirectedEdge(lane_blocks_[ll1.first], lane_blocks_[ll2.first], 0.0);
+                    // graph_->AddUndirectedEdge(lane_blocks_[ll1.first], lane_blocks_[ll2.first], 0.0);
+                    // delay adding geometric connections until sinks/sources are identified
+                    overlapped_lane_pairs.insert(std::make_pair(ll1.first, ll2.first));
             }
         }
 
     for (auto it = graph_->vertex_begin(); it != graph_->vertex_end(); ++it)
     {
+        // std::cout << "check graph: " << it->state_->name << " , incoming: " << it->vertices_from_.size() << " , outgoing: " << it->edges_to_.size() << std::endl;
+        // if (it->state_->name == "s1" || it->state_->name == "s2")
+        // {
+        //     std::cout << "incoming: " << std::endl;
+        //     for (auto in : it->vertices_from_)
+        //         std::cout << in->state_->name << std::endl;
+        //     std::cout << "outgoing: " << std::endl;
+        //     for (auto out : it->edges_to_)
+        //         std::cout << out.dst_->state_->name << std::endl;
+        // }
         if (it->vertices_from_.empty() && !it->edges_to_.empty())
             sources_.push_back(it->state_->name);
         if (it->edges_to_.empty() && !it->vertices_from_.empty())
@@ -67,6 +126,10 @@ void TopoGeoGraph::ConstructGraph()
         if (it->edges_to_.empty() && it->vertices_from_.empty())
             isolated_lanes_.push_back(it->state_->name);
     }
+
+    // add geometric connections now
+    for (auto &entry : overlapped_lane_pairs)
+        graph_->AddUndirectedEdge(lane_blocks_[entry.first], lane_blocks_[entry.second], 0.0);
 }
 
 std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
@@ -125,7 +188,7 @@ std::vector<std::string> TopoGeoGraph::BacktrackVertices(int32_t id)
     names.push_back(vtx->state_->name);
     for (auto v : vertices)
         names.push_back(v->state_->name);
-        
+
     // std::cout << "total number: " << names.size() << std::endl;
 
     // std::cout << "-------------------------" << std::endl;
