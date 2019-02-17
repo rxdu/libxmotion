@@ -8,7 +8,7 @@ set(LATTICE_PLANNER_LIB_SRC
   src/reference_trajectory.cpp
   # src/lattice_planner.cpp
   # threat evaluation
-  src/lookahead_zone.cpp
+  #src/lookahead_zone.cpp
 )
 add_library(local_planner STATIC ${LATTICE_PLANNER_LIB_SRC})
 target_link_libraries(local_planner common decomp lattice graph traffic threatdist utils)

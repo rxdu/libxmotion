@@ -3,7 +3,7 @@ find_package(TBB REQUIRED)
 
 # Add libraries
 set(FIELD_DECOMP_LIB_SRC
-    src/field_basis.cpp
+    # src/field_basis.cpp
     src/threat_map.cpp
     src/tfield_ws.cpp
 )

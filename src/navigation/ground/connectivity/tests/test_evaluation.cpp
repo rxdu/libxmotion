@@ -103,11 +103,11 @@ int main()
     for (int i = 0; i <= eval_horizon; i++)
         UGVNavViz::ShowThreatField(loader.road_map, ranker.field_, i, true, "occupancy_estimation_new" + std::to_string(i), false);
 
-    for (int32_t i = 0; i <= eval_horizon; ++i)
-    {
-        std::cout << "passing in: " << i << std::endl;
-        UGVNavViz::ShowPathWithThreatField(loader.road_map, path, zone, ranker.field_, i, 0.5, "threat_exposure" + std::to_string(i), true);
-    }
+    // for (int32_t i = 0; i <= eval_horizon; ++i)
+    // {
+    //     std::cout << "passing in: " << i << std::endl;
+    //     UGVNavViz::ShowPathWithThreatField(loader.road_map, path, zone, ranker.field_, i, 0.5, "threat_exposure" + std::to_string(i), true);
+    // }
 #endif
 
     return 0;

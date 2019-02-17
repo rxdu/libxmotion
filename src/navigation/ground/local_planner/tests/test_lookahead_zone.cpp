@@ -46,7 +46,7 @@ int main()
     LookaheadZone zone(traj);
 
 #ifdef ENABLE_VIZ
-    UGVNavViz::ShowLatticePathWithLookaheadZone(loader.road_map, path, zone, ego_chn.get(), "path with lookahead");
+    // UGVNavViz::ShowLatticePathWithLookaheadZone(loader.road_map, path, zone, ego_chn.get(), "path with lookahead");
 #endif
 
     return 0;

@@ -5,7 +5,7 @@
  * Description: 
  * 
  * Copyright (c) 2019 Ruixiang Du (rdu)
- */ 
+ */
 
 #ifndef TRAFFICSIM_VIEWER_HPP
 #define TRAFFICSIM_VIEWER_HPP
@@ -51,6 +51,8 @@ class TrafficSimViewer
     double ymax_ = 200;
     double x_span_ = 200;
     double y_span_ = 200;
+
+    cv::Mat background_img_;
 
     bool ego_state_updated_ = false;
     VehicleState ego_vehicle_state_;

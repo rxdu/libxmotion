@@ -2,8 +2,9 @@
 #include <cstdint>
 #include <cmath>
 
-#include "geometry/polygon.hpp"
-#include "threat_field/threat_map.hpp"
+// #include "geometry/polygon.hpp"
+// #include "threat_field/threat_map.hpp"
+#include "threat_field/gaussian_basis.hpp"
 
 #define ENABLE_VIZ
 
@@ -16,7 +17,8 @@ using namespace librav;
 
 int main()
 {
-    ThreatMap basis(0.0, 0.0);
+    //     ThreatMap basis(0.0, 0.0);
+    GaussianBasis basis(0.0, 0.0);
 
     ///////////////////////////////////////////////////////////
 #ifdef ENABLE_VIZ
@@ -25,7 +27,7 @@ int main()
     canvas.Resize(-50, 50, -50, 50);
 
     // draw distribution
-    GeometryViz::DrawDistribution(canvas, 0, 0, 50, 50, std::bind(basis, std::placeholders::_1, std::placeholders::_2, 10, 10));
+    GeometryViz::DrawDistribution(canvas, 0, 0, 50, 50, basis);
     CvIO::ShowImage(canvas.GetPaintArea(), "test field viz");
 #endif
 

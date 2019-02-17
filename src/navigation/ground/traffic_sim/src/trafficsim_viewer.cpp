@@ -28,6 +28,13 @@ TrafficSimViewer::TrafficSimViewer(std::string map_file, int32_t ppu) : ppu_(ppu
 
     CalcCanvasSize(road_map_);
 
+    // generate road network image (static through the simulation)
+    CvCanvas canvas(ppu_);
+    canvas.Resize(xmin_, xmax_, ymin_, ymax_);
+    canvas.FillBackgroundColor(CvColors::jet_colormap_lowest);
+    RoadMapViz::DrawLanes(canvas, road_map_, true);
+    background_img_ = canvas.GetPaintArea();
+
     // setup communication link
     data_link_ = std::make_shared<LCMLink>();
     if (!data_link_->good())
@@ -126,42 +133,41 @@ void TrafficSimViewer::Start()
     bool use_jetcolor_bg = true;
     bool show_center_line = true;
     bool centered_at_ego_vehicle = false;
-    bool save_image = false;
 
     double zoom_in_ratio = 0.5;
 
+    stopwatch::StopWatch framerate_sw;
+
+    CvCanvas canvas(background_img_);
+    canvas.Resize(xmin_, xmax_, ymin_, ymax_);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
+
     while (true)
     {
-        loop_stopwatch_.tic();
+        //-------------------------------------------------------------//
 
-        // process LCM callbacks first
-        data_link_->handleTimeout(0);
+        canvas.Clear();
 
-        CvCanvas canvas(ppu_);
-        canvas.Resize(xmin_, xmax_, ymin_, ymax_);
-        if (use_jetcolor_bg)
-            canvas.FillBackgroundColor(CvColors::jet_colormap_lowest);
-
-        RoadMapViz::DrawLanes(canvas, road_map_, show_center_line);
-
+        // draw surrounding vehicles
         for (auto &veh : surrounding_vehicles_)
         {
             Polygon fp = VehicleFootprint(veh.GetPose()).polygon;
             VehicleViz::DrawVehicle(canvas, fp, veh.id_);
         }
 
+        // draw ego vehicle
         if (ego_state_updated_)
         {
             Polygon fp = VehicleFootprint(ego_vehicle_state_.GetPose()).polygon;
             VehicleViz::DrawVehicle(canvas, fp, CvColors::blue_color);
         }
 
-        //-------------------------------------------------------------//
-
-        // draw image to window
-        // cv::Mat vis_img = cv::imread("/home/rdu/Pictures/lanelets_light.png");
+        // display frame rate
+        canvas.WriteText("fps: " + std::to_string(static_cast<int32_t>(1 / framerate_sw.toc())), {xmax_ - 8, 0.5}, 0.5);
+        framerate_sw.tic();
 
         cv::Mat vis_img;
+        // cv::Mat vis_img = cv::imread("/home/rdu/Pictures/lanelets_light.png");
         if (centered_at_ego_vehicle && ego_state_updated_)
         {
             auto pos = ego_vehicle_state_.GetPose().position;
@@ -172,21 +178,12 @@ void TrafficSimViewer::Start()
             vis_img = canvas.GetPaintArea();
         }
 
-        // LightWidget::DrawOpenCVImageToBackground(vis_img);
-
-        // save image if requested
-        if (save_image)
-        {
-            std::string name = "sim_default";
-            cv::imwrite(name + ".png", vis_img);
-            save_image = false;
-        }
-
-        // show frame
+        // draw image to window
         CvIO::ShowImageFrame(vis_img, "Traffic Sim");
 
         //-------------------------------------------------------------//
 
-        loop_stopwatch_.sleep_until_ms(1000 / 60);
+        // process LCM callbacks
+        data_link_->handleTimeout(1);
     }
 }

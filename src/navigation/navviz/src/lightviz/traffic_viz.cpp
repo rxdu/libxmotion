@@ -114,20 +114,20 @@ void UGVNavViz::ShowLatticePathInTrafficChannel(std::shared_ptr<RoadMap> map, st
     CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 
-void UGVNavViz::ShowLatticePathWithLookaheadZone(std::shared_ptr<RoadMap> map, std::vector<StateLattice> &path, LookaheadZone &zone, TrafficChannel *channel, std::string window_name, bool save_img)
-{
-    auto canvas = UGVNavViz::CreateCanvas(map);
+// void UGVNavViz::ShowLatticePathWithLookaheadZone(std::shared_ptr<RoadMap> map, std::vector<StateLattice> &path, LookaheadZone &zone, TrafficChannel *channel, std::string window_name, bool save_img)
+// {
+//     auto canvas = UGVNavViz::CreateCanvas(map);
 
-    RoadMapViz::DrawLanes(canvas, map, true);
-    // RoadMapViz::DrawTrafficChannelGrid(canvas, map, channel, false);
-    CurvilinearGridViz::FillCurvilinearGrid(canvas, zone, CvColors::palegreen_color);
-    // CurvilinearGridViz::DrawCurvilinearGrid(canvas, zone);
+//     RoadMapViz::DrawLanes(canvas, map, true);
+//     // RoadMapViz::DrawTrafficChannelGrid(canvas, map, channel, false);
+//     CurvilinearGridViz::FillCurvilinearGrid(canvas, zone, CvColors::palegreen_color);
+//     // CurvilinearGridViz::DrawCurvilinearGrid(canvas, zone);
 
-    // draw state lattice
-    LatticeViz::DrawStateLattice(canvas, path, 0.1, CvColors::lime_color, 2);
+//     // draw state lattice
+//     LatticeViz::DrawStateLattice(canvas, path, 0.1, CvColors::lime_color, 2);
 
-    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
-}
+//     CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
+// }
 
 void UGVNavViz::ShowOccupancyField(std::shared_ptr<RoadMap> map, ThreatField &field, int32_t t_k, bool show_veh_id, std::string window_name, bool save_img)
 {
@@ -288,35 +288,35 @@ void UGVNavViz::ShowTrafficChannelWithThreatField(std::shared_ptr<RoadMap> map, 
     CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 
-void UGVNavViz::ShowPathWithThreatField(std::shared_ptr<RoadMap> map, std::vector<StateLattice> &path, LookaheadZone &zone, ThreatField &field, int32_t t_k, double T, std::string window_name, bool save_img)
-{
-    auto canvas = UGVNavViz::CreateCanvas(map);
+// void UGVNavViz::ShowPathWithThreatField(std::shared_ptr<RoadMap> map, std::vector<StateLattice> &path, LookaheadZone &zone, ThreatField &field, int32_t t_k, double T, std::string window_name, bool save_img)
+// {
+//     auto canvas = UGVNavViz::CreateCanvas(map);
 
-    double xmin, xmax, ymin, ymax;
-    canvas.GetCanvasRange(xmin,xmax,ymin,ymax);
-    double xspan, yspan;
-    canvas.GetCanvasSpan(xspan, yspan);
-    double cx = (xmax + xmin) / 2.0;
-    double cy = (ymax + ymin) / 2.0;
-    ThreatViz::DrawCollisionThreatField(canvas, field, t_k, cx, cy, xspan, yspan);
+//     double xmin, xmax, ymin, ymax;
+//     canvas.GetCanvasRange(xmin,xmax,ymin,ymax);
+//     double xspan, yspan;
+//     canvas.GetCanvasSpan(xspan, yspan);
+//     double cx = (xmax + xmin) / 2.0;
+//     double cy = (ymax + ymin) / 2.0;
+//     ThreatViz::DrawCollisionThreatField(canvas, field, t_k, cx, cy, xspan, yspan);
 
-    RoadMapViz::DrawLanes(canvas, map, true);
-    // RoadMapViz::DrawTrafficChannelGrid(canvas, map, channel, false);
-    // CurvilinearGridViz::FillCurvilinearGrid(canvas, zone, CvColors::palegreen_color);
-    // CurvilinearGridViz::DrawCurvilinearGrid(canvas, zone);
+//     RoadMapViz::DrawLanes(canvas, map, true);
+//     // RoadMapViz::DrawTrafficChannelGrid(canvas, map, channel, false);
+//     // CurvilinearGridViz::FillCurvilinearGrid(canvas, zone, CvColors::palegreen_color);
+//     // CurvilinearGridViz::DrawCurvilinearGrid(canvas, zone);
 
-    for (auto &veh : field.GetAllVehicleEstimations())
-        VehicleViz::DrawVehicle(canvas,veh.GetFootprint(), veh.id_);
+//     for (auto &veh : field.GetAllVehicleEstimations())
+//         VehicleViz::DrawVehicle(canvas,veh.GetFootprint(), veh.id_);
 
-    // draw state lattice
-    LatticeViz::DrawStateLattice(canvas, path, 0.1, CvColors::lime_color, 2);
+//     // draw state lattice
+//     LatticeViz::DrawStateLattice(canvas, path, 0.1, CvColors::lime_color, 2);
 
-    auto dstate = zone.trajectory_.GetDesiredState(t_k * T);
-    GeometryViz::DrawLabelPoint(canvas, dstate.x, dstate.y, CvColors::red_color, 2);
+//     auto dstate = zone.trajectory_.GetDesiredState(t_k * T);
+//     GeometryViz::DrawLabelPoint(canvas, dstate.x, dstate.y, CvColors::red_color, 2);
 
-    // draw ego vehicle
-    VehicleFP ego_veh({dstate.x, dstate.y, dstate.theta});
-    VehicleViz::DrawVehicle(canvas,ego_veh.polygon, CvColors::cyan_color);
+//     // draw ego vehicle
+//     VehicleFP ego_veh({dstate.x, dstate.y, dstate.theta});
+//     VehicleViz::DrawVehicle(canvas,ego_veh.polygon, CvColors::cyan_color);
 
-    CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
-}
+//     CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
+// }

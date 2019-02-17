@@ -74,9 +74,6 @@ void CvCanvas::Resize(double xmin, double xmax, double ymin, double ymax)
 {
     assert(xmax > xmin && ymax > ymin);
 
-    if (img_bg_mode_)
-        return;
-
     xmin_ = xmin;
     xmax_ = xmax;
     ymin_ = ymin;
@@ -84,6 +81,10 @@ void CvCanvas::Resize(double xmin, double xmax, double ymin, double ymax)
 
     xspan_ = xmax - xmin;
     yspan_ = ymax - ymin;
+
+    // do not update canvas info if using background image
+    if (img_bg_mode_)
+        return;
 
     canvas_size_x_ = xspan_ * ppu_;
     canvas_size_y_ = yspan_ * ppu_;
