@@ -19,6 +19,7 @@ add_subdirectory(spatial)
 add_subdirectory(dubins_curves)
 add_subdirectory(nema_tode)
 # visualization
+add_subdirectory(nana)
 add_subdirectory(imgui)
 add_subdirectory(drawstuff)
 # add_subdirectory(kindr)
