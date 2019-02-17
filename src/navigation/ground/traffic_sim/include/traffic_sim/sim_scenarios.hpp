@@ -22,6 +22,9 @@ TrafficSimConfig GenerateScenarioCase2();
 
 // "urban_single_lane_loop_full"
 TrafficSimConfig GenerateScenarioCase3();
+
+// "one_way_merging_horizontal"
+TrafficSimConfig GenerateScenarioCase4();
 } // namespace SimScenario
 } // namespace librav
 

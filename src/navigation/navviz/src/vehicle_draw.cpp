@@ -31,7 +31,8 @@ void VehicleViz::DrawVehicle(CvCanvas &canvas, Polygon polygon, int32_t id, cv::
     }
     pt.x = pt.x / 4.0;
     pt.y = pt.y / 4.0;
-    GeometryViz::WriteTextAtPosition(canvas, std::to_string(id), pt);
+    // GeometryViz::WriteTextAtPosition(canvas, std::to_string(id), pt);
+    canvas.WriteText(std::to_string(id), {pt.x, pt.y}, 1, CvColors::cyan_color);
 }
 
 void VehicleViz::DrawVehicle(CvCanvas &canvas, std::vector<Polygon> &polygons, cv::Scalar ln_color, int32_t ln_width)

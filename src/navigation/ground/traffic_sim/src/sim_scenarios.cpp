@@ -93,4 +93,24 @@ TrafficSimConfig SimScenario::GenerateScenarioCase3()
     return config;
 }
 
+TrafficSimConfig SimScenario::GenerateScenarioCase4()
+{
+    TrafficSimConfig config;
+
+    config.tf = 30.0;
+    config.dt = 0.1;
+
+    config.map = "/home/rdu/Workspace/librav/data/road_map/one_way_merging_horizontal.osm";
+
+    // first wave
+    config.surrounding_vehicles.push_back(VehicleInfo(std::make_pair("s2", "s5"), 15.0, 11.0));
+    config.surrounding_vehicles.push_back(VehicleInfo(std::make_pair("s2", "s5"), 35.0, 11.0));
+    config.surrounding_vehicles.push_back(VehicleInfo(std::make_pair("s2", "s5"), 85.0, 11.0));
+
+    config.surrounding_vehicles.push_back(VehicleInfo(std::make_pair("s3", "s6"), 25.0, 15.5));
+    config.surrounding_vehicles.push_back(VehicleInfo(std::make_pair("s3", "s6"), 55.0, 15.5));
+
+    return config;
+}
+
 } // namespace librav
