@@ -8,7 +8,7 @@ set(RCCAR_DRIVER_LIB_SRC
 add_library(rccar_driver STATIC ${RCCAR_DRIVER_LIB_SRC})
 target_link_libraries(rccar_driver common imu rccar utils ${LCM_LIBRARIES})
 target_include_directories(rccar_driver PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
   PRIVATE src)
 

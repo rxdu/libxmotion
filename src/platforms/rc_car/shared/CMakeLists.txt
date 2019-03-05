@@ -4,9 +4,9 @@
 set(CARPARAM_LIB_SRC
 	src/lcm_channels.cpp
 )
-add_library(rccar_param STATIC ${CARPARAM_LIB_SRC})
-target_link_libraries(rccar_param common utils)
-target_include_directories(rccar_param PUBLIC
+add_library(rccar_shared STATIC ${CARPARAM_LIB_SRC})
+target_link_libraries(rccar_shared common utils)
+target_include_directories(rccar_shared PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
   PRIVATE src)

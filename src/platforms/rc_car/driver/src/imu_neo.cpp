@@ -8,7 +8,7 @@
  */
 
 #include "driver/imu_neo.hpp"
-#include "params/car_params.hpp"
+#include "system/car_params.hpp"
 
 using namespace librav;
 

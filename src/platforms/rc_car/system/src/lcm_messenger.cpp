@@ -7,7 +7,7 @@
  */
 
 #include "system/lcm_messenger.hpp"
-#include "params/lcm_channels.hpp"
+#include "shared/lcm_channels.hpp"
 
 using namespace librav;
 

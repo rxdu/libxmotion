@@ -6,7 +6,7 @@
  * Copyright (c) 2017 Ruixiang Du (rdu)
  */
 
-#include "params/lcm_channels.hpp"
+#include "shared/lcm_channels.hpp"
 
 namespace librav
 {

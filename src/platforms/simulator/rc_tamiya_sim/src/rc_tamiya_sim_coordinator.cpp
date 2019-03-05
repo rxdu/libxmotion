@@ -12,7 +12,7 @@
 #include <iostream>
 
 #include "logging/loggers.hpp"
-#include "params/lcm_channels.hpp"
+#include "shared/lcm_channels.hpp"
 
 using namespace librav;
 
