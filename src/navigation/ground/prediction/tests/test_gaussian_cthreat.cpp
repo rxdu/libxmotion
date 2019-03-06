@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "traffic_map/map_loader.hpp"
-#include "threat_field/dynamic_threat_model.hpp"
+#include "prediction/vehicle_threat.hpp"
 
 #include "stopwatch/stopwatch.h"
 
@@ -33,7 +33,6 @@ int main()
 
     stopwatch::StopWatch timer;
 
-    // std::shared_ptr<DynamicThreatModel> ct1 = std::make_shared<DynamicThreatModel>(veh1, ego_chn);
     std::shared_ptr<VehicleThreat> ct1 = std::make_shared<VehicleThreat>(veh1, loader.traffic_map);
 
     ct1->ComputeOccupancyDistribution(5, true);
@@ -43,9 +42,13 @@ int main()
     std::cout << "------------- all calculation finished -------------" << std::endl;
 
 #ifdef ENABLE_VIZ
-    UGVNavViz::ShowVehicleOccupancyDistribution(loader.road_map, ct1, 4, "occupancy_estimation");
-    // UGVNavViz::ShowVehicleIntervalOccupancyDistribution(ct1, 4, "interval_occupancy_estimation");
-#endif
+    // UGVNavViz::ShowVehicleOccupancyDistribution(ct1, "occupancy_estimation");
+    UGVNavViz::ShowVehicleCollisionThreat(loader.road_map, ct1, 4, "occupancy_estimation", false);
+    // UGVNavViz::ShowVehicleIntervalCollisionThreat(ct1, 4, "occupancy_estimation_interval", false);
+
+    // for (int i = 0; i < 5; ++i)
+    // UGVNavViz::ShowVehicleCollisionThreat(ct1, i, "occupancy_estimation", false);
+#endif 
 
     return 0;
 }

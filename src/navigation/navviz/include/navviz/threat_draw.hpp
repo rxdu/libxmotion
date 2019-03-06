@@ -10,8 +10,8 @@
 #ifndef THREAT_DRAW_HPP
 #define THREAT_DRAW_HPP
 
-#include "threat_field/vehicle_threat.hpp"
-#include "threat_field/threat_field.hpp"
+#include "prediction/vehicle_threat.hpp"
+#include "prediction/threat_field.hpp"
 
 #include "cvdraw/cvdraw.hpp"
 

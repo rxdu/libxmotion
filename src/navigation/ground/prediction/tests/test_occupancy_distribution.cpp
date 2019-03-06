@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "traffic_map/map_loader.hpp"
-#include "threat_field/vehicle_threat.hpp"
+#include "prediction/vehicle_threat.hpp"
 #include "stopwatch/stopwatch.h"
 
 #define ENABLE_VIZ

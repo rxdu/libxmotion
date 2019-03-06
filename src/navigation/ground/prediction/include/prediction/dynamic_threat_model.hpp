@@ -18,8 +18,8 @@
 #include <iostream>
 
 #include "reachability/markov_occupancy.hpp"
-#include "threat_field/vehicle_estimation.hpp"
-#include "threat_field/static_threat_model.hpp"
+#include "prediction/vehicle_estimation.hpp"
+#include "prediction/static_threat_model.hpp"
 
 namespace librav
 {

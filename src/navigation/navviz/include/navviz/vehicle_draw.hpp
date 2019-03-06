@@ -12,7 +12,7 @@
 
 #include "geometry/polyline.hpp"
 #include "geometry/polygon.hpp"
-#include "threat_field/dynamic_threat_model.hpp"
+#include "prediction/dynamic_threat_model.hpp"
 
 #include "cvdraw/cvdraw.hpp"
 

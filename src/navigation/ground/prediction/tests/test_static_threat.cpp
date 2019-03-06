@@ -3,17 +3,21 @@
 #include <cmath>
 
 #include "traffic_map/map_loader.hpp"
-#include "threat_field/dynamic_threat_model.hpp"
+#include "prediction/dynamic_threat_model.hpp"
 
 #include "stopwatch/stopwatch.h"
-#include "file_io/folder_path.hpp"
+
+#define ENABLE_VIZ
+
+#ifdef ENABLE_VIZ
+#include "lightviz/navviz.hpp"
+#endif
 
 using namespace librav;
 
 int main()
 {
     MapLoader loader("/home/rdu/Workspace/librav/data/road_map/single_bidirectional_lane_horizontal.osm");
-    // UGVNavViz::SetupTrafficViz(loader.road_map);
 
     //////////////////////////////////////////////////
 
@@ -25,13 +29,13 @@ int main()
     veh1.SetSpeedVariance(2 * 2);
 
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels().back();
+    // UGVNavViz::ShowVehicleInChannel(veh1.GetFootprint(), *ego_chn.get());
 
-    std::shared_ptr<DynamicThreatModel> ct1 = std::make_shared<DynamicThreatModel>(veh1);
-    ct1->PrecomputeParameters(FolderPath::GetDataFolderPath() + "/reachability/vehicle_threat_combined_transition");
+    VehicleStaticThreat static_threat(veh1.GetPose(), 1);
 
-    std::cout << "------------- all calculation finished -------------" << std::endl;
-
-    // UGVNavViz::ShowVehicleOccupancyDistribution(ct1, "occupancy_estimation");
+#ifdef ENABLE_VIZ
+    UGVNavViz::ShowVehicleStaticThreat(loader.road_map, static_threat);
+#endif
 
     return 0;
 }

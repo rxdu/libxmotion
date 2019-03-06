@@ -18,7 +18,7 @@
 #include <iostream>
 
 #include "traffic_map/traffic_map.hpp"
-#include "threat_field/dynamic_threat_model.hpp"
+#include "prediction/dynamic_threat_model.hpp"
 
 namespace librav
 {

@@ -15,7 +15,7 @@
 #include <unordered_map>
 
 #include "traffic_map/traffic_map.hpp"
-#include "threat_field/vehicle_threat.hpp"
+#include "prediction/vehicle_threat.hpp"
 
 namespace librav
 {

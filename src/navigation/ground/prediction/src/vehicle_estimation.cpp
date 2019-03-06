@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "threat_field/vehicle_estimation.hpp"
+#include "prediction/vehicle_estimation.hpp"
 
 using namespace librav;
 

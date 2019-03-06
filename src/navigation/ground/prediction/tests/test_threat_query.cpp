@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "traffic_map/map_loader.hpp"
-#include "threat_field/threat_field.hpp"
+#include "prediction/threat_field.hpp"
 
 #include "stopwatch/stopwatch.h"
 

@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "threat_field/threat_field.hpp"
+#include "prediction/threat_field.hpp"
 
 #include <tbb/tbb.h>
 

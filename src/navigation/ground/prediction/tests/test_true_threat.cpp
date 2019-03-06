@@ -1,9 +1,9 @@
 #include <iostream>
 #include <memory>
 
-#include "threat_field/collision_field.hpp"
-#include "threat_field/traffic_participant.hpp"
-#include "threat_field/threat_distribution.hpp"
+#include "prediction/collision_field.hpp"
+#include "prediction/traffic_participant.hpp"
+#include "prediction/threat_distribution.hpp"
 
 #include "stopwatch/stopwatch.h"
 
