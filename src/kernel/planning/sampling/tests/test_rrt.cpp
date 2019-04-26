@@ -35,11 +35,11 @@ int main()
     rrt.SetExtendStepSize(1.0);
     rrt.SetSteerFunction(RVStraightSteer<2>(&rvspace, 1.0));
 
-    RVPolygonValidityChecker checker;
-    Polygon collision{{5, 3}, {15, 3}, {15, 7}, {5, 7}};
-    checker.AddCollisionPolygon(collision);
-    rrt.SetStateValidityChecker(checker);
-    rrt.SetPathValidityChecker(checker);
+    // RVPolygonValidityChecker checker;
+    // Polygon collision{{5, 3}, {15, 3}, {15, 7}, {5, 7}};
+    // checker.AddCollisionPolygon(collision);
+    // rrt.SetStateValidityChecker(checker);
+    // rrt.SetPathValidityChecker(checker);
 
     auto path = rrt.Search(sstate, gstate, 5000);
 
