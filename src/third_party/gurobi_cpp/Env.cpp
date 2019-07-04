@@ -1,8 +1,10 @@
-// Copyright (C) 2016, Gurobi Optimization, Inc.
+// Copyright (C) 2019, Gurobi Optimization, LLC
 // All Rights Reserved
 
 #include "Common.h"
 #include "parprivate.h"
+
+#define APITYPE_CPP 1
 
 GRBEnv::GRBEnv(GRBenv* Cenv)
 {
@@ -10,33 +12,57 @@ GRBEnv::GRBEnv(GRBenv* Cenv)
   envP = NULL;
 }
 
-GRBEnv::GRBEnv()
+GRBEnv::GRBEnv(const bool empty)
 {
-  int error = GRBloadenvadv(&env, NULL, 1, GRB_VERSION_MAJOR,
+  int error;
+  if (empty) {
+    error = GRBemptyenvadv(&env, APITYPE_CPP, GRB_VERSION_MAJOR,
+                           GRB_VERSION_MINOR, GRB_VERSION_TECHNICAL);
+  } else {
+    error = GRBloadenvadv(&env, NULL, APITYPE_CPP, GRB_VERSION_MAJOR,
+                          GRB_VERSION_MINOR, GRB_VERSION_TECHNICAL,
+                          NULL, NULL, NULL, NULL, -9999999, -1,
+                          NULL, NULL, NULL, NULL);
+  }
+
+  if (error) throw GRBException(getErrorMsg(), error);
+  envP = &env;
+}
+
+GRBEnv::GRBEnv(const char* logfilename)
+{
+  int error = GRBloadenvadv(&env, logfilename, APITYPE_CPP, GRB_VERSION_MAJOR,
                             GRB_VERSION_MINOR, GRB_VERSION_TECHNICAL,
-                            NULL, NULL);
+                            NULL, NULL, NULL, NULL, -9999999, -1,
+                            NULL, NULL, NULL, NULL);
   if (error) throw GRBException(getErrorMsg(), error);
   envP = &env;
 }
 
 GRBEnv::GRBEnv(const string& logfilename)
 {
-  int error = GRBloadenvadv(&env, logfilename.c_str(), 1, GRB_VERSION_MAJOR,
-                            GRB_VERSION_MINOR, GRB_VERSION_TECHNICAL,
-                            NULL, NULL);
+  int error = GRBloadenvadv(&env, logfilename.c_str(), APITYPE_CPP,
+                            GRB_VERSION_MAJOR, GRB_VERSION_MINOR,
+                            GRB_VERSION_TECHNICAL,
+                            NULL, NULL, NULL, NULL, -9999999, -1,
+                            NULL, NULL, NULL, NULL);
   if (error) throw GRBException(getErrorMsg(), error);
   envP = &env;
 }
 
 GRBEnv::GRBEnv(const string& logfilename,
                const string& computeserver,
-               int           port,
+               const string& router,
                const string& password,
+               const string& group,
+               int           tlsInsecure,
                int           priority,
                double        timeout)
 {
-  int error = GRBloadclientenvadv(&env, logfilename.c_str(), computeserver.c_str(),
-                                  port, password.c_str(), priority, timeout, 1,
+  int error = GRBloadclientenvadv(&env, logfilename.c_str(),
+                                  computeserver.c_str(), router.c_str(),
+                                  password.c_str(), group.c_str(),
+                                  tlsInsecure, priority, timeout, APITYPE_CPP,
                                   GRB_VERSION_MAJOR, GRB_VERSION_MINOR,
                                   GRB_VERSION_TECHNICAL, NULL, NULL);
   if (error) throw GRBException(getErrorMsg(), error);
@@ -46,10 +72,12 @@ GRBEnv::GRBEnv(const string& logfilename,
 GRBEnv::GRBEnv(const string& logfilename,
                const string& accessID,
                const string& secretKey,
-               const string& pool)
+               const string& pool,
+               int           priority)
 {
   int error = GRBloadcloudenvadv(&env, logfilename.c_str(), accessID.c_str(),
-                                 secretKey.c_str(), pool.c_str(), 1,
+                                 secretKey.c_str(), pool.c_str(), priority,
+                                 APITYPE_CPP,
                                  GRB_VERSION_MAJOR, GRB_VERSION_MINOR,
                                  GRB_VERSION_TECHNICAL, NULL, NULL);
   if (error) throw GRBException(getErrorMsg(), error);
@@ -68,6 +96,13 @@ void
 GRBEnv::message(const string& msg)
 {
   GRBmsg(env, msg.c_str());
+}
+
+void
+GRBEnv::start()
+{
+  int error = GRBstartenv(env);
+  if (error) throw GRBException(getErrorMsg(), error);
 }
 
 int

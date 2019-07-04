@@ -1,14 +1,15 @@
-// Copyright (C) 2016, Gurobi Optimization, Inc.
+// Copyright (C) 2019, Gurobi Optimization, LLC
 // All Rights Reserved
 #ifndef _COLUMN_CPP_H_
 #define _COLUMN_CPP_H_
+
 
 class GRBColumn
 {
   private:
 
-    vector<double> coeffs;
-    vector<GRBConstr> constrs;
+    std::vector<double> coeffs;
+    std::vector<GRBConstr> constrs;
 
   public:
 

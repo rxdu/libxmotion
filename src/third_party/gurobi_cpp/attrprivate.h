@@ -1,4 +1,4 @@
-// Copyright (C) 2016, Gurobi Optimization, Inc.
+// Copyright (C) 2019, Gurobi Optimization, LLC
 // All Rights Reserved
 #ifndef _ATTRPRIVATE_CPP_H_
 #define _ATTRPRIVATE_CPP_H_
@@ -21,6 +21,7 @@ static const char* iattrname[] = {
   "IsMIP",
   "IsQP",
   "IsQCP",
+  "IsMultiObj",
   "Status",
   "SolCount",
   "BarIterCount",
@@ -53,7 +54,10 @@ static const char* iattrname[] = {
   "VarHintPri",
   "ObjNPriority",
   "NumObj",
-  "GenConstrType"
+  "GenConstrType",
+  "NumStart",
+  "Partition",
+  "LicenseExpiration"
 };
 
 static const char* cattrname[] = {
@@ -80,8 +84,12 @@ static const char* dattrname[] = {
   "MinObjCoeff",
   "MaxRHS",
   "MinRHS",
+  "MaxQCRHS",
+  "MinQCRHS",
   "MaxQCCoeff",
   "MinQCCoeff",
+  "MaxQCLCoeff",
+  "MinQCLCoeff",
   "MaxQObjCoeff",
   "MinQObjCoeff",
   "ObjVal",
@@ -154,7 +162,9 @@ static const char* sattrname[] = {
   "ConstrName",
   "QCName",
   "GenConstrName",
-  "ObjNName"
+  "ObjNName",
+  "Server",
+  "JobID"
 };
 
 static void checkattrsize(GRBmodel*   Cmodel,

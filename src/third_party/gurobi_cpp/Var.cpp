@@ -1,4 +1,4 @@
-// Copyright (C) 2016, Gurobi Optimization, Inc.
+// Copyright (C) 2019, Gurobi Optimization, LLC
 // All Rights Reserved
 #include "Common.h"
 #include "attrprivate.h"

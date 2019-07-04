@@ -1,21 +1,22 @@
-// Copyright (C) 2016, Gurobi Optimization, Inc.
+// Copyright (C) 2019, Gurobi Optimization, LLC
 // All Rights Reserved
 #ifndef _EXCEPTION_H_
 #define _EXCEPTION_H_
+
 
 class GRBException
 {
   private:
 
-    string msg;
+    std::string msg;
     int error;
 
   public:
 
     GRBException(int errcode = 0);
-    GRBException(string errmsg, int errcode = 0);
+    GRBException(std::string errmsg, int errcode = 0);
 
-    const string getMessage() const;
+    const std::string getMessage() const;
     int getErrorCode() const;
 };
 #endif

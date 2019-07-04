@@ -1,15 +1,16 @@
-// Copyright (C) 2016, Gurobi Optimization, Inc.
+// Copyright (C) 2019, Gurobi Optimization, LLC
 // All Rights Reserved
 #ifndef _LINEXPR_CPP_H_
 #define _LINEXPR_CPP_H_
+
 
 class GRBLinExpr: public GRBExpr
 {
   private:
 
     double constant;
-    vector<double> coeffs;
-    vector<GRBVar> vars;
+    std::vector<double> coeffs;
+    std::vector<GRBVar> vars;
     void multAdd(double m, const GRBLinExpr& expr);
 
   public:
@@ -19,7 +20,7 @@ class GRBLinExpr: public GRBExpr
 
     friend class GRBQuadExpr;
 
-    friend ostream& operator<<(ostream &stream, GRBLinExpr expr);
+    friend std::ostream& operator<<(std::ostream &stream, GRBLinExpr expr);
     friend GRBLinExpr operator+(const GRBLinExpr& x, const GRBLinExpr& y);
     friend GRBLinExpr operator+(const GRBLinExpr& x);
     friend GRBLinExpr operator+(GRBVar x, GRBVar y);

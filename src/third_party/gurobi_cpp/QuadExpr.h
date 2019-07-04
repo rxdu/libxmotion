@@ -1,16 +1,17 @@
-// Copyright (C) 2016, Gurobi Optimization, Inc.
+// Copyright (C) 2019, Gurobi Optimization, LLC
 // All Rights Reserved
 #ifndef _QUADEXPR_CPP_H
 #define _QUADEXPR_CPP_H
+
 
 class GRBQuadExpr: public GRBExpr
 {
   private:
 
     GRBLinExpr linexpr;
-    vector<double> coeffs;
-    vector<GRBVar> vars1;
-    vector<GRBVar> vars2;
+    std::vector<double> coeffs;
+    std::vector<GRBVar> vars1;
+    std::vector<GRBVar> vars2;
     void multAdd(double m, const GRBQuadExpr& expr);
 
   public:
@@ -19,7 +20,7 @@ class GRBQuadExpr: public GRBExpr
     GRBQuadExpr(GRBVar var, double coeff=1.0);
     GRBQuadExpr(GRBLinExpr le);
 
-    friend ostream& operator<<(ostream &stream, GRBQuadExpr expr);
+    friend std::ostream& operator<<(std::ostream &stream, GRBQuadExpr expr);
     friend GRBQuadExpr operator+(const GRBQuadExpr& x, const GRBQuadExpr& y);
     friend GRBQuadExpr operator-(const GRBQuadExpr& x, const GRBQuadExpr& y);
     friend GRBQuadExpr operator+(const GRBQuadExpr& x);

@@ -1,4 +1,4 @@
-// Copyright (C) 2016, Gurobi Optimization, Inc.
+// Copyright (C) 2019, Gurobi Optimization, LLC
 // All Rights Reserved
 #ifndef _PARPRIVATE_CPP_H_
 #define _PARPRIVATE_CPP_H_
@@ -32,7 +32,8 @@ static const char* dparname[] = {
   "PreSOS2BigM",
   "PoolGap",
   "BestObjStop",
-  "BestBdStop"
+  "BestBdStop",
+  "CSQueueTimeout"
 };
 
 static const char* iparname[] = {
@@ -114,13 +115,21 @@ static const char* iparname[] = {
   "Disconnected",
   "NoRelHeuristic",
   "UpdateMode",
-  "WorkerPort",
   "Record",
   "ObjNumber",
   "MultiObjMethod",
   "MultiObjPre",
   "PoolSolutions",
-  "PoolSearchMode"
+  "PoolSearchMode",
+  "StartNumber",
+  "StartNodeLimit",
+  "IgnoreNames",
+  "PartitionPlace",
+  "CSPriority",
+  "CSTLSInsecure",
+  "CSIdleTimeout",
+  "ServerTimeout",
+  "TSPort"
 };
 
 static const char* sparname[] = {
@@ -129,6 +138,15 @@ static const char* sparname[] = {
   "ResultFile",
   "WorkerPool",
   "WorkerPassword",
+  "ComputeServer",
+  "ServerPassword",
+  "CSRouter",
+  "CSGroup",
+  "TokenServer",
+  "CloudAccessID",
+  "CloudSecretKey",
+  "CloudPool",
+  "CloudHost",
   "Dummy"
 };
 

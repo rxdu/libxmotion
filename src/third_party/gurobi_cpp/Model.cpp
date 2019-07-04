@@ -1,6 +1,7 @@
-// Copyright (C) 2016, Gurobi Optimization, Inc.
+// Copyright (C) 2019, Gurobi Optimization, LLC
 // All Rights Reserved
 #include <string.h>
+#include <assert.h>
 #include "Common.h"
 #include "attrprivate.h"
 #include "parprivate.h"
@@ -31,7 +32,7 @@ GRBModel::GRBModel(const GRBEnv& env)
   // environment gets copied in GRBnewmodel
   Cenv = GRBgetenv(Cmodel);
 
-  populate();
+  populate(true);
 }
 
 GRBModel::GRBModel(const GRBEnv& env,
@@ -146,6 +147,8 @@ GRBModel::fixedModel()
 GRBModel
 GRBModel::presolve()
 {
+  update();
+
   GRBModel xmodel = GRBModel();
   xmodel.Cmodel = GRBpresolvemodel(Cmodel);
   if (xmodel.Cmodel == NULL) throw
@@ -335,17 +338,22 @@ GRBModel::getupdmode()
 }
 
 void
-GRBModel::populate()
+GRBModel::populate(bool emptyModel)
 {
   int i, j;
 
   cb = NULL;
 
-  cols          = get(GRB_IntAttr_NumVars);
-  rows          = get(GRB_IntAttr_NumConstrs);
-  numsos        = get(GRB_IntAttr_NumSOS);
-  numqconstrs   = get(GRB_IntAttr_NumQConstrs);
-  numgenconstrs = get(GRB_IntAttr_NumGenConstrs);
+  if (emptyModel) {
+    cols = rows = numsos = numqconstrs = numgenconstrs = 0;
+  } else {
+    cols          = get(GRB_IntAttr_NumVars);
+    rows          = get(GRB_IntAttr_NumConstrs);
+    numsos        = get(GRB_IntAttr_NumSOS);
+    numqconstrs   = get(GRB_IntAttr_NumQConstrs);
+    numgenconstrs = get(GRB_IntAttr_NumGenConstrs);
+  }
+
   newranges   = 0;
   updatemode  = -1;
 
@@ -586,6 +594,8 @@ GRBModel::optimizeasync()
 void
 GRBModel::computeIIS()
 {
+  update();
+
   int error = GRBcomputeIIS(Cmodel);
   if (error) throw GRBException(string(GRBgeterrormsg(Cenv)), error);
 }
@@ -593,14 +603,16 @@ GRBModel::computeIIS()
 void
 GRBModel::tune()
 {
+  update();
+
   int error = GRBtunemodel(Cmodel);
   if (error) throw GRBException(string(GRBgeterrormsg(Cenv)), error);
 }
 
 void
-GRBModel::reset()
+GRBModel::reset(int clearall /* default value = 0 */)
 {
-  int error = GRBresetmodel(Cmodel);
+  int error = GRBreset(Cmodel, clearall);
   if (error) throw GRBException(string(GRBgeterrormsg(Cenv)), error);
 }
 
@@ -624,11 +636,9 @@ GRBModel::getTuneResult(int i)
   if (error) throw GRBException(string(GRBgeterrormsg(Cenv)), error);
 }
 
-
 GRBQuadExpr
 GRBModel::getObjective() const
 {
-  if (cols <= 0) return GRBQuadExpr();
   double objcon;
   int    error;
 
@@ -675,6 +685,48 @@ GRBModel::getObjective() const
   }
 }
 
+GRBLinExpr
+GRBModel::getObjective(int index) const
+{
+  int    objnumber = -1;
+  double objcon;
+  int    error;
+
+  error = GRBgetintparam(Cenv, "ObjNumber", &objnumber);
+  if (error) throw GRBException(string(GRBgeterrormsg(Cenv)), error);
+
+  error = GRBsetintparam(Cenv, "ObjNumber", index);
+  if (error) throw GRBException(string(GRBgeterrormsg(Cenv)), error);
+
+  error = GRBgetdblattr(Cmodel, "ObjNCon", &objcon);
+  if (error) throw GRBException(string(GRBgeterrormsg(Cenv)), error);
+
+  double* obj = new double[cols];
+  error = GRBgetdblattrarray(Cmodel, "ObjN", 0, cols, obj);
+  if (error) throw GRBException(string(GRBgeterrormsg(Cenv)), error);
+
+  error = GRBsetintparam(Cenv, "ObjNumber", objnumber);
+  if (error) throw GRBException(string(GRBgeterrormsg(Cenv)), error);
+
+  GRBLinExpr le = GRBLinExpr(objcon);
+  for (int i = 0; i < cols; i++)
+    if (obj[i] != 0.0)
+      le += obj[i] * vars[i];
+
+  delete[] obj;
+
+  if (index == 0) {
+    int qnz;
+    error = GRBgetintattr(Cmodel, "NumQNZs", &qnz);
+    if (error) throw GRBException(string(GRBgeterrormsg(Cenv)), error);
+
+    if (qnz > 0) throw GRBException("Objective is quadratic",
+                                    GRB_ERROR_DATA_NOT_AVAILABLE);
+  }
+
+  return le;
+}
+
 int
 GRBModel::getPWLObj(GRBVar v, double *ptval, double *ptobj) const
 {
@@ -695,6 +747,36 @@ GRBModel::getPWLObj(GRBVar v, double *ptval, double *ptobj) const
   if (error) throw GRBException(string(GRBgeterrormsg(Cenv)), error);
 
   return pts;
+}
+
+void
+GRBModel::setObjectiveN(GRBLinExpr obje,
+                        int        index,
+                        int        priority,
+                        double     weight,
+                        double     abstol,
+                        double     reltol,
+                        string     name)
+{
+  int     len = obje.size();
+  int    *ind = new int[len];
+  double *val = new double[len];
+
+  double objcon = obje.getConstant();
+  for (int i = 0; i < len; i++) {
+    ind[i] = obje.getVar(i).getcolno();
+    val[i] = obje.getCoeff(i);
+    if (ind[i] < 0)
+      throw GRBException("Variable not in model", GRB_ERROR_NOT_IN_MODEL);
+  }
+
+  int error = GRBsetobjectiven(Cmodel, index, priority, weight, abstol,
+                               reltol, (char *) name.c_str(), objcon,
+                               len, ind, val);
+  if (error) throw GRBException(string(GRBgeterrormsg(Cenv)), error);
+
+  delete[] ind;
+  delete[] val;
 }
 
 void
@@ -2383,6 +2465,24 @@ void
 GRBModel::discardConcurrentEnvs()
 {
   GRBdiscardconcurrentenvs(Cmodel);
+}
+
+GRBEnv
+GRBModel::getMultiobjEnv(int num)
+{
+  GRBenv *multiobjenv = GRBgetmultiobjenv(Cmodel, num);
+
+  if (multiobjenv == NULL)
+    throw GRBException("Failed to create multiobj env",
+                       GRB_ERROR_INVALID_ARGUMENT);
+
+  return GRBEnv(multiobjenv);
+}
+
+void
+GRBModel::discardMultiobjEnvs()
+{
+  GRBdiscardmultiobjenvs(Cmodel);
 }
 
 int

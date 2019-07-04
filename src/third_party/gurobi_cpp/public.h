@@ -1,14 +1,8 @@
-// Copyright (C) 2016, Gurobi Optimization, Inc.
+// Copyright (C) 2019, Gurobi Optimization, LLC
 // All Rights Reserved
 #include <iostream>
-#include <string>
-#include <assert.h>
 #include <vector>
-#include <fstream>
-
-using std::string;
-using std::vector;
-using std::ostream;
+#include <string>
 
 extern "C" {
 #include "gurobi_c.h"
@@ -45,7 +39,8 @@ enum GRB_DoubleParam {
   GRB_DoubleParam_PreSOS2BigM,
   GRB_DoubleParam_PoolGap,
   GRB_DoubleParam_BestObjStop,
-  GRB_DoubleParam_BestBdStop
+  GRB_DoubleParam_BestBdStop,
+  GRB_DoubleParam_CSQueueTimeout
 };
 
 enum GRB_IntParam {
@@ -127,13 +122,21 @@ enum GRB_IntParam {
   GRB_IntParam_Disconnected,
   GRB_IntParam_NoRelHeuristic,
   GRB_IntParam_UpdateMode,
-  GRB_IntParam_WorkerPort,
   GRB_IntParam_Record,
   GRB_IntParam_ObjNumber,
   GRB_IntParam_MultiObjMethod,
   GRB_IntParam_MultiObjPre,
   GRB_IntParam_PoolSolutions,
-  GRB_IntParam_PoolSearchMode
+  GRB_IntParam_PoolSearchMode,
+  GRB_IntParam_StartNumber,
+  GRB_IntParam_StartNodeLimit,
+  GRB_IntParam_IgnoreNames,
+  GRB_IntParam_PartitionPlace,
+  GRB_IntParam_CSPriority,
+  GRB_IntParam_CSTLSInsecure,
+  GRB_IntParam_CSIdleTimeout,
+  GRB_IntParam_ServerTimeout,
+  GRB_IntParam_TSPort
 };
 
 enum GRB_StringParam {
@@ -142,6 +145,15 @@ enum GRB_StringParam {
   GRB_StringParam_ResultFile,
   GRB_StringParam_WorkerPool,
   GRB_StringParam_WorkerPassword,
+  GRB_StringParam_ComputeServer,
+  GRB_StringParam_ServerPassword,
+  GRB_StringParam_CSRouter,
+  GRB_StringParam_CSGroup,
+  GRB_StringParam_TokenServer,
+  GRB_StringParam_CloudAccessID,
+  GRB_StringParam_CloudSecretKey,
+  GRB_StringParam_CloudPool,
+  GRB_StringParam_CloudHost,
   GRB_StringParam_Dummy
 };
 
@@ -161,6 +173,7 @@ enum GRB_IntAttr {
   GRB_IntAttr_IsMIP,
   GRB_IntAttr_IsQP,
   GRB_IntAttr_IsQCP,
+  GRB_IntAttr_IsMultiObj,
   GRB_IntAttr_Status,
   GRB_IntAttr_SolCount,
   GRB_IntAttr_BarIterCount,
@@ -193,7 +206,10 @@ enum GRB_IntAttr {
   GRB_IntAttr_VarHintPri,
   GRB_IntAttr_ObjNPriority,
   GRB_IntAttr_NumObj,
-  GRB_IntAttr_GenConstrType
+  GRB_IntAttr_GenConstrType,
+  GRB_IntAttr_NumStart,
+  GRB_IntAttr_Partition,
+  GRB_IntAttr_LicenseExpiration
 };
 
 enum GRB_CharAttr {
@@ -220,8 +236,12 @@ enum GRB_DoubleAttr {
   GRB_DoubleAttr_MinObjCoeff,
   GRB_DoubleAttr_MaxRHS,
   GRB_DoubleAttr_MinRHS,
+  GRB_DoubleAttr_MaxQCRHS,
+  GRB_DoubleAttr_MinQCRHS,
   GRB_DoubleAttr_MaxQCCoeff,
   GRB_DoubleAttr_MinQCCoeff,
+  GRB_DoubleAttr_MaxQCLCoeff,
+  GRB_DoubleAttr_MinQCLCoeff,
   GRB_DoubleAttr_MaxQObjCoeff,
   GRB_DoubleAttr_MinQObjCoeff,
   GRB_DoubleAttr_ObjVal,
@@ -294,7 +314,9 @@ enum GRB_StringAttr {
   GRB_StringAttr_ConstrName,
   GRB_StringAttr_QCName,
   GRB_StringAttr_GenConstrName,
-  GRB_StringAttr_ObjNName
+  GRB_StringAttr_ObjNName,
+  GRB_StringAttr_Server,
+  GRB_StringAttr_JobID
 };
 
 class GRBVar;
@@ -312,7 +334,7 @@ class GRBGenConstr;
 class GRBColumn;
 class GRBTempConstr;
 
-ostream& operator<<(ostream &stream, GRBLinExpr expr);
+std::ostream& operator<<(std::ostream &stream, GRBLinExpr expr);
 GRBLinExpr operator+(const GRBLinExpr& x, const GRBLinExpr& y);
 GRBLinExpr operator-(const GRBLinExpr& x, const GRBLinExpr& y);
 GRBLinExpr operator+(const GRBLinExpr& x);
@@ -331,7 +353,7 @@ GRBLinExpr operator*(double a, const GRBLinExpr& x);
 GRBLinExpr operator/(GRBVar x, double a);
 GRBLinExpr operator/(const GRBLinExpr& x, double a);
 
-ostream& operator<<(ostream &stream, GRBQuadExpr expr);
+std::ostream& operator<<(std::ostream &stream, GRBQuadExpr expr);
 GRBQuadExpr operator+(const GRBQuadExpr& x, const GRBQuadExpr& y);
 GRBQuadExpr operator-(const GRBQuadExpr& x, const GRBQuadExpr& y);
 GRBQuadExpr operator+(const GRBQuadExpr& x);

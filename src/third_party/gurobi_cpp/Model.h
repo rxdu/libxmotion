@@ -1,7 +1,8 @@
-// Copyright (C) 2016, Gurobi Optimization, Inc.
+// Copyright (C) 2019, Gurobi Optimization, LLC
 // All Rights Reserved
 #ifndef _MODEL_CPP_H_
 #define _MODEL_CPP_H_
+
 
 class GRBEnv;
 class GRBCallback;
@@ -23,28 +24,28 @@ class GRBModel
 
     int updatemode;
 
-    vector<GRBVar> vars;
-    vector<GRBConstr> constrs;
-    vector<GRBSOS> sos;
-    vector<GRBQConstr> qconstrs;
-    vector<GRBGenConstr> genconstrs;
+    std::vector<GRBVar> vars;
+    std::vector<GRBConstr> constrs;
+    std::vector<GRBSOS> sos;
+    std::vector<GRBQConstr> qconstrs;
+    std::vector<GRBGenConstr> genconstrs;
 
 // only for gurobi_c++.h const GRBModel& operator=(const GRBModel &xmodel);
 
     GRBModel();
     int  getupdmode();
-    void populate();
+    void populate(bool emptyModel=false);
     int* setvarsind(const GRBVar* xvars, int size);
     int* setconstrsind(const GRBConstr* xconstrs, int size);
     int* setqconstrsind(const GRBQConstr* xqconstrs, int size);
     int* setgenconstrsind(const GRBGenConstr* xgenconstrs, int size);
     GRBConstr addConstr(const GRBLinExpr&  expr, char sense,
-                        double lhs, double rhs, const string& cname);
+                        double lhs, double rhs, const std::string& cname);
     GRBConstr* addConstrs(const GRBLinExpr* expr, const char* sense,
                           const double* lhs, const double* rhs,
-                          const string* name, int len);
+                          const std::string* name, int len);
     GRBQConstr addQConstr(const GRBQuadExpr&  expr, char sense,
-                          const string& cname);
+                          const std::string& cname);
     double feasRelaxP(int type, bool minrelax, int vlen, int clen,
                     const GRBVar* vars, const double* lbpen,
                     const double* ubpen, const GRBConstr* constrs,
@@ -53,13 +54,13 @@ class GRBModel
   public:
 
     GRBModel(const GRBEnv& env);
-    GRBModel(const GRBEnv& env, const string& filename);
+    GRBModel(const GRBEnv& env, const std::string& filename);
     GRBModel(const GRBModel& xmodel);
 
     ~GRBModel();
 
-    void read(const string& filename);
-    void write(const string& filename);
+    void read(const std::string& filename);
+    void write(const std::string& filename);
 
     void sync();
 
@@ -80,88 +81,92 @@ class GRBModel
     void optimizeasync();
     void computeIIS();
     void tune();
-    void reset();
+    void reset(int clearall = 0);
     void check();
     void terminate();
 
     void getTuneResult(int i);
 
     GRBQuadExpr getObjective() const;
+    GRBLinExpr getObjective(int index) const;
     int  getPWLObj(GRBVar v, double *x, double *y) const;
     void setObjective(GRBLinExpr obje, int sense=0);
     void setObjective(GRBQuadExpr obje, int sense=0);
+    void setObjectiveN(GRBLinExpr obj, int index, int priority=0,
+                       double weight=1, double abstol=0, double reltol=0,
+                       std::string name="");
     void setPWLObj(GRBVar v, int points, double *x, double *y);
 
     GRBVar getVar(int i) const;
     GRBVar* getVars() const;
-    GRBVar getVarByName(const string& name);
+    GRBVar getVarByName(const std::string& name);
     GRBConstr getConstr(int i) const;
     GRBConstr* getConstrs() const;
-    GRBConstr getConstrByName(const string& name);
+    GRBConstr getConstrByName(const std::string& name);
     GRBSOS* getSOSs() const;
     GRBQConstr* getQConstrs() const;
     GRBGenConstr* getGenConstrs() const;
 
     GRBVar addVar(double lb, double ub, double obj, char vtype,
-                  string vname="");
+                  std::string vname="");
     GRBVar addVar(double lb, double ub, double obj, char vtype,
                   int nonzeros, const GRBConstr* xconstrs,
-                  const double* coeffs=NULL, string name="");
+                  const double* coeffs=NULL, std::string name="");
     GRBVar addVar(double lb, double ub, double obj, char vtype,
-                  const GRBColumn& col, string name="");
+                  const GRBColumn& col, std::string name="");
     GRBVar* addVars(int cnt, char type=GRB_CONTINUOUS);
     GRBVar* addVars(const double* lb, const double* ub,
                     const double* obj, const char* type,
-                    const string* name, int len);
+                    const std::string* name, int len);
     GRBVar* addVars(const double* lb, const double *ub,
                     const double* obj, const char* type,
-                    const string* name, const GRBColumn*
+                    const std::string* name, const GRBColumn*
                     col, int len);
 
     GRBConstr addConstr(const GRBLinExpr& expr1, char sense,
                         const GRBLinExpr& expr2,
-                        string name="");
+                        std::string name="");
     GRBConstr addConstr(const GRBLinExpr& expr, char sense, GRBVar v,
-                        string name="");
+                        std::string name="");
     GRBConstr addConstr(GRBVar v1, char sense, GRBVar v2,
-                        string name="");
+                        std::string name="");
     GRBConstr addConstr(GRBVar v, char sense, double rhs,
-                        string name="");
+                        std::string name="");
     GRBConstr addConstr(const GRBLinExpr& expr, char sense, double rhs,
-                        string name="");
-    GRBConstr addConstr(const GRBTempConstr& tc, string name="");
+                        std::string name="");
+    GRBConstr addConstr(const GRBTempConstr& tc, std::string name="");
     GRBConstr addRange(const GRBLinExpr& expr, double lower, double upper,
-                       string name="");
+                       std::string name="");
     GRBConstr* addConstrs(int cnt);
     GRBConstr* addConstrs(const GRBLinExpr* expr, const char* sense,
-                          const double* rhs, const string* name,
+                          const double* rhs, const std::string* name,
                           int len);
     GRBConstr* addRanges(const GRBLinExpr* expr, const double* lower,
-                         const double* upper, const string* name,
+                         const double* upper, const std::string* name,
                          int len);
     GRBSOS addSOS(const GRBVar* xvars, const double* weight, int len, int type);
     GRBQConstr addQConstr(const GRBQuadExpr& expr1, char sense,
                           const GRBQuadExpr& expr2,
-                          string name="");
-    GRBQConstr addQConstr(const GRBTempConstr& tc, string name="");
+                          std::string name="");
+    GRBQConstr addQConstr(const GRBTempConstr& tc, std::string name="");
     GRBQConstr addQConstr(const GRBQuadExpr&  expr, char sense, double rhs,
-                          string name="");
+                          std::string name="");
     GRBGenConstr addGenConstrMax(GRBVar resvar, const GRBVar* xvars,
-                                 int len, double constant=-GRB_INFINITY, string name="");
+                                 int len, double constant=-GRB_INFINITY, std::string name="");
     GRBGenConstr addGenConstrMin(GRBVar resvar, const GRBVar* xvars,
-                                 int len, double constant=GRB_INFINITY, string name="");
+                                 int len, double constant=GRB_INFINITY, std::string name="");
     GRBGenConstr addGenConstrAbs(GRBVar resvar, GRBVar argvar,
-                                 string name="");
+                                 std::string name="");
     GRBGenConstr addGenConstrAnd(GRBVar resvar, const GRBVar* xvars,
-                                 int len, string name="");
+                                 int len, std::string name="");
     GRBGenConstr addGenConstrOr(GRBVar resvar, const GRBVar* xvars,
-                                int len, string name="");
+                                int len, std::string name="");
     GRBGenConstr addGenConstrIndicator(GRBVar binvar, int binval,
                                        const GRBLinExpr& expr, char sense, double rhs,
-                                       string name="");
+                                       std::string name="");
     GRBGenConstr addGenConstrIndicator(GRBVar binvar, int binval,
                                        const GRBTempConstr& constr,
-                                       string name="");
+                                       std::string name="");
 
     void remove(GRBVar v);
     void remove(GRBConstr c);
@@ -194,45 +199,47 @@ class GRBModel
     GRBEnv getEnv();
     GRBEnv getConcurrentEnv(int num);
     void discardConcurrentEnvs();
+    GRBEnv getMultiobjEnv(int num);
+    void discardMultiobjEnvs();
 
     // Parameters
 
     int    get(GRB_IntParam param) const;
     double get(GRB_DoubleParam param) const;
-    string get(GRB_StringParam param) const;
+    std::string get(GRB_StringParam param) const;
 
     void set(GRB_IntParam param, int val);
     void set(GRB_DoubleParam param, double val);
-    void set(GRB_StringParam param, const string& val);
-    void set(const string& param, const string& val);
+    void set(GRB_StringParam param, const std::string& val);
+    void set(const std::string& param, const std::string& val);
 
     // Attributes
 
     int    get(GRB_IntAttr attr) const;
     double get(GRB_DoubleAttr attr) const;
-    string get(GRB_StringAttr attr) const;
+    std::string get(GRB_StringAttr attr) const;
 
     void set(GRB_IntAttr attr, int val);
     void set(GRB_DoubleAttr attr, double val);
-    void set(GRB_StringAttr attr, const string& val);
+    void set(GRB_StringAttr attr, const std::string& val);
 
     int*    get(GRB_IntAttr    attr, const GRBVar* xvars, int len);
     char*   get(GRB_CharAttr   attr, const GRBVar* xvars, int len);
     double* get(GRB_DoubleAttr attr, const GRBVar* xvars, int len);
-    string* get(GRB_StringAttr attr, const GRBVar* xvars, int len);
+    std::string* get(GRB_StringAttr attr, const GRBVar* xvars, int len);
 
     int*    get(GRB_IntAttr    attr, const GRBConstr* xconstrs, int len);
     char*   get(GRB_CharAttr   attr, const GRBConstr* xconstrs, int len);
     double* get(GRB_DoubleAttr attr, const GRBConstr* xconstrs, int len);
-    string* get(GRB_StringAttr attr, const GRBConstr* xconstrs, int len);
+    std::string* get(GRB_StringAttr attr, const GRBConstr* xconstrs, int len);
 
     int*    get(GRB_IntAttr    attr, const GRBQConstr* xqconstrs, int len);
     char*   get(GRB_CharAttr   attr, const GRBQConstr* xqconstrs, int len);
     double* get(GRB_DoubleAttr attr, const GRBQConstr* xqconstrs, int len);
-    string* get(GRB_StringAttr attr, const GRBQConstr* xqconstrs, int len);
+    std::string* get(GRB_StringAttr attr, const GRBQConstr* xqconstrs, int len);
 
     int*    get(GRB_IntAttr    attr, const GRBGenConstr* xgenconstrs, int len);
-    string* get(GRB_StringAttr attr, const GRBGenConstr* xgenconstrs, int len);
+    std::string* get(GRB_StringAttr attr, const GRBGenConstr* xgenconstrs, int len);
 
     void set(GRB_IntAttr    attr, const GRBVar* xvars,
              const int*    val, int len);
@@ -241,7 +248,7 @@ class GRBModel
     void set(GRB_DoubleAttr attr, const GRBVar* xvars,
              const double* val, int len);
     void set(GRB_StringAttr attr, const GRBVar* xvars,
-             const string* val, int len);
+             const std::string* val, int len);
 
     void set(GRB_IntAttr    attr, const GRBConstr* xconstrs,
              const int*    val, int len);
@@ -250,17 +257,17 @@ class GRBModel
     void set(GRB_DoubleAttr attr, const GRBConstr* xconstrs,
              const double* val, int len);
     void set(GRB_StringAttr attr, const GRBConstr* xconstrs,
-             const string* val, int len);
+             const std::string* val, int len);
 
     void set(GRB_CharAttr   attr, const GRBQConstr* xconstrs,
              const char*   val, int len);
     void set(GRB_DoubleAttr attr, const GRBQConstr* xconstrs,
              const double* val, int len);
     void set(GRB_StringAttr attr, const GRBQConstr* xconstrs,
-             const string* val, int len);
+             const std::string* val, int len);
 
     void set(GRB_StringAttr attr, const GRBGenConstr* xqconstrs,
-             const string* val, int len);
+             const std::string* val, int len);
 
     void setCallback(GRBCallback* xcb);
 };

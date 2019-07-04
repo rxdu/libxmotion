@@ -1,7 +1,8 @@
-// Copyright (C) 2016, Gurobi Optimization, Inc.
+// Copyright (C) 2019, Gurobi Optimization, LLC
 // All Rights Reserved
 #ifndef _GENCONSTR_CPP_H_
 #define _GENCONSTR_CPP_H_
+
 
 class GRBGenConstrRep // private one
 {
@@ -29,8 +30,8 @@ class GRBGenConstr
 
     GRBGenConstr();
     int get(GRB_IntAttr attr) const;
-    string get(GRB_StringAttr attr) const;
+    std::string get(GRB_StringAttr attr) const;
 
-    void set(GRB_StringAttr attr, const string& value);
+    void set(GRB_StringAttr attr, const std::string& value);
 };
 #endif

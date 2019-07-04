@@ -1,4 +1,4 @@
-// Copyright (C) 2016, Gurobi Optimization, Inc.
+// Copyright (C) 2019, Gurobi Optimization, LLC
 // All Rights Reserved
 #include "Common.h"
 
@@ -25,16 +25,11 @@ GRBCallback::xcb(GRBmodel *xmodel, void *xcbdata, int xwhere, void *xuserdata)
   cb->cbdata = xcbdata;
   cb->where  = xwhere;
   cb->callback();
+  if (cb->newx != NULL)
+    cb->useSolution();
   if (cb->x != NULL) {
     delete[] cb->x;
     cb->x = NULL;
-  }
-  if (cb->newx != NULL) {
-    double* tmpx = cb->newx;
-    cb->newx = NULL;
-    int error = GRBcbsolution(cb->cbdata, tmpx, NULL);
-    delete[] tmpx;
-    if (error) throw GRBException("setSolution", error);
   }
   if (cb->relx != NULL) {
     delete[] cb->relx;
@@ -121,7 +116,12 @@ GRBCallback::getSolution(GRBVar v)
 {
   if (x == NULL) {
     x = new double[cols];
-    int error = GRBcbget(cbdata, where, GRB_CB_MIPSOL_SOL, x);
+    int error;
+    if (where == GRB_CB_MIPSOL) {
+      error = GRBcbget(cbdata, where, GRB_CB_MIPSOL_SOL, x);
+    } else {
+      error = GRBcbget(cbdata, where, GRB_CB_MULTIOBJ_SOL, x);
+    }
     if (error) throw GRBException("getSolution", error);
   }
 
@@ -141,7 +141,12 @@ GRBCallback::getSolution(const GRBVar* xvars, int len)
 
   if (x == NULL) {
     x = new double[cols];
-    int error = GRBcbget(cbdata, where, GRB_CB_MIPSOL_SOL, x);
+    int error;
+    if (where == GRB_CB_MIPSOL) {
+      error = GRBcbget(cbdata, where, GRB_CB_MIPSOL_SOL, x);
+    } else {
+      error = GRBcbget(cbdata, where, GRB_CB_MULTIOBJ_SOL, x);
+    }
     if (error) throw GRBException("getSolution", error);
   }
 
@@ -236,6 +241,20 @@ GRBCallback::setSolution(const GRBVar* xvars, const double* sol, int len)
   }
 }
 
+double
+GRBCallback::useSolution()
+{
+  double obj = GRB_INFINITY;
+  if (newx != NULL) {
+    double* tmpx = newx;
+    newx = NULL;
+    int error = GRBcbsolution(cbdata, tmpx, &obj);
+    delete[] tmpx;
+    if (error) throw GRBException("setSolution", error);
+  }
+  return obj;
+}
+
 void
 GRBCallback::addCut(const GRBTempConstr& tc)
 {
@@ -328,4 +347,11 @@ void
 GRBCallback::abort()
 {
   GRBterminate(Cmodel);
+}
+
+void
+GRBCallback::stopOneMultiObj(int objnum)
+{
+  int error = GRBcbstoponemultiobj(Cmodel, cbdata, objnum);
+  if (error) throw GRBException("stopOneMultiObj", error);
 }

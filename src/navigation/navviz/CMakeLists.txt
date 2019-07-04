@@ -38,7 +38,7 @@ set(UGVNAV_VIZ_LIB_SRC
     src/lightviz/traffic_viz.cpp
 )
 add_library(navviz STATIC ${UGVNAV_VIZ_LIB_SRC})
-target_link_libraries(navviz coreviz lightviz cav_common decomp roadmap traffic lattice local_planner reachability connectivity threatdist)
+target_link_libraries(navviz coreviz lightviz cav_common decomp roadmap traffic lattice local_planner reachability threatdist)
 target_include_directories(navviz PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

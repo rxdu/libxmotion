@@ -1,4 +1,4 @@
-// Copyright (C) 2016, Gurobi Optimization, Inc.
+// Copyright (C) 2019, Gurobi Optimization, LLC
 // All Rights Reserved
 #ifndef _TEMPCONSTR_CPP_H_
 #define _TEMPCONSTR_CPP_H_

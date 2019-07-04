@@ -1,7 +1,8 @@
-// Copyright (C) 2016, Gurobi Optimization, Inc.
+// Copyright (C) 2019, Gurobi Optimization, LLC
 // All Rights Reserved
 #ifndef _QCONSTR_CPP_H_
 #define _QCONSTR_CPP_H_
+
 
 class GRBQConstrRep // private one
 {
@@ -31,10 +32,10 @@ class GRBQConstr
     char get(GRB_CharAttr attr) const;
     int get(GRB_IntAttr attr) const;
     double get(GRB_DoubleAttr attr) const;
-    string get(GRB_StringAttr attr) const;
+    std::string get(GRB_StringAttr attr) const;
 
     void set(GRB_CharAttr attr, char value);
     void set(GRB_DoubleAttr attr, double value);
-    void set(GRB_StringAttr attr, const string& value);
+    void set(GRB_StringAttr attr, const std::string& value);
 };
 #endif

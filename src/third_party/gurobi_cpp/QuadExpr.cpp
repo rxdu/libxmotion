@@ -1,4 +1,4 @@
-// Copyright (C) 2016, Gurobi Optimization, Inc.
+// Copyright (C) 2019, Gurobi Optimization, LLC
 // All Rights Reserved
 #include "Common.h"
 
@@ -319,9 +319,13 @@ GRBQuadExpr
 operator*(GRBVar x, const GRBLinExpr& y)
 {
   GRBQuadExpr result;
-  result.linexpr += y.getConstant() * x;
+
+  if (y.getConstant() != 0.0)
+    result.linexpr += y.getConstant() * x;
+
   for (unsigned int i = 0; i < y.size(); i++)
     result.addTerm(y.getCoeff(i), y.getVar(i), x);
+
   return result;
 }
 
@@ -336,9 +340,13 @@ operator*(const GRBLinExpr& x, const GRBLinExpr& y)
 {
   double c = y.getConstant();
   GRBQuadExpr result;
-  result += c * x;
+
+  if (c != 0.0)
+    result += c * x;
+
   for (unsigned int i = 0; i < y.size(); i++)
     result += y.getVar(i) * x * y.getCoeff(i);
+
   return result;
 }
 
