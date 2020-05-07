@@ -22,5 +22,5 @@ add_subdirectory(nema_tode)
 # add_subdirectory(polynomial)
 # visualization
 # add_subdirectory(nana)
-# add_subdirectory(imgui)
-# add_subdirectory(drawstuff)
+add_subdirectory(imgui)
+add_subdirectory(drawstuff)

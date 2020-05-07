@@ -18,6 +18,6 @@ endif()
 
 ## Add sub source directories
 add_subdirectory(sim_interface)
-add_subdirectory(quad_hbird_sim)
+# add_subdirectory(quad_hbird_sim)
 # add_subdirectory(quad_solo_sim)
 add_subdirectory(rc_tamiya_sim)

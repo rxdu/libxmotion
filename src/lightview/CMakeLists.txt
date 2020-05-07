@@ -44,9 +44,9 @@ target_include_directories(pose_viewer PUBLIC
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 
-add_subdirectory(apps)
+# add_subdirectory(apps)
 
 # Add executables
-if(BUILD_TESTS)
+# if(BUILD_TESTS)
 	add_subdirectory(tests)
-endif()
+# endif()
