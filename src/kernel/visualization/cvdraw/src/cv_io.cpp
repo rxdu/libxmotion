@@ -23,12 +23,12 @@ cv::Mat CvIO::ReadImageFile(std::string img_file)
 
 cv::Mat CvIO::ReadColorImage(std::string img_file)
 {
-    return imread(img_file, CV_LOAD_IMAGE_COLOR);
+    return imread(img_file, cv::IMREAD_COLOR);
 }
 
 cv::Mat CvIO::ReadGrayscaleImage(std::string img_file)
 {
-    return imread(img_file, CV_LOAD_IMAGE_GRAYSCALE);
+    return imread(img_file, cv::IMREAD_GRAYSCALE);
 }
 
 void CvIO::ShowImage(cv::Mat img, std::string window_name, bool save_img)
