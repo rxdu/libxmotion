@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(librav)
 
+# cmake module path
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+
+# automatically build LCM types.  This also defines a number of CMake
+# variables, see cmake/lcmtypes.cmake for details
+include(cmake/lcmtypes.cmake)
+lcmtypes_build()
+
 # generate symbols for IDE indexer
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/devel)

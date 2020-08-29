@@ -1,11 +1,3 @@
-# cmake module path
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/src/cmake/modules")
-
-# automatically build LCM types.  This also defines a number of CMake
-# variables, see cmake/lcmtypes.cmake for details
-include(cmake/lcmtypes.cmake)
-lcmtypes_build()
-
 ## Add sub source directories
 # Core packages of librav
 add_subdirectory(kernel)
