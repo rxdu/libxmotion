@@ -237,7 +237,7 @@ void CvCanvas::ShowFrame(int32_t frame_period_ms)
 void CvCanvas::DrawPoint(CPoint center, int radius, const cv::Scalar &color, int line_type)
 {
     cv::Point cv_center = ConvertCvPointToPixel(center);
-    circle(paint_area_, cv_center, radius, color, CV_FILLED, line_type);
+    circle(paint_area_, cv_center, radius, color, cv::FILLED, line_type);
 }
 
 void CvCanvas::DrawCircle(CPoint center, int radius, const cv::Scalar &color, int thickness, int line_type)

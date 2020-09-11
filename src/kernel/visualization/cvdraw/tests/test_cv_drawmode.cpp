@@ -7,9 +7,9 @@ using namespace librav;
 int main()
 {
     // Mat image;
-    // image = imread("/home/rdu/Workspace/librav/data/intensity.jpg", CV_LOAD_IMAGE_COLOR);   // Read the file
+    // image = imread("/home/rdu/Workspace/librav/data/intensity.jpg", cv::IMREAD_COLOR);   // Read the file
     std::string file_name = "/home/rdu/Workspace/librav/data/intensity/intensity.jpg";
-    cv::Mat image = cv::imread(file_name, CV_LOAD_IMAGE_COLOR); // Read the file
+    cv::Mat image = cv::imread(file_name, cv::IMREAD_COLOR); // Read the file
 
     // CvDraw::ShowImage(file_name, "test greyscale");
 
