@@ -1,11 +1,11 @@
 ## Add sub source directories
 # Core packages of librav
-add_subdirectory(kernel)
+add_subdirectory(modules)
 add_subdirectory(third_party)
 
-# Packages built on top of kernel
-add_subdirectory(mcontrol)
-add_subdirectory(navigation)
+# Packages built on top of modules
+# add_subdirectory(mcontrol)
+# add_subdirectory(navigation)
 # # add_subdirectory(lightview)
 # add_subdirectory(platforms)
 

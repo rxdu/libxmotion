@@ -32,7 +32,5 @@ add_subdirectory(datalink)
 add_subdirectory(utilities)
 add_subdirectory(visualization)
 
-add_subdirectory(examples)
-
 # to be deprecated
 add_subdirectory(legacy)

@@ -37,5 +37,5 @@ add_subdirectory(src)
 
 ## Add test source directories
 if(BUILD_TESTS)
-    add_subdirectory(unit_tests) 
+    add_subdirectory(tests) 
 endif()
