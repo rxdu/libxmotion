@@ -23,7 +23,7 @@ set(CMAKE_BUILD_TYPE Release)
 
 ## Optionally built modules: ON/OFF
 set(ENABLE_LOGGING ON)
-set(BUILD_TESTS OFF)
+set(BUILD_TESTS ON)
 
 if(ENABLE_LOGGING)
 	message( "-- Enable logging with spdlog -- Yes" )
