@@ -1,14 +1,5 @@
-cmake_minimum_required(VERSION 3.0.0)
-project(librav_libs)
-
-## Put all binary files into /bin and libraries into /lib
-#set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
-set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-
 ## Add sub source directories
 add_subdirectory(asio)
-add_subdirectory(googletest)
 add_subdirectory(spdlog)
 add_subdirectory(ascent)
 add_subdirectory(liblanelet)
@@ -23,4 +14,4 @@ add_subdirectory(nema_tode)
 # visualization
 # add_subdirectory(nana)
 add_subdirectory(imgui)
-add_subdirectory(drawstuff)
+# add_subdirectory(drawstuff)

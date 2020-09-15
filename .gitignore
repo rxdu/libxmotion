@@ -5,7 +5,7 @@ build
 cmake-build-debug
 cmake-build-release/
 
-lcmtypes
+# lcmtypes
 
 data/log/quad/prsim
 

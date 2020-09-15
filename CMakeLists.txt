@@ -9,13 +9,17 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 include(cmake/lcmtypes.cmake)
 lcmtypes_build()
 
+## Set compiler to use c++ 11 features
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # generate symbols for IDE indexer
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/devel)
 
 ## Chosse build type
-# set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
+# set(CMAKE_BUILD_TYPE Debug)
 
 ## Optionally built modules: ON/OFF
 set(ENABLE_LOGGING ON)
@@ -30,3 +34,8 @@ endif(ENABLE_LOGGING)
 
 ## Add source directories
 add_subdirectory(src)
+
+## Add test source directories
+if(BUILD_TESTS)
+    add_subdirectory(unit_tests) 
+endif()
