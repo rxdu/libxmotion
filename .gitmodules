@@ -1,6 +1,3 @@
 [submodule "tests/googletest"]
 	path = tests/googletest
 	url = https://github.com/google/googletest.git
-[submodule "src/third_party/ascent"]
-	path = src/third_party/ascent
-	url = https://github.com/AnyarInc/Ascent.git
