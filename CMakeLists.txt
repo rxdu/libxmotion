@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.16.0)
 project(librav)
 
 # cmake module path
@@ -10,7 +10,7 @@ include(cmake/lcmtypes.cmake)
 lcmtypes_build()
 
 ## Set compiler to use c++ 11 features
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 

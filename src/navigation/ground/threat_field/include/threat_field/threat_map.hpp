@@ -20,9 +20,9 @@ class ThreatMap
     ThreatMap() = default;
     ThreatMap(double px, double py);
 
-    static constexpr double alpha = 0.05;
-    static constexpr double sigma_f = (4.8 / 2) * (4.8 / 2);
-    static constexpr double sigma_s = (1.8 * 4 / 5) * (1.8 * 4 / 5);
+    const double alpha = 0.05;
+    const double sigma_f = (4.8 / 2) * (4.8 / 2);
+    const double sigma_s = (1.8 * 4 / 5) * (1.8 * 4 / 5);
 
     double operator()(double x, double y, double vx, double vy);
     void PrintInfo();
