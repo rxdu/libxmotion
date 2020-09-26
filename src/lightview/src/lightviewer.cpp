@@ -71,11 +71,15 @@ bool LightViewer::SetupViewer(int width, int hight, std::string title, bool dark
 
     // Initialize OpenGL loader
     // if (gl3wInit() != 0)
-    if (glewInit() != GLEW_OK)
-    {
-        std::cerr << "Failed to initialize OpenGL loader!" << std::endl;
-        return false;
-    }
+    // if (glewInit() != GLEW_OK)
+    // {
+    //     std::cerr << "Failed to initialize OpenGL loader!" << std::endl;
+    //     return false;
+    // }
+      // setup OpenGL context
+  glfwMakeContextCurrent(window_);
+  if (!gladLoadGL()) return false; 
+  glfwSwapInterval(1);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();

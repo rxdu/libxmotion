@@ -12,7 +12,8 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include <GL/gl3w.h>
+// #include <GL/gl3w.h>
+#include "glad/glad.h"
 
 using namespace librav;
 

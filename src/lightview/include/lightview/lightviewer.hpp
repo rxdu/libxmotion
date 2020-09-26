@@ -20,8 +20,11 @@
 
 // #include <GL/gl3w.h>
 // #include <GL/gl.h>
-#include <GL/glew.h>
-#include <GL/glu.h>
+// #include <GL/glew.h>
+// #include <GL/glu.h>// 
+
+#include <glad/glad.h>
+// #include <GLFW/glfw3.h>
 
 // Include glfw3.h after OpenGL definitions
 #include <GLFW/glfw3.h>

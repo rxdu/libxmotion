@@ -9,7 +9,9 @@
 
 #include "lightview/lightwidgets.hpp"
 
-#include <GL/gl3w.h>
+// #include <GL/gl3w.h>
+#include "glad/glad.h"
+
 #include "lightview/viewer_utils.hpp"
 
 namespace librav

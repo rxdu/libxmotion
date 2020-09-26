@@ -11,5 +11,6 @@ add_subdirectory(dubins_curves)
 # add_subdirectory(kindr)
 # add_subdirectory(polynomial)
 # visualization
+add_subdirectory(glad)
 add_subdirectory(imgui)
 # add_subdirectory(drawstuff)

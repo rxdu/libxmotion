@@ -5,4 +5,4 @@ add_subdirectory(third_party)
 
 # Packages built on top of modules
 add_subdirectory(navigation)
-# add_subdirectory(lightview)
+add_subdirectory(lightview)
