@@ -12,6 +12,7 @@
 
 #include <memory>
 
+#include "prediction/vehicle_estimation.hpp"
 #include "traffic_map/traffic_map.hpp"
 #include "threat_field/threat_field.hpp"
 #include "local_planner/lookahead_zone.hpp"

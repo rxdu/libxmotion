@@ -20,6 +20,13 @@ class VehicleStaticThreat
     VehicleStaticThreat() = default;
     VehicleStaticThreat(Pose2d _pose, double _probability) : pose(_pose), probability(_probability){};
 
+    // TODO added for compilation, not sure if behavior is correct yet
+    VehicleStaticThreat& operator=(const VehicleStaticThreat& other) {
+        pose = other.pose;
+        probability = other.probability;
+        return *this;
+    }
+
     void SetParameters(Pose2d _pose, double _probability)
     {
         pose = _pose;

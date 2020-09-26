@@ -2,7 +2,7 @@
 
 #include "reachability/details/tstate_transition_sim.hpp"
 
-#define ENABLE_VIZ
+// #define ENABLE_VIZ
 
 #ifdef ENABLE_VIZ
 #include "lightviz/navviz.hpp"

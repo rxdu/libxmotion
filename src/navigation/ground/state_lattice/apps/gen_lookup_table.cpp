@@ -3,7 +3,7 @@
 
 #include "state_lattice/details/lookup_table.hpp"
 
-#define ENABLE_VIZ
+// #define ENABLE_VIZ
 
 #ifdef ENABLE_VIZ
 #include "lightviz/navviz.hpp"

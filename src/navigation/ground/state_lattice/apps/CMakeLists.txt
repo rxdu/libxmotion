@@ -3,4 +3,4 @@
 
 ## tests
 add_executable(gen_lookup_table gen_lookup_table.cpp)
-target_link_libraries(gen_lookup_table lattice navviz)
+target_link_libraries(gen_lookup_table lattice)

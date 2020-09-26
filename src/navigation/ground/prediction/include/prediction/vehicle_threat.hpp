@@ -29,6 +29,13 @@ class VehicleThreat
     {
         std::shared_ptr<CurvilinearGrid> occupancy_grid;
         std::vector<VehicleStaticThreat> sub_threats;
+
+        // TODO added for compilation, not sure if behavior is correct yet
+        ThreatRecord&operator=(const ThreatRecord &other){
+            occupancy_grid = other.occupancy_grid;
+            sub_threats = other.sub_threats;
+            return *this;
+        }
     };
 
     struct ThreatCase
