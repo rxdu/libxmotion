@@ -8,5 +8,8 @@ add_subdirectory(datalink)
 add_subdirectory(utilities)
 add_subdirectory(visualization)
 
+add_subdirectory(ground)
+add_subdirectory(navviz)
+
 # to be deprecated
 add_subdirectory(legacy)
