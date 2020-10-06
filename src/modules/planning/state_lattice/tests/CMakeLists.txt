@@ -13,3 +13,6 @@ target_link_libraries(test_lookup_table lattice navviz)
 
 add_executable(test_state_lattice test_state_lattice.cpp)
 target_link_libraries(test_state_lattice lattice navviz utils)
+
+add_executable(test_lattice_viz test_lattice_viz.cpp)
+target_link_libraries(test_lattice_viz lattice utils)

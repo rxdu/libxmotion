@@ -12,11 +12,11 @@ This repository contains a collection of software for research on autonomous veh
 | maps        | map files                |
 | src         | C++ code                 |
 
-## Build repository
+## Build and run
 
 ### Install dependencies
 
-## Compile code
+### Compile code
 
 ```
 $ mkdir build

@@ -29,10 +29,10 @@ set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(UGVNAV_VIZ_LIB_SRC
     src/roadmap_draw.cpp
     src/vehicle_draw.cpp
-    src/lattice_draw.cpp
+    # src/lattice_draw.cpp
     src/threat_draw.cpp
     # extension to LightViz
-    src/lightviz/lattice_viz.cpp
+    # src/lightviz/lattice_viz.cpp
     src/lightviz/roadmap_viz.cpp
     src/lightviz/reachability_viz.cpp
     src/lightviz/traffic_viz.cpp

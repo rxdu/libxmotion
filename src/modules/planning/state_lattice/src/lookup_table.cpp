@@ -86,7 +86,7 @@ void LookupTable::GenerateLookupTable(bool save_to_file, std::string filename)
 
 void LookupTable::SaveLookupTableToFile(std::string filename)
 {
-    std::string location = GetLogFolderPath();
+    std::string location = GetDataFolderPath() + "/lattice/lookup/";
     CsvLogger logger(filename, location);
 
     for (auto &entry : entries_)

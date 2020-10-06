@@ -23,12 +23,12 @@ inline std::string GetDataFolderPath()
     if (home_path != NULL)
     {
         std::string hm(home_path);
-        log_path = hm + "/Workspace/librav/data";
+        log_path = hm + "/Workspace/auto_drive/data";
     }
     else
     {
         // default path
-        log_path = "/home/rdu/Workspace/librav/data";
+        log_path = "/home/rdu/Workspace/auto_drive/data";
     }
     return log_path;
 }

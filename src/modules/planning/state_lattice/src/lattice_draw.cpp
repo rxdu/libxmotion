@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "navviz/lattice_draw.hpp"
+#include "state_lattice/lattice_draw.hpp"
 
 using namespace librav;
 

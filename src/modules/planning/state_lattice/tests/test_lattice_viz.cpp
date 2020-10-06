@@ -3,13 +3,9 @@
 #include <cmath>
 
 #include "state_lattice/state_lattice.hpp"
-#include "stopwatch/stopwatch.h"
 
-#define ENABLE_VIZ
-
-#ifdef ENABLE_VIZ
 #include "state_lattice/lattice_viz.hpp"
-#endif
+#include "stopwatch/stopwatch.h"
 
 using namespace librav;
 
@@ -20,10 +16,8 @@ int main()
 
     StateLattice lattice(start, target);
 
-#ifdef ENABLE_VIZ
     if (lattice.IsValid())
         LightViz::ShowStateLattice(lattice, 0.1, 50);
-#endif
 
     return 0;
 }

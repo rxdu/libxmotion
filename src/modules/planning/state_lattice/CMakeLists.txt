@@ -8,9 +8,12 @@ set(LATTICE_LIB_SRC
   src/lookup_table.cpp
   src/primitive_generator.cpp
   src/state_lattice.cpp
+  # drawing
+  src/lattice_draw.cpp
+  src/lattice_viz.cpp 
 )
 add_library(lattice STATIC ${LATTICE_LIB_SRC})
-target_link_libraries(lattice model ascent logging utils)
+target_link_libraries(lattice model ascent logging utils cvdraw)
 target_include_directories(lattice PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
@@ -18,6 +21,6 @@ target_include_directories(lattice PUBLIC
 
 add_subdirectory(apps)
 
-if(BUILD_TESTS)
+# if(BUILD_TESTS)
   add_subdirectory(tests)
-endif()
+# endif()

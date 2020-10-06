@@ -7,10 +7,10 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "lightviz/lattice_viz.hpp"
+#include "state_lattice/lattice_viz.hpp"
 
 #include "cvdraw/cvdraw.hpp"
-#include "navviz/lattice_draw.hpp"
+#include "state_lattice/lattice_draw.hpp"
 
 using namespace librav;
 

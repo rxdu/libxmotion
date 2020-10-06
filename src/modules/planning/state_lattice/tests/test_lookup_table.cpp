@@ -6,7 +6,7 @@
 #define ENABLE_VIZ
 
 #ifdef ENABLE_VIZ
-#include "lightviz/navviz.hpp"
+#include "state_lattice/lattice_viz.hpp"
 #endif
 
 using namespace librav;
