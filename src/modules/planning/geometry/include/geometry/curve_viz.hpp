@@ -18,8 +18,7 @@
 
 namespace librav
 {
-namespace LightViz
-{
+namespace LightViz {
 void ShowCubicSpline(const CSpline &spline, double step = 0.01, int32_t pixel_per_unit = 10, std::string window_name = "Spline Image", bool save_img = false);
 void ShowCubicSpline(const std::vector<CSpline> &splines, double step = 0.01, int32_t pixel_per_unit = 10, std::string window_name = "Spline Image", bool save_img = false);
 void ShowCubicSplinePosition(const std::vector<CSpline> &splines, double step = 0.01, int32_t pixel_per_unit = 10, std::string window_name = "Spline Image", bool save_img = false);

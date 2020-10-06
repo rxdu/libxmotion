@@ -7,10 +7,10 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "lightviz/matrix_viz.hpp"
+#include "geometry/matrix_viz.hpp"
 
 #include "cvdraw/cvdraw.hpp"
-#include "coreviz/matrix_draw.hpp"
+#include "geometry/matrix_draw.hpp"
 
 #include <opencv2/core/eigen.hpp>
 #include <opencv2/imgproc/imgproc.hpp>

@@ -1,4 +1,4 @@
-#include "lightviz/polygon_viz.hpp"
+#include "geometry/polygon_viz.hpp"
 #include "geometry/polygon.hpp"
 
 using namespace librav;

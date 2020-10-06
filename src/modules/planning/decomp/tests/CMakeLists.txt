@@ -26,3 +26,6 @@ target_link_libraries(test_sgrid_draw decomp)
 
 add_executable(test_cgrid_draw test_cgrid_draw.cpp)
 target_link_libraries(test_cgrid_draw decomp)
+
+add_executable(test_sgrid_viz test_sgrid_viz.cpp )
+target_link_libraries(test_sgrid_viz decomp)

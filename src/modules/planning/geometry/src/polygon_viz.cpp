@@ -7,11 +7,11 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "lightviz/polygon_viz.hpp"
+#include "geometry/polygon_viz.hpp"
 
 #include <cmath>
 
-#include "coreviz/geometry_draw.hpp"
+#include "geometry/geometry_draw.hpp"
 
 using namespace librav;
 using namespace LightViz;

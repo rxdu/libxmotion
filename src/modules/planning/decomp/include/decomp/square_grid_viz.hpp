@@ -13,10 +13,10 @@
 #include <cstdint>
 
 #include "cvdraw/cvdraw.hpp"
-#include "coreviz/square_grid_draw.hpp"
 
 #include "decomp/square_grid.hpp"
 #include "graph/graph.hpp"
+#include "decomp/square_grid_draw.hpp"
 
 namespace librav
 {

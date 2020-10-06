@@ -12,7 +12,10 @@ set(GEOMETRY_LIB_SRC
     src/parametric_curve.cpp
     # drawing
     src/matrix_draw.cpp
-	src/geometry_draw.cpp
+    src/geometry_draw.cpp
+    src/curve_viz.cpp
+    # src/matrix_viz.cpp
+	src/polygon_viz.cpp
 )
 add_library(geometry STATIC ${GEOMETRY_LIB_SRC})
 target_link_libraries(geometry cvdraw ${CGAL_LIBS} ${GSL_LIBRARIES} ${TBB_LIBRARIES})
