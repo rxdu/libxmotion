@@ -3,4 +3,4 @@
 add_subdirectory(modules)
 
 # Packages built on top of modules
-add_subdirectory(lightview)
+# add_subdirectory(lightview)

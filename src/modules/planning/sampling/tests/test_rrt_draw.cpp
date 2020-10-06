@@ -5,7 +5,7 @@
 #include "sampling/space/realvector_space.hpp"
 #include "sampling/steer/rv_straight_steer.hpp"
 
-#include "coreviz/rrt_draw.hpp"
+#include "sampling/rrt_draw.hpp"
 
 using namespace librav;
 

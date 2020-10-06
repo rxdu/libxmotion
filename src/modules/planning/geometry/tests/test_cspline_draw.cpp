@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "geometry/cspline.hpp"
-#include "coreviz/geometry_draw.hpp"
+#include "geometry/geometry_draw.hpp"
 
 using namespace librav;
 

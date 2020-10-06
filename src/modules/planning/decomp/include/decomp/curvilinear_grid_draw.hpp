@@ -17,13 +17,10 @@
 #include <Eigen/Dense>
 
 #include "decomp/curvilinear_grid.hpp"
-#include "cvdraw/cvdraw.hpp"
-#include "coreviz/geometry_draw.hpp"
+#include "geometry/geometry_draw.hpp"
 
-namespace librav
-{
-namespace CurvilinearGridViz
-{
+namespace librav {
+namespace CurvilinearGridViz {
 // geometric grid
 template <typename GridType>
 void DrawCurvilinearGrid(CvCanvas &canvas, const GridType &grid, cv::Scalar ln_color = CvColors::lime_color, int32_t thickness = 1)

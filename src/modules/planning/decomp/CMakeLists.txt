@@ -7,7 +7,7 @@ set(ENABLE_CURVILINEAR_GRID on)
 # Add libraries
 add_library(decomp INTERFACE)
 if(ENABLE_CURVILINEAR_GRID)
-target_link_libraries(decomp INTERFACE geometry)
+target_link_libraries(decomp INTERFACE geometry graph)
 endif()
 target_include_directories(decomp INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -15,6 +15,6 @@ target_include_directories(decomp INTERFACE
   $<INSTALL_INTERFACE:include>)
 
 # Add tests
-if(BUILD_TESTS)
+# if(BUILD_TESTS)
   add_subdirectory(tests)
-endif()
+# endif()

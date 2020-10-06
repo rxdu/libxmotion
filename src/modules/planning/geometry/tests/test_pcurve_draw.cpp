@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "geometry/parametric_curve.hpp"
-#include "coreviz/geometry_draw.hpp"
+#include "geometry/geometry_draw.hpp"
 
 using namespace librav;
 

@@ -19,3 +19,6 @@ target_link_libraries(test_rrg sampling utils)
 
 add_executable(test_rrts test_rrts.cpp)
 target_link_libraries(test_rrts sampling utils)
+
+add_executable(test_rrt_draw test_rrt_draw.cpp)
+target_link_libraries(test_rrt_draw sampling)

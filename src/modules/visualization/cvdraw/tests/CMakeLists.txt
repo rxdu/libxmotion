@@ -3,7 +3,7 @@
 
 ## tests
 add_executable(test_image_rw test_image_rw.cpp)
-target_link_libraries(test_image_rw coreviz)
+target_link_libraries(test_image_rw cvdraw)
 
 add_executable(test_cv_canvas test_cv_canvas.cpp)
 target_link_libraries(test_cv_canvas cvdraw)

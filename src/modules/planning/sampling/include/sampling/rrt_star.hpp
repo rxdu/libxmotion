@@ -25,7 +25,7 @@
 // #define SHOW_TREE_GROWTH
 
 #ifdef SHOW_TREE_GROWTH
-#include "coreviz/rrt_draw.hpp"
+#include "sampling/rrt_draw.hpp"
 // #define SHOW_INTERMEDIATE_STEPS
 #endif
 

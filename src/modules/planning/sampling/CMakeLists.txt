@@ -13,6 +13,6 @@ target_include_directories(sampling PUBLIC
   $<INSTALL_INTERFACE:include>
   private src)
 
-if(BUILD_TESTS)
+# if(BUILD_TESTS)
   add_subdirectory(tests)
-endif()
+# endif()

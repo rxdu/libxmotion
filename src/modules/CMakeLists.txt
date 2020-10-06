@@ -9,7 +9,7 @@ add_subdirectory(utilities)
 add_subdirectory(visualization)
 
 add_subdirectory(drive)
-add_subdirectory(navviz)
+# add_subdirectory(navviz)
 
 # to be deprecated
 add_subdirectory(legacy)

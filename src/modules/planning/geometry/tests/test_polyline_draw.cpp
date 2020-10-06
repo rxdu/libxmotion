@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "geometry/polyline.hpp"
-#include "coreviz/geometry_draw.hpp"
+#include "geometry/geometry_draw.hpp"
 
 using namespace librav;
 

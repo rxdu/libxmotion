@@ -8,7 +8,7 @@ int main()
 {
     // Mat image;
     // image = imread("/home/rdu/Workspace/librav/data/intensity.jpg", cv::IMREAD_COLOR);   // Read the file
-    std::string file_name = "/home/rdu/Workspace/librav/data/intensity/intensity.jpg";
+    std::string file_name = "/home/rdu/Pictures/3dr_solo_sim.png";
     cv::Mat image = cv::imread(file_name, cv::IMREAD_COLOR); // Read the file
 
     // CvDraw::ShowImage(file_name, "test greyscale");

@@ -18,10 +18,8 @@
 
 #include "cvdraw/cvdraw.hpp"
 
-namespace librav
-{
-namespace SquareGridViz
-{
+namespace librav {
+namespace SquareGridViz {
 template <typename GridType>
 CvCanvas CreateCanvas(GridType *grid, int32_t ppu = 100)
 {

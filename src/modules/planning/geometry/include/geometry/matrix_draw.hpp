@@ -1,9 +1,9 @@
-/* 
+/*
  * matrix_draw.hpp
- * 
+ *
  * Created on: Aug 10, 2018 09:32
- * Description: 
- * 
+ * Description:
+ *
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
@@ -13,12 +13,10 @@
 #include <Eigen/Dense>
 #include <opencv2/opencv.hpp>
 
-namespace librav
-{
-namespace MatrixViz
-{
+namespace librav {
+namespace MatrixViz {
 cv::Mat CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix, bool invert_y = false);
 };
-} // namespace librav
+}  // namespace librav
 
 #endif /* MATRIX_DRAW_HPP */

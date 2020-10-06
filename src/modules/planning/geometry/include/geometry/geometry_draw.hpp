@@ -19,15 +19,12 @@
 #include "geometry/polygon.hpp"
 #include "geometry/cspline.hpp"
 #include "geometry/parametric_curve.hpp"
-#include "decomp/curvilinear_grid.hpp"
+#include "geometry/matrix_draw.hpp"
 
 #include "cvdraw/cvdraw.hpp"
-#include "coreviz/matrix_draw.hpp"
 
-namespace librav
-{
-namespace GeometryViz
-{
+namespace librav {
+namespace GeometryViz {
 // curve
 void DrawPolyline(CvCanvas &canvas, const Polyline &polyline, bool show_dot = false, cv::Scalar ln_color = CvColors::blue_color, int32_t thickness = 1);
 void DrawCubicSpline(CvCanvas &canvas, const CSpline &spline, double step = 0.01, cv::Scalar ln_color = CvColors::blue_color, int32_t thickness = 1);

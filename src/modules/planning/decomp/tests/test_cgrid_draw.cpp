@@ -1,5 +1,5 @@
 #include "decomp/curvilinear_grid.hpp"
-#include "coreviz/curvilinear_grid_draw.hpp"
+#include "decomp/curvilinear_grid_draw.hpp"
 
 using namespace librav;
 
