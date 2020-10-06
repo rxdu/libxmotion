@@ -1,6 +1,6 @@
 # TODO List
 
-## Kernel
+## Modules
 
 - [ ] Remove CGAL dependency if possible
 - [ ] Add memory leak check tests for all modules in "kernel"

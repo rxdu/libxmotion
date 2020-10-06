@@ -1,6 +1,6 @@
-## Add sub source directories
-# Core packages of librav
+## Add source directories
+# Modules
 add_subdirectory(modules)
 
-# Packages built on top of modules
-# add_subdirectory(lightview)
+# Application
+# add_subdirectory(dview)

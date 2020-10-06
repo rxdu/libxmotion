@@ -6,7 +6,7 @@ add_subdirectory(decision)
 add_subdirectory(planning)
 add_subdirectory(datalink)
 add_subdirectory(utilities)
-add_subdirectory(visualization)
+add_subdirectory(cvdraw)
 
 add_subdirectory(drive)
 # add_subdirectory(navviz)

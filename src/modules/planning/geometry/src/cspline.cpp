@@ -116,5 +116,7 @@ double CSpline::Evaluate(double x, int32_t derivative) const
         return gsl_spline_eval_deriv(spline_, x, accel_);
     case 2:
         return gsl_spline_eval_deriv2(spline_, x, accel_);
+    default:
+        return 0;
     }
 }
