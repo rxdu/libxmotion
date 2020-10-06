@@ -1,5 +1,5 @@
 [submodule "tests/googletest"]
-	path = tests/googletest
+	path = src/third_party/googletest
 	url = https://github.com/google/googletest.git
 [submodule "src/third_party/ascent"]
 	path = src/third_party/ascent

@@ -11,5 +11,7 @@ add_subdirectory(cvdraw)
 add_subdirectory(drive)
 # add_subdirectory(navviz)
 
+# add_subdirectory(unit_tests)
+
 # to be deprecated
 add_subdirectory(legacy)

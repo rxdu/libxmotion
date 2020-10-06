@@ -1,6 +1,9 @@
 ## Add source directories
+# Application
+# add_subdirectory(dview)
+
 # Modules
 add_subdirectory(modules)
 
-# Application
-# add_subdirectory(dview)
+# Third-party libraries
+add_subdirectory(third_party)

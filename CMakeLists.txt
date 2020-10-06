@@ -34,9 +34,3 @@ endif(ENABLE_LOGGING)
 
 ## Add source directories
 add_subdirectory(src)
-add_subdirectory(third_party)
-
-## Add test source directories
-if(BUILD_TESTS)
-    add_subdirectory(tests) 
-endif()
