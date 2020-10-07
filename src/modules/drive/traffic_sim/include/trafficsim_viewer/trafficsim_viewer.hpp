@@ -17,7 +17,7 @@
 
 #include "datalink/lcm_link.hpp"
 
-#include "cav_motion/vehicle_state.hpp"
+#include "mission/vehicle_state.hpp"
 #include "road_map/road_map.hpp"
 #include "traffic_map/traffic_map.hpp"
 

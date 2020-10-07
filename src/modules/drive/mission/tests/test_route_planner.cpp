@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "traffic_map/map_loader.hpp"
-#include "cav_motion/route_planner.hpp"
+#include "mission/route_planner.hpp"
 #include "stopwatch/stopwatch.h"
 
 #define ENABLE_VIZ

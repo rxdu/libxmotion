@@ -14,6 +14,10 @@ This repository contains a collection of software for research on autonomous veh
 
 ## Build and run
 
+### Requirements
+
+* C++17
+
 ### Install dependencies
 
 ### Compile code

@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "cav_motion/virtual_controller.hpp"
+#include "mission/virtual_controller.hpp"
 
 namespace autodrive
 {

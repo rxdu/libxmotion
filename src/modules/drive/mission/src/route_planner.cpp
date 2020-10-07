@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "cav_motion/route_planner.hpp"
+#include "mission/route_planner.hpp"
 
 #include <limits>
 

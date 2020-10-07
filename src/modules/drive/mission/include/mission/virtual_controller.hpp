@@ -12,7 +12,7 @@
 
 #include <memory>
 
-#include "cav_motion/cav_datalink.hpp"
+#include "mission/cav_datalink.hpp"
 
 namespace autodrive
 {

@@ -1,5 +1,5 @@
 /* 
- * cav_mission_control.hpp
+ * mission_control.hpp
  * 
  * Created on: Dec 09, 2018 22:52
  * Description: 
@@ -7,14 +7,14 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#ifndef CAV_MISSION_CONTROL_HPP
-#define CAV_MISSION_CONTROL_HPP
+#ifndef MISSION_CONTROL_HPP
+#define MISSION_CONTROL_HPP
 
 #include <string>
 #include <memory>
 
-#include "cav_motion/cav_datalink.hpp"
-#include "cav_motion/route_planner.hpp"
+#include "mission/cav_datalink.hpp"
+#include "mission/route_planner.hpp"
 #include "traffic_map/map_loader.hpp"
 
 namespace autodrive
@@ -62,4 +62,4 @@ class CAVMissionControl
 };
 } // namespace autodrive
 
-#endif /* CAV_MISSION_CONTROL_HPP */
+#endif /* MISSION_CONTROL_HPP */

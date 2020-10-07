@@ -12,7 +12,7 @@
 
 #include <memory>
 
-#include "cav_motion/reference_route.hpp"
+#include "mission/reference_route.hpp"
 #include "traffic_map/traffic_map.hpp"
 
 namespace autodrive

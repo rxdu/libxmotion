@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "cav_motion/vehicle_state.hpp"
+#include "mission/vehicle_state.hpp"
 
 namespace autodrive
 {

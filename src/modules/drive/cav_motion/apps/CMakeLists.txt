@@ -1,9 +1,0 @@
-# Dependency libraries
-#find_package(LIBRARY_NAME REQUIRED)
-
-# tests
-add_executable(app_cav_mission_control app_cav_mission_control.cpp)
-target_link_libraries(app_cav_mission_control cav_motion utils)
-
-add_executable(app_cav_motion_manager app_cav_motion_manager.cpp)
-target_link_libraries(app_cav_motion_manager cav_motion utils)

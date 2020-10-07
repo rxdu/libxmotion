@@ -1,5 +1,5 @@
 /* 
- * cav_mission_control.cpp
+ * mission_control.cpp
  * 
  * Created on: Dec 09, 2018 22:52
  * Description: 
@@ -7,8 +7,8 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "cav_motion/cav_mission_control.hpp"
-#include "cav_motion/vehicle_state.hpp"
+#include "mission/mission_control.hpp"
+#include "mission/vehicle_state.hpp"
 
 namespace autodrive
 {

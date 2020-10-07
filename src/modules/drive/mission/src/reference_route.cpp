@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "cav_motion/reference_route.hpp"
+#include "mission/reference_route.hpp"
 
 #include <iostream>
 

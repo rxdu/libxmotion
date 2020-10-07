@@ -15,7 +15,7 @@
 #include <string>
 
 #include <lcm/lcm-cpp.hpp>
-#include "lcmtypes/librav.hpp"
+#include "lcmtypes/auto_drive.hpp"
 
 #include <octomap/octomap.h>
 #include <octomap/OcTree.h>

@@ -11,7 +11,7 @@
 #define VEHICLE_MOTION_HPP
 
 #include "traffic_sim/vehicle_info.hpp"
-#include "cav_motion/vehicle_state.hpp"
+#include "mission/vehicle_state.hpp"
 
 namespace autodrive
 {

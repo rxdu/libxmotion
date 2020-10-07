@@ -4,7 +4,7 @@
 
 #include "road_map/road_map.hpp"
 #include "traffic_map/map_loader.hpp"
-#include "cav_motion/cav_motion_manager.hpp"
+#include "mission/motion_manager.hpp"
 
 #include "stopwatch/stopwatch.h"
 
@@ -16,7 +16,7 @@ int main()
 
     if (!manager.IsReady())
     {
-        std::cerr << "ERROR: planner is not set up properly" << std::endl;
+        std::cerr << "ERROR: motion manager is not set up properly" << std::endl;
         return -1;
     }
 

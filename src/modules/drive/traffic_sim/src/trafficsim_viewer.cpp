@@ -16,7 +16,7 @@
 #include "traffic_viz/vehicle_draw.hpp"
 
 #include "traffic_map/map_loader.hpp"
-#include "cav_motion/cav_datalink.hpp"
+#include "mission/cav_datalink.hpp"
 
 using namespace autodrive;
 

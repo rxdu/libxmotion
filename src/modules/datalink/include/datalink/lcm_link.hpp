@@ -12,6 +12,6 @@
 
 // headers for lcm
 #include "datalink/details/lcm-cpp.hpp"
-#include "lcmtypes/librav.hpp"
+#include "lcmtypes/auto_drive.hpp"
 
 #endif /* LCM_LINK_HPP */

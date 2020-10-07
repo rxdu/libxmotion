@@ -1,5 +1,5 @@
 /* 
- * cav_motion_manager.cpp
+ * motion_manager.cpp
  * 
  * Created on: Dec 06, 2018 03:21
  * Description: 
@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "cav_motion/cav_motion_manager.hpp"
+#include "mission/motion_manager.hpp"
 
 #include <iostream>
 

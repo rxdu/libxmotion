@@ -11,7 +11,7 @@
 
 #include <functional>
 
-#include "cav_motion/vehicle_state.hpp"
+#include "mission/vehicle_state.hpp"
 
 #include "decomp/curvilinear_grid_draw.hpp"
 #include "state_lattice/lattice_draw.hpp"
