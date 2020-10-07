@@ -12,7 +12,7 @@
 #include <cstdint>
 #include <cmath>
 
-using namespace librav;
+using namespace autodrive;
 
 BicycleKinematics::BicycleKinematics(control_t u) : u_(u)
 {

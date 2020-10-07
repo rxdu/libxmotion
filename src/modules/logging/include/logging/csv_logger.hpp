@@ -20,7 +20,7 @@
 
 #include "logging/details/specialized_logger.hpp"
 
-namespace librav
+namespace autodrive
 {
 class CsvLogger : public SpecializedLogger
 {
@@ -61,6 +61,6 @@ class GlobalCsvLogger : public CsvLogger
     GlobalCsvLogger(const GlobalCsvLogger &) = delete;
     GlobalCsvLogger &operator=(const GlobalCsvLogger &) = delete;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* CSV_LOGGER_HPP */

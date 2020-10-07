@@ -9,7 +9,7 @@
 
 #include "traffic_sim/traffic_sim_config.hpp"
 
-namespace librav
+namespace autodrive
 {
 std::atomic<int32_t> VehicleInfo::count = {0};
 }

@@ -51,7 +51,7 @@
 #include <mutex>
 #include <random>
 
-namespace librav
+namespace autodrive
 {
 class RNGSeedGenerator
 {
@@ -123,6 +123,6 @@ class RNGSeedGenerator
     std::ranlux24_base sGen_;
     std::uniform_int_distribution<> sDist_;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* RNG_SEED_GEN_HPP */

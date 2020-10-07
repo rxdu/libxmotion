@@ -25,7 +25,7 @@
 #include "graph/graph.hpp"
 #include "graph/details/priority_queue.hpp"
 
-namespace librav
+namespace autodrive
 {
 
 template <typename State>
@@ -390,6 +390,6 @@ class DijkstraTraversal
 	};
 };
 
-} // namespace librav
+} // namespace autodrive
 
 #endif /* DIJKSTRA_HPP */

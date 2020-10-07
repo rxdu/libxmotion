@@ -20,7 +20,7 @@
 
 #include "logging/details/specialized_logger.hpp"
 
-namespace librav
+namespace autodrive
 {
 class CtrlLogger : public SpecializedLogger
 {
@@ -53,6 +53,6 @@ class CtrlLogger : public SpecializedLogger
     CtrlLogger(const CtrlLogger &) = delete;
     CtrlLogger &operator=(const CtrlLogger &) = delete;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* CTRL_LOGGER_HPP */

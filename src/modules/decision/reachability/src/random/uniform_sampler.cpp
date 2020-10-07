@@ -9,7 +9,7 @@
 
 #include "random/uniform_sampler.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 UniformSampler::UniformSampler(double min, double max) : min_(min), max_(max), distribution_(min, max)
 {

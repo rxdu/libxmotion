@@ -11,7 +11,7 @@
 
 using namespace cv;
 
-namespace librav
+namespace autodrive
 {
 namespace
 {

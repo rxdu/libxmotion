@@ -12,7 +12,7 @@
 #include "cvdraw/cvdraw.hpp"
 #include "state_lattice/lattice_draw.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 void LightViz::ShowMotionStateTrajectory(const std::vector<MotionState> &states, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {

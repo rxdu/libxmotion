@@ -19,7 +19,7 @@
 #include "adtypes/adtypes.hpp"
 #include "geometry/polygon.hpp"
 
-namespace librav
+namespace autodrive
 {
 struct VehicleFootprint
 {
@@ -86,6 +86,6 @@ class VehicleState
 
     VehicleFootprint footprint_;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* VEHICLE_STATE_HPP */

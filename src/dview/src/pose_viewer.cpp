@@ -15,7 +15,7 @@
 
 #include "drawstuff/drawstuff.h"
 
-using namespace librav;
+using namespace autodrive;
 
 namespace
 {
@@ -110,13 +110,13 @@ PoseViewer::PoseViewer() : LightViewer()
     data_link_->subscribe(CAV_COMMON_CHANNELS::EGO_VEHICLE_STATE_CHANNEL, &PoseViewer::HandleEgoVehicleStateMsg, this);
 }
 
-void PoseViewer::HandleEgoVehicleStateMsg(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleState *msg)
+void PoseViewer::HandleEgoVehicleStateMsg(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleState *msg)
 {
     ego_vehicle_state_ = VehicleState(msg->id, {msg->position[0], msg->position[1], msg->theta}, msg->speed);
     ego_state_updated_ = true;
 }
 
-void PoseViewer::HandleVehicleEstimationsMsg(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg)
+void PoseViewer::HandleVehicleEstimationsMsg(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg)
 {
     surrounding_vehicles_.clear();
     for (int i = 0; i < msg->vehicle_num; ++i)

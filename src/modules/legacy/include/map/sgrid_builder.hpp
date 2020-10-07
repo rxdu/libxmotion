@@ -20,7 +20,7 @@
 
 #include "map/square_grid.hpp"
 
-namespace librav
+namespace autodrive
 {
 
 namespace SGridBuilderV2

@@ -11,7 +11,7 @@
 #ifdef ENABLE_VIZ
 #include "lightviz/navviz.hpp"
 #endif
-using namespace librav;
+using namespace autodrive;
 
 int main()
 {

@@ -9,7 +9,7 @@
 
 #include "traffic_map/traffic_map.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 TrafficMap::TrafficMap(std::shared_ptr<RoadMap> map) : road_map_(map)
 {

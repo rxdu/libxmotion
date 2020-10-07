@@ -12,7 +12,7 @@
 
 #include <functional>
 
-namespace librav
+namespace autodrive
 {
 template <typename Transition>
 class DefaultComparator
@@ -26,6 +26,6 @@ class DefaultComparator
   private:
     // Comparator compare;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* DEFAULT_COMPARATOR_HPP */

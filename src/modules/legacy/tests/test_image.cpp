@@ -16,7 +16,7 @@
 #include "map/image_utils.h"
 
 using namespace cv;
-using namespace librav;
+using namespace autodrive;
 
 int main(int argc, char** argv )
 {

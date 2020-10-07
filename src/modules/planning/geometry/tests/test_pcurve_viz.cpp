@@ -3,7 +3,7 @@
 #include "geometry/parametric_curve.hpp"
 #include "geometry/curve_viz.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 int main()
 {

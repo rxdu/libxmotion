@@ -4,7 +4,7 @@
 
 #include "trajectory/trajectory.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 int main()
 {

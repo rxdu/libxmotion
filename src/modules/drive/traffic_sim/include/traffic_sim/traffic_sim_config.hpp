@@ -16,7 +16,7 @@
 
 #include "traffic_sim/vehicle_info.hpp"
 
-namespace librav
+namespace autodrive
 {
 struct TrafficSimConfig
 {
@@ -36,6 +36,6 @@ struct TrafficSimConfig
     VehicleInfo ego_vehicle;
     std::vector<VehicleInfo> surrounding_vehicles;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* TRAFFIC_SIM_CONFIG_HPP */

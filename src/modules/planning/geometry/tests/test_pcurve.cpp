@@ -2,7 +2,7 @@
 
 #include "geometry/parametric_curve.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 int main()
 {

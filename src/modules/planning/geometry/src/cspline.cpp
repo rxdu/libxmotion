@@ -13,7 +13,7 @@
 #include <algorithm>
 #include <cassert>
 
-using namespace librav;
+using namespace autodrive;
 
 CSpline::CSpline()
 {

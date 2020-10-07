@@ -5,7 +5,7 @@
 #include "map/image_utils.h"
 #include "map/qtree_builder.h"
 
-using namespace librav;
+using namespace autodrive;
 using namespace cv;
 
 /*

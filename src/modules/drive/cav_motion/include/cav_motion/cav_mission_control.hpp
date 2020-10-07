@@ -17,7 +17,7 @@
 #include "cav_motion/route_planner.hpp"
 #include "traffic_map/map_loader.hpp"
 
-namespace librav
+namespace autodrive
 {
 class CAVMissionControl
 {
@@ -60,6 +60,6 @@ class CAVMissionControl
     void ResetMission();
     void ValidateMissionRequest();
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* CAV_MISSION_CONTROL_HPP */

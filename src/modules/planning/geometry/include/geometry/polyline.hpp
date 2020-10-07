@@ -20,7 +20,7 @@
 
 #include "geometry/simple_point.hpp"
 
-namespace librav
+namespace autodrive
 {
 class Polyline
 {
@@ -85,6 +85,6 @@ private:
 
   void UpdateXYMinMax(double x, double y);
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* POLYLINE_HPP */

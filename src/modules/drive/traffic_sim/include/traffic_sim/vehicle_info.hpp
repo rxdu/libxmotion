@@ -18,7 +18,7 @@
 
 #include "traffic_map/traffic_channel.hpp"
 
-namespace librav
+namespace autodrive
 {
 enum class DriveMode
 {
@@ -71,6 +71,6 @@ struct VehicleInfo
     // used to generate id automatically
     static std::atomic<int32_t> count;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* VEHICLE_INFO_HPP */

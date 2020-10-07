@@ -10,7 +10,7 @@
 #ifndef SPEED_PROFILE_HPP
 #define SPEED_PROFILE_HPP
 
-namespace librav
+namespace autodrive
 {
 class SpeedProfileIF
 {
@@ -36,6 +36,6 @@ class ConstSpeedProfile : public SpeedProfileIF
   private:
     double speed_;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* SPEED_PROFILE_HPP */

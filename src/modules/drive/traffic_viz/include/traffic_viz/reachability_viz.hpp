@@ -15,12 +15,12 @@
 
 #include "reachability/tstate_space.hpp"
 
-namespace librav
+namespace autodrive
 {
 namespace LightViz
 {
 void ShowTStateSpace(TStateSpace &space, int32_t pixel_per_unit = 100, std::string window_name = "Reachability Image", bool save_img = false);
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* REACHABILITY_VIZ_HPP */

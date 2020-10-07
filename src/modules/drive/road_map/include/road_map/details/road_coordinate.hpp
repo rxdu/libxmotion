@@ -14,7 +14,7 @@
 #include <liblanelet/Lanelet.hpp>
 #include <liblanelet/LaneletPoint.hpp>
 
-namespace librav
+namespace autodrive
 {
 /*
  *  Internal Coordinate System:

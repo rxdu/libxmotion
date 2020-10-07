@@ -15,7 +15,7 @@
 #include "cav_motion/reference_route.hpp"
 #include "traffic_map/traffic_map.hpp"
 
-namespace librav
+namespace autodrive
 {
 class RoutePlanner
 {
@@ -38,6 +38,6 @@ class RoutePlanner
     std::shared_ptr<RoadMap> road_map_;
     std::shared_ptr<TrafficMap> traffic_map_;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* ROUTE_PLANNER_HPP */

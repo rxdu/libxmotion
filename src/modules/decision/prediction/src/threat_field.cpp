@@ -11,7 +11,7 @@
 
 #include <tbb/tbb.h>
 
-using namespace librav;
+using namespace autodrive;
 
 ThreatField::ThreatField(std::shared_ptr<RoadMap> rmap, std::shared_ptr<TrafficMap> tmap) : road_map_(rmap), traffic_map_(tmap)
 {

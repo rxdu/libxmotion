@@ -27,7 +27,7 @@
 
 #include "graph/details/default_indexer.hpp"
 
-namespace librav
+namespace autodrive
 {
 /// Tree class template.
 template <typename State, typename Transition = double, typename StateIndexer = DefaultIndexer<State>>
@@ -314,7 +314,7 @@ class Tree
 
 template <typename State, typename Transition = double, typename StateIndexer = DefaultIndexer<State>>
 using Tree_t = Tree<State, Transition, StateIndexer>;
-} // namespace librav
+} // namespace autodrive
 
 #include "graph/details/tree/tree_edge_impl.hpp"
 #include "graph/details/tree/tree_vertex_impl.hpp"

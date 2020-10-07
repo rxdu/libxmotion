@@ -7,7 +7,7 @@
 
 #include "map/image_utils.hpp"
 
-using namespace librav;
+using namespace autodrive;
 using namespace cv;
 
 void Map::BinarizeImage(cv::InputArray _src, cv::OutputArray _dst, uint8_t thresh)

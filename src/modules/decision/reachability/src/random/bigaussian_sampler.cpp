@@ -9,7 +9,7 @@
 
 #include "random/bigaussian_sampler.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 BiGaussianSampler::BiGaussianSampler(double sigma_x, double sigma_y, double rho) : sigma_x_(sigma_x),
                                                                             sigma_y_(sigma_y),

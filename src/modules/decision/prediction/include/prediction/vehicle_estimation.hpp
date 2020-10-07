@@ -18,7 +18,7 @@
 #include "adtypes/adtypes.hpp"
 #include "geometry/polygon.hpp"
 
-namespace librav
+namespace autodrive
 {
 struct VehicleFP
 {
@@ -80,6 +80,6 @@ class VehicleEstimation
     double spd_var_ = 0;
     VehicleFP footprint_;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* VEHICLE_ESTIMATION_HPP */

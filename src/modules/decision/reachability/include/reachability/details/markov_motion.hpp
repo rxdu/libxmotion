@@ -17,7 +17,7 @@
 #include "reachability/details/markov_command.hpp"
 #include "reachability/details/occupancy_markov_chain.hpp"
 
-namespace librav
+namespace autodrive
 {
 class SVDistribution
 {
@@ -164,6 +164,6 @@ class MarkovMotion : public OccupancyMarkovChain<M * N>
     std::shared_ptr<TStateSpace> state_space_;
     std::shared_ptr<CommandModel> cmd_model_;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* MARKOV_MOTION_HPP */

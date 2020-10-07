@@ -18,7 +18,7 @@
 
 #include "reachability/details/car_longitudinal_model.hpp"
 
-namespace librav
+namespace autodrive
 {
 class CarModelPropagator
 {
@@ -47,6 +47,6 @@ public:
 private:
   asc::RK4 integrator_;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* CAR_MODEL_PROPAGATOR_HPP */

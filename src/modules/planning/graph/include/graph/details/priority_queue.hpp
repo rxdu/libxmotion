@@ -13,7 +13,7 @@
 #include <utility>
 #include <queue>
 
-namespace librav
+namespace autodrive
 {
 template <typename T>
 struct PQElementComparator
@@ -54,6 +54,6 @@ struct PriorityQueue
 		return best_item;
 	}
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* PRIORITY_QUEUE_HPP */

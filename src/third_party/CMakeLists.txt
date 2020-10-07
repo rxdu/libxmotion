@@ -13,7 +13,6 @@ add_subdirectory(dubins_curves)
 # visualization
 add_subdirectory(glad)
 add_subdirectory(imgui)
-# add_subdirectory(drawstuff)
 
 if(BUILD_TESTS)
     # Google tests

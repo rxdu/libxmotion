@@ -17,7 +17,7 @@
 #include "cav_motion/route_planner.hpp"
 #include "traffic_map/map_loader.hpp"
 
-namespace librav
+namespace autodrive
 {
 class CAVMotionManager
 {
@@ -49,10 +49,10 @@ class CAVMotionManager
     ReferenceRoute current_route_;
 
     void ResetTask();
-    void HandleMissionInfoMsg(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::CAVMissionInfo *msg);
-    void HandleEgoVehicleStateMsg(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleState *msg);
-    void HandleVehicleEstimationsMsg(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg);
+    void HandleMissionInfoMsg(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::CAVMissionInfo *msg);
+    void HandleEgoVehicleStateMsg(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleState *msg);
+    void HandleVehicleEstimationsMsg(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg);
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* CAV_MOTION_MANAGER_HPP */

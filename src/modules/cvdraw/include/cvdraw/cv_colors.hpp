@@ -12,7 +12,7 @@
 
 #include "cvdraw/details/cvdraw_headers.hpp"
 
-namespace librav
+namespace autodrive
 {
 /********************* Common Colors *********************/
 struct CvColors
@@ -51,6 +51,6 @@ struct CvColors
     static const cv::Scalar honeydew_color;
     static const cv::Scalar palegreen_color;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* CV_COLORS_HPP */

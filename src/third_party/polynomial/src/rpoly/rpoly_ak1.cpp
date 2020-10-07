@@ -46,7 +46,7 @@
 
 #include "polynomial/rpoly/rpoly_ak1.h"
 
-namespace librav {
+namespace autodrive {
 
 constexpr int kRpolyMaxDegree = 100;
 
@@ -945,4 +945,4 @@ void rpolyWrapper(double* coefficients_decreasing, int* degree,
                         roots_imag);
 }
 
-}  // namespace librav
+}  // namespace autodrive

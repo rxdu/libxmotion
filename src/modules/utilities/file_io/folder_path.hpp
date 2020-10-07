@@ -13,7 +13,7 @@
 #include <cstdlib>
 #include <string>
 
-namespace librav
+namespace autodrive
 {
 namespace FolderPath
 {
@@ -40,6 +40,6 @@ inline std::string GetLogFolderPath()
     return GetDataFolderPath() + "/log";
 }
 } // namespace FolderPath
-} // namespace librav
+} // namespace autodrive
 
 #endif /* FOLDER_PATH_HPP */

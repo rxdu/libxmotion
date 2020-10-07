@@ -12,7 +12,7 @@
 
 #include "EigenFileIO/EigenFileIO.hpp"
 
-namespace librav
+namespace autodrive
 {
 namespace MatrixFile
 {
@@ -35,6 +35,6 @@ bool saveMatrix(std::string directory, std::string filename, Eigen::Matrix<Scala
 }
 
 } // namespace MatrixFile
-} // namespace librav
+} // namespace autodrive
 
 #endif /* MATRIX_FILE_HPP */

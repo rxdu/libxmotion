@@ -22,7 +22,7 @@
 
 #include "cvdraw/cvdraw.hpp"
 
-namespace librav
+namespace autodrive
 {
 namespace RoadMapViz
 {
@@ -30,6 +30,6 @@ void DrawLanes(CvCanvas &canvas, std::shared_ptr<RoadMap> map, bool show_center_
 void DrawTrafficChannelGrid(CvCanvas &canvas, std::shared_ptr<RoadMap> map, TrafficChannel *channel, bool show_center_line = true);
 void DrawTrafficChannelCenterline(CvCanvas &canvas, std::shared_ptr<RoadMap> map, TrafficChannel *channel);
 }; // namespace RoadMapViz
-} // namespace librav
+} // namespace autodrive
 
 #endif /* ROADMAP_DRAW_HPP */

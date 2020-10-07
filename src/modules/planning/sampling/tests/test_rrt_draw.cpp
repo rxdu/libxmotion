@@ -7,7 +7,7 @@
 
 #include "sampling/rrt_draw.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 int main()
 {

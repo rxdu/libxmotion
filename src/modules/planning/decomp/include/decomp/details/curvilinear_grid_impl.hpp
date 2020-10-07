@@ -10,7 +10,7 @@
 #ifndef CURVILINEAR_GRID_IMPL_HPP
 #define CURVILINEAR_GRID_IMPL_HPP
 
-namespace librav
+namespace autodrive
 {
 template <typename T, typename CurveType>
 CurvilinearGridBase<T, CurveType>::CurvilinearGridBase(CurveType pcurve, double s_step, double d_step, int32_t d_num, double s_offset) : curve_(pcurve), s_step_(s_step), delta_step_(d_step), delta_num_(d_num), s_offset_(s_offset)
@@ -193,6 +193,6 @@ SimplePoint CurvilinearGridBase<T, CurveType>::ConvertToGlobalCoordinate(typenam
 
     return SimplePoint(result.x(), result.y());
 }
-} // namespace librav
+} // namespace autodrive
 
 #endif /* CURVILINEAR_GRID_IMPL_HPP */

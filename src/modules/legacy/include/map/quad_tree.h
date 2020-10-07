@@ -9,7 +9,7 @@
 //#include "qtree_types.h"
 #include "planning/graph/bds_base.h"
 
-namespace librav {
+namespace autodrive {
 
 // Definition of Supporting Types
 enum class NodeType

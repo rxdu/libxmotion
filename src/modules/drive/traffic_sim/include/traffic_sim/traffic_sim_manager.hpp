@@ -20,7 +20,7 @@
 #include "traffic_sim/traffic_sim_config.hpp"
 #include "traffic_sim/vehicle_manager.hpp"
 
-namespace librav
+namespace autodrive
 {
 class TrafficSimManager
 {
@@ -43,8 +43,8 @@ class TrafficSimManager
 
     void UpdateSimState(double t);
 
-    void HandleSyncTriggerMsg(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg);
+    void HandleSyncTriggerMsg(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg);
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* TRAFFIC_SIM_MANAGER_HPP */

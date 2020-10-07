@@ -14,7 +14,7 @@
 
 #include "graph/graph.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 struct DenseGridTest : testing::Test
 {

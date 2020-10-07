@@ -15,13 +15,13 @@
 
 #include "cvdraw/cvdraw.hpp"
 
-namespace librav
+namespace autodrive
 {
 namespace ThreatViz
 {
 void DrawCollisionThreat(CvCanvas &canvas, VehicleThreat &threat, int32_t t_k, double cx, double cy, double xspan, double yspan);
 void DrawCollisionThreatField(CvCanvas &canvas, ThreatField &field, int32_t t_k, double cx, double cy, double xspan, double yspan);
 }; // namespace ThreatViz
-} // namespace librav
+} // namespace autodrive
 
 #endif /* THREAT_DRAW_HPP */

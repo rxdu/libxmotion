@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <iostream>
 
-namespace librav
+namespace autodrive
 {
 struct TModelSolver
 {
@@ -43,6 +43,6 @@ struct TModelSolver
     static constexpr double v_max = 18.0; // 18 m/s ~= 40 mph
     static constexpr double a_max = 7.0;  // 7.0 m/s^2
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* TMODEL_SOLVER_HPP */

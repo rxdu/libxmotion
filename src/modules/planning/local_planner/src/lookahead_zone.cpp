@@ -9,7 +9,7 @@
 
 #include "local_planner/lookahead_zone.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 LookaheadZone::LookaheadZone(ReferenceTrajectory curve, double s_step) : CurvilinearGridBase<ThreatField::ThreatComponent, ReferenceTrajectory>(curve, s_step, DStep, DNum, SOffset),
                                                                          trajectory_(curve)

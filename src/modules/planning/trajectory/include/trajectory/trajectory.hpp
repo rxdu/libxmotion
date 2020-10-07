@@ -12,7 +12,7 @@
 
 #include <cstdint>
 
-namespace librav
+namespace autodrive
 {
 template <int32_t N>
 class Trajectory
@@ -25,6 +25,6 @@ public:
 private:
   int32_t dimension_;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* TRAJECTORY_HPP */

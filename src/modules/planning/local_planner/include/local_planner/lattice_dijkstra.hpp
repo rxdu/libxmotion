@@ -28,7 +28,7 @@
 #include "state_lattice/state_lattice.hpp"
 #include "local_planner/lattice_graph.hpp"
 
-namespace librav
+namespace autodrive
 {
 /// Dijkstra search algorithm.
 class LatticeDijkstra
@@ -179,6 +179,6 @@ class LatticeDijkstra
         return path;
     }
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* LATTICE_DIJKSTRA_HPP */

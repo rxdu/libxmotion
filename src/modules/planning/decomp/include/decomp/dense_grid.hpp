@@ -17,7 +17,7 @@
 #include "decomp/details/rect_grid_base.hpp"
 #include "decomp/square_grid.hpp"
 
-namespace librav
+namespace autodrive
 {
 
 /*
@@ -162,6 +162,6 @@ class DenseGrid : public RectGridBase<double>
         return grid;
     }
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* DENSE_GRID_HPP */

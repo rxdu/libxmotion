@@ -27,7 +27,7 @@
 #include "map/map_utils.h"
 
 using namespace cv;
-using namespace librav;
+using namespace autodrive;
 
 int main(int argc, char** argv )
 {

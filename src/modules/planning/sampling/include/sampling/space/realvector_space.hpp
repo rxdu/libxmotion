@@ -23,7 +23,7 @@
 #include "sampling/base/space_base.hpp"
 #include "sampling/space/realvector_bound.hpp"
 
-namespace librav
+namespace autodrive
 {
 template <int32_t N>
 class RealVectorSpace : public SpaceBase
@@ -232,6 +232,6 @@ class RealVectorSpace : public SpaceBase
 
 template <int32_t N>
 std::atomic<std::size_t> RealVectorSpace<N>::StateType::count = {0};
-} // namespace librav
+} // namespace autodrive
 
 #endif /* REALVECTOR_SPACE_HPP */

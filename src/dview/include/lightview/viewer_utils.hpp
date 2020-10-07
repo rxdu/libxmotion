@@ -12,12 +12,12 @@
 
 #include "opencv2/opencv.hpp"
 
-namespace librav
+namespace autodrive
 {
 namespace ViewerUtils
 {
 void ConvertMatToGL(const cv::Mat &src, unsigned int *texID);
 } // namespace ViewerUtils
-} // namespace librav
+} // namespace autodrive
 
 #endif /* VIEWER_UTILS_HPP */

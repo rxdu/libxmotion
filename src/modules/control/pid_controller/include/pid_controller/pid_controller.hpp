@@ -10,13 +10,13 @@
 #ifndef PID_CONTROLLER_HPP
 #define PID_CONTROLLER_HPP
 
-namespace librav
+namespace autodrive
 {
 // PID controller for a SISO system
 class PIDController
 {
   public:
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* PID_CONTROLLER_HPP */

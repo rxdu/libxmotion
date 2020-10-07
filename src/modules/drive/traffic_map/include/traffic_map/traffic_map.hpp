@@ -17,7 +17,7 @@
 #include "road_map/road_map.hpp"
 #include "traffic_map/traffic_channel.hpp"
 
-namespace librav
+namespace autodrive
 {
 class RoadMap;
 
@@ -39,6 +39,6 @@ class TrafficMap
 
     void IdentifyTrafficElements();
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* TRAFFIC_MAP_HPP */

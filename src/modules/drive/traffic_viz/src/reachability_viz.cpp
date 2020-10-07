@@ -10,7 +10,7 @@
 #include "traffic_viz/reachability_viz.hpp"
 #include "decomp/square_grid_viz.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 void LightViz::ShowTStateSpace(TStateSpace &space, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {

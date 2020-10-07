@@ -2,7 +2,7 @@
 
 #include "trafficsim_viewer/trafficsim_viewer.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 int main()
 {

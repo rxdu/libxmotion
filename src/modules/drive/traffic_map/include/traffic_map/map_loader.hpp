@@ -19,7 +19,7 @@
 #include "traffic_map/traffic_map.hpp"
 #include "stopwatch/stopwatch.h"
 
-namespace librav
+namespace autodrive
 {
 struct MapLoader
 {
@@ -48,6 +48,6 @@ struct MapLoader
     std::shared_ptr<RoadMap> road_map;
     std::shared_ptr<TrafficMap> traffic_map;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* MAP_LOADER_HPP */

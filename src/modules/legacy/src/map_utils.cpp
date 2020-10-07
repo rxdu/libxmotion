@@ -9,7 +9,7 @@
 
 #include "map/map_utils.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 bool Map::ReadImageFromFile(std::string map_path, cv::OutputArray _dst)
 {

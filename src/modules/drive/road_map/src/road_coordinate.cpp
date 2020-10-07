@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-using namespace librav;
+using namespace autodrive;
 
 void RoadCoordinateFrame::SetOrigin(LLet::point_with_id_t origin)
 {

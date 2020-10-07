@@ -21,7 +21,7 @@
 #include "traffic_viz/threat_draw.hpp"
 #include "traffic_viz/roadmap_viz.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 void UGVNavViz::ShowVehicleInChannel(std::shared_ptr<RoadMap> map, Polygon polygon, TrafficChannel *channel, std::string window_name, bool save_img)
 {

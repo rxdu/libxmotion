@@ -16,7 +16,7 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_spline.h>
 
-namespace librav
+namespace autodrive
 {
 class CSpline
 {
@@ -51,6 +51,6 @@ class CSpline
 
     std::vector<Knot> knots_;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* CSPLINE_HPP */

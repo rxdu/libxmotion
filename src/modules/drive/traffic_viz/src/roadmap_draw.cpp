@@ -12,7 +12,7 @@
 #include "geometry/geometry_draw.hpp"
 #include "decomp/curvilinear_grid_draw.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 void RoadMapViz::DrawLanes(CvCanvas &canvas, std::shared_ptr<RoadMap> map, bool show_center_line)
 {

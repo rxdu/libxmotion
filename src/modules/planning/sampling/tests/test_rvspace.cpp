@@ -4,7 +4,7 @@
 #include "sampling/space/realvector_space.hpp"
 #include "stopwatch/stopwatch.h"
 
-using namespace librav;
+using namespace autodrive;
 
 int main()
 {

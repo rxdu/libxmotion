@@ -27,7 +27,7 @@
 #include <utility>
 #include <vector>
 
-namespace librav {
+namespace autodrive {
 
 // Implementation of polynomials of order N-1. Order must be known at
 // compile time.
@@ -246,6 +246,6 @@ class Polynomial {
 // up to order N.
 Eigen::MatrixXd computeBaseCoefficients(int N);
 
-}  // namespace librav
+}  // namespace autodrive
 
 #endif  // MAV_TRAJECTORY_GENERATION_POLYNOMIAL_H_

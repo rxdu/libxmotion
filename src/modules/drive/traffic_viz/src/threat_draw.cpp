@@ -11,7 +11,7 @@
 #include "geometry/geometry_draw.hpp"
 // #include <tbb/tbb.h>
 
-namespace librav
+namespace autodrive
 {
 void ThreatViz::DrawCollisionThreat(CvCanvas &canvas, VehicleThreat &threat, int32_t t_k, double cx, double cy, double xspan, double yspan)
 {
@@ -22,4 +22,4 @@ void ThreatViz::DrawCollisionThreatField(CvCanvas &canvas, ThreatField &field, i
 {
     GeometryViz::DrawDistribution(canvas, cx, cy, xspan, yspan, std::bind(field, std::placeholders::_1, std::placeholders::_2, t_k));
 }
-} // namespace librav
+} // namespace autodrive

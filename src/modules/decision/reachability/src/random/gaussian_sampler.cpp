@@ -9,7 +9,7 @@
 
 #include "random/gaussian_sampler.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 GaussianSampler::GaussianSampler(double mean, double variance) : mean_(mean), variance_(variance), distribution_(mean, variance)
 {

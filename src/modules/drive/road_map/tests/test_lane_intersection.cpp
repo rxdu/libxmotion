@@ -3,7 +3,7 @@
 #include "road_map/road_map.hpp"
 #include "stopwatch/stopwatch.h"
 
-using namespace librav;
+using namespace autodrive;
 
 int main()
 {

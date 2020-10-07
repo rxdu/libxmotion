@@ -14,7 +14,7 @@
 
 #include "lightview/viewer_utils.hpp"
 
-namespace librav
+namespace autodrive
 {
 // Source: https://blog.csdn.net/weixin_43007275/article/details/82590530
 void LightWidget::DrawOpenCVImageToBackground(cv::Mat img)
@@ -39,4 +39,4 @@ void LightWidget::DrawOpenCVImageToBackground(cv::Mat img)
     ImGui::End();
     ImGui::PopStyleVar(2);
 }
-} // namespace librav
+} // namespace autodrive

@@ -19,7 +19,7 @@
 
 #include "adtypes/adtypes.hpp"
 
-namespace librav
+namespace autodrive
 {
 namespace TransMath
 {
@@ -34,6 +34,6 @@ struct Transform3D
 Position3Dd TransformPosition3D(Transform3D transform, Position3Dd pos);
 
 } // namespace TransMath
-} // namespace librav
+} // namespace autodrive
 
 #endif /* LIBRAV_MATH_H */

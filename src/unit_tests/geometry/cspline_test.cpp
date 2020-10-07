@@ -15,7 +15,7 @@
 
 #include "geometry/cspline.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 struct CSplineTest : testing::Test
 {

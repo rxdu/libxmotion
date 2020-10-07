@@ -9,7 +9,7 @@
 
 #include "traffic_sim/vehicle_manager.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 VehicleManager::VehicleManager(std::shared_ptr<TrafficMap> tmap) : traffic_map_(tmap)
 {

@@ -12,7 +12,7 @@
 
 #include <cstdint>
 
-namespace librav
+namespace autodrive
 {
 template <int32_t N>
 class RVBasicStateValidityChecker
@@ -24,6 +24,6 @@ class RVBasicStateValidityChecker
   public:
     RVBasicStateValidityChecker();
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* RV_BASIC_VALIDITY_CHECKER_HPP */

@@ -13,7 +13,7 @@
 
 #include "geometry/geometry_draw.hpp"
 
-using namespace librav;
+using namespace autodrive;
 using namespace LightViz;
 
 void LightViz::ShowPolyline(const Polyline &polyline, int32_t pixel_per_unit, std::string window_name, bool save_img)

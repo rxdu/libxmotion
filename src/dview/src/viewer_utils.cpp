@@ -15,7 +15,7 @@
 // #include <GL/gl3w.h>
 #include "glad/glad.h"
 
-using namespace librav;
+using namespace autodrive;
 
 // Source: https://gist.github.com/saccadic/2a40b09e3fc4623cb14c02cac3ddbe6c
 // Reference:

@@ -13,7 +13,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-using namespace librav;
+using namespace autodrive;
 using namespace cv;
 
 cv::Mat CvIO::ReadImageFile(std::string img_file)

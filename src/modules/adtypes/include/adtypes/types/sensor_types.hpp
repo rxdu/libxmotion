@@ -18,7 +18,7 @@
 
 #include "adtypes/types/base_types.hpp"
 
-namespace librav
+namespace autodrive
 {
 
 /****************** Types for Sensors ******************/
@@ -82,6 +82,6 @@ struct IMUCalibParams
 	Eigen::Matrix<double, 3, 3> scale_matrix;
 	Eigen::Matrix<double, 3, 1> bias_vector;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* SENSOR_TYPES_HPP */

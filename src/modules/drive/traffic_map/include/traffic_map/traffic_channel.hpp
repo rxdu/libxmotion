@@ -21,7 +21,7 @@
 #include "decomp/curvilinear_grid.hpp"
 #include "road_map/road_map.hpp"
 
-namespace librav
+namespace autodrive
 {
 class RoadMap;
 
@@ -68,6 +68,6 @@ class TrafficChannel
     double GetPointLineDistance(SimplePoint ln_pt1, SimplePoint ln_pt2, SimplePoint pt);
     CurvilinearGrid::GridPoint FindApproximatePoint(SimplePoint pt);
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* TRAFFIC_CHANNEL_HPP */

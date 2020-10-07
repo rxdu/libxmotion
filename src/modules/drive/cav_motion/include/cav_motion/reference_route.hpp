@@ -16,7 +16,7 @@
 #include "adtypes/adtypes.hpp"
 #include "traffic_map/traffic_channel.hpp"
 
-namespace librav
+namespace autodrive
 {
 class ReferenceRoute : public TrafficChannel
 {
@@ -37,6 +37,6 @@ class ReferenceRoute : public TrafficChannel
 
     void PrintInfo();
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* REFERENCE_ROUTE_HPP */

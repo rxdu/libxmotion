@@ -10,7 +10,7 @@
 #ifndef ESTIMATOR_H
 #define ESTIMATOR_H
 
-namespace librav
+namespace autodrive
 {
 
 template<typename EstParamType, typename StateType, typename InputType, typename OutputType>

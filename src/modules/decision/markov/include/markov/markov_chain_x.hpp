@@ -19,7 +19,7 @@
 
 #include <eigen3/Eigen/Dense>
 
-namespace librav
+namespace autodrive
 {
 template <int32_t N>
 class MarkovChainX
@@ -94,6 +94,6 @@ class MarkovChainX
 
     std::vector<State> states_;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* MARKOV_CHAIN_X_HPP */

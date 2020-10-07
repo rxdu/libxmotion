@@ -19,7 +19,7 @@
 #include "graph/graph.hpp"
 #include "geometry/polyline.hpp"
 
-namespace librav
+namespace autodrive
 {
 class RoadMap;
 
@@ -76,6 +76,6 @@ private:
   void ConstructGraph();
   std::vector<std::string> BacktrackVertices(int32_t id);
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* TOPOGEO_GRAPH_HPP */

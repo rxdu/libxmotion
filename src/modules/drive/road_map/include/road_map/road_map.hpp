@@ -24,7 +24,7 @@
 #include "road_map/details/topogeo_graph.hpp"
 // #include "road_map/traffic_map.hpp"
 
-namespace librav
+namespace autodrive
 {
 class RoadMap
 {
@@ -118,6 +118,6 @@ class RoadMap
     int32_t GetLaneletIDByCenterLineName(std::string cl_name);
     inline std::string GetCenterLineNameByLanelet(std::string lanelet_name) { return "cl_" + lanelet_name; }
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* ROAD_MAP_HPP */

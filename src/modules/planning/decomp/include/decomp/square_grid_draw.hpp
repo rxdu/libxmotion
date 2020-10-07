@@ -18,7 +18,7 @@
 
 #include "cvdraw/cvdraw.hpp"
 
-namespace librav {
+namespace autodrive {
 namespace SquareGridViz {
 template <typename GridType>
 CvCanvas CreateCanvas(GridType *grid, int32_t ppu = 100)
@@ -173,6 +173,6 @@ void DrawGridCostOnly(CvCanvas &canvas, GridType *grid)
         }
 }
 }; // namespace SquareGridViz
-} // namespace librav
+} // namespace autodrive
 
 #endif /* SQUARE_GRID_DRAW_HPP */

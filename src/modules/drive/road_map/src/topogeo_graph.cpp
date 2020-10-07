@@ -15,7 +15,7 @@
 
 #include "road_map/road_map.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 TopoGeoGraph::TopoGeoGraph(RoadMap *map) : road_map_(map)
 {

@@ -18,7 +18,7 @@
 
 #include "adtypes/types/base_types.hpp"
 
-namespace librav
+namespace autodrive
 {
 using Position2Di = value2<int32_t>;
 using Position2Dd = value2<double>;
@@ -71,6 +71,6 @@ struct KeyframeSet
 	std::vector<Keyframe> keyframes;
 	uint64_t start_time;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* NAV_TYPES_HPP */

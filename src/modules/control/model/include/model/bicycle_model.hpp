@@ -13,7 +13,7 @@
 #include "ascent/Ascent.h"
 #include "ascent/Utility.h"
 
-namespace librav
+namespace autodrive
 {
 // Reference:
 //  [1] B. Paden, M. Cap, S. Z. Yong, D. Yershov, and E. Frazzoli, “A Survey of
@@ -59,6 +59,6 @@ private:
   control_t u_ = {0.0, 0.0};
   static constexpr double L = 2.4;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* BICYCLE_MODEL_HPP */

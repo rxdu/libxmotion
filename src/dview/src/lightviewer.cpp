@@ -13,7 +13,7 @@
 
 #include "lightview/viewer_utils.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 namespace
 {

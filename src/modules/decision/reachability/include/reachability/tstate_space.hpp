@@ -19,7 +19,7 @@
 #include <cassert>
 // #include <unordered_map>
 
-namespace librav
+namespace autodrive
 {
 class TStateSpace
 {
@@ -190,6 +190,6 @@ class TStateSpace
         }
     }
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* TSTATE_SPACE_HPP */

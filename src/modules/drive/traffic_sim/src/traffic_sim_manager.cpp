@@ -14,7 +14,7 @@
 
 #include "cav_motion/cav_datalink.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 TrafficSimManager::TrafficSimManager(TrafficSimConfig config) : config_(config), map_loader_(config.map)
 {
@@ -44,7 +44,7 @@ bool TrafficSimManager::ValidateSimConfig()
     return true;
 }
 
-void TrafficSimManager::HandleSyncTriggerMsg(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg)
+void TrafficSimManager::HandleSyncTriggerMsg(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg)
 {
     sync_trigger_ready_ = msg->trigger_ready;
 }

@@ -16,7 +16,7 @@
 
 #include "markov/markov_chain_x.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 struct MarkovChainXTest : testing::Test
 {

@@ -18,7 +18,7 @@
 #include "logging/details/spdlog_headers.hpp"
 #include "logging/details/logging_utils.hpp"
 
-namespace librav
+namespace autodrive
 {
 class SpecializedLogger
 {
@@ -55,6 +55,6 @@ class SpecializedLogger
         build_string(o, rest...);
     }
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* SPECIALIZED_LOGGER_HPP */

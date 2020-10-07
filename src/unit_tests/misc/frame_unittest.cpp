@@ -13,9 +13,9 @@
 #include "common/librav_math.hpp"
 
 using namespace Eigen;
-using namespace librav;
-using namespace librav::utils;
-using namespace librav::utils::Transformation;
+using namespace autodrive;
+using namespace autodrive::utils;
+using namespace autodrive::utils::Transformation;
 
 TEST(FrameTest, Transformation)
 {

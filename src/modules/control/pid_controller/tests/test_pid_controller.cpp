@@ -2,7 +2,7 @@
 
 #include "model/bicycle_model.hpp"
 
-using namespace librav;
+using namespace autodrive;
 using namespace asc;
 
 int main()

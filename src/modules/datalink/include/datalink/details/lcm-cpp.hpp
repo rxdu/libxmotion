@@ -18,7 +18,7 @@
 #include <functional>
 #endif
 
-namespace librav {
+namespace autodrive {
 
 /**
  * @defgroup LcmCpp C++ API Reference

@@ -9,7 +9,7 @@
 #include "lightviz/matrix_viz.hpp"
 #endif 
 
-using namespace librav;
+using namespace autodrive;
 
 int main()
 {

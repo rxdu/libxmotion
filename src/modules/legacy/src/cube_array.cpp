@@ -11,7 +11,7 @@
 
 #include "map/cube_array.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 CubeArray::CubeArray(int32_t col_num, int32_t row_num, int32_t height_num, double cube_size):
 				row_size_(row_num),

@@ -2,7 +2,7 @@
 
 #include "pose_viewer/pose_viewer.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 int main()
 {

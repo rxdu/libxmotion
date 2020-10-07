@@ -19,13 +19,13 @@
 
 #include <Eigen/Eigen>
 
-namespace librav {
+namespace autodrive {
 
 int findLastNonZeroCoeff(const Eigen::VectorXd& coefficients);
 
 bool findRootsJenkinsTraub(const Eigen::VectorXd& coefficients_increasing,
                            Eigen::VectorXcd* roots);
 
-}  // namespace librav
+}  // namespace autodrive
 
 #endif  // MAV_TRAJECTORY_GENERATION_RPOLY_RPOLY_AK1_H_

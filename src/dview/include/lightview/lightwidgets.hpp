@@ -13,12 +13,12 @@
 #include "imgui.h"
 #include "opencv2/opencv.hpp"
 
-namespace librav
+namespace autodrive
 {
 namespace LightWidget
 {
 void DrawOpenCVImageToBackground(cv::Mat img);
 }
-} // namespace librav
+} // namespace autodrive
 
 #endif /* LIGHTWIDGETS_HPP */

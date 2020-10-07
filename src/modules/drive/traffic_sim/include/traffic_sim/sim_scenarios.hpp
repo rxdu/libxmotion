@@ -12,7 +12,7 @@
 
 #include "traffic_sim/traffic_sim_config.hpp"
 
-namespace librav
+namespace autodrive
 {
 namespace SimScenario
 {
@@ -26,6 +26,6 @@ TrafficSimConfig GenerateScenarioCase3();
 // "one_way_merging_horizontal"
 TrafficSimConfig GenerateScenarioCase4();
 } // namespace SimScenario
-} // namespace librav
+} // namespace autodrive
 
 #endif /* SIM_SCENARIOS_HPP */

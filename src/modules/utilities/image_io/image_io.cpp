@@ -17,7 +17,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "image_io/stb_image_write.h"
 
-using namespace librav;
+using namespace autodrive;
 
 MonoImageMatrix ImageIO::ReadImage(std::string file_name)
 {

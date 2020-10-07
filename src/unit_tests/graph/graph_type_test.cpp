@@ -15,7 +15,7 @@
 
 #include "graph/graph.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 struct TestState
 {

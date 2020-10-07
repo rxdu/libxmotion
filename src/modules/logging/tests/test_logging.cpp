@@ -11,7 +11,7 @@
 
 #include "logging/loggers.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 int main(int argc, char* argv[])
 {

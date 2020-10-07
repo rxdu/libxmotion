@@ -15,7 +15,7 @@
 #include "state_lattice/state_lattice.hpp"
 #include "local_planner/speed_profile.hpp"
 
-namespace librav
+namespace autodrive
 {
 class ReferenceTrajectory
 {
@@ -72,6 +72,6 @@ class ReferenceTrajectory
     void FindPathSegment(const double s, StateLattice &lattice, double &s_offset);
     double AccumulatedDistance(double t);
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* REFERENCE_TRAJECTORY_HPP */

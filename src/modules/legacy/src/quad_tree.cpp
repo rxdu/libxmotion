@@ -7,7 +7,7 @@
 
 #include "map/quad_tree.h"
 
-using namespace librav;
+using namespace autodrive;
 
 /*********************************************************/
 /*              Implementation of Quad Tree              */

@@ -14,7 +14,7 @@
 
 #include "map/image_utils.hpp"
 
-namespace librav
+namespace autodrive
 {
 /*
  * 2D Map Coordinate System:

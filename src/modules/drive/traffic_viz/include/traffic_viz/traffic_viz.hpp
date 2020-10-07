@@ -28,7 +28,7 @@
 
 #include "cvdraw/cvdraw.hpp"
 
-namespace librav
+namespace autodrive
 {
 namespace UGVNavViz
 {
@@ -53,6 +53,6 @@ void ShowLatticeInThreatField(std::shared_ptr<RoadMap> map, std::vector<StateLat
 void ShowTrafficChannelWithThreatField(std::shared_ptr<RoadMap> map, TrafficChannel *channel, ThreatField &field, int32_t t_k, bool show_veh_id = false, std::string window_name = "Threat Field", bool save_img = false);
 // void ShowPathWithThreatField(std::shared_ptr<RoadMap> map, std::vector<StateLattice> &path, LookaheadZone &zone, ThreatField &field, int32_t t_k, double T = 0.5, std::string window_name = "Traffic Channel Image", bool save_img = false);
 }; // namespace UGVNavViz
-} // namespace librav
+} // namespace autodrive
 
 #endif /* TRAFFIC_VIZ_HPP */

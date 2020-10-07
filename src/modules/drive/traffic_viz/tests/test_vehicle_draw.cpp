@@ -5,7 +5,7 @@
 
 #include "navviz/vehicle_draw.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 int main()
 {

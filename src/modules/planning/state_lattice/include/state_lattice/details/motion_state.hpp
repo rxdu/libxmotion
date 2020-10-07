@@ -14,7 +14,7 @@
 
 #include <eigen3/Eigen/Dense>
 
-namespace librav
+namespace autodrive
 {
 using JacobianMatrix = Eigen::Matrix<double, 3, 3>;
 using StatePMatrix = Eigen::Vector3d;
@@ -46,6 +46,6 @@ struct MotionState
         return os;
     }
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* MOTION_STATE_HPP */

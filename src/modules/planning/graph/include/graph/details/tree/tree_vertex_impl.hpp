@@ -10,7 +10,7 @@
 #ifndef TREE_VERTEX_IMPL_HPP
 #define TREE_VERTEX_IMPL_HPP
 
-namespace librav
+namespace autodrive
 {
 template <typename State, typename Transition, typename StateIndexer>
 bool Tree<State, Transition, StateIndexer>::Vertex::operator==(const Tree<State, Transition, StateIndexer>::Vertex &other)
@@ -75,6 +75,6 @@ void Tree<State, Transition, StateIndexer>::Vertex::ClearVertexSearchInfo()
     g_cost_ = 0.0;
     h_cost_ = 0.0;
 }
-} // namespace librav
+} // namespace autodrive
 
 #endif /* TREE_VERTEX_IMPL_HPP */

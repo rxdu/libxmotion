@@ -19,7 +19,7 @@
 #include "ascent/Ascent.h"
 #include "ascent/Utility.h"
 
-namespace librav
+namespace autodrive
 {
 template <typename SystemDynamics, typename ControlInput>
 class SystemPropagator
@@ -43,6 +43,6 @@ public:
 private:
   asc::RK4 integrator_;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* SYSTEM_PROPAGATOR_HPP */

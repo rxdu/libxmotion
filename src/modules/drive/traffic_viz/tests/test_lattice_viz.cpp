@@ -7,7 +7,7 @@
 #include "lightviz/lattice_viz.hpp"
 #include "stopwatch/stopwatch.h"
 
-using namespace librav;
+using namespace autodrive;
 
 int main()
 {

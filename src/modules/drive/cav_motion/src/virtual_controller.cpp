@@ -9,10 +9,10 @@
 
 #include "cav_motion/virtual_controller.hpp"
 
-namespace librav
+namespace autodrive
 {
 VirtualController::VirtualController(std::shared_ptr<LCMLink> link) : data_link_(link)
 {
         // data_link_->subscribe(CAV_SIM_CHANNELS::SIM_SYNC_TRIGGER_CHANNEL, &TrafficSimManager::HandleLCMMessage_SyncTrigger, this);
 }
-} // namespace librav
+} // namespace autodrive

@@ -2,7 +2,7 @@
 
 #include "lightview/lightviewer.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 int main()
 {

@@ -18,7 +18,7 @@
 #include <vector>
 #include <type_traits>
 
-namespace librav
+namespace autodrive
 {
 class SpaceBase;
 
@@ -52,6 +52,6 @@ struct TreeAdapter
     virtual std::vector<StateType *> FindNear(StateType *state, double radius) = 0;
     /*******************************************************/
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* TREE_ADAPTER_HPP */

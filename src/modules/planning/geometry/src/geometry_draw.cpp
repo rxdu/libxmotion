@@ -14,7 +14,7 @@
 
 #include <tbb/tbb.h>
 
-using namespace librav;
+using namespace autodrive;
 
 void GeometryViz::DrawPolyline(CvCanvas &canvas, const Polyline &polyline,
                                bool show_dot, cv::Scalar ln_color,

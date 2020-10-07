@@ -11,7 +11,7 @@
 
 #include "file_io/folder_path.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 DynamicThreatModel::DynamicThreatModel(VehicleEstimation est) : vehicle_est_(est)
 {

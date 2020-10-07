@@ -4,7 +4,7 @@
 
 #include "stopwatch/stopwatch.h"
 
-using namespace librav;
+using namespace autodrive;
 
 int main()
 {

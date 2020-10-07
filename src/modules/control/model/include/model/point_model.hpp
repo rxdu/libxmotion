@@ -13,7 +13,7 @@
 #include "ascent/Ascent.h"
 #include "ascent/Utility.h"
 
-namespace librav
+namespace autodrive
 {
 // Reference:
 //  [1] Broadhurst, A., S. Baker, and T. Kanade. 2005. “Monte Carlo Road Safety Reasoning.”
@@ -32,6 +32,6 @@ private:
   static constexpr double v_sw = 7.3;
   static constexpr double a_max = 7;
 };
-} // namespace librav
+} // namespace autodrive
 
 #endif /* POINT_MODEL_HPP */

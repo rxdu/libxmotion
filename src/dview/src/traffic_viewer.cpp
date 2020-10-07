@@ -18,7 +18,7 @@
 #include "traffic_map/map_loader.hpp"
 #include "cav_common/cav_datalink.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 TrafficViewer::TrafficViewer(std::string map_file, int32_t ppu) : LightViewer(), ppu_(ppu)
 {
@@ -102,13 +102,13 @@ cv::Mat TrafficViewer::CropImageToROI(cv::Mat img, double cx, double cy, double 
     return img(cv::Rect(tl_x, tl_y, width, height));
 }
 
-void TrafficViewer::HandleEgoVehicleStateMsg(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleState *msg)
+void TrafficViewer::HandleEgoVehicleStateMsg(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleState *msg)
 {
     ego_vehicle_state_ = VehicleState(msg->id, {msg->position[0], msg->position[1], msg->theta}, msg->speed);
     ego_state_updated_ = true;
 }
 
-void TrafficViewer::HandleVehicleEstimationsMsg(const librav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg)
+void TrafficViewer::HandleVehicleEstimationsMsg(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg)
 {
     surrounding_vehicles_.clear();
     for (int i = 0; i < msg->vehicle_num; ++i)

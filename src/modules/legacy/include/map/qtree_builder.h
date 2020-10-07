@@ -11,7 +11,7 @@
 #include "legacy/quad_tree.h"
 #include "map/map_type.h"
 
-namespace librav{
+namespace autodrive{
 
 class QTreeBuilder{
 public:

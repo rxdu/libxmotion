@@ -23,7 +23,7 @@
 
 #include "cvdraw/cvdraw.hpp"
 
-namespace librav {
+namespace autodrive {
 namespace GeometryViz {
 // curve
 void DrawPolyline(CvCanvas &canvas, const Polyline &polyline, bool show_dot = false, cv::Scalar ln_color = CvColors::blue_color, int32_t thickness = 1);
@@ -43,6 +43,6 @@ void WritePointPosition(CvCanvas &canvas, const std::vector<SimplePoint> &points
 // distribution
 void DrawDistribution(CvCanvas &canvas, double cx, double cy, double xspan, double yspan, std::function<double(double, double)> dist_fun);
 }; // namespace GeometryViz
-} // namespace librav
+} // namespace autodrive
 
 #endif /* GEOMETRY_DRAW_HPP */

@@ -5,7 +5,7 @@
 
 #include "sampling/base/rand_num/rand_num_gen.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 int main(int argc, char *argv[])
 {

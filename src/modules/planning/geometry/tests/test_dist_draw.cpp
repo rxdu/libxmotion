@@ -1,7 +1,7 @@
 #include "geometry/geometry_draw.hpp"
 #include "geometry/polygon.hpp"
 
-using namespace librav;
+using namespace autodrive;
 
 // copied here to avoid dependency from a higher-level package
 class GaussianPositionThreat

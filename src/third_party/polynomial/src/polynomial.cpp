@@ -24,7 +24,7 @@
 
 #include "polynomial/rpoly/rpoly_ak1.h"
 
-namespace librav {
+namespace autodrive {
 
 bool Polynomial::getRoots(int derivative, Eigen::VectorXcd* roots) const {
   return findRootsJenkinsTraub(getCoefficients(derivative), roots);
@@ -200,4 +200,4 @@ bool Polynomial::getPolynomialWithAppendedCoefficients(
 Eigen::MatrixXd Polynomial::base_coefficients_ =
     computeBaseCoefficients(Polynomial::kMaxConvolutionSize);
 
-}  // namespace librav
+}  // namespace autodrive

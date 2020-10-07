@@ -16,12 +16,12 @@
 
 #include "decomp/dense_grid.hpp"
 
-namespace librav {
+namespace autodrive {
 namespace LightViz {
 void ShowMatrixAsImage(const Eigen::MatrixXd &matrix, std::string window_name = "Matrix Image", bool save_img = false);
 void ShowMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::string window_name = "Matrix Color Map", bool save_img = false);
 void ShowPathOnMatrixAsColorMap(const Eigen::MatrixXd &matrix, std::vector<RectGridIndex> waypoints, std::string window_name = "Matrix Color Map", bool save_img = false);
 } // namespace LightViz
-} // namespace librav
+} // namespace autodrive
 
 #endif /* MATRIX_VIZ_HPP */

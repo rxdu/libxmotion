@@ -16,7 +16,7 @@
 
 #include "adtypes/types/base_types.hpp"
 
-namespace librav
+namespace autodrive
 {
 struct EulerAngle
 {
@@ -114,6 +114,6 @@ struct UAVTrajectoryPoint
 };
 
 using UAVTrajectory = std::vector<UAVTrajectoryPoint>;
-} // namespace librav
+} // namespace autodrive
 
 #endif /* CTRL_TYPES_HPP */
