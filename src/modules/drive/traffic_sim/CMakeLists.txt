@@ -10,7 +10,7 @@ set(TRAFFIC_SIM_LIB_SRC
     src/sim_scenarios.cpp
 )
 add_library(trafficsim STATIC ${TRAFFIC_SIM_LIB_SRC})
-target_link_libraries(trafficsim cav_common roadmap traffic datalink utils)
+target_link_libraries(trafficsim cav_motion roadmap traffic datalink utils)
 target_include_directories(trafficsim PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
@@ -20,7 +20,7 @@ set(TRAFFICSIM_VIEWER_LIB_SRC
     src/trafficsim_viewer.cpp
 )
 add_library(trafficsim_viewer STATIC ${TRAFFICSIM_VIEWER_LIB_SRC})
-target_link_libraries(trafficsim_viewer trafficsim datalink traffic lightviz navviz utils ${OpenCV_LIBS})
+target_link_libraries(trafficsim_viewer trafficsim datalink traffic trafficviz utils ${OpenCV_LIBS})
 target_include_directories(trafficsim_viewer PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

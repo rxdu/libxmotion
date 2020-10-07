@@ -12,11 +12,11 @@
 #include <cassert>
 
 #include "cvdraw/cvdraw.hpp"
-#include "navviz/roadmap_draw.hpp"
-#include "navviz/vehicle_draw.hpp"
+#include "traffic_viz/roadmap_draw.hpp"
+#include "traffic_viz/vehicle_draw.hpp"
 
 #include "traffic_map/map_loader.hpp"
-#include "cav_common/cav_datalink.hpp"
+#include "cav_motion/cav_datalink.hpp"
 
 using namespace librav;
 

@@ -12,7 +12,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "cav_common/cav_datalink.hpp"
+#include "cav_motion/cav_datalink.hpp"
 
 using namespace librav;
 

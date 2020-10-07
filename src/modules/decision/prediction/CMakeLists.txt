@@ -9,7 +9,7 @@ set(TFIELD_LIB_SRC
     src/threat_field.cpp
 )
 add_library(threatdist STATIC ${TFIELD_LIB_SRC})
-target_link_libraries(threatdist common decomp graph traffic reachability ${TBB_LIBRARIES})
+target_link_libraries(threatdist adtypes decomp graph traffic reachability ${TBB_LIBRARIES})
 target_include_directories(threatdist PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${TBB_INCLUDE_DIRS}>

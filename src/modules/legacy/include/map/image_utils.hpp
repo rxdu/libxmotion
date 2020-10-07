@@ -15,7 +15,7 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
 
-#include "common/librav_types.hpp"
+#include "adtypes/adtypes.hpp"
 
 namespace librav
 {

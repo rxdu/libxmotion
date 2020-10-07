@@ -10,7 +10,7 @@
 
 #include <cmath>
 
-#include "common/librav_types.hpp"
+#include "adtypes/adtypes.hpp"
 
 namespace librav {
 

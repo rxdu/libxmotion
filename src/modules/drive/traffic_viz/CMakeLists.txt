@@ -1,27 +1,3 @@
-
-cmake_minimum_required(VERSION 3.0.0)
-project(librav_navviz)
-
-## Set compiler to use c++ 11 features
-include(CheckCXXCompilerFlag)
-CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-if(COMPILER_SUPPORTS_CXX14)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-elseif(COMPILER_SUPPORTS_CXX11)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-elseif(COMPILER_SUPPORTS_CXX0X)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-else()
-	message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++14 or C++11 support. Please use a different C++ compiler.")
-endif()
-
-## Put all binary files into /bin and libraries into /lib
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
-set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-
 # Dependency libraries
 # find_package(OpenMP REQUIRED)
 
@@ -33,13 +9,13 @@ set(UGVNAV_VIZ_LIB_SRC
     src/threat_draw.cpp
     # extension to LightViz
     # src/lightviz/lattice_viz.cpp
-    src/lightviz/roadmap_viz.cpp
-    src/lightviz/reachability_viz.cpp
-    src/lightviz/traffic_viz.cpp
+    src/roadmap_viz.cpp
+    src/reachability_viz.cpp
+    src/traffic_viz.cpp
 )
-add_library(navviz STATIC ${UGVNAV_VIZ_LIB_SRC})
-target_link_libraries(navviz coreviz lightviz cav_common decomp roadmap traffic lattice local_planner reachability threatdist)
-target_include_directories(navviz PUBLIC
+add_library(trafficviz STATIC ${UGVNAV_VIZ_LIB_SRC})
+target_link_libraries(trafficviz cvdraw cav_motion decomp roadmap traffic lattice local_planner reachability threatdist)
+target_include_directories(trafficviz PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)

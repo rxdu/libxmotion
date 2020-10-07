@@ -6,7 +6,7 @@ set(SAMPLING_LIB_SRC
     src/rand_num_gen.cpp
 )
 add_library(sampling ${SAMPLING_LIB_SRC})
-target_link_libraries(sampling graph geometry spatial coreviz)
+target_link_libraries(sampling graph geometry spatial cvdraw)
 target_include_directories(sampling PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>

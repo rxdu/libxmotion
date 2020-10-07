@@ -12,8 +12,8 @@
 
 #include <memory>
 
-#include "cav_common/cav_datalink.hpp"
-#include "cav_common/vehicle_state.hpp"
+#include "cav_motion/cav_datalink.hpp"
+#include "cav_motion/vehicle_state.hpp"
 #include "cav_motion/route_planner.hpp"
 #include "traffic_map/map_loader.hpp"
 

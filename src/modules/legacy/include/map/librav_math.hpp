@@ -17,7 +17,7 @@
 #include "eigen3/Eigen/Core"
 #include "eigen3/Eigen/Geometry"
 
-#include "common/librav_types.hpp"
+#include "adtypes/adtypes.hpp"
 
 namespace librav
 {

@@ -3,6 +3,8 @@
 
 # Add libraries
 set(CAV_MOTION_LIB_SRC
+    # state
+    src/vehicle_state.cpp
     # controller
     src/virtual_controller.cpp
     # planner
@@ -14,7 +16,7 @@ set(CAV_MOTION_LIB_SRC
     src/cav_mission_control.cpp
 )
 add_library(cav_motion STATIC ${CAV_MOTION_LIB_SRC})
-target_link_libraries(cav_motion common datalink cav_common traffic local_planner utils)
+target_link_libraries(cav_motion adtypes datalink traffic local_planner utils)
 target_include_directories(cav_motion PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>

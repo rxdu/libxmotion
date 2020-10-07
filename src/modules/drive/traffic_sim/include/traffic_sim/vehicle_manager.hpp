@@ -13,7 +13,7 @@
 #include <vector>
 #include <memory>
 
-#include "cav_common/vehicle_state.hpp"
+#include "cav_motion/vehicle_state.hpp"
 #include "traffic_map/traffic_map.hpp"
 #include "traffic_sim/vehicle_info.hpp"
 #include "traffic_sim/vehicle_motion.hpp"

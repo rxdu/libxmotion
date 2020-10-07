@@ -7,9 +7,9 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "navviz/vehicle_draw.hpp"
+#include "traffic_viz/vehicle_draw.hpp"
 #include "geometry/simple_point.hpp"
-#include "coreviz/geometry_draw.hpp"
+#include "geometry/geometry_draw.hpp"
 
 namespace librav
 {

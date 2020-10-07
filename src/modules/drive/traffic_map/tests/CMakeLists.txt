@@ -3,7 +3,7 @@
 
 ## tests
 add_executable(test_trafficmap test_trafficmap.cpp)
-target_link_libraries(test_trafficmap traffic navviz utils)
+target_link_libraries(test_trafficmap traffic trafficviz utils)
 
 add_executable(test_trafficmap2 test_trafficmap2.cpp)
-target_link_libraries(test_trafficmap2 traffic navviz utils)
+target_link_libraries(test_trafficmap2 traffic trafficviz utils)

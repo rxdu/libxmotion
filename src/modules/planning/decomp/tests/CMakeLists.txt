@@ -9,13 +9,13 @@
 # target_link_libraries(test_newgrid decomp)
 
 # add_executable(test_dense_grid test_dense_grid.cpp)
-# target_link_libraries(test_dense_grid decomp lightviz)
+# target_link_libraries(test_dense_grid decomp)
 
 # add_executable(test_curvilinear_grid test_curvilinear_grid.cpp)
-# target_link_libraries(test_curvilinear_grid decomp lightviz)
+# target_link_libraries(test_curvilinear_grid decomp)
 
 # add_executable(test_square_grid test_square_grid.cpp)
-# target_link_libraries(test_square_grid decomp lightviz)
+# target_link_libraries(test_square_grid decomp)
 
 # add_executable(test_decomp_memory test_decomp_memory.cpp)
 # target_link_libraries(test_decomp_memory decomp)

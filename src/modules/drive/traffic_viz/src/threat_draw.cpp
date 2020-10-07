@@ -7,8 +7,8 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "navviz/threat_draw.hpp"
-#include "coreviz/geometry_draw.hpp"
+#include "traffic_viz/threat_draw.hpp"
+#include "geometry/geometry_draw.hpp"
 // #include <tbb/tbb.h>
 
 namespace librav

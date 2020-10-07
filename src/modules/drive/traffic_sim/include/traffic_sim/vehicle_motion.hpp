@@ -11,7 +11,7 @@
 #define VEHICLE_MOTION_HPP
 
 #include "traffic_sim/vehicle_info.hpp"
-#include "cav_common/vehicle_state.hpp"
+#include "cav_motion/vehicle_state.hpp"
 
 namespace librav
 {

@@ -12,7 +12,7 @@
 
 #include <memory>
 
-#include "cav_common/cav_datalink.hpp"
+#include "cav_motion/cav_datalink.hpp"
 
 namespace librav
 {

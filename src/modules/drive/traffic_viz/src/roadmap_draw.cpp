@@ -7,10 +7,10 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "navviz/roadmap_draw.hpp"
+#include "traffic_viz/roadmap_draw.hpp"
 
-#include "coreviz/geometry_draw.hpp"
-#include "coreviz/curvilinear_grid_draw.hpp"
+#include "geometry/geometry_draw.hpp"
+#include "decomp/curvilinear_grid_draw.hpp"
 
 using namespace librav;
 

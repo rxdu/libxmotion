@@ -8,8 +8,7 @@
  */
 
 #include "cav_motion/cav_mission_control.hpp"
-
-#include "cav_common/vehicle_state.hpp"
+#include "cav_motion/vehicle_state.hpp"
 
 namespace librav
 {

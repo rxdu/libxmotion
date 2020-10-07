@@ -10,7 +10,7 @@
 #ifndef STATIC_THREAT_MODEL_HPP
 #define STATIC_THREAT_MODEL_HPP
 
-#include "common/librav_types.hpp"
+#include "adtypes/adtypes.hpp"
 
 namespace librav
 {

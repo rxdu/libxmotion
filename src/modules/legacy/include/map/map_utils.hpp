@@ -19,7 +19,7 @@
 #include "opencv2/opencv.hpp"
 
 // #include "graph/graph.hpp"
-#include "common/librav_types.hpp"
+#include "adtypes/adtypes.hpp"
 #include "map/square_grid.hpp"
 #include "map/map_info.h"
 

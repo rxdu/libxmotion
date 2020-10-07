@@ -13,7 +13,7 @@
 #include <string>
 #include <memory>
 
-#include "common/librav_types.hpp"
+#include "adtypes/adtypes.hpp"
 #include "traffic_map/traffic_channel.hpp"
 
 namespace librav
