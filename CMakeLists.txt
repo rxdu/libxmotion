@@ -1,9 +1,8 @@
 cmake_minimum_required(VERSION 3.16.0)
-project(librav)
+project(auto_drive)
 
 # cmake module path
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
-list(APPEND CMAKE_MODULE_PATH "/opt/stage/lib")
 
 # automatically build LCM types.  This also defines a number of CMake
 # variables, see cmake/lcmtypes.cmake for details
