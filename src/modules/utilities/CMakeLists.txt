@@ -2,6 +2,8 @@
 find_package(Eigen3 REQUIRED)
 
 # Add libraries
+add_subdirectory(eigenfileio)
+
 set(UTILITY_LIB_SRC
 	image_io/image_io.cpp
 )

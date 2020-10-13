@@ -12,7 +12,7 @@
 
 #include "spdlog/spdlog.h"
 #include "spdlog/async.h"
-#include "spdlog/signal_handler.h"
+// #include "spdlog/signal_handler.h"
 #include "spdlog/sinks/basic_file_sink.h"
 
 #endif /* SPDLOG_HEADERS_HPP */

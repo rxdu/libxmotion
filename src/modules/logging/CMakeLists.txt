@@ -2,6 +2,8 @@
 find_package(Threads REQUIRED)
 
 # Add libraries
+add_subdirectory(third_party)
+
 set(LOGGING_LIB_SRC
     src/ctrl_logger.cpp
 )
