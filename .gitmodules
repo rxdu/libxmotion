@@ -7,3 +7,6 @@
 [submodule "src/modules/logging/third_party/spdlog"]
 	path = src/modules/logging/third_party/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "src/modules/viewer/third_party/raylib"]
+	path = src/modules/viewer/third_party/raylib
+	url = https://github.com/raysan5/raylib.git
