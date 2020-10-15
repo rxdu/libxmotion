@@ -1,6 +1,8 @@
 # Library for Intelligent Vehicle Navigation
 
-This repository contains a collection of software for research on autonomous vehicles.
+This repository contains a collection of software for study and research on autonomous vehicles.
+
+Note: this project is built on top of a number of open-source packages and is the result of my work from past a few years during my graduate study. I'm in the process of cleaning up the code and hopefully it would also be useful for others.
 
 ## Repository structure
 
