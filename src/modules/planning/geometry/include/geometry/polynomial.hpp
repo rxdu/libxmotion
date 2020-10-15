@@ -22,7 +22,7 @@
 #include <eigen3/Eigen/Dense>
 #include <gsl/gsl_poly.h>
 
-namespace autodrive
+namespace ivnav
 {
 // (N-1)-degree polynomial with N coefficients
 // Polynomial coefficients are stored with increasing powers,
@@ -94,6 +94,6 @@ class Polynomial
     Eigen::VectorXd coefficients_;
     double coeff_vals_[N] = {0};
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* POLYNOMIAL_HPP */

@@ -18,7 +18,7 @@
 #include "traffic_sim/vehicle_info.hpp"
 #include "traffic_sim/vehicle_motion.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 class VehicleManager
 {
@@ -33,6 +33,6 @@ class VehicleManager
     // std::vector<VehicleInfo> surrounding_vehicles_;
     std::vector<std::pair<VehicleInfo, VehicleMotion>> surrounding_vehicles_;
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* VEHICLE_MANAGER_HPP */

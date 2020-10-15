@@ -13,7 +13,7 @@
 
 #include "reachability/details/tmodel_solver.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 void TStateTransitionSim::SetupStateSpace(double smin, double smax, double vmin, double vmax, int32_t ssize, int32_t vsize)
 {

@@ -17,7 +17,7 @@
 #include "road_map/road_map.hpp"
 #include "traffic_map/traffic_channel.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 class RoadMap;
 
@@ -39,6 +39,6 @@ class TrafficMap
 
     void IdentifyTrafficElements();
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* TRAFFIC_MAP_HPP */

@@ -17,7 +17,7 @@
 
 #include "sampling/base/rand_num/rand_num_gen.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 class State
 {
@@ -63,6 +63,6 @@ class SpaceBase
   protected:
     RandNumGen rng_;
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* SPACE_BASE_HPP */

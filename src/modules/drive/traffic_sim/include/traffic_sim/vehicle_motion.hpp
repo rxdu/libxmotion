@@ -13,7 +13,7 @@
 #include "traffic_sim/vehicle_info.hpp"
 #include "mission/vehicle_state.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 class VehicleMotion
 {
@@ -29,6 +29,6 @@ class VehicleMotion
 
     VehicleState PropagateConstSpeedModel(double t);
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* VEHICLE_MOTION_HPP */

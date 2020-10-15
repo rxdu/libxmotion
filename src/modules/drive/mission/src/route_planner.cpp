@@ -11,7 +11,7 @@
 
 #include <limits>
 
-namespace autodrive
+namespace ivnav
 {
 RoutePlanner::RoutePlanner(std::shared_ptr<RoadMap> rmap, std::shared_ptr<TrafficMap> tmap) : road_map_(rmap),
                                                                                               traffic_map_(tmap)
@@ -71,4 +71,4 @@ bool RoutePlanner::SearchRoute(Position2d start, Position2d goal, ReferenceRoute
     return true;
 }
 
-} // namespace autodrive
+} // namespace ivnav

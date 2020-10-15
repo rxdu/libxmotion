@@ -1,7 +1,7 @@
 #include <iostream>
 #include "geometry/polynomial.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

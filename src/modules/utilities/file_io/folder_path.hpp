@@ -13,7 +13,7 @@
 #include <cstdlib>
 #include <string>
 
-namespace autodrive
+namespace ivnav
 {
 namespace FolderPath
 {
@@ -40,6 +40,6 @@ inline std::string GetLogFolderPath()
     return GetDataFolderPath() + "/log";
 }
 } // namespace FolderPath
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* FOLDER_PATH_HPP */

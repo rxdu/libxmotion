@@ -2,7 +2,7 @@
 
 #include "geometry/parametric_curve.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

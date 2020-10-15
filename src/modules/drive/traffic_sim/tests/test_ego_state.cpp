@@ -6,7 +6,7 @@
 #include "cav_common/cav_datalink.hpp"
 #include "cav_common/vehicle_state.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

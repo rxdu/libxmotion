@@ -9,7 +9,7 @@
 
 #include "state_lattice/details/point_kinematics.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 void PointKinematics::SetParameters(const Param &p)
 {

@@ -14,7 +14,7 @@
 #include "local_planner/reference_trajectory.hpp"
 #include "threat_field/threat_field.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 class LookaheadZone : public CurvilinearGridBase<ThreatField::ThreatComponent, ReferenceTrajectory>
 {
@@ -32,6 +32,6 @@ class LookaheadZone : public CurvilinearGridBase<ThreatField::ThreatComponent, R
     static constexpr double DNum = 3.0;
     static constexpr double SOffset = 0.0;
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* LOOKAHEAD_ZONE_HPP */

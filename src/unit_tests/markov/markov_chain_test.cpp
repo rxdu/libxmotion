@@ -16,7 +16,7 @@
 
 #include "markov/markov_chain.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 struct MarkovChainTest : testing::Test
 {

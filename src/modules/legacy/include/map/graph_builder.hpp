@@ -15,7 +15,7 @@
 #include "graph/graph.hpp"
 #include "decomp/square_grid.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 namespace Planner
 {

@@ -22,7 +22,7 @@
 
 #include "cvdraw/cvdraw.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 namespace UGVNavViz
 {
@@ -36,6 +36,6 @@ void ShowTrafficChannelCenterline(std::shared_ptr<RoadMap> map, TrafficChannel *
 void ShowVehicleOnMap(std::shared_ptr<RoadMap> map, Polygon polygon, std::string window_name = "Vehicle Image", bool save_img = false);
 void ShowVehicleOnMap(std::shared_ptr<RoadMap> map, std::vector<Polygon> &polygons, std::string window_name = "Vehicle Image", bool save_img = false);
 } // namespace UGVNavViz
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* ROADMAP_VIZ_HPP */

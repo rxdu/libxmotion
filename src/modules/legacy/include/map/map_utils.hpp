@@ -23,7 +23,7 @@
 #include "map/square_grid.hpp"
 #include "map/map_info.h"
 
-namespace autodrive
+namespace ivnav
 {
 namespace Map
 {

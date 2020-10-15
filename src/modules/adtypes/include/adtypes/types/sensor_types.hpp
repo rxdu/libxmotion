@@ -18,7 +18,7 @@
 
 #include "adtypes/types/base_types.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 
 /****************** Types for Sensors ******************/
@@ -82,6 +82,6 @@ struct IMUCalibParams
 	Eigen::Matrix<double, 3, 3> scale_matrix;
 	Eigen::Matrix<double, 3, 1> bias_vector;
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* SENSOR_TYPES_HPP */

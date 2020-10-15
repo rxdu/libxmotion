@@ -13,7 +13,7 @@
 
 #include "geometry/geometry_draw.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 void LightViz::ShowCubicSpline(const CSpline &spline, double step, int32_t pixel_per_unit, std::string window_name, bool save_img)
 {

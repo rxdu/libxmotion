@@ -22,7 +22,7 @@
 #include "traffic_map/traffic_map.hpp"
 #include "state_lattice/state_lattice.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 class LatticeGraph
 {
@@ -58,6 +58,6 @@ class LatticeGraph
     static constexpr int32_t min_h = 6;
     static constexpr int32_t max_h = min_h;
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* LATTICE_GRAPH_HPP */

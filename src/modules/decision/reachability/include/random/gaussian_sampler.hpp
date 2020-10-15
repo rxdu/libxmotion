@@ -12,7 +12,7 @@
 
 #include <random>
 
-namespace autodrive
+namespace ivnav
 {
 class GaussianSampler
 {

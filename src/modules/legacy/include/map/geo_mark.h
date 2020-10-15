@@ -12,7 +12,7 @@
 
 #include "adtypes/adtypes.hpp"
 
-namespace autodrive {
+namespace ivnav {
 
 enum class GeoMarkSource {
 	NOT_SPECIFIED,

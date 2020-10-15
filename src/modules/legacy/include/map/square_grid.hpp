@@ -16,7 +16,7 @@
 
 #include "adtypes/adtypes.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 
 /*

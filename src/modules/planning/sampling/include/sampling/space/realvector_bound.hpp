@@ -12,7 +12,7 @@
 
 #include <cassert>
 
-namespace autodrive
+namespace ivnav
 {
 class RealVectorBound
 {
@@ -50,6 +50,6 @@ class RealVectorBound
     double lower_bound_ = 0.0;
     double upper_bound_ = 1.0;
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* REALVECTOR_BOUND_HPP */

@@ -15,7 +15,7 @@
 
 #include "csv_parser/csv.h"
 
-using namespace autodrive;
+using namespace ivnav;
 
 #define ENABLE_SCALER_SELECTION
 

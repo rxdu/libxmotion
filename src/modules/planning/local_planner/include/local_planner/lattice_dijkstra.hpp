@@ -28,7 +28,7 @@
 #include "state_lattice/state_lattice.hpp"
 #include "local_planner/lattice_graph.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 /// Dijkstra search algorithm.
 class LatticeDijkstra
@@ -179,6 +179,6 @@ class LatticeDijkstra
         return path;
     }
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* LATTICE_DIJKSTRA_HPP */

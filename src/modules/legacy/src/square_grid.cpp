@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-using namespace autodrive;
+using namespace ivnav;
 
 // Note: Assertions are for debugging purpose. Since assert() will be expanded
 // as void if "NDEBUG" is defined, you should not rely on it to do online

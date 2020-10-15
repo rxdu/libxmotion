@@ -14,7 +14,7 @@
 
 #include <Eigen/Dense>
 
-namespace autodrive
+namespace ivnav
 {
 struct MonoImageMatrix
 {

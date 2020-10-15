@@ -24,7 +24,7 @@
 #include "map/sgrid_builder.h"
 
 using namespace cv;
-using namespace autodrive;
+using namespace ivnav;
 
 int main(int argc, char** argv )
 {

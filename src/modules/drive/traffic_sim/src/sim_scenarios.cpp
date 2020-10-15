@@ -9,7 +9,7 @@
 
 #include "traffic_sim/sim_scenarios.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 
 TrafficSimConfig SimScenario::GenerateScenarioCase1()
@@ -113,4 +113,4 @@ TrafficSimConfig SimScenario::GenerateScenarioCase4()
     return config;
 }
 
-} // namespace autodrive
+} // namespace ivnav

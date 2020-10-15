@@ -5,7 +5,7 @@
 #include "geometry/cspline.hpp"
 #include "geometry/geometry_draw.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

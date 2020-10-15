@@ -7,7 +7,7 @@
 
 #include "sampling/rrt_draw.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

@@ -13,7 +13,7 @@
 
 #include "map/cube_array_builder.h"
 
-using namespace autodrive;
+using namespace ivnav;
 using namespace octomap;
 
 std::shared_ptr<CubeArray> CubeArrayBuilder::BuildEmptyCubeArray(int32_t col_size, int32_t row_size, int32_t hei_size, double res)

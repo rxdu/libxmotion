@@ -16,7 +16,7 @@
 
 #include <eigen3/Eigen/Core>
 
-namespace autodrive
+namespace ivnav
 {
 template <int32_t N>
 class RVStraightSteer
@@ -50,6 +50,6 @@ class RVStraightSteer
         return std::make_pair(space_->CreateState(end_state), max_dist_);
     }
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* RV_STRAIGHT_STEER_HPP */

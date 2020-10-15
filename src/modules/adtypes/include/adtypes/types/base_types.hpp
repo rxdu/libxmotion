@@ -16,7 +16,7 @@
 
 #include "eigen3/Eigen/Core"
 
-namespace autodrive
+namespace ivnav
 {
 
 using TimeStamp = uint64_t;
@@ -81,6 +81,6 @@ using Point3i = value3<int32_t>;
 
 using CovarMatrix2d = Eigen::Matrix<double, 2, 2>;
 
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* BASE_TYPES_HPP */

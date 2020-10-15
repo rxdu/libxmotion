@@ -21,7 +21,7 @@
 #include "graph/graph.hpp"
 #include "sampling/base/tree_adapter.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 template <typename Space>
 class KdGraph : public Graph<typename Space::StateType *, double>, public TreeAdapter<Space>
@@ -121,6 +121,6 @@ class KdGraph : public Graph<typename Space::StateType *, double>, public TreeAd
   private:
     KdTreeType kdtree_;
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* KD_GRAPH_HPP */

@@ -5,7 +5,7 @@
 
 #include "lightviz/roadmap_viz.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

@@ -9,7 +9,7 @@
 
 #include "map/grid_map.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 bool GridMap::IsMapValid()
 {

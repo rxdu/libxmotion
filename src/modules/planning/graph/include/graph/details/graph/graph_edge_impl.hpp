@@ -10,7 +10,7 @@
 #ifndef GRAPH_EDGE_IMPL_HPP
 #define GRAPH_EDGE_IMPL_HPP
 
-namespace autodrive
+namespace ivnav
 {
 template <typename State, typename Transition, typename StateIndexer>
 bool Graph<State, Transition, StateIndexer>::Edge::operator==(const Graph<State, Transition, StateIndexer>::Edge &other)
@@ -26,6 +26,6 @@ void Graph<State, Transition, StateIndexer>::Edge::PrintEdge()
     std::cout << "Edge_t: src - " << src_->GetVertexID() << " , dst - " << dst_->GetVertexID() << " , cost - " << cost_ << std::endl;
 }
 
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* GRAPH_EDGE_IMPL_HPP */

@@ -3,7 +3,7 @@
 
 #include "decomp/curvilinear_grid.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

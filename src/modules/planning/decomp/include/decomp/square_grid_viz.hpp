@@ -18,7 +18,7 @@
 #include "graph/graph.hpp"
 #include "decomp/square_grid_draw.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 namespace LightViz
 {
@@ -82,6 +82,6 @@ void ShowSquareGridGraphCostOnly(GridType *grid, int32_t pixel_per_unit = 100, s
     CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
 } // namespace LightViz
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* GRID_VIZ_HPP */

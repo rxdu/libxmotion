@@ -9,7 +9,7 @@
 
 #include "reachability/details/car_longitudinal_model.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 // x1 = s, x2 = v
 void CarLongitudinalModel::operator()(const asc::state_t &x, asc::state_t &xd, const double)

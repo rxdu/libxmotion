@@ -9,7 +9,7 @@
 #include "sampling/space/realvector_space.hpp"
 #include "stopwatch/stopwatch.h"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

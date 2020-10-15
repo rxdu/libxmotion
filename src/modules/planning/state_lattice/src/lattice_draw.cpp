@@ -9,7 +9,7 @@
 
 #include "state_lattice/lattice_draw.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 void LatticeViz::DrawTrajectoryPoints(CvCanvas &canvas, const std::vector<MotionState> &states, cv::Scalar ln_color, int32_t thickness)
 {

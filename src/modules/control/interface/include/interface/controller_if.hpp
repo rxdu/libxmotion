@@ -10,7 +10,7 @@
 #ifndef CONTROLLER_IF_HPP
 #define CONTROLLER_IF_HPP
 
-namespace autodrive
+namespace ivnav
 {
 
 template<typename CtrlParamType, typename StateType, typename InputType, typename OutputType>

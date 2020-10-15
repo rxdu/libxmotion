@@ -9,7 +9,7 @@
 
 #include "mission/vehicle_state.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 
 std::atomic<int32_t> VehicleState::count = {0};
@@ -39,4 +39,4 @@ void VehicleState::SetPose(Pose2d ps)
     footprint_.TransformRT(pose_.position.x, pose_.position.y, pose_.theta);
 }
 
-} // namespace autodrive
+} // namespace ivnav

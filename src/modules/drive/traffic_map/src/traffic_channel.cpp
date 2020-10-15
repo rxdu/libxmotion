@@ -15,7 +15,7 @@
 
 #include <eigen3/Eigen/Dense>
 
-using namespace autodrive;
+using namespace ivnav;
 
 TrafficChannel::TrafficChannel(std::shared_ptr<RoadMap> map, std::string src, std::string dst, std::vector<std::string> lanes) : road_map_(map), source_(src), sink_(dst), lanes_(lanes)
 {

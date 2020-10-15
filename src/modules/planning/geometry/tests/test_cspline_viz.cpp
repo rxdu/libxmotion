@@ -7,7 +7,7 @@
 #include "geometry/curve_viz.hpp"
 #include "geometry/polygon.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

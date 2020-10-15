@@ -29,7 +29,7 @@
 // Include glfw3.h after OpenGL definitions
 #include <GLFW/glfw3.h>
 
-namespace autodrive
+namespace ivnav
 {
 class LightViewer
 {
@@ -58,6 +58,6 @@ class LightViewer
     void PrepareOpenGLDraw(int &display_w, int &display_h);
     void RenderData();
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* LIGHTVIEWER_HPP */

@@ -10,7 +10,7 @@
 #ifndef GRAPH_VERTEX_IMPL_HPP
 #define GRAPH_VERTEX_IMPL_HPP
 
-namespace autodrive
+namespace ivnav
 {
 template <typename State, typename Transition, typename StateIndexer>
 bool Graph<State, Transition, StateIndexer>::Vertex::operator==(const Graph<State, Transition, StateIndexer>::Vertex &other)
@@ -75,6 +75,6 @@ void Graph<State, Transition, StateIndexer>::Vertex::ClearVertexSearchInfo()
     g_cost_ = 0.0;
     h_cost_ = 0.0;
 }
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* GRAPH_VERTEX_IMPL_HPP */

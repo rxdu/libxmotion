@@ -1,7 +1,7 @@
 #include "geometry/polygon_viz.hpp"
 #include "geometry/polygon.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

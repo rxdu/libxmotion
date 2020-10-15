@@ -14,7 +14,7 @@
 
 #include "geometry/polygon.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 namespace LightViz
 {
@@ -31,6 +31,6 @@ void ShowFilledPolygon(const std::vector<Polygon> &polygons, const std::vector<P
 void ShowLanePolylines(const std::vector<Polyline> &bounds, const std::vector<Polyline> &centers, int32_t pixel_per_unit = 10, std::string window_name = "Lane Polyline Image", bool save_img = false);
 void ShowPathInLane(const std::vector<Polyline> &bounds, const std::vector<Polyline> &centers, std::vector<Polyline> &path, bool show_wp = true, int32_t pixel_per_unit = 10, std::string window_name = "Lane Polyline Image", bool save_img = false);
 } // namespace LightViz
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* POLYGON_VIZ_HPP */

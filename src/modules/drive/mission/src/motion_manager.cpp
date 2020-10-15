@@ -13,7 +13,7 @@
 
 #include "stopwatch/stopwatch.h"
 
-using namespace autodrive;
+using namespace ivnav;
 
 CAVMotionManager::CAVMotionManager(std::string map_file) : map_loader_(map_file)
 {
@@ -46,7 +46,7 @@ void CAVMotionManager::ResetTask()
     current_route_.valid = false;
 }
 
-void CAVMotionManager::HandleMissionInfoMsg(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::CAVMissionInfo *msg)
+void CAVMotionManager::HandleMissionInfoMsg(const ivnav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::CAVMissionInfo *msg)
 {
     if (msg->mission_type == librav_lcm_msgs::CAVMissionInfo::MT_NEW_MISSION_REQUEST)
     {
@@ -67,12 +67,12 @@ void CAVMotionManager::HandleMissionInfoMsg(const autodrive::ReceiveBuffer *rbuf
     }
 }
 
-void CAVMotionManager::HandleEgoVehicleStateMsg(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleState *msg)
+void CAVMotionManager::HandleEgoVehicleStateMsg(const ivnav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleState *msg)
 {
     ego_vehicle_state_ = VehicleState(msg->id, {msg->position[0], msg->position[1], msg->theta}, msg->speed);
 }
 
-void CAVMotionManager::HandleVehicleEstimationsMsg(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg)
+void CAVMotionManager::HandleVehicleEstimationsMsg(const ivnav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg)
 {
     surrounding_vehicles_.clear();
     for (int i = 0; i < msg->vehicle_num; ++i)

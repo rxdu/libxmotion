@@ -10,7 +10,7 @@
 #ifndef SPEED_PROFILE_HPP
 #define SPEED_PROFILE_HPP
 
-namespace autodrive
+namespace ivnav
 {
 class SpeedProfileIF
 {
@@ -36,6 +36,6 @@ class ConstSpeedProfile : public SpeedProfileIF
   private:
     double speed_;
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* SPEED_PROFILE_HPP */

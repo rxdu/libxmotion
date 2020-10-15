@@ -12,7 +12,7 @@
 
 #include "cvdraw/details/cvdraw_headers.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 namespace JetColorMap
 {
@@ -20,6 +20,6 @@ namespace JetColorMap
 cv::Scalar Transform(double val);
 void Transform(double val, double &r, double &g, double &b);
 }; // namespace JetColorMap
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* COLOR_MAPS_HPP */

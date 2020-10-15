@@ -11,7 +11,7 @@
 #include "geometry/simple_point.hpp"
 #include "geometry/geometry_draw.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 void VehicleViz::DrawVehicle(CvCanvas &canvas, Polygon polygon, cv::Scalar ln_color, int32_t ln_width)
 {
@@ -53,4 +53,4 @@ void VehicleViz::DrawVehicleStaticCollision(CvCanvas &canvas, VehicleStaticThrea
     GeometryViz::DrawPolygon(canvas, polygon, false, CvColors::black_color, 2);
     GeometryViz::DrawPolygonDirection(canvas, polygon, CvColors::orange_color, 2);
 }
-} // namespace autodrive
+} // namespace ivnav

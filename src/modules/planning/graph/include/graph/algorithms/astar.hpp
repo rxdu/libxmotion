@@ -28,7 +28,7 @@
 #include "graph/graph.hpp"
 #include "graph/details/priority_queue.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 template <typename State>
 using Path = std::vector<State>;
@@ -284,6 +284,6 @@ class AStar
 		return path;
 	}
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* ASTAR_HPP */

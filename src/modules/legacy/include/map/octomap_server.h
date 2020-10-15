@@ -23,7 +23,7 @@
 
 #include "map/librav_math.hpp"
 
-namespace autodrive {
+namespace ivnav {
 
 typedef struct
 {

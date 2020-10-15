@@ -20,7 +20,7 @@
 
 #include "logging/details/specialized_logger.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 class EventLogger : public SpecializedLogger
 {
@@ -79,6 +79,6 @@ class EventLogger : public SpecializedLogger
         build_string(o, rest...);
     }
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* EVENT_LOGGER_HPP */

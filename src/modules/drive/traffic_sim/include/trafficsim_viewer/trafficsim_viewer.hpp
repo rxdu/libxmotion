@@ -23,7 +23,7 @@
 
 #include "stopwatch/stopwatch.h"
 
-namespace autodrive
+namespace ivnav
 {
 class TrafficSimViewer
 {
@@ -61,9 +61,9 @@ class TrafficSimViewer
     void CalcCanvasSize(std::shared_ptr<RoadMap> road_map);
     cv::Mat CropImageToROI(cv::Mat img, double cx, double cy, double xspan, double yspan);
 
-    void HandleEgoVehicleStateMsg(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleState *msg);
-    void HandleVehicleEstimationsMsg(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg);
+    void HandleEgoVehicleStateMsg(const ivnav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleState *msg);
+    void HandleVehicleEstimationsMsg(const ivnav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg);
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* TRAFFICSIM_VIEWER_HPP */

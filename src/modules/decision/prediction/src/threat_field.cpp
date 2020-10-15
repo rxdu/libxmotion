@@ -11,7 +11,7 @@
 
 #include <tbb/tbb.h>
 
-using namespace autodrive;
+using namespace ivnav;
 
 ThreatField::ThreatField(std::shared_ptr<RoadMap> rmap, std::shared_ptr<TrafficMap> tmap) : road_map_(rmap), traffic_map_(tmap)
 {

@@ -2,7 +2,7 @@
 
 #include "pose_viewer/pose_viewer.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

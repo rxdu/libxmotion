@@ -17,7 +17,7 @@
 #include "traffic_map/traffic_map.hpp"
 #include "prediction/vehicle_threat.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 class ThreatField
 {
@@ -67,6 +67,6 @@ class ThreatField
 
     bool CheckInConflict(VehicleEstimation veh);
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* THREAT_FIELD_HPP */

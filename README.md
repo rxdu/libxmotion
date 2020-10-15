@@ -1,4 +1,4 @@
-# Auto Drive
+# Library for Intelligent Vehicle Navigation
 
 This repository contains a collection of software for research on autonomous vehicles.
 

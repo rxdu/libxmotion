@@ -14,7 +14,7 @@
 
 #include "mission/cav_datalink.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 class VirtualController
 {
@@ -24,8 +24,8 @@ class VirtualController
   private:
     std::shared_ptr<LCMLink> data_link_;
 
-    // void HandleLCMMessage_SyncTrigger(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg);
+    // void HandleLCMMessage_SyncTrigger(const ivnav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::SimSyncTrigger *msg);
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* VIRTUAL_CONTROLLER_HPP */

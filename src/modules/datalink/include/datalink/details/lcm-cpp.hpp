@@ -18,7 +18,7 @@
 #include <functional>
 #endif
 
-namespace autodrive {
+namespace ivnav {
 
 /**
  * @defgroup LcmCpp C++ API Reference

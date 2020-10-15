@@ -11,7 +11,7 @@
 
 #include <cassert>
 
-using namespace autodrive;
+using namespace ivnav;
 
 ParametricCurve::ParametricCurve(Polyline center_polyline) : polyline_(center_polyline)
 {

@@ -17,7 +17,7 @@
 #include "geometry/cspline.hpp"
 #include "geometry/simple_point.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 // 2D parametric curve: x, y
 // each dimension is represented as a cubic spline
@@ -58,6 +58,6 @@ namespace CurveFitting
 ParametricCurve FitApproximateLengthCurve(Polyline polyline);
 ParametricCurve FitTimedCurve(std::vector<double> x, std::vector<double> y, std::vector<double> t);
 } // namespace CurveFitting
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* PARAMETRIC_CURVE_HPP */

@@ -9,7 +9,7 @@
 
 #include "map/sgrid_builder.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 using namespace cv;
 
 std::shared_ptr<SquareGrid> SGridBuilderV2::BuildSquareGrid(cv::InputArray _src, uint32_t cell_size, uint8_t obj_expand_num, int64_t img_offset_x, int64_t img_offset_y)

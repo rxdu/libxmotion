@@ -16,7 +16,7 @@
 #include "geometry/cspline.hpp"
 #include "geometry/parametric_curve.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 namespace LightViz {
 void ShowCubicSpline(const CSpline &spline, double step = 0.01, int32_t pixel_per_unit = 10, std::string window_name = "Spline Image", bool save_img = false);
@@ -25,6 +25,6 @@ void ShowCubicSplinePosition(const std::vector<CSpline> &splines, double step = 
 
 void ShowParametricCurve(const ParametricCurve &pcurve, double step = 0.01, int32_t pixel_per_unit = 10, std::string window_name = "Spline Image", bool save_img = false);
 } // namespace LightViz
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* CURVE_VIZ_HPP */

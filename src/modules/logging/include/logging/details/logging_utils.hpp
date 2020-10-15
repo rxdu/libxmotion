@@ -13,7 +13,7 @@
 #include <cstdlib>
 #include <string>
 
-namespace autodrive
+namespace ivnav
 {
 inline std::string GetDataFolderPath()
 {
@@ -51,6 +51,6 @@ inline std::string CreateLogFileName(std::string prefix, std::string path)
 	std::string filename = path + "/" + prefix + "." + time_stamp + ".data";
 	return filename;
 }
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* LOGGING_UTILS_HPP */

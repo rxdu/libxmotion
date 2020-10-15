@@ -3,7 +3,7 @@
 #include "road_map/road_map.hpp"
 #include "stopwatch/stopwatch.h"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

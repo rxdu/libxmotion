@@ -2,7 +2,7 @@
 #include "geometry/polygon.hpp"
 #include "coreviz/geometry_draw.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 // copied here to avoid dependency from a higher-level package
 class GaussianPositionThreat

@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-namespace autodrive
+namespace ivnav
 {
 /// Convenient substitution to CGAL Point type
 struct SimplePoint
@@ -27,6 +27,6 @@ struct SimplePoint
         return os;
     }
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* SIMPLE_POINT_HPP */

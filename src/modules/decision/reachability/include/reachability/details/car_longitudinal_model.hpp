@@ -13,7 +13,7 @@
 #include "ascent/Ascent.h"
 #include "ascent/Utility.h"
 
-namespace autodrive
+namespace ivnav
 {
 // Reference:
 //  [1] Althoff, M., and A. Mergel. 2011. “Comparison of Markov Chain Abstraction
@@ -36,5 +36,5 @@ class CarLongitudinalModel
   private:
     control_t u_ = 0;
 };
-} // namespace autodrive
+} // namespace ivnav
 #endif /* CAR_LONGITUDINAL_MODEL_HPP */

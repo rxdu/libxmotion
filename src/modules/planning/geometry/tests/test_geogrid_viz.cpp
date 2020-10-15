@@ -1,7 +1,7 @@
 #include "decomp/curvilinear_grid.hpp"
 #include "lightviz/details/curvilinear_grid_draw.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

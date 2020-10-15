@@ -17,7 +17,7 @@
 #include "cvdraw/details/cvdraw_headers.hpp"
 #include "cvdraw/cv_colors.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 struct CPoint
 {
@@ -170,6 +170,6 @@ class CvCanvas
         return cv::Point(x, y);
     }
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* CV_CANVAS_HPP */

@@ -16,7 +16,7 @@
 
 #include "sampling/base/tree_adapter.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 template <typename Space, typename Tree>
 class PlannerBase
@@ -74,6 +74,6 @@ class PlannerBase
     bool DefaultStateValidityCheck(StateType *state) { return true; }
     bool DefaultPathValidityCheck(StateType *sstate, StateType *dstate) { return true; }
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* PLANNER_BASE_HPP */

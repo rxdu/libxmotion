@@ -19,7 +19,7 @@
 #include "adtypes/adtypes.hpp"
 #include "geometry/polygon.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 struct VehicleFootprint
 {
@@ -86,6 +86,6 @@ class VehicleState
 
     VehicleFootprint footprint_;
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* VEHICLE_STATE_HPP */

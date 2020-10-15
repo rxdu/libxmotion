@@ -9,7 +9,7 @@
 
 #include "map/map_utils.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 bool Map::ReadImageFromFile(std::string map_path, cv::OutputArray _dst)
 {

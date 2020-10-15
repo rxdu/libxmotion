@@ -17,7 +17,7 @@
 #include "mission/route_planner.hpp"
 #include "traffic_map/map_loader.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 class CAVMissionControl
 {
@@ -60,6 +60,6 @@ class CAVMissionControl
     void ResetMission();
     void ValidateMissionRequest();
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* MISSION_CONTROL_HPP */

@@ -24,7 +24,7 @@
 
 #include "state_lattice/details/motion_state.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 class PointKinematics
 {
@@ -97,6 +97,6 @@ class PointKinematics
 
     inline void CalculateIntermediateParams(const Param &p);
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* POINT_KINEMATICS_HPP */

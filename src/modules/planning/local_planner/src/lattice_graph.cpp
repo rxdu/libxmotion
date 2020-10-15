@@ -14,7 +14,7 @@
 
 #include "local_planner/lattice_dijkstra.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 std::shared_ptr<Graph<LatticeGraph::LatticeNode, StateLattice>> LatticeGraph::Construct(std::shared_ptr<TrafficChannel> channel, CurviGridIndex start_index, int32_t expansion_iter, std::vector<int32_t> &final_nodes)
 {

@@ -10,7 +10,7 @@
 #include "mission/mission_control.hpp"
 #include "mission/vehicle_state.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 CAVMissionControl::CAVMissionControl(std::string map_file) : map_loader_(map_file)
 {
@@ -149,4 +149,4 @@ void CAVMissionControl::ResetMission()
     init_state_set_ = false;
     goal_state_set_ = false;
 }
-} // namespace autodrive
+} // namespace ivnav

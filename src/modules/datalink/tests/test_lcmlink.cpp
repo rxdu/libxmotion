@@ -3,7 +3,7 @@
 
 #include "datalink/lcm_link.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main(int argc, char *argv[])
 {

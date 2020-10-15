@@ -18,7 +18,7 @@
 #include <CGAL/Boolean_set_operations_2.h>
 #include <CGAL/Point_2.h>
 
-using namespace autodrive;
+using namespace ivnav;
 
 Polygon::Polygon(std::initializer_list<SimplePoint> pts)
 {

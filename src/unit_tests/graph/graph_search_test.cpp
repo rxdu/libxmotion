@@ -16,7 +16,7 @@
 #include "graph/algorithms/astar.hpp"
 #include "graph/algorithms/dijkstra.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 #define ROW_SIZE 4
 #define COL_SIZE 4

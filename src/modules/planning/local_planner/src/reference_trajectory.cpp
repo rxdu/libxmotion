@@ -9,7 +9,7 @@
 
 #include "local_planner/reference_trajectory.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 ReferenceTrajectory::ReferenceTrajectory(std::vector<StateLattice> path) : path_(path)
 {

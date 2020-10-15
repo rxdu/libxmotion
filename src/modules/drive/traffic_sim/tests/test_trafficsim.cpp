@@ -4,7 +4,7 @@
 #include "traffic_sim/traffic_sim.hpp"
 #include "stopwatch/stopwatch.h"
 
-using namespace autodrive;
+using namespace ivnav;
 
 #define LOOP_PERIOD 500
 

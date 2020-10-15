@@ -12,7 +12,7 @@
 #include <opencv2/core/eigen.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-namespace autodrive {
+namespace ivnav {
 // Reference:
 //  [1]
 //  https://www.learnopencv.com/applycolormap-for-pseudocoloring-in-opencv-c-python/
@@ -42,4 +42,4 @@ cv::Mat MatrixViz::CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix,
 
   return color_img;
 }
-}  // namespace autodrive
+}  // namespace ivnav

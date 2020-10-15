@@ -16,7 +16,7 @@
 
 #include "map/cube_array.hpp"
 
-namespace autodrive {
+namespace ivnav {
 
 namespace CubeArrayBuilder {
 

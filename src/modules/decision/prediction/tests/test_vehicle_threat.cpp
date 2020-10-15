@@ -8,7 +8,7 @@
 #include "stopwatch/stopwatch.h"
 // #include "lightviz/navviz.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

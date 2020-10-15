@@ -19,7 +19,7 @@
 #include "map/cube_array_builder.h"
 #include "map/graph_builder.h"
 
-using namespace autodrive;
+using namespace ivnav;
 using namespace octomap;
 
 void print_query_info(point3d query, OcTreeNode* node) {

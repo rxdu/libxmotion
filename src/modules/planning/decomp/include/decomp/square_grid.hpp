@@ -15,7 +15,7 @@
 
 #include "decomp/details/rect_grid_base.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 /*
  * Coordinate System:
@@ -167,7 +167,7 @@ class SquareGridBase : public RectGridBase<SquareCellBase<T> *>
 
 using SquareCell = SquareCellBase<double>;
 using SquareGrid = SquareGridBase<double>;
-} // namespace autodrive
+} // namespace ivnav
 
 #include "details/square_grid_impl.hpp"
 

@@ -16,7 +16,7 @@
 #include "graph/tree.hpp"
 #include "cvdraw/cvdraw.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 namespace RRTViz
 {
@@ -89,6 +89,6 @@ void DrawStraightPath(CvCanvas &canvas, std::vector<StateType *> path)
     canvas.DrawPoint(pt2, 5, CvColors::finish_color);
 }
 }; // namespace RRTViz
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* RRT_DRAW_HPP */

@@ -9,7 +9,7 @@
 
 #include "traffic_sim/vehicle_motion.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 VehicleMotion::VehicleMotion(VehicleInfo info) : vehicle_info_(info)
 {

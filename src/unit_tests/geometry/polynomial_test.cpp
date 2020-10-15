@@ -15,7 +15,7 @@
 
 #include "geometry/polynomial.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 struct PolynomialTest : testing::Test
 {

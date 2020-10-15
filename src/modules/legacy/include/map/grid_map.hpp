@@ -14,7 +14,7 @@
 
 #include "map/image_utils.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 /*
  * 2D Map Coordinate System:

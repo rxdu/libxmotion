@@ -12,7 +12,7 @@
 #include "model/bicycle_model.hpp"
 #include "model/system_propagator.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

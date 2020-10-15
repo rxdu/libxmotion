@@ -15,7 +15,7 @@
 #include "map/cube_array_builder.h"
 // #include "map/graph_builder.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 using namespace octomap;
 
 OctomapServer::OctomapServer(std::shared_ptr<lcm::LCM> lcm):

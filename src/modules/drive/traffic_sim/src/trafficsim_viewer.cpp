@@ -18,7 +18,7 @@
 #include "traffic_map/map_loader.hpp"
 #include "mission/cav_datalink.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 TrafficSimViewer::TrafficSimViewer(std::string map_file, int32_t ppu) : ppu_(ppu)
 {
@@ -109,13 +109,13 @@ cv::Mat TrafficSimViewer::CropImageToROI(cv::Mat img, double cx, double cy, doub
     return img(cv::Rect(tl_x, tl_y, width, height));
 }
 
-void TrafficSimViewer::HandleEgoVehicleStateMsg(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleState *msg)
+void TrafficSimViewer::HandleEgoVehicleStateMsg(const ivnav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleState *msg)
 {
     ego_vehicle_state_ = VehicleState(msg->id, {msg->position[0], msg->position[1], msg->theta}, msg->speed);
     ego_state_updated_ = true;
 }
 
-void TrafficSimViewer::HandleVehicleEstimationsMsg(const autodrive::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg)
+void TrafficSimViewer::HandleVehicleEstimationsMsg(const ivnav::ReceiveBuffer *rbuf, const std::string &chan, const librav_lcm_msgs::VehicleEstimations *msg)
 {
     surrounding_vehicles_.clear();
     for (int i = 0; i < msg->vehicle_num; ++i)

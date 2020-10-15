@@ -3,7 +3,7 @@
 
 #include "decomp/details/rect_grid_base.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

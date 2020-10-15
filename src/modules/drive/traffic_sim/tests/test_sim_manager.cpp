@@ -3,7 +3,7 @@
 #include "traffic_sim/traffic_sim_manager.hpp"
 #include "traffic_sim/sim_scenarios.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 #define LOOP_PERIOD 500
 

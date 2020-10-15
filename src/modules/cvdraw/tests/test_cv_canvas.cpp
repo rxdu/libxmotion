@@ -2,7 +2,7 @@
 
 #include "cvdraw/cv_canvas.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

@@ -14,7 +14,7 @@
 
 #include "logging/loggers.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 // PrimitiveGenerator StateLattice::generator(FolderPath::GetLogFolderPath() + "/lookup_table.20181026024917.data");
 PrimitiveGenerator StateLattice::generator(GetDataFolderPath() + "/lattice/lookup/lookup_table.20181027112245.data");

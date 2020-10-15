@@ -51,7 +51,7 @@
 #include <mutex>
 #include <random>
 
-namespace autodrive
+namespace ivnav
 {
 class RNGSeedGenerator
 {
@@ -123,6 +123,6 @@ class RNGSeedGenerator
     std::ranlux24_base sGen_;
     std::uniform_int_distribution<> sDist_;
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* RNG_SEED_GEN_HPP */

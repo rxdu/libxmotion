@@ -4,7 +4,7 @@
 
 #include "mission/mission_control.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

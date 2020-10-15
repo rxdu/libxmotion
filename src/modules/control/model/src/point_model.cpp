@@ -11,7 +11,7 @@
 
 #include <cstdint>
 
-using namespace autodrive;
+using namespace ivnav;
 
 LongitudinalDynamics::LongitudinalDynamics(control_t u) : u_(u)
 {

@@ -9,7 +9,7 @@
 #include "lightviz/roadmap_viz.hpp"
 #include "lightviz/traffic_viz.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

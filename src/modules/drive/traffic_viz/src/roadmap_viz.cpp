@@ -12,7 +12,7 @@
 #include "traffic_viz/roadmap_draw.hpp"
 #include "traffic_viz/vehicle_draw.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 CvCanvas UGVNavViz::CreateCanvas(std::shared_ptr<RoadMap> map, int32_t ppu, bool use_jetcolor)
 {
@@ -97,4 +97,4 @@ void UGVNavViz::ShowVehicleOnMap(std::shared_ptr<RoadMap> map, std::vector<Polyg
     VehicleViz::DrawVehicle(canvas, polygons);
     CvIO::ShowImage(canvas.GetPaintArea(), window_name, save_img);
 }
-} // namespace autodrive
+} // namespace ivnav

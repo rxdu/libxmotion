@@ -12,7 +12,7 @@
 
 #include "map/graph_builder.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 std::shared_ptr<Graph<SquareCell *>> Planner::BuildGraphFromSquareGrid(std::shared_ptr<SquareGrid> grid, bool allow_diag_move)
 {

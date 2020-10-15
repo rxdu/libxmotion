@@ -16,7 +16,7 @@
 
 #include "cvdraw/cvdraw.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 namespace VehicleViz
 {
@@ -27,6 +27,6 @@ void DrawVehiclePath(CvCanvas &canvas, std::vector<Polyline> &path, std::vector<
 
 void DrawVehicleStaticCollision(CvCanvas &canvas, VehicleStaticThreat threat, Polygon polygon);
 }; // namespace VehicleViz
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* VEHICLE_DRAW_HPP */

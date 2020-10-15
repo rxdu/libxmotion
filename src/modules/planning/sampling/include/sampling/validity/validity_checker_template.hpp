@@ -15,7 +15,7 @@
 
 #include "sampling/space/realvector_space.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 class ValidityCheckerTemplate
 {
@@ -40,6 +40,6 @@ class ValidityCheckerTemplate
 
     // add other member variables/functions
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* VALIDITY_CHECKER_TEMPLATE_HPP */

@@ -15,7 +15,7 @@
 #include "mission/reference_route.hpp"
 #include "traffic_map/traffic_map.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 class RoutePlanner
 {
@@ -38,6 +38,6 @@ class RoutePlanner
     std::shared_ptr<RoadMap> road_map_;
     std::shared_ptr<TrafficMap> traffic_map_;
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* ROUTE_PLANNER_HPP */

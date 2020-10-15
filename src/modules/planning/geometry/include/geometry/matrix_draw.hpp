@@ -13,10 +13,10 @@
 #include <Eigen/Dense>
 #include <opencv2/opencv.hpp>
 
-namespace autodrive {
+namespace ivnav {
 namespace MatrixViz {
 cv::Mat CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix, bool invert_y = false);
 };
-}  // namespace autodrive
+}  // namespace ivnav
 
 #endif /* MATRIX_DRAW_HPP */

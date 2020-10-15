@@ -3,7 +3,7 @@
 #include "reachability/monte_carlo_sim.hpp"
 #include "stopwatch/stopwatch.h"
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

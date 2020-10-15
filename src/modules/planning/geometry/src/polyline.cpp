@@ -9,7 +9,7 @@
 
 #include "geometry/polyline.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 Polyline::Polyline(std::vector<Point_2> pts)
 {

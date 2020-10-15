@@ -10,7 +10,7 @@
 #include "reachability/monte_carlo_sim.hpp"
 #include "logging/loggers.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 void MonteCarloSim::RunSim(double t0, double tf, double step, int32_t iter_num)
 {

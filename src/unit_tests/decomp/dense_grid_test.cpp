@@ -14,7 +14,7 @@
 
 #include "graph/graph.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 struct DenseGridTest : testing::Test
 {

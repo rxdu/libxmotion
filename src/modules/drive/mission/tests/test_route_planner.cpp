@@ -12,7 +12,7 @@
 #include "lightviz/navviz.hpp"
 #endif
 
-using namespace autodrive;
+using namespace ivnav;
 
 int main()
 {

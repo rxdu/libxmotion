@@ -14,7 +14,7 @@
 
 #include "graph/tree.hpp"
 
-using namespace autodrive;
+using namespace ivnav;
 
 struct TestState
 {

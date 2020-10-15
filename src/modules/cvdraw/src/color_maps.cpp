@@ -11,7 +11,7 @@
 
 using namespace cv;
 
-namespace autodrive
+namespace ivnav
 {
 namespace
 {

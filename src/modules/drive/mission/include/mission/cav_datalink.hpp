@@ -14,7 +14,7 @@
 
 #include "datalink/lcm_link.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 struct CAV_COMMON_CHANNELS
 {
@@ -30,6 +30,6 @@ struct CAV_SIM_CHANNELS
 {
     static constexpr auto SIM_SYNC_TRIGGER_CHANNEL = "sim_sync_trigger";
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* CAV_DATALINK_HPP */

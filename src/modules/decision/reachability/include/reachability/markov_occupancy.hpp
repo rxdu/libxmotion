@@ -20,7 +20,7 @@
 
 #include "file_io/matrix_file.hpp"
 
-namespace autodrive
+namespace ivnav
 {
 // N: number of system states - i
 // M: number of control inputs - alpha, beta
@@ -174,6 +174,6 @@ class MarkovOccupancy
         return pos_prob_vec;
     }
 };
-} // namespace autodrive
+} // namespace ivnav
 
 #endif /* MARKOV_OCCUPANCY_HPP */
