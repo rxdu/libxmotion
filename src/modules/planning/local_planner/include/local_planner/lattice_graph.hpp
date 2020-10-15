@@ -15,7 +15,7 @@
 #include <vector>
 #include <iostream>
 
-#include "adtypes/adtypes.hpp"
+#include "navtypes/navtypes.hpp"
 #include "graph/graph.hpp"
 #include "decomp/curvilinear_grid.hpp"
 

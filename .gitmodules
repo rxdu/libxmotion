@@ -4,9 +4,9 @@
 [submodule "src/third_party/ascent"]
 	path = src/third_party/ascent
 	url = https://github.com/AnyarInc/Ascent.git
-[submodule "src/modules/logging/third_party/spdlog"]
-	path = src/modules/logging/third_party/spdlog
+[submodule "src/modules/diagnosis/third_party/spdlog"]
+	path = src/modules/diagnosis/third_party/spdlog
 	url = https://github.com/gabime/spdlog.git
-[submodule "src/modules/viewer/third_party/raylib"]
-	path = src/modules/viewer/third_party/raylib
+[submodule "src/modules/visualization/third_party/raylib"]
+	path = src/modules/visualization/third_party/raylib
 	url = https://github.com/raysan5/raylib.git

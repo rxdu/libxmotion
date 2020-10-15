@@ -11,7 +11,7 @@ set(LATTICE_PLANNER_LIB_SRC
   #src/lookahead_zone.cpp
 )
 add_library(local_planner STATIC ${LATTICE_PLANNER_LIB_SRC})
-target_link_libraries(local_planner adtypes decomp lattice graph traffic utils)
+target_link_libraries(local_planner navtypes decomp lattice graph traffic utils)
 target_include_directories(local_planner PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>

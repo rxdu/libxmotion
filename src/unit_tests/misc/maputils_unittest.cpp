@@ -16,7 +16,7 @@
 #include "opencv2/opencv.hpp"
 
 // user
-#include "adtypes/adtypes.hpp"
+#include "navtypes/navtypes.hpp"
 #include "map/map_utils.h"
 #include "map/map_type.h"
 #include "map/graph_builder.h"
