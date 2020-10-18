@@ -1,8 +1,6 @@
 ## Add source directories
 add_subdirectory(navtypes)
 add_subdirectory(diagnosis)
-add_subdirectory(traffic)
-add_subdirectory(mission)
 add_subdirectory(control)
 add_subdirectory(planning)
 add_subdirectory(datalink)
