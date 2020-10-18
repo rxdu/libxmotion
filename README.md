@@ -2,7 +2,7 @@
 
 This repository contains a collection of software for study and research on autonomous vehicles.
 
-Note: this project is built on top of a number of open-source packages and is part of my work in the past a few years for my graduate study. I'm in the process of cleaning up the code and hopefully it would also be useful for others.
+Note: this library is built on top of a number of open-source packages. At this moment, most of the available modules are from my graduate study. I'm in the process of cleaning up the code, redesigning some modules and adding new functions. My hope is to make this library useful for others interested in mobile robot/intelligent vehicle navigation.
 
 ## Repository structure
 
