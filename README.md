@@ -2,17 +2,17 @@
 
 This repository contains a collection of software for study and research on autonomous vehicles.
 
-Note: this project is built on top of a number of open-source packages and is the result of my work from past a few years during my graduate study. I'm in the process of cleaning up the code and hopefully it would also be useful for others.
+Note: this project is built on top of a number of open-source packages and is part of my work in the past a few years for my graduate study. I'm in the process of cleaning up the code and hopefully it would also be useful for others.
 
 ## Repository structure
 
-| Folder      | Description              |
-| ----------- | ------------------------ |
-| cmake       | cmake configuration      |
-| data        | experiment results, logs |
-| docs        | ocumentation             |
-| maps        | map files                |
-| src         | C++ code                 |
+| Folder |       Description        |
+| ------ | ------------------------ |
+| cmake  | cmake configuration      |
+| data   | experiment results, logs |
+| docs   | ocumentation             |
+| map    | map files                |
+| src    | C++ code                 |
 
 ## Build and run
 
