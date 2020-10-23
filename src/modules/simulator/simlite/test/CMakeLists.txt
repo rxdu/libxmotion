@@ -1,0 +1,2 @@
+add_executable(test_odeint test_odeint.cpp)
+target_link_libraries(test_odeint odeint)

@@ -27,7 +27,7 @@ class MonteCarloSim
 
   private:
     // SystemPropagator<LongitudinalDynamics, double> propagator_;
-    SystemPropagator<BicycleKinematics, BicycleKinematics::control_t> propagator_;
+    SystemPropagator<BicycleKinematics, BicycleKinematics::control_type> propagator_;
 
     BiGaussianSampler init_pos_sampler_ = {0.1, 0.05, 0};
     GaussianSampler acc_sampler_ = {0.0, 2.0};

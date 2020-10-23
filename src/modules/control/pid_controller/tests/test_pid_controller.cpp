@@ -12,7 +12,7 @@ int main()
     double t = 0.0;
     double dt = 0.001;
     double t_end = 10.0;
-    BicycleKinematics::control_t u = {0.1, 0};
+    BicycleKinematics::control_type u = {0.1, 0};
 
     RK4 integrator;
     Recorder recorder;
