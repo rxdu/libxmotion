@@ -10,8 +10,24 @@
 #ifndef ROBOT_HPP
 #define ROBOT_HPP
 
+#include "odeint.hpp"
+
 namespace ivnav {
-class Robot {};
+template <typename Model>
+class Robot {
+ public:
+  using State = typename Model::state_type;
+  using Command = typename Model::control_type;
+
+ public:
+  State StepForward(State x0, Command u, double t0, double tf, double dt) {
+    State x = x0;
+    boost::numeric::odeint::integrate_const(
+        boost::numeric::odeint::runge_kutta4<typename Model::state_type>(),
+        Model(u), x, t0, tf, dt);
+    return x;
+  }
+};
 }  // namespace ivnav
 
 #endif /* ROBOT_HPP */
