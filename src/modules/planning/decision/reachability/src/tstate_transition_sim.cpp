@@ -62,7 +62,7 @@ Eigen::MatrixXd TStateTransitionSim::RunSim(double T)
                 // perform simulation with cell and control
                 for (auto &sample : samples)
                 {
-                    asc::state_t statef = propagator_.Propagate({sample.s, sample.v}, control_set_(c), 0, T, T / 10);
+                    auto statef = propagator_.Propagate({sample.s, sample.v}, control_set_(c), 0, T, T / 10);
                     // std::cout << "control: " << control_set_(i) << " , final state: " << statef[0] << " , " << statef[1] << std::endl;
 
                     auto final_cell = state_space_->GetStateCell(statef[0], statef[1]);

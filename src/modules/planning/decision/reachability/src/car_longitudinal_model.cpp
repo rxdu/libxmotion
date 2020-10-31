@@ -12,7 +12,7 @@
 using namespace ivnav;
 
 // x1 = s, x2 = v
-void CarLongitudinalModel::operator()(const asc::state_t &x, asc::state_t &xd, const double)
+void CarLongitudinalModel::operator()(const state_type &x, state_type &xd, const double)
 {
     // s_dot
     xd[0] = x[1];

@@ -1,9 +1,9 @@
-/* 
+/*
  * car_model_propagator.hpp
- * 
+ *
  * Created on: Oct 30, 2018 22:52
- * Description: 
- * 
+ * Description:
+ *
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
@@ -13,40 +13,37 @@
 #include <cstdint>
 #include <vector>
 
-#include "ascent/Ascent.h"
-#include "ascent/Utility.h"
+#include "odeint.hpp"
 
 #include "reachability/details/car_longitudinal_model.hpp"
 
-namespace ivnav
-{
-class CarModelPropagator
-{
-public:
-  asc::state_t Propagate(asc::state_t init_state, CarLongitudinalModel::control_t u, double t0, double tf, double dt)
-  {
+namespace ivnav {
+class CarModelPropagator {
+ public:
+  CarLongitudinalModel::state_type Propagate(CarLongitudinalModel::state_type init_state,
+                       CarLongitudinalModel::control_type u, double t0,
+                       double tf, double dt) {
     double t = t0;
-    asc::state_t x = init_state;
+    CarLongitudinalModel::state_type x = init_state;
 
-    while (t <= tf)
-    {
-      integrator_(CarLongitudinalModel(u), x, t, dt);
+    while (t <= tf) {
+      //   integrator_(CarLongitudinalModel(u), x, t, dt);
+
+      boost::numeric::odeint::integrate_const(
+          boost::numeric::odeint::runge_kutta4<
+              CarLongitudinalModel::state_type>(),
+          CarLongitudinalModel(u), x, t, t+dt, dt/10.0);
 
       // add additional constraint to s, v: s >= s0, v >=0, v < v_max
-      if(x[0] < init_state[0])
-        x[0] = init_state[0];
-      if (x[1] < 0)
-        x[1] = 0;
+      if (x[0] < init_state[0]) x[0] = init_state[0];
+      if (x[1] < 0) x[1] = 0;
       if (x[1] > CarLongitudinalModel::v_max)
         x[1] = CarLongitudinalModel::v_max;
     }
 
     return x;
   }
-
-private:
-  asc::RK4 integrator_;
 };
-} // namespace ivnav
+}  // namespace ivnav
 
 #endif /* CAR_MODEL_PROPAGATOR_HPP */
