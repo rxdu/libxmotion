@@ -18,7 +18,7 @@ Note: this library is built on top of a number of open-source packages. At this 
 
 ### Requirements
 
-* C++17
+* C++11
 
 ### Install dependencies
 
