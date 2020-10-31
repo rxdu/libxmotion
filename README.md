@@ -1,6 +1,6 @@
 # Library for Intelligent Vehicle Navigation
 
-![GitHub Workflow Status](https://github.com/rxdu/libnav/workflows/cmake/badge.svg)
+![GitHub Workflow Status](https://github.com/rxdu/libnav/workflows/CMake/badge.svg)
 
 This repository contains a collection of software for study and research on autonomous vehicles.
 
