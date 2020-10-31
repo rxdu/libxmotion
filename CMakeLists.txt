@@ -55,8 +55,8 @@ endif(ENABLE_LOGGING)
 
 # automatically build LCM types.  This also defines a number of CMake
 # variables, see cmake/lcmtypes.cmake for details
-include(cmake/lcmtypes.cmake)
-lcmtypes_build()
+# include(cmake/lcmtypes.cmake)
+# lcmtypes_build()
 
 ## Add source directories
 add_subdirectory(src)
