@@ -9,7 +9,7 @@
 
 #include "geometry/polyline.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 
 Polyline::Polyline(std::vector<Point_2> pts)
 {

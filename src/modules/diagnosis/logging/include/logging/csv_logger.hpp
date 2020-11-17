@@ -20,7 +20,7 @@
 
 #include "logging/details/specialized_logger.hpp"
 
-namespace ivnav
+namespace rnav
 {
 class CsvLogger : public SpecializedLogger
 {
@@ -61,6 +61,6 @@ class GlobalCsvLogger : public CsvLogger
     GlobalCsvLogger(const GlobalCsvLogger &) = delete;
     GlobalCsvLogger &operator=(const GlobalCsvLogger &) = delete;
 };
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* CSV_LOGGER_HPP */

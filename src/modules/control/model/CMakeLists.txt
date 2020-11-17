@@ -9,6 +9,6 @@ target_include_directories(model INTERFACE
 	$<INSTALL_INTERFACE:include>)
 
 # Add executables
-# if(BUILD_TESTS)
+# if(BUILD_TESTING)
 	add_subdirectory(tests)
 # endif()

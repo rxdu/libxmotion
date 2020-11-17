@@ -30,6 +30,6 @@ target_include_directories(geometry PUBLIC
 	PRIVATE src)
 
 # Add executables
-# if(BUILD_TESTS)
-	add_subdirectory(tests)
+# if(BUILD_TESTING)
+	# add_subdirectory(tests)
 # endif()

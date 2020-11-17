@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-namespace ivnav
+namespace rnav
 {
 /// Convenient substitution to CGAL Point type
 struct SimplePoint
@@ -27,6 +27,6 @@ struct SimplePoint
         return os;
     }
 };
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* SIMPLE_POINT_HPP */

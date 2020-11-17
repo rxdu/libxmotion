@@ -12,7 +12,7 @@
 
 #include "navtypes/navtypes.hpp"
 
-namespace ivnav
+namespace rnav
 {
 class VehicleStaticThreat
 {
@@ -56,6 +56,6 @@ class VehicleStaticThreat
     const double sigma_f_hsquare = sigma_f * sigma_f / 2.0;
     const double sigma_s_hsquare = sigma_s * sigma_s / 2.0;
 };
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* STATIC_THREAT_MODEL_HPP */

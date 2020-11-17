@@ -12,7 +12,7 @@
 
 #include "odeint.hpp"
 
-namespace ivnav {
+namespace rnav {
 // Reference:
 //  [1] Althoff, M., and A. Mergel. 2011. “Comparison of Markov Chain
 //  Abstraction
@@ -36,5 +36,5 @@ class CarLongitudinalModel {
  private:
   control_type u_ = 0;
 };
-}  // namespace ivnav
+}  // namespace rnav
 #endif /* CAR_LONGITUDINAL_MODEL_HPP */

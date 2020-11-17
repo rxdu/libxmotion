@@ -16,7 +16,7 @@
 #include "graph/algorithms/astar.hpp"
 #include "graph/algorithms/dijkstra.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 
 struct Index
 {

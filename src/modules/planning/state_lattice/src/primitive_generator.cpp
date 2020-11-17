@@ -15,7 +15,7 @@
 
 #include "csv_parser/csv.h"
 
-using namespace ivnav;
+using namespace rnav;
 
 #define ENABLE_SCALER_SELECTION
 

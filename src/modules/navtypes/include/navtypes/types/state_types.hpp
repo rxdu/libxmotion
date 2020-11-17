@@ -16,7 +16,7 @@
 
 #include "navtypes/types/base_types.hpp"
 
-namespace ivnav
+namespace rnav
 {
 struct EulerAngle
 {
@@ -114,6 +114,6 @@ struct UAVTrajectoryPoint
 };
 
 using UAVTrajectory = std::vector<UAVTrajectoryPoint>;
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* CTRL_TYPES_HPP */

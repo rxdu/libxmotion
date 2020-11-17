@@ -20,7 +20,7 @@
 
 #include "geometry/simple_point.hpp"
 
-namespace ivnav
+namespace rnav
 {
 class Polyline
 {
@@ -85,6 +85,6 @@ private:
 
   void UpdateXYMinMax(double x, double y);
 };
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* POLYLINE_HPP */

@@ -13,7 +13,7 @@
 #include "ascent/Ascent.h"
 #include "ascent/Utility.h"
 
-namespace ivnav
+namespace rnav
 {
 class UnicycleKinematics
 {
@@ -28,6 +28,6 @@ private:
   control_t u_ = 0;
   static constexpr double L = 2.4;
 };
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* UNICYCLE_MODEL_HPP */

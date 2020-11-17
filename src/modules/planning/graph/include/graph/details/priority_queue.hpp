@@ -13,7 +13,7 @@
 #include <utility>
 #include <queue>
 
-namespace ivnav
+namespace rnav
 {
 template <typename T>
 struct PQElementComparator
@@ -54,6 +54,6 @@ struct PriorityQueue
 		return best_item;
 	}
 };
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* PRIORITY_QUEUE_HPP */

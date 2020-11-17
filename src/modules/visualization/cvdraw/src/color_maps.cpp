@@ -11,7 +11,7 @@
 
 using namespace cv;
 
-namespace ivnav
+namespace rnav
 {
 namespace
 {

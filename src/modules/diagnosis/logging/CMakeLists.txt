@@ -16,6 +16,6 @@ target_include_directories(logging PUBLIC
 	PRIVATE src)
 
 # Add executables
-if(BUILD_TESTS)
+if(BUILD_TESTING)
 	add_subdirectory(tests)
 endif()

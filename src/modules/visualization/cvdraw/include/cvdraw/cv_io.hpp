@@ -18,7 +18,7 @@
 #include "cvdraw/color_maps.hpp"
 #include "cvdraw/cv_canvas.hpp"
 
-namespace ivnav
+namespace rnav
 {
 namespace CvIO
 {
@@ -33,6 +33,6 @@ void ShowImage(std::string file_name, std::string window_name = "Image");
 void ShowImage(cv::Mat img, std::string window_name = "Image", bool save_img = false);
 void ShowImageFrame(cv::Mat img, std::string window_name = "Image", int32_t frame_period_ms = 50);
 } // namespace CvIO
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* CV_IO_HPP */

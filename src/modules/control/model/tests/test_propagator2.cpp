@@ -12,7 +12,7 @@
 #include "model/bicycle_model.hpp"
 #include "odeint.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 using namespace boost::numeric::odeint;
 
 int main() {

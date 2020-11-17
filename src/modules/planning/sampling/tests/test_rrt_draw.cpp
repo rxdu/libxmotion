@@ -7,7 +7,7 @@
 
 #include "sampling/rrt_draw.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 
 int main()
 {

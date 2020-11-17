@@ -18,7 +18,7 @@
 #include <functional>
 #endif
 
-namespace ivnav {
+namespace rnav {
 
 /**
  * @defgroup LcmCpp C++ API Reference

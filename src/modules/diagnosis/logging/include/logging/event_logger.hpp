@@ -20,7 +20,7 @@
 
 #include "logging/details/specialized_logger.hpp"
 
-namespace ivnav
+namespace rnav
 {
 class EventLogger : public SpecializedLogger
 {
@@ -79,6 +79,6 @@ class EventLogger : public SpecializedLogger
         build_string(o, rest...);
     }
 };
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* EVENT_LOGGER_HPP */

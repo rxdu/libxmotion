@@ -11,5 +11,5 @@
 
 #include <cstdint>
 
-using namespace ivnav;
+using namespace rnav;
 

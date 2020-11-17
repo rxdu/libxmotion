@@ -18,7 +18,7 @@
 
 #include "odeint.hpp"
 
-namespace ivnav {
+namespace rnav {
 template <typename Model, typename Input>
 class SystemPropagator {
  public:
@@ -32,6 +32,6 @@ class SystemPropagator {
     return x;
   }
 };
-}  // namespace ivnav
+}  // namespace rnav
 
 #endif /* SYSTEM_PROPAGATOR_HPP */

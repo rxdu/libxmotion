@@ -13,9 +13,9 @@
 #include "common/librav_math.hpp"
 
 using namespace Eigen;
-using namespace ivnav;
-using namespace ivnav::utils;
-using namespace ivnav::utils::Transformation;
+using namespace rnav;
+using namespace rnav::utils;
+using namespace rnav::utils::Transformation;
 
 TEST(FrameTest, Transformation)
 {

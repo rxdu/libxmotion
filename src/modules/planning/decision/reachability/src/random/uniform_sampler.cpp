@@ -9,7 +9,7 @@
 
 #include "random/uniform_sampler.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 
 UniformSampler::UniformSampler(double min, double max) : min_(min), max_(max), distribution_(min, max)
 {

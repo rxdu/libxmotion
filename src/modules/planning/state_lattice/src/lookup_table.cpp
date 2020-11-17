@@ -16,7 +16,7 @@
 #include "logging/loggers.hpp"
 #include "csv_parser/csv.h"
 
-using namespace ivnav;
+using namespace rnav;
 
 LookupTable::LookupTable(std::string filename)
 {

@@ -2,7 +2,7 @@
 
 #include "decomp/square_grid.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 
 int main()
 {

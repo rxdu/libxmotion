@@ -23,7 +23,7 @@
 #include "map/sgrid_builder.h"
 
 using namespace cv;
-using namespace ivnav;
+using namespace rnav;
 
 struct MapUtilsTest: testing::Test
 {

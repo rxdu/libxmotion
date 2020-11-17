@@ -18,7 +18,7 @@
 
 #include "navtypes/types/base_types.hpp"
 
-namespace ivnav
+namespace rnav
 {
 
 /****************** Types for Sensors ******************/
@@ -82,6 +82,6 @@ struct IMUCalibParams
 	Eigen::Matrix<double, 3, 3> scale_matrix;
 	Eigen::Matrix<double, 3, 1> bias_vector;
 };
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* SENSOR_TYPES_HPP */

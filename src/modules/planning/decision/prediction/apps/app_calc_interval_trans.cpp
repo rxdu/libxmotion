@@ -8,7 +8,7 @@
 #include "stopwatch/stopwatch.h"
 #include "file_io/folder_path.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 
 int main()
 {

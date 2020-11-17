@@ -15,7 +15,7 @@
 
 #include "geometry/cspline.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 
 struct CSplineTest : testing::Test
 {

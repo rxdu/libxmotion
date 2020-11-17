@@ -25,7 +25,7 @@
 #include "graph/graph.hpp"
 #include "graph/details/priority_queue.hpp"
 
-namespace ivnav
+namespace rnav
 {
 
 template <typename State>
@@ -390,6 +390,6 @@ class DijkstraTraversal
 	};
 };
 
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* DIJKSTRA_HPP */

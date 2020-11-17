@@ -18,7 +18,7 @@
 #include <vector>
 #include <type_traits>
 
-namespace ivnav
+namespace rnav
 {
 class SpaceBase;
 
@@ -52,6 +52,6 @@ struct TreeAdapter
     virtual std::vector<StateType *> FindNear(StateType *state, double radius) = 0;
     /*******************************************************/
 };
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* TREE_ADAPTER_HPP */

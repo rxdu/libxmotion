@@ -13,7 +13,7 @@
 #include "lightviz/navviz.hpp"
 #endif
 
-using namespace ivnav;
+using namespace rnav;
 
 int main()
 {

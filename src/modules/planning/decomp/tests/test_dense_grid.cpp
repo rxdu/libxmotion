@@ -9,7 +9,7 @@
 #include "lightviz/matrix_viz.hpp"
 #endif 
 
-using namespace ivnav;
+using namespace rnav;
 
 int main()
 {

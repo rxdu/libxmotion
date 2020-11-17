@@ -2,7 +2,7 @@
 
 #include "markov/markov_chain.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 
 int main()
 {

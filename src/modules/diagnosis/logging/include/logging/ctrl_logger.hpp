@@ -20,7 +20,7 @@
 
 #include "logging/details/specialized_logger.hpp"
 
-namespace ivnav
+namespace rnav
 {
 class CtrlLogger : public SpecializedLogger
 {
@@ -53,6 +53,6 @@ class CtrlLogger : public SpecializedLogger
     CtrlLogger(const CtrlLogger &) = delete;
     CtrlLogger &operator=(const CtrlLogger &) = delete;
 };
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* CTRL_LOGGER_HPP */

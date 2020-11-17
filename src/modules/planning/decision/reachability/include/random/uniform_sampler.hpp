@@ -12,7 +12,7 @@
 
 #include <random>
 
-namespace ivnav
+namespace rnav
 {
 class UniformSampler
 {

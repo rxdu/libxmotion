@@ -12,7 +12,7 @@
 
 #include "odeint.hpp"
 
-namespace ivnav {
+namespace rnav {
 template <typename Model>
 class Robot {
  public:
@@ -28,6 +28,6 @@ class Robot {
     return x;
   }
 };
-}  // namespace ivnav
+}  // namespace rnav
 
 #endif /* ROBOT_HPP */

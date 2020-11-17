@@ -10,7 +10,7 @@
 
 #include "stopwatch/stopwatch.h"
 
-using namespace ivnav;
+using namespace rnav;
 
 int main()
 {

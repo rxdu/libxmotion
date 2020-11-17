@@ -12,7 +12,7 @@
 
 #include <type_traits>
 
-namespace ivnav
+namespace rnav
 {
 template <typename State, typename Transition, typename StateIndexer>
 Graph<State, Transition, StateIndexer>::Graph(const Graph<State, Transition, StateIndexer> &other)
@@ -187,6 +187,6 @@ typename Graph<State, Transition, StateIndexer>::vertex_iterator Graph<State, Tr
 
     return vertex_iterator(it);
 }
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* GRAPH_IMPL_HPP */

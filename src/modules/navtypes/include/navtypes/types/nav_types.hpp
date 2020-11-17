@@ -18,7 +18,7 @@
 
 #include "navtypes/types/base_types.hpp"
 
-namespace ivnav
+namespace rnav
 {
 using Position2Di = value2<int32_t>;
 using Position2Dd = value2<double>;
@@ -71,6 +71,6 @@ struct KeyframeSet
 	std::vector<Keyframe> keyframes;
 	uint64_t start_time;
 };
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* NAV_TYPES_HPP */

@@ -10,7 +10,7 @@
 #ifndef SQUARE_GRID_IMPL_HPP
 #define SQUARE_GRID_IMPL_HPP
 
-namespace ivnav
+namespace rnav
 {
 template <typename T>
 SquareGridBase<T>::SquareGridBase(int32_t size_x, int32_t size_y, double cell_size) : RectGridBase<SquareCellBase<T> *>(size_x, size_y),
@@ -211,6 +211,6 @@ std::vector<SquareCellBase<T> *> SquareGridBase<T>::GetNeighbours(int64_t id, bo
     auto index = IDToIndex(id);
     return GetNeighbours(index.GetX(), index.GetY(), allow_diag);
 }
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* SQUARE_GRID_IMPL_HPP */

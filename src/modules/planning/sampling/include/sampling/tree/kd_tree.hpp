@@ -20,7 +20,7 @@
 #include "graph/tree.hpp"
 #include "sampling/base/tree_adapter.hpp"
 
-namespace ivnav
+namespace rnav
 {
 template <typename Space>
 class KdTree : public Tree<typename Space::StateType *, double>, public TreeAdapter<Space>
@@ -112,6 +112,6 @@ class KdTree : public Tree<typename Space::StateType *, double>, public TreeAdap
   private:
     KdTreeType kdtree_;
 };
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* KD_TREE_HPP */

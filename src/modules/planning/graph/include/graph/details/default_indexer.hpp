@@ -16,7 +16,7 @@
 #include <iostream>
 #include <iomanip>
 
-namespace ivnav
+namespace rnav
 {
 /*
  * Reference:
@@ -102,6 +102,6 @@ struct DefaultIndexer<State, typename std::enable_if<has_member_id<typename std:
     template <typename T = State, typename std::enable_if<(std::is_pointer<T>::value || is_shared_ptr<T>::value)>::type * = nullptr>
     int64_t operator()(State state) const { return static_cast<int64_t>(state->id); }
 };
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* STATE_INDEXER_HPP */

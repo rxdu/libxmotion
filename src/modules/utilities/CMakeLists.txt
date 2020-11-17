@@ -15,6 +15,6 @@ target_include_directories(utils PUBLIC
     $<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>
 	$<INSTALL_INTERFACE:include>)
 
-if(BUILD_TESTS)
+if(BUILD_TESTING)
 	add_subdirectory(tests)
 endif()

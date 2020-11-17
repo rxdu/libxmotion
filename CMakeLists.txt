@@ -8,7 +8,7 @@ if(CCACHE_PROGRAM)
 endif()
 
 ## Project Options
-option(BUILD_TESTS ON)
+option(BUILD_TESTING ON)
 option(ENABLE_LOGGING ON)
 option(STATIC_CHECK OFF)
 # set(CMAKE_BUILD_TYPE Release)
@@ -62,7 +62,7 @@ endif(ENABLE_LOGGING)
 add_subdirectory(src)
 
 ## Build tests
-if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME AND BUILD_TESTS)
+if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME AND BUILD_TESTING)
     message(STATUS "Tests will be built")
     enable_testing()
     include(GoogleTest)

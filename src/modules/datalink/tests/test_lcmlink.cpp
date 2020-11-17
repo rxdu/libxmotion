@@ -3,7 +3,7 @@
 
 #include "datalink/lcm_link.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 
 int main(int argc, char *argv[])
 {

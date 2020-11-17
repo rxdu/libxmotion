@@ -17,7 +17,7 @@
 #include "decomp/details/rect_grid_base.hpp"
 #include "decomp/square_grid.hpp"
 
-namespace ivnav
+namespace rnav
 {
 
 /*
@@ -162,6 +162,6 @@ class DenseGrid : public RectGridBase<double>
         return grid;
     }
 };
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* DENSE_GRID_HPP */

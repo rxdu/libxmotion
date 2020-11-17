@@ -24,7 +24,7 @@
 
 #include "stopwatch/stopwatch.h"
 
-namespace ivnav
+namespace rnav
 {
 template <int32_t N>
 class OccupancyMarkovChain
@@ -181,6 +181,6 @@ class OccupancyMarkovChain
     std::vector<State> states_;
     std::vector<State> intv_states_;
 };
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* OCCUPANCY_MARKOV_CHAIN_HPP */

@@ -4,7 +4,7 @@
 #include "sampling/space/realvector_space.hpp"
 #include "stopwatch/stopwatch.h"
 
-using namespace ivnav;
+using namespace rnav;
 
 int main()
 {

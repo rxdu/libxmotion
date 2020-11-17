@@ -12,7 +12,7 @@
 #include <cmath>
 #include <cassert>
 
-namespace ivnav
+namespace rnav
 {
 using namespace cv;
 
@@ -404,4 +404,4 @@ void CvCanvas::DrawParametricCurve(CRange range, std::function<double(double)> f
     }
     DrawDataPoints(data_points, color, thickness, line_type);
 }
-} // namespace ivnav
+} // namespace rnav

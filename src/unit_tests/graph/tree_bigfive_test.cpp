@@ -15,7 +15,7 @@
 
 #include "graph/tree.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 
 struct TestState
 {

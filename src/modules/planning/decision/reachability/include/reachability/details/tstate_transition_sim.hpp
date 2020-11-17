@@ -17,7 +17,7 @@
 #include "reachability/tstate_space.hpp"
 #include "reachability/details/car_model_propagator.hpp"
 
-namespace ivnav
+namespace rnav
 {
 class TStateTransitionSim
 {
@@ -36,6 +36,6 @@ private:
 
   CarModelPropagator propagator_;
 };
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* TSTATE_TRANSITION_SIM_HPP */

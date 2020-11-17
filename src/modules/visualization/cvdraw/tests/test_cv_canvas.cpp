@@ -2,7 +2,7 @@
 
 #include "cvdraw/cv_canvas.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 
 int main()
 {

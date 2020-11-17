@@ -12,7 +12,7 @@
 
 #include <type_traits>
 
-namespace ivnav
+namespace rnav
 {
 template <typename State, typename Transition, typename StateIndexer>
 Tree<State, Transition, StateIndexer>::Tree(const Tree<State, Transition, StateIndexer> &other)
@@ -260,6 +260,6 @@ typename Tree<State, Transition, StateIndexer>::vertex_iterator Tree<State, Tran
 
     return vertex_iterator(it);
 }
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* TREE_IMPL_HPP */

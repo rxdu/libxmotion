@@ -14,7 +14,7 @@
 
 #include <Eigen/Dense>
 
-namespace ivnav
+namespace rnav
 {
 struct MonoImageMatrix
 {

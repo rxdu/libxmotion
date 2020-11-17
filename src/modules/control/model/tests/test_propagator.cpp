@@ -12,7 +12,7 @@
 #include "model/bicycle_model.hpp"
 #include "model/system_propagator.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 
 class Lorenz {
  public:

@@ -1,6 +1,6 @@
-# Library for Intelligent Vehicle Navigation
+# Library for Robot Navigation
 
-This repository contains a collection of software for study and research on autonomous vehicles.
+This repository contains a collection of software for study and research on mobile robot navigation.
 
 Note: this library is built on top of a number of open-source packages. At this moment, most of the available modules are from my graduate study. I'm in the process of cleaning up the code, redesigning some modules and adding new functions. I use this library mostly for study and experiments on new ideas. I hope it could also be useful for others.
 

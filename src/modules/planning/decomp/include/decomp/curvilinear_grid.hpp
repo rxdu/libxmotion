@@ -29,7 +29,7 @@
 #include "geometry/simple_point.hpp"
 #include "geometry/parametric_curve.hpp"
 
-namespace ivnav
+namespace rnav
 {
 /*
  * Coordinate System:
@@ -367,7 +367,7 @@ class PCurveCurvilinearGrid : public CurvilinearGridBase<T, ParametricCurve>
 
 using CurvilinearCell = CurvilinearCellBase<double>;
 using CurvilinearGrid = PCurveCurvilinearGrid<double>;
-} // namespace ivnav
+} // namespace rnav
 
 #include "details/curvilinear_grid_impl.hpp"
 

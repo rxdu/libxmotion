@@ -9,7 +9,7 @@
 
 #include "prediction/vehicle_estimation.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 
 int32_t VehicleEstimation::VehicleCount = 0;
 

@@ -3,7 +3,7 @@
 
 #include "decomp/curvilinear_grid.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 
 int main()
 {

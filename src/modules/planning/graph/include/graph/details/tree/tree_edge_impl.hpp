@@ -10,7 +10,7 @@
 #ifndef TREE_EDGE_IMPL_HPP
 #define TREE_EDGE_IMPL_HPP
 
-namespace ivnav
+namespace rnav
 {
 template <typename State, typename Transition, typename StateIndexer>
 bool Tree<State, Transition, StateIndexer>::Edge::operator==(const Tree<State, Transition, StateIndexer>::Edge &other)
@@ -26,6 +26,6 @@ void Tree<State, Transition, StateIndexer>::Edge::PrintEdge()
     std::cout << "Edge_t: src - " << src_->GetVertexID() << " , dst - " << dst_->GetVertexID() << " , cost - " << trans_ << std::endl;
 }
 
-} // namespace ivnav
+} // namespace rnav
 
 #endif /* TREE_EDGE_IMPL_HPP */

@@ -10,11 +10,11 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
 
-namespace ivnav {
+namespace rnav {
 class World {
  public:
   World();
 };
-}  // namespace ivnav
+}  // namespace rnav
 
 #endif /* WORLD_HPP */

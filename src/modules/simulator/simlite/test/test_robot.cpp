@@ -12,7 +12,7 @@
 #include "model/bicycle_model.hpp"
 #include "simlite/robot.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 
 int main(int argc, char *argv[]) {
   Robot<BicycleKinematics> robot;

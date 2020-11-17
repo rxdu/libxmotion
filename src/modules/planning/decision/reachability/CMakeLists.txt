@@ -35,6 +35,6 @@ target_include_directories(reachability PUBLIC
 
 add_subdirectory(apps)
 
-if(BUILD_TESTS)
+if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()

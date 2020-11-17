@@ -15,7 +15,7 @@
 
 #include "geometry/polynomial.hpp"
 
-using namespace ivnav;
+using namespace rnav;
 
 struct PolynomialTest : testing::Test
 {
