@@ -14,7 +14,7 @@
 #include "state_lattice/primitive_generator.hpp"
 
 #include "logging/loggers.hpp"
-#include "csv_parser/csv.h"
+#include "csv.h"
 
 using namespace rnav;
 

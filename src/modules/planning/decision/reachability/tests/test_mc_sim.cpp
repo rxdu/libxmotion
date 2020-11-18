@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "reachability/monte_carlo_sim.hpp"
-#include "stopwatch/stopwatch.h"
+#include "stopwatch.hpp"
 
 using namespace rnav;
 

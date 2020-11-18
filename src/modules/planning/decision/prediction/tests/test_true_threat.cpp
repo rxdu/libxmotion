@@ -5,7 +5,7 @@
 #include "prediction/traffic_participant.hpp"
 #include "prediction/threat_distribution.hpp"
 
-#include "stopwatch/stopwatch.h"
+#include "stopwatch.hpp"
 
 #define ENABLE_VIZ
 

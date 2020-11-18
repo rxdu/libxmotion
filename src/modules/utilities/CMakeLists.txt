@@ -1,20 +1,8 @@
-# Dependency libraries
-find_package(Eigen3 REQUIRED)
-
 # Add libraries
-add_subdirectory(eigenfileio)
+add_subdirectory(file_io)
+add_subdirectory(image_io)
+add_subdirectory(logging)
+add_subdirectory(third_party)
 
-set(UTILITY_LIB_SRC
-	image_io/image_io.cpp
-)
-add_library(utils STATIC ${UTILITY_LIB_SRC})
-target_link_libraries(utils eigenfileio)
-target_compile_options(utils PUBLIC "-Wno-format-truncation")
-target_include_directories(utils PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>
-	$<INSTALL_INTERFACE:include>)
-
-if(BUILD_TESTING)
-	add_subdirectory(tests)
-endif()
+add_library(utils INTERFACE)
+target_link_libraries(utils INTERFACE file_io image_io logging stopwatch csv_parser)

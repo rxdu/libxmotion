@@ -7,7 +7,7 @@
 #include "spatial/neighbor_iterator.hpp"
 
 #include "sampling/space/realvector_space.hpp"
-#include "stopwatch/stopwatch.h"
+#include "stopwatch.hpp"
 
 using namespace rnav;
 

@@ -13,7 +13,7 @@
 
 #include <eigen3/Eigen/LU>
 
-#include "csv_parser/csv.h"
+#include "csv.h"
 
 using namespace rnav;
 

@@ -12,10 +12,10 @@
 #include <iostream>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "image_io/stb_image.h"
+#include "stb_image.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "image_io/stb_image_write.h"
+#include "stb_image_write.h"
 
 using namespace rnav;
 

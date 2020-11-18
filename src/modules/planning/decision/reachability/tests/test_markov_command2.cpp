@@ -2,7 +2,7 @@
 
 #include "reachability/markov_occupancy.hpp"
 
-#include "stopwatch/stopwatch.h"
+#include "stopwatch.hpp"
 
 using namespace rnav;
 

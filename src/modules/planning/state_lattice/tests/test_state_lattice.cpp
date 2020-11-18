@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "state_lattice/state_lattice.hpp"
-#include "stopwatch/stopwatch.h"
+#include "stopwatch.hpp"
 
 #define ENABLE_VIZ
 

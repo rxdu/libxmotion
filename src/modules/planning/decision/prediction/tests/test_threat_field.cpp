@@ -5,7 +5,7 @@
 #include "traffic_map/map_loader.hpp"
 #include "prediction/threat_field.hpp"
 
-#include "stopwatch/stopwatch.h"
+#include "stopwatch.hpp"
 
 #define ENABLE_VIZ
 

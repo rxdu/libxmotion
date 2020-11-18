@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "reachability/details/tstate_transition_sim.hpp"
-#include "stopwatch/stopwatch.h"
+#include "stopwatch.hpp"
 
 #define ENABLE_VIZ
 

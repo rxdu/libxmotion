@@ -5,7 +5,7 @@
 #include "traffic_map/map_loader.hpp"
 #include "prediction/vehicle_threat.hpp"
 
-#include "stopwatch/stopwatch.h"
+#include "stopwatch.hpp"
 // #include "lightviz/navviz.hpp"
 
 using namespace rnav;

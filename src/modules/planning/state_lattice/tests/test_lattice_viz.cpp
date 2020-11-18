@@ -5,7 +5,7 @@
 #include "state_lattice/state_lattice.hpp"
 
 #include "state_lattice/lattice_viz.hpp"
-#include "stopwatch/stopwatch.h"
+#include "stopwatch.hpp"
 
 using namespace rnav;
 

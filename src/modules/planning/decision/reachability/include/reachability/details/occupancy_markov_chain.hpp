@@ -22,7 +22,7 @@
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Sparse>
 
-#include "stopwatch/stopwatch.h"
+#include "stopwatch.hpp"
 
 namespace rnav
 {
