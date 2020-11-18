@@ -4,6 +4,3 @@
 [submodule "src/modules/diagnosis/third_party/spdlog"]
 	path = src/modules/diagnosis/third_party/spdlog
 	url = https://github.com/gabime/spdlog.git
-[submodule "src/modules/visualization/third_party/raylib"]
-	path = src/modules/simulator/third_party/raylib
-	url = https://github.com/raysan5/raylib.git
