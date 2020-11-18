@@ -1,5 +1,5 @@
 [submodule "src/unit_tests/googletest"]
-	path = src/unit_tests/googletest
+	path = test/googletest
 	url = https://github.com/google/googletest.git
 [submodule "src/modules/diagnosis/third_party/spdlog"]
 	path = src/modules/utilities/third_party/spdlog

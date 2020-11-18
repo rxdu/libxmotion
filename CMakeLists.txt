@@ -53,11 +53,6 @@ else(ENABLE_LOGGING)
 	message( "-- Enable logging with spdlog -- No" )
 endif(ENABLE_LOGGING)
 
-# automatically build LCM types.  This also defines a number of CMake
-# variables, see cmake/lcmtypes.cmake for details
-# include(cmake/lcmtypes.cmake)
-# lcmtypes_build()
-
 ## Add source directories
 add_subdirectory(src)
 
@@ -66,7 +61,7 @@ if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME AND BUILD_TESTING)
     message(STATUS "Tests will be built")
     enable_testing()
     include(GoogleTest)
-    # add_subdirectory(tests)
+    add_subdirectory(test)
 else()
     message(STATUS "Tests will not be built")
 endif()
