@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16.0)
+cmake_minimum_required(VERSION 3.10.2)
 project(auto_drive)
 
 find_program(CCACHE_PROGRAM ccache)
@@ -35,6 +35,14 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+## Use GNUInstallDirs to install libraries into correct locations on all platforms.
+include(GNUInstallDirs)
+
+## Put all binary files into /bin and libraries into /lib
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+
 ## Chosse build type
 set(default_build_type "Release")
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -53,24 +61,19 @@ else(ENABLE_LOGGING)
 	message( "-- Enable logging with spdlog -- No" )
 endif(ENABLE_LOGGING)
 
-## Add source directories
-add_subdirectory(src)
-
-## Build tests
+## Enable test if requested
 if(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME AND BUILD_TESTING)
-    message(STATUS "Tests will be built")
     enable_testing()
     include(GoogleTest)
-    add_subdirectory(test)
+    set(TESTING_ENABLED ON)
+    message(STATUS "Tests will be built")
 else()
+    set(TESTING_ENABLED OFF)
     message(STATUS "Tests will not be built")
 endif()
 
-## Use GNUInstallDirs to install libraries into correct locations on all platforms.
-include(GNUInstallDirs)
-message(STATUS "Project will be installed to ${CMAKE_INSTALL_PREFIX} with 'make install'")
+## Add source directories
+add_subdirectory(src)
 
-## Put all binary files into /bin and libraries into /lib
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+## Installation setup
+# message(STATUS "Project will be installed to ${CMAKE_INSTALL_PREFIX} with 'make install'")

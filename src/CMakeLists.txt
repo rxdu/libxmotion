@@ -4,4 +4,8 @@
 
 # Modules
 add_subdirectory(modules)
-# add_subdirectory(unit_tests)
+
+# Unit test
+if(TESTING_ENABLED)
+    add_subdirectory(unit_test)
+endif()
