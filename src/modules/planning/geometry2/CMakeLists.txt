@@ -20,6 +20,6 @@ target_include_directories(geometry2 PUBLIC
 	PRIVATE src)
 
 # Add executables
-# if(BUILD_TESTS)
+if(BUILD_TESTS)
 	add_subdirectory(test)
-# endif()
+endif()
