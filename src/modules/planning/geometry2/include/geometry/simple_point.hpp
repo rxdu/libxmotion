@@ -10,26 +10,11 @@
 #ifndef SIMPLE_POINT_HPP
 #define SIMPLE_POINT_HPP
 
-#include <iostream>
+#include <eigen3/Eigen/Dense>
 
 namespace rnav {
-struct SimplePoint {
-  SimplePoint(double _x = 0, double _y = 0) : x(_x), y(_y) {}
-  double x;
-  double y;
-
-  bool operator==(const SimplePoint &other) {
-    if (this->x == other.x && this->y == other.y)
-      return true;
-    else
-      return false;
-  }
-
-  friend std::ostream &operator<<(std::ostream &os, const SimplePoint &pos) {
-    os << "(x, y): " << pos.x << " , " << pos.y;
-    return os;
-  }
-};
+using SimplePoint2 = Eigen::Vector2d;
+using SimplePoint3 = Eigen::Vector3d;
 }  // namespace rnav
 
 #endif /* SIMPLE_POINT_HPP */

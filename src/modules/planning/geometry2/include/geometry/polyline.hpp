@@ -13,11 +13,9 @@
 #include <vector>
 #include <limits>
 
-#include <eigen3/Eigen/Core>
+#include "geometry/simple_point.hpp"
 
 namespace rnav {
-using SimplePoint2 = Eigen::Vector2d;
-
 class LineSegment {
  public:
   LineSegment() = default;
