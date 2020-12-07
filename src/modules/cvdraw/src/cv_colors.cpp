@@ -1,11 +1,11 @@
-/* 
+/*
  * cv_colors.cpp
- * 
+ *
  * Created on: Jan 04, 2019 10:15
- * Description: 
- * 
+ * Description:
+ *
  * Copyright (c) 2019 Ruixiang Du (rdu)
- */ 
+ */
 
 #include "cvdraw/cv_colors.hpp"
 
@@ -22,8 +22,10 @@ const cv::Scalar CvColors::ln_color = Scalar(Scalar(0, 0, 0));
 const cv::Scalar CvColors::obs_color = Scalar(Scalar(0, 102, 204));
 const cv::Scalar CvColors::aoi_color = Scalar(Scalar(0, 255, 255));
 const cv::Scalar CvColors::start_color = Scalar(0, 0, 255);
-const cv::Scalar CvColors::intermediate_color = cv::Scalar(255, 153, 51); //Scalar(0, 0, 255);
-const cv::Scalar CvColors::finish_color = Scalar(51, 153, 51);            //Scalar(153, 76, 0);
+const cv::Scalar CvColors::intermediate_color =
+    cv::Scalar(255, 153, 51);  // Scalar(0, 0, 255);
+const cv::Scalar CvColors::finish_color =
+    Scalar(51, 153, 51);  // Scalar(153, 76, 0);
 const cv::Scalar CvColors::jet_colormap_lowest = Scalar(128, 0, 0);
 
 // Reference: https://www.rapidtables.com/web/color/RGB_Color.html

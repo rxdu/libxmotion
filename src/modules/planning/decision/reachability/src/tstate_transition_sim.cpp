@@ -11,8 +11,6 @@
 
 #include <unordered_map>
 
-#include "reachability/details/tmodel_solver.hpp"
-
 using namespace rnav;
 
 void TStateTransitionSim::SetupStateSpace(double smin, double smax, double vmin, double vmax, int32_t ssize, int32_t vsize)

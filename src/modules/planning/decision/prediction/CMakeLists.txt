@@ -12,13 +12,12 @@ add_library(threatdist STATIC ${TFIELD_LIB_SRC})
 target_link_libraries(threatdist navtypes decomp graph traffic reachability ${TBB_LIBRARIES})
 target_include_directories(threatdist PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${TBB_INCLUDE_DIRS}>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 
 add_subdirectory(apps)
 
-if(BUILD_TESTING)
+if(BUILD_TESTS)
     add_subdirectory(tests)
 endif()
 

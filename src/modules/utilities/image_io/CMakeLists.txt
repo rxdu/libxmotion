@@ -10,6 +10,6 @@ target_include_directories(image_io PUBLIC
     $<INSTALL_INTERFACE:include> 
     PRIVATE src)
 
-if(BUILD_TESTING)
+if(BUILD_TESTS)
 	add_subdirectory(test)
 endif()

@@ -29,12 +29,10 @@ target_link_libraries(reachability markov model logging utils ${GSL_LIBRARIES})
 target_include_directories(reachability PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
-  $<BUILD_INTERFACE:${GSL_INCLUDE_DIRS}>
-  $<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>
   PRIVATE src)
 
 add_subdirectory(apps)
 
-if(BUILD_TESTING)
+if(BUILD_TESTIS)
 #   add_subdirectory(tests)
 endif()

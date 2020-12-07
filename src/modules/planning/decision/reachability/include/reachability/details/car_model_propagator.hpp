@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <vector>
 
-#include "odeint.hpp"
+#include <boost/numeric/odeint.hpp>
 
 #include "reachability/details/car_longitudinal_model.hpp"
 

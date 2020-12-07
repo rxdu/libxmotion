@@ -20,7 +20,7 @@
 
 #include <eigen3/Eigen/Dense>
 
-#include "odeint.hpp"
+#include <boost/numeric/odeint.hpp>
 
 #include "state_lattice/details/motion_state.hpp"
 

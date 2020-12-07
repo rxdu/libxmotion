@@ -23,7 +23,7 @@ Note: this library is built on top of a number of open-source packages. At this 
 * C++11
 
 ```
-$ sudo apt-get install -y libeigen3-dev libcgal-dev libgsl-dev libtbb-dev libboost-all-dev ibopencv-dev
+$ sudo apt-get install -y libeigen3-dev libgsl-dev libtbb-dev libboost-all-dev libopencv-dev
 ```
 
 ### Install dependencies

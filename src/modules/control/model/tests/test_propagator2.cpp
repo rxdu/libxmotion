@@ -9,8 +9,9 @@
 
 #include <iostream>
 
+#include <boost/numeric/odeint.hpp>
+
 #include "model/bicycle_model.hpp"
-#include "odeint.hpp"
 
 using namespace rnav;
 using namespace boost::numeric::odeint;

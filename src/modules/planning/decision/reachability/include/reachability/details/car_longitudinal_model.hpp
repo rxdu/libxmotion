@@ -10,7 +10,7 @@
 #ifndef CAR_LONGITUDINAL_MODEL_HPP
 #define CAR_LONGITUDINAL_MODEL_HPP
 
-#include "odeint.hpp"
+#include <boost/numeric/odeint.hpp>
 
 namespace rnav {
 // Reference:

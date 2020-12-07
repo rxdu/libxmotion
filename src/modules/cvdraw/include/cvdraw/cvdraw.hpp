@@ -1,11 +1,11 @@
-/* 
+/*
  * cv_draw.hpp
- * 
+ *
  * Created on: Jan 05, 2019 11:31
- * Description: 
- * 
+ * Description:
+ *
  * Copyright (c) 2019 Ruixiang Du (rdu)
- */ 
+ */
 
 #ifndef CV_DRAW_HPP
 #define CV_DRAW_HPP

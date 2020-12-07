@@ -6,6 +6,6 @@
 add_subdirectory(modules)
 
 # Unit test
-if(TESTING_ENABLED)
+if(BUILD_TESTS)
     add_subdirectory(unit_test)
 endif()
