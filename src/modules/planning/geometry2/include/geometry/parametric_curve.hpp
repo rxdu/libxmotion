@@ -14,7 +14,7 @@
 #include <vector>
 
 #include "geometry/polyline.hpp"
-#include "geometry/cspline.hpp"
+#include "geometry/cubic_spline.hpp"
 #include "geometry/simple_point.hpp"
 
 namespace robotnav {
@@ -24,31 +24,23 @@ class ParametricCurve {
  public:
   ParametricCurve() = default;
   explicit ParametricCurve(Polyline center_polyline);
-  ParametricCurve(CSpline xspline, CSpline yspline, double sf);
-  ~ParametricCurve() = default;
+  ParametricCurve(CubicSpline xspline, CubicSpline yspline, double sf);
 
-  ParametricCurve(const ParametricCurve &other) = default;
-  ParametricCurve &operator=(const ParametricCurve &other) = default;
-  ParametricCurve(ParametricCurve &&other) = default;
-  ParametricCurve &operator=(ParametricCurve &&other) = default;
-
-  SimplePoint Evaluate(double s) const;
-  SimplePoint Evaluate(double s, int32_t derivative) const;
+  SimplePoint2 Evaluate(double s, int32_t derivative = 0) const;
 
   void GetPositionVector(double s, double &x, double &y) const;
   void GetTangentVector(double s, double &x, double &y) const;
 
   double GetLength() const { return total_length_; }
-  CSpline GetXSpline() const { return x_spline_; }
-  CSpline GetYSpline() const { return y_spline_; }
+  CubicSpline GetXSpline() const { return x_spline_; }
+  CubicSpline GetYSpline() const { return y_spline_; }
 
  private:
+  Polyline polyline_;
   double total_length_;
 
-  CSpline x_spline_;
-  CSpline y_spline_;
-
-  Polyline polyline_;
+  CubicSpline x_spline_;
+  CubicSpline y_spline_;
 };
 
 namespace CurveFitting {

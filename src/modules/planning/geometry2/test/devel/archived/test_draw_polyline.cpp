@@ -15,7 +15,9 @@ int main() {
   CvCanvas canvas(100);
   canvas.Resize(-1, 3, -1, 3);
   canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
+
   DrawPolyline(canvas, polyline);
+
   canvas.Show();
 
   return 0;

@@ -5,20 +5,17 @@
 add_executable(test_polyline test_polyline.cpp)
 target_link_libraries(test_polyline geometry2)
 
+add_executable(test_cubic_spline test_cubic_spline.cpp)
+target_link_libraries(test_cubic_spline geometry2)
+
 # add_executable(test_polygon test_polygon.cpp)
 # target_link_libraries(test_polygon geometry2)
-
-# add_executable(test_cspline test_cspline.cpp)
-# target_link_libraries(test_cspline geometry2)
 
 # add_executable(test_pcurve test_pcurve.cpp)
 # target_link_libraries(test_pcurve geometry2)
 
 # add_executable(test_polynomial test_polynomial.cpp)
 # target_link_libraries(test_polynomial geometry2)
-
-# add_executable(test_polyline_draw test_polyline_draw.cpp )
-# target_link_libraries(test_polyline_draw geometry2)
 
 # add_executable(test_pcurve_draw test_pcurve_draw.cpp)
 # target_link_libraries(test_pcurve_draw geometry2)

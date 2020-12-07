@@ -25,7 +25,8 @@ bool OnSegment(SimplePoint2 p_i, SimplePoint2 p_j, SimplePoint2 p_k) {
   return false;
 }
 
-int32_t CalculateDirection(SimplePoint2 p_i, SimplePoint2 p_j, SimplePoint2 p_k) {
+int32_t CalculateDirection(SimplePoint2 p_i, SimplePoint2 p_j,
+                           SimplePoint2 p_k) {
   Eigen::Vector2d pt1 = p_k - p_i;
   Eigen::Vector2d pt2 = p_j - p_i;
   return pt1.x() * pt2.y() - pt1.y() * pt1.x();
@@ -137,4 +138,29 @@ void Polyline::UpdateXYMinMax(double x, double y) {
   if (y < ymin_) ymin_ = y;
   if (y > ymax_) ymax_ = y;
 }
+
+//---------------------------------------------------------------------------//
+
+#ifdef ENABLE_VISUAL
+void DrawPolyline(CvCanvas &canvas, const Polyline &polyline, bool show_dot,
+                  cv::Scalar ln_color, int32_t thickness) {
+  std::size_t pt_num = polyline.GetPointNumer();
+
+  if (pt_num == 0) return;
+
+  if (pt_num > 1) {
+    for (std::size_t i = 0; i < pt_num - 1; ++i) {
+      CPoint pt1(polyline.GetPoint(i).x(), polyline.GetPoint(i).y());
+      CPoint pt2(polyline.GetPoint(i + 1).x(), polyline.GetPoint(i + 1).y());
+      canvas.DrawLine(pt1, pt2, ln_color, thickness);
+    }
+  }
+
+  if (show_dot) {
+    for (std::size_t i = 0; i < pt_num; ++i)
+      canvas.DrawPoint({polyline.GetPoint(i).x(), polyline.GetPoint(i).y()}, 1,
+                       CvColors::red_color);
+  }
+}
+#endif
 }  // namespace robotnav

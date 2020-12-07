@@ -13,6 +13,10 @@
 #include <vector>
 #include <limits>
 
+#ifdef ENABLE_VISUAL
+#include "cvdraw/cvdraw.hpp"
+#endif
+
 #include "geometry/simple_point.hpp"
 
 namespace robotnav {
@@ -71,6 +75,13 @@ class Polyline {
 
   void UpdateXYMinMax(double x, double y);
 };
+
+#ifdef ENABLE_VISUAL
+void DrawPolyline(CvCanvas& canvas, const Polyline& polyline,
+                  bool show_dot = false,
+                  cv::Scalar ln_color = CvColors::blue_color,
+                  int32_t thickness = 1);
+#endif
 }  // namespace robotnav
 
 #endif /* POLYLINE_HPP */
