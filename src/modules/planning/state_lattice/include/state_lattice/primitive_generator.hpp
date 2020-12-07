@@ -16,7 +16,7 @@
 #include "state_lattice/details/point_kinematics.hpp"
 #include "state_lattice/details/lookup_table.hpp"
 
-namespace rnav
+namespace robotnav
 {
 class PrimitiveGenerator
 {
@@ -46,6 +46,6 @@ class PrimitiveGenerator
     JacobianMatrix CalcJacobian(MotionState init, MotionState target, PointKinematics::Param p);
     double SelectParamScaler(StatePMatrix start, StatePMatrix target, PointKinematics::Param p, ParamPMatrix p_i, ParamPMatrix delta_pi);
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* PRIMITIVE_GENERATOR_HPP */

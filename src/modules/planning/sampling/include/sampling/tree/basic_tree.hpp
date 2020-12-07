@@ -16,7 +16,7 @@
 #include "graph/tree.hpp"
 #include "sampling/base/tree_adapter.hpp"
 
-namespace rnav
+namespace robotnav
 {
 template <typename Space>
 class BasicTree : public Tree<typename Space::StateType *, double>, public TreeAdapter<Space>
@@ -89,6 +89,6 @@ class BasicTree : public Tree<typename Space::StateType *, double>, public TreeA
         return empty;
     }
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* BASIC_TREE_HPP */

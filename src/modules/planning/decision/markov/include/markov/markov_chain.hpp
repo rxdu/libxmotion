@@ -17,7 +17,7 @@
 
 #include <eigen3/Eigen/Dense>
 
-namespace rnav
+namespace robotnav
 {
 template <int32_t N>
 class MarkovChain
@@ -79,6 +79,6 @@ class MarkovChain
 
     std::vector<State> states_;
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* MARKOV_CHAIN_HPP */

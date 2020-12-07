@@ -17,7 +17,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-using namespace rnav;
+using namespace robotnav;
 
 MonoImageMatrix ImageIO::ReadImage(std::string file_name)
 {

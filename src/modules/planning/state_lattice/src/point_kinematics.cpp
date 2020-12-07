@@ -9,7 +9,7 @@
 
 #include "state_lattice/details/point_kinematics.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 void PointKinematics::SetParameters(const Param &p)
 {

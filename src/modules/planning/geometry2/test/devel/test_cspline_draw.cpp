@@ -5,7 +5,7 @@
 #include "geometry/cspline.hpp"
 #include "geometry/geometry_draw.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 int main()
 {

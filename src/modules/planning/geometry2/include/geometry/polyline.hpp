@@ -15,7 +15,7 @@
 
 #include "geometry/simple_point.hpp"
 
-namespace rnav {
+namespace robotnav {
 class LineSegment {
  public:
   LineSegment() = default;
@@ -71,6 +71,6 @@ class Polyline {
 
   void UpdateXYMinMax(double x, double y);
 };
-}  // namespace rnav
+}  // namespace robotnav
 
 #endif /* POLYLINE_HPP */

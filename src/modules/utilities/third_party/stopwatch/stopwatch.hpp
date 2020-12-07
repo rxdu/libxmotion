@@ -24,7 +24,7 @@
 
 #include <thread>
 
-namespace rnav {
+namespace robotnav {
 // only supported on x86 processors
 #if (defined __x86_64__) || (defined __i386)
 // An implementation of the 'TrivialClock' concept using the rdtscp instruction.
@@ -157,6 +157,6 @@ struct Timer {
       std::this_thread::sleep_for(std::chrono::microseconds(duration));
   };
 };
-}  // namespace rnav
+}  // namespace robotnav
 
 #endif  // STOPWATCH_HPP

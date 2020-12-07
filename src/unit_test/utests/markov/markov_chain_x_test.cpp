@@ -16,7 +16,7 @@
 
 #include "markov/markov_chain_x.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 struct MarkovChainXTest : testing::Test
 {

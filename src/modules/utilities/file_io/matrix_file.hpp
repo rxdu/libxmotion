@@ -12,7 +12,7 @@
 
 #include "EigenFileIO/EigenFileIO.hpp"
 
-namespace rnav
+namespace robotnav
 {
 namespace MatrixFile
 {
@@ -35,6 +35,6 @@ bool saveMatrix(std::string directory, std::string filename, Eigen::Matrix<Scala
 }
 
 } // namespace MatrixFile
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* MATRIX_FILE_HPP */

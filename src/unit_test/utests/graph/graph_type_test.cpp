@@ -15,7 +15,7 @@
 
 #include "graph/graph.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 struct TestState
 {

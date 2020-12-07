@@ -14,7 +14,7 @@
 
 #include "geometry/simple_point.hpp"
 
-namespace rnav {
+namespace robotnav {
 class CubicSpline {
  public:
   using Knot = SimplePoint2;
@@ -33,6 +33,6 @@ class CubicSpline {
  private:
   std::vector<Knot> knots_;
 };
-}  // namespace rnav
+}  // namespace robotnav
 
 #endif /* CUBIC_SPLINE_HPP */

@@ -11,7 +11,7 @@
 
 #include "file_io/folder_path.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 DynamicThreatModel::DynamicThreatModel(VehicleEstimation est) : vehicle_est_(est)
 {

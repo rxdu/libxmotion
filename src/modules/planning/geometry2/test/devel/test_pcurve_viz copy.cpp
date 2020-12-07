@@ -3,7 +3,7 @@
 #include "geometry/parametric_curve.hpp"
 #include "lightviz/curve_viz.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 int main()
 {

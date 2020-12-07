@@ -13,7 +13,7 @@
 
 #include "model/bicycle_model.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 using namespace boost::numeric::odeint;
 
 int main() {

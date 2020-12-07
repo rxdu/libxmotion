@@ -9,7 +9,7 @@
 
 #include "random/gaussian_sampler.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 GaussianSampler::GaussianSampler(double mean, double variance) : mean_(mean), variance_(variance), distribution_(mean, variance)
 {

@@ -10,7 +10,7 @@
 #include "state_lattice/lattice_viz.hpp"
 #endif
 
-using namespace rnav;
+using namespace robotnav;
 
 int main()
 {

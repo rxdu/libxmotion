@@ -9,7 +9,7 @@
 
 #include "cvdraw/cv_colors.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 using namespace cv;
 
 /********************* Common Colors *********************/

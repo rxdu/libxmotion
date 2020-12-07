@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-namespace rnav
+namespace robotnav
 {
 /// Convenient substitution to CGAL Point type
 struct SimplePoint
@@ -27,6 +27,6 @@ struct SimplePoint
         return os;
     }
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* SIMPLE_POINT_HPP */

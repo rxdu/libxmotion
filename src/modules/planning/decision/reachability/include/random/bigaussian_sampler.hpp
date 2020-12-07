@@ -13,7 +13,7 @@
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 
-namespace rnav
+namespace robotnav
 {
 class BiGaussianSampler
 {

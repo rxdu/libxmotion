@@ -12,7 +12,7 @@
 
 #include <cassert>
 
-namespace rnav
+namespace robotnav
 {
 class RealVectorBound
 {
@@ -50,6 +50,6 @@ class RealVectorBound
     double lower_bound_ = 0.0;
     double upper_bound_ = 1.0;
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* REALVECTOR_BOUND_HPP */

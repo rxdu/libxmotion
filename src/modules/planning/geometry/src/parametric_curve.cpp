@@ -11,7 +11,7 @@
 
 #include <cassert>
 
-using namespace rnav;
+using namespace robotnav;
 
 ParametricCurve::ParametricCurve(Polyline center_polyline) : polyline_(center_polyline)
 {

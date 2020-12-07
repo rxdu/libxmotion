@@ -7,7 +7,7 @@
 #include "geometry/curve_viz.hpp"
 #include "geometry/polygon.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 int main()
 {

@@ -7,7 +7,7 @@
 
 #include "logging/loggers.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 int main()
 {

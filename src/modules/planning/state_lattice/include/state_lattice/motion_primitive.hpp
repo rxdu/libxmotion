@@ -26,7 +26,7 @@
 #include "state_lattice/details/motion_state.hpp"
 #include "state_lattice/details/point_kinematics.hpp"
 
-namespace rnav
+namespace robotnav
 {
 class MotionPrimitive
 {
@@ -59,6 +59,6 @@ class MotionPrimitive
     PointKinematics::Param params_;
     PointKinematics model_;
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* MOTION_PRIMITIVE_HPP */

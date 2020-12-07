@@ -24,7 +24,7 @@
 #include "geometry/polyline.hpp"
 #include "geometry/simple_point.hpp"
 
-namespace rnav
+namespace robotnav
 {
 /// A light wrapper class for CGAL Polygon_2
 class Polygon
@@ -95,6 +95,6 @@ private:
 
   Polygon(Polygon_2 internal_data) : data_(internal_data) {}
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* POLYGON_HPP */

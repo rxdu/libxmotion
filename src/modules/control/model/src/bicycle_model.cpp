@@ -12,7 +12,7 @@
 #include <cstdint>
 #include <cmath>
 
-using namespace rnav;
+using namespace robotnav;
 
 BicycleKinematics::BicycleKinematics(control_t u) : u_(u)
 {

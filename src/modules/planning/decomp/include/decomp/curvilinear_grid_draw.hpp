@@ -19,7 +19,7 @@
 #include "decomp/curvilinear_grid.hpp"
 #include "geometry/geometry_draw.hpp"
 
-namespace rnav {
+namespace robotnav {
 namespace CurvilinearGridViz {
 // geometric grid
 template <typename GridType>
@@ -140,6 +140,6 @@ void DrawCurvilinearGridGrayscaleCost(CvCanvas &canvas, const GridType &grid, cv
     CurvilinearGridViz::DrawCurvilinearGrid(canvas, grid);
 }
 }; // namespace CurvilinearGridViz
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* CURVILINEAR_GRID_DRAW_HPP */

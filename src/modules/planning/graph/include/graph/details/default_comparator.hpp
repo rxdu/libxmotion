@@ -12,7 +12,7 @@
 
 #include <functional>
 
-namespace rnav
+namespace robotnav
 {
 template <typename Transition>
 class DefaultComparator
@@ -26,6 +26,6 @@ class DefaultComparator
   private:
     // Comparator compare;
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* DEFAULT_COMPARATOR_HPP */

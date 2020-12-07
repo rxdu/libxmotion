@@ -9,7 +9,7 @@
 
 #include "sampling/base/rand_num/rand_num_gen.hpp"
 
-namespace rnav
+namespace robotnav
 {
 double RandNumGen::Uniform()
 {
@@ -95,4 +95,4 @@ void RandNumGen::SetLocalSeed(std::uint_fast32_t localSeed)
     uniform_rdist_.reset();
     normal_dist_.reset();
 }
-} // namespace rnav
+} // namespace robotnav

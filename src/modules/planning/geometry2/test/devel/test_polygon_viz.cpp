@@ -1,7 +1,7 @@
 #include "geometry/polygon_viz.hpp"
 #include "geometry/polygon.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 int main()
 {

@@ -10,7 +10,7 @@
 
 #include "stopwatch.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 int main()
 {

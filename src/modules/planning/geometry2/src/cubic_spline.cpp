@@ -16,7 +16,7 @@
 #include <algorithm>
 #include <cassert>
 
-namespace rnav {
+namespace robotnav {
 CubicSpline::CubicSpline(const std::vector<Knot> &knots) : knots_(knots) {
   Interpolate();
 }
@@ -45,4 +45,4 @@ double CubicSpline::Evaluate(double x, uint32_t derivative) const {
   //   }
   return 0.0;
 }
-}  // namespace rnav
+}  // namespace robotnav

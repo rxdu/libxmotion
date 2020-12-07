@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace rnav
+namespace robotnav
 {
 // Reference: https://stackoverflow.com/questions/25492589/can-i-use-sfinae-to-selectively-define-a-member-variable-in-a-template-class?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 template <typename T, typename IsScalar = void>
@@ -106,6 +106,6 @@ class GridTiles<T, std::enable_if_t<!std::is_floating_point<T>::value && !std::i
         grid_tiles_[y][x] = tile;
     }
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* RECT_GRID_BASE_TILES_HPP */

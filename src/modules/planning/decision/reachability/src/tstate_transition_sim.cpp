@@ -11,7 +11,7 @@
 
 #include <unordered_map>
 
-using namespace rnav;
+using namespace robotnav;
 
 void TStateTransitionSim::SetupStateSpace(double smin, double smax, double vmin, double vmax, int32_t ssize, int32_t vsize)
 {

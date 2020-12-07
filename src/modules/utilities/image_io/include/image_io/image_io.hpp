@@ -14,7 +14,7 @@
 
 #include <eigen3/Eigen/Dense>
 
-namespace rnav
+namespace robotnav
 {
 struct MonoImageMatrix
 {

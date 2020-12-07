@@ -2,7 +2,7 @@
 #include "image_io/image_io.hpp"
 #include "cvdraw/cvdraw.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 int main()
 {

@@ -2,7 +2,7 @@
 
 #include "cvdraw/cv_canvas.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 int main() {
   // Mat image;

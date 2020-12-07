@@ -13,10 +13,10 @@
 #include <Eigen/Dense>
 #include <opencv2/opencv.hpp>
 
-namespace rnav {
+namespace robotnav {
 namespace MatrixViz {
 cv::Mat CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix, bool invert_y = false);
 };
-}  // namespace rnav
+}  // namespace robotnav
 
 #endif /* MATRIX_DRAW_HPP */

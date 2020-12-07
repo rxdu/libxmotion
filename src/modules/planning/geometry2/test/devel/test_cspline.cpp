@@ -4,7 +4,7 @@
 
 #include "geometry/cspline.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 int main()
 {

@@ -13,7 +13,7 @@
 #include <cassert>
 #include <iostream>
 
-namespace rnav {
+namespace robotnav {
 
 namespace {
 bool OnSegment(SimplePoint2 p_i, SimplePoint2 p_j, SimplePoint2 p_k) {
@@ -137,4 +137,4 @@ void Polyline::UpdateXYMinMax(double x, double y) {
   if (y < ymin_) ymin_ = y;
   if (y > ymax_) ymax_ = y;
 }
-}  // namespace rnav
+}  // namespace robotnav

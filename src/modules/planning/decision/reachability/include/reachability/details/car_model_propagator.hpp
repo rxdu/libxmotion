@@ -17,7 +17,7 @@
 
 #include "reachability/details/car_longitudinal_model.hpp"
 
-namespace rnav {
+namespace robotnav {
 class CarModelPropagator {
  public:
   CarLongitudinalModel::state_type Propagate(CarLongitudinalModel::state_type init_state,
@@ -44,6 +44,6 @@ class CarModelPropagator {
     return x;
   }
 };
-}  // namespace rnav
+}  // namespace robotnav
 
 #endif /* CAR_MODEL_PROPAGATOR_HPP */

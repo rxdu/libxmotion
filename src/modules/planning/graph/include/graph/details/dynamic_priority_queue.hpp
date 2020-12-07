@@ -18,7 +18,7 @@
 #include "graph/details/default_indexer.hpp"
 #include "graph/details/default_comparator.hpp"
 
-namespace rnav
+namespace robotnav
 {
 /// A priority queue implementation that supports element priority update.
 // Reference:
@@ -69,6 +69,6 @@ private:
   std::unordered_map<int64_t, Item> data_;
   ItemIndexer GetItemIndex;
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* DYNAMIC_PRIORITY_QUEUE_HPP */

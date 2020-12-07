@@ -1,7 +1,7 @@
 #include "decomp/square_grid.hpp"
 #include "decomp/square_grid_draw.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 int main()
 {

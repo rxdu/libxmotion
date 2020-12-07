@@ -15,7 +15,7 @@
 
 #include "csv.h"
 
-using namespace rnav;
+using namespace robotnav;
 
 #define ENABLE_SCALER_SELECTION
 

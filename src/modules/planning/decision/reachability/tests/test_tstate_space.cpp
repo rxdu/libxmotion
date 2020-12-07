@@ -3,7 +3,7 @@
 #include "reachability/tstate_space.hpp"
 #include <eigen3/Eigen/Dense>
 
-using namespace rnav;
+using namespace robotnav;
 
 int main()
 {

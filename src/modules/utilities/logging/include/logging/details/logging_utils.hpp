@@ -13,7 +13,7 @@
 #include <cstdlib>
 #include <string>
 
-namespace rnav
+namespace robotnav
 {
 inline std::string GetDataFolderPath()
 {
@@ -51,6 +51,6 @@ inline std::string CreateLogFileName(std::string prefix, std::string path)
 	std::string filename = path + "/" + prefix + "." + time_stamp + ".data";
 	return filename;
 }
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* LOGGING_UTILS_HPP */

@@ -11,7 +11,7 @@
 
 #include <cstdint>
 
-using namespace rnav;
+using namespace robotnav;
 
 LongitudinalDynamics::LongitudinalDynamics(control_t u) : u_(u)
 {

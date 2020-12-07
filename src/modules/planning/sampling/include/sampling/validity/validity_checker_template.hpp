@@ -15,7 +15,7 @@
 
 #include "sampling/space/realvector_space.hpp"
 
-namespace rnav
+namespace robotnav
 {
 class ValidityCheckerTemplate
 {
@@ -40,6 +40,6 @@ class ValidityCheckerTemplate
 
     // add other member variables/functions
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* VALIDITY_CHECKER_TEMPLATE_HPP */

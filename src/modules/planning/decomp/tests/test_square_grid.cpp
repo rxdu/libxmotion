@@ -6,7 +6,7 @@
 #include "lightviz/square_grid_viz.hpp"
 #endif
 
-using namespace rnav;
+using namespace robotnav;
 
 int main()
 {

@@ -3,7 +3,7 @@
 
 #include "decomp/details/rect_grid_base.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 int main()
 {

@@ -13,7 +13,7 @@
 #include <cstdlib>
 #include <string>
 
-namespace rnav
+namespace robotnav
 {
 namespace FolderPath
 {
@@ -40,6 +40,6 @@ inline std::string GetLogFolderPath()
     return GetDataFolderPath() + "/log";
 }
 } // namespace FolderPath
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* FOLDER_PATH_HPP */

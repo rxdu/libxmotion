@@ -3,7 +3,7 @@
 #include "reachability/monte_carlo_sim.hpp"
 #include "stopwatch.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 int main()
 {

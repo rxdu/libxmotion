@@ -21,7 +21,7 @@
 
 #include "decomp/details/rect_grid_base_tiles.hpp"
 
-namespace rnav
+namespace robotnav
 {
 
 /*
@@ -196,6 +196,6 @@ class RectGridBase : public GridTiles<TileType>
     int64_t origin_offset_x_ = 0;
     int64_t origin_offset_y_ = 0;
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* RECT_GRID_BASE_HPP */

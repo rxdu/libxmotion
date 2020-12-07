@@ -20,7 +20,7 @@
 
 #include "logging/details/specialized_logger.hpp"
 
-namespace rnav
+namespace robotnav
 {
 class CtrlLogger : public SpecializedLogger
 {
@@ -53,6 +53,6 @@ class CtrlLogger : public SpecializedLogger
     CtrlLogger(const CtrlLogger &) = delete;
     CtrlLogger &operator=(const CtrlLogger &) = delete;
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* CTRL_LOGGER_HPP */

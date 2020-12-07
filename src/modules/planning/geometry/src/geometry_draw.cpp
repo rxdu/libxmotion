@@ -14,7 +14,7 @@
 
 #include <tbb/tbb.h>
 
-using namespace rnav;
+using namespace robotnav;
 
 void GeometryViz::DrawPolyline(CvCanvas &canvas, const Polyline &polyline,
                                bool show_dot, cv::Scalar ln_color,

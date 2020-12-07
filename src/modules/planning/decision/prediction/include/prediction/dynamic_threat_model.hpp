@@ -21,7 +21,7 @@
 #include "prediction/vehicle_estimation.hpp"
 #include "prediction/static_threat_model.hpp"
 
-namespace rnav
+namespace robotnav
 {
 class DynamicThreatModel
 {
@@ -92,6 +92,6 @@ class DynamicThreatModel
 
     void SetupPredictionModel();
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* DYNAMIC_THREAT_MODEL_HPP */

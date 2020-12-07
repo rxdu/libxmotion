@@ -12,7 +12,7 @@
 
 #include <opencv2/opencv.hpp>
 
-namespace rnav {
+namespace robotnav {
 /********************* Common Colors *********************/
 struct CvColors {
   static const cv::Scalar default_pt_color;    // default point color
@@ -49,6 +49,6 @@ struct CvColors {
   static const cv::Scalar honeydew_color;
   static const cv::Scalar palegreen_color;
 };
-}  // namespace rnav
+}  // namespace robotnav
 
 #endif /* CV_COLORS_HPP */

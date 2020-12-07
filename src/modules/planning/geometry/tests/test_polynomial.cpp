@@ -1,7 +1,7 @@
 #include <iostream>
 #include "geometry/polynomial.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 int main()
 {

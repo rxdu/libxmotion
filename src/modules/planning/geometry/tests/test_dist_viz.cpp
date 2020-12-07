@@ -2,7 +2,7 @@
 #include "geometry/polygon.hpp"
 #include "coreviz/geometry_draw.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 // copied here to avoid dependency from a higher-level package
 class GaussianPositionThreat

@@ -1,7 +1,7 @@
 #include "geometry/geometry_draw.hpp"
 #include "geometry/polygon.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 // copied here to avoid dependency from a higher-level package
 class GaussianPositionThreat

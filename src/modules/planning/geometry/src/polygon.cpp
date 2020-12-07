@@ -18,7 +18,7 @@
 #include <CGAL/Boolean_set_operations_2.h>
 #include <CGAL/Point_2.h>
 
-using namespace rnav;
+using namespace robotnav;
 
 Polygon::Polygon(std::initializer_list<SimplePoint> pts)
 {

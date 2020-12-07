@@ -2,7 +2,7 @@
 
 #include "geometry/parametric_curve.hpp"
 
-using namespace rnav;
+using namespace robotnav;
 
 int main()
 {

@@ -30,7 +30,7 @@
 #define SHOW_INTERMEDIATE_STEPS
 #endif
 
-namespace rnav
+namespace robotnav
 {
 template <typename Space, typename Tree = BasicTree<Space>>
 class RRT : public PlannerBase<Space, Tree>
@@ -113,6 +113,6 @@ class RRT : public PlannerBase<Space, Tree>
         return path;
     }
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* RRT_HPP */

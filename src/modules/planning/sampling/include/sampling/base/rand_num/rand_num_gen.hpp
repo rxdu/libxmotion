@@ -53,7 +53,7 @@
 
 #include "sampling/base/rand_num/rng_seed_gen.hpp"
 
-namespace rnav
+namespace robotnav
 {
 class RandNumGen
 {
@@ -91,6 +91,6 @@ class RandNumGen
     std::uniform_real_distribution<> uniform_rdist_{0, 1};
     std::normal_distribution<> normal_dist_{0, 1};
 };
-}; // namespace rnav
+}; // namespace robotnav
 
 #endif /* RAN_NUM_GEN_HPP */

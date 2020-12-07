@@ -16,7 +16,7 @@
 #include "state_lattice/motion_primitive.hpp"
 #include "state_lattice/state_lattice.hpp"
 
-namespace rnav
+namespace robotnav
 {
 namespace LightViz
 {
@@ -28,6 +28,6 @@ void ShowMotionPrimitive(std::vector<MotionPrimitive> &mps, double step = 0.1, i
 void ShowStateLattice(StateLattice sl, double step = 0.1, int32_t pixel_per_unit = 10, std::string window_name = "Lattice Image", bool save_img = false);
 void ShowStateLattice(std::vector<StateLattice> &sls, double step = 0.1, int32_t pixel_per_unit = 10, std::string window_name = "Lattice Image", bool save_img = false);
 }; // namespace LightViz
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* LATTICE_VIZ_HPP */

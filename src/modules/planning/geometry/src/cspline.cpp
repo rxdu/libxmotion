@@ -13,7 +13,7 @@
 #include <algorithm>
 #include <cassert>
 
-using namespace rnav;
+using namespace robotnav;
 
 CSpline::CSpline()
 {

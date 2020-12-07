@@ -18,7 +18,7 @@
 #include "state_lattice/details/point_kinematics.hpp"
 #include "state_lattice/motion_primitive.hpp"
 
-namespace rnav
+namespace robotnav
 {
 class LookupTable
 {
@@ -62,6 +62,6 @@ class LookupTable
 
     std::vector<MotionState> GenerateStateList();
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* LOOKUP_TABLE_HPP */

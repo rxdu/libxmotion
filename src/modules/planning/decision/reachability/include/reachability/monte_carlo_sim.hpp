@@ -18,7 +18,7 @@
 #include "random/bigaussian_sampler.hpp"
 #include "random/gaussian_sampler.hpp"
 
-namespace rnav
+namespace robotnav
 {
 class MonteCarloSim
 {

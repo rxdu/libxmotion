@@ -18,7 +18,7 @@
 #include "navtypes/navtypes.hpp"
 #include "geometry/polygon.hpp"
 
-namespace rnav
+namespace robotnav
 {
 struct VehicleFP
 {
@@ -80,6 +80,6 @@ class VehicleEstimation
     double spd_var_ = 0;
     VehicleFP footprint_;
 };
-} // namespace rnav
+} // namespace robotnav
 
 #endif /* VEHICLE_ESTIMATION_HPP */
