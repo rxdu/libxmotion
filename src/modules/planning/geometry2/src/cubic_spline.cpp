@@ -37,6 +37,8 @@ void CubicSpline::Interpolate(const std::vector<Knot> &knots) {
   // no interpolation if size < 3
   if (n < 2) return;
 
+  coefficients_ = Eigen::MatrixXd::Zero(n, 4);
+
   Eigen::VectorXd x = Eigen::VectorXd::Zero(n + 1);
   Eigen::VectorXd a = Eigen::VectorXd::Zero(n + 1);
   Eigen::VectorXd h = Eigen::VectorXd::Zero(n);
@@ -79,11 +81,20 @@ void CubicSpline::Interpolate(const std::vector<Knot> &knots) {
     b(j) = (a(j + 1) - a(j)) / h(j) - h(j) * (c(j + 1) + 2 * c(j)) / 3;
     d(j) = (c(j + 1) - c(j)) / (3 * h(j));
   }
-  std::cout << "result: " << std::endl;
-  std::cout << "a: " << a.transpose() << std::endl;
-  std::cout << "b: " << b.transpose() << std::endl;
-  std::cout << "c: " << c.transpose() << std::endl;
-  std::cout << "d: " << d.transpose() << std::endl;
+
+  // copy over results
+  coefficients_.block(0, 0, n, 1) = a;
+  coefficients_.block(0, 1, n, 1) = b;
+  coefficients_.block(0, 2, n, 1) = c.block(0, 0, 1, n);
+  coefficients_.block(0, 3, n, 1) = d;
+
+  //   std::cout << "result: " << std::endl;
+  //   std::cout << "a: " << a.transpose() << std::endl;
+  //   std::cout << "b: " << b.transpose() << std::endl;
+  //   std::cout << "c: " << c.transpose() << std::endl;
+  //   std::cout << "d: " << d.transpose() << std::endl;
+  //   std::cout << "------" << std::endl;
+  //   std::cout << "coefficients: \n" << coefficients_ << std::endl;
 }
 
 void CubicSpline::Interpolate(double fp0, double fpn,
@@ -96,6 +107,8 @@ void CubicSpline::Interpolate(double fp0, double fpn,
 
   // no interpolation if size < 3
   if (n < 2) return;
+
+  coefficients_ = Eigen::MatrixXd::Zero(n, 4);
 
   Eigen::VectorXd x = Eigen::VectorXd::Zero(n + 1);
   Eigen::VectorXd a = Eigen::VectorXd::Zero(n + 1);
@@ -146,26 +159,51 @@ void CubicSpline::Interpolate(double fp0, double fpn,
     d(j) = (c(j + 1) - c(j)) / (3 * h(j));
   }
 
-  std::cout << "result: " << std::endl;
-  std::cout << "a: " << a.transpose() << std::endl;
-  std::cout << "b: " << b.transpose() << std::endl;
-  std::cout << "c: " << c.transpose() << std::endl;
-  std::cout << "d: " << d.transpose() << std::endl;
+  // copy over results
+  coefficients_.block(0, 0, n, 1) = a;
+  coefficients_.block(0, 1, n, 1) = b;
+  coefficients_.block(0, 2, n, 1) = c.block(0, 0, 1, n);
+  coefficients_.block(0, 3, n, 1) = d;
+
+  //   std::cout << "result: " << std::endl;
+  //   std::cout << "a: " << a.transpose() << std::endl;
+  //   std::cout << "b: " << b.transpose() << std::endl;
+  //   std::cout << "c: " << c.transpose() << std::endl;
+  //   std::cout << "d: " << d.transpose() << std::endl;
+  //   std::cout << "------" << std::endl;
+  //   std::cout << "coefficients: \n" << coefficients_ << std::endl;
 }
 
 double CubicSpline::Evaluate(double x, uint32_t derivative) const {
-  assert(derivative <= 2);
+  assert(derivative <= 3 && x >= knots_.front().x() && x <= knots_.back().x());
 
-  //   switch (derivative) {
-  //     case 0:
-  //       return Evaluate(x);
-  //     case 1:
-  //       return gsl_spline_eval_deriv(spline_, x, accel_);
-  //     case 2:
-  //       return gsl_spline_eval_deriv2(spline_, x, accel_);
-  //     default:
-  //       return 0;
-  //   }
-  return 0.0;
+  if (derivative > 3 || x < knots_.front().x() || x > knots_.back().x())
+    return std::numeric_limits<double>::signaling_NaN();
+
+  // find segment
+  uint32_t idx = 0;
+  for (int i = 0; i < knots_.size(); ++i) {
+    if (x >= knots_[i].x() && x <= knots_[i + 1].x()) {
+      idx = i;
+      break;
+    }
+  }
+
+  // then evaluate
+  double error = x - knots_[idx].x();
+  if (derivative == 0) {
+    return coefficients_(idx, 0) + coefficients_(idx, 1) * error +
+           coefficients_(idx, 2) * error * error +
+           coefficients_(idx, 3) * error * error * error;
+  } else if (derivative == 1) {
+    return coefficients_(idx, 1) + 2 * coefficients_(idx, 2) * error +
+           3 * coefficients_(idx, 3) * error * error;
+  } else if (derivative == 2) {
+    return 2 * coefficients_(idx, 2) + 6 * coefficients_(idx, 3) * error;
+  } else if (derivative == 3) {
+    return 6 * coefficients_(idx, 3);
+  } else {
+    return std::numeric_limits<double>::signaling_NaN();
+  }
 }
 }  // namespace robotnav

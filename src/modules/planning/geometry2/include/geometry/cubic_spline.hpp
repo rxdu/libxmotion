@@ -37,8 +37,13 @@ class CubicSpline {
   void Interpolate(double fp0, double fpn, const std::vector<Knot> &knots = {});
   double Evaluate(double x, uint32_t derivative = 0) const;
 
+  Type GetInterpolationType() const { return type_; }
+  Eigen::MatrixXd GetCoefficients() const { return coefficients_; }
+
  private:
+  Type type_;
   std::vector<Knot> knots_;
+  Eigen::MatrixXd coefficients_;
 };
 }  // namespace robotnav
 
