@@ -21,10 +21,12 @@ namespace robotnav {
 class CubicSpline {
  public:
   using Knot = SimplePoint2;
+  enum class Type { Natual = 0, Clamped };
 
  public:
   CubicSpline() = default;
   explicit CubicSpline(const std::vector<Knot> &knots);
+  CubicSpline(double fp0, double fpn, const std::vector<Knot> &knots);
 
   std::vector<Knot> GetKnots() const { return knots_; }
 

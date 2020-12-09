@@ -22,6 +22,11 @@ CubicSpline::CubicSpline(const std::vector<Knot> &knots) : knots_(knots) {
   Interpolate();
 }
 
+CubicSpline::CubicSpline(double fp0, double fpn, const std::vector<Knot> &knots)
+    : knots_(knots) {
+  Interpolate(fp0, fpn);
+}
+
 void CubicSpline::Interpolate(const std::vector<Knot> &knots) {
   // replace existing knots if a non-empty set of Knots is passed in
   if (!knots.empty()) knots_ = knots;
@@ -64,7 +69,7 @@ void CubicSpline::Interpolate(const std::vector<Knot> &knots) {
   }
 
   Eigen::VectorXd b = Eigen::VectorXd::Zero(n);
-  Eigen::VectorXd c = Eigen::VectorXd::Zero(n);
+  Eigen::VectorXd c = Eigen::VectorXd::Zero(n + 1);
   Eigen::VectorXd d = Eigen::VectorXd::Zero(n);
   l(n) = 1;
   z(n) = 0;
@@ -118,7 +123,7 @@ void CubicSpline::Interpolate(double fp0, double fpn,
   Eigen::VectorXd z = Eigen::VectorXd::Zero(n + 1);
 
   Eigen::VectorXd b = Eigen::VectorXd::Zero(n);
-  Eigen::VectorXd c = Eigen::VectorXd::Zero(n);
+  Eigen::VectorXd c = Eigen::VectorXd::Zero(n + 1);
   Eigen::VectorXd d = Eigen::VectorXd::Zero(n);
 
   l(0) = 2 * h(0);
@@ -130,7 +135,7 @@ void CubicSpline::Interpolate(double fp0, double fpn,
     miu(i) = h(i) / l(i);
     z(i) = (alpha(i) - h(i - 1) * z(i - 1)) / l(i);
   }
-  
+
   l(n) = h(n - 1) * (2 - miu(n - 1));
   z(n) = (alpha(n) - h(n - 1) * z(n - 1)) / l(n);
   c(n) = z(n);
