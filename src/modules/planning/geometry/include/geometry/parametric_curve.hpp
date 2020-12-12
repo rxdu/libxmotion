@@ -1,10 +1,10 @@
-/* 
+/*
  * parametric_curve.hpp
- * 
+ *
  * Created on: Oct 20, 2018 08:44
- * Description: parametric curve with each dimension represented 
+ * Description: parametric curve with each dimension represented
  *              as a cubic spline
- * 
+ *
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
@@ -14,50 +14,51 @@
 #include <vector>
 
 #include "geometry/polyline.hpp"
-#include "geometry/cspline.hpp"
+#include "geometry/cubic_spline.hpp"
 #include "geometry/simple_point.hpp"
 
-namespace robotnav
-{
+#ifdef ENABLE_VISUAL
+#include "cvdraw/cvdraw.hpp"
+#endif
+
+namespace robotnav {
 // 2D parametric curve: x, y
 // each dimension is represented as a cubic spline
-class ParametricCurve
-{
-  public:
-    ParametricCurve() = default;
-    explicit ParametricCurve(Polyline center_polyline);
-    ParametricCurve(CSpline xspline, CSpline yspline, double sf);
-    ~ParametricCurve() = default;
+class ParametricCurve {
+ public:
+  ParametricCurve() = default;
+  explicit ParametricCurve(Polyline center_polyline);
+  ParametricCurve(CubicSpline xspline, CubicSpline yspline, double sf);
 
-    ParametricCurve(const ParametricCurve &other) = default;
-    ParametricCurve &operator=(const ParametricCurve &other) = default;
-    ParametricCurve(ParametricCurve &&other) = default;
-    ParametricCurve &operator=(ParametricCurve &&other) = default;
+  SimplePoint2 Evaluate(double s, int32_t derivative = 0) const;
 
-    SimplePoint Evaluate(double s) const;
-    SimplePoint Evaluate(double s, int32_t derivative) const;
+  void GetPositionVector(double s, double &x, double &y) const;
+  void GetTangentVector(double s, double &x, double &y) const;
 
-    void GetPositionVector(double s, double &x, double &y) const;
-    void GetTangentVector(double s, double &x, double &y) const;
+  double GetLength() const { return total_length_; }
+  CubicSpline GetXSpline() const { return x_spline_; }
+  CubicSpline GetYSpline() const { return y_spline_; }
 
-    double GetLength() const { return total_length_; }
-    CSpline GetXSpline() const { return x_spline_; }
-    CSpline GetYSpline() const { return y_spline_; }
+ private:
+  Polyline polyline_;
+  double total_length_;
 
-  private:
-    double total_length_;
-
-    CSpline x_spline_;
-    CSpline y_spline_;
-
-    Polyline polyline_;
+  CubicSpline x_spline_;
+  CubicSpline y_spline_;
 };
 
-namespace CurveFitting
-{
+namespace CurveFitting {
 ParametricCurve FitApproximateLengthCurve(Polyline polyline);
-ParametricCurve FitTimedCurve(std::vector<double> x, std::vector<double> y, std::vector<double> t);
-} // namespace CurveFitting
-} // namespace robotnav
+ParametricCurve FitTimedCurve(std::vector<double> x, std::vector<double> y,
+                              std::vector<double> t);
+}  // namespace CurveFitting
+
+#ifdef ENABLE_VISUAL
+void DrawParametricCurve(CvCanvas &canvas, const ParametricCurve &pcurve,
+                         double step = 0.1,
+                         cv::Scalar ln_color = CvColors::blue_color,
+                         int32_t thickness = 1);
+#endif
+}  // namespace robotnav
 
 #endif /* PARAMETRIC_CURVE_HPP */

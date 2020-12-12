@@ -17,7 +17,6 @@
 #include <Eigen/Dense>
 
 #include "decomp/curvilinear_grid.hpp"
-#include "geometry/geometry_draw.hpp"
 
 namespace robotnav {
 namespace CurvilinearGridViz {

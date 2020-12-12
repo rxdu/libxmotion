@@ -99,7 +99,7 @@ struct CurvilinearCellBase
         double delta;
 
         // for convenient visualization
-        SimplePoint position;
+        SimplePoint2 position;
     };
 
     CurvilinearCellBase() = delete;
@@ -173,7 +173,7 @@ struct CurvilinearCellBase
     {
         std::cout << "cell " << id << " ; index " << index
                   << " ; center : " << center.s << " , " << center.delta
-                  << " ; " << center.position.x << " , " << center.position.y << std::endl;
+                  << " ; " << center.position.x() << " , " << center.position.y() << std::endl;
     }
 };
 
@@ -216,7 +216,7 @@ class CurvilinearGridBase
     // local path coordinate
     // - s: starts from 0
     // - delta: positive - left, zero - on curve, negative -right
-    SimplePoint ConvertToGlobalCoordinate(GridPoint pt);
+    SimplePoint2 ConvertToGlobalCoordinate(GridPoint pt);
 
     double GetCellSizeS() const { return s_step_; }
     double GetCellSizeDelta() const { return delta_step_; }

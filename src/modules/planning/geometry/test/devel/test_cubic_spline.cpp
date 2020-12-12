@@ -15,21 +15,19 @@ int main() {
 
   std::cout << "knot size: " << knots.size() << std::endl;
 
-  CubicSpline spline(knots);
+  CubicSpline natual_spline(knots);
 
   std::cout << "---------------" << std::endl;
 
-  std::vector<CubicSpline::Knot> knots2;
+  CubicSpline clamped_spline;
+  clamped_spline.Interpolate(2, 1, knots);
 
-  knots2.emplace_back(0, 1);
-  knots2.emplace_back(1, std::exp(1));
-  knots2.emplace_back(2, std::exp(2));
-  knots2.emplace_back(3, std::exp(3));
-
-  std::cout << "knot size: " << knots2.size() << std::endl;
-
-  CubicSpline spline2;
-  spline2.Interpolate(1, std::exp(3), knots2);
+  CvCanvas canvas(100);
+  canvas.Resize(-1, 10, -10, 10);
+  canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
+  DrawCubicSpline(canvas, natual_spline);
+  DrawCubicSpline(canvas, clamped_spline, 0.01, CvColors::cyan_color);
+  canvas.Show();
 
   return 0;
 }

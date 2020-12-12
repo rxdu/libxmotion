@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 
-#define ENABLE_VIZ
+// #define ENABLE_VIZ
 
 #include "decomp/dense_grid.hpp"
 

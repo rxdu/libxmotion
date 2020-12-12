@@ -170,7 +170,7 @@ std::vector<CurvilinearCellBase<T> *> CurvilinearGridBase<T, CurveType>::GetNeig
 }
 
 template <typename T, typename CurveType>
-SimplePoint CurvilinearGridBase<T, CurveType>::ConvertToGlobalCoordinate(typename CurvilinearGridBase<T, CurveType>::GridPoint pt)
+SimplePoint2 CurvilinearGridBase<T, CurveType>::ConvertToGlobalCoordinate(typename CurvilinearGridBase<T, CurveType>::GridPoint pt)
 {
     // TODO: calculation could be simplified
     Eigen::Matrix2d rotation_matrix;
@@ -191,7 +191,7 @@ SimplePoint CurvilinearGridBase<T, CurveType>::ConvertToGlobalCoordinate(typenam
     Eigen::Vector2d offset = vec_n.normalized() * pt.delta;
     Eigen::Vector2d result = base_vec + offset;
 
-    return SimplePoint(result.x(), result.y());
+    return SimplePoint2(result.x(), result.y());
 }
 } // namespace robotnav
 

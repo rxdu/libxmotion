@@ -1,6 +1,6 @@
 #include "decomp/square_grid.hpp"
 
-#define ENABLE_VIZ
+// #define ENABLE_VIZ
 
 #ifdef ENABLE_VIZ
 #include "lightviz/square_grid_viz.hpp"

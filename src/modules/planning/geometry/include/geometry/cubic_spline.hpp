@@ -17,6 +17,10 @@
 
 #include "geometry/simple_point.hpp"
 
+#ifdef ENABLE_VISUAL
+#include "cvdraw/cvdraw.hpp"
+#endif
+
 namespace robotnav {
 class CubicSpline {
  public:
@@ -45,6 +49,13 @@ class CubicSpline {
   std::vector<Knot> knots_;
   Eigen::MatrixXd coefficients_;
 };
+
+#ifdef ENABLE_VISUAL
+void DrawCubicSpline(CvCanvas &canvas, const CubicSpline &spline,
+                     double step = 0.01,
+                     cv::Scalar ln_color = CvColors::blue_color,
+                     int32_t thickness = 1);
+#endif
 }  // namespace robotnav
 
 #endif /* CUBIC_SPLINE_HPP */

@@ -206,4 +206,20 @@ double CubicSpline::Evaluate(double x, uint32_t derivative) const {
     return std::numeric_limits<double>::signaling_NaN();
   }
 }
+
+#ifdef ENABLE_VISUAL
+void DrawCubicSpline(CvCanvas &canvas, const CubicSpline &spline, double step,
+                     cv::Scalar ln_color, int32_t thickness) {
+  std::vector<cv::Point2d> pts;
+  std::vector<CubicSpline::Knot> knots(spline.GetKnots());
+  for (double x = knots.front().x(); x < knots.back().x(); x += step)
+    pts.emplace_back(x, spline.Evaluate(x));
+
+  std::cout << "intermediate points: " << pts.size() << std::endl;
+
+  for (std::size_t i = 0; i < pts.size() - 1; ++i)
+    canvas.DrawLine({pts[i].x, pts[i].y}, {pts[i + 1].x, pts[i + 1].y},
+                    ln_color, thickness);
+}
+#endif
 }  // namespace robotnav
