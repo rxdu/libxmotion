@@ -103,8 +103,8 @@ template <typename T>
 class SquareGridBase : public RectGridBase<SquareCellBase<T> *> {
  public:
   SquareGridBase(int32_t size_x, int32_t size_y, double cell_size = 0.1);
-  // side_length: number of elements in matrix per cell side
-  SquareGridBase(const Eigen::MatrixXd &matrix, int32_t side_length,
+  // element_per_cell: number of elements in matrix per cell side
+  SquareGridBase(const Eigen::MatrixXd &matrix, int32_t element_per_cell,
                  double cell_size = 0.1);
   ~SquareGridBase();
 

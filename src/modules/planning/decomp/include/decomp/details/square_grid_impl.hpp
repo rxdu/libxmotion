@@ -28,12 +28,12 @@ SquareGridBase<T>::SquareGridBase(int32_t size_x, int32_t size_y,
 
 template <typename T>
 SquareGridBase<T>::SquareGridBase(const Eigen::MatrixXd &matrix,
-                                  int32_t side_length, double cell_size)
+                                  int32_t element_per_cell, double cell_size)
     : RectGridBase<SquareCellBase<T> *>(0, 0), cell_size_(cell_size) {
   int32_t grid_size_x, grid_size_y;
   Eigen::MatrixXd occupancy_matrix;
 
-  if (side_length == 1) {
+  if (element_per_cell == 1) {
     grid_size_x = matrix.cols();
     grid_size_y = matrix.rows();
     occupancy_matrix = matrix;
@@ -42,23 +42,14 @@ SquareGridBase<T>::SquareGridBase(const Eigen::MatrixXd &matrix,
     bool shrink_y = false;
 
     // determine size of grid
-    int32_t center_x = matrix.cols() / 2;
-    int32_t center_y = matrix.rows() / 2;
-
-    if (matrix.cols() % side_length != 0) shrink_x = true;
-    if (matrix.rows() % side_length != 0) shrink_y = true;
-    grid_size_x = (center_x / side_length) * 2;
-    grid_size_y = (center_y / side_length) * 2;
-
+    if (matrix.cols() % element_per_cell != 0) shrink_x = true;
+    if (matrix.rows() % element_per_cell != 0) shrink_y = true;
+    grid_size_x = matrix.cols() / element_per_cell;
+    grid_size_y = matrix.rows() / element_per_cell;
     if (shrink_x || shrink_y) {
-      occupancy_matrix = Eigen::MatrixXd::Ones(grid_size_y * side_length,
-                                               grid_size_x * side_length);
-
-      int32_t x_start = 0, y_start = 0;
-      if (shrink_x) x_start = center_x % side_length;
-      if (shrink_y) y_start = center_y % side_length;
-
-      occupancy_matrix = matrix.block(y_start, x_start, occupancy_matrix.rows(),
+      occupancy_matrix = Eigen::MatrixXd::Ones(grid_size_y * element_per_cell,
+                                               grid_size_x * element_per_cell);
+      occupancy_matrix = matrix.block(0, 0, occupancy_matrix.rows(),
                                       occupancy_matrix.cols());
     } else {
       occupancy_matrix = matrix;
@@ -81,10 +72,10 @@ SquareGridBase<T>::SquareGridBase(const Eigen::MatrixXd &matrix,
   for (int64_t x = 0; x < RectGridBase<SquareCellBase<T> *>::SizeX(); ++x)
     for (int64_t y = 0; y < RectGridBase<SquareCellBase<T> *>::SizeY(); ++y) {
       bool occupied = false;
-      int32_t xmin = x * side_length;
-      int32_t xmax = xmin + side_length;
-      int32_t ymin = y * side_length;
-      int32_t ymax = ymin + side_length;
+      int32_t xmin = x * element_per_cell;
+      int32_t xmax = xmin + element_per_cell;
+      int32_t ymin = y * element_per_cell;
+      int32_t ymax = ymin + element_per_cell;
       for (int i = xmin; i < xmax; ++i) {
         for (int j = ymin; j < ymax; ++j) {
           if (occupancy_matrix(j, i) != 0) {

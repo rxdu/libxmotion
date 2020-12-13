@@ -22,9 +22,11 @@ TEST(SquareGridTest, BasicConstruct) {
 }
 
 TEST(SquareGridTest, MatrixConstruct) {
+  // row: 10, col: 8
   Eigen::MatrixXd mat = Eigen::MatrixXd::Random(10, 8);
-  SquareGrid sgrid(mat, 2);
-  std::cout << "x: " << sgrid.SizeX() << " , y: " << sgrid.SizeY() << std::endl;
-  ASSERT_TRUE(sgrid.SizeX() == 5);
-  ASSERT_TRUE(sgrid.SizeY() == 4);
+  SquareGrid sgrid(mat, 2, 0.2);
+
+  ASSERT_TRUE(sgrid.SizeX() == 4);
+  ASSERT_TRUE(sgrid.SizeY() == 5);
+  ASSERT_FLOAT_EQ(sgrid.GetCellSize(), 0.2);
 }
