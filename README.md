@@ -9,8 +9,8 @@ This repository contains a collection of software packages for study and researc
 | Folder |       Description        |
 | ------ | ------------------------ |
 | cmake  | cmake configuration      |
-| data   | experiment results, logs |
-| docs   | ocumentation             |
+| data   | map, results, logs       |
+| docs   | documentation            |
 | src    | C++ code                 |
 
 ## Build and run
