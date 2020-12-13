@@ -11,8 +11,8 @@ target_link_libraries(test_cubic_spline geometry)
 add_executable(test_parametric_curve test_parametric_curve.cpp)
 target_link_libraries(test_parametric_curve geometry)
 
-# add_executable(test_polygon test_polygon.cpp)
-# target_link_libraries(test_polygon geometry)
+add_executable(test_polygon test_polygon.cpp)
+target_link_libraries(test_polygon geometry)
 
 # add_executable(test_pcurve test_pcurve.cpp)
 # target_link_libraries(test_pcurve geometry)

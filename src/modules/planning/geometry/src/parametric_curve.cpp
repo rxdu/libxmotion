@@ -76,6 +76,8 @@ ParametricCurve CurveFitting::FitTimedCurve(std::vector<double> x,
   return ParametricCurve(CubicSpline(xknots), CubicSpline(yknots), t.back());
 }
 
+//---------------------------------------------------------------------------//
+
 #ifdef ENABLE_VISUAL
 void DrawParametricCurve(CvCanvas &canvas, const ParametricCurve &pcurve,
                          double step, cv::Scalar ln_color, int32_t thickness) {

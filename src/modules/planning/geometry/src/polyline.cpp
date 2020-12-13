@@ -66,9 +66,8 @@ bool LineSegment::Intersect(const LineSegment &other) const {
 
 //---------------------------------------------------------------------------//
 
-Polyline::Polyline(const std::vector<SimplePoint2> &pts) {
-  points_ = pts;
-  for (auto &pt : pts) {
+Polyline::Polyline(const std::vector<SimplePoint2> &pts) : points_(pts) {
+  for (const auto &pt : points_) {
     UpdateXYMinMax(pt.x(), pt.y());
   }
 }

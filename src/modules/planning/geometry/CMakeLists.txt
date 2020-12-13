@@ -7,6 +7,7 @@ add_library(geometry STATIC
     src/polyline.cpp
 	src/cubic_spline.cpp
     src/parametric_curve.cpp
+    src/polygon.cpp
 )
 target_link_libraries(geometry cvdraw ${TBB_LIBRARIES})
 target_compile_definitions(geometry PUBLIC ENABLE_VISUAL)
