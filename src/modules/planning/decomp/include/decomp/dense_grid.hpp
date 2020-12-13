@@ -60,36 +60,31 @@ class DenseGrid : public RectGridBase<double> {
 
   inline void AddGrid(const DenseGrid &other) {
     assert(this->SizeX() == other.SizeX() && this->SizeY() == other.SizeY());
-
     this->grid_tiles_ += other.grid_tiles_;
   }
 
   inline void SubtractGrid(const DenseGrid &other) {
     assert(this->SizeX() == other.SizeX() && this->SizeY() == other.SizeY());
-
     this->grid_tiles_ -= other.grid_tiles_;
   }
 
   inline void AddGrid(DenseGrid *other) {
     assert(this->SizeX() == other->SizeX() && this->SizeY() == other->SizeY());
-
     this->grid_tiles_ += other->grid_tiles_;
   }
 
   inline void SubtractGrid(DenseGrid *other) {
     assert(this->SizeX() == other->SizeX() && this->SizeY() == other->SizeY());
-
     this->grid_tiles_ -= other->grid_tiles_;
   }
 
-  inline Eigen::MatrixXd GetGridMatrix(bool normalize = false) {
+  inline Eigen::MatrixXd GetGridMatrix(bool normalize = false) const {
     Eigen::MatrixXd grid_matrix = grid_tiles_;
     if (normalize)
       grid_matrix = (grid_tiles_ + Eigen::MatrixXd::Ones(grid_tiles_.rows(),
                                                          grid_tiles_.cols()) *
                                        grid_tiles_.minCoeff()) /
                     (grid_tiles_.maxCoeff() - grid_tiles_.minCoeff()) * 1.0;
-
     return grid_matrix;
   }
 
@@ -153,5 +148,29 @@ class DenseGrid : public RectGridBase<double> {
   }
 };
 }  // namespace robotnav
+
+#ifdef ENABLE_VISUAL
+#include "details/dense_grid_visual.hpp"
+
+namespace robotnav {
+void ShowDenseGridAsImage(const DenseGrid &grid, bool save_img = false,
+                          std::string img_name = "DenseGrid") {
+  ShowMatrixAsImage(grid.GetGridMatrix(true) * 128, img_name, save_img);
+}
+
+void ShowDenseGridAsColorMap(const DenseGrid &grid, bool save_img = false,
+                             std::string img_name = "DenseGrid") {
+  ShowMatrixAsColorMap(grid.GetGridMatrix(true), img_name, save_img);
+}
+
+void ShowPathOnDenseGrid(const DenseGrid &grid,
+                         std::vector<RectGridIndex> waypoints,
+                         bool save_img = false,
+                         std::string img_name = "DenseGrid") {
+  ShowPathOnMatrixAsColorMap(grid.GetGridMatrix(true), waypoints, img_name,
+                             save_img);
+}
+}  // namespace robotnav
+#endif
 
 #endif /* DENSE_GRID_HPP */

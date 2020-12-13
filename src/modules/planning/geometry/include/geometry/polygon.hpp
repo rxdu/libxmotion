@@ -84,6 +84,11 @@ void DrawPolygon(CvCanvas &canvas, const Polygon &polygon,
                  bool show_dot = false,
                  cv::Scalar ln_color = CvColors::blue_color,
                  int32_t thickness = 1);
+void FillPolygon(CvCanvas &canvas, const Polygon &polygon,
+                 bool show_dot = false,
+                 cv::Scalar fill_color = CvColors::aoi_color,
+                 cv::Scalar ln_color = CvColors::blue_color,
+                 int32_t thickness = 1);
 #endif
 }  // namespace robotnav
 

@@ -99,12 +99,7 @@ struct CurvilinearCellBase {
   CurvilinearCellBase() = delete;
   CurvilinearCellBase(int32_t xval, int32_t yval, int64_t idval = -1)
       : index(CurviGridIndex(xval, yval)), id(idval) {}
-  ~CurvilinearCellBase() = default;
-
-  CurvilinearCellBase(const CurvilinearCellBase &other) = default;
-  CurvilinearCellBase(CurvilinearCellBase &&other) = default;
-  CurvilinearCellBase &operator=(const CurvilinearCellBase &other) = default;
-  CurvilinearCellBase &operator=(CurvilinearCellBase &&other) = default;
+  virtual ~CurvilinearCellBase() = default;
 
   // for easy reference, maybe unnecessary for some applications
   int64_t id = -1;
@@ -360,5 +355,8 @@ using CurvilinearGrid = PCurveCurvilinearGrid<double>;
 }  // namespace robotnav
 
 #include "details/curvilinear_grid_impl.hpp"
+#ifdef ENABLE_VISUAL
+#include "details/curvilinear_grid_visual.hpp"
+#endif
 
 #endif /* CURVILINEAR_GRID_HPP */

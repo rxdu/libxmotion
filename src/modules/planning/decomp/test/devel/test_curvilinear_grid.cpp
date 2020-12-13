@@ -38,5 +38,14 @@ int main()
 
     // grid.PrintGrid();
 
+    CvCanvas canvas(100);
+    canvas.Resize(-1, 3, -1, 3);
+    canvas.SetMode(CvCanvas::DrawMode::GeometryInvertedY);
+
+    FillCurvilinearGrid(canvas, grid);
+    DrawCurvilinearGrid(canvas, grid, CvColors::black_color);
+
+    canvas.Show();
+
     return 0;
 }

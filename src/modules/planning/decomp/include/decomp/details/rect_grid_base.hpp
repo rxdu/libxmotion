@@ -82,16 +82,15 @@ class RectGridBase : public GridTiles<TileType> {
  public:
   RectGridBase(int64_t size_x, int64_t size_y)
       : GridTiles<TileType>(size_x, size_y), size_x_(size_x), size_y_(size_y) {}
-
   virtual ~RectGridBase() = default;
 
-  int64_t SizeX() const { return size_x_; };
-  int64_t SizeY() const { return size_y_; };
+  inline int64_t SizeX() const { return size_x_; };
+  inline int64_t SizeY() const { return size_y_; };
 
   // Note: resizing the grid may invalidate the reference to grid elements
   //    acquired from GetTileRefAtRawCoordinate() and
   //    GetTileRefAtGridCoordinate()
-  void ResizeGrid(int64_t x, int64_t y) {
+  inline void ResizeGrid(int64_t x, int64_t y) {
     if (x == size_x_ && y == size_y_) return;
 
     assert(x > origin_offset_x_ && y > origin_offset_y_);
@@ -101,7 +100,7 @@ class RectGridBase : public GridTiles<TileType> {
     size_y_ = y;
   }
 
-  void SetOriginCoordinate(int64_t origin_x, int64_t origin_y) {
+  inline void SetOriginCoordinate(int64_t origin_x, int64_t origin_y) {
     origin_offset_x_ = origin_x;
     origin_offset_y_ = origin_y;
   }
@@ -121,35 +120,35 @@ class RectGridBase : public GridTiles<TileType> {
 
  protected:
   // operations WRT coordinate of internal data structure directly
-  void SetTileAtRawCoordinate(int64_t x, int64_t y, TileType tile) {
+  inline void SetTileAtRawCoordinate(int64_t x, int64_t y, TileType tile) {
     assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
     GridTiles<TileType>::SetTileAtCoordinate(x, y, tile);
   }
 
-  TileType GetTileAtRawCoordinate(int64_t x, int64_t y) const {
+  inline TileType GetTileAtRawCoordinate(int64_t x, int64_t y) const {
     assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
     return GridTiles<TileType>::GetTileAtCoordinate(x, y);
   }
 
-  TileType &GetTileRefAtRawCoordinate(int64_t x, int64_t y) {
+  inline TileType &GetTileRefAtRawCoordinate(int64_t x, int64_t y) {
     assert((x >= 0) && (x < size_x_) && (y >= 0) && (y < size_y_));
     return GridTiles<TileType>::GetTileRefAtCoordinate(x, y);
   }
 
   // operations WRT coordinate of field
-  void SetTileAtGridCoordinate(int64_t x, int64_t y, TileType tile) {
+  inline void SetTileAtGridCoordinate(int64_t x, int64_t y, TileType tile) {
     auto internal_coordinate = ConvertToRawCoordinate(x, y);
     SetTileAtRawCoordinate(internal_coordinate.GetX(),
                            internal_coordinate.GetY(), tile);
   }
 
-  TileType GetTileAtGridCoordinate(int64_t x, int64_t y) const {
+  inline TileType GetTileAtGridCoordinate(int64_t x, int64_t y) const {
     auto internal_coordinate = ConvertToRawCoordinate(x, y);
     return GetTileAtRawCoordinate(internal_coordinate.GetX(),
                                   internal_coordinate.GetY());
   }
 
-  TileType &GetTileRefAtGridCoordinate(int64_t x, int64_t y) {
+  inline TileType &GetTileRefAtGridCoordinate(int64_t x, int64_t y) {
     auto internal_coordinate = ConvertToRawCoordinate(x, y);
     return GetTileRefAtRawCoordinate(internal_coordinate.GetX(),
                                      internal_coordinate.GetY());

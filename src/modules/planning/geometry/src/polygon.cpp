@@ -158,5 +158,19 @@ void DrawPolygon(CvCanvas &canvas, const Polygon &polygon, bool show_dot,
                        CvColors::red_color);
   }
 }
+
+void FillPolygon(CvCanvas &canvas, const Polygon &polygon, bool show_dot,
+                 cv::Scalar fill_color, cv::Scalar ln_color,
+                 int32_t thickness) {
+  std::size_t pt_num = polygon.GetPointNumer();
+
+  if (pt_num < 3) return;
+
+  std::vector<CPoint> pts;
+  for (int i = 0; i < polygon.GetPointNumer(); ++i)
+    pts.emplace_back(polygon.GetPoint(i).x(), polygon.GetPoint(i).y());
+
+  canvas.FillPoly(pts, fill_color);
+}
 #endif
 }  // namespace robotnav

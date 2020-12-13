@@ -39,21 +39,16 @@ enum class SquareCellLabel { OCCUPIED, FREE };
 template <typename AttributeType>
 struct SquareCellBase {
   struct GridPoint {
-    GridPoint(double xval = 0, double yval = 0) : x(xval), y(yval){};
+    GridPoint() = default;
+    GridPoint(double xval, double yval) : x(xval), y(yval){};
 
-    double x;
-    double y;
+    double x = 0.0;
+    double y = 0.0;
   };
 
   SquareCellBase() = default;
   SquareCellBase(int32_t xval, int32_t yval, int64_t idval = -1)
       : x(xval), y(yval), id(idval) {}
-
-  ~SquareCellBase() = default;
-  SquareCellBase(const SquareCellBase &other) = default;
-  SquareCellBase &operator=(const SquareCellBase &other) = default;
-  SquareCellBase(SquareCellBase &&other) = default;
-  SquareCellBase &operator=(SquareCellBase &&other) = default;
 
   // for easy reference, maybe unnecessary for some applications
   int64_t id = -1;
@@ -108,6 +103,7 @@ template <typename T>
 class SquareGridBase : public RectGridBase<SquareCellBase<T> *> {
  public:
   SquareGridBase(int32_t size_x, int32_t size_y, double cell_size = 0.1);
+  // side_length: number of elements in matrix per cell side
   SquareGridBase(const Eigen::MatrixXd &matrix, int32_t side_length,
                  double cell_size = 0.1);
   ~SquareGridBase();
@@ -125,7 +121,9 @@ class SquareGridBase : public RectGridBase<SquareCellBase<T> *> {
   }
 
   SquareCellBase<T> *GetCell(int64_t id);
+  const SquareCellBase<T> *GetCell(int64_t id) const;
   SquareCellBase<T> *GetCell(int32_t x, int32_t y);
+  const SquareCellBase<T> *GetCell(int32_t x, int32_t y) const;
 
   std::vector<SquareCellBase<T> *> GetNeighbours(int32_t x, int32_t y,
                                                  bool allow_diag);
@@ -164,5 +162,8 @@ using SquareGrid = SquareGridBase<double>;
 }  // namespace robotnav
 
 #include "details/square_grid_impl.hpp"
+#ifdef ENABLE_VISUAL
+#include "details/square_grid_visual.hpp"
+#endif
 
 #endif /* SQUARE_GRID_HPP */

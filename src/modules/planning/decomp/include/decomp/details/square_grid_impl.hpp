@@ -154,7 +154,19 @@ SquareCellBase<T> *SquareGridBase<T>::GetCell(int64_t id) {
 }
 
 template <typename T>
+const SquareCellBase<T> *SquareGridBase<T>::GetCell(int64_t id) const {
+  auto coordinate = IDToIndex(id);
+  return RectGridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(
+      coordinate.GetX(), coordinate.GetY());
+}
+
+template <typename T>
 SquareCellBase<T> *SquareGridBase<T>::GetCell(int32_t x, int32_t y) {
+  return RectGridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(x, y);
+}
+
+template <typename T>
+const SquareCellBase<T> *SquareGridBase<T>::GetCell(int32_t x, int32_t y) const {
   return RectGridBase<SquareCellBase<T> *>::GetTileAtGridCoordinate(x, y);
 }
 
