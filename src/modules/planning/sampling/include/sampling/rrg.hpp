@@ -21,7 +21,7 @@
 #include "sampling/base/planner_base.hpp"
 #include "sampling/tree/kd_graph.hpp"
 
-#include "graph/algorithms/dijkstra.hpp"
+#include "graph/search/dijkstra.hpp"
 
 // #define SHOW_TREE_GROWTH
 
