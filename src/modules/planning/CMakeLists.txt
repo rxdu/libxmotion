@@ -5,6 +5,6 @@ add_subdirectory(decomp)
 add_subdirectory(third_party)
 
 # under revision
+# add_subdirectory(sampling)
 add_subdirectory(state_lattice)
 add_subdirectory(decision)
-add_subdirectory(sampling)

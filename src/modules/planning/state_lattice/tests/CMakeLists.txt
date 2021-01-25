@@ -12,7 +12,7 @@ add_executable(test_lookup_table test_lookup_table.cpp)
 target_link_libraries(test_lookup_table lattice trafficviz)
 
 add_executable(test_state_lattice test_state_lattice.cpp)
-target_link_libraries(test_state_lattice lattice trafficviz utils)
+target_link_libraries(test_state_lattice lattice trafficviz utilities)
 
 add_executable(test_lattice_viz test_lattice_viz.cpp)
-target_link_libraries(test_lattice_viz lattice utils)
+target_link_libraries(test_lattice_viz lattice utilities)

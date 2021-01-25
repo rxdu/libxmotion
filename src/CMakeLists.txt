@@ -4,8 +4,4 @@
 
 # Modules
 add_subdirectory(modules)
-
-# Unit test
-if(BUILD_TESTS)
-    add_subdirectory(unit_test)
-endif()
+add_subdirectory(third_party)

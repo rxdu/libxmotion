@@ -1,9 +1,9 @@
-/* 
+/*
  * image_io.hpp
- * 
+ *
  * Created on: Mar 23, 2018 17:27
- * Description: 
- * 
+ * Description:
+ *
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
@@ -14,21 +14,18 @@
 
 #include <eigen3/Eigen/Dense>
 
-namespace robotnav
-{
-struct MonoImageMatrix
-{
-    int32_t w = 0;
-    int32_t h = 0;
-    const int32_t d = 1;
-    Eigen::MatrixXd data;
+namespace robotnav {
+struct MonoImageMatrix {
+  int32_t w = 0;
+  int32_t h = 0;
+  const int32_t d = 1;
+  Eigen::MatrixXd data;
 };
 
-namespace ImageIO
-{
+namespace ImageIO {
 MonoImageMatrix ReadImage(std::string file_name);
 bool SaveToImage(const MonoImageMatrix& matrix, std::string file_name);
-}
-}
+}  // namespace ImageIO
+}  // namespace robotnav
 
 #endif /* IMAGE_IO_HPP */
