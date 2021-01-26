@@ -20,7 +20,7 @@ This repository contains a collection of software packages for study and researc
 * C++11
 
 ```
-$ sudo apt-get install -y libeigen3-dev libgsl-dev libtbb-dev libboost-all-dev libopencv-dev
+$ sudo apt-get install -y libboost-all-dev libeigen3-dev libtbb-dev libopencv-dev
 ```
 
 ### Install dependencies
