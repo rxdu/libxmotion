@@ -12,16 +12,13 @@
 
 #include "eigen3/Eigen/Core"
 
+#include "file_io/project_path.hpp"
+
 namespace robotnav {
 namespace FileIO {
 template <typename Scalar, int RowsAtCompileTime, int ColsAtCompileTime>
 bool ReadFromFile(
     std::string filename,
-    Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime> &m);
-
-template <typename Scalar, int RowsAtCompileTime, int ColsAtCompileTime>
-bool ReadFromImage(
-    std::string file_name,
     Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime> &m);
 
 template <typename Scalar, int RowsAtCompileTime, int ColsAtCompileTime>
@@ -31,8 +28,13 @@ bool WriteToFile(
     bool overwrite = false);
 
 template <typename Scalar, int RowsAtCompileTime, int ColsAtCompileTime>
+bool ReadFromImage(
+    std::string filename,
+    Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime> &m);
+
+template <typename Scalar, int RowsAtCompileTime, int ColsAtCompileTime>
 bool WriteToImage(
-    std::string directory, std::string file_name,
+    std::string directory, std::string filename,
     Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime> matrix,
     bool overwrite = true);
 }  // namespace FileIO

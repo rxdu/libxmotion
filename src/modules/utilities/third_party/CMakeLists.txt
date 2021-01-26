@@ -1,5 +1,4 @@
 add_subdirectory(spdlog)
-add_subdirectory(eigenfileio)
 
 add_library(csv_parser INTERFACE)
 target_include_directories(csv_parser INTERFACE

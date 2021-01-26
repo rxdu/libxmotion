@@ -15,17 +15,17 @@ This repository contains a collection of software packages for study and researc
 
 ## Build and run
 
-### Requirements
+#### Compiler Requirements
 
 * C++11
 
+#### Install dependencies
+
 ```
-$ sudo apt-get install -y libboost-all-dev libeigen3-dev libtbb-dev libopencv-dev
+$ sudo apt-get install -y libboost-all-dev libeigen3-dev libgsl-dev libtbb-dev libopencv-dev
 ```
 
-### Install dependencies
-
-### Compile code
+#### Compile code
 
 ```
 $ mkdir build
@@ -33,3 +33,4 @@ $ cmake ..
 $ make -j8
 ```
 
+**Note**: If you get any building issues, please refer to the CI configuration ".github/workflows/cmake.yml" for detailed build steps.
