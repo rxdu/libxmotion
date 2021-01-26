@@ -13,6 +13,6 @@ target_include_directories(eigenfileio INTERFACE
   $<INSTALL_INTERFACE:include>)
 
 # Add tests
-if(BUILD_TESTS)
-  add_subdirectory(tests)
-endif()
+# if(BUILD_TESTS)
+#   add_subdirectory(test)
+# endif()

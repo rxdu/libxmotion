@@ -1,2 +1,0 @@
-add_executable(test_eigen_fileio test_eigen_fileio.cpp)
-target_link_libraries(test_eigen_fileio eigenfileio)

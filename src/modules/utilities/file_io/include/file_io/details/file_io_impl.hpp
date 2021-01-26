@@ -16,14 +16,13 @@
 
 #include <boost/filesystem.hpp>
 
-#include "EigenFileIO/EigenFileIO.hpp"
-
 namespace robotnav {
 template <typename Scalar, int RowsAtCompileTime, int ColsAtCompileTime>
 bool FileIO::ReadFromFile(
     std::string filename,
     Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime> &m) {
-  return DmpBbo::loadMatrix(filename, m);
+//   return DmpBbo::loadMatrix(filename, m);
+    return false;
 }
 
 template <typename Scalar, int RowsAtCompileTime, int ColsAtCompileTime>
