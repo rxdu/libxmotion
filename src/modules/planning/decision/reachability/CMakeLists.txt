@@ -1,6 +1,6 @@
 # Dependency libraries
 find_package(GSL REQUIRED)
-find_package(Eigen3 REQUIRED)
+find_package(Eigen3 REQUIRED NO_MODULE)
 
 # Eigen Flags
 # EIGEN_STACK_ALLOCATION_LIMIT=0 => no limit on stack size
@@ -24,7 +24,7 @@ set(REACHABILITY_LIB_SRC
     src/car_longitudinal_model.cpp
 )
 add_library(reachability STATIC ${REACHABILITY_LIB_SRC})
-target_link_libraries(reachability markov model utilities ${GSL_LIBRARIES})
+target_link_libraries(reachability markov model utilities Eigen3::Eigen ${GSL_LIBRARIES})
 # target_compile_definitions(reachability PUBLIC "-DEIGEN_STACK_ALLOCATION_LIMIT=0")
 target_include_directories(reachability PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
