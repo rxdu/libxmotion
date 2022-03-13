@@ -29,7 +29,7 @@ maintenance.
 
 ```
 $ sudo apt-get install -y libboost-all-dev libeigen3-dev libgsl-dev libtbb-dev libopencv-dev \
-    libgl1-mesa-dev libglfw3-dev libcairo2-dev libasio-dev yaml-cpp
+    libgl1-mesa-dev libglfw3-dev libcairo2-dev libasio-dev libyaml-cpp-dev
 ```
 
 #### Compile code
