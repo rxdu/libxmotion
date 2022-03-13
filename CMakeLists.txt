@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.2)
-project(auto_drive)
+project(robosw)
 
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
@@ -8,9 +8,10 @@ if(CCACHE_PROGRAM)
 endif()
 
 ## Project Options
-option(BUILD_TESTING ON)
-option(ENABLE_LOGGING ON)
-option(STATIC_CHECK OFF)
+option(BUILD_TESTING "Build tests" ON)
+option(ENABLE_TARGET_DESKTOP "Enable desktop-only modules" ON)
+option(ENABLE_LOGGING "Enable logging" ON)
+option(STATIC_CHECK "Enable static check" OFF)
 
 ## Generate symbols for IDE indexer
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

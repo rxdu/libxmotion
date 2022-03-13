@@ -10,4 +10,7 @@ add_subdirectory(mapping)
 add_subdirectory(planning)
 add_subdirectory(control)
 add_subdirectory(utilities)
+
+if(ENABLE_TARGET_DESKTOP)
 add_subdirectory(visualization)
+endif()
