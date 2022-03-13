@@ -11,5 +11,8 @@
 	path = src/modules/utilities/third_party/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp.git
 [submodule "src/visualization/imgui"]
-	path = src/visualization/imgui
+	path = src/visualization/imcore/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "src/visualization/imcore/implot"]
+	path = src/visualization/imcore/implot
+	url = https://github.com/epezent/implot.git
