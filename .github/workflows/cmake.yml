@@ -2,20 +2,23 @@ name: CMake
 
 on:
   push:
-    branches: [ master, devel ]
+    branches: [ main, devel ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 env:
   BUILD_TYPE: Release
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, ubuntu-20.04]
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y libboost-all-dev libgsl-dev libeigen3-dev libtbb-dev libopencv-dev
+      run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libglfw3-dev libcairo2-dev libasio-dev libboost-all-dev libgsl-dev libeigen3-dev libtbb-dev libopencv-dev
     - name: Update submodules
       run: git submodule update --init --recursive      
     - name: Create Build Environment
@@ -31,7 +34,10 @@ jobs:
 
   test:
     # The type of runner that the job will run on
-    runs-on: ubuntu-18.04
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, ubuntu-20.04]
     steps:
         - uses: actions/checkout@v2
         - name: Install dependencies
@@ -52,3 +58,7 @@ jobs:
           working-directory: ${{runner.workspace}}/build
           shell: bash
           run: cmake --build . --config $BUILD_TYPE
+        - name: Test
+          working-directory: ${{runner.workspace}}/build
+          shell: bash
+          run: ctest
