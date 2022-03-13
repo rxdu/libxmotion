@@ -41,7 +41,7 @@ jobs:
     steps:
         - uses: actions/checkout@v2
         - name: Install dependencies
-          run: sudo apt-get update && sudo apt-get install -y libboost-all-dev libgsl-dev libeigen3-dev libtbb-dev libopencv-dev
+          run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libglfw3-dev libcairo2-dev libasio-dev libboost-all-dev libgsl-dev libeigen3-dev libtbb-dev libopencv-dev
         - name: Update submodules
           run: git submodule update --init --recursive      
         - name: Create Build Environment
