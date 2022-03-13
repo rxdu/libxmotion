@@ -1,6 +1,3 @@
-add_subdirectory(spdlog)
-add_subdirectory(yaml-cpp)
-
 add_library(csv_parser INTERFACE)
 target_include_directories(csv_parser INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/csv_parser>
