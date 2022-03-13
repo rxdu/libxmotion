@@ -1,5 +1,5 @@
 [submodule "src/third_party/googletest"]
-	path = src/third_party/googletest
+	path = src/testing/googletest
 	url = https://github.com/google/googletest.git
 [submodule "src/modules/utilities/third_party/spdlog"]
 	path = src/modules/utilities/third_party/spdlog
@@ -10,3 +10,6 @@
 [submodule "src/modules/utilities/third_party/yaml-cpp"]
 	path = src/modules/utilities/third_party/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "src/visualization/imgui"]
+	path = src/visualization/imgui
+	url = https://github.com/ocornut/imgui.git
