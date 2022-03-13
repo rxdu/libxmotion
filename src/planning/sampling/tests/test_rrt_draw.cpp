@@ -7,7 +7,7 @@
 
 #include "sampling/rrt_draw.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 int main()
 {

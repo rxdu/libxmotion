@@ -5,7 +5,7 @@
 #include "decomp/dense_grid.hpp"
 #include "decomp/square_grid.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 int main()
 {

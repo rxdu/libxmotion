@@ -8,7 +8,7 @@
 #ifdef ENABLE_VIZ
 #include "lightviz/navviz.hpp"
 #endif
-using namespace robotnav;
+using namespace robosw;
 
 int main()
 {

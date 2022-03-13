@@ -29,7 +29,7 @@
 #include "geometry/simple_point.hpp"
 #include "geometry/parametric_curve.hpp"
 
-namespace robotnav {
+namespace robosw {
 /*
  * Coordinate System:
  *
@@ -352,7 +352,7 @@ class PCurveCurvilinearGrid : public CurvilinearGridBase<T, ParametricCurve> {
 
 using CurvilinearCell = CurvilinearCellBase<double>;
 using CurvilinearGrid = PCurveCurvilinearGrid<double>;
-}  // namespace robotnav
+}  // namespace robosw
 
 #include "details/curvilinear_grid_impl.hpp"
 #ifdef ENABLE_VISUAL

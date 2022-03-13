@@ -11,7 +11,7 @@
 
 #include "geometry/polyline.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 struct PolylineTest : testing::Test {
   PolylineTest() {

@@ -12,7 +12,7 @@
 
 #include <boost/numeric/odeint.hpp>
 
-namespace robotnav {
+namespace robosw {
 class UnicycleKinematics {
  public:
   using control_t = double;
@@ -25,6 +25,6 @@ class UnicycleKinematics {
   control_t u_ = 0;
   static constexpr double L = 2.4;
 };
-}  // namespace robotnav
+}  // namespace robosw
 
 #endif /* UNICYCLE_MODEL_HPP */

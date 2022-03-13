@@ -12,7 +12,7 @@
 
 #include <boost/numeric/odeint.hpp>
 
-namespace robotnav {
+namespace robosw {
 // Reference:
 //  [1] Althoff, M., and A. Mergel. 2011. “Comparison of Markov Chain
 //  Abstraction
@@ -36,5 +36,5 @@ class CarLongitudinalModel {
  private:
   control_type u_ = 0;
 };
-}  // namespace robotnav
+}  // namespace robosw
 #endif /* CAR_LONGITUDINAL_MODEL_HPP */

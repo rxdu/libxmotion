@@ -13,7 +13,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-using namespace robotnav;
+using namespace robosw;
 using namespace cv;
 
 cv::Mat CvIO::ReadImageFile(std::string img_file) { return imread(img_file); }

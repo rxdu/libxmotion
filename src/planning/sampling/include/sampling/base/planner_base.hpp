@@ -16,7 +16,7 @@
 
 #include "sampling/base/tree_adapter.hpp"
 
-namespace robotnav
+namespace robosw
 {
 template <typename Space, typename Tree>
 class PlannerBase
@@ -74,6 +74,6 @@ class PlannerBase
     bool DefaultStateValidityCheck(StateType *state) { return true; }
     bool DefaultPathValidityCheck(StateType *sstate, StateType *dstate) { return true; }
 };
-} // namespace robotnav
+} // namespace robosw
 
 #endif /* PLANNER_BASE_HPP */

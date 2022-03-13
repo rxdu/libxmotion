@@ -20,7 +20,7 @@
 #include "traffic_map/traffic_map.hpp"
 #include "prediction/dynamic_threat_model.hpp"
 
-namespace robotnav
+namespace robosw
 {
 class VehicleThreat
 {
@@ -79,6 +79,6 @@ class VehicleThreat
     void ComputeOccupancyRecord(int32_t t_k);
     void ComputeIntervalOccupancyRecord(int32_t t_k);
 };
-} // namespace robotnav
+} // namespace robosw
 
 #endif /* VEHICLE_THREAT_HPP */

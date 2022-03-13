@@ -2,7 +2,7 @@
 
 #include "cvdraw/cvdraw.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 int main()
 {

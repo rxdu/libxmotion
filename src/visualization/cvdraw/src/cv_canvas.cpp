@@ -12,7 +12,7 @@
 #include <cmath>
 #include <cassert>
 
-namespace robotnav {
+namespace robosw {
 using namespace cv;
 
 CvCanvas::CvCanvas(cv::Mat background, std::string name)
@@ -395,4 +395,4 @@ void CvCanvas::DrawParametricCurve(CRange range,
   }
   DrawDataPoints(data_points, color, thickness, line_type);
 }
-}  // namespace robotnav
+}  // namespace robosw

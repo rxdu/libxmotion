@@ -11,7 +11,7 @@
 
 // #include <tbb/tbb.h>
 
-using namespace robotnav;
+using namespace robosw;
 
 VehicleThreat::VehicleThreat(VehicleEstimation est, std::shared_ptr<TrafficMap> tmap) : vehicle_est_(est),
                                                                                         traffic_map_(tmap),

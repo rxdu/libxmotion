@@ -8,7 +8,7 @@
 #include "stopwatch.hpp"
 // #include "lightviz/navviz.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 int main()
 {

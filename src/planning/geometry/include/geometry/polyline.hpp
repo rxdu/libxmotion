@@ -19,7 +19,7 @@
 #include "cvdraw/cvdraw.hpp"
 #endif
 
-namespace robotnav {
+namespace robosw {
 class LineSegment {
  public:
   LineSegment() = default;
@@ -82,6 +82,6 @@ void DrawPolyline(CvCanvas& canvas, const Polyline& polyline,
                   cv::Scalar ln_color = CvColors::blue_color,
                   int32_t thickness = 1);
 #endif
-}  // namespace robotnav
+}  // namespace robosw
 
 #endif /* POLYLINE_HPP */

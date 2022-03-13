@@ -15,7 +15,7 @@
 
 #include "geometry/polynomial.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 struct PolynomialTest : testing::Test
 {

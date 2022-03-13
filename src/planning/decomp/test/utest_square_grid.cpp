@@ -11,7 +11,7 @@
 
 #include "decomp/square_grid.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 TEST(SquareGridTest, BasicConstruct) {
   SquareGrid sgrid(6, 8, 0.5);

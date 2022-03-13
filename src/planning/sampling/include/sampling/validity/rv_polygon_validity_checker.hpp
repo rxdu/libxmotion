@@ -18,7 +18,7 @@
 #include "geometry/polygon.hpp"
 #include "sampling/space/realvector_space.hpp"
 
-namespace robotnav
+namespace robosw
 {
 class RVPolygonValidityChecker
 {
@@ -75,6 +75,6 @@ class RVPolygonValidityChecker
     double step_size_ = 0.5;
     std::vector<Polygon> collisions_;
 };
-} // namespace robotnav
+} // namespace robosw
 
 #endif /* RV_POLYGON_VALIDITY_CHECKER_HPP */

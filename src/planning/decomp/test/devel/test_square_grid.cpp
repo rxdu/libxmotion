@@ -1,6 +1,6 @@
 #include "decomp/square_grid.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 int main() {
   SquareGrid grid(30, 20);

@@ -9,7 +9,7 @@
 #include "lightviz/matrix_viz.hpp"
 #endif
 
-using namespace robotnav;
+using namespace robosw;
 
 int main() {
   const int size_x = 500;

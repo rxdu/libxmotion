@@ -21,7 +21,7 @@
 #include "cvdraw/cvdraw.hpp"
 #endif
 
-namespace robotnav {
+namespace robosw {
 class CubicSpline {
  public:
   using Knot = SimplePoint2;
@@ -56,6 +56,6 @@ void DrawCubicSpline(CvCanvas &canvas, const CubicSpline &spline,
                      cv::Scalar ln_color = CvColors::blue_color,
                      int32_t thickness = 1);
 #endif
-}  // namespace robotnav
+}  // namespace robosw
 
 #endif /* CUBIC_SPLINE_HPP */

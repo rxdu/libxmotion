@@ -2,7 +2,7 @@
 
 #include "markov/markov_chain.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 int main()
 {

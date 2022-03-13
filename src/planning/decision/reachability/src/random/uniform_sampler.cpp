@@ -9,7 +9,7 @@
 
 #include "random/uniform_sampler.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 UniformSampler::UniformSampler(double min, double max) : min_(min), max_(max), distribution_(min, max)
 {

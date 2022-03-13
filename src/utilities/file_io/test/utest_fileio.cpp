@@ -11,7 +11,7 @@
 
 #include "file_io/file_io.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 struct FileIOTest : testing::Test {
   FileIOTest() {

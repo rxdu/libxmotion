@@ -17,7 +17,7 @@
 #include "traffic_map/traffic_map.hpp"
 #include "prediction/vehicle_threat.hpp"
 
-namespace robotnav
+namespace robosw
 {
 class ThreatField
 {
@@ -67,6 +67,6 @@ class ThreatField
 
     bool CheckInConflict(VehicleEstimation veh);
 };
-} // namespace robotnav
+} // namespace robosw
 
 #endif /* THREAT_FIELD_HPP */

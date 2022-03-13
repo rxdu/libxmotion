@@ -2,7 +2,7 @@
 
 #include "geometry/parametric_curve.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 int main() {
   Polyline polyline;

@@ -13,7 +13,7 @@
 #include <cmath>
 #include <vector>
 
-namespace robotnav {
+namespace robosw {
 // Reference:
 //  [1] B. Paden, M. Cap, S. Z. Yong, D. Yershov, and E. Frazzoli, “A Survey of
 //      Motion Planning and Control Techniques for Self-driving Urban Vehicles,”
@@ -62,6 +62,6 @@ class BicycleKinematics {
   control_type u_ = {0.0, 0.0};
   static constexpr double L = 2.4;
 };
-}  // namespace robotnav
+}  // namespace robosw
 
 #endif /* BICYCLE_MODEL_HPP */

@@ -9,7 +9,7 @@
 
 #include "reachability/details/car_longitudinal_model.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 // x1 = s, x2 = v
 void CarLongitudinalModel::operator()(const state_type &x, state_type &xd, const double)

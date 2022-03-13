@@ -24,7 +24,7 @@
 
 #include "stopwatch.hpp"
 
-namespace robotnav
+namespace robosw
 {
 template <int32_t N>
 class OccupancyMarkovChain
@@ -181,6 +181,6 @@ class OccupancyMarkovChain
     std::vector<State> states_;
     std::vector<State> intv_states_;
 };
-} // namespace robotnav
+} // namespace robosw
 
 #endif /* OCCUPANCY_MARKOV_CHAIN_HPP */

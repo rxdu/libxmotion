@@ -9,7 +9,7 @@
 #include "sampling/space/realvector_space.hpp"
 #include "stopwatch.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 int main()
 {

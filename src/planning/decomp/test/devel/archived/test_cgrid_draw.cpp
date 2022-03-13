@@ -1,7 +1,7 @@
 #include "decomp/curvilinear_grid.hpp"
 #include "decomp/curvilinear_grid_draw.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 int main()
 {

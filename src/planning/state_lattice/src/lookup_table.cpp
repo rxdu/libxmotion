@@ -16,7 +16,7 @@
 #include "logging/loggers.hpp"
 #include "csv.h"
 
-using namespace robotnav;
+using namespace robosw;
 
 LookupTable::LookupTable(std::string filename)
 {

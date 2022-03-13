@@ -18,7 +18,7 @@
 
 #include <eigen3/Eigen/Core>
 
-namespace robotnav {
+namespace robosw {
 class PgmMap {
  public:
   struct MapInfo {
@@ -45,6 +45,6 @@ class PgmMap {
   MapInfo info_;
   MapData data_;
 };
-}  // namespace robotnav
+}  // namespace robosw
 
 #endif /* PGM_MAP_HPP */

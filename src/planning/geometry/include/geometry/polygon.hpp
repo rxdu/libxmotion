@@ -20,7 +20,7 @@
 #include "cvdraw/cvdraw.hpp"
 #endif
 
-namespace robotnav {
+namespace robosw {
 class Polygon {
  public:
   Polygon() = default;
@@ -90,6 +90,6 @@ void FillPolygon(CvCanvas &canvas, const Polygon &polygon,
                  cv::Scalar ln_color = CvColors::blue_color,
                  int32_t thickness = 1);
 #endif
-}  // namespace robotnav
+}  // namespace robosw
 
 #endif /* POLYGON_HPP */

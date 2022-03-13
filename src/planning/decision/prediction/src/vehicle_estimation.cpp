@@ -9,7 +9,7 @@
 
 #include "prediction/vehicle_estimation.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 int32_t VehicleEstimation::VehicleCount = 0;
 

@@ -17,7 +17,7 @@
 #include "decomp/details/rect_grid_base.hpp"
 #include "decomp/square_grid.hpp"
 
-namespace robotnav {
+namespace robosw {
 
 /*
  * Coordinate System:
@@ -147,12 +147,12 @@ class DenseGrid : public RectGridBase<double> {
     return grid;
   }
 };
-}  // namespace robotnav
+}  // namespace robosw
 
 #ifdef ENABLE_VISUAL
 #include "details/dense_grid_visual.hpp"
 
-namespace robotnav {
+namespace robosw {
 void ShowDenseGridAsImage(const DenseGrid &grid, bool save_img = false,
                           std::string img_name = "DenseGrid") {
   ShowMatrixAsImage(grid.GetGridMatrix(true) * 128, img_name, save_img);
@@ -170,7 +170,7 @@ void ShowPathOnDenseGrid(const DenseGrid &grid,
   ShowPathOnMatrixAsColorMap(grid.GetGridMatrix(true), waypoints, img_name,
                              save_img);
 }
-}  // namespace robotnav
+}  // namespace robosw
 #endif
 
 #endif /* DENSE_GRID_HPP */

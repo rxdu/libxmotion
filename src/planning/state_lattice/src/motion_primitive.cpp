@@ -9,7 +9,7 @@
 
 #include "state_lattice/motion_primitive.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 MotionPrimitive::MotionPrimitive(MotionState state_s, MotionState state_f) : state_s_(state_s), state_f_(state_f)
 {

@@ -24,7 +24,7 @@
 
 #include "state_lattice/details/motion_state.hpp"
 
-namespace robotnav {
+namespace robosw {
 class PointKinematics {
  public:
   struct Param {
@@ -107,6 +107,6 @@ class PointKinematics {
 
   inline void CalculateIntermediateParams(const Param &p);
 };
-}  // namespace robotnav
+}  // namespace robosw
 
 #endif /* POINT_KINEMATICS_HPP */

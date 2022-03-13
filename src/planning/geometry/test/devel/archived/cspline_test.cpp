@@ -15,7 +15,7 @@
 
 #include "geometry/cspline.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 struct CSplineTest : testing::Test
 {

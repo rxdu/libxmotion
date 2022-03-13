@@ -13,7 +13,7 @@
 #include <cassert>
 #include <iostream>
 
-namespace robotnav {
+namespace robosw {
 
 namespace {
 bool OnSegment(SimplePoint2 p_i, SimplePoint2 p_j, SimplePoint2 p_k) {
@@ -162,4 +162,4 @@ void DrawPolyline(CvCanvas &canvas, const Polyline &polyline, bool show_dot,
   }
 }
 #endif
-}  // namespace robotnav
+}  // namespace robosw

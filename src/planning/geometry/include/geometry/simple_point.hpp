@@ -12,9 +12,9 @@
 
 #include <eigen3/Eigen/Dense>
 
-namespace robotnav {
+namespace robosw {
 using SimplePoint2 = Eigen::Vector2d;
 using SimplePoint3 = Eigen::Vector3d;
-}  // namespace robotnav
+}  // namespace robosw
 
 #endif /* SIMPLE_POINT_HPP */

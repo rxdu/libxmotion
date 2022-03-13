@@ -17,7 +17,7 @@
 #include <algorithm>
 #include <cassert>
 
-namespace robotnav {
+namespace robosw {
 CubicSpline::CubicSpline(const std::vector<Knot> &knots) : knots_(knots) {
   Interpolate();
 }
@@ -224,4 +224,4 @@ void DrawCubicSpline(CvCanvas &canvas, const CubicSpline &spline, double step,
                     ln_color, thickness);
 }
 #endif
-}  // namespace robotnav
+}  // namespace robosw

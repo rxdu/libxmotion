@@ -12,7 +12,7 @@
 #include "model/bicycle_model.hpp"
 #include "model/system_propagator.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 class Lorenz {
  public:

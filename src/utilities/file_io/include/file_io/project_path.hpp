@@ -13,7 +13,7 @@
 #include <cstdlib>
 #include <string>
 
-namespace robotnav {
+namespace robosw {
 inline std::string GetProjectRootPath() {
   std::string res_path = "..";
   if (const char* env_p = std::getenv("ROBOTNAV_ROOT")) {
@@ -27,6 +27,6 @@ inline std::string GetDataFolderPath() {
 }
 
 inline std::string GetLogFolderPath() { return GetDataFolderPath() + "/log"; }
-}  // namespace robotnav
+}  // namespace robosw
 
 #endif /* PROJECT_PATH_HPP */

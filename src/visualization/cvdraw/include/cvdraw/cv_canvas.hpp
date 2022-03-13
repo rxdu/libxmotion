@@ -20,7 +20,7 @@
 
 #include "cvdraw/cv_colors.hpp"
 
-namespace robotnav {
+namespace robosw {
 struct CPoint {
   CPoint(double _x = 0, double _y = 0) : x(_x), y(_y) {}
   double x;
@@ -191,6 +191,6 @@ class CvCanvas {
     return cv::Point(x, y);
   }
 };
-}  // namespace robotnav
+}  // namespace robosw
 
 #endif /* CV_CANVAS_HPP */

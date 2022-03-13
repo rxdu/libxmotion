@@ -9,7 +9,7 @@
 
 #include "map/pgm_map.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 int main(int argc, char *argv[]) {
     return 0;

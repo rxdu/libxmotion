@@ -11,7 +11,7 @@
 
 #include "decomp/details/rect_grid_base.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 TEST(RectGridBaseTest, GridDouble) {
   const int size_x = 6;

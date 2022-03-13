@@ -12,7 +12,7 @@
 
 #include <random>
 
-namespace robotnav
+namespace robosw
 {
 class GaussianSampler
 {

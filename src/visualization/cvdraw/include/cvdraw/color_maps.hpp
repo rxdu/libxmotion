@@ -12,12 +12,12 @@
 
 #include <opencv2/opencv.hpp>
 
-namespace robotnav {
+namespace robosw {
 namespace JetColorMap {
 // Input range: 0-1, Output range: 0-255 (OpenCV color)
 cv::Scalar Transform(double val);
 void Transform(double val, double &r, double &g, double &b);
 };  // namespace JetColorMap
-}  // namespace robotnav
+}  // namespace robosw
 
 #endif /* COLOR_MAPS_HPP */

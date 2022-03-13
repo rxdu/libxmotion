@@ -7,7 +7,7 @@
 #include "state_lattice/lattice_viz.hpp"
 #include "stopwatch.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 int main()
 {

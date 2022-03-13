@@ -12,7 +12,7 @@
 
 #include <cstdint>
 
-namespace robotnav
+namespace robosw
 {
 template <int32_t N>
 class RVBasicStateValidityChecker
@@ -24,6 +24,6 @@ class RVBasicStateValidityChecker
   public:
     RVBasicStateValidityChecker();
 };
-} // namespace robotnav
+} // namespace robosw
 
 #endif /* RV_BASIC_VALIDITY_CHECKER_HPP */

@@ -26,7 +26,7 @@
 
 // #define PRINT_MATRIX
 
-namespace robotnav
+namespace robosw
 {
 // N: number of system states - i
 // M: number of control inputs - alpha, beta
@@ -97,6 +97,6 @@ class MarkovCommand : public MarkovChainX<M * N>
     PriorityVector m_;
     double gamma_;
 };
-} // namespace robotnav
+} // namespace robosw
 
 #endif /* MARKOV_COMMAND_HPP */

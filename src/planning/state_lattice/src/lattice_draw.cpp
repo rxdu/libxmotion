@@ -9,7 +9,7 @@
 
 #include "state_lattice/lattice_draw.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 void LatticeViz::DrawTrajectoryPoints(CvCanvas &canvas, const std::vector<MotionState> &states, cv::Scalar ln_color, int32_t thickness)
 {

@@ -30,7 +30,7 @@
 // #define SHOW_INTERMEDIATE_STEPS
 #endif
 
-namespace robotnav
+namespace robosw
 {
 template <typename Space>
 class RRG : public PlannerBase<Space, KdGraph<Space>>
@@ -178,6 +178,6 @@ class RRG : public PlannerBase<Space, KdGraph<Space>>
     double fixed_radius_ = 0.0;
     double gamma_ = 1.0;
 };
-} // namespace robotnav
+} // namespace robosw
 
 #endif /* RRG_HPP */

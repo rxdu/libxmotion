@@ -11,7 +11,7 @@
 #include "state_lattice/lattice_viz.hpp"
 #endif
 
-using namespace robotnav;
+using namespace robosw;
 
 int main()
 {

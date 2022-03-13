@@ -3,7 +3,7 @@
 
 #include "decomp/curvilinear_grid.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 int main()
 {

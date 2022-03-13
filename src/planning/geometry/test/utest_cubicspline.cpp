@@ -11,7 +11,7 @@
 
 #include "geometry/cubic_spline.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 struct CubicSplineTest : testing::Test {
   CubicSplineTest() {

@@ -4,7 +4,7 @@
 
 #include "stopwatch.hpp"
 
-using namespace robotnav;
+using namespace robosw;
 
 int main()
 {

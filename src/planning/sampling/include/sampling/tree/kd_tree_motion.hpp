@@ -21,7 +21,7 @@
 #include "graph/tree.hpp"
 #include "sampling/base/tree_adapter.hpp"
 
-namespace robotnav
+namespace robosw
 {
 template <typename Space>
 class KdTreeMotion : public Tree<typename Space::StateType *, double>, public TreeAdapter<Space>
@@ -154,6 +154,6 @@ class KdTreeMotion : public Tree<typename Space::StateType *, double>, public Tr
     KdTreeType kdtree_;
     std::unordered_map<int64_t, double> g_cost_;
 };
-} // namespace robotnav
+} // namespace robosw
 
 #endif /* KD_TREE_MOTION_HPP */

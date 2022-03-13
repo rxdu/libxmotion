@@ -18,7 +18,7 @@
 #include "logging/details/spdlog_headers.hpp"
 #include "logging/details/logging_utils.hpp"
 
-namespace robotnav
+namespace robosw
 {
 class SpecializedLogger
 {
@@ -55,6 +55,6 @@ class SpecializedLogger
         build_string(o, rest...);
     }
 };
-} // namespace robotnav
+} // namespace robosw
 
 #endif /* SPECIALIZED_LOGGER_HPP */

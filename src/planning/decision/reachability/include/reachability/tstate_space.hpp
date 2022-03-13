@@ -19,7 +19,7 @@
 #include <cassert>
 // #include <unordered_map>
 
-namespace robotnav
+namespace robosw
 {
 class TStateSpace
 {
@@ -190,6 +190,6 @@ class TStateSpace
         }
     }
 };
-} // namespace robotnav
+} // namespace robosw
 
 #endif /* TSTATE_SPACE_HPP */

@@ -19,7 +19,7 @@
 
 #include <eigen3/Eigen/Dense>
 
-namespace robotnav
+namespace robosw
 {
 template <int32_t N>
 class MarkovChainX
@@ -94,6 +94,6 @@ class MarkovChainX
 
     std::vector<State> states_;
 };
-} // namespace robotnav
+} // namespace robosw
 
 #endif /* MARKOV_CHAIN_X_HPP */

@@ -9,8 +9,8 @@
 
 #include "map/pgm_map.hpp"
 
-namespace robotnav {
+namespace robosw {
 PgmMap::PgmMap(std::string yaml_file) {}
 
 bool PgmMap::LoadMapData() { return false; }
-}  // namespace robotnav
+}  // namespace robosw

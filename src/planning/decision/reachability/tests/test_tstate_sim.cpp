@@ -10,7 +10,7 @@
 // #include "geometry/matrix_viz.hpp"
 #endif
 
-using namespace robotnav;
+using namespace robosw;
 
 int main()
 {

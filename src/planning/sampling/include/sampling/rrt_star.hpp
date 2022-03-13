@@ -29,7 +29,7 @@
 // #define SHOW_INTERMEDIATE_STEPS
 #endif
 
-namespace robotnav
+namespace robosw
 {
 template <typename Space, typename Tree = KdTreeMotion<Space>>
 class RRTStar : public PlannerBase<Space, Tree>
@@ -213,6 +213,6 @@ class RRTStar : public PlannerBase<Space, Tree>
         }
     }
 };
-} // namespace robotnav
+} // namespace robosw
 
 #endif /* RRT_STAR_HPP */
