@@ -13,3 +13,6 @@
 [submodule "src/visualization/imcore/implot"]
 	path = src/visualization/imcore/implot
 	url = https://github.com/epezent/implot.git
+[submodule "src/library/rapidcsv"]
+	path = src/library/rapidcsv
+	url = https://github.com/d99kris/rapidcsv.git
