@@ -31,7 +31,7 @@ void Polygon::AddPoint(SimplePoint2 pt) {
 }
 
 SimplePoint2 Polygon::GetPoint(std::size_t i) const {
-  assert(i < data_.size());
+  assert(i < points_.size());
   return points_[i];
 };
 

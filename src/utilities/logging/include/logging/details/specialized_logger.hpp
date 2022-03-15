@@ -30,7 +30,7 @@ class SpecializedLogger
 #ifdef ENABLE_LOGGING
         // initialize logger
         std::string filename = CreateLogFileName(logfile_prefix_, logfile_path_);
-        spdlog::installCrashHandlerOnce();
+//        spdlog::installCrashHandlerOnce();
         logger_ = spdlog::basic_logger_mt<spdlog::async_factory>(filename, filename);
         logger_->set_pattern("%v");
 #endif
