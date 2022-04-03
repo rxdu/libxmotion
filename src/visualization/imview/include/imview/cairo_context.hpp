@@ -17,7 +17,7 @@
 #include <GL/gl.h>
 
 namespace robosw {
-namespace viewer {
+namespace swviz {
 class CairoContext {
   struct Scaler {
     double x;
@@ -74,7 +74,7 @@ class CairoContext {
   void CreateSurface();
   void GenGlTexture();
 };
-}  // namespace viewer
+}  // namespace swviz
 }  // namespace robosw
 
 #endif /* CAIRO_CONTEXT_HPP */

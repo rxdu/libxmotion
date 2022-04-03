@@ -12,7 +12,7 @@
 #include <iostream>
 
 namespace robosw {
-namespace viewer {
+namespace swviz {
 CairoContext::CairoContext(uint32_t width, uint32_t height,
                            bool normalize_coordinate)
     : width_(width),
@@ -107,5 +107,5 @@ GLuint CairoContext::RenderToGlTexture() {
 
   return image_texture_;
 }
-}  // namespace viewer
+}  // namespace swviz
 }  // namespace robosw

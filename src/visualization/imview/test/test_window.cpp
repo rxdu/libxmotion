@@ -12,9 +12,9 @@
 using namespace robosw;
 
 int main(int argc, char* argv[]) {
-  viewer::Init();
+  swviz::Init();
 
-  viewer::Window win;
+  swviz::Window win;
 
   win.ApplyDarkStyle();
 
@@ -35,27 +35,27 @@ int main(int argc, char* argv[]) {
       //                |
       //                    ImGuiWindowFlags_NoMove);
 
-      ImGui::PushFont(win.GetFont(viewer::FontSize::Normal));
+      ImGui::PushFont(win.GetFont(swviz::FontSize::Normal));
       ImGui::Text("Canvas ");
       ImGui::PopFont();
 
-      ImGui::PushFont(win.GetFont(viewer::FontSize::Tiny));
+      ImGui::PushFont(win.GetFont(swviz::FontSize::Tiny));
       ImGui::Text("Canvas ");
       ImGui::PopFont();
 
-      ImGui::PushFont(win.GetFont(viewer::FontSize::Small));
+      ImGui::PushFont(win.GetFont(swviz::FontSize::Small));
       ImGui::Text("Canvas ");
       ImGui::PopFont();
 
-      ImGui::PushFont(win.GetFont(viewer::FontSize::Big));
+      ImGui::PushFont(win.GetFont(swviz::FontSize::Big));
       ImGui::Text("Canvas ");
       ImGui::PopFont();
 
-      ImGui::PushFont(win.GetFont(viewer::FontSize::Large));
+      ImGui::PushFont(win.GetFont(swviz::FontSize::Large));
       ImGui::Text("Canvas ");
       ImGui::PopFont();
 
-      ImGui::PushFont(win.GetFont(viewer::FontSize::ExtraLarge));
+      ImGui::PushFont(win.GetFont(swviz::FontSize::ExtraLarge));
       ImGui::Text("Canvas ");
       ImGui::PopFont();
 
@@ -65,6 +65,6 @@ int main(int argc, char* argv[]) {
     win.RenderFrame();
   }
 
-  viewer::Terminate();
+  swviz::Terminate();
   return 0;
 }

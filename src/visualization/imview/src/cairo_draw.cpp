@@ -12,7 +12,7 @@
 #include <cmath>
 
 namespace robosw {
-namespace viewer {
+namespace swviz {
 void DrawPoint(cairo_t *cr, ImVec2 pos, double size, ImVec4 color) {
   cairo_set_source_rgba(cr, color.x, color.y, color.z, color.w);
   cairo_arc(cr, pos.x, pos.y, size, 0, 2 * M_PI);
@@ -132,5 +132,5 @@ void DrawRectangle(cairo_t *cr, ImVec2 pos1, ImVec2 pos2, double thickness,
     DrawLine(cr, start, end, std::abs(pos1.x - pos2.x), color);
   }
 }
-}  // namespace viewer
+}  // namespace swviz
 }  // namespace robosw

@@ -15,7 +15,7 @@
 #include <fontconfig/fontconfig.h>
 
 namespace robosw {
-namespace viewer {
+namespace swviz {
 CairoWidget::CairoWidget(uint32_t width, uint32_t height,
                          bool normalize_coordinate)
     : ctx_(new CairoContext(width, height, normalize_coordinate)) {}
@@ -153,5 +153,5 @@ void CairoWidget::Render(const ImVec2& uv0, const ImVec2& uv1,
   ImGui::Image((void*)(intptr_t)image, ImGui::GetContentRegionAvail(), uv0, uv1,
                tint_col, border_col);
 }
-}  // namespace viewer
+}  // namespace swviz
 }  // namespace robosw
