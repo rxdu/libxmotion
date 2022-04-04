@@ -7,7 +7,7 @@
  * Copyright (c) 2022 Ruixiang Du (rdu)
  */
 
-#include "tbot_widget.hpp"
+#include "tbot/tbot_widget.hpp"
 
 using namespace robosw;
 
