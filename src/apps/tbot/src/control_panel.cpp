@@ -20,6 +20,8 @@ void ControlPanel::Draw() {
 
   ImGui::Indent(10);
 
+  bool can_ready = ((ctx_.can_ != nullptr) && ctx_.can_->IsOpened());
+
   ImGui::Dummy(ImVec2(0.0f, 5.0f));
   {
     ImGui::Text("PWM Control");
@@ -39,6 +41,15 @@ void ControlPanel::Draw() {
     ImGui::SliderInt("##slider_pwm_right", &pwm_right, -100, 100, "%d");
     ImGui::SameLine();
     if (ImGui::Button("Reset##Right")) { pwm_right = 0; }
+
+    if (can_ready) {
+      struct can_frame frame;
+      frame.can_id = 0x101;
+      frame.can_dlc = 2;
+      frame.data[0] = static_cast<uint8_t>(pwm_left);
+      frame.data[1] = static_cast<uint8_t>(pwm_right);
+      ctx_.can_->SendFrame(frame);
+    }
   }
 
   ImGui::Dummy(ImVec2(0.0f, 5.0f));

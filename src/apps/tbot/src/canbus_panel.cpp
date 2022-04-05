@@ -8,6 +8,7 @@
  */
 
 #include "tbot/canbus_panel.hpp"
+#include "imview/popup.hpp"
 
 #include <memory>
 
@@ -29,12 +30,12 @@ void CanbusPanel::Draw() {
 
     ImGui::SetCursorPos(ImVec2(10, 40));
     ImGui::Text("Port:");
-//    ImGui::SameLine(60);
     ImGui::SetCursorPos(ImVec2(80, 38));
     ImGui::SetNextItemWidth(100);
-    ImGui::Combo("##CAN_Port", &port_idx, item_names, IM_ARRAYSIZE(item_names), IM_ARRAYSIZE(item_names));
-//    ImGui::SameLine(200);
+    ImGui::Combo("##CAN_Port", &port_idx, item_names,
+                 IM_ARRAYSIZE(item_names), IM_ARRAYSIZE(item_names));
     ImGui::SetCursorPos(ImVec2(220, 38));
+    static bool show_open_error_popup = false;
     if (ctx_.can_ == nullptr || !ctx_.can_->IsOpened()) {
       if (ImGui::Button("Connect")) {
         if (ctx_.can_ != nullptr) {
@@ -42,12 +43,15 @@ void CanbusPanel::Draw() {
         }
         std::string port = {item_names[port_idx]};
         ctx_.can_ = std::make_shared<AsyncCAN>(port);
-        ctx_.can_->Open();
+        show_open_error_popup = !(ctx_.can_->Open());
       }
     } else {
       if (ImGui::Button("Disconnect")) {
         ctx_.can_->Close();
       }
+    }
+    if (show_open_error_popup) {
+      show_open_error_popup = swviz::ShowPopupNotification("Failed to open port", "Notification");
     }
   }
 

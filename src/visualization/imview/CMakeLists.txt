@@ -12,6 +12,7 @@ add_library(imview
         src/window.cpp
         src/viewer.cpp
         src/panel.cpp
+        src/popup.cpp
         src/cairo_widget.cpp
         src/cairo_draw.cpp)
 target_link_libraries(imview PUBLIC imcore PkgConfig::Cairo PkgConfig::Fontconfig)
