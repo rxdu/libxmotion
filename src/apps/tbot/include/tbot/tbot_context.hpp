@@ -12,11 +12,14 @@
 
 #include <memory>
 
-#include "async_port/async_can.hpp"
+#include "interface/types.hpp"
+#include "tbot/messenger.hpp"
 
 namespace robosw {
 struct TbotContext {
-  std::shared_ptr<AsyncCAN> can_ = nullptr;
+  float plot_history = 20.0;
+  RSTimePoint time_of_start;
+  std::shared_ptr<Messenger> msger = nullptr;
 };
 }
 

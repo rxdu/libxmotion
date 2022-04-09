@@ -22,6 +22,7 @@ class DataBuffer {
  public:
   DataBuffer(uint32_t size = 2048);
 
+  void Resize(uint32_t size);
   std::size_t GetSize() const;
   std::size_t GetOffset() const;
 

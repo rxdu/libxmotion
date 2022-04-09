@@ -17,6 +17,11 @@ DataBuffer::DataBuffer(uint32_t size) : buffer_size_(size) {
   data_.reserve(size);
 }
 
+void DataBuffer::Resize(uint32_t size) {
+  data_.reserve(size);
+  buffer_size_ = size;
+}
+
 std::size_t DataBuffer::GetSize() const { return data_.size(); }
 
 std::size_t DataBuffer::GetOffset() const { return offset_; }
@@ -37,7 +42,7 @@ void DataBuffer::AddPoint(float x, float y) {
   }
 }
 
-ImVec2& DataBuffer::operator[](std::size_t index) {
+ImVec2 &DataBuffer::operator[](std::size_t index) {
   assert(index < data_.size());
   return data_[index];
 }

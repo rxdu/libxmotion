@@ -18,7 +18,7 @@
 
 #include "imgui.h"
 
-#include "imview/cairo_context.hpp"
+#include "imview/details/cairo_context.hpp"
 
 namespace robosw {
 namespace swviz {

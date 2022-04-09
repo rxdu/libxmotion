@@ -15,7 +15,6 @@
 namespace robosw {
 CanbusPanel::CanbusPanel(swviz::Viewer *parent, TbotContext &ctx) :
     Panel("CanbusPanel", parent), ctx_(ctx) {
-
 }
 
 void CanbusPanel::Draw() {
@@ -36,18 +35,14 @@ void CanbusPanel::Draw() {
                  IM_ARRAYSIZE(item_names), IM_ARRAYSIZE(item_names));
     ImGui::SetCursorPos(ImVec2(220, 38));
     static bool show_open_error_popup = false;
-    if (ctx_.can_ == nullptr || !ctx_.can_->IsOpened()) {
+    if (!ctx_.msger->IsStarted()) {
       if (ImGui::Button("Connect")) {
-        if (ctx_.can_ != nullptr) {
-          ctx_.can_.reset();
-        }
         std::string port = {item_names[port_idx]};
-        ctx_.can_ = std::make_shared<AsyncCAN>(port);
-        show_open_error_popup = !(ctx_.can_->Open());
+        show_open_error_popup = !(ctx_.msger->Start(port));
       }
     } else {
       if (ImGui::Button("Disconnect")) {
-        ctx_.can_->Close();
+        ctx_.msger->Stop();
       }
     }
     if (show_open_error_popup) {
