@@ -20,9 +20,11 @@
 namespace robosw {
 class Messenger {
  public:
-  enum class RpmIndex : RSEnumBaseType {
-    kLeft = 0,
-    kRight
+  enum class DataBufferIndex : RSEnumBaseType {
+    kRawRpmLeft = 0,
+    kRawRpmRight,
+    kFilteredRpmLeft,
+    kFilteredRpmRight
   };
 
  public:
@@ -33,13 +35,13 @@ class Messenger {
   bool IsStarted();
 
   void SendPwmCommand(float left, float right);
-  swviz::DataBuffer &GetRpmBuffer(RpmIndex idx);
+  swviz::DataBuffer &GetDataBuffer(DataBufferIndex idx);
 
  private:
   RSTimePoint t0_;
   std::shared_ptr<AsyncCAN> can_ = nullptr;
 
-  std::unordered_map<RpmIndex, swviz::DataBuffer> rpm_buffers_;
+  std::unordered_map<DataBufferIndex, swviz::DataBuffer> rpm_buffers_;
 
   void HandleCanFrame(can_frame *rx_frame);
 };

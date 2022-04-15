@@ -17,6 +17,7 @@
 #define TBOT_MOTION_CMD_CAN_ID 0x103
 
 #define TBOT_ENCODER_RAW_CAN_ID 0x211
+#define TBOT_ENCODER_FILTERED_CAN_ID 0x212
 
 namespace robosw {
 namespace {
@@ -31,11 +32,15 @@ int32_t ToInt32(uint8_t b0, uint8_t b1, uint8_t b2, uint8_t b3) {
 }
 
 Messenger::Messenger(RSTimePoint tp) : t0_(tp) {
-  rpm_buffers_[RpmIndex::kLeft] = swviz::DataBuffer();
-  rpm_buffers_[RpmIndex::kRight] = swviz::DataBuffer();
+  rpm_buffers_[DataBufferIndex::kRawRpmLeft] = swviz::DataBuffer();
+  rpm_buffers_[DataBufferIndex::kRawRpmRight] = swviz::DataBuffer();
+  rpm_buffers_[DataBufferIndex::kFilteredRpmLeft] = swviz::DataBuffer();
+  rpm_buffers_[DataBufferIndex::kFilteredRpmRight] = swviz::DataBuffer();
 
-  rpm_buffers_[RpmIndex::kLeft].Resize(4096);
-  rpm_buffers_[RpmIndex::kRight].Resize(4096);
+  rpm_buffers_[DataBufferIndex::kRawRpmLeft].Resize(4096);
+  rpm_buffers_[DataBufferIndex::kRawRpmRight].Resize(4096);
+  rpm_buffers_[DataBufferIndex::kFilteredRpmLeft].Resize(4096);
+  rpm_buffers_[DataBufferIndex::kFilteredRpmRight].Resize(4096);
 }
 
 bool Messenger::Start(std::string can) {
@@ -64,7 +69,7 @@ void Messenger::SendPwmCommand(float left, float right) {
   can_->SendFrame(frame);
 }
 
-swviz::DataBuffer &Messenger::GetRpmBuffer(RpmIndex idx) {
+swviz::DataBuffer &Messenger::GetDataBuffer(DataBufferIndex idx) {
   assert(rpm_buffers_.find(idx) != rpm_buffers_.end());
   return rpm_buffers_[idx];
 }
@@ -79,8 +84,17 @@ void Messenger::HandleCanFrame(can_frame *rx_frame) {
                              rx_frame->data[2], rx_frame->data[3]);
       int32_t right = ToInt32(rx_frame->data[4], rx_frame->data[5],
                               rx_frame->data[6], rx_frame->data[7]);
-      rpm_buffers_[RpmIndex::kLeft].AddPoint(t, left / 1.0f);
-      rpm_buffers_[RpmIndex::kRight].AddPoint(t, right / 1.0f);
+      rpm_buffers_[DataBufferIndex::kRawRpmLeft].AddPoint(t, left / 1.0f);
+      rpm_buffers_[DataBufferIndex::kRawRpmRight].AddPoint(t, right / 1.0f);
+      break;
+    }
+    case TBOT_ENCODER_FILTERED_CAN_ID: {
+      int32_t left = ToInt32(rx_frame->data[0], rx_frame->data[1],
+                             rx_frame->data[2], rx_frame->data[3]);
+      int32_t right = ToInt32(rx_frame->data[4], rx_frame->data[5],
+                              rx_frame->data[6], rx_frame->data[7]);
+      rpm_buffers_[DataBufferIndex::kFilteredRpmLeft].AddPoint(t, left / 1.0f);
+      rpm_buffers_[DataBufferIndex::kFilteredRpmRight].AddPoint(t, right / 1.0f);
       break;
     }
   }

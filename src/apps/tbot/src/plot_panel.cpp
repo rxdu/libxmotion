@@ -29,8 +29,10 @@ PlotPanel::PlotPanel(swviz::Viewer *parent, TbotContext &ctx) :
 }
 
 void PlotPanel::Draw() {
-  auto &rpm_left = ctx_.msger->GetRpmBuffer(Messenger::RpmIndex::kLeft);
-  auto &rpm_right = ctx_.msger->GetRpmBuffer(Messenger::RpmIndex::kRight);
+  auto &raw_rpm_left = ctx_.msger->GetDataBuffer(Messenger::DataBufferIndex::kRawRpmLeft);
+  auto &raw_rpm_right = ctx_.msger->GetDataBuffer(Messenger::DataBufferIndex::kRawRpmRight);
+  auto &filtered_rpm_left = ctx_.msger->GetDataBuffer(Messenger::DataBufferIndex::kFilteredRpmLeft);
+  auto &filtered_rpm_right = ctx_.msger->GetDataBuffer(Messenger::DataBufferIndex::kFilteredRpmRight);
 
   Begin(NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar);
 
@@ -50,8 +52,10 @@ void PlotPanel::Draw() {
     ImPlot::SetupAxisLimits(ImAxis_Y1, -600, 600);
     ImPlot::SetNextFillStyle(IMPLOT_AUTO_COL, 0.5f);
 
-    PlotDataBufferLine(rpm_left, "RPM Raw - Left");
-    PlotDataBufferLine(rpm_right, "RPM Raw - Right");
+    PlotDataBufferLine(raw_rpm_left, "RPM Raw - Left");
+    PlotDataBufferLine(raw_rpm_right, "RPM Raw - Right");
+    PlotDataBufferLine(filtered_rpm_left, "RPM Filtered - Left");
+    PlotDataBufferLine(filtered_rpm_right, "RPM Filtered - Right");
 
     ImPlot::EndPlot();
   }
