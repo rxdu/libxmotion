@@ -14,8 +14,11 @@
 #ifndef ROBOSW_SRC_CONTROL_PID_INCLUDE_PID_PID_CONTROLLER_HPP
 #define ROBOSW_SRC_CONTROL_PID_INCLUDE_PID_PID_CONTROLLER_HPP
 
+#include
+
 namespace robosw {
-class PidController {
+//template<typename N>
+class PidController: {
  public:
   PidController(float kp, float ki, float kd, float fc, float ts);
   ~PidController() = default;
