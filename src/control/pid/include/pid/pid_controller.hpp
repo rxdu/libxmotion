@@ -14,7 +14,7 @@
 #ifndef ROBOSW_SRC_CONTROL_PID_INCLUDE_PID_PID_CONTROLLER_HPP
 #define ROBOSW_SRC_CONTROL_PID_INCLUDE_PID_PID_CONTROLLER_HPP
 
-//#include
+#include <eigen3/Eigen/Core>
 
 namespace robosw {
 //template<typename N>

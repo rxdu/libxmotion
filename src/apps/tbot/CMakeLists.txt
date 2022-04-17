@@ -11,5 +11,5 @@ target_include_directories(app_tbot_widget PUBLIC
         $<INSTALL_INTERFACE:include>
         PRIVATE src)
 
-#add_executable(tbot_speed_control src/tbot_speed_control.cpp)
-#target_link_libraries(tbot_speed_control interface pid async_port)
+add_executable(tbot_speed_control src/tbot_speed_control.cpp)
+target_link_libraries(tbot_speed_control interface pid async_port)

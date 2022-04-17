@@ -64,14 +64,16 @@ class TbotSpeedControl {
     tl_ = tc;
 
     switch (rx_frame->can_id) {
-      case 0x211: {
+      case 0x212: {
         int32_t left = ToInt32(rx_frame->data[0], rx_frame->data[1],
                                rx_frame->data[2], rx_frame->data[3]);
         int32_t right = ToInt32(rx_frame->data[4], rx_frame->data[5],
                                 rx_frame->data[6], rx_frame->data[7]);
-        float u = pid_controller_.Update(100, left);
-        std::cout << "left: " << left << " , u: " << u << std::endl;
-        SendPwmCommand(u, 0);
+        float u_left = left_pid_controller_.Update(120, left);
+        float u_right = left_pid_controller_.Update(80, right);
+
+        std::cout << "left: " << left << " , u: " << u_left << std::endl;
+        SendPwmCommand(u_left, u_right);
         break;
       }
     }
@@ -98,7 +100,8 @@ class TbotSpeedControl {
 
   RSTimePoint t0_{RSClock::now()};
   RSTimePoint tl_{RSClock::now()};
-  PidController pid_controller_{0.2, 1.5, 0, 500, 0.02};
+  PidController left_pid_controller_{0.2, 0.5, 0, 500, 0.02};
+  PidController right_pid_controller_{0.2, 0.5, 0, 500, 0.02};
 };
 }
 
