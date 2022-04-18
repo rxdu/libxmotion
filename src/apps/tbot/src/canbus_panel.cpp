@@ -39,10 +39,14 @@ void CanbusPanel::Draw() {
       if (ImGui::Button("Connect")) {
         std::string port = {item_names[port_idx]};
         show_open_error_popup = !(ctx_.msger->Start(port));
+        if (ctx_.msger->IsStarted()) {
+//          ctx_.speed_ctrl_->Run(port);
+        }
       }
     } else {
       if (ImGui::Button("Disconnect")) {
         ctx_.msger->Stop();
+        ctx_.speed_ctrl_->Stop();
       }
     }
     if (show_open_error_popup) {

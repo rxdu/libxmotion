@@ -35,6 +35,7 @@ class Messenger {
   bool IsStarted();
 
   void SendPwmCommand(float left, float right);
+  void SendRpmCommand(int32_t left, int32_t right);
   swviz::DataBuffer &GetDataBuffer(DataBufferIndex idx);
 
  private:

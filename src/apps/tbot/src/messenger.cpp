@@ -59,16 +59,6 @@ bool Messenger::IsStarted() {
   return can_->IsOpened();
 }
 
-void Messenger::SendPwmCommand(float left, float right) {
-  if (can_ == nullptr) return;
-  struct can_frame frame;
-  frame.can_id = 0x101;
-  frame.can_dlc = 2;
-  frame.data[0] = static_cast<uint8_t>(left);
-  frame.data[1] = static_cast<uint8_t>(right);
-  can_->SendFrame(frame);
-}
-
 swviz::DataBuffer &Messenger::GetDataBuffer(DataBufferIndex idx) {
   assert(rpm_buffers_.find(idx) != rpm_buffers_.end());
   return rpm_buffers_[idx];
@@ -98,5 +88,34 @@ void Messenger::HandleCanFrame(can_frame *rx_frame) {
       break;
     }
   }
+}
+
+void Messenger::SendPwmCommand(float left, float right) {
+  if (can_ == nullptr) return;
+  struct can_frame frame;
+  frame.can_id = 0x101;
+  frame.can_dlc = 2;
+  frame.data[0] = static_cast<uint8_t>(left);
+  frame.data[1] = static_cast<uint8_t>(right);
+  can_->SendFrame(frame);
+}
+
+void Messenger::SendRpmCommand(int32_t left, int32_t right) {
+  if (can_ == nullptr) return;
+
+  struct can_frame frame;
+  frame.can_id = 0x102;
+  frame.can_dlc = 8;
+  frame.data[0] = static_cast<uint8_t>((static_cast<uint32_t>(left) & 0xff000000) >> 24);
+  frame.data[1] = static_cast<uint8_t>((static_cast<uint32_t>(left) & 0x00ff0000) >> 16);
+  frame.data[2] = static_cast<uint8_t>((static_cast<uint32_t>(left) & 0x0000ff00) >> 8);
+  frame.data[3] = static_cast<uint8_t>((static_cast<uint32_t>(left) & 0x000000ff) >> 0);
+
+  frame.data[0] = static_cast<uint8_t>((static_cast<uint32_t>(right) & 0xff000000) >> 24);
+  frame.data[1] = static_cast<uint8_t>((static_cast<uint32_t>(right) & 0x00ff0000) >> 16);
+  frame.data[2] = static_cast<uint8_t>((static_cast<uint32_t>(right) & 0x0000ff00) >> 8);
+  frame.data[3] = static_cast<uint8_t>((static_cast<uint32_t>(right) & 0x000000ff) >> 0);
+
+  can_->SendFrame(frame);
 }
 }

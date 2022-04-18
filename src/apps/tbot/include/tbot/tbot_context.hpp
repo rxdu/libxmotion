@@ -14,12 +14,14 @@
 
 #include "interface/types.hpp"
 #include "tbot/messenger.hpp"
+#include "tbot/speed_controller.hpp"
 
 namespace robosw {
 struct TbotContext {
   float plot_history = 20.0;
   RSTimePoint time_of_start;
   std::shared_ptr<Messenger> msger = nullptr;
+  std::shared_ptr<SpeedController> speed_ctrl_ = nullptr;
 };
 }
 

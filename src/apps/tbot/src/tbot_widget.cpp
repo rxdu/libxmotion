@@ -20,7 +20,8 @@ TbotWidget::TbotWidget(uint32_t width, uint32_t height,
 void TbotWidget::InitUI() {
   // init context
   context_.time_of_start = RSClock::now();
-  context_.msger = std::make_unique<Messenger>(context_.time_of_start);
+  context_.msger = std::make_shared<Messenger>(context_.time_of_start);
+  context_.speed_ctrl_ = std::make_shared<SpeedController>();
 
   // init ui components
   control_panel_ = std::make_unique<ControlPanel>(this, context_);
