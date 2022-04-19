@@ -20,20 +20,18 @@ namespace robosw {
 //template<typename N>
 class PidController {
  public:
-  PidController(float kp, float ki, float kd, float fc, float ts);
-  ~PidController() = default;
+  PidController(float kp, float ki, float kd, float umax, float ts);
 
   // public API
   float Update(float reference, float measurement);
 
  private:
   float kp_, ki_, kd_;
-  float alpha_;
   float ts_;
   float u_max_ = 100;
 
   float integral_ = 0;
-  float ef_last_ = 0;
+  float error_last_ = 0;
 };
 }
 

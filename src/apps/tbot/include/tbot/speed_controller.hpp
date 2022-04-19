@@ -34,8 +34,8 @@ class SpeedController {
 
   RSTimePoint t0_{RSClock::now()};
   RSTimePoint tl_{RSClock::now()};
-  PidController left_pid_controller_{0.2, 0.5, 0, 500, 0.02};
-  PidController right_pid_controller_{0.2, 0.5, 0, 500, 0.02};
+  PidController left_pid_controller_{0.2, 0.5, 0, 100, 0.02};
+  PidController right_pid_controller_{0.2, 0.5, 0, 100, 0.02};
 
   void SendPwmCommand(float left, float right);
   void HandleCanFrame(can_frame *rx_frame);
