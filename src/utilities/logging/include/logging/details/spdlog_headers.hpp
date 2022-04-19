@@ -5,7 +5,7 @@
  * Description: 
  * 
  * Copyright (c) 2018 Ruixiang Du (rdu)
- */ 
+ */
 
 #ifndef SPDLOG_HEADERS_HPP
 #define SPDLOG_HEADERS_HPP

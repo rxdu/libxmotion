@@ -20,38 +20,36 @@
 
 #include "logging/details/specialized_logger.hpp"
 
-namespace robosw
-{
-class CtrlLogger : public SpecializedLogger
-{
-  public:
-    static CtrlLogger &GetLogger(std::string logfile_prefix = "", std::string logfile_path = "");
+namespace robosw {
+class CtrlLogger : public SpecializedLogger {
+ public:
+  static CtrlLogger &GetLogger(std::string logfile_prefix = "", std::string logfile_path = "");
 
-    // basic functions
-    void AddItemNameToEntryHead(std::string name);
-    void AddItemDataToEntry(std::string item_name, std::string data_str);
-    void AddItemDataToEntry(uint64_t item_id, std::string data_str);
+  // basic functions
+  void AddItemNameToEntryHead(std::string name);
+  void AddItemDataToEntry(std::string item_name, std::string data_str);
+  void AddItemDataToEntry(uint64_t item_id, std::string data_str);
 
-    // extra helper functions
-    void AddItemDataToEntry(std::string item_name, double data);
-    void AddItemDataToEntry(uint64_t item_id, double data);
+  // extra helper functions
+  void AddItemDataToEntry(std::string item_name, double data);
+  void AddItemDataToEntry(uint64_t item_id, double data);
 
-    // functions that invoke logger calls
-    void PassEntryHeaderToLogger();
-    void PassEntryDataToLogger();
+  // functions that invoke logger calls
+  void PassEntryHeaderToLogger();
+  void PassEntryDataToLogger();
 
-  private:
-    bool head_added_;
-    std::map<uint64_t, std::string> entry_names_;
-    std::map<std::string, uint64_t> entry_ids_;
-    std::atomic<uint64_t> item_counter_;
-    std::vector<std::string> item_data_;
+ private:
+  bool head_added_;
+  std::map<uint64_t, std::string> entry_names_;
+  std::map<std::string, uint64_t> entry_ids_;
+  std::atomic<uint64_t> item_counter_;
+  std::vector<std::string> item_data_;
 
-    CtrlLogger(std::string log_name_prefix, std::string log_save_path);
+  CtrlLogger(std::string log_name_prefix, std::string log_save_path);
 
-    // non-copyable
-    CtrlLogger(const CtrlLogger &) = delete;
-    CtrlLogger &operator=(const CtrlLogger &) = delete;
+  // non-copyable
+  CtrlLogger(const CtrlLogger &) = delete;
+  CtrlLogger &operator=(const CtrlLogger &) = delete;
 };
 } // namespace robosw
 
