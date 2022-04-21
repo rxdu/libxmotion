@@ -1,4 +1,4 @@
-/* 
+/*
  * messenger.cpp
  *
  * Created on 4/4/22 9:52 PM
@@ -23,13 +23,12 @@ namespace robosw {
 namespace {
 int32_t ToInt32(uint8_t b0, uint8_t b1, uint8_t b2, uint8_t b3) {
   int32_t ret = 0;
-  ret = static_cast<int32_t>(static_cast<uint32_t>(b0) << 24 |
-      static_cast<uint32_t>(b1) << 16 |
-      static_cast<uint32_t>(b2) << 8 |
-      static_cast<uint32_t>(b3) << 0);
+  ret = static_cast<int32_t>(
+      static_cast<uint32_t>(b0) << 24 | static_cast<uint32_t>(b1) << 16 |
+      static_cast<uint32_t>(b2) << 8 | static_cast<uint32_t>(b3) << 0);
   return ret;
 }
-}
+}  // namespace
 
 Messenger::Messenger(RSTimePoint tp) : t0_(tp) {
   rpm_buffers_[DataBufferIndex::kRawRpmLeft] = swviz::DataBuffer();
@@ -46,13 +45,12 @@ Messenger::Messenger(RSTimePoint tp) : t0_(tp) {
 bool Messenger::Start(std::string can) {
   if (can_ != nullptr) can_.reset();
   can_ = std::make_shared<AsyncCAN>(can);
-  can_->SetReceiveCallback(std::bind(&Messenger::HandleCanFrame, this, std::placeholders::_1));
+  can_->SetReceiveCallback(
+      std::bind(&Messenger::HandleCanFrame, this, std::placeholders::_1));
   return can_->Open();
 }
 
-void Messenger::Stop() {
-  can_->Close();
-}
+void Messenger::Stop() { can_->Close(); }
 
 bool Messenger::IsStarted() {
   if (can_ == nullptr) return false;
@@ -66,7 +64,9 @@ swviz::DataBuffer &Messenger::GetDataBuffer(DataBufferIndex idx) {
 
 void Messenger::HandleCanFrame(can_frame *rx_frame) {
   float t = std::chrono::duration_cast<std::chrono::milliseconds>(
-      RSClock::now() - t0_).count() / 1000.0f;
+                RSClock::now() - t0_)
+                .count() /
+            1000.0f;
 
   switch (rx_frame->can_id) {
     case TBOT_ENCODER_RAW_CAN_ID: {
@@ -84,7 +84,8 @@ void Messenger::HandleCanFrame(can_frame *rx_frame) {
       int32_t right = ToInt32(rx_frame->data[4], rx_frame->data[5],
                               rx_frame->data[6], rx_frame->data[7]);
       rpm_buffers_[DataBufferIndex::kFilteredRpmLeft].AddPoint(t, left / 1.0f);
-      rpm_buffers_[DataBufferIndex::kFilteredRpmRight].AddPoint(t, right / 1.0f);
+      rpm_buffers_[DataBufferIndex::kFilteredRpmRight].AddPoint(t,
+                                                                right / 1.0f);
       break;
     }
   }
@@ -106,16 +107,24 @@ void Messenger::SendRpmCommand(int32_t left, int32_t right) {
   struct can_frame frame;
   frame.can_id = 0x102;
   frame.can_dlc = 8;
-  frame.data[0] = static_cast<uint8_t>((static_cast<uint32_t>(left) & 0xff000000) >> 24);
-  frame.data[1] = static_cast<uint8_t>((static_cast<uint32_t>(left) & 0x00ff0000) >> 16);
-  frame.data[2] = static_cast<uint8_t>((static_cast<uint32_t>(left) & 0x0000ff00) >> 8);
-  frame.data[3] = static_cast<uint8_t>((static_cast<uint32_t>(left) & 0x000000ff) >> 0);
+  frame.data[0] =
+      static_cast<uint8_t>((static_cast<uint32_t>(left) & 0xff000000) >> 24);
+  frame.data[1] =
+      static_cast<uint8_t>((static_cast<uint32_t>(left) & 0x00ff0000) >> 16);
+  frame.data[2] =
+      static_cast<uint8_t>((static_cast<uint32_t>(left) & 0x0000ff00) >> 8);
+  frame.data[3] =
+      static_cast<uint8_t>((static_cast<uint32_t>(left) & 0x000000ff) >> 0);
 
-  frame.data[0] = static_cast<uint8_t>((static_cast<uint32_t>(right) & 0xff000000) >> 24);
-  frame.data[1] = static_cast<uint8_t>((static_cast<uint32_t>(right) & 0x00ff0000) >> 16);
-  frame.data[2] = static_cast<uint8_t>((static_cast<uint32_t>(right) & 0x0000ff00) >> 8);
-  frame.data[3] = static_cast<uint8_t>((static_cast<uint32_t>(right) & 0x000000ff) >> 0);
+  frame.data[4] =
+      static_cast<uint8_t>((static_cast<uint32_t>(right) & 0xff000000) >> 24);
+  frame.data[5] =
+      static_cast<uint8_t>((static_cast<uint32_t>(right) & 0x00ff0000) >> 16);
+  frame.data[6] =
+      static_cast<uint8_t>((static_cast<uint32_t>(right) & 0x0000ff00) >> 8);
+  frame.data[7] =
+      static_cast<uint8_t>((static_cast<uint32_t>(right) & 0x000000ff) >> 0);
 
   can_->SendFrame(frame);
 }
-}
+}  // namespace robosw

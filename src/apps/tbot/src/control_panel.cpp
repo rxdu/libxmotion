@@ -1,4 +1,4 @@
-/* 
+/*
  * control_panel.cpp
  *
  * Created on 4/3/22 11:12 PM
@@ -10,10 +10,8 @@
 #include "tbot/control_panel.hpp"
 
 namespace robosw {
-ControlPanel::ControlPanel(swviz::Viewer *parent, TbotContext &ctx) :
-    Panel("ControlPanel", parent), ctx_(ctx) {
-
-}
+ControlPanel::ControlPanel(swviz::Viewer *parent, TbotContext &ctx)
+    : Panel("ControlPanel", parent), ctx_(ctx) {}
 
 void ControlPanel::Draw() {
   Begin(NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar);
@@ -32,16 +30,20 @@ void ControlPanel::Draw() {
     ImGui::SameLine(75);
     ImGui::SliderInt("##slider_pwm_left", &pwm_left, -100, 100, "%d");
     ImGui::SameLine();
-    if (ImGui::Button("Reset##Left-PWM")) { pwm_left = 0; }
+    if (ImGui::Button("Reset##Left-PWM")) {
+      pwm_left = 0;
+    }
 
     ImGui::Text("Right:");
     ImGui::SameLine(75);
     ImGui::SliderInt("##slider_pwm_right", &pwm_right, -100, 100, "%d");
     ImGui::SameLine();
-    if (ImGui::Button("Reset##Right-PWM")) { pwm_right = 0; }
+    if (ImGui::Button("Reset##Right-PWM")) {
+      pwm_right = 0;
+    }
 
     if (ctx_.msger->IsStarted()) {
-      ctx_.msger->SendPwmCommand(pwm_left, pwm_right);
+      //   ctx_.msger->SendPwmCommand(pwm_left, pwm_right);
     }
   }
 
@@ -57,13 +59,17 @@ void ControlPanel::Draw() {
     ImGui::SameLine(75);
     ImGui::SliderInt("##slider_rpm_left", &rpm_left, -500, 500, "%d");
     ImGui::SameLine();
-    if (ImGui::Button("Reset##Left-RPM")) { rpm_left = 0; }
+    if (ImGui::Button("Reset##Left-RPM")) {
+      rpm_left = 0;
+    }
 
     ImGui::Text("Right:");
     ImGui::SameLine(75);
     ImGui::SliderInt("##slider_rpm_right", &rpm_right, -500, 500, "%d");
     ImGui::SameLine();
-    if (ImGui::Button("Reset##Right-RPM")) { rpm_right = 0; }
+    if (ImGui::Button("Reset##Right-RPM")) {
+      rpm_right = 0;
+    }
 
     if (ctx_.msger->IsStarted()) {
       ctx_.msger->SendRpmCommand(rpm_left, rpm_right);
@@ -82,16 +88,20 @@ void ControlPanel::Draw() {
     ImGui::SameLine(75);
     ImGui::SliderFloat("##slider_linear_motion", &linear, -1.5, 1.5, "%.2f");
     ImGui::SameLine();
-    if (ImGui::Button("Reset##Linear-Motion")) { linear = 0; }
+    if (ImGui::Button("Reset##Linear-Motion")) {
+      linear = 0;
+    }
 
     ImGui::Text("Angular:");
     ImGui::SameLine(75);
     ImGui::SliderFloat("##slider_angular_motion", &angular, -1.5, 1.5, "%.2f");
     ImGui::SameLine();
-    if (ImGui::Button("Reset##Angular-Motion")) { angular = 0; }
+    if (ImGui::Button("Reset##Angular-Motion")) {
+      angular = 0;
+    }
 
     if (ctx_.msger->IsStarted()) {
-//      ctx_.msger->SendRpmCommand(linear, angular);
+      //      ctx_.msger->SendRpmCommand(linear, angular);
     }
   }
 
@@ -99,4 +109,4 @@ void ControlPanel::Draw() {
 
   End();
 }
-}
+}  // namespace robosw
