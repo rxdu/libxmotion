@@ -20,6 +20,20 @@ void ControlPanel::Draw() {
 
   ImGui::Dummy(ImVec2(0.0f, 5.0f));
   {
+    ImGui::Text("Control Mode:");
+    ImGui::SameLine();
+
+    static int e = static_cast<int>(ctx_.control_mode);
+    ImGui::RadioButton("PWM", &e, 0);
+    ImGui::SameLine();
+    ImGui::RadioButton("RPM", &e, 1);
+    ImGui::SameLine();
+    ImGui::RadioButton("Motion", &e, 2);
+    ctx_.control_mode = static_cast<ControlMode>(e);
+  }
+
+  ImGui::Dummy(ImVec2(0.0f, 5.0f));
+  {
     ImGui::Text("PWM Control");
     ImGui::Separator();
     ImGui::Dummy(ImVec2(0.0f, 5.0f));
@@ -42,14 +56,14 @@ void ControlPanel::Draw() {
       pwm_right = 0;
     }
 
-    if (ctx_.msger->IsStarted()) {
-      //   ctx_.msger->SendPwmCommand(pwm_left, pwm_right);
+    if (ctx_.msger->IsStarted() && (ctx_.control_mode == ControlMode::kPwm)) {
+      ctx_.msger->SendPwmCommand(pwm_left, pwm_right);
     }
   }
 
   ImGui::Dummy(ImVec2(0.0f, 5.0f));
   {
-    ImGui::Text("Motor Control");
+    ImGui::Text("RPM Control");
     ImGui::Separator();
     ImGui::Dummy(ImVec2(0.0f, 5.0f));
 
@@ -71,7 +85,7 @@ void ControlPanel::Draw() {
       rpm_right = 0;
     }
 
-    if (ctx_.msger->IsStarted()) {
+    if (ctx_.msger->IsStarted() && (ctx_.control_mode == ControlMode::kRpm)) {
       ctx_.msger->SendRpmCommand(rpm_left, rpm_right);
     }
   }
@@ -100,7 +114,7 @@ void ControlPanel::Draw() {
       angular = 0;
     }
 
-    if (ctx_.msger->IsStarted()) {
+    if (ctx_.msger->IsStarted() && (ctx_.control_mode == ControlMode::kMotion)) {
       //      ctx_.msger->SendRpmCommand(linear, angular);
     }
   }

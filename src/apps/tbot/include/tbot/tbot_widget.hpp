@@ -24,7 +24,7 @@ class TbotWidget : public swviz::Viewer {
              std::string title = "Tbot Widget",
              uint32_t window_hints = swviz::Window::WIN_RESIZABLE |
                  swviz::Window::WIN_DECORATED);
-  ~TbotWidget() = default;
+  ~TbotWidget();
 
  private:
   TbotContext context_;

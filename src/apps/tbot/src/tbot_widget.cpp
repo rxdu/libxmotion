@@ -17,6 +17,12 @@ TbotWidget::TbotWidget(uint32_t width, uint32_t height,
   InitUI();
 }
 
+TbotWidget::~TbotWidget() {
+  if (context_.msger && context_.msger->IsStarted()) {
+    context_.msger->Stop();
+  }
+}
+
 void TbotWidget::InitUI() {
   // init context
   context_.time_of_start = RSClock::now();
