@@ -27,12 +27,24 @@ class Messenger {
     kFilteredRpmRight
   };
 
+  typedef enum {
+    kNonSupervised = 0,
+    kSupervisedPwm = 1,
+    kSupervisedRpm = 2
+  } SupervisedMode;
+
+  struct SupervisorCommand {
+    SupervisedMode supervised_mode;
+  };
+
  public:
   Messenger(RSTimePoint tp);
 
   bool Start(std::string can);
   void Stop();
   bool IsStarted();
+
+  void SendSupervisorCommand(SupervisorCommand cmd);
 
   void SendPwmCommand(float left, float right);
   void SendRpmCommand(int32_t left, int32_t right);

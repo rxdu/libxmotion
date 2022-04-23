@@ -12,6 +12,7 @@
 #include <cassert>
 #include <iostream>
 
+#define TBOT_SUP_CMD_CAN_ID 0x100
 #define TBOT_PWM_CMD_CAN_ID 0x101
 #define TBOT_RPM_CMD_CAN_ID 0x102
 #define TBOT_MOTION_CMD_CAN_ID 0x103
@@ -89,6 +90,15 @@ void Messenger::HandleCanFrame(can_frame *rx_frame) {
       break;
     }
   }
+}
+
+void Messenger::SendSupervisorCommand(SupervisorCommand cmd) {
+  if (can_ == nullptr) return;
+  struct can_frame frame;
+  frame.can_id = TBOT_SUP_CMD_CAN_ID;
+  frame.can_dlc = 1;
+  frame.data[0] = static_cast<uint8_t>(cmd.supervised_mode);
+  can_->SendFrame(frame);
 }
 
 void Messenger::SendPwmCommand(float left, float right) {

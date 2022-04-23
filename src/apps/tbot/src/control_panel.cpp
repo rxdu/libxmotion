@@ -29,7 +29,23 @@ void ControlPanel::Draw() {
     ImGui::RadioButton("RPM", &e, 1);
     ImGui::SameLine();
     ImGui::RadioButton("Motion", &e, 2);
-    ctx_.control_mode = static_cast<ControlMode>(e);
+
+    if (e != static_cast<int>(ctx_.control_mode)) {
+      ctx_.control_mode = static_cast<ControlMode>(e);
+
+      Messenger::SupervisorCommand sup_cmd;
+      switch (e) {
+        case 0:sup_cmd.supervised_mode = Messenger::SupervisedMode::kSupervisedPwm;
+          break;
+        case 1:sup_cmd.supervised_mode = Messenger::SupervisedMode::kSupervisedRpm;
+          break;
+        case 2:sup_cmd.supervised_mode = Messenger::SupervisedMode::kNonSupervised;
+          break;
+      }
+      if (ctx_.msger->IsStarted()) {
+        ctx_.msger->SendSupervisorCommand(sup_cmd);
+      }
+    }
   }
 
   ImGui::Dummy(ImVec2(0.0f, 5.0f));
