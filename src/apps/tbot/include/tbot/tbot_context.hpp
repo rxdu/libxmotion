@@ -29,7 +29,7 @@ struct TbotContext {
   std::shared_ptr<Messenger> msger = nullptr;
   std::shared_ptr<SpeedController> speed_ctrl_ = nullptr;
 
-  ControlMode control_mode = ControlMode::kRpm;
+  ControlMode control_mode = ControlMode::kMotion;
 };
 }
 

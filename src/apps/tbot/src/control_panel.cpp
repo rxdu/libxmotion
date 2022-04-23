@@ -115,7 +115,7 @@ void ControlPanel::Draw() {
     }
 
     if (ctx_.msger->IsStarted() && (ctx_.control_mode == ControlMode::kMotion)) {
-      //      ctx_.msger->SendRpmCommand(linear, angular);
+      ctx_.msger->SendMotionCommand(linear, angular);
     }
   }
 
