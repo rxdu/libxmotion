@@ -24,7 +24,9 @@ class Messenger {
     kRawRpmLeft = 0,
     kRawRpmRight,
     kFilteredRpmLeft,
-    kFilteredRpmRight
+    kFilteredRpmRight,
+    kTargetRpmLeft,
+    kTargetRpmRight
   };
 
   typedef enum {

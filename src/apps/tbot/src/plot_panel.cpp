@@ -34,6 +34,9 @@ void PlotPanel::Draw() {
   auto &filtered_rpm_left = ctx_.msger->GetDataBuffer(Messenger::DataBufferIndex::kFilteredRpmLeft);
   auto &filtered_rpm_right = ctx_.msger->GetDataBuffer(Messenger::DataBufferIndex::kFilteredRpmRight);
 
+  auto &target_rpm_left = ctx_.msger->GetDataBuffer(Messenger::DataBufferIndex::kTargetRpmLeft);
+  auto &target_rpm_right = ctx_.msger->GetDataBuffer(Messenger::DataBufferIndex::kTargetRpmRight);
+
   Begin(NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar);
 
   static float t = 0;
@@ -56,6 +59,8 @@ void PlotPanel::Draw() {
     PlotDataBufferLine(raw_rpm_right, "RPM Raw - Right");
     PlotDataBufferLine(filtered_rpm_left, "RPM Filtered - Left");
     PlotDataBufferLine(filtered_rpm_right, "RPM Filtered - Right");
+    PlotDataBufferLine(target_rpm_left, "Target RPM - Left");
+    PlotDataBufferLine(target_rpm_right, "Target RPM - Right");
 
     ImPlot::EndPlot();
   }

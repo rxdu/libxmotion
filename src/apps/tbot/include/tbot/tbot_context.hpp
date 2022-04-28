@@ -25,6 +25,7 @@ enum class ControlMode : RSEnumBaseType {
 
 struct TbotContext {
   float plot_history = 20.0;
+
   RSTimePoint time_of_start;
   std::shared_ptr<Messenger> msger = nullptr;
   std::shared_ptr<SpeedController> speed_ctrl_ = nullptr;

@@ -3,6 +3,7 @@ add_executable(app_tbot_widget
         src/tbot_widget.cpp
         src/control_panel.cpp
         src/plot_panel.cpp
+        src/data_panel.cpp
         src/canbus_panel.cpp
         src/messenger.cpp
         src/speed_controller.cpp)

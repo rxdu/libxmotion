@@ -16,6 +16,7 @@
 #include "control_panel.hpp"
 #include "plot_panel.hpp"
 #include "canbus_panel.hpp"
+#include "data_panel.hpp"
 
 namespace robosw {
 class TbotWidget : public swviz::Viewer {
@@ -32,8 +33,9 @@ class TbotWidget : public swviz::Viewer {
   std::unique_ptr<ControlPanel> control_panel_;
   std::unique_ptr<PlotPanel> plot_panel_;
   std::unique_ptr<CanbusPanel> canbus_panel_;
+  std::unique_ptr<DataPanel> data_panel_;
 
-  const float panel_min_size_x = 350;
+  const float panel_min_size_x = 385;
   const float panel_min_size_y = 80;
 
   void InitUI();

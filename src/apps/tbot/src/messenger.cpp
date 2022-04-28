@@ -19,6 +19,7 @@
 
 #define TBOT_ENCODER_RAW_CAN_ID 0x211
 #define TBOT_ENCODER_FILTERED_CAN_ID 0x212
+#define TBOT_TARGET_RPM_CAN_ID 0x213
 
 namespace robosw {
 namespace {
@@ -36,11 +37,15 @@ Messenger::Messenger(RSTimePoint tp) : t0_(tp) {
   rpm_buffers_[DataBufferIndex::kRawRpmRight] = swviz::DataBuffer();
   rpm_buffers_[DataBufferIndex::kFilteredRpmLeft] = swviz::DataBuffer();
   rpm_buffers_[DataBufferIndex::kFilteredRpmRight] = swviz::DataBuffer();
+  rpm_buffers_[DataBufferIndex::kTargetRpmLeft] = swviz::DataBuffer();
+  rpm_buffers_[DataBufferIndex::kTargetRpmRight] = swviz::DataBuffer();
 
   rpm_buffers_[DataBufferIndex::kRawRpmLeft].Resize(4096);
   rpm_buffers_[DataBufferIndex::kRawRpmRight].Resize(4096);
   rpm_buffers_[DataBufferIndex::kFilteredRpmLeft].Resize(4096);
   rpm_buffers_[DataBufferIndex::kFilteredRpmRight].Resize(4096);
+  rpm_buffers_[DataBufferIndex::kTargetRpmLeft].Resize(4096);
+  rpm_buffers_[DataBufferIndex::kTargetRpmRight].Resize(4096);
 }
 
 bool Messenger::Start(std::string can) {
@@ -88,6 +93,15 @@ void Messenger::HandleCanFrame(can_frame *rx_frame) {
       rpm_buffers_[DataBufferIndex::kFilteredRpmRight].AddPoint(t,
                                                                 right / 1.0f);
       break;
+    }
+    case TBOT_TARGET_RPM_CAN_ID: {
+      int32_t left = ToInt32(rx_frame->data[0], rx_frame->data[1],
+                             rx_frame->data[2], rx_frame->data[3]);
+      int32_t right = ToInt32(rx_frame->data[4], rx_frame->data[5],
+                              rx_frame->data[6], rx_frame->data[7]);
+      rpm_buffers_[DataBufferIndex::kTargetRpmLeft].AddPoint(t, left / 1.0f);
+      rpm_buffers_[DataBufferIndex::kTargetRpmRight].AddPoint(t,
+                                                              right / 1.0f);
     }
   }
 }

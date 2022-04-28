@@ -33,6 +33,7 @@ void TbotWidget::InitUI() {
   control_panel_ = std::make_unique<ControlPanel>(this, context_);
   plot_panel_ = std::make_unique<PlotPanel>(this, context_);
   canbus_panel_ = std::make_unique<CanbusPanel>(this, context_);
+  data_panel_ = std::make_unique<DataPanel>(this, context_);
 
   // set ui styles
   ImGuiStyle &style = ImGui::GetStyle();
@@ -46,7 +47,7 @@ void TbotWidget::Update() {
 
   control_panel_->Draw();
   plot_panel_->Draw();
-
+  data_panel_->Draw();
   canbus_panel_->Draw();
 }
 }
