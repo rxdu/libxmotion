@@ -24,22 +24,23 @@ void ControlPanel::Draw() {
     ImGui::SameLine();
 
     static int e = static_cast<int>(ctx_.control_mode);
-    ImGui::RadioButton("PWM", &e, 0);
+    ImGui::RadioButton("PWM", &e, 1);
     ImGui::SameLine();
-    ImGui::RadioButton("RPM", &e, 1);
+    ImGui::RadioButton("RPM", &e, 2);
     ImGui::SameLine();
-    ImGui::RadioButton("Motion", &e, 2);
+    ImGui::RadioButton("Motion", &e, 0);
+
+    auto sup_state = ctx_.msger->GetSupervisedState();
+    ctx_.control_mode = sup_state.supervised_mode;
 
     if (e != static_cast<int>(ctx_.control_mode)) {
-      ctx_.control_mode = static_cast<ControlMode>(e);
-
       Messenger::SupervisorCommand sup_cmd;
       switch (e) {
-        case 0:sup_cmd.supervised_mode = Messenger::SupervisedMode::kSupervisedPwm;
+        case 0:sup_cmd.supervised_mode = Messenger::SupervisedMode::kNonSupervised;
           break;
-        case 1:sup_cmd.supervised_mode = Messenger::SupervisedMode::kSupervisedRpm;
+        case 1:sup_cmd.supervised_mode = Messenger::SupervisedMode::kSupervisedPwm;
           break;
-        case 2:sup_cmd.supervised_mode = Messenger::SupervisedMode::kNonSupervised;
+        case 2:sup_cmd.supervised_mode = Messenger::SupervisedMode::kSupervisedRpm;
           break;
       }
       if (ctx_.msger->IsStarted()) {
@@ -72,7 +73,7 @@ void ControlPanel::Draw() {
       pwm_right = 0;
     }
 
-    if (ctx_.msger->IsStarted() && (ctx_.control_mode == ControlMode::kPwm)) {
+    if (ctx_.msger->IsStarted() && (ctx_.control_mode == Messenger::SupervisedMode::kSupervisedPwm)) {
       ctx_.msger->SendPwmCommand(pwm_left, pwm_right);
     }
   }
@@ -101,7 +102,7 @@ void ControlPanel::Draw() {
       rpm_right = 0;
     }
 
-    if (ctx_.msger->IsStarted() && (ctx_.control_mode == ControlMode::kRpm)) {
+    if (ctx_.msger->IsStarted() && (ctx_.control_mode == Messenger::SupervisedMode::kSupervisedRpm)) {
       ctx_.msger->SendRpmCommand(rpm_left, rpm_right);
     }
   }
@@ -130,7 +131,7 @@ void ControlPanel::Draw() {
       angular = 0;
     }
 
-    if (ctx_.msger->IsStarted() && (ctx_.control_mode == ControlMode::kMotion)) {
+    if (ctx_.msger->IsStarted() && (ctx_.control_mode == Messenger::SupervisedMode::kNonSupervised)) {
       ctx_.msger->SendMotionCommand(linear, angular);
     }
   }

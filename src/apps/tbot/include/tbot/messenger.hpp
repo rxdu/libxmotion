@@ -39,6 +39,10 @@ class Messenger {
     SupervisedMode supervised_mode;
   };
 
+  struct SupervisedState {
+    SupervisedMode supervised_mode;
+  };
+
  public:
   Messenger(RSTimePoint tp);
 
@@ -46,6 +50,7 @@ class Messenger {
   void Stop();
   bool IsStarted();
 
+  SupervisedState GetSupervisedState() const;
   void SendSupervisorCommand(SupervisorCommand cmd);
 
   void SendPwmCommand(float left, float right);
@@ -58,6 +63,7 @@ class Messenger {
   RSTimePoint t0_;
   std::shared_ptr<AsyncCAN> can_ = nullptr;
 
+  SupervisedState supervised_state_;
   std::unordered_map<DataBufferIndex, swviz::DataBuffer> rpm_buffers_;
 
   void HandleCanFrame(can_frame *rx_frame);

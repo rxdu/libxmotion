@@ -17,6 +17,7 @@
 #define TBOT_RPM_CMD_CAN_ID 0x102
 #define TBOT_MOTION_CMD_CAN_ID 0x103
 
+#define TBOT_SUPERVISED_STATE_CAN_ID 0x200
 #define TBOT_ENCODER_RAW_CAN_ID 0x211
 #define TBOT_ENCODER_FILTERED_CAN_ID 0x212
 #define TBOT_TARGET_RPM_CAN_ID 0x213
@@ -33,6 +34,8 @@ int32_t ToInt32(uint8_t b0, uint8_t b1, uint8_t b2, uint8_t b3) {
 }  // namespace
 
 Messenger::Messenger(RSTimePoint tp) : t0_(tp) {
+  supervised_state_.supervised_mode = SupervisedMode::kNonSupervised;
+  
   rpm_buffers_[DataBufferIndex::kRawRpmLeft] = swviz::DataBuffer();
   rpm_buffers_[DataBufferIndex::kRawRpmRight] = swviz::DataBuffer();
   rpm_buffers_[DataBufferIndex::kFilteredRpmLeft] = swviz::DataBuffer();
@@ -75,6 +78,10 @@ void Messenger::HandleCanFrame(can_frame *rx_frame) {
       1000.0f;
 
   switch (rx_frame->can_id) {
+    case TBOT_SUPERVISED_STATE_CAN_ID: {
+      supervised_state_.supervised_mode = static_cast<SupervisedMode>(rx_frame->data[0]);
+      break;
+    }
     case TBOT_ENCODER_RAW_CAN_ID: {
       int32_t left = ToInt32(rx_frame->data[0], rx_frame->data[1],
                              rx_frame->data[2], rx_frame->data[3]);
@@ -104,6 +111,10 @@ void Messenger::HandleCanFrame(can_frame *rx_frame) {
                                                               right / 1.0f);
     }
   }
+}
+
+Messenger::SupervisedState Messenger::GetSupervisedState() const {
+  return supervised_state_;
 }
 
 void Messenger::SendSupervisorCommand(SupervisorCommand cmd) {

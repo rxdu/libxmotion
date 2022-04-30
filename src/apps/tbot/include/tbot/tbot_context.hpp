@@ -17,20 +17,14 @@
 #include "tbot/speed_controller.hpp"
 
 namespace robosw {
-enum class ControlMode : RSEnumBaseType {
-  kPwm = 0,
-  kRpm,
-  kMotion
-};
-
 struct TbotContext {
-  float plot_history = 20.0;
+  float plot_history = 30.0;
 
   RSTimePoint time_of_start;
   std::shared_ptr<Messenger> msger = nullptr;
   std::shared_ptr<SpeedController> speed_ctrl_ = nullptr;
 
-  ControlMode control_mode = ControlMode::kMotion;
+  Messenger::SupervisedMode control_mode = Messenger::SupervisedMode::kNonSupervised;
 };
 }
 
