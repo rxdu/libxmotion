@@ -16,3 +16,6 @@
 [submodule "src/library/rapidcsv"]
 	path = src/library/rapidcsv
 	url = https://github.com/d99kris/rapidcsv.git
+[submodule "src/library/stopwatch"]
+	path = src/library/stopwatch
+	url = https://github.com/rxdu/stopwatch.git
