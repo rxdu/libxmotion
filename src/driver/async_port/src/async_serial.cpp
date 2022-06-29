@@ -17,7 +17,6 @@
 #include <iostream>
 
 namespace robosw {
-
 AsyncSerial::AsyncSerial(std::string port_name, uint32_t baud_rate)
     : port_(port_name), baud_rate_(baud_rate), serial_port_(io_context_) {}
 

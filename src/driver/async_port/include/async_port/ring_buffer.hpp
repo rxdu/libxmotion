@@ -31,11 +31,15 @@
  *       W/R (W>R)
  *
  * Reference:
- *  [1] https://embeddedartistry.com/blog/2017/05/17/creating-a-circular-buffer-in-c-and-c/
- *  [2] https://stackoverflow.com/questions/10527581/why-must-a-ring-buffer-size-be-a-power-of-2
- *  [3] https://stackoverflow.com/questions/9718116/improving-c-circular-buffer-efficiency
+ *  [1]
+ * https://embeddedartistry.com/blog/2017/05/17/creating-a-circular-buffer-in-c-and-c/
+ *  [2]
+ * https://stackoverflow.com/questions/10527581/why-must-a-ring-buffer-size-be-a-power-of-2
+ *  [3]
+ * https://stackoverflow.com/questions/9718116/improving-c-circular-buffer-efficiency
  *  [4] https://www.snellman.net/blog/archive/2016-12-13-ring-buffers/
- *  [5] tttp://www.trytoprogram.com/c-examples/c-program-to-test-if-a-number-is-a-power-of-2/
+ *  [5]
+ * tttp://www.trytoprogram.com/c-examples/c-program-to-test-if-a-number-is-a-power-of-2/
  *
  * Copyright (c) 2019 Ruixiang Du (rdu)
  */
@@ -50,14 +54,15 @@
 #include <iostream>
 
 namespace robosw {
-template<typename T = uint8_t, std::size_t N = 1024>
+template <typename T = uint8_t, std::size_t N = 1024>
 class RingBuffer {
  public:
   // Init and reset of buffer
   RingBuffer() {
     // assert size is a power of 2
-    static_assert((N != 0) && ((N & (N - 1)) == 0),
-                  "Size of ring buffer has to be 2^n, where n is a positive integer");
+    static_assert(
+        (N != 0) && ((N & (N - 1)) == 0),
+        "Size of ring buffer has to be 2^n, where n is a positive integer");
 
     size_ = N;
     size_mask_ = size_ - 1;
@@ -86,12 +91,14 @@ class RingBuffer {
     }
     return btr;
   }
+
   std::size_t Peek(T data[], std::size_t btp) {
     for (int i = 0; i < btp; ++i) {
       if (PeekOneAt(&data[i], i) == 0) return i;
     }
     return btp;
   }
+
   std::size_t Write(const T new_data[], std::size_t btw) {
     for (int i = 0; i < btw; ++i) {
       if (WriteOne(new_data[i]) == 0) return i;
