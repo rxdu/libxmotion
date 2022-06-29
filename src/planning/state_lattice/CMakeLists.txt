@@ -13,7 +13,7 @@ set(LATTICE_LIB_SRC
   src/lattice_viz.cpp 
 )
 add_library(lattice STATIC ${LATTICE_LIB_SRC})
-target_link_libraries(lattice model logging utilities cvdraw)
+target_link_libraries(lattice control logging utilities cvdraw)
 target_include_directories(lattice PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>

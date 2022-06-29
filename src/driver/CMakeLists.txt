@@ -17,4 +17,3 @@ target_include_directories(driver PUBLIC
 if(BUILD_TESTS)
     add_subdirectory(test)
 endif()
-
