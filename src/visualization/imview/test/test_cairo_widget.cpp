@@ -9,17 +9,17 @@
 
 #include <iostream>
 
-#include "imview/viewer_base.hpp"
+#include "imview/viewer.hpp"
 #include "imview/cairo_widget.hpp"
 
-using namespace robosw::viewer;
+using namespace robosw::swviz;
 
 const std::string img_file = "../image/fish.png";
 
-class MyWin : public ViewerBase {
+class MyWin : public Viewer {
  public:
   MyWin(uint32_t width, uint32_t height, std::string title = "Canvas")
-      : ViewerBase(width, height, title), cairo_panel_{width, height} {
+      : Viewer(width, height, title), cairo_panel_{width, height} {
     cairo_panel_.LoadImage(img_file);
   }
 

@@ -13,43 +13,36 @@
 #include <cstdlib>
 #include <string>
 
-namespace robosw
-{
-inline std::string GetDataFolderPath()
-{
-    char *home_path;
-    home_path = std::getenv("HOME");
-    std::string log_path;
-    if (home_path != NULL)
-    {
-        std::string hm(home_path);
-        log_path = hm + "/Workspace/robosw/data";
-    }
-    else
-    {
-        // default path
-        log_path = "/home/rdu/Workspace/robosw/data";
-    }
-    return log_path;
+namespace robosw {
+inline std::string GetDataFolderPath() {
+  char *home_path;
+  home_path = std::getenv("HOME");
+  std::string log_path;
+  if (home_path != NULL) {
+    std::string hm(home_path);
+    log_path = hm + "/Workspace/robosw/data";
+  } else {
+    // default path
+    log_path = "/home/rdu/Workspace/robosw/data";
+  }
+  return log_path;
 }
 
-inline std::string GetLogFolderPath()
-{
-    return GetDataFolderPath() + "/log";
+inline std::string GetLogFolderPath() {
+  return GetDataFolderPath() + "/log";
 }
 
 // reference: https://stackoverflow.com/questions/22318389/pass-system-date-and-time-as-a-filename-in-c
-inline std::string CreateLogFileName(std::string prefix, std::string path)
-{
-	time_t t = time(0); // get time now
-	struct tm *now = localtime(&t);
+inline std::string CreateLogFileName(std::string prefix, std::string path) {
+  time_t t = time(0); // get time now
+  struct tm *now = localtime(&t);
 
-	char buffer[80];
-	strftime(buffer, 80, "%Y%m%d%H%M%S", now);
-	std::string time_stamp(buffer);
+  char buffer[80];
+  strftime(buffer, 80, "%Y%m%d%H%M%S", now);
+  std::string time_stamp(buffer);
 
-	std::string filename = path + "/" + prefix + "." + time_stamp + ".data";
-	return filename;
+  std::string filename = path + "/" + prefix + "." + time_stamp + ".csv";
+  return filename;
 }
 } // namespace robosw
 

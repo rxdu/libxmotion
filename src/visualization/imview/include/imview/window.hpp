@@ -20,7 +20,7 @@
 #include <string>
 
 namespace robosw {
-namespace viewer {
+namespace swviz {
 enum class FontSize { Tiny, Small, Normal, Big, Large, ExtraLarge };
 
 void Init();
@@ -93,7 +93,7 @@ class Window {
   void ApplyWindowHints(uint32_t window_hints);
   void LoadDefaultStyle();
 };
-}  // namespace viewer
+}  // namespace swviz
 
 }  // namespace robosw
 

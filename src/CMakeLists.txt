@@ -1,6 +1,6 @@
 ## Add source directories
 # Application
-# add_subdirectory(dview)
+add_subdirectory(apps)
 
 # Modules
 add_subdirectory(library)

@@ -7,11 +7,11 @@
  * Copyright (c) 2021 Ruixiang Du (rdu)
  */
 
-#include "imview/viewer_base.hpp"
+#include "imview/viewer.hpp"
 
-using namespace robosw::viewer;
+using namespace robosw::swviz;
 
-class Viewer : public ViewerBase {
+class MyViewer : public Viewer {
   void Draw() {
     ImGui::Begin("Canvas", NULL,
                  ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove |
@@ -36,7 +36,7 @@ class Viewer : public ViewerBase {
 };
 
 int main(int argc, char* argv[]) {
-  Viewer viewer;
+  MyViewer viewer;
   viewer.Show();
   return 0;
 }

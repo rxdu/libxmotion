@@ -20,46 +20,41 @@
 
 #include "logging/details/specialized_logger.hpp"
 
-namespace robosw
-{
-class CsvLogger : public SpecializedLogger
-{
-  public:
-    CsvLogger(std::string logfile_prefix, std::string logfile_path) : SpecializedLogger(logfile_prefix, logfile_path) {}
+namespace robosw {
+class CsvLogger : public SpecializedLogger {
+ public:
+  CsvLogger(std::string logfile_prefix, std::string logfile_path) : SpecializedLogger(logfile_prefix, logfile_path) {}
 
-    // non-copyable
-    CsvLogger(const CsvLogger &) = delete;
-    CsvLogger &operator=(const CsvLogger &) = delete;
+  // non-copyable
+  CsvLogger(const CsvLogger &) = delete;
+  CsvLogger &operator=(const CsvLogger &) = delete;
 
-    template <class... T>
-    void LogData(const T &... value)
-    {
+  template<class... T>
+  void LogData(const T &... value) {
 #ifdef ENABLE_LOGGING
-        std::ostringstream o;
-        build_string(o, value...);
+    std::ostringstream o;
+    build_string(o, value...);
 
-        std::string data = o.str();
-        data.pop_back();
+    std::string data = o.str();
+    data.pop_back();
 
-        logger_->info(data);
+    logger_->info(data);
 #endif
-    }
+  }
 };
 
-class GlobalCsvLogger : public CsvLogger
-{
-    GlobalCsvLogger(std::string prefix, std::string path) : CsvLogger(prefix, path){};
+class GlobalCsvLogger : public CsvLogger {
+  GlobalCsvLogger(std::string prefix, std::string path) : CsvLogger(prefix, path) {};
 
-  public:
-    static GlobalCsvLogger &GetLogger(std::string logfile_prefix = "", std::string logfile_path = "")
-    {
-        static GlobalCsvLogger instance(logfile_prefix, logfile_path);
-        return instance;
-    }
+ public:
+  static GlobalCsvLogger &GetLogger(std::string logfile_prefix = "", std::string logfile_path = "") {
+    static GlobalCsvLogger instance(logfile_prefix, logfile_path);
+    return instance;
+  }
 
-    // prevent copy or assignment
-    GlobalCsvLogger(const GlobalCsvLogger &) = delete;
-    GlobalCsvLogger &operator=(const GlobalCsvLogger &) = delete;
+  // prevent copy or assignment
+  GlobalCsvLogger(const GlobalCsvLogger &) = delete;
+  GlobalCsvLogger &operator=(const GlobalCsvLogger &) = delete;
 };
 } // namespace robosw
 

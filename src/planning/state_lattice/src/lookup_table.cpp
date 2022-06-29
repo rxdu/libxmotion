@@ -14,7 +14,6 @@
 #include "state_lattice/primitive_generator.hpp"
 
 #include "logging/loggers.hpp"
-#include "csv.h"
 
 using namespace robosw;
 
@@ -103,20 +102,21 @@ void LookupTable::LoadLookupTableFromFile(std::string filename)
 {
     std::cout << "read lookup table from file: " << filename << std::endl;
 
-    const int32_t entry_size = 9;
-    io::CSVReader<entry_size> mpfile(filename);
-
-    // clear existing table entries
-    entries_.clear();
-
-    // load entries from file
-    double data_entry[entry_size];
-    while (mpfile.read_row(data_entry[0], data_entry[1], data_entry[2], data_entry[3],                 // target state
-                           data_entry[4], data_entry[5], data_entry[6], data_entry[7], data_entry[8])) // spriral param
-    {
-        entries_.emplace_back(TableEntry(MotionState(data_entry[0], data_entry[1], data_entry[2], data_entry[3]),
-                                         PointKinematics::Param(data_entry[4], data_entry[5], data_entry[6], data_entry[7], data_entry[8])));
-    }
+    // TODO fix csv read with new csv library
+//    const int32_t entry_size = 9;
+//    io::CSVReader<entry_size> mpfile(filename);
+//
+//    // clear existing table entries
+//    entries_.clear();
+//
+//    // load entries from file
+//    double data_entry[entry_size];
+//    while (mpfile.read_row(data_entry[0], data_entry[1], data_entry[2], data_entry[3],                 // target state
+//                           data_entry[4], data_entry[5], data_entry[6], data_entry[7], data_entry[8])) // spriral param
+//    {
+//        entries_.emplace_back(TableEntry(MotionState(data_entry[0], data_entry[1], data_entry[2], data_entry[3]),
+//                                         PointKinematics::Param(data_entry[4], data_entry[5], data_entry[6], data_entry[7], data_entry[8])));
+//    }
 
     std::cout << "number of table entries loaded: " << entries_.size() << std::endl;
 }

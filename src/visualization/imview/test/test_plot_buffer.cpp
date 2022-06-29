@@ -9,12 +9,12 @@
 
 #include <iostream>
 
-#include "imview/viewer_base.hpp"
+#include "imview/viewer.hpp"
 #include "imview/data_buffer.hpp"
 
-using namespace robosw::viewer;
+using namespace robosw::swviz;
 
-struct ImDraw : public ViewerBase {
+struct ImDraw : public Viewer {
   void Update() override {
     // do nothing
     ImGui::BulletText("Move your mouse to change the data!");

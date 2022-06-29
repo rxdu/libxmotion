@@ -17,11 +17,12 @@
 #include "imgui.h"
 
 namespace robosw {
-namespace viewer {
+namespace swviz {
 class DataBuffer {
  public:
   DataBuffer(uint32_t size = 2048);
 
+  void Resize(uint32_t size);
   std::size_t GetSize() const;
   std::size_t GetOffset() const;
 
@@ -35,7 +36,7 @@ class DataBuffer {
   uint32_t buffer_size_ = 0;
   uint32_t offset_ = 0;
 };
-}  // namespace viewer
+}  // namespace swviz
 }  // namespace robosw
 
 #endif /* PLOT_BUFFER_HPP */

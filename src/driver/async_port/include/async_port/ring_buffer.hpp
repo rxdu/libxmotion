@@ -50,14 +50,14 @@
 #include <iostream>
 
 namespace robosw {
-template <typename T = uint8_t, std::size_t N = 1024>
+template<typename T = uint8_t, std::size_t N = 1024>
 class RingBuffer {
  public:
   // Init and reset of buffer
   RingBuffer() {
     // assert size is a power of 2
-    static_assert((N != 0) && ((N & (N - 1)) == 0), 
-        "Size of ring buffer has to be 2^n, where n is a positive integer");
+    static_assert((N != 0) && ((N & (N - 1)) == 0),
+                  "Size of ring buffer has to be 2^n, where n is a positive integer");
 
     size_ = N;
     size_mask_ = size_ - 1;

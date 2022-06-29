@@ -18,10 +18,10 @@
 
 #include "imgui.h"
 
-#include "imview/cairo_context.hpp"
+#include "imview/details/cairo_context.hpp"
 
 namespace robosw {
-namespace viewer {
+namespace swviz {
 class CairoWidget {
  public:
   CairoWidget(uint32_t width, uint32_t height,
@@ -67,7 +67,7 @@ class CairoWidget {
 
   cairo_surface_t* GetImageSurface(std::string png_file);
 };
-}  // namespace viewer
+}  // namespace swviz
 }  // namespace robosw
 
 #endif /* CAIRO_WIDGET_HPP */

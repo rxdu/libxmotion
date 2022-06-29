@@ -27,7 +27,7 @@
 #include "fonts/opensans_bold.hpp"
 
 namespace robosw {
-namespace viewer {
+namespace swviz {
 void Init() {
   if (!glfwInit()) {
     throw std::runtime_error("Failed to initialize GLFW library");
@@ -114,7 +114,7 @@ void Window::ApplyWindowHints(uint32_t window_hints) {
 void Window::LoadDefaultStyle() {
   // additional variable initialization
   background_color_ = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);
-  
+
   ImGuiIO &io = ImGui::GetIO();
   // default font (first loaded font)
   font_normal_ = io.Fonts->AddFontFromMemoryCompressedTTF(
@@ -144,6 +144,36 @@ void Window::LoadDefaultStyle() {
 void Window::ApplyDarkStyle() {
   background_color_ = ImVec4(0.4f, 0.4f, 0.4f, 1.00f);
   ImGui::StyleColorsDark();
+
+  auto &colors = ImGui::GetStyle().Colors;
+  colors[ImGuiCol_WindowBg] = ImVec4{0.1f, 0.105f, 0.11f, 1.0f};
+
+  // Headers
+  colors[ImGuiCol_Header] = ImVec4{0.2f, 0.205f, 0.21f, 1.0f};
+  colors[ImGuiCol_HeaderHovered] = ImVec4{0.3f, 0.305f, 0.31f, 1.0f};
+  colors[ImGuiCol_HeaderActive] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+
+  // Buttons
+  colors[ImGuiCol_Button] = ImVec4{0.2f, 0.205f, 0.21f, 1.0f};
+  colors[ImGuiCol_ButtonHovered] = ImVec4{0.3f, 0.305f, 0.31f, 1.0f};
+  colors[ImGuiCol_ButtonActive] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+
+  // Frame BG
+  colors[ImGuiCol_FrameBg] = ImVec4{0.2f, 0.205f, 0.21f, 1.0f};
+  colors[ImGuiCol_FrameBgHovered] = ImVec4{0.3f, 0.305f, 0.31f, 1.0f};
+  colors[ImGuiCol_FrameBgActive] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+
+  // Tabs
+  colors[ImGuiCol_Tab] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+  colors[ImGuiCol_TabHovered] = ImVec4{0.38f, 0.3805f, 0.381f, 1.0f};
+  colors[ImGuiCol_TabActive] = ImVec4{0.28f, 0.2805f, 0.281f, 1.0f};
+  colors[ImGuiCol_TabUnfocused] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+  colors[ImGuiCol_TabUnfocusedActive] = ImVec4{0.2f, 0.205f, 0.21f, 1.0f};
+
+  // Title
+  colors[ImGuiCol_TitleBg] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+  colors[ImGuiCol_TitleBgActive] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+  colors[ImGuiCol_TitleBgCollapsed] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
 }
 
 void Window::ApplyLightStyle() {
@@ -256,5 +286,5 @@ void Window::Show() {
     glfwSwapBuffers(glfw_win_);
   }
 }
-}  // namespace viewer
+}  // namespace swviz
 }  // namespace robosw

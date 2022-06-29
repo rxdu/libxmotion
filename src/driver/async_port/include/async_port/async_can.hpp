@@ -27,7 +27,7 @@
 namespace robosw {
 class AsyncCAN : public std::enable_shared_from_this<AsyncCAN> {
  public:
-  using ReceiveCallback = std::function<void(can_frame *rx_frame)>;
+  using ReceiveCallback = std::function<void(const struct can_frame *rx_frame)>;
 
  public:
   AsyncCAN(std::string can_port = "can0");
