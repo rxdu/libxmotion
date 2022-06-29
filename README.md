@@ -1,6 +1,6 @@
 # Robot Software
 
-![GitHub Workflow Status](https://github.com/rxdu/robosw/workflows/CMake/badge.svg)
+![GitHub Workflow Status](https://github.com/rxdu/robosw/workflows/Main/badge.svg)
 
 This repository contains a collection of software packages for **robotics experiments and applications**. Many of the
 components were initially created and maintained in other repositories, such
