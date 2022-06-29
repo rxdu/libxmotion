@@ -7,7 +7,7 @@
  * Copyright (c) 2021 Ruixiang Du (rdu)
  */
 
-#include "../include/sensor/imu_hipnuc.hpp"
+#include "imu_driver/imu_hipnuc.hpp"
 
 extern "C" {
 #include "ch_serial.h"
