@@ -76,3 +76,38 @@ add_subdirectory(src)
 
 ## Installation setup
 # message(STATUS "Project will be installed to ${CMAKE_INSTALL_PREFIX} with 'make install'")
+message(STATUS "Project will be installed to ${CMAKE_INSTALL_PREFIX} with 'make install'")
+
+# Offer the user the choice of overriding the installation directories
+set(INSTALL_LIBDIR ${CMAKE_INSTALL_LIBDIR} CACHE PATH "Installation directory for libraries")
+set(INSTALL_BINDIR ${CMAKE_INSTALL_BINDIR} CACHE PATH "Installation directory for executables")
+set(INSTALL_INCLUDEDIR ${CMAKE_INSTALL_INCLUDEDIR} CACHE PATH "Installation directory for header files")
+if (WIN32 AND NOT CYGWIN)
+    set(DEF_INSTALL_CMAKEDIR CMake)
+else ()
+    set(DEF_INSTALL_CMAKEDIR share/cmake/${PROJECT_NAME})
+endif ()
+set(INSTALL_CMAKEDIR ${DEF_INSTALL_CMAKEDIR} CACHE PATH "Installation directory for CMake files")
+
+# Report to user
+foreach (p LIB BIN INCLUDE CMAKE)
+    file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${INSTALL_${p}DIR} _path)
+    message(STATUS " - To install ${p} components to ${_path}")
+    unset(_path)
+endforeach ()
+
+# Packaging support
+set(CPACK_PACKAGE_VENDOR "Ruixiang Du")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Robot Software Packages")
+set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/robosw")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+#set(CPACK_DEBIAN_PACKAGE_DEPENDS "abc (>= 0.1.2), xyz (<< 0.3.4)")
+set(CPACK_GENERATOR "DEB")
+set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Ruixiang Du (ruixiang.du@gmail.com)")
+set(CPACK_SOURCE_IGNORE_FILES .git dist .*build.* /\\\\.DS_Store)
+include(CPack)
