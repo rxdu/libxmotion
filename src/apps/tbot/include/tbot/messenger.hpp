@@ -1,4 +1,4 @@
-/* 
+/*
  * messenger.hpp
  *
  * Created on 4/4/22 9:52 PM
@@ -66,8 +66,8 @@ class Messenger {
   SupervisedState supervised_state_;
   std::unordered_map<DataBufferIndex, swviz::DataBuffer> rpm_buffers_;
 
-  void HandleCanFrame(can_frame *rx_frame);
+  void HandleCanFrame(const can_frame *rx_frame);
 };
-}
+}  // namespace robosw
 
-#endif //ROBOSW_SRC_APPS_TBOT_INCLUDE_MESSENGER_HPP
+#endif  // ROBOSW_SRC_APPS_TBOT_INCLUDE_MESSENGER_HPP

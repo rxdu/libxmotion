@@ -1,4 +1,4 @@
-/* 
+/*
  * speed_controller.hpp
  *
  * Created on 4/18/22 11:17 PM
@@ -38,8 +38,8 @@ class SpeedController {
   PidController right_pid_controller_{0.2, 0.5, 0, 100, 0.02};
 
   void SendPwmCommand(float left, float right);
-  void HandleCanFrame(can_frame *rx_frame);
+  void HandleCanFrame(const can_frame *rx_frame);
 };
-}
+}  // namespace robosw
 
-#endif //ROBOSW_SRC_APPS_TBOT_INCLUDE_TBOT_SPEED_CONTROLLER_HPP
+#endif  // ROBOSW_SRC_APPS_TBOT_INCLUDE_TBOT_SPEED_CONTROLLER_HPP
