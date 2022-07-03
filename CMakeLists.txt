@@ -104,10 +104,10 @@ write_basic_package_version_file(
     VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH}"
     COMPATIBILITY SameMajorVersion)
 
-# install(EXPORT roboswTargets
-#     FILE roboswTargets.cmake
-#     NAMESPACE robosw::
-#     DESTINATION lib/cmake/robosw)
+ install(EXPORT roboswTargets
+     FILE roboswTargets.cmake
+     NAMESPACE robosw::
+     DESTINATION lib/cmake/robosw)
 
 configure_file(cmake/roboswConfig.cmake.in roboswConfig.cmake @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/roboswConfig.cmake"
