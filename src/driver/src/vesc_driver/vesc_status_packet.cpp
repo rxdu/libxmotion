@@ -1,5 +1,5 @@
 /* 
- * vesc_packet.cpp
+ * vesc_status_packet.cpp
  *
  * Created on 6/30/22 10:51 PM
  * Description:
@@ -11,7 +11,7 @@
  * Copyright (c) 2022 Ruixiang Du (rdu)
  */
 
-#include "vesc_driver/vesc_packet.hpp"
+#include "vesc_driver/vesc_status_packet.hpp"
 
 namespace robosw {
 VescStatus1Packet::VescStatus1Packet(const struct can_frame &frame) : VescFrame(frame) {

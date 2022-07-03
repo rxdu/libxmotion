@@ -12,10 +12,11 @@
 #include <iostream>
 #include <functional>
 
-#include "vesc_driver/vesc_packet.hpp"
+#include "vesc_driver/vesc_cmd_packet.hpp"
+#include "vesc_driver/vesc_status_packet.hpp"
 
 namespace robosw {
-bool VescCanInterface::Connect(const std::string &can, uint32_t vesc_id) {
+bool VescCanInterface::Connect(const std::string &can, uint8_t vesc_id) {
   vesc_id_ = vesc_id;
   can_ = std::make_shared<AsyncCAN>(can);
   can_->SetReceiveCallback(std::bind(&VescCanInterface::HandleCanFrame, this, std::placeholders::_1));
@@ -76,5 +77,56 @@ void VescCanInterface::HandleCanFrame(const struct can_frame *frame) {
   if (state_updated_callback_) {
     state_updated_callback_(stamped_state_);
   }
+}
+
+// TODO
+void VescCanInterface::RequestFwVersion() {
+
+}
+
+// TODO
+void VescCanInterface::RequestState() {
+
+}
+
+// TODO
+void VescCanInterface::RequestImuData() {
+
+}
+
+void VescCanInterface::SetDutyCycle(double duty_cycle) {
+  if (can_ == nullptr || !can_->IsOpened()) return;
+  VescSetDutyCycleCmdPacket pkt(vesc_id_, duty_cycle);
+  can_->SendFrame(pkt.GetCanFrame());
+}
+
+void VescCanInterface::SetCurrent(double current) {
+  if (can_ == nullptr || !can_->IsOpened()) return;
+  VescSetCurrentCmdPacket pkt(vesc_id_, current);
+  can_->SendFrame(pkt.GetCanFrame());
+}
+
+void VescCanInterface::SetBrake(double brake) {
+  if (can_ == nullptr || !can_->IsOpened()) return;
+  VescSetCurrentBrakeCmdPacket pkt(vesc_id_, brake);
+  can_->SendFrame(pkt.GetCanFrame());
+}
+
+void VescCanInterface::SetSpeed(double speed) {
+  if (can_ == nullptr || !can_->IsOpened()) return;
+  VescSetRpmCmdPacket pkt(vesc_id_, speed);
+  can_->SendFrame(pkt.GetCanFrame());
+}
+
+void VescCanInterface::SetPosition(double position) {
+  if (can_ == nullptr || !can_->IsOpened()) return;
+  VescSetPositionCmdPacket pkt(vesc_id_, position);
+  can_->SendFrame(pkt.GetCanFrame());
+}
+
+void VescCanInterface::SetServo(double servo) {
+  if (can_ == nullptr || !can_->IsOpened()) return;
+  VescSetServoPosCmdPacket pkt(vesc_id_, servo);
+  can_->SendFrame(pkt.GetCanFrame());
 }
 }

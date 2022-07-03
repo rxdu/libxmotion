@@ -1,5 +1,5 @@
 /* 
- * vesc_packet.hpp
+ * vesc_status_packet.hpp
  *
  * Created on 6/30/22 10:51 PM
  * Description:
@@ -7,30 +7,12 @@
  * Copyright (c) 2022 Ruixiang Du (rdu)
  */
 
-#ifndef ROBOSW_SRC_DRIVER_INCLUDE_VESC_DRIVER_VESC_PACKET_HPP
-#define ROBOSW_SRC_DRIVER_INCLUDE_VESC_DRIVER_VESC_PACKET_HPP
+#ifndef ROBOSW_SRC_DRIVER_INCLUDE_VESC_DRIVER_VESC_STATUS_PACKET_HPP
+#define ROBOSW_SRC_DRIVER_INCLUDE_VESC_DRIVER_VESC_STATUS_PACKET_HPP
 
-#include <linux/can.h>
-
-#include <cstdint>
+#include "vesc_driver/vesc_frame.hpp"
 
 namespace robosw {
-class VescFrame {
- public:
-  static constexpr uint32_t VescStatus1FrameId = 0x00000900;
-  static constexpr uint32_t VescStatus2FrameId = 0x00000e00;
-  static constexpr uint32_t VescStatus3FrameId = 0x00000f00;
-  static constexpr uint32_t VescStatus4FrameId = 0x00001000;
-  static constexpr uint32_t VescStatus5FrameId = 0x00001b00;
-
- public:
-  VescFrame(const struct can_frame &frame) : frame_(frame) {};
-  virtual ~VescFrame() = default;
-
- protected:
-  struct can_frame frame_;
-};
-
 class VescStatus1Packet : public VescFrame {
  public:
   VescStatus1Packet(const struct can_frame &frame);
@@ -114,4 +96,4 @@ class VescStatus6Packet : public VescFrame {
 };
 }
 
-#endif //ROBOSW_SRC_DRIVER_INCLUDE_VESC_DRIVER_VESC_PACKET_HPP
+#endif //ROBOSW_SRC_DRIVER_INCLUDE_VESC_DRIVER_VESC_STATUS_PACKET_HPP
