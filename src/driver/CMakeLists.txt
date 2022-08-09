@@ -13,6 +13,7 @@ add_library(driver STATIC
         src/vesc_driver/vesc_cmd_packet.cpp)
 target_link_libraries(driver PUBLIC interface Threads::Threads)
 target_compile_definitions(driver PUBLIC ASIO_ENABLE_OLD_SERVICES)
+target_compile_options(driver PUBLIC -fPIC)
 target_include_directories(driver PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
@@ -31,4 +32,4 @@ install(TARGETS driver
         INCLUDES DESTINATION include)
 
 install(DIRECTORY include/
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/driver)
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
