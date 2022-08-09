@@ -11,6 +11,7 @@
 #define CAIRO_WIDGET_HPP
 
 #include <cmath>
+#include <string>
 #include <cstdint>
 #include <memory>
 #include <functional>

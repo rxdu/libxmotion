@@ -76,6 +76,7 @@ endif()
 
 # # Add source directories
 add_subdirectory(src)
+add_subdirectory(extern)
 
 # # Installation setup
 # Offer the user the choice of overriding the installation directories
