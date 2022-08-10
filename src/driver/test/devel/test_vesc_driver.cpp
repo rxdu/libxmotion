@@ -11,7 +11,7 @@
 #include <chrono>
 #include <thread>
 
-#include "vesc_driver/vesc_can_interface.hpp"
+#include "driver/vesc_driver/vesc_can_interface.hpp"
 
 using namespace robosw;
 
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
 //    vesc.SetServo(servo_pos);
 //    std::this_thread::sleep_for(std::chrono::seconds(2));
 
-    vesc.SetSpeed(-2000);
+    vesc.SetSpeed(2000);
     vesc.SetServo(0.7);
     std::this_thread::sleep_for(std::chrono::milliseconds(20));
   }

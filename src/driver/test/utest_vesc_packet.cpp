@@ -12,8 +12,8 @@
 #include <cstdint>
 #include <cstring>
 
-#include "vesc_driver/vesc_status_packet.hpp"
-#include "vesc_driver/vesc_cmd_packet.hpp"
+#include "driver/vesc_driver/vesc_status_packet.hpp"
+#include "driver/vesc_driver/vesc_cmd_packet.hpp"
 
 using namespace robosw;
 

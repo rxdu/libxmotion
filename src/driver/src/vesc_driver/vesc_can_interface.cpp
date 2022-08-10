@@ -29,6 +29,10 @@ void VescCanInterface::Disconnect() {
   }
 }
 
+uint8_t VescCanInterface::GetVescId() const {
+  return vesc_id_;
+}
+
 void VescCanInterface::SetStateUpdatedCallback(StateUpdatedCallback cb) {
   state_updated_callback_ = cb;
 }
@@ -44,6 +48,7 @@ void VescCanInterface::HandleCanFrame(const struct can_frame *frame) {
 //            << std::endl;
   {
     std::lock_guard<std::mutex> lock(state_mtx_);
+
     stamped_state_.time = VescClock::now();
     if (can_id == (VescFrame::VescStatus1FrameId | vesc_id_)) {
       auto pkt = VescStatus1Packet(*frame);

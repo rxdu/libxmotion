@@ -27,6 +27,8 @@ class VescCanInterface {
   bool Connect(const std::string &can, uint8_t vesc_id);
   void Disconnect();
 
+  uint8_t GetVescId() const;
+
   void SetStateUpdatedCallback(StateUpdatedCallback cb);
   StampedVescState GetLastState() const;
 
