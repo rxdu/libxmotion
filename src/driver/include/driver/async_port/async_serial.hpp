@@ -19,7 +19,7 @@
 
 #include "asio.hpp"
 
-#include "async_port/ring_buffer.hpp"
+#include "driver/async_port/ring_buffer.hpp"
 
 namespace robosw {
 class AsyncSerial : public std::enable_shared_from_this<AsyncSerial> {

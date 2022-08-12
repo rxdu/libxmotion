@@ -3,7 +3,6 @@
 add_subdirectory(apps)
 
 # Modules
-add_subdirectory(library)
 add_subdirectory(interface)
 add_subdirectory(driver)
 add_subdirectory(mapping)

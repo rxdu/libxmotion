@@ -11,7 +11,7 @@
  * Copyright (c) 2022 Ruixiang Du (rdu)
  */
 
-#include "vesc_driver/vesc_status_packet.hpp"
+#include "driver/vesc_driver/vesc_status_packet.hpp"
 
 namespace robosw {
 VescStatus1Packet::VescStatus1Packet(const struct can_frame &frame) : VescFrame(frame) {

@@ -7,7 +7,7 @@
  * Copyright (c) 2021 Ruixiang Du (rdu)
  */
 
-#include "imu_driver/imu_hipnuc.hpp"
+#include "driver/imu_driver/imu_hipnuc.hpp"
 
 using namespace robosw;
 

@@ -10,7 +10,7 @@
 #ifndef IMU_HIPNUC_HPP
 #define IMU_HIPNUC_HPP
 
-#include "async_port/async_serial.hpp"
+#include "driver/async_port/async_serial.hpp"
 #include "interface/sensor/imu_interface.hpp"
 
 namespace robosw {

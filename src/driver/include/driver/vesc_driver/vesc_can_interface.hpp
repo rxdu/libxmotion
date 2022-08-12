@@ -13,8 +13,8 @@
 #include <mutex>
 #include <functional>
 
-#include "async_port/async_can.hpp"
-#include "vesc_driver/vesc_state.hpp"
+#include "driver/async_port/async_can.hpp"
+#include "driver/vesc_driver/vesc_state.hpp"
 
 namespace robosw {
 class VescCanInterface {
@@ -26,6 +26,8 @@ class VescCanInterface {
 
   bool Connect(const std::string &can, uint8_t vesc_id);
   void Disconnect();
+
+  uint8_t GetVescId() const;
 
   void SetStateUpdatedCallback(StateUpdatedCallback cb);
   StampedVescState GetLastState() const;

@@ -7,7 +7,7 @@
  * Copyright (c) 2020 Ruixiang Du (rdu)
  */
 
-#include "async_port/async_serial.hpp"
+#include "driver/async_port/async_serial.hpp"
 
 #if defined(__linux__)
 #include <linux/serial.h>

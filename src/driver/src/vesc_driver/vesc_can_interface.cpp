@@ -7,13 +7,13 @@
  * Copyright (c) 2022 Ruixiang Du (rdu)
  */
 
-#include "vesc_driver/vesc_can_interface.hpp"
+#include "driver/vesc_driver/vesc_can_interface.hpp"
 
 #include <iostream>
 #include <functional>
 
-#include "vesc_driver/vesc_cmd_packet.hpp"
-#include "vesc_driver/vesc_status_packet.hpp"
+#include "driver/vesc_driver/vesc_cmd_packet.hpp"
+#include "driver/vesc_driver/vesc_status_packet.hpp"
 
 namespace robosw {
 bool VescCanInterface::Connect(const std::string &can, uint8_t vesc_id) {
@@ -27,6 +27,10 @@ void VescCanInterface::Disconnect() {
   if (can_ && can_->IsOpened()) {
     can_->Close();
   }
+}
+
+uint8_t VescCanInterface::GetVescId() const {
+  return vesc_id_;
 }
 
 void VescCanInterface::SetStateUpdatedCallback(StateUpdatedCallback cb) {
@@ -44,6 +48,7 @@ void VescCanInterface::HandleCanFrame(const struct can_frame *frame) {
 //            << std::endl;
   {
     std::lock_guard<std::mutex> lock(state_mtx_);
+
     stamped_state_.time = VescClock::now();
     if (can_id == (VescFrame::VescStatus1FrameId | vesc_id_)) {
       auto pkt = VescStatus1Packet(*frame);
