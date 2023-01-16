@@ -1,9 +1,9 @@
-/* 
+/*
  * rand_num_gen.hpp
- * 
+ *
  * Created on: Dec 29, 2018 08:32
  * Description: adapted from RandomNumbers in OMPL
- * 
+ *
  * Copyright (c) 2008, Willow Garage, Inc.
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
@@ -51,46 +51,51 @@
 #include <random>
 #include <memory>
 
-#include "sampling/base/rand_num/rng_seed_gen.hpp"
+#include "sampling/random/rng_seed_gen.hpp"
 
-namespace robosw
-{
-class RandNumGen
-{
-  public:
-    RandNumGen() : local_seed_(RNGSeedGenerator::getRNGSeedGenerator().nextSeed()), generator_(local_seed_){};
-    explicit RandNumGen(std::uint_fast32_t localSeed) : local_seed_(localSeed), generator_(localSeed) {}
+namespace robosw {
+class RandNumGen {
+ public:
+  RandNumGen()
+      : local_seed_(RNGSeedGenerator::getRNGSeedGenerator().nextSeed()),
+        generator_(local_seed_){};
+  explicit RandNumGen(std::uint_fast32_t localSeed)
+      : local_seed_(localSeed), generator_(localSeed) {}
 
-    // seeding functions
-    static void SetSeed(std::uint_fast32_t seed) { RNGSeedGenerator::getRNGSeedGenerator().setSeed(seed); }
-    static std::uint_fast32_t GetSeed() { return RNGSeedGenerator::getRNGSeedGenerator().firstSeed(); }
+  // seeding functions
+  static void SetSeed(std::uint_fast32_t seed) {
+    RNGSeedGenerator::getRNGSeedGenerator().setSeed(seed);
+  }
+  static std::uint_fast32_t GetSeed() {
+    return RNGSeedGenerator::getRNGSeedGenerator().firstSeed();
+  }
 
-    void SetLocalSeed(std::uint_fast32_t localSeed);
-    std::uint_fast32_t GetLocalSeed() const { return local_seed_; }
+  void SetLocalSeed(std::uint_fast32_t localSeed);
+  std::uint_fast32_t GetLocalSeed() const { return local_seed_; }
 
-    // sampling functions
-    double Uniform();
-    double UniformReal(double lower_bound, double upper_bound);
-    int UniformInt(int lower_bound, int upper_bound);
-    bool UniformBool();
+  // sampling functions
+  double Uniform();
+  double UniformReal(double lower_bound, double upper_bound);
+  int UniformInt(int lower_bound, int upper_bound);
+  bool UniformBool();
 
-    double Gaussian();
-    double Gaussian(double mean, double stddev);
+  double Gaussian();
+  double Gaussian(double mean, double stddev);
 
-    double HalfNormalReal(double r_min, double r_max, double focus = 3.0);
-    int HalfNormalInt(int r_min, int r_max, double focus = 3.0);
+  double HalfNormalReal(double r_min, double r_max, double focus = 3.0);
+  int HalfNormalInt(int r_min, int r_max, double focus = 3.0);
 
-    void Quaternion(double value[4]);
-    void EulerRPY(double value[3]);
+  void Quaternion(double value[4]);
+  void EulerRPY(double value[3]);
 
-  private:
-    std::uint_fast32_t local_seed_;
-    std::random_device rd_;
-    std::mt19937 generator_;
+ private:
+  std::uint_fast32_t local_seed_;
+  std::random_device rd_;
+  std::mt19937 generator_;
 
-    std::uniform_real_distribution<> uniform_rdist_{0, 1};
-    std::normal_distribution<> normal_dist_{0, 1};
+  std::uniform_real_distribution<> uniform_rdist_{0, 1};
+  std::normal_distribution<> normal_dist_{0, 1};
 };
-}; // namespace robosw
+};  // namespace robosw
 
 #endif /* RAN_NUM_GEN_HPP */

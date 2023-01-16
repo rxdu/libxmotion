@@ -1,10 +1,10 @@
-/* 
+/*
  * rng_seed_gen.hpp
- * 
+ *
  * Created on: Dec 29, 2018 10:15
  * Description: changed RNGSeedGenerator to singleton
  *              commented out OMPL messages
- * 
+ *
  * Copyright (c) 2008, Willow Garage, Inc.
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
@@ -51,78 +51,67 @@
 #include <mutex>
 #include <random>
 
-namespace robosw
-{
-class RNGSeedGenerator
-{
-    RNGSeedGenerator()
-        : firstSeed_(std::chrono::duration_cast<std::chrono::microseconds>(
-                         std::chrono::system_clock::now() - std::chrono::system_clock::time_point::min())
-                         .count()),
-          sGen_(firstSeed_), sDist_(1, 1000000000)
-    {
+namespace robosw {
+class RNGSeedGenerator {
+  RNGSeedGenerator()
+      : firstSeed_(std::chrono::duration_cast<std::chrono::microseconds>(
+                       std::chrono::system_clock::now() -
+                       std::chrono::system_clock::time_point::min())
+                       .count()),
+        sGen_(firstSeed_),
+        sDist_(1, 1000000000) {}
+
+  // non-copyable
+  RNGSeedGenerator(const RNGSeedGenerator &) = delete;
+  RNGSeedGenerator &operator=(const RNGSeedGenerator &) = delete;
+
+ public:
+  static RNGSeedGenerator &getRNGSeedGenerator() {
+    static RNGSeedGenerator gen;
+    return gen;
+  }
+
+  std::uint_fast32_t firstSeed() {
+    std::lock_guard<std::mutex> slock(rngMutex_);
+    return firstSeed_;
+  }
+
+  void setSeed(std::uint_fast32_t seed) {
+    std::lock_guard<std::mutex> slock(rngMutex_);
+    if (seed > 0) {
+      if (someSeedsGenerated_) {
+        // OMPL_ERROR("Random number generation already started. Changing seed
+        // now will not lead to "
+        //            "deterministic sampling.");
+      } else {
+        // In this case, since no seeds have been generated yet, so we remember
+        // this seed as the first one.
+        firstSeed_ = seed;
+      }
+    } else {
+      if (someSeedsGenerated_) {
+        // OMPL_WARN("Random generator seed cannot be 0. Ignoring seed.");
+        return;
+      }
+      // OMPL_WARN("Random generator seed cannot be 0. Using 1 instead.");
+      seed = 1;
     }
+    sGen_.seed(seed);
+  }
 
-    // non-copyable
-    RNGSeedGenerator(const RNGSeedGenerator &) = delete;
-    RNGSeedGenerator &operator=(const RNGSeedGenerator &) = delete;
+  std::uint_fast32_t nextSeed() {
+    std::lock_guard<std::mutex> slock(rngMutex_);
+    someSeedsGenerated_ = true;
+    return sDist_(sGen_);
+  }
 
-  public:
-    static RNGSeedGenerator &getRNGSeedGenerator()
-    {
-        static RNGSeedGenerator gen;
-        return gen;
-    }
-
-    std::uint_fast32_t firstSeed()
-    {
-        std::lock_guard<std::mutex> slock(rngMutex_);
-        return firstSeed_;
-    }
-
-    void setSeed(std::uint_fast32_t seed)
-    {
-        std::lock_guard<std::mutex> slock(rngMutex_);
-        if (seed > 0)
-        {
-            if (someSeedsGenerated_)
-            {
-                // OMPL_ERROR("Random number generation already started. Changing seed now will not lead to "
-                //            "deterministic sampling.");
-            }
-            else
-            {
-                // In this case, since no seeds have been generated yet, so we remember this seed as the first one.
-                firstSeed_ = seed;
-            }
-        }
-        else
-        {
-            if (someSeedsGenerated_)
-            {
-                // OMPL_WARN("Random generator seed cannot be 0. Ignoring seed.");
-                return;
-            }
-            // OMPL_WARN("Random generator seed cannot be 0. Using 1 instead.");
-            seed = 1;
-        }
-        sGen_.seed(seed);
-    }
-
-    std::uint_fast32_t nextSeed()
-    {
-        std::lock_guard<std::mutex> slock(rngMutex_);
-        someSeedsGenerated_ = true;
-        return sDist_(sGen_);
-    }
-
-  private:
-    bool someSeedsGenerated_{false};
-    std::uint_fast32_t firstSeed_;
-    std::mutex rngMutex_;
-    std::ranlux24_base sGen_;
-    std::uniform_int_distribution<> sDist_;
+ private:
+  bool someSeedsGenerated_{false};
+  std::uint_fast32_t firstSeed_;
+  std::mutex rngMutex_;
+  std::ranlux24_base sGen_;
+  std::uniform_int_distribution<> sDist_;
 };
-} // namespace robosw
+}  // namespace robosw
 
 #endif /* RNG_SEED_GEN_HPP */

@@ -10,3 +10,4 @@ target_include_directories(stopwatch INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/stopwatch>
     $<INSTALL_INTERFACE:include>)
     
+add_subdirectory(spatial)
