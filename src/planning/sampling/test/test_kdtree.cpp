@@ -7,7 +7,7 @@
 #include "spatial/neighbor_iterator.hpp"
 
 #include "sampling/space/realvector_space.hpp"
-#include "stopwatch.hpp"
+#include "interface/time/stopwatch.hpp"
 
 using namespace robosw;
 
@@ -27,19 +27,19 @@ int main()
 
     using StateType = RealVectorSpace<N>::StateType;
 
-    std::vector<StateType *> states;
+    std::vector<std::shared_ptr<StateType>> states;
     for (int i = 0; i < 5; ++i)
         states.push_back(rvspace.SampleUniform());
 
     struct state_accessor
     {
-        double operator()(spatial::dimension_type dim, StateType *state) const
+        double operator()(spatial::dimension_type dim, std::shared_ptr<StateType>state) const
         {
             return (*state)[dim];
         }
     };
 
-    typedef spatial::point_multiset<N, StateType *, spatial::accessor_less<state_accessor, StateType *>> KdTreeType;
+    typedef spatial::point_multiset<N, std::shared_ptr<StateType>, spatial::accessor_less<state_accessor, std::shared_ptr<StateType>>> KdTreeType;
 
     KdTreeType kdtree;
     kdtree.insert(states.begin(), states.end());

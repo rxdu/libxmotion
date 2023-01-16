@@ -30,7 +30,7 @@ class RVPolygonValidityChecker
     RVPolygonValidityChecker() = default;
     RVPolygonValidityChecker(double step) : step_size_(step) {}
 
-    bool operator()(StateType *state)
+    bool operator()(std::shared_ptr<StateType>state)
     {
         for (auto &poly : collisions_)
         {
@@ -40,7 +40,7 @@ class RVPolygonValidityChecker
         return true;
     }
 
-    bool operator()(StateType *sstate, StateType *dstate)
+    bool operator()(std::shared_ptr<StateType>sstate, std::shared_ptr<StateType>dstate)
     {
         if (!(*this)(sstate) || !(*this)(dstate))
             return false;

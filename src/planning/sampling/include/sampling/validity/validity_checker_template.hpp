@@ -27,13 +27,13 @@ class ValidityCheckerTemplate
 
   public:
     // operator for state validity checking
-    bool operator()(StateType *state)
+    bool operator()(std::shared_ptr<StateType>state)
     {
         return true;
     }
 
     // operator for path validity checking
-    bool operator()(StateType *sstate, StateType *dstate)
+    bool operator()(std::shared_ptr<StateType>sstate, std::shared_ptr<StateType>dstate)
     {
         return true;
     }

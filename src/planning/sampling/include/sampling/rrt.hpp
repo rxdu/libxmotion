@@ -44,7 +44,7 @@ class RRT : public PlannerBase<Space, Tree>
     using PlannerBase<Space, Tree>::PlannerBase;
 
   public:
-    PathType Search(StateType *start, StateType *goal, int32_t iter = -1) override
+    PathType Search(std::shared_ptr<StateType>start, std::shared_ptr<StateType>goal, int32_t iter = -1) override
     {
         assert(BaseType::Steer != nullptr);
 

@@ -15,7 +15,7 @@
 
 #include "eigen3/Eigen/Dense"
 
-#include "sampling/base/rand_num/rand_num_gen.hpp"
+#include "sampling/random/rand_num_gen.hpp"
 
 namespace robosw {
 class State {
@@ -47,14 +47,19 @@ class SpaceBase {
   /****************** To Be Implemented ******************/
   // common interface for space
   virtual int32_t GetDimension() const = 0;
-  virtual double EvaluateDistance(const State *sstate, const State *dstate) = 0;
+  virtual double EvaluateDistance(std::shared_ptr<State> sstate,
+                                  std::shared_ptr<State> dstate) = 0;
 
-  virtual State *CreateState(std::initializer_list<double> elements) = 0;
-  virtual State *CreateState(const Eigen::MatrixXd &elements) = 0;
+  virtual std::shared_ptr<State> CreateState(
+      std::initializer_list<double> elements) = 0;
+  virtual std::shared_ptr<State> CreateState(
+      const Eigen::MatrixXd &elements) = 0;
 
-  virtual State *SampleUniform() = 0;
-  virtual State *SampleUniformAround(const State *center, double distance) = 0;
-  virtual State *SampleGaussian(const State *mean, double stdDev) = 0;
+  virtual std::shared_ptr<State> SampleUniform() = 0;
+  virtual std::shared_ptr<State> SampleUniformAround(
+      const std::shared_ptr<State> center, double distance) = 0;
+  virtual std::shared_ptr<State> SampleGaussian(
+      const std::shared_ptr<State> mean, double stdDev) = 0;
   /*******************************************************/
 
  protected:

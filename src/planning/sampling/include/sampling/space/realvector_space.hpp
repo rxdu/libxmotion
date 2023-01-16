@@ -7,8 +7,8 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#ifndef REALVECTOR_SPACE_HPP
-#define REALVECTOR_SPACE_HPP
+#ifndef SPACE_REALVECTOR_SPACE_HPP
+#define SPACE_REALVECTOR_SPACE_HPP
 
 #include <cstdint>
 #include <cassert>
@@ -20,50 +20,18 @@
 
 #include <eigen3/Eigen/Dense>
 
-#include "sampling/base/space_base.hpp"
+#include "sampling/interface/space_interface.hpp"
 #include "sampling/space/realvector_bound.hpp"
+#include "sampling/space/realvector_state.hpp"
+#include "sampling/random/rand_num_gen.hpp"
 
 namespace robosw {
 template <int32_t N>
-class RealVectorSpace : public SpaceBase {
-  using BaseType = SpaceBase;
+class RealVectorSpace : public SpaceInterface<RealVectorState<N>> {
+  using BaseType = SpaceInterface<RealVectorState<N>>;
 
  public:
-  class StateType : public State {
-    StateType() : State(StateType::count) { StateType::count.fetch_add(1); };
-
-    StateType(std::initializer_list<double> vals) : State(StateType::count) {
-      int32_t i = 0;
-      for (auto &val : vals) values_[i++] = val;
-      StateType::count.fetch_add(1);
-    }
-
-    template <int32_t M>
-    friend class RealVectorSpace;
-
-   public:
-    double values_[N];
-
-    double operator[](int32_t i) const override {
-      assert(i < N);
-      return values_[i];
-    }
-
-    double &operator[](int32_t i) override {
-      assert(i < N);
-      return values_[i];
-    }
-
-    friend std::ostream &operator<<(std::ostream &os, const StateType &other) {
-      os << "[ ";
-      for (int i = 0; i < N; ++i) os << other.values_[i] << " ";
-      os << "]";
-      return os;
-    }
-
-    // statistics
-    static std::atomic<std::size_t> count;
-  };
+  using StateType = RealVectorState<N>;
 
  public:
   RealVectorSpace() { bounds_.resize(N); }
@@ -76,7 +44,7 @@ class RealVectorSpace : public SpaceBase {
   }
 
   ~RealVectorSpace() {
-    for (auto &state : all_states_) delete state.second;
+    // for (auto &state : all_states_) delete state.second;
   }
 
   RealVectorSpace(RealVectorSpace &&other) {
@@ -114,10 +82,8 @@ class RealVectorSpace : public SpaceBase {
     return vol;
   }
 
-  double EvaluateDistance(const State *sstate, const State *dstate) override {
-    const StateType *first = static_cast<const StateType *>(sstate);
-    const StateType *second = static_cast<const StateType *>(dstate);
-
+  double EvaluateDistance(std::shared_ptr<StateType> first,
+                          std::shared_ptr<StateType> second) override {
     // 2-norm distance
     double se_sum = 0;
     for (int i = 0; i < N; ++i) {
@@ -127,51 +93,52 @@ class RealVectorSpace : public SpaceBase {
     return std::sqrt(se_sum);
   }
 
-  StateType *CreateState(std::initializer_list<double> elements) override {
+  std::shared_ptr<StateType> CreateState(
+      std::initializer_list<double> elements) override {
     assert(elements.size() >= N);
 
-    StateType *new_state = new StateType();
+    std::shared_ptr<StateType> new_state = std::make_shared<StateType>();
     int i = 0;
     for (auto &element : elements) new_state->values_[i++] = element;
     all_states_[new_state->id_] = new_state;
     return new_state;
   }
 
-  StateType *CreateState(const Eigen::MatrixXd &elements) override {
+  std::shared_ptr<StateType> CreateState(
+      const Eigen::MatrixXd &elements) override {
     assert(elements.size() >= N);
 
-    StateType *new_state = new StateType();
+    std::shared_ptr<StateType> new_state = std::make_shared<StateType>();
     for (int i = 0; i < N; ++i) new_state->values_[i] = elements(i);
     all_states_[new_state->id_] = new_state;
     return new_state;
   }
 
-  StateType *SampleUniform() override {
-    StateType *new_state = new StateType();
+  std::shared_ptr<StateType> SampleUniform() override {
+    std::shared_ptr<StateType> new_state = std::make_shared<StateType>();
     for (int i = 0; i < N; ++i)
       new_state->values_[i] =
-          BaseType::rng_.UniformReal(bounds_[i].GetLow(), bounds_[i].GetHigh());
+          rng_.UniformReal(bounds_[i].GetLow(), bounds_[i].GetHigh());
     all_states_[new_state->id_] = new_state;
     return new_state;
   };
 
-  StateType *SampleUniformAround(const State *center,
-                                 double distance) override {
-    const StateType *near_state = static_cast<const StateType *>(center);
-    StateType *new_state = new StateType();
+  std::shared_ptr<StateType> SampleUniformAround(
+      std::shared_ptr<StateType> center, double distance) override {
+    std::shared_ptr<StateType> new_state = std::make_shared<StateType>();
     for (int i = 0; i < N; ++i)
-      new_state->values_[i] = BaseType::rng_.UniformReal(
-          std::max(bounds_[i].GetLow(), near_state->values_[i] - distance),
-          std::min(bounds_[i].GetHigh(), near_state->values_[i] + distance));
+      new_state->values_[i] = rng_.UniformReal(
+          std::max(bounds_[i].GetLow(), center->values_[i] - distance),
+          std::min(bounds_[i].GetHigh(), center->values_[i] + distance));
     all_states_[new_state->id_] = new_state;
     return new_state;
   };
 
-  StateType *SampleGaussian(const State *mean, double stdDev) override {
-    const StateType *mean_state = static_cast<const StateType *>(mean);
-    StateType *new_state = new StateType();
+  std::shared_ptr<StateType> SampleGaussian(std::shared_ptr<StateType> mean,
+                                            double stdDev) override {
+    std::shared_ptr<StateType> new_state = std::make_shared<StateType>();
     for (int i = 0; i < N; ++i) {
-      double v = BaseType::rng_.Gaussian(mean_state->values_[i], stdDev);
+      double v = rng_.Gaussian(mean->values_[i], stdDev);
       if (v < bounds_[i].GetLow())
         v = bounds_[i].GetLow();
       else if (v > bounds_[i].GetHigh())
@@ -191,12 +158,10 @@ class RealVectorSpace : public SpaceBase {
   }
 
  private:
+  RandNumGen rng_;
   std::vector<RealVectorBound> bounds_;
-  std::unordered_map<std::size_t, StateType *> all_states_;
+  std::unordered_map<std::size_t, std::shared_ptr<StateType>> all_states_;
 };
-
-template <int32_t N>
-std::atomic<std::size_t> RealVectorSpace<N>::StateType::count = {0};
 }  // namespace robosw
 
-#endif /* REALVECTOR_SPACE_HPP */
+#endif /* SPACE_REALVECTOR_SPACE_HPP */

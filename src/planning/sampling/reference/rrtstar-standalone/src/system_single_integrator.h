@@ -126,7 +126,7 @@ namespace SingleIntegrator {
      */
     class Trajectory {
         
-        State *endState; 
+        std::shared_ptr<State>endState; 
         double totalVariation;  
         
     public:    

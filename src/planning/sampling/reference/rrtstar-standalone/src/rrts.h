@@ -30,7 +30,7 @@ namespace RRTstar {
     class Vertex {
             
         Vertex *parent;
-        State *state;
+        std::shared_ptr<State>state;
         std::set<Vertex*> children;
         double costFromParent;
         double costFromRoot;

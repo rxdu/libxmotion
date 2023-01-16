@@ -16,7 +16,10 @@
 #define TREE_ADAPTER_HPP
 
 #include <vector>
+#include <memory>
 #include <type_traits>
+
+#include "sampling/interface/space_interface.hpp"
 
 namespace robosw {
 class SpaceBase;
@@ -24,13 +27,13 @@ class SpaceBase;
 template <typename Space>
 struct TreeAdapter {
   using StateType = typename Space::StateType;
-  using PathType = std::vector<StateType *>;
+  using PathType = std::vector<std::shared_ptr<StateType>>;
 
   /****************** type sanity check ******************/
   // check if Space is derived from SpaceBase
-  static_assert(
-      std::is_base_of<SpaceBase, Space>::value,
-      "Space should inherit from SpaceBase to ensure interface compatibility");
+  static_assert(std::is_base_of<SpaceInterface<StateType>, Space>::value,
+                "Space should inherit from SpaceInterface to ensure interface "
+                "compatibility");
   /*******************************************************/
 
   TreeAdapter(Space *s) : space(s) {}
@@ -40,17 +43,20 @@ struct TreeAdapter {
 
   /****************** To Be Implemented ******************/
   // common interface for tree
-  virtual void AddTreeRootNode(StateType *sstate) = 0;
-  virtual void ConnectTreeNodes(StateType *sstate, StateType *dstate,
+  virtual void AddTreeRootNode(std::shared_ptr<StateType> sstate) = 0;
+  virtual void ConnectTreeNodes(std::shared_ptr<StateType> sstate,
+                                std::shared_ptr<StateType> dstate,
                                 double dist) = 0;
-  virtual void DisconnectTreeNodes(StateType *sstate, StateType *dstate) = 0;
+  virtual void DisconnectTreeNodes(std::shared_ptr<StateType> sstate,
+                                   std::shared_ptr<StateType> dstate) = 0;
 
   virtual std::size_t GetTotalTreeNodeNumber() = 0;
-  virtual PathType TraceBackToRoot(StateType *state) = 0;
+  virtual PathType TraceBackToRoot(std::shared_ptr<StateType> state) = 0;
 
-  virtual StateType *FindNearest(StateType *state) = 0;
-  virtual std::vector<StateType *> FindNear(StateType *state,
-                                            double radius) = 0;
+  virtual std::shared_ptr<StateType> FindNearest(
+      std::shared_ptr<StateType> state) = 0;
+  virtual std::vector<std::shared_ptr<StateType>> FindNear(
+      std::shared_ptr<StateType> state, double radius) = 0;
   /*******************************************************/
 };
 }  // namespace robosw

@@ -24,10 +24,10 @@ class PlannerBase {
   using PathType = typename Tree::PathType;
 
   using SteerFunc =
-      std::function<std::pair<StateType *, double>(StateType *, StateType *)>;
-  using StateValidityCheckFunc = std::function<bool(StateType *state)>;
+      std::function<std::pair<std::shared_ptr<StateType>, double>(std::shared_ptr<StateType>, std::shared_ptr<StateType>)>;
+  using StateValidityCheckFunc = std::function<bool(std::shared_ptr<StateType>state)>;
   using PathValidityCheckFunc =
-      std::function<bool(StateType *sstate, StateType *dstate)>;
+      std::function<bool(std::shared_ptr<StateType>sstate, std::shared_ptr<StateType>dstate)>;
 
   /****************** type sanity check ******************/
   // check if the tree interface is satisfied
@@ -53,7 +53,7 @@ class PlannerBase {
 
   /****************** To Be Implemented ******************/
   // common interface for planner
-  virtual PathType Search(StateType *start, StateType *goal,
+  virtual PathType Search(std::shared_ptr<StateType>start, std::shared_ptr<StateType>goal,
                           int32_t iter = -1) = 0;
   /*******************************************************/
 
@@ -70,7 +70,7 @@ class PlannerBase {
       std::bind(&PlannerBase<Space, Tree>::DefaultPathValidityCheck, this,
                 std::placeholders::_1, std::placeholders::_2);
 
-  bool CheckGoal(StateType *state, StateType *goal, double dist) {
+  bool CheckGoal(std::shared_ptr<StateType>state, std::shared_ptr<StateType>goal, double dist) {
     if (space_->EvaluateDistance(state, goal) <= dist)
       return true;
     else
@@ -78,8 +78,8 @@ class PlannerBase {
   }
 
   // default validity check function - always valid
-  bool DefaultStateValidityCheck(StateType *state) { return true; }
-  bool DefaultPathValidityCheck(StateType *sstate, StateType *dstate) {
+  bool DefaultStateValidityCheck(std::shared_ptr<StateType>state) { return true; }
+  bool DefaultPathValidityCheck(std::shared_ptr<StateType>sstate, std::shared_ptr<StateType>dstate) {
     return true;
   }
 };

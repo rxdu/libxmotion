@@ -51,7 +51,7 @@ class RRTStar : public PlannerBase<Space, Tree>
         fixed_radius_ = radius;
     }
 
-    PathType Search(StateType *start, StateType *goal, int32_t iter = -1) override
+    PathType Search(std::shared_ptr<StateType>start, std::shared_ptr<StateType>goal, int32_t iter = -1) override
     {
         assert(BaseType::Steer != nullptr);
 
@@ -69,7 +69,7 @@ class RRTStar : public PlannerBase<Space, Tree>
         BaseType::tree_.AddTreeRootNode(start);
 
         PathType path;
-        std::vector<StateType *> state_to_goal_candidates;
+        std::vector<std::shared_ptr<StateType>> state_to_goal_candidates;
 
         // grow tree and look for goal state
         for (int32_t k = 0; k < iter_num; ++k)
@@ -140,7 +140,7 @@ class RRTStar : public PlannerBase<Space, Tree>
         {
             std::cout << "number of candidates: " << state_to_goal_candidates.size() << std::endl;
 
-            std::map<double, StateType *> candidate_map;
+            std::map<double, std::shared_ptr<StateType>> candidate_map;
 
             for (auto candidate : state_to_goal_candidates)
             {
@@ -172,9 +172,9 @@ class RRTStar : public PlannerBase<Space, Tree>
     double fixed_radius_ = 0.0;
     double gamma_ = 1.0;
 
-    std::pair<StateType *, double> FindBestParent(StateType *new_state, const std::vector<StateType *> &near, StateType *min_state, double min_dist)
+    std::pair<std::shared_ptr<StateType>, double> FindBestParent(std::shared_ptr<StateType>new_state, const std::vector<std::shared_ptr<StateType>> &near, std::shared_ptr<StateType>min_state, double min_dist)
     {
-        StateType *output_min_state = min_state;
+        std::shared_ptr<StateType>output_min_state = min_state;
         double output_min_dist = min_dist;
 
         double cost_new = BaseType::tree_.GetStateCost(new_state);
@@ -195,7 +195,7 @@ class RRTStar : public PlannerBase<Space, Tree>
         return std::make_pair(output_min_state, output_min_dist);
     }
 
-    void RewireBranches(StateType *new_state, StateType *min_state, const std::vector<StateType *> &near)
+    void RewireBranches(std::shared_ptr<StateType>new_state, std::shared_ptr<StateType>min_state, const std::vector<std::shared_ptr<StateType>> &near)
     {
         for (auto near_state : near)
         {

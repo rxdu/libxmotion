@@ -2,7 +2,7 @@
 #include <cstdint>
 
 #include "sampling/space/realvector_space.hpp"
-#include "stopwatch.hpp"
+#include "interface/time/stopwatch.hpp"
 
 using namespace robosw;
 
