@@ -1,5 +1,5 @@
 /*
- * nc_window.hpp
+ * ncwindow.hpp
  *
  * Created on: Jul 11, 2022 14:56
  * Description:
@@ -16,11 +16,11 @@
 
 namespace robosw {
 namespace swviz {
-class Terminal;
+class NcViewer;
 
 class NcWindow {
  public:
-  NcWindow(std::string name, Terminal* parent);
+  NcWindow(std::string name, NcViewer* parent);
   ~NcWindow();
 
   std::string GetName() const { return name_; }
@@ -32,8 +32,11 @@ class NcWindow {
 
  protected:
   std::string name_;
-  const Terminal* parent_;
+  const NcViewer* parent_;
   WINDOW* window_;
+
+  int term_size_x_;
+  int term_size_y_;
 };
 }  // namespace swviz
 }  // namespace robosw

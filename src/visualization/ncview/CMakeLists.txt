@@ -4,8 +4,8 @@ find_package(Curses REQUIRED)
 
 # add library
 add_library(ncview
-    src/terminal.cpp
-    src/nc_window.cpp)
+    src/ncviewer.cpp
+    src/ncwindow.cpp)
 target_link_libraries(ncview PUBLIC ${CURSES_LIBRARIES})
 target_include_directories(ncview PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

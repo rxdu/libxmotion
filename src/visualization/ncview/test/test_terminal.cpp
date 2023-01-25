@@ -7,14 +7,17 @@
  * Copyright (c) 2022 Ruixiang Du (rdu)
  */
 
-#include "ncview/terminal.hpp"
-#include "ncview/nc_window.hpp"
+#include "ncview/ncviewer.hpp"
+#include "ncview/ncwindow.hpp"
+
+#include <csignal>
+#include <iostream>
 
 using namespace robosw::swviz;
 
 class MyWin : public NcWindow {
  public:
-  MyWin(std::string name, Terminal* parent) : NcWindow(name, parent) {}
+  MyWin(std::string name, NcViewer* parent) : NcWindow(name, parent) {}
 
   void Draw() override {
     box(window_, 0, 0);
@@ -24,10 +27,16 @@ class MyWin : public NcWindow {
  private:
 };
 
-int main(int argc, char* argv[]) {
-  Terminal term;
+// void signal_handler(int signal) {
+//   std::cout << "signal received: " << signal << std::endl;
+// }
 
-  std::shared_ptr<MyWin> win = std::make_shared<MyWin>("mywin", &term);
+int main(int argc, char* argv[]) {
+  NcViewer term;
+
+//   std::signal(SIGWINCH, signal_handler);
+
+  auto win = std::make_shared<MyWin>("mywin", &term);
   term.AddWindow(win);
 
   term.Show();
