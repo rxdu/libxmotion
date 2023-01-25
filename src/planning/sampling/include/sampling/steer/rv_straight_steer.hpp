@@ -31,7 +31,7 @@ class RVStraightSteer
     SpaceType *space_;
     double max_dist_;
 
-    std::pair<StateType *, double> operator()(StateType *start, StateType *goal)
+    std::pair<std::shared_ptr<StateType>, double> operator()(std::shared_ptr<StateType>start, std::shared_ptr<StateType>goal)
     {
         double distance = space_->EvaluateDistance(start, goal);
         if (distance < max_dist_)

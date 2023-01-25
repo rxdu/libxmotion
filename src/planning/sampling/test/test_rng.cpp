@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <map>
 
-#include "sampling/base/rand_num/rand_num_gen.hpp"
+#include "sampling/random/rand_num_gen.hpp"
 
 using namespace robosw;
 

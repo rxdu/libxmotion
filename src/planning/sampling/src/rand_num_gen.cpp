@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "sampling/base/rand_num/rand_num_gen.hpp"
+#include "sampling/random/rand_num_gen.hpp"
 
 namespace robosw
 {

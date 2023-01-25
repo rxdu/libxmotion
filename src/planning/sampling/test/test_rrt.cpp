@@ -3,27 +3,26 @@
 
 #define SHOW_TREE_GROWTH
 
-#include "sampling/rrg.hpp"
+#include "sampling/rrt.hpp"
 #include "sampling/space/realvector_space.hpp"
 #include "sampling/steer/rv_straight_steer.hpp"
 #include "sampling/validity/rv_polygon_validity_checker.hpp"
 
-#include "stopwatch.hpp"
+#include "interface/time/stopwatch.hpp"
 
 using namespace robosw;
 
 int main()
 {
-    constexpr int32_t N = 2;
-
-    RealVectorSpace<N> rvspace;
+    RealVectorSpace<2> rvspace;
 
     rvspace.SetBound(0, 0, 20);
     rvspace.SetBound(1, 0, 10);
 
     rvspace.PrintInfo();
 
-    RRG<RealVectorSpace<N>> rrg(&rvspace);
+    // RRT<RealVectorSpace<2>> rrt(&rvspace);
+    RRT<RealVectorSpace<2>, KdTree<RealVectorSpace<2>>> rrt(&rvspace);
 
     // auto sstate = rvspace.SampleUniform();
     // auto gstate = rvspace.SampleUniform();
@@ -33,18 +32,16 @@ int main()
     std::cout << "start: " << *sstate << std::endl;
     std::cout << "goal: " << *gstate << std::endl;
 
-    rrg.SetExtendStepSize(5.0);
-    rrg.SetSteerFunction(RVStraightSteer<N>(&rvspace, 5.0));
+    rrt.SetExtendStepSize(1.0);
+    rrt.SetSteerFunction(RVStraightSteer<2>(&rvspace, 1.0));
 
     // RVPolygonValidityChecker checker;
     // Polygon collision{{5, 3}, {15, 3}, {15, 7}, {5, 7}};
     // checker.AddCollisionPolygon(collision);
-    // rrg.SetStateValidityChecker(checker);
-    // rrg.SetPathValidityChecker(checker);
+    // rrt.SetStateValidityChecker(checker);
+    // rrt.SetPathValidityChecker(checker);
 
-    rrg.SetOptimizationConstant(50);
-
-    auto path = rrg.Search(sstate, gstate, 200);
+    auto path = rrt.Search(sstate, gstate, 5000);
 
     double distance = 0;
     for (int i = 0; i < path.size() - 1; ++i)

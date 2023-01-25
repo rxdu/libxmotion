@@ -53,7 +53,7 @@ class RRG : public PlannerBase<Space, KdGraph<Space>>
         fixed_radius_ = radius;
     }
 
-    PathType Search(StateType *start, StateType *goal, int32_t iter = -1) override
+    PathType Search(std::shared_ptr<StateType>start, std::shared_ptr<StateType>goal, int32_t iter = -1) override
     {
         assert(BaseType::Steer != nullptr);
 
@@ -70,7 +70,7 @@ class RRG : public PlannerBase<Space, KdGraph<Space>>
         // add start state to tree
         BaseType::tree_.AddTreeRootNode(start);
 
-        std::vector<StateType *> state_to_goal_candidates;
+        std::vector<std::shared_ptr<StateType>> state_to_goal_candidates;
 
         // grow tree and look for goal state
         for (int32_t k = 0; k < iter_num; ++k)
