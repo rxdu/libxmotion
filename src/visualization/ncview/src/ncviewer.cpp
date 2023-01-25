@@ -60,10 +60,15 @@ void NcViewer::Show(uint32_t fps) {
     doupdate();
 
     // handle input
-    if (getch() == KEY_RESIZE) {
-      resize_triggered_ = true;
-      std::cout << "resize triggered" << std::endl;
+    int input_ch = getch();
+    switch (input_ch) {
+      case KEY_RESIZE: {
+        resize_triggered_ = true;
+        break;
+      }
     }
+
+    // handle window resize
     if (resize_triggered_) {
       Deinit();
       Init();
