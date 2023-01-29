@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
   NcSubWindow::Specs specs;
   specs.name = "mywin";
   specs.pos.x = 1;
-  specs.pos.y = 1;
+  specs.pos.y = 2;
   specs.size.x = 70;
   specs.size.y = 15;
 

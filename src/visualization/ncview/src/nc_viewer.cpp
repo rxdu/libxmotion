@@ -39,7 +39,7 @@ NcViewer::~NcViewer() {
 void NcViewer::Init() {
   // setup ncurses mode
   initscr();
-  // raw();
+  refresh();
   cbreak();
   noecho();
   nonl();
@@ -50,10 +50,10 @@ void NcViewer::Init() {
   // create main window
   getmaxyx(stdscr, term_size_y_, term_size_x_);
   window_ = newwin(term_size_y_, term_size_x_, 0, 0);
-//  wrefresh(window_);
 }
 
 void NcViewer::Deinit() {
+  //  delete win and exit ncurses mode
   delwin(window_);
   endwin();
 }
