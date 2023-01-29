@@ -9,9 +9,17 @@
 #ifndef NCVIEW_NCOUTPUT_HPP
 #define NCVIEW_NCOUTPUT_HPP
 
+#include <string>
+
 namespace robosw {
 namespace swviz {
-class NcOutput {};
+namespace NcOutput {
+struct NcColor {};
+
+struct NcText {
+  std::string text;
+};
+};  // namespace NcOutput
 }  // namespace swviz
 }  // namespace robosw
 

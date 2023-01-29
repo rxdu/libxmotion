@@ -7,38 +7,49 @@
  * Copyright (c) 2022 Ruixiang Du (rdu)
  */
 
-#include "ncview/ncviewer.hpp"
-#include "ncview/ncwindow.hpp"
-
 #include <csignal>
 #include <iostream>
 
+#include "ncview/nc_viewer.hpp"
+#include "ncview/nc_subwindow.hpp"
+#include "ncview/nc_hbox.hpp"
+
 using namespace robosw::swviz;
 
-class MyWin : public NcWindow {
+class SampleWindow : public NcSubWindow {
  public:
-  MyWin(std::string name, NcViewer* parent) : NcWindow(name, parent) {}
-
-  void Draw() override {
-    box(window_, 0, 0);
-    // printw("Hello World !!!"); /* Print Hello World		  */
+  SampleWindow(NcViewer *parent, const NcSubWindow::Specs &specs) :
+      NcSubWindow(parent, specs) {
+    //  NcHbox hbox;
+    //  hbox.AddElement(win);
   }
 
  private:
+  void OnDraw() override {
+//    mvprintw(1, 1, "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+
+    mvwprintw(window_, 1, 1, "abcdefghijklmnopqrstuvwxyz");
+
+//    mvwprintw(window_, 1, 1, "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+//    mvwprintw(window_, 2,
+//              0,
+//              "01234567890123456789012345678901234567890123456789012345678901234567890123456789");
+  }
 };
 
-// void signal_handler(int signal) {
-//   std::cout << "signal received: " << signal << std::endl;
-// }
+int main(int argc, char *argv[]) {
+  NcSubWindow::Specs specs;
+  specs.name = "mywin";
+  specs.pos.x = 1;
+  specs.pos.y = 1;
+  specs.size.x = 70;
+  specs.size.y = 15;
 
-int main(int argc, char* argv[]) {
-  NcViewer term;
+  NcViewer viewer;
+  auto win =
+      std::make_shared<SampleWindow>(&viewer, specs);
+  viewer.AddSubWindow(win);
+  viewer.Show();
 
-//   std::signal(SIGWINCH, signal_handler);
-
-  auto win = std::make_shared<MyWin>("mywin", &term);
-  term.AddWindow(win);
-
-  term.Show();
   return 0;
 }

@@ -1,5 +1,5 @@
 /*
- * terminal.cpp
+ * nc_viewer.cpp
  *
  * Created on: Jul 11, 2022 14:45
  * Description:
@@ -15,7 +15,7 @@
  * Copyright (c) 2022 Ruixiang Du (rdu)
  */
 
-#include "ncview/ncviewer.hpp"
+#include "ncview/nc_viewer.hpp"
 
 #include <ncurses.h>
 
@@ -26,11 +26,18 @@
 
 namespace robosw {
 namespace swviz {
-NcViewer::NcViewer() { Init(); }
+NcViewer::NcViewer(const std::string &title)
+    : title_(title) {
+  Init();
+}
 
-NcViewer::~NcViewer() { Deinit(); }
+NcViewer::~NcViewer() {
+  keep_running_ = false;
+  Deinit();
+}
 
 void NcViewer::Init() {
+  // setup ncurses mode
   initscr();
   // raw();
   cbreak();
@@ -39,25 +46,37 @@ void NcViewer::Init() {
   curs_set(FALSE);
   intrflush(stdscr, FALSE);
   keypad(stdscr, TRUE);
+
+  // create main window
+  getmaxyx(stdscr, term_size_y_, term_size_x_);
+  window_ = newwin(term_size_y_, term_size_x_, 0, 0);
+//  wrefresh(window_);
 }
 
-void NcViewer::Deinit() { endwin(); }
+void NcViewer::Deinit() {
+  delwin(window_);
+  endwin();
+}
 
-void NcViewer::AddWindow(std::shared_ptr<NcWindow> win) {
-  windows_[win->GetName()] = win;
+void NcViewer::AddSubWindow(std::shared_ptr<NcSubWindow> win) {
+  sub_wins_[win->GetName()] = win;
 }
 
 void NcViewer::Show(uint32_t fps) {
   uint32_t period_ms = 1000 / fps;
   keep_running_ = true;
   while (keep_running_) {
+    getmaxyx(stdscr, term_size_y_, term_size_x_);
+
     // refresh sub-windows
-    for (auto& win : windows_) {
-      win.second->Clear();
-      win.second->Draw();
-      win.second->Refresh();
+    werase(window_);
+    for (auto &win : sub_wins_) {
+      win.second->Update();
     }
-    doupdate();
+    mvwprintw(window_, 1, (term_size_x_ - title_.size()) / 2, title_.c_str(), NULL);
+    box(window_, 0, 0);
+    touchwin(window_);
+    wrefresh(window_);
 
     // handle input
     int input_ch = getch();
