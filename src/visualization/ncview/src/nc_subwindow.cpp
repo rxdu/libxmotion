@@ -7,14 +7,13 @@
  * Copyright (c) 2022 Ruixiang Du (rdu)
  */
 
-#include "ncview/nc_subwindow.hpp"
 #include "ncview/nc_viewer.hpp"
 
 namespace robosw {
 namespace swviz {
-NcSubWindow::NcSubWindow(NcViewer *parent, const Specs &specs)
-    : parent_(parent), specs_(specs) {
-  window_ = derwin(parent_->window_, specs_.size.y, specs_.size.x,
+NcSubWindow::NcSubWindow(const Specs &specs)
+    : specs_(specs) {
+  window_ = derwin(stdscr, specs_.size.y, specs_.size.x,
                    specs_.pos.y, specs_.pos.x);
 //  window_ = newwin(specs_.size.y, specs_.size.x,
 //                   specs_.pos.y, specs_.pos.x);
@@ -37,17 +36,14 @@ void NcSubWindow::OnResize() {
 
 void NcSubWindow::Update() {
   // pre-draw
-//  werase(window_);
 
   // user-defined draw
-//  OnDraw();
+  OnDraw();
 
   // post-draw
-//  if (specs_.with_border) {
-  box(window_, 0, 0);
-//  }
-
-//  wrefresh(window_);
+  if (specs_.with_border) {
+    box(window_, 0, 0);
+  }
 }
 }  // namespace swviz
 }  // namespace robosw

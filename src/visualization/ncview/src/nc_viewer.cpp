@@ -46,15 +46,11 @@ void NcViewer::Init() {
   curs_set(FALSE);
   intrflush(stdscr, FALSE);
   keypad(stdscr, TRUE);
-
-  // create main window
-  getmaxyx(stdscr, term_size_y_, term_size_x_);
-  window_ = newwin(term_size_y_, term_size_x_, 0, 0);
 }
 
 void NcViewer::Deinit() {
   //  delete win and exit ncurses mode
-  delwin(window_);
+//  delwin(stdscr);
   endwin();
 }
 
@@ -68,15 +64,17 @@ void NcViewer::Show(uint32_t fps) {
   while (keep_running_) {
     getmaxyx(stdscr, term_size_y_, term_size_x_);
 
-    // refresh sub-windows
-    werase(window_);
+    // update sub-windows
+    werase(stdscr);
     for (auto &win : sub_wins_) {
       win.second->Update();
     }
-    mvwprintw(window_, 1, (term_size_x_ - title_.size()) / 2, title_.c_str(), NULL);
-    box(window_, 0, 0);
-    touchwin(window_);
-    wrefresh(window_);
+
+    // show title and border
+    mvwprintw(stdscr, 1, (term_size_x_ - title_.size()) / 2, title_.c_str(), NULL);
+    box(stdscr, 0, 0);
+    touchwin(stdscr);
+    wrefresh(stdscr);
 
     // handle input
     int input_ch = getch();

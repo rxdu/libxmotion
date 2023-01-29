@@ -26,8 +26,6 @@ class NcViewer {
   void AddSubWindow(std::shared_ptr<NcSubWindow> win);
   void Show(uint32_t fps = 30);
 
-  WINDOW *window_;
-
  private:
   void Init();
   void Deinit();

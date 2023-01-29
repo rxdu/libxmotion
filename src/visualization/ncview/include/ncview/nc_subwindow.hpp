@@ -18,8 +18,6 @@
 
 namespace robosw {
 namespace swviz {
-class NcViewer;
-
 class NcSubWindow : public NcElement {
  public:
   struct Specs {
@@ -30,7 +28,7 @@ class NcSubWindow : public NcElement {
   };
 
  public:
-  NcSubWindow(NcViewer *parent, const Specs &specs);
+  NcSubWindow(const Specs &specs);
   virtual ~NcSubWindow();
 
   std::string GetName() const { return specs_.name; }
@@ -41,7 +39,6 @@ class NcSubWindow : public NcElement {
   virtual void OnDraw() = 0;
   void OnResize() override;
 
-  NcViewer *parent_;
   Specs specs_;
   WINDOW *window_;
   NcBox bounding_box_;

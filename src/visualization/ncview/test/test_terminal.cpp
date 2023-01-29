@@ -18,8 +18,8 @@ using namespace robosw::swviz;
 
 class SampleWindow : public NcSubWindow {
  public:
-  SampleWindow(NcViewer *parent, const NcSubWindow::Specs &specs) :
-      NcSubWindow(parent, specs) {
+  SampleWindow(const NcSubWindow::Specs &specs) :
+      NcSubWindow(specs) {
     //  NcHbox hbox;
     //  hbox.AddElement(win);
   }
@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
 
   NcViewer viewer;
   auto win =
-      std::make_shared<SampleWindow>(&viewer, specs);
+      std::make_shared<SampleWindow>(specs);
   viewer.AddSubWindow(win);
   viewer.Show();
 
