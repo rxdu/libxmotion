@@ -38,14 +38,18 @@ class SampleWindow : public NcSubWindow {
 };
 
 int main(int argc, char *argv[]) {
+  NcViewer viewer("NcView", true);
+  auto disp = viewer.GetDisplayRegion();
+
   NcSubWindow::Specs specs;
   specs.name = "mywin";
-  specs.pos.x = 1;
-  specs.pos.y = 2;
-  specs.size.x = 70;
-  specs.size.y = 15;
+  specs.pos = disp.pos;
+  specs.size = disp.size;
+  //  specs.pos.x = 1;
+//  specs.pos.y = 2;
+//  specs.size.x = 78;
+//  specs.size.y = 21;
 
-  NcViewer viewer;
   auto win =
       std::make_shared<SampleWindow>(specs);
   viewer.AddSubWindow(win);

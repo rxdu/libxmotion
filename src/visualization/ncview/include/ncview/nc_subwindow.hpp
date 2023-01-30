@@ -21,14 +21,17 @@ namespace swviz {
 class NcSubWindow : public NcElement {
  public:
   struct Specs {
+    Specs() : name(""), pos({0, 0}),
+              size({0, 0}), with_border(true) {};
+
     std::string name;
     NcVector2 pos;
     NcVector2 size;
-    bool with_border = true;
+    bool with_border;
   };
 
  public:
-  NcSubWindow(const Specs &specs);
+  NcSubWindow(const Specs &specs = {});
   virtual ~NcSubWindow();
 
   std::string GetName() const { return specs_.name; }
@@ -37,14 +40,11 @@ class NcSubWindow : public NcElement {
 
  protected:
   virtual void OnDraw() = 0;
-  void OnResize() override;
+  void OnResize(int rows, int cols, int y, int x) override;
 
   Specs specs_;
   WINDOW *window_;
   NcBox bounding_box_;
-
-  int term_size_x_ = 0;
-  int term_size_y_ = 0;
 };
 }  // namespace swviz
 }  // namespace robosw

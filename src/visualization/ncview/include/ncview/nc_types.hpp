@@ -22,6 +22,11 @@ struct NcRange {
   int max = 0;
 };
 
+struct NcRegion {
+  NcVector2 pos;
+  NcVector2 size;
+};
+
 struct NcBox {
   NcRange x;
   NcRange y;

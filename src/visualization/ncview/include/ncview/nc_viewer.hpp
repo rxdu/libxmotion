@@ -19,10 +19,18 @@
 namespace robosw {
 namespace swviz {
 class NcViewer {
+  enum class TitleOption {
+    kNone = 0,
+    kWithTitleOnly,
+    kWithBorderOnly,
+    kWithBorderAndTitle
+  };
+
  public:
-  NcViewer(const std::string &title = "NcViewer");
+  NcViewer(const std::string &title = "", bool has_border = true);
   ~NcViewer();
 
+  NcRegion GetDisplayRegion() const { return disp_region_; }
   void AddSubWindow(std::shared_ptr<NcSubWindow> win);
   void Show(uint32_t fps = 30);
 
@@ -30,12 +38,19 @@ class NcViewer {
   void Init();
   void Deinit();
 
+  void CalcDisplayRegion();
+
   std::string title_;
+  bool has_border_;
+  TitleOption title_option_ = TitleOption::kWithBorderOnly;
+
   bool resize_triggered_;
   std::atomic<bool> keep_running_{false};
   std::unordered_map<std::string, std::shared_ptr<NcSubWindow>> sub_wins_;
   int term_size_x_ = 0;
   int term_size_y_ = 0;
+
+  NcRegion disp_region_;
 };
 }  // namespace swviz
 }  // namespace robosw

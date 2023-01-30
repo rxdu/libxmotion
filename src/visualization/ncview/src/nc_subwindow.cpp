@@ -15,23 +15,17 @@ NcSubWindow::NcSubWindow(const Specs &specs)
     : specs_(specs) {
   window_ = derwin(stdscr, specs_.size.y, specs_.size.x,
                    specs_.pos.y, specs_.pos.x);
-//  window_ = newwin(specs_.size.y, specs_.size.x,
-//                   specs_.pos.y, specs_.pos.x);
-//  int sy, sx;
-//  getmaxyx(stdscr, sy, sx);
-//  window_ = newwin(sy, sx, 0, 0);
-//  bounding_box_ = {{specs_.pos.x, specs_.pos.x + specs_.size.x},
-//                   {specs_.pos.y, specs_.pos.y + specs_.size.y}};
+  bounding_box_ = {{specs_.pos.x, specs_.pos.x + specs_.size.x},
+                   {specs_.pos.y, specs_.pos.y + specs_.size.y}};
 }
 
 NcSubWindow::~NcSubWindow() {
   delwin(window_);
 }
 
-void NcSubWindow::OnResize() {
-//  getmaxyx(stdscr, term_size_y_, term_size_x_);
-//  wresize(window_, term_size_y_, term_size_x_);
-//  mvwin(window_, 0, 0);
+void NcSubWindow::OnResize(int rows, int cols, int y, int x) {
+  wresize(window_, rows, cols);
+  mvwin(window_, y, x);
 };
 
 void NcSubWindow::Update() {

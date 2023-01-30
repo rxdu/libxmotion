@@ -25,7 +25,7 @@ class NcContainer : public NcElement {
   void AddElement(std::shared_ptr<NcElement> element);
 
  protected:
-  void OnResize() override {};
+  void OnResize(int rows, int cols, int y, int x) override {};
   void OnDraw() override {};
 
   std::vector<std::shared_ptr<NcElement>> elements_;

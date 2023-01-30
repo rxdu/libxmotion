@@ -17,7 +17,7 @@ struct NcElement {
   virtual ~NcElement() = default;
 
   // common interface
-  virtual void OnResize() {};
+  virtual void OnResize(int rows, int cols, int y, int x) {};
   virtual void OnDraw() = 0;
 };
 }

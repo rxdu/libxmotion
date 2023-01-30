@@ -26,9 +26,21 @@
 
 namespace robosw {
 namespace swviz {
-NcViewer::NcViewer(const std::string &title)
-    : title_(title) {
+NcViewer::NcViewer(const std::string &title, bool has_border)
+    : title_(title), has_border_(has_border) {
   Init();
+
+  bool has_title = !title.empty();
+  if (has_title && !has_border_) {
+    title_option_ = TitleOption::kWithTitleOnly;
+  } else if (has_title && has_border_) {
+    title_option_ = TitleOption::kWithBorderAndTitle;
+  } else if (!has_title && has_border_) {
+    title_option_ = TitleOption::kWithBorderOnly;
+  } else {
+    title_option_ = TitleOption::kNone;
+  }
+  CalcDisplayRegion();
 }
 
 NcViewer::~NcViewer() {
@@ -50,7 +62,6 @@ void NcViewer::Init() {
 
 void NcViewer::Deinit() {
   //  delete win and exit ncurses mode
-//  delwin(stdscr);
   endwin();
 }
 
@@ -58,12 +69,35 @@ void NcViewer::AddSubWindow(std::shared_ptr<NcSubWindow> win) {
   sub_wins_[win->GetName()] = win;
 }
 
+void NcViewer::CalcDisplayRegion() {
+  getmaxyx(stdscr, term_size_y_, term_size_x_);
+  switch (title_option_) {
+    case TitleOption::kNone: {
+      disp_region_ = {{0, 0}, {0, 0}};
+      break;
+    }
+    case TitleOption::kWithBorderOnly: {
+      disp_region_ = {{1, 1},
+                      {term_size_x_ - 2, term_size_y_ - 2}};
+      break;
+    }
+    case TitleOption::kWithTitleOnly: {
+      disp_region_ = {{0, 1},
+                      {term_size_x_, term_size_y_ - 1}};
+      break;
+    }
+    case TitleOption::kWithBorderAndTitle: {
+      disp_region_ = {{1, 2},
+                      {term_size_x_ - 2, term_size_y_ - 3}};
+      break;
+    }
+  }
+}
+
 void NcViewer::Show(uint32_t fps) {
   uint32_t period_ms = 1000 / fps;
   keep_running_ = true;
   while (keep_running_) {
-    getmaxyx(stdscr, term_size_y_, term_size_x_);
-
     // update sub-windows
     werase(stdscr);
     for (auto &win : sub_wins_) {
@@ -71,8 +105,15 @@ void NcViewer::Show(uint32_t fps) {
     }
 
     // show title and border
-    mvwprintw(stdscr, 1, (term_size_x_ - title_.size()) / 2, title_.c_str(), NULL);
-    box(stdscr, 0, 0);
+    if (has_border_) {
+      box(stdscr, 0, 0);
+    }
+    if (!title_.empty()) {
+      int row = 0;
+      if (has_border_) row = 1;
+      mvwprintw(stdscr, row, (term_size_x_ - title_.size()) / 2, title_.c_str(), NULL);
+    }
+
     touchwin(stdscr);
     wrefresh(stdscr);
 
@@ -89,6 +130,7 @@ void NcViewer::Show(uint32_t fps) {
     if (resize_triggered_) {
       Deinit();
       Init();
+      CalcDisplayRegion();
       resize_triggered_ = false;
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(period_ms));
