@@ -65,9 +65,9 @@ void NcViewer::Deinit() {
   endwin();
 }
 
-void NcViewer::AddSubWindow(std::shared_ptr<NcSubWindow> win) {
-  sub_wins_[win->GetName()] = win;
-}
+//void NcViewer::AddSubWindow(std::shared_ptr<NcSubWindow> win) {
+//  sub_wins_[win->GetName()] = win;
+//}
 
 void NcViewer::AddElement(std::shared_ptr<NcElement> element) {
   elements_.push_back(element);

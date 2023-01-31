@@ -60,7 +60,6 @@ int main(int argc, char *argv[]) {
   vbox->AddElement(hbox);
   vbox->AddElement(hbox2);
 
-//  viewer.AddSubWindow(win);
   viewer.AddElement(vbox);
   viewer.Show();
 

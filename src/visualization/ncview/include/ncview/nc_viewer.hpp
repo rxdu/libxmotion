@@ -34,8 +34,7 @@ class NcViewer {
   NcRegion GetDisplayRegion() const { return disp_region_; }
 
   // add a sub-window with user defined size and position
-  void AddSubWindow(std::shared_ptr<NcSubWindow> win);
-
+//  void AddSubWindow(std::shared_ptr<NcSubWindow> win);
   void AddElement(std::shared_ptr<NcElement> element);
 
   void Show(uint32_t fps = 30);
@@ -52,7 +51,7 @@ class NcViewer {
 
   bool resize_triggered_;
   std::atomic<bool> keep_running_{false};
-  std::unordered_map<std::string, std::shared_ptr<NcSubWindow>> sub_wins_;
+//  std::unordered_map<std::string, std::shared_ptr<NcSubWindow>> sub_wins_;
   std::vector<std::shared_ptr<NcElement>> elements_;
   int term_size_x_ = 0;
   int term_size_y_ = 0;

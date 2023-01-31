@@ -6,7 +6,7 @@
 * @copyright Copyright (c) 2023 Ruixiang Du (rdu)
 */
 
-#include "ncview/nc_container.hpp"
+#include "ncview/details/nc_container.hpp"
 
 namespace robosw {
 namespace swviz {

@@ -10,7 +10,7 @@
 #ifndef ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_VBOX_HPP_
 #define ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_VBOX_HPP_
 
-#include "ncview/nc_container.hpp"
+#include "ncview/details/nc_container.hpp"
 
 namespace robosw {
 namespace swviz {

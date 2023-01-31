@@ -25,7 +25,8 @@ class NcContainer : public NcElement {
   void AddElement(std::shared_ptr<NcElement> element);
 
  protected:
-  void OnResize(int rows, int cols, int y, int x) override;
+  // resize() must be implemented by derived containers
+  virtual void OnResize(int rows, int cols, int y, int x) = 0;
   void OnDraw() override;
 
   std::vector<std::shared_ptr<NcElement>> elements_;
