@@ -6,7 +6,7 @@
 * @copyright Copyright (c) 2023 Ruixiang Du (rdu)
 */
 
-#include "nc_hbox.hpp"
+#include "ncview/nc_hbox.hpp"
 
 namespace robosw {
 } // robosw

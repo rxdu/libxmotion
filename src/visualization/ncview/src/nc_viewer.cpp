@@ -33,10 +33,10 @@ NcViewer::NcViewer(const std::string &title, bool has_border)
   bool has_title = !title.empty();
   if (has_title && !has_border_) {
     title_option_ = TitleOption::kWithTitleOnly;
-  } else if (has_title && has_border_) {
-    title_option_ = TitleOption::kWithBorderAndTitle;
   } else if (!has_title && has_border_) {
     title_option_ = TitleOption::kWithBorderOnly;
+  } else if (has_title && has_border_) {
+    title_option_ = TitleOption::kWithBorderAndTitle;
   } else {
     title_option_ = TitleOption::kNone;
   }
@@ -67,6 +67,10 @@ void NcViewer::Deinit() {
 
 void NcViewer::AddSubWindow(std::shared_ptr<NcSubWindow> win) {
   sub_wins_[win->GetName()] = win;
+}
+
+void NcViewer::AddElement(std::shared_ptr<NcElement> element) {
+  elements_.push_back(element);
 }
 
 void NcViewer::CalcDisplayRegion() {
@@ -100,8 +104,17 @@ void NcViewer::Show(uint32_t fps) {
   while (keep_running_) {
     // update sub-windows
     werase(stdscr);
-    for (auto &win : sub_wins_) {
-      win.second->Update();
+//    for (auto &win : sub_wins_) {
+//      win.second->Update();
+//    }
+
+    for (auto &element : elements_) {
+      element->OnResize(disp_region_.size.y, disp_region_.size.x,
+                        disp_region_.pos.y, disp_region_.pos.x);
+//      element->OnResize(12, 40, 2, 10);
+//      std::cout << "disp: " << disp_region_.size.y << " " << disp_region_.size.x << " "
+//                << disp_region_.pos.y << " " << disp_region_.pos.x << std::endl;
+      element->OnDraw();
     }
 
     // show title and border

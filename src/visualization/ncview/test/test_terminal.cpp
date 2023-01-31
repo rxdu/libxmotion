@@ -20,20 +20,18 @@ class SampleWindow : public NcSubWindow {
  public:
   SampleWindow(const NcSubWindow::Specs &specs) :
       NcSubWindow(specs) {
-    //  NcHbox hbox;
-    //  hbox.AddElement(win);
   }
 
  private:
   void OnDraw() override {
-//    mvprintw(1, 1, "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
-
-    mvwprintw(window_, 1, 1, "abcdefghijklmnopqrstuvwxyz");
-
+//    mvwprintw(window_, 1, 1, "abcdefghijklmnopqrstuvwxyz");
 //    mvwprintw(window_, 1, 1, "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
-//    mvwprintw(window_, 2,
-//              0,
-//              "01234567890123456789012345678901234567890123456789012345678901234567890123456789");
+    mvwprintw(window_, disp_region_.pos.y, disp_region_.pos.x,
+              "01234567890123456789012345678901234567890123456789012345678901234567890123456789");
+
+    if (specs_.with_border) {
+      box(window_, 0, 0);
+    }
   }
 };
 
@@ -43,8 +41,8 @@ int main(int argc, char *argv[]) {
 
   NcSubWindow::Specs specs;
   specs.name = "mywin";
-  specs.pos = disp.pos;
-  specs.size = disp.size;
+//  specs.pos = disp.pos;
+//  specs.size = disp.size;
   //  specs.pos.x = 1;
 //  specs.pos.y = 2;
 //  specs.size.x = 78;
@@ -52,7 +50,12 @@ int main(int argc, char *argv[]) {
 
   auto win =
       std::make_shared<SampleWindow>(specs);
-  viewer.AddSubWindow(win);
+
+  NcHbox hbox;
+  hbox.AddElement(win);
+
+//  viewer.AddSubWindow(win);
+  viewer.AddElement(win);
   viewer.Show();
 
   return 0;

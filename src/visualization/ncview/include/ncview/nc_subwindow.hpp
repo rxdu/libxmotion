@@ -45,6 +45,7 @@ class NcSubWindow : public NcElement {
   Specs specs_;
   WINDOW *window_;
   NcBox bounding_box_;
+  NcRegion disp_region_;
 };
 }  // namespace swviz
 }  // namespace robosw

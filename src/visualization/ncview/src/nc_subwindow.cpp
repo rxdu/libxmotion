@@ -15,8 +15,7 @@ NcSubWindow::NcSubWindow(const Specs &specs)
     : specs_(specs) {
   window_ = derwin(stdscr, specs_.size.y, specs_.size.x,
                    specs_.pos.y, specs_.pos.x);
-  bounding_box_ = {{specs_.pos.x, specs_.pos.x + specs_.size.x},
-                   {specs_.pos.y, specs_.pos.y + specs_.size.y}};
+  OnResize(specs_.size.y, specs_.size.x, specs_.pos.y, specs_.pos.x);
 }
 
 NcSubWindow::~NcSubWindow() {
@@ -25,7 +24,13 @@ NcSubWindow::~NcSubWindow() {
 
 void NcSubWindow::OnResize(int rows, int cols, int y, int x) {
   wresize(window_, rows, cols);
-  mvwin(window_, y, x);
+  mvderwin(window_, y, x);
+  bounding_box_ = {{x, x + cols}, {y, y + rows}};
+  if (specs_.with_border) {
+    disp_region_ = {1, 1, cols - 2, rows - 2};
+  } else {
+    disp_region_ = {0, 0, cols, rows};
+  }
 };
 
 void NcSubWindow::Update() {
@@ -37,6 +42,9 @@ void NcSubWindow::Update() {
   // post-draw
   if (specs_.with_border) {
     box(window_, 0, 0);
+    disp_region_ = {bounding_box_.x.min + 1, bounding_box_.y.min + 1,
+                    bounding_box_.x.max - bounding_box_.x.min + 1 - 2,
+                    bounding_box_.y.max - bounding_box_.y.min + 1 - 2};
   }
 }
 }  // namespace swviz
