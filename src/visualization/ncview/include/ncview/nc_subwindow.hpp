@@ -21,12 +21,9 @@ namespace swviz {
 class NcSubWindow : public NcElement {
  public:
   struct Specs {
-    Specs() : name(""), pos({0, 0}),
-              size({0, 0}), with_border(true) {};
+    Specs() : name(""), with_border(true) {};
 
     std::string name;
-    NcVector2 pos;
-    NcVector2 size;
     bool with_border;
   };
 
@@ -41,6 +38,8 @@ class NcSubWindow : public NcElement {
  protected:
   virtual void OnDraw() = 0;
   void OnResize(int rows, int cols, int y, int x) override;
+
+  void ShowTitle();
 
   Specs specs_;
   WINDOW *window_;

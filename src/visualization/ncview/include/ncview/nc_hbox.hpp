@@ -17,6 +17,8 @@ namespace swviz {
 class NcHbox : public NcContainer {
  public:
   NcHbox() = default;
+
+  void OnResize(int rows, int cols, int y, int x) final;
 };
 }
 } // robosw

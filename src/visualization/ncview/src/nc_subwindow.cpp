@@ -13,9 +13,8 @@ namespace robosw {
 namespace swviz {
 NcSubWindow::NcSubWindow(const Specs &specs)
     : specs_(specs) {
-  window_ = derwin(stdscr, specs_.size.y, specs_.size.x,
-                   specs_.pos.y, specs_.pos.x);
-  OnResize(specs_.size.y, specs_.size.x, specs_.pos.y, specs_.pos.x);
+  window_ = derwin(stdscr, 1, 1, 0, 0);
+  OnResize(1, 1, 0, 0);
 }
 
 NcSubWindow::~NcSubWindow() {
@@ -32,6 +31,14 @@ void NcSubWindow::OnResize(int rows, int cols, int y, int x) {
     disp_region_ = {0, 0, cols, rows};
   }
 };
+
+void NcSubWindow::ShowTitle() {
+  if (specs_.with_border) {
+    box(window_, 0, 0);
+    mvwprintw(window_, disp_region_.pos.y - 1, disp_region_.pos.x + 1,
+              specs_.name.c_str(), NULL);
+  }
+}
 
 void NcSubWindow::Update() {
   // pre-draw

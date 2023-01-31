@@ -1,23 +1,23 @@
 /**
-* @file nc_hbox.cpp
-* @date 1/29/23
+* @file nc_vbox.cpp
+* @date 1/31/23
 * @brief
 * 
 * @copyright Copyright (c) 2023 Ruixiang Du (rdu)
 */
 
-#include "ncview/nc_hbox.hpp"
+#include "ncview/nc_vbox.hpp"
 
 #include <cassert>
 
 namespace robosw {
 namespace swviz {
-void NcHbox::OnResize(int rows, int cols, int y, int x) {
+void NcVbox::OnResize(int rows, int cols, int y, int x) {
   int div = elements_.size();
   assert(div != 0 && "Vbox divider cannot be zero!");
-  int col_width = cols / div;
+  int row_height = rows / div;
   for (int i = 0; i < elements_.size(); ++i) {
-    elements_[i]->OnResize(rows, col_width, y, x + col_width * i);
+    elements_[i]->OnResize(row_height, cols, y + row_height * i, x);
   }
 }
 }
