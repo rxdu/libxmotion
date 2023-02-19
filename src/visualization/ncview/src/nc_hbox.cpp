@@ -33,6 +33,8 @@ void NcHbox::AllocateSpace(int rows, int cols) {
 }
 
 void NcHbox::OnResize(int rows, int cols, int y, int x) {
+  if (components_.empty()) return;
+
   AllocateSpace(rows, cols);
 
   int x_start = x;

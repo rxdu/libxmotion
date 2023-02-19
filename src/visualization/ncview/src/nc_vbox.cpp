@@ -33,6 +33,8 @@ void NcVbox::AllocateSpace(int rows, int cols) {
 }
 
 void NcVbox::OnResize(int rows, int cols, int y, int x) {
+  if (components_.empty()) return;
+
   AllocateSpace(rows, cols);
 
   int y_start = y;
