@@ -1,11 +1,11 @@
 
 /**
-* @file nc_text.hpp
-* @date 1/29/23
-* @brief
-* 
-* @copyright Copyright (c) 2023 Ruixiang Du (rdu)
-*/
+ * @file nc_text.hpp
+ * @date 1/29/23
+ * @brief
+ *
+ * @copyright Copyright (c) 2023 Ruixiang Du (rdu)
+ */
 
 #ifndef ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_TEXT_HPP_
 #define ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_TEXT_HPP_
@@ -27,7 +27,7 @@ class NcText : public NcElement {
  private:
   std::string text_;
 };
-}
-} // robosw
+}  // namespace swviz
+}  // namespace robosw
 
-#endif //ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_TEXT_HPP_
+#endif  // ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_TEXT_HPP_

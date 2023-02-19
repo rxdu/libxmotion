@@ -1,10 +1,10 @@
 /**
-* @file nc_subwindow.hpp
-* @date 7/11/22
-* @brief a sub-window of stdscr
-*
-* @copyright Copyright (c) 2022 Ruixiang Du (rdu)
-*/
+ * @file nc_subwindow.hpp
+ * @date 7/11/22
+ * @brief a sub-window of stdscr
+ *
+ * @copyright Copyright (c) 2022 Ruixiang Du (rdu)
+ */
 
 #ifndef NC_SUBWINDOW_HPP
 #define NC_SUBWINDOW_HPP
@@ -21,7 +21,7 @@ namespace swviz {
 class NcSubWindow : public NcElement {
  public:
   struct Specs {
-    Specs() : name(""), with_border(true) {};
+    Specs() : name(""), with_border(true){};
 
     std::string name;
     bool with_border;

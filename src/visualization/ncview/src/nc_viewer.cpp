@@ -65,9 +65,9 @@ void NcViewer::Deinit() {
   endwin();
 }
 
-//void NcViewer::AddSubWindow(std::shared_ptr<NcSubWindow> win) {
-//  sub_wins_[win->GetName()] = win;
-//}
+// void NcViewer::AddSubWindow(std::shared_ptr<NcSubWindow> win) {
+//   sub_wins_[win->GetName()] = win;
+// }
 
 void NcViewer::AddElement(std::shared_ptr<NcElement> element) {
   elements_.push_back(element);
@@ -81,18 +81,15 @@ void NcViewer::CalcDisplayRegion() {
       break;
     }
     case TitleOption::kWithBorderOnly: {
-      disp_region_ = {{1, 1},
-                      {term_size_x_ - 2, term_size_y_ - 2}};
+      disp_region_ = {{1, 1}, {term_size_x_ - 2, term_size_y_ - 2}};
       break;
     }
     case TitleOption::kWithTitleOnly: {
-      disp_region_ = {{0, 1},
-                      {term_size_x_, term_size_y_ - 1}};
+      disp_region_ = {{0, 1}, {term_size_x_, term_size_y_ - 1}};
       break;
     }
     case TitleOption::kWithBorderAndTitle: {
-      disp_region_ = {{1, 2},
-                      {term_size_x_ - 2, term_size_y_ - 3}};
+      disp_region_ = {{1, 2}, {term_size_x_ - 2, term_size_y_ - 3}};
       break;
     }
   }
@@ -104,16 +101,10 @@ void NcViewer::Show(uint32_t fps) {
   while (keep_running_) {
     // update sub-windows
     werase(stdscr);
-//    for (auto &win : sub_wins_) {
-//      win.second->Update();
-//    }
 
     for (auto &element : elements_) {
       element->OnResize(disp_region_.size.y, disp_region_.size.x,
                         disp_region_.pos.y, disp_region_.pos.x);
-//      element->OnResize(12, 40, 2, 10);
-//      std::cout << "disp: " << disp_region_.size.y << " " << disp_region_.size.x << " "
-//                << disp_region_.pos.y << " " << disp_region_.pos.x << std::endl;
       element->OnDraw();
     }
 
@@ -124,7 +115,8 @@ void NcViewer::Show(uint32_t fps) {
     if (!title_.empty()) {
       int row = 0;
       if (has_border_) row = 1;
-      mvwprintw(stdscr, row, (term_size_x_ - title_.size()) / 2, title_.c_str(), NULL);
+      mvwprintw(stdscr, row, (term_size_x_ - title_.size()) / 2, title_.c_str(),
+                NULL);
     }
 
     touchwin(stdscr);

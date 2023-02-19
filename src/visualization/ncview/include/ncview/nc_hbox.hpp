@@ -23,7 +23,7 @@ class NcHbox : public NcContainer {
   void OnResize(int rows, int cols, int y, int x) final;
 
  private:
-  void AllocateSpace(int rows, int cols);
+  void AllocateSpace(int rows, int cols) override;
   std::unordered_map<std::shared_ptr<NcElement>, int> allocated_sizes_;
 };
 }

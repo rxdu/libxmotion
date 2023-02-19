@@ -1,11 +1,11 @@
 
 /**
-* @file nc_types.hpp
-* @date 1/29/23
-* @brief
-* 
-* @copyright Copyright (c) 2023 Ruixiang Du (rdu)
-*/
+ * @file nc_types.hpp
+ * @date 1/29/23
+ * @brief
+ *
+ * @copyright Copyright (c) 2023 Ruixiang Du (rdu)
+ */
 
 #ifndef ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_TYPES_HPP_
 #define ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_TYPES_HPP_
@@ -31,7 +31,7 @@ struct NcBox {
   NcRange x;
   NcRange y;
 };
-}
-} // robosw
+}  // namespace swviz
+}  // namespace robosw
 
-#endif //ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_TYPES_HPP_
+#endif  // ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_TYPES_HPP_

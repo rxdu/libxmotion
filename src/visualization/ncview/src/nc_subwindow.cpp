@@ -11,15 +11,12 @@
 
 namespace robosw {
 namespace swviz {
-NcSubWindow::NcSubWindow(const Specs &specs)
-    : specs_(specs) {
+NcSubWindow::NcSubWindow(const Specs &specs) : specs_(specs) {
   window_ = derwin(stdscr, 1, 1, 0, 0);
   OnResize(1, 1, 0, 0);
 }
 
-NcSubWindow::~NcSubWindow() {
-  delwin(window_);
-}
+NcSubWindow::~NcSubWindow() { delwin(window_); }
 
 void NcSubWindow::OnResize(int rows, int cols, int y, int x) {
   wresize(window_, rows, cols);
