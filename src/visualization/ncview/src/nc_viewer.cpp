@@ -24,6 +24,8 @@
 #include <chrono>
 #include <iostream>
 
+#include "ncview/nc_text.hpp"
+
 namespace robosw {
 namespace swviz {
 NcViewer::NcViewer(const std::string &title, bool has_border)
@@ -51,6 +53,8 @@ NcViewer::~NcViewer() {
 void NcViewer::Init() {
   // setup ncurses mode
   initscr();
+  NcText::InitColor();
+
   refresh();
   cbreak();
   noecho();

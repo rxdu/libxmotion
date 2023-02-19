@@ -19,16 +19,29 @@ using namespace robosw::swviz;
 
 class SampleWindow : public NcSubWindow {
  public:
-  SampleWindow(const NcSubWindow::Specs &specs) :
-      NcSubWindow(specs) {
-  }
+  SampleWindow(const NcSubWindow::Specs &specs) : NcSubWindow(specs) {}
 
  private:
   void OnDraw() override {
-//    mvwprintw(window_, 1, 1, "abcdefghijklmnopqrstuvwxyz");
-//    mvwprintw(window_, 1, 1, "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
-    mvwprintw(window_, disp_region_.pos.y, disp_region_.pos.x,
-              "01234567890123456789012345678901234567890123456789012345678901234567890123456789");
+    //    mvwprintw(window_, 1, 1, "abcdefghijklmnopqrstuvwxyz");
+    //    mvwprintw(window_, 1, 1,
+    //    "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+    //        mvwprintw(window_, disp_region_.pos.y, disp_region_.pos.x,
+    //                  "0123456789012345678901234567890123456789012345678901234567890123"
+    //                  "4567890123456789");
+
+    NcText::Printw(
+        window_, disp_region_.pos.y, disp_region_.pos.x, NcText::Color::kBlue,
+        "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", NULL);
+
+    NcText::SetAttribute(window_, NcText::ATTR_UNDERLINE | NcText::ATTR_BOLD |
+                                      NcText::ATTR_BLINK);
+    NcText::Printw(window_, disp_region_.pos.y + 3, disp_region_.pos.x,
+                   NcText::Color::kRed, "012345678901234567890", NULL);
+    NcText::ResetAttribute(window_);
+
+    NcText::Printw(window_, disp_region_.pos.y + 5, disp_region_.pos.x,
+                   NcText::Color::kGreen, "012345678901234567890", NULL);
 
     ShowTitle();
   }
@@ -42,12 +55,9 @@ int main(int argc, char *argv[]) {
   specs.name = "mywin";
   specs.with_border = true;
 
-  auto win =
-      std::make_shared<SampleWindow>(specs);
-  auto win2 =
-      std::make_shared<SampleWindow>(specs);
-  auto win3 =
-      std::make_shared<SampleWindow>(specs);
+  auto win = std::make_shared<SampleWindow>(specs);
+  auto win2 = std::make_shared<SampleWindow>(specs);
+  auto win3 = std::make_shared<SampleWindow>(specs);
 
   auto hbox = std::make_shared<NcHbox>();
   hbox->AddElement(win, NcConstraint{NcConstraint::Type::kFixed, 0.6});
