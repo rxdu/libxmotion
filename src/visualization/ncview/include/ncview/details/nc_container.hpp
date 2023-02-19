@@ -14,22 +14,32 @@
 #include <memory>
 
 #include "ncview/details/nc_element.hpp"
+#include "ncview/details/nc_constraint.hpp"
 
 namespace robosw {
 namespace swviz {
 class NcContainer : public NcElement {
+ protected:
+  struct Component {
+    std::shared_ptr<NcElement> element;
+    NcConstraint constraint;
+  };
+
  public:
   NcContainer() = default;
   virtual ~NcContainer() = default;
 
-  void AddElement(std::shared_ptr<NcElement> element);
+  bool AddElement(std::shared_ptr<NcElement> element, NcConstraint constraint = NcConstraint{});
 
  protected:
   // resize() must be implemented by derived containers
   virtual void OnResize(int rows, int cols, int y, int x) = 0;
   void OnDraw() override;
 
-  std::vector<std::shared_ptr<NcElement>> elements_;
+  virtual bool ValidateNewConstraint(const NcConstraint &constraint);
+
+  std::vector<Component> components_;
+  uint32_t num_of_flex_components_{0};
 };
 }
 } // robosw

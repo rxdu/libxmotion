@@ -12,6 +12,8 @@
 
 #include "ncview/details/nc_container.hpp"
 
+#include <unordered_map>
+
 namespace robosw {
 namespace swviz {
 class NcHbox : public NcContainer {
@@ -19,6 +21,10 @@ class NcHbox : public NcContainer {
   NcHbox() = default;
 
   void OnResize(int rows, int cols, int y, int x) final;
+
+ private:
+  void AllocateSpace(int rows, int cols);
+  std::unordered_map<std::shared_ptr<NcElement>, int> allocated_sizes_;
 };
 }
 } // robosw

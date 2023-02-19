@@ -50,14 +50,14 @@ int main(int argc, char *argv[]) {
       std::make_shared<SampleWindow>(specs);
 
   auto hbox = std::make_shared<NcHbox>();
-  hbox->AddElement(win);
+  hbox->AddElement(win, NcConstraint{NcConstraint::Type::kFixed, 0.6});
   hbox->AddElement(win2);
 
   auto hbox2 = std::make_shared<NcHbox>();
   hbox2->AddElement(win3);
 
   auto vbox = std::make_shared<NcVbox>();
-  vbox->AddElement(hbox);
+  vbox->AddElement(hbox, NcConstraint{NcConstraint::Type::kFixed, 0.7});
   vbox->AddElement(hbox2);
 
   viewer.AddElement(vbox);

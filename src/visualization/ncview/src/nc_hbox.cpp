@@ -12,12 +12,30 @@
 
 namespace robosw {
 namespace swviz {
+void NcHbox::AllocateSpace(int rows, int cols) {
+  float allocated_ratio = 0;
+  for (int i = 0; i < components_.size(); ++i) {
+    if (components_[i].constraint.type == NcConstraint::Type::kFixed) {
+      allocated_sizes_[components_[i].element] = components_[i].constraint.ratio * cols;
+      allocated_ratio += components_[i].constraint.ratio;
+    }
+  }
+  for (int i = 0; i < components_.size(); ++i) {
+    if (components_[i].constraint.type == NcConstraint::Type::kFlexible) {
+      allocated_sizes_[components_[i].element] = (1 - allocated_ratio) / num_of_flex_components_ * cols;
+    }
+  }
+}
+
 void NcHbox::OnResize(int rows, int cols, int y, int x) {
-  int div = elements_.size();
-  assert(div != 0 && "Vbox divider cannot be zero!");
-  int col_width = cols / div;
-  for (int i = 0; i < elements_.size(); ++i) {
-    elements_[i]->OnResize(rows, col_width, y, x + col_width * i);
+  AllocateSpace(rows, cols);
+
+  int x_start = x;
+  for (int i = 0; i < components_.size(); ++i) {
+    components_[i].element->OnResize(rows,
+                                     allocated_sizes_[components_[i].element],
+                                     y, x_start);
+    x_start = x + allocated_sizes_[components_[i].element];
   }
 }
 }
