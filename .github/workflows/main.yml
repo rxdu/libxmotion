@@ -14,11 +14,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04, ubuntu-20.04]
+        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04]
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libglfw3-dev libcairo2-dev libtbb-dev libasio-dev libboost-all-dev libgsl-dev libeigen3-dev libtbb-dev libopencv-dev libyaml-cpp-dev
+      run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libglfw3-dev libcairo2-dev libtbb-dev libasio-dev libboost-all-dev libgsl-dev libeigen3-dev libtbb-dev libopencv-dev libyaml-cpp-dev libncurses-dev
     - name: Update submodules
       run: git submodule update --init --recursive      
     - name: Create Build Environment
@@ -37,11 +37,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04, ubuntu-20.04]
+        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04]
     steps:
         - uses: actions/checkout@v2
         - name: Install dependencies
-          run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libglfw3-dev libcairo2-dev libtbb-dev libasio-dev libboost-all-dev libgsl-dev libeigen3-dev libtbb-dev libopencv-dev libyaml-cpp-dev
+          run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libglfw3-dev libcairo2-dev libtbb-dev libasio-dev libboost-all-dev libgsl-dev libeigen3-dev libtbb-dev libopencv-dev libyaml-cpp-dev libncurses-dev
         - name: Update submodules
           run: git submodule update --init --recursive      
         - name: Create Build Environment
