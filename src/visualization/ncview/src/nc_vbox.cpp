@@ -1,10 +1,10 @@
 /**
-* @file nc_vbox.cpp
-* @date 1/31/23
-* @brief
-* 
-* @copyright Copyright (c) 2023 Ruixiang Du (rdu)
-*/
+ * @file nc_vbox.cpp
+ * @date 1/31/23
+ * @brief
+ *
+ * @copyright Copyright (c) 2023 Ruixiang Du (rdu)
+ */
 
 #include "ncview/nc_vbox.hpp"
 
@@ -22,11 +22,13 @@ void NcVbox::OnResize(int rows, int cols, int y, int x) {
   AllocateSpace(rows, cols);
 
   int y_start = y;
+  int y_allocated = 0;
   for (int i = 0; i < components_.size(); ++i) {
-    components_[i].element->OnResize(allocated_sizes_[components_[i].element], cols,
-                                     y_start, x);
-    y_start = y + allocated_sizes_[components_[i].element];
+    components_[i].element->OnResize(allocated_sizes_[components_[i].element],
+                                     cols, y_start, x);
+    y_allocated += allocated_sizes_[components_[i].element];
+    y_start = y + y_allocated;
   }
 }
-}
-} // robosw
+}  // namespace swviz
+}  // namespace robosw

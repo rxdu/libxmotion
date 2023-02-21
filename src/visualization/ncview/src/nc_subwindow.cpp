@@ -36,20 +36,5 @@ void NcSubWindow::ShowTitle() {
               specs_.name.c_str(), NULL);
   }
 }
-
-void NcSubWindow::Update() {
-  // pre-draw
-
-  // user-defined draw
-  OnDraw();
-
-  // post-draw
-  if (specs_.with_border) {
-    box(window_, 0, 0);
-    disp_region_ = {bounding_box_.x.min + 1, bounding_box_.y.min + 1,
-                    bounding_box_.x.max - bounding_box_.x.min + 1 - 2,
-                    bounding_box_.y.max - bounding_box_.y.min + 1 - 2};
-  }
-}
 }  // namespace swviz
 }  // namespace robosw

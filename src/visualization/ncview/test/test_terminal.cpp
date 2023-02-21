@@ -58,13 +58,15 @@ int main(int argc, char *argv[]) {
   auto win = std::make_shared<SampleWindow>(specs);
   auto win2 = std::make_shared<SampleWindow>(specs);
   auto win3 = std::make_shared<SampleWindow>(specs);
+  auto win4 = std::make_shared<SampleWindow>(specs);
 
   auto hbox = std::make_shared<NcHbox>();
   hbox->AddElement(win, NcConstraint{NcConstraint::Type::kFixed, 0.6});
   hbox->AddElement(win2);
+  hbox->AddElement(win3);
 
   auto hbox2 = std::make_shared<NcHbox>();
-  hbox2->AddElement(win3);
+  hbox2->AddElement(win4);
 
   auto vbox = std::make_shared<NcVbox>();
   vbox->AddElement(hbox, NcConstraint{NcConstraint::Type::kFixed, 0.7});

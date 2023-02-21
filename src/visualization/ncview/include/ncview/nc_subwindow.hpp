@@ -33,8 +33,6 @@ class NcSubWindow : public NcElement {
 
   std::string GetName() const { return specs_.name; }
 
-  void Update();
-
  protected:
   virtual void OnDraw() = 0;
   void OnResize(int rows, int cols, int y, int x) override;
