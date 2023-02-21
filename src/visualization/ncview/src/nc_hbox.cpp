@@ -22,10 +22,12 @@ void NcHbox::OnResize(int rows, int cols, int y, int x) {
   AllocateSpace(rows, cols);
 
   int x_start = x;
+  int x_allocated = 0;
   for (int i = 0; i < components_.size(); ++i) {
     components_[i].element->OnResize(
         rows, allocated_sizes_[components_[i].element], y, x_start);
-    x_start = x + allocated_sizes_[components_[i].element];
+    x_allocated += allocated_sizes_[components_[i].element];
+    x_start = x + x_allocated;
   }
 }
 }  // namespace swviz
