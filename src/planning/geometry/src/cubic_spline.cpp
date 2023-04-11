@@ -83,9 +83,9 @@ void CubicSpline::Interpolate(const std::vector<Knot> &knots) {
   }
 
   // copy over results
-  coefficients_.block(0, 0, n, 1) = a;
+  coefficients_.block(0, 0, n, 1) = a.block(0, 0, n, 1);
   coefficients_.block(0, 1, n, 1) = b;
-  coefficients_.block(0, 2, n, 1) = c.block(0, 0, 1, n);
+  coefficients_.block(0, 2, n, 1) = c.block(0, 0, n, 1);
   coefficients_.block(0, 3, n, 1) = d;
 
   //   std::cout << "result: " << std::endl;
@@ -160,9 +160,9 @@ void CubicSpline::Interpolate(double fp0, double fpn,
   }
 
   // copy over results
-  coefficients_.block(0, 0, n, 1) = a;
+  coefficients_.block(0, 0, n, 1) = a.block(0, 0, n, 1);
   coefficients_.block(0, 1, n, 1) = b;
-  coefficients_.block(0, 2, n, 1) = c.block(0, 0, 1, n);
+  coefficients_.block(0, 2, n, 1) = c.block(0, 0, n, 1);
   coefficients_.block(0, 3, n, 1) = d;
 
   //   std::cout << "result: " << std::endl;
