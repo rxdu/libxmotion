@@ -7,13 +7,13 @@
  * Copyright (c) 2022 Ruixiang Du (rdu)
  */
 
-#include "driver/vesc_driver/vesc_can_interface.hpp"
+#include "motor_vesc/vesc_can_interface.hpp"
 
 #include <iostream>
 #include <functional>
 
-#include "driver/vesc_driver/vesc_cmd_packet.hpp"
-#include "driver/vesc_driver/vesc_status_packet.hpp"
+#include "motor_vesc/vesc_cmd_packet.hpp"
+#include "motor_vesc/vesc_status_packet.hpp"
 
 namespace robosw {
 bool VescCanInterface::Connect(const std::string &can, uint8_t vesc_id) {

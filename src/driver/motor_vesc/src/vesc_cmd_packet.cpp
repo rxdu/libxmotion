@@ -7,7 +7,7 @@
  * Copyright (c) 2022 Ruixiang Du (rdu)
  */
 
-#include "driver/vesc_driver/vesc_cmd_packet.hpp"
+#include "motor_vesc/vesc_cmd_packet.hpp"
 
 #include <iostream>
 

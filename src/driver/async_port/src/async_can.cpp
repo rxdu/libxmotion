@@ -7,7 +7,7 @@
  * Copyright (c) 2020 Ruixiang Du (rdu)
  */
 
-#include "driver/async_port/async_can.hpp"
+#include "async_port/async_can.hpp"
 
 #include <net/if.h>
 #include <poll.h>

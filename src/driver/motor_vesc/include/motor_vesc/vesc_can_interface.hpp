@@ -13,8 +13,8 @@
 #include <mutex>
 #include <functional>
 
-#include "driver/async_port/async_can.hpp"
-#include "driver/vesc_driver/vesc_state.hpp"
+#include "async_port/async_can.hpp"
+#include "motor_vesc/vesc_state.hpp"
 
 namespace robosw {
 class VescCanInterface {

@@ -10,6 +10,10 @@
 #ifndef SENSOR_INTERFACE_HPP
 #define SENSOR_INTERFACE_HPP
 
+#include <string>
+#include <stdexcept>
+#include <functional>
+
 namespace robosw {
 template <typename T>
 class SensorInterface {

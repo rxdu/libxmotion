@@ -10,7 +10,7 @@
 #ifndef ROBOSW_SRC_DRIVER_INCLUDE_VESC_DRIVER_VESC_CMD_PACKET_HPP
 #define ROBOSW_SRC_DRIVER_INCLUDE_VESC_DRIVER_VESC_CMD_PACKET_HPP
 
-#include "driver/vesc_driver/vesc_frame.hpp"
+#include "motor_vesc/vesc_frame.hpp"
 
 namespace robosw {
 class VescSetServoPosCmdPacket : public VescFrame {
