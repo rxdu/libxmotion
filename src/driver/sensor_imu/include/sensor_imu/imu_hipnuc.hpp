@@ -10,7 +10,9 @@
 #ifndef IMU_HIPNUC_HPP
 #define IMU_HIPNUC_HPP
 
-#include "async_port/async_serial.hpp"
+#include <memory>
+
+#include "interface/driver/serial_adapter.hpp"
 #include "interface/driver/imu_interface.hpp"
 
 namespace robosw {
@@ -26,7 +28,7 @@ class ImuHipnuc : public ImuInterface {
   void GetLastImuData(ImuData *data) override;
 
  private:
-  std::shared_ptr<AsyncSerial> serial_;
+  std::shared_ptr<SerialAdapter> serial_;
 
   bool Connect(std::string dev_name) { return false; };
   void ParseSerialData(uint8_t *data, const size_t bufsize, size_t len);

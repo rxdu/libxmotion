@@ -18,6 +18,8 @@ namespace robosw {
 template <typename T>
 class SensorInterface {
  public:
+  virtual ~SensorInterface() = default;
+
   virtual bool Connect(std::string dev_name) {
     throw std::runtime_error(
         "The CAN interface is not implemented by the sensor. You also need to "

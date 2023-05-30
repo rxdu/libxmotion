@@ -8,6 +8,7 @@
  */
 
 #include "sensor_imu/imu_hipnuc.hpp"
+#include "async_port/async_serial.hpp"
 
 extern "C" {
 #include "ch_serial.h"

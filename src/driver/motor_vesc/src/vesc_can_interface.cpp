@@ -12,6 +12,8 @@
 #include <iostream>
 #include <functional>
 
+#include "async_port/async_can.hpp"
+
 #include "motor_vesc/vesc_cmd_packet.hpp"
 #include "motor_vesc/vesc_status_packet.hpp"
 

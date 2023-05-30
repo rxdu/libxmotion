@@ -28,6 +28,8 @@ struct ImuData {
 
 class ImuInterface {
  public:
+  virtual ~ImuInterface() = default;
+
   virtual bool Connect(std::string dev_name) = 0;
   virtual bool Connect(std::string dev_name, uint32_t baud_rate) = 0;
 

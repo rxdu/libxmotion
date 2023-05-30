@@ -11,9 +11,10 @@
 #define ROBOSW_SRC_DRIVER_INCLUDE_VESC_DRIVER_VESC_CAN_INTERFACE_HPP
 
 #include <mutex>
+#include <memory>
 #include <functional>
 
-#include "async_port/async_can.hpp"
+#include "interface/driver/can_adapter.hpp"
 #include "motor_vesc/vesc_state.hpp"
 
 namespace robosw {
@@ -44,7 +45,7 @@ class VescCanInterface {
   void SetServo(double servo);
 
  private:
-  std::shared_ptr<AsyncCAN> can_;
+  std::shared_ptr<CanAdapter> can_;
   uint8_t vesc_id_;
 
   mutable std::mutex state_mtx_;

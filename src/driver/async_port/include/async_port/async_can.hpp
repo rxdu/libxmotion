@@ -24,8 +24,11 @@
 #include "asio.hpp"
 #include "asio/posix/basic_stream_descriptor.hpp"
 
+#include "interface/driver/can_adapter.hpp"
+
 namespace robosw {
-class AsyncCAN : public std::enable_shared_from_this<AsyncCAN> {
+class AsyncCAN : public std::enable_shared_from_this<AsyncCAN>,
+                 public CanAdapter {
  public:
   using ReceiveCallback = std::function<void(const struct can_frame *rx_frame)>;
 
