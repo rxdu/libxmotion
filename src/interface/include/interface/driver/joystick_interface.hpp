@@ -78,6 +78,11 @@ struct JsAxisValue {
   float value;
 };
 
+struct JoystickDescriptor {
+  int index;
+  std::string name;
+};
+
 class JoystickInterface {
  public:
   using ButtonEventCallback =
@@ -92,6 +97,8 @@ class JoystickInterface {
   virtual bool Open() = 0;
   virtual void Close() = 0;
   virtual bool IsOpened() const = 0;
+
+  virtual std::string GetDeviceName() const = 0;
 
   virtual void SetButtonEventCallback(ButtonEventCallback cb) = 0;
   virtual void SetAxisEventCallback(AxisEventCallback cb) = 0;
