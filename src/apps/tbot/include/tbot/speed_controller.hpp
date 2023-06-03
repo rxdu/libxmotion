@@ -17,7 +17,7 @@
 #include <iostream>
 
 #include "interface/types.hpp"
-#include "driver/async_port/async_can.hpp"
+#include "interface/driver/can_adapter.hpp"
 #include "pid/pid_controller.hpp"
 
 namespace robosw {
@@ -30,7 +30,7 @@ class SpeedController {
 
  private:
   std::string can_dev_;
-  std::shared_ptr<AsyncCAN> can_ = nullptr;
+  std::shared_ptr<CanAdapter> can_ = nullptr;
 
   RSTimePoint t0_{RSClock::now()};
   RSTimePoint tl_{RSClock::now()};

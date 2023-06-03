@@ -12,6 +12,8 @@
 #include <cassert>
 #include <iostream>
 
+#include "async_port/async_can.hpp"
+
 #define TBOT_SUP_CMD_CAN_ID 0x100
 #define TBOT_PWM_CMD_CAN_ID 0x101
 #define TBOT_RPM_CMD_CAN_ID 0x102

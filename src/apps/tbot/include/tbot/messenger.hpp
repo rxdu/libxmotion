@@ -14,7 +14,7 @@
 #include <unordered_map>
 
 #include "interface/types.hpp"
-#include "driver/async_port/async_can.hpp"
+#include "interface/driver/can_adapter.hpp"
 #include "imview/data_buffer.hpp"
 
 namespace robosw {
@@ -61,7 +61,7 @@ class Messenger {
 
  private:
   RSTimePoint t0_;
-  std::shared_ptr<AsyncCAN> can_ = nullptr;
+  std::shared_ptr<CanAdapter> can_ = nullptr;
 
   SupervisedState supervised_state_;
   std::unordered_map<DataBufferIndex, swviz::DataBuffer> rpm_buffers_;
