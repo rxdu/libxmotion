@@ -17,6 +17,7 @@
 #include <memory>
 #include <thread>
 #include <atomic>
+#include <mutex>
 
 #include "interface/driver/joystick_interface.hpp"
 
@@ -40,8 +41,13 @@ class Joystick : public JoystickInterface {
   void Close() override;
   bool IsOpened() const override;
 
-  void SetButtonEventCallback(ButtonEventCallback cb) override;
-  void SetAxisEventCallback(AxisEventCallback cb) override;
+  std::string GetButtonName(const JsButton& btn) const;
+  std::string GetAxisName(const JsAxis& axis) const;
+
+  bool GetButtonState(const JsButton& btn) const override;
+  JsAxisValue GetAxisState(const JsAxis& axis) const override;
+
+  void SetJoystickRumble(short weakRumble, short strongRumble);
 
  private:
   void ReadJoystickInput();
@@ -55,7 +61,10 @@ class Joystick : public JoystickInterface {
   std::atomic<bool> keep_running_{false};
   std::atomic<bool> connected_{false};
 
+  mutable std::mutex buttons_mtx_;
   bool buttons_[max_js_buttons];
+
+  mutable std::mutex axes_mtx_;
   JsAxisValue axes_[max_js_axes];
 
   bool has_rumble_ = false;

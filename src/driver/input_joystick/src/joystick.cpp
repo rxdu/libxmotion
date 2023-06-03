@@ -20,7 +20,22 @@
 
 #include <iostream>
 
+#define PRINT_DEBUG_MSG 0
+
 namespace robosw {
+static const char* js_button_names[32] = {
+    "TRIGGER", "THUMB", "THUMB2", "TOP",   "TOP2", "PINKIE", "BASE",  "BASE2",
+    "BASE3",   "BASE4", "BASE5",  "BASE6", "",     "",       "",      "DEAD",
+    "SOUTH",   "EAST",  "C",      "NORTH", "WEST", "Z",      "TL",    "TR",
+    "TL2",     "TR2",   "SELECT", "START", "MODE", "THUMBL", "THUMBR"};
+
+static const char* js_axis_names[32] = {
+    "X",        "Y",        "Z",      "RX",     "RY",        "RZ",
+    "THROTTLE", "RUDDER",   "WHEEL",  "GAS",    "BRAKE",     "",
+    "",         "",         "",       "",       "HAT0X",     "HAT0Y",
+    "HAT1X",    "HAT1Y",    "HAT2X",  "HAT2Y",  "HAT3X",     "HAT3Y",
+    "PRESSURE", "DISTANCE", "TILT_X", "TILT_Y", "TOOL_WIDTH"};
+
 std::vector<JoystickDescriptor> Joystick::EnumberateJoysticks(int max_index) {
   std::vector<JoystickDescriptor> jss;
 
@@ -34,31 +49,6 @@ std::vector<JoystickDescriptor> Joystick::EnumberateJoysticks(int max_index) {
       jd.index = i;
       jd.name = {js_name};
       close(fd);
-      //      auto js = std::make_shared<Joystick>();
-      //      js->fd_ = fd;
-      //      js->connected_ = true;
-      //
-      //      ioctl(fd, EVIOCGNAME(sizeof(js_name)), js_name);
-      //      js->name_ = {js_name};
-      //
-      //      // Setup axes
-      //      for (unsigned int i = 0; i < Joystick::max_js_axes; ++i) {
-      //        input_absinfo axisInfo;
-      //        if (ioctl(fd, EVIOCGABS(i), &axisInfo) != -1) {
-      //          js->axes_[i].min = axisInfo.minimum;
-      //          js->axes_[i].max = axisInfo.maximum;
-      //        }
-      //      }
-      //
-      //      // Setup rumble
-      //      ff_effect effect = {0};
-      //      effect.type = FF_RUMBLE;
-      //      effect.id = -1;
-      //      if (ioctl(fd, EVIOCSFF, &effect) != -1) {
-      //        js->rumble_effect_id_ = effect.id;
-      //        js->has_rumble_ = true;
-      //      }
-
       jss.push_back(jd);
     }
   }
@@ -67,7 +57,15 @@ std::vector<JoystickDescriptor> Joystick::EnumberateJoysticks(int max_index) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Joystick::Joystick(JoystickDescriptor descriptor) : descriptor_(descriptor) {}
+Joystick::Joystick(JoystickDescriptor descriptor) : descriptor_(descriptor) {
+  // initialize values
+  for (int i = 0; i < max_js_buttons; ++i) buttons_[i] = false;
+  for (int i = 0; i < max_js_axes; ++i) {
+    axes_[i].min = 0;
+    axes_[i].max = 0;
+    axes_[i].value = 0;
+  }
+}
 
 Joystick::~Joystick() {
   if (connected_) {
@@ -127,42 +125,47 @@ void Joystick::Close() {
 
 bool Joystick::IsOpened() const { return connected_; }
 
-void Joystick::SetButtonEventCallback(
-    JoystickInterface::ButtonEventCallback cb) {}
+std::string Joystick::GetButtonName(const JsButton& btn) const {
+  return std::string(js_button_names[static_cast<int>(btn)]);
+}
 
-void Joystick::SetAxisEventCallback(JoystickInterface::AxisEventCallback cb) {}
+std::string Joystick::GetAxisName(const JsAxis& axis) const {
+  return std::string(js_axis_names[static_cast<int>(axis)]);
+}
+
+bool Joystick::GetButtonState(const JsButton& btn) const {
+  std::lock_guard<std::mutex> lock(buttons_mtx_);
+  return buttons_[static_cast<int>(btn)];
+}
+
+JsAxisValue Joystick::GetAxisState(const JsAxis& axis) const {
+  std::lock_guard<std::mutex> lock(axes_mtx_);
+  return axes_[static_cast<int>(axis)];
+}
 
 void Joystick::ReadJoystickInput() {
   input_event event;
   while (read(fd_, &event, sizeof(event)) > 0) {
-    if (event.type == EV_KEY && event.code >= BTN_JOYSTICK &&
-        event.code <= BTN_THUMBR) {
-      buttons_[event.code - 0x120] = event.value;
+    {
+      std::lock_guard<std::mutex> lock(buttons_mtx_);
+      if (event.type == EV_KEY && event.code >= BTN_JOYSTICK &&
+          event.code <= BTN_THUMBR) {
+        buttons_[event.code - 0x120] = event.value;
+      }
     }
-    if (event.type == EV_ABS && event.code < ABS_TOOL_WIDTH) {
-      auto axis = &axes_[event.code];
-      float normalized =
-          (event.value - axis->min) / (float)(axis->max - axis->min) * 2 - 1;
-      axes_[event.code].value = normalized;
+    {
+      std::lock_guard<std::mutex> lock(axes_mtx_);
+      if (event.type == EV_ABS && event.code < ABS_TOOL_WIDTH) {
+        auto axis = &axes_[event.code];
+        float normalized =
+            (event.value - axis->min) / (float)(axis->max - axis->min) * 2 - 1;
+        axes_[event.code].value = normalized;
+      }
     }
   }
 }
 
 void Joystick::Update() {
-  static const char* js_button_names[32] = {
-      "TRIGGER", "THUMB", "THUMB2", "TOP",   "TOP2", "PINKIE", "BASE",  "BASE2",
-      "BASE3",   "BASE4", "BASE5",  "BASE6", "",     "",       "",      "DEAD",
-
-      "SOUTH",   "EAST",  "C",      "NORTH", "WEST", "Z",      "TL",    "TR",
-      "TL2",     "TR2",   "SELECT", "START", "MODE", "THUMBL", "THUMBR"};
-
-  static const char* js_axis_names[32] = {
-      "X",        "Y",        "Z",      "RX",     "RY",        "RZ",
-      "THROTTLE", "RUDDER",   "WHEEL",  "GAS",    "BRAKE",     "",
-      "",         "",         "",       "",       "HAT0X",     "HAT0Y",
-      "HAT1X",    "HAT1Y",    "HAT2X",  "HAT2Y",  "HAT3X",     "HAT3Y",
-      "PRESSURE", "DISTANCE", "TILT_X", "TILT_Y", "TOOL_WIDTH"};
-
   // Update which joysticks are connected
   inotify_event event;
   //  if (read(device_change_notify_, &event, sizeof(event) + 16) != -1) {
@@ -175,6 +178,7 @@ void Joystick::Update() {
   if (connected_) {
     ReadJoystickInput();
 
+#if PRINT_DEBUG_MSG
     printf("%s - Axes: ", descriptor_.name.c_str());
     for (char axisIndex = 0; axisIndex < max_js_axes; ++axisIndex) {
       if (axes_[axisIndex].max - axes_[axisIndex].min)
@@ -185,13 +189,31 @@ void Joystick::Update() {
       if (buttons_[buttonIndex]) printf("%s ", js_button_names[buttonIndex]);
     }
     printf("\n");
-
-    //    short weakRumble = fabsf(joysticks[i].axes[ABS_X].value) * 0xFFFF;
-    //    short strongRumble = fabsf(joysticks[i].axes[ABS_Y].value) * 0xFFFF;
-    //    setJoystickRumble(joysticks[i], weakRumble, strongRumble);
+#endif
   }
-
+#if PRINT_DEBUG_MSG
   fflush(stdout);
+#endif
+
   usleep(16000);
+}
+
+void Joystick::SetJoystickRumble(short weakRumble, short strongRumble) {
+  if (has_rumble_) {
+    ff_effect effect = {0};
+    effect.type = FF_RUMBLE;
+    effect.id = rumble_effect_id_;
+    effect.replay.length = 5000;
+    effect.replay.delay = 0;
+    effect.u.rumble.weak_magnitude = weakRumble;
+    effect.u.rumble.strong_magnitude = strongRumble;
+    ioctl(fd_, EVIOCSFF, &effect);
+
+    input_event play = {0};
+    play.type = EV_FF;
+    play.code = rumble_effect_id_;
+    play.value = 1;
+    write(fd_, &play, sizeof(play));
+  }
 }
 }  // namespace robosw

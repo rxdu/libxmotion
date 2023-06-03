@@ -33,16 +33,21 @@ int main(int argc, char* argv[]) {
   }
 
   while (js.IsOpened()) {
-    //    auto axes = js.GetAxes();
-    //    std::cout << "Axes: ";
-    //    for (auto a : axes) std::cout << a << " ";
-    //    std::cout << std::endl;
-    //
-    //    auto buttons = js.GetButtons();
-    //    std::cout << "Buttons: ";
-    //    for (auto b : buttons) std::cout << b << " ";
-    //    std::cout << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    std::cout << "Axes X: " << js.GetAxisState(JsAxis::kX).value
+              << ", Axes Y: " << js.GetAxisState(JsAxis::kY).value
+              << ", Axes Z: " << js.GetAxisState(JsAxis::kZ).value
+              << ", Axes RX: " << js.GetAxisState(JsAxis::kRX).value
+              << ", Axes RY: " << js.GetAxisState(JsAxis::kRY).value
+              << ", Axes RZ: " << js.GetAxisState(JsAxis::kRZ).value
+              << std::endl;
+
+    if (js.GetButtonState(JsButton::kMode)) {
+      js.SetJoystickRumble(0.1 * 0xFFFF, 0.5 * 0xFFFF);
+    } else {
+      js.SetJoystickRumble(0.0 * 0xFFFF, 0.0 * 0xFFFF);
+    }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 
   return 0;
