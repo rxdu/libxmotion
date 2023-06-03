@@ -34,7 +34,7 @@ class BasicTree
 
  public:
   void AddTreeRootNode(std::shared_ptr<StateType> sstate) final {
-    TreeType::AddVertex(sstate);
+    TreeType::AddRoot(sstate);
   }
 
   void ConnectTreeNodes(std::shared_ptr<StateType> sstate,

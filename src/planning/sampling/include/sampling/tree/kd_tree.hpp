@@ -48,7 +48,7 @@ class KdTree : public Tree<std::shared_ptr<typename Space::StateType>, double>,
 
  public:
   void AddTreeRootNode(std::shared_ptr<StateType> sstate) final {
-    TreeType::AddVertex(sstate);
+    TreeType::AddRoot(sstate);
     kdtree_.insert(sstate);
   }
 

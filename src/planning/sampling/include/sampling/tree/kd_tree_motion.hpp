@@ -50,7 +50,7 @@ class KdTreeMotion
 
  public:
   void AddTreeRootNode(std::shared_ptr<StateType> sstate) final {
-    TreeType::AddVertex(sstate);
+    TreeType::AddRoot(sstate);
     kdtree_.insert(sstate);
     g_cost_[sstate->id_] = 0.0;
   }
