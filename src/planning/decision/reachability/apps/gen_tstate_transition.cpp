@@ -8,7 +8,7 @@
 #include "lightviz/navviz.hpp"
 #endif
 
-using namespace robosw;
+using namespace xmotion;
 
 int main()
 {

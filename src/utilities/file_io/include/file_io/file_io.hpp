@@ -14,7 +14,7 @@
 
 #include "file_io/project_path.hpp"
 
-namespace robosw {
+namespace xmotion {
 namespace FileIO {
 template <typename Scalar, int RowsAtCompileTime, int ColsAtCompileTime>
 bool ReadFromFile(
@@ -38,7 +38,7 @@ bool WriteToImage(
     Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime> matrix,
     bool overwrite = true);
 }  // namespace FileIO
-}  // namespace robosw
+}  // namespace xmotion
 
 #include "details/file_io_impl.hpp"
 

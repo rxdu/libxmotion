@@ -20,7 +20,7 @@
 
 #include "logging/details/specialized_logger.hpp"
 
-namespace robosw {
+namespace xmotion {
 class CsvLogger : public SpecializedLogger {
  public:
   CsvLogger(std::string logfile_prefix, std::string logfile_path) : SpecializedLogger(logfile_prefix, logfile_path) {}
@@ -56,6 +56,6 @@ class GlobalCsvLogger : public CsvLogger {
   GlobalCsvLogger(const GlobalCsvLogger &) = delete;
   GlobalCsvLogger &operator=(const GlobalCsvLogger &) = delete;
 };
-} // namespace robosw
+} // namespace xmotion
 
 #endif /* CSV_LOGGER_HPP */

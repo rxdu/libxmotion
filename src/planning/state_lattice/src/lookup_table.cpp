@@ -15,7 +15,7 @@
 
 #include "logging/loggers.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 LookupTable::LookupTable(std::string filename)
 {

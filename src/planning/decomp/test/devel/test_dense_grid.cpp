@@ -9,7 +9,7 @@
 #include "lightviz/matrix_viz.hpp"
 #endif
 
-using namespace robosw;
+using namespace xmotion;
 
 int main() {
   const int size_x = 500;

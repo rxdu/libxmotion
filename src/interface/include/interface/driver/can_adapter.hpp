@@ -15,7 +15,7 @@
 #include <string>
 #include <functional>
 
-namespace robosw {
+namespace xmotion {
 class CanAdapter {
  public:
   using ReceiveCallback = std::function<void(const struct can_frame *rx_frame)>;
@@ -31,6 +31,6 @@ class CanAdapter {
   virtual void SetReceiveCallback(ReceiveCallback cb) = 0;
   virtual void SendFrame(const struct can_frame &frame) = 0;
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif  // ROBOSW_CAN_ADAPTER_HPP

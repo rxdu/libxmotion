@@ -11,7 +11,7 @@
 
 #include "file_io/file_io.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 struct FileIOTest : testing::Test {
   FileIOTest() {

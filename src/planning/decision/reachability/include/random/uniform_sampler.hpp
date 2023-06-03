@@ -12,7 +12,7 @@
 
 #include <random>
 
-namespace robosw
+namespace xmotion
 {
 class UniformSampler
 {

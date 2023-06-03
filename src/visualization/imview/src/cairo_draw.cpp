@@ -11,7 +11,7 @@
 
 #include <cmath>
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 void DrawPoint(cairo_t *cr, ImVec2 pos, double size, ImVec4 color) {
   cairo_set_source_rgba(cr, color.x, color.y, color.z, color.w);
@@ -133,4 +133,4 @@ void DrawRectangle(cairo_t *cr, ImVec2 pos1, ImVec2 pos2, double thickness,
   }
 }
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion

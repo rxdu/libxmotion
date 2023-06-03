@@ -13,7 +13,7 @@
 #include <csignal>
 #include <iostream>
 
-using namespace robosw::swviz;
+using namespace xmotion::swviz;
 
 class MyWin : public NcWindow {
  public:

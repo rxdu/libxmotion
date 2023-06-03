@@ -13,7 +13,7 @@
 #include <string>
 #include <functional>
 
-namespace robosw {
+namespace xmotion {
 enum class JsButton {
   kTrigger = 0,
   kThumb = 1,
@@ -105,6 +105,6 @@ class JoystickInterface {
   virtual bool GetButtonState(const JsButton& btn) const = 0;
   virtual JsAxisValue GetAxisState(const JsAxis& axis) const = 0;
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif  // ROBOSW_JOYSTICK_INTERFACE_HPP

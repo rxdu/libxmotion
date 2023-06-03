@@ -9,7 +9,7 @@
 
 #include "tbot/control_panel.hpp"
 
-namespace robosw {
+namespace xmotion {
 ControlPanel::ControlPanel(swviz::Viewer *parent, TbotContext &ctx)
     : Panel("ControlPanel", parent), ctx_(ctx) {}
 
@@ -140,4 +140,4 @@ void ControlPanel::Draw() {
 
   End();
 }
-}  // namespace robosw
+}  // namespace xmotion

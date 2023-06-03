@@ -26,7 +26,7 @@
 #include "fonts/opensans_semibold.hpp"
 #include "fonts/opensans_bold.hpp"
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 void Init() {
   if (!glfwInit()) {
@@ -287,4 +287,4 @@ void Window::Show() {
   }
 }
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion

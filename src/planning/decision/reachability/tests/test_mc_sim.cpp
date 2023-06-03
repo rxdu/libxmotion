@@ -3,7 +3,7 @@
 #include "reachability/monte_carlo_sim.hpp"
 #include "stopwatch.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main()
 {

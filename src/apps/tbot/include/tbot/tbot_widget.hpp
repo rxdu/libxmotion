@@ -18,7 +18,7 @@
 #include "canbus_panel.hpp"
 #include "data_panel.hpp"
 
-namespace robosw {
+namespace xmotion {
 class TbotWidget : public swviz::Viewer {
  public:
   TbotWidget(uint32_t width = 1280, uint32_t height = 800,

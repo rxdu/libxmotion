@@ -21,7 +21,7 @@
 
 #include "imview/details/cairo_context.hpp"
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 class CairoWidget {
  public:
@@ -69,6 +69,6 @@ class CairoWidget {
   cairo_surface_t* GetImageSurface(std::string png_file);
 };
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* CAIRO_WIDGET_HPP */

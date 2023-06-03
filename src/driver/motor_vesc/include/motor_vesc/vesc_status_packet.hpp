@@ -12,7 +12,7 @@
 
 #include "motor_vesc/vesc_frame.hpp"
 
-namespace robosw {
+namespace xmotion {
 class VescStatus1Packet : public VescFrame {
  public:
   VescStatus1Packet(const struct can_frame &frame);

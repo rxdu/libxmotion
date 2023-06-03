@@ -5,7 +5,7 @@
 
 #include "sampling/random/rand_num_gen.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main(int argc, char *argv[])
 {

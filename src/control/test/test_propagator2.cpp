@@ -13,7 +13,7 @@
 
 #include "model/bicycle_model.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 using namespace boost::numeric::odeint;
 
 int main() {

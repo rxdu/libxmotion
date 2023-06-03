@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <chrono>
 
-namespace robosw {
+namespace xmotion {
 using VescClock = std::chrono::steady_clock;
 using VescTimepoint = VescClock::time_point;
 

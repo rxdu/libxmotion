@@ -17,7 +17,7 @@
 
 #include "reachability/details/car_longitudinal_model.hpp"
 
-namespace robosw {
+namespace xmotion {
 class CarModelPropagator {
  public:
   CarLongitudinalModel::state_type Propagate(CarLongitudinalModel::state_type init_state,
@@ -44,6 +44,6 @@ class CarModelPropagator {
     return x;
   }
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* CAR_MODEL_PROPAGATOR_HPP */

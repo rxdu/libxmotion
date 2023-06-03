@@ -22,7 +22,7 @@
 #include "state_lattice/motion_primitive.hpp"
 #include "state_lattice/primitive_generator.hpp"
 
-namespace robosw
+namespace xmotion
 {
 class StateLattice : public MotionPrimitive
 {
@@ -64,6 +64,6 @@ class StateLattice : public MotionPrimitive
     // MotionPrimitive TransformPrimitive(const MotionPrimitive &input, double dx, double dy, double dtheta);
     // PrimitiveNode TransformNode(const PrimitiveNode &input, double dx, double dy, double dtheta);
 };
-} // namespace robosw
+} // namespace xmotion
 
 #endif /* STATE_LATTICE_HPP */

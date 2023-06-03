@@ -53,7 +53,7 @@
 #include <array>
 #include <iostream>
 
-namespace robosw {
+namespace xmotion {
 template <typename T = uint8_t, std::size_t N = 1024>
 class RingBuffer {
  public:
@@ -140,6 +140,6 @@ class RingBuffer {
     return 1;
   }
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* RING_BUFFER_HPP */

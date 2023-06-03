@@ -9,7 +9,7 @@
 
 #include "imview/panel.hpp"
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 Panel::Panel(std::string name, Viewer *parent) :
     name_(name), parent_(parent) {}

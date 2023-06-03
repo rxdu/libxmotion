@@ -8,7 +8,7 @@
 
 #include <cstdint>
 
-namespace robosw {
+namespace xmotion {
 class StateInterface {
  public:
   explicit StateInterface(int64_t id) : id_(id){};
@@ -29,4 +29,4 @@ class StateInterface {
 //  protected:
   int64_t id_;
 };
-}  // namespace robosw
+}  // namespace xmotion

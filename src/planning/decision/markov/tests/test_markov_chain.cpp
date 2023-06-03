@@ -2,7 +2,7 @@
 
 #include "markov/markov_chain.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main()
 {

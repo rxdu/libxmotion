@@ -19,7 +19,7 @@
 
 #include <cstdint>
 
-namespace robosw {
+namespace xmotion {
 class VescFrame {
  public:
   // CAN id
@@ -51,6 +51,6 @@ class VescFrame {
  protected:
   struct can_frame frame_;
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif  // ROBOSW_SRC_DRIVER_INCLUDE_VESC_DRIVER_VESC_FRAME_HPP

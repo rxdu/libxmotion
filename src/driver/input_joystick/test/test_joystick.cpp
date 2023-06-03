@@ -13,7 +13,7 @@
 #include <chrono>
 #include <iostream>
 
-using namespace robosw;
+using namespace xmotion;
 
 int main(int argc, char* argv[]) {
   auto jds = Joystick::EnumberateJoysticks();

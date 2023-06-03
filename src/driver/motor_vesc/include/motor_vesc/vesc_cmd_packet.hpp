@@ -12,7 +12,7 @@
 
 #include "motor_vesc/vesc_frame.hpp"
 
-namespace robosw {
+namespace xmotion {
 class VescSetServoPosCmdPacket : public VescFrame {
  public:
   VescSetServoPosCmdPacket(uint8_t vesc_id, float pos);
@@ -42,6 +42,6 @@ class VescSetPositionCmdPacket : public VescFrame {
  public:
   VescSetPositionCmdPacket(uint8_t vesc_id, float pos);
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif  // ROBOSW_SRC_DRIVER_INCLUDE_VESC_DRIVER_VESC_CMD_PACKET_HPP

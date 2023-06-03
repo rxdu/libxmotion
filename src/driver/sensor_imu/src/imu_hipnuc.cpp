@@ -14,7 +14,7 @@ extern "C" {
 #include "ch_serial.h"
 }
 
-namespace robosw {
+namespace xmotion {
 namespace {
 void UnpackData(raw_t *data, ImuData *data_imu, int num) {
   data_imu->id = data->imu[num].id;
@@ -81,4 +81,4 @@ void ImuHipnuc::ParseSerialData(uint8_t *data, const size_t bufsize,
     }
   }
 }
-}  // namespace robosw
+}  // namespace xmotion

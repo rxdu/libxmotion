@@ -16,7 +16,7 @@
 #include "async_port/async_can.hpp"
 #include "pid/pid_controller.hpp"
 
-namespace robosw {
+namespace xmotion {
 namespace {
 int32_t ToInt32(uint8_t b0, uint8_t b1, uint8_t b2, uint8_t b3) {
   int32_t ret = 0;
@@ -103,9 +103,9 @@ class TbotSpeedControl {
   PidController left_pid_controller_{0.2, 0.5, 0, 100, 0.02};
   PidController right_pid_controller_{0.2, 0.5, 0, 100, 0.02};
 };
-}  // namespace robosw
+}  // namespace xmotion
 
-using namespace robosw;
+using namespace xmotion;
 
 int main(int argc, char *argv[]) {
   TbotSpeedControl tbot_speed_control("can0");

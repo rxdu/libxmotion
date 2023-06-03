@@ -11,7 +11,7 @@
 
 using namespace cv;
 
-namespace robosw {
+namespace xmotion {
 namespace {
 // Source:
 // https://stackoverflow.com/questions/7706339/grayscale-to-red-green-blue-matlab-jet-color-scale?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
@@ -50,4 +50,4 @@ void JetColorMap::Transform(double val, double &r, double &g, double &b) {
   g = JetGreen(val);
   b = JetBlue(val);
 }
-}  // namespace robosw
+}  // namespace xmotion

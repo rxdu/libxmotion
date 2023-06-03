@@ -19,7 +19,7 @@
 #include <cassert>
 // #include <unordered_map>
 
-namespace robosw
+namespace xmotion
 {
 class TStateSpace
 {
@@ -190,6 +190,6 @@ class TStateSpace
         }
     }
 };
-} // namespace robosw
+} // namespace xmotion
 
 #endif /* TSTATE_SPACE_HPP */

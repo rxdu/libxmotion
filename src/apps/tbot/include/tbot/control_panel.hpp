@@ -13,7 +13,7 @@
 #include "imview/panel.hpp"
 #include "tbot_context.hpp"
 
-namespace robosw {
+namespace xmotion {
 class ControlPanel : public swviz::Panel {
  public:
   ControlPanel(swviz::Viewer *parent, TbotContext &ctx);

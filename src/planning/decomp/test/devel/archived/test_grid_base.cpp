@@ -3,7 +3,7 @@
 
 #include "decomp/details/rect_grid_base.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main() {
   const int size_x = 10;

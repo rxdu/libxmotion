@@ -18,7 +18,7 @@
 
 #include <eigen3/Eigen/Core>
 
-namespace robosw {
+namespace xmotion {
 class PgmMap {
  public:
   struct MapInfo {
@@ -45,6 +45,6 @@ class PgmMap {
   MapInfo info_;
   MapData data_;
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* PGM_MAP_HPP */

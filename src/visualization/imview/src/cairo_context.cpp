@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 CairoContext::CairoContext(uint32_t width, uint32_t height,
                            bool normalize_coordinate)
@@ -108,4 +108,4 @@ GLuint CairoContext::RenderToGlTexture() {
   return image_texture_;
 }
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion

@@ -15,7 +15,7 @@
 #include "driver/vesc_driver/vesc_status_packet.hpp"
 #include "driver/vesc_driver/vesc_cmd_packet.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 // TODO most tests don't cover out-of-limit checks
 

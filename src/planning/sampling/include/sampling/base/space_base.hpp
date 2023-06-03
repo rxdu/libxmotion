@@ -17,7 +17,7 @@
 
 #include "sampling/random/rand_num_gen.hpp"
 
-namespace robosw {
+namespace xmotion {
 class State {
  public:
   explicit State(int64_t id) : id_(id){};
@@ -65,6 +65,6 @@ class SpaceBase {
  protected:
   RandNumGen rng_;
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* SPACE_BASE_HPP */

@@ -26,7 +26,7 @@
 
 #include "interface/driver/can_adapter.hpp"
 
-namespace robosw {
+namespace xmotion {
 class AsyncCAN : public std::enable_shared_from_this<AsyncCAN>,
                  public CanAdapter {
  public:
@@ -70,6 +70,6 @@ class AsyncCAN : public std::enable_shared_from_this<AsyncCAN>,
   void ReadFromPort(struct can_frame &rec_frame,
                     asio::posix::basic_stream_descriptor<> &stream);
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* ASYNC_CAN_HPP */

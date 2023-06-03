@@ -13,17 +13,17 @@
 #include <cstdlib>
 #include <string>
 
-namespace robosw {
+namespace xmotion {
 inline std::string GetDataFolderPath() {
   char *home_path;
   home_path = std::getenv("HOME");
   std::string log_path;
   if (home_path != NULL) {
     std::string hm(home_path);
-    log_path = hm + "/Workspace/robosw/data";
+    log_path = hm + "/Workspace/xmotion/data";
   } else {
     // default path
-    log_path = "/home/rdu/Workspace/robosw/data";
+    log_path = "/home/rdu/Workspace/xmotion/data";
   }
   return log_path;
 }
@@ -44,6 +44,6 @@ inline std::string CreateLogFileName(std::string prefix, std::string path) {
   std::string filename = path + "/" + prefix + "." + time_stamp + ".csv";
   return filename;
 }
-} // namespace robosw
+} // namespace xmotion
 
 #endif /* LOGGING_UTILS_HPP */

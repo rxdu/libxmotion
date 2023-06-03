@@ -11,7 +11,7 @@
 
 #include "implot/implot.h"
 
-namespace robosw {
+namespace xmotion {
 namespace {
 template<typename T>
 void PlotDataBufferLine(T &var_buff, const std::string &name) {

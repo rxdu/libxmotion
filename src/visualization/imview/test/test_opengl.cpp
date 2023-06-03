@@ -1,6 +1,6 @@
 #include "imview/viewer.hpp"
 
-using namespace robosw::swviz;
+using namespace xmotion::swviz;
 
 class MyViewer : public Viewer {
   void Update() override {

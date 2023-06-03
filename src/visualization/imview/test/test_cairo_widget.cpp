@@ -12,7 +12,7 @@
 #include "imview/viewer.hpp"
 #include "imview/cairo_widget.hpp"
 
-using namespace robosw::swviz;
+using namespace xmotion::swviz;
 
 const std::string img_file = "../image/fish.png";
 

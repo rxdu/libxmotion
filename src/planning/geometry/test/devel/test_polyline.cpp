@@ -2,7 +2,7 @@
 
 #include "geometry/polyline.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main() {
   Polyline polyline;

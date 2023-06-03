@@ -14,7 +14,7 @@
 
 #include <string>
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 class NcText {
  public:
@@ -64,6 +64,6 @@ class NcText {
   static int active_attributes;
 };  // namespace NcText
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif  // ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_TEXT_HPP_

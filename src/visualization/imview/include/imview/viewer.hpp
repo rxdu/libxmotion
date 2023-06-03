@@ -14,7 +14,7 @@
 
 #include "imview/window.hpp"
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 struct DisplayRegion {
   ImVec2 pos;
@@ -46,6 +46,6 @@ class Viewer {
   virtual void Update() {}
 };
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* VIEWER_BASE_HPP */

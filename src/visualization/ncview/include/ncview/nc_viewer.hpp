@@ -17,7 +17,7 @@
 
 #include "ncview/nc_subwindow.hpp"
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 class NcViewer {
   enum class TitleOption {
@@ -59,6 +59,6 @@ class NcViewer {
   NcRegion disp_region_;
 };
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* NCVIEWER_HPP */

@@ -11,7 +11,7 @@
 
 #include <cmath>
 
-namespace robosw {
+namespace xmotion {
 PidController::PidController(float kp, float ki, float kd, float umax, float ts)
     : kp_(kp), ki_(ki), kd_(kd), u_max_(umax), ts_(ts) {}
 

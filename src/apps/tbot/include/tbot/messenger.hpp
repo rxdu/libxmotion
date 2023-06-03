@@ -17,7 +17,7 @@
 #include "interface/driver/can_adapter.hpp"
 #include "imview/data_buffer.hpp"
 
-namespace robosw {
+namespace xmotion {
 class Messenger {
  public:
   enum class DataBufferIndex : RSEnumBaseType {
@@ -68,6 +68,6 @@ class Messenger {
 
   void HandleCanFrame(const can_frame *rx_frame);
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif  // ROBOSW_SRC_APPS_TBOT_INCLUDE_MESSENGER_HPP

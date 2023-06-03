@@ -1,6 +1,6 @@
 #include "geometry/polygon.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main() {
   // GeometryViz gdraw(50);

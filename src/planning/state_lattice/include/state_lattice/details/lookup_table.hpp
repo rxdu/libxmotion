@@ -18,7 +18,7 @@
 #include "state_lattice/details/point_kinematics.hpp"
 #include "state_lattice/motion_primitive.hpp"
 
-namespace robosw
+namespace xmotion
 {
 class LookupTable
 {
@@ -62,6 +62,6 @@ class LookupTable
 
     std::vector<MotionState> GenerateStateList();
 };
-} // namespace robosw
+} // namespace xmotion
 
 #endif /* LOOKUP_TABLE_HPP */

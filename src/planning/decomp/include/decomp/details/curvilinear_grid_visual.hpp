@@ -19,7 +19,7 @@
 #include "geometry/polygon.hpp"
 #include "cvdraw/cvdraw.hpp"
 
-namespace robosw {
+namespace xmotion {
 // geometric grid
 template <typename GridType>
 void DrawCurvilinearGrid(CvCanvas &canvas, const GridType &grid,
@@ -137,6 +137,6 @@ void DrawCurvilinearGridCostGrayscale(
 
   DrawCurvilinearGrid(canvas, grid);
 }
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* CURVILINEAR_GRID_VISUAL_HPP */

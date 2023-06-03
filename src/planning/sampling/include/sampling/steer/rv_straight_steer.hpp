@@ -16,7 +16,7 @@
 
 #include <eigen3/Eigen/Core>
 
-namespace robosw
+namespace xmotion
 {
 template <int32_t N>
 class RVStraightSteer
@@ -50,6 +50,6 @@ class RVStraightSteer
         return std::make_pair(space_->CreateState(end_state), max_dist_);
     }
 };
-} // namespace robosw
+} // namespace xmotion
 
 #endif /* RV_STRAIGHT_STEER_HPP */

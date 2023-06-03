@@ -20,7 +20,7 @@
 
 #include "logging/details/specialized_logger.hpp"
 
-namespace robosw {
+namespace xmotion {
 class CtrlLogger : public SpecializedLogger {
  public:
   static CtrlLogger &GetLogger(std::string logfile_prefix = "", std::string logfile_path = "");
@@ -51,6 +51,6 @@ class CtrlLogger : public SpecializedLogger {
   CtrlLogger(const CtrlLogger &) = delete;
   CtrlLogger &operator=(const CtrlLogger &) = delete;
 };
-} // namespace robosw
+} // namespace xmotion
 
 #endif /* CTRL_LOGGER_HPP */

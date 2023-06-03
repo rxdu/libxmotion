@@ -20,7 +20,7 @@
 
 #include "logging/details/specialized_logger.hpp"
 
-namespace robosw {
+namespace xmotion {
 class EventLogger : public SpecializedLogger {
  public:
   EventLogger() = delete;
@@ -72,6 +72,6 @@ class EventLogger : public SpecializedLogger {
     build_string(o, rest...);
   }
 };
-} // namespace robosw
+} // namespace xmotion
 
 #endif /* EVENT_LOGGER_HPP */

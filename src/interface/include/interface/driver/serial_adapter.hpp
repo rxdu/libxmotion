@@ -14,7 +14,7 @@
 #include <string>
 #include <functional>
 
-namespace robosw {
+namespace xmotion {
 class SerialAdapter {
  public:
   using ReceiveCallback =
@@ -33,6 +33,6 @@ class SerialAdapter {
   virtual void SetReceiveCallback(ReceiveCallback cb) = 0;
   virtual void SendBytes(const uint8_t *bytes, size_t length) = 0;
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif  // ROBOSW_SERIAL_ADAPTER_HPP

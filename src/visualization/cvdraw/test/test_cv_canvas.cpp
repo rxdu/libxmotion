@@ -2,7 +2,7 @@
 
 #include "cvdraw/cv_canvas.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main() {
   // Mat image;

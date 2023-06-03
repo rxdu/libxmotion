@@ -16,7 +16,7 @@
 #include <cairo.h>
 #include <GL/gl.h>
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 class CairoContext {
   struct Scaler {
@@ -75,6 +75,6 @@ class CairoContext {
   void GenGlTexture();
 };
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* CAIRO_CONTEXT_HPP */

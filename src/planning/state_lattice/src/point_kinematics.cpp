@@ -9,7 +9,7 @@
 
 #include "state_lattice/details/point_kinematics.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 void PointKinematics::SetParameters(const Param &p)
 {

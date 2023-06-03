@@ -1,7 +1,7 @@
 #include "geometry/polygon_viz.hpp"
 #include "geometry/polygon.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main()
 {

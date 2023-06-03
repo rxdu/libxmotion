@@ -9,7 +9,7 @@
 #include "sampling/space/realvector_space.hpp"
 #include "interface/time/stopwatch.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main()
 {

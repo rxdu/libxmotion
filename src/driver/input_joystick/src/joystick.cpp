@@ -22,7 +22,7 @@
 
 #define PRINT_DEBUG_MSG 0
 
-namespace robosw {
+namespace xmotion {
 static const char* js_button_names[32] = {
     "TRIGGER", "THUMB", "THUMB2", "TOP",   "TOP2", "PINKIE", "BASE",  "BASE2",
     "BASE3",   "BASE4", "BASE5",  "BASE6", "",     "",       "",      "DEAD",
@@ -216,4 +216,4 @@ void Joystick::SetJoystickRumble(short weakRumble, short strongRumble) {
     write(fd_, &play, sizeof(play));
   }
 }
-}  // namespace robosw
+}  // namespace xmotion

@@ -12,7 +12,7 @@
 
 #include <vector>
 
-namespace robosw {
+namespace xmotion {
 // Reference:
 //  [1] Broadhurst, A., S. Baker, and T. Kanade. 2005. “Monte Carlo Road Safety
 //  Reasoning.”
@@ -41,6 +41,6 @@ class LongitudinalDynamics {
   static constexpr double v_sw = 7.3;
   static constexpr double a_max = 7;
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* POINT_MODEL_HPP */

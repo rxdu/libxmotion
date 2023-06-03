@@ -14,7 +14,7 @@
 #include <stdexcept>
 #include <functional>
 
-namespace robosw {
+namespace xmotion {
 template <typename T>
 class SensorInterface {
  public:
@@ -46,6 +46,6 @@ class SensorInterface {
  protected:
   CallbackFunc callback_ = nullptr;
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* SENSOR_INTERFACE_HPP */

@@ -16,7 +16,7 @@
 #include "ncview/details/nc_element.hpp"
 #include "ncview/nc_text.hpp"
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 class NcSubWindow : public NcElement {
  public:
@@ -45,6 +45,6 @@ class NcSubWindow : public NcElement {
   NcRegion disp_region_;
 };
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* NC_SUBWINDOW_HPP */

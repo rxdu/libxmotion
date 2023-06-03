@@ -16,7 +16,7 @@
 #include <cstring>
 #include <iostream>
 
-namespace robosw {
+namespace xmotion {
 AsyncSerial::AsyncSerial(std::string port_name, uint32_t baud_rate)
     : port_(port_name), baud_rate_(baud_rate), serial_port_(io_context_) {}
 
@@ -156,4 +156,4 @@ void AsyncSerial::SendBytes(const uint8_t *bytes, size_t length) {
   io_context_.post(
       std::bind(&AsyncSerial::WriteToPort, shared_from_this(), true));
 }
-}  // namespace robosw
+}  // namespace xmotion

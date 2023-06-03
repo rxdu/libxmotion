@@ -11,7 +11,7 @@
 
 #include "geometry/polyline.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 struct PolylineTest : testing::Test {
   PolylineTest() {

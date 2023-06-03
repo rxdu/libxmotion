@@ -17,7 +17,7 @@
 #include "ncview/details/nc_element.hpp"
 #include "ncview/details/nc_constraint.hpp"
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 class NcContainer : public NcElement {
  protected:
@@ -51,6 +51,6 @@ class NcContainer : public NcElement {
   uint32_t num_of_flex_components_{0};
 };
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif  // ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_CONTAINER_HPP_

@@ -24,7 +24,7 @@
 #define TBOT_ENCODER_FILTERED_CAN_ID 0x212
 #define TBOT_TARGET_RPM_CAN_ID 0x213
 
-namespace robosw {
+namespace xmotion {
 namespace {
 int32_t ToInt32(uint8_t b0, uint8_t b1, uint8_t b2, uint8_t b3) {
   int32_t ret = 0;
@@ -195,4 +195,4 @@ void Messenger::SendMotionCommand(float linear, float angular) {
 
   can_->SendFrame(frame);
 }
-}  // namespace robosw
+}  // namespace xmotion

@@ -10,7 +10,7 @@
 #ifndef SQUARE_GRID_IMPL_HPP
 #define SQUARE_GRID_IMPL_HPP
 
-namespace robosw {
+namespace xmotion {
 template <typename T>
 SquareGridBase<T>::SquareGridBase(int32_t size_x, int32_t size_y,
                                   double cell_size)
@@ -197,6 +197,6 @@ std::vector<SquareCellBase<T> *> SquareGridBase<T>::GetNeighbours(
   auto index = IDToIndex(id);
   return GetNeighbours(index.GetX(), index.GetY(), allow_diag);
 }
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* SQUARE_GRID_IMPL_HPP */
