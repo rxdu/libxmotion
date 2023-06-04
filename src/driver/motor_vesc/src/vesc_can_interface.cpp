@@ -17,7 +17,7 @@
 #include "motor_vesc/vesc_cmd_packet.hpp"
 #include "motor_vesc/vesc_status_packet.hpp"
 
-namespace robosw {
+namespace xmotion {
 bool VescCanInterface::Connect(const std::string &can, uint8_t vesc_id) {
   vesc_id_ = vesc_id;
   can_ = std::make_shared<AsyncCAN>(can);

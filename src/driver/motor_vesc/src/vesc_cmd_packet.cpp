@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-namespace robosw {
+namespace xmotion {
 namespace {
 void ClampCommand(float &cmd, float min, float max) {
   if (cmd > max) cmd = max;

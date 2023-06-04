@@ -15,7 +15,7 @@
 #include "interface/driver/serial_adapter.hpp"
 #include "interface/driver/imu_interface.hpp"
 
-namespace robosw {
+namespace xmotion {
 class ImuHipnuc : public ImuInterface {
  public:
   ImuHipnuc() = default;
@@ -33,6 +33,6 @@ class ImuHipnuc : public ImuInterface {
   bool Connect(std::string dev_name) { return false; };
   void ParseSerialData(uint8_t *data, const size_t bufsize, size_t len);
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* IMU_HIPNUC_HPP */

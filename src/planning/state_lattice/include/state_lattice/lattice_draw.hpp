@@ -16,7 +16,7 @@
 
 #include "cvdraw/cvdraw.hpp"
 
-namespace robosw
+namespace xmotion
 {
 namespace LatticeViz
 {
@@ -28,6 +28,6 @@ void DrawMotionPrimitive(CvCanvas &canvas, std::vector<MotionPrimitive> &mps, do
 void DrawStateLattice(CvCanvas &canvas, StateLattice sl, double step = 0.1, cv::Scalar ln_color = CvColors::orange_color, int32_t thickness = 1);
 void DrawStateLattice(CvCanvas &canvas, std::vector<StateLattice> &sls, double step = 0.1, cv::Scalar ln_color = CvColors::orange_color, int32_t thickness = 1);
 }; // namespace LatticeViz
-} // namespace robosw
+} // namespace xmotion
 
 #endif /* LATTICE_DRAW_HPP */

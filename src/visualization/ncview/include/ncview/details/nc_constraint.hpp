@@ -10,7 +10,7 @@
 #ifndef ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_DETAILS_NC_CONSTRAINT_HPP_
 #define ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_DETAILS_NC_CONSTRAINT_HPP_
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 /// @brief Constraint for NcElement.
 /// If the type is kFixed, the ratio is used to allocate space for the element.
@@ -29,6 +29,6 @@ struct NcConstraint {
   float ratio = 0.0;
 };
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif  // ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_DETAILS_NC_CONSTRAINT_HPP_

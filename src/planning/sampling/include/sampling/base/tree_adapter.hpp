@@ -21,7 +21,7 @@
 
 #include "sampling/interface/space_interface.hpp"
 
-namespace robosw {
+namespace xmotion {
 class SpaceBase;
 
 template <typename Space>
@@ -59,6 +59,6 @@ struct TreeAdapter {
       std::shared_ptr<StateType> state, double radius) = 0;
   /*******************************************************/
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* TREE_ADAPTER_HPP */

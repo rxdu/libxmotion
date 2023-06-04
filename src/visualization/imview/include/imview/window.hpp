@@ -19,7 +19,7 @@
 
 #include <string>
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 enum class FontSize { Tiny, Small, Normal, Big, Large, ExtraLarge };
 
@@ -95,6 +95,6 @@ class Window {
 };
 }  // namespace swviz
 
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* WINDOW_HPP */

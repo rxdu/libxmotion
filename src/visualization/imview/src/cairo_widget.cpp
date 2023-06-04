@@ -14,7 +14,7 @@
 
 #include <fontconfig/fontconfig.h>
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 CairoWidget::CairoWidget(uint32_t width, uint32_t height,
                          bool normalize_coordinate)
@@ -154,4 +154,4 @@ void CairoWidget::Render(const ImVec2& uv0, const ImVec2& uv1,
                tint_col, border_col);
 }
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion

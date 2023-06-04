@@ -15,7 +15,7 @@
 #include "imview/panel.hpp"
 #include "tbot/tbot_context.hpp"
 
-namespace robosw {
+namespace xmotion {
 class CanbusPanel : public swviz::Panel {
  public:
   CanbusPanel(swviz::Viewer *parent, TbotContext &ctx);

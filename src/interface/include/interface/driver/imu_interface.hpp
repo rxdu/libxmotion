@@ -14,7 +14,7 @@
 
 #include "interface/types.hpp"
 
-namespace robosw {
+namespace xmotion {
 struct ImuData {
   uint32_t id;
   Vector3f accel;
@@ -44,6 +44,6 @@ class ImuInterface {
  protected:
   ImuCallbackFunc callback_ = nullptr;
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* IMU_INTERFACE_HPP */

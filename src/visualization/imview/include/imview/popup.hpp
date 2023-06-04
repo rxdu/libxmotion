@@ -13,7 +13,7 @@
 #include <string>
 #include <cstdint>
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 bool ShowPopupNotification(std::string msg, std::string title,
                            float width = 300, float height = 150);

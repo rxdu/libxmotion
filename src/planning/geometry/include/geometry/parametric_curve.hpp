@@ -21,7 +21,7 @@
 #include "cvdraw/cvdraw.hpp"
 #endif
 
-namespace robosw {
+namespace xmotion {
 // 2D parametric curve: x, y
 // each dimension is represented as a cubic spline
 class ParametricCurve {
@@ -59,6 +59,6 @@ void DrawParametricCurve(CvCanvas &canvas, const ParametricCurve &pcurve,
                          cv::Scalar ln_color = CvColors::blue_color,
                          int32_t thickness = 1);
 #endif
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* PARAMETRIC_CURVE_HPP */

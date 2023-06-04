@@ -9,7 +9,7 @@
 
 #include "tbot/tbot_widget.hpp"
 
-namespace robosw {
+namespace xmotion {
 using namespace swviz;
 TbotWidget::TbotWidget(uint32_t width, uint32_t height,
                        std::string title, uint32_t window_hints) :

@@ -9,7 +9,7 @@
 
 #include "sampling/random/rand_num_gen.hpp"
 
-namespace robosw
+namespace xmotion
 {
 double RandNumGen::Uniform()
 {
@@ -95,4 +95,4 @@ void RandNumGen::SetLocalSeed(std::uint_fast32_t localSeed)
     uniform_rdist_.reset();
     normal_dist_.reset();
 }
-} // namespace robosw
+} // namespace xmotion

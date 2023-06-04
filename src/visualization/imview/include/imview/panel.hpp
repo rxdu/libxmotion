@@ -14,7 +14,7 @@
 
 #include "imgui.h"
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 class Viewer;
 

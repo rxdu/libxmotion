@@ -12,7 +12,7 @@
 
 #include <memory>
 
-namespace robosw {
+namespace xmotion {
 CanbusPanel::CanbusPanel(swviz::Viewer *parent, TbotContext &ctx) :
     Panel("CanbusPanel", parent), ctx_(ctx) {
 }

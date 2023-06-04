@@ -1,7 +1,7 @@
 #include "geometry/geometry_draw.hpp"
 #include "geometry/polygon.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main()
 {

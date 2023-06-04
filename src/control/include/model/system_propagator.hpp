@@ -18,7 +18,7 @@
 
 #include <boost/numeric/odeint.hpp>
 
-namespace robosw {
+namespace xmotion {
 template <typename Model, typename Input>
 class SystemPropagator {
  public:
@@ -32,6 +32,6 @@ class SystemPropagator {
     return x;
   }
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* SYSTEM_PROPAGATOR_HPP */

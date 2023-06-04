@@ -9,7 +9,7 @@
 
 #include "tbot/data_panel.hpp"
 
-namespace robosw {
+namespace xmotion {
 DataPanel::DataPanel(swviz::Viewer *parent, TbotContext &ctx)
     : Panel("DataPanel", parent), ctx_(ctx) {}
 

@@ -16,7 +16,7 @@
 
 #include "sampling/base/tree_adapter.hpp"
 
-namespace robosw {
+namespace xmotion {
 template <typename Space, typename Tree>
 class PlannerBase {
  public:
@@ -83,6 +83,6 @@ class PlannerBase {
     return true;
   }
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* PLANNER_BASE_HPP */

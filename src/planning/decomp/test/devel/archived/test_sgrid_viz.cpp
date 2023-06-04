@@ -1,7 +1,7 @@
 #include "decomp/square_grid.hpp"
 #include "decomp/square_grid_viz.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main()
 {

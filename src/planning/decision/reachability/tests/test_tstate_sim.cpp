@@ -10,7 +10,7 @@
 // #include "geometry/matrix_viz.hpp"
 #endif
 
-using namespace robosw;
+using namespace xmotion;
 
 int main()
 {

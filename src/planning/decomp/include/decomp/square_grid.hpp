@@ -15,7 +15,7 @@
 
 #include "decomp/details/rect_grid_base.hpp"
 
-namespace robosw {
+namespace xmotion {
 /*
  * Coordinate System:
  *
@@ -159,7 +159,7 @@ class SquareGridBase : public RectGridBase<SquareCellBase<T> *> {
 
 using SquareCell = SquareCellBase<double>;
 using SquareGrid = SquareGridBase<double>;
-}  // namespace robosw
+}  // namespace xmotion
 
 #include "details/square_grid_impl.hpp"
 #ifdef ENABLE_VISUAL

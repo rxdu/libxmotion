@@ -56,7 +56,7 @@
 
 ////////////////////////////////////////////////////////////////////
 
-namespace robosw {
+namespace xmotion {
 class RectGridIndex {
  public:
   RectGridIndex(int64_t x = 0, int64_t y = 0) : index_x_(x), index_y_(y) {}
@@ -173,6 +173,6 @@ class RectGridBase : public GridTiles<TileType> {
   int64_t origin_offset_x_ = 0;
   int64_t origin_offset_y_ = 0;
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* RECT_GRID_BASE_HPP */

@@ -15,7 +15,7 @@
 
 #include "geometry/cspline.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 struct CSplineTest : testing::Test
 {

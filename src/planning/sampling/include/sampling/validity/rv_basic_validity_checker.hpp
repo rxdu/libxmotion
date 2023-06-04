@@ -12,7 +12,7 @@
 
 #include <cstdint>
 
-namespace robosw
+namespace xmotion
 {
 template <int32_t N>
 class RVBasicStateValidityChecker
@@ -24,6 +24,6 @@ class RVBasicStateValidityChecker
   public:
     RVBasicStateValidityChecker();
 };
-} // namespace robosw
+} // namespace xmotion
 
 #endif /* RV_BASIC_VALIDITY_CHECKER_HPP */

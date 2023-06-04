@@ -9,7 +9,7 @@
 
 #include "map/pgm_map.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main(int argc, char *argv[]) {
     return 0;

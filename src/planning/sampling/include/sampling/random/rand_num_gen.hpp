@@ -53,7 +53,7 @@
 
 #include "sampling/random/rng_seed_gen.hpp"
 
-namespace robosw {
+namespace xmotion {
 class RandNumGen {
  public:
   RandNumGen()
@@ -96,6 +96,6 @@ class RandNumGen {
   std::uniform_real_distribution<> uniform_rdist_{0, 1};
   std::normal_distribution<> normal_dist_{0, 1};
 };
-};  // namespace robosw
+};  // namespace xmotion
 
 #endif /* RAN_NUM_GEN_HPP */

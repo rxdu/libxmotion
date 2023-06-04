@@ -10,7 +10,7 @@
 
 #include <cassert>
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 void NcVbox::AllocateSpace(int rows, int cols) {
   SpaceAllocator1D(rows, components_, allocated_sizes_);
@@ -31,4 +31,4 @@ void NcVbox::OnResize(int rows, int cols, int y, int x) {
   }
 }
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion

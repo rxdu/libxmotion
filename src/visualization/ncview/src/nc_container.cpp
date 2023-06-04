@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 bool NcContainer::AddElement(std::shared_ptr<NcElement> element,
                              NcConstraint constraint) {
@@ -74,4 +74,4 @@ void NcContainer::SpaceAllocator1D(
   }
 }
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion

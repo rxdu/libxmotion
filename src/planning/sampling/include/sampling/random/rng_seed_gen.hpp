@@ -51,7 +51,7 @@
 #include <mutex>
 #include <random>
 
-namespace robosw {
+namespace xmotion {
 class RNGSeedGenerator {
   RNGSeedGenerator()
       : firstSeed_(std::chrono::duration_cast<std::chrono::microseconds>(
@@ -112,6 +112,6 @@ class RNGSeedGenerator {
   std::ranlux24_base sGen_;
   std::uniform_int_distribution<> sDist_;
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* RNG_SEED_GEN_HPP */

@@ -26,7 +26,7 @@
 
 #include "ncview/nc_text.hpp"
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 NcViewer::NcViewer(const std::string &title, bool has_border)
     : title_(title), has_border_(has_border) {
@@ -146,4 +146,4 @@ void NcViewer::Show(uint32_t fps) {
   }
 }
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion

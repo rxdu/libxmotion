@@ -10,7 +10,7 @@
 #ifndef CURVILINEAR_GRID_IMPL_HPP
 #define CURVILINEAR_GRID_IMPL_HPP
 
-namespace robosw {
+namespace xmotion {
 template <typename T, typename CurveType>
 CurvilinearGridBase<T, CurveType>::CurvilinearGridBase(CurveType pcurve,
                                                        double s_step,
@@ -193,6 +193,6 @@ SimplePoint2 CurvilinearGridBase<T, CurveType>::ConvertToGlobalCoordinate(
 
   return SimplePoint2(result.x(), result.y());
 }
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* CURVILINEAR_GRID_IMPL_HPP */

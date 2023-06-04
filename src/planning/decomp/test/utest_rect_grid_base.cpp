@@ -11,7 +11,7 @@
 
 #include "decomp/details/rect_grid_base.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 TEST(RectGridBaseTest, GridDouble) {
   const int size_x = 6;

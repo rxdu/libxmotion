@@ -16,7 +16,7 @@
 #include "graph/tree.hpp"
 #include "cvdraw/cvdraw.hpp"
 
-namespace robosw {
+namespace xmotion {
 namespace RRTViz {
 template <typename TreeType>
 void DrawTree(CvCanvas &canvas, TreeType *tree) {
@@ -81,6 +81,6 @@ void DrawStraightPath(CvCanvas &canvas,
   canvas.DrawPoint(pt2, 5, CvColors::finish_color);
 }
 };  // namespace RRTViz
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* RRT_DRAW_HPP */

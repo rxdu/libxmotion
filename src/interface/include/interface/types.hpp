@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <chrono>
 
-namespace robosw {
+namespace xmotion {
 template<typename T>
 struct vector3_t {
   T x;
@@ -46,6 +46,6 @@ using RSClock = std::chrono::steady_clock;
 using RSTimePoint = std::chrono::time_point<RSClock>;
 
 using RSEnumBaseType = uint32_t;
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* TYPES_HPP */

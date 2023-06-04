@@ -17,7 +17,7 @@
 
 #include "sampling/interface/state_interface.hpp"
 
-namespace robosw {
+namespace xmotion {
 template <int32_t N>
 class RealVectorSpace;
 
@@ -66,6 +66,6 @@ class RealVectorState : public StateInterface {
 
 template <int32_t N>
 std::atomic<std::size_t> RealVectorState<N>::count = {0};
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* SPACE_REALVECTOR_STATE_HPP */

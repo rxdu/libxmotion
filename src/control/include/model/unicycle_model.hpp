@@ -12,7 +12,7 @@
 
 #include <boost/numeric/odeint.hpp>
 
-namespace robosw {
+namespace xmotion {
 class UnicycleKinematics {
  public:
   using control_t = double;
@@ -25,6 +25,6 @@ class UnicycleKinematics {
   control_t u_ = 0;
   static constexpr double L = 2.4;
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* UNICYCLE_MODEL_HPP */

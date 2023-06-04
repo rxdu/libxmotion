@@ -25,7 +25,7 @@
 #include "sampling/space/realvector_state.hpp"
 #include "sampling/random/rand_num_gen.hpp"
 
-namespace robosw {
+namespace xmotion {
 template <int32_t N>
 class RealVectorSpace : public SpaceInterface<RealVectorState<N>> {
   using BaseType = SpaceInterface<RealVectorState<N>>;
@@ -162,6 +162,6 @@ class RealVectorSpace : public SpaceInterface<RealVectorState<N>> {
   std::vector<RealVectorBound> bounds_;
   std::unordered_map<std::size_t, std::shared_ptr<StateType>> all_states_;
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* SPACE_REALVECTOR_SPACE_HPP */

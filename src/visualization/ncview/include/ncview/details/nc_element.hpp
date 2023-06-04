@@ -11,7 +11,7 @@
 
 #include "ncview/nc_types.hpp"
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 struct NcElement {
   virtual ~NcElement() = default;
@@ -21,6 +21,6 @@ struct NcElement {
   virtual void OnDraw() = 0;
 };
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif  // ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_ELEMENT_HPP_

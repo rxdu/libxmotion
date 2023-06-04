@@ -9,8 +9,8 @@
 
 #include "map/pgm_map.hpp"
 
-namespace robosw {
+namespace xmotion {
 PgmMap::PgmMap(std::string yaml_file) {}
 
 bool PgmMap::LoadMapData() { return false; }
-}  // namespace robosw
+}  // namespace xmotion

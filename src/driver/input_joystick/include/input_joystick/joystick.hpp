@@ -21,7 +21,7 @@
 
 #include "interface/driver/joystick_interface.hpp"
 
-namespace robosw {
+namespace xmotion {
 class Joystick : public JoystickInterface {
  public:
   static constexpr unsigned int max_js_buttons = 32;
@@ -70,6 +70,6 @@ class Joystick : public JoystickInterface {
   bool has_rumble_ = false;
   short rumble_effect_id_;
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif  // ROBOSW_JOYSTICK_HPP

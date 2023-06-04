@@ -14,7 +14,7 @@
 
 #include "eigen3/Eigen/Dense"
 
-namespace robosw {
+namespace xmotion {
 template <typename T>
 class SpaceInterface {
  public:
@@ -47,6 +47,6 @@ class SpaceInterface {
     return nullptr;
   }
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* INTERFACE_SPACE_INTERFACE_HPP */

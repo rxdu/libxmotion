@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 int NcText::active_attributes = 0;
 
@@ -43,4 +43,4 @@ void NcText::SetAttribute(WINDOW *win, int attr) {
 
 void NcText::ResetAttribute(WINDOW *win) { wattroff(win, active_attributes); }
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion

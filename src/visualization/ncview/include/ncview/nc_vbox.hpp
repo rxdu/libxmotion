@@ -14,7 +14,7 @@
 
 #include <unordered_map>
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 class NcVbox : public NcContainer {
  public:
@@ -27,6 +27,6 @@ class NcVbox : public NcContainer {
   std::unordered_map<std::shared_ptr<NcElement>, int> allocated_sizes_;
 };
 }
-} // robosw
+} // xmotion
 
 #endif //ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_VBOX_HPP_

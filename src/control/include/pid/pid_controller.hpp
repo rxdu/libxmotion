@@ -16,7 +16,7 @@
 
 #include <eigen3/Eigen/Core>
 
-namespace robosw {
+namespace xmotion {
 //template<typename N>
 class PidController {
  public:

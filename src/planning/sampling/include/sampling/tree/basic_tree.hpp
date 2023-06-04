@@ -17,7 +17,7 @@
 #include "graph/tree.hpp"
 #include "sampling/base/tree_adapter.hpp"
 
-namespace robosw {
+namespace xmotion {
 template <typename Space>
 class BasicTree
     : public Tree<std::shared_ptr<typename Space::StateType>, double>,
@@ -34,7 +34,7 @@ class BasicTree
 
  public:
   void AddTreeRootNode(std::shared_ptr<StateType> sstate) final {
-    TreeType::AddVertex(sstate);
+    TreeType::AddRoot(sstate);
   }
 
   void ConnectTreeNodes(std::shared_ptr<StateType> sstate,
@@ -85,6 +85,6 @@ class BasicTree
     return empty;
   }
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* BASIC_TREE_HPP */

@@ -7,7 +7,7 @@
 
 #include "sampling/rrt_draw.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main()
 {

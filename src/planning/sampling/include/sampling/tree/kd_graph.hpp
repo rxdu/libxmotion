@@ -21,7 +21,7 @@
 #include "graph/graph.hpp"
 #include "sampling/base/tree_adapter.hpp"
 
-namespace robosw {
+namespace xmotion {
 template <typename Space>
 class KdGraph
     : public Graph<std::shared_ptr<typename Space::StateType>, double>,
@@ -118,6 +118,6 @@ class KdGraph
  private:
   KdTreeType kdtree_;
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* KD_GRAPH_HPP */

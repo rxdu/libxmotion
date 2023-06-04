@@ -13,7 +13,7 @@
 
 #include <eigen3/Eigen/LU>
 
-using namespace robosw;
+using namespace xmotion;
 
 #define ENABLE_SCALER_SELECTION
 

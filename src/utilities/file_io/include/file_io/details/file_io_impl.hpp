@@ -27,7 +27,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "file_io/details/stb/stb_image_write.h"
 
-namespace robosw {
+namespace xmotion {
 template <typename Scalar, int RowsAtCompileTime, int ColsAtCompileTime>
 bool FileIO::ReadFromFile(
     std::string filename,
@@ -210,6 +210,6 @@ bool FileIO::WriteToImage(
 
   return result;
 }
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* FILE_IO_IMPL_HPP */

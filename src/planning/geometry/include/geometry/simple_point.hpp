@@ -12,9 +12,9 @@
 
 #include <eigen3/Eigen/Dense>
 
-namespace robosw {
+namespace xmotion {
 using SimplePoint2 = Eigen::Vector2d;
 using SimplePoint3 = Eigen::Vector3d;
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* SIMPLE_POINT_HPP */

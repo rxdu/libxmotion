@@ -9,7 +9,7 @@
 
 #include "ncview/nc_viewer.hpp"
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 NcSubWindow::NcSubWindow(const Specs &specs) : specs_(specs) {
   window_ = derwin(stdscr, 1, 1, 0, 0);
@@ -37,4 +37,4 @@ void NcSubWindow::ShowTitle() {
   }
 }
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion

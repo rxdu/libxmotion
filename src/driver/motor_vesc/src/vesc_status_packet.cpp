@@ -13,7 +13,7 @@
 
 #include "motor_vesc/vesc_status_packet.hpp"
 
-namespace robosw {
+namespace xmotion {
 VescStatus1Packet::VescStatus1Packet(const struct can_frame &frame) : VescFrame(frame) {
   // rpm(4 byte), current*10.0(2 byte), duty*1000.0(2 byte)
   uint32_t rpm_raw = (frame.data[0] << 24) | (frame.data[1] << 16) | (frame.data[2] << 8) | (frame.data[3]);

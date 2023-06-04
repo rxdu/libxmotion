@@ -22,7 +22,7 @@
 #include "async_port/ring_buffer.hpp"
 #include "interface/driver/serial_adapter.hpp"
 
-namespace robosw {
+namespace xmotion {
 class AsyncSerial : public std::enable_shared_from_this<AsyncSerial>,
                     public SerialAdapter {
  public:
@@ -77,6 +77,6 @@ class AsyncSerial : public std::enable_shared_from_this<AsyncSerial>,
   void ReadFromPort();
   void WriteToPort(bool check_if_busy);
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* ASYNC_SERIAL_HPP */

@@ -12,7 +12,7 @@
 
 #include <cassert>
 
-namespace robosw {
+namespace xmotion {
 class RealVectorBound {
  public:
   RealVectorBound() = default;
@@ -45,6 +45,6 @@ class RealVectorBound {
   double lower_bound_ = 0.0;
   double upper_bound_ = 1.0;
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* REALVECTOR_BOUND_HPP */

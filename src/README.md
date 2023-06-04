@@ -8,4 +8,3 @@ Main components of librav (C++)
     * planning: decision making and motion planning algorithms
     * utilities: tiny 3rd-party libraries and helper/wrappper classes implemented to simplify usage of external libraries
     * cvdraw: for data visualization
-* **unit_tests**: google unit test code

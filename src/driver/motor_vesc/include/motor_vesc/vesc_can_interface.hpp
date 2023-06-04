@@ -17,7 +17,7 @@
 #include "interface/driver/can_adapter.hpp"
 #include "motor_vesc/vesc_state.hpp"
 
-namespace robosw {
+namespace xmotion {
 class VescCanInterface {
  public:
   using StateUpdatedCallback = std::function<void(const StampedVescState &)>;
@@ -54,6 +54,6 @@ class VescCanInterface {
 
   void HandleCanFrame(const struct can_frame *frame);
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif  // ROBOSW_SRC_DRIVER_INCLUDE_VESC_DRIVER_VESC_CAN_INTERFACE_HPP

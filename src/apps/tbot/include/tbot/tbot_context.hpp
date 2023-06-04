@@ -16,7 +16,7 @@
 #include "tbot/messenger.hpp"
 #include "tbot/speed_controller.hpp"
 
-namespace robosw {
+namespace xmotion {
 struct TbotContext {
   float plot_history = 30.0;
 

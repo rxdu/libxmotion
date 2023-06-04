@@ -11,7 +11,7 @@
 
 #include <cassert>
 
-namespace robosw {
+namespace xmotion {
 ParametricCurve::ParametricCurve(Polyline center_polyline)
     : polyline_(center_polyline) {}
 
@@ -94,4 +94,4 @@ void DrawParametricCurve(CvCanvas &canvas, const ParametricCurve &pcurve,
                     ln_color, thickness);
 }
 #endif
-}  // namespace robosw
+}  // namespace xmotion

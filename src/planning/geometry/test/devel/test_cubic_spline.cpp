@@ -4,7 +4,7 @@
 
 #include "geometry/cubic_spline.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main() {
   std::vector<CubicSpline::Knot> knots;

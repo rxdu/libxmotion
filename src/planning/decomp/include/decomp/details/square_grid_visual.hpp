@@ -20,7 +20,7 @@
 #include "cvdraw/cvdraw.hpp"
 #endif
 
-namespace robosw {
+namespace xmotion {
 template <typename GridType>
 CvCanvas CreateCanvas(const GridType &grid, int32_t ppu = 100) {
   int32_t vis_side_size = grid.GetCellSize() * ppu;
@@ -133,6 +133,6 @@ void DrawGridCostOnly(CvCanvas &canvas, const GridType &grid) {
       }
     }
 }
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* SQUARE_GRID_VISUAL_HPP */

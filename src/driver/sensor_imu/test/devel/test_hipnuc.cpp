@@ -9,7 +9,7 @@
 
 #include "driver/imu_driver/imu_hipnuc.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main(int argc, char **argv) {
   ImuHipnuc imu;

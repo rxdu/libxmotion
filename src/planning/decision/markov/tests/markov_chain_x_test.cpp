@@ -16,7 +16,7 @@
 
 #include "markov/markov_chain_x.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 struct MarkovChainXTest : testing::Test
 {

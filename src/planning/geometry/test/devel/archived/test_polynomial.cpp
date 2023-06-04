@@ -1,7 +1,7 @@
 #include <iostream>
 #include "geometry/polynomial.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main()
 {

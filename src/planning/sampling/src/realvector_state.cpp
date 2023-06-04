@@ -8,7 +8,7 @@
 
 #include "sampling/space/realvector_state.hpp"
 
-namespace robosw {
+namespace xmotion {
 template <int32_t N>
 std::atomic<std::size_t> RealVectorState<N>::count = {0};
 }

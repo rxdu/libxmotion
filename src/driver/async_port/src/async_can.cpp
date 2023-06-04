@@ -18,7 +18,7 @@
 
 #include <iostream>
 
-namespace robosw {
+namespace xmotion {
 AsyncCAN::AsyncCAN(std::string can_port)
     : port_(can_port), socketcan_stream_(io_context_) {}
 
@@ -134,4 +134,4 @@ void AsyncCAN::SendFrame(const struct can_frame &frame) {
       });
 }
 
-}  // namespace robosw
+}  // namespace xmotion

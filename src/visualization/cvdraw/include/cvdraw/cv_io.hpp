@@ -18,7 +18,7 @@
 #include "cvdraw/color_maps.hpp"
 #include "cvdraw/cv_canvas.hpp"
 
-namespace robosw {
+namespace xmotion {
 namespace CvIO {
 /******************* Basic Input/Output *******************/
 // Read image from file
@@ -33,6 +33,6 @@ void ShowImage(cv::Mat img, std::string window_name = "Image",
 void ShowImageFrame(cv::Mat img, std::string window_name = "Image",
                     int32_t frame_period_ms = 50);
 }  // namespace CvIO
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* CV_IO_HPP */

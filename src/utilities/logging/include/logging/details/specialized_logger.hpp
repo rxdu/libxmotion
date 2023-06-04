@@ -18,7 +18,7 @@
 #include "logging/details/spdlog_headers.hpp"
 #include "logging/details/logging_utils.hpp"
 
-namespace robosw {
+namespace xmotion {
 class SpecializedLogger {
  public:
   SpecializedLogger() = delete;
@@ -51,6 +51,6 @@ class SpecializedLogger {
     build_string(o, rest...);
   }
 };
-} // namespace robosw
+} // namespace xmotion
 
 #endif /* SPECIALIZED_LOGGER_HPP */

@@ -10,7 +10,7 @@
 #ifndef ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_TYPES_HPP_
 #define ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_TYPES_HPP_
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 struct NcVector2 {
   int x = 0;
@@ -32,6 +32,6 @@ struct NcBox {
   NcRange y;
 };
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif  // ROBOSW_SRC_VISUALIZATION_NCVIEW_INCLUDE_NCVIEW_NC_TYPES_HPP_

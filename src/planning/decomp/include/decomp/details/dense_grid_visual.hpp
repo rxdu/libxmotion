@@ -21,7 +21,7 @@
 #include "decomp/dense_grid.hpp"
 #include "cvdraw/cvdraw.hpp"
 
-namespace robosw {
+namespace xmotion {
 cv::Mat CreateColorMapFromEigenMatrix(const Eigen::MatrixXd &matrix,
                                       bool invert_y = false) {
   cv::Mat grey_img, color_img;
@@ -80,6 +80,6 @@ void ShowPathOnMatrixAsColorMap(const Eigen::MatrixXd &matrix,
 
   CvIO::ShowImage(color_img, window_name, save_img);
 }
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* DENSE_GRID_VISUAL_HPP */

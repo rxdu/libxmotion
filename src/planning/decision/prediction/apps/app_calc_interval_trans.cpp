@@ -8,7 +8,7 @@
 #include "stopwatch.hpp"
 #include "file_io/folder_path.hpp"
 
-using namespace robosw;
+using namespace xmotion;
 
 int main()
 {

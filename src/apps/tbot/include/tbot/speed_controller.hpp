@@ -20,7 +20,7 @@
 #include "interface/driver/can_adapter.hpp"
 #include "pid/pid_controller.hpp"
 
-namespace robosw {
+namespace xmotion {
 class SpeedController {
  public:
   SpeedController() = default;
@@ -40,6 +40,6 @@ class SpeedController {
   void SendPwmCommand(float left, float right);
   void HandleCanFrame(const can_frame *rx_frame);
 };
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif  // ROBOSW_SRC_APPS_TBOT_INCLUDE_TBOT_SPEED_CONTROLLER_HPP

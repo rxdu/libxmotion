@@ -11,7 +11,7 @@
 
 #include <cmath>
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 DataBuffer::DataBuffer(uint32_t size) : buffer_size_(size) {
   data_.reserve(size);
@@ -47,4 +47,4 @@ ImVec2 &DataBuffer::operator[](std::size_t index) {
   return data_[index];
 }
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion

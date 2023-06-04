@@ -13,7 +13,7 @@
 #include <sstream>
 #include <ctime>
 
-namespace robosw {
+namespace xmotion {
 CtrlLogger::CtrlLogger(std::string logfile_prefix, std::string logfile_path) :
     SpecializedLogger(logfile_prefix, logfile_path),
     head_added_(false),
@@ -108,4 +108,4 @@ void CtrlLogger::PassEntryDataToLogger() {
     logger_->info(log_entry);
 #endif
 }
-} // namespace robosw
+} // namespace xmotion

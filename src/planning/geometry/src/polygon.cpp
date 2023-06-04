@@ -13,7 +13,7 @@
 #include <cassert>
 #include <cmath>
 
-namespace robosw {
+namespace xmotion {
 Polygon::Polygon(const std::vector<SimplePoint2> &pts) : points_(pts) {
   for (const auto &pt : points_) {
     UpdateXYMinMax(pt.x(), pt.y());
@@ -173,4 +173,4 @@ void FillPolygon(CvCanvas &canvas, const Polygon &polygon, bool show_dot,
   canvas.FillPoly(pts, fill_color);
 }
 #endif
-}  // namespace robosw
+}  // namespace xmotion

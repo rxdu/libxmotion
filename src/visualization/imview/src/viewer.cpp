@@ -9,7 +9,7 @@
 
 #include "imview/viewer.hpp"
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 Viewer::Viewer(uint32_t width, uint32_t height, std::string title,
                uint32_t window_hints) {
@@ -55,4 +55,4 @@ void Viewer::Show() {
   }
 }
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion

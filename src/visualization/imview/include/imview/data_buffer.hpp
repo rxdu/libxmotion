@@ -16,7 +16,7 @@
 
 #include "imgui.h"
 
-namespace robosw {
+namespace xmotion {
 namespace swviz {
 class DataBuffer {
  public:
@@ -37,6 +37,6 @@ class DataBuffer {
   uint32_t offset_ = 0;
 };
 }  // namespace swviz
-}  // namespace robosw
+}  // namespace xmotion
 
 #endif /* PLOT_BUFFER_HPP */

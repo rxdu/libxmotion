@@ -15,7 +15,7 @@
 #include "ncview/nc_hbox.hpp"
 #include "ncview/nc_vbox.hpp"
 
-using namespace robosw::swviz;
+using namespace xmotion::swviz;
 
 class SampleWindow : public NcSubWindow {
  public:

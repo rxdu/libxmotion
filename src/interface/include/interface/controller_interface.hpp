@@ -10,7 +10,7 @@
 #ifndef ROBOSW_SRC_INTERFACE_INCLUDE_INTERFACE_CONTROLLER_INTERFACE_HPP
 #define ROBOSW_SRC_INTERFACE_INCLUDE_INTERFACE_CONTROLLER_INTERFACE_HPP
 
-namespace robosw {
+namespace xmotion {
 template<typename State, typename Output>
 class ControllerInterface {
  public:
