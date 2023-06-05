@@ -12,9 +12,5 @@ target_include_directories(stopwatch INTERFACE
 
 add_subdirectory(spatial)
 
-if(BUILD_TESTS)
-    option(LCM_ENABLE_TESTS "Build LCM tests" ON)
-else ()
-    option(LCM_ENABLE_TESTS "Build LCM tests" OFF)
-endif()
+set(LCM_ENABLE_TESTS OFF CACHE BOOL "Build LCM tests")
 add_subdirectory(lcm)
