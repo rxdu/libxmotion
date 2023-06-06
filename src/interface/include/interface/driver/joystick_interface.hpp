@@ -104,6 +104,8 @@ class JoystickInterface {
 
   virtual bool GetButtonState(const JsButton& btn) const = 0;
   virtual JsAxisValue GetAxisState(const JsAxis& axis) const = 0;
+
+  virtual void SetJoystickRumble(short weakRumble, short strongRumble) {}
 };
 }  // namespace xmotion
 

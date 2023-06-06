@@ -19,6 +19,3 @@
 [submodule "src/visualization/imcore/implot"]
 	path = src/visualization/imcore/implot
 	url = https://github.com/epezent/implot.git
-[submodule "extern/lcm"]
-	path = extern/lcm
-	url = https://github.com/lcm-proj/lcm.git
