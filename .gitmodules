@@ -19,3 +19,6 @@
 [submodule "src/visualization/imcore/implot"]
 	path = src/visualization/imcore/implot
 	url = https://github.com/epezent/implot.git
+[submodule "extern/cyclonedds"]
+	path = extern/cyclonedds
+	url = https://github.com/eclipse-cyclonedds/cyclonedds.git
