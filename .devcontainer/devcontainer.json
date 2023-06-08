@@ -1,12 +1,12 @@
 // See https://aka.ms/vscode-remote/devcontainer.json for format details.
 {
-	"dockerFile": "Dockerfile",
+	"dockerFile": "Dockerfile.jammy",
 	"build": {
 		"args": {
 			"WORKSPACE": "${containerWorkspaceFolder}"
 		}
 	},
-	"remoteUser": "ros",
+	"remoteUser": "ubuntu",
 	"runArgs": [
 		"--network=host",
                 // This will allow you to use a ptrace-based debugger like C++, Go, and Rust.
