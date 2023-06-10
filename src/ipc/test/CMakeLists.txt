@@ -6,8 +6,6 @@
 
 find_package(CycloneDDS REQUIRED)
 
-message(STATUS "Cyclone include: ${CycloneDDS_INCLUDE_DIRS}")
-
 idlc_generate(TARGET HelloWorldData_lib FILES "HelloWorldData.idl" WARNINGS no-implicit-extensibility)
 #idlc_generate(TARGET HelloWorldData_lib FILES "HelloWorldData.idl")
 
