@@ -23,6 +23,13 @@ RUN apt-get -y --no-install-recommends install \
 # Set up user account
 RUN useradd -ms /bin/bash ubuntu && echo "ubuntu:ubuntu" | chpasswd && adduser ubuntu sudo
 
+# install cyclonedds
+RUN git clone -b 0.9.1 https://github.com/eclipse-cyclonedds/cyclonedds.git && \
+    cd cyclonedds && mkdir build && cd build && \
+    cmake -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DENABLE_SHM=NO .. && \
+    make -j && make install && \
+    cd .. && rm -rf cyclonedds
+
 # Install dependent packages
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \

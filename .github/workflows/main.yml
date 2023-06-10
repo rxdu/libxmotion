@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Install cyclonedds
         run: |
-          git clone https://github.com/eclipse-cyclonedds/cyclonedds.git
+          git clone -b 0.9.1 https://github.com/eclipse-cyclonedds/cyclonedds.git
           cd cyclonedds && mkdir build && cd build
           cmake -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DENABLE_SHM=NO ..
           make -j && sudo make install
@@ -51,7 +51,7 @@ jobs:
     steps:
       - name: Install cyclonedds
         run: |
-          git clone https://github.com/eclipse-cyclonedds/cyclonedds.git
+          git clone -b 0.9.1 https://github.com/eclipse-cyclonedds/cyclonedds.git
           cd cyclonedds && mkdir build && cd build
           cmake -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DENABLE_SHM=NO ..
           make -j && sudo make install
