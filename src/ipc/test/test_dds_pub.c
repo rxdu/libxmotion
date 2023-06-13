@@ -24,7 +24,7 @@ int main (int argc, char ** argv)
   (void)argv;
 
   /* Create a Participant. */
-  participant = dds_create_participant (DDS_DOMAIN_DEFAULT, NULL, NULL);
+  participant = dds_create_participant (0, NULL, NULL);
   if (participant < 0)
     DDS_FATAL("dds_create_participant: %s\n", dds_strretcode(-participant));
 
