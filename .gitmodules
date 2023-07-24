@@ -21,4 +21,4 @@
 	url = https://github.com/epezent/implot.git
 [submodule "src/ipc/ros2_idl"]
 	path = src/ipc/ros2_idl
-	url = git@github.com:rxdu/ros2_idl.git
+	url = https://github.com/rxdu/ros2_idl.git
