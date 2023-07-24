@@ -4,6 +4,10 @@
  * Created on 6/1/23 8:46 PM
  * Description:
  *
+ * Input: joystick config and joystick readings
+ *   - Required key: left joystick, right joystick, right trigger
+ * Output: command of type Twist to /cmd_vel
+ *
  * Copyright (c) 2023 Ruixiang Du (rdu)
  */
 
