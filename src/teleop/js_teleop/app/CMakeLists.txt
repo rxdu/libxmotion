@@ -1,0 +1,2 @@
+add_executable(app_js_teleop app_js_teleop.cpp)
+target_link_libraries(app_js_teleop js_teleop)

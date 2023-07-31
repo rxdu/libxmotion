@@ -74,9 +74,11 @@ else()
     message(STATUS "Tests will not be built")
 endif()
 
+# # Dependent libraries
+add_subdirectory(extern)
+
 # # Add source directories
 add_subdirectory(src)
-add_subdirectory(extern)
 
 # # Installation setup
 # Offer the user the choice of overriding the installation directories

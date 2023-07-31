@@ -1,0 +1,45 @@
+FROM ubuntu:jammy
+
+# arguments
+ARG DEBIAN_FRONTEND=noninteractive
+ARG TZ=Asia/Singapore
+
+# system upgrade
+RUN apt-get -y update && apt-get -y dist-upgrade
+
+# common packages
+RUN apt-get -y --no-install-recommends install \
+    ca-certificates \
+    build-essential \
+    git \
+    cmake \
+    wget \
+    curl \
+    locales \
+    keyboard-configuration \
+    software-properties-common \
+    sudo
+
+# Set up user account
+RUN useradd -ms /bin/bash ubuntu && echo "ubuntu:ubuntu" | chpasswd && adduser ubuntu sudo
+
+# install cyclonedds
+RUN git clone -b 0.9.1 https://github.com/eclipse-cyclonedds/cyclonedds.git && \
+    cd cyclonedds && mkdir build && cd build && \
+    cmake -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DENABLE_SHM=NO .. && \
+    make -j && make install && \
+    cd .. && rm -rf cyclonedds
+
+# Install dependent packages
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && \
+    apt-get install -y libgl1-mesa-dev \
+    libglfw3-dev libcairo2-dev libtbb-dev \
+    libasio-dev libboost-all-dev libgsl-dev \
+    libeigen3-dev libtbb-dev libopencv-dev \
+    libyaml-cpp-dev libncurses-dev libevdev-dev
+
+# Clean up
+RUN apt-get autoremove -y \
+        && apt-get clean -y \
+        && rm -rf /var/lib/apt/lists/*

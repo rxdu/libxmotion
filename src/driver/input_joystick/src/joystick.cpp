@@ -213,7 +213,8 @@ void Joystick::SetJoystickRumble(short weakRumble, short strongRumble) {
     play.type = EV_FF;
     play.code = rumble_effect_id_;
     play.value = 1;
-    write(fd_, &play, sizeof(play));
+    ssize_t ret = write(fd_, &play, sizeof(play));
+    (void)ret;
   }
 }
 }  // namespace xmotion
