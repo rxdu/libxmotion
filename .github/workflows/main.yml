@@ -33,6 +33,7 @@ jobs:
            make -j && sudo make install
       - name: Install iceoryx
         run: |
+          sudo apt-get install -y libacl1-dev libncurses5-dev pkg-config
           git clone -b v2.0.3 https://github.com/eclipse-iceoryx/iceoryx.git
             cd iceoryx 
             cmake -Bbuild -Hiceoryx_meta -DCMAKE_PREFIX_PATH=$(pwd)/build/dependencies/
@@ -63,6 +64,7 @@ jobs:
           make -j && sudo make install
       - name: Install iceoryx
         run: |
+          sudo apt-get install -y libacl1-dev libncurses5-dev pkg-config
           git clone -b v2.0.3 https://github.com/eclipse-iceoryx/iceoryx.git
             cd iceoryx 
             cmake -Bbuild -Hiceoryx_meta -DCMAKE_PREFIX_PATH=$(pwd)/build/dependencies/
