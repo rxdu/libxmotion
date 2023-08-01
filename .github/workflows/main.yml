@@ -31,6 +31,12 @@ jobs:
            cd cyclonedds && mkdir build && cd build
            cmake -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DENABLE_SHM=NO ..
            make -j && sudo make install
+      - name: Install iceoryx
+        run: |
+          git clone -b v2.0.3 https://github.com/eclipse-iceoryx/iceoryx.git
+            cd iceoryx 
+            cmake -Bbuild -Hiceoryx_meta -DCMAKE_PREFIX_PATH=$(pwd)/build/dependencies/
+            cmake --build build && sudo cmake --build build --target install
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
       - name: Configure CMake
@@ -55,6 +61,12 @@ jobs:
           cd cyclonedds && mkdir build && cd build
           cmake -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DENABLE_SHM=NO ..
           make -j && sudo make install
+      - name: Install iceoryx
+        run: |
+          git clone -b v2.0.3 https://github.com/eclipse-iceoryx/iceoryx.git
+            cd iceoryx 
+            cmake -Bbuild -Hiceoryx_meta -DCMAKE_PREFIX_PATH=$(pwd)/build/dependencies/
+            cmake --build build && sudo cmake --build build --target install
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: |
