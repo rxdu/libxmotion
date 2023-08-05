@@ -22,7 +22,7 @@ endif()
 
 ## installation configuration
 #install(TARGETS control
-#        EXPORT roboswTargets
+#        EXPORT xmotionTargets
 #        LIBRARY DESTINATION lib
 #        ARCHIVE DESTINATION lib
 #        RUNTIME DESTINATION bin

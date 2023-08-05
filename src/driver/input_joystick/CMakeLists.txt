@@ -16,7 +16,7 @@ endif ()
 
 ## installation configuration
 install(TARGETS input_joystick
-        EXPORT roboswTargets
+        EXPORT xmotionTargets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin

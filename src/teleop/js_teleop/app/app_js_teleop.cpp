@@ -4,9 +4,10 @@
  * Created on 6/1/23 8:46 PM
  * Description:
  *
- * Input: joystick config and joystick readings
+ * Input 1: joystick config and joystick readings
  *   - Required key: left joystick, right joystick, right trigger
- * Output: command of type Twist to /cmd_vel
+ * Input 2: /cmd_vel topic of type Twist
+ * Output (to VESC): command to vesc driver
  *
  * Copyright (c) 2023 Ruixiang Du (rdu)
  */
@@ -33,6 +34,9 @@ int main(int argc, char* argv[]) {
 
   JoystickTeleop::Config config;
   config.jd = jds.front();
+  config.can_if_name = "can0";
+  config.vesc_id = 0x68;
+
   JoystickTeleop teleop(config);
 
   if (teleop.Initialize()) {
