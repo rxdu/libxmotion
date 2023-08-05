@@ -12,13 +12,13 @@ target_include_directories(motor_vesc PUBLIC
         $<INSTALL_INTERFACE:include>
         PRIVATE src)
 
-#if (BUILD_TESTS)
-#    add_subdirectory(test)
-#endif ()
+if (BUILD_TESTS)
+    add_subdirectory(test)
+endif ()
 
 ## installation configuration
 install(TARGETS motor_vesc
-        EXPORT roboswTargets
+        EXPORT xmotionTargets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin

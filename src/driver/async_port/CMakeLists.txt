@@ -17,7 +17,7 @@ target_include_directories(async_port PUBLIC
 
 ## installation configuration
 install(TARGETS async_port
-        EXPORT roboswTargets
+        EXPORT xmotionTargets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin

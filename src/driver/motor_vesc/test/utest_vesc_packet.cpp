@@ -12,8 +12,8 @@
 #include <cstdint>
 #include <cstring>
 
-#include "driver/vesc_driver/vesc_status_packet.hpp"
-#include "driver/vesc_driver/vesc_cmd_packet.hpp"
+#include "motor_vesc/vesc_status_packet.hpp"
+#include "motor_vesc/vesc_cmd_packet.hpp"
 
 using namespace xmotion;
 

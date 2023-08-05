@@ -11,11 +11,19 @@
 #define XMOTION_LIB_DDS_PARTICIPANT_HPP
 
 #include <cstdint>
+#include <string>
+#include <vector>
+#include <memory>
+
+#include "dds/dds.h"
+
+#include "dds_ipc/dds_publisher.hpp"
+#include "dds_ipc/dds_qos.hpp"
 
 namespace xmotion {
 class DdsParticipant {
  public:
-  DdsParticipant(uint32_t domain_id);
+  DdsParticipant(uint32_t domain_id = DDS_DOMAIN_DEFAULT);
   ~DdsParticipant();
 
   // do not allow copy
@@ -25,13 +33,17 @@ class DdsParticipant {
   DdsParticipant& operator=(DdsParticipant&&) = delete;
 
   // public interface
-//  template <typename MsgType>
-//  std::shared_ptr<DdsPublisher> CreatePublisher(
-//      std::string topic_name, DdsPublisherQos qos = DdsPublisherQos());
+  dds_entity_t entity() const { return participant_; }
+
+  std::shared_ptr<DdsPublisher> CreatePublisher(
+      std::string topic_name, const dds_topic_descriptor_t* topic_desc,
+      DdsQos qos = DdsQos());
 
  private:
   uint32_t domain_id_;
   dds_entity_t participant_;
+
+  std::vector<dds_entity_t> topics_;
 };
 }  // namespace xmotion
 

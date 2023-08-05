@@ -7,6 +7,6 @@
  * Copyright (c) 2023 Ruixiang Du (rdu)
  */
 
-#include "dds_publisher.hpp"
+#include "dds_ipc/dds_publisher.hpp"
 
 namespace {}

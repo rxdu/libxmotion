@@ -17,7 +17,7 @@ target_include_directories(sensor_imu PUBLIC
 
 ## installation configuration
 install(TARGETS sensor_imu
-        EXPORT roboswTargets
+        EXPORT xmotionTargets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin

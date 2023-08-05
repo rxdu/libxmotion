@@ -11,7 +11,7 @@
 #include <chrono>
 #include <thread>
 
-#include "driver/vesc_driver/vesc_can_interface.hpp"
+#include "motor_vesc/vesc_can_interface.hpp"
 
 using namespace xmotion;
 

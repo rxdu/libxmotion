@@ -5,7 +5,7 @@ target_include_directories(interface INTERFACE
 
 ## installation configuration
 install(TARGETS interface
-        EXPORT roboswTargets
+        EXPORT xmotionTargets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin
