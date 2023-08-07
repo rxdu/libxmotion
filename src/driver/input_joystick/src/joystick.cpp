@@ -58,18 +58,25 @@ std::vector<JoystickDescriptor> Joystick::EnumberateJoysticks(int max_index) {
 ////////////////////////////////////////////////////////////////////////////////
 
 Joystick::Joystick(JoystickDescriptor descriptor) : descriptor_(descriptor) {
+  InitializeChannels();
+}
+
+Joystick::Joystick(int index)
+    : Joystick(JoystickDescriptor{index, "js" + std::to_string(index)}) {}
+
+Joystick::~Joystick() {
+  if (connected_) {
+    Close();
+  }
+}
+
+void Joystick::InitializeChannels() {
   // initialize values
   for (int i = 0; i < max_js_buttons; ++i) buttons_[i] = false;
   for (int i = 0; i < max_js_axes; ++i) {
     axes_[i].min = 0;
     axes_[i].max = 0;
     axes_[i].value = 0;
-  }
-}
-
-Joystick::~Joystick() {
-  if (connected_) {
-    Close();
   }
 }
 

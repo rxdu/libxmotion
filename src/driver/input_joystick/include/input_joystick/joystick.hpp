@@ -32,6 +32,7 @@ class Joystick : public JoystickInterface {
 
  public:
   Joystick(JoystickDescriptor descriptor);
+  explicit Joystick(int index);
   ~Joystick();
 
   std::string GetDeviceName() const override { return descriptor_.name; };
@@ -50,6 +51,7 @@ class Joystick : public JoystickInterface {
   void SetJoystickRumble(short weakRumble, short strongRumble);
 
  private:
+  void InitializeChannels();
   void ReadJoystickInput();
   void Update();
 
