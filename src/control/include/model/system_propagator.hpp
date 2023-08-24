@@ -19,11 +19,11 @@
 #include <boost/numeric/odeint.hpp>
 
 namespace xmotion {
-template <typename Model, typename Input>
+template <typename Model>
 class SystemPropagator {
  public:
   typename Model::state_type Propagate(typename Model::state_type init_state,
-                                       Input u, double t0, double tf,
+                                       typename Model::control_type u, double t0, double tf,
                                        double dt) {
     typename Model::state_type x = init_state;
     boost::numeric::odeint::integrate_const(
