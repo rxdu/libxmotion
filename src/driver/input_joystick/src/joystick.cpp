@@ -57,6 +57,14 @@ std::vector<JoystickDescriptor> Joystick::EnumberateJoysticks(int max_index) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+Joystick::Joystick() {
+  descriptor_.index = 0;
+  auto jds = Joystick::EnumberateJoysticks();
+  if(jds.empty()) throw std::runtime_error("No joystick found");
+  descriptor_.index = jds.back().index;
+  InitializeChannels();    
+}
+
 Joystick::Joystick(JoystickDescriptor descriptor) : descriptor_(descriptor) {
   InitializeChannels();
 }

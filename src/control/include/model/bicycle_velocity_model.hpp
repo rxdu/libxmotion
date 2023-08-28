@@ -30,10 +30,10 @@ namespace xmotion {
  *  dot_x = v(t) * cos(theta(t))
  *  dot_y = v(t) * sin(theta(t))
  *  dot_theta = v(t)/L * tan(delta(t))
- * State: (x, y, v, theta)
+ * State: (x, y, theta)
  * Control input: (v, delta) - speed, steering angle of front wheel
  */
-class BicycleKinematics {
+class BicycleVelocityKinematics {
  public:
   struct Command {
     Command() = default;
@@ -47,18 +47,18 @@ class BicycleKinematics {
   using state_type = std::vector<double>;
 
  public:
-  BicycleKinematics(control_type u) : u_(u){};
+  BicycleVelocityKinematics(control_type u) : u_(u){};
 
-  // x1 = x, x2 = y, x3 = v, x4 = theta
+  // x1 = x, x2 = y, x3 = theta
   void operator()(const state_type &x, state_type &xd, double) {
-    xd[0] = x[2] * std::cos(x[3]);
-    xd[1] = x[2] * std::sin(x[3]);
-    xd[3] = x[2] / L * std::tan(u_.delta);
+    xd[0] = u_.v * std::cos(x[2]);
+    xd[1] = u_.v * std::sin(x[2]);
+    xd[2] = u_.v / L * std::tan(u_.delta);
   }
 
  private:
   control_type u_ = {0.0, 0.0};
-  static constexpr double L = 2.4;
+  static constexpr double L = 0.29;
 };
 }  // namespace xmotion
 

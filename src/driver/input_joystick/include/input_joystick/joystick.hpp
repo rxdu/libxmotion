@@ -31,7 +31,8 @@ class Joystick : public JoystickInterface {
       int max_index = 32);
 
  public:
-  Joystick(JoystickDescriptor descriptor);
+  Joystick();
+  explicit Joystick(JoystickDescriptor descriptor);
   explicit Joystick(int index);
   ~Joystick();
 
