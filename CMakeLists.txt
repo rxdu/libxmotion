@@ -58,7 +58,7 @@ endif ()
 
 if (ENABLE_LOGGING)
     message("-- Enable logging with spdlog -- Yes")
-    message("-- Default log file storage location: librav/data/log")
+    message("-- Default log file storage location: ~/.xmotion/log")
 else (ENABLE_LOGGING)
     message("-- Enable logging with spdlog -- No")
 endif (ENABLE_LOGGING)

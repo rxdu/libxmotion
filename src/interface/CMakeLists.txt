@@ -12,4 +12,4 @@ install(TARGETS interface
         INCLUDES DESTINATION include)
 
 install(DIRECTORY include/
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/interface)
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

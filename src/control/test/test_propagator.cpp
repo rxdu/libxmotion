@@ -42,7 +42,7 @@ int main() {
   //   std::cout << "final state: " << state[0] << " , " << state[1] <<
   //   std::endl;
 
-  SystemPropagator<Lorenz, Lorenz::control_type> propagator;
+  SystemPropagator<Lorenz> propagator;
 
   BicycleKinematics::state_type state =
       propagator.Propagate({10.0, 10.0, 10.0}, 0, 0, 10, 0.01);
