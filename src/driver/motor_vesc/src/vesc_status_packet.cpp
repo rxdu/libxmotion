@@ -15,6 +15,14 @@
 
 namespace xmotion {
 namespace {
+int32_t ToInt32(uint8_t byte0, uint8_t byte1, uint8_t byte2, uint8_t byte3) {
+  int32_t value = static_cast<int32_t>((static_cast<uint32_t>(byte0) << 24) | 
+        (static_cast<uint32_t>(byte1) << 16) | 
+        (static_cast<uint32_t>(byte2) << 8) | 
+        static_cast<uint32_t>(byte3));
+  return value;
+}
+
 float ToFloat(uint8_t byte0, uint8_t byte1) {
   int16_t value = static_cast<int16_t>((static_cast<uint16_t>(byte0) << 8) | 
         static_cast<uint16_t>(byte1));
@@ -32,8 +40,8 @@ float ToFloat(uint8_t byte0, uint8_t byte1, uint8_t byte2, uint8_t byte3) {
 
 VescStatus1Packet::VescStatus1Packet(const struct can_frame &frame) : VescFrame(frame) {
   // rpm(4 byte), current*10.0(2 byte), duty*1000.0(2 byte)
-  uint32_t rpm_raw = (frame.data[0] << 24) | (frame.data[1] << 16) | (frame.data[2] << 8) | (frame.data[3]);
-  rpm_ = rpm_raw;
+//   uint32_t rpm_raw = (frame.data[0] << 24) | (frame.data[1] << 16) | (frame.data[2] << 8) | (frame.data[3]);
+  rpm_ = ToInt32(frame.data[0], frame.data[1], frame.data[2], frame.data[3]);
 
 //   uint16_t current_raw = (frame.data[4] << 8) | (frame.data[5]);
 //   current_ = current_raw / 10.0f;
@@ -58,8 +66,8 @@ VescStatus3Packet::VescStatus3Packet(const struct can_frame &frame) : VescFrame(
 //   uint32_t watt_hours_raw = (frame.data[0] << 24) | (frame.data[1] << 16) | (frame.data[2] << 8) | (frame.data[3]);
   watt_hours_ = ToFloat(frame.data[0], frame.data[1], frame.data[2], frame.data[3]) / 10000.0f;
 
-  uint32_t
-      watt_hours_charged_raw = (frame.data[4] << 24) | (frame.data[5] << 16) | (frame.data[6] << 8) | (frame.data[7]);
+//   uint32_t
+//       watt_hours_charged_raw = (frame.data[4] << 24) | (frame.data[5] << 16) | (frame.data[6] << 8) | (frame.data[7]);
   watt_hours_charged_ = ToFloat(frame.data[4], frame.data[5], frame.data[6], frame.data[7]) / 10000.0f;
 }
 
@@ -80,8 +88,9 @@ VescStatus4Packet::VescStatus4Packet(const struct can_frame &frame) : VescFrame(
 
 VescStatus5Packet::VescStatus5Packet(const struct can_frame &frame) : VescFrame(frame) {
   // tacho_value(4 byte), v_in*10.0(2 byte), reserved as 0(2 byte)
-  uint32_t tacho_raw = (frame.data[0] << 24) | (frame.data[1] << 16) | (frame.data[2] << 8) | (frame.data[3]);
-  tacho_value_ = static_cast<int32_t>(tacho_raw);
+//   uint32_t tacho_raw = (frame.data[0] << 24) | (frame.data[1] << 16) | (frame.data[2] << 8) | (frame.data[3]);
+//   tacho_value_ = static_cast<int32_t>(tacho_raw);
+  tacho_value_ = ToInt32(frame.data[0], frame.data[1], frame.data[2], frame.data[3]);
 
 //   uint16_t vin_raw = (frame.data[4] << 8) | (frame.data[5]);
   voltage_in_ = ToFloat(frame.data[4], frame.data[5]) / 10.0f;
