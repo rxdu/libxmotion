@@ -14,7 +14,7 @@
 
 using namespace xmotion::swviz;
 
-const std::string img_file = "../image/fish.png";
+const std::string img_file = "../data/screenshots/sampling/rrts.png";
 
 class MyWin : public Viewer {
  public:

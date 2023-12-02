@@ -34,6 +34,7 @@ void DrawArc(cairo_t *cr, ImVec2 center, float radius, float start_angle,
   cairo_set_source_rgba(cr, color.x, color.y, color.z, color.w);
   cairo_set_line_width(cr, thickness);
 
+  cairo_new_sub_path(cr);
   cairo_arc(cr, center.x, center.y, radius, start_angle, end_angle);
   cairo_stroke(cr);
 }
@@ -46,6 +47,7 @@ void DrawArcSector(cairo_t *cr, ImVec2 center, float radius, float start_angle,
     cairo_set_source_rgba(cr, color.x, color.y, color.z, color.w);
     cairo_set_line_width(cr, thickness);
 
+    cairo_new_sub_path(cr);
     cairo_arc(cr, center.x, center.y, radius, start_angle, end_angle);
     cairo_stroke(cr);
 
@@ -67,6 +69,7 @@ void DrawArcSector(cairo_t *cr, ImVec2 center, float radius, float start_angle,
 
     cairo_move_to(cr, center.x, center.y);
     cairo_line_to(cr, pos1.x, pos1.y);
+    cairo_new_sub_path(cr);
     cairo_arc(cr, center.x, center.y, radius, start_angle, end_angle);
     cairo_line_to(cr, center.x, center.y);
     cairo_fill(cr);
@@ -78,6 +81,7 @@ void DrawCircle(cairo_t *cr, ImVec2 center, float radius, double thickness,
   cairo_set_source_rgba(cr, color.x, color.y, color.z, color.w);
   cairo_set_line_width(cr, thickness);
 
+  cairo_new_sub_path(cr);
   cairo_arc(cr, center.x, center.y, radius, 0, 2 * M_PI);
   cairo_stroke(cr);
 }
