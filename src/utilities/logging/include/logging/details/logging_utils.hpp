@@ -14,22 +14,22 @@
 #include <string>
 
 namespace xmotion {
-inline std::string GetDataFolderPath() {
+inline std::string GetProjectRootPath() {
   char *home_path;
   home_path = std::getenv("HOME");
   std::string log_path;
   if (home_path != NULL) {
     std::string hm(home_path);
-    log_path = hm + "/Workspace/xmotion/data";
+    log_path = hm + "/.xmotion";
   } else {
     // default path
-    log_path = "/home/rdu/Workspace/xmotion/data";
+    log_path = "/home/rdu/.xmotion";
   }
   return log_path;
 }
 
 inline std::string GetLogFolderPath() {
-  return GetDataFolderPath() + "/log";
+  return GetProjectRootPath() + "/log";
 }
 
 // reference: https://stackoverflow.com/questions/22318389/pass-system-date-and-time-as-a-filename-in-c
