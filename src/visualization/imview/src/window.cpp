@@ -38,7 +38,7 @@ void Terminate() { glfwTerminate(); }
 
 //-------------------------------------------------------------------//
 
-Window::Window(uint32_t width, uint32_t height, std::string title,
+Window::Window(std::string title, uint32_t width, uint32_t height,
                uint32_t window_hints) {
   // setup GLFW window
   ApplyWindowHints(window_hints);

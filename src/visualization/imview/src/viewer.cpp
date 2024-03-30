@@ -11,28 +11,22 @@
 
 namespace xmotion {
 namespace swviz {
-Viewer::Viewer(uint32_t width, uint32_t height, std::string title,
+Viewer::Viewer(std::string title, uint32_t width, uint32_t height,
                uint32_t window_hints) {
   swviz::Init();
 
   window_ = std::unique_ptr<swviz::Window>(
-      new swviz::Window(width, height, title, window_hints));
+      new swviz::Window(title, width, height, window_hints));
   window_->ApplyDarkStyle();
 }
 
 Viewer::~Viewer() { swviz::Terminate(); }
 
-uint32_t Viewer::GetWidth() {
-  return window_->GetWidth();
-}
+uint32_t Viewer::GetWidth() { return window_->GetWidth(); }
 
-uint32_t Viewer::GetHeight() {
-  return window_->GetHeight();
-}
+uint32_t Viewer::GetHeight() { return window_->GetHeight(); }
 
-ImFont *Viewer::GetFont(FontSize size) {
-  return window_->GetFont(size);
-}
+ImFont *Viewer::GetFont(FontSize size) { return window_->GetFont(size); }
 
 void Viewer::DockSpaceOverMainViewport() {
   ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
