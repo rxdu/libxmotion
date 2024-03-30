@@ -19,8 +19,8 @@ const std::string img_file = "../image/fish.png";
 
 class MyWin : public Viewer {
  public:
-  MyWin(uint32_t width, uint32_t height, std::string title = "Canvas")
-      : Viewer(width, height, title), cairo_panel_{width, height, true} {
+  MyWin(std::string title, uint32_t width, uint32_t height)
+      : Viewer(title, width, height), cairo_panel_{width, height, true} {
     cairo_panel_.LoadImage(img_file);
   }
 
@@ -80,7 +80,7 @@ class MyWin : public Viewer {
 int main(int argc, char* argv[]) {
   // MyWin win(1280, 720);
   //   MyWin win(1920, 1080);
-  MyWin win(1080, 720);
+  MyWin win("cairo_normalize", 1080, 720);
 
   win.Show();
   return 0;

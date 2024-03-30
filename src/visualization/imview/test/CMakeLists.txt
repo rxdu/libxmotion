@@ -5,6 +5,9 @@ target_link_libraries(test_window imview)
 add_executable(test_viewer test_viewer.cpp)
 target_link_libraries(test_viewer imview)
 
+add_executable(test_panel test_panel.cpp)
+target_link_libraries(test_panel imview)
+
 ## implot
 add_executable(test_plot_buffer test_plot_buffer.cpp)
 target_link_libraries(test_plot_buffer PRIVATE imview)

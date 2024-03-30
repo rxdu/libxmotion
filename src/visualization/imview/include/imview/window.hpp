@@ -38,8 +38,8 @@ class Window {
   };
 
  public:
-  Window(uint32_t width = 640, uint32_t height = 480,
-         std::string title = "Window",
+  Window(std::string title = "Window", uint32_t width = 640,
+         uint32_t height = 480,
          uint32_t window_hints = WIN_RESIZABLE | WIN_DECORATED);
   ~Window();
 

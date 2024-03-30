@@ -23,10 +23,9 @@ struct DisplayRegion {
 
 class Viewer {
  public:
-  Viewer(uint32_t width = 640, uint32_t height = 480,
-         std::string title = "Viewer",
-         uint32_t window_hints = Window::WIN_RESIZABLE |
-             Window::WIN_DECORATED);
+  Viewer(std::string title = "Viewer", uint32_t width = 640,
+         uint32_t height = 480,
+         uint32_t window_hints = Window::WIN_RESIZABLE | Window::WIN_DECORATED);
   virtual ~Viewer();
 
   // public API

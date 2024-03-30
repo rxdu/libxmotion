@@ -1,4 +1,4 @@
-/* 
+/*
  * tbot_widget.hpp
  *
  * Created on 4/3/22 10:48 PM
@@ -21,10 +21,10 @@
 namespace xmotion {
 class TbotWidget : public swviz::Viewer {
  public:
-  TbotWidget(uint32_t width = 1280, uint32_t height = 800,
-             std::string title = "Tbot Widget",
+  TbotWidget(std::string title = "Tbot Widget", uint32_t width = 1280,
+             uint32_t height = 800,
              uint32_t window_hints = swviz::Window::WIN_RESIZABLE |
-                 swviz::Window::WIN_DECORATED);
+                                     swviz::Window::WIN_DECORATED);
   ~TbotWidget();
 
  private:
@@ -41,6 +41,6 @@ class TbotWidget : public swviz::Viewer {
   void InitUI();
   void Update();
 };
-}
+}  // namespace xmotion
 
-#endif //ROBOSW_SRC_APPS_TBOT_TBOT_WIDGET_HPP
+#endif  // ROBOSW_SRC_APPS_TBOT_TBOT_WIDGET_HPP

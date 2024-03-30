@@ -1,4 +1,4 @@
-/* 
+/*
  * tbot_widget.cpp
  *
  * Created on 4/3/22 10:48 PM
@@ -11,9 +11,9 @@
 
 namespace xmotion {
 using namespace swviz;
-TbotWidget::TbotWidget(uint32_t width, uint32_t height,
-                       std::string title, uint32_t window_hints) :
-    swviz::Viewer(width, height, title, window_hints) {
+TbotWidget::TbotWidget(std::string title, uint32_t width, uint32_t height,
+                       uint32_t window_hints)
+    : swviz::Viewer(title, width, height, window_hints) {
   InitUI();
 }
 
@@ -50,4 +50,4 @@ void TbotWidget::Update() {
   data_panel_->Draw();
   canbus_panel_->Draw();
 }
-}
+}  // namespace xmotion
