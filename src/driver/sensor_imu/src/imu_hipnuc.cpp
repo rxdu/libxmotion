@@ -8,6 +8,9 @@
  */
 
 #include "sensor_imu/imu_hipnuc.hpp"
+
+#include <cmath>
+
 #include "async_port/async_serial.hpp"
 
 extern "C" {
@@ -16,6 +19,8 @@ extern "C" {
 
 namespace xmotion {
 namespace {
+static constexpr float g_const = 9.81;
+
 void UnpackData(raw_t *data, ImuData *data_imu, int num) {
   data_imu->id = data->imu[num].id;
 
@@ -23,13 +28,13 @@ void UnpackData(raw_t *data, ImuData *data_imu, int num) {
 
   data_imu->pressure = data->imu[num].pressure;
 
-  data_imu->accel.x = data->imu[num].acc[0];
-  data_imu->accel.y = data->imu[num].acc[1];
-  data_imu->accel.z = data->imu[num].acc[2];
+  data_imu->accel.x = data->imu[num].acc[0] * g_const;
+  data_imu->accel.y = data->imu[num].acc[1] * g_const;
+  data_imu->accel.z = data->imu[num].acc[2] * g_const;
 
-  data_imu->gyro.x = data->imu[num].gyr[0];
-  data_imu->gyro.y = data->imu[num].gyr[1];
-  data_imu->gyro.z = data->imu[num].gyr[2];
+  data_imu->gyro.x = data->imu[num].gyr[0] * (M_PI / 180.0);
+  data_imu->gyro.y = data->imu[num].gyr[1] * (M_PI / 180.0);
+  data_imu->gyro.z = data->imu[num].gyr[2] * (M_PI / 180.0);
 
   data_imu->magn.x = data->imu[num].mag[0];
   data_imu->magn.y = data->imu[num].mag[1];
@@ -75,9 +80,9 @@ void ImuHipnuc::ParseSerialData(uint8_t *data, const size_t bufsize,
 
       if (callback_ != nullptr) callback_(imu);
 
-      printf("accel: %6.2f, %6.2f, %6.2f; gyro: %6.2f, %6.2f, %6.2f\n",
-             imu.accel.x, imu.accel.y, imu.accel.z, imu.gyro.x, imu.gyro.y,
-             imu.gyro.z);
+      //      printf("accel: %6.2f, %6.2f, %6.2f; gyro: %6.2f, %6.2f, %6.2f\n",
+      //             imu.accel.x, imu.accel.y, imu.accel.z, imu.gyro.x,
+      //             imu.gyro.y, imu.gyro.z);
     }
   }
 }

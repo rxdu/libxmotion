@@ -5,4 +5,4 @@ add_subdirectory(logging)
 add_subdirectory(time)
 
 add_library(utilities INTERFACE)
-target_link_libraries(utilities INTERFACE file_io logging)
+target_link_libraries(utilities INTERFACE file_io logging time)

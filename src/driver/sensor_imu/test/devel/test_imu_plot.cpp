@@ -9,13 +9,13 @@
 
 #include <iostream>
 
-#include "imview/viewer_base.hpp"
+#include "imview/viewer.hpp"
 #include "imview/data_buffer.hpp"
 
 using namespace xmotion::swviz;
 
 struct ImDraw : public Viewer {
-  void Draw() override {
+  void Update() override {
     // do nothing
     ImGui::BulletText("Move your mouse to change the data!");
     ImGui::BulletText(

@@ -6,7 +6,7 @@ add_executable(test_rvspace test_rvspace.cpp)
 target_link_libraries(test_rvspace sampling interface time)
 
 add_executable(test_rng test_rng.cpp)
-target_link_libraries(test_rng sampling)
+target_link_libraries(test_rng sampling time)
 
 add_executable(test_rrt test_rrt.cpp)
 target_link_libraries(test_rrt sampling interface time)
