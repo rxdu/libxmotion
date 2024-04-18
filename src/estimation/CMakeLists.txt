@@ -2,7 +2,7 @@ find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 
 # Add libraries
 add_library(estimation STATIC
-        src/multiplicative_ekf.cpp)
+        src/mekf6.cpp)
 target_link_libraries(estimation PUBLIC
         interface
         Eigen3::Eigen)
