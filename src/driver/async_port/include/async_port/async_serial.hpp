@@ -20,11 +20,11 @@
 #include "asio.hpp"
 
 #include "async_port/ring_buffer.hpp"
-#include "interface/driver/serial_adapter.hpp"
+#include "interface/driver/serial_interface.hpp"
 
 namespace xmotion {
 class AsyncSerial : public std::enable_shared_from_this<AsyncSerial>,
-                    public SerialAdapter {
+                    public SerialInterface {
  public:
   using ReceiveCallback =
       std::function<void(uint8_t *data, const size_t bufsize, size_t len)>;

@@ -17,7 +17,7 @@
 #include <iostream>
 
 #include "interface/types.hpp"
-#include "interface/driver/can_adapter.hpp"
+#include "interface/driver/can_interface.hpp"
 #include "pid/pid_controller.hpp"
 
 namespace xmotion {
@@ -30,7 +30,7 @@ class SpeedController {
 
  private:
   std::string can_dev_;
-  std::shared_ptr<CanAdapter> can_ = nullptr;
+  std::shared_ptr<CanInterface> can_ = nullptr;
 
   RSTimePoint t0_{RSClock::now()};
   RSTimePoint tl_{RSClock::now()};
