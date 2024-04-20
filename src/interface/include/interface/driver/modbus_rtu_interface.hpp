@@ -5,6 +5,7 @@
  * Reference:
  * [1] https://modbus.org/docs/Modbus_Application_Protocol_V1_1b3.pdf
  * [2] https://www.modbus.org/docs/Modbus_over_serial_line_V1.pdf
+ * [3] https://www.simplymodbus.ca/index.html
  *
  * @copyright Copyright (c) 2024 Ruixiang Du (rdu)
  */
@@ -51,6 +52,7 @@ class ModbusRtuInterface {
   // function code 03
   virtual bool ReadHoldingRegisters(uint8_t slave_id, uint16_t addr,
                                     uint16_t quantity, uint16_t* data) = 0;
+  
   // function code 06
   virtual bool WriteSingleRegister(uint8_t slave_id, uint16_t addr,
                                    uint16_t value) = 0;

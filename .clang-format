@@ -2,3 +2,5 @@
 BasedOnStyle: Google
 
 SortIncludes: false
+SeparateDefinitionBlocks: Always
+EmptyLineBeforeAccessModifier: LogicalBlock

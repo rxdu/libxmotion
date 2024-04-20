@@ -9,7 +9,9 @@
 
 #include <memory>
 
-#include "logging/loggers.hpp"
+#include "logging/ctrl_logger.hpp"
+#include "logging/csv_logger.hpp"
+#include "logging/event_logger.hpp"
 
 using namespace xmotion;
 
