@@ -25,38 +25,39 @@ class ModbusRtu : public ModbusRtuInterface {
   void Close() override;
   bool IsOpened() const override;
 
-  // modbus read/write
-  // function code 01
-  bool ReadCoils(uint8_t slave_id, uint16_t addr, uint16_t quantity,
-                 uint8_t* data) override;
-  // function code 05
-  bool WriteSingleCoil(uint8_t slave_id, uint16_t addr, bool status) override;
-  // function code 15
-  bool WriteMultipleCoils(uint8_t slave_id, uint16_t addr, uint16_t quantity,
-                          const uint8_t* data) override;
-
-  // function code 02
-  bool ReadDiscreteInputs(uint8_t slave_id, uint16_t addr, uint16_t quantity,
-                          uint8_t* data) override;
-
-  // function code 04
-  bool ReadInputRegisters(uint8_t slave_id, uint16_t addr, uint16_t quantity,
-                          uint16_t* data) override;
-
-  // function code 03
-  bool ReadHoldingRegisters(uint8_t slave_id, uint16_t addr, uint16_t quantity,
-                            uint16_t* data) override;
-
-  // function code 06
-  bool WriteSingleRegister(uint8_t slave_id, uint16_t addr,
-                           uint16_t value) override;
-  // function code 16
-  bool WriteMultipleRegisters(uint8_t slave_id, uint16_t addr,
-                              uint16_t quantity, const uint16_t* data) override;
-
- private:
+  bool SelectDevice(uint8_t device_id) override;
   bool SetResponseTimeout(int sec, int usec);
 
+  // modbus read/write
+  // function code 01
+  int ReadCoils(uint8_t device_id, uint16_t addr, uint16_t quantity,
+                uint8_t* data) override;
+  // function code 05
+  int WriteSingleCoil(uint8_t device_id, uint16_t addr, int status) override;
+  // function code 15
+  int WriteMultipleCoils(uint8_t device_id, uint16_t addr, uint16_t quantity,
+                         const uint8_t* data) override;
+
+  // function code 02
+  int ReadDiscreteInputs(uint8_t device_id, uint16_t addr, uint16_t quantity,
+                         uint8_t* data) override;
+
+  // function code 04
+  int ReadInputRegisters(uint8_t device_id, uint16_t addr, uint16_t quantity,
+                         uint16_t* data) override;
+
+  // function code 03
+  int ReadHoldingRegisters(uint8_t device_id, uint16_t addr, uint16_t quantity,
+                           uint16_t* data) override;
+
+  // function code 06
+  int WriteSingleRegister(uint8_t device_id, uint16_t addr,
+                          uint16_t value) override;
+  // function code 16
+  int WriteMultipleRegisters(uint8_t device_id, uint16_t addr,
+                             uint16_t quantity, const uint16_t* data) override;
+
+ private:
   modbus_t* ctx_ = nullptr;
 };
 }  // namespace xmotion

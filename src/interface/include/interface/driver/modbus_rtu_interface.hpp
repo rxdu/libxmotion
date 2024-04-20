@@ -30,36 +30,37 @@ class ModbusRtuInterface {
   virtual void Close() = 0;
   virtual bool IsOpened() const = 0;
 
+  virtual bool SelectDevice(uint8_t device_id) = 0;
+
   // modbus read/write
   // function code 01
-  virtual bool ReadCoils(uint8_t slave_id, uint16_t addr, uint16_t quantity,
-                         uint8_t* data) = 0;
+  virtual int ReadCoils(uint8_t device_id, uint16_t addr, uint16_t quantity,
+                        uint8_t* data) = 0;
   // function code 05
-  virtual bool WriteSingleCoil(uint8_t slave_id, uint16_t addr,
-                               bool status) = 0;
+  virtual int WriteSingleCoil(uint8_t device_id, uint16_t addr, int status) = 0;
   // function code 15
-  virtual bool WriteMultipleCoils(uint8_t slave_id, uint16_t addr,
-                                  uint16_t quantity, const uint8_t* data) = 0;
+  virtual int WriteMultipleCoils(uint8_t device_id, uint16_t addr,
+                                 uint16_t quantity, const uint8_t* data) = 0;
 
   // function code 02
-  virtual bool ReadDiscreteInputs(uint8_t slave_id, uint16_t addr,
-                                  uint16_t quantity, uint8_t* data) = 0;
+  virtual int ReadDiscreteInputs(uint8_t device_id, uint16_t addr,
+                                 uint16_t quantity, uint8_t* data) = 0;
 
   // function code 04
-  virtual bool ReadInputRegisters(uint8_t slave_id, uint16_t addr,
-                                  uint16_t quantity, uint16_t* data) = 0;
+  virtual int ReadInputRegisters(uint8_t device_id, uint16_t addr,
+                                 uint16_t quantity, uint16_t* data) = 0;
 
   // function code 03
-  virtual bool ReadHoldingRegisters(uint8_t slave_id, uint16_t addr,
-                                    uint16_t quantity, uint16_t* data) = 0;
-  
+  virtual int ReadHoldingRegisters(uint8_t device_id, uint16_t addr,
+                                   uint16_t quantity, uint16_t* data) = 0;
+
   // function code 06
-  virtual bool WriteSingleRegister(uint8_t slave_id, uint16_t addr,
-                                   uint16_t value) = 0;
+  virtual int WriteSingleRegister(uint8_t device_id, uint16_t addr,
+                                  uint16_t value) = 0;
   // function code 16
-  virtual bool WriteMultipleRegisters(uint8_t slave_id, uint16_t addr,
-                                      uint16_t quantity,
-                                      const uint16_t* data) = 0;
+  virtual int WriteMultipleRegisters(uint8_t device_id, uint16_t addr,
+                                     uint16_t quantity,
+                                     const uint16_t* data) = 0;
 };
 }  // namespace xmotion
 
