@@ -18,7 +18,7 @@
  * level: 0 - TRACE, 1 - DEBUG, 2 - INFO, 3 - WARN,
  *        4 - ERROR, 5 - FATAL, 6 - OFF
  */
-#ifdef ENABLE_XLOGGING
+#ifdef ENABLE_LOGGING
 #define XLOG_LEVEL(level)                                  \
   {                                                        \
     xmotion::DefaultLogger::GetInstance()->SetLoggerLevel( \

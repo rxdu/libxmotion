@@ -3,7 +3,7 @@ pkg_check_modules(LibModbus QUIET IMPORTED_TARGET libmodbus)
 
 if (LIBMODBUS_FOUND)
     add_library(modbus_rtu STATIC
-            src/modbus_rtu.cpp)
+        src/modbus_rtu_port.cpp)
     target_link_libraries(modbus_rtu PUBLIC interface logging PkgConfig::LibModbus)
     target_include_directories(modbus_rtu PUBLIC
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

@@ -30,7 +30,7 @@ class ModbusRtuInterface {
   virtual void Close() = 0;
   virtual bool IsOpened() const = 0;
 
-  virtual bool SelectDevice(uint8_t device_id) = 0;
+  virtual bool SetResponseTimeout(int sec, int usec) = 0;
 
   // modbus read/write
   // function code 01
@@ -61,6 +61,9 @@ class ModbusRtuInterface {
   virtual int WriteMultipleRegisters(uint8_t device_id, uint16_t addr,
                                      uint16_t quantity,
                                      const uint16_t* data) = 0;
+
+ protected:
+  virtual bool SelectDevice(uint8_t device_id) = 0;
 };
 }  // namespace xmotion
 

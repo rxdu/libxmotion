@@ -1,5 +1,5 @@
 /*
- * @file modbus_rtu.hpp
+ * @file modbus_rtu_port.hpp
  * @date 4/18/24
  * @brief
  *
@@ -14,9 +14,9 @@
 #include "interface/driver/modbus_rtu_interface.hpp"
 
 namespace xmotion {
-class ModbusRtu : public ModbusRtuInterface {
+class ModbusRtuPort : public ModbusRtuInterface {
  public:
-  ModbusRtu();
+  ModbusRtuPort();
 
   // public methods
   // port management
@@ -25,8 +25,7 @@ class ModbusRtu : public ModbusRtuInterface {
   void Close() override;
   bool IsOpened() const override;
 
-  bool SelectDevice(uint8_t device_id) override;
-  bool SetResponseTimeout(int sec, int usec);
+  bool SetResponseTimeout(int sec, int usec) override;
 
   // modbus read/write
   // function code 01
@@ -58,6 +57,8 @@ class ModbusRtu : public ModbusRtuInterface {
                              uint16_t quantity, const uint16_t* data) override;
 
  private:
+  bool SelectDevice(uint8_t device_id) override;
+
   modbus_t* ctx_ = nullptr;
 };
 }  // namespace xmotion
