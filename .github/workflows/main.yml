@@ -24,7 +24,7 @@ jobs:
           sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev \
            libglfw3-dev libcairo2-dev libtbb-dev libasio-dev libboost-all-dev \
            libgsl-dev libeigen3-dev libtbb-dev libopencv-dev libyaml-cpp-dev \
-           libncurses-dev libevdev-dev
+           libncurses-dev libevdev-dev libmodbus-dev
       - name: Install cyclonedds
         run: |
           git clone -b 0.9.1 https://github.com/eclipse-cyclonedds/cyclonedds.git
@@ -75,7 +75,7 @@ jobs:
           sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev \
            libglfw3-dev libcairo2-dev libtbb-dev libasio-dev libboost-all-dev \
            libgsl-dev libeigen3-dev libtbb-dev libopencv-dev libyaml-cpp-dev \
-           libncurses-dev libevdev-dev
+           libncurses-dev libevdev-dev libmodbus-dev
       - name: Update submodules
         run: git submodule update --init --recursive
       - name: Create Build Environment
