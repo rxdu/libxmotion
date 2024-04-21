@@ -10,6 +10,7 @@ endif ()
 
 # # Project Options
 option(BUILD_TESTING "Build tests" OFF)
+option(BUILD_APPS "Build applications" ON)
 option(ENABLE_TARGET_DESKTOP "Enable desktop-only modules" ON)
 option(ENABLE_LOGGING "Enable logging" ON)
 option(STATIC_CHECK "Enable static check" OFF)

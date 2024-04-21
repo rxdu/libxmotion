@@ -9,4 +9,22 @@
 
 #include "motor_akelc/motor_akelc.hpp"
 
-namespace xmotion {}  // namespace xmotion
+namespace xmotion {
+MotorAkelc::MotorAkelc(std::shared_ptr<MotorAkelcInterface> impl) : impl_() {}
+
+void MotorAkelc::SetSpeed(int32_t rpm) { impl_->SetTargetRpm(rpm); }
+
+int32_t MotorAkelc::GetSpeed() { return impl_->GetActualRpm(); }
+
+void MotorAkelc::ApplyBrake(double brake) { impl_->ApplyBrake(brake); }
+
+void MotorAkelc::ReleaseBrake() { impl_->ReleaseBrake(); }
+
+bool MotorAkelc::IsNormal() {
+  if (!impl_->IsMotorBlocked() &&
+      impl_->GetErrorCode() == MotorAkelcInterface::ErrorCode::kNoError) {
+    return true;
+  }
+  return false;
+}
+}  // namespace xmotion

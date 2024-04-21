@@ -23,7 +23,9 @@ if (AKELC_WITH_MODBUS OR AKELC_WITH_CANOPEN)
       $<INSTALL_INTERFACE:include>
       PRIVATE src)
 
-  add_subdirectory(app)
+  if (BUILD_APPS)
+    add_subdirectory(app)
+  endif ()
 
   if (BUILD_TESTS)
     add_subdirectory(test)
