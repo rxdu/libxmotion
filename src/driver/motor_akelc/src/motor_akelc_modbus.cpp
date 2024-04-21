@@ -36,6 +36,15 @@ constexpr uint16_t REGISTER_ADDRESS_DRIVER_ACTUAL_RPM_LOW = 0x001f;
 constexpr uint16_t REGISTER_ADDRESS_CTRL_TARGET_SPEED = 0x0040;
 constexpr uint16_t REGISTER_ADDRESS_CTRL_APPLY_BRAKE = 0x0042;
 constexpr uint16_t REGISTER_ADDRESS_CTRL_RELEASE_BRAKE = 0x0044;
+
+// system configuration registers
+constexpr uint16_t REGISTER_ADDRESS_CONF_KP_INTERNAL_FEEDBACK_HIGH = 0x0090;
+constexpr uint16_t REGISTER_ADDRESS_CONF_KI_INTERNAL_FEEDBACK_HIGH = 0x0092;
+constexpr uint16_t REGISTER_ADDRESS_CONF_KD_INTERNAL_FEEDBACK_HIGH = 0x0094;
+
+constexpr uint16_t REGISTER_ADDRESS_CONF_KP_EXTERNAL_FEEDBACK_HIGH = 0x0098;
+constexpr uint16_t REGISTER_ADDRESS_CONF_KI_EXTERNAL_FEEDBACK_HIGH = 0x009a;
+constexpr uint16_t REGISTER_ADDRESS_CONF_KD_EXTERNAL_FEEDBACK_HIGH = 0x009c;
 }  // namespace
 
 MotorAkelcModbus::MotorAkelcModbus(std::shared_ptr<ModbusRtuInterface> port,
@@ -219,5 +228,77 @@ MotorAkelcInterface::ErrorCode MotorAkelcModbus::GetErrorCode() {
     return ErrorCode::kUnknown;
   }
   return static_cast<ErrorCode>(buffer_[0]);
+}
+
+bool MotorAkelcModbus::ConfigurePidWithInternalFeedback(double kp, double ki,
+                                                        double kd) {
+  if (!port_) return false;
+  // set kp
+  buffer_[0] =
+      static_cast<uint16_t>((static_cast<uint32_t>(kp) & 0xff00) >> 16);
+  buffer_[1] = static_cast<uint16_t>(static_cast<uint32_t>(kp) & 0x00ff);
+  int ret = port_->WriteMultipleRegisters(
+      device_id_, REGISTER_ADDRESS_CONF_KP_INTERNAL_FEEDBACK_HIGH, 2, buffer_);
+  if (ret < 0) {
+    XLOG_ERROR("[Akelc Modbus] Failed to write register {}, error code: {}",
+               REGISTER_ADDRESS_CONF_KP_INTERNAL_FEEDBACK_HIGH, ret);
+  }
+  // set ki
+  buffer_[0] =
+      static_cast<uint16_t>((static_cast<uint32_t>(ki) & 0xff00) >> 16);
+  buffer_[1] = static_cast<uint16_t>(static_cast<uint32_t>(ki) & 0x00ff);
+  ret = port_->WriteMultipleRegisters(
+      device_id_, REGISTER_ADDRESS_CONF_KI_INTERNAL_FEEDBACK_HIGH, 2, buffer_);
+  if (ret < 0) {
+    XLOG_ERROR("[Akelc Modbus] Failed to write register {}, error code: {}",
+               REGISTER_ADDRESS_CONF_KI_INTERNAL_FEEDBACK_HIGH, ret);
+  }
+  // set kd
+  buffer_[0] =
+      static_cast<uint16_t>((static_cast<uint32_t>(kd) & 0xff00) >> 16);
+  buffer_[1] = static_cast<uint16_t>(static_cast<uint32_t>(kd) & 0x00ff);
+  ret = port_->WriteMultipleRegisters(
+      device_id_, REGISTER_ADDRESS_CONF_KD_INTERNAL_FEEDBACK_HIGH, 2, buffer_);
+  if (ret < 0) {
+    XLOG_ERROR("[Akelc Modbus] Failed to write register {}, error code: {}",
+               REGISTER_ADDRESS_CONF_KD_INTERNAL_FEEDBACK_HIGH, ret);
+  }
+  return true;
+}
+
+bool MotorAkelcModbus::ConfigurePidWithExternalFeedback(double kp, double ki,
+                                                        double kd) {
+  if (!port_) return false;
+  // set kp
+  buffer_[0] =
+      static_cast<uint16_t>((static_cast<uint32_t>(kp) & 0xff00) >> 16);
+  buffer_[1] = static_cast<uint16_t>(static_cast<uint32_t>(kp) & 0x00ff);
+  int ret = port_->WriteMultipleRegisters(
+      device_id_, REGISTER_ADDRESS_CONF_KP_EXTERNAL_FEEDBACK_HIGH, 2, buffer_);
+  if (ret < 0) {
+    XLOG_ERROR("[Akelc Modbus] Failed to write register {}, error code: {}",
+               REGISTER_ADDRESS_CONF_KP_EXTERNAL_FEEDBACK_HIGH, ret);
+  }
+  // set ki
+  buffer_[0] =
+      static_cast<uint16_t>((static_cast<uint32_t>(ki) & 0xff00) >> 16);
+  buffer_[1] = static_cast<uint16_t>(static_cast<uint32_t>(ki) & 0x00ff);
+  ret = port_->WriteMultipleRegisters(
+      device_id_, REGISTER_ADDRESS_CONF_KI_EXTERNAL_FEEDBACK_HIGH, 2, buffer_);
+  if (ret < 0) {
+    XLOG_ERROR("[Akelc Modbus] Failed to write register {}, error code: {}",
+               REGISTER_ADDRESS_CONF_KI_EXTERNAL_FEEDBACK_HIGH, ret);
+  }
+  // set kd
+  buffer_[0] =
+      static_cast<uint16_t>((static_cast<uint32_t>(kd) & 0xff00) >> 16);
+  buffer_[1] = static_cast<uint16_t>(static_cast<uint32_t>(kd) & 0x00ff);
+  ret = port_->WriteMultipleRegisters(
+      device_id_, REGISTER_ADDRESS_CONF_KD_EXTERNAL_FEEDBACK_HIGH, 2, buffer_);
+  if (ret < 0) {
+    XLOG_ERROR("[Akelc Modbus] Failed to write register {}, error code: {}",
+               REGISTER_ADDRESS_CONF_KD_EXTERNAL_FEEDBACK_HIGH, ret);
+  }
+  return true;
 }
 }  // namespace xmotion

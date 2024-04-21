@@ -50,6 +50,11 @@ class MotorAkelcInterface {
 
   virtual bool IsMotorBlocked() = 0;
   virtual ErrorCode GetErrorCode() = 0;
+
+  virtual bool ConfigurePidWithInternalFeedback(double kp, double ki,
+                                                double kd) = 0;
+  virtual bool ConfigurePidWithExternalFeedback(double kp, double ki,
+                                                double kd) = 0;
 };
 }  // namespace xmotion
 

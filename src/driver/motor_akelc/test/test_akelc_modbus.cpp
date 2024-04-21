@@ -1,5 +1,7 @@
 #include <iostream>
 #include <memory>
+#include <chrono>
+#include <thread>
 
 #include "modbus_rtu/modbus_rtu_port.hpp"
 #include "motor_akelc/motor_akelc_modbus.hpp"
@@ -35,6 +37,10 @@ int main(int argc, char* argv[]) {
             << std::endl;
   std::cout << "Driver current: " << motor->GetDriverCurrent() << std::endl;
   std::cout << "Driver PWM: " << motor->GetDriverPwm() << std::endl;
+
+  motor->SetTargetRpm(200);
+  std::this_thread::sleep_for(std::chrono::seconds(15));
+  motor->SetTargetRpm(0);
 
   return 0;
 }

@@ -40,6 +40,11 @@ class MotorAkelcModbus final : public MotorAkelcInterface,
   bool IsMotorBlocked() override;
   ErrorCode GetErrorCode() override;
 
+  bool ConfigurePidWithInternalFeedback(double kp, double ki,
+                                        double kd) override;
+  bool ConfigurePidWithExternalFeedback(double kp, double ki,
+                                        double kd) override;
+
  private:
   uint16_t buffer_[16];
 };
