@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
   std::cout << "Driver PWM: " << motor->GetDriverPwm() << std::endl;
 
   motor->SetTargetRpm(200);
-  std::this_thread::sleep_for(std::chrono::seconds(15));
+  std::this_thread::sleep_for(std::chrono::seconds(5));
   motor->SetTargetRpm(0);
 
   return 0;
