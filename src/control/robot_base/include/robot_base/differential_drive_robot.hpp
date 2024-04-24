@@ -3,6 +3,8 @@
  * @date 4/21/24
  * @brief
  *
+ * Reference: https://en.wikipedia.org/wiki/Differential_wheeled_robot
+ *
  * @copyright Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
@@ -16,16 +18,29 @@
 namespace xmotion {
 class DifferentialDriveRobot {
  public:
-  DifferentialDriveRobot(std::shared_ptr<SpeedActuatorGroup> left,
-                         std::shared_ptr<SpeedActuatorGroup> right);
+  struct Config {
+    double track_width;   // d
+    double wheel_radius;  // r
+
+    double linear_vel_deadband;
+    double angular_vel_deadband;
+
+    bool reverse_left_wheel = false;
+    bool reverse_right_wheel = false;
+
+    std::shared_ptr<SpeedActuatorGroup> left_actuator_group;
+    std::shared_ptr<SpeedActuatorGroup> right_actuator_group;
+  };
+
+ public:
+  DifferentialDriveRobot(const Config &config);
 
   // public interface
   void SetMotionCommand(double linear_vel, double angular_vel);
   void GetMotionStatus(double &linear_vel, double &angular_vel);
 
  private:
-  std::shared_ptr<SpeedActuatorGroup> left_;
-  std::shared_ptr<SpeedActuatorGroup> right_;
+  Config config_;
 };
 }  // namespace xmotion
 

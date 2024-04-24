@@ -10,7 +10,8 @@
 #include "motor_akelc/motor_akelc.hpp"
 
 namespace xmotion {
-MotorAkelc::MotorAkelc(std::shared_ptr<MotorAkelcInterface> impl) : impl_() {}
+MotorAkelc::MotorAkelc(std::shared_ptr<MotorAkelcInterface> impl)
+    : impl_(impl) {}
 
 void MotorAkelc::SetSpeed(int32_t rpm) { impl_->SetTargetRpm(rpm); }
 

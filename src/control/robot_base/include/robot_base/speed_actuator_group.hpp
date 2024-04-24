@@ -11,14 +11,19 @@
 
 #include <vector>
 #include <memory>
+
 #include "interface/driver/motor_controller_interface.hpp"
+#include "logging/xlogger.hpp"
 
 namespace xmotion {
 class SpeedActuatorGroup final : public MotorControllerInterface {
  public:
   SpeedActuatorGroup(
       std::vector<std::shared_ptr<MotorControllerInterface>> actuators)
-      : actuators_(actuators) {}
+      : actuators_(actuators) {
+    XLOG_DEBUG("speed actuator group created with {} actuators",
+               actuators_.size());
+  }
 
   // public interface
   void SetSpeed(int32_t rpm) override;
