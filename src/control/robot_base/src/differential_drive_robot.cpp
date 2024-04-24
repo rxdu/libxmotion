@@ -22,9 +22,6 @@ void DifferentialDriveRobot::SetMotionCommand(double linear_vel,
   if (std::abs(linear_vel) < config_.linear_vel_deadband) linear_vel = 0.0;
   if (std::abs(angular_vel) < config_.angular_vel_deadband) angular_vel = 0.0;
 
-  XLOG_DEBUG("Set motion command: linear_vel: {:.2f}, angular_vel: {:.2f}",
-             linear_vel, angular_vel)
-
   // calculate left and right wheel speed
   double left_wheel_speed =
       (linear_vel - angular_vel * config_.track_width / 2) /
@@ -41,11 +38,11 @@ void DifferentialDriveRobot::SetMotionCommand(double linear_vel,
     return;
   }
 
-  XLOG_DEBUG("Set left wheel speed: {:.2f} rpm, right wheel speed: {:.2f} rpm",
-             left_rpm, right_rpm);
-
   if (config_.reverse_left_wheel) left_rpm = -left_rpm;
   if (config_.reverse_right_wheel) right_rpm = -right_rpm;
+
+  XLOG_DEBUG("Set left wheel speed: {} rpm, right wheel speed: {} rpm",
+             left_rpm, right_rpm);
 
   config_.left_actuator_group->SetSpeed(left_rpm);
   config_.right_actuator_group->SetSpeed(right_rpm);
