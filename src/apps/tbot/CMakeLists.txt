@@ -7,11 +7,11 @@ add_executable(app_tbot_widget
         src/canbus_panel.cpp
         src/messenger.cpp
         src/speed_controller.cpp)
-target_link_libraries(app_tbot_widget interface async_port imview control)
+target_link_libraries(app_tbot_widget interface async_port imview pid)
 target_include_directories(app_tbot_widget PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
         PRIVATE src)
 
 add_executable(tbot_speed_control src/tbot_speed_control.cpp)
-target_link_libraries(tbot_speed_control interface control async_port)
+target_link_libraries(tbot_speed_control interface pid async_port)

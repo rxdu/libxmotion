@@ -7,8 +7,8 @@
  * Copyright (c) 2021 Ruixiang Du (rdu)
  */
 
-#ifndef SENSOR_INTERFACE_HPP
-#define SENSOR_INTERFACE_HPP
+#ifndef XMOTION_SENSOR_INTERFACE_HPP
+#define XMOTION_SENSOR_INTERFACE_HPP
 
 #include <string>
 #include <stdexcept>
@@ -33,7 +33,7 @@ class SensorInterface {
     return false;
   };
 
-  virtual void Disconnect(){};
+  virtual void Disconnect() {};
 
   virtual bool IsOkay() = 0;
 
@@ -48,4 +48,4 @@ class SensorInterface {
 };
 }  // namespace xmotion
 
-#endif /* SENSOR_INTERFACE_HPP */
+#endif /* XMOTION_SENSOR_INTERFACE_HPP */

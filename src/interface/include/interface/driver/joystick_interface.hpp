@@ -7,8 +7,8 @@
  * Copyright (c) 2023 Ruixiang Du (rdu)
  */
 
-#ifndef ROBOSW_JOYSTICK_INTERFACE_HPP
-#define ROBOSW_JOYSTICK_INTERFACE_HPP
+#ifndef XMOTION_JOYSTICK_INTERFACE_HPP
+#define XMOTION_JOYSTICK_INTERFACE_HPP
 
 #include <string>
 #include <functional>
@@ -109,4 +109,4 @@ class JoystickInterface {
 };
 }  // namespace xmotion
 
-#endif  // ROBOSW_JOYSTICK_INTERFACE_HPP
+#endif  // XMOTION_JOYSTICK_INTERFACE_HPP

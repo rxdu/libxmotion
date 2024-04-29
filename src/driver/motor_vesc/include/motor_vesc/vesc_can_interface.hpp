@@ -14,7 +14,7 @@
 #include <memory>
 #include <functional>
 
-#include "interface/driver/can_adapter.hpp"
+#include "interface/driver/can_interface.hpp"
 #include "motor_vesc/vesc_state.hpp"
 
 namespace xmotion {
@@ -45,7 +45,7 @@ class VescCanInterface {
   void SetServo(double servo);
 
  private:
-  std::shared_ptr<CanAdapter> can_;
+  std::shared_ptr<CanInterface> can_;
   uint8_t vesc_id_;
 
   mutable std::mutex state_mtx_;

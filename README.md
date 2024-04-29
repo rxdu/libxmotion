@@ -48,3 +48,9 @@ $ make -j8
 
 **Note**: If you get any building issues, please refer to the CI configuration ".github/workflows/cmake.yml" for
 the current build steps.
+
+#### Logging configurations
+
+* XLOG_LEVEL: 0 - 6, 0: TRACE, 1: DEBUG, 2: INFO, 3: WARN, 4: ERROR, 5: FATAL, 6: OFF
+* XLOG_ENABLE_LOGFILE: 0 or 1
+* XLOG_FOLDER: folder to store log files, default folder: `~/.xmotion/log`

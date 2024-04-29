@@ -14,7 +14,7 @@
 #include <unordered_map>
 
 #include "interface/types.hpp"
-#include "interface/driver/can_adapter.hpp"
+#include "interface/driver/can_interface.hpp"
 #include "imview/data_buffer.hpp"
 
 namespace xmotion {
@@ -61,7 +61,7 @@ class Messenger {
 
  private:
   RSTimePoint t0_;
-  std::shared_ptr<CanAdapter> can_ = nullptr;
+  std::shared_ptr<CanInterface> can_ = nullptr;
 
   SupervisedState supervised_state_;
   std::unordered_map<DataBufferIndex, swviz::DataBuffer> rpm_buffers_;

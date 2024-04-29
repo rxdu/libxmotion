@@ -10,6 +10,7 @@ endif ()
 
 # # Project Options
 option(BUILD_TESTING "Build tests" OFF)
+option(BUILD_APPS "Build applications" ON)
 option(ENABLE_TARGET_DESKTOP "Enable desktop-only modules" ON)
 option(ENABLE_LOGGING "Enable logging" ON)
 option(STATIC_CHECK "Enable static check" OFF)
@@ -30,8 +31,8 @@ set(USER_CMAKE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 list(APPEND CMAKE_MODULE_PATH "${USER_CMAKE_PATH}/modules")
 list(APPEND CMAKE_PREFIX_PATH "/usr/lib/${CMAKE_SYSTEM_PROCESSOR}-linux-gnu/cmake")
 
-# # Set compiler to use c++ 14 features
-set(CMAKE_CXX_STANDARD 14)
+# # Set compiler to use c++ 17 features
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 

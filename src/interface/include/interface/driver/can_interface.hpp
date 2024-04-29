@@ -1,5 +1,5 @@
 /*
- * can_adapter.hpp
+ * can_interface.hpp
  *
  * Created on 5/30/23 10:28 PM
  * Description:
@@ -7,8 +7,8 @@
  * Copyright (c) 2023 Ruixiang Du (rdu)
  */
 
-#ifndef ROBOSW_CAN_ADAPTER_HPP
-#define ROBOSW_CAN_ADAPTER_HPP
+#ifndef XMOTION_CAN_INTERFACE_HPP
+#define XMOTION_CAN_INTERFACE_HPP
 
 #include <linux/can.h>
 
@@ -16,12 +16,12 @@
 #include <functional>
 
 namespace xmotion {
-class CanAdapter {
+class CanInterface {
  public:
   using ReceiveCallback = std::function<void(const struct can_frame *rx_frame)>;
 
  public:
-  virtual ~CanAdapter() = default;
+  virtual ~CanInterface() = default;
 
   // Public API
   virtual bool Open() = 0;
@@ -33,4 +33,4 @@ class CanAdapter {
 };
 }  // namespace xmotion
 
-#endif  // ROBOSW_CAN_ADAPTER_HPP
+#endif  // XMOTION_CAN_INTERFACE_HPP
