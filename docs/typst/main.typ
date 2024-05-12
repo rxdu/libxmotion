@@ -351,7 +351,9 @@ $ mat(tilde(bold(a))^b;
     bold(eta)_f;
     bold(eta)_m
   ) $
-where we can define the measurement matrix $bold(H)$ as
+where $bold(g)$ and $bold(m)^i$ are the gravity vector and the magnetic field vector in the inertial frame, respectively and both are known constants.
+
+We can define the measurement matrix $bold(H)$ as
 
 $ bold(H) = mat(
     mat(
