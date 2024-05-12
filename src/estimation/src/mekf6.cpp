@@ -22,5 +22,9 @@ void Mekf6::Initialize(const Params& params) {
 }
 
 void Mekf6::Update(const Eigen::Vector3d& gyro, const Eigen::Vector3d& accel,
-                   double dt) {}
+                   double dt) {
+  Eigen::Quaterniond q_k_1(state_(0), state_(1), state_(2), state_(3));
+  Eigen::Quaterniond q_g(0, gyro(0), gyro(1), gyro(2));
+//  Eigen::Quaterniond q_k = q_k_1 + q_k_1 * q_g * dt;
+}
 }  // namespace xmotion
