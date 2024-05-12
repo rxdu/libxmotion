@@ -30,7 +30,7 @@
 
 = MEKF
 
-This section is about the MEKF implementation in libxmotion. Most of the equations and derivation steps are directly from @Maley2013-it.
+This section is about the MEKF implementation in libxmotion. Most of the equations and derivation steps are taken from @Maley2013-it.
 
 == Quaternion 
 
@@ -71,10 +71,10 @@ The MEKF is used to estimate the attitude of the body frame with respect to the 
 Normally, we would have the state dynamics as
 
 $ dot(hat(bold(q))) = frac(1,2)hat(bold(q)) times.circle mat(0; bold(omega)) $
-$ dot(hat(bold(v)))^i = bold(R)^i_b (hat(bold(q))) hat(bold(f))^b + hat(bold(g))^i $ <translational-dynamics-1>
+$ dot(hat(bold(v)))^i = bold(C)^i_b (hat(bold(q))) hat(bold(f))^b + hat(bold(g))^i $ <translational-dynamics-1>
 $ dot(hat(bold(r)))^i =  hat(bold(v))^i $ <translational-dynamics-2> 
 
-where $bold(R)^i_b$ is the transformation matrix that transforms a vector from the body frame to the inertial frame, $hat(bold(q))$ is the estimated quaternion, $hat(bold(v))$ is the estimated velocity, and $hat(bold(r))$ is the estimated position.
+where $bold(C)^i_b$ is the transformation matrix that transforms a vector from the body frame to the inertial frame, $hat(bold(q))$ is the estimated quaternion, $hat(bold(v))$ is the estimated velocity, and $hat(bold(r))$ is the estimated position.
 
 With MEKF, we use the error quaternion, which is the difference between the estimated quaternion and the true quaternion, as well as error velocity and position. 
 
@@ -126,7 +126,7 @@ $ delta bold(r) = bold(r) - hat(bold(r)) $
 
 Based on @translational-dynamics-1 and @translational-dynamics-2, we can derive the dynamics of the velocity and position error as
 
-$ delta dot(bold(v)) = -bold(R)^i_b (hat(bold(q)))hat(bold(f))^b_times bold(alpha) + bold(R)^i_b delta bold(f) $ <error-velocity-dynamics>
+$ delta dot(bold(v)) = -bold(C)^i_b (hat(bold(q)))hat(bold(f))^b_times bold(alpha) + bold(C)^i_b delta bold(f) $ <error-velocity-dynamics>
 $ delta dot(bold(r)) = delta bold(v) $ <error-position-dynamics>
 
 === Sensor Bias Dynamics
@@ -184,7 +184,7 @@ $ delta dot(bold(x)) = mat(dot(bold(alpha));
   bold(dot(beta)_f);
   bold(dot(beta)_m)) = mat(
   -hat(bold(omega))_times, bold(0)_(3times 3), bold(0)_(3times 3), -bold(I)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
-  -bold(R)^i_b (hat(bold(q)))hat(bold(f))^b_times, bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3), -bold(R)^i_b (hat(bold(q))), bold(0)_(3times 3);
+  -bold(C)^i_b (hat(bold(q)))hat(bold(f))^b_times, bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3), -bold(C)^i_b (hat(bold(q))), bold(0)_(3times 3);
   bold(0)_(3times 3), bold(I)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
   bold(0)_(3times 3), bold(0)_(3times 3) , bold(0)_(3times 3) , bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
   bold(0)_(3times 3), bold(0)_(3times 3) , bold(0)_(3times 3) , bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
@@ -199,7 +199,7 @@ $ delta dot(bold(x)) = mat(dot(bold(alpha));
     bold(beta_m)
   ) + mat(
     -bold(eta_(omega));
-    -bold(R)^i_b (hat(bold(q)))bold(eta)_f;
+    -bold(C)^i_b (hat(bold(q)))bold(eta)_f;
     bold(0)_(3times 3);
     bold(nu)_omega;
     bold(nu)_f;
@@ -214,7 +214,7 @@ where matrices $bold(F)$ is given by
 
 $ bold(F)(hat(bold(q)),hat(bold(omega)),hat(bold(f))) = mat(
   -hat(bold(omega))_times, bold(0), bold(0), -bold(I)_(3times 3), bold(0), bold(0);
-  -bold(R)^i_b (hat(bold(q)))hat(bold(f))^b_times, bold(0), bold(0), bold(0), -bold(R)^i_b (hat(bold(q))), bold(0);
+  -bold(C)^i_b (hat(bold(q)))hat(bold(f))^b_times, bold(0), bold(0), bold(0), -bold(C)^i_b (hat(bold(q))), bold(0);
   bold(0), bold(I)_(3times 3), bold(0), bold(0), bold(0), bold(0);
   bold(0), bold(0) , bold(0) , bold(0), bold(0), bold(0);
   bold(0), bold(0) , bold(0) , bold(0), bold(0), bold(0);
@@ -225,7 +225,7 @@ and $mono(W)$ is the process noise. According to @full-error-state-dynamics, we 
 
 $ mono(W) = mat(
   -bold(eta_(omega));
-  -bold(R)^i_b (hat(bold(q)))bold(eta)_f;
+  -bold(C)^i_b (hat(bold(q)))bold(eta)_f;
   bold(0)_(3times 3);
   bold(nu)_omega;
   bold(nu)_f;
@@ -249,38 +249,136 @@ where $bold(sigma)_omega$, $bold(sigma)_f$, $bold(sigma)_(beta omega)$, $bold(si
 
 The measurement model for the MEKF can be represented in the standard form
 
-$ bold(z) = bold(H)delta bold(x) + mono(V) $
+$ delta bold(z) = bold(H)delta bold(x) + mono(V) $
 
-where $bold(z)$ is the measurement vector, $bold(H)$ is the measurement function, $delta bold(x)$ is the error state vector, and $mono(V)$ is the measurement noise.
+where $delta bold(z)$ is the error measurement vector, $bold(H)$ is the measurement function, $delta bold(x)$ is the error state vector, and $mono(V)$ is the measurement noise.
 
 In this case, the gyroscope measurement is treated as control input. We have the following two types of measurements:
 
-- Accelerometer: $tilde(bold(a))^b = bold(a)^b + bold(R)^b_i (bold(q))mat(0;0;-g) + bold(beta)_f + bold(eta)_f$
-- Magnetometer: $tilde(bold(m))^b = bold(R)^b_i (bold(q)) bold(m)^i + bold(beta)_m + bold(eta)_m$
+- Accelerometer: $tilde(bold(a))^b$
+- Magnetometer: $tilde(bold(m))^b$
 
-In practice, $tilde(bold(a))^b$ and $tilde(bold(m))^b$ can be acquired directly from the accelerometer and magnetometer, respectively. We will need to derive the measurement model for the accelerometer and magnetometer so that we can use the current estimated state to predict the measurements in order to find the measurement residual.
+In practice, $tilde(bold(a))^b$ and $tilde(bold(m))^b$ can be acquired directly from the accelerometer and magnetometer, respectively. 
 
-Equation 37 and 38 in @Maley2013-it are used to derive the measurement model for the accelerometer and magnetometer
+Note that Equation 37 in @Maley2013-it will be used for the calculation of measurement residual for the accelerometer and magnetometer
 
-$ bold(R)^b_i (bold(q)) tilde.equiv mat(bold(I) - bold(alpha)_times)bold(R)^b_i (hat(bold(q))) $
-$ bold(R)^i_b (bold(q)) tilde.equiv bold(R)^i_b (hat(bold(q)))mat(bold(I) + bold(alpha)_times) $
+$ bold(C)^b_i (bold(q)) tilde.equiv mat(bold(I) - bold(alpha)_times)bold(C)^b_i (hat(bold(q))) $ <real-state-to-estimated-state>
+// $ bold(C)^i_b (bold(q)) tilde.equiv bold(C)^i_b (hat(bold(q)))mat(bold(I) + bold(alpha)_times) $
+
+=== Accelerometer Measurement Model
+
+The accelerometer measurement model is given by:
+
+$ tilde(bold(a))^b = bold(C)^b_i (bold(q))mat(0;0;-g) + bold(beta)_f + bold(eta)_f $
+
+
+Here the acceleration of the rigid body where the IMU is attached to is neglected, and the accelerometer measurement is given by the gravity vector in the inertial frame rotated to the body frame. 
+
+Substituting @real-state-to-estimated-state into the above equation, we can get
+
+$ tilde(bold(a))^b &= mat(bold(I) - bold(alpha)_times)bold(C)^b_i (hat(bold(q))) mat(0;0;-g) + bold(beta)_f + bold(eta)_f \
+&= bold(C)^b_i (hat(bold(q)))mat(0;0;-g) - bold(alpha)_times bold(C)^b_i (hat(bold(q)))mat(0;0;-g) +  bold(beta)_f + bold(eta)_f \
+&= hat(tilde(bold(a)))^b - bold(alpha) times bold(C)^b_i (hat(bold(q))) mat(0;0;-g) + bold(beta)_f + bold(eta)_f \
+&= hat(tilde(bold(a)))^b + bold(C)^b_i (hat(bold(q))) mat(0;0;-g) times bold(alpha) + bold(beta)_f + bold(eta)_f $
+
+$ arrow.r.double delta tilde(bold(a))^b &= bold(C)^b_i (hat(bold(q))) mat(0;0;-g) times bold(alpha) + bold(beta)_f + bold(eta)_f \
+&= mat(
+  bold(C)^b_i (hat(bold(q))) mat(0;0;-g) times,
+  bold(0),
+  bold(0),
+  bold(0),
+  bold(I),
+  bold(0)
+  ) mat(
+  bold(alpha);
+  delta bold(v);
+  delta bold(r);
+  bold(beta_omega);
+  bold(beta_f);
+  bold(beta_m)
+) + bold(eta)_f $
 
 === Magnetometer Measurement Model
 
-The predicted magnetometer measurement is given by
+The magnetometer measurement model is given by:
 
-$ hat(tilde(bold(m)))^b = bold(R)^b_i (hat(bold(q)))bold(m)^i $
+$ tilde(bold(m))^b &= bold(C)^b_i (bold(q)) bold(m)^i + bold(beta)_m + bold(eta)_m $
 
-The measurement residual is then
+Similarly, substituting @real-state-to-estimated-state, we can get
 
-$ delta tilde(bold(m))^b =  $
+$ tilde(bold(m))^b &tilde.equiv mat(bold(I) - bold(alpha)_times)bold(C)^b_i (hat(bold(q))) bold(m)^i + bold(beta)_m + bold(eta)_m \
+&= bold(C)^b_i (hat(bold(q))) bold(m)^i + bold(C)^b_i (hat(bold(q))) bold(m)^i times bold(alpha) + bold(beta)_m + bold(eta)_m \
+&= hat(tilde(bold(m)))^b + bold(C)^b_i (hat(bold(q))) bold(m)^i times bold(alpha) + bold(beta)_m + bold(eta)_m $
+$ arrow.r.double delta tilde(bold(m))^b &= bold(C)^b_i (hat(bold(q))) bold(m)^i times bold(alpha) + bold(beta)_m + bold(eta)_m \
+&= mat(
+  bold(C)^b_i (hat(bold(q))) bold(m)^i times, 
+  bold(0), 
+  bold(0), 
+  bold(0), 
+  bold(0), 
+  bold(I)) 
+mat(
+  bold(alpha);
+  delta bold(v);
+  delta bold(r);
+  bold(beta_omega);
+  bold(beta_f);
+  bold(beta_m)
+) + bold(eta)_m $ 
 
-$ tilde(bold(m))^b &= bold(R)^b_i (bold(q)) bold(m)^i + bold(beta)_m + bold(eta)_m \
-&tilde.equiv mat(bold(I) - bold(alpha)_times)bold(R)^b_i (hat(bold(q))) bold(m)^i + bold(beta)_m + bold(eta)_m $ 
+=== Full Measurement Model
 
-=== Angle Measurements
+The full measurement model can be written as
 
+$ mat(tilde(bold(a))^b;
+  tilde(bold(m))^b) = mat(
+    mat(
+    bold(C)^b_i (hat(bold(q))) mat(0;0;-g) times,
+    bold(0),
+    bold(0),
+    bold(0),
+    bold(I),
+    bold(0)
+    );
+    mat(
+    bold(C)^b_i (hat(bold(q))) bold(m)^i times, 
+    bold(0), 
+    bold(0), 
+    bold(0), 
+    bold(0), 
+    bold(I)) 
+  ) delta bold(x) + mat(
+    bold(eta)_f;
+    bold(eta)_m
+  ) $
+where we can define the measurement matrix $bold(H)$ as
 
+$ bold(H) = mat(
+    mat(
+    bold(C)^b_i (hat(bold(q))) mat(0;0;-g) times,
+    bold(0),
+    bold(0),
+    bold(0),
+    bold(I),
+    bold(0)
+    );
+    mat(
+    bold(C)^b_i (hat(bold(q))) bold(m)^i times, 
+    bold(0), 
+    bold(0), 
+    bold(0), 
+    bold(0), 
+    bold(I)) 
+  ) $
+
+The measurement noise covariance matrix $bold(R)_c$ is given by
+
+$ bold(R)_c = mat(
+  bold(sigma)^2_a, bold(0);
+  bold(0), bold(sigma)^2_m
+) $
+
+where $bold(sigma)_a$ and $bold(sigma)_m$ are the standard deviations of the accelerometer and magnetometer measurements, respectively.
 
 #pagebreak()
 

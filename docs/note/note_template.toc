@@ -1,5 +1,0 @@
-\contentsline {part}{I\hspace {1em}Dynamics and Control}{3}{}%
-\contentsline {section}{\numberline {1}Dynamics}{3}{}%
-\contentsline {section}{\numberline {2}Control}{3}{}%
-\contentsline {part}{II\hspace {1em}Fluids Engineering}{4}{}%
-\contentsline {part}{III\hspace {1em}Structures and Materials}{5}{}%
