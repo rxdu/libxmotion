@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
   auto imu = std::make_shared<ImuHipnuc>();
   auto mekf_node = std::make_shared<MekfRosNode>(imu);
 
-  if (!mekf_node->Initialize("/dev/ttyUSB1", 921600)) {
+  if (!mekf_node->Initialize("/dev/ttyUSB0", 921600)) {
     std::cout << "Failed to initialize MEKF node" << std::endl;
     return -1;
   }

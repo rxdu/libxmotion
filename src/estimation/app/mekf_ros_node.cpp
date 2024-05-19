@@ -63,7 +63,11 @@ void MekfRosNode::ImuCallback(const ImuData& data) {
   auto time_lapse =
       std::chrono::duration_cast<std::chrono::microseconds>(error).count();
 
-  RCLCPP_INFO(this->get_logger(), "imu update rate: %f",
-              1.0f / time_lapse * 1000000.0f);
+  RCLCPP_INFO(this->get_logger(), "gyro: %.6f %.6f %.6f, accel: %.6f %.6f %.6f, mag: %.6f %.6f %.6f, rate: %.1f",
+              data.gyro.x, data.gyro.y, data.gyro.z, data.accel.x, data.accel.y,
+              data.accel.z, data.magn.x, data.magn.y, data.magn.z, 1.0f / time_lapse * 1000000.0f);
+
+//  RCLCPP_INFO(this->get_logger(), "imu update rate: %f",
+//              1.0f / time_lapse * 1000000.0f);
 }
 }  // namespace xmotion

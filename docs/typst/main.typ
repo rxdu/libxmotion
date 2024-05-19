@@ -20,7 +20,7 @@
 
 #outline(
   title: auto,
-  depth: 1,
+  depth: 2,
   indent: auto
 )
 
@@ -208,7 +208,7 @@ $ delta dot(bold(x)) = mat(dot(bold(alpha));
 
 The 18-error-state model is linear and time-varying with respect to the error states. Following the standard representation of a linear time-varying system, we can write the error state dynamics as
 
-$ delta dot(bold(x)) = bold(F) delta bold(x) + mono(W) $
+$ delta dot(bold(x)) = bold(F) delta bold(x) + bold(G)mono(w) $
 
 where matrices $bold(F)$ is given by
 
@@ -221,18 +221,18 @@ $ bold(F)(hat(bold(q)),hat(bold(omega)),hat(bold(f))) = mat(
   bold(0), bold(0) , bold(0) , bold(0), bold(0), bold(0);
   ) $
   
-and $mono(W)$ is the process noise. According to @full-error-state-dynamics, we have 
+the matrix $bold(G)$ transforms the white noice sequeunce $mono(w)$ into the disturbance vector and is given by
 
-$ mono(W) = mat(
-  -bold(eta_(omega));
-  -bold(C)^i_b (hat(bold(q)))bold(eta)_f;
-  bold(0)_(3times 3);
-  bold(nu)_omega;
-  bold(nu)_f;
-  bold(nu)_m
-) $
+$ bold(G) = mat(
+  -bold(I), bold(0), bold(0), bold(0), bold(0), bold(0);
+  bold(0), -bold(C)^i_b (hat(bold(q))), bold(0), bold(0), bold(0), bold(0);
+  bold(0), bold(0), bold(0), bold(0), bold(0), bold(0);
+  bold(0), bold(0), bold(0), bold(I), bold(0), bold(0);
+  bold(0), bold(0), bold(0), bold(0), bold(I), bold(0);
+  bold(0), bold(0), bold(0), bold(0), bold(0), bold(I);
+  ) $
 
-From the definitions of $bold(eta)_omega$, $bold(eta)_f$, $bold(nu)_omega$, $bold(nu)_f$, $bold(nu)_m$, we can get the covariance matrix of the process noise as
+The variance of the disturbance vector $mono(w)$ is given by
 
 $ bold(Q)_c = mat(
   "diag"(bold(sigma)^2_omega), bold(0), bold(0), bold(0), bold(0), bold(0);
@@ -243,7 +243,7 @@ $ bold(Q)_c = mat(
   bold(0), bold(0), bold(0), bold(0), bold(0), "diag"(bold(sigma)^2_(beta m));
   ) $
 
-where $bold(sigma)_omega$, $bold(sigma)_f$, $bold(sigma)_(beta omega)$, $bold(sigma)_(beta f)$, $bold(sigma)_(beta m)$ are the standard deviations of the white noise processes.
+where $bold(sigma)_omega$, $bold(sigma)_f$, $bold(sigma)_(beta omega)$, $bold(sigma)_(beta f)$, $bold(sigma)_(beta m)$ are the standard deviations of the white noise processes. You can find more details about the derivation from Appendix E.1 of @Sola2017-cy.
 
 == Measurement Model
 
@@ -330,8 +330,8 @@ mat(
 
 The full measurement model can be written as
 
-$ mat(tilde(bold(a))^b;
-  tilde(bold(m))^b) = mat(
+$ mat(delta tilde(bold(a))^b;
+  delta tilde(bold(m))^b) = mat(
     mat(
     bold(C)^b_i (hat(bold(q))) mat(0;0;-g) times,
     bold(0),
@@ -350,7 +350,7 @@ $ mat(tilde(bold(a))^b;
   ) delta bold(x) + mat(
     bold(eta)_f;
     bold(eta)_m
-  ) $
+  ) $ <full-measurement-model>
 where $bold(g)$ and $bold(m)^i$ are the gravity vector and the magnetic field vector in the inertial frame, respectively and both are known constants.
 
 We can define the measurement matrix $bold(H)$ as
@@ -375,27 +375,160 @@ $ bold(H) = mat(
 
 The measurement noise covariance matrix $bold(R)_c$ is given by
 
-$ bold(R)_c = mat(
+$ bold(R) = mat(
   bold(sigma)^2_a, bold(0);
   bold(0), bold(sigma)^2_m
 ) $
 
 where $bold(sigma)_a$ and $bold(sigma)_m$ are the standard deviations of the accelerometer and magnetometer measurements, respectively.
 
+== MEKF Formulation
+
+=== Model Discretization
+
+We have acquired the error state dynamics and the measurement model as given in @full-error-state-dynamics and @full-measurement-model. 
+
+#math.equation(block: true, numbering: none, [
+    $
+    delta dot(bold(x)) &= bold(F) delta bold(x) + bold(G)mono(w) \
+    &= mat(
+    -hat(bold(omega))_times, bold(0)_(3times 3), bold(0)_(3times 3), -bold(I)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
+    -bold(C)^i_b (hat(bold(q)))hat(bold(f))^b_times, bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3), -bold(C)^i_b (hat(bold(q))), bold(0)_(3times 3);
+    bold(0)_(3times 3), bold(I)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
+    bold(0)_(3times 3), bold(0)_(3times 3) , bold(0)_(3times 3) , bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
+    bold(0)_(3times 3), bold(0)_(3times 3) , bold(0)_(3times 3) , bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
+    bold(0)_(3times 3), bold(0)_(3times 3) , bold(0)_(3times 3) , bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
+    ) 
+    mat(
+      bold(alpha);
+      delta bold(v);
+      delta bold(r);
+      bold(beta_omega);
+      bold(beta_f);
+      bold(beta_m)
+    ) + mat(
+      -bold(eta_(omega));
+      -bold(C)^i_b (hat(bold(q)))bold(eta)_f;
+      bold(0)_(3times 3);
+      bold(nu)_omega;
+      bold(nu)_f;
+      bold(nu)_m
+    )
+    $
+  ]
+)
+
+The state transition matrix for the discrete system, $bold(Phi)$, is given by:
+
+$ bold(Phi) = e^(bold(F)Delta t) $
+
+The state transition matrix can be approximated as
+
+$ bold(Phi)_(k-1) &= bold(I) + bold(F)_(k-1) Delta t \ 
+  &= bold(I) + mat(
+    -hat(bold(omega))_(k-1 _times), bold(0)_(3times 3), bold(0)_(3times 3), -bold(I)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
+    -bold(C)^i_b (hat(bold(q))_(k-1))hat(bold(f))^b_(k-1 times), bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3), -bold(C)^i_b (hat(bold(q))_(k-1)), bold(0)_(3times 3);
+    bold(0)_(3times 3), bold(I)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
+    bold(0)_(3times 3), bold(0)_(3times 3) , bold(0)_(3times 3) , bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
+    bold(0)_(3times 3), bold(0)_(3times 3) , bold(0)_(3times 3) , bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
+    bold(0)_(3times 3), bold(0)_(3times 3) , bold(0)_(3times 3) , bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
+    ) Delta t
+$ <discrete-state-transition-matrix>
+
+Then the state covariance matrix can be updated as
+
+$ bold(P)^-_k = bold(Phi)_(k-1)bold(P)^+_(k-1)bold(Phi)^T_(k-1) + bold(Q)_d $
+
+where $bold(Q)_d$ is the discrete-time process noise covariance matrix and is given by
+
+#math.equation(block: false, numbering: none, [
+$ bold(Q)_d &= integral^(Delta t)_0 e^(bold(F(t-tau)))bold(Q)_c e^(bold(F^T (t-tau)))d tau \
+&= mat(
+  // first row
+  Lambda(bold(sigma^2_omega)) Delta t + Lambda(bold(sigma^2_omega)) Delta t^3 / 3, bold(0), bold(0), -Lambda(bold(sigma^2_(beta omega)))frac(Delta t^2,2), bold(0), bold(0);
+  // second row
+  bold(0), Lambda(bold(sigma^2_f)) Delta t + Lambda(bold(sigma^2_(beta f))) frac(Delta t^3, 3), Lambda(bold(sigma^2_(beta f))) frac(Delta t^4,8) + Lambda(bold(sigma^2_(beta f))) Delta t^2 / 2, bold(0), -Lambda(bold(sigma^2_(beta f))) Delta t^2 / 2, bold(0);
+  // third row
+  bold(0), Lambda(bold(sigma^2_f)) frac(Delta t^2,2) + Lambda(bold(sigma^2_(beta f))) frac(Delta t^4, 8), Lambda(bold(sigma^2_(f))) frac(Delta t^3,3) + Lambda(bold(sigma^2_(beta f))) frac(Delta t^5, 20), bold(0), -Lambda(bold(sigma^2_(beta f))) frac(Delta t^3, 6), bold(0);
+  // forth row
+  -Lambda(bold(sigma^2_(beta omega))) frac(Delta t^2,2), bold(0), bold(0), Lambda(bold(sigma^2_(beta omega))) frac(Delta t^2,2), bold(0), bold(0);
+  // fifth row
+  bold(0), -Lambda(bold(sigma^2_(beta f))) Delta t^2 / 2, -Lambda(bold(sigma^2_(beta f))) frac(Delta t^3, 6), bold(0), Lambda(bold(sigma^2_(beta f))) Delta t, bold(0);
+  // sixth row
+  bold(0), bold(0), bold(0), bold(0), bold(0), Lambda(bold(sigma^2_(beta m))) Delta t
+) $
+]
+)
+
+Similarly, we have the transition matrix for the measurement model as
+
+$ bold(H)_k = mat(
+  bold(C)^b_i (hat(bold(q))^-_k) mat(0;0;-g) times,
+  bold(0),
+  bold(0),
+  bold(0),
+  bold(I),
+  bold(0);
+  bold(C)^b_i (hat(bold(q))^-_k) bold(m)^i times, 
+  bold(0), 
+  bold(0), 
+  bold(0), 
+  bold(0), 
+  bold(I)
+) $ <discrete-measurement-matrix>
+
+=== MEKF Algorithm
+
+The MEKF can be formulated as follows: 
+
+- Initialize the filter with the initial state estimate $delta hat(bold(x))^+_0$ and the initial error-state covariance matrix $bold(P)^+_0$
+
+$ delta hat(bold(x))^+_0 = bold(0) $
+$ bold(P)^+_0 = bold(E)[(delta bold(x)_0 - delta hat(bold(x))^+_0)  (delta bold(x)_0 - delta hat(bold(x))^+_0)^T] = bold(E)(delta bold(x)_0 delta bold(x)_0^T)  $
+
+- For step $k = 1,2,...$, perform the following steps:
+
+  - Update $hat(bold(q))^-_k$
+
+  $ hat(bold(q))^-_k = hat(bold(q))^+_(k-1) times.circle mat(1; bold(hat(alpha)^+_(k-1))/2) $
+
+  - Update $Phi_(k-1)$ using @discrete-state-transition-matrix
+
+  #math.equation(block: true, numbering: none, [
+    $ bold(Phi)_(k-1) &= bold(I) + bold(F)_(k-1) Delta t \ 
+      &= bold(I) + mat(
+        -hat(bold(omega))_(k-1 _times), bold(0)_(3times 3), bold(0)_(3times 3), -bold(I)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
+        -bold(C)^i_b (hat(bold(q))_(k-1))hat(bold(f))^b_(k-1 times), bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3), -bold(C)^i_b (hat(bold(q))_(k-1)), bold(0)_(3times 3);
+        bold(0)_(3times 3), bold(I)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
+        bold(0)_(3times 3), bold(0)_(3times 3) , bold(0)_(3times 3) , bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
+        bold(0)_(3times 3), bold(0)_(3times 3) , bold(0)_(3times 3) , bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
+        bold(0)_(3times 3), bold(0)_(3times 3) , bold(0)_(3times 3) , bold(0)_(3times 3), bold(0)_(3times 3), bold(0)_(3times 3);
+        ) Delta t
+    $
+  ])
+
+  - Predict the error state and error-state covariance matrix
+
+  $ bold(P)^-_k = bold(Phi)_(k-1)bold(P)^+_(k-1)bold(Phi)^T_(k-1) + bold(Q)_d $
+  $ hat(bold(x))^-_k = bold(Phi)_(k-1) hat(bold(x))_(k-1)  $
+
+  - Update the measurement matrix $bold(H)_k$ using @discrete-measurement-matrix
+  - Compute the Kalman gain $bold(K)_k$
+  
+  $ bold(K)_k = bold(P)^-_k bold(H)_k^T (bold(H)_k bold(P)^-_k bold(H)_k^T + bold(R)_k)^(-1) $
+
+  - Update the error state and error-state covariance matrix
+
+  $ delta hat(bold(x))^+_k = delta hat(bold(x))^-_k + bold(K)_k bold(H)_k delta bold(x)^-_k $
+  $ bold(P)^+_k = (bold(I) - bold(K)_k bold(H)_k) bold(P)^-_k $
+
+  - Update the full states
+
+  $ hat(bold(q))^+_k = hat(bold(q))^-_k times.circle mat(1; bold(alpha^+_k)/2) $
+  $ hat(bold(r))^+_k = hat(bold(r))^-_k + delta bold(r)^+_k $
+  $ hat(bold(v))^+_k = hat(bold(v))^-_k + delta bold(v)^+_k $
+
 #pagebreak()
-
-= Heading: first level
-#lorem(20)
-
-== Heading: second level
-#lorem(20)
-
-=== Heading: third level
-
-==== Paragraph
-#lorem(20)
-
-#lorem(20)
 
 = Math
 
@@ -493,11 +626,11 @@ Single citation @Vaswani2017AttentionIA. Multiple citations @Vaswani2017Attentio
 // Add bibliography and create Bibiliography section
 #bibliography("bibliography.bib")
 
-// Create appendix section
-#show: arkheion-appendices
-= 
+// // Create appendix section
+// #show: arkheion-appendices
+// = 
 
-== Appendix section
+// == Appendix section
 
-#lorem(100)
+// #lorem(100)
 
