@@ -15,35 +15,54 @@ namespace xmotion {
 class Mekf6 {
  public:
   static constexpr int StateDimension = 15;
+  static constexpr int ControlInputDimension = 3;
   static constexpr int ObservationDimension = 3;
 
+  // state: [alpha, delta v, delta r, beta omega, beta f]
   using State = Eigen::Vector<double, StateDimension>;
+  using ControlInput = Eigen::Vector<double, ControlInputDimension>;
+  using Observation = Eigen::Vector<double, ObservationDimension>;
+
   using StateCovariance = Eigen::Matrix<double, StateDimension, StateDimension>;
-  using ObservationCovariance =
+  using ProcessNoiseCovariance =
+      Eigen::Matrix<double, StateDimension, StateDimension>;
+  using ObservationNoiseCovariance =
       Eigen::Matrix<double, ObservationDimension, ObservationDimension>;
 
   struct Params {
+    Eigen::Quaterniond init_quaternion;
+
     State init_state;
     StateCovariance init_state_cov;
-    ObservationCovariance init_observation_cov;
 
-    Eigen::Vector<double, ObservationDimension> gyro_bias;
-    Eigen::Vector<double, ObservationDimension> accel_bias;
+    ProcessNoiseCovariance init_process_noise_cov;
+    ObservationNoiseCovariance init_observation_noise_cov;
 
-    Eigen::Vector<double, ObservationDimension> accel_obs_cov;
+    Eigen::Vector3d sigma_omega;
+    Eigen::Vector3d sigma_f;
+    Eigen::Vector3d sigma_beta_omega;
+    Eigen::Vector3d sigma_beta_f;
+
+    double gravity_constant = 9.81;
   };
 
  public:
   void Initialize(const Params &params);
-  void Update(const Eigen::Vector3d &gyro, const Eigen::Vector3d &accel,
+  void Update(const ControlInput &gyro_tilde, const Observation &accel_tilde,
               double dt);
 
+  Eigen::Quaterniond GetQuaternion() const { return q_hat_; }
+
  private:
-  State state_;
-  StateCovariance state_cov_;
-  ObservationCovariance observation_cov_;
-  Eigen::Vector<double, ObservationDimension> gyro_bias_;
-  Eigen::Vector<double, ObservationDimension> accel_bias_;
+  Eigen::Matrix<double, StateDimension, StateDimension> GetQMatrix(double dt);
+
+  State x_;
+  StateCovariance P_;
+  ProcessNoiseCovariance Q_;
+  ObservationNoiseCovariance R_;
+
+  Params params_;
+  Eigen::Quaterniond q_hat_;
 };
 }  // namespace xmotion
 
