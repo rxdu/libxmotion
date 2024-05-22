@@ -13,8 +13,6 @@ int main(int argc, char* argv[]) {
   params.init_state = Eigen::VectorXd::Zero(Mekf6::StateDimension);
   params.init_state_cov =
       Eigen::MatrixXd::Identity(Mekf6::StateDimension, Mekf6::StateDimension);
-  params.init_process_noise_cov =
-      Eigen::MatrixXd::Identity(Mekf6::StateDimension, Mekf6::StateDimension);
   params.init_observation_noise_cov = Eigen::MatrixXd::Identity(
       Mekf6::ObservationDimension, Mekf6::ObservationDimension);
   params.sigma_omega = Eigen::Vector3d(0.01, 0.01, 0.01);

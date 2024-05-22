@@ -34,8 +34,6 @@ class Mekf6 {
 
     State init_state;
     StateCovariance init_state_cov;
-
-    ProcessNoiseCovariance init_process_noise_cov;
     ObservationNoiseCovariance init_observation_noise_cov;
 
     Eigen::Vector3d sigma_omega;
@@ -58,7 +56,6 @@ class Mekf6 {
 
   State x_;
   StateCovariance P_;
-  ProcessNoiseCovariance Q_;
   ObservationNoiseCovariance R_;
 
   Params params_;

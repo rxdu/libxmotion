@@ -488,9 +488,9 @@ $ bold(P)^+_0 = bold(E)[(delta bold(x)_0 - delta hat(bold(x))^+_0)  (delta bold(
 
 - For step $k = 1,2,...$, perform the following steps:
 
-  - Update $hat(bold(q))^-_k$
+  // - Update $hat(bold(q))^-_k$
 
-  $ hat(bold(q))^-_k = hat(bold(q))^+_(k-1) times.circle mat(1; bold(hat(alpha)^+_(k-1))/2) $
+  // $ hat(bold(q))^-_k = hat(bold(q))^+_(k-1) times.circle mat(1; bold(hat(alpha)^+_(k-1))/2) $
 
   - Update $Phi_(k-1)$ using @discrete-state-transition-matrix
 
