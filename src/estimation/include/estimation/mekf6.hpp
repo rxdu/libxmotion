@@ -49,7 +49,7 @@ class Mekf6 {
   void Update(const ControlInput &gyro_tilde, const Observation &accel_tilde,
               double dt);
 
-  Eigen::Quaterniond GetQuaternion() const { return q_hat_; }
+  const Eigen::Quaterniond &GetQuaternion() const { return q_hat_; }
 
  private:
   Eigen::Matrix<double, StateDimension, StateDimension> GetQMatrix(double dt);

@@ -76,22 +76,20 @@ Mekf6::GetQMatrix(double dt) {
 
 void Mekf6::Update(const ControlInput &gyro_tilde,
                    const Observation &accel_tilde, double dt) {
-  //  std::cout << "gyro_tilde: \n" << gyro_tilde.transpose() << std::endl;
-  //  std::cout << "accel_tilde: \n" << accel_tilde.transpose() << std::endl;
-
   // subtract bias from gyro measurement
-  ControlInput gyro = gyro_tilde;   // - x_.segment<ControlInputDimension>(9);
-  Observation accel = accel_tilde;  // - x_.segment<ObservationDimension>(12);
+  ControlInput gyro = gyro_tilde - x_.segment<ControlInputDimension>(9);
+  Observation accel = accel_tilde - x_.segment<ObservationDimension>(12);
 
+  std::cout << "gyro_tilde: \n" << gyro_tilde.transpose() << std::endl;
+  std::cout << "accel_tilde: \n" << accel_tilde.transpose() << std::endl;
   std::cout << "gyro: \n" << gyro.transpose() << std::endl;
   std::cout << "accel: \n" << accel.transpose() << std::endl;
 
-  //  Eigen::Quaterniond error_q = Eigen::Quaterniond(1, x_(0) / 2.0f, x_(1)
-  //  / 2.0f, x_(2) / 2.0f); std::cout << "error_q: " << error_q.w() << ", " <<
-  //  error_q.x() << ", "
-  //            << error_q.y() << ", " << error_q.z() << std::endl;
-  //  std::cout << "q_hat: " << q_hat_.w() << ", " << q_hat_.x() << ", "
-  //            << q_hat_.y() << ", " << q_hat_.z() << std::endl;
+  // predict state with control input
+  q_hat_ = Eigen::Quaterniond(
+      q_hat_.coeffs() +
+      0.5 * dt * Eigen::Quaterniond(0, gyro(0), gyro(1), gyro(2)).coeffs());
+  q_hat_.normalize();
 
   // update state transition matrix
   Eigen::Matrix<double, StateDimension, StateDimension> F =
@@ -124,7 +122,7 @@ void Mekf6::Update(const ControlInput &gyro_tilde,
       Eigen::Matrix<double, ObservationDimension, StateDimension>::Zero();
   Eigen::Vector<double, ObservationDimension> h =
       q_hat_.inverse().toRotationMatrix() *
-      Eigen::Vector3d(0, 0, params_.gravity_constant);
+      Eigen::Vector3d(0, 0, -params_.gravity_constant);
   H.block<3, 3>(0, 0) = SkewSymmetric(h);
   H.block<3, 3>(0, 12) = Eigen::Matrix<double, 3, 3>::Identity();
 
@@ -135,20 +133,24 @@ void Mekf6::Update(const ControlInput &gyro_tilde,
   //  std::cout << "H: \n" << H << std::endl;
 
   // update the state and covariance
-  x_ = x_ + K * (accel - H * x_);
+  Eigen::Vector3d delta_y =
+      accel - q_hat_.inverse().toRotationMatrix() *
+                  Eigen::Vector3d(0, 0, -params_.gravity_constant);
+
+  //  std::cout << "delta y: \n" << delta_y.transpose() << std::endl;
+  std::cout << "K * delta_y: \n" << (K * delta_y).transpose() << std::endl;
+
+  x_ = x_ + K * delta_y;
   P_ = (Eigen::Matrix<double, StateDimension, StateDimension>::Identity() -
         K * H) *
        P_;
 
-  std::cout << "x^+: \n" << x_.block<3, 1>(0, 0).transpose() << std::endl;
-  std::cout << "P^+: \n" << P_ << std::endl;
+  std::cout << "x^+: \n" << x_.transpose() << std::endl;
+  //  std::cout << "P^+: \n" << P_ << std::endl;
 
   // calculate q_hat_plus
   q_hat_ =
       q_hat_ * Eigen::Quaterniond(1, x_(0) / 2.0f, x_(1) / 2.0f, x_(2) / 2.0f);
-  //  q_hat_ = Eigen::Quaterniond(
-  //      q_hat_.coeffs() +
-  //      0.5 * dt * Eigen::Quaterniond(0, gyro(0), gyro(1), gyro(2)).coeffs());
   q_hat_.normalize();
 }
 }  // namespace xmotion

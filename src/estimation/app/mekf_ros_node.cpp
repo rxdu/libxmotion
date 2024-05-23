@@ -47,14 +47,16 @@ bool MekfRosNode::Initialize(std::string dev_name, uint32_t baud_rate) {
   // initialize MEKF
   params_.gravity_constant = 9.81;
   params_.init_quaternion = Eigen::Quaterniond(1, 0, 0, 0);
-  params_.init_state = 0.0001 * Eigen::VectorXd::Ones(Mekf6::StateDimension);
+  params_.init_state = Eigen::VectorXd::Zero(Mekf6::StateDimension);
   params_.init_state(0) = 0;
   params_.init_state(1) = 0;
   params_.init_state(2) = 0;
   params_.init_state_cov =
+      1.0 *
       Eigen::MatrixXd::Identity(Mekf6::StateDimension, Mekf6::StateDimension);
-  params_.init_observation_noise_cov = Eigen::MatrixXd::Identity(
-      Mekf6::ObservationDimension, Mekf6::ObservationDimension);
+  params_.init_observation_noise_cov =
+      1.0 * Eigen::MatrixXd::Identity(Mekf6::ObservationDimension,
+                                      Mekf6::ObservationDimension);
   params_.sigma_omega = Eigen::Vector3d(0.01, 0.01, 0.01);
   params_.sigma_f = Eigen::Vector3d(0.01, 0.01, 0.01);
   params_.sigma_beta_omega = Eigen::Vector3d(0.01, 0.01, 0.01);
@@ -68,7 +70,9 @@ bool MekfRosNode::Initialize(std::string dev_name, uint32_t baud_rate) {
 void MekfRosNode::ImuCallback(const ImuData& data) {
   auto error = Clock::now() - last_update_time_;
   last_update_time_ = Clock::now();
-
+  auto time_lapse =
+      std::chrono::duration_cast<std::chrono::microseconds>(error).count();
+  
   // publish imu data
   auto imu_msg = sensor_msgs::msg::Imu();
   imu_msg.header.stamp = this->now();
@@ -88,8 +92,6 @@ void MekfRosNode::ImuCallback(const ImuData& data) {
   accel_tilde << data.accel.x, data.accel.y, data.accel.z;
   mekf6_.Update(gyro_tilde, accel_tilde, 1.0 / 500.0);
 
-  auto time_lapse =
-      std::chrono::duration_cast<std::chrono::microseconds>(error).count();
   // publish a marker
   visualization_msgs::msg::MarkerArray marker_array;
 
@@ -143,12 +145,12 @@ void MekfRosNode::ImuCallback(const ImuData& data) {
   marker_array.markers.push_back(orientation_marker);
   marker_pub_->publish(marker_array);
 
-  //  RCLCPP_INFO(this->get_logger(),
-  //              "gyro: %.6f %.6f %.6f, accel: %.6f %.6f %.6f, mag: %.6f %.6f "
-  //              "%.6f, rate: %.1f",
-  //              data.gyro.x, data.gyro.y, data.gyro.z, data.accel.x,
-  //              data.accel.y, data.accel.z, data.magn.x, data.magn.y,
-  //              data.magn.z, 1.0f / time_lapse * 1000000.0f);
+  RCLCPP_INFO(this->get_logger(),
+              "gyro: %.6f %.6f %.6f, accel: %.6f %.6f %.6f, mag: %.6f %.6f "
+              "%.6f, rate: %.1f",
+              data.gyro.x, data.gyro.y, data.gyro.z, data.accel.x, data.accel.y,
+              data.accel.z, data.magn.x, data.magn.y, data.magn.z,
+              1.0f / time_lapse * 1000000.0f);
 
   RCLCPP_INFO(this->get_logger(), "q(w,x,y,z): %.6f, %.6f, %.6f, %.6f",
               mekf6_.GetQuaternion().w(), mekf6_.GetQuaternion().x(),
