@@ -90,7 +90,7 @@ void MekfRosNode::ImuCallback(const ImuData& data) {
   gyro_tilde << data.gyro.x, data.gyro.y, data.gyro.z;
   Mekf6::Observation accel_tilde;
   accel_tilde << data.accel.x, data.accel.y, data.accel.z;
-  mekf6_.Update(gyro_tilde, accel_tilde, 1.0 / 500.0);
+  mekf6_.Update(gyro_tilde, -accel_tilde, 1.0 / 500.0);
 
   // publish a marker
   visualization_msgs::msg::MarkerArray marker_array;

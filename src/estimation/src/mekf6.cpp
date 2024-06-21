@@ -65,7 +65,7 @@ Mekf6::GetQMatrix(double dt) {
   Q.block<3, 3>(6, 12) = -m_sigma_beta_f * dt * dt * dt / 6.0f;
 
   Q.block<3, 3>(9, 0) = -m_sigma_beta_omega * dt * dt / 2.0f;
-  Q.block<3, 3>(9, 9) = m_sigma_beta_omega * dt * dt / 2.0f;
+  Q.block<3, 3>(9, 9) = m_sigma_beta_omega * dt;
 
   Q.block<3, 3>(12, 3) = -m_sigma_beta_f * dt * dt / 2.0f;
   Q.block<3, 3>(12, 6) = -m_sigma_beta_f * dt * dt * dt / 6.0f;
@@ -87,8 +87,8 @@ void Mekf6::Update(const ControlInput &gyro_tilde,
 
   // predict state with control input
   q_hat_ = Eigen::Quaterniond(
-      q_hat_.coeffs() +
-      0.5 * dt * Eigen::Quaterniond(0, gyro(0), gyro(1), gyro(2)).coeffs());
+      q_hat_.coeffs() + (q_hat_ *Eigen::Quaterniond(
+      0.5 * dt * Eigen::Quaterniond(0, gyro(0), gyro(1), gyro(2)).coeffs())).coeffs());
   q_hat_.normalize();
 
   // update state transition matrix
@@ -112,7 +112,6 @@ void Mekf6::Update(const ControlInput &gyro_tilde,
 
   // predict the state and covariance
   P_ = Phi * P_ * Phi.transpose() + GetQMatrix(dt);
-  x_ = Phi * x_;
 
   //  std::cout << "P^-: \n" << P_ << std::endl;
   //  std::cout << "x^-: \n" << x_.block<3, 1>(0, 0).transpose() << std::endl;
@@ -152,5 +151,7 @@ void Mekf6::Update(const ControlInput &gyro_tilde,
   q_hat_ =
       q_hat_ * Eigen::Quaterniond(1, x_(0) / 2.0f, x_(1) / 2.0f, x_(2) / 2.0f);
   q_hat_.normalize();
+
+  x_.segment<3>(0) = Eigen::Vector3d::Zero();
 }
 }  // namespace xmotion
