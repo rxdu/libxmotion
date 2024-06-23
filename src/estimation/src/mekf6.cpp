@@ -88,7 +88,8 @@ void Mekf6::Update(const ControlInput &gyro_tilde,
   // predict state with control input
   q_hat_ = Eigen::Quaterniond(
       q_hat_.coeffs() +
-      0.5 * dt * Eigen::Quaterniond(0, gyro(0), gyro(1), gyro(2)).coeffs());
+      0.5 * dt *
+          (q_hat_ * Eigen::Quaterniond(0, gyro(0), gyro(1), gyro(2))).coeffs());
   q_hat_.normalize();
 
   // update state transition matrix
