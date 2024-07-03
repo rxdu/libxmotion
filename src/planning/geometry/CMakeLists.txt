@@ -9,7 +9,9 @@ add_library(geometry STATIC
     src/polygon.cpp
 )
 target_link_libraries(geometry cvdraw Eigen3::Eigen)
+if(ENABLE_TARGET_DESKTOP)
 target_compile_definitions(geometry PUBLIC ENABLE_VISUAL)
+endif()
 target_include_directories(geometry PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>	

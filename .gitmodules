@@ -6,7 +6,7 @@
 	url = https://github.com/gabime/spdlog.git
 [submodule "extern/rapidcsv"]
 	path = extern/rapidcsv
-	url = https://github.com/d99kris/rapidcsv.git
+	url = https://github.com/rxdu/rapidcsv.git
 [submodule "extern/stopwatch"]
 	path = extern/stopwatch
 	url = https://github.com/rxdu/stopwatch.git
