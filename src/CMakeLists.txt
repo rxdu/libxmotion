@@ -4,6 +4,8 @@ if (BUILD_APPS)
   add_subdirectory(apps)
 endif ()
 
+add_subdirectory(platform)
+
 # Modules
 add_subdirectory(interface)
 # add_subdirectory(ipc)l

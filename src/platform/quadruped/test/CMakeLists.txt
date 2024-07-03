@@ -1,0 +1,2 @@
+add_executable(test_quadruped_mode test_quadruped_mode.cpp)
+target_link_libraries(test_quadruped_mode PRIVATE quadruped)
