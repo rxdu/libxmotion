@@ -15,7 +15,7 @@ namespace xmotion {
 namespace {
 Eigen::Matrix<double, 3, 3> SkewSymmetric(const Eigen::Vector3d &v) {
   Eigen::Matrix<double, 3, 3> m;
-  m << 0, -v(2), v(1), v(2), 0, -v(0), -v(1), v(0), 0;
+  m << 0.0, -v(2), v(1), v(2), 0.0, -v(0), -v(1), v(0), 0.0;
   return m;
 }
 }  // namespace
@@ -80,12 +80,15 @@ void Mekf6::Update(const ControlInput &gyro_tilde,
   ControlInput gyro = gyro_tilde - x_.segment<ControlInputDimension>(9);
   Observation accel = accel_tilde - x_.segment<ObservationDimension>(12);
 
-  std::cout << "gyro_tilde: \n" << gyro_tilde.transpose() << std::endl;
-  std::cout << "accel_tilde: \n" << accel_tilde.transpose() << std::endl;
-  std::cout << "gyro: \n" << gyro.transpose() << std::endl;
-  std::cout << "accel: \n" << accel.transpose() << std::endl;
+  // reset the error state
+  x_ = Eigen::Vector<double, StateDimension>::Zero();
 
-  // predict state with control input
+  std::cout << "gyro_tilde: " << gyro_tilde.transpose() << std::endl;
+  std::cout << "accel_tilde: " << accel_tilde.transpose() << std::endl;
+  std::cout << "gyro: " << gyro.transpose() << std::endl;
+  std::cout << "accel: " << accel.transpose() << std::endl;
+
+  // predict state by propagating gyro data as control input
   q_hat_ = Eigen::Quaterniond(
       q_hat_.coeffs() +
       0.5 * dt *
@@ -105,7 +108,7 @@ void Mekf6::Update(const ControlInput &gyro_tilde,
       Eigen::Matrix<double, StateDimension, StateDimension>::Identity() +
       F * dt;
 
-  //  std::cout << "x: \n" << x_ << std::endl;
+  //  std::cout << "x: \n" << x_.transpose() << std::endl;
   //  std::cout << "F: \n" << F << std::endl;
   //  std::cout << "Phi: \n" << Phi << std::endl;
   //  std::cout << "P^-: \n" << P_ << std::endl;
@@ -139,19 +142,22 @@ void Mekf6::Update(const ControlInput &gyro_tilde,
                   Eigen::Vector3d(0, 0, -params_.gravity_constant);
 
   //  std::cout << "delta y: \n" << delta_y.transpose() << std::endl;
-  std::cout << "K * delta_y: \n" << (K * delta_y).transpose() << std::endl;
+  //  std::cout << "K * delta_y: \n" << (K * delta_y).transpose() << std::endl;
 
   x_ = x_ + K * delta_y;
   P_ = (Eigen::Matrix<double, StateDimension, StateDimension>::Identity() -
         K * H) *
        P_;
 
-  std::cout << "x^+: \n" << x_.transpose() << std::endl;
+  //  std::cout << "x^+: \n" << x_.transpose() << std::endl;
   //  std::cout << "P^+: \n" << P_ << std::endl;
 
   // calculate q_hat_plus
   q_hat_ =
       q_hat_ * Eigen::Quaterniond(1, x_(0) / 2.0f, x_(1) / 2.0f, x_(2) / 2.0f);
   q_hat_.normalize();
+
+  x_.block<3, 1>(0, 0) += x_.block<3, 1>(9, 0);
+  x_.block<3, 1>(3, 0) += x_.block<3, 1>(12, 0);
 }
 }  // namespace xmotion

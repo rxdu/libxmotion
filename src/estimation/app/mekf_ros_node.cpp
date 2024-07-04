@@ -57,10 +57,11 @@ bool MekfRosNode::Initialize(std::string dev_name, uint32_t baud_rate) {
   params_.init_observation_noise_cov =
       1.0 * Eigen::MatrixXd::Identity(Mekf6::ObservationDimension,
                                       Mekf6::ObservationDimension);
-  params_.sigma_omega = Eigen::Vector3d(0.01, 0.01, 0.01);
-  params_.sigma_f = Eigen::Vector3d(0.01, 0.01, 0.01);
-  params_.sigma_beta_omega = Eigen::Vector3d(0.01, 0.01, 0.01);
-  params_.sigma_beta_f = Eigen::Vector3d(0.01, 0.01, 0.01);
+  params_.sigma_omega = std::sqrt(0.1) * Eigen::Vector3d::Identity();
+  params_.sigma_omega(2) = std::sqrt(0.05);
+  params_.sigma_beta_omega = std::sqrt(0.1) * Eigen::Vector3d::Identity();
+  params_.sigma_f = std::sqrt(0.05) * Eigen::Vector3d::Identity();
+  params_.sigma_beta_f = std::sqrt(0.1) * Eigen::Vector3d::Identity();
 
   mekf6_.Initialize(params_);
 
@@ -72,7 +73,7 @@ void MekfRosNode::ImuCallback(const ImuData& data) {
   last_update_time_ = Clock::now();
   auto time_lapse =
       std::chrono::duration_cast<std::chrono::microseconds>(error).count();
-  
+
   // publish imu data
   auto imu_msg = sensor_msgs::msg::Imu();
   imu_msg.header.stamp = this->now();
@@ -83,6 +84,10 @@ void MekfRosNode::ImuCallback(const ImuData& data) {
   imu_msg.linear_acceleration.x = data.accel.x;
   imu_msg.linear_acceleration.y = data.accel.y;
   imu_msg.linear_acceleration.z = data.accel.z;
+  imu_msg.orientation.w = data.quat.w;
+  imu_msg.orientation.x = data.quat.x;
+  imu_msg.orientation.y = data.quat.y;
+  imu_msg.orientation.z = data.quat.z;
   imu_pub_->publish(imu_msg);
 
   // update mekf
@@ -90,7 +95,8 @@ void MekfRosNode::ImuCallback(const ImuData& data) {
   gyro_tilde << data.gyro.x, data.gyro.y, data.gyro.z;
   Mekf6::Observation accel_tilde;
   accel_tilde << data.accel.x, data.accel.y, data.accel.z;
-  mekf6_.Update(gyro_tilde, accel_tilde, 1.0 / 500.0);
+  //  mekf6_.Update(gyro_tilde, accel_tilde, 1.0 / 500.0);
+  mekf6_.Update(gyro_tilde, accel_tilde, time_lapse / 1000000.0f);
 
   // publish a marker
   visualization_msgs::msg::MarkerArray marker_array;
@@ -110,12 +116,12 @@ void MekfRosNode::ImuCallback(const ImuData& data) {
   reference_frame.pose.orientation.y = 0.0;
   reference_frame.pose.orientation.z = 0.0;
   reference_frame.pose.orientation.w = 1.0;
-  reference_frame.scale.x = 0.3;
-  reference_frame.scale.y = 0.3;
-  reference_frame.scale.z = 0.3;
+  reference_frame.scale.x = 0.2;
+  reference_frame.scale.y = 0.2;
+  reference_frame.scale.z = 0.2;
   reference_frame.color.a = 0.5;
-  reference_frame.color.r = 0.0;
-  reference_frame.color.g = 1.0;
+  reference_frame.color.r = 1.0;
+  reference_frame.color.g = 0.0;
   reference_frame.color.b = 0.0;
 
   // Orientation marker
@@ -136,27 +142,51 @@ void MekfRosNode::ImuCallback(const ImuData& data) {
   orientation_marker.scale.x = 0.5;
   orientation_marker.scale.y = 0.5;
   orientation_marker.scale.z = 0.5;
-  orientation_marker.color.a = 1.0;
-  orientation_marker.color.r = 1.0;
-  orientation_marker.color.g = 0.0;
+  orientation_marker.color.a = 0.3;
+  orientation_marker.color.r = 0.0;
+  orientation_marker.color.g = 1.0;
   orientation_marker.color.b = 0.0;
+
+  // ground truth orientation marker
+  visualization_msgs::msg::Marker truth_marker;
+  truth_marker.header.frame_id = "world";
+  truth_marker.header.stamp = this->now();
+  truth_marker.ns = "imu_quaternion";
+  truth_marker.id = 2;
+  truth_marker.type = visualization_msgs::msg::Marker::CUBE;
+  truth_marker.action = visualization_msgs::msg::Marker::ADD;
+  truth_marker.pose.position.x = 0.0;
+  truth_marker.pose.position.y = 0.0;
+  truth_marker.pose.position.z = 0.0;
+  truth_marker.pose.orientation.x = imu_msg.orientation.x;
+  truth_marker.pose.orientation.y = imu_msg.orientation.y;
+  truth_marker.pose.orientation.z = imu_msg.orientation.z;
+  truth_marker.pose.orientation.w = imu_msg.orientation.w;
+  truth_marker.scale.x = 0.35;
+  truth_marker.scale.y = 0.35;
+  truth_marker.scale.z = 0.35;
+  truth_marker.color.a = 0.5;
+  truth_marker.color.r = 0.0;
+  truth_marker.color.g = 0.0;
+  truth_marker.color.b = 1.0;
 
   marker_array.markers.push_back(reference_frame);
   marker_array.markers.push_back(orientation_marker);
+  marker_array.markers.push_back(truth_marker);
   marker_pub_->publish(marker_array);
 
-  RCLCPP_INFO(this->get_logger(),
-              "gyro: %.6f %.6f %.6f, accel: %.6f %.6f %.6f, mag: %.6f %.6f "
-              "%.6f, rate: %.1f",
-              data.gyro.x, data.gyro.y, data.gyro.z, data.accel.x, data.accel.y,
-              data.accel.z, data.magn.x, data.magn.y, data.magn.z,
-              1.0f / time_lapse * 1000000.0f);
+  //  RCLCPP_INFO(this->get_logger(),
+  //              "gyro: %.6f %.6f %.6f, accel: %.6f %.6f %.6f, mag: %.6f %.6f "
+  //              "%.6f, rate: %.1f",
+  //              data.gyro.x, data.gyro.y, data.gyro.z, data.accel.x,
+  //              data.accel.y, data.accel.z, data.magn.x, data.magn.y,
+  //              data.magn.z, 1.0f / time_lapse * 1000000.0f);
 
-  RCLCPP_INFO(this->get_logger(), "q(w,x,y,z): %.6f, %.6f, %.6f, %.6f",
-              mekf6_.GetQuaternion().w(), mekf6_.GetQuaternion().x(),
-              mekf6_.GetQuaternion().y(), mekf6_.GetQuaternion().z());
+  //  RCLCPP_INFO(this->get_logger(), "q(w,x,y,z): %.6f, %.6f, %.6f, %.6f",
+  //              mekf6_.GetQuaternion().w(), mekf6_.GetQuaternion().x(),
+  //              mekf6_.GetQuaternion().y(), mekf6_.GetQuaternion().z());
 
-  //  RCLCPP_INFO(this->get_logger(), "imu update rate: %f",
-  //              1.0f / time_lapse * 1000000.0f);
+  //  RCLCPP_INFO(this->get_logger(), "imu update rate: %f, dt: %f",
+  //              1.0f / time_lapse * 1000000.0f, time_lapse / 1000000.0f);
 }
 }  // namespace xmotion
