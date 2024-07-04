@@ -1,12 +1,10 @@
 /*
- * mode_fsm.cpp
+ * control_context.cpp
  *
- * Created on 7/3/24 11:28 PM
+ * Created on 7/4/24 11:51 PM
  * Description:
  *
  * Copyright (c) 2024 Ruixiang Du (rdu)
  */
-
-#include "quadruped/mode_fsm.hpp"
 
 namespace xmotion {}  // namespace xmotion

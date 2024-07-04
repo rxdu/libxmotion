@@ -3,7 +3,12 @@ find_package(Eigen3 REQUIRED NO_MODULE)
 
 ## Add libraries
 add_library(quadruped
-    src/mode_fsm.cpp)
+    src/control_mode_fsm.cpp
+    src/modes/fixed_stand_mode.cpp
+    src/modes/free_stand_mode.cpp
+    src/modes/move_base_mode.cpp
+    src/modes/passive_mode.cpp
+    src/modes/throtting_mode.cpp)
 target_link_libraries(quadruped PUBLIC interface logging Eigen3::Eigen)
 target_include_directories(quadruped PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
