@@ -2,17 +2,19 @@
 #find_package(LIBRARY_NAME REQUIRED)
 
 ## tests
-add_executable(test_polyline test_polyline.cpp)
-target_link_libraries(test_polyline geometry)
+if (ENABLE_TARGET_DESKTOP)
+  add_executable(test_polyline test_polyline.cpp)
+  target_link_libraries(test_polyline geometry)
 
-add_executable(test_cubic_spline test_cubic_spline.cpp)
-target_link_libraries(test_cubic_spline geometry)
+  add_executable(test_cubic_spline test_cubic_spline.cpp)
+  target_link_libraries(test_cubic_spline geometry)
 
-add_executable(test_parametric_curve test_parametric_curve.cpp)
-target_link_libraries(test_parametric_curve geometry)
+  add_executable(test_parametric_curve test_parametric_curve.cpp)
+  target_link_libraries(test_parametric_curve geometry)
 
-add_executable(test_polygon test_polygon.cpp)
-target_link_libraries(test_polygon geometry)
+  add_executable(test_polygon test_polygon.cpp)
+  target_link_libraries(test_polygon geometry)
+endif ()
 
 # add_executable(test_pcurve test_pcurve.cpp)
 # target_link_libraries(test_pcurve geometry)

@@ -19,6 +19,7 @@ endif ()
 
 ## Project Options
 option(BUILD_TESTING "Build tests" OFF)
+option(FORCE_BUILD_TESTS "Force build tests" OFF)
 option(ENABLE_LOGGING "Enable logging" ON)
 option(STATIC_CHECK "Enable static check" OFF)
 
@@ -86,7 +87,7 @@ else (ENABLE_LOGGING)
 endif (ENABLE_LOGGING)
 
 ## Enable test if requested
-if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME AND BUILD_TESTING)
+if (((PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME) AND BUILD_TESTING) OR FORCE_BUILD_TESTS)
   enable_testing()
   include(GoogleTest)
   set(BUILD_TESTS ON)

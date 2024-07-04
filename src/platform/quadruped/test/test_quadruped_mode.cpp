@@ -6,3 +6,10 @@
  *
  * Copyright (c) 2024 Ruixiang Du (rdu)
  */
+
+#include <iostream>
+
+int main(int argc, char **argv) {
+    std::cout << "Hello, Quadruped!" << std::endl;
+    return 0;
+}
