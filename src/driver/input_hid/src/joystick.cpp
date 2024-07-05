@@ -7,7 +7,7 @@
  * Copyright (c) 2023 Ruixiang Du (rdu)
  */
 
-#include "input_joystick/joystick.hpp"
+#include "input_hid/joystick.hpp"
 
 #include <sys/ioctl.h>
 #include <sys/inotify.h>
@@ -60,9 +60,9 @@ std::vector<JoystickDescriptor> Joystick::EnumberateJoysticks(int max_index) {
 Joystick::Joystick() {
   descriptor_.index = 0;
   auto jds = Joystick::EnumberateJoysticks();
-  if(jds.empty()) throw std::runtime_error("No joystick found");
+  if (jds.empty()) throw std::runtime_error("No joystick found");
   descriptor_.index = jds.back().index;
-  InitializeChannels();    
+  InitializeChannels();
 }
 
 Joystick::Joystick(JoystickDescriptor descriptor) : descriptor_(descriptor) {
@@ -122,6 +122,7 @@ bool Joystick::Open() {
     io_thread_ = std::thread([this]() {
       while (keep_running_) {
         this->Update();
+        usleep(16000);
       }
     });
   }
@@ -209,8 +210,6 @@ void Joystick::Update() {
 #if PRINT_DEBUG_MSG
   fflush(stdout);
 #endif
-
-  usleep(16000);
 }
 
 void Joystick::SetJoystickRumble(short weakRumble, short strongRumble) {

@@ -7,7 +7,7 @@
  * Copyright (c) 2023 Ruixiang Du (rdu)
  */
 
-#include "input_joystick/joystick.hpp"
+#include "input_hid/joystick.hpp"
 
 #include <thread>
 #include <chrono>

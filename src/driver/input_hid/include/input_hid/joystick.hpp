@@ -36,6 +36,11 @@ class Joystick : public JoystickInterface {
   explicit Joystick(int index);
   ~Joystick();
 
+  // do not allow copy
+  Joystick(const Joystick&) = delete;
+  Joystick& operator=(const Joystick&) = delete;
+
+  // public methods
   std::string GetDeviceName() const override { return descriptor_.name; };
   int GetDeviceIndex() const { return descriptor_.index; };
 
