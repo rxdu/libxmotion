@@ -12,6 +12,8 @@
 
 #include <functional>
 
+#include "interface/driver/hid_poll_interface.hpp"
+
 namespace xmotion {
 enum class KeyboardCode {
   kA,
@@ -91,7 +93,7 @@ enum class KeyboardEvent {
   kRelease,
 };
 
-class KeyboardInterface {
+class KeyboardInterface : public HidPollInterface {
  public:
   using KeyEventCallback = std::function<void(KeyboardCode, KeyboardEvent)>;
 
@@ -100,6 +102,8 @@ class KeyboardInterface {
 
   virtual bool StartMonitoring(const std::string& event_name) = 0;
   virtual void RegisterKeyEventCallback(KeyEventCallback callback) = 0;
+
+  void PollEvent() override = 0;
 };
 }  // namespace xmotion
 

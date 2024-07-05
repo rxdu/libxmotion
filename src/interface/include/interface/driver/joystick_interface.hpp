@@ -13,6 +13,8 @@
 #include <string>
 #include <functional>
 
+#include "interface/driver/hid_poll_interface.hpp"
+
 namespace xmotion {
 enum class JsButton {
   kTrigger = 0,
@@ -83,7 +85,7 @@ struct JoystickDescriptor {
   std::string name;
 };
 
-class JoystickInterface {
+class JoystickInterface : public HidPollInterface {
  public:
   using ButtonEventCallback =
       std::function<void(const JsButton& btn, const bool value)>;
@@ -98,8 +100,12 @@ class JoystickInterface {
   virtual void Close() = 0;
   virtual bool IsOpened() const = 0;
 
+  void PollEvent() override = 0;
+
   virtual std::string GetDeviceName() const = 0;
+
   virtual std::string GetButtonName(const JsButton& btn) const { return ""; }
+
   virtual std::string GetAxisName(const JsAxis& axis) const { return ""; }
 
   virtual bool GetButtonState(const JsButton& btn) const = 0;

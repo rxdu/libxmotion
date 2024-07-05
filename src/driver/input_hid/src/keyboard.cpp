@@ -162,46 +162,52 @@ static std::unordered_map<KeyboardCode, std::string> keyname_map = {
     {KeyboardCode::kPageDown, "PageDown"}};
 }  // namespace
 
+Keyboard::Keyboard(bool with_daemon) : with_daemon_(with_daemon) {}
+
 Keyboard::~Keyboard() {
-  if (io_thread_.joinable()) {
+  if (with_daemon_) {
     keep_running_ = false;
-    io_thread_.join();
+    if (io_thread_.joinable()) {
+      keep_running_ = false;
+      io_thread_.join();
+    }
   }
   if (fd_ > 0) close(fd_);
 }
 
 bool Keyboard::StartMonitoring(const std::string& event_name) {
-  fd_ = open(event_name.c_str(), O_RDONLY);
+  fd_ = open(event_name.c_str(), O_RDWR | O_NONBLOCK);
   if (fd_ < 0) {
     XLOG_ERROR_STREAM("Failed to open input device: " << event_name);
     return false;
   }
 
-  keep_running_ = true;
-  io_thread_ = std::thread([this]() {
-    struct input_event ev;
-    ssize_t n;
-    while (keep_running_) {
-      n = read(fd_, &ev, sizeof(ev));
-      if (n == (ssize_t)-1) {
-        XLOG_ERROR("Failed to read input event");
-        close(fd_);
-        return;
+  if (with_daemon_) {
+    keep_running_ = true;
+    io_thread_ = std::thread([this]() {
+      while (keep_running_) {
+        this->PollEvent();
+        usleep(10000);
       }
-      if (ev.type == EV_KEY) {
-        XLOG_DEBUG_STREAM("Key " << ev.code
-                                 << (ev.value ? " pressed" : " released"));
-        if (key_event_callback_ != nullptr) {
-          key_event_callback_(
-              keycode_map[ev.code],
-              (ev.value ? KeyboardEvent::kPress : KeyboardEvent::kRelease));
-        }
-      }
-      usleep(10000);
-    }
-  });
+    });
+  }
 
   return true;
+}
+
+void Keyboard::PollEvent() {
+  struct input_event ev;
+  while (ssize_t n = read(fd_, &ev, sizeof(ev)) > 0) {
+    if (ev.type == EV_KEY) {
+      XLOG_DEBUG_STREAM("Key " << ev.code
+                               << (ev.value ? " pressed" : " released"));
+      if (key_event_callback_ != nullptr) {
+        key_event_callback_(
+            keycode_map[ev.code],
+            (ev.value ? KeyboardEvent::kPress : KeyboardEvent::kRelease));
+      }
+    }
+  }
 }
 
 void Keyboard::RegisterKeyEventCallback(KeyEventCallback callback) {

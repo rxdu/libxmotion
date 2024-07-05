@@ -57,7 +57,7 @@ std::vector<JoystickDescriptor> Joystick::EnumberateJoysticks(int max_index) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Joystick::Joystick() {
+Joystick::Joystick(bool with_daemon) : with_daemon_(with_daemon) {
   descriptor_.index = 0;
   auto jds = Joystick::EnumberateJoysticks();
   if (jds.empty()) throw std::runtime_error("No joystick found");
@@ -65,12 +65,14 @@ Joystick::Joystick() {
   InitializeChannels();
 }
 
-Joystick::Joystick(JoystickDescriptor descriptor) : descriptor_(descriptor) {
+Joystick::Joystick(JoystickDescriptor descriptor, bool with_daemon)
+    : descriptor_(descriptor), with_daemon_(with_daemon) {
   InitializeChannels();
 }
 
-Joystick::Joystick(int index)
-    : Joystick(JoystickDescriptor{index, "js" + std::to_string(index)}) {}
+Joystick::Joystick(int index, bool with_daemon)
+    : Joystick(JoystickDescriptor{index, "js" + std::to_string(index)},
+               with_daemon) {}
 
 Joystick::~Joystick() {
   if (connected_) {
@@ -118,20 +120,24 @@ bool Joystick::Open() {
     device_change_notify_ = inotify_init1(IN_NONBLOCK);
     inotify_add_watch(device_change_notify_, file_name.c_str(), IN_ATTRIB);
 
-    keep_running_ = true;
-    io_thread_ = std::thread([this]() {
-      while (keep_running_) {
-        this->Update();
-        usleep(16000);
-      }
-    });
+    if (with_daemon_) {
+      keep_running_ = true;
+      io_thread_ = std::thread([this]() {
+        while (keep_running_) {
+          this->PollEvent();
+          usleep(16000);
+        }
+      });
+    }
   }
   return connected_;
 }
 
 void Joystick::Close() {
-  keep_running_ = false;
-  if (io_thread_.joinable()) io_thread_.join();
+  if (with_daemon_) {
+    keep_running_ = false;
+    if (io_thread_.joinable()) io_thread_.join();
+  }
 
   if (connected_) {
     close(fd_);
@@ -181,8 +187,8 @@ void Joystick::ReadJoystickInput() {
   }
 }
 
-void Joystick::Update() {
-  // Update which joysticks are connected
+void Joystick::PollEvent() {
+  // PollEvent which joysticks are connected
   inotify_event event;
   //  if (read(device_change_notify_, &event, sizeof(event) + 16) != -1) {
   if (read(device_change_notify_, &event, sizeof(event)) != -1) {
@@ -190,7 +196,7 @@ void Joystick::Update() {
     Open();
   }
 
-  // Update and print inputs for each connected joystick
+  // PollEvent and print inputs for each connected joystick
   if (connected_) {
     ReadJoystickInput();
 

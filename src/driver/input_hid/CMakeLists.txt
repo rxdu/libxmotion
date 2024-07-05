@@ -2,7 +2,8 @@ find_package(Threads REQUIRED)
 
 add_library(input_hid STATIC
     src/joystick.cpp
-    src/keyboard.cpp)
+    src/keyboard.cpp
+    src/hid_event_poll.cpp)
 target_link_libraries(input_hid PUBLIC interface logging Threads::Threads)
 target_compile_definitions(input_hid PUBLIC ASIO_ENABLE_OLD_SERVICES)
 target_compile_options(input_hid PUBLIC -fPIC)

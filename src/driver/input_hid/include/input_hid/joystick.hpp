@@ -31,9 +31,9 @@ class Joystick : public JoystickInterface {
       int max_index = 32);
 
  public:
-  Joystick();
-  explicit Joystick(JoystickDescriptor descriptor);
-  explicit Joystick(int index);
+  Joystick(bool with_daemon = true);
+  explicit Joystick(JoystickDescriptor descriptor, bool with_daemon = true);
+  explicit Joystick(int index, bool with_daemon = true);
   ~Joystick();
 
   // do not allow copy
@@ -42,6 +42,7 @@ class Joystick : public JoystickInterface {
 
   // public methods
   std::string GetDeviceName() const override { return descriptor_.name; };
+
   int GetDeviceIndex() const { return descriptor_.index; };
 
   bool Open() override;
@@ -56,12 +57,14 @@ class Joystick : public JoystickInterface {
 
   void SetJoystickRumble(short weakRumble, short strongRumble);
 
+  void PollEvent() override;
+
  private:
   void InitializeChannels();
   void ReadJoystickInput();
-  void Update();
 
   JoystickDescriptor descriptor_;
+  bool with_daemon_ = false;
 
   int fd_ = -1;
   int device_change_notify_;

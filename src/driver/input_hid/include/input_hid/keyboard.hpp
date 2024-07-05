@@ -18,7 +18,7 @@
 namespace xmotion {
 class Keyboard : public KeyboardInterface {
  public:
-  Keyboard() = default;
+  Keyboard(bool with_daemon = true);
   ~Keyboard();
 
   // do not allow copy
@@ -29,11 +29,12 @@ class Keyboard : public KeyboardInterface {
   bool StartMonitoring(const std::string& event_name) override;
   void RegisterKeyEventCallback(KeyEventCallback callback) override;
 
+  void PollEvent() override;
+
   static std::string GetKeyName(KeyboardCode code);
 
  private:
-  void Poll();
-
+  bool with_daemon_ = false;
   int fd_;
   std::thread io_thread_;
   std::atomic<bool> keep_running_{false};
