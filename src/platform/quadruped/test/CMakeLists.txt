@@ -1,2 +1,7 @@
 add_executable(test_quadruped_mode test_quadruped_mode.cpp)
 target_link_libraries(test_quadruped_mode PRIVATE quadruped time)
+
+find_package(unitree_sdk2 REQUIRED)
+
+add_executable(test_unitree_stand test_unitree_stand.cpp)
+target_link_libraries(test_unitree_stand PRIVATE unitree_sdk2)

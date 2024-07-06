@@ -1,15 +1,28 @@
 ## Dependency libraries
 find_package(Eigen3 REQUIRED NO_MODULE)
+find_package(unitree_sdk2 REQUIRED)
 
 ## Add libraries
 add_library(quadruped
+    # model
+    src/robot_model/unitree_motor.cpp
+    src/robot_model/unitree_dog.cpp
+    src/robot_model/unitree_model_profile.cpp
+    # controllers
     src/control_mode_fsm.cpp
-    src/modes/fixed_stand_mode.cpp
-    src/modes/free_stand_mode.cpp
-    src/modes/move_base_mode.cpp
-    src/modes/passive_mode.cpp
-    src/modes/throtting_mode.cpp)
-target_link_libraries(quadruped PUBLIC interface logging Eigen3::Eigen)
+    src/control_mode/fixed_stand_mode.cpp
+    src/control_mode/free_stand_mode.cpp
+    src/control_mode/move_base_mode.cpp
+    src/control_mode/passive_mode.cpp
+    src/control_mode/throtting_mode.cpp
+    # system
+    src/quadruped_system.cpp
+)
+target_link_libraries(quadruped PUBLIC
+    interface fsm time
+    unitree_sdk2
+    Eigen3::Eigen
+    PRIVATE logging)
 target_include_directories(quadruped PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
@@ -20,7 +33,7 @@ if (BUILD_TESTS)
 endif ()
 
 #if (BUILD_APPS)
-#  add_subdirectory(app)
+add_subdirectory(app)
 #endif ()
 
 ## installation configuration

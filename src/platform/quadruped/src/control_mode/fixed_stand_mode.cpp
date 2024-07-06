@@ -7,7 +7,7 @@
  * Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#include "quadruped/modes/fixed_stand_mode.hpp"
+#include "quadruped/control_mode/fixed_stand_mode.hpp"
 
 #include "logging/xlogger.hpp"
 

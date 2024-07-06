@@ -9,15 +9,16 @@
 #ifndef QUADRUPED_MOTION_PASSIVE_MODE_HPP
 #define QUADRUPED_MOTION_PASSIVE_MODE_HPP
 
+#include "fsm/fsm_template.hpp"
 #include "quadruped/control_context.hpp"
 
 namespace xmotion {
-class PassiveMode {
+class PassiveMode : public FsmState<ControlContext> {
  public:
-  PassiveMode() = default;
+  PassiveMode();
   ~PassiveMode() = default;
 
-  void Update(ControlContext &context);
+  void Update(ControlContext &context) override;
 };
 }  // namespace xmotion
 

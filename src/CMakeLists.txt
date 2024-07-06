@@ -1,9 +1,5 @@
 ## Add source directories
-# Application
-if (BUILD_APPS)
-  add_subdirectory(apps)
-endif ()
-
+# Robots
 add_subdirectory(platform)
 
 # Modules

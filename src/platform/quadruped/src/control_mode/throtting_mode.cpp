@@ -7,7 +7,7 @@
  * Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#include "quadruped/modes/throtting_mode.hpp"
+#include "quadruped/control_mode/throtting_mode.hpp"
 
 #include "logging/xlogger.hpp"
 

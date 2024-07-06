@@ -1,0 +1,2 @@
+add_executable(app_quadruped_locomotion app_quadruped_locomotion.cpp)
+target_link_libraries(app_quadruped_locomotion PRIVATE quadruped logging)

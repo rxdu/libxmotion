@@ -9,6 +9,8 @@
 #ifndef QUADRUPED_MOTION_CONTROL_CONTEXT_HPP
 #define QUADRUPED_MOTION_CONTROL_CONTEXT_HPP
 
+#include "quadruped/robot_model/unitree_dog.hpp"
+
 namespace xmotion {
 class ControlContext {
  public:

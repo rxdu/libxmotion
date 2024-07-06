@@ -17,6 +17,15 @@
 #include <optional>
 
 namespace xmotion {
+template <typename Context>
+class FsmState {
+ public:
+  virtual ~FsmState() = default;
+
+  virtual void Update(Context &context) = 0;
+};
+
+// TODO (rdu): check State in States is derived from FsmState
 template <typename Context, typename Transition, typename... States>
 class FiniteStateMachine {
  public:

@@ -9,14 +9,15 @@
 #ifndef QUADRUPED_MOTION_CONTROL_MODE_FSM_HPP
 #define QUADRUPED_MOTION_CONTROL_MODE_FSM_HPP
 
-#include "quadruped/fsm_template.hpp"
+#include "fsm/fsm_template.hpp"
 
 #include "quadruped/control_context.hpp"
-#include "quadruped/modes/fixed_stand_mode.hpp"
-#include "quadruped/modes/free_stand_mode.hpp"
-#include "quadruped/modes/move_base_mode.hpp"
-#include "quadruped/modes/passive_mode.hpp"
-#include "quadruped/modes/throtting_mode.hpp"
+
+#include "quadruped/control_mode/fixed_stand_mode.hpp"
+#include "quadruped/control_mode/free_stand_mode.hpp"
+#include "quadruped/control_mode/move_base_mode.hpp"
+#include "quadruped/control_mode/passive_mode.hpp"
+#include "quadruped/control_mode/throtting_mode.hpp"
 
 namespace xmotion {
 using StateVariant = std::variant<FixedStandMode, FreeStandMode, MoveBaseMode,
@@ -25,34 +26,19 @@ using OptionalStateVariant = std::optional<StateVariant>;
 
 struct ModeTransition {
   static OptionalStateVariant Transit(FixedStandMode &state,
-                                      ControlContext &context) {
-    return FreeStandMode{};
-    // return std::nullopt;
-  }
+                                      ControlContext &context);
 
   static OptionalStateVariant Transit(FreeStandMode &state,
-                                      ControlContext &context) {
-    return MoveBaseMode{};
-    // return std::nullopt;
-  }
+                                      ControlContext &context);
 
   static OptionalStateVariant Transit(MoveBaseMode &state,
-                                      ControlContext &context) {
-    return PassiveMode{};
-    // return std::nullopt;
-  }
+                                      ControlContext &context);
 
   static OptionalStateVariant Transit(PassiveMode &state,
-                                      ControlContext &context) {
-    return ThrottingMode{};
-    // return std::nullopt;
-  }
+                                      ControlContext &context);
 
   static OptionalStateVariant Transit(ThrottingMode &state,
-                                      ControlContext &context) {
-    return FixedStandMode{};
-    // return std::nullopt;
-  }
+                                      ControlContext &context);
 };
 
 using ControlModeFsm =
