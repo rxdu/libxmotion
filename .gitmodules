@@ -3,7 +3,7 @@
 	url = https://github.com/google/googletest.git
 [submodule "extern/spdlog"]
 	path = extern/spdlog
-	url = https://github.com/gabime/spdlog.git
+	url = https://github.com/rxdu/spdlog.git
 [submodule "extern/rapidcsv"]
 	path = extern/rapidcsv
 	url = https://github.com/rxdu/rapidcsv.git
