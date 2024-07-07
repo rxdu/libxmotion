@@ -45,7 +45,7 @@ class UnitreeMotor {
   void SetGains(float kp, float kd);
   void SetTarget(float q, float dq, float tau);
 
-  CmdMsg ToCmdMsg();
+  CmdMsg GetCommandMsg();
 
  private:
   Mode mode_ = Mode::kIdle;

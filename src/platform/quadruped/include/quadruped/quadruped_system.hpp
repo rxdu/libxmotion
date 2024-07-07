@@ -10,6 +10,7 @@
 #define QUADRUPED_MOTION_QUADRUPED_SYSTEM_HPP
 
 #include <memory>
+#include <atomic>
 #include <thread>
 
 #include "quadruped/robot_model/quadruped_model.hpp"

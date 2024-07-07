@@ -34,9 +34,9 @@ int main(int argc, char **argv) {
   // create a robot model
   auto dog_model = std::make_shared<UnitreeDog>(UnitreeDogs::GetGo2Profile());
 
-  // create a quadruped system and orchestrate the components
+  // create a quadruped system and initialize the components
   quadruped = std::make_unique<QuadrupedSystem>(dog_model);
-
+  
   if (!quadruped->Initialize()) {
     XLOG_ERROR("Failed to initialize quadruped system, exiting...");
     return -1;

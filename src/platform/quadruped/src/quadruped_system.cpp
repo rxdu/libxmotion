@@ -30,6 +30,8 @@ bool QuadrupedSystem::Initialize() {
   // initialize control subsystem
   PassiveMode initial_state;
   ControlContext context;
+  context.robot_model = model_;
+
   fsm_ = std::make_unique<ControlModeFsm>(std::move(initial_state),
                                           std::move(context));
   keep_control_loop_ = true;

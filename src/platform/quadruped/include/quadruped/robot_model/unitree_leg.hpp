@@ -31,7 +31,17 @@
 namespace xmotion {
 class UnitreeLeg {
  public:
-  UnitreeLeg(UnitreeModelProfile profile, LegIndex index);
+  UnitreeLeg() = default;
+  UnitreeLeg(const UnitreeModelProfile& profile, LegIndex index);
+
+  // commands
+  void Enable();
+  void Disable();
+  void SetFootTarget(const Position3d& pos, const Velocity3d& vel,
+                     const Force3d& f);
+  void SetJointTarget(const JointPosition3d& q, const JointVelocity3d& q_dot,
+                      const Torque3d& tau);
+  std::unordered_map<int, UnitreeMotor::CmdMsg> GetMotorCommandMsgs();
 
   // forward kinematics
   Position3d GetFootPosition(const JointPosition3d& q) const;
@@ -46,12 +56,13 @@ class UnitreeLeg {
                                     const Velocity3d& vel) const;
 
   // force/torque calculation
-  Torque3d GetFootTorque(const JointPosition3d& q, const Force3d& f) const;
+  Torque3d GetJointTorque(const Position3d& pos, const Force3d& f) const;
+  Torque3d GetJointTorqueQ(const JointPosition3d& q, const Force3d& f) const;
 
  private:
   Eigen::Matrix3d GetJacobian(const JointPosition3d& q) const;
 
-  const LegIndex index_;
+  LegIndex index_;
   std::array<UnitreeMotor, 3> motors_;
 
   double l1_;

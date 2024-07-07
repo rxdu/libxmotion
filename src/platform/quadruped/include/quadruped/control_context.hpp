@@ -9,13 +9,13 @@
 #ifndef QUADRUPED_MOTION_CONTROL_CONTEXT_HPP
 #define QUADRUPED_MOTION_CONTROL_CONTEXT_HPP
 
-#include "quadruped/robot_model/unitree_dog.hpp"
+#include <memory>
+
+#include "quadruped/robot_model/quadruped_model.hpp"
 
 namespace xmotion {
-class ControlContext {
- public:
-  double linear_velocity;
-  double angular_velocity;
+struct ControlContext {
+  std::shared_ptr<QuadrupedModel> robot_model;
 };
 }  // namespace xmotion
 

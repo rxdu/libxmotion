@@ -35,7 +35,7 @@ void UnitreeMotor::SetTarget(float q, float dq, float tau) {
   state_.tau = tau;
 }
 
-UnitreeMotor::CmdMsg UnitreeMotor::ToCmdMsg() {
+UnitreeMotor::CmdMsg UnitreeMotor::GetCommandMsg() {
   CmdMsg msg;
   msg.mode() = static_cast<uint8_t>(mode_);
   msg.q() = state_.q;

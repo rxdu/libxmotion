@@ -40,14 +40,15 @@ class UnitreeDog : public QuadrupedModel {
   void SendCommandToRobot();
 
  private:
+  void InitCommand();
   void OnLowLevelStateMessageReceived(const void* message);
 
   UnitreeModelProfile profile_;
   std::unordered_map<LegIndex, UnitreeLeg> legs_;
 
   std::mutex state_mutex_;
-  LowLevelState state_{};
-  LowLevelCmd cmd_{};
+  LowLevelState state_;
+  LowLevelCmd cmd_;
 
   unitree::robot::ChannelPublisherPtr<LowLevelCmd> cmd_pub_;
   unitree::robot::ChannelSubscriberPtr<LowLevelState> state_sub_;

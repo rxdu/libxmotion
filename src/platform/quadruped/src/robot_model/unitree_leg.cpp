@@ -10,7 +10,7 @@
 #include "quadruped/robot_model/unitree_leg.hpp"
 
 namespace xmotion {
-UnitreeLeg::UnitreeLeg(UnitreeModelProfile profile, LegIndex index)
+UnitreeLeg::UnitreeLeg(const UnitreeModelProfile& profile, LegIndex index)
     : index_(index) {
   // set leg link lengths
   if (index == LegIndex::kFrontRight || index == LegIndex::kRearRight) {
@@ -20,6 +20,39 @@ UnitreeLeg::UnitreeLeg(UnitreeModelProfile profile, LegIndex index)
   }
   l2_ = -profile.leg_thigh_link;
   l3_ = -profile.leg_calf_link;
+}
+
+void UnitreeLeg::Enable() {
+  for (int i = 0; i < 3; ++i) motors_[i].SetMode(UnitreeMotor::Mode::kFoc);
+}
+
+void UnitreeLeg::Disable() {
+  for (int i = 0; i < 3; ++i) motors_[i].SetMode(UnitreeMotor::Mode::kIdle);
+}
+
+void UnitreeLeg::SetFootTarget(const Position3d& pos, const Velocity3d& vel,
+                               const Force3d& f) {
+  JointPosition3d q = GetJointPosition(pos);
+  JointVelocity3d q_dot = GetJointVelocity(pos, vel);
+  Torque3d tau = GetJointTorque(pos, f);
+  SetJointTarget(q, q_dot, tau);
+}
+
+void UnitreeLeg::SetJointTarget(const JointPosition3d& q,
+                                const JointVelocity3d& q_dot,
+                                const Torque3d& tau) {
+  for (int i = 0; i < 3; ++i) {
+    motors_[i].SetTarget(q[i], q_dot[i], tau[i]);
+  }
+}
+
+std::unordered_map<int, UnitreeMotor::CmdMsg>
+UnitreeLeg::GetMotorCommandMsgs() {
+  std::unordered_map<int, UnitreeMotor::CmdMsg> msgs;
+  for (int i = 0; i < 3; ++i) {
+    msgs[i] = motors_[i].GetCommandMsg();
+  }
+  return msgs;
 }
 
 Position3d UnitreeLeg::GetFootPosition(const JointPosition3d& q) const {
@@ -92,8 +125,14 @@ JointVelocity3d UnitreeLeg::GetJointVelocityQ(const JointPosition3d& q,
   return GetJacobian(q).inverse() * vel;
 }
 
-Torque3d UnitreeLeg::GetFootTorque(const JointPosition3d& q,
-                                   const Force3d& f) const {
+Torque3d UnitreeLeg::GetJointTorque(const Position3d& pos,
+                                    const Force3d& f) const {
+  JointPosition3d q = GetJointPosition(pos);
+  return GetJacobian(q).transpose() * f;
+}
+
+Torque3d UnitreeLeg::GetJointTorqueQ(const JointPosition3d& q,
+                                     const Force3d& f) const {
   return GetJacobian(q).transpose() * f;
 }
 }  // namespace xmotion

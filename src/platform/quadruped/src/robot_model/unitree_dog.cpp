@@ -41,32 +41,49 @@ uint32_t CalculateCrc32(uint32_t* ptr, uint32_t len) {
 }  // namespace
 
 UnitreeDog::UnitreeDog(const UnitreeModelProfile& profile) : profile_(profile) {
+  for (int i = 0; i < 4; i++) {
+    auto index = static_cast<LegIndex>(i);
+    legs_[index] = UnitreeLeg{profile_, index};
+  }
+
+  // initialize variables
+  InitCommand();
+
+  // initialize publisher/subscriber
+  cmd_pub_.reset(new ChannelPublisher<unitree_go::msg::dds_::LowCmd_>(
+      low_level_cmd_topic));
+  cmd_pub_->InitChannel();
+
+  state_sub_.reset(new ChannelSubscriber<unitree_go::msg::dds_::LowState_>(
+      low_level_state_topic));
+  state_sub_->InitChannel(std::bind(&UnitreeDog::OnLowLevelStateMessageReceived,
+                                    this, std::placeholders::_1),
+                          1);
+}
+
+void UnitreeDog::InitCommand() {
   // initialize command
   cmd_.head()[0] = 0xFE;
   cmd_.head()[1] = 0xEF;
   cmd_.level_flag() = 0xFF;
   cmd_.gpio() = 0;
 
-  for (int i = 0; i < 12; i++) {
-    cmd_.motor_cmd()[i].mode() = (0x01);  // motor switch to servo (PMSM) mode
-//    cmd_.motor_cmd()[i].q() = (PosStopF);
-//    cmd_.motor_cmd()[i].kp() = (0);
-//    cmd_.motor_cmd()[i].dq() = (VelStopF);
-//    cmd_.motor_cmd()[i].kd() = (0);
-//    cmd_.motor_cmd()[i].tau() = (0);
+  for (int i = 0; i < 4; i++) {
+    auto index = static_cast<LegIndex>(i);
+    legs_[index].Enable();
+    //    legs_[static_cast<LegIndex>(i)] =
+    //    UnitreeLeg(profile_.leg_profiles[i]);
   }
 
-  /*create publisher*/
-  cmd_pub_.reset(new ChannelPublisher<unitree_go::msg::dds_::LowCmd_>(
-      low_level_cmd_topic));
-  cmd_pub_->InitChannel();
-
-  /*create subscriber*/
-  state_sub_.reset(new ChannelSubscriber<unitree_go::msg::dds_::LowState_>(
-      low_level_state_topic));
-  state_sub_->InitChannel(std::bind(&UnitreeDog::OnLowLevelStateMessageReceived,
-                                    this, std::placeholders::_1),
-                          1);
+  for (int i = 0; i < 12; i++) {
+    cmd_.motor_cmd()[i].mode() =
+        (0x01);  // motor switch to servo (PMSM) mode
+                 //    cmd_.motor_cmd()[i].q() = (PosStopF);
+                 //    cmd_.motor_cmd()[i].kp() = (0);
+                 //    cmd_.motor_cmd()[i].dq() = (VelStopF);
+                 //    cmd_.motor_cmd()[i].kd() = (0);
+                 //    cmd_.motor_cmd()[i].tau() = (0);
+  }
 }
 
 void UnitreeDog::SendCommandToRobot() {}
