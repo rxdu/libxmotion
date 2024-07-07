@@ -38,6 +38,7 @@ bool QuadrupedSystem::Initialize() {
 }
 
 void QuadrupedSystem::ControlSubsystem() {
+  XLOG_INFO("QuadrupedSystem: entering control loop");
   Timer timer;
   while (keep_control_loop_) {
     timer.reset();
@@ -45,16 +46,19 @@ void QuadrupedSystem::ControlSubsystem() {
     //    timer.sleep_until_us(2000);
     timer.sleep_until_ms(1000);
   }
+  XLOG_INFO("QuadrupedSystem: control loop exited");
 }
 
 void QuadrupedSystem::Run() {
   control_thread_ = std::thread(&QuadrupedSystem::ControlSubsystem, this);
 
+  // main loop for housekeeping
+  XLOG_INFO("QuadrupedSystem: entering main loop");
   keep_running_ = true;
   while (keep_running_) {
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
   }
-  XLOG_INFO("QuadrupedSystem::Run exited");
+  XLOG_INFO("QuadrupedSystem: main loop exited");
 }
 
 void QuadrupedSystem::Stop() {

@@ -11,9 +11,13 @@
 
 namespace xmotion {
 UnitreeModelProfile UnitreeDogs::GetGo2Profile() {
-  UnitreeModelProfile profile("Go2");
+  UnitreeModelProfile profile;
 
-  profile.leg_l1 = 0.0;
+  profile.name = "unitree_go2";
+
+  profile.leg_hip_link = 0.0955;    // l_{abad}
+  profile.leg_thigh_link = 0.213;  // l_{hip}
+  profile.leg_calf_link = 0.213;    // l_{knee}
 
   return profile;
 }

@@ -13,14 +13,12 @@
 #include <string>
 
 namespace xmotion {
-class UnitreeModelProfile {
- public:
-  UnitreeModelProfile(const std::string& name) : name_(name) {}
+struct UnitreeModelProfile {
+  std::string name = "unitree_dog";
 
-  float leg_l1 = 0.0;
-
- private:
-  std::string name_;
+  double leg_hip_link = 0.0;
+  double leg_thigh_link = 0.0;
+  double leg_calf_link = 0.0;
 };
 
 struct UnitreeDogs {

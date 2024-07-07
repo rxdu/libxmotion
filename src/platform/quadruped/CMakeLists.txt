@@ -4,8 +4,11 @@ find_package(unitree_sdk2 REQUIRED)
 
 ## Add libraries
 add_library(quadruped
+    # common
+    src/config_loader.cpp
     # model
     src/robot_model/unitree_motor.cpp
+    src/robot_model/unitree_leg.cpp
     src/robot_model/unitree_dog.cpp
     src/robot_model/unitree_model_profile.cpp
     # controllers

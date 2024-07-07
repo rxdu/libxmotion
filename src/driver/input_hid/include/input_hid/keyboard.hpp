@@ -32,6 +32,7 @@ class Keyboard : public KeyboardInterface {
   void PollEvent() override;
 
   static std::string GetKeyName(KeyboardCode code);
+  static KeyboardCode GetKeyCode(const std::string& key_name);
 
  private:
   bool with_daemon_ = false;

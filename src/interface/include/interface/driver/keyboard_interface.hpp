@@ -16,6 +16,7 @@
 
 namespace xmotion {
 enum class KeyboardCode {
+  kUnknown,
   kA,
   kB,
   kC,

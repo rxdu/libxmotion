@@ -160,6 +160,78 @@ static std::unordered_map<KeyboardCode, std::string> keyname_map = {
     {KeyboardCode::kEnd, "End"},
     {KeyboardCode::kPageUp, "PageUp"},
     {KeyboardCode::kPageDown, "PageDown"}};
+
+std::unordered_map<std::string, KeyboardCode> keyname_to_keycode_map = {
+    {"A", KeyboardCode::kA},
+    {"B", KeyboardCode::kB},
+    {"C", KeyboardCode::kC},
+    {"D", KeyboardCode::kD},
+    {"E", KeyboardCode::kE},
+    {"F", KeyboardCode::kF},
+    {"G", KeyboardCode::kG},
+    {"H", KeyboardCode::kH},
+    {"I", KeyboardCode::kI},
+    {"J", KeyboardCode::kJ},
+    {"K", KeyboardCode::kK},
+    {"L", KeyboardCode::kL},
+    {"M", KeyboardCode::kM},
+    {"N", KeyboardCode::kN},
+    {"O", KeyboardCode::kO},
+    {"P", KeyboardCode::kP},
+    {"Q", KeyboardCode::kQ},
+    {"R", KeyboardCode::kR},
+    {"S", KeyboardCode::kS},
+    {"T", KeyboardCode::kT},
+    {"U", KeyboardCode::kU},
+    {"V", KeyboardCode::kV},
+    {"W", KeyboardCode::kW},
+    {"X", KeyboardCode::kX},
+    {"Y", KeyboardCode::kY},
+    {"Z", KeyboardCode::kZ},
+    {"Esc", KeyboardCode::kEsc},
+    {"1", KeyboardCode::kNum1},
+    {"2", KeyboardCode::kNum2},
+    {"3", KeyboardCode::kNum3},
+    {"4", KeyboardCode::kNum4},
+    {"5", KeyboardCode::kNum5},
+    {"6", KeyboardCode::kNum6},
+    {"7", KeyboardCode::kNum7},
+    {"8", KeyboardCode::kNum8},
+    {"9", KeyboardCode::kNum9},
+    {"0", KeyboardCode::kNum0},
+    {"-", KeyboardCode::kMinus},
+    {"=", KeyboardCode::kEqual},
+    {"Backspace", KeyboardCode::kBackspace},
+    {"Tab", KeyboardCode::kTab},
+    {"Enter", KeyboardCode::kEnter},
+    {"Space", KeyboardCode::kSpace},
+    {"CapsLock", KeyboardCode::kCapsLock},
+    {"F1", KeyboardCode::kF1},
+    {"F2", KeyboardCode::kF2},
+    {"F3", KeyboardCode::kF3},
+    {"F4", KeyboardCode::kF4},
+    {"F5", KeyboardCode::kF5},
+    {"F6", KeyboardCode::kF6},
+    {"F7", KeyboardCode::kF7},
+    {"F8", KeyboardCode::kF8},
+    {"F9", KeyboardCode::kF9},
+    {"F10", KeyboardCode::kF10},
+    {"F11", KeyboardCode::kF11},
+    {"F12", KeyboardCode::kF12},
+    {"LeftCtrl", KeyboardCode::kLeftCtrl},
+    {"RightCtrl", KeyboardCode::kRightCtrl},
+    {"LeftShift", KeyboardCode::kLeftShift},
+    {"RightShift", KeyboardCode::kRightShift},
+    {"LeftAlt", KeyboardCode::kLeftAlt},
+    {"RightAlt", KeyboardCode::kRightAlt},
+    {"Left", KeyboardCode::kLeft},
+    {"Right", KeyboardCode::kRight},
+    {"Up", KeyboardCode::kUp},
+    {"Down", KeyboardCode::kDown},
+    {"Home", KeyboardCode::kHome},
+    {"End", KeyboardCode::kEnd},
+    {"PageUp", KeyboardCode::kPageUp},
+    {"PageDown", KeyboardCode::kPageDown}};
 }  // namespace
 
 Keyboard::Keyboard(bool with_daemon) : with_daemon_(with_daemon) {}
@@ -215,6 +287,14 @@ void Keyboard::RegisterKeyEventCallback(KeyEventCallback callback) {
 }
 
 std::string Keyboard::GetKeyName(KeyboardCode code) {
+  if (keyname_map.find(code) == keyname_map.end()) return "UnknownKey";
   return keyname_map[code];
+}
+
+KeyboardCode Keyboard::GetKeyCode(const std::string& key_name) {
+  if (keyname_to_keycode_map.find(key_name) == keyname_to_keycode_map.end()) {
+    return KeyboardCode::kUnknown;
+  }
+  return keyname_to_keycode_map[key_name];
 }
 }  // namespace xmotion

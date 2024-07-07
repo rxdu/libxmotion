@@ -5,3 +5,5 @@ find_package(unitree_sdk2 REQUIRED)
 
 add_executable(test_unitree_stand test_unitree_stand.cpp)
 target_link_libraries(test_unitree_stand PRIVATE unitree_sdk2)
+
+add_subdirectory(unit_test)

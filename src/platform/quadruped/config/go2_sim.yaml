@@ -1,0 +1,24 @@
+domain_id: 1  # Domain id
+interface: "lo" # Interface
+
+keyboard_mappings:
+  forward: "w"
+  backward: "s"
+  left: "a"
+  right: "d"
+  up: "q"
+  down: "e"
+  roll_left: "z"
+  roll_right: "c"
+  pitch_up: "r"
+  pitch_down: "f"
+  yaw_left: "t"
+  yaw_right: "g"
+  reset: "x"
+  quit: "esc"
+
+use_joystick: 0 # Simulate Unitree WirelessController using a gamepad
+joystick_type: "xbox" # support "xbox" and "switch" gamepad layout
+joystick_device: "/dev/input/js0" # Device path
+joystick_bits: 16 # Some game controllers may only have 8-bit accuracy
+
