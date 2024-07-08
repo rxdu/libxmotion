@@ -13,13 +13,16 @@
 #include <atomic>
 #include <thread>
 
+#include "quadruped/system_config.hpp"
 #include "quadruped/robot_model/quadruped_model.hpp"
 #include "quadruped/control_mode_fsm.hpp"
+#include "quadruped/event_handler/hid_event_handler.hpp"
 
 namespace xmotion {
 class QuadrupedSystem {
  public:
-  QuadrupedSystem(std::shared_ptr<QuadrupedModel> model);
+  QuadrupedSystem(const SystemConfig& config,
+                  std::shared_ptr<QuadrupedModel> model);
   ~QuadrupedSystem();
 
   // do not allow copy or move
@@ -37,8 +40,11 @@ class QuadrupedSystem {
  private:
   void ControlSubsystem();
 
+  const SystemConfig config_;
   std::shared_ptr<QuadrupedModel> model_;
   std::atomic<bool> keep_running_{false};
+
+  std::shared_ptr<HidEventHandler> hid_event_listener_;
 
   std::thread control_thread_;
   std::atomic<bool> keep_control_loop_{false};

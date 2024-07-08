@@ -11,14 +11,11 @@
 
 #include <string>
 
-namespace xmotion {
-struct RobotConfig {
-  int dds_domain_id;
-  std::string network_interface;
-};
+#include "quadruped/system_config.hpp"
 
+namespace xmotion {
 struct ConfigLoader {
-  static bool LoadConfigFile(const std::string& file_path, RobotConfig* config);
+  static bool LoadConfigFile(const std::string& file_path, SystemConfig* config);
 };
 }  // namespace xmotion
 

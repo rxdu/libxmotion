@@ -34,6 +34,7 @@ class Joystick : public JoystickInterface {
   Joystick(bool with_daemon = true);
   explicit Joystick(JoystickDescriptor descriptor, bool with_daemon = true);
   explicit Joystick(int index, bool with_daemon = true);
+  explicit Joystick(const std::string& event_name, bool with_daemon = true);
   ~Joystick();
 
   // do not allow copy
@@ -65,6 +66,7 @@ class Joystick : public JoystickInterface {
 
   JoystickDescriptor descriptor_;
   bool with_daemon_ = false;
+  std::string device_name_;
 
   int fd_ = -1;
   int device_change_notify_;

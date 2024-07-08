@@ -62,17 +62,31 @@ Joystick::Joystick(bool with_daemon) : with_daemon_(with_daemon) {
   auto jds = Joystick::EnumberateJoysticks();
   if (jds.empty()) throw std::runtime_error("No joystick found");
   descriptor_.index = jds.back().index;
+  device_name_ = "/dev/input/event" + std::to_string(descriptor_.index);
   InitializeChannels();
 }
 
 Joystick::Joystick(JoystickDescriptor descriptor, bool with_daemon)
     : descriptor_(descriptor), with_daemon_(with_daemon) {
+  device_name_ = "/dev/input/event" + std::to_string(descriptor.index);
   InitializeChannels();
 }
 
 Joystick::Joystick(int index, bool with_daemon)
     : Joystick(JoystickDescriptor{index, "js" + std::to_string(index)},
                with_daemon) {}
+
+Joystick::Joystick(const std::string& event_name, bool with_daemon)
+    : with_daemon_(with_daemon) {
+  device_name_ = event_name;
+  try {
+    descriptor_.index = std::stoi(event_name.substr(16));
+  } catch (std::invalid_argument& e) {
+    descriptor_.index = -1;
+  }
+  descriptor_.name = event_name;
+  InitializeChannels();
+}
 
 Joystick::~Joystick() {
   if (connected_) {
@@ -93,9 +107,7 @@ void Joystick::InitializeChannels() {
 bool Joystick::Open() {
   if (connected_) return true;
 
-  std::string file_name =
-      "/dev/input/event" + std::to_string(descriptor_.index);
-  fd_ = open(file_name.c_str(), O_RDWR | O_NONBLOCK);
+  fd_ = open(device_name_.c_str(), O_RDWR | O_NONBLOCK);
   if (fd_ != -1) {
     connected_ = true;
 
@@ -118,7 +130,7 @@ bool Joystick::Open() {
     }
 
     device_change_notify_ = inotify_init1(IN_NONBLOCK);
-    inotify_add_watch(device_change_notify_, file_name.c_str(), IN_ATTRIB);
+    inotify_add_watch(device_change_notify_, device_name_.c_str(), IN_ATTRIB);
 
     if (with_daemon_) {
       keep_running_ = true;

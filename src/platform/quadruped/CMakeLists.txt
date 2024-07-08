@@ -1,11 +1,14 @@
 ## Dependency libraries
 find_package(Eigen3 REQUIRED NO_MODULE)
+find_package(yaml-cpp REQUIRED)
 find_package(unitree_sdk2 REQUIRED)
 
 ## Add libraries
 add_library(quadruped
     # common
     src/config_loader.cpp
+    # event handler
+    src/event_handler/hid_event_handler.cpp
     # model
     src/robot_model/unitree_motor.cpp
     src/robot_model/unitree_leg.cpp
@@ -19,12 +22,14 @@ add_library(quadruped
     src/control_mode/passive_mode.cpp
     src/control_mode/throtting_mode.cpp
     # system
-    src/quadruped_system.cpp
-)
+    src/quadruped_system.cpp)
 target_link_libraries(quadruped PUBLIC
-    interface fsm time
+    interface
+    fsm time
+    input_hid
     unitree_sdk2
     Eigen3::Eigen
+    yaml-cpp
     PRIVATE logging)
 target_include_directories(quadruped PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
