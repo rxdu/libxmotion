@@ -16,8 +16,10 @@ struct EventHandler {
 
   // pure virtual functions
   virtual bool Initialize() = 0;
+
   virtual void Start() = 0;
   virtual void PollEvents() = 0;
+  virtual void Stop() = 0;
 };
 }  // namespace xmotion
 

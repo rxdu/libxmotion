@@ -35,7 +35,7 @@ class LoggerInterface {
  public:
   virtual void Initialize(std::string logger_name, std::string pattern,
                           std::string file_suffix) = 0;
-  virtual void Deinitialize() {};
+  virtual void Terminate() {};
 
   virtual void SetLoggerLevel(LogLevel level) = 0;
   virtual LogLevel GetLoggerLevel() = 0;

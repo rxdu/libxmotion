@@ -35,7 +35,8 @@ class UnitreeDog : public QuadrupedModel {
   using LowLevelState = unitree_go::msg::dds_::LowState_;
 
  public:
-  explicit UnitreeDog(const UnitreeModelProfile& profile);
+  explicit UnitreeDog(const std::string& network_interface,
+                      const UnitreeModelProfile& profile);
 
   void SendCommandToRobot();
 
@@ -43,6 +44,7 @@ class UnitreeDog : public QuadrupedModel {
   void InitCommand();
   void OnLowLevelStateMessageReceived(const void* message);
 
+  std::string network_interface_;
   UnitreeModelProfile profile_;
   std::unordered_map<LegIndex, UnitreeLeg> legs_;
 

@@ -22,7 +22,7 @@ class HidEventPoll {
   ~HidEventPoll();
 
   void RegisterDevice(HidPollInterface* device);
-  
+
   void StartPolling();
   void StopPolling();
 

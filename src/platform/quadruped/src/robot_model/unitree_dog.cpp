@@ -40,7 +40,9 @@ uint32_t CalculateCrc32(uint32_t* ptr, uint32_t len) {
 }
 }  // namespace
 
-UnitreeDog::UnitreeDog(const UnitreeModelProfile& profile) : profile_(profile) {
+UnitreeDog::UnitreeDog(const std::string& network_interface,
+                       const UnitreeModelProfile& profile)
+    : network_interface_(network_interface), profile_(profile) {
   for (int i = 0; i < 4; i++) {
     auto index = static_cast<LegIndex>(i);
     legs_[index] = UnitreeLeg{profile_, index};
@@ -50,6 +52,7 @@ UnitreeDog::UnitreeDog(const UnitreeModelProfile& profile) : profile_(profile) {
   InitCommand();
 
   // initialize publisher/subscriber
+  ChannelFactory::Instance()->Init(0, network_interface_);
   cmd_pub_.reset(new ChannelPublisher<unitree_go::msg::dds_::LowCmd_>(
       low_level_cmd_topic));
   cmd_pub_->InitChannel();

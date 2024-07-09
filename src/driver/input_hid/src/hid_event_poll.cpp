@@ -23,8 +23,10 @@ void HidEventPoll::StartPolling() {
   io_thread_ = std::thread([this]() {
     while (keep_running_) {
       for (auto device : devices_) {
-        if (device != nullptr) device->PollEvent();
-        usleep(10000);
+        if (device != nullptr) {
+          device->PollEvent();
+          usleep(10000);
+        }
       }
     }
   });

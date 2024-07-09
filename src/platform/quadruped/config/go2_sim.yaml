@@ -1,6 +1,6 @@
-domain_id: 1  # Domain id
-interface: "lo" # Interface
-simulation: True # Simulation mode
+dds_domain_id: 1  # Domain id
+network_interface: "lo" # Interface
+is_simulation: True # Simulation mode
 
 hid_config:
   keyboard:

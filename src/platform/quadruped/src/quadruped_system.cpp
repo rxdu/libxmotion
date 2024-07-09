@@ -19,15 +19,11 @@ QuadrupedSystem::QuadrupedSystem(const SystemConfig& config,
   hid_event_listener_ = std::make_shared<HidEventHandler>(config_.hid_config);
 }
 
-QuadrupedSystem::~QuadrupedSystem() {
-  keep_running_ = false;
-
-  // wait for control thread to finish
-  keep_control_loop_ = false;
-  if (control_thread_.joinable()) control_thread_.join();
-}
+QuadrupedSystem::~QuadrupedSystem() { Stop(); }
 
 bool QuadrupedSystem::Initialize() {
+  XLOG_INFO("QuadrupedSystem: initializing...");
+
   // initialize event listeners
   if (!hid_event_listener_->Initialize()) return false;
 
@@ -46,6 +42,8 @@ bool QuadrupedSystem::Initialize() {
   fsm_ = std::make_unique<ControlModeFsm>(std::move(initial_state),
                                           std::move(context));
   keep_control_loop_ = true;
+
+  XLOG_INFO("====== QuadrupedSystem: initialized ======");
 
   return true;
 }
@@ -75,13 +73,20 @@ void QuadrupedSystem::Run() {
   XLOG_INFO("QuadrupedSystem: entering main loop");
   keep_running_ = true;
   while (keep_running_) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    hid_event_listener_->PollEvents();
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }
   XLOG_INFO("QuadrupedSystem: main loop exited");
 }
 
 void QuadrupedSystem::Stop() {
   XLOG_INFO("Stopping QuadrupedSystem");
+
+  // wait for control thread to finish
+  keep_control_loop_ = false;
+  if (control_thread_.joinable()) control_thread_.join();
+
+  // finally stop the main loop
   keep_running_ = false;
 }
 }  // namespace xmotion

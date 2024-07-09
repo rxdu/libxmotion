@@ -11,7 +11,7 @@
 
 #include "yaml-cpp/yaml.h"
 
-#include "wra_utils/logging/logger.hpp"
+#include "logging/xlogger.hpp"
 
 namespace xmotion {
 bool ConfigLoader::LoadConfigFile(const std::string &file_path,
@@ -28,16 +28,17 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
     config->hid_config.keyboard.enable =
         config_node["hid_config"]["keyboard"]["enable"].as<bool>();
     config->hid_config.keyboard.device =
-        config_node["hid_config"]["keyboard"]["device"].as<std::string>();
+        config_node["hid_config"]["keyboard"]["device_name"].as<std::string>();
 
     config->hid_config.joystick.enable =
         config_node["hid_config"]["joystick"]["enable"].as<bool>();
     config->hid_config.joystick.device =
-        config_node["hid_config"]["joystick"]["device"].as<std::string>();
+        config_node["hid_config"]["joystick"]["device_name"].as<std::string>();
   } catch (YAML::BadFile &e) {
-    WLOG_ERROR("ConfigLoader: failed to open config file {}", file_path);
+    XLOG_ERROR("ConfigLoader: failed to open config file {}: {}", file_path,
+               e.what());
     return false;
   }
-  return false;
+  return true;
 }
 }  // namespace xmotion
