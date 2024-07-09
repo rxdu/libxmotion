@@ -10,22 +10,41 @@
 #ifndef QUADRUPED_MOTION_HID_EVENT_HPP
 #define QUADRUPED_MOTION_HID_EVENT_HPP
 
+#include "interface/driver/keyboard_interface.hpp"
+#include "interface/driver/joystick_interface.hpp"
+#include "quadruped/system_config.hpp"
+
 namespace xmotion {
 class HidEvent {
  public:
-  enum class EventType { kButtonEvent, kAxisEvent };
+  enum class EventType { kKeyPressed, kButtonPressed, kAxisChanged };
 
-  HidEvent(EventType type, int id, int value)
-      : type_(type), id_(id), value_(value) {}
+  struct AxisChangedEventData {
+    JsAxis axis;
+    JsAxisValue value;
+  };
 
-  int GetId() const { return id_; }
+  HidEvent(KeyboardCode code)
+      : type_(EventType::kKeyPressed), pressed_key_(code) {}
 
-  int GetValue() const { return value_; }
+  HidEvent(JsButton button)
+      : type_(EventType::kButtonPressed), pressed_button_(button) {}
+
+  HidEvent(AxisChangedEventData axis)
+      : type_(EventType::kAxisChanged), changed_axis_(axis) {}
+
+  KeyboardCode GetKeyCode() const { return pressed_key_; }
+
+  JsButton GetJsButton() const { return pressed_button_; }
+
+  AxisChangedEventData GetJsAxis() const { return changed_axis_; }
 
  private:
   EventType type_;
-  int id_;
-  int value_;
+  KeyboardCode pressed_key_ = KeyboardCode::kUnknown;
+
+  JsButton pressed_button_;
+  AxisChangedEventData changed_axis_;
 };
 }  // namespace xmotion
 

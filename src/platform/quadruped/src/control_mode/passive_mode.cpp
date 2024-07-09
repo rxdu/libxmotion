@@ -12,11 +12,11 @@
 #include "logging/xlogger.hpp"
 
 namespace xmotion {
-PassiveMode::PassiveMode() {
-
-}
+PassiveMode::PassiveMode() {}
 
 void PassiveMode::Update(ControlContext& context) {
   XLOG_INFO("PassiveMode::Update");
+
+  XLOG_INFO("PassiveMode: Update end");
 }
 }  // namespace xmotion

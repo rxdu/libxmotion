@@ -12,11 +12,22 @@
 
 #include <string>
 
+#include "interface/driver/keyboard_interface.hpp"
+
 namespace xmotion {
 struct HidConfig {
+  enum class KeyFunction : int {
+    kPassiveMode = 0,
+    kFixedStandMode,
+    kFreeStandMode,
+    kTrottingMode,
+    kMoveBaseMode,
+  };
+
   struct Keyboard {
     bool enable;
     std::string device;
+    std::unordered_map<KeyboardCode, KeyFunction> keyboard_mappings;
   };
 
   struct Joystick {

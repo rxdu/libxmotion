@@ -11,11 +11,13 @@
 
 #include <memory>
 
+#include "quadruped/system_config.hpp"
 #include "quadruped/robot_model/quadruped_model.hpp"
 #include "quadruped/event_handler/hid_event_handler.hpp"
 
 namespace xmotion {
 struct ControlContext {
+  SystemConfig system_config;
   std::shared_ptr<QuadrupedModel> robot_model;
   std::shared_ptr<HidEventHandler> hid_event_listener;
 };

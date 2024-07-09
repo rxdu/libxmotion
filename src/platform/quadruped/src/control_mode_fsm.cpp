@@ -9,16 +9,18 @@
 
 #include "quadruped/control_mode_fsm.hpp"
 
+#include "logging/xlogger.hpp"
+
 namespace xmotion {
 OptionalStateVariant ModeTransition::Transit(FixedStandMode &state,
                                              ControlContext &context) {
-  return FreeStandMode{};
+  return FixedStandMode{};
   // return std::nullopt;
 }
 
 OptionalStateVariant ModeTransition::Transit(FreeStandMode &state,
                                              ControlContext &context) {
-  return MoveBaseMode{};
+  return FreeStandMode{};
   // return std::nullopt;
 }
 
@@ -31,13 +33,24 @@ OptionalStateVariant ModeTransition::Transit(MoveBaseMode &state,
 OptionalStateVariant ModeTransition::Transit(PassiveMode &state,
                                              ControlContext &context) {
   //  return ThrottingMode{};
-  return state;
-  // return std::nullopt;
+  auto config = context.system_config;
+  auto listener = context.hid_event_listener;
+  auto key_event = listener->TryPopKeyboardEvent();
+  if (key_event.has_value()) {
+    if (config.hid_config.keyboard.keyboard_mappings[key_event->GetKeyCode()] ==
+        HidConfig::KeyFunction::kFixedStandMode) {
+      XLOG_INFO("---------> Switch to FixedStandMode");
+      return FixedStandMode{};
+    }
+    XLOG_INFO("Keycode: {}", static_cast<int>(key_event->GetKeyCode()));
+  }
+  XLOG_INFO("NO TRANSITION");
+  return std::nullopt;
 }
 
-OptionalStateVariant ModeTransition::Transit(ThrottingMode &state,
+OptionalStateVariant ModeTransition::Transit(TrottingMode &state,
                                              ControlContext &context) {
-  return FixedStandMode{};
+  return TrottingMode{};
   // return std::nullopt;
 }
 }  // namespace xmotion

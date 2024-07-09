@@ -12,8 +12,7 @@
 #include "logging/xlogger.hpp"
 
 namespace xmotion {
-HidEventHandler::HidEventHandler(const HidConfig& config, uint32_t queue_size)
-    : config_(config), queue_size_(queue_size) {
+HidEventHandler::HidEventHandler(const HidConfig& config) : config_(config) {
   if (config_.keyboard.enable) {
     keyboard_ = std::make_unique<Keyboard>(false);
     keyboard_->RegisterKeyEventCallback(std::bind(&HidEventHandler::OnKeyEvent,
@@ -62,7 +61,17 @@ void HidEventHandler::PollEvents() {
 }
 
 void HidEventHandler::OnKeyEvent(KeyboardCode code, KeyboardEvent event) {
-  XLOG_INFO("Key {} {}", Keyboard::GetKeyName(code),
-            (event == KeyboardEvent::kPress ? "pressed" : "released"));
+  //  XLOG_INFO("Key {} {}", Keyboard::GetKeyName(code),
+  //            (event == KeyboardEvent::kPress ? "pressed" : "released"));
+  kb_event_queue_.Push(HidEvent{code});
+//  XLOG_INFO("Key event pushed to queue");
+}
+
+std::optional<HidEvent> HidEventHandler::TryPopJoystickEvent() {
+  return js_event_queue_.TryPop();
+}
+
+std::optional<HidEvent> HidEventHandler::TryPopKeyboardEvent() {
+  return kb_event_queue_.TryPop();
 }
 }  // namespace xmotion

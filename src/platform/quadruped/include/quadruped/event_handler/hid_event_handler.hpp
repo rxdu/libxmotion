@@ -21,12 +21,16 @@
 namespace xmotion {
 class HidEventHandler final : public EventHandler {
  public:
-  HidEventHandler(const HidConfig& config, uint32_t queue_size = 5);
+  explicit HidEventHandler(const HidConfig& config);
 
   bool Initialize() override;
+
   void Start() override;
-  void Stop() override;
   void PollEvents() override;
+  void Stop() override;
+
+  std::optional<HidEvent> TryPopJoystickEvent();
+  std::optional<HidEvent> TryPopKeyboardEvent();
 
  private:
   void OnKeyEvent(KeyboardCode code, KeyboardEvent event);
@@ -37,7 +41,9 @@ class HidEventHandler final : public EventHandler {
   std::unique_ptr<Keyboard> keyboard_;
   std::unique_ptr<Joystick> joystick_;
   HidEventPoll hid_poll_;
-  EventQueue<HidEvent> event_queue_;
+
+  EventQueue<HidEvent> js_event_queue_;
+  EventQueue<HidEvent> kb_event_queue_;
 };
 }  // namespace xmotion
 

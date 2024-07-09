@@ -20,7 +20,7 @@ add_library(quadruped
     src/control_mode/free_stand_mode.cpp
     src/control_mode/move_base_mode.cpp
     src/control_mode/passive_mode.cpp
-    src/control_mode/throtting_mode.cpp
+    src/control_mode/trotting_mode.cpp
     # system
     src/quadruped_system.cpp)
 target_link_libraries(quadruped PUBLIC
