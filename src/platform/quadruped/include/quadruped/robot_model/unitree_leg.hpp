@@ -37,11 +37,13 @@ class UnitreeLeg {
   // commands
   void Enable();
   void Disable();
+  void SetJointGains(const std::array<double, 3>& kp,
+                     const std::array<double, 3>& kd);
   void SetFootTarget(const Position3d& pos, const Velocity3d& vel,
                      const Force3d& f);
   void SetJointTarget(const JointPosition3d& q, const JointVelocity3d& q_dot,
                       const Torque3d& tau);
-  std::unordered_map<int, UnitreeMotor::CmdMsg> GetMotorCommandMsgs();
+  std::vector<UnitreeMotor::CmdMsg> GetMotorCommandMsgs();
 
   // forward kinematics
   Position3d GetFootPosition(const JointPosition3d& q) const;

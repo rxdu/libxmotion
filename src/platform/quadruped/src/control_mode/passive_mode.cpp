@@ -16,6 +16,8 @@ PassiveMode::PassiveMode() {}
 
 void PassiveMode::Update(ControlContext& context) {
   XLOG_INFO("PassiveMode::Update");
+  // set joint positions to current joint positions
+
 
   XLOG_INFO("PassiveMode: Update end");
 }

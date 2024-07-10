@@ -17,8 +17,8 @@
 namespace xmotion {
 class UnitreeMotor {
   // constants from unitree_sdk2
-  static constexpr double q_idle_target = 2.146e+9f;
-  static constexpr double qd_idle_target = 16000.0f;
+  static constexpr double q_zero_target = 2.146e+9f;
+  static constexpr double q_dot_zero_target = 16000.0f;
 
  public:
   using CmdMsg = unitree_go::msg::dds_::MotorCmd_;

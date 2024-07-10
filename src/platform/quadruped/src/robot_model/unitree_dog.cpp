@@ -73,20 +73,43 @@ void UnitreeDog::InitCommand() {
 
   for (int i = 0; i < 4; i++) {
     auto index = static_cast<LegIndex>(i);
+    legs_[index] = UnitreeLeg(profile_, index);
     legs_[index].Enable();
-    //    legs_[static_cast<LegIndex>(i)] =
-    //    UnitreeLeg(profile_.leg_profiles[i]);
   }
 
-  for (int i = 0; i < 12; i++) {
-    cmd_.motor_cmd()[i].mode() =
-        (0x01);  // motor switch to servo (PMSM) mode
-                 //    cmd_.motor_cmd()[i].q() = (PosStopF);
-                 //    cmd_.motor_cmd()[i].kp() = (0);
-                 //    cmd_.motor_cmd()[i].dq() = (VelStopF);
-                 //    cmd_.motor_cmd()[i].kd() = (0);
-                 //    cmd_.motor_cmd()[i].tau() = (0);
+  for (int i = 0; i < 4; i++) {
+    auto msgs = legs_[static_cast<LegIndex>(i)].GetMotorCommandMsgs();
+    cmd_.motor_cmd()[i * 3] = msgs[0];
+    cmd_.motor_cmd()[i * 3 + 1] = msgs[1];
+    cmd_.motor_cmd()[i * 3 + 2] = msgs[2];
   }
+}
+
+void UnitreeDog::SetJointGains(const JointGains& gains) {
+  for (int i = 0; i < 4; i++) {
+    auto index = static_cast<LegIndex>(i);
+    legs_[index].SetJointGains(
+        std::array<double, 3>{gains.kp[i * 3], gains.kp[i * 3 + 1],
+                              gains.kp[i * 3 + 2]},
+        std::array<double, 3>{gains.kd[i * 3], gains.kd[i * 3 + 1],
+                              gains.kd[i * 3 + 2]});
+  }
+}
+
+void UnitreeDog::SetTargetState(const State& state) {
+  // set target state
+  legs_[LegIndex::kFrontRight].SetJointTarget(state.q.segment<3>(0),
+                                              state.q_dot.segment<3>(0),
+                                              state.tau.segment<3>(0));
+  legs_[LegIndex::kFrontLeft].SetJointTarget(state.q.segment<3>(3),
+                                             state.q_dot.segment<3>(3),
+                                             state.tau.segment<3>(3));
+  legs_[LegIndex::kRearRight].SetJointTarget(state.q.segment<3>(6),
+                                             state.q_dot.segment<3>(6),
+                                             state.tau.segment<3>(6));
+  legs_[LegIndex::kRearLeft].SetJointTarget(state.q.segment<3>(9),
+                                            state.q_dot.segment<3>(9),
+                                            state.tau.segment<3>(9));
 }
 
 void UnitreeDog::SendCommandToRobot() {}

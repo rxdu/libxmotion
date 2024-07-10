@@ -28,9 +28,9 @@ class UnitreeDog : public QuadrupedModel {
   static constexpr auto low_level_cmd_topic = "rt/lowcmd";
   static constexpr auto low_level_state_topic = "rt/lowstate";
 
- public:
-  struct State {};
+  using State = QuadrupedModel::State;
 
+ public:
   using LowLevelCmd = unitree_go::msg::dds_::LowCmd_;
   using LowLevelState = unitree_go::msg::dds_::LowState_;
 
@@ -38,7 +38,9 @@ class UnitreeDog : public QuadrupedModel {
   explicit UnitreeDog(const std::string& network_interface,
                       const UnitreeModelProfile& profile);
 
-  void SendCommandToRobot();
+  void SetJointGains(const JointGains& gains) override;
+  void SetTargetState(const State& state) override;
+  void SendCommandToRobot() override;
 
  private:
   void InitCommand();

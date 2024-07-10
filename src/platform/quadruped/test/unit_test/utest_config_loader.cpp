@@ -21,16 +21,18 @@ TEST(ConfigLoaderTest, LoadConfigFileTest) {
   EXPECT_EQ(config.network_interface, "lo");
   EXPECT_EQ(config.is_simulation, true);
 
-  EXPECT_EQ(config.hid_config.keyboard.enable, true);
-  EXPECT_EQ(config.hid_config.keyboard.device, "/dev/input/event3");
-  EXPECT_EQ(config.hid_config.keyboard.keyboard_mappings[KeyboardCode::kF1],
-            HidConfig::KeyFunction::kPassiveMode);
-  EXPECT_EQ(config.hid_config.keyboard.keyboard_mappings[KeyboardCode::kF2],
-            HidConfig::KeyFunction::kFixedStandMode);
-  EXPECT_EQ(config.hid_config.keyboard.keyboard_mappings[KeyboardCode::kF3],
-            HidConfig::KeyFunction::kFreeStandMode);
-  EXPECT_EQ(config.hid_config.keyboard.keyboard_mappings[KeyboardCode::kF4],
-            HidConfig::KeyFunction::kTrottingMode);
-  EXPECT_EQ(config.hid_config.keyboard.keyboard_mappings[KeyboardCode::kF5],
-            HidConfig::KeyFunction::kMoveBaseMode);
+  EXPECT_EQ(config.hid_settings.keyboard.enable, true);
+  EXPECT_EQ(config.hid_settings.keyboard.device, "/dev/input/event3");
+  EXPECT_EQ(config.hid_settings.keyboard.keyboard_mappings[KeyboardCode::kF1],
+            HidSettings::KeyFunction::kPassiveMode);
+  EXPECT_EQ(config.hid_settings.keyboard.keyboard_mappings[KeyboardCode::kF2],
+            HidSettings::KeyFunction::kFixedStandMode);
+  EXPECT_EQ(config.hid_settings.keyboard.keyboard_mappings[KeyboardCode::kF3],
+            HidSettings::KeyFunction::kFreeStandMode);
+  EXPECT_EQ(config.hid_settings.keyboard.keyboard_mappings[KeyboardCode::kF4],
+            HidSettings::KeyFunction::kTrottingMode);
+  EXPECT_EQ(config.hid_settings.keyboard.keyboard_mappings[KeyboardCode::kF5],
+            HidSettings::KeyFunction::kMoveBaseMode);
+
+
 }

@@ -12,7 +12,7 @@
 #include "logging/xlogger.hpp"
 
 namespace xmotion {
-HidEventHandler::HidEventHandler(const HidConfig& config) : config_(config) {
+HidEventHandler::HidEventHandler(const HidSettings& config) : config_(config) {
   if (config_.keyboard.enable) {
     keyboard_ = std::make_unique<Keyboard>(false);
     keyboard_->RegisterKeyEventCallback(std::bind(&HidEventHandler::OnKeyEvent,

@@ -37,8 +37,8 @@ OptionalStateVariant ModeTransition::Transit(PassiveMode &state,
   auto listener = context.hid_event_listener;
   auto key_event = listener->TryPopKeyboardEvent();
   if (key_event.has_value()) {
-    if (config.hid_config.keyboard.keyboard_mappings[key_event->GetKeyCode()] ==
-        HidConfig::KeyFunction::kFixedStandMode) {
+    if (config.hid_settings.keyboard.keyboard_mappings[key_event->GetKeyCode()] ==
+        HidSettings::KeyFunction::kFixedStandMode) {
       XLOG_INFO("---------> Switch to FixedStandMode");
       return FixedStandMode{};
     }

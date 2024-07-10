@@ -16,12 +16,12 @@
 
 namespace xmotion {
 namespace {
-std::unordered_map<std::string, HidConfig::KeyFunction> str_to_key_mapping = {
-    {"passive_mode", HidConfig::KeyFunction::kPassiveMode},
-    {"fixed_stand_mode", HidConfig::KeyFunction::kFixedStandMode},
-    {"free_stand_mode", HidConfig::KeyFunction::kFreeStandMode},
-    {"trotting_mode", HidConfig::KeyFunction::kTrottingMode},
-    {"move_base_mode", HidConfig::KeyFunction::kMoveBaseMode}};
+std::unordered_map<std::string, HidSettings::KeyFunction> str_to_key_mapping = {
+    {"passive_mode", HidSettings::KeyFunction::kPassiveMode},
+    {"fixed_stand_mode", HidSettings::KeyFunction::kFixedStandMode},
+    {"free_stand_mode", HidSettings::KeyFunction::kFreeStandMode},
+    {"trotting_mode", HidSettings::KeyFunction::kTrottingMode},
+    {"move_base_mode", HidSettings::KeyFunction::kMoveBaseMode}};
 }
 
 bool ConfigLoader::LoadConfigFile(const std::string &file_path,
@@ -34,14 +34,19 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
         config_node["network_interface"].as<std::string>();
     config->is_simulation = config_node["is_simulation"].as<bool>();
 
-    // HID config
-    config->hid_config.keyboard.enable =
-        config_node["hid_config"]["keyboard"]["enable"].as<bool>();
-    config->hid_config.keyboard.device =
-        config_node["hid_config"]["keyboard"]["device_name"].as<std::string>();
-    for (auto it =
-             config_node["hid_config"]["keyboard"]["keyboard_mappings"].begin();
-         it != config_node["hid_config"]["keyboard"]["keyboard_mappings"].end();
+    /*------------------------------------------------------------------------*/
+    // HID settings
+    /*------------------------------------------------------------------------*/
+
+    config->hid_settings.keyboard.enable =
+        config_node["hid_settings"]["keyboard"]["enable"].as<bool>();
+    config->hid_settings.keyboard.device =
+        config_node["hid_settings"]["keyboard"]["device_name"]
+            .as<std::string>();
+    for (auto it = config_node["hid_settings"]["keyboard"]["keyboard_mappings"]
+                       .begin();
+         it !=
+         config_node["hid_settings"]["keyboard"]["keyboard_mappings"].end();
          ++it) {
       if (str_to_key_mapping.find(it->first.as<std::string>()) ==
           str_to_key_mapping.end()) {
@@ -55,17 +60,33 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
                    it->second.as<std::string>());
         return false;
       }
-      config->hid_config.keyboard.keyboard_mappings[Keyboard::GetKeyCode(
+      config->hid_settings.keyboard.keyboard_mappings[Keyboard::GetKeyCode(
           it->second.as<std::string>())] =
           str_to_key_mapping[it->first.as<std::string>()];
       XLOG_INFO("ConfigLoader: key mapping: {} -> {}",
                 it->first.as<std::string>(), it->second.as<std::string>());
     }
 
-    config->hid_config.joystick.enable =
-        config_node["hid_config"]["joystick"]["enable"].as<bool>();
-    config->hid_config.joystick.device =
-        config_node["hid_config"]["joystick"]["device_name"].as<std::string>();
+    config->hid_settings.joystick.enable =
+        config_node["hid_settings"]["joystick"]["enable"].as<bool>();
+    config->hid_settings.joystick.device =
+        config_node["hid_settings"]["joystick"]["device_name"]
+            .as<std::string>();
+
+    /*------------------------------------------------------------------------*/
+    // control settings
+    /*------------------------------------------------------------------------*/
+    for (int i = 0; i < 12; ++i) {
+      config->ctrl_settings.passive_mode.joint_gains.kp[i] =
+          config_node["control_settings"]["passive_mode"]["joint_gains"]
+                     ["joint" + std::to_string(i)]["kp"]
+                         .as<double>();
+      config->ctrl_settings.passive_mode.joint_gains.kd[i] =
+          config_node["control_settings"]["passive_mode"]["joint_gains"]
+                     ["joint" + std::to_string(i)]["kd"]
+                         .as<double>();
+    }
+
   } catch (YAML::BadFile &e) {
     XLOG_ERROR("ConfigLoader: failed to open config file {}: {}", file_path,
                e.what());

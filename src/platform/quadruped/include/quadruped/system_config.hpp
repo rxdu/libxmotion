@@ -13,9 +13,10 @@
 #include <string>
 
 #include "interface/driver/keyboard_interface.hpp"
+#include "quadruped/robot_model/quadruped_model.hpp"
 
 namespace xmotion {
-struct HidConfig {
+struct HidSettings {
   enum class KeyFunction : int {
     kPassiveMode = 0,
     kFixedStandMode,
@@ -39,12 +40,19 @@ struct HidConfig {
   Joystick joystick;
 };
 
+struct ControlSettings {
+  struct PassiveModeParams {
+    QuadrupedModel::JointGains joint_gains;
+  } passive_mode;
+};
+
 struct SystemConfig {
   int dds_domain_id;
   std::string network_interface;
   bool is_simulation;
 
-  HidConfig hid_config;
+  HidSettings hid_settings;
+  ControlSettings ctrl_settings;
 };
 }  // namespace xmotion
 

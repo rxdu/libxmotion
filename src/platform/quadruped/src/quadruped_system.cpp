@@ -16,7 +16,7 @@ namespace xmotion {
 QuadrupedSystem::QuadrupedSystem(const SystemConfig& config,
                                  std::shared_ptr<QuadrupedModel> model)
     : config_(config), model_(model) {
-  hid_event_listener_ = std::make_shared<HidEventHandler>(config_.hid_config);
+  hid_event_listener_ = std::make_shared<HidEventHandler>(config_.hid_settings);
 }
 
 QuadrupedSystem::~QuadrupedSystem() { Stop(); }
@@ -73,7 +73,12 @@ void QuadrupedSystem::Run() {
   // start main loop for housekeeping
   XLOG_INFO("QuadrupedSystem: entering main loop");
   keep_running_ = true;
+  StopWatch sw;
   while (keep_running_) {
+    if (sw.stoc() > 3) {
+      XLOG_INFO("QuadrupedSystem: main loop running");
+      break;
+    }
     hid_event_listener_->PollEvents();
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }

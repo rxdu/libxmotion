@@ -16,8 +16,8 @@ void UnitreeMotor::SetMode(Mode mode) {
     state_.q = 0;
     state_.dq = 0;
   } else {
-    state_.q = q_idle_target;
-    state_.dq = qd_idle_target;
+    state_.q = q_zero_target;
+    state_.dq = q_dot_zero_target;
   }
   state_.tau = 0;
   state_.kp = 0;

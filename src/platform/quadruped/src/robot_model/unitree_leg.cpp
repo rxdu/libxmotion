@@ -30,6 +30,13 @@ void UnitreeLeg::Disable() {
   for (int i = 0; i < 3; ++i) motors_[i].SetMode(UnitreeMotor::Mode::kIdle);
 }
 
+void UnitreeLeg::SetJointGains(const std::array<double, 3>& kp,
+                               const std::array<double, 3>& kd) {
+  for (int i = 0; i < 3; ++i) {
+    motors_[i].SetGains(kp[i], kd[i]);
+  }
+}
+
 void UnitreeLeg::SetFootTarget(const Position3d& pos, const Velocity3d& vel,
                                const Force3d& f) {
   JointPosition3d q = GetJointPosition(pos);
@@ -46,9 +53,9 @@ void UnitreeLeg::SetJointTarget(const JointPosition3d& q,
   }
 }
 
-std::unordered_map<int, UnitreeMotor::CmdMsg>
-UnitreeLeg::GetMotorCommandMsgs() {
-  std::unordered_map<int, UnitreeMotor::CmdMsg> msgs;
+std::vector<UnitreeMotor::CmdMsg> UnitreeLeg::GetMotorCommandMsgs() {
+  std::vector<UnitreeMotor::CmdMsg> msgs;
+  msgs.resize(3);
   for (int i = 0; i < 3; ++i) {
     msgs[i] = motors_[i].GetCommandMsg();
   }

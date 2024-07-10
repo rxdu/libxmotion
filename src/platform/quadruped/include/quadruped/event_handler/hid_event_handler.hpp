@@ -21,7 +21,7 @@
 namespace xmotion {
 class HidEventHandler final : public EventHandler {
  public:
-  explicit HidEventHandler(const HidConfig& config);
+  explicit HidEventHandler(const HidSettings& config);
 
   bool Initialize() override;
 
@@ -35,7 +35,7 @@ class HidEventHandler final : public EventHandler {
  private:
   void OnKeyEvent(KeyboardCode code, KeyboardEvent event);
 
-  HidConfig config_;
+  HidSettings config_;
   uint32_t queue_size_;
 
   std::unique_ptr<Keyboard> keyboard_;

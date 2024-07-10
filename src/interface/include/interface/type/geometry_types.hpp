@@ -11,6 +11,7 @@
 #define QUADRUPED_MOTION_GEOMETRY_TYPES_HPP
 
 #include <eigen3/Eigen/Geometry>
+#include <eigen3/Eigen/Dense>
 
 namespace xmotion {
 // workspace Cartesian coordinates
