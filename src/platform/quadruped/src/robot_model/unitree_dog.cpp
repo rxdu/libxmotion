@@ -40,7 +40,9 @@ uint32_t CalculateCrc32(uint32_t* ptr, uint32_t len) {
 }
 }  // namespace
 
-UnitreeDog::UnitreeDog(const std::string& network_interface,
+////////////////////////////////////////////////////////////////////////////////
+
+UnitreeDog::UnitreeDog(uint32_t domain_id, const std::string& network_interface,
                        const UnitreeModelProfile& profile)
     : network_interface_(network_interface), profile_(profile) {
   for (int i = 0; i < 4; i++) {
@@ -52,7 +54,7 @@ UnitreeDog::UnitreeDog(const std::string& network_interface,
   InitCommand();
 
   // initialize publisher/subscriber
-  ChannelFactory::Instance()->Init(0, network_interface_);
+  ChannelFactory::Instance()->Init(domain_id, network_interface_);
   cmd_pub_.reset(new ChannelPublisher<unitree_go::msg::dds_::LowCmd_>(
       low_level_cmd_topic));
   cmd_pub_->InitChannel();
@@ -98,21 +100,54 @@ void UnitreeDog::SetJointGains(const JointGains& gains) {
 
 void UnitreeDog::SetTargetState(const State& state) {
   // set target state
-  legs_[LegIndex::kFrontRight].SetJointTarget(state.q.segment<3>(0),
-                                              state.q_dot.segment<3>(0),
-                                              state.tau.segment<3>(0));
-  legs_[LegIndex::kFrontLeft].SetJointTarget(state.q.segment<3>(3),
-                                             state.q_dot.segment<3>(3),
-                                             state.tau.segment<3>(3));
-  legs_[LegIndex::kRearRight].SetJointTarget(state.q.segment<3>(6),
-                                             state.q_dot.segment<3>(6),
-                                             state.tau.segment<3>(6));
-  legs_[LegIndex::kRearLeft].SetJointTarget(state.q.segment<3>(9),
-                                            state.q_dot.segment<3>(9),
-                                            state.tau.segment<3>(9));
+  for (int i = 0; i < 4; i++) {
+    auto index = static_cast<LegIndex>(i);
+    legs_[index].SetJointTarget(state.q.segment<3>(i * 3),
+                                state.q_dot.segment<3>(i * 3),
+                                state.tau.segment<3>(i * 3));
+  }
 }
 
-void UnitreeDog::SendCommandToRobot() {}
+UnitreeDog::State UnitreeDog::GetEstimatedState() {
+  LowLevelState state_feedback;
+  {
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    state_feedback = state_;
+  }
+
+  State state;
+  state.q = Eigen::Matrix<double, 12, 1>::Zero();
+  state.q_dot = Eigen::Matrix<double, 12, 1>::Zero();
+  state.tau = Eigen::Matrix<double, 12, 1>::Zero();
+  for (int i = 0; i < 12; ++i) {
+    auto& motor_state = state_feedback.motor_state()[i];
+    state.q[i] = motor_state.q();
+    state.q_dot[i] = motor_state.dq();
+    state.tau[i] = motor_state.tau_est();
+    state.q_ddot[i] = motor_state.ddq();
+  }
+  return state;
+}
+
+void UnitreeDog::SendCommandToRobot() {
+  // update motor command
+  for (int i = 0; i < 4; i++) {
+    auto msgs = legs_[static_cast<LegIndex>(i)].GetMotorCommandMsgs();
+    cmd_.motor_cmd()[i * 3] = msgs[0];
+    cmd_.motor_cmd()[i * 3 + 1] = msgs[1];
+    cmd_.motor_cmd()[i * 3 + 2] = msgs[2];
+    //    std::cout << "Motor command of leg " << i << " : " << msgs[0].q() << "
+    //    "
+    //              << msgs[1].q() << " " << msgs[2].q() << std::endl;
+  }
+
+  // calculate crc32
+  cmd_.crc() = CalculateCrc32(
+      (uint32_t*)&cmd_, (sizeof(unitree_go::msg::dds_::LowCmd_) >> 2) - 1);
+
+  // send command
+  cmd_pub_->Write(cmd_);
+}
 
 void UnitreeDog::OnLowLevelStateMessageReceived(const void* message) {
   auto msg_ptr = static_cast<const unitree_go::msg::dds_::LowState_*>(message);

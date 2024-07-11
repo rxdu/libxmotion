@@ -24,22 +24,25 @@ enum class LegIndex : int {
 
 class QuadrupedModel {
  public:
+  using JointVar = Eigen::Matrix<double, 12, 1>;
+
   struct JointGains {
-    std::array<double, 12> kp;
-    std::array<double, 12> kd;
+    JointVar kp;
+    JointVar kd;
   };
 
-  using JointState = Eigen::Vector<double, 12>;
-
   struct State {
-    JointState q;
-    JointState q_dot;
-    JointState tau;
+    JointVar q;
+    JointVar q_dot;
+    JointVar tau;
+
+    JointVar q_ddot;
   };
 
  public:
   virtual void SetJointGains(const JointGains& gains) = 0;
   virtual void SetTargetState(const State& state) = 0;
+  virtual State GetEstimatedState() = 0;
   virtual void SendCommandToRobot() = 0;
 };
 }  // namespace xmotion

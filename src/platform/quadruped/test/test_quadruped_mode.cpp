@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
   std::cout << "Hello, Quadruped!" << std::endl;
 
   ControlContext context;
-  PassiveMode initial_state;
+  PassiveMode initial_state{context};
   ControlModeFsm fsm(std::move(initial_state), std::move(context));
 
   Timer timer;

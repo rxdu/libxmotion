@@ -35,11 +35,11 @@ bool QuadrupedSystem::Initialize() {
   // initialize estimator subsystem
 
   // initialize control subsystem
-  PassiveMode initial_state;
   ControlContext context;
   context.system_config = config_;
   context.robot_model = model_;
   context.hid_event_listener = hid_event_listener_;
+  PassiveMode initial_state{context};
   fsm_ = std::make_unique<ControlModeFsm>(std::move(initial_state),
                                           std::move(context));
   keep_control_loop_ = true;
@@ -56,7 +56,7 @@ void QuadrupedSystem::ControlSubsystem() {
     timer.reset();
     fsm_->Update();
     //    timer.sleep_until_us(2000);
-    timer.sleep_until_ms(1000);
+    timer.sleep_until_ms(2);
   }
   XLOG_INFO("QuadrupedSystem: control loop exited");
 }
@@ -73,12 +73,12 @@ void QuadrupedSystem::Run() {
   // start main loop for housekeeping
   XLOG_INFO("QuadrupedSystem: entering main loop");
   keep_running_ = true;
-  StopWatch sw;
+//  StopWatch sw;
   while (keep_running_) {
-    if (sw.stoc() > 3) {
-      XLOG_INFO("QuadrupedSystem: main loop running");
-      break;
-    }
+//    if (sw.stoc() > 3) {
+    //      XLOG_INFO("QuadrupedSystem: main loop running");
+    //      break;
+    //    }
     hid_event_listener_->PollEvents();
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }

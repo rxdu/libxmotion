@@ -35,11 +35,12 @@ class UnitreeDog : public QuadrupedModel {
   using LowLevelState = unitree_go::msg::dds_::LowState_;
 
  public:
-  explicit UnitreeDog(const std::string& network_interface,
-                      const UnitreeModelProfile& profile);
+  UnitreeDog(uint32_t domain_id, const std::string& network_interface,
+             const UnitreeModelProfile& profile);
 
   void SetJointGains(const JointGains& gains) override;
   void SetTargetState(const State& state) override;
+  State GetEstimatedState() override;
   void SendCommandToRobot() override;
 
  private:

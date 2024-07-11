@@ -19,6 +19,7 @@ namespace {
 std::unordered_map<std::string, HidSettings::KeyFunction> str_to_key_mapping = {
     {"passive_mode", HidSettings::KeyFunction::kPassiveMode},
     {"fixed_stand_mode", HidSettings::KeyFunction::kFixedStandMode},
+    {"lying_down_mode", HidSettings::KeyFunction::kLyingDownMode},
     {"free_stand_mode", HidSettings::KeyFunction::kFreeStandMode},
     {"trotting_mode", HidSettings::KeyFunction::kTrottingMode},
     {"move_base_mode", HidSettings::KeyFunction::kMoveBaseMode}};
@@ -77,6 +78,7 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
     // control settings
     /*------------------------------------------------------------------------*/
     for (int i = 0; i < 12; ++i) {
+      // passive mode
       config->ctrl_settings.passive_mode.joint_gains.kp[i] =
           config_node["control_settings"]["passive_mode"]["joint_gains"]
                      ["joint" + std::to_string(i)]["kp"]
@@ -85,8 +87,69 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
           config_node["control_settings"]["passive_mode"]["joint_gains"]
                      ["joint" + std::to_string(i)]["kd"]
                          .as<double>();
+
+      // fixed stand mode
+      config->ctrl_settings.fixed_stand_mode.joint_gains.kp[i] =
+          config_node["control_settings"]["fixed_stand_mode"]["joint_gains"]
+                     ["joint" + std::to_string(i)]["kp"]
+                         .as<double>();
+      config->ctrl_settings.fixed_stand_mode.joint_gains.kd[i] =
+          config_node["control_settings"]["fixed_stand_mode"]["joint_gains"]
+                     ["joint" + std::to_string(i)]["kd"]
+                         .as<double>();
+
+      // lying down mode
+      config->ctrl_settings.lying_down_mode.joint_gains.kp[i] =
+          config_node["control_settings"]["lying_down_mode"]["joint_gains"]
+                     ["joint" + std::to_string(i)]["kp"]
+                         .as<double>();
+      config->ctrl_settings.lying_down_mode.joint_gains.kd[i] =
+          config_node["control_settings"]["lying_down_mode"]["joint_gains"]
+                     ["joint" + std::to_string(i)]["kd"]
+                         .as<double>();
     }
 
+    // fixed stand mode desired joint position
+    {
+      std::vector<double> q_desired =
+          config_node["control_settings"]["fixed_stand_mode"]["q_desired"]
+              .as<std::vector<double>>();
+      if (q_desired.size() != 12) {
+        XLOG_ERROR(
+            "ConfigLoader: fixed stand mode desired joint position size "
+            "mismatch");
+        return false;
+      }
+      for (size_t i = 0; i < q_desired.size(); ++i) {
+        config->ctrl_settings.fixed_stand_mode.desired_joint_position(i) =
+            q_desired[i];
+      }
+
+      config->ctrl_settings.fixed_stand_mode.duration_ms =
+          config_node["control_settings"]["fixed_stand_mode"]["duration_ms"]
+              .as<uint32_t>();
+    }
+
+    // lying down mode desired joint position
+    {
+      std::vector<double> q_desired =
+          config_node["control_settings"]["lying_down_mode"]["q_desired"]
+              .as<std::vector<double>>();
+      if (q_desired.size() != 12) {
+        XLOG_ERROR(
+            "ConfigLoader: lying down mode desired joint position size "
+            "mismatch");
+        return false;
+      }
+      for (size_t i = 0; i < q_desired.size(); ++i) {
+        config->ctrl_settings.lying_down_mode.desired_joint_position(i) =
+            q_desired[i];
+      }
+
+      config->ctrl_settings.lying_down_mode.duration_ms =
+          config_node["control_settings"]["lying_down_mode"]["duration_ms"]
+              .as<uint32_t>();
+    }
   } catch (YAML::BadFile &e) {
     XLOG_ERROR("ConfigLoader: failed to open config file {}: {}", file_path,
                e.what());

@@ -20,6 +20,7 @@ struct HidSettings {
   enum class KeyFunction : int {
     kPassiveMode = 0,
     kFixedStandMode,
+    kLyingDownMode,
     kFreeStandMode,
     kTrottingMode,
     kMoveBaseMode,
@@ -44,6 +45,18 @@ struct ControlSettings {
   struct PassiveModeParams {
     QuadrupedModel::JointGains joint_gains;
   } passive_mode;
+
+  struct FixedStandModeParams {
+    QuadrupedModel::JointGains joint_gains;
+    QuadrupedModel::JointVar desired_joint_position;
+    uint32_t duration_ms;
+  } fixed_stand_mode;
+
+  struct LyingDownModeParams {
+    QuadrupedModel::JointGains joint_gains;
+    QuadrupedModel::JointVar desired_joint_position;
+    uint32_t duration_ms;
+  } lying_down_mode;
 };
 
 struct SystemConfig {

@@ -14,8 +14,38 @@
 namespace xmotion {
 OptionalStateVariant ModeTransition::Transit(FixedStandMode &state,
                                              ControlContext &context) {
-  return FixedStandMode{};
-  // return std::nullopt;
+  auto config = context.system_config;
+  auto listener = context.hid_event_listener;
+  auto key_event = listener->TryPopKeyboardEvent();
+  if (key_event.has_value()) {
+    if (config.hid_settings.keyboard
+            .keyboard_mappings[key_event->GetKeyCode()] ==
+        HidSettings::KeyFunction::kLyingDownMode) {
+      return LyingDownMode{context};
+    }
+    XLOG_DEBUG("Keycode: {}", static_cast<int>(key_event->GetKeyCode()));
+  }
+  return std::nullopt;
+}
+
+OptionalStateVariant ModeTransition::Transit(LyingDownMode &state,
+                                             ControlContext &context) {
+  auto config = context.system_config;
+  auto listener = context.hid_event_listener;
+  auto key_event = listener->TryPopKeyboardEvent();
+  if (key_event.has_value()) {
+    if (config.hid_settings.keyboard
+            .keyboard_mappings[key_event->GetKeyCode()] ==
+        HidSettings::KeyFunction::kPassiveMode) {
+      return PassiveMode{context};
+    } else if (config.hid_settings.keyboard
+                   .keyboard_mappings[key_event->GetKeyCode()] ==
+               HidSettings::KeyFunction::kFixedStandMode) {
+      return FixedStandMode{context};
+    }
+    XLOG_DEBUG("Keycode: {}", static_cast<int>(key_event->GetKeyCode()));
+  }
+  return std::nullopt;
 }
 
 OptionalStateVariant ModeTransition::Transit(FreeStandMode &state,
@@ -26,7 +56,7 @@ OptionalStateVariant ModeTransition::Transit(FreeStandMode &state,
 
 OptionalStateVariant ModeTransition::Transit(MoveBaseMode &state,
                                              ControlContext &context) {
-  return PassiveMode{};
+  return PassiveMode{context};
   // return std::nullopt;
 }
 
@@ -37,14 +67,13 @@ OptionalStateVariant ModeTransition::Transit(PassiveMode &state,
   auto listener = context.hid_event_listener;
   auto key_event = listener->TryPopKeyboardEvent();
   if (key_event.has_value()) {
-    if (config.hid_settings.keyboard.keyboard_mappings[key_event->GetKeyCode()] ==
+    if (config.hid_settings.keyboard
+            .keyboard_mappings[key_event->GetKeyCode()] ==
         HidSettings::KeyFunction::kFixedStandMode) {
-      XLOG_INFO("---------> Switch to FixedStandMode");
-      return FixedStandMode{};
+      return FixedStandMode{context};
     }
-    XLOG_INFO("Keycode: {}", static_cast<int>(key_event->GetKeyCode()));
+    XLOG_DEBUG("Keycode: {}", static_cast<int>(key_event->GetKeyCode()));
   }
-  XLOG_INFO("NO TRANSITION");
   return std::nullopt;
 }
 

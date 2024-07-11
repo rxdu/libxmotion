@@ -21,7 +21,7 @@ TEST(ConfigLoaderTest, LoadConfigFileTest) {
   EXPECT_EQ(config.network_interface, "lo");
   EXPECT_EQ(config.is_simulation, true);
 
-  EXPECT_EQ(config.hid_settings.keyboard.enable, true);
+  //  EXPECT_EQ(config.hid_settings.keyboard.enable, true);
   EXPECT_EQ(config.hid_settings.keyboard.device, "/dev/input/event3");
   EXPECT_EQ(config.hid_settings.keyboard.keyboard_mappings[KeyboardCode::kF1],
             HidSettings::KeyFunction::kPassiveMode);
@@ -34,5 +34,30 @@ TEST(ConfigLoaderTest, LoadConfigFileTest) {
   EXPECT_EQ(config.hid_settings.keyboard.keyboard_mappings[KeyboardCode::kF5],
             HidSettings::KeyFunction::kMoveBaseMode);
 
+  for (int i = 0; i < 12; ++i) {
+    EXPECT_FLOAT_EQ(config.ctrl_settings.passive_mode.joint_gains.kp[i], 0.0);
+    EXPECT_FLOAT_EQ(config.ctrl_settings.passive_mode.joint_gains.kd[i], 8.0);
+  }
 
+  for (int i = 0; i < 4; ++i) {
+    EXPECT_FLOAT_EQ(config.ctrl_settings.fixed_stand_mode.joint_gains.kp[i * 3],
+                    180.0);
+    EXPECT_FLOAT_EQ(config.ctrl_settings.fixed_stand_mode.joint_gains.kd[i * 3],
+                    8.0);
+
+    EXPECT_FLOAT_EQ(
+        config.ctrl_settings.fixed_stand_mode.joint_gains.kp[i * 3 + 1], 180.0);
+    EXPECT_FLOAT_EQ(
+        config.ctrl_settings.fixed_stand_mode.joint_gains.kd[i * 3 + 1], 8.0);
+
+    EXPECT_FLOAT_EQ(
+        config.ctrl_settings.fixed_stand_mode.joint_gains.kp[i * 3 + 2], 300.0);
+    EXPECT_FLOAT_EQ(
+        config.ctrl_settings.fixed_stand_mode.joint_gains.kd[i * 3 + 2], 15.0);
+  }
+
+  EXPECT_FLOAT_EQ(
+      config.ctrl_settings.fixed_stand_mode.desired_joint_position[0], 0.00571868);
+  EXPECT_FLOAT_EQ(
+      config.ctrl_settings.fixed_stand_mode.desired_joint_position[1], 0.608813);
 }

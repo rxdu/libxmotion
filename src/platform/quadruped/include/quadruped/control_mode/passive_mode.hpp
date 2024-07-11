@@ -15,10 +15,13 @@
 namespace xmotion {
 class PassiveMode : public FsmState<ControlContext> {
  public:
-  PassiveMode();
+  PassiveMode(const ControlContext& context);
   ~PassiveMode() = default;
 
-  void Update(ControlContext &context) override;
+  void Update(ControlContext& context) override;
+
+ private:
+  QuadrupedModel::State target_state_;
 };
 }  // namespace xmotion
 

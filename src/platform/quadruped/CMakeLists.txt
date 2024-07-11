@@ -17,6 +17,7 @@ add_library(quadruped
     # controllers
     src/control_mode_fsm.cpp
     src/control_mode/fixed_stand_mode.cpp
+    src/control_mode/lying_down_mode.cpp
     src/control_mode/free_stand_mode.cpp
     src/control_mode/move_base_mode.cpp
     src/control_mode/passive_mode.cpp

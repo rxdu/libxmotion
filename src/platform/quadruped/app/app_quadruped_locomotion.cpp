@@ -52,7 +52,8 @@ int main(int argc, char **argv) {
   XLOG_INFO("Loaded configuration file {}", config_file_path);
 
   // create a robot model
-  auto dog_model = std::make_shared<UnitreeDog>(config.network_interface,
+  auto dog_model = std::make_shared<UnitreeDog>(config.dds_domain_id,
+                                                config.network_interface,
                                                 UnitreeDogs::GetGo2Profile());
 
   // create a quadruped system and initialize the components
