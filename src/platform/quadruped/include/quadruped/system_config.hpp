@@ -20,7 +20,7 @@ struct HidSettings {
   enum class KeyFunction : int {
     kPassiveMode = 0,
     kFixedStandMode,
-    kLyingDownMode,
+    kSwingTestMode,
     kFreeStandMode,
     kTrottingMode,
     kMoveBaseMode,

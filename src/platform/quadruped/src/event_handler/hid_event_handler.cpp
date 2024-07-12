@@ -63,8 +63,8 @@ void HidEventHandler::PollEvents() {
 void HidEventHandler::OnKeyEvent(KeyboardCode code, KeyboardEvent event) {
   //  XLOG_INFO("Key {} {}", Keyboard::GetKeyName(code),
   //            (event == KeyboardEvent::kPress ? "pressed" : "released"));
-  kb_event_queue_.Push(HidEvent{code});
-//  XLOG_INFO("Key event pushed to queue");
+  if (event == KeyboardEvent::kPress) kb_event_queue_.Push(HidEvent{code});
+  //  XLOG_INFO("Key event pushed to queue");
 }
 
 std::optional<HidEvent> HidEventHandler::TryPopJoystickEvent() {

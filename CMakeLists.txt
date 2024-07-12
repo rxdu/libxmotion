@@ -84,7 +84,7 @@ if (ENABLE_LOGGING)
   message("-- Enable logging with spdlog -- Yes")
   message("-- Default log file storage location: ~/.xmotion/log")
 else (ENABLE_LOGGING)
-  message("-- Enable logging with spdlog -- No")
+  message("-- Disable logging with spdlog")
 endif (ENABLE_LOGGING)
 
 ## Enable test if requested

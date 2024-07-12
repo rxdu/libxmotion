@@ -68,8 +68,5 @@ int main(int argc, char **argv) {
 
   XLOG_INFO("Quadruped Locomotion Application Exited");
 
-  spdlog::drop_all();
-  spdlog::shutdown();
-
   return 0;
 }
