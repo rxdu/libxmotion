@@ -34,7 +34,7 @@ class UnitreeLeg {
   UnitreeLeg() = default;
   UnitreeLeg(const UnitreeModelProfile& profile, LegIndex index);
 
-  // commands
+  // control interface
   void Enable();
   void Disable();
   void SetJointGains(const std::array<double, 3>& kp,
@@ -57,7 +57,7 @@ class UnitreeLeg {
   JointVelocity3d GetJointVelocityQ(const JointPosition3d& q,
                                     const Velocity3d& vel) const;
 
-  // force/torque calculation
+  // quasi-static torque calculation
   Torque3d GetJointTorque(const Position3d& pos, const Force3d& f) const;
   Torque3d GetJointTorqueQ(const JointPosition3d& q, const Force3d& f) const;
 

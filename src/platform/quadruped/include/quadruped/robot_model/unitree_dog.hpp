@@ -38,12 +38,16 @@ class UnitreeDog : public QuadrupedModel {
   UnitreeDog(uint32_t domain_id, const std::string& network_interface,
              const UnitreeModelProfile& profile);
 
+  // QuadrupedModel: control interface
   void SetJointGains(const JointGains& gains) override;
   void SetTargetState(const State& state) override;
-  State GetEstimatedState() override;
   void SendCommandToRobot() override;
 
+  // QuadrupedModel: estimator interface
+  State GetEstimatedState() override;
+
  private:
+  // unitree-specific implementation details
   void InitCommand();
   void OnLowLevelStateMessageReceived(const void* message);
 
