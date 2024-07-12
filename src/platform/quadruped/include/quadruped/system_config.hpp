@@ -11,6 +11,7 @@
 #define QUADRUPED_MOTION_SYSTEM_CONFIG_HPP
 
 #include <string>
+#include <unordered_map>
 
 #include "interface/driver/keyboard_interface.hpp"
 #include "quadruped/robot_model/quadruped_model.hpp"
@@ -42,21 +43,27 @@ struct HidSettings {
 };
 
 struct ControlSettings {
+  std::unordered_map<std::string, QuadrupedModel::JointGains> gain_sets;
+
   struct PassiveModeParams {
-    QuadrupedModel::JointGains joint_gains;
+    QuadrupedModel::JointGains default_joint_gains;
   } passive_mode;
 
   struct FixedStandModeParams {
-    QuadrupedModel::JointGains joint_gains;
+    QuadrupedModel::JointGains default_joint_gains;
     QuadrupedModel::JointVar desired_joint_position;
     uint32_t duration_ms;
   } fixed_stand_mode;
 
   struct LyingDownModeParams {
-    QuadrupedModel::JointGains joint_gains;
+    QuadrupedModel::JointGains default_joint_gains;
     QuadrupedModel::JointVar desired_joint_position;
     uint32_t duration_ms;
   } lying_down_mode;
+
+  struct SwingTestModeParams {
+    QuadrupedModel::JointGains default_joint_gains;
+  } swing_test_mode;
 };
 
 struct SystemConfig {

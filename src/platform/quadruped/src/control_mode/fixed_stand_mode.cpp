@@ -16,12 +16,10 @@
 namespace xmotion {
 FixedStandMode::FixedStandMode(const ControlContext& context) {
   XLOG_INFO("==> Switched to FixedStandMode");
-  auto fixed_stand_mode_gains =
-      context.system_config.ctrl_settings.fixed_stand_mode.joint_gains;
-  desired_gains_.kp = fixed_stand_mode_gains.kp;
-  desired_gains_.kd = fixed_stand_mode_gains.kd;
-  context.robot_model->SetJointGains(desired_gains_);
   
+  context.robot_model->SetJointGains(
+      context.system_config.ctrl_settings.fixed_stand_mode.default_joint_gains);
+
   auto target_pos = context.system_config.ctrl_settings.fixed_stand_mode
                         .desired_joint_position;
   target_state_.q = target_pos;

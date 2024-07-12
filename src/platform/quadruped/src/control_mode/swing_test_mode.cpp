@@ -14,6 +14,8 @@
 namespace xmotion {
 SwingTestMode::SwingTestMode(const ControlContext& context) {
   XLOG_INFO("==> Switched to SwingTestMode");
+
+
 }
 
 void SwingTestMode::Update(ControlContext& context) {}

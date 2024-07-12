@@ -17,19 +17,15 @@ namespace xmotion {
 LyingDownMode::LyingDownMode(const ControlContext& context) {
   XLOG_INFO("==> Switched to LyingDownMode");
 
-  auto desired_gains =
-      context.system_config.ctrl_settings.lying_down_mode.joint_gains;
-  context.robot_model->SetJointGains(desired_gains);
-
-  //  std::cout << "kp: " << desired_gains.kp.transpose() << std::endl;
-  //  std::cout << "kd: " << desired_gains.kd.transpose() << std::endl;
+  context.robot_model->SetJointGains(
+      context.system_config.ctrl_settings.lying_down_mode.default_joint_gains);
 
   auto target_pos = context.system_config.ctrl_settings.lying_down_mode
                         .desired_joint_position;
   target_state_.q = target_pos;
   target_state_.q_dot = QuadrupedModel::JointVar::Zero();
   target_state_.tau = QuadrupedModel::JointVar::Zero();
-  
+
   auto current_state = context.robot_model->GetEstimatedState();
   for (int i = 0; i < 12; i++) {
     initial_state_.q[i] = current_state.q[i];

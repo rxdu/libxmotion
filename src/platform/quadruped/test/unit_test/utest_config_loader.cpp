@@ -28,36 +28,48 @@ TEST(ConfigLoaderTest, LoadConfigFileTest) {
   EXPECT_EQ(config.hid_settings.keyboard.keyboard_mappings[KeyboardCode::kF2],
             HidSettings::KeyFunction::kFixedStandMode);
   EXPECT_EQ(config.hid_settings.keyboard.keyboard_mappings[KeyboardCode::kF3],
-            HidSettings::KeyFunction::kFreeStandMode);
+            HidSettings::KeyFunction::kSwingTestMode);
   EXPECT_EQ(config.hid_settings.keyboard.keyboard_mappings[KeyboardCode::kF4],
-            HidSettings::KeyFunction::kTrottingMode);
+            HidSettings::KeyFunction::kFreeStandMode);
   EXPECT_EQ(config.hid_settings.keyboard.keyboard_mappings[KeyboardCode::kF5],
+            HidSettings::KeyFunction::kTrottingMode);
+  EXPECT_EQ(config.hid_settings.keyboard.keyboard_mappings[KeyboardCode::kF6],
             HidSettings::KeyFunction::kMoveBaseMode);
 
   for (int i = 0; i < 12; ++i) {
-    EXPECT_FLOAT_EQ(config.ctrl_settings.passive_mode.joint_gains.kp[i], 0.0);
-    EXPECT_FLOAT_EQ(config.ctrl_settings.passive_mode.joint_gains.kd[i], 8.0);
+    EXPECT_FLOAT_EQ(config.ctrl_settings.passive_mode.default_joint_gains.kp[i],
+                    0.0);
+    EXPECT_FLOAT_EQ(config.ctrl_settings.passive_mode.default_joint_gains.kd[i],
+                    8.0);
   }
 
   for (int i = 0; i < 4; ++i) {
-    EXPECT_FLOAT_EQ(config.ctrl_settings.fixed_stand_mode.joint_gains.kp[i * 3],
-                    180.0);
-    EXPECT_FLOAT_EQ(config.ctrl_settings.fixed_stand_mode.joint_gains.kd[i * 3],
-                    8.0);
+    EXPECT_FLOAT_EQ(
+        config.ctrl_settings.fixed_stand_mode.default_joint_gains.kp[i * 3],
+        80.0);
+    EXPECT_FLOAT_EQ(
+        config.ctrl_settings.fixed_stand_mode.default_joint_gains.kd[i * 3],
+        3.5);
 
     EXPECT_FLOAT_EQ(
-        config.ctrl_settings.fixed_stand_mode.joint_gains.kp[i * 3 + 1], 180.0);
+        config.ctrl_settings.fixed_stand_mode.default_joint_gains.kp[i * 3 + 1],
+        80.0);
     EXPECT_FLOAT_EQ(
-        config.ctrl_settings.fixed_stand_mode.joint_gains.kd[i * 3 + 1], 8.0);
+        config.ctrl_settings.fixed_stand_mode.default_joint_gains.kd[i * 3 + 1],
+        3.5);
 
     EXPECT_FLOAT_EQ(
-        config.ctrl_settings.fixed_stand_mode.joint_gains.kp[i * 3 + 2], 300.0);
+        config.ctrl_settings.fixed_stand_mode.default_joint_gains.kp[i * 3 + 2],
+        80.0);
     EXPECT_FLOAT_EQ(
-        config.ctrl_settings.fixed_stand_mode.joint_gains.kd[i * 3 + 2], 15.0);
+        config.ctrl_settings.fixed_stand_mode.default_joint_gains.kd[i * 3 + 2],
+        3.5);
   }
 
   EXPECT_FLOAT_EQ(
-      config.ctrl_settings.fixed_stand_mode.desired_joint_position[0], 0.00571868);
+      config.ctrl_settings.fixed_stand_mode.desired_joint_position[0],
+      0.00571868);
   EXPECT_FLOAT_EQ(
-      config.ctrl_settings.fixed_stand_mode.desired_joint_position[1], 0.608813);
+      config.ctrl_settings.fixed_stand_mode.desired_joint_position[1],
+      0.608813);
 }

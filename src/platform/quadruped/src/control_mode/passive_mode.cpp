@@ -14,20 +14,12 @@
 namespace xmotion {
 PassiveMode::PassiveMode(const ControlContext& context) {
   XLOG_INFO("==> Switched to PassiveMode");
-  QuadrupedModel::JointGains joint_gains;
-  auto passive_mode_gains =
-      context.system_config.ctrl_settings.passive_mode.joint_gains;
-  for (int i = 0; i < 12; ++i) {
-    joint_gains.kp[i] = passive_mode_gains.kp[0];
-    joint_gains.kd[i] = passive_mode_gains.kd[0];
-    //    XLOG_INFO("Joint {} kp: {}, kd: {}", i, joint_gains.kp[i],
-    //              joint_gains.kd[i]);
+  context.robot_model->SetJointGains(
+      context.system_config.ctrl_settings.passive_mode.default_joint_gains);
 
-    target_state_.q[i] = 0;
-    target_state_.q_dot[i] = 0;
-    target_state_.tau[i] = 0;
-  }
-  context.robot_model->SetJointGains(joint_gains);
+  target_state_.q = QuadrupedModel::JointVar::Zero();
+  target_state_.q_dot = QuadrupedModel::JointVar::Zero();
+  target_state_.tau = QuadrupedModel::JointVar::Zero();
   context.robot_model->SetTargetState(target_state_);
 }
 

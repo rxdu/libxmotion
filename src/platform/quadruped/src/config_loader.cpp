@@ -77,40 +77,49 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
     /*------------------------------------------------------------------------*/
     // control settings
     /*------------------------------------------------------------------------*/
-    for (int i = 0; i < 12; ++i) {
-      // passive mode
-      config->ctrl_settings.passive_mode.joint_gains.kp[i] =
-          config_node["control_settings"]["passive_mode"]["joint_gains"]
-                     ["joint" + std::to_string(i)]["kp"]
-                         .as<double>();
-      config->ctrl_settings.passive_mode.joint_gains.kd[i] =
-          config_node["control_settings"]["passive_mode"]["joint_gains"]
-                     ["joint" + std::to_string(i)]["kd"]
-                         .as<double>();
+    for (auto it = config_node["control_settings"]["gain_sets"].begin();
+         it != config_node["control_settings"]["gain_sets"].end(); ++it) {
+      QuadrupedModel::JointGains gains;
+      for (int i = 0; i < 12; ++i) {
+        gains.kp[i] =
+            it->second["joint" + std::to_string(i)]["kp"].as<double>();
+        gains.kd[i] =
+            it->second["joint" + std::to_string(i)]["kd"].as<double>();
+      }
+      config->ctrl_settings.gain_sets[it->first.as<std::string>()] = gains;
+    }
 
-      // fixed stand mode
-      config->ctrl_settings.fixed_stand_mode.joint_gains.kp[i] =
-          config_node["control_settings"]["fixed_stand_mode"]["joint_gains"]
-                     ["joint" + std::to_string(i)]["kp"]
-                         .as<double>();
-      config->ctrl_settings.fixed_stand_mode.joint_gains.kd[i] =
-          config_node["control_settings"]["fixed_stand_mode"]["joint_gains"]
-                     ["joint" + std::to_string(i)]["kd"]
-                         .as<double>();
-
-      // lying down mode
-      config->ctrl_settings.lying_down_mode.joint_gains.kp[i] =
-          config_node["control_settings"]["lying_down_mode"]["joint_gains"]
-                     ["joint" + std::to_string(i)]["kp"]
-                         .as<double>();
-      config->ctrl_settings.lying_down_mode.joint_gains.kd[i] =
-          config_node["control_settings"]["lying_down_mode"]["joint_gains"]
-                     ["joint" + std::to_string(i)]["kd"]
-                         .as<double>();
+    // passive mode default joint gains
+    {
+      std::string gain_set_name =
+          config_node["control_settings"]["passive_mode"]["default_joint_gains"]
+              .as<std::string>();
+      if (config->ctrl_settings.gain_sets.find(gain_set_name) ==
+          config->ctrl_settings.gain_sets.end()) {
+        XLOG_ERROR("ConfigLoader: passive mode default gain set not found: {}",
+                   gain_set_name);
+        return false;
+      }
+      config->ctrl_settings.passive_mode.default_joint_gains =
+          config->ctrl_settings.gain_sets[gain_set_name];
     }
 
     // fixed stand mode desired joint position
     {
+      std::string gain_set_name =
+          config_node["control_settings"]["fixed_stand_mode"]
+                     ["default_joint_gains"]
+                         .as<std::string>();
+      if (config->ctrl_settings.gain_sets.find(gain_set_name) ==
+          config->ctrl_settings.gain_sets.end()) {
+        XLOG_ERROR(
+            "ConfigLoader: fixed stand mode default gain set not found: {}",
+            gain_set_name);
+        return false;
+      }
+      config->ctrl_settings.fixed_stand_mode.default_joint_gains =
+          config->ctrl_settings.gain_sets[gain_set_name];
+
       std::vector<double> q_desired =
           config_node["control_settings"]["fixed_stand_mode"]["q_desired"]
               .as<std::vector<double>>();
@@ -132,6 +141,20 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
 
     // lying down mode desired joint position
     {
+      std::string gain_set_name =
+          config_node["control_settings"]["lying_down_mode"]
+                     ["default_joint_gains"]
+                         .as<std::string>();
+      if (config->ctrl_settings.gain_sets.find(gain_set_name) ==
+          config->ctrl_settings.gain_sets.end()) {
+        XLOG_ERROR(
+            "ConfigLoader: fixed stand mode default gain set not found: {}",
+            gain_set_name);
+        return false;
+      }
+      config->ctrl_settings.lying_down_mode.default_joint_gains =
+          config->ctrl_settings.gain_sets[gain_set_name];
+
       std::vector<double> q_desired =
           config_node["control_settings"]["lying_down_mode"]["q_desired"]
               .as<std::vector<double>>();
@@ -149,6 +172,23 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
       config->ctrl_settings.lying_down_mode.duration_ms =
           config_node["control_settings"]["lying_down_mode"]["duration_ms"]
               .as<uint32_t>();
+    }
+
+    // swing test mode default joint gains
+    {
+      std::string gain_set_name =
+          config_node["control_settings"]["swing_test_mode"]
+                     ["default_joint_gains"]
+                         .as<std::string>();
+      if (config->ctrl_settings.gain_sets.find(gain_set_name) ==
+          config->ctrl_settings.gain_sets.end()) {
+        XLOG_ERROR(
+            "ConfigLoader: swing test mode default gain set not found: {}",
+            gain_set_name);
+        return false;
+      }
+      config->ctrl_settings.swing_test_mode.default_joint_gains =
+          config->ctrl_settings.gain_sets[gain_set_name];
     }
   } catch (YAML::BadFile &e) {
     XLOG_ERROR("ConfigLoader: failed to open config file {}: {}", file_path,
