@@ -73,9 +73,9 @@ void QuadrupedSystem::Run() {
   // start main loop for housekeeping
   XLOG_INFO("QuadrupedSystem: entering main loop");
   keep_running_ = true;
-//  StopWatch sw;
+  //  StopWatch sw;
   while (keep_running_) {
-//    if (sw.stoc() > 3) {
+    //    if (sw.stoc() > 3) {
     //      XLOG_INFO("QuadrupedSystem: main loop running");
     //      break;
     //    }
@@ -86,7 +86,7 @@ void QuadrupedSystem::Run() {
 }
 
 void QuadrupedSystem::Stop() {
-  XLOG_INFO("Stopping QuadrupedSystem");
+  // DO NOT CALL ANY XLOG HERE AS A SIGNAL HAVE BEEN TRIGGERED
 
   // wait for control thread to finish
   keep_control_loop_ = false;
