@@ -23,6 +23,7 @@ class LyingDownMode : public FsmState<ControlContext> {
   StopWatch sw_;
   QuadrupedModel::State initial_state_;
   QuadrupedModel::State target_state_;
+  QuadrupedModel::Command joint_cmd_;
 };
 }  // namespace xmotion
 

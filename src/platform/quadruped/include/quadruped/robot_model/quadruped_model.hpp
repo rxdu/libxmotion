@@ -24,25 +24,64 @@ enum class LegIndex : int {
 
 class QuadrupedModel {
  public:
-  using JointVar = Eigen::Matrix<double, 12, 1>;
+  using LegJointVar = Eigen::Matrix<double, 3, 1>;
+  using AllJointVar = Eigen::Matrix<double, 12, 1>;
 
-  struct JointGains {
-    JointVar kp;
-    JointVar kd;
+  struct LegJointGains {
+    LegJointVar kp;
+    LegJointVar kd;
+  };
+
+  struct AllJointGains {
+    AllJointVar kp;
+    AllJointVar kd;
   };
 
   struct State {
-    JointVar q;
-    JointVar q_dot;
-    JointVar tau;
-
-    JointVar q_ddot;
+    AllJointVar q;
+    AllJointVar q_dot;
+    AllJointVar tau;
+    AllJointVar q_ddot;
   };
 
+  struct Command {
+    AllJointVar q;
+    AllJointVar q_dot;
+    AllJointVar tau;
+  };
+
+  enum class RefFrame { kBase = 0, kLeg };
+
  public:
-  virtual void SetJointGains(const JointGains& gains) = 0;
-  virtual void SetTargetState(const State& state) = 0;
+  // estimator
+  // TODO (rdu): estimated state should be from a state estimator
   virtual State GetEstimatedState() = 0;
+
+  // kinematics
+  virtual Position3d GetFootPosition(LegIndex leg_index,
+                                     const JointPosition3d& q,
+                                     RefFrame frame) const = 0;
+  virtual Velocity3d GetFootVelocity(LegIndex leg_index,
+                                     const JointPosition3d& q,
+                                     const JointVelocity3d& q_dot) const = 0;
+  virtual JointPosition3d GetJointPosition(LegIndex leg_index,
+                                           const Position3d& pos) const = 0;
+  virtual JointVelocity3d GetJointVelocity(LegIndex leg_index,
+                                           const Position3d& pos,
+                                           const Velocity3d& vel) const = 0;
+  virtual JointVelocity3d GetJointVelocityQ(LegIndex leg_index,
+                                            const JointPosition3d& q,
+                                            const Velocity3d& vel) const = 0;
+
+  // dynamics
+  virtual Torque3d GetJointTorque(LegIndex leg_index, const Position3d& pos,
+                                  const Force3d& f) const = 0;
+  virtual Torque3d GetJointTorqueQ(LegIndex leg_index, const JointPosition3d& q,
+                                   const Force3d& f) const = 0;
+
+  // control interface
+  virtual void SetJointGains(const AllJointGains& gains) = 0;
+  virtual void SetJointCommand(const Command& cmd) = 0;
   virtual void SendCommandToRobot() = 0;
 };
 }  // namespace xmotion

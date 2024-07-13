@@ -17,10 +17,10 @@ PassiveMode::PassiveMode(const ControlContext& context) {
   context.robot_model->SetJointGains(
       context.system_config.ctrl_settings.passive_mode.default_joint_gains);
 
-  target_state_.q = QuadrupedModel::JointVar::Zero();
-  target_state_.q_dot = QuadrupedModel::JointVar::Zero();
-  target_state_.tau = QuadrupedModel::JointVar::Zero();
-  context.robot_model->SetTargetState(target_state_);
+  joint_cmd_.q = QuadrupedModel::AllJointVar::Zero();
+  joint_cmd_.q_dot = QuadrupedModel::AllJointVar::Zero();
+  joint_cmd_.tau = QuadrupedModel::AllJointVar::Zero();
+  context.robot_model->SetJointCommand(joint_cmd_);
 }
 
 void PassiveMode::Update(ControlContext& context) {

@@ -14,6 +14,8 @@
 
 namespace xmotion {
 class SwingTestMode : public FsmState<ControlContext> {
+  enum class Axis { kX, kY, kZ };
+
  public:
   SwingTestMode(const ControlContext &context);
   ~SwingTestMode() = default;
@@ -22,8 +24,16 @@ class SwingTestMode : public FsmState<ControlContext> {
 
  private:
   void HandleKeyboardInput(ControlContext &context);
+  void UpdateTargetFootPosition(Axis axis, double delta);
 
-  QuadrupedModel::State target_state_;
+  LegIndex swing_leg_;
+  double move_step_;
+  ControlSettings::SwingTestModeParams::ChangeLimit change_limit_;
+  Position3d initial_position_;
+  Position3d target_position_;
+  Eigen::Matrix<double, 3, 3> kp_;
+  Eigen::Matrix<double, 3, 3> kd_;
+  QuadrupedModel::Command joint_cmd_;
 };
 }  // namespace xmotion
 

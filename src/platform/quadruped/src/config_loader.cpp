@@ -87,7 +87,7 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
     /*------------------------------------------------------------------------*/
     for (auto it = config_node["control_settings"]["gain_sets"].begin();
          it != config_node["control_settings"]["gain_sets"].end(); ++it) {
-      QuadrupedModel::JointGains gains;
+      QuadrupedModel::AllJointGains gains;
       for (int i = 0; i < 12; ++i) {
         gains.kp[i] =
             it->second["joint" + std::to_string(i)]["kp"].as<double>();
@@ -203,6 +203,19 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
           config_node["control_settings"]["swing_test_mode"]["swing_leg_index"]
               .as<int>());
 
+      QuadrupedModel::LegJointGains leg_gains;
+      for (int i = 0; i < 3; ++i) {
+        leg_gains.kp[i] =
+            config_node["control_settings"]["swing_test_mode"]
+                       ["swing_leg_gains"]["joint_s_" + std::to_string(i)]["kp"]
+                           .as<double>();
+        leg_gains.kd[i] =
+            config_node["control_settings"]["swing_test_mode"]
+                       ["swing_leg_gains"]["joint_s_" + std::to_string(i)]["kd"]
+                           .as<double>();
+      }
+      config->ctrl_settings.swing_test_mode.swing_leg_gains = leg_gains;
+
       std::vector<double> kp =
           config_node["control_settings"]["swing_test_mode"]["kp"]
               .as<std::vector<double>>();
@@ -218,23 +231,33 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
         config->ctrl_settings.swing_test_mode.kd(i) = kd[i];
       }
 
-      config->ctrl_settings.swing_test_mode.range.x_min =
-          config_node["control_settings"]["swing_test_mode"]["range"]["x_min"]
-              .as<double>();
-      config->ctrl_settings.swing_test_mode.range.x_max =
-          config_node["control_settings"]["swing_test_mode"]["range"]["x_max"]
-              .as<double>();
-      config->ctrl_settings.swing_test_mode.range.y_min =
-          config_node["control_settings"]["swing_test_mode"]["range"]["y_min"]
-              .as<double>();
-      config->ctrl_settings.swing_test_mode.range.y_max =
-          config_node["control_settings"]["swing_test_mode"]["range"]["y_max"]
-              .as<double>();
-      config->ctrl_settings.swing_test_mode.range.z_min =
-          config_node["control_settings"]["swing_test_mode"]["range"]["z_min"]
-              .as<double>();
-      config->ctrl_settings.swing_test_mode.range.z_max =
-          config_node["control_settings"]["swing_test_mode"]["range"]["z_max"]
+      config->ctrl_settings.swing_test_mode.change_limit.x_min =
+          config_node["control_settings"]["swing_test_mode"]["change_limit"]
+                     ["x_min"]
+                         .as<double>();
+      config->ctrl_settings.swing_test_mode.change_limit.x_max =
+          config_node["control_settings"]["swing_test_mode"]["change_limit"]
+                     ["x_max"]
+                         .as<double>();
+      config->ctrl_settings.swing_test_mode.change_limit.y_min =
+          config_node["control_settings"]["swing_test_mode"]["change_limit"]
+                     ["y_min"]
+                         .as<double>();
+      config->ctrl_settings.swing_test_mode.change_limit.y_max =
+          config_node["control_settings"]["swing_test_mode"]["change_limit"]
+                     ["y_max"]
+                         .as<double>();
+      config->ctrl_settings.swing_test_mode.change_limit.z_min =
+          config_node["control_settings"]["swing_test_mode"]["change_limit"]
+                     ["z_min"]
+                         .as<double>();
+      config->ctrl_settings.swing_test_mode.change_limit.z_max =
+          config_node["control_settings"]["swing_test_mode"]["change_limit"]
+                     ["z_max"]
+                         .as<double>();
+
+      config->ctrl_settings.swing_test_mode.move_step =
+          config_node["control_settings"]["swing_test_mode"]["move_step"]
               .as<double>();
     }
   } catch (YAML::BadFile &e) {

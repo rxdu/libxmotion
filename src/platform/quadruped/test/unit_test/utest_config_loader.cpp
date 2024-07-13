@@ -78,6 +78,8 @@ TEST(ConfigLoaderTest, LoadConfigFileTest) {
   EXPECT_FLOAT_EQ(config.ctrl_settings.swing_test_mode.kp[0], 20.0);
   EXPECT_FLOAT_EQ(config.ctrl_settings.swing_test_mode.kp[1], 20.0);
   EXPECT_FLOAT_EQ(config.ctrl_settings.swing_test_mode.kp[2], 50.0);
-  EXPECT_FLOAT_EQ(config.ctrl_settings.swing_test_mode.range.x_min, -0.1);
-  EXPECT_FLOAT_EQ(config.ctrl_settings.swing_test_mode.range.x_max, 0.1);
+  EXPECT_FLOAT_EQ(config.ctrl_settings.swing_test_mode.change_limit.x_min,
+                  -0.15);
+  EXPECT_FLOAT_EQ(config.ctrl_settings.swing_test_mode.change_limit.x_max, 0.1);
+  EXPECT_FLOAT_EQ(config.ctrl_settings.swing_test_mode.move_step, 0.05);
 }

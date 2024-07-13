@@ -57,38 +57,42 @@ struct HidSettings {
 };
 
 struct ControlSettings {
-  std::unordered_map<std::string, QuadrupedModel::JointGains> gain_sets;
+  std::unordered_map<std::string, QuadrupedModel::AllJointGains> gain_sets;
 
   struct PassiveModeParams {
-    QuadrupedModel::JointGains default_joint_gains;
+    QuadrupedModel::AllJointGains default_joint_gains;
   } passive_mode;
 
   struct FixedStandModeParams {
-    QuadrupedModel::JointGains default_joint_gains;
-    QuadrupedModel::JointVar desired_joint_position;
+    QuadrupedModel::AllJointGains default_joint_gains;
+    QuadrupedModel::AllJointVar desired_joint_position;
     uint32_t duration_ms;
   } fixed_stand_mode;
 
   struct LyingDownModeParams {
-    QuadrupedModel::JointGains default_joint_gains;
-    QuadrupedModel::JointVar desired_joint_position;
+    QuadrupedModel::AllJointGains default_joint_gains;
+    QuadrupedModel::AllJointVar desired_joint_position;
     uint32_t duration_ms;
   } lying_down_mode;
 
   struct SwingTestModeParams {
-    QuadrupedModel::JointGains default_joint_gains;
+    QuadrupedModel::AllJointGains default_joint_gains;
     LegIndex swing_leg_index;
+    QuadrupedModel::LegJointGains swing_leg_gains;
+
     Eigen::Matrix<double, 3, 1> kp;
     Eigen::Matrix<double, 3, 1> kd;
 
-    struct Range {
+    struct ChangeLimit {
       double x_min;
       double x_max;
       double y_min;
       double y_max;
       double z_min;
       double z_max;
-    } range;
+    } change_limit;
+
+    double move_step;
   } swing_test_mode;
 };
 

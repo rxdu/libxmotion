@@ -21,7 +21,7 @@ class PassiveMode : public FsmState<ControlContext> {
   void Update(ControlContext& context) override;
 
  private:
-  QuadrupedModel::State target_state_;
+  QuadrupedModel::Command joint_cmd_;
 };
 }  // namespace xmotion
 

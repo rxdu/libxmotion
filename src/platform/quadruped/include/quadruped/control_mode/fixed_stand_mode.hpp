@@ -21,9 +21,10 @@ class FixedStandMode : public FsmState<ControlContext> {
 
  private:
   StopWatch sw_;
-  QuadrupedModel::JointGains desired_gains_;
+  QuadrupedModel::AllJointGains desired_gains_;
   QuadrupedModel::State initial_state_;
   QuadrupedModel::State target_state_;
+  QuadrupedModel::Command joint_cmd_;
 };
 }  // namespace xmotion
 

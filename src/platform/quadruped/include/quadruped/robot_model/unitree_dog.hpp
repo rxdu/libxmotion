@@ -39,12 +39,31 @@ class UnitreeDog : public QuadrupedModel {
              const UnitreeModelProfile& profile);
 
   // QuadrupedModel: control interface
-  void SetJointGains(const JointGains& gains) override;
-  void SetTargetState(const State& state) override;
+  void SetJointGains(const AllJointGains& gains) override;
+  void SetJointCommand(const Command& cmd) override;
   void SendCommandToRobot() override;
 
   // QuadrupedModel: estimator interface
   State GetEstimatedState() override;
+
+  // QuadrupedModel: kinematics interface
+  Position3d GetFootPosition(LegIndex leg_index, const JointPosition3d& q,
+                             RefFrame frame) const override;
+  Velocity3d GetFootVelocity(LegIndex leg_index, const JointPosition3d& q,
+                             const JointVelocity3d& q_dot) const override;
+  JointPosition3d GetJointPosition(LegIndex leg_index,
+                                   const Position3d& pos) const override;
+  JointVelocity3d GetJointVelocity(LegIndex leg_index, const Position3d& pos,
+                                   const Velocity3d& vel) const override;
+  JointVelocity3d GetJointVelocityQ(LegIndex leg_index,
+                                    const JointPosition3d& q,
+                                    const Velocity3d& vel) const override;
+
+  // QuadrupedModel: dynamics interface
+  Torque3d GetJointTorque(LegIndex leg_index, const Position3d& pos,
+                          const Force3d& f) const override;
+  Torque3d GetJointTorqueQ(LegIndex leg_index, const JointPosition3d& q,
+                           const Force3d& f) const override;
 
  private:
   // unitree-specific implementation details
@@ -54,6 +73,7 @@ class UnitreeDog : public QuadrupedModel {
   std::string network_interface_;
   UnitreeModelProfile profile_;
   std::unordered_map<LegIndex, UnitreeLeg> legs_;
+  std::unordered_map<LegIndex, Position3d> body_to_leg_offsets_;
 
   std::mutex state_mutex_;
   LowLevelState state_;

@@ -12,13 +12,19 @@
 
 #include <string>
 
+#include "quadruped/robot_model/quadruped_model.hpp"
+
 namespace xmotion {
 struct UnitreeModelProfile {
   std::string name = "unitree_dog";
 
+  // leg parameters
   double leg_hip_link = 0.0;
   double leg_thigh_link = 0.0;
   double leg_calf_link = 0.0;
+
+  // body to leg offsets
+  std::unordered_map<LegIndex, Position3d> body_to_leg_offsets;
 };
 
 struct UnitreeDogs {

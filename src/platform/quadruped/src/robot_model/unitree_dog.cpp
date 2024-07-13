@@ -9,6 +9,8 @@
 
 #include "quadruped/robot_model/unitree_dog.hpp"
 
+#include "logging/xlogger.hpp"
+
 using namespace unitree::common;
 using namespace unitree::robot;
 
@@ -49,6 +51,7 @@ UnitreeDog::UnitreeDog(uint32_t domain_id, const std::string& network_interface,
     auto index = static_cast<LegIndex>(i);
     legs_[index] = UnitreeLeg{profile_, index};
   }
+  body_to_leg_offsets_ = profile_.body_to_leg_offsets;
 
   // initialize variables
   InitCommand();
@@ -87,7 +90,7 @@ void UnitreeDog::InitCommand() {
   }
 }
 
-void UnitreeDog::SetJointGains(const JointGains& gains) {
+void UnitreeDog::SetJointGains(const AllJointGains& gains) {
   for (int i = 0; i < 4; i++) {
     auto index = static_cast<LegIndex>(i);
     legs_[index].SetJointGains(
@@ -98,13 +101,13 @@ void UnitreeDog::SetJointGains(const JointGains& gains) {
   }
 }
 
-void UnitreeDog::SetTargetState(const State& state) {
+void UnitreeDog::SetJointCommand(const Command& cmd) {
   // set target state
   for (int i = 0; i < 4; i++) {
     auto index = static_cast<LegIndex>(i);
-    legs_[index].SetJointTarget(state.q.segment<3>(i * 3),
-                                state.q_dot.segment<3>(i * 3),
-                                state.tau.segment<3>(i * 3));
+    legs_[index].SetJointTarget(cmd.q.segment<3>(i * 3),
+                                cmd.q_dot.segment<3>(i * 3),
+                                cmd.tau.segment<3>(i * 3));
   }
 }
 
@@ -129,6 +132,50 @@ UnitreeDog::State UnitreeDog::GetEstimatedState() {
   return state;
 }
 
+Position3d UnitreeDog::GetFootPosition(LegIndex leg_index,
+                                       const JointPosition3d& q,
+                                       RefFrame frame) const {
+  auto pos = legs_.at(leg_index).GetFootPosition(q);
+  if (frame == RefFrame::kBase) {
+    pos = pos + body_to_leg_offsets_.at(leg_index);
+  }
+  return pos;
+}
+
+Velocity3d UnitreeDog::GetFootVelocity(LegIndex leg_index,
+                                       const JointPosition3d& q,
+                                       const JointVelocity3d& q_dot) const {
+  return legs_.at(leg_index).GetFootVelocity(q, q_dot);
+}
+
+JointPosition3d UnitreeDog::GetJointPosition(LegIndex leg_index,
+                                             const Position3d& pos) const {
+  return legs_.at(leg_index).GetJointPosition(pos);
+}
+
+JointVelocity3d UnitreeDog::GetJointVelocity(LegIndex leg_index,
+                                             const Position3d& pos,
+                                             const Velocity3d& vel) const {
+  return legs_.at(leg_index).GetJointVelocity(pos, vel);
+}
+
+JointVelocity3d UnitreeDog::GetJointVelocityQ(LegIndex leg_index,
+                                              const JointPosition3d& q,
+                                              const Velocity3d& vel) const {
+  return legs_.at(leg_index).GetJointVelocityQ(q, vel);
+}
+
+Torque3d UnitreeDog::GetJointTorque(LegIndex leg_index, const Position3d& pos,
+                                    const Force3d& f) const {
+  return legs_.at(leg_index).GetJointTorque(pos, f);
+}
+
+Torque3d UnitreeDog::GetJointTorqueQ(LegIndex leg_index,
+                                     const JointPosition3d& q,
+                                     const Force3d& f) const {
+  return legs_.at(leg_index).GetJointTorqueQ(q, f);
+}
+
 void UnitreeDog::SendCommandToRobot() {
   // update motor command
   for (int i = 0; i < 4; i++) {
@@ -136,9 +183,11 @@ void UnitreeDog::SendCommandToRobot() {
     cmd_.motor_cmd()[i * 3] = msgs[0];
     cmd_.motor_cmd()[i * 3 + 1] = msgs[1];
     cmd_.motor_cmd()[i * 3 + 2] = msgs[2];
-    //    std::cout << "Motor command of leg " << i << " : " << msgs[0].q() << "
-    //    "
-    //              << msgs[1].q() << " " << msgs[2].q() << std::endl;
+    //    if (i == 0) {
+    //      std::cout << "Motor command of leg " << i << " : " << msgs[0].q() <<
+    //      " "
+    //                << msgs[1].q() << " " << msgs[2].q() << std::endl;
+    //    }
   }
 
   // calculate crc32

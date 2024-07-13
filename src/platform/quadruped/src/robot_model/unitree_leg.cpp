@@ -64,7 +64,7 @@ std::vector<UnitreeMotor::CmdMsg> UnitreeLeg::GetMotorCommandMsgs() {
 
 Position3d UnitreeLeg::GetFootPosition(const JointPosition3d& q) const {
   Position3d pos;
-  pos.x() = l3_ * std::cos(q[1] + q[2]) + l2_ * std::sin(q[1]);
+  pos.x() = l3_ * std::sin(q[1] + q[2]) + l2_ * std::sin(q[1]);
   pos.y() = -l3_ * std::sin(q[0]) * std::cos(q[1] + q[2]) +
             l1_ * std::cos(q[0]) - l2_ * std::cos(q[1]) * std::sin(q[0]);
   pos.z() = l3_ * std::cos(q[0]) * std::cos(q[1] + q[2]) +
