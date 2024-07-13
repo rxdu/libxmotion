@@ -7,6 +7,7 @@ find_package(unitree_sdk2 REQUIRED)
 add_library(quadruped
     # common
     src/config_loader.cpp
+    src/utils.cpp
     # event handler
     src/event_handler/hid_event_handler.cpp
     # model

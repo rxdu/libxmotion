@@ -55,7 +55,6 @@ void QuadrupedSystem::ControlSubsystem() {
   while (keep_control_loop_) {
     timer.reset();
     fsm_->Update();
-    //    timer.sleep_until_us(2000);
     timer.sleep_until_ms(2);
   }
   XLOG_INFO("QuadrupedSystem: control loop exited");
@@ -86,7 +85,7 @@ void QuadrupedSystem::Run() {
 }
 
 void QuadrupedSystem::Stop() {
-  // DO NOT CALL ANY XLOG HERE AS A SIGNAL HAVE BEEN TRIGGERED
+  // DO NOT CALL ANY XLOG HERE AS A SIGNAL MAY HAVE BEEN TRIGGERED
 
   // wait for control thread to finish
   keep_control_loop_ = false;

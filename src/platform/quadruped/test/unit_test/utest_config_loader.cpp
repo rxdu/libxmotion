@@ -72,4 +72,12 @@ TEST(ConfigLoaderTest, LoadConfigFileTest) {
   EXPECT_FLOAT_EQ(
       config.ctrl_settings.fixed_stand_mode.desired_joint_position[1],
       0.608813);
+
+  EXPECT_EQ(config.ctrl_settings.swing_test_mode.swing_leg_index,
+            LegIndex::kFrontRight);
+  EXPECT_FLOAT_EQ(config.ctrl_settings.swing_test_mode.kp[0], 20.0);
+  EXPECT_FLOAT_EQ(config.ctrl_settings.swing_test_mode.kp[1], 20.0);
+  EXPECT_FLOAT_EQ(config.ctrl_settings.swing_test_mode.kp[2], 50.0);
+  EXPECT_FLOAT_EQ(config.ctrl_settings.swing_test_mode.range.x_min, -0.1);
+  EXPECT_FLOAT_EQ(config.ctrl_settings.swing_test_mode.range.x_max, 0.1);
 }

@@ -22,7 +22,15 @@ std::unordered_map<std::string, HidSettings::KeyFunction> str_to_key_mapping = {
     {"swing_test_mode", HidSettings::KeyFunction::kSwingTestMode},
     {"free_stand_mode", HidSettings::KeyFunction::kFreeStandMode},
     {"trotting_mode", HidSettings::KeyFunction::kTrottingMode},
-    {"move_base_mode", HidSettings::KeyFunction::kMoveBaseMode}};
+    {"move_base_mode", HidSettings::KeyFunction::kMoveBaseMode},
+    {"left_stick_up", HidSettings::KeyFunction::kLeftStickUp},
+    {"left_stick_down", HidSettings::KeyFunction::kLeftStickDown},
+    {"left_stick_left", HidSettings::KeyFunction::kLeftStickLeft},
+    {"left_stick_right", HidSettings::KeyFunction::kLeftStickRight},
+    {"right_stick_up", HidSettings::KeyFunction::kRightStickUp},
+    {"right_stick_down", HidSettings::KeyFunction::kRightStickDown},
+    {"right_stick_left", HidSettings::KeyFunction::kRightStickLeft},
+    {"right_stick_right", HidSettings::KeyFunction::kRightStickRight}};
 }
 
 bool ConfigLoader::LoadConfigFile(const std::string &file_path,
@@ -189,6 +197,45 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
       }
       config->ctrl_settings.swing_test_mode.default_joint_gains =
           config->ctrl_settings.gain_sets[gain_set_name];
+
+      config->ctrl_settings.swing_test_mode
+          .swing_leg_index = static_cast<LegIndex>(
+          config_node["control_settings"]["swing_test_mode"]["swing_leg_index"]
+              .as<int>());
+
+      std::vector<double> kp =
+          config_node["control_settings"]["swing_test_mode"]["kp"]
+              .as<std::vector<double>>();
+      std::vector<double> kd =
+          config_node["control_settings"]["swing_test_mode"]["kd"]
+              .as<std::vector<double>>();
+      if (kp.size() != 3 | kd.size() != 3) {
+        XLOG_ERROR("ConfigLoader: swing test mode kp or kd size mismatch");
+        return false;
+      }
+      for (size_t i = 0; i < 3; ++i) {
+        config->ctrl_settings.swing_test_mode.kp(i) = kp[i];
+        config->ctrl_settings.swing_test_mode.kd(i) = kd[i];
+      }
+
+      config->ctrl_settings.swing_test_mode.range.x_min =
+          config_node["control_settings"]["swing_test_mode"]["range"]["x_min"]
+              .as<double>();
+      config->ctrl_settings.swing_test_mode.range.x_max =
+          config_node["control_settings"]["swing_test_mode"]["range"]["x_max"]
+              .as<double>();
+      config->ctrl_settings.swing_test_mode.range.y_min =
+          config_node["control_settings"]["swing_test_mode"]["range"]["y_min"]
+              .as<double>();
+      config->ctrl_settings.swing_test_mode.range.y_max =
+          config_node["control_settings"]["swing_test_mode"]["range"]["y_max"]
+              .as<double>();
+      config->ctrl_settings.swing_test_mode.range.z_min =
+          config_node["control_settings"]["swing_test_mode"]["range"]["z_min"]
+              .as<double>();
+      config->ctrl_settings.swing_test_mode.range.z_max =
+          config_node["control_settings"]["swing_test_mode"]["range"]["z_max"]
+              .as<double>();
     }
   } catch (YAML::BadFile &e) {
     XLOG_ERROR("ConfigLoader: failed to open config file {}: {}", file_path,

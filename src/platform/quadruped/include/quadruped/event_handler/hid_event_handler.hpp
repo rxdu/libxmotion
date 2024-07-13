@@ -16,21 +16,25 @@
 #include "quadruped/system_config.hpp"
 #include "quadruped/event_handler/hid_event.hpp"
 #include "quadruped/event_handler/event_queue.hpp"
-#include "quadruped/event_handler/event_handler.hpp"
 
 namespace xmotion {
-class HidEventHandler final : public EventHandler {
+class HidEventHandler {
  public:
+  enum class KeyboardEventType {
+    kModeSelection = 0,
+    kControlInput,
+  };
+
   explicit HidEventHandler(const HidSettings& config);
 
-  bool Initialize() override;
+  bool Initialize();
 
-  void Start() override;
-  void PollEvents() override;
-  void Stop() override;
+  void Start();
+  void PollEvents();
+  void Stop();
 
   std::optional<HidEvent> TryPopJoystickEvent();
-  std::optional<HidEvent> TryPopKeyboardEvent();
+  std::optional<HidEvent> TryPopKeyboardEvent(KeyboardEventType type);
 
  private:
   void OnKeyEvent(KeyboardCode code, KeyboardEvent event);
@@ -43,7 +47,8 @@ class HidEventHandler final : public EventHandler {
   HidEventPoll hid_poll_;
 
   EventQueue<HidEvent> js_event_queue_;
-  EventQueue<HidEvent> kb_event_queue_;
+  EventQueue<HidEvent> kb_mode_switch_queue_;
+  EventQueue<HidEvent> kb_control_input_queue_;
 };
 }  // namespace xmotion
 

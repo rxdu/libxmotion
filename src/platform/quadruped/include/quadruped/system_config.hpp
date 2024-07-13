@@ -19,12 +19,26 @@
 namespace xmotion {
 struct HidSettings {
   enum class KeyFunction : int {
-    kPassiveMode = 0,
+    // keys for mode selection
+    kFirstModeKey = 0,
+    kPassiveMode,
     kFixedStandMode,
     kSwingTestMode,
     kFreeStandMode,
     kTrottingMode,
     kMoveBaseMode,
+    kLastModeKey,
+    // keys for control
+    kFirstControlKey,
+    kLeftStickUp,
+    kLeftStickDown,
+    kLeftStickLeft,
+    kLeftStickRight,
+    kRightStickUp,
+    kRightStickDown,
+    kRightStickLeft,
+    kRightStickRight,
+    kLastControlKey
   };
 
   struct Keyboard {
@@ -63,6 +77,18 @@ struct ControlSettings {
 
   struct SwingTestModeParams {
     QuadrupedModel::JointGains default_joint_gains;
+    LegIndex swing_leg_index;
+    Eigen::Matrix<double, 3, 1> kp;
+    Eigen::Matrix<double, 3, 1> kd;
+
+    struct Range {
+      double x_min;
+      double x_max;
+      double y_min;
+      double y_max;
+      double z_min;
+      double z_max;
+    } range;
   } swing_test_mode;
 };
 

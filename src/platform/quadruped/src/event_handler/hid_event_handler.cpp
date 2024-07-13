@@ -63,7 +63,20 @@ void HidEventHandler::PollEvents() {
 void HidEventHandler::OnKeyEvent(KeyboardCode code, KeyboardEvent event) {
   //  XLOG_INFO("Key {} {}", Keyboard::GetKeyName(code),
   //            (event == KeyboardEvent::kPress ? "pressed" : "released"));
-  if (event == KeyboardEvent::kPress) kb_event_queue_.Push(HidEvent{code});
+  if (event == KeyboardEvent::kPress) {
+    if (config_.keyboard.keyboard_mappings.find(code) !=
+        config_.keyboard.keyboard_mappings.end()) {
+      auto key_func = config_.keyboard.keyboard_mappings.at(code);
+      if (key_func > HidSettings::KeyFunction::kFirstModeKey &&
+          key_func < HidSettings::KeyFunction::kLastModeKey) {
+        kb_mode_switch_queue_.Push(HidEvent{code});
+      }
+      if (key_func > HidSettings::KeyFunction::kFirstControlKey &&
+          key_func < HidSettings::KeyFunction::kLastControlKey) {
+        kb_control_input_queue_.Push(HidEvent{code});
+      }
+    }
+  }
   //  XLOG_INFO("Key event pushed to queue");
 }
 
@@ -71,7 +84,13 @@ std::optional<HidEvent> HidEventHandler::TryPopJoystickEvent() {
   return js_event_queue_.TryPop();
 }
 
-std::optional<HidEvent> HidEventHandler::TryPopKeyboardEvent() {
-  return kb_event_queue_.TryPop();
+std::optional<HidEvent> HidEventHandler::TryPopKeyboardEvent(
+    KeyboardEventType type) {
+  if (type == KeyboardEventType::kModeSelection) {
+    return kb_mode_switch_queue_.TryPop();
+  } else if (type == KeyboardEventType::kControlInput) {
+    return kb_control_input_queue_.TryPop();
+  }
+  return std::nullopt;
 }
 }  // namespace xmotion

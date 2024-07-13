@@ -21,6 +21,8 @@ class SwingTestMode : public FsmState<ControlContext> {
   void Update(ControlContext &context) override;
 
  private:
+  void HandleKeyboardInput(ControlContext &context);
+
   QuadrupedModel::State target_state_;
 };
 }  // namespace xmotion

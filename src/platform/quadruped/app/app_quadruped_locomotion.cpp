@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
   std::signal(SIGINT, [](int signal) -> void {
     if (signal == SIGINT) {
       if (quadruped != nullptr) {
-        XLOG_INFO("Received SIGINT");
+        XLOG_INFO("Received SIGINT, stopping quadruped system...");
         quadruped->Stop();
       }
     }
