@@ -135,6 +135,7 @@ void SwingTestMode::Update(ControlContext& context) {
   auto target_force = kp_ * (target_position_ - pos_foot) + kd_ * (-vel_foot);
   auto target_torque =
       context.robot_model->GetJointTorqueQ(swing_leg_, q_foot, target_force);
+  joint_cmd_.tau = current_state.tau;
   joint_cmd_.tau.segment<3>(static_cast<int>(swing_leg_) * 3) = target_torque;
 
   XLOG_INFO("==> SwingTestMode: target foot torque: {}, {}, {}",

@@ -9,6 +9,8 @@
 
 #include "quadruped/robot_model/unitree_leg.hpp"
 
+#include "logging/xlogger.hpp"
+
 namespace xmotion {
 UnitreeLeg::UnitreeLeg(const UnitreeModelProfile& profile, LegIndex index)
     : index_(index) {
@@ -104,12 +106,15 @@ JointPosition3d UnitreeLeg::GetJointPosition(const Position3d& pos) const {
 
   // calculate q3
   double pos_len_square =
-      std::sqrt(pos.x() * pos.x() + pos.y() * pos.y() + pos.z() * pos.z());
+      pos.x() * pos.x() + pos.y() * pos.y() + pos.z() * pos.z();
   double temp = (l2_ * l2_ + l3_ * l3_ - (pos_len_square - l1_ * l1_)) /
                 (2 * std::fabs(l2_ * l3_));
+  //  XLOG_INFO("***** temp: {}", temp);
   if (temp > 1.0) temp = 1.0;
   if (temp < -1.0) temp = -1.0;
   q.z() = -M_PI + std::acos(temp);
+
+  //  XLOG_INFO("***** q.z(): {}", q.z());
 
   // calculate q2
   double m1 = l3_ * std::sin(q[2]);
