@@ -34,16 +34,6 @@ class EventQueue {
     return value;
   }
 
-  bool Empty() {
-    std::lock_guard<std::mutex> lock(mutex_);
-    return queue_.empty();
-  }
-
-  std::size_t Size() {
-    std::lock_guard<std::mutex> lock(mutex_);
-    return queue_.size();
-  }
-
  private:
   std::queue<T> queue_;
   std::mutex mutex_;

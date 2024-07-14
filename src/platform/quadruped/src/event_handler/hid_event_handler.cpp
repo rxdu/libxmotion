@@ -86,7 +86,7 @@ std::optional<HidEvent> HidEventHandler::TryPopJoystickEvent() {
 
 std::optional<HidEvent> HidEventHandler::TryPopKeyboardEvent(
     KeyboardEventType type) {
-  if (type == KeyboardEventType::kModeSelection) {
+  if (type == KeyboardEventType::kModeSwitch) {
     return kb_mode_switch_queue_.TryPop();
   } else if (type == KeyboardEventType::kControlInput) {
     return kb_control_input_queue_.TryPop();

@@ -21,7 +21,7 @@ namespace xmotion {
 class HidEventHandler {
  public:
   enum class KeyboardEventType {
-    kModeSelection = 0,
+    kModeSwitch = 0,
     kControlInput,
   };
 

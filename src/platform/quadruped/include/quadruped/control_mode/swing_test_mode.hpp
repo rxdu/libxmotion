@@ -11,6 +11,7 @@
 
 #include "fsm/fsm_template.hpp"
 #include "quadruped/control_context.hpp"
+#include "time/stopwatch.hpp"
 
 namespace xmotion {
 class SwingTestMode : public FsmState<ControlContext> {
@@ -26,6 +27,7 @@ class SwingTestMode : public FsmState<ControlContext> {
   void HandleKeyboardInput(ControlContext &context);
   void UpdateTargetFootPosition(Axis axis, double delta);
 
+  StopWatch sw_;
   LegIndex swing_leg_;
   double move_step_;
   ControlSettings::SwingTestModeParams::ChangeLimit change_limit_;

@@ -76,26 +76,26 @@ void SwingTestMode::HandleKeyboardInput(ControlContext& context) {
       context, HidEventHandler::KeyboardEventType::kControlInput);
   if (key_func.has_value()) {
     if (key_func.value() == HidSettings::KeyFunction::kLeftStickUp) {
-      //      XLOG_INFO("SwingTestMode: LeftStickUp");
+      XLOG_INFO("SwingTestMode: LeftStickUp");
       UpdateTargetFootPosition(Axis::kZ, move_step_);
     } else if (key_func.value() == HidSettings::KeyFunction::kLeftStickDown) {
-      //      XLOG_INFO("SwingTestMode: LeftStickDown");
+      XLOG_INFO("SwingTestMode: LeftStickDown");
       UpdateTargetFootPosition(Axis::kZ, -move_step_);
     } else if (key_func.value() == HidSettings::KeyFunction::kLeftStickLeft) {
-      //      XLOG_INFO("SwingTestMode: LeftStickLeft");
+      XLOG_INFO("SwingTestMode: LeftStickLeft");
     } else if (key_func.value() == HidSettings::KeyFunction::kLeftStickRight) {
-      //      XLOG_INFO("SwingTestMode: LeftStickRight");
+      XLOG_INFO("SwingTestMode: LeftStickRight");
     } else if (key_func.value() == HidSettings::KeyFunction::kRightStickUp) {
-      //      XLOG_INFO("SwingTestMode: RightStickUp");
+      XLOG_INFO("SwingTestMode: RightStickUp");
       UpdateTargetFootPosition(Axis::kX, move_step_);
     } else if (key_func.value() == HidSettings::KeyFunction::kRightStickDown) {
-      //      XLOG_INFO("SwingTestMode: RightStickDown");
+      XLOG_INFO("SwingTestMode: RightStickDown");
       UpdateTargetFootPosition(Axis::kX, -move_step_);
     } else if (key_func.value() == HidSettings::KeyFunction::kRightStickLeft) {
-      //      XLOG_INFO("SwingTestMode: RightStickLeft");
+      XLOG_INFO("SwingTestMode: RightStickLeft");
       UpdateTargetFootPosition(Axis::kY, move_step_);
     } else if (key_func.value() == HidSettings::KeyFunction::kRightStickRight) {
-      //      XLOG_INFO("SwingTestMode: RightStickRight");
+      XLOG_INFO("SwingTestMode: RightStickRight");
       UpdateTargetFootPosition(Axis::kY, -move_step_);
     }
   }
@@ -106,7 +106,9 @@ void SwingTestMode::HandleKeyboardInput(ControlContext& context) {
 }
 
 void SwingTestMode::Update(ControlContext& context) {
+  //  sw_.tic();
   HandleKeyboardInput(context);
+  //  if (sw_.mtoc() > 0) XLOG_INFO("Updating keyboard took: {}", sw_.mtoc());
 
   auto current_state = context.robot_model->GetEstimatedState();
 
@@ -115,14 +117,8 @@ void SwingTestMode::Update(ControlContext& context) {
       context.robot_model->GetJointPosition(swing_leg_, target_position_);
   joint_cmd_.q = current_state.q;
   joint_cmd_.q.segment<3>(static_cast<int>(swing_leg_) * 3) = swing_q_desired;
-  XLOG_INFO("==> SwingTestMode: current joint position: {}, {}, {}",
-            current_state.q[static_cast<int>(swing_leg_) * 3],
-            current_state.q[static_cast<int>(swing_leg_) * 3 + 1],
-            current_state.q[static_cast<int>(swing_leg_) * 3 + 2]);
-  XLOG_INFO("==> SwingTestMode: target joint position: {}, {}, {}",
-            swing_q_desired.x(), swing_q_desired.y(), swing_q_desired.z());
 
-  // desired joint torque
+  // calculate desired joint torque
   auto q_foot = current_state.q.segment<3>(static_cast<int>(swing_leg_) * 3);
   auto q_dot_foot =
       current_state.q_dot.segment<3>(static_cast<int>(swing_leg_) * 3);
@@ -138,8 +134,8 @@ void SwingTestMode::Update(ControlContext& context) {
   joint_cmd_.tau = current_state.tau;
   joint_cmd_.tau.segment<3>(static_cast<int>(swing_leg_) * 3) = target_torque;
 
-  XLOG_INFO("==> SwingTestMode: target foot torque: {}, {}, {}",
-            target_torque.x(), target_torque.y(), target_torque.z());
+  //  XLOG_INFO("==> SwingTestMode: target foot torque: {}, {}, {}",
+  //            target_torque.x(), target_torque.y(), target_torque.z());
 
   context.robot_model->SetJointCommand(joint_cmd_);
 

@@ -17,7 +17,7 @@ namespace xmotion {
 OptionalStateVariant ModeTransition::Transit(FixedStandMode &state,
                                              ControlContext &context) {
   auto key_func = Utils::PollKeyFunction(
-      context, HidEventHandler::KeyboardEventType::kModeSelection);
+      context, HidEventHandler::KeyboardEventType::kModeSwitch);
   if (key_func.has_value()) {
     if (key_func.value() == HidSettings::KeyFunction::kFixedStandMode) {
       return LyingDownMode{context};
@@ -31,7 +31,7 @@ OptionalStateVariant ModeTransition::Transit(FixedStandMode &state,
 OptionalStateVariant ModeTransition::Transit(LyingDownMode &state,
                                              ControlContext &context) {
   auto key_func = Utils::PollKeyFunction(
-      context, HidEventHandler::KeyboardEventType::kModeSelection);
+      context, HidEventHandler::KeyboardEventType::kModeSwitch);
   if (key_func.has_value()) {
     if (key_func.value() == HidSettings::KeyFunction::kPassiveMode) {
       return PassiveMode{context};
@@ -45,7 +45,7 @@ OptionalStateVariant ModeTransition::Transit(LyingDownMode &state,
 OptionalStateVariant ModeTransition::Transit(SwingTestMode &state,
                                              ControlContext &context) {
   auto key_func = Utils::PollKeyFunction(
-      context, HidEventHandler::KeyboardEventType::kModeSelection);
+      context, HidEventHandler::KeyboardEventType::kModeSwitch);
   if (key_func.has_value()) {
     if (key_func.value() == HidSettings::KeyFunction::kFixedStandMode) {
       return FixedStandMode{context};
@@ -68,7 +68,7 @@ OptionalStateVariant ModeTransition::Transit(MoveBaseMode &state,
 OptionalStateVariant ModeTransition::Transit(PassiveMode &state,
                                              ControlContext &context) {
   auto key_func = Utils::PollKeyFunction(
-      context, HidEventHandler::KeyboardEventType::kModeSelection);
+      context, HidEventHandler::KeyboardEventType::kModeSwitch);
   if (key_func.has_value()) {
     if (key_func.value() == HidSettings::KeyFunction::kFixedStandMode) {
       return FixedStandMode{context};
