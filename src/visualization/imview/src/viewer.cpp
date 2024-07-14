@@ -29,7 +29,7 @@ uint32_t Viewer::GetHeight() { return window_->GetHeight(); }
 ImFont *Viewer::GetFont(FontSize size) { return window_->GetFont(size); }
 
 void Viewer::DockSpaceOverMainViewport() {
-  ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+  ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport());
 }
 
 void Viewer::Show() {

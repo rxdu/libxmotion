@@ -28,7 +28,7 @@ class PanelFixed : public Panel {
 
     ImGui::SetCursorPos(ImVec2(180, 200));
     ImGui::PushFont(parent_->GetFont(FontSize::Normal));
-    ImGui::Text("Weston Robot Assisted Driving Toolbox");
+    ImGui::Text("Test Panel");
     ImGui::PopFont();
     ImVec2 size = ImGui::GetWindowSize();
     printf("PanelNoDock: %f x %f\n", size.x, size.y);
