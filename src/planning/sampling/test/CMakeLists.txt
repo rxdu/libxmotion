@@ -2,7 +2,7 @@
 #find_package(LIBRARY_NAME REQUIRED)
 
 ## tests
-if (ENABLE_TARGET_DESKTOP)
+if (ENABLE_VISUALIZATION)
   add_executable(test_rvspace test_rvspace.cpp)
   target_link_libraries(test_rvspace sampling interface time)
 

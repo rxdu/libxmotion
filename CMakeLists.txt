@@ -25,18 +25,16 @@ option(STATIC_CHECK "Enable static check" OFF)
 
 option(ENABLE_TBOT_APP "Enable tbot app" OFF)
 option(ENABLE_QUADRUPED_APP "Enable quadruped app" OFF)
+option(ENABLE_VISUALIZATION "Enable visualization targets" ON)
 
-if (BUILD_AS_MODULE)
-  set(ENABLE_TARGET_DESKTOP OFF)
-  message(STATUS "Disabled desktop target on module build")
-else ()
-  if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
-    set(ENABLE_TARGET_DESKTOP ON)
-  else ()
-    set(ENABLE_TARGET_DESKTOP OFF)
-    message(STATUS "Disable desktop target on non-x86_64")
-  endif ()
-endif ()
+if(BUILD_AS_MODULE AND (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")))
+    message(STATUS "Disable visualization targets on non-x86_64 when built as module")
+    set(ENABLE_VISUALIZATION OFF)
+endif()
+
+if(ENABLE_VISUALIZATION)
+    message(STATUS "Enable visualization targets")
+endif()
 
 ## Generate symbols for IDE indexer
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

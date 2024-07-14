@@ -2,7 +2,7 @@
 #find_package(LIBRARY_NAME REQUIRED)
 
 ## tests
-if (ENABLE_TARGET_DESKTOP)
+if (ENABLE_VISUALIZATION)
   add_executable(test_curvilinear_grid test_curvilinear_grid.cpp)
   target_link_libraries(test_curvilinear_grid decomp)
 

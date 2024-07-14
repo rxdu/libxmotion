@@ -4,7 +4,7 @@
 # Add libraries
 add_library(decomp INTERFACE)
 target_link_libraries(decomp INTERFACE geometry graph)
-if (ENABLE_TARGET_DESKTOP)
+if (ENABLE_VISUALIZATION)
   target_compile_definitions(decomp INTERFACE ENABLE_VISUAL)
 endif ()
 target_include_directories(decomp INTERFACE

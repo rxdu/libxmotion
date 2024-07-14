@@ -9,7 +9,7 @@ add_library(geometry STATIC
     src/polygon.cpp
 )
 target_link_libraries(geometry PUBLIC Eigen3::Eigen)
-if (ENABLE_TARGET_DESKTOP)
+if (ENABLE_VISUALIZATION)
   target_compile_definitions(geometry PUBLIC ENABLE_VISUAL)
   target_link_libraries(geometry PUBLIC cvdraw)
 endif ()

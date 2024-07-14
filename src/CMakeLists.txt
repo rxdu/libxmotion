@@ -12,6 +12,6 @@ add_subdirectory(control)
 add_subdirectory(planning)
 add_subdirectory(utilities)
 
-if (ENABLE_TARGET_DESKTOP)
+if (ENABLE_VISUALIZATION)
   add_subdirectory(visualization)
 endif ()
