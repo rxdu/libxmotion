@@ -1,24 +1,25 @@
 /*
  * @file keyboard.hpp
  * @date 7/5/24
- * @brief
+ * @brief A keyboard class that monitors keyboard events using polling way
  *
  * @copyright Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#ifndef QUADRUPED_MOTION_KEYBOARD_HPP
-#define QUADRUPED_MOTION_KEYBOARD_HPP
+#ifndef XMOTION_KEYBOARD_HPP
+#define XMOTION_KEYBOARD_HPP
 
 #include <string>
 #include <thread>
 #include <atomic>
 
 #include "interface/driver/keyboard_interface.hpp"
+#include "input_hid/keyboard_mapping.hpp"
 
 namespace xmotion {
 class Keyboard : public KeyboardInterface {
  public:
-  Keyboard(bool with_daemon = true);
+  Keyboard() = default;
   ~Keyboard();
 
   // do not allow copy
@@ -31,11 +32,7 @@ class Keyboard : public KeyboardInterface {
 
   void PollEvent() override;
 
-  static std::string GetKeyName(KeyboardCode code);
-  static KeyboardCode GetKeyCode(const std::string& key_name);
-
  private:
-  bool with_daemon_ = false;
   int fd_;
   std::thread io_thread_;
   std::atomic<bool> keep_running_{false};
@@ -44,4 +41,4 @@ class Keyboard : public KeyboardInterface {
 };
 }  // namespace xmotion
 
-#endif  // QUADRUPED_MOTION_KEYBOARD_HPP
+#endif  // XMOTION_KEYBOARD_HPP

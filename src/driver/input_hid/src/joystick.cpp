@@ -57,7 +57,7 @@ std::vector<JoystickDescriptor> Joystick::EnumberateJoysticks(int max_index) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Joystick::Joystick(bool with_daemon) : with_daemon_(with_daemon) {
+Joystick::Joystick() {
   descriptor_.index = 0;
   auto jds = Joystick::EnumberateJoysticks();
   if (jds.empty()) throw std::runtime_error("No joystick found");
@@ -66,18 +66,15 @@ Joystick::Joystick(bool with_daemon) : with_daemon_(with_daemon) {
   InitializeChannels();
 }
 
-Joystick::Joystick(JoystickDescriptor descriptor, bool with_daemon)
-    : descriptor_(descriptor), with_daemon_(with_daemon) {
+Joystick::Joystick(JoystickDescriptor descriptor) : descriptor_(descriptor) {
   device_name_ = "/dev/input/event" + std::to_string(descriptor.index);
   InitializeChannels();
 }
 
-Joystick::Joystick(int index, bool with_daemon)
-    : Joystick(JoystickDescriptor{index, "js" + std::to_string(index)},
-               with_daemon) {}
+Joystick::Joystick(int index)
+    : Joystick(JoystickDescriptor{index, "js" + std::to_string(index)}) {}
 
-Joystick::Joystick(const std::string& event_name, bool with_daemon)
-    : with_daemon_(with_daemon) {
+Joystick::Joystick(const std::string& event_name) {
   device_name_ = event_name;
   try {
     descriptor_.index = std::stoi(event_name.substr(16));
@@ -132,24 +129,20 @@ bool Joystick::Open() {
     device_change_notify_ = inotify_init1(IN_NONBLOCK);
     inotify_add_watch(device_change_notify_, device_name_.c_str(), IN_ATTRIB);
 
-    if (with_daemon_) {
-      keep_running_ = true;
-      io_thread_ = std::thread([this]() {
-        while (keep_running_) {
-          this->PollEvent();
-          usleep(16000);
-        }
-      });
-    }
+    keep_running_ = true;
+    io_thread_ = std::thread([this]() {
+      while (keep_running_) {
+        this->PollEvent();
+        usleep(16000);
+      }
+    });
   }
   return connected_;
 }
 
 void Joystick::Close() {
-  if (with_daemon_) {
-    keep_running_ = false;
-    if (io_thread_.joinable()) io_thread_.join();
-  }
+  keep_running_ = false;
+  if (io_thread_.joinable()) io_thread_.join();
 
   if (connected_) {
     close(fd_);

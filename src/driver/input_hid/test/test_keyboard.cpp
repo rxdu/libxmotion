@@ -21,7 +21,7 @@
 using namespace xmotion;
 
 void OnKeyEvent(KeyboardCode code, KeyboardEvent event) {
-  std::cout << "Key " << Keyboard::GetKeyName(code) << " "
+  std::cout << "Key " << KeyboardMapping::GetKeyName(code) << " "
             << (event == KeyboardEvent::kPress ? "pressed" : "released")
             << std::endl;
 }

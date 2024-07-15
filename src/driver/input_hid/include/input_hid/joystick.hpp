@@ -2,7 +2,7 @@
  * joystick.hpp
  *
  * Created on 5/30/23 11:00 PM
- * Description:
+ * Description: A joystick class that monitors joystick events using polling way
  *
  * Reference: https://github.com/MysteriousJ/Joystick-Input-Examples
  *
@@ -31,10 +31,10 @@ class Joystick : public JoystickInterface {
       int max_index = 32);
 
  public:
-  Joystick(bool with_daemon = true);
-  explicit Joystick(JoystickDescriptor descriptor, bool with_daemon = true);
-  explicit Joystick(int index, bool with_daemon = true);
-  explicit Joystick(const std::string& event_name, bool with_daemon = true);
+  Joystick();
+  explicit Joystick(JoystickDescriptor descriptor);
+  explicit Joystick(int index);
+  explicit Joystick(const std::string& event_name);
   ~Joystick();
 
   // do not allow copy
@@ -65,7 +65,6 @@ class Joystick : public JoystickInterface {
   void ReadJoystickInput();
 
   JoystickDescriptor descriptor_;
-  bool with_daemon_ = false;
   std::string device_name_;
 
   int fd_ = -1;

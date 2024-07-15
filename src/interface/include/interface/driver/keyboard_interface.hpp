@@ -10,9 +10,8 @@
 #ifndef QUADRUPED_MOTION_KEYBOARD_INTERFACE_HPP
 #define QUADRUPED_MOTION_KEYBOARD_INTERFACE_HPP
 
+#include <string>
 #include <functional>
-
-#include "interface/driver/hid_poll_interface.hpp"
 
 namespace xmotion {
 enum class KeyboardCode {
@@ -94,7 +93,7 @@ enum class KeyboardEvent {
   kRelease,
 };
 
-class KeyboardInterface : public HidPollInterface {
+class KeyboardInterface {
  public:
   using KeyEventCallback = std::function<void(KeyboardCode, KeyboardEvent)>;
 
@@ -104,7 +103,7 @@ class KeyboardInterface : public HidPollInterface {
   virtual bool StartMonitoring(const std::string& event_name) = 0;
   virtual void RegisterKeyEventCallback(KeyEventCallback callback) = 0;
 
-  void PollEvent() override = 0;
+  virtual void PollEvent() = 0;
 };
 }  // namespace xmotion
 

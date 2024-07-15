@@ -1,10 +1,15 @@
 find_package(Threads REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(Libevent REQUIRED IMPORTED_TARGET libevent)
 
 add_library(input_hid STATIC
     src/joystick.cpp
     src/keyboard.cpp
-    src/hid_event_poll.cpp)
-target_link_libraries(input_hid PUBLIC interface logging Threads::Threads)
+    src/hid_event_listener.cpp
+    src/keyboard_handler.cpp
+    src/keyboard_mapping.cpp
+)
+target_link_libraries(input_hid PUBLIC interface logging Threads::Threads PkgConfig::Libevent)
 target_compile_definitions(input_hid PUBLIC ASIO_ENABLE_OLD_SERVICES)
 target_compile_options(input_hid PUBLIC -fPIC)
 target_include_directories(input_hid PUBLIC
