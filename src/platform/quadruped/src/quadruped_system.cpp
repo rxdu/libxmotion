@@ -78,15 +78,13 @@ void QuadrupedSystem::Run() {
     //      XLOG_INFO("QuadrupedSystem: main loop running");
     //      break;
     //    }
-    hid_event_listener_->PollEvents();
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
   }
   XLOG_INFO("QuadrupedSystem: main loop exited");
 }
 
 void QuadrupedSystem::Stop() {
-  // DO NOT CALL ANY XLOG HERE AS A SIGNAL MAY HAVE BEEN TRIGGERED
-
+  // DO NOT CALL ANY XLOG BEYOND THIS LINE AS A SIGNAL MAY HAVE BEEN TRIGGERED
   // wait for control thread to finish
   keep_control_loop_ = false;
   if (control_thread_.joinable()) control_thread_.join();

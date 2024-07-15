@@ -9,9 +9,8 @@
 #ifndef QUADRUPED_HID_EVENT_HANDLER_HPP
 #define QUADRUPED_HID_EVENT_HANDLER_HPP
 
-#include "input_hid/hid_event_poll.hpp"
-#include "input_hid/keyboard.hpp"
-#include "input_hid/joystick.hpp"
+#include "input_hid/keyboard_handler.hpp"
+#include "input_hid/hid_event_listener.hpp"
 
 #include "quadruped/system_config.hpp"
 #include "quadruped/event_handler/hid_event.hpp"
@@ -28,10 +27,7 @@ class HidEventHandler {
   explicit HidEventHandler(const HidSettings& config);
 
   bool Initialize();
-
   void Start();
-  void PollEvents();
-  void Stop();
 
   std::optional<HidEvent> TryPopJoystickEvent();
   std::optional<HidEvent> TryPopKeyboardEvent(KeyboardEventType type);
@@ -42,9 +38,8 @@ class HidEventHandler {
   HidSettings config_;
   uint32_t queue_size_;
 
-  std::unique_ptr<Keyboard> keyboard_;
-  std::unique_ptr<Joystick> joystick_;
-  HidEventPoll hid_poll_;
+  KeyboardHandler keyboard_handler_;
+  HidEventListener hid_event_listener_;
 
   EventQueue<HidEvent> js_event_queue_;
   EventQueue<HidEvent> kb_mode_switch_queue_;

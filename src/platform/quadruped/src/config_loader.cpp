@@ -63,14 +63,15 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
                    it->first.as<std::string>());
         return false;
       }
-      auto key_code = Keyboard::GetKeyCode(it->second.as<std::string>());
+      auto key_code = KeyboardMapping::GetKeyCode(it->second.as<std::string>());
       if (key_code == KeyboardCode::kUnknown) {
         XLOG_ERROR("ConfigLoader: unknown key code: {}",
                    it->second.as<std::string>());
         return false;
       }
-      config->hid_settings.keyboard.keyboard_mappings[Keyboard::GetKeyCode(
-          it->second.as<std::string>())] =
+      config->hid_settings.keyboard
+          .keyboard_mappings[KeyboardMapping::GetKeyCode(
+              it->second.as<std::string>())] =
           str_to_key_mapping[it->first.as<std::string>()];
       XLOG_INFO("ConfigLoader: key mapping: {} -> {}",
                 it->first.as<std::string>(), it->second.as<std::string>());

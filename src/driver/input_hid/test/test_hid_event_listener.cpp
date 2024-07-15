@@ -38,6 +38,7 @@ int main(int argc, char* argv[]) {
 
   uint32_t count = 0;
   while (count++ < 20) {
+    std::cout << "running..." << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 
