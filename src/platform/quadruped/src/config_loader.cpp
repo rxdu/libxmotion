@@ -261,6 +261,47 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
           config_node["control_settings"]["swing_test_mode"]["move_step"]
               .as<double>();
     }
+
+    // free stand mode default joint gains
+    {
+      std::string gain_set_name =
+          config_node["control_settings"]["free_stand_mode"]
+                     ["default_joint_gains"]
+                         .as<std::string>();
+      if (config->ctrl_settings.gain_sets.find(gain_set_name) ==
+          config->ctrl_settings.gain_sets.end()) {
+        XLOG_ERROR(
+            "ConfigLoader: free stand mode default gain set not found: {}",
+            gain_set_name);
+        return false;
+      }
+      config->ctrl_settings.free_stand_mode.default_joint_gains =
+          config->ctrl_settings.gain_sets[gain_set_name];
+
+      config->ctrl_settings.free_stand_mode.pose_limit.roll =
+          config_node["control_settings"]["free_stand_mode"]["pose_limit"]
+                     ["roll"]
+                         .as<double>();
+      config->ctrl_settings.free_stand_mode.pose_limit.pitch =
+          config_node["control_settings"]["free_stand_mode"]["pose_limit"]
+                     ["pitch"]
+                         .as<double>();
+      config->ctrl_settings.free_stand_mode.pose_limit.yaw =
+          config_node["control_settings"]["free_stand_mode"]["pose_limit"]
+                     ["yaw"]
+                         .as<double>();
+      config->ctrl_settings.free_stand_mode.pose_limit.height =
+          config_node["control_settings"]["free_stand_mode"]["pose_limit"]
+                     ["height"]
+                         .as<double>();
+
+      config->ctrl_settings.free_stand_mode.angle_step =
+          config_node["control_settings"]["free_stand_mode"]["angle_step"]
+              .as<double>();
+      config->ctrl_settings.free_stand_mode.height_step =
+          config_node["control_settings"]["free_stand_mode"]["height_step"]
+              .as<double>();
+    }
   } catch (YAML::BadFile &e) {
     XLOG_ERROR("ConfigLoader: failed to open config file {}: {}", file_path,
                e.what());

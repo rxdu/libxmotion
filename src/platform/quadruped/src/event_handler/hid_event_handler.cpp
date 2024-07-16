@@ -71,12 +71,14 @@ void HidEventHandler::OnKeyEvent(KeyboardCode code, KeyboardEvent event) {
       auto key_func = config_.keyboard.keyboard_mappings.at(code);
       if (key_func > HidSettings::KeyFunction::kFirstModeKey &&
           key_func < HidSettings::KeyFunction::kLastModeKey) {
-        XLOG_INFO("Key pressed: {}", KeyboardMapping::GetKeyName(code));
+        //        XLOG_INFO("Key pressed: {}",
+        //        KeyboardMapping::GetKeyName(code));
         kb_mode_switch_queue_.Push(HidEvent{code});
       }
       if (key_func > HidSettings::KeyFunction::kFirstControlKey &&
           key_func < HidSettings::KeyFunction::kLastControlKey) {
-        XLOG_INFO("Key pressed: {}", KeyboardMapping::GetKeyName(code));
+        //        XLOG_INFO("Key pressed: {}",
+        //        KeyboardMapping::GetKeyName(code));
         kb_control_input_queue_.Push(HidEvent{code});
       }
     }

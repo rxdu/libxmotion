@@ -23,6 +23,8 @@ OptionalStateVariant ModeTransition::Transit(FixedStandMode &state,
       return LyingDownMode{context};
     } else if (key_func.value() == HidSettings::KeyFunction::kSwingTestMode) {
       return SwingTestMode{context};
+    } else if (key_func.value() == HidSettings::KeyFunction::kFreeStandMode) {
+      return FreeStandMode{context};
     }
   }
   return std::nullopt;
@@ -56,6 +58,13 @@ OptionalStateVariant ModeTransition::Transit(SwingTestMode &state,
 
 OptionalStateVariant ModeTransition::Transit(FreeStandMode &state,
                                              ControlContext &context) {
+  auto key_func = Utils::PollKeyFunction(
+      context, HidEventHandler::KeyboardEventType::kModeSwitch);
+  if (key_func.has_value()) {
+    if (key_func.value() == HidSettings::KeyFunction::kFixedStandMode) {
+      return FixedStandMode{context};
+    }
+  }
   return std::nullopt;
 }
 

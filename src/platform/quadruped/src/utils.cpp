@@ -12,6 +12,29 @@
 #include "logging/xlogger.hpp"
 
 namespace xmotion {
+double Utils::UpdateRangeLimitedValue(double target, double delta, double min,
+                                      double max) {
+  double new_value = target + delta;
+  if (new_value >= min && new_value <= max) {
+    return new_value;
+  }
+  return target;
+}
+
+double Utils::UpdateChangeLimitedValue(double target, double initial,
+                                       double delta, double min_change,
+                                       double max_change) {
+  double change = target + delta - initial;
+  if (change >= min_change && change <= max_change) {
+    return target + delta;
+  }
+  return target;
+}
+
+double Utils::DegreeToRadian(double degree) { return degree * M_PI / 180.0; }
+
+double Utils::RadianToDegree(double radian) { return radian * 180.0 / M_PI; }
+
 std::optional<HidSettings::KeyFunction> Utils::PollKeyFunction(
     ControlContext &context, HidEventHandler::KeyboardEventType type) {
   auto config = context.system_config;

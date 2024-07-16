@@ -8,6 +8,7 @@ add_library(quadruped
     # common
     src/config_loader.cpp
     src/utils.cpp
+    src/matrix_helper.cpp
     # event handler
     src/event_handler/hid_event_handler.cpp
     # model

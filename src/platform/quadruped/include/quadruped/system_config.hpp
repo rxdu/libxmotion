@@ -94,6 +94,20 @@ struct ControlSettings {
 
     double move_step;
   } swing_test_mode;
+
+  struct FreeStandModeParams {
+    QuadrupedModel::AllJointGains default_joint_gains;
+
+    struct PoseLimit {
+      double roll;
+      double pitch;
+      double yaw;
+      double height;
+    } pose_limit;
+
+    double angle_step;
+    double height_step;
+  } free_stand_mode;
 };
 
 struct SystemConfig {

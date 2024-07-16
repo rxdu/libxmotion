@@ -165,6 +165,30 @@ JointVelocity3d UnitreeDog::GetJointVelocityQ(LegIndex leg_index,
   return legs_.at(leg_index).GetJointVelocityQ(q, vel);
 }
 
+UnitreeDog::AllJointVar UnitreeDog::GetJointPosition(
+    const std::array<Position3d, 4>& foot_pos, RefFrame frame) const {
+  AllJointVar q = AllJointVar::Zero();
+  for (int i = 0; i < 4; ++i) {
+    auto index = static_cast<LegIndex>(i);
+    if (frame == RefFrame::kBase)
+      q.segment<3>(i * 3) = legs_.at(index).GetJointPosition(
+          foot_pos[i] - body_to_leg_offsets_.at(index));
+    else
+      q.segment<3>(i * 3) = legs_.at(index).GetJointPosition(foot_pos[i]);
+  }
+  return q;
+}
+
+std::array<Position3d, 4> UnitreeDog::GetFootPosition(const AllJointVar& q,
+                                                      RefFrame frame) const {
+  std::array<Position3d, 4> foot_pos;
+  for (int i = 0; i < 4; ++i) {
+    auto index = static_cast<LegIndex>(i);
+    foot_pos[i] = GetFootPosition(index, q.segment<3>(i * 3), frame);
+  }
+  return foot_pos;
+}
+
 Torque3d UnitreeDog::GetJointTorque(LegIndex leg_index, const Position3d& pos,
                                     const Force3d& f) const {
   return legs_.at(leg_index).GetJointTorque(pos, f);

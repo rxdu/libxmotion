@@ -21,6 +21,7 @@ class EventQueue {
  public:
   void Push(T value) {
     std::lock_guard<std::mutex> lock(mutex_);
+    if (!queue_.empty()) queue_.pop();
     queue_.push(std::move(value));
   }
 

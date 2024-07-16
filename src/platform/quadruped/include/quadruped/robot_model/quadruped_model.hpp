@@ -12,6 +12,8 @@
 #ifndef QUADRUPED_MOTION_QUADRUPED_MODEL_HPP
 #define QUADRUPED_MOTION_QUADRUPED_MODEL_HPP
 
+#include <array>
+
 #include "interface/type/geometry_types.hpp"
 
 namespace xmotion {
@@ -72,6 +74,12 @@ class QuadrupedModel {
   virtual JointVelocity3d GetJointVelocityQ(LegIndex leg_index,
                                             const JointPosition3d& q,
                                             const Velocity3d& vel) const = 0;
+
+  // full-body kinematics
+  virtual AllJointVar GetJointPosition(
+      const std::array<Position3d, 4>& foot_pos, RefFrame frame) const = 0;
+  virtual std::array<Position3d, 4> GetFootPosition(const AllJointVar& q,
+                                                    RefFrame frame) const = 0;
 
   // dynamics
   virtual Torque3d GetJointTorque(LegIndex leg_index, const Position3d& pos,
