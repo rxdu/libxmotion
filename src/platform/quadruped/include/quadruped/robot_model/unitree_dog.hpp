@@ -44,6 +44,8 @@ class UnitreeDog : public QuadrupedModel {
   void SendCommandToRobot() override;
 
   // QuadrupedModel: estimator interface
+  void ConnectSensorDataQueue(
+      std::shared_ptr<DataQueue<SensorData>> queue) override;
   State GetEstimatedState() override;
 
   // QuadrupedModel: kinematics interface
@@ -84,6 +86,8 @@ class UnitreeDog : public QuadrupedModel {
   std::mutex state_mutex_;
   LowLevelState state_;
   LowLevelCmd cmd_;
+
+  std::shared_ptr<DataQueue<SensorData>> sensor_data_queue_;
 
   unitree::robot::ChannelPublisherPtr<LowLevelCmd> cmd_pub_;
   unitree::robot::ChannelSubscriberPtr<LowLevelState> state_sub_;

@@ -111,6 +111,11 @@ void UnitreeDog::SetJointCommand(const Command& cmd) {
   }
 }
 
+void UnitreeDog::ConnectSensorDataQueue(
+    std::shared_ptr<DataQueue<SensorData>> queue) {
+  sensor_data_queue_ = queue;
+}
+
 UnitreeDog::State UnitreeDog::GetEstimatedState() {
   LowLevelState state_feedback;
   {
@@ -226,5 +231,8 @@ void UnitreeDog::OnLowLevelStateMessageReceived(const void* message) {
   auto msg_ptr = static_cast<const unitree_go::msg::dds_::LowState_*>(message);
   std::lock_guard<std::mutex> lock(state_mutex_);
   state_ = *msg_ptr;
+  if (sensor_data_queue_ != nullptr) {
+    //    sensor_data_queue_->Push(SensorData{state_});
+  }
 }
 }  // namespace xmotion

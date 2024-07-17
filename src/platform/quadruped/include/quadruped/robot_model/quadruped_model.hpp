@@ -13,8 +13,10 @@
 #define QUADRUPED_MOTION_QUADRUPED_MODEL_HPP
 
 #include <array>
+#include <memory>
 
 #include "interface/type/geometry_types.hpp"
+#include "quadruped/robot_model/data_queue.hpp"
 
 namespace xmotion {
 enum class LegIndex : int {
@@ -28,6 +30,8 @@ class QuadrupedModel {
  public:
   using LegJointVar = Eigen::Matrix<double, 3, 1>;
   using AllJointVar = Eigen::Matrix<double, 12, 1>;
+
+  enum class RefFrame { kBase = 0, kLeg };
 
   struct LegJointGains {
     LegJointVar kp;
@@ -52,11 +56,15 @@ class QuadrupedModel {
     AllJointVar tau;
   };
 
-  enum class RefFrame { kBase = 0, kLeg };
+  struct SensorData {
+    AllJointVar q;
+  };
 
  public:
   // estimator
   // TODO (rdu): estimated state should be from a state estimator
+  virtual void ConnectSensorDataQueue(
+      std::shared_ptr<DataQueue<SensorData>> queue) = 0;
   virtual State GetEstimatedState() = 0;
 
   // kinematics

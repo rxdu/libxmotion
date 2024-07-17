@@ -33,6 +33,9 @@ bool QuadrupedSystem::Initialize() {
   }
 
   // initialize estimator subsystem
+  estimator_ = std::make_unique<SimpleEstimator>();
+  SimpleEstimator::Params estimator_params;
+  estimator_->Initialize(estimator_params);
 
   // initialize control subsystem
   ControlContext context;
@@ -58,6 +61,17 @@ void QuadrupedSystem::ControlSubsystem() {
     timer.sleep_until_ms(2);
   }
   XLOG_INFO("QuadrupedSystem: control loop exited");
+}
+
+void QuadrupedSystem::EstimationSubsystem() {
+  XLOG_INFO("QuadrupedSystem: entering estimation loop");
+  Timer timer;
+  while (keep_estimation_loop_) {
+    timer.reset();
+    estimator_->Update();
+    timer.sleep_until_ms(2);
+  }
+  XLOG_INFO("QuadrupedSystem: estimation loop exited");
 }
 
 void QuadrupedSystem::Run() {

@@ -133,14 +133,13 @@ void FreeStandMode::Update(ControlContext& context) {
   double pitch = Utils::DegreeToRadian(target_pose_.pitch);
   double yaw = Utils::DegreeToRadian(target_pose_.yaw);
 
-  RotationMatrix3d R =
-      MatrixHelper::RollPitchYawToRotationMatrix(roll, pitch, yaw);
-  HomogeneousMatrix3d T_sb = MatrixHelper::CreateHomogeneousMatrix(R, p_0);
-  HomogeneousMatrix3d T_bs = MatrixHelper::GetHomogeneousMatrixInverse(T_sb);
+  RotMatrix3d R = MatrixHelper::RpyToRotMatrix(roll, pitch, yaw);
+  HomoMatrix3d T_sb = MatrixHelper::CreateHomoMatrix(R, p_0);
+  HomoMatrix3d T_bs = MatrixHelper::GetHomoMatrixInverse(T_sb);
 
   std::array<Position3d, 4> p_bx;
   for (int i = 0; i < 4; ++i) {
-    p_bx[i] = MatrixHelper::ApplyHomogeneousMatrix(T_bs, p_sx_[i]);
+    p_bx[i] = MatrixHelper::ApplyHomoMatrix(T_bs, p_sx_[i]);
   }
   joint_cmd_.q = context.robot_model->GetJointPosition(
       p_bx, QuadrupedModel::RefFrame::kBase);

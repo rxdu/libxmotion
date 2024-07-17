@@ -16,10 +16,9 @@
 namespace xmotion {
 // workspace Cartesian coordinates
 using Position3d = Eigen::Vector3d;
-using Rotation3d = Eigen::Matrix3d;
 using Quaterniond = Eigen::Quaterniond;
-using RotationMatrix3d = Eigen::Matrix<double, 3, 3>;
-using HomogeneousMatrix3d = Eigen::Matrix<double, 4, 4>;
+using RotMatrix3d = Eigen::Matrix<double, 3, 3>;
+using HomoMatrix3d = Eigen::Matrix<double, 4, 4>;
 
 using Velocity3d = Eigen::Vector3d;
 

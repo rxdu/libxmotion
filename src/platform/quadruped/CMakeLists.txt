@@ -16,6 +16,8 @@ add_library(quadruped
     src/robot_model/unitree_leg.cpp
     src/robot_model/unitree_dog.cpp
     src/robot_model/unitree_model_profile.cpp
+    # estimators
+    src/estimator/simple_estimator.cpp
     # controllers
     src/control_mode_fsm.cpp
     src/control_mode/fixed_stand_mode.cpp
