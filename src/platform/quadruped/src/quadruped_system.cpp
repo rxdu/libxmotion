@@ -36,11 +36,15 @@ bool QuadrupedSystem::Initialize() {
   estimator_ = std::make_unique<SimpleEstimator>();
   SimpleEstimator::Params estimator_params;
   estimator_->Initialize(estimator_params);
+  keep_estimation_loop_ = true;
 
   // initialize control subsystem
   ControlContext context;
   context.system_config = config_;
   context.robot_model = model_;
+  sensor_data_queue_ =
+      std::make_shared<DataQueue<QuadrupedModel::SensorData>>();
+  context.robot_model->ConnectSensorDataQueue(sensor_data_queue_);
   context.hid_event_listener = hid_event_listener_;
   PassiveMode initial_state{context};
   fsm_ = std::make_unique<ControlModeFsm>(std::move(initial_state),
@@ -65,17 +69,19 @@ void QuadrupedSystem::ControlSubsystem() {
 
 void QuadrupedSystem::EstimationSubsystem() {
   XLOG_INFO("QuadrupedSystem: entering estimation loop");
-  Timer timer;
+  //  Timer timer;
   while (keep_estimation_loop_) {
-    timer.reset();
-    estimator_->Update();
-    timer.sleep_until_ms(2);
+    //    timer.reset();
+    QuadrupedModel::SensorData data;
+    if (sensor_data_queue_->Pop(data)) estimator_->Update();
+    //    timer.sleep_until_ms(2);
   }
   XLOG_INFO("QuadrupedSystem: estimation loop exited");
 }
 
 void QuadrupedSystem::Run() {
   // start estimator thread
+  estimation_thread_ = std::thread(&QuadrupedSystem::EstimationSubsystem, this);
 
   // start control thread
   control_thread_ = std::thread(&QuadrupedSystem::ControlSubsystem, this);
@@ -102,6 +108,10 @@ void QuadrupedSystem::Stop() {
   // wait for control thread to finish
   keep_control_loop_ = false;
   if (control_thread_.joinable()) control_thread_.join();
+
+  // wait for estimation thread to finish
+  keep_estimation_loop_ = false;
+  if (estimation_thread_.joinable()) estimation_thread_.join();
 
   // finally stop the main loop
   keep_running_ = false;

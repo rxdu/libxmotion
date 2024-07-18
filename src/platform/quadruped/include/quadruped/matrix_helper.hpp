@@ -29,8 +29,7 @@ RotMatrix3d RpyToRotMatrix(double roll, double pitch, double yaw);
  * @param p
  * @return
  */
-HomoMatrix3d CreateHomoMatrix(const RotMatrix3d& R,
-                                     const Position3d& p);
+HomoMatrix3d CreateHomoMatrix(const RotMatrix3d& R, const Position3d& p);
 
 /**
  * @brief Get the inverse of a homogeneous matrix
@@ -46,6 +45,8 @@ HomoMatrix3d GetHomoMatrixInverse(const HomoMatrix3d& in);
  * @return
  */
 Position3d ApplyHomoMatrix(const HomoMatrix3d& H, const Position3d& p);
+
+RotMatrix3d GetSkewSymmetricMatrix(const Eigen::Vector3d& m);
 }  // namespace MatrixHelper
 }  // namespace xmotion
 

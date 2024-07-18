@@ -184,6 +184,34 @@ UnitreeDog::AllJointVar UnitreeDog::GetJointPosition(
   return q;
 }
 
+UnitreeDog::AllJointVar UnitreeDog::GetJointVelocity(
+    const std::array<Position3d, 4>& foot_pos,
+    const std::array<Velocity3d, 4>& foot_vel, RefFrame frame) const {
+  AllJointVar q_dot = AllJointVar::Zero();
+  for (int i = 0; i < 4; ++i) {
+    auto index = static_cast<LegIndex>(i);
+    if (frame == RefFrame::kBase) {
+      q_dot.segment<3>(i * 3) = legs_.at(index).GetJointVelocity(
+          foot_pos[i] - body_to_leg_offsets_.at(index), foot_vel[i]);
+    } else if (frame == RefFrame::kLeg) {
+      q_dot.segment<3>(i * 3) =
+          legs_.at(index).GetJointVelocity(foot_pos[i], foot_vel[i]);
+    }
+  }
+  return q_dot;
+}
+
+UnitreeDog::AllJointVar UnitreeDog::GetJointTorqueQ(
+    const AllJointVar& q, const std::array<Force3d, 4>& foot_force) const {
+  AllJointVar tau = AllJointVar::Zero();
+  for (int i = 0; i < 4; ++i) {
+    auto index = static_cast<LegIndex>(i);
+    tau.segment<3>(i * 3) =
+        legs_.at(index).GetJointTorqueQ(q.segment<3>(i * 3), foot_force[i]);
+  }
+  return tau;
+}
+
 std::array<Position3d, 4> UnitreeDog::GetFootPosition(const AllJointVar& q,
                                                       RefFrame frame) const {
   std::array<Position3d, 4> foot_pos;
@@ -192,6 +220,17 @@ std::array<Position3d, 4> UnitreeDog::GetFootPosition(const AllJointVar& q,
     foot_pos[i] = GetFootPosition(index, q.segment<3>(i * 3), frame);
   }
   return foot_pos;
+}
+
+std::array<Velocity3d, 4> UnitreeDog::GetFootVelocity(
+    const AllJointVar& q, const AllJointVar& q_dot) const {
+  std::array<Velocity3d, 4> foot_vel;
+  for (int i = 0; i < 4; ++i) {
+    auto index = static_cast<LegIndex>(i);
+    foot_vel[i] =
+        GetFootVelocity(index, q.segment<3>(i * 3), q_dot.segment<3>(i * 3));
+  }
+  return foot_vel;
 }
 
 Torque3d UnitreeDog::GetJointTorque(LegIndex leg_index, const Position3d& pos,
@@ -231,8 +270,24 @@ void UnitreeDog::OnLowLevelStateMessageReceived(const void* message) {
   auto msg_ptr = static_cast<const unitree_go::msg::dds_::LowState_*>(message);
   std::lock_guard<std::mutex> lock(state_mutex_);
   state_ = *msg_ptr;
+  // copy state to sensor data queue
   if (sensor_data_queue_ != nullptr) {
-    //    sensor_data_queue_->Push(SensorData{state_});
+    SensorData data;
+    data.q = Eigen::Matrix<double, 12, 1>::Zero();
+    for (int i = 0; i < 12; ++i) {
+      auto& motor_state = state_.motor_state()[i];
+      data.q[i] = motor_state.q();
+    }
+    data.quaternion = Quaterniond(
+        state_.imu_state().quaternion()[0], state_.imu_state().quaternion()[1],
+        state_.imu_state().quaternion()[2], state_.imu_state().quaternion()[3]);
+    data.gyroscope = Eigen::Vector3d(state_.imu_state().gyroscope()[0],
+                                     state_.imu_state().gyroscope()[1],
+                                     state_.imu_state().gyroscope()[2]);
+    data.accelerometer = Eigen::Vector3d(state_.imu_state().accelerometer()[0],
+                                         state_.imu_state().accelerometer()[1],
+                                         state_.imu_state().accelerometer()[2]);
+    sensor_data_queue_->Push(data);
   }
 }
 }  // namespace xmotion

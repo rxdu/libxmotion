@@ -64,8 +64,17 @@ class UnitreeDog : public QuadrupedModel {
   // QuadrupedModel: full-body kinematics interface
   AllJointVar GetJointPosition(const std::array<Position3d, 4>& foot_pos,
                                RefFrame frame) const override;
+  AllJointVar GetJointVelocity(const std::array<Position3d, 4>& foot_pos,
+                               const std::array<Velocity3d, 4>& foot_vel,
+                               RefFrame frame) const override;
+  AllJointVar GetJointTorqueQ(
+      const AllJointVar& q,
+      const std::array<Force3d, 4>& foot_force) const override;
+
   std::array<Position3d, 4> GetFootPosition(const AllJointVar& q,
                                             RefFrame frame) const override;
+  std::array<Velocity3d, 4> GetFootVelocity(
+      const AllJointVar& q, const AllJointVar& q_dot) const override;
 
   // QuadrupedModel: dynamics interface
   Torque3d GetJointTorque(LegIndex leg_index, const Position3d& pos,

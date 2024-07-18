@@ -41,14 +41,13 @@ RotMatrix3d RotZ(double theta) {
 }
 }  // namespace
 
-RotMatrix3d MatrixHelper::RpyToRotMatrix(double roll,
-                                                            double pitch,
-                                                            double yaw) {
+RotMatrix3d MatrixHelper::RpyToRotMatrix(double roll, double pitch,
+                                         double yaw) {
   return RotZ(yaw) * RotY(pitch) * RotX(roll);
 }
 
-HomoMatrix3d MatrixHelper::CreateHomoMatrix(
-    const RotMatrix3d& R, const Position3d& p) {
+HomoMatrix3d MatrixHelper::CreateHomoMatrix(const RotMatrix3d& R,
+                                            const Position3d& p) {
   HomoMatrix3d H;
   H.block<3, 3>(0, 0) = R;
   H.block<3, 1>(0, 3) = p;
@@ -56,8 +55,7 @@ HomoMatrix3d MatrixHelper::CreateHomoMatrix(
   return H;
 }
 
-HomoMatrix3d MatrixHelper::GetHomoMatrixInverse(
-    const HomoMatrix3d& in) {
+HomoMatrix3d MatrixHelper::GetHomoMatrixInverse(const HomoMatrix3d& in) {
   HomoMatrix3d out;
   out.block<3, 3>(0, 0) = in.topLeftCorner(3, 3).transpose();
   out.block<3, 1>(0, 3) =
@@ -67,7 +65,13 @@ HomoMatrix3d MatrixHelper::GetHomoMatrixInverse(
 }
 
 Position3d MatrixHelper::ApplyHomoMatrix(const HomoMatrix3d& H,
-                                                const Position3d& p) {
+                                         const Position3d& p) {
   return H.block<3, 3>(0, 0) * p + H.block<3, 1>(0, 3);
+}
+
+RotMatrix3d MatrixHelper::GetSkewSymmetricMatrix(const Eigen::Vector3d& m) {
+  RotMatrix3d M;
+  M << 0, -m(2), m(1), m(2), 0, -m(0), -m(1), m(0), 0;
+  return M;
 }
 }  // namespace xmotion

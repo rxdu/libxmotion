@@ -49,7 +49,7 @@ class QuadrupedSystem {
 
   std::shared_ptr<HidEventHandler> hid_event_listener_;
 
-  DataQueue<QuadrupedModel::SensorData> sensor_data_queue_;
+  std::shared_ptr<DataQueue<QuadrupedModel::SensorData>> sensor_data_queue_;
 
   std::thread control_thread_;
   std::atomic<bool> keep_control_loop_{false};
