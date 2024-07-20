@@ -110,6 +110,14 @@ struct ControlSettings {
   } free_stand_mode;
 };
 
+struct EstimatorSettings {
+  double expected_dt;
+
+  struct SimpleEstimatorParams {
+    Eigen::Vector<double, 18> Q_diag;
+  } simple_estimator;
+};
+
 struct SystemConfig {
   int dds_domain_id;
   std::string network_interface;
@@ -117,6 +125,7 @@ struct SystemConfig {
 
   HidSettings hid_settings;
   ControlSettings ctrl_settings;
+  EstimatorSettings est_settings;
 };
 }  // namespace xmotion
 

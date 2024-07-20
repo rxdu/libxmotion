@@ -84,6 +84,28 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
             .as<std::string>();
 
     /*------------------------------------------------------------------------*/
+    // estimator settings
+    /*------------------------------------------------------------------------*/
+
+    config->est_settings.expected_dt =
+        config_node["estimator_settings"]["expected_dt"].as<double>();
+
+    // simple estimator settings
+    {
+      std::vector<double> Q_diag =
+          config_node["estimator_settings"]["simple_estimator"]["Q_diag"]
+              .as<std::vector<double>>();
+      if (Q_diag.size() != 18) {
+        XLOG_ERROR(
+            "ConfigLoader: simple estimator desired Q_diag size mismatch");
+        return false;
+      }
+      for (size_t i = 0; i < Q_diag.size(); ++i) {
+        config->est_settings.simple_estimator.Q_diag(i) = Q_diag[i];
+      }
+    }
+
+    /*------------------------------------------------------------------------*/
     // control settings
     /*------------------------------------------------------------------------*/
     for (auto it = config_node["control_settings"]["gain_sets"].begin();

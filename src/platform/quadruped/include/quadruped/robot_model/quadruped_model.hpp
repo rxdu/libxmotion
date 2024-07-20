@@ -58,6 +58,7 @@ class QuadrupedModel {
 
   struct SensorData {
     AllJointVar q;
+    AllJointVar q_dot;
     Quaterniond quaternion;
     Eigen::Vector3d gyroscope;
     Eigen::Vector3d accelerometer;

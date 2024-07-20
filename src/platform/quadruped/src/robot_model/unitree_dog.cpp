@@ -277,6 +277,7 @@ void UnitreeDog::OnLowLevelStateMessageReceived(const void* message) {
     for (int i = 0; i < 12; ++i) {
       auto& motor_state = state_.motor_state()[i];
       data.q[i] = motor_state.q();
+      data.q_dot[i] = motor_state.dq();
     }
     data.quaternion = Quaterniond(
         state_.imu_state().quaternion()[0], state_.imu_state().quaternion()[1],

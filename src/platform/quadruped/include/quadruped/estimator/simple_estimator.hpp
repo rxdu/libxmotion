@@ -11,6 +11,9 @@
 
 #include "interface/type/geometry_types.hpp"
 
+#include "quadruped/system_config.hpp"
+#include "quadruped/robot_model/quadruped_model.hpp"
+
 namespace xmotion {
 class SimpleEstimator {
   using State = Eigen::Matrix<double, 18, 1>;
@@ -28,14 +31,18 @@ class SimpleEstimator {
   };
 
  public:
-  SimpleEstimator() = default;
+  SimpleEstimator(const EstimatorSettings& settings,
+                  std::shared_ptr<QuadrupedModel> robot_model);
   ~SimpleEstimator() = default;
 
   // public methods
-  void Initialize(const Params &params);
-  void Update();
+  void Initialize(const Params& params);
+  void Update(const QuadrupedModel::SensorData& sensor_data, double dt);
 
  private:
+  EstimatorSettings settings_;
+  std::shared_ptr<QuadrupedModel> robot_model_;
+
   State x_hat_;
   Control u_;
   Mesaurement y_;
@@ -46,6 +53,8 @@ class SimpleEstimator {
   StateCovariance P_;
   StateCovariance Q_;
   MeasurementCovariance R_;
+
+  Eigen::Matrix<double, 4, 1> foot_height;
 
   Params params_;
 };
