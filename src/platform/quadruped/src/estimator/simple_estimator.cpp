@@ -62,6 +62,28 @@ std::array<Velocity3d, 4> GetFootToBodyVelocityWrtWorld(
   }
   return foot_vel;
 }
+
+// from mathTools.h in unitree_guide
+template <typename T>
+inline T WindowFunc(const T x, const T windowRatio, const T xRange = 1.0,
+                    const T yRange = 1.0) {
+  if ((x < 0) || (x > xRange)) {
+    XLOG_ERROR_STREAM("[ERROR][windowFunc] The x="
+                      << x << ", which should between [0, xRange]");
+  }
+  if ((windowRatio <= 0) || (windowRatio >= 0.5)) {
+    XLOG_ERROR_STREAM("[ERROR][windowFunc] The windowRatio="
+                      << windowRatio << ", which should between [0, 0.5]");
+  }
+
+  if (x / xRange < windowRatio) {
+    return x * yRange / (xRange * windowRatio);
+  } else if (x / xRange > 1 - windowRatio) {
+    return yRange * (xRange - x) / (xRange * windowRatio);
+  } else {
+    return yRange;
+  }
+}
 }  // namespace
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +101,6 @@ void SimpleEstimator::Initialize(const SimpleEstimator::Params& params) {
   //  P_ = params_.p0;
   //  R_ = params_.r0;
   P_.setIdentity();
-  const double large_variance = 100.0;
   P_ *= large_variance;
   R_ << 0.008, 0.012, -0.000, -0.009, 0.012, 0.000, 0.009, -0.009, -0.000,
       -0.009, -0.009, 0.000, -0.000, 0.000, -0.000, 0.000, -0.000, -0.001,
@@ -191,6 +212,10 @@ void SimpleEstimator::Initialize(const SimpleEstimator::Params& params) {
   C_(25, 11) = 1;
   C_(26, 14) = 1;
   C_(27, 17) = 1;
+
+  // save initial P and R
+  Q_0_ = Q_;
+  R_0_ = R_;
 }
 
 void SimpleEstimator::Update(const QuadrupedModel::SensorData& sensor_data,
@@ -208,7 +233,19 @@ void SimpleEstimator::Update(const QuadrupedModel::SensorData& sensor_data,
       robot_model_, sensor_data.q, sensor_data.q_dot, sensor_data.quaternion,
       sensor_data.gyroscope);
 
+  Q_ = Q_0_;
+  R_ = R_0_;
+  auto contact = robot_model_->GetFootContactState();
   for (int i = 0; i < 4; ++i) {
+    if (contact(i) == 1) {
+      Q_.block<3, 3>(6 + 3 * i, 6 + 3 * i) =
+          large_variance * Eigen::Matrix<double, 3, 3>::Identity();
+      R_.block<3, 3>(12 + 3 * i, 12 + 3 * i) =
+          large_variance * Eigen::Matrix<double, 3, 3>::Identity();
+      R_(24 + i, 24 + i) = large_variance;
+    } else {
+      //      double belief = WindowFunc()
+    }
   }
 }
 }  // namespace xmotion

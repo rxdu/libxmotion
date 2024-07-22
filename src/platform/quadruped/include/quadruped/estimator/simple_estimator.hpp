@@ -40,6 +40,8 @@ class SimpleEstimator {
   void Update(const QuadrupedModel::SensorData& sensor_data, double dt);
 
  private:
+  const double large_variance = 100.0;
+  
   EstimatorSettings settings_;
   std::shared_ptr<QuadrupedModel> robot_model_;
 
@@ -53,6 +55,8 @@ class SimpleEstimator {
   StateCovariance P_;
   StateCovariance Q_;
   MeasurementCovariance R_;
+  StateCovariance Q_0_;
+  MeasurementCovariance R_0_;
 
   Eigen::Matrix<double, 4, 1> foot_height;
 

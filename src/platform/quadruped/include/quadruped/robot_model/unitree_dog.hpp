@@ -38,6 +38,10 @@ class UnitreeDog : public QuadrupedModel {
   UnitreeDog(uint32_t domain_id, const std::string& network_interface,
              const UnitreeModelProfile& profile);
 
+  // QuadrupedModel: flag control states
+  void SetFootContactState(const Eigen::Vector4d& contact_state) override;
+  Eigen::Vector4d GetFootContactState() const override;
+
   // QuadrupedModel: control interface
   void SetJointGains(const AllJointGains& gains) override;
   void SetJointCommand(const Command& cmd) override;
@@ -89,6 +93,10 @@ class UnitreeDog : public QuadrupedModel {
 
   std::string network_interface_;
   UnitreeModelProfile profile_;
+
+  mutable std::mutex foot_contact_state_mutex_;
+  Eigen::Vector4d foot_contact_state_;
+
   std::unordered_map<LegIndex, UnitreeLeg> legs_;
   std::unordered_map<LegIndex, Position3d> body_to_leg_offsets_;
 

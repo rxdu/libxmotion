@@ -69,6 +69,16 @@ UnitreeDog::UnitreeDog(uint32_t domain_id, const std::string& network_interface,
                           1);
 }
 
+void UnitreeDog::SetFootContactState(const Eigen::Vector4d& contact_state) {
+  std::lock_guard<std::mutex> lock(foot_contact_state_mutex_);
+  foot_contact_state_ = contact_state;
+}
+
+Eigen::Vector4d UnitreeDog::GetFootContactState() const {
+  std::lock_guard<std::mutex> lock(foot_contact_state_mutex_);
+  return foot_contact_state_;
+}
+
 void UnitreeDog::InitCommand() {
   // initialize command
   cmd_.head()[0] = 0xFE;
