@@ -25,6 +25,8 @@ OptionalStateVariant ModeTransition::Transit(FixedStandMode &state,
       return SwingTestMode{context};
     } else if (key_func.value() == HidSettings::KeyFunction::kFreeStandMode) {
       return FreeStandMode{context};
+    } else if (key_func.value() == HidSettings::KeyFunction::kBalanceTestMode) {
+      return BalanceTestMode{context};
     }
   }
   return std::nullopt;
@@ -68,12 +70,6 @@ OptionalStateVariant ModeTransition::Transit(FreeStandMode &state,
   return std::nullopt;
 }
 
-OptionalStateVariant ModeTransition::Transit(MoveBaseMode &state,
-                                             ControlContext &context) {
-  return PassiveMode{context};
-  // return std::nullopt;
-}
-
 OptionalStateVariant ModeTransition::Transit(PassiveMode &state,
                                              ControlContext &context) {
   auto key_func = Utils::PollKeyFunction(
@@ -89,6 +85,24 @@ OptionalStateVariant ModeTransition::Transit(PassiveMode &state,
 OptionalStateVariant ModeTransition::Transit(TrottingMode &state,
                                              ControlContext &context) {
   return TrottingMode{};
+  // return std::nullopt;
+}
+
+OptionalStateVariant ModeTransition::Transit(BalanceTestMode &state,
+                                             ControlContext &context) {
+  auto key_func = Utils::PollKeyFunction(
+      context, HidEventHandler::KeyboardEventType::kModeSwitch);
+  if (key_func.has_value()) {
+    if (key_func.value() == HidSettings::KeyFunction::kFixedStandMode) {
+      return FixedStandMode{context};
+    }
+  }
+  return std::nullopt;
+}
+
+OptionalStateVariant ModeTransition::Transit(MoveBaseMode &state,
+                                             ControlContext &context) {
+  return PassiveMode{context};
   // return std::nullopt;
 }
 }  // namespace xmotion

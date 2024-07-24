@@ -13,9 +13,10 @@
 
 #include "quadruped/system_config.hpp"
 #include "quadruped/robot_model/quadruped_model.hpp"
+#include "quadruped/estimator/estimator_interface.hpp"
 
 namespace xmotion {
-class SimpleEstimator {
+class SimpleEstimator final : public EstimatorInterface {
   using State = Eigen::Matrix<double, 18, 1>;
   using StateCovariance = Eigen::Matrix<double, 18, 18>;
   using MeasurementCovariance = Eigen::Matrix<double, 28, 28>;
@@ -37,11 +38,12 @@ class SimpleEstimator {
 
   // public methods
   void Initialize(const Params& params);
-  void Update(const QuadrupedModel::SensorData& sensor_data, double dt);
+  void Update(const QuadrupedModel::SensorData& sensor_data,
+              double dt) override;
 
  private:
   const double large_variance = 100.0;
-  
+
   EstimatorSettings settings_;
   std::shared_ptr<QuadrupedModel> robot_model_;
 

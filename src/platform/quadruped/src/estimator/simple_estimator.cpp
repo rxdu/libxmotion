@@ -220,11 +220,11 @@ void SimpleEstimator::Initialize(const SimpleEstimator::Params& params) {
 
 void SimpleEstimator::Update(const QuadrupedModel::SensorData& sensor_data,
                              double dt) {
-  XLOG_INFO("SimpleEstimator::Update, dt {}", dt);
-  if (std::abs(dt - settings_.expected_dt) / settings_.expected_dt > 0.1) {
-    XLOG_WARN("SimpleEstimator::Update, dt {} is not expected as setting {}",
-              dt, settings_.expected_dt);
-  }
+//  XLOG_INFO("SimpleEstimator::Update, dt {}", dt);
+//  if (std::abs(dt - settings_.expected_dt) / settings_.expected_dt > 0.1) {
+//    XLOG_WARN("SimpleEstimator::Update, dt {} is not expected as setting {}",
+//              dt, settings_.expected_dt);
+//  }
 
   foot_height.setZero();
   std::array<Position3d, 4> foot_pos = GetFootToBodyPositionWrtWorld(

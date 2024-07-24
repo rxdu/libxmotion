@@ -33,9 +33,11 @@ bool QuadrupedSystem::Initialize() {
   }
 
   // initialize estimator subsystem
-  estimator_ = std::make_unique<SimpleEstimator>(config_.est_settings, model_);
+  SimpleEstimator* simple_estimator =
+      new SimpleEstimator(config_.est_settings, model_);
   SimpleEstimator::Params estimator_params;
-  estimator_->Initialize(estimator_params);
+  simple_estimator->Initialize(estimator_params);
+  estimator_.reset(simple_estimator);
   keep_estimation_loop_ = true;
 
   // initialize control subsystem
@@ -59,32 +61,55 @@ bool QuadrupedSystem::Initialize() {
 void QuadrupedSystem::ControlSubsystem() {
   XLOG_INFO("QuadrupedSystem: entering control loop");
   Timer timer;
+  bool first_run = true;
+  TimePoint last_time = Clock::now();
   while (keep_control_loop_) {
     timer.reset();
+
+    // calculate time step
+    if (first_run) {
+      last_time = Clock::now();
+      first_run = false;
+      continue;
+    }
+    auto now = Clock::now();
+    double dt =
+        std::chrono::duration_cast<std::chrono::microseconds>(now - last_time)
+            .count() /
+        1000000.0f;
+    last_time = now;
+//    if ((dt - 0.002) / 0.002 > 0.1) {
+//      XLOG_ERROR("QuadrupedSystem: control loop running at {} ms", dt * 1000);
+//    }
+
+    // update control
     fsm_->Update();
-    timer.sleep_until_ms(2);
+    timer.sleep_until_us(2000);
   }
   XLOG_INFO("QuadrupedSystem: control loop exited");
 }
 
 void QuadrupedSystem::EstimationSubsystem() {
   XLOG_INFO("QuadrupedSystem: entering estimation loop");
-  //  Timer timer;
-  using Clock = std::chrono::steady_clock;
-  using TimePoint = std::chrono::time_point<Clock>;
   TimePoint last_time = Clock::now();
   bool first_run = true;
   while (keep_estimation_loop_) {
-    //    timer.reset();
     QuadrupedModel::SensorData data;
     if (sensor_data_queue_->Pop(data)) {
+      // calculate time step
       if (first_run) {
         last_time = Clock::now();
         first_run = false;
+        continue;
       }
       auto now = Clock::now();
-      double dt = std::chrono::duration<double>(now - last_time).count();
+      double dt =
+          std::chrono::duration_cast<std::chrono::microseconds>(now - last_time)
+              .count() /
+          1000000.0f;
       last_time = now;
+
+      // update estimation
       estimator_->Update(data, dt);
     }
     //    timer.sleep_until_ms(2);
@@ -105,12 +130,8 @@ void QuadrupedSystem::Run() {
   // start main loop for housekeeping
   XLOG_INFO("QuadrupedSystem: entering main loop");
   keep_running_ = true;
-  //  StopWatch sw;
   while (keep_running_) {
-    //    if (sw.stoc() > 3) {
-    //      XLOG_INFO("QuadrupedSystem: main loop running");
-    //      break;
-    //    }
+    // handle user input logic here
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
   }
   XLOG_INFO("QuadrupedSystem: main loop exited");
@@ -124,6 +145,8 @@ void QuadrupedSystem::Stop() {
 
   // wait for estimation thread to finish
   keep_estimation_loop_ = false;
+  // push an empty data to unblock the estimation thread
+  sensor_data_queue_->Push(QuadrupedModel::SensorData());
   if (estimation_thread_.joinable()) estimation_thread_.join();
 
   // finally stop the main loop

@@ -19,9 +19,10 @@ namespace {
 std::unordered_map<std::string, HidSettings::KeyFunction> str_to_key_mapping = {
     {"passive_mode", HidSettings::KeyFunction::kPassiveMode},
     {"fixed_stand_mode", HidSettings::KeyFunction::kFixedStandMode},
-    {"swing_test_mode", HidSettings::KeyFunction::kSwingTestMode},
     {"free_stand_mode", HidSettings::KeyFunction::kFreeStandMode},
     {"trotting_mode", HidSettings::KeyFunction::kTrottingMode},
+    {"swing_test_mode", HidSettings::KeyFunction::kSwingTestMode},
+    {"balance_test_mode", HidSettings::KeyFunction::kBalanceTestMode},
     {"move_base_mode", HidSettings::KeyFunction::kMoveBaseMode},
     {"left_stick_up", HidSettings::KeyFunction::kLeftStickUp},
     {"left_stick_down", HidSettings::KeyFunction::kLeftStickDown},

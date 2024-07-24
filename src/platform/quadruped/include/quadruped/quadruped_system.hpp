@@ -12,16 +12,21 @@
 #include <memory>
 #include <atomic>
 #include <thread>
+#include <chrono>
 
 #include "quadruped/system_config.hpp"
 #include "quadruped/robot_model/data_queue.hpp"
 #include "quadruped/robot_model/quadruped_model.hpp"
+#include "quadruped/estimator/estimator_interface.hpp"
 #include "quadruped/estimator/simple_estimator.hpp"
 #include "quadruped/control_mode_fsm.hpp"
 #include "quadruped/event_handler/hid_event_handler.hpp"
 
 namespace xmotion {
 class QuadrupedSystem {
+  using Clock = std::chrono::steady_clock;
+  using TimePoint = std::chrono::time_point<Clock>;
+
  public:
   QuadrupedSystem(const SystemConfig& config,
                   std::shared_ptr<QuadrupedModel> model);
@@ -57,7 +62,7 @@ class QuadrupedSystem {
 
   std::thread estimation_thread_;
   std::atomic<bool> keep_estimation_loop_{false};
-  std::unique_ptr<SimpleEstimator> estimator_;
+  std::shared_ptr<EstimatorInterface> estimator_;
 };
 }  // namespace xmotion
 

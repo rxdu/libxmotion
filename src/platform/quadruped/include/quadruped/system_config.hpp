@@ -23,9 +23,10 @@ struct HidSettings {
     kFirstModeKey = 0,
     kPassiveMode,
     kFixedStandMode,
-    kSwingTestMode,
     kFreeStandMode,
     kTrottingMode,
+    kSwingTestMode,
+    kBalanceTestMode,
     kMoveBaseMode,
     kLastModeKey,
     // keys for control

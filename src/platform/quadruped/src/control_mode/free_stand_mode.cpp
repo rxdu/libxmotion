@@ -94,28 +94,28 @@ void FreeStandMode::HandleKeyboardInput(ControlContext& context) {
       context, HidEventHandler::KeyboardEventType::kControlInput);
   if (key_func.has_value()) {
     if (key_func.value() == HidSettings::KeyFunction::kLeftStickUp) {
-      XLOG_INFO("FreeStandMode: LeftStickUp");
+      XLOG_DEBUG("FreeStandMode: LeftStickUp");
       UpdateTargetPose(Term::kHeight, height_step_);
     } else if (key_func.value() == HidSettings::KeyFunction::kLeftStickDown) {
-      XLOG_INFO("FreeStandMode: LeftStickDown");
+      XLOG_DEBUG("FreeStandMode: LeftStickDown");
       UpdateTargetPose(Term::kHeight, -height_step_);
     } else if (key_func.value() == HidSettings::KeyFunction::kLeftStickLeft) {
-      XLOG_INFO("FreeStandMode: LeftStickLeft");
+      XLOG_DEBUG("FreeStandMode: LeftStickLeft");
       UpdateTargetPose(Term::kYaw, angle_step_);
     } else if (key_func.value() == HidSettings::KeyFunction::kLeftStickRight) {
-      XLOG_INFO("FreeStandMode: LeftStickRight");
+      XLOG_DEBUG("FreeStandMode: LeftStickRight");
       UpdateTargetPose(Term::kYaw, -angle_step_);
     } else if (key_func.value() == HidSettings::KeyFunction::kRightStickUp) {
-      XLOG_INFO("FreeStandMode: RightStickUp");
+      XLOG_DEBUG("FreeStandMode: RightStickUp");
       UpdateTargetPose(Term::kPitch, angle_step_);
     } else if (key_func.value() == HidSettings::KeyFunction::kRightStickDown) {
-      XLOG_INFO("FreeStandMode: RightStickDown");
+      XLOG_DEBUG("FreeStandMode: RightStickDown");
       UpdateTargetPose(Term::kPitch, -angle_step_);
     } else if (key_func.value() == HidSettings::KeyFunction::kRightStickLeft) {
-      XLOG_INFO("FreeStandMode: RightStickLeft");
+      XLOG_DEBUG("FreeStandMode: RightStickLeft");
       UpdateTargetPose(Term::kRoll, -angle_step_);
     } else if (key_func.value() == HidSettings::KeyFunction::kRightStickRight) {
-      XLOG_INFO("FreeStandMode: RightStickRight");
+      XLOG_DEBUG("FreeStandMode: RightStickRight");
       UpdateTargetPose(Term::kRoll, angle_step_);
     }
   }

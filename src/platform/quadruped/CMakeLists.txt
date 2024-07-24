@@ -17,8 +17,11 @@ add_library(quadruped
     src/robot_model/unitree_dog.cpp
     src/robot_model/unitree_model_profile.cpp
     # estimators
+    src/estimator/sim_dummy_estimator.cpp
     src/estimator/simple_estimator.cpp
     # controllers
+    src/controller/balance_controller.cpp
+    # finite-state machine
     src/control_mode_fsm.cpp
     src/control_mode/fixed_stand_mode.cpp
     src/control_mode/lying_down_mode.cpp
@@ -27,6 +30,7 @@ add_library(quadruped
     src/control_mode/move_base_mode.cpp
     src/control_mode/passive_mode.cpp
     src/control_mode/trotting_mode.cpp
+    src/control_mode/balance_test_mode.cpp
     # system
     src/quadruped_system.cpp)
 target_link_libraries(quadruped PUBLIC
