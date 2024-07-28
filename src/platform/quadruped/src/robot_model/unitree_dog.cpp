@@ -126,26 +126,26 @@ void UnitreeDog::ConnectSensorDataQueue(
   sensor_data_queue_ = queue;
 }
 
-//UnitreeDog::State UnitreeDog::GetEstimatedState() {
-//  LowLevelState state_feedback;
-//  {
-//    std::lock_guard<std::mutex> lock(state_mutex_);
-//    state_feedback = state_;
-//  }
+// UnitreeDog::State UnitreeDog::GetEstimatedState() {
+//   LowLevelState state_feedback;
+//   {
+//     std::lock_guard<std::mutex> lock(state_mutex_);
+//     state_feedback = state_;
+//   }
 //
-//  State state;
-//  state.q = Eigen::Matrix<double, 12, 1>::Zero();
-//  state.q_dot = Eigen::Matrix<double, 12, 1>::Zero();
-//  state.tau = Eigen::Matrix<double, 12, 1>::Zero();
-//  for (int i = 0; i < 12; ++i) {
-//    auto& motor_state = state_feedback.motor_state()[i];
-//    state.q[i] = motor_state.q();
-//    state.q_dot[i] = motor_state.dq();
-//    state.tau[i] = motor_state.tau_est();
-//    state.q_ddot[i] = motor_state.ddq();
-//  }
-//  return state;
-//}
+//   State state;
+//   state.q = Eigen::Matrix<double, 12, 1>::Zero();
+//   state.q_dot = Eigen::Matrix<double, 12, 1>::Zero();
+//   state.tau = Eigen::Matrix<double, 12, 1>::Zero();
+//   for (int i = 0; i < 12; ++i) {
+//     auto& motor_state = state_feedback.motor_state()[i];
+//     state.q[i] = motor_state.q();
+//     state.q_dot[i] = motor_state.dq();
+//     state.tau[i] = motor_state.tau_est();
+//     state.q_ddot[i] = motor_state.ddq();
+//   }
+//   return state;
+// }
 
 Position3d UnitreeDog::GetFootPosition(LegIndex leg_index,
                                        const JointPosition3d& q,
@@ -211,17 +211,6 @@ UnitreeDog::AllJointVar UnitreeDog::GetJointVelocity(
   return q_dot;
 }
 
-UnitreeDog::AllJointVar UnitreeDog::GetJointTorqueQ(
-    const AllJointVar& q, const std::array<Force3d, 4>& foot_force) const {
-  AllJointVar tau = AllJointVar::Zero();
-  for (int i = 0; i < 4; ++i) {
-    auto index = static_cast<LegIndex>(i);
-    tau.segment<3>(i * 3) =
-        legs_.at(index).GetJointTorqueQ(q.segment<3>(i * 3), foot_force[i]);
-  }
-  return tau;
-}
-
 std::array<Position3d, 4> UnitreeDog::GetFootPosition(const AllJointVar& q,
                                                       RefFrame frame) const {
   std::array<Position3d, 4> foot_pos;
@@ -252,6 +241,17 @@ Torque3d UnitreeDog::GetJointTorqueQ(LegIndex leg_index,
                                      const JointPosition3d& q,
                                      const Force3d& f) const {
   return legs_.at(leg_index).GetJointTorqueQ(q, f);
+}
+
+UnitreeDog::AllJointVar UnitreeDog::GetJointTorqueQ(
+    const AllJointVar& q, const std::array<Force3d, 4>& foot_force) const {
+  AllJointVar tau = AllJointVar::Zero();
+  for (int i = 0; i < 4; ++i) {
+    auto index = static_cast<LegIndex>(i);
+    tau.segment<3>(i * 3) =
+        legs_.at(index).GetJointTorqueQ(q.segment<3>(i * 3), foot_force[i]);
+  }
+  return tau;
 }
 
 void UnitreeDog::SendCommandToRobot() {

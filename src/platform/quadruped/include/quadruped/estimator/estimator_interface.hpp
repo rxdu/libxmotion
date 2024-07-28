@@ -19,7 +19,8 @@ class EstimatorInterface {
   virtual void Update(const QuadrupedModel::SensorData& sensor_data,
                       double dt) = 0;
 
-  virtual QuadrupedModel::State GetCurrentState() const = 0;
+  virtual QuadrupedModel::AllJointVar GetEstimatedJointPosition() const = 0;
+  virtual QuadrupedModel::AllJointVar GetEstimatedJointVelocity() const = 0;
 };
 }  // namespace xmotion
 

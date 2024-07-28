@@ -36,9 +36,9 @@ FreeStandMode::FreeStandMode(const ControlContext& context) {
             height_step_);
 
   // front right foot position with respect to base
-  auto current_state = context.estimator->GetCurrentState();
+  auto q_hat = context.estimator->GetEstimatedJointPosition();
   JointPosition3d q_b0 =
-      current_state.q.segment<3>(static_cast<int>(LegIndex::kFrontRight) * 3);
+      q_hat.segment<3>(static_cast<int>(LegIndex::kFrontRight) * 3);
   p_b0_ = context.robot_model->GetFootPosition(LegIndex::kFrontRight, q_b0,
                                                QuadrupedModel::RefFrame::kBase);
 
@@ -46,12 +46,9 @@ FreeStandMode::FreeStandMode(const ControlContext& context) {
   target_pose_.height = initial_pose_.height;
 
   // foot position with respect to front right foot
-  auto q_b1 =
-      current_state.q.segment<3>(static_cast<int>(LegIndex::kFrontLeft) * 3);
-  auto q_b2 =
-      current_state.q.segment<3>(static_cast<int>(LegIndex::kRearRight) * 3);
-  auto q_b3 =
-      current_state.q.segment<3>(static_cast<int>(LegIndex::kRearLeft) * 3);
+  auto q_b1 = q_hat.segment<3>(static_cast<int>(LegIndex::kFrontLeft) * 3);
+  auto q_b2 = q_hat.segment<3>(static_cast<int>(LegIndex::kRearRight) * 3);
+  auto q_b3 = q_hat.segment<3>(static_cast<int>(LegIndex::kRearLeft) * 3);
   p_sx_[0] = p_b0_ - p_b0_;
   p_sx_[1] = context.robot_model->GetFootPosition(
                  LegIndex::kFrontLeft, q_b1, QuadrupedModel::RefFrame::kBase) -

@@ -44,7 +44,7 @@ void UnitreeOnboardEstimator::Update(
     //    x_hat_.q[i] = motor_state.q();
     //    x_hat_.q_dot[i] = motor_state.dq();
     x_hat_.tau[i] = motor_state.tau_est();
-    x_hat_.q_ddot[i] = motor_state.ddq();
+//    x_hat_.q_ddot[i] = motor_state.ddq();
   }
   x_hat_.q = sensor_data.q;
   x_hat_.q_dot = sensor_data.q_dot;
@@ -57,8 +57,16 @@ void UnitreeOnboardEstimator::Update(
   //  }
 }
 
-QuadrupedModel::State UnitreeOnboardEstimator::GetCurrentState() const {
-  return x_hat_;
+QuadrupedModel::AllJointVar UnitreeOnboardEstimator::GetEstimatedJointPosition()
+    const {
+  std::lock_guard<std::mutex> lock(x_hat_mutex_);
+  return x_hat_.q;
+}
+
+QuadrupedModel::AllJointVar UnitreeOnboardEstimator::GetEstimatedJointVelocity()
+    const {
+  std::lock_guard<std::mutex> lock(x_hat_mutex_);
+  return x_hat_.q_dot;
 }
 
 void UnitreeOnboardEstimator::OnLowLevelStateMessageReceived(

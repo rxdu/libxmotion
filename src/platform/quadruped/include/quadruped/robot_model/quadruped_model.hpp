@@ -43,11 +43,10 @@ class QuadrupedModel {
     AllJointVar kd;
   };
 
-  struct State {
+  struct JointState {
     AllJointVar q;
     AllJointVar q_dot;
     AllJointVar tau;
-    AllJointVar q_ddot;
   };
 
   struct Command {
@@ -92,8 +91,6 @@ class QuadrupedModel {
   virtual AllJointVar GetJointVelocity(
       const std::array<Position3d, 4>& foot_pos,
       const std::array<Velocity3d, 4>& foot_vel, RefFrame frame) const = 0;
-  virtual AllJointVar GetJointTorqueQ(
-      const AllJointVar& q, const std::array<Force3d, 4>& foot_force) const = 0;
 
   virtual std::array<Position3d, 4> GetFootPosition(const AllJointVar& q,
                                                     RefFrame frame) const = 0;
@@ -103,6 +100,8 @@ class QuadrupedModel {
   // dynamics
   virtual Torque3d GetJointTorque(LegIndex leg_index, const Position3d& pos,
                                   const Force3d& f) const = 0;
+  virtual AllJointVar GetJointTorqueQ(
+      const AllJointVar& q, const std::array<Force3d, 4>& foot_force) const = 0;
   virtual Torque3d GetJointTorqueQ(LegIndex leg_index, const JointPosition3d& q,
                                    const Force3d& f) const = 0;
 

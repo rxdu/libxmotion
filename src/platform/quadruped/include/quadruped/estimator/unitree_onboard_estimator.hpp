@@ -30,15 +30,18 @@ class UnitreeOnboardEstimator final : public EstimatorInterface {
 
   void Update(const QuadrupedModel::SensorData& sensor_data,
               double dt) override;
-  QuadrupedModel::State GetCurrentState() const override;
+
+  QuadrupedModel::AllJointVar GetEstimatedJointPosition() const;
+  QuadrupedModel::AllJointVar GetEstimatedJointVelocity() const;
 
  private:
   void OnLowLevelStateMessageReceived(const void* message);
   void OnSportModeStateMessageReceived(const void* message);
 
-  QuadrupedModel::State x_hat_;
+  mutable std::mutex x_hat_mutex_;
+  QuadrupedModel::JointState x_hat_;
 
-  std::mutex high_state_mutex_;
+  mutable std::mutex high_state_mutex_;
   SportModeState high_state_;
   unitree::robot::ChannelSubscriberPtr<SportModeState> high_state_sub_;
 

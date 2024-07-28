@@ -23,9 +23,9 @@ LyingDownMode::LyingDownMode(const ControlContext& context) {
   joint_cmd_.q_dot = QuadrupedModel::AllJointVar::Zero();
   joint_cmd_.tau = QuadrupedModel::AllJointVar::Zero();
 
-  auto current_state = context.estimator->GetCurrentState();
+  auto q_hat = context.estimator->GetEstimatedJointPosition();
   for (int i = 0; i < 12; i++) {
-    initial_state_.q[i] = current_state.q[i];
+    initial_state_.q[i] = q_hat[i];
   }
   target_state_.q = context.system_config.ctrl_settings.lying_down_mode
                         .desired_joint_position;
@@ -41,7 +41,7 @@ void LyingDownMode::Update(ControlContext& context) {
       elapsed_ms /
       context.system_config.ctrl_settings.lying_down_mode.duration_ms);
 
-  QuadrupedModel::State desired_state = initial_state_;
+  QuadrupedModel::JointState desired_state = initial_state_;
   for (int i = 0; i < 12; i++) {
     desired_state.q[i] = initial_state_.q[i] +
                          phase * (target_state_.q[i] - initial_state_.q[i]);

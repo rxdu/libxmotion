@@ -28,7 +28,7 @@ class UnitreeDog : public QuadrupedModel {
   static constexpr auto low_level_cmd_topic = "rt/lowcmd";
   static constexpr auto low_level_state_topic = "rt/lowstate";
 
-  using State = QuadrupedModel::State;
+  using JointState = QuadrupedModel::JointState;
 
  public:
   using LowLevelCmd = unitree_go::msg::dds_::LowCmd_;
@@ -51,7 +51,7 @@ class UnitreeDog : public QuadrupedModel {
   void ConnectSensorDataQueue(
       std::shared_ptr<DataQueue<SensorData>> queue) override;
 
-  // QuadrupedModel: kinematics interface
+  // QuadrupedModel: leg kinematics interface
   Position3d GetFootPosition(LegIndex leg_index, const JointPosition3d& q,
                              RefFrame frame) const override;
   Velocity3d GetFootVelocity(LegIndex leg_index, const JointPosition3d& q,
@@ -70,9 +70,6 @@ class UnitreeDog : public QuadrupedModel {
   AllJointVar GetJointVelocity(const std::array<Position3d, 4>& foot_pos,
                                const std::array<Velocity3d, 4>& foot_vel,
                                RefFrame frame) const override;
-  AllJointVar GetJointTorqueQ(
-      const AllJointVar& q,
-      const std::array<Force3d, 4>& foot_force) const override;
 
   std::array<Position3d, 4> GetFootPosition(const AllJointVar& q,
                                             RefFrame frame) const override;
@@ -84,6 +81,9 @@ class UnitreeDog : public QuadrupedModel {
                           const Force3d& f) const override;
   Torque3d GetJointTorqueQ(LegIndex leg_index, const JointPosition3d& q,
                            const Force3d& f) const override;
+  AllJointVar GetJointTorqueQ(
+      const AllJointVar& q,
+      const std::array<Force3d, 4>& foot_force) const override;
 
  private:
   // unitree-specific implementation details

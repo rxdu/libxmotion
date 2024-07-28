@@ -40,10 +40,9 @@ SwingTestMode::SwingTestMode(const ControlContext& context) {
   joint_cmd_.q_dot = QuadrupedModel::AllJointVar::Zero();
   joint_cmd_.tau = QuadrupedModel::AllJointVar::Zero();
 
-  auto current_state = context.estimator->GetCurrentState();
+  auto q_hat = context.estimator->GetEstimatedJointPosition();
 
-  auto foot_joints =
-      current_state.q.segment<3>(static_cast<int>(swing_leg_) * 3);
+  auto foot_joints = q_hat.segment<3>(static_cast<int>(swing_leg_) * 3);
   initial_position_ = context.robot_model->GetFootPosition(
       swing_leg_, foot_joints, QuadrupedModel::RefFrame::kLeg);
   target_position_ = initial_position_;
@@ -110,18 +109,18 @@ void SwingTestMode::Update(ControlContext& context) {
   HandleKeyboardInput(context);
   //  if (sw_.mtoc() > 0) XLOG_INFO("Updating keyboard took: {}", sw_.mtoc());
 
-  auto current_state = context.estimator->GetCurrentState();
+  auto q_hat = context.estimator->GetEstimatedJointPosition();
+  auto q_dot_hat = context.estimator->GetEstimatedJointVelocity();
 
   // desired joint position
   auto swing_q_desired =
       context.robot_model->GetJointPosition(swing_leg_, target_position_);
-  joint_cmd_.q = current_state.q;
+  joint_cmd_.q = q_hat;
   joint_cmd_.q.segment<3>(static_cast<int>(swing_leg_) * 3) = swing_q_desired;
 
   // calculate desired joint torque
-  auto q_foot = current_state.q.segment<3>(static_cast<int>(swing_leg_) * 3);
-  auto q_dot_foot =
-      current_state.q_dot.segment<3>(static_cast<int>(swing_leg_) * 3);
+  auto q_foot = q_hat.segment<3>(static_cast<int>(swing_leg_) * 3);
+  auto q_dot_foot = q_dot_hat.segment<3>(static_cast<int>(swing_leg_) * 3);
 
   auto pos_foot = context.robot_model->GetFootPosition(
       swing_leg_, q_foot, QuadrupedModel::RefFrame::kLeg);
@@ -131,8 +130,9 @@ void SwingTestMode::Update(ControlContext& context) {
   auto target_force = kp_ * (target_position_ - pos_foot) + kd_ * (-vel_foot);
   auto target_torque =
       context.robot_model->GetJointTorqueQ(swing_leg_, q_foot, target_force);
-  joint_cmd_.tau = current_state.tau;
-  joint_cmd_.tau.segment<3>(static_cast<int>(swing_leg_) * 3) = target_torque;
+  //  joint_cmd_.tau = current_state.tau;
+  joint_cmd_.tau = QuadrupedModel::AllJointVar::Zero();
+  joint_cmd_.tau.segment<3>(static_cast<int>(swing_leg_) * 3) += target_torque;
 
   //  XLOG_INFO("==> SwingTestMode: target foot torque: {}, {}, {}",
   //            target_torque.x(), target_torque.y(), target_torque.z());
