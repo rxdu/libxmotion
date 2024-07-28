@@ -65,12 +65,8 @@ class QuadrupedModel {
   };
 
  public:
-  // estimator
-  // TODO (rdu): estimated state should be from a state estimator
   virtual void ConnectSensorDataQueue(
       std::shared_ptr<DataQueue<SensorData>> queue) = 0;
-  virtual State GetEstimatedState() = 0;
-
   virtual void SetFootContactState(const Eigen::Vector4d& contact_state) = 0;
   virtual Eigen::Vector4d GetFootContactState() const = 0;
 

@@ -36,7 +36,7 @@ FreeStandMode::FreeStandMode(const ControlContext& context) {
             height_step_);
 
   // front right foot position with respect to base
-  auto current_state = context.robot_model->GetEstimatedState();
+  auto current_state = context.estimator->GetCurrentState();
   JointPosition3d q_b0 =
       current_state.q.segment<3>(static_cast<int>(LegIndex::kFrontRight) * 3);
   p_b0_ = context.robot_model->GetFootPosition(LegIndex::kFrontRight, q_b0,

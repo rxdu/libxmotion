@@ -40,7 +40,7 @@ SwingTestMode::SwingTestMode(const ControlContext& context) {
   joint_cmd_.q_dot = QuadrupedModel::AllJointVar::Zero();
   joint_cmd_.tau = QuadrupedModel::AllJointVar::Zero();
 
-  auto current_state = context.robot_model->GetEstimatedState();
+  auto current_state = context.estimator->GetCurrentState();
 
   auto foot_joints =
       current_state.q.segment<3>(static_cast<int>(swing_leg_) * 3);
@@ -110,7 +110,7 @@ void SwingTestMode::Update(ControlContext& context) {
   HandleKeyboardInput(context);
   //  if (sw_.mtoc() > 0) XLOG_INFO("Updating keyboard took: {}", sw_.mtoc());
 
-  auto current_state = context.robot_model->GetEstimatedState();
+  auto current_state = context.estimator->GetCurrentState();
 
   // desired joint position
   auto swing_q_desired =

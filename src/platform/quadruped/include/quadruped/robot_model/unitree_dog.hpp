@@ -50,7 +50,6 @@ class UnitreeDog : public QuadrupedModel {
   // QuadrupedModel: estimator interface
   void ConnectSensorDataQueue(
       std::shared_ptr<DataQueue<SensorData>> queue) override;
-  State GetEstimatedState() override;
 
   // QuadrupedModel: kinematics interface
   Position3d GetFootPosition(LegIndex leg_index, const JointPosition3d& q,

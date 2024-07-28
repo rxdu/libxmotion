@@ -18,6 +18,8 @@ class EstimatorInterface {
 
   virtual void Update(const QuadrupedModel::SensorData& sensor_data,
                       double dt) = 0;
+
+  virtual QuadrupedModel::State GetCurrentState() const = 0;
 };
 }  // namespace xmotion
 

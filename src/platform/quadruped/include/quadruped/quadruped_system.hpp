@@ -18,7 +18,6 @@
 #include "quadruped/robot_model/data_queue.hpp"
 #include "quadruped/robot_model/quadruped_model.hpp"
 #include "quadruped/estimator/estimator_interface.hpp"
-#include "quadruped/estimator/simple_estimator.hpp"
 #include "quadruped/control_mode_fsm.hpp"
 #include "quadruped/event_handler/hid_event_handler.hpp"
 

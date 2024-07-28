@@ -9,6 +9,9 @@
 
 #include "quadruped/quadruped_system.hpp"
 
+// #include "quadruped/estimator/simple_estimator.hpp"
+#include "quadruped/estimator/unitree_onboard_estimator.hpp"
+
 #include "time/stopwatch.hpp"
 #include "logging/xlogger.hpp"
 
@@ -33,11 +36,12 @@ bool QuadrupedSystem::Initialize() {
   }
 
   // initialize estimator subsystem
-  SimpleEstimator* simple_estimator =
-      new SimpleEstimator(config_.est_settings, model_);
-  SimpleEstimator::Params estimator_params;
-  simple_estimator->Initialize(estimator_params);
-  estimator_.reset(simple_estimator);
+  //  SimpleEstimator* simple_estimator =
+  //      new SimpleEstimator(config_.est_settings, model_);
+  //  SimpleEstimator::Params estimator_params;
+  //  simple_estimator->Initialize(estimator_params);
+  UnitreeOnboardEstimator* est_impl = new UnitreeOnboardEstimator();
+  estimator_.reset(est_impl);
   keep_estimation_loop_ = true;
 
   // initialize control subsystem
@@ -47,6 +51,7 @@ bool QuadrupedSystem::Initialize() {
   sensor_data_queue_ =
       std::make_shared<DataQueue<QuadrupedModel::SensorData>>();
   context.robot_model->ConnectSensorDataQueue(sensor_data_queue_);
+  context.estimator = estimator_;
   context.hid_event_listener = hid_event_listener_;
   PassiveMode initial_state{context};
   fsm_ = std::make_unique<ControlModeFsm>(std::move(initial_state),
@@ -78,9 +83,10 @@ void QuadrupedSystem::ControlSubsystem() {
             .count() /
         1000000.0f;
     last_time = now;
-//    if ((dt - 0.002) / 0.002 > 0.1) {
-//      XLOG_ERROR("QuadrupedSystem: control loop running at {} ms", dt * 1000);
-//    }
+    //    if ((dt - 0.002) / 0.002 > 0.1) {
+    //      XLOG_ERROR("QuadrupedSystem: control loop running at {} ms", dt *
+    //      1000);
+    //    }
 
     // update control
     fsm_->Update();

@@ -17,7 +17,7 @@ add_library(quadruped
     src/robot_model/unitree_dog.cpp
     src/robot_model/unitree_model_profile.cpp
     # estimators
-    src/estimator/sim_dummy_estimator.cpp
+    src/estimator/unitree_onboard_estimator.cpp
     src/estimator/simple_estimator.cpp
     # controllers
     src/controller/balance_controller.cpp
