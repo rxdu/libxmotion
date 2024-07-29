@@ -325,6 +325,92 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
           config_node["control_settings"]["free_stand_mode"]["height_step"]
               .as<double>();
     }
+
+    // balance test mode default joint gains
+    {
+      std::string gain_set_name =
+          config_node["control_settings"]["balance_test_mode"]
+                     ["default_joint_gains"]
+                         .as<std::string>();
+      if (config->ctrl_settings.gain_sets.find(gain_set_name) ==
+          config->ctrl_settings.gain_sets.end()) {
+        XLOG_ERROR(
+            "ConfigLoader: balance test mode default gain set not found: {}",
+            gain_set_name);
+        return false;
+      }
+      config->ctrl_settings.balance_test_mode.default_joint_gains =
+          config->ctrl_settings.gain_sets[gain_set_name];
+
+      // position controller
+      {
+        std::vector<double> kp =
+            config_node["control_settings"]["balance_test_mode"]
+                       ["position_controller"]["kp"]
+                           .as<std::vector<double>>();
+        std::vector<double> kd =
+            config_node["control_settings"]["balance_test_mode"]
+                       ["position_controller"]["kd"]
+                           .as<std::vector<double>>();
+        if (kp.size() != 3 | kd.size() != 3) {
+          XLOG_ERROR("ConfigLoader: balance test mode kp or kd size mismatch");
+          return false;
+        }
+        for (size_t i = 0; i < 3; ++i) {
+          config->ctrl_settings.balance_test_mode.position_controller.kp(i) =
+              kp[i];
+          config->ctrl_settings.balance_test_mode.position_controller.kd(i) =
+              kd[i];
+        }
+      }
+
+      // orientation controller
+      {
+        config->ctrl_settings.balance_test_mode.orientation_controller.kp =
+            config_node["control_settings"]["balance_test_mode"]
+                       ["orientation_controller"]["kp"]
+                           .as<double>();
+        std::vector<double> kd =
+            config_node["control_settings"]["balance_test_mode"]
+                       ["orientation_controller"]["kd"]
+                           .as<std::vector<double>>();
+        if (kd.size() != 3) {
+          XLOG_ERROR("ConfigLoader: balance test mode kd size mismatch");
+          return false;
+        }
+        for (size_t i = 0; i < 3; ++i) {
+          config->ctrl_settings.balance_test_mode.orientation_controller.kd(i) =
+              kd[i];
+        }
+      }
+
+      // pose limit
+      {
+        config->ctrl_settings.balance_test_mode.pose_limit.x =
+            config_node["control_settings"]["balance_test_mode"]["pose_limit"]
+                       ["x"]
+                           .as<double>();
+        config->ctrl_settings.balance_test_mode.pose_limit.y =
+            config_node["control_settings"]["balance_test_mode"]["pose_limit"]
+                       ["y"]
+                           .as<double>();
+        config->ctrl_settings.balance_test_mode.pose_limit.z =
+            config_node["control_settings"]["balance_test_mode"]["pose_limit"]
+                       ["z"]
+                           .as<double>();
+        config->ctrl_settings.balance_test_mode.pose_limit.yaw =
+            config_node["control_settings"]["balance_test_mode"]["pose_limit"]
+                       ["yaw"]
+                           .as<double>();
+      }
+
+      config->ctrl_settings.balance_test_mode.move_step =
+          config_node["control_settings"]["balance_test_mode"]["move_step"]
+              .as<double>();
+      config->ctrl_settings.balance_test_mode.rotate_step =
+          config_node["control_settings"]["balance_test_mode"]["rotate_step"]
+              .as<double>();
+    }
   } catch (YAML::BadFile &e) {
     XLOG_ERROR("ConfigLoader: failed to open config file {}: {}", file_path,
                e.what());

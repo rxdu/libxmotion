@@ -10,7 +10,10 @@
 #define QUADRUPED_MOTION_BALANCE_CONTROLLER_HPP
 
 namespace xmotion {
-class BalanceController {};
+class BalanceController {
+ public:
+
+};
 }  // namespace xmotion
 
 #endif  // QUADRUPED_MOTION_BALANCE_CONTROLLER_HPP

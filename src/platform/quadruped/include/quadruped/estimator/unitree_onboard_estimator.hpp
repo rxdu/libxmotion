@@ -24,6 +24,14 @@ class UnitreeOnboardEstimator final : public EstimatorInterface {
   using LowLevelState = unitree_go::msg::dds_::LowState_;
   using SportModeState = unitree_go::msg::dds_::SportModeState_;
 
+  struct EstimatorState {
+    QuadrupedModel::AllJointVar q;
+    QuadrupedModel::AllJointVar q_dot;
+    Position3d p_base;
+    Velocity3d v_base;
+    Quaterniond quat_base;
+  };
+
  public:
   UnitreeOnboardEstimator();
   ~UnitreeOnboardEstimator() = default;
@@ -31,15 +39,19 @@ class UnitreeOnboardEstimator final : public EstimatorInterface {
   void Update(const QuadrupedModel::SensorData& sensor_data,
               double dt) override;
 
-  QuadrupedModel::AllJointVar GetEstimatedJointPosition() const;
-  QuadrupedModel::AllJointVar GetEstimatedJointVelocity() const;
+  QuadrupedModel::AllJointVar GetEstimatedJointPosition() const override;
+  QuadrupedModel::AllJointVar GetEstimatedJointVelocity() const override;
+
+  Position3d GetEstimatedBasePosition() const override;
+  Velocity3d GetEstimatedBaseVelocity() const override;
+  Quaterniond GetEstimatedBaseOrientation() const override;
 
  private:
   void OnLowLevelStateMessageReceived(const void* message);
   void OnSportModeStateMessageReceived(const void* message);
 
   mutable std::mutex x_hat_mutex_;
-  QuadrupedModel::JointState x_hat_;
+  EstimatorState x_hat_;
 
   mutable std::mutex high_state_mutex_;
   SportModeState high_state_;

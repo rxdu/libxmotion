@@ -76,6 +76,20 @@ struct ControlSettings {
     uint32_t duration_ms;
   } lying_down_mode;
 
+  struct FreeStandModeParams {
+    QuadrupedModel::AllJointGains default_joint_gains;
+
+    struct PoseLimit {
+      double roll;
+      double pitch;
+      double yaw;
+      double height;
+    } pose_limit;
+
+    double angle_step;
+    double height_step;
+  } free_stand_mode;
+
   struct SwingTestModeParams {
     QuadrupedModel::AllJointGains default_joint_gains;
     LegIndex swing_leg_index;
@@ -96,26 +110,36 @@ struct ControlSettings {
     double move_step;
   } swing_test_mode;
 
-  struct FreeStandModeParams {
+  struct BalanceTestModeParams {
     QuadrupedModel::AllJointGains default_joint_gains;
 
+    struct PositionController {
+      Eigen::Matrix<double, 3, 1> kp;
+      Eigen::Matrix<double, 3, 1> kd;
+    } position_controller;
+
+    struct OrientationController {
+      double kp;
+      Eigen::Matrix<double, 3, 1> kd;
+    } orientation_controller;
+
     struct PoseLimit {
-      double roll;
-      double pitch;
+      double x;
+      double y;
+      double z;
       double yaw;
-      double height;
     } pose_limit;
 
-    double angle_step;
-    double height_step;
-  } free_stand_mode;
+    double move_step;
+    double rotate_step;
+  } balance_test_mode;
 };
 
 struct EstimatorSettings {
   double expected_dt;
 
   struct SimpleEstimatorParams {
-    Eigen::Vector<double, 18> Q_diag;
+    Eigen::Matrix<double, 18, 1> Q_diag;
   } simple_estimator;
 };
 

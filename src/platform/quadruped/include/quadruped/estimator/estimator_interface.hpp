@@ -21,6 +21,10 @@ class EstimatorInterface {
 
   virtual QuadrupedModel::AllJointVar GetEstimatedJointPosition() const = 0;
   virtual QuadrupedModel::AllJointVar GetEstimatedJointVelocity() const = 0;
+
+  virtual Position3d GetEstimatedBasePosition() const = 0;
+  virtual Velocity3d GetEstimatedBaseVelocity() const = 0;
+  virtual Quaterniond GetEstimatedBaseOrientation() const = 0;
 };
 }  // namespace xmotion
 

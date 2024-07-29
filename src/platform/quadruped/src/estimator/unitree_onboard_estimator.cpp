@@ -36,25 +36,21 @@ void UnitreeOnboardEstimator::Update(
     std::lock_guard<std::mutex> lock(low_state_mutex_);
     low_state = low_state_;
   }
-  //  x_hat_.q = Eigen::Matrix<double, 12, 1>::Zero();
-  //  x_hat_.q_dot = Eigen::Matrix<double, 12, 1>::Zero();
-  //  x_hat_.tau = Eigen::Matrix<double, 12, 1>::Zero();
-  for (int i = 0; i < 12; ++i) {
-    auto& motor_state = low_state.motor_state()[i];
-    //    x_hat_.q[i] = motor_state.q();
-    //    x_hat_.q_dot[i] = motor_state.dq();
-    x_hat_.tau[i] = motor_state.tau_est();
-//    x_hat_.q_ddot[i] = motor_state.ddq();
-  }
+
   x_hat_.q = sensor_data.q;
   x_hat_.q_dot = sensor_data.q_dot;
+  x_hat_.quat_base = sensor_data.quaternion;
 
   // high level state
-  //  SportModeState state_feedback;
-  //  {
-  //    std::lock_guard<std::mutex> lock(high_state_mutex_);
-  //    state_feedback = high_state_;
-  //  }
+  SportModeState high_state;
+  {
+    std::lock_guard<std::mutex> lock(high_state_mutex_);
+    high_state = high_state_;
+  }
+  for (int i = 0; i < 3; ++i) {
+    x_hat_.p_base[i] = high_state.position()[i];
+    x_hat_.v_base[i] = high_state.velocity()[i];
+  }
 }
 
 QuadrupedModel::AllJointVar UnitreeOnboardEstimator::GetEstimatedJointPosition()
@@ -67,6 +63,21 @@ QuadrupedModel::AllJointVar UnitreeOnboardEstimator::GetEstimatedJointVelocity()
     const {
   std::lock_guard<std::mutex> lock(x_hat_mutex_);
   return x_hat_.q_dot;
+}
+
+Position3d UnitreeOnboardEstimator::GetEstimatedBasePosition() const {
+  std::lock_guard<std::mutex> lock(x_hat_mutex_);
+  return x_hat_.p_base;
+}
+
+Velocity3d UnitreeOnboardEstimator::GetEstimatedBaseVelocity() const {
+  std::lock_guard<std::mutex> lock(x_hat_mutex_);
+  return x_hat_.v_base;
+}
+
+Quaterniond UnitreeOnboardEstimator::GetEstimatedBaseOrientation() const {
+  std::lock_guard<std::mutex> lock(x_hat_mutex_);
+  return x_hat_.quat_base;
 }
 
 void UnitreeOnboardEstimator::OnLowLevelStateMessageReceived(
