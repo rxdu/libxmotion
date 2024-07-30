@@ -12,6 +12,8 @@ target_include_directories(stopwatch INTERFACE
 
 add_subdirectory(spatial)
 
+add_subdirectory(quadprog++)
+
 # set(BUILD_DDSPERF OFF CACHE INTERNAL "Build the performance test" FORCE)
 # set(BUILD_TESTING OFF CACHE INTERNAL "Build the testing tree" FORCE)
 # set(ENABLE_SHM OFF CACHE INTERNAL "Enable shared memory transport" FORCE)

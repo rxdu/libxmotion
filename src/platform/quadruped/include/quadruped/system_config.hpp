@@ -57,6 +57,13 @@ struct HidSettings {
   Joystick joystick;
 };
 
+struct ControllerParams {
+  struct BalanceControllerParams {
+    Eigen::Matrix<double, 3, 1> kp;
+    Eigen::Matrix<double, 3, 1> kd;
+  } balance_controller;
+};
+
 struct ControlSettings {
   std::unordered_map<std::string, QuadrupedModel::AllJointGains> gain_sets;
 
@@ -151,6 +158,8 @@ struct SystemConfig {
   HidSettings hid_settings;
   ControlSettings ctrl_settings;
   EstimatorSettings est_settings;
+
+  ControllerParams ctrl_params;
 };
 }  // namespace xmotion
 

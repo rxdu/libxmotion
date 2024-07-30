@@ -35,7 +35,10 @@ add_library(quadruped
     src/quadruped_system.cpp)
 target_link_libraries(quadruped PUBLIC
     interface
-    fsm time
+    fsm
+    time
+    quadprog
+    math_utils
     input_hid
     unitree_sdk2
     Eigen3::Eigen

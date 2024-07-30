@@ -94,5 +94,4 @@ void UnitreeOnboardEstimator::OnSportModeStateMessageReceived(
   std::lock_guard<std::mutex> lock(high_state_mutex_);
   high_state_ = *msg_ptr;
 }
-
 }  // namespace xmotion
