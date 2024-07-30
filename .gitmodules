@@ -22,3 +22,6 @@
 [submodule "src/ipc/ros2_idl"]
 	path = src/ipc/ros2_idl
 	url = https://github.com/rxdu/ros2_idl.git
+[submodule "extern/quadprog++"]
+	path = extern/quadprog++
+	url = git@github.com:rxdu/QuadProgpp.git
