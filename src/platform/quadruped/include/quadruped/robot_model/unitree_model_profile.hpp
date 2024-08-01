@@ -18,6 +18,9 @@ namespace xmotion {
 struct UnitreeModelProfile {
   std::string name = "unitree_dog";
 
+  double mass = 0.0;
+  Eigen::Matrix3d moment_of_inertia;
+
   // leg parameters
   double leg_hip_link = 0.0;
   double leg_thigh_link = 0.0;
@@ -25,10 +28,12 @@ struct UnitreeModelProfile {
 
   // body to leg offsets
   std::unordered_map<LegIndex, Position3d> body_to_leg_offsets;
+  Position3d center_of_gravity_offset;
 };
 
 struct UnitreeDogs {
   static UnitreeModelProfile GetGo2Profile();
+  static UnitreeModelProfile GetGo2SimProfile();
 };
 }  // namespace xmotion
 

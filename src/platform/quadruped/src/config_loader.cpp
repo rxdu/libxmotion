@@ -410,6 +410,53 @@ bool ConfigLoader::LoadConfigFile(const std::string &file_path,
       config->ctrl_settings.balance_test_mode.rotate_step =
           config_node["control_settings"]["balance_test_mode"]["rotate_step"]
               .as<double>();
+
+      config->ctrl_settings.balance_test_mode.friction_ratio =
+          config_node["control_settings"]["balance_test_mode"]["friction_ratio"]
+              .as<double>();
+    }
+
+    // controller params
+    {
+      std::vector<double> s =
+          config_node["controller_params"]["balance_controller"]["s"]
+              .as<std::vector<double>>();
+      if (s.size() != 6) {
+        XLOG_ERROR("ConfigLoader: balance controller s size mismatch");
+        return false;
+      }
+      for (size_t i = 0; i < 6; ++i) {
+        config->ctrl_params.balance_controller.s(i) = s[i];
+      }
+
+      std::vector<double> w =
+          config_node["controller_params"]["balance_controller"]["w"]
+              .as<std::vector<double>>();
+      if (w.size() != 12) {
+        XLOG_ERROR("ConfigLoader: balance controller w size mismatch");
+        return false;
+      }
+      for (size_t i = 0; i < 12; ++i) {
+        config->ctrl_params.balance_controller.w(i) = w[i];
+      }
+
+      std::vector<double> u =
+          config_node["controller_params"]["balance_controller"]["u"]
+              .as<std::vector<double>>();
+      if (u.size() != 12) {
+        XLOG_ERROR("ConfigLoader: balance controller u size mismatch");
+        return false;
+      }
+      for (size_t i = 0; i < 12; ++i) {
+        config->ctrl_params.balance_controller.u(i) = u[i];
+      }
+
+      config->ctrl_params.balance_controller.alpha =
+          config_node["controller_params"]["balance_controller"]["alpha"]
+              .as<double>();
+      config->ctrl_params.balance_controller.beta =
+          config_node["controller_params"]["balance_controller"]["beta"]
+              .as<double>();
     }
   } catch (YAML::BadFile &e) {
     XLOG_ERROR("ConfigLoader: failed to open config file {}: {}", file_path,

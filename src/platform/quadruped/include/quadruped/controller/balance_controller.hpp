@@ -19,12 +19,14 @@ class BalanceController {
                     std::shared_ptr<QuadrupedModel> robot_model);
 
   Eigen::Matrix<double, 3, 4> ComputeFootForce(
-      const Eigen::Matrix<double, 3, 4>& p_ddot,
-      const Eigen::Matrix<double, 3, 4>& omega_dot, const Quaterniond& quat,
+      double mu, const Eigen::Matrix<double, 3, 1>& p_ddot,
+      const Eigen::Matrix<double, 3, 1>& omega_dot, const Quaterniond& quat,
       const Eigen::Matrix<double, 3, 4>& foot_pos,
       const Eigen::Vector4d& foot_contact);
 
  private:
+  const Eigen::Vector3d g_const = Eigen::Vector3d(0, 0, -9.81);
+  Eigen::Matrix<double, 12, 1> f_prev_;
   ControllerParams::BalanceControllerParams params_;
   std::shared_ptr<QuadrupedModel> robot_model_;
 };

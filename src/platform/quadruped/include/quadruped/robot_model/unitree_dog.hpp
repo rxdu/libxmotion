@@ -51,6 +51,10 @@ class UnitreeDog : public QuadrupedModel {
   void ConnectSensorDataQueue(
       std::shared_ptr<DataQueue<SensorData>> queue) override;
 
+  Position3d GetCogOffset() const override;
+  double GetMass() const override;
+  Eigen::Matrix3d GetMomentOfInertia() const override;
+
   // QuadrupedModel: leg kinematics interface
   Position3d GetFootPosition(LegIndex leg_index, const JointPosition3d& q,
                              RefFrame frame) const override;

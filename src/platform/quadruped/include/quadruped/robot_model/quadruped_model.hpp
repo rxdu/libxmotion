@@ -69,6 +69,11 @@ class QuadrupedModel {
   virtual void SetFootContactState(const Eigen::Vector4d& contact_state) = 0;
   virtual Eigen::Vector4d GetFootContactState() const = 0;
 
+  // robot profile
+  virtual Position3d GetCogOffset() const = 0;
+  virtual double GetMass() const = 0;
+  virtual Eigen::Matrix3d GetMomentOfInertia() const = 0;
+
   // kinematics
   virtual Position3d GetFootPosition(LegIndex leg_index,
                                      const JointPosition3d& q,

@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
   // create a robot model
   auto dog_model = std::make_shared<UnitreeDog>(config.dds_domain_id,
                                                 config.network_interface,
-                                                UnitreeDogs::GetGo2Profile());
+                                                UnitreeDogs::GetGo2SimProfile());
 
   // create a quadruped system and initialize the components
   quadruped = std::make_unique<QuadrupedSystem>(config, dog_model);

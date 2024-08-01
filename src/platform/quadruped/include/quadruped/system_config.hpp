@@ -59,8 +59,11 @@ struct HidSettings {
 
 struct ControllerParams {
   struct BalanceControllerParams {
-    Eigen::Matrix<double, 3, 1> kp;
-    Eigen::Matrix<double, 3, 1> kd;
+    Eigen::Vector<double, 6> s;
+    Eigen::Vector<double, 12> w;
+    Eigen::Vector<double, 12> u;
+    double alpha;
+    double beta;
   } balance_controller;
 };
 
@@ -139,6 +142,7 @@ struct ControlSettings {
 
     double move_step;
     double rotate_step;
+    double friction_ratio;
   } balance_test_mode;
 };
 

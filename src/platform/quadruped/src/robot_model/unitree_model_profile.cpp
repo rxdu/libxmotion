@@ -15,6 +15,9 @@ UnitreeModelProfile UnitreeDogs::GetGo2Profile() {
 
   profile.name = "unitree_go2";
 
+  profile.mass = 12.0;  // kg
+  profile.moment_of_inertia << 0.1320, 0, 0, 0, 0.3475, 0, 0, 0, 0.3775;
+
   // values extracted from Unitree mujoco model: go2.xml
   profile.leg_hip_link = 0.0955;   // l_{abad}
   profile.leg_thigh_link = 0.213;  // l_{hip}
@@ -28,6 +31,35 @@ UnitreeModelProfile UnitreeDogs::GetGo2Profile() {
       Position3d(-0.1934, -0.0465, 0.0);
   profile.body_to_leg_offsets[LegIndex::kRearLeft] =
       Position3d(-0.1934, 0.0465, 0.0);
+
+  profile.center_of_gravity_offset = Position3d(0.0, 0.0, 0.0);
+
+  return profile;
+}
+
+UnitreeModelProfile UnitreeDogs::GetGo2SimProfile() {
+  UnitreeModelProfile profile;
+
+  profile.name = "unitree_go2";
+
+  profile.mass = 12.0;  // kg
+  profile.moment_of_inertia << 0.1320, 0, 0, 0, 0.3475, 0, 0, 0, 0.3775;
+
+  // values extracted from Unitree mujoco model: go2.xml
+  profile.leg_hip_link = 0.0955;   // l_{abad}
+  profile.leg_thigh_link = 0.213;  // l_{hip}
+  profile.leg_calf_link = 0.213;   // l_{knee}
+
+  profile.body_to_leg_offsets[LegIndex::kFrontRight] =
+      Position3d(0.1934, -0.0465, 0.0);
+  profile.body_to_leg_offsets[LegIndex::kFrontLeft] =
+      Position3d(0.1934, 0.0465, 0.0);
+  profile.body_to_leg_offsets[LegIndex::kRearRight] =
+      Position3d(-0.1934, -0.0465, 0.0);
+  profile.body_to_leg_offsets[LegIndex::kRearLeft] =
+      Position3d(-0.1934, 0.0465, 0.0);
+
+  profile.center_of_gravity_offset = Position3d(0.0, 0.0, 0.0);
 
   return profile;
 }

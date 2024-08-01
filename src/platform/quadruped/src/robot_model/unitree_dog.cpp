@@ -126,26 +126,15 @@ void UnitreeDog::ConnectSensorDataQueue(
   sensor_data_queue_ = queue;
 }
 
-// UnitreeDog::State UnitreeDog::GetEstimatedState() {
-//   LowLevelState state_feedback;
-//   {
-//     std::lock_guard<std::mutex> lock(state_mutex_);
-//     state_feedback = state_;
-//   }
-//
-//   State state;
-//   state.q = Eigen::Matrix<double, 12, 1>::Zero();
-//   state.q_dot = Eigen::Matrix<double, 12, 1>::Zero();
-//   state.tau = Eigen::Matrix<double, 12, 1>::Zero();
-//   for (int i = 0; i < 12; ++i) {
-//     auto& motor_state = state_feedback.motor_state()[i];
-//     state.q[i] = motor_state.q();
-//     state.q_dot[i] = motor_state.dq();
-//     state.tau[i] = motor_state.tau_est();
-//     state.q_ddot[i] = motor_state.ddq();
-//   }
-//   return state;
-// }
+Position3d UnitreeDog::GetCogOffset() const {
+  return profile_.center_of_gravity_offset;
+}
+
+double UnitreeDog::GetMass() const { return profile_.mass; }
+
+Eigen::Matrix3d UnitreeDog::GetMomentOfInertia() const {
+  return profile_.moment_of_inertia;
+}
 
 Position3d UnitreeDog::GetFootPosition(LegIndex leg_index,
                                        const JointPosition3d& q,
