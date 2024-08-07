@@ -8,6 +8,9 @@
  */
 
 #include "sensor_imu/imu_hipnuc.hpp"
+
+#include <cmath>
+
 #include "async_port/async_serial.hpp"
 
 extern "C" {
@@ -16,33 +19,35 @@ extern "C" {
 
 namespace xmotion {
 namespace {
-void UnpackData(raw_t *data, ImuData *data_imu, int num) {
-  data_imu->id = data->imu[num].id;
+static constexpr float g_const = 9.81;
 
-  data_imu->timestamp = data->imu[num].timestamp;
+void UnpackData(hipnuc_raw_t *data, ImuData *data_imu) {
+  data_imu->id = 0x91;
 
-  data_imu->pressure = data->imu[num].pressure;
+  data_imu->timestamp = data->imu.ts;
 
-  data_imu->accel.x = data->imu[num].acc[0];
-  data_imu->accel.y = data->imu[num].acc[1];
-  data_imu->accel.z = data->imu[num].acc[2];
+  data_imu->pressure = data->imu.prs;
 
-  data_imu->gyro.x = data->imu[num].gyr[0];
-  data_imu->gyro.y = data->imu[num].gyr[1];
-  data_imu->gyro.z = data->imu[num].gyr[2];
+  data_imu->accel.x = -data->imu.acc[0] * g_const;
+  data_imu->accel.y = -data->imu.acc[1] * g_const;
+  data_imu->accel.z = -data->imu.acc[2] * g_const;
 
-  data_imu->magn.x = data->imu[num].mag[0];
-  data_imu->magn.y = data->imu[num].mag[1];
-  data_imu->magn.z = data->imu[num].mag[2];
+  data_imu->gyro.x = data->imu.gyr[0] * (M_PI / 180.0);
+  data_imu->gyro.y = data->imu.gyr[1] * (M_PI / 180.0);
+  data_imu->gyro.z = data->imu.gyr[2] * (M_PI / 180.0);
 
-  data_imu->euler.roll = data->imu[num].eul[0];
-  data_imu->euler.pitch = data->imu[num].eul[1];
-  data_imu->euler.yaw = data->imu[num].eul[2];
+  data_imu->magn.x = data->imu.mag[0];
+  data_imu->magn.y = data->imu.mag[1];
+  data_imu->magn.z = data->imu.mag[2];
 
-  data_imu->quat.w = data->imu[num].quat[0];
-  data_imu->quat.x = data->imu[num].quat[1];
-  data_imu->quat.y = data->imu[num].quat[2];
-  data_imu->quat.z = data->imu[num].quat[3];
+  data_imu->euler.roll = data->imu.eul[0];
+  data_imu->euler.pitch = data->imu.eul[1];
+  data_imu->euler.yaw = data->imu.eul[2];
+
+  data_imu->quat.w = data->imu.quat[0];
+  data_imu->quat.x = data->imu.quat[1];
+  data_imu->quat.y = data->imu.quat[2];
+  data_imu->quat.z = data->imu.quat[3];
 }
 }  // namespace
 
@@ -65,19 +70,19 @@ void ImuHipnuc::GetLastImuData(ImuData *data) {}
 
 void ImuHipnuc::ParseSerialData(uint8_t *data, const size_t bufsize,
                                 size_t len) {
-  static raw_t raw;
+  static hipnuc_raw_t raw;
   for (int i = 0; i < len; i++) {
     int rev = ch_serial_input(&raw, data[i]);
 
-    if (raw.item_code[raw.nitem_code - 1] != KItemGWSOL && rev) {
+    if (rev) {
       ImuData imu;
-      UnpackData(&raw, &imu, raw.nimu - 1);
+      UnpackData(&raw, &imu);
 
       if (callback_ != nullptr) callback_(imu);
 
-      printf("accel: %6.2f, %6.2f, %6.2f; gyro: %6.2f, %6.2f, %6.2f\n",
-             imu.accel.x, imu.accel.y, imu.accel.z, imu.gyro.x, imu.gyro.y,
-             imu.gyro.z);
+      //      printf("accel: %6.2f, %6.2f, %6.2f; gyro: %6.2f, %6.2f, %6.2f\n",
+      //             imu.accel.x, imu.accel.y, imu.accel.z, imu.gyro.x,
+      //             imu.gyro.y, imu.gyro.z);
     }
   }
 }
