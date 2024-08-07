@@ -24,4 +24,4 @@
 	url = https://github.com/rxdu/ros2_idl.git
 [submodule "extern/quadprog++"]
 	path = extern/quadprog++
-	url = git@github.com:rxdu/QuadProgpp.git
+	url = https://github.com/rxdu/QuadProgpp.git
