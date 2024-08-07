@@ -1,6 +1,6 @@
 ## Add source directories
-# Application
-add_subdirectory(apps)
+# Robots
+add_subdirectory(platform)
 
 # Modules
 add_subdirectory(interface)
@@ -12,6 +12,6 @@ add_subdirectory(control)
 add_subdirectory(planning)
 add_subdirectory(utilities)
 
-if(ENABLE_TARGET_DESKTOP)
-add_subdirectory(visualization)
-endif()
+if (ENABLE_VISUALIZATION)
+  add_subdirectory(visualization)
+endif ()

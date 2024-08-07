@@ -98,8 +98,12 @@ class JoystickInterface {
   virtual void Close() = 0;
   virtual bool IsOpened() const = 0;
 
+  virtual void PollEvent() = 0;
+
   virtual std::string GetDeviceName() const = 0;
+
   virtual std::string GetButtonName(const JsButton& btn) const { return ""; }
+
   virtual std::string GetAxisName(const JsAxis& axis) const { return ""; }
 
   virtual bool GetButtonState(const JsButton& btn) const = 0;

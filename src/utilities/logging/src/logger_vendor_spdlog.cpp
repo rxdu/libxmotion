@@ -94,7 +94,7 @@ void LoggerVendorSpdlog::Initialize(std::string logger_name,
   SetLoggerLevel(FromSpdlogLevel(log_level));
 }
 
-void LoggerVendorSpdlog::Deinitialize() { logger_->flush(); }
+void LoggerVendorSpdlog::Terminate() { logger_->flush(); }
 
 void LoggerVendorSpdlog::SetLoggerLevel(LogLevel level) {
   logger_->set_level(ToSpdlogLevel(level));

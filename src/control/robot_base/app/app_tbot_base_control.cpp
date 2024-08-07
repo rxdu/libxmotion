@@ -15,7 +15,7 @@
 
 #include "logging/xlogger.hpp"
 
-#include "input_joystick/joystick.hpp"
+#include "input_hid/joystick.hpp"
 
 #include "modbus_rtu/modbus_rtu_port.hpp"
 #include "motor_akelc/motor_akelc.hpp"
