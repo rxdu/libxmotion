@@ -81,7 +81,7 @@ void Mekf6::Update(const ControlInput &gyro_tilde,
   Observation accel = accel_tilde - x_.segment<ObservationDimension>(12);
 
   // reset the error state
-  x_ = Eigen::Vector<double, StateDimension>::Zero();
+  x_ = Eigen::Matrix<double, StateDimension, 1>::Zero();
 
   std::cout << "gyro_tilde: " << gyro_tilde.transpose() << std::endl;
   std::cout << "accel_tilde: " << accel_tilde.transpose() << std::endl;
@@ -124,7 +124,7 @@ void Mekf6::Update(const ControlInput &gyro_tilde,
   // update the kalman gain
   Eigen::Matrix<double, ObservationDimension, StateDimension> H =
       Eigen::Matrix<double, ObservationDimension, StateDimension>::Zero();
-  Eigen::Vector<double, ObservationDimension> h =
+  Eigen::Matrix<double, ObservationDimension, 1> h =
       q_hat_.inverse().toRotationMatrix() *
       Eigen::Vector3d(0, 0, -params_.gravity_constant);
   H.block<3, 3>(0, 0) = SkewSymmetric(h);

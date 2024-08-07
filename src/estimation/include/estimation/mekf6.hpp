@@ -19,9 +19,9 @@ class Mekf6 {
   static constexpr int ObservationDimension = 3;
 
   // state: [alpha, delta v, delta r, beta omega, beta f]
-  using State = Eigen::Vector<double, StateDimension>;
-  using ControlInput = Eigen::Vector<double, ControlInputDimension>;
-  using Observation = Eigen::Vector<double, ObservationDimension>;
+  using State = Eigen::Matrix<double, StateDimension, 1>;
+  using ControlInput = Eigen::Matrix<double, ControlInputDimension, 1>;
+  using Observation = Eigen::Matrix<double, ObservationDimension, 1>;
 
   using StateCovariance = Eigen::Matrix<double, StateDimension, StateDimension>;
   using ProcessNoiseCovariance =
