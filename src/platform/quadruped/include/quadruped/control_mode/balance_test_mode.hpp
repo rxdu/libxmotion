@@ -11,6 +11,7 @@
 
 #include "fsm/fsm_template.hpp"
 #include "quadruped/control_context.hpp"
+#include "quadruped/controller/balance_controller.hpp"
 #include "time/stopwatch.hpp"
 
 namespace xmotion {
@@ -32,6 +33,8 @@ class BalanceTestMode : public FsmState<ControlContext> {
  private:
   void UpdateTargetPose(Term term, double delta);
   void HandleKeyboardInput(ControlContext& context);
+
+  std::unique_ptr<BalanceController> balance_controller_;
 
   ControlSettings::BalanceTestModeParams::PoseLimit pose_limit_;
   ControlSettings::BalanceTestModeParams::PositionController pos_ctrl_gains_;

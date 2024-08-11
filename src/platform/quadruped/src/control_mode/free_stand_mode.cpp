@@ -23,6 +23,7 @@ FreeStandMode::FreeStandMode(const ControlContext& context) {
 
   joint_cmd_.q_dot = QuadrupedModel::AllJointVar::Zero();
   joint_cmd_.tau = QuadrupedModel::AllJointVar::Zero();
+  context.robot_model->SetJointCommand(joint_cmd_);
 
   pose_limit_ = context.system_config.ctrl_settings.free_stand_mode.pose_limit;
   angle_step_ = context.system_config.ctrl_settings.free_stand_mode.angle_step;
@@ -134,9 +135,9 @@ void FreeStandMode::Update(ControlContext& context) {
   HomoMatrix3d T_sb = MatrixHelper::CreateHomoMatrix(R, p_0);
   HomoMatrix3d T_bs = MatrixHelper::GetHomoMatrixInverse(T_sb);
 
-  std::array<Position3d, 4> p_bx;
+  Eigen::Matrix<double, 3, 4> p_bx;
   for (int i = 0; i < 4; ++i) {
-    p_bx[i] = MatrixHelper::ApplyHomoMatrix(T_bs, p_sx_[i]);
+    p_bx.col(i) = MatrixHelper::ApplyHomoMatrix(T_bs, p_sx_[i]);
   }
   joint_cmd_.q = context.robot_model->GetJointPosition(
       p_bx, QuadrupedModel::RefFrame::kBase);

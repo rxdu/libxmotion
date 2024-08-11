@@ -91,7 +91,7 @@ BalanceController::BalanceController(
 
 Eigen::Matrix<double, 3, 4> BalanceController::ComputeFootForce(
     double mu, const Eigen::Matrix<double, 3, 1>& p_ddot,
-    const Eigen::Matrix<double, 3, 1>& omega_dot, const Quaterniond& quat,
+    const Eigen::Matrix<double, 3, 1>& w_dot, const Quaterniond& quat,
     const Eigen::Matrix<double, 3, 4>& foot_pos,
     const Eigen::Vector4d& foot_contact) {
   Eigen::Matrix<double, 3, 4> f_d;
@@ -110,7 +110,7 @@ Eigen::Matrix<double, 3, 4> BalanceController::ComputeFootForce(
   b.block<3, 1>(0, 0) = robot_model_->GetMass() * (p_ddot - g_const);
   b.block<3, 1>(3, 0) = quat.toRotationMatrix() *
                         robot_model_->GetMomentOfInertia() *
-                        quat.toRotationMatrix().transpose() * omega_dot;
+                        quat.toRotationMatrix().transpose() * w_dot;
 
   // formulate constraints
   int num_contact = 0;

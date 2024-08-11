@@ -10,10 +10,15 @@
 
 #include "quadruped/utils.hpp"
 #include "logging/xlogger.hpp"
+#include "quadruped/matrix_helper.hpp"
 
 namespace xmotion {
 BalanceTestMode::BalanceTestMode(const ControlContext& context) {
   XLOG_INFO("==> Switched to BalanceTestMode");
+
+  balance_controller_ = std::make_unique<BalanceController>(
+      context.system_config.ctrl_params.balance_controller,
+      context.robot_model);
 
   pose_limit_ =
       context.system_config.ctrl_settings.balance_test_mode.pose_limit;
@@ -90,6 +95,8 @@ void BalanceTestMode::Update(ControlContext& context) {
   Position3d p_b = context.estimator->GetEstimatedBasePosition();
   Velocity3d p_dot_b = context.estimator->GetEstimatedBaseVelocity();
   Quaterniond quat_b = context.estimator->GetEstimatedBaseOrientation();
+  Eigen::Vector3d w_b = context.estimator->GetGyroRaw();
+  RotMatrix3d rot_g2b = quat_b.toRotationMatrix().transpose();
 
   // calculate desired acceleration p_ddot
   Eigen::Matrix<double, 3, 1> dp = {target_pose_.x - p_b.x(),
@@ -101,7 +108,34 @@ void BalanceTestMode::Update(ControlContext& context) {
                                        pos_ctrl_gains_.kd.asDiagonal() * dp_dot;
 
   // calculate desired orientation
-//  Eigen::Matrix<double, 3, 1> w_dot = ori_ctrl_gains_.kp *
+  Eigen::Matrix<double, 3, 1> w_dot =
+      ori_ctrl_gains_.kp * MatrixHelper::GetExponentialMap(
+                               target_pose_.quat.toRotationMatrix() * rot_g2b) +
+      ori_ctrl_gains_.kd.asDiagonal() *
+          (Eigen::Vector3d::Zero() - quat_b.toRotationMatrix() * w_b);
+
+  Eigen::Matrix<double, 3, 4> foot_pos = context.robot_model->GetFootPosition(
+      context.estimator->GetEstimatedJointPosition(),
+      QuadrupedModel::RefFrame::kBase);
+  Eigen::Matrix<double, 3, 4> p_foot;
+  for (int i = 0; i < 4; ++i) {
+    p_foot.col(i) = quat_b.toRotationMatrix() * foot_pos.col(i);
+  }
+
+  Eigen::Matrix<double, 3, 4> f_global = balance_controller_->ComputeFootForce(
+      0.3, p_ddot, w_dot, quat_b, p_foot, Eigen::Vector4d::Ones());
+  Eigen::Matrix<double, 3, 4> f_body =
+      quat_b.toRotationMatrix().transpose() * f_global;
+
+  QuadrupedModel::AllJointVar q_d =
+      context.estimator->GetEstimatedJointPosition();
+  QuadrupedModel::AllJointVar tau_d =
+      context.robot_model->GetJointTorqueQ(q_d, f_body);
+
+  // set joint command
+  joint_cmd_.q = q_d;
+  joint_cmd_.tau = tau_d;
+  context.robot_model->SetJointCommand(joint_cmd_);
 
   // finally send the command to the robot
   context.robot_model->SendCommandToRobot();

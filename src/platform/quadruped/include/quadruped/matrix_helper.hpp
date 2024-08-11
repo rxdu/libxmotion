@@ -46,7 +46,19 @@ HomoMatrix3d GetHomoMatrixInverse(const HomoMatrix3d& in);
  */
 Position3d ApplyHomoMatrix(const HomoMatrix3d& H, const Position3d& p);
 
+/**
+ * @brief Get the skew symmetric matrix of a 3x1 vector
+ * @param m
+ * @return
+ */
 RotMatrix3d GetSkewSymmetricMatrix(const Eigen::Vector3d& m);
+
+/**
+ * @brief Get the exponential map of a rotation matrix
+ * @param rm
+ * @return
+ */
+Eigen::Vector3d GetExponentialMap(const RotMatrix3d& rm);
 }  // namespace MatrixHelper
 }  // namespace xmotion
 

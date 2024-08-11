@@ -19,6 +19,9 @@ class EstimatorInterface {
   virtual void Update(const QuadrupedModel::SensorData& sensor_data,
                       double dt) = 0;
 
+  virtual Eigen::Vector3d GetGyroRaw() const = 0;
+  virtual Eigen::Vector3d GetAccelRaw() const = 0;
+
   virtual QuadrupedModel::AllJointVar GetEstimatedJointPosition() const = 0;
   virtual QuadrupedModel::AllJointVar GetEstimatedJointVelocity() const = 0;
 

@@ -39,6 +39,7 @@ SwingTestMode::SwingTestMode(const ControlContext& context) {
   joint_cmd_.q = QuadrupedModel::AllJointVar::Zero();
   joint_cmd_.q_dot = QuadrupedModel::AllJointVar::Zero();
   joint_cmd_.tau = QuadrupedModel::AllJointVar::Zero();
+  context.robot_model->SetJointCommand(joint_cmd_);
 
   auto q_hat = context.estimator->GetEstimatedJointPosition();
 
