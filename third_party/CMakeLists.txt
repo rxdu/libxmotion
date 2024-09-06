@@ -5,14 +5,13 @@ endif()
 add_subdirectory(spdlog)
 add_subdirectory(rapidcsv)
 
-add_library(stopwatch INTERFACE)
-target_include_directories(stopwatch INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/stopwatch>
-    $<INSTALL_INTERFACE:include>)
+add_subdirectory(stopwatch)
 
 add_subdirectory(spatial)
 
 add_subdirectory(quadprog++)
+
+add_subdirectory(pnm)
 
 # set(BUILD_DDSPERF OFF CACHE INTERNAL "Build the performance test" FORCE)
 # set(BUILD_TESTING OFF CACHE INTERNAL "Build the testing tree" FORCE)
