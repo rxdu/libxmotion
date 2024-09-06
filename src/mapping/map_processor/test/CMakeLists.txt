@@ -1,4 +1,4 @@
 if (ENABLE_VISUALIZATION)
   add_executable(test_pgm_map test_pgm_map.cpp)
-  target_link_libraries(test_pgm_map map)
+  target_link_libraries(test_pgm_map map_processor)
 endif ()

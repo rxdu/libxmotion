@@ -9,7 +9,7 @@
 
 #include "gtest/gtest.h"
 
-#include "file_io/file_io.hpp"
+#include "math_utils/eigen_io.hpp"
 
 using namespace xmotion;
 
@@ -28,39 +28,39 @@ struct FileIOTest : testing::Test {
 
 TEST_F(FileIOTest, RWFileTest) {
   std::string file_name = "matrix_file.data";
-  FileIO::WriteToFile(".", file_name, matrix);
+  EigenIO::WriteToFile(".", file_name, matrix);
 
   // test overwrite
-  ASSERT_FALSE(FileIO::WriteToFile(".", file_name, matrix));
-  ASSERT_TRUE(FileIO::WriteToFile(".", file_name, matrix, true));
+  ASSERT_FALSE(EigenIO::WriteToFile(".", file_name, matrix));
+  ASSERT_TRUE(EigenIO::WriteToFile(".", file_name, matrix, true));
 
   Eigen::MatrixXi md;
-  FileIO::ReadFromFile("./matrix_file.data", md);
+  EigenIO::ReadFromFile("./matrix_file.data", md);
   ASSERT_TRUE(md == matrix);
 }
 
 TEST_F(FileIOTest, RWImageJpgTest) {
-  FileIO::WriteToImage(".", "image_file.jpg", matrix);
+  EigenIO::WriteToImage(".", "image_file.jpg", matrix);
 
   // test overwrite
-  ASSERT_FALSE(FileIO::WriteToImage(".", "image_file.jpg", matrix, false));
-  ASSERT_TRUE(FileIO::WriteToImage(".", "image_file.jpg", matrix));
+  ASSERT_FALSE(EigenIO::WriteToImage(".", "image_file.jpg", matrix, false));
+  ASSERT_TRUE(EigenIO::WriteToImage(".", "image_file.jpg", matrix));
 
   Eigen::MatrixXi md;
-  FileIO::ReadFromImage("./image_file.jpg", md);
+  EigenIO::ReadFromImage("./image_file.jpg", md);
   std::cout << "jpg: \n" << md << std::endl;
-//   ASSERT_TRUE(md == matrix);
+  //   ASSERT_TRUE(md == matrix);
 }
 
 TEST_F(FileIOTest, RWImagePngTest) {
-  FileIO::WriteToImage(".", "image_file.png", matrix);
+  EigenIO::WriteToImage(".", "image_file.png", matrix);
 
   // test overwrite
-  ASSERT_FALSE(FileIO::WriteToImage(".", "image_file.png", matrix, false));
-  ASSERT_TRUE(FileIO::WriteToImage(".", "image_file.png", matrix));
+  ASSERT_FALSE(EigenIO::WriteToImage(".", "image_file.png", matrix, false));
+  ASSERT_TRUE(EigenIO::WriteToImage(".", "image_file.png", matrix));
 
   Eigen::MatrixXi md;
-  FileIO::ReadFromImage("./image_file.png", md);
+  EigenIO::ReadFromImage("./image_file.png", md);
   std::cout << "png: \n" << md << std::endl;
   ASSERT_TRUE(md == matrix);
 }

@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "file_io/file_io.hpp"
+#include "math_utils/eigen_io.hpp"
 
 using namespace xmotion;
 
@@ -16,19 +16,19 @@ int main() {
 
   std::string file_name = "matrix_file.data";
 
-  FileIO::WriteToFile(".", file_name, matrix);
+  EigenIO::WriteToFile(".", file_name, matrix);
 
   Eigen::MatrixXd md2;
-  FileIO::ReadFromFile("./" + file_name, md2);
+  EigenIO::ReadFromFile("./" + file_name, md2);
 
   std::cout << "loaded:\n" << md2 << std::endl;
 
   Eigen::MatrixXd md3;
-  FileIO::ReadFromImage("./test.jpg", md3);
+  EigenIO::ReadFromImage("./test.jpg", md3);
 
-//   std::cout << md3 << std::endl;
+  //   std::cout << md3 << std::endl;
 
-  FileIO::WriteToImage(".", "test2.jpg", md3);
+  EigenIO::WriteToImage(".", "test2.jpg", md3);
 
   return 0;
 }

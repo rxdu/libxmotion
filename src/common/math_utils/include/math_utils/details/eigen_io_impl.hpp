@@ -19,23 +19,26 @@
 #include <sstream>
 #include <iostream>
 
+#include <eigen3/Eigen/Core>
 #include <boost/filesystem.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "file_io/details/stb/stb_image.h"
+#include "stb_image.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "file_io/details/stb/stb_image_write.h"
+#include "stb_image_write.h"
+
+#include "logging/xlogger.hpp"
 
 namespace xmotion {
 template <typename Scalar, int RowsAtCompileTime, int ColsAtCompileTime>
-bool FileIO::ReadFromFile(
+bool EigenIO::ReadFromFile(
     std::string filename,
     Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime> &m) {
   // check file
   std::ifstream input(filename.c_str());
   if (input.fail()) {
-    std::cerr << "Erro: failed to find file - " << filename << std::endl;
+    XLOG_ERROR("failed to find file - {}", filename);
     m = Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime>(0, 0);
     return false;
   }
@@ -70,7 +73,7 @@ bool FileIO::ReadFromFile(
 }
 
 template <typename Scalar, int RowsAtCompileTime, int ColsAtCompileTime>
-bool FileIO::WriteToFile(
+bool EigenIO::WriteToFile(
     std::string directory, std::string filename,
     Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime> matrix,
     bool overwrite) {
@@ -78,8 +81,8 @@ bool FileIO::WriteToFile(
   if (directory.empty()) return false;
   if (!boost::filesystem::exists(directory)) {
     if (!boost::filesystem::create_directories(directory)) {
-      std::cerr << "Error: directory is not found and failed to be created - "
-                << directory << std::endl;
+      XLOG_ERROR("directory is not found and failed to be created - {}",
+                 directory);
       return false;
     }
   }
@@ -89,7 +92,7 @@ bool FileIO::WriteToFile(
   if (boost::filesystem::exists(filename)) {
     if (!overwrite) {
       // File exists, but overwriting is not allowed. Abort.
-      std::cerr << "Error: file already exists - " << filename << std::endl;
+      XLOG_ERROR("file already exists - {}", filename);
       return false;
     }
   }
@@ -98,7 +101,7 @@ bool FileIO::WriteToFile(
   std::ofstream file;
   file.open(filename.c_str());
   if (!file.is_open()) {
-    std::cerr << "Error: failed to open file " << filename << std::endl;
+    XLOG_ERROR("failed to open file - {}", filename);
     return false;
   }
 
@@ -110,13 +113,13 @@ bool FileIO::WriteToFile(
 }
 
 template <typename Scalar, int RowsAtCompileTime, int ColsAtCompileTime>
-bool FileIO::ReadFromImage(
+bool EigenIO::ReadFromImage(
     std::string filename,
     Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime> &m) {
   // check file
   std::ifstream input(filename.c_str());
   if (input.fail()) {
-    std::cerr << "Erro: failed to find file - " << filename << std::endl;
+    XLOG_ERROR("failed to find file - {}", filename);
     m = Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime>(0, 0);
     return false;
   }
@@ -134,8 +137,7 @@ bool FileIO::ReadFromImage(
   m = Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime>(row_num,
                                                                   col_num);
 
-  std::cout << "read image size (w,y,d): " << x << " , " << y << " , " << n
-            << std::endl;
+  XLOG_DEBUG("read image size (w,y,d): {} , {} , {}", x, y, n);
 
   if (n <= 2) {
     for (int32_t j = 0; j < y; ++j) {
@@ -159,7 +161,7 @@ bool FileIO::ReadFromImage(
 }
 
 template <typename Scalar, int RowsAtCompileTime, int ColsAtCompileTime>
-bool FileIO::WriteToImage(
+bool EigenIO::WriteToImage(
     std::string directory, std::string filename,
     Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime> matrix,
     bool overwrite) {
@@ -167,8 +169,8 @@ bool FileIO::WriteToImage(
   if (directory.empty()) return false;
   if (!boost::filesystem::exists(directory)) {
     if (!boost::filesystem::create_directories(directory)) {
-      std::cerr << "Error: directory is not found and failed to be created - "
-                << directory << std::endl;
+      XLOG_ERROR("directory is not found and failed to be created - {}",
+                 directory);
       return false;
     }
   }
@@ -178,7 +180,7 @@ bool FileIO::WriteToImage(
   if (boost::filesystem::exists(filename)) {
     if (!overwrite) {
       // File exists, but overwriting is not allowed. Abort.
-      std::cerr << "Error: file already exists - " << filename << std::endl;
+      XLOG_ERROR("file already exists - {}", filename);
       return false;
     }
   }

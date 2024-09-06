@@ -12,10 +12,8 @@
 
 #include "eigen3/Eigen/Core"
 
-#include "file_io/project_path.hpp"
-
 namespace xmotion {
-namespace FileIO {
+namespace EigenIO {
 template <typename Scalar, int RowsAtCompileTime, int ColsAtCompileTime>
 bool ReadFromFile(
     std::string filename,
@@ -37,9 +35,9 @@ bool WriteToImage(
     std::string directory, std::string filename,
     Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime> matrix,
     bool overwrite = true);
-}  // namespace FileIO
+}  // namespace EigenIO
 }  // namespace xmotion
 
-#include "details/file_io_impl.hpp"
+#include "details/eigen_io_impl.hpp"
 
 #endif /* FILE_IO_HPP */

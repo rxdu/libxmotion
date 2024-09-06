@@ -2,7 +2,7 @@
 #include <cstdint>
 
 #include "sampling/space/realvector_space.hpp"
-#include "time/stopwatch.hpp"
+#include "stopwatch/stopwatch.hpp"
 
 using namespace xmotion;
 

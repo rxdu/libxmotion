@@ -6,6 +6,7 @@
  *
  * Reference:
  *  [1] http://davis.lbl.gov/Manuals/NETPBM/doc/pgm.html
+ *  [2] https://netpbm.sourceforge.net/doc/pgm.html
  *
  * Copyright (c) 2021 Ruixiang Du (rdu)
  */
@@ -37,15 +38,18 @@ class PgmMap {
 
  public:
   PgmMap() = default;
-  explicit PgmMap(std::string yaml_file);
+  explicit PgmMap(const Metadata& metadata);
 
-  bool LoadMapData();
+  bool LoadData();
+  bool LoadFromFile(const std::string& file_path);
+  void SaveToFile(const std::string& file_path);
 
-  Metadata GetMapInfo() { return info_; };
+  Metadata GetMapMetadata() { return metadata_; };
+
   MapData& GetMapData() { return data_; };
 
  private:
-  Metadata info_;
+  Metadata metadata_;
   MapData data_;
 };
 }  // namespace xmotion

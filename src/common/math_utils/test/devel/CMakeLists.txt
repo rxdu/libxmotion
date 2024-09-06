@@ -1,0 +1,2 @@
+add_executable(test_eigen_io test_eigen_io.cpp)
+target_link_libraries(test_eigen_io math_utils)
