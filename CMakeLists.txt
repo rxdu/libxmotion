@@ -97,7 +97,7 @@ else ()
 endif ()
 
 ## Dependent libraries
-add_subdirectory(extern)
+add_subdirectory(third_party)
 
 ## Add source directories
 add_subdirectory(src)

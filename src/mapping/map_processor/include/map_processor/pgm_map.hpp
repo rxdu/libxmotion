@@ -16,15 +16,18 @@
 #include <string>
 #include <vector>
 
-#include <eigen3/Eigen/Core>
+#include "interface/type/geometry_types.hpp"
 
 namespace xmotion {
 class PgmMap {
  public:
-  struct MapInfo {
-    std::string file;
+  enum class MapMode { kTrinary = 0, kScale, kRaw };
+
+  struct Metadata {
+    std::string image;
+    MapMode mode;
     double resolution;
-    std::vector<double> origin;
+    Position3d origin;
     bool negate;
     double occupied_thresh;
     double free_thresh;
@@ -38,11 +41,11 @@ class PgmMap {
 
   bool LoadMapData();
 
-  MapInfo GetMapInfo() { return info_; };
+  Metadata GetMapInfo() { return info_; };
   MapData& GetMapData() { return data_; };
 
  private:
-  MapInfo info_;
+  Metadata info_;
   MapData data_;
 };
 }  // namespace xmotion
