@@ -2,12 +2,12 @@
 find_package(Eigen3 REQUIRED NO_MODULE)
 
 ## Add libraries
-add_library(map 
+add_library(map_processor 
     src/pgm_map.cpp
 )
-target_link_libraries(map Eigen3::Eigen cvdraw)
-target_compile_definitions(map PUBLIC ENABLE_VISUAL)
-target_include_directories(map PUBLIC
+target_link_libraries(map_processor Eigen3::Eigen cvdraw)
+target_compile_definitions(map_processor PUBLIC ENABLE_VISUAL)
+target_include_directories(map_processor PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:include>	
 	PRIVATE src)

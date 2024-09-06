@@ -7,7 +7,7 @@
  * Copyright (c) 2021 Ruixiang Du (rdu)
  */
 
-#include "map/pgm_map.hpp"
+#include "map_processor/pgm_map.hpp"
 
 namespace xmotion {
 PgmMap::PgmMap(std::string yaml_file) {}
