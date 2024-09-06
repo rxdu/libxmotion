@@ -5,13 +5,13 @@ endif()
 add_subdirectory(spdlog)
 add_subdirectory(rapidcsv)
 
+add_subdirectory(stb)
 add_subdirectory(stopwatch)
+add_subdirectory(pnm)
 
 add_subdirectory(spatial)
-
 add_subdirectory(quadprog++)
 
-add_subdirectory(pnm)
 
 # set(BUILD_DDSPERF OFF CACHE INTERNAL "Build the performance test" FORCE)
 # set(BUILD_TESTING OFF CACHE INTERNAL "Build the testing tree" FORCE)

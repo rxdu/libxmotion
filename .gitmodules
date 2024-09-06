@@ -28,3 +28,6 @@
 [submodule "third_party/pnm"]
 	path = third_party/pnm
 	url = https://github.com/rxdu/pnm.git
+[submodule "third_party/stb"]
+	path = third_party/stb
+	url = https://github.com/rxdu/stb.git
