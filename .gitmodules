@@ -27,4 +27,4 @@
 	url = https://github.com/rxdu/QuadProgpp.git
 [submodule "third_party/pnm"]
 	path = third_party/pnm
-	url = https://github.com/ToruNiina/pnm.git
+	url = https://github.com/rxdu/pnm.git
