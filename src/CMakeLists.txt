@@ -5,7 +5,6 @@ add_subdirectory(platform)
 # Modules
 add_subdirectory(common)
 add_subdirectory(interface)
-# add_subdirectory(ipc)
 add_subdirectory(driver)
 add_subdirectory(mapping)
 add_subdirectory(estimation)

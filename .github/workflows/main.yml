@@ -24,20 +24,20 @@ jobs:
           sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev \
            libglfw3-dev libcairo2-dev libtbb-dev libasio-dev libboost-all-dev \
            libgsl-dev libeigen3-dev libtbb-dev libopencv-dev libyaml-cpp-dev \
-           libncurses-dev libevdev-dev libmodbus-dev
-      - name: Install cyclonedds
-        run: |
-          git clone -b 0.9.1 https://github.com/eclipse-cyclonedds/cyclonedds.git
-           cd cyclonedds && mkdir build && cd build
-           cmake -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DENABLE_SHM=NO ..
-           make -j && sudo make install
-      - name: Install iceoryx
-        run: |
-          sudo apt-get install -y libacl1-dev libncurses5-dev pkg-config
-          git clone -b v2.0.3 https://github.com/eclipse-iceoryx/iceoryx.git
-            cd iceoryx 
-            cmake -Bbuild -Hiceoryx_meta -DCMAKE_PREFIX_PATH=$(pwd)/build/dependencies/
-            cmake --build build && sudo cmake --build build --target install
+           libncurses-dev libevdev-dev libmodbus-dev libpcl-dev
+#      - name: Install cyclonedds
+#        run: |
+#          git clone -b 0.9.1 https://github.com/eclipse-cyclonedds/cyclonedds.git
+#           cd cyclonedds && mkdir build && cd build
+#           cmake -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DENABLE_SHM=NO ..
+#           make -j && sudo make install
+#      - name: Install iceoryx
+#        run: |
+#          sudo apt-get install -y libacl1-dev libncurses5-dev pkg-config
+#          git clone -b v2.0.3 https://github.com/eclipse-iceoryx/iceoryx.git
+#            cd iceoryx
+#            cmake -Bbuild -Hiceoryx_meta -DCMAKE_PREFIX_PATH=$(pwd)/build/dependencies/
+#            cmake --build build && sudo cmake --build build --target install
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
       - name: Configure CMake
@@ -56,26 +56,26 @@ jobs:
       matrix:
         os: [ ubuntu-20.04, ubuntu-22.04 ]
     steps:
-      - name: Install cyclonedds
-        run: |
-          git clone -b 0.9.1 https://github.com/eclipse-cyclonedds/cyclonedds.git
-          cd cyclonedds && mkdir build && cd build
-          cmake -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DENABLE_SHM=NO ..
-          make -j && sudo make install
-      - name: Install iceoryx
-        run: |
-          sudo apt-get install -y libacl1-dev libncurses5-dev pkg-config
-          git clone -b v2.0.3 https://github.com/eclipse-iceoryx/iceoryx.git
-            cd iceoryx 
-            cmake -Bbuild -Hiceoryx_meta -DCMAKE_PREFIX_PATH=$(pwd)/build/dependencies/
-            cmake --build build && sudo cmake --build build --target install
+#      - name: Install cyclonedds
+#        run: |
+#          git clone -b 0.9.1 https://github.com/eclipse-cyclonedds/cyclonedds.git
+#          cd cyclonedds && mkdir build && cd build
+#          cmake -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DENABLE_SHM=NO ..
+#          make -j && sudo make install
+#      - name: Install iceoryx
+#        run: |
+#          sudo apt-get install -y libacl1-dev libncurses5-dev pkg-config
+#          git clone -b v2.0.3 https://github.com/eclipse-iceoryx/iceoryx.git
+#            cd iceoryx
+#            cmake -Bbuild -Hiceoryx_meta -DCMAKE_PREFIX_PATH=$(pwd)/build/dependencies/
+#            cmake --build build && sudo cmake --build build --target install
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: |
           sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev \
            libglfw3-dev libcairo2-dev libtbb-dev libasio-dev libboost-all-dev \
            libgsl-dev libeigen3-dev libtbb-dev libopencv-dev libyaml-cpp-dev \
-           libncurses-dev libevdev-dev libmodbus-dev
+           libncurses-dev libevdev-dev libmodbus-dev libpcl-dev
       - name: Update submodules
         run: git submodule update --init --recursive
       - name: Create Build Environment

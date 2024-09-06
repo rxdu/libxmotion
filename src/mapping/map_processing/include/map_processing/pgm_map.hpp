@@ -17,6 +17,8 @@
 #include <string>
 #include <vector>
 
+#include <opencv4/opencv2/opencv.hpp>
+
 #include "interface/type/geometry_types.hpp"
 
 namespace xmotion {
@@ -26,7 +28,7 @@ class PgmMap {
 
   struct Metadata {
     std::string image;
-    MapMode mode;
+    MapMode mode = MapMode::kTrinary;
     double resolution;
     Position3d origin;
     bool negate;
@@ -42,9 +44,11 @@ class PgmMap {
 
   bool LoadData();
   bool LoadFromFile(const std::string& file_path);
-  void SaveToFile(const std::string& file_path);
+  bool SaveToFile(const std::string& directory, const std::string& filename);
 
-  Metadata GetMapMetadata() { return metadata_; };
+  cv::Mat ToCvMat(int channel_num = 4);
+
+  Metadata GetMapMetadata() const { return metadata_; };
 
   MapData& GetMapData() { return data_; };
 

@@ -20,7 +20,7 @@
 	path = src/visualization/imcore/implot
 	url = https://github.com/epezent/implot.git
 [submodule "src/ipc/ros2_idl"]
-	path = src/ipc/ros2_idl
+	path = src/common/ipc/ros2_idl
 	url = https://github.com/rxdu/ros2_idl.git
 [submodule "extern/quadprog++"]
 	path = third_party/quadprog++
