@@ -23,6 +23,7 @@
 namespace xmotion {
 struct CPoint {
   CPoint(double _x = 0, double _y = 0) : x(_x), y(_y) {}
+
   double x;
   double y;
 
@@ -35,6 +36,7 @@ struct CPoint {
 struct CRange {
   CRange(double min = 0, double step = 0, double max = 0)
       : min_value(min), inc_value(step), max_value(max) {}
+
   double min_value = 0.0;
   double inc_value = 0.0;
   double max_value = 0.0;
@@ -62,12 +64,16 @@ class CvCanvas {
   void FillBackgroundColor(cv::Scalar bg_color);
 
   int32_t GetPPU() const { return ppu_; }
+
   int32_t GetCanvasSizeX() const { return canvas_size_x_; }
+
   int32_t GetCanvasSizeY() const { return canvas_size_y_; }
+
   void GetCanvasSpan(double &xspan, double &yspan);
   void GetCanvasRange(double &xmin, double &xmax, double &ymin, double &ymax);
 
   cv::Mat GetPaintArea() { return paint_area_; }
+
   cv::Mat GetROIofPaintArea(double cx, double cy, double xspan, double yspan);
   cv::Mat GetROIofPaintArea(double cx, double cy, double ratio);
 
@@ -122,8 +128,7 @@ class CvCanvas {
                  int thickness = 1, int line_type = cv::LINE_AA);
 
   // function plotting
-  void DrawXYAxis(double arrow_size = 0.01,
-                  const cv::Scalar &color = CvColors::black_color);
+  void DrawXYAxis(double arrow_size = 0.01);
   void DrawReferenceGrid(double spacing_unit = 10,
                          const cv::Scalar &color = CvColors::gray_color);
   void DrawDataPoints(const std::vector<std::pair<double, double>> &data_points,
