@@ -13,6 +13,8 @@
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 
+#include "interface/type/geometry_types.hpp"
+
 namespace xmotion {
 class PointCloudProcessor {
  public:
@@ -20,6 +22,11 @@ class PointCloudProcessor {
   ~PointCloudProcessor() = default;
 
   bool LoadData(const std::string &pc_file);
+  void SaveData(const std::string &pc_file);
+  void SaveData(const std::string &pc_file,
+                const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud);
+
+  void CropAlongZAxis(double z_min, double z_max);
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr GetCloud() { return cloud_; }
 

@@ -36,4 +36,37 @@ bool PointCloudProcessor::LoadData(const std::string& pc_file) {
   }
   return true;
 }
+
+void PointCloudProcessor::SaveData(const std::string& pc_file) {
+  SaveData(pc_file, cloud_);
+}
+
+void PointCloudProcessor::SaveData(
+    const std::string& pc_file,
+    const pcl::PointCloud<pcl::PointXYZ>::Ptr& cloud) {
+  if (cloud_ == nullptr) {
+    XLOG_ERROR("Point cloud is empty, nothing to save");
+    return;
+  }
+  if (pc_file.empty()) {
+    XLOG_ERROR("Point cloud file path is empty");
+    return;
+  }
+
+  // save to pcd file to current folder
+  if (pcl::io::savePCDFile(pc_file, *cloud) == -1) {
+    XLOG_ERROR("Failed to save PCD file");
+  }
+}
+
+void PointCloudProcessor::CropAlongZAxis(double z_min, double z_max) {
+  pcl::PointCloud<pcl::PointXYZ>::Ptr new_cloud;
+  new_cloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+  for (const auto& point : *cloud_) {
+    if (point.z >= z_min && point.z <= z_max) {
+      new_cloud->push_back(point);
+    }
+  }
+  cloud_ = new_cloud;
+}
 }  // namespace xmotion
