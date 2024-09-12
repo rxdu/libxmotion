@@ -1,14 +1,14 @@
 [submodule "extern/googletest"]
-	path = extern/googletest
+	path = third_party/googletest
 	url = https://github.com/google/googletest.git
 [submodule "extern/spdlog"]
-	path = extern/spdlog
+	path = third_party/spdlog
 	url = https://github.com/rxdu/spdlog.git
 [submodule "extern/rapidcsv"]
-	path = extern/rapidcsv
+	path = third_party/rapidcsv
 	url = https://github.com/rxdu/rapidcsv.git
 [submodule "extern/stopwatch"]
-	path = extern/stopwatch
+	path = third_party/stopwatch
 	url = https://github.com/rxdu/stopwatch.git
 [submodule "src/planning/graph"]
 	path = src/planning/graph
@@ -20,8 +20,14 @@
 	path = src/visualization/imcore/implot
 	url = https://github.com/epezent/implot.git
 [submodule "src/ipc/ros2_idl"]
-	path = src/ipc/ros2_idl
+	path = src/common/ipc/ros2_idl
 	url = https://github.com/rxdu/ros2_idl.git
 [submodule "extern/quadprog++"]
-	path = extern/quadprog++
+	path = third_party/quadprog++
 	url = https://github.com/rxdu/QuadProgpp.git
+[submodule "third_party/pnm"]
+	path = third_party/pnm
+	url = https://github.com/rxdu/pnm.git
+[submodule "third_party/stb"]
+	path = third_party/stb
+	url = https://github.com/rxdu/stb.git

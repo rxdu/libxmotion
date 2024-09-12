@@ -321,10 +321,11 @@ void CvCanvas::WriteText(const std::string &text, CPoint pos, double font_scale,
           thickness, line_type);
 }
 
-void CvCanvas::DrawXYAxis(double arrow_size, const cv::Scalar &color) {
-  DrawArrowedLine({xmin_ + 1, 0}, {xmax_ - 1, 0}, arrow_size, color);
+void CvCanvas::DrawXYAxis(double arrow_size) {
+  DrawArrowedLine({xmin_ + 1, 0}, {xmax_ - 1, 0}, arrow_size,
+                  CvColors::red_color);
   DrawArrowedLine({0, ymin_ + 1}, {0, ymax_ - 1}, arrow_size * xspan_ / yspan_,
-                  color);
+                  CvColors::green_color);
 }
 
 void CvCanvas::DrawReferenceGrid(double spacing_unit, const cv::Scalar &color) {

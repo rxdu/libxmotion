@@ -21,6 +21,7 @@ using RotMatrix3d = Eigen::Matrix<double, 3, 3>;
 using HomoMatrix3d = Eigen::Matrix<double, 4, 4>;
 
 using Velocity3d = Eigen::Vector3d;
+using Acceleration3d = Eigen::Vector3d;
 
 // joint space coordinates
 using JointPosition3d = Eigen::Vector3d;

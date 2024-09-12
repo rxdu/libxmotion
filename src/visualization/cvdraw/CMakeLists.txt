@@ -16,3 +16,13 @@ target_include_directories(cvdraw PUBLIC
 if(BUILD_TESTS)
     add_subdirectory(test)
 endif()
+
+install(TARGETS cvdraw
+		EXPORT xmotionTargets
+		LIBRARY DESTINATION lib
+		ARCHIVE DESTINATION lib
+		RUNTIME DESTINATION bin
+		INCLUDES DESTINATION include)
+
+install(DIRECTORY include/
+		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
