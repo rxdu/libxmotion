@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.2)
-project(xmotion)
+project(xmotion VERSION 0.1.0)
 
 message(STATUS "------------------------------------------------")
 if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
@@ -27,14 +27,14 @@ option(ENABLE_TBOT_APP "Enable tbot app" OFF)
 option(ENABLE_QUADRUPED_APP "Enable quadruped app" OFF)
 option(ENABLE_VISUALIZATION "Enable visualization targets" ON)
 
-if(BUILD_AS_MODULE AND (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")))
-    message(STATUS "Disable visualization targets on non-x86_64 when built as module")
-    set(ENABLE_VISUALIZATION OFF)
-endif()
+if (BUILD_AS_MODULE AND (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")))
+  message(STATUS "Disable visualization targets on non-x86_64 when built as module")
+  set(ENABLE_VISUALIZATION OFF)
+endif ()
 
-if(ENABLE_VISUALIZATION)
-    message(STATUS "Enable visualization targets")
-endif()
+if (ENABLE_VISUALIZATION)
+  message(STATUS "Enable visualization targets")
+endif ()
 
 ## Generate symbols for IDE indexer
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -140,8 +140,9 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xmotionConfig.cmake"
     DESTINATION lib/cmake/xmotion)
 
 # Packaging support
+set(CPACK_DEBIAN_PACKAGE_NAME "libxmotion")
 set(CPACK_PACKAGE_VENDOR "Ruixiang Du")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Robot Software Packages")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "xMotion Library - a library for motion planning and control")
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
@@ -149,6 +150,9 @@ set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/xmotion")
 set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 # set(CPACK_DEBIAN_PACKAGE_DEPENDS "abc (>= 0.1.2), xyz (<< 0.3.4)")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libgl1-mesa-dev, libglfw3-dev, libcairo2-dev,
+    libtbb-dev, libasio-dev, libboost-all-dev, libgsl-dev, libeigen3-dev, libtbb-dev,
+    libopencv-dev, libyaml-cpp-dev, libncurses-dev, libevdev-dev, libmodbus-dev, libpcl-dev")
 set(CPACK_GENERATOR "DEB")
 set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Ruixiang Du (ruixiang.du@gmail.com)")
