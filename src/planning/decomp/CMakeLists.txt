@@ -16,3 +16,14 @@ target_include_directories(decomp INTERFACE
 if (BUILD_TESTS)
   add_subdirectory(test)
 endif ()
+
+## installation configuration
+install(TARGETS decomp
+    EXPORT xmotionTargets
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include)
+
+install(DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

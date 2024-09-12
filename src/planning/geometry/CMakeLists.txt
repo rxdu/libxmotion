@@ -22,3 +22,13 @@ target_include_directories(geometry PUBLIC
 if (BUILD_TESTS)
   add_subdirectory(test)
 endif ()
+
+install(TARGETS geometry
+    EXPORT xmotionTargets
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include)
+
+install(DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

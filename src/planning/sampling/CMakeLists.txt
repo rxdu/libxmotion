@@ -15,8 +15,18 @@ target_include_directories(sampling PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>
     $<INSTALL_INTERFACE:include>
-    private src)
+    PRIVATE src)
 
 if (BUILD_TESTS)
   add_subdirectory(test)
 endif ()
+
+install(TARGETS sampling
+    EXPORT xmotionTargets
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include)
+
+install(DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
