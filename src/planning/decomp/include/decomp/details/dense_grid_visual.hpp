@@ -54,13 +54,13 @@ void ShowMatrixAsImage(const Eigen::MatrixXd &matrix, std::string window_name,
   cv::Mat img;
   cv::eigen2cv(matrix, img);
   img.convertTo(img, CV_8UC3);
-  CvIO::ShowImage(img, window_name, save_img);
+  quickviz::CvIO::ShowImage(img, window_name, save_img);
 }
 
 void ShowMatrixAsColorMap(const Eigen::MatrixXd &matrix,
                           std::string window_name, bool save_img) {
   cv::Mat color_img = CreateColorMapFromEigenMatrix(matrix);
-  CvIO::ShowImage(color_img, window_name, save_img);
+  quickviz::CvIO::ShowImage(color_img, window_name, save_img);
 }
 
 void ShowPathOnMatrixAsColorMap(const Eigen::MatrixXd &matrix,
@@ -68,7 +68,7 @@ void ShowPathOnMatrixAsColorMap(const Eigen::MatrixXd &matrix,
                                 std::string window_name, bool save_img) {
   cv::Mat color_img = CreateColorMapFromEigenMatrix(matrix);
 
-  CvCanvas canvas(color_img);
+  quickviz::CvCanvas canvas(color_img);
 
   for (int i = 0; i < waypoints.size() - 1; ++i) {
     canvas.DrawLine({static_cast<double>(waypoints[i].GetX()),
@@ -78,7 +78,7 @@ void ShowPathOnMatrixAsColorMap(const Eigen::MatrixXd &matrix,
                     cv::Scalar(244, 92, 66));
   }
 
-  CvIO::ShowImage(color_img, window_name, save_img);
+  quickviz::CvIO::ShowImage(color_img, window_name, save_img);
 }
 }  // namespace xmotion
 

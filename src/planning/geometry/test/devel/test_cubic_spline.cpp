@@ -5,6 +5,7 @@
 #include "geometry/cubic_spline.hpp"
 
 using namespace xmotion;
+using namespace quickviz;
 
 int main() {
   std::vector<CubicSpline::Knot> knots;

@@ -42,6 +42,7 @@ class CubicSpline {
   double Evaluate(double x, uint32_t derivative = 0) const;
 
   Type GetInterpolationType() const { return type_; }
+
   Eigen::MatrixXd GetCoefficients() const { return coefficients_; }
 
  private:
@@ -51,9 +52,9 @@ class CubicSpline {
 };
 
 #ifdef ENABLE_VISUAL
-void DrawCubicSpline(CvCanvas &canvas, const CubicSpline &spline,
+void DrawCubicSpline(quickviz::CvCanvas &canvas, const CubicSpline &spline,
                      double step = 0.01,
-                     cv::Scalar ln_color = CvColors::blue_color,
+                     cv::Scalar ln_color = quickviz::CvColors::blue_color,
                      int32_t thickness = 1);
 #endif
 }  // namespace xmotion

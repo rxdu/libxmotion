@@ -8,6 +8,7 @@
 #include "sampling/rrt_draw.hpp"
 
 using namespace xmotion;
+using namespace quickviz;
 
 int main()
 {

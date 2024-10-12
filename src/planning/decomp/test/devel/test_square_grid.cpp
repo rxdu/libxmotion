@@ -1,6 +1,7 @@
 #include "decomp/square_grid.hpp"
 
 using namespace xmotion;
+using namespace quickviz;
 
 int main() {
   SquareGrid grid(30, 20);

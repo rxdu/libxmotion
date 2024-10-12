@@ -22,43 +22,45 @@
 namespace xmotion {
 // geometric grid
 template <typename GridType>
-void DrawCurvilinearGrid(CvCanvas &canvas, const GridType &grid,
-                         cv::Scalar ln_color = CvColors::lime_color,
+void DrawCurvilinearGrid(quickviz::CvCanvas &canvas, const GridType &grid,
+                         cv::Scalar ln_color = quickviz::CvColors::lime_color,
                          int32_t thickness = 1) {
   // draw normal lines
-  CPoint spt1(grid.grid_tiles_.front().back()->vertices[2].position.x(),
-              grid.grid_tiles_.front().back()->vertices[2].position.y());
-  CPoint spt2(grid.grid_tiles_.front().front()->vertices[3].position.x(),
-              grid.grid_tiles_.front().front()->vertices[3].position.y());
+  quickviz::CPoint spt1(
+      grid.grid_tiles_.front().back()->vertices[2].position.x(),
+      grid.grid_tiles_.front().back()->vertices[2].position.y());
+  quickviz::CPoint spt2(
+      grid.grid_tiles_.front().front()->vertices[3].position.x(),
+      grid.grid_tiles_.front().front()->vertices[3].position.y());
   canvas.DrawLine(spt1, spt2, ln_color, thickness);
   for (auto &row : grid.grid_tiles_) {
-    CPoint pt1(row.back()->vertices[0].position.x(),
-               row.back()->vertices[0].position.y());
-    CPoint pt2(row.front()->vertices[1].position.x(),
-               row.front()->vertices[1].position.y());
+    quickviz::CPoint pt1(row.back()->vertices[0].position.x(),
+                         row.back()->vertices[0].position.y());
+    quickviz::CPoint pt2(row.front()->vertices[1].position.x(),
+                         row.front()->vertices[1].position.y());
     canvas.DrawLine(pt1, pt2, ln_color, thickness);
   }
 
   // draw tangential lines
   for (auto &row : grid.grid_tiles_) {
     for (auto &cell : row) {
-      CPoint pt1(cell->vertices[1].position.x(),
-                 cell->vertices[1].position.y());
-      CPoint pt2(cell->vertices[3].position.x(),
-                 cell->vertices[3].position.y());
+      quickviz::CPoint pt1(cell->vertices[1].position.x(),
+                           cell->vertices[1].position.y());
+      quickviz::CPoint pt2(cell->vertices[3].position.x(),
+                           cell->vertices[3].position.y());
       canvas.DrawLine(pt1, pt2, ln_color, thickness);
     }
-    CPoint fpt1(row.back()->vertices[0].position.x(),
-                row.back()->vertices[0].position.y());
-    CPoint fpt2(row.back()->vertices[2].position.x(),
-                row.back()->vertices[2].position.y());
+    quickviz::CPoint fpt1(row.back()->vertices[0].position.x(),
+                          row.back()->vertices[0].position.y());
+    quickviz::CPoint fpt2(row.back()->vertices[2].position.x(),
+                          row.back()->vertices[2].position.y());
     canvas.DrawLine(fpt1, fpt2, ln_color, thickness);
   }
 }
 
 template <typename GridType>
-void FillCurvilinearGrid(CvCanvas &canvas, const GridType &grid,
-                         cv::Scalar fill_color = CvColors::lime_color,
+void FillCurvilinearGrid(quickviz::CvCanvas &canvas, const GridType &grid,
+                         cv::Scalar fill_color = quickviz::CvColors::lime_color,
                          int32_t thickness = 1) {
   Polygon polygon;
 
@@ -88,9 +90,10 @@ void FillCurvilinearGrid(CvCanvas &canvas, const GridType &grid,
 }
 
 template <typename GridType>
-void DrawCurvilinearGridCost(CvCanvas &canvas, const GridType &grid,
-                             cv::Scalar ln_color = CvColors::lime_color,
-                             int32_t thickness = 1) {
+void DrawCurvilinearGridCost(
+    quickviz::CvCanvas &canvas, const GridType &grid,
+    cv::Scalar ln_color = quickviz::CvColors::lime_color,
+    int32_t thickness = 1) {
   for (auto &tile_row : grid.grid_tiles_) {
     for (auto tile : tile_row) {
       Polygon polygon;
@@ -104,7 +107,7 @@ void DrawCurvilinearGridCost(CvCanvas &canvas, const GridType &grid,
                        tile->vertices[2].position.y());
       if (tile->cost_map != 0) {
         FillPolygon(canvas, polygon, false,
-                    JetColorMap::Transform(tile->cost_map));
+                    quickviz::JetColorMap::Transform(tile->cost_map));
       }
     }
   }
@@ -114,8 +117,9 @@ void DrawCurvilinearGridCost(CvCanvas &canvas, const GridType &grid,
 
 template <typename GridType>
 void DrawCurvilinearGridCostGrayscale(
-    CvCanvas &canvas, const GridType &grid,
-    cv::Scalar ln_color = CvColors::lime_color, int32_t thickness = 1) {
+    quickviz::CvCanvas &canvas, const GridType &grid,
+    cv::Scalar ln_color = quickviz::CvColors::lime_color,
+    int32_t thickness = 1) {
   for (auto &tile_row : grid.grid_tiles_) {
     for (auto tile : tile_row) {
       Polygon polygon;

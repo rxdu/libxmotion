@@ -1,6 +1,7 @@
 #include "geometry/polygon.hpp"
 
 using namespace xmotion;
+using namespace quickviz;
 
 int main() {
   // GeometryViz gdraw(50);

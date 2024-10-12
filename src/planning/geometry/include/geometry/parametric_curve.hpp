@@ -54,9 +54,9 @@ ParametricCurve FitTimedCurve(std::vector<double> x, std::vector<double> y,
 }  // namespace CurveFitting
 
 #ifdef ENABLE_VISUAL
-void DrawParametricCurve(CvCanvas &canvas, const ParametricCurve &pcurve,
+void DrawParametricCurve(quickviz::CvCanvas &canvas, const ParametricCurve &pcurve,
                          double step = 0.1,
-                         cv::Scalar ln_color = CvColors::blue_color,
+                         cv::Scalar ln_color = quickviz::CvColors::blue_color,
                          int32_t thickness = 1);
 #endif
 }  // namespace xmotion

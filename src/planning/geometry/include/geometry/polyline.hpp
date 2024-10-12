@@ -39,24 +39,34 @@ class Polyline {
 
   typedef std::vector<SimplePoint2>::iterator point_iterator;
   typedef std::vector<SimplePoint2>::const_iterator point_const_iterator;
+
   point_iterator point_begin() { return points_.begin(); }
+
   point_iterator point_end() { return points_.end(); }
+
   point_const_iterator point_begin() const { return points_.begin(); }
+
   point_const_iterator point_end() const { return points_.end(); }
 
   void AddPoint(double x, double y);
   void AddPoint(SimplePoint2 pt);
+
   void SetPoints(std::vector<SimplePoint2> pts) { points_ = pts; }
 
   bool Intersect(const Polyline& other) const;
 
   int32_t GetPointNumer() const { return points_.size(); }
+
   SimplePoint2 GetPoint(std::size_t i) const;
+
   std::vector<SimplePoint2> GetPoints() const { return points_; }
 
   inline double GetMinX() const { return xmin_; }
+
   inline double GetMaxX() const { return xmax_; }
+
   inline double GetMinY() const { return ymin_; }
+
   inline double GetMaxY() const { return ymax_; }
 
   Polyline SeriesConcatenate(const Polyline& other);
@@ -77,9 +87,9 @@ class Polyline {
 };
 
 #ifdef ENABLE_VISUAL
-void DrawPolyline(CvCanvas& canvas, const Polyline& polyline,
+void DrawPolyline(quickviz::CvCanvas& canvas, const Polyline& polyline,
                   bool show_dot = false,
-                  cv::Scalar ln_color = CvColors::blue_color,
+                  cv::Scalar ln_color = quickviz::CvColors::blue_color,
                   int32_t thickness = 1);
 #endif
 }  // namespace xmotion
