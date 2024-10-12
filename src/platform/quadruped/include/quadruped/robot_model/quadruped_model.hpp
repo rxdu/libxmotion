@@ -12,7 +12,6 @@
 #ifndef QUADRUPED_MOTION_QUADRUPED_MODEL_HPP
 #define QUADRUPED_MOTION_QUADRUPED_MODEL_HPP
 
-#include <array>
 #include <memory>
 
 #include "interface/type/geometry_types.hpp"
@@ -64,10 +63,15 @@ class QuadrupedModel {
   };
 
  public:
+  // control interface
   virtual void ConnectSensorDataQueue(
       std::shared_ptr<DataQueue<SensorData>> queue) = 0;
   virtual void SetFootContactState(const Eigen::Vector4d& contact_state) = 0;
   virtual Eigen::Vector4d GetFootContactState() const = 0;
+
+  virtual void SetJointGains(const AllJointGains& gains) = 0;
+  virtual void SetJointCommand(const Command& cmd) = 0;
+  virtual void SendCommandToRobot() = 0;
 
   // robot profile
   virtual Position3d GetCogOffset() const = 0;
@@ -92,28 +96,24 @@ class QuadrupedModel {
 
   // full-body kinematics
   virtual AllJointVar GetJointPosition(
-      const std::array<Position3d, 4>& foot_pos, RefFrame frame) const = 0;
+      const Eigen::Matrix<double, 3, 4>& foot_pos, RefFrame frame) const = 0;
   virtual AllJointVar GetJointVelocity(
-      const std::array<Position3d, 4>& foot_pos,
-      const std::array<Velocity3d, 4>& foot_vel, RefFrame frame) const = 0;
+      const Eigen::Matrix<double, 3, 4>& foot_pos,
+      const Eigen::Matrix<double, 3, 4>& foot_vel, RefFrame frame) const = 0;
 
-  virtual std::array<Position3d, 4> GetFootPosition(const AllJointVar& q,
-                                                    RefFrame frame) const = 0;
-  virtual std::array<Velocity3d, 4> GetFootVelocity(
+  virtual Eigen::Matrix<double, 3, 4> GetFootPosition(const AllJointVar& q,
+                                                      RefFrame frame) const = 0;
+  virtual Eigen::Matrix<double, 3, 4> GetFootVelocity(
       const AllJointVar& q, const AllJointVar& q_dot) const = 0;
 
   // dynamics
   virtual Torque3d GetJointTorque(LegIndex leg_index, const Position3d& pos,
                                   const Force3d& f) const = 0;
   virtual AllJointVar GetJointTorqueQ(
-      const AllJointVar& q, const std::array<Force3d, 4>& foot_force) const = 0;
+      const AllJointVar& q,
+      const Eigen::Matrix<double, 3, 4>& foot_force) const = 0;
   virtual Torque3d GetJointTorqueQ(LegIndex leg_index, const JointPosition3d& q,
                                    const Force3d& f) const = 0;
-
-  // control interface
-  virtual void SetJointGains(const AllJointGains& gains) = 0;
-  virtual void SetJointCommand(const Command& cmd) = 0;
-  virtual void SendCommandToRobot() = 0;
 };
 }  // namespace xmotion
 

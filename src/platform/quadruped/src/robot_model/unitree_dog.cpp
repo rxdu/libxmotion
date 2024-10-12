@@ -170,52 +170,52 @@ JointVelocity3d UnitreeDog::GetJointVelocityQ(LegIndex leg_index,
 }
 
 UnitreeDog::AllJointVar UnitreeDog::GetJointPosition(
-    const std::array<Position3d, 4>& foot_pos, RefFrame frame) const {
+    const Eigen::Matrix<double, 3, 4>& foot_pos, RefFrame frame) const {
   AllJointVar q = AllJointVar::Zero();
   for (int i = 0; i < 4; ++i) {
     auto index = static_cast<LegIndex>(i);
     if (frame == RefFrame::kBase)
       q.segment<3>(i * 3) = legs_.at(index).GetJointPosition(
-          foot_pos[i] - body_to_leg_offsets_.at(index));
+          foot_pos.col(i) - body_to_leg_offsets_.at(index));
     else
-      q.segment<3>(i * 3) = legs_.at(index).GetJointPosition(foot_pos[i]);
+      q.segment<3>(i * 3) = legs_.at(index).GetJointPosition(foot_pos.col(i));
   }
   return q;
 }
 
 UnitreeDog::AllJointVar UnitreeDog::GetJointVelocity(
-    const std::array<Position3d, 4>& foot_pos,
-    const std::array<Velocity3d, 4>& foot_vel, RefFrame frame) const {
+    const Eigen::Matrix<double, 3, 4>& foot_pos,
+    const Eigen::Matrix<double, 3, 4>& foot_vel, RefFrame frame) const {
   AllJointVar q_dot = AllJointVar::Zero();
   for (int i = 0; i < 4; ++i) {
     auto index = static_cast<LegIndex>(i);
     if (frame == RefFrame::kBase) {
       q_dot.segment<3>(i * 3) = legs_.at(index).GetJointVelocity(
-          foot_pos[i] - body_to_leg_offsets_.at(index), foot_vel[i]);
+          foot_pos.col(i) - body_to_leg_offsets_.at(index), foot_vel.col(i));
     } else if (frame == RefFrame::kLeg) {
       q_dot.segment<3>(i * 3) =
-          legs_.at(index).GetJointVelocity(foot_pos[i], foot_vel[i]);
+          legs_.at(index).GetJointVelocity(foot_pos.col(i), foot_vel.col(i));
     }
   }
   return q_dot;
 }
 
-std::array<Position3d, 4> UnitreeDog::GetFootPosition(const AllJointVar& q,
-                                                      RefFrame frame) const {
-  std::array<Position3d, 4> foot_pos;
+Eigen::Matrix<double, 3, 4> UnitreeDog::GetFootPosition(const AllJointVar& q,
+                                                        RefFrame frame) const {
+  Eigen::Matrix<double, 3, 4> foot_pos;
   for (int i = 0; i < 4; ++i) {
     auto index = static_cast<LegIndex>(i);
-    foot_pos[i] = GetFootPosition(index, q.segment<3>(i * 3), frame);
+    foot_pos.col(i) = GetFootPosition(index, q.segment<3>(i * 3), frame);
   }
   return foot_pos;
 }
 
-std::array<Velocity3d, 4> UnitreeDog::GetFootVelocity(
+Eigen::Matrix<double, 3, 4> UnitreeDog::GetFootVelocity(
     const AllJointVar& q, const AllJointVar& q_dot) const {
-  std::array<Velocity3d, 4> foot_vel;
+  Eigen::Matrix<double, 3, 4> foot_vel;
   for (int i = 0; i < 4; ++i) {
     auto index = static_cast<LegIndex>(i);
-    foot_vel[i] =
+    foot_vel.col(i) =
         GetFootVelocity(index, q.segment<3>(i * 3), q_dot.segment<3>(i * 3));
   }
   return foot_vel;
@@ -233,12 +233,12 @@ Torque3d UnitreeDog::GetJointTorqueQ(LegIndex leg_index,
 }
 
 UnitreeDog::AllJointVar UnitreeDog::GetJointTorqueQ(
-    const AllJointVar& q, const std::array<Force3d, 4>& foot_force) const {
+    const AllJointVar& q, const Eigen::Matrix<double, 3, 4>& foot_force) const {
   AllJointVar tau = AllJointVar::Zero();
   for (int i = 0; i < 4; ++i) {
     auto index = static_cast<LegIndex>(i);
     tau.segment<3>(i * 3) =
-        legs_.at(index).GetJointTorqueQ(q.segment<3>(i * 3), foot_force[i]);
+        legs_.at(index).GetJointTorqueQ(q.segment<3>(i * 3), foot_force.col(i));
   }
   return tau;
 }

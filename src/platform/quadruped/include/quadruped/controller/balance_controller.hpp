@@ -20,7 +20,7 @@ class BalanceController {
 
   Eigen::Matrix<double, 3, 4> ComputeFootForce(
       double mu, const Eigen::Matrix<double, 3, 1>& p_ddot,
-      const Eigen::Matrix<double, 3, 1>& omega_dot, const Quaterniond& quat,
+      const Eigen::Matrix<double, 3, 1>& w_dot, const Quaterniond& quat,
       const Eigen::Matrix<double, 3, 4>& foot_pos,
       const Eigen::Vector4d& foot_contact);
 

@@ -74,4 +74,27 @@ RotMatrix3d MatrixHelper::GetSkewSymmetricMatrix(const Eigen::Vector3d& m) {
   M << 0, -m(2), m(1), m(2), 0, -m(0), -m(1), m(0), 0;
   return M;
 }
+
+Eigen::Vector3d MatrixHelper::GetExponentialMap(const RotMatrix3d& rm) {
+  double cos_value = rm.trace() / 2.0 - 1 / 2.0;
+  if (cos_value > 1.0f) {
+    cos_value = 1.0f;
+  } else if (cos_value < -1.0f) {
+    cos_value = -1.0f;
+  }
+
+  double angle = std::acos(cos_value);
+  Eigen::Vector3d exp;
+  if (std::fabs(angle) < 1e-5) {
+    exp = Eigen::Vector3d(0, 0, 0);
+  } else if (std::fabs(angle - M_PI) < 1e-5) {
+    exp = angle * Eigen::Vector3d(rm(0, 0) + 1, rm(0, 1), rm(0, 2)) /
+          std::sqrt(2 * (1 + rm(0, 0)));
+  } else {
+    exp = angle / (2.0f * std::sin(angle)) *
+          Eigen::Vector3d(rm(2, 1) - rm(1, 2), rm(0, 2) - rm(2, 0),
+                          rm(1, 0) - rm(0, 1));
+  }
+  return exp;
+}
 }  // namespace xmotion

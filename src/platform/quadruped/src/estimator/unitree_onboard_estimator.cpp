@@ -30,6 +30,12 @@ UnitreeOnboardEstimator::UnitreeOnboardEstimator() {
 
 void UnitreeOnboardEstimator::Update(
     const QuadrupedModel::SensorData& sensor_data, double dt) {
+  // raw sensor data
+  {
+    std::lock_guard<std::mutex> lock(sensor_raw_mutex_);
+    sensor_raw_ = sensor_data;
+  }
+
   // low level state
   LowLevelState low_state;
   {
@@ -51,6 +57,16 @@ void UnitreeOnboardEstimator::Update(
     x_hat_.p_base[i] = high_state.position()[i];
     x_hat_.v_base[i] = high_state.velocity()[i];
   }
+}
+
+Eigen::Vector3d UnitreeOnboardEstimator::GetGyroRaw() const {
+  std::lock_guard<std::mutex> lock(sensor_raw_mutex_);
+  return sensor_raw_.gyroscope;
+}
+
+Eigen::Vector3d UnitreeOnboardEstimator::GetAccelRaw() const {
+  std::lock_guard<std::mutex> lock(sensor_raw_mutex_);
+  return sensor_raw_.accelerometer;
 }
 
 QuadrupedModel::AllJointVar UnitreeOnboardEstimator::GetEstimatedJointPosition()

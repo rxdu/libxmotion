@@ -39,6 +39,9 @@ class UnitreeOnboardEstimator final : public EstimatorInterface {
   void Update(const QuadrupedModel::SensorData& sensor_data,
               double dt) override;
 
+  Eigen::Vector3d GetGyroRaw() const override;
+  Eigen::Vector3d GetAccelRaw() const override;
+
   QuadrupedModel::AllJointVar GetEstimatedJointPosition() const override;
   QuadrupedModel::AllJointVar GetEstimatedJointVelocity() const override;
 
@@ -49,6 +52,9 @@ class UnitreeOnboardEstimator final : public EstimatorInterface {
  private:
   void OnLowLevelStateMessageReceived(const void* message);
   void OnSportModeStateMessageReceived(const void* message);
+
+  mutable std::mutex sensor_raw_mutex_;
+  QuadrupedModel::SensorData sensor_raw_;
 
   mutable std::mutex x_hat_mutex_;
   EstimatorState x_hat_;
