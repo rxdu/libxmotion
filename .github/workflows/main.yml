@@ -14,9 +14,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-20.04, ubuntu-22.04 ]
+        os: [ ubuntu-20.04, ubuntu-22.04, ubuntu-24.04 ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Update submodules
         run: git submodule update --init --recursive
       - name: Install dependencies
@@ -40,10 +40,16 @@ jobs:
 #            cmake --build build && sudo cmake --build build --target install
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
-      - name: Configure CMake
+      - name: Configure CMake (ubuntu-22.04, 24.04)
+        if: ${{ matrix.os != 'ubuntu-20.04' }}
         shell: bash
         working-directory: ${{runner.workspace}}/build
         run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+      - name: Configure CMake (ubuntu-20.04)
+        if: ${{ matrix.os == 'ubuntu-20.04' }}
+        shell: bash
+        working-directory: ${{runner.workspace}}/build
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DENABLE_VISUALIZATION=OFF
       - name: Build
         working-directory: ${{runner.workspace}}/build
         shell: bash
@@ -54,7 +60,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-20.04, ubuntu-22.04 ]
+        os: [ ubuntu-20.04, ubuntu-22.04, ubuntu-24.04 ]
     steps:
 #      - name: Install cyclonedds
 #        run: |
@@ -69,7 +75,7 @@ jobs:
 #            cd iceoryx
 #            cmake -Bbuild -Hiceoryx_meta -DCMAKE_PREFIX_PATH=$(pwd)/build/dependencies/
 #            cmake --build build && sudo cmake --build build --target install
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
           sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev \
@@ -80,10 +86,16 @@ jobs:
         run: git submodule update --init --recursive
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
-      - name: Configure CMake
+      - name: Configure CMake (ubuntu-22.04, 24.04)
+        if: ${{ matrix.os != 'ubuntu-20.04' }}
         shell: bash
         working-directory: ${{runner.workspace}}/build
         run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TESTING=ON
+      - name: Configure CMake (ubuntu-20.04)
+        if: ${{ matrix.os == 'ubuntu-20.04' }}
+        shell: bash
+        working-directory: ${{runner.workspace}}/build
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TESTING=ON -DENABLE_VISUALIZATION=OFF
       - name: Build
         working-directory: ${{runner.workspace}}/build
         shell: bash
