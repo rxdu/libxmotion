@@ -210,7 +210,7 @@ double CubicSpline::Evaluate(double x, uint32_t derivative) const {
 //---------------------------------------------------------------------------//
 
 #ifdef ENABLE_VISUAL
-void DrawCubicSpline(CvCanvas &canvas, const CubicSpline &spline, double step,
+void DrawCubicSpline(quickviz::CvCanvas &canvas, const CubicSpline &spline, double step,
                      cv::Scalar ln_color, int32_t thickness) {
   std::vector<cv::Point2d> pts;
   std::vector<CubicSpline::Knot> knots(spline.GetKnots());

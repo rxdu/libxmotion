@@ -136,6 +136,8 @@ void Polygon::PrintInfo() const {
 //---------------------------------------------------------------------------//
 
 #ifdef ENABLE_VISUAL
+using namespace quickviz;
+
 void DrawPolygon(CvCanvas &canvas, const Polygon &polygon, bool show_dot,
                  cv::Scalar ln_color, int32_t thickness) {
   std::size_t pt_num = polygon.GetPointNumer();

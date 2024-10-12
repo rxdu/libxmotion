@@ -28,17 +28,24 @@ class Polygon {
 
   typedef std::vector<SimplePoint2>::iterator point_iterator;
   typedef std::vector<SimplePoint2>::const_iterator point_const_iterator;
+
   point_iterator point_begin() { return points_.begin(); }
+
   point_iterator point_end() { return points_.end(); }
+
   point_const_iterator point_begin() const { return points_.begin(); }
+
   point_const_iterator point_end() const { return points_.end(); }
 
   void AddPoint(double x, double y);
   void AddPoint(SimplePoint2 pt);
+
   void SetPoints(std::vector<SimplePoint2> pts) { points_ = pts; }
 
   int32_t GetPointNumer() const { return points_.size(); }
+
   SimplePoint2 GetPoint(std::size_t i) const;
+
   std::vector<SimplePoint2> GetPoints() const { return points_; }
 
   // TODO
@@ -52,11 +59,15 @@ class Polygon {
 
   bool Intersect(const Polygon &other) const;
   bool Contain(const Polygon &other) const;
+
   //---------------------------------------
 
   double GetMinX() const { return xmin_; }
+
   double GetMaxX() const { return xmax_; }
+
   double GetMinY() const { return ymin_; }
+
   double GetMaxY() const { return ymax_; }
 
   /// Polygon tranformation: rotate first, then translate
@@ -80,14 +91,14 @@ class Polygon {
 };
 
 #ifdef ENABLE_VISUAL
-void DrawPolygon(CvCanvas &canvas, const Polygon &polygon,
+void DrawPolygon(quickviz::CvCanvas &canvas, const Polygon &polygon,
                  bool show_dot = false,
-                 cv::Scalar ln_color = CvColors::blue_color,
+                 cv::Scalar ln_color = quickviz::CvColors::blue_color,
                  int32_t thickness = 1);
-void FillPolygon(CvCanvas &canvas, const Polygon &polygon,
+void FillPolygon(quickviz::CvCanvas &canvas, const Polygon &polygon,
                  bool show_dot = false,
-                 cv::Scalar fill_color = CvColors::aoi_color,
-                 cv::Scalar ln_color = CvColors::blue_color,
+                 cv::Scalar fill_color = quickviz::CvColors::aoi_color,
+                 cv::Scalar ln_color = quickviz::CvColors::blue_color,
                  int32_t thickness = 1);
 #endif
 }  // namespace xmotion

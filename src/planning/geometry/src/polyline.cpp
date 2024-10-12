@@ -141,6 +141,8 @@ void Polyline::UpdateXYMinMax(double x, double y) {
 //---------------------------------------------------------------------------//
 
 #ifdef ENABLE_VISUAL
+using namespace quickviz;
+
 void DrawPolyline(CvCanvas &canvas, const Polyline &polyline, bool show_dot,
                   cv::Scalar ln_color, int32_t thickness) {
   std::size_t pt_num = polyline.GetPointNumer();

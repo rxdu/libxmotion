@@ -79,8 +79,9 @@ ParametricCurve CurveFitting::FitTimedCurve(std::vector<double> x,
 //---------------------------------------------------------------------------//
 
 #ifdef ENABLE_VISUAL
-void DrawParametricCurve(CvCanvas &canvas, const ParametricCurve &pcurve,
-                         double step, cv::Scalar ln_color, int32_t thickness) {
+void DrawParametricCurve(quickviz::CvCanvas &canvas,
+                         const ParametricCurve &pcurve, double step,
+                         cv::Scalar ln_color, int32_t thickness) {
   std::vector<cv::Point2d> pts;
 
   for (double s = 0; s < pcurve.GetLength(); s += step)

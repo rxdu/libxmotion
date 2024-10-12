@@ -3,6 +3,7 @@
 #include "geometry/polyline.hpp"
 
 using namespace xmotion;
+using namespace quickviz;
 
 int main() {
   Polyline polyline;

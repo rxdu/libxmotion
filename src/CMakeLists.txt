@@ -12,5 +12,5 @@ add_subdirectory(control)
 add_subdirectory(planning)
 
 if (ENABLE_VISUALIZATION)
-  add_subdirectory(visualization)
+  add_subdirectory(quickviz)
 endif ()

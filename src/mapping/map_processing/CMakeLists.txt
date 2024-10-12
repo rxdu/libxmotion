@@ -1,5 +1,5 @@
-find_package(OpenCV REQUIRED)
 find_package(PCL REQUIRED)
+find_package(OpenCV REQUIRED)
 find_package(Eigen3 REQUIRED NO_MODULE)
 
 include_directories(${PCL_INCLUDE_DIRS})
@@ -18,7 +18,6 @@ target_link_libraries(map_processing PUBLIC
     rapidcsv
     math_utils
     logging
-    cvdraw
     Eigen3::Eigen
     ${OpenCV_LIBS}
     ${PCL_LIBRARIES})
