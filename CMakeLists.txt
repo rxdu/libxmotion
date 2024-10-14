@@ -19,7 +19,7 @@ endif ()
 
 ## Project Options
 option(BUILD_TESTING "Build tests" OFF)
-option(FORCE_BUILD_TESTS "Force build tests" OFF)
+option(XMOTION_DEV_MODE "Development mode forces building tests" OFF)
 option(ENABLE_LOGGING "Enable logging" ON)
 option(STATIC_CHECK "Enable static check" OFF)
 
@@ -63,7 +63,15 @@ include(GNUInstallDirs)
 ## Put all binary files into /bin and libraries into /lib
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+if (XMOTION_DEV_MODE)
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+else ()
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+endif ()
+
+if(XMOTION_DEV_MODE)
+  message(STATUS "xmotion development mode enabled")
+endif()
 
 ## Chosse build type
 set(default_build_type "Release")
@@ -86,14 +94,14 @@ else (ENABLE_LOGGING)
 endif (ENABLE_LOGGING)
 
 ## Enable test if requested
-if (((PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME) AND BUILD_TESTING) OR FORCE_BUILD_TESTS)
+if (((NOT BUILD_AS_MODULE) AND BUILD_TESTING) OR XMOTION_DEV_MODE)
   enable_testing()
   include(GoogleTest)
   set(BUILD_TESTS ON)
-  message(STATUS "Tests will be built")
+  message(STATUS "xmotion tests will be built")
 else ()
   set(BUILD_TESTS OFF)
-  message(STATUS "Tests will not be built")
+  message(STATUS "xmotion tests will not be built")
 endif ()
 
 ## Dependent libraries

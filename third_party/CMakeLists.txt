@@ -1,6 +1,10 @@
-if(BUILD_TESTS)
+if (BUILD_TESTS)
+  if (TARGET gtest)
+    message(STATUS "GoogleTest already found, project will use the existing target")
+  else ()
     add_subdirectory(googletest)
-endif()
+  endif ()
+endif ()
 
 add_subdirectory(spdlog)
 add_subdirectory(rapidcsv)
