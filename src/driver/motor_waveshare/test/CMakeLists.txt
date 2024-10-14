@@ -1,0 +1,2 @@
+#add_executable(test_akelc_modbus test_akelc_modbus.cpp)
+#target_link_libraries(test_akelc_modbus motor_akelc)
