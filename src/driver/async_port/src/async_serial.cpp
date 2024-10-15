@@ -78,7 +78,7 @@ void AsyncSerial::Close() {
   io_context_.stop();
   if (io_thread_.joinable()) io_thread_.join();
   io_context_.reset();
-  
+
   if (IsOpened()) {
     serial_port_.cancel();
     serial_port_.close();
@@ -122,7 +122,9 @@ void AsyncSerial::WriteToPort(bool check_if_busy) {
 
   auto sthis = shared_from_this();
   tx_in_progress_ = true;
-  auto len = tx_rbuf_.Read(tx_buf_, tx_rbuf_.GetOccupiedSize());
+  std::vector<uint8_t> data(tx_rbuf_.GetOccupiedSize());
+  auto len = tx_rbuf_.Read(data, tx_rbuf_.GetOccupiedSize());
+  std::memcpy(tx_buf_, data.data(), len);
   serial_port_.async_write_some(
       asio::buffer(tx_buf_, len),
       [sthis](asio::error_code error, size_t bytes_transferred) {
@@ -152,7 +154,8 @@ void AsyncSerial::SendBytes(const uint8_t *bytes, size_t length) {
         "AsyncSerial::SendBytes: tx buffer overflow, try to slow down sending "
         "data");
   }
-  tx_rbuf_.Write(bytes, length);
+  std::vector<uint8_t> data(bytes, bytes + length);
+  tx_rbuf_.Write(data, length);
   io_context_.post(
       std::bind(&AsyncSerial::WriteToPort, shared_from_this(), true));
 }

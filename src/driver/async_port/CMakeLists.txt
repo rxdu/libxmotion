@@ -11,9 +11,9 @@ target_include_directories(async_port PUBLIC
         $<INSTALL_INTERFACE:include>
         PRIVATE src)
 
-#if (BUILD_TESTS)
-#    add_subdirectory(test)
-#endif ()
+if (BUILD_TESTS)
+  add_subdirectory(test)
+endif ()
 
 ## installation configuration
 install(TARGETS async_port
