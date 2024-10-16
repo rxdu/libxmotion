@@ -197,20 +197,20 @@ void Ddsm210::RequestOdometryFeedback() {
 }
 
 void Ddsm210::ProcessFeedback(uint8_t* data, const size_t bufsize, size_t len) {
-  {
-    std::stringstream ss;
-    for (int i = 0; i < len; i++) {
-      ss << std::hex << (int)(data[i]) << " ";
-    }
-    XLOG_INFO_STREAM("Raw feedback: " << ss.str());
-  }
+  //  {
+  //    std::stringstream ss;
+  //    for (int i = 0; i < len; i++) {
+  //      ss << std::hex << (int)(data[i]) << " ";
+  //    }
+  //    XLOG_INFO_STREAM("Raw feedback: " << ss.str());
+  //  }
 
   std::vector<uint8_t> new_data(data, data + len);
   rx_buffer_.Write(new_data, new_data.size());
 
   // only try to decode when there are at least 10 bytes in the buffer
   while (rx_buffer_.GetOccupiedSize() >= 10) {
-    std::vector<uint8_t> frame;
+    std::vector<uint8_t> frame(10);
     rx_buffer_.Peek(frame, 10);
 
     // check if the frame is valid

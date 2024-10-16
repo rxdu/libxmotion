@@ -22,11 +22,11 @@ int main(int argc, char **argv) {
     return -1;
   }
 
-  for (int i = 0; i < 5; ++i) {
+  for (int i = 0; i < 500; ++i) {
     motor.SetSpeed(10);
     //    std::cout << "Speed: " << motor.GetSpeed() << std::endl;
     std::cout << "speed: " << motor.GetSpeed() << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
   }
 
   motor.ApplyBrake();
