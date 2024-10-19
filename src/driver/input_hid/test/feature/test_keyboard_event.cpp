@@ -1,5 +1,5 @@
 /*
- * test_hid_event_listener.cpp
+ * test_keyboard_event.cpp
  *
  * Created on 7/15/24 9:20 PM
  * Description:
@@ -21,7 +21,18 @@ void OnKeyEvent(KeyboardCode code, KeyboardEvent event) {
 }
 
 int main(int argc, char* argv[]) {
-  KeyboardHandler keyboard_handler("/dev/input/event3");
+  int event_num = 8;
+
+  if (argc == 2) {
+    event_num = std::atoi(argv[1]);
+  } else {
+    std::cout << "Usage: " << argv[0] << " <event_num>" << std::endl;
+    std::cout << "event_num: 0 - /dev/input/event0" << std::endl;
+    return -1;
+  }
+
+  KeyboardHandler keyboard_handler("/dev/input/event" +
+                                   std::to_string(event_num));
   if (!keyboard_handler.Open()) {
     std::cerr << "Failed to open keyboard device" << std::endl;
     return -1;

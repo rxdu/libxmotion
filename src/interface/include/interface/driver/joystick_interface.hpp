@@ -14,7 +14,7 @@
 #include <functional>
 
 namespace xmotion {
-enum class JsButton {
+enum class JsButton : int {
   kTrigger = 0,
   kThumb = 1,
   kThumb2 = 2,
@@ -43,9 +43,10 @@ enum class JsButton {
   kMode = 28,
   kThumbL = 29,
   kThumbR = 30,
+  kLast
 };
 
-enum class JsAxis {
+enum class JsAxis : int {
   kX = 0,
   kY = 1,
   kZ = 2,
@@ -70,6 +71,12 @@ enum class JsAxis {
   kTiltX = 26,
   kTiltY = 27,
   kToolWidth = 28,
+  kLast
+};
+
+enum class JxButtonEvent {
+  kPress,
+  kRelease,
 };
 
 struct JsAxisValue {
@@ -86,9 +93,9 @@ struct JoystickDescriptor {
 class JoystickInterface {
  public:
   using ButtonEventCallback =
-      std::function<void(const JsButton& btn, const bool value)>;
+      std::function<void(const JsButton& btn, const JxButtonEvent& event)>;
   using AxisEventCallback =
-      std::function<void(const JsAxis& axis, const JsAxisValue& value)>;
+      std::function<void(const JsAxis& axis, const float& value)>;
 
  public:
   virtual ~JoystickInterface() = default;

@@ -14,10 +14,10 @@
 #include <linux/input.h>
 
 #include "logging/xlogger.hpp"
-#include "input_hid/keyboard_mapping.hpp"
 
 namespace xmotion {
-KeyboardHandler::KeyboardHandler(const std::string &device) : device_(device) {}
+KeyboardHandler::KeyboardHandler(const std::string &input_event)
+    : device_(input_event) {}
 
 KeyboardHandler::~KeyboardHandler() { Close(); }
 
@@ -35,7 +35,10 @@ bool KeyboardHandler::Open() {
 }
 
 void KeyboardHandler::Close() {
-  if (fd_ > 0) close(fd_);
+  if (fd_ > 0) {
+    close(fd_);
+    fd_ = -1;
+  }
 }
 
 bool KeyboardHandler::IsOpened() const { return fd_ > 0; }
@@ -43,8 +46,8 @@ bool KeyboardHandler::IsOpened() const { return fd_ > 0; }
 void KeyboardHandler::OnInputEvent() {
   struct input_event ev;
   ssize_t bytes_read = read(fd_, &ev, sizeof(ev));
-  if (bytes_read == (ssize_t)-1) {
-    XLOG_ERROR("Failed to read input event");
+  if (bytes_read <= 0) {
+    XLOG_ERROR("No input event read from device: {0}", device_);
   } else if (bytes_read == sizeof(ev)) {
     if (ev.type == EV_KEY) {
       XLOG_DEBUG_STREAM("Key " << ev.code

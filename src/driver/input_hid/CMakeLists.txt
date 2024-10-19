@@ -3,9 +3,12 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(Libevent REQUIRED IMPORTED_TARGET libevent)
 
 add_library(input_hid STATIC
+    # polling-based driver
     src/joystick.cpp
     src/keyboard.cpp
+    # event-based driver
     src/hid_event_listener.cpp
+    src/joystick_handler.cpp
     src/keyboard_handler.cpp
     src/keyboard_mapping.cpp
 )

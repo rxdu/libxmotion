@@ -14,7 +14,7 @@
 #include <atomic>
 
 #include "interface/driver/keyboard_interface.hpp"
-#include "input_hid/keyboard_mapping.hpp"
+#include "input_hid/details/keyboard_mapping.hpp"
 
 namespace xmotion {
 class Keyboard : public KeyboardInterface {

@@ -13,12 +13,12 @@
 
 #include "interface/driver/hid_handler_interface.hpp"
 #include "interface/driver/keyboard_interface.hpp"
-#include "input_hid/keyboard_mapping.hpp"
+#include "input_hid/details/keyboard_mapping.hpp"
 
 namespace xmotion {
 class KeyboardHandler : public HidInputInterface {
  public:
-  KeyboardHandler(const std::string &device);
+  KeyboardHandler(const std::string &input_event);
   ~KeyboardHandler();
 
   // do not allow copy

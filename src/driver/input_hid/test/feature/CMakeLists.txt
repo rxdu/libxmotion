@@ -1,0 +1,14 @@
+add_executable(test_keyboard test_keyboard.cpp)
+target_link_libraries(test_keyboard input_hid)
+
+add_executable(test_keyboard_event test_keyboard_event.cpp)
+target_link_libraries(test_keyboard_event input_hid)
+
+add_executable(test_joystick test_joystick.cpp)
+target_link_libraries(test_joystick input_hid)
+
+add_executable(test_joystick_event test_joystick_event.cpp)
+target_link_libraries(test_joystick_event input_hid)
+
+add_executable(test_multiple_device_event test_multiple_device_event.cpp)
+target_link_libraries(test_multiple_device_event input_hid)

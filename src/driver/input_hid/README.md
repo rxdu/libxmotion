@@ -1,4 +1,19 @@
-# HID
+# HID Device Driver
+
+This module provides driver for the following devices:
+
+- Keyboard
+- JoyStick
+
+Two types of drivers are provided:
+
+- Polling driver: Keyboard, Joystick
+- Event-driven driver: (KeyboardHandler, JoystickHandler) + HidEventListener
+
+If you don't care about the performance, both drivers can be used. The polling driver is easier to use and can be used
+for simple use cases. It creates a thread in the background that reads the device and calls the callback function.
+The event-driven driver is more efficient, especially if you need to handle multiple devices. One instance of
+HidEventListener can handle multiple devices.
 
 ## Find the device
 
@@ -35,4 +50,20 @@ Available devices:
 /dev/input/event19:	HDA Intel PCH Line
 /dev/input/event20:	HDA Intel PCH Headphone Front
 /dev/input/event21:	HDA Intel PCH Front Headphone Surround
+```
+
+## Device permission
+
+You can check the permission of the device with the `ls` command.
+
+```bash
+$ ls -la /dev/input/event8 
+crw-rw---- 1 root input 13, 72 Oct 19  2024 /dev/input/event8
+```
+
+The device is owned by the `root` user and the `input` group. You can add your user to the `input` group to get access
+to the device.
+
+```bash
+$ sudo usermod -a -G input $USER
 ```
