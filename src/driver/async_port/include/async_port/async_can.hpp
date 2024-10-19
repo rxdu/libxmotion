@@ -41,12 +41,13 @@ class AsyncCAN : public std::enable_shared_from_this<AsyncCAN>,
   AsyncCAN &operator=(const AsyncCAN &) = delete;
 
   // Public API
-  bool Open();
-  void Close();
-  bool IsOpened() const;
+  bool Open() override;
+  void Close() override;
+  bool IsOpened() const override;
 
-  void SetReceiveCallback(ReceiveCallback cb) { rcv_cb_ = cb; }
-  void SendFrame(const struct can_frame &frame);
+  void SetReceiveCallback(ReceiveCallback cb) override { rcv_cb_ = cb; }
+
+  void SendFrame(const struct can_frame &frame) override;
 
  private:
   std::string port_;

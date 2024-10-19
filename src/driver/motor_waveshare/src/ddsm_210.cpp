@@ -17,38 +17,6 @@
 
 namespace xmotion {
 namespace {
-// reference:
-// https://reveng.sourceforge.io/crc-catalogue/all.htm#crc.cat.crc-8-maxim-dow
-int8_t CalculateChecksum(const std::array<uint8_t, 10>& data) {
-  uint8_t crc = 0x00;
-  for (size_t i = 0; i < data.size() - 1; ++i) {
-    crc ^= data[i];
-    for (size_t j = 0; j < 8; ++j) {
-      if (crc & 0x01) {
-        crc = (crc >> 1) ^ 0x8c;
-      } else {
-        crc >>= 1;
-      }
-    }
-  }
-  return crc;
-}
-
-int8_t CalculateChecksum(const std::vector<uint8_t>& data) {
-  uint8_t crc = 0x00;
-  for (size_t i = 0; i < data.size() - 1; ++i) {
-    crc ^= data[i];
-    for (size_t j = 0; j < 8; ++j) {
-      if (crc & 0x01) {
-        crc = (crc >> 1) ^ 0x8c;
-      } else {
-        crc >>= 1;
-      }
-    }
-  }
-  return crc;
-}
-
 void PrintBuffer(const std::array<uint8_t, 10>& buffer) {
   std::cout << "Buffer: ";
   for (int i = 0; i < buffer.size(); i++) {
@@ -78,71 +46,32 @@ bool Ddsm210::SetMode(Ddsm210::Mode mode, uint32_t timeout_ms) {
   } else if (mode == Ddsm210::Mode::kPosition) {
   } else {
   }
+  return true;
 }
 
 Ddsm210::Mode Ddsm210::GetMode() const { return Ddsm210::Mode::kSpeed; }
 
 bool Ddsm210::SetMotorId(uint8_t id, uint32_t timeout_ms) { return false; }
 
-void Ddsm210::SetAcceleration(uint8_t ms_per_rpm) {
-  ms_per_rpm_ = ms_per_rpm;
-  //  int16_t rpm_val = static_cast<int16_t>(rpm * 10);
-
-  tx_buffer_[0] = motor_id_;
-  tx_buffer_[1] = 0x64;
-  tx_buffer_[2] = 0;
-  tx_buffer_[3] = 0;
-  tx_buffer_[4] = 0;
-  tx_buffer_[5] = 0;
-  tx_buffer_[6] = ms_per_rpm;
-  tx_buffer_[7] = 0;
-  tx_buffer_[8] = 0;
-  tx_buffer_[9] = CalculateChecksum(tx_buffer_);
-}
+void Ddsm210::SetAcceleration(uint8_t ms_per_rpm) {}
 
 void Ddsm210::SetSpeed(int32_t rpm) {
-  if (rpm > max_rpm) rpm = max_rpm;
-  if (rpm < min_rpm) rpm = min_rpm;
-
-  int16_t rpm_val = static_cast<int16_t>(rpm * 10);
-
-  tx_buffer_[0] = motor_id_;
-  tx_buffer_[1] = 0x64;
-  tx_buffer_[2] = (rpm_val & 0xff00) >> 8;
-  tx_buffer_[3] = rpm_val & 0x00ff;
-  tx_buffer_[4] = 0;
-  tx_buffer_[5] = 0;
-  tx_buffer_[6] = 0;
-  tx_buffer_[7] = 0;
-  tx_buffer_[8] = 0;
-  tx_buffer_[9] = CalculateChecksum(tx_buffer_);
-  serial_->SendBytes(tx_buffer_.data(), tx_buffer_.size());
-
-  RequestOdometryFeedback();
+  Ddsm210Frame frame(motor_id_);
+  frame.SetSpeed(rpm);
+  auto buffer = frame.ToBuffer();
+  //  PrintBuffer(buffer);
+  serial_->SendBytes(buffer.data(), buffer.size());
 }
 
-int32_t Ddsm210::GetSpeed() { return raw_feedback_.rpm; }
+int32_t Ddsm210::GetSpeed() { return raw_feedback_.rpm * 0.1f; }
 
 int32_t Ddsm210::GetEncoderCount() { return raw_feedback_.encoder_count; }
 
 void Ddsm210::SetPosition(double position) {
-  if (position > max_pos) position = max_pos;
-  if (position < min_pos) position = min_pos;
-
-  int16_t pos_val = static_cast<int16_t>(position / 360 * 32767);
-  tx_buffer_[0] = motor_id_;
-  tx_buffer_[1] = 0x64;
-  tx_buffer_[2] = (pos_val & 0xff00) >> 8;
-  tx_buffer_[3] = pos_val & 0x00ff;
-  tx_buffer_[4] = 0;
-  tx_buffer_[5] = 0;
-  tx_buffer_[6] = 0;
-  tx_buffer_[7] = 0;
-  tx_buffer_[8] = 0;
-  tx_buffer_[9] = CalculateChecksum(tx_buffer_);
-  serial_->SendBytes(tx_buffer_.data(), tx_buffer_.size());
-
-  RequestOdometryFeedback();
+  Ddsm210Frame frame(motor_id_);
+  frame.SetPosition(position);
+  auto buffer = frame.ToBuffer();
+  serial_->SendBytes(buffer.data(), buffer.size());
 }
 
 double Ddsm210::GetPosition() {
@@ -150,32 +79,17 @@ double Ddsm210::GetPosition() {
 }
 
 void Ddsm210::ApplyBrake(double brake) {
-  (void)brake;
-  tx_buffer_[0] = motor_id_;
-  tx_buffer_[1] = 0x64;
-  tx_buffer_[2] = 0;
-  tx_buffer_[3] = 0;
-  tx_buffer_[4] = 0;
-  tx_buffer_[5] = 0;
-  tx_buffer_[6] = 0;
-  tx_buffer_[7] = 0xff;
-  tx_buffer_[8] = 0;
-  tx_buffer_[9] = CalculateChecksum(tx_buffer_);
-  serial_->SendBytes(tx_buffer_.data(), tx_buffer_.size());
+  Ddsm210Frame frame(motor_id_);
+  frame.ApplyBrake();
+  auto buffer = frame.ToBuffer();
+  serial_->SendBytes(buffer.data(), buffer.size());
 }
 
 void Ddsm210::ReleaseBrake() {
-  tx_buffer_[0] = motor_id_;
-  tx_buffer_[1] = 0x64;
-  tx_buffer_[2] = 0;
-  tx_buffer_[3] = 0;
-  tx_buffer_[4] = 0;
-  tx_buffer_[5] = 0;
-  tx_buffer_[6] = 0;
-  tx_buffer_[7] = 0;
-  tx_buffer_[8] = 0;
-  tx_buffer_[9] = CalculateChecksum(tx_buffer_);
-  serial_->SendBytes(tx_buffer_.data(), tx_buffer_.size());
+  Ddsm210Frame frame(motor_id_);
+  frame.ReleaseBrake();
+  auto buffer = frame.ToBuffer();
+  serial_->SendBytes(buffer.data(), buffer.size());
 }
 
 bool Ddsm210::IsNormal() {
@@ -183,17 +97,10 @@ bool Ddsm210::IsNormal() {
 }
 
 void Ddsm210::RequestOdometryFeedback() {
-  tx_buffer_[0] = motor_id_;
-  tx_buffer_[1] = 0x74;
-  tx_buffer_[2] = 0;
-  tx_buffer_[3] = 0;
-  tx_buffer_[4] = 0;
-  tx_buffer_[5] = 0;
-  tx_buffer_[6] = 0;
-  tx_buffer_[7] = 0;
-  tx_buffer_[8] = 0;
-  tx_buffer_[9] = CalculateChecksum(tx_buffer_);
-  serial_->SendBytes(tx_buffer_.data(), tx_buffer_.size());
+  Ddsm210Frame frame(motor_id_);
+  frame.RequestOdom();
+  auto buffer = frame.ToBuffer();
+  serial_->SendBytes(buffer.data(), buffer.size());
 }
 
 void Ddsm210::ProcessFeedback(uint8_t* data, const size_t bufsize, size_t len) {
@@ -202,7 +109,7 @@ void Ddsm210::ProcessFeedback(uint8_t* data, const size_t bufsize, size_t len) {
   //    for (int i = 0; i < len; i++) {
   //      ss << std::hex << (int)(data[i]) << " ";
   //    }
-  //    XLOG_INFO_STREAM("Raw feedback: " << ss.str());
+  //    XLOG_INFO_STREAM("Raw data: " << ss.str());
   //  }
 
   std::vector<uint8_t> new_data(data, data + len);
@@ -212,46 +119,14 @@ void Ddsm210::ProcessFeedback(uint8_t* data, const size_t bufsize, size_t len) {
   while (rx_buffer_.GetOccupiedSize() >= 10) {
     std::vector<uint8_t> frame(10);
     rx_buffer_.Peek(frame, 10);
-
-    // check if the frame is valid
-    if (frame[0] == motor_id_ &&
-        (frame[1] == 0x64 || frame[1] == 0x74 || frame[1] == 0x75 ||
-         frame[1] == 0xa0) &&
-        CalculateChecksum((frame)) == frame[9]) {
+    Ddsm210Frame ddsm_frame(frame);
+    if (ddsm_frame.IsValid()) {
+      //      XLOG_INFO("----------------------> Frame found");
+      raw_feedback_ = ddsm_frame.GetRawFeedback();
       rx_buffer_.Read(frame, 10);
-      if (data[1] == 0x64) {
-        XLOG_INFO("Type: 0x64");
-        raw_feedback_.rpm =
-            static_cast<int16_t>((static_cast<uint16_t>(data[2]) << 8) |
-                                 static_cast<uint16_t>(data[3]));
-        raw_feedback_.current =
-            static_cast<int16_t>((static_cast<uint16_t>(data[4]) << 8) |
-                                 static_cast<uint16_t>(data[5]));
-        raw_feedback_.ms_per_rpm = data[6];
-        raw_feedback_.temperature = static_cast<int8_t>(data[7]);
-        //      raw_feedback_.error_code = data[8];
-      } else if (data[1] == 0x74) {
-        XLOG_INFO("Type: 0x74");
-        raw_feedback_.encoder_count =
-            static_cast<int32_t>((static_cast<uint32_t>(data[2]) << 24) |
-                                 (static_cast<uint32_t>(data[3]) << 16) |
-                                 (static_cast<uint32_t>(data[4]) << 8) |
-                                 static_cast<uint32_t>(data[5]));
-        raw_feedback_.position =
-            static_cast<int16_t>((static_cast<uint16_t>(data[6]) << 8) |
-                                 static_cast<uint16_t>(data[7]));
-        raw_feedback_.error_code = data[8];
-      } else if (data[1] == 0x75) {
-        XLOG_INFO("Type: 0x75");
-        raw_feedback_.mode = data[2];
-      } else if (data[1] == 0xa0) {
-        XLOG_INFO("Type: 0xa0");
-        mode_set_ack_received_ = true;
-        raw_feedback_.mode = data[2];
-      }
-    }
-    // incomplete/invalid frame, discard the first byte and try again
-    else {
+    } else {
+      //      XLOG_INFO("xxxxxxxxxxxxxxxxxxx");
+      // incomplete/invalid frame, discard the first byte and try again
       rx_buffer_.Read(frame, 1);
     }
   }

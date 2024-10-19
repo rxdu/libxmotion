@@ -38,15 +38,16 @@ class AsyncSerial : public std::enable_shared_from_this<AsyncSerial>,
   AsyncSerial &operator=(const AsyncSerial &) = delete;
 
   // Public API
-  void SetBaudRate(unsigned baudrate);
-  void SetHardwareFlowControl(bool enabled);
+  void SetBaudRate(unsigned baudrate) override;
+  void SetHardwareFlowControl(bool enabled) override;
 
-  bool Open();
-  void Close();
-  bool IsOpened() const;
+  bool Open() override;
+  void Close() override;
+  bool IsOpened() const override;
 
-  void SetReceiveCallback(ReceiveCallback cb) { rcv_cb_ = cb; }
-  void SendBytes(const uint8_t *bytes, size_t length);
+  void SetReceiveCallback(ReceiveCallback cb) override { rcv_cb_ = cb; }
+
+  void SendBytes(const uint8_t *bytes, size_t length) override;
 
  private:
   std::string port_;

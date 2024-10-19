@@ -9,12 +9,17 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <csignal>
 
 #include "motor_waveshare/ddsm_210.hpp"
 
 using namespace xmotion;
 
+bool keep_running = true;
+
 int main(int argc, char **argv) {
+  std::signal(SIGINT, [](int signum) { keep_running = false; });
+
   Ddsm210 motor(1);
 
   if (!motor.Connect("/dev/ttyUSB0")) {
@@ -22,11 +27,28 @@ int main(int argc, char **argv) {
     return -1;
   }
 
-  for (int i = 0; i < 500; ++i) {
-    motor.SetSpeed(10);
-    //    std::cout << "Speed: " << motor.GetSpeed() << std::endl;
-    std::cout << "speed: " << motor.GetSpeed() << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+  bool variable_speed = true;
+  int speed = 10;
+  bool increase = true;
+  for (int i = 0; i < 5000 && keep_running; ++i) {
+    if (variable_speed) {
+      if (i % 10 == 0) {
+        if (increase) {
+          speed += 1;
+        } else {
+          speed -= 1;
+        }
+        if (speed >= 210) {
+          increase = false;
+        } else if (speed <= -210) {
+          increase = true;
+        }
+        std::cout << "Target speed: " << speed << std::endl;
+      }
+    }
+    motor.SetSpeed(speed);
+    std::cout << "Speed feedback: " << motor.GetSpeed() << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 
   motor.ApplyBrake();

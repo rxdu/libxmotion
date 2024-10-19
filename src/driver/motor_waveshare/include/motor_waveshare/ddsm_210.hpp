@@ -17,6 +17,7 @@
 #include "interface/driver/serial_interface.hpp"
 
 #include "async_port/ring_buffer.hpp"
+#include "motor_waveshare/details/ddsm_210_frame.hpp"
 
 namespace xmotion {
 class Ddsm210 : public MotorControllerInterface {
@@ -48,36 +49,18 @@ class Ddsm210 : public MotorControllerInterface {
   void SetPosition(double position) override;
   double GetPosition() override;
 
-  void ApplyBrake(double brake = 1.0) override;
+  void ApplyBrake(double brake = true) override;
   void ReleaseBrake() override;
   bool IsNormal() override;
 
  private:
-  static constexpr uint8_t over_temp_error_bit = 0x10;
-  static constexpr uint8_t over_current_error_bit = 0x02;
-  static constexpr int16_t max_rpm = 210;
-  static constexpr int16_t min_rpm = -210;
-  static constexpr uint16_t max_pos = 360;
-  static constexpr uint16_t min_pos = 0;
-
   void RequestOdometryFeedback();
   void ProcessFeedback(uint8_t* data, const size_t bufsize, size_t len);
 
   uint8_t motor_id_;
   std::shared_ptr<SerialInterface> serial_;
-  std::array<uint8_t, 10> tx_buffer_;
   RingBuffer<uint8_t, 1024> rx_buffer_;
-
-  struct RawFeedback {
-    int16_t rpm;
-    int16_t current;
-    uint8_t ms_per_rpm;
-    int8_t temperature;
-    int32_t encoder_count;
-    int16_t position;
-    uint8_t error_code;
-    uint8_t mode;
-  } raw_feedback_;
+  Ddsm210Frame::RawFeedback raw_feedback_;
 
   uint8_t ms_per_rpm_ = 1;
   bool id_set_ack_received_ = false;
