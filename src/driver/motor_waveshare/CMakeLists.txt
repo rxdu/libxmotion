@@ -3,6 +3,8 @@ add_library(motor_waveshare STATIC
     src/ddsm_210.cpp
     src/ddsm_210_frame.cpp
     src/ddsm_210_array.cpp
+    src/sms_sts_servo.cpp
+    src/sms_sts_servo_impl.cpp
     src/servo/SMS_STS.cpp
     src/servo/SCS.cpp
     src/servo/SCSerial.cpp)

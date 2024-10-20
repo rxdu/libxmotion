@@ -13,10 +13,12 @@ int main(int argc, char **argv) {
     return 0;
   }
   std::cout << "serial:" << argv[1] << std::endl;
+
   if (!sm_st.begin(1000000, argv[1])) {
     std::cout << "Failed to init sms/sts motor!" << std::endl;
     return 0;
   }
+
   while (1) {
     sm_st.WritePosEx(
         1, 4095, 2400,
@@ -30,6 +32,8 @@ int main(int argc, char **argv) {
     std::cout << "pos = " << 0 << std::endl;
     usleep(2187 * 1000);  //[(P1-P0)/V]*1000+[V/(A*100)]*1000
   }
+
   sm_st.end();
+
   return 1;
 }

@@ -26,6 +26,7 @@ class Ddsm210 : public MotorControllerInterface {
 
  public:
   explicit Ddsm210(uint8_t id);
+  // this construction is used for motor array
   Ddsm210(uint8_t id, std::shared_ptr<SerialInterface> serial);
   ~Ddsm210() = default;
 

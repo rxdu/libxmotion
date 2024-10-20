@@ -2,7 +2,7 @@
  * SMS_STS.h
  * SMS/STS系列串行舵机应用层程序
  * 日期: 2021.12.8
- * 作者: 
+ * 作者:
  */
 
 #ifndef _SMS_STS_H
