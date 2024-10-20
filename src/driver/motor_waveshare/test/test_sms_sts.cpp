@@ -26,20 +26,30 @@ int main(int argc, char **argv) {
     servo.SetPosition(360);
     std::cout << "set to 360" << std::endl;
     for (int i = 0; i < 10; i++) {
-      auto state = servo.GetState();
-      std::cout << "position: " << state.position << ", speed: " << state.speed
-                << ", load: " << state.load << ", voltage: " << state.voltage
-                << ", temperature: " << state.temperature
-                << ", current: " << state.current
-                << ", is_moving: " << std::boolalpha << state.is_moving
-                << std::endl;
       std::this_thread::sleep_for(std::chrono::microseconds(2187 * 100));
-      std::cout << "sleeping" << std::endl;
+      std::cout << "speed: " << servo.GetSpeed() << std::endl;
     }
+    // clang-format off
+//    for (int i = 0; i < 10; i++) {
+//      auto state = servo.GetState();
+//      std::cout << "position: " << state.position << ", speed: " << state.speed
+//                << ", load: " << state.load << ", voltage: " << state.voltage
+//                << ", temperature: " << state.temperature
+//                << ", current: " << state.current
+//                << ", is_moving: " << std::boolalpha << state.is_moving
+//                << std::endl;
+//      std::this_thread::sleep_for(std::chrono::microseconds(2187 * 100));
+//      std::cout << "sleeping" << std::endl;
+//    }
+    // clang-format on
     //    std::this_thread::sleep_for(std::chrono::microseconds(2187 * 1000));
     servo.SetPosition(0);
     std::cout << "set to 0" << std::endl;
-    std::this_thread::sleep_for(std::chrono::microseconds(2187 * 1000));
+    for (int i = 0; i < 10; i++) {
+      std::this_thread::sleep_for(std::chrono::microseconds(2187 * 100));
+      std::cout << "speed: " << servo.GetSpeed() << std::endl;
+    }
+    //    std::this_thread::sleep_for(std::chrono::microseconds(2187 * 1000));
   }
 
   return 0;

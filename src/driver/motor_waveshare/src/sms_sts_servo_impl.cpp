@@ -28,9 +28,16 @@ class SmsStsServo::Impl {
 
   void Disconnect() { sm_st_.end(); }
 
-  void SetSpeed(float rpm) {}
+  void SetSpeed(float step_per_sec) {
+    if (step_per_sec > 2400) step_per_sec = 2400;
+    if (step_per_sec < -2400) step_per_sec = -2400;
+    sm_st_.WriteSpe(id_, step_per_sec, 50);
+  }
 
-  float GetSpeed() { return 0; }
+  float GetSpeed() {
+    auto speed = sm_st_.ReadSpeed(id_);
+    return speed;
+  }
 
   void SetPosition(float position) {
     // map 0-360 to 0-4095
@@ -39,12 +46,15 @@ class SmsStsServo::Impl {
     sm_st_.WritePosEx(id_, pos, 2400, 50);
   }
 
-  float GetPosition() { return 0.0; }
+  float GetPosition() {
+    auto pos = sm_st_.ReadPos(id_);
+    return pos;
+  }
 
   bool IsNormal() { return true; }
 
   SmsStsServo::State GetState() {
-    if (sm_st_.FeedBack(1) != -1) {
+    if (sm_st_.FeedBack(id_) != -1) {
       state_.position = sm_st_.ReadPos(-1);  //-1表示缓冲区数据，以下相同
       state_.speed = sm_st_.ReadSpeed(-1);
       state_.load = sm_st_.ReadLoad(-1);

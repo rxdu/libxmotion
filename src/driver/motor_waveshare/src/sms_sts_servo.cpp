@@ -21,9 +21,11 @@ bool SmsStsServo::Connect(std::string dev_name) {
 
 void SmsStsServo::Disconnect() { pimpl_->Disconnect(); }
 
-void SmsStsServo::SetSpeed(float rpm) {}
+void SmsStsServo::SetSpeed(float step_per_sec) {
+  pimpl_->SetSpeed(step_per_sec);
+}
 
-float SmsStsServo::GetSpeed() { return 0; }
+float SmsStsServo::GetSpeed() { return pimpl_->GetSpeed(); }
 
 void SmsStsServo::SetPosition(float position) { pimpl_->SetPosition(position); }
 

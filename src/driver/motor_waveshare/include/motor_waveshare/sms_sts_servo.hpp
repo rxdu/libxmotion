@@ -42,7 +42,7 @@ class SmsStsServo : public MotorControllerInterface {
   bool Connect(std::string dev_name);
   void Disconnect();
 
-  void SetSpeed(float rpm) override;
+  void SetSpeed(float step_per_sec) override;
   float GetSpeed() override;
 
   void SetPosition(float position) override;
