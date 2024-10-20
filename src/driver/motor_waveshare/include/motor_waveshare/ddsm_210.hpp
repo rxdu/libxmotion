@@ -53,8 +53,10 @@ class Ddsm210 : public MotorControllerInterface {
   void ReleaseBrake() override;
   bool IsNormal() override;
 
- private:
   void RequestOdometryFeedback();
+  void RequestModeFeedback();
+
+ private:
   void ProcessFeedback(uint8_t* data, const size_t bufsize, size_t len);
 
   uint8_t motor_id_;

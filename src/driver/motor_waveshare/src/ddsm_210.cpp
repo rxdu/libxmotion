@@ -63,9 +63,11 @@ void Ddsm210::SetSpeed(int32_t rpm) {
   serial_->SendBytes(buffer.data(), buffer.size());
 }
 
-int32_t Ddsm210::GetSpeed() { return raw_feedback_.rpm * 0.1f; }
+int32_t Ddsm210::GetSpeed() { return raw_feedback_.speed_feedback.rpm * 0.1f; }
 
-int32_t Ddsm210::GetEncoderCount() { return raw_feedback_.encoder_count; }
+int32_t Ddsm210::GetEncoderCount() {
+  return raw_feedback_.odom_feedback.encoder_count;
+}
 
 void Ddsm210::SetPosition(double position) {
   Ddsm210Frame frame(motor_id_);
@@ -75,7 +77,7 @@ void Ddsm210::SetPosition(double position) {
 }
 
 double Ddsm210::GetPosition() {
-  return raw_feedback_.position * 360.0f / 32767;
+  return raw_feedback_.odom_feedback.position * 360.0f / 32767;
 }
 
 void Ddsm210::ApplyBrake(double brake) {
@@ -93,12 +95,20 @@ void Ddsm210::ReleaseBrake() {
 }
 
 bool Ddsm210::IsNormal() {
-  return serial_->IsOpened() && (raw_feedback_.error_code == 0x00);
+  return serial_->IsOpened() &&
+         (raw_feedback_.odom_feedback.error_code == 0x00);
 }
 
 void Ddsm210::RequestOdometryFeedback() {
   Ddsm210Frame frame(motor_id_);
   frame.RequestOdom();
+  auto buffer = frame.ToBuffer();
+  serial_->SendBytes(buffer.data(), buffer.size());
+}
+
+void Ddsm210::RequestModeFeedback() {
+  Ddsm210Frame frame(motor_id_);
+  frame.RequestMode();
   auto buffer = frame.ToBuffer();
   serial_->SendBytes(buffer.data(), buffer.size());
 }
@@ -122,10 +132,28 @@ void Ddsm210::ProcessFeedback(uint8_t* data, const size_t bufsize, size_t len) {
     Ddsm210Frame ddsm_frame(frame);
     if (ddsm_frame.IsValid()) {
       //      XLOG_INFO("----------------------> Frame found");
-      raw_feedback_ = ddsm_frame.GetRawFeedback();
+      auto new_raw_feedback = ddsm_frame.GetRawFeedback();
+      switch (ddsm_frame.GetType()) {
+        case Ddsm210Frame::Type::kSpeedFeedback: {
+          raw_feedback_.speed_feedback = new_raw_feedback.speed_feedback;
+          break;
+        }
+        case Ddsm210Frame::Type::kOdomFeedback: {
+          raw_feedback_.odom_feedback = new_raw_feedback.odom_feedback;
+          break;
+        }
+        case Ddsm210Frame::Type::kModeSwitchFeedback: {
+          raw_feedback_.mode_switch_feedback =
+              new_raw_feedback.mode_switch_feedback;
+          break;
+        }
+        case Ddsm210Frame::Type::kModeRequestFeedback: {
+          raw_feedback_.mode_request_feedback =
+              new_raw_feedback.mode_request_feedback;
+        }
+      }
       rx_buffer_.Read(frame, 10);
     } else {
-      //      XLOG_INFO("xxxxxxxxxxxxxxxxxxx");
       // incomplete/invalid frame, discard the first byte and try again
       rx_buffer_.Read(frame, 1);
     }

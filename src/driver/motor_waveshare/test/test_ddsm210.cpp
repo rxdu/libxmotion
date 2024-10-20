@@ -27,7 +27,12 @@ int main(int argc, char **argv) {
     return -1;
   }
 
-  bool variable_speed = true;
+  motor.RequestModeFeedback();
+  std::this_thread::sleep_for(std::chrono::milliseconds(200));
+  std::cout << "Current mode: " << static_cast<int>(motor.GetMode())
+            << std::endl;
+
+  bool variable_speed = false;
   int speed = 10;
   bool increase = true;
   for (int i = 0; i < 5000 && keep_running; ++i) {
@@ -47,7 +52,10 @@ int main(int argc, char **argv) {
       }
     }
     motor.SetSpeed(speed);
-    std::cout << "Speed feedback: " << motor.GetSpeed() << std::endl;
+    motor.RequestOdometryFeedback();
+    //    std::cout << "Speed feedback: " << motor.GetSpeed() << std::endl;
+    std::cout << "Encoder count: " << motor.GetEncoderCount()
+              << " , position: " << motor.GetPosition() << std::endl;
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 

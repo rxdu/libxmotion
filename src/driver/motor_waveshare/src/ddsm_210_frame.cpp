@@ -59,46 +59,45 @@ Ddsm210Frame::Ddsm210Frame(const std::vector<uint8_t>& frame_buffer) {
   switch (frame_buffer[1]) {
     case 0x64: {
       //      XLOG_INFO("Type: 0x64");
-      raw_feedback_.rpm =
+      raw_feedback_.speed_feedback.rpm =
           static_cast<int16_t>((static_cast<uint16_t>(frame_buffer[2]) << 8) |
                                static_cast<uint16_t>(frame_buffer[3]));
-      raw_feedback_.current =
+      raw_feedback_.speed_feedback.current =
           static_cast<int16_t>((static_cast<uint16_t>(frame_buffer[4]) << 8) |
                                static_cast<uint16_t>(frame_buffer[5]));
-      raw_feedback_.ms_per_rpm = frame_buffer[6];
-      raw_feedback_.temperature = static_cast<int8_t>(frame_buffer[7]);
+      raw_feedback_.speed_feedback.ms_per_rpm = frame_buffer[6];
+      raw_feedback_.speed_feedback.temperature =
+          static_cast<int8_t>(frame_buffer[7]);
+      type_ = Type::kSpeedFeedback;
       valid_ = true;
       break;
     }
     case 0x74: {
       //      XLOG_INFO("Type: 0x74");
-      //        raw_feedback_.encoder_count =
-      //            static_cast<int32_t>((static_cast<uint32_t>(frame_buffer[2])
-      //            << 24) |
-      //                                 (static_cast<uint32_t>(frame_buffer[3])
-      //                                 << 16) |
-      //                                 (static_cast<uint32_t>(frame_buffer[4])
-      //                                 << 8) |
-      //                                 static_cast<uint32_t>(frame_buffer[5]));
-      //        raw_feedback_.position =
-      //            static_cast<int16_t>((static_cast<uint16_t>(frame_buffer[6])
-      //            << 8)
-      //            |
-      //                                 static_cast<uint16_t>(frame_buffer[7]));
-      //        raw_feedback_.error_code = frame_buffer[8];
+      raw_feedback_.odom_feedback.encoder_count =
+          static_cast<int32_t>((static_cast<uint32_t>(frame_buffer[2]) << 24) |
+                               (static_cast<uint32_t>(frame_buffer[3]) << 16) |
+                               (static_cast<uint32_t>(frame_buffer[4]) << 8) |
+                               static_cast<uint32_t>(frame_buffer[5]));
+      raw_feedback_.odom_feedback.position =
+          static_cast<uint16_t>((static_cast<uint16_t>(frame_buffer[6]) << 8) |
+                                static_cast<uint16_t>(frame_buffer[7]));
+      raw_feedback_.odom_feedback.error_code = frame_buffer[8];
+      type_ = Type::kOdomFeedback;
       valid_ = true;
       break;
     }
     case 0x75: {
-      //      XLOG_INFO("Type: 0x75");
-      //        raw_feedback_.mode = frame_buffer[2];
+            XLOG_INFO("Type: 0x75");
+      raw_feedback_.mode_request_feedback.mode = frame_buffer[2];
+      type_ = Type::kModeRequestFeedback;
       valid_ = true;
       break;
     }
     case 0xa0: {
       //      XLOG_INFO("Type: 0xa0");
-      //        mode_set_ack_received_ = true;
-      //        raw_feedback_.mode = frame_buffer[2];
+      raw_feedback_.mode_switch_feedback.mode = frame_buffer[2];
+      type_ = Type::kModeSwitchFeedback;
       valid_ = true;
       break;
     }
@@ -192,6 +191,21 @@ void Ddsm210Frame::SetMode(Ddsm210Frame::Mode mode) {}
 void Ddsm210Frame::RequestOdom() {
   frame_buffer_[0] = motor_id_;
   frame_buffer_[1] = 0x74;
+  frame_buffer_[2] = 0;
+  frame_buffer_[3] = 0;
+  frame_buffer_[4] = 0;
+  frame_buffer_[5] = 0;
+  frame_buffer_[6] = 0;
+  frame_buffer_[7] = 0;
+  frame_buffer_[8] = 0;
+  frame_buffer_[9] = CalculateChecksum(frame_buffer_);
+
+  valid_ = true;
+}
+
+void Ddsm210Frame::RequestMode() {
+  frame_buffer_[0] = motor_id_;
+  frame_buffer_[1] = 0x75;
   frame_buffer_[2] = 0;
   frame_buffer_[3] = 0;
   frame_buffer_[4] = 0;

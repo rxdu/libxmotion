@@ -20,28 +20,34 @@ class Ddsm210Frame {
 
   enum class Type : uint32_t {
     kUnknown = 0,
-    kIdSetCmd,             // 0x55
-    kSpeedCmd,             // 0x64
-    kPositionCmd,          // 0x64
-    kBrakeCmd,             // 0x64
-    kIdSetFeedback,        // 0x64
-    kModeSwitchCmd,        // 0xa0
-    kModeFeedback,         // 0xa0
-    kOdomRequestCmd,       // 0x74
+    kCommand,
+    kSpeedFeedback,        // 0x64
     kOdomFeedback,         // 0x74
-    kModeRequestCmd,       // 0x75
     kModeRequestFeedback,  // 0x75
+    kModeSwitchFeedback,   // 0xa0
   };
 
   struct RawFeedback {
-    int16_t rpm;
-    int16_t current;
-    uint8_t ms_per_rpm;
-    int8_t temperature;
-    int32_t encoder_count;
-    int16_t position;
-    uint8_t error_code;
-    uint8_t mode;
+    struct {
+      int16_t rpm = 0;
+      int16_t current = 0;
+      uint8_t ms_per_rpm = 0;
+      int8_t temperature = 0;
+    } speed_feedback;
+
+    struct {
+      int32_t encoder_count = 0;
+      uint16_t position = 0;
+      uint8_t error_code = 0;
+    } odom_feedback;
+
+    struct {
+      uint8_t mode = 0;
+    } mode_request_feedback;
+
+    struct {
+      uint8_t mode = 0;
+    } mode_switch_feedback;
   };
 
  public:
@@ -62,6 +68,7 @@ class Ddsm210Frame {
   void SetId(uint8_t id);
   void SetMode(Mode mode);
   void RequestOdom();
+  void RequestMode();
   std::array<uint8_t, 10> ToBuffer();
 
  private:
@@ -73,7 +80,7 @@ class Ddsm210Frame {
   static constexpr uint16_t min_pos = 0;
 
   bool valid_ = false;
-  Type type_;
+  Type type_ = Type::kCommand;
   uint8_t motor_id_;
   std::array<uint8_t, 10> frame_buffer_;
   RawFeedback raw_feedback_;
