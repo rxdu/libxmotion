@@ -18,3 +18,6 @@ target_include_directories(test_servo_feedback PRIVATE ../src/servo)
 
 add_executable(test_sms_sts ./test_sms_sts.cpp)
 target_link_libraries(test_sms_sts motor_waveshare)
+
+add_executable(test_sms_sts_array ./test_sms_sts_array.cpp)
+target_link_libraries(test_sms_sts_array motor_waveshare)

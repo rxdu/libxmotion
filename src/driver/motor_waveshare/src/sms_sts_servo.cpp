@@ -13,6 +13,13 @@
 namespace xmotion {
 SmsStsServo::SmsStsServo(uint8_t id) : pimpl_(std::make_unique<Impl>(id)) {}
 
+SmsStsServo::SmsStsServo(const std::vector<uint8_t>& ids) {
+  if (ids.empty()) {
+    throw std::invalid_argument("Motor id list is empty");
+  }
+  pimpl_ = std::make_unique<Impl>(ids);
+}
+
 SmsStsServo::~SmsStsServo() = default;
 
 bool SmsStsServo::Connect(std::string dev_name) {
@@ -37,5 +44,17 @@ SmsStsServo::State SmsStsServo::GetState() const { return pimpl_->GetState(); }
 
 bool SmsStsServo::SetMode(SmsStsServo::Mode mode, uint32_t timeout_ms) {
   return pimpl_->SetMode(mode, timeout_ms);
+}
+
+void SmsStsServo::SetPosition(std::vector<float> positions) {
+  pimpl_->SetPosition(positions);
+}
+
+std::unordered_map<uint8_t, float> SmsStsServo::GetPositions() {
+  return pimpl_->GetPositions();
+}
+
+std::unordered_map<uint8_t, SmsStsServo::State> SmsStsServo::GetStates() const {
+  return pimpl_->GetStates();
 }
 }  // namespace xmotion

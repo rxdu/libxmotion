@@ -16,6 +16,13 @@ namespace xmotion {
 class SmsStsServo::Impl {
  public:
   Impl(uint8_t id) : id_(id) {};
+
+  Impl(const std::vector<uint8_t>& ids) : ids_(ids) {
+    if (ids.size() == 1) {
+      id_ = ids[0];
+    }
+  }
+
   ~Impl() = default;
 
   bool Connect(std::string dev_name) {
@@ -76,8 +83,49 @@ class SmsStsServo::Impl {
     return false;
   }
 
+  void SetPosition(std::vector<float> positions) {
+    assert(positions.size() == ids_.size());
+    std::vector<s16> pos_vec;
+    std::vector<u16> speed_vec(ids_.size(), 2400);
+    std::vector<u8> acc_vec(ids_.size(), 50);
+    for (int i = 0; i < ids_.size(); i++) {
+      pos_vec.push_back(positions[i] / 360 * 4095);
+    }
+    sm_st_.SyncWritePosEx(ids_.data(), ids_.size(), pos_vec.data(),
+                          speed_vec.data(), acc_vec.data());
+  }
+
+  std::unordered_map<uint8_t, float> GetPositions() {
+    std::unordered_map<uint8_t, float> positions;
+    for (auto id : ids_) {
+      auto pos = sm_st_.ReadPos(id);
+      positions[id] = pos;
+    }
+    return positions;
+  }
+
+  std::unordered_map<uint8_t, State> GetStates() {
+    std::unordered_map<uint8_t, State> states;
+    for (auto id : ids_) {
+      State state;
+      if (sm_st_.FeedBack(id) != -1) {
+        state.position = sm_st_.ReadPos(-1);  //-1表示缓冲区数据，以下相同
+        state.speed = sm_st_.ReadSpeed(-1);
+        state.load = sm_st_.ReadLoad(-1);
+        state.voltage = sm_st_.ReadVoltage(-1);
+        state.temperature = sm_st_.ReadTemper(-1);
+        state.is_moving = sm_st_.ReadMove(-1);
+        state.current = sm_st_.ReadCurrent(-1);
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+      }
+      states[id] = state;
+    }
+    return states;
+  }
+
  private:
   uint8_t id_ = 0;
+  std::vector<uint8_t> ids_;
   SMS_STS sm_st_;
   State state_;
 };
