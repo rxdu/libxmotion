@@ -28,6 +28,9 @@ void PrintBuffer(const std::array<uint8_t, 10>& buffer) {
 
 Ddsm210::Ddsm210(uint8_t id) : motor_id_(id) {}
 
+Ddsm210::Ddsm210(uint8_t id, std::shared_ptr<SerialInterface> serial)
+    : motor_id_(id), serial_(serial) {}
+
 bool Ddsm210::Connect(std::string dev_name) {
   serial_ = std::make_shared<AsyncSerial>(dev_name, 115200);
   if (serial_->Open()) {
@@ -100,7 +103,7 @@ void Ddsm210::SetSpeed(float rpm) {
 
 float Ddsm210::GetSpeed() { return raw_feedback_.speed_feedback.rpm * 0.1f; }
 
-int32_t Ddsm210::GetEncoderCount() {
+int32_t Ddsm210::GetEncoderCount() const {
   return raw_feedback_.odom_feedback.encoder_count;
 }
 

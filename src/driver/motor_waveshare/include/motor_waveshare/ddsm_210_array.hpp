@@ -15,32 +15,43 @@
 #include "motor_waveshare/ddsm_210.hpp"
 
 namespace xmotion {
-class Ddsm210Manager {
+class Ddsm210Array {
  public:
   using Mode = Ddsm210::Mode;
 
  public:
-  Ddsm210Manager() = default;
+  Ddsm210Array(std::string dev_name);
 
   // do not allow copy
-  Ddsm210Manager(const Ddsm210Manager &) = delete;
-  Ddsm210Manager &operator=(const Ddsm210Manager &) = delete;
+  Ddsm210Array(const Ddsm210Array &) = delete;
+  Ddsm210Array &operator=(const Ddsm210Array &) = delete;
 
   // public methods
-  bool Connect(std::string dev_name);
+  void RegisterMotor(uint8_t id);
+  void UnregisterMotor(uint8_t id);
+
+  bool Connect();
   void Disconnect();
 
-  void SetSpeed(uint8_t id, int32_t rpm);
-  int32_t GetSpeed(uint8_t id);
+  Mode GetMode(uint8_t id) const;
+  int32_t GetEncoderCount(uint8_t id) const;
 
-  void SetPosition(uint8_t id, double position);
-  double GetPosition(uint8_t id);
+  void RequestOdometryFeedback(uint8_t id);
+  void RequestModeFeedback(uint8_t id);
 
-  void ApplyBrake(uint8_t id, double brake);
+  void SetSpeed(uint8_t id, float rpm);
+  float GetSpeed(uint8_t id);
+
+  void SetPosition(uint8_t id, float position);
+  float GetPosition(uint8_t id);
+
+  void ApplyBrake(uint8_t id, float brake = 1.0);
   void ReleaseBrake(uint8_t id);
   bool IsNormal(uint8_t id);
 
  private:
+  void ProcessFeedback(uint8_t *data, const size_t bufsize, size_t len);
+
   std::shared_ptr<SerialInterface> serial_;
   std::unordered_map<uint8_t, std::shared_ptr<Ddsm210>> motors_;
 };

@@ -25,7 +25,8 @@ class Ddsm210 : public MotorControllerInterface {
   using Mode = Ddsm210Frame::Mode;
 
  public:
-  Ddsm210(uint8_t id);
+  explicit Ddsm210(uint8_t id);
+  Ddsm210(uint8_t id, std::shared_ptr<SerialInterface> serial);
   ~Ddsm210() = default;
 
   // do not allow copy
@@ -37,7 +38,7 @@ class Ddsm210 : public MotorControllerInterface {
   void Disconnect();
 
   Mode GetMode() const;
-  int32_t GetEncoderCount();
+  int32_t GetEncoderCount() const;
 
   void RequestOdometryFeedback();
   void RequestModeFeedback();
@@ -48,7 +49,7 @@ class Ddsm210 : public MotorControllerInterface {
   void SetPosition(float position) override;
   float GetPosition() override;
 
-  void ApplyBrake(float brake = true) override;
+  void ApplyBrake(float brake = 1.0) override;
   void ReleaseBrake() override;
   bool IsNormal() override;
 
@@ -58,6 +59,7 @@ class Ddsm210 : public MotorControllerInterface {
   bool SetMotorId(uint8_t id, uint32_t timeout_ms = 100);
 
  private:
+  friend class Ddsm210Array;
   void ProcessFeedback(uint8_t* data, const size_t bufsize, size_t len);
 
   uint8_t motor_id_;

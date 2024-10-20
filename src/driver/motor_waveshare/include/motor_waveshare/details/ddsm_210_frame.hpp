@@ -16,7 +16,12 @@
 namespace xmotion {
 class Ddsm210Frame {
  public:
-  enum class Mode { kOpenLoop = 0, kSpeed, kPosition };
+  enum class Mode {
+    kOpenLoop = 0,
+    kSpeed = 0x02,
+    kPosition = 0x03,
+    kUnknown = 0xff
+  };
 
   enum class Type : uint32_t {
     kUnknown = 0,
