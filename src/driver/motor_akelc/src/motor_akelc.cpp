@@ -13,11 +13,11 @@ namespace xmotion {
 MotorAkelc::MotorAkelc(std::shared_ptr<MotorAkelcInterface> impl)
     : impl_(impl) {}
 
-void MotorAkelc::SetSpeed(int32_t rpm) { impl_->SetTargetRpm(rpm); }
+void MotorAkelc::SetSpeed(float rpm) { impl_->SetTargetRpm(rpm); }
 
-int32_t MotorAkelc::GetSpeed() { return impl_->GetActualRpm(); }
+float MotorAkelc::GetSpeed() { return impl_->GetActualRpm(); }
 
-void MotorAkelc::ApplyBrake(double brake) { impl_->ApplyBrake(brake); }
+void MotorAkelc::ApplyBrake(float brake) { impl_->ApplyBrake(brake); }
 
 void MotorAkelc::ReleaseBrake() { impl_->ReleaseBrake(); }
 

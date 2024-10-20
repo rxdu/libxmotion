@@ -53,8 +53,8 @@ int main(int argc, char **argv) {
     }
     motor.SetSpeed(speed);
     motor.RequestOdometryFeedback();
-    //    std::cout << "Speed feedback: " << motor.GetSpeed() << std::endl;
-    std::cout << "Encoder count: " << motor.GetEncoderCount()
+    std::cout << "Speed: " << motor.GetSpeed()
+              << ", encoder count: " << motor.GetEncoderCount()
               << " , position: " << motor.GetPosition() << std::endl;
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }

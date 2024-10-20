@@ -22,7 +22,7 @@
 namespace xmotion {
 class Ddsm210 : public MotorControllerInterface {
  public:
-  enum class Mode { kOpenLoop, kSpeed, kPosition };
+  using Mode = Ddsm210Frame::Mode;
 
  public:
   Ddsm210(uint8_t id);
@@ -39,22 +39,23 @@ class Ddsm210 : public MotorControllerInterface {
   Mode GetMode() const;
   int32_t GetEncoderCount();
 
-  bool SetMode(Mode mode, uint32_t timeout_ms = 100);
-  bool SetMotorId(uint8_t id, uint32_t timeout_ms = 100);
-  void SetAcceleration(uint8_t ms_per_rpm);
+  void RequestOdometryFeedback();
+  void RequestModeFeedback();
 
-  void SetSpeed(int32_t rpm) override;
-  int32_t GetSpeed() override;
+  void SetSpeed(float rpm) override;
+  float GetSpeed() override;
 
-  void SetPosition(double position) override;
-  double GetPosition() override;
+  void SetPosition(float position) override;
+  float GetPosition() override;
 
-  void ApplyBrake(double brake = true) override;
+  void ApplyBrake(float brake = true) override;
   void ReleaseBrake() override;
   bool IsNormal() override;
 
-  void RequestOdometryFeedback();
-  void RequestModeFeedback();
+  // the following functions may not be called during normal motor operation
+  // in most cases, motor id and mode should be set beforehand
+  bool SetMode(Mode mode, uint32_t timeout_ms = 100);
+  bool SetMotorId(uint8_t id, uint32_t timeout_ms = 100);
 
  private:
   void ProcessFeedback(uint8_t* data, const size_t bufsize, size_t len);
@@ -63,10 +64,7 @@ class Ddsm210 : public MotorControllerInterface {
   std::shared_ptr<SerialInterface> serial_;
   RingBuffer<uint8_t, 1024> rx_buffer_;
   Ddsm210Frame::RawFeedback raw_feedback_;
-
-  uint8_t ms_per_rpm_ = 1;
   bool id_set_ack_received_ = false;
-  bool mode_set_ack_received_ = false;
 };
 }  // namespace xmotion
 

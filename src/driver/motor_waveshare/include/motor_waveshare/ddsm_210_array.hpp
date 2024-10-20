@@ -12,11 +12,12 @@
 #include <memory>
 
 #include "interface/driver/serial_interface.hpp"
+#include "motor_waveshare/ddsm_210.hpp"
 
 namespace xmotion {
 class Ddsm210Manager {
  public:
-  enum class Mode { kOpenLoop, kSpeed, kPosition };
+  using Mode = Ddsm210::Mode;
 
  public:
   Ddsm210Manager() = default;
@@ -29,22 +30,19 @@ class Ddsm210Manager {
   bool Connect(std::string dev_name);
   void Disconnect();
 
-  bool SetMode(Mode mode, uint32_t timeout_ms = 100);
-  bool SetMotorId(uint8_t id, uint32_t timeout_ms = 100);
-  void SetAcceleration(uint8_t ms_per_rpm);
+  void SetSpeed(uint8_t id, int32_t rpm);
+  int32_t GetSpeed(uint8_t id);
 
-  void SetSpeed(int32_t rpm);
-  int32_t GetSpeed();
+  void SetPosition(uint8_t id, double position);
+  double GetPosition(uint8_t id);
 
-  void SetPosition(double position);
-  double GetPosition();
-
-  void ApplyBrake(double brake);
-  void ReleaseBrake();
-  bool IsNormal();
+  void ApplyBrake(uint8_t id, double brake);
+  void ReleaseBrake(uint8_t id);
+  bool IsNormal(uint8_t id);
 
  private:
   std::shared_ptr<SerialInterface> serial_;
+  std::unordered_map<uint8_t, std::shared_ptr<Ddsm210>> motors_;
 };
 }  // namespace xmotion
 

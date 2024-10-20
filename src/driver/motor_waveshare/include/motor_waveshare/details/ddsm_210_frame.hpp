@@ -1,7 +1,7 @@
 /*
  * @file ddsm_210_frame.hpp
  * @date 10/19/24
- * @brief
+ * @brief this class handles encoding and decoding of DDSM-210 serial frames
  *
  * @copyright Copyright (c) 2024 Ruixiang Du (rdu)
  */
@@ -52,7 +52,7 @@ class Ddsm210Frame {
 
  public:
   Ddsm210Frame(uint8_t id);
-  Ddsm210Frame(const std::vector<uint8_t>& frame_buffer);
+  Ddsm210Frame(uint8_t id, const std::vector<uint8_t>& frame_buffer);
 
   bool IsValid() const;
 
@@ -61,8 +61,8 @@ class Ddsm210Frame {
   RawFeedback GetRawFeedback() const;
 
   // setters
-  void SetSpeed(int16_t rpm);
-  void SetPosition(int16_t position);
+  void SetSpeed(float rpm);
+  void SetPosition(float position);
   void ApplyBrake();
   void ReleaseBrake();
   void SetId(uint8_t id);
