@@ -1,0 +1,11 @@
+add_executable(app_ddsm210_set_motor_id app_ddsm210_set_motor_id.cpp)
+target_link_libraries(app_ddsm210_set_motor_id PRIVATE motor_waveshare)
+
+add_executable(app_sms_sts_set_id app_sms_sts_set_id.cpp)
+target_link_libraries(app_sms_sts_set_id PRIVATE motor_waveshare)
+
+add_executable(app_sms_sts_set_neutral app_sms_sts_set_neutral.cpp)
+target_link_libraries(app_sms_sts_set_neutral PRIVATE motor_waveshare)
+
+add_executable(app_sms_sts_set_position app_sms_sts_set_position.cpp)
+target_link_libraries(app_sms_sts_set_position PRIVATE motor_waveshare)

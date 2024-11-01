@@ -16,6 +16,14 @@ add_executable(test_servo_feedback ./examples/SMS_STS/FeedBack/FeedBack.cpp)
 target_link_libraries(test_servo_feedback motor_waveshare)
 target_include_directories(test_servo_feedback PRIVATE ../src/servo)
 
+add_executable(test_servo_eprom ./examples/SMS_STS/ProgramEprom/ProgramEprom.cpp)
+target_link_libraries(test_servo_eprom motor_waveshare)
+target_include_directories(test_servo_eprom PRIVATE ../src/servo)
+
+add_executable(test_servo_calib ./examples/SMS_STS/CalibrationOfs/CalibrationOfs.cpp)
+target_link_libraries(test_servo_calib motor_waveshare)
+target_include_directories(test_servo_calib PRIVATE ../src/servo)
+
 add_executable(test_sms_sts ./test_sms_sts.cpp)
 target_link_libraries(test_sms_sts motor_waveshare)
 

@@ -10,7 +10,7 @@ int main(int argc, char **argv)
         return 0;
 	}
 	std::cout<<"serial:"<<argv[1]<<std::endl;
-    if(!sm_st.begin(115200, argv[1])){
+    if(!sm_st.begin(1000000, argv[1])){
         std::cout<<"Failed to init sms/sts motor!"<<std::endl;
         return 0;
     }

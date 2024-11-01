@@ -48,7 +48,7 @@ class SmsStsServo::Impl {
 
   void SetPosition(float position) {
     // map 0-360 to 0-4095
-    s16 pos = position / 360 * 4095;
+    s16 pos = position / 360.0f * 4095;
     XLOG_INFO_STREAM("Set motor pos: " << pos);
     sm_st_.WritePosEx(id_, pos, 2400, 50);
   }
@@ -81,6 +81,18 @@ class SmsStsServo::Impl {
       sm_st_.WheelMode(id_);
     }
     return false;
+  }
+
+  bool SetMotorId(uint8_t id) {
+    sm_st_.unLockEprom(id_);
+    int ack = sm_st_.writeByte(id_, SMSBL_ID, id);
+    sm_st_.LockEprom(id);
+    return (ack == 1);
+  }
+
+  bool SetNeutralPosition() {
+    int ack = sm_st_.CalibrationOfs(id_);
+    return (ack == 1);
   }
 
   void SetPosition(std::vector<float> positions) {

@@ -15,7 +15,7 @@
 using namespace xmotion;
 
 int main(int argc, char **argv) {
-  SmsStsServo servo(1);
+  SmsStsServo servo(4);
 
   if (!servo.Connect("/dev/ttyACM0")) {
     std::cout << "Failed to connect to motor" << std::endl;

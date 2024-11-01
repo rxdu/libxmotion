@@ -59,6 +59,8 @@ class SmsStsServo : public MotorControllerInterface {
   // the following functions may not be called during normal motor operation
   // in most cases, motor id and mode should be set beforehand
   bool SetMode(Mode mode, uint32_t timeout_ms = 100);
+  bool SetMotorId(uint8_t id);
+  bool SetNeutralPosition();
 
   // for multi-servo control
   void SetPosition(std::vector<float> positions);

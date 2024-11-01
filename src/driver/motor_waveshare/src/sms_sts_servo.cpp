@@ -46,6 +46,10 @@ bool SmsStsServo::SetMode(SmsStsServo::Mode mode, uint32_t timeout_ms) {
   return pimpl_->SetMode(mode, timeout_ms);
 }
 
+bool SmsStsServo::SetMotorId(uint8_t id) { return pimpl_->SetMotorId(id); }
+
+bool SmsStsServo::SetNeutralPosition() { return pimpl_->SetNeutralPosition(); }
+
 void SmsStsServo::SetPosition(std::vector<float> positions) {
   pimpl_->SetPosition(positions);
 }
