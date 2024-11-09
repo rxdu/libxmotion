@@ -60,6 +60,13 @@ void Ddsm210Array::SetSpeed(uint8_t id, float rpm) {
   if (motors_.find(id) != motors_.end()) motors_[id]->SetSpeed(rpm);
 }
 
+void Ddsm210Array::SetSpeeds(std::unordered_map<uint8_t, float> speeds) {
+  for (auto speed : speeds) {
+    if (motors_.find(speed.first) != motors_.end())
+      motors_[speed.first]->SetSpeed(speed.second);
+  }
+}
+
 float Ddsm210Array::GetSpeed(uint8_t id) {
   if (motors_.find(id) != motors_.end()) return motors_[id]->GetSpeed();
   return 0;

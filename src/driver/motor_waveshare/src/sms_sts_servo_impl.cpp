@@ -46,8 +46,11 @@ class SmsStsServo::Impl {
     return speed;
   }
 
+  void SetPositionOffset(float offset) { pos_cmd_offset_ = offset; }
+
   void SetPosition(float position) {
     // map 0-360 to 0-4095
+    position += pos_cmd_offset_;
     s16 pos = position / 360.0f * 4095;
     XLOG_INFO_STREAM("Set motor pos: " << pos);
     sm_st_.WritePosEx(id_, pos, 2400, 50);
@@ -97,6 +100,9 @@ class SmsStsServo::Impl {
 
   void SetPosition(std::vector<float> positions) {
     assert(positions.size() == ids_.size());
+    for(int i = 0; i < ids_.size(); i++) {
+      positions[i] += pos_cmd_offset_;
+    }
     std::vector<s16> pos_vec;
     std::vector<u16> speed_vec(ids_.size(), 2400);
     std::vector<u8> acc_vec(ids_.size(), 50);
@@ -140,5 +146,8 @@ class SmsStsServo::Impl {
   std::vector<uint8_t> ids_;
   SMS_STS sm_st_;
   State state_;
+
+  // motor position command remap
+  float pos_cmd_offset_ = 0.0;
 };
 }  // namespace xmotion

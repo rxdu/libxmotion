@@ -1,14 +1,14 @@
 /*
- * @file speed_actuator_group.hpp
- * @date 4/21/24
+ * @file position_actuator_group.hpp
+ * @date 11/9/24
  * @brief if motors always receive the same command and used in the same way,
  * then we can group them together and treat them as a single actuator
  *
  * @copyright Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#ifndef XMOTION_SPEED_ACTUATOR_GROUP_HPP_
-#define XMOTION_SPEED_ACTUATOR_GROUP_HPP_
+#ifndef XMOTION_POSITION_ACTUATOR_GROUP_HPP
+#define XMOTION_POSITION_ACTUATOR_GROUP_HPP
 
 #include <vector>
 #include <memory>
@@ -17,21 +17,18 @@
 #include "logging/xlogger.hpp"
 
 namespace xmotion {
-class SpeedActuatorGroup final : public MotorControllerInterface {
+class PositionActuatorGroup final : public MotorControllerInterface {
  public:
-  SpeedActuatorGroup(
+  PositionActuatorGroup(
       std::vector<std::shared_ptr<MotorControllerInterface>> actuators)
       : actuators_(actuators) {
-    XLOG_DEBUG("speed actuator group created with {} actuators",
+    XLOG_DEBUG("position actuator group created with {} actuators",
                actuators_.size());
   }
 
   // public interface
-  void SetSpeed(float rpm) override;
-  float GetSpeed() override;
-
-  void ApplyBrake(float brake) override;
-  void ReleaseBrake() override;
+  void SetPosition(float position) override;
+  float GetPosition() override;
 
   bool IsNormal() override;
 
@@ -40,4 +37,4 @@ class SpeedActuatorGroup final : public MotorControllerInterface {
 };
 }  // namespace xmotion
 
-#endif  // XMOTION_SPEED_ACTUATOR_GROUP_HPP_
+#endif  // XMOTION_POSITION_ACTUATOR_GROUP_HPP

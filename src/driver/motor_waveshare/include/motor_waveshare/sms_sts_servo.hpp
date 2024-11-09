@@ -49,6 +49,10 @@ class SmsStsServo : public MotorControllerInterface {
   void SetSpeed(float step_per_sec) override;
   float GetSpeed() override;
 
+  // position offset is used to remap the position command
+  // for example, if the servo is mounted at 180 degree, set offset to 180,
+  // then set position to 0 will actually move the servo to 180 degree
+  void SetPositionOffset(float offset);
   void SetPosition(float position) override;
   float GetPosition() override;
 

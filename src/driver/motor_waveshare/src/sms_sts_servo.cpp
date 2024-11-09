@@ -34,6 +34,10 @@ void SmsStsServo::SetSpeed(float step_per_sec) {
 
 float SmsStsServo::GetSpeed() { return pimpl_->GetSpeed(); }
 
+void SmsStsServo::SetPositionOffset(float offset) {
+  pimpl_->SetPositionOffset(offset);
+}
+
 void SmsStsServo::SetPosition(float position) { pimpl_->SetPosition(position); }
 
 float SmsStsServo::GetPosition() { return pimpl_->GetPosition(); }

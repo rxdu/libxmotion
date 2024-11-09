@@ -12,10 +12,11 @@
 #include <memory>
 
 #include "interface/driver/serial_interface.hpp"
+#include "interface/driver/motor_controller_array_interface.hpp"
 #include "motor_waveshare/ddsm_210.hpp"
 
 namespace xmotion {
-class Ddsm210Array {
+class Ddsm210Array final : public MotorControllerArrayInterface {
  public:
   using Mode = Ddsm210::Mode;
 
@@ -27,8 +28,8 @@ class Ddsm210Array {
   Ddsm210Array &operator=(const Ddsm210Array &) = delete;
 
   // public methods
-  void RegisterMotor(uint8_t id);
-  void UnregisterMotor(uint8_t id);
+  void RegisterMotor(uint8_t id) override;
+  void UnregisterMotor(uint8_t id) override;
 
   bool Connect();
   void Disconnect();
@@ -39,15 +40,16 @@ class Ddsm210Array {
   void RequestOdometryFeedback(uint8_t id);
   void RequestModeFeedback(uint8_t id);
 
-  void SetSpeed(uint8_t id, float rpm);
-  float GetSpeed(uint8_t id);
+  void SetSpeed(uint8_t id, float rpm) override;
+  void SetSpeeds(std::unordered_map<uint8_t, float> speeds) override;
+  float GetSpeed(uint8_t id) override;
 
-  void SetPosition(uint8_t id, float position);
-  float GetPosition(uint8_t id);
+  void SetPosition(uint8_t id, float position) override;
+  float GetPosition(uint8_t id) override;
 
-  void ApplyBrake(uint8_t id, float brake = 1.0);
-  void ReleaseBrake(uint8_t id);
-  bool IsNormal(uint8_t id);
+  void ApplyBrake(uint8_t id, float brake = 1.0) override;
+  void ReleaseBrake(uint8_t id) override;
+  bool IsNormal(uint8_t id) override;
 
  private:
   void ProcessFeedback(uint8_t *data, const size_t bufsize, size_t len);

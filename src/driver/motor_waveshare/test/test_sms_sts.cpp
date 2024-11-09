@@ -16,6 +16,7 @@ using namespace xmotion;
 
 int main(int argc, char **argv) {
   SmsStsServo servo(1);
+  servo.SetPositionOffset(180);
 
   if (!servo.Connect("/dev/ttyUSB0")) {
     std::cout << "Failed to connect to motor" << std::endl;
@@ -23,7 +24,7 @@ int main(int argc, char **argv) {
   }
 
   while (true) {
-    servo.SetPosition(90);
+    servo.SetPosition(0);
     std::cout << "set to 360" << std::endl;
     for (int i = 0; i < 10; i++) {
       std::this_thread::sleep_for(std::chrono::microseconds(2187 * 100));

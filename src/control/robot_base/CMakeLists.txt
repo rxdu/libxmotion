@@ -4,7 +4,9 @@ find_package(Eigen3 REQUIRED NO_MODULE)
 ## Add libraries
 add_library(robot_base
     src/speed_actuator_group.cpp
-    src/differential_drive_robot.cpp)
+    src/position_actuator_group.cpp
+    src/differential_drive_robot.cpp
+    src/swerve_drive_robot.cpp)
 target_link_libraries(robot_base PUBLIC interface logging Eigen3::Eigen)
 target_include_directories(robot_base PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

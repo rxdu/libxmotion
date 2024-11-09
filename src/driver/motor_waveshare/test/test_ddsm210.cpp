@@ -20,7 +20,7 @@ bool keep_running = true;
 int main(int argc, char **argv) {
   std::signal(SIGINT, [](int signum) { keep_running = false; });
 
-  Ddsm210 motor(4);
+  Ddsm210 motor(1);
 
   if (!motor.Connect("/dev/ttyUSB0")) {
     std::cout << "Failed to connect to motor" << std::endl;
