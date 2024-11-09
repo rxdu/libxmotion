@@ -15,15 +15,15 @@
 using namespace xmotion;
 
 int main(int argc, char **argv) {
-  SmsStsServo servo(4);
+  SmsStsServo servo(1);
 
-  if (!servo.Connect("/dev/ttyACM0")) {
+  if (!servo.Connect("/dev/ttyUSB0")) {
     std::cout << "Failed to connect to motor" << std::endl;
     return -1;
   }
 
   while (true) {
-    servo.SetPosition(360);
+    servo.SetPosition(90);
     std::cout << "set to 360" << std::endl;
     for (int i = 0; i < 10; i++) {
       std::this_thread::sleep_for(std::chrono::microseconds(2187 * 100));

@@ -34,6 +34,8 @@ endif ()
 
 if (ENABLE_VISUALIZATION)
   message(STATUS "Enable visualization targets")
+else ()
+  message(STATUS "Disable visualization targets")
 endif ()
 
 ## Generate symbols for IDE indexer

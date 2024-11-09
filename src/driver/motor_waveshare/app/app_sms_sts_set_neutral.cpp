@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 
   SmsStsServo servo(id);
 
-  if (!servo.Connect("/dev/ttyACM0")) {
+  if (!servo.Connect("/dev/ttyUSB0")) {
     std::cout << "Failed to connect to motor" << std::endl;
     return -1;
   }

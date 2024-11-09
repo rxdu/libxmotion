@@ -18,13 +18,13 @@ int main(int argc, char **argv) {
   std::vector<uint8_t> ids = {1, 2, 3, 4};
   SmsStsServo servo(ids);
 
-  if (!servo.Connect("/dev/ttyACM0")) {
+  if (!servo.Connect("/dev/ttyUSB0")) {
     std::cout << "Failed to connect to motor" << std::endl;
     return -1;
   }
 
   while (true) {
-    servo.SetPosition({360, 360, 360, 360});
+    servo.SetPosition({90, 90, 90, 90});
     std::cout << "set to 360" << std::endl;
     for (int i = 0; i < 10; i++) {
       std::this_thread::sleep_for(std::chrono::microseconds(2187 * 100));
@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
 //    }
     // clang-format on
     //    std::this_thread::sleep_for(std::chrono::microseconds(2187 * 1000));
-    servo.SetPosition({0, 0, 0, 0});
+    servo.SetPosition({270, 270, 270, 270});
     std::cout << "set to 0" << std::endl;
     std::this_thread::sleep_for(std::chrono::microseconds(2187 * 1000));
   }
