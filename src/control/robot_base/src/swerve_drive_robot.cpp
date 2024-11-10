@@ -15,5 +15,7 @@ SwerveDriveRobot::SwerveDriveRobot(const SwerveDriveRobot::Config& config)
 void SwerveDriveRobot::SetMotionCommand(const Twist& twist) {}
 
 void SwerveDriveRobot::SetActuatorCommand(const std::array<float, 4>& speeds,
-                                          const std::array<float, 4>& angles) {}
+                                          const std::array<float, 4>& angles) {
+
+}
 }  // namespace xmotion

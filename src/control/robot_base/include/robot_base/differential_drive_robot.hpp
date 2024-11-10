@@ -13,7 +13,7 @@
 
 #include <vector>
 
-#include "robot_base/speed_actuator_group.hpp"
+#include "robot_base/actuator/speed_actuator_group.hpp"
 
 namespace xmotion {
 class DifferentialDriveRobot {

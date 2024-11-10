@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#include "robot_base/position_actuator_group.hpp"
+#include "robot_base/actuator/position_actuator_group.hpp"
 
 namespace xmotion {
 void PositionActuatorGroup::SetPosition(float position) {

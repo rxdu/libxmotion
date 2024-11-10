@@ -1,0 +1,2 @@
+add_executable(test_swerve_drive_robot test_swerve_drive_robot.cpp)
+target_link_libraries(test_swerve_drive_robot PRIVATE robot_base)
