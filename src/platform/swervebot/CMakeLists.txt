@@ -8,6 +8,7 @@ add_library(swervebot
     src/ws_sbot_base.cpp)
 target_link_libraries(swervebot PUBLIC
     interface
+    motor_waveshare
     robot_base
     fsm
     input_hid

@@ -1,0 +1,3 @@
+serial_ports:
+  steering_motor: /dev/ttyUSB0
+  driving_motor: /dev/ttyUSB1
