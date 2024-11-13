@@ -25,7 +25,7 @@
 namespace xmotion {
 class SmsStsServoArray : public MotorControllerArrayInterface {
  public:
-  SmsStsServoArray() = default;
+  SmsStsServoArray(const std::string& dev_name);
   ~SmsStsServoArray() = default;
 
   // do not allow copy
@@ -37,17 +37,18 @@ class SmsStsServoArray : public MotorControllerArrayInterface {
   void RegisterMotor(uint8_t id) override;
   void UnregisterMotor(uint8_t id) override;
 
-  bool Connect(std::string dev_name);
+  bool Connect();
   void Disconnect();
 
   void SetPositionOffset(float offset);
   void SetPosition(uint8_t id, float position) override;
-  void SetPositions(std::unordered_map<uint8_t, float> positions) override;
+  void SetPositions(const std::vector<float>& positions) override;
   float GetPosition(uint8_t id) override;
 
   bool IsNormal(uint8_t id) override;
 
  private:
+  std::string dev_name_;
   std::vector<uint8_t> ids_;
   std::shared_ptr<SmsStsServo> servo_;
   float default_position_ = 0;

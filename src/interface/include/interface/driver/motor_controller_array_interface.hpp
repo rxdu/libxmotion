@@ -28,7 +28,7 @@ class MotorControllerArrayInterface {
     throw std::runtime_error("SetSpeed not implemented");
   };
 
-  virtual void SetSpeeds(std::unordered_map<uint8_t, float> speeds) {
+  virtual void SetSpeeds(const std::vector<float>& speeds) {
     throw std::runtime_error("SetSpeeds not implemented");
   };
 
@@ -36,7 +36,7 @@ class MotorControllerArrayInterface {
     throw std::runtime_error("SetPosition not implemented");
   };
 
-  virtual void SetPositions(std::unordered_map<uint8_t, float> positions) {
+  virtual void SetPositions(const std::vector<float>& positions) {
     throw std::runtime_error("SetPositions not implemented");
   };
 
@@ -44,7 +44,7 @@ class MotorControllerArrayInterface {
     throw std::runtime_error("SetTorque not implemented");
   };
 
-  virtual void SetTorques(std::unordered_map<uint8_t, float> torques) {
+  virtual void SetTorques(const std::vector<float>& torques) {
     throw std::runtime_error("SetTorques not implemented");
   };
 
@@ -52,7 +52,7 @@ class MotorControllerArrayInterface {
     throw std::runtime_error("SetCurrent not implemented");
   };
 
-  virtual void SetCurrents(std::unordered_map<uint8_t, float> currents) {
+  virtual void SetCurrents(const std::vector<float>& currents) {
     throw std::runtime_error("SetCurrents not implemented");
   };
 

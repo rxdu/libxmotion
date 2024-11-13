@@ -24,6 +24,7 @@ option(ENABLE_LOGGING "Enable logging" ON)
 option(STATIC_CHECK "Enable static check" OFF)
 
 option(ENABLE_TBOT_APP "Enable tbot app" OFF)
+option(ENABLE_SWERVEBOT_APP "Enable swervebot app" OFF)
 option(ENABLE_QUADRUPED_APP "Enable quadruped app" OFF)
 option(ENABLE_VISUALIZATION "Enable visualization targets" ON)
 

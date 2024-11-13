@@ -1,2 +1,0 @@
-add_executable(app_tbot_base_control app_tbot_base_control.cpp)
-target_link_libraries(app_tbot_base_control PRIVATE robot_base motor_akelc input_hid)

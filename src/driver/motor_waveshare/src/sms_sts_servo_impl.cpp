@@ -15,7 +15,7 @@
 namespace xmotion {
 class SmsStsServo::Impl {
  public:
-  Impl(uint8_t id) : id_(id) {};
+  Impl(uint8_t id) : id_(id) { ids_.push_back(id); };
 
   Impl(const std::vector<uint8_t>& ids) : ids_(ids) {
     if (ids.size() == 1) {
@@ -100,7 +100,7 @@ class SmsStsServo::Impl {
 
   void SetPosition(std::vector<float> positions) {
     assert(positions.size() == ids_.size());
-    for(int i = 0; i < ids_.size(); i++) {
+    for (int i = 0; i < ids_.size(); i++) {
       positions[i] += pos_cmd_offset_;
     }
     std::vector<s16> pos_vec;

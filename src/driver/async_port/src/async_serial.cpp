@@ -17,7 +17,7 @@
 #include <iostream>
 
 namespace xmotion {
-AsyncSerial::AsyncSerial(std::string port_name, uint32_t baud_rate)
+AsyncSerial::AsyncSerial(const std::string &port_name, uint32_t baud_rate)
     : port_(port_name), baud_rate_(baud_rate), serial_port_(io_context_) {}
 
 AsyncSerial::~AsyncSerial() { Close(); }

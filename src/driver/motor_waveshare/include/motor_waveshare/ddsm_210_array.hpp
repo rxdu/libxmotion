@@ -21,7 +21,8 @@ class Ddsm210Array final : public MotorControllerArrayInterface {
   using Mode = Ddsm210::Mode;
 
  public:
-  Ddsm210Array(std::string dev_name);
+  Ddsm210Array(const std::string &dev_name);
+  ~Ddsm210Array();
 
   // do not allow copy
   Ddsm210Array(const Ddsm210Array &) = delete;
@@ -41,7 +42,7 @@ class Ddsm210Array final : public MotorControllerArrayInterface {
   void RequestModeFeedback(uint8_t id);
 
   void SetSpeed(uint8_t id, float rpm) override;
-  void SetSpeeds(std::unordered_map<uint8_t, float> speeds) override;
+  void SetSpeeds(const std::vector<float> &speeds) override;
   float GetSpeed(uint8_t id) override;
 
   void SetPosition(uint8_t id, float position) override;
@@ -55,6 +56,7 @@ class Ddsm210Array final : public MotorControllerArrayInterface {
   void ProcessFeedback(uint8_t *data, const size_t bufsize, size_t len);
 
   std::shared_ptr<SerialInterface> serial_;
+  std::vector<uint8_t> ids_;
   std::unordered_map<uint8_t, std::shared_ptr<Ddsm210>> motors_;
 };
 }  // namespace xmotion

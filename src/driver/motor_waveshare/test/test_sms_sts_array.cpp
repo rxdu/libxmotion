@@ -15,7 +15,7 @@
 using namespace xmotion;
 
 int main(int argc, char **argv) {
-  SmsStsServoArray servo;
+  SmsStsServoArray servo("/dev/ttyUSB0");
   servo.SetPositionOffset(180);
   servo.SetDefaultPosition(0);
 
@@ -24,28 +24,21 @@ int main(int argc, char **argv) {
     servo.RegisterMotor(id);
   }
 
-  if (!servo.Connect("/dev/ttyUSB0")) {
+  if (!servo.Connect()) {
     std::cout << "Failed to connect to motor" << std::endl;
     return -1;
   }
 
-  std::unordered_map<uint8_t, float> positions;
-  for (auto id : ids) {
-    positions[id] = 45;
-  }
-  servo.SetPositions(positions);
+  servo.SetPositions({45, 45, 45, 45});
   std::this_thread::sleep_for(std::chrono::microseconds(2187 * 1000));
 
-  for (auto id : ids) {
-    positions[id] = -45;
-  }
-  servo.SetPositions(positions);
+  servo.SetPositions({0, 0, 0, 0});
   std::this_thread::sleep_for(std::chrono::microseconds(2187 * 1000));
 
-  for (auto id : ids) {
-    positions[id] = 0;
-  }
-  servo.SetPositions(positions);
+  servo.SetPositions({-45, -45, -45, -45});
+  std::this_thread::sleep_for(std::chrono::microseconds(2187 * 1000));
+
+  servo.SetPositions({0, 0, 0, 0});
   std::this_thread::sleep_for(std::chrono::microseconds(2187 * 1000));
 
   return 0;

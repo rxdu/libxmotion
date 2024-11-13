@@ -75,7 +75,7 @@ bool SCSerial::begin(int baudRate, const char* serialPort)
     cfsetispeed(&curopt, CR_BAUDRATE);
     cfsetospeed(&curopt, CR_BAUDRATE);
 
-	printf("serial speed %d\n", baudRate);
+//	printf("serial speed %d\n", baudRate);
     //Mostly 8N1
     curopt.c_cflag &= ~PARENB;
     curopt.c_cflag &= ~CSTOPB;

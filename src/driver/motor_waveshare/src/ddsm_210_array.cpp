@@ -13,16 +13,24 @@
 #include "logging/xlogger.hpp"
 
 namespace xmotion {
-Ddsm210Array::Ddsm210Array(std::string dev_name) {
+Ddsm210Array::Ddsm210Array(const std::string &dev_name) {
   serial_ = std::make_shared<AsyncSerial>(dev_name, 115200);
 }
 
+Ddsm210Array::~Ddsm210Array() {
+  for (auto motor : motors_) {
+    motor.second->SetSpeed(0);
+  }
+}
+
 void Ddsm210Array::RegisterMotor(uint8_t id) {
+  ids_.push_back(id);
   motors_[id] = std::make_shared<Ddsm210>(id, serial_);
 }
 
 void Ddsm210Array::UnregisterMotor(uint8_t id) {
   if (motors_.find(id) != motors_.end()) motors_.erase(id);
+  ids_.erase(std::find(ids_.begin(), ids_.end(), id));
 }
 
 bool Ddsm210Array::Connect() {
@@ -60,10 +68,11 @@ void Ddsm210Array::SetSpeed(uint8_t id, float rpm) {
   if (motors_.find(id) != motors_.end()) motors_[id]->SetSpeed(rpm);
 }
 
-void Ddsm210Array::SetSpeeds(std::unordered_map<uint8_t, float> speeds) {
-  for (auto speed : speeds) {
-    if (motors_.find(speed.first) != motors_.end())
-      motors_[speed.first]->SetSpeed(speed.second);
+void Ddsm210Array::SetSpeeds(const std::vector<float> &speeds) {
+  assert(speeds.size() == motors_.size());
+  for (int i = 0; i < ids_.size(); i++) {
+    if (motors_.find(ids_[i]) != motors_.end())
+      motors_[ids_[i]]->SetSpeed(speeds[i]);
   }
 }
 

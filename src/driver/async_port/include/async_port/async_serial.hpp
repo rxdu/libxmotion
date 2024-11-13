@@ -30,7 +30,7 @@ class AsyncSerial : public std::enable_shared_from_this<AsyncSerial>,
       std::function<void(uint8_t *data, const size_t bufsize, size_t len)>;
 
  public:
-  AsyncSerial(std::string port_name, uint32_t baud_rate = 115200);
+  AsyncSerial(const std::string& port_name, uint32_t baud_rate = 115200);
   ~AsyncSerial();
 
   // do not allow copy
