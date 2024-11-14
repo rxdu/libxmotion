@@ -43,9 +43,6 @@ class SwerveDriveRobot {
     double wheel_base;    // l
     double wheel_radius;  // r
 
-    double linear_vel_deadband;
-    double angular_vel_deadband;
-
     bool reverse_left_wheels = false;
     bool reverse_right_wheels = false;
 
