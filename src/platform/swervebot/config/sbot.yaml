@@ -1,3 +1,3 @@
-serial_ports:
-  steering_motor: /dev/ttyUSB0
-  driving_motor: /dev/ttyUSB1
+robot_base:
+  steering_motor_port: /dev/ttyUSB1
+  driving_motor_port: /dev/ttyUSB0

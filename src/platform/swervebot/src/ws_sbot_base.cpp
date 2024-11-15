@@ -8,9 +8,15 @@
 
 #include "swervebot/ws_sbot_base.hpp"
 
+#include "logging/xlogger.hpp"
+
 namespace xmotion {
+WsSbotBase::WsSbotBase(const SbotConfig::BaseConfig& config)
+    : config_(config) {}
+
 bool WsSbotBase::Initialize() {
-  steering_motor_ = std::make_shared<SmsStsServoArray>("/dev/ttyUSB0");
+  steering_motor_ =
+      std::make_shared<SmsStsServoArray>(config_.steering_motor_port);
   steering_motor_->SetPositionOffset(180);
   steering_motor_->SetDefaultPosition(0);
   steering_motor_->RegisterMotor(1);
@@ -23,7 +29,7 @@ bool WsSbotBase::Initialize() {
   }
 
   // set up driving motors
-  driving_motor_ = std::make_shared<Ddsm210Array>("/dev/ttyUSB1");
+  driving_motor_ = std::make_shared<Ddsm210Array>(config_.driving_motor_port);
   driving_motor_->RegisterMotor(1);
   driving_motor_->RegisterMotor(2);
   driving_motor_->RegisterMotor(3);
@@ -33,7 +39,7 @@ bool WsSbotBase::Initialize() {
     return false;
   }
 
-  SwerveDriveRobot::Config config;
+  ModelConfig config;
   config.track_width = sbot_track_width;
   config.wheel_base = sbot_wheel_base;
   config.wheel_radius = sbot_wheel_radius;
@@ -43,5 +49,21 @@ bool WsSbotBase::Initialize() {
   robot_ = std::make_unique<SwerveDriveRobot>(config);
 
   return true;
+}
+
+void WsSbotBase::SetSteeringCommand(const std::array<float, 4>& angles) {
+  if (robot_ == nullptr) {
+    std::cout << "Robot model is not initialized" << std::endl;
+    return;
+  }
+  robot_->SetSteeringCommand(angles);
+}
+
+void WsSbotBase::SetDrivingCommand(const std::array<float, 4>& speeds) {
+  if (robot_ == nullptr) {
+    std::cout << "Robot model is not initialized" << std::endl;
+    return;
+  }
+  robot_->SetDrivingCommand(speeds);
 }
 }  // namespace xmotion

@@ -4,7 +4,14 @@ find_package(yaml-cpp REQUIRED)
 
 ## Add libraries
 add_library(swervebot
-    # common
+    # system
+    src/sbot_system.cpp
+    # fsm
+    src/sbot_fsm.cpp
+    src/control_modes/manual_mode.cpp
+    src/control_modes/auto_mode.cpp
+    # robot
+    src/sbot_config.cpp
     src/ws_sbot_base.cpp)
 target_link_libraries(swervebot PUBLIC
     interface
