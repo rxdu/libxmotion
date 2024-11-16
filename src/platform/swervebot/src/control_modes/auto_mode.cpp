@@ -15,5 +15,12 @@ AutoMode::AutoMode(const ControlContext& context) {
   XLOG_INFO("==> Switched to AutoMode");
 }
 
-void AutoMode::Update(ControlContext& context) {}
+void AutoMode::Update(ControlContext& context) {
+  // clear js event queue
+  AxisEvent axis_event;
+  while (context.js_axis_queue->TryPop(axis_event)) {
+  }
+
+  // handle commands from higher level controller
+}
 }  // namespace xmotion

@@ -48,10 +48,10 @@ bool SbotSystem::Initialize() {
   ControlContext context;
   context.config = config_;
   context.robot_base = sbot_;
-  context.fsm_js_axis_move_queue =
-      std::make_shared<ThreadSafeQueue<AxisEvent>>();
-  context.fsm_js_button_press_queue =
-      std::make_shared<ThreadSafeQueue<JsButton>>();
+  context.js_axis_queue = std::make_shared<ThreadSafeQueue<AxisEvent>>();
+  context.js_button_queue = std::make_shared<ThreadSafeQueue<JsButton>>();
+  context.command_queue = std::make_shared<ThreadSafeQueue<UserCommand>>();
+  context.feedback_queue = std::make_shared<ThreadSafeQueue<RobotFeedback>>();
 
   // initialize fsm
   ManualMode initial_state{context};
@@ -62,9 +62,12 @@ bool SbotSystem::Initialize() {
 }
 
 void SbotSystem::ControlLoop() {
-  XLOG_INFO("SbotSystem: entering control loop");
   Timer timer;
   bool first_run = true;
+  keep_control_loop_ = true;
+  auto& context = fsm_->GetContext();
+
+  XLOG_INFO("SbotSystem: entering control loop");
   TimePoint last_time = Clock::now();
   while (keep_control_loop_) {
     timer.reset();
@@ -81,14 +84,20 @@ void SbotSystem::ControlLoop() {
             .count() /
         1000000.0f;
     last_time = now;
-    //    if ((dt - 0.002) / 0.002 > 0.1) {
-    //      XLOG_ERROR("QuadrupedSystem: control loop running at {} ms", dt *
-    //      1000);
-    //    }
 
     // update control
-    fsm_->Update();
-    timer.sleep_until_us(2000);
+    UserCommand cmd;
+    while (context.command_queue->TryPop(cmd)) {
+      sbot_->SetMotionCommand({{cmd.vx, cmd.vy, 0}, {0, 0, cmd.wz}});
+    }
+    sbot_->Update(dt);
+
+    // time housekeeping
+    if ((dt - 0.02) / 0.02 > 0.1) {
+      XLOG_WARN("SbotSystem: control loop running at {} ms", dt * 1000);
+    }
+
+    timer.sleep_until_ms(20);
   }
   XLOG_INFO("SbotSystem: control loop exited");
 }
@@ -99,7 +108,7 @@ void SbotSystem::OnJsButtonEvent(const JsButton& btn,
   //            << (event == JxButtonEvent::kPress ? "pressed" : "released")
   //            << std::endl;
   if (btn == JsButton::kStart && event == JxButtonEvent::kPress) {
-    fsm_->GetContext().fsm_js_button_press_queue->Push(btn);
+    fsm_->GetContext().js_button_queue->Push(btn);
   }
 }
 
@@ -109,7 +118,7 @@ void SbotSystem::OnJsAxisEvent(const JsAxis& axis, const float& value) {
     AxisEvent event;
     event.axis = axis;
     event.value = value;
-    fsm_->GetContext().fsm_js_axis_move_queue->Push(event);
+    fsm_->GetContext().js_axis_queue->Push(event);
   }
 }
 
@@ -118,10 +127,10 @@ void SbotSystem::Run() {
   control_thread_ = std::thread(&SbotSystem::ControlLoop, this);
 
   XLOG_INFO("SbotSystem: entering main loop");
-  keep_running_ = true;
-  while (keep_running_) {
+  keep_main_loop_ = true;
+  while (keep_main_loop_) {
     fsm_->Update();
-    std::this_thread::sleep_for(std::chrono::milliseconds(20));
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
   }
   XLOG_INFO("SbotSystem: main loop exited");
 }
@@ -140,6 +149,6 @@ void SbotSystem::Stop() {
   sbot_->SetDrivingCommand({0, 0, 0, 0});
 
   // finally stop the main loop
-  keep_running_ = false;
+  keep_main_loop_ = false;
 }
 }  // namespace xmotion

@@ -12,9 +12,35 @@
 
 namespace xmotion {
 SwerveDriveRobot::SwerveDriveRobot(const SwerveDriveRobot::Config& config)
-    : config_(config) {}
+    : config_(config), kinematics_(config.kinematics_param) {}
 
-void SwerveDriveRobot::SetMotionCommand(const Twist& twist) {}
+void SwerveDriveRobot::Update(const Twist& twist, double dt) {
+  Twist twist_filtered = twist;
+  if (std::abs(twist.linear.x()) <
+      config_.kinematics_param.linear_vel_deadband) {
+    twist_filtered.linear.x() = 0;
+  }
+  if (std::abs(twist.linear.y()) <
+      config_.kinematics_param.linear_vel_deadband) {
+    twist_filtered.linear.y() = 0;
+  }
+  if (std::abs(twist.angular.z()) <
+      config_.kinematics_param.angular_vel_deadband) {
+    twist_filtered.angular.z() = 0;
+  }
+
+  XLOG_INFO_STREAM("Input: vx = " << twist_filtered.linear.x()
+                                  << ", vy = " << twist_filtered.linear.y()
+                                  << ", wz = " << twist_filtered.angular.z());
+
+  auto cmd = kinematics_.ComputeWheelCommands(twist_filtered);
+  XLOG_INFO_STREAM("Output: ");
+  for (int i = 0; i < 4; ++i) {
+    XLOG_INFO_STREAM("Wheel " << i << ": speed = " << cmd.speeds[i]
+                              << ", angle = " << cmd.angles[i]);
+  }
+  XLOG_INFO("--------------------");
+}
 
 void SwerveDriveRobot::SetSteeringCommand(const std::array<float, 4>& angles) {
   if (config_.steering_motors == nullptr) {
@@ -38,7 +64,8 @@ void SwerveDriveRobot::SetDrivingCommand(const std::array<float, 4>& speeds) {
   std::vector<float> driving_speeds;
   for (int i = 0; i < 4; ++i) {
     // convert speed m/s to rpm
-    float rpm = speeds[i] / (2 * M_PI * config_.wheel_radius) * 60;
+    float rpm =
+        speeds[i] / (2 * M_PI * config_.kinematics_param.wheel_radius) * 60;
     if (config_.reverse_left_wheels && (i == 1 || i == 2)) {
       driving_speeds.push_back(-rpm);
     } else if (config_.reverse_right_wheels && (i == 0 || i == 3)) {

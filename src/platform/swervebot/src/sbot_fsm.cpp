@@ -12,7 +12,7 @@ namespace xmotion {
 OptionalStateVariant ModeTransition::Transit(ManualMode& state,
                                              ControlContext& context) {
   JsButton btn;
-  if (context.fsm_js_button_press_queue->TryPop(btn)) {
+  if (context.js_button_queue->TryPop(btn)) {
     return AutoMode{context};
   }
   //  return ManualMode{context};
@@ -22,7 +22,7 @@ OptionalStateVariant ModeTransition::Transit(ManualMode& state,
 OptionalStateVariant ModeTransition::Transit(AutoMode& state,
                                              ControlContext& context) {
   JsButton btn;
-  if (context.fsm_js_button_press_queue->TryPop(btn)) {
+  if (context.js_button_queue->TryPop(btn)) {
     return ManualMode{context};
   }
   return std::nullopt;

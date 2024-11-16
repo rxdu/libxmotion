@@ -15,6 +15,7 @@
 
 #include "swervebot/sbot_config.hpp"
 #include "swervebot/ws_sbot_base.hpp"
+#include "robot_base/kinematics/swerve_drive_kinematics.hpp"
 
 #include "event/thread_safe_queue.hpp"
 
@@ -24,13 +25,28 @@ struct AxisEvent {
   float value;
 };
 
+struct UserCommand {
+  float vx;
+  float vy;
+  float wz;
+};
+
+struct RobotFeedback {
+  float x;
+  float y;
+  float theta;
+};
+
 struct ControlContext {
   SbotConfig config;
   std::shared_ptr<WsSbotBase> robot_base;
-  // for mode switch (consumed in main thread)
-  std::shared_ptr<ThreadSafeQueue<JsButton>> fsm_js_button_press_queue;
-  // for motion control (consumed in control thread)
-  std::shared_ptr<ThreadSafeQueue<AxisEvent>> fsm_js_axis_move_queue;
+  // event thread -> main thread
+  std::shared_ptr<ThreadSafeQueue<JsButton>> js_button_queue;
+  std::shared_ptr<ThreadSafeQueue<AxisEvent>> js_axis_queue;
+  // main thread -> control thread
+  std::shared_ptr<ThreadSafeQueue<UserCommand>> command_queue;
+  // control thread -> main thread
+  std::shared_ptr<ThreadSafeQueue<RobotFeedback>> feedback_queue;
 };
 }  // namespace xmotion
 

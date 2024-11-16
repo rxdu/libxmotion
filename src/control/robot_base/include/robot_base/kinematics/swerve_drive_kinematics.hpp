@@ -23,13 +23,22 @@
 
 namespace xmotion {
 class SwerveDriveKinematics {
+  enum SteeringRange {
+    kPI = 0,
+    k2PI,
+  };
+
  public:
   struct Param {
-    double track_width;
-    double wheel_base;
-    double wheel_radius;
+    double track_width;   // d
+    double wheel_base;    // l
+    double wheel_radius;  // r
+
     double max_driving_speed;
     double max_steering_angle;
+
+    double linear_vel_deadband = 0.005;
+    double angular_vel_deadband = 0.005;
   };
 
   enum MotorIndex {
@@ -39,21 +48,28 @@ class SwerveDriveKinematics {
     kRearRight = 3
   };
 
-  struct Commands {
+  struct Command {
+    std::array<float, 4> speeds;
+    std::array<float, 4> angles;
+  };
+
+  struct State {
     std::array<float, 4> speeds;
     std::array<float, 4> angles;
   };
 
  public:
+  SwerveDriveKinematics() = default;
   SwerveDriveKinematics(const Param& param);
 
   // forward kinematics
-  Commands ComputeWheelCommands(const Twist& twist);
+  Command ComputeWheelCommands(const Twist& twist);
 
   // inverse kinematics
 
  private:
   Param param_;
+  SteeringRange steering_range_ = SteeringRange::kPI;
 
   double rx_;
   double ry_;

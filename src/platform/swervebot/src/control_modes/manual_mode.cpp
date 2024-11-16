@@ -18,7 +18,7 @@ ManualMode::ManualMode(const ControlContext& context) {
 void ManualMode::Update(ControlContext& context) {
   // handle joystick events
   AxisEvent axis_event;
-  while (context.fsm_js_axis_move_queue->TryPop(axis_event)) {
+  while (context.js_axis_queue->TryPop(axis_event)) {
     if (axis_event.axis == JsAxis::kX) {
       vy_ = -axis_event.value;
     } else if (axis_event.axis == JsAxis::kY) {
@@ -27,7 +27,16 @@ void ManualMode::Update(ControlContext& context) {
       wz_ = -axis_event.value;
     }
   }
-  XLOG_INFO_STREAM("ManualMode: vx = " << vx_ << ", vy = " << vy_
-                                       << ", wz = " << wz_);
+  //  XLOG_INFO_STREAM("ManualMode: vx = " << vx_ << ", vy = " << vy_
+  //                                       << ", wz = " << wz_);
+
+  // convert from [-1,1] to actual speed and steering angle
+  UserCommand cmd;
+  cmd.vx = vx_;
+  cmd.vy = vy_;
+  cmd.wz = wz_;
+
+  //  command_queue
+  context.command_queue->Push(cmd);
 }
 }  // namespace xmotion

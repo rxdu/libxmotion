@@ -38,7 +38,7 @@ class SbotSystem {
   void OnJsAxisEvent(const JsAxis& axis, const float& value);
 
   SbotConfig config_;
-  std::atomic<bool> keep_running_{false};
+  std::atomic<bool> keep_main_loop_{false};
 
   std::unique_ptr<JoystickHandler> joystick_;
   std::shared_ptr<HidEventListener> hid_event_listener_;
@@ -46,7 +46,7 @@ class SbotSystem {
   std::shared_ptr<WsSbotBase> sbot_;
 
   std::thread control_thread_;
-  std::atomic<bool> keep_control_loop_{true};
+  std::atomic<bool> keep_control_loop_{false};
   std::unique_ptr<SbotFsm> fsm_;
 };
 }  // namespace xmotion

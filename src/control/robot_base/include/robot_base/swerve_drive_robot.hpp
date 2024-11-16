@@ -11,7 +11,7 @@
  * 4. Rear right
  *
  * Robot command:
- * - Steering angles: in radian [-M_PI/2.0f, M_PI/2.0f]
+ * - Steering angles: in radian
  * - Driving speeds: in m/s
  *
  * It's assumed that the underlying steering motor driver uses degree as unit.
@@ -32,20 +32,19 @@
 #include <memory>
 
 #include "interface/type/geometry_types.hpp"
-
 #include "interface/driver/motor_controller_array_interface.hpp"
+
+#include "robot_base/kinematics/swerve_drive_kinematics.hpp"
 
 namespace xmotion {
 class SwerveDriveRobot {
  public:
   struct Config {
-    double track_width;   // d
-    double wheel_base;    // l
-    double wheel_radius;  // r
+    SwerveDriveKinematics::Param kinematics_param;
 
+    // actuator configuration
     bool reverse_left_wheels = false;
     bool reverse_right_wheels = false;
-
     std::shared_ptr<MotorControllerArrayInterface> driving_motors;
     std::shared_ptr<MotorControllerArrayInterface> steering_motors;
   };
@@ -54,12 +53,13 @@ class SwerveDriveRobot {
   SwerveDriveRobot(const Config &config);
 
   // public interface
-  void SetMotionCommand(const Twist &twist);
+  void Update(const Twist &twist, double dt);
   void SetSteeringCommand(const std::array<float, 4> &angles);
   void SetDrivingCommand(const std::array<float, 4> &speeds);
 
  private:
   Config config_;
+  SwerveDriveKinematics kinematics_;
 };
 }  // namespace xmotion
 

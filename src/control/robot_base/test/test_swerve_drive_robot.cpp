@@ -54,9 +54,9 @@ int main(int argc, char* argv[]) {
 
   // set up swerve drive robot
   SwerveDriveRobot::Config config;
-  config.track_width = 0.198;
-  config.wheel_base = 0.245;
-  config.wheel_radius = 0.0363;
+  config.kinematics_param.track_width = 0.198;
+  config.kinematics_param.wheel_base = 0.245;
+  config.kinematics_param.wheel_radius = 0.0363;
   config.steering_motors = steering_motor;
   config.driving_motors = driving_motor;
   config.reverse_right_wheels = true;

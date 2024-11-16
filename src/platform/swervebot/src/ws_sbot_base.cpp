@@ -40,9 +40,10 @@ bool WsSbotBase::Initialize() {
   }
 
   ModelConfig config;
-  config.track_width = sbot_track_width;
-  config.wheel_base = sbot_wheel_base;
-  config.wheel_radius = sbot_wheel_radius;
+  config.kinematics_param.track_width = sbot_track_width;
+  config.kinematics_param.wheel_base = sbot_wheel_base;
+  config.kinematics_param.wheel_radius = sbot_wheel_radius;
+  config.kinematics_param.max_steering_angle = M_PI / 2.0;
   config.steering_motors = steering_motor_;
   config.driving_motors = driving_motor_;
   config.reverse_right_wheels = true;
@@ -50,6 +51,12 @@ bool WsSbotBase::Initialize() {
 
   return true;
 }
+
+void WsSbotBase::SetMotionCommand(const Twist& twist) {
+  current_twist_ = twist;
+}
+
+void WsSbotBase::Update(double dt) { robot_->Update(current_twist_, dt); }
 
 void WsSbotBase::SetSteeringCommand(const std::array<float, 4>& angles) {
   if (robot_ == nullptr) {
@@ -66,4 +73,5 @@ void WsSbotBase::SetDrivingCommand(const std::array<float, 4>& speeds) {
   }
   robot_->SetDrivingCommand(speeds);
 }
+
 }  // namespace xmotion

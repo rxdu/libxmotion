@@ -25,6 +25,9 @@ class WsSbotBase {
   // public methods
   bool Initialize();
 
+  void SetMotionCommand(const Twist &twist);
+  void Update(double dt);
+
   // low-level commands
   void SetSteeringCommand(const std::array<float, 4> &angles);
   void SetDrivingCommand(const std::array<float, 4> &speeds);
@@ -38,6 +41,7 @@ class WsSbotBase {
   std::shared_ptr<SmsStsServoArray> steering_motor_;
   std::shared_ptr<Ddsm210Array> driving_motor_;
   std::unique_ptr<SwerveDriveRobot> robot_;
+  Twist current_twist_ = {{0, 0, 0}, {0, 0, 0}};
 };
 }  // namespace xmotion
 
