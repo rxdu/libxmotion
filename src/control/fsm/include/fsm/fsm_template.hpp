@@ -25,7 +25,6 @@ class FsmState {
   virtual void Update(Context &context) = 0;
 };
 
-// TODO (rdu): check State in States is derived from FsmState
 template <typename Context, typename Transition, typename... States>
 class FiniteStateMachine {
  public:
@@ -35,8 +34,10 @@ class FiniteStateMachine {
   using OptionalStateVariant = std::optional<StateVariant>;
 
   FiniteStateMachine(StateVariant &&initial_state, Context &&context)
-      : current_state_{std::move(initial_state)},
-        context_{std::move(context)} {}
+      : current_state_{std::move(initial_state)}, context_{std::move(context)} {
+    static_assert((std::is_base_of<FsmState<Context>, States>::value && ...),
+                  "All states in the FSM must be derived from FsmState");
+  }
 
   void Update() {
     std::visit([this](auto &state) { state.Update(context_); }, current_state_);
