@@ -5,9 +5,9 @@ build
 cmake-build-debug
 cmake-build-release/
 
-# lcmtypes
-
-data/log/quad/prsim
+# colcon
+install
+log
 
 # Temp files
 *~

@@ -1,0 +1,2 @@
+add_executable(test_mekf6 test_mekf6.cpp)
+target_link_libraries(test_mekf6 PRIVATE estimation)

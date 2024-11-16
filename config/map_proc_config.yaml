@@ -1,0 +1,2 @@
+point_cloud: /home/rdu/Workspace/map/parking/parking_lot.ply
+trajectory: /home/rdu/Workspace/map/parking/traj_lidar.txt

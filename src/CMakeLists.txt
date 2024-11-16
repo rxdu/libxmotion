@@ -1,7 +1,16 @@
 ## Add source directories
-# Application
-# add_subdirectory(dview)
+# Robots
+add_subdirectory(platform)
 
 # Modules
-add_subdirectory(modules)
-# add_subdirectory(unit_tests)
+add_subdirectory(common)
+add_subdirectory(interface)
+add_subdirectory(driver)
+add_subdirectory(mapping)
+add_subdirectory(estimation)
+add_subdirectory(control)
+add_subdirectory(planning)
+
+if (ENABLE_VISUALIZATION)
+  add_subdirectory(quickviz)
+endif ()

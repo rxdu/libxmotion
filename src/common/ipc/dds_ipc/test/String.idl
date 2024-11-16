@@ -1,0 +1,9 @@
+module std_msgs {
+    module msg {
+        module dds_ {
+            @final struct String_ {
+              string data;
+            };
+        };
+    };
+ };

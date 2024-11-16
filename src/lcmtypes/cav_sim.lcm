@@ -1,7 +1,0 @@
-package librav_lcm_msgs;
-
-struct SimSyncTrigger
-{
-    int64_t mtime;
-    boolean trigger_ready;
-}
