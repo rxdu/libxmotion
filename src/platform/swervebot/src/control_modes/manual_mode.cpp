@@ -8,8 +8,26 @@
 
 #include "swervebot/control_modes/manual_mode.hpp"
 
-namespace xmotion {
-ManualMode::ManualMode(const ControlContext& context) {}
+#include "logging/xlogger.hpp"
 
-void ManualMode::Update(ControlContext& context) {}
+namespace xmotion {
+ManualMode::ManualMode(const ControlContext& context) {
+  XLOG_INFO("==> Switched to ManualMode");
+}
+
+void ManualMode::Update(ControlContext& context) {
+  // handle joystick events
+  AxisEvent axis_event;
+  while (context.fsm_js_axis_move_queue->TryPop(axis_event)) {
+    if (axis_event.axis == JsAxis::kX) {
+      vy_ = -axis_event.value;
+    } else if (axis_event.axis == JsAxis::kY) {
+      vx_ = -axis_event.value;
+    } else if (axis_event.axis == JsAxis::kRX) {
+      wz_ = -axis_event.value;
+    }
+  }
+  XLOG_INFO_STREAM("ManualMode: vx = " << vx_ << ", vy = " << vy_
+                                       << ", wz = " << wz_);
+}
 }  // namespace xmotion

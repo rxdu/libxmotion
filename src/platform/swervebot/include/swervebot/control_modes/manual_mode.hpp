@@ -19,6 +19,9 @@ class ManualMode : public FsmState<ControlContext> {
   void Update(ControlContext& context);
 
  private:
+  float vx_{0.0};
+  float vy_{0.0};
+  float wz_{0.0};
 };
 }  // namespace xmotion
 

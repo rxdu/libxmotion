@@ -2,17 +2,11 @@
 find_package(Threads REQUIRED)
 
 # Add libraries
-set(LOGGING_LIB_SRC
-    src/ctrl_logger.cpp
-    src/default_logger.cpp
-    src/logger_vendor_spdlog.cpp
-)
-add_library(logging STATIC ${LOGGING_LIB_SRC})
-if (ENABLE_LOGGING)
-  target_compile_definitions(logging PUBLIC "-DENABLE_LOGGING")
-endif (ENABLE_LOGGING)
-target_link_libraries(logging PUBLIC spdlog ${CMAKE_THREAD_LIBS_INIT})
-target_include_directories(logging PUBLIC
+add_library(event STATIC
+    src/async_event_dispatcher.cpp
+    src/event_dispatcher.cpp)
+target_link_libraries(event PUBLIC logging)
+target_include_directories(event PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
@@ -22,7 +16,7 @@ if (BUILD_TESTS)
   add_subdirectory(test)
 endif ()
 
-install(TARGETS logging spdlog
+install(TARGETS event
     EXPORT xmotionTargets
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib

@@ -8,8 +8,12 @@
 
 #include "swervebot/control_modes/auto_mode.hpp"
 
+#include "logging/xlogger.hpp"
+
 namespace xmotion {
-AutoMode::AutoMode(const ControlContext& context) {}
+AutoMode::AutoMode(const ControlContext& context) {
+  XLOG_INFO("==> Switched to AutoMode");
+}
 
 void AutoMode::Update(ControlContext& context) {}
 }  // namespace xmotion

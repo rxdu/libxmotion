@@ -18,6 +18,8 @@ target_link_libraries(swervebot PUBLIC
     motor_waveshare
     robot_base
     fsm
+    stopwatch
+    event
     input_hid
     Eigen3::Eigen
     yaml-cpp

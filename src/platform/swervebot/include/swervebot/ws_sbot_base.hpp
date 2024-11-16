@@ -20,7 +20,7 @@ class WsSbotBase {
   using ModelConfig = SwerveDriveRobot::Config;
 
  public:
-  WsSbotBase(const SbotConfig::BaseConfig &config);
+  WsSbotBase(const SbotConfig::BaseSettings &config);
 
   // public methods
   bool Initialize();
@@ -34,7 +34,7 @@ class WsSbotBase {
   static constexpr float sbot_wheel_base = 0.245;
   static constexpr float sbot_wheel_radius = 0.0363;
 
-  SbotConfig::BaseConfig config_;
+  SbotConfig::BaseSettings config_;
   std::shared_ptr<SmsStsServoArray> steering_motor_;
   std::shared_ptr<Ddsm210Array> driving_motor_;
   std::unique_ptr<SwerveDriveRobot> robot_;

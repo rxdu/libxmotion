@@ -13,12 +13,16 @@
 
 namespace xmotion {
 struct SbotConfig {
-  struct BaseConfig {
+  struct BaseSettings {
     std::string steering_motor_port;
     std::string driving_motor_port;
   };
 
-  BaseConfig base_config;
+  BaseSettings base_settings;
+
+  struct {
+    std::string joystick_device;
+  } hid_settings;
 };
 
 bool LoadConfigFile(const std::string &file_path, SbotConfig *config);

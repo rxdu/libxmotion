@@ -35,7 +35,7 @@ SwerveDriveKinematics::Commands SwerveDriveKinematics::ComputeWheelCommands(
   Commands cmd;
   Eigen::Vector3d v_body = {twist.linear.x(), twist.linear.y(),
                             twist.angular.z()};
-  Eigen::Vector<double, 8> v_wheel = coeff_matrix_ * v_body;
+  Eigen::VectorXd v_wheel = coeff_matrix_ * v_body;
   std::cout << "v_wheel: \n" << v_wheel << std::endl;
 
   for (int i = 0; i < 4; i++) {

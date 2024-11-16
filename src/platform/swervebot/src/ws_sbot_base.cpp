@@ -11,7 +11,7 @@
 #include "logging/xlogger.hpp"
 
 namespace xmotion {
-WsSbotBase::WsSbotBase(const SbotConfig::BaseConfig& config)
+WsSbotBase::WsSbotBase(const SbotConfig::BaseSettings& config)
     : config_(config) {}
 
 bool WsSbotBase::Initialize() {

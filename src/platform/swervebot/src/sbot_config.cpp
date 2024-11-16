@@ -18,10 +18,14 @@ bool LoadConfigFile(const std::string& file_path, SbotConfig* config) {
     YAML::Node config_node = YAML::LoadFile(file_path);
 
     // base config
-    config->base_config.steering_motor_port =
+    config->base_settings.steering_motor_port =
         config_node["robot_base"]["steering_motor_port"].as<std::string>();
-    config->base_config.driving_motor_port =
+    config->base_settings.driving_motor_port =
         config_node["robot_base"]["driving_motor_port"].as<std::string>();
+
+    // HID settings
+    config->hid_settings.joystick_device =
+        config_node["hid"]["joystick_device"].as<std::string>();
 
   } catch (YAML::BadFile& e) {
     XLOG_ERROR("ConfigLoader: failed to open config file {}: {}", file_path,
