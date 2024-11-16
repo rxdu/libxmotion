@@ -16,23 +16,37 @@
 #include "logging/xlogger.hpp"
 
 namespace xmotion {
+namespace {
+void OnWakeupEvent(evutil_socket_t fd, short events, void *arg) {
+  // No-op event; just wakes up the loop
+}
+}  // namespace
+
 HidEventListener::HidEventListener() {
   base_ = event_base_new();
   if (base_ == nullptr) {
     throw std::runtime_error("HidEventListener: failed to create event base");
   }
+
+  struct event *wakeup =
+      event_new(base_, -1, EV_PERSIST, OnWakeupEvent, nullptr);
+  struct timeval tv = {1, 0};  // Wake up every second
+  if (wakeup) {
+    event_add(wakeup, &tv);
+  }
 }
 
 HidEventListener::~HidEventListener() {
-  event_base_loopbreak(base_);
-  if (event_thread_.joinable()) {
-    event_thread_.join();
+  if (base_) {
+    event_base_loopbreak(base_);
+    if (event_thread_.joinable()) {
+      event_thread_.join();
+    }
+    for (auto event : hid_events_) {
+      event_free(event);
+    }
+    event_base_free(base_);
   }
-
-  for (auto event : hid_events_) {
-    event_free(event);
-  }
-  event_base_free(base_);
 }
 
 void HidEventListener::EventCallback(evutil_socket_t fd, short events,
@@ -65,6 +79,8 @@ bool HidEventListener::AddHidHandler(HidInputInterface *handler) {
 }
 
 void HidEventListener::StartListening() {
-  event_thread_ = std::thread([this]() { event_base_dispatch(base_); });
+  event_thread_ = std::thread([this]() {
+    if (base_) event_base_dispatch(base_);
+  });
 }
 }  // namespace xmotion
