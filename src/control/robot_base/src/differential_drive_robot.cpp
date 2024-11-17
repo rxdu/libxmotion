@@ -48,7 +48,7 @@ void DifferentialDriveRobot::SetMotionCommand(double linear_vel,
   config_.right_actuator_group->SetSpeed(right_rpm);
 }
 
-void DifferentialDriveRobot::GetMotionStatus(double& linear_vel,
+void DifferentialDriveRobot::GetMotionState(double& linear_vel,
                                              double& angular_vel) {
   // get left and right wheel speed
   double left_wheel_rpm = config_.left_actuator_group->GetSpeed();

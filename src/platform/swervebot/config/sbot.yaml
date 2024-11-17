@@ -1,8 +1,8 @@
 hid:
   joystick_device: /dev/input/event21
 robot_base:
-  steering_motor_port: /dev/ttyUSB1
-  driving_motor_port: /dev/ttyUSB0
+  steering_motor_port: /dev/ttyUSB0
+  driving_motor_port: /dev/ttyUSB1
   max_driving_speed: 1.0
   max_steering_angle: 1.57
   driving_deadzone: 0.005

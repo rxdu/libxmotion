@@ -54,12 +54,19 @@ class SwerveDriveRobot {
 
   // public interface
   void Update(const Twist &twist, double dt);
+  Odometry GetOdometry();
+  void ResetOdometry();
+
+  // low-level control
   void SetSteeringCommand(const std::array<float, 4> &angles);
   void SetDrivingCommand(const std::array<float, 4> &speeds);
 
  private:
   Config config_;
   SwerveDriveKinematics kinematics_;
+  Odometry odom_;
+  std::vector<float> driving_speeds_;
+  std::vector<float> steering_angles_;
 };
 }  // namespace xmotion
 

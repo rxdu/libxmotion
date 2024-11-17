@@ -44,6 +44,7 @@ class Ddsm210Array final : public MotorControllerArrayInterface {
   void SetSpeed(uint8_t id, float rpm) override;
   void SetSpeeds(const std::vector<float> &speeds) override;
   float GetSpeed(uint8_t id) override;
+  void GetSpeeds(std::vector<float> &speeds) override;
 
   void SetPosition(uint8_t id, float position) override;
   float GetPosition(uint8_t id) override;

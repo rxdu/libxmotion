@@ -61,9 +61,17 @@ class MotorControllerArrayInterface {
     return 0;
   };
 
+  virtual void GetSpeeds(std::vector<float>& speeds) {
+    throw std::runtime_error("GetSpeeds not implemented");
+  };
+
   virtual float GetPosition(uint8_t id) {
     throw std::runtime_error("GetPosition not implemented");
     return 0;
+  };
+
+  virtual void GetPositions(std::vector<float>& positions) {
+    throw std::runtime_error("GetPositions not implemented");
   };
 
   virtual float GetTorque(uint8_t id) {
@@ -71,9 +79,17 @@ class MotorControllerArrayInterface {
     return 0;
   };
 
+  virtual void GetTorques(std::vector<float>& torques) {
+    throw std::runtime_error("GetTorques not implemented");
+  };
+
   virtual float GetCurrent(uint8_t id) {
     throw std::runtime_error("GetCurrent not implemented");
     return 0;
+  };
+
+  virtual void GetCurrents(std::vector<float>& currents) {
+    throw std::runtime_error("GetCurrents not implemented");
   };
 
   virtual void ApplyBrake(uint8_t id, float brake) {

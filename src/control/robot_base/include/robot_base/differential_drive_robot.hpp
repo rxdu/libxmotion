@@ -37,7 +37,7 @@ class DifferentialDriveRobot {
 
   // public interface
   void SetMotionCommand(double linear_vel, double angular_vel);
-  void GetMotionStatus(double &linear_vel, double &angular_vel);
+  void GetMotionState(double &linear_vel, double &angular_vel);
 
  private:
   Config config_;

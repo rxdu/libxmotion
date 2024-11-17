@@ -8,6 +8,7 @@
 
 #include <cassert>
 #include <algorithm>
+#include <iostream>
 
 #include "motor_waveshare/sms_sts_servo_array.hpp"
 
@@ -62,6 +63,18 @@ void SmsStsServoArray::SetPositions(const std::vector<float>& positions) {
 float SmsStsServoArray::GetPosition(uint8_t id) {
   auto states = servo_->GetStates();
   return states[id].position;
+}
+
+void SmsStsServoArray::GetPositions(std::vector<float>& positions) {
+  auto pos_feedback = servo_->GetPositions();
+  if (pos_feedback.size() != ids_.size()) return;
+
+  positions.clear();
+  for (auto id : ids_) {
+    //    std::cout << "id: " << int(id) << ", pos: " << pos_feedback[id]
+    //              << std::endl;
+    positions.push_back(pos_feedback[id]);
+  }
 }
 
 bool SmsStsServoArray::IsNormal(uint8_t id) {

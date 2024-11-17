@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
     robot.SetMotionCommand(linear_vel, angular_vel);
 
     double actual_linear_vel, actual_angular_vel;
-    robot.GetMotionStatus(actual_linear_vel, actual_angular_vel);
+    robot.GetMotionState(actual_linear_vel, actual_angular_vel);
     //    std::cout << "actual_linear_vel: " << actual_linear_vel
     //              << ", actual_angular_vel: " << actual_angular_vel <<
     //              std::endl;

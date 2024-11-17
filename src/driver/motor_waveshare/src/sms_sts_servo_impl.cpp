@@ -57,7 +57,8 @@ class SmsStsServo::Impl {
   }
 
   float GetPosition() {
-    auto pos = sm_st_.ReadPos(id_);
+    auto pos = sm_st_.ReadPos(id_) / 4095.0f * 360;
+    pos -= pos_cmd_offset_;
     return pos;
   }
 
@@ -65,7 +66,9 @@ class SmsStsServo::Impl {
 
   SmsStsServo::State GetState() {
     if (sm_st_.FeedBack(id_) != -1) {
-      state_.position = sm_st_.ReadPos(-1);  //-1表示缓冲区数据，以下相同
+      state_.position =
+          sm_st_.ReadPos(-1) / 4095.0f * 360;  //-1表示缓冲区数据，以下相同
+      state_.position -= pos_cmd_offset_;
       state_.speed = sm_st_.ReadSpeed(-1);
       state_.load = sm_st_.ReadLoad(-1);
       state_.voltage = sm_st_.ReadVoltage(-1);
@@ -116,7 +119,8 @@ class SmsStsServo::Impl {
   std::unordered_map<uint8_t, float> GetPositions() {
     std::unordered_map<uint8_t, float> positions;
     for (auto id : ids_) {
-      auto pos = sm_st_.ReadPos(id);
+      auto pos = sm_st_.ReadPos(id) / 4095.0f * 360;
+      pos -= pos_cmd_offset_;
       positions[id] = pos;
     }
     return positions;
@@ -127,7 +131,9 @@ class SmsStsServo::Impl {
     for (auto id : ids_) {
       State state;
       if (sm_st_.FeedBack(id) != -1) {
-        state.position = sm_st_.ReadPos(-1);  //-1表示缓冲区数据，以下相同
+        state.position =
+            sm_st_.ReadPos(-1) / 4095.0f * 360;  //-1表示缓冲区数据，以下相同
+        state_.position -= pos_cmd_offset_;
         state.speed = sm_st_.ReadSpeed(-1);
         state.load = sm_st_.ReadLoad(-1);
         state.voltage = sm_st_.ReadVoltage(-1);

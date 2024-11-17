@@ -44,6 +44,7 @@ class SmsStsServoArray : public MotorControllerArrayInterface {
   void SetPosition(uint8_t id, float position) override;
   void SetPositions(const std::vector<float>& positions) override;
   float GetPosition(uint8_t id) override;
+  void GetPositions(std::vector<float>& positions) override;
 
   bool IsNormal(uint8_t id) override;
 

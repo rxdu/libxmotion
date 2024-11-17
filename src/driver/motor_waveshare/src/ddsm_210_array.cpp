@@ -81,6 +81,14 @@ float Ddsm210Array::GetSpeed(uint8_t id) {
   return 0;
 }
 
+void Ddsm210Array::GetSpeeds(std::vector<float> &speeds) {
+  speeds.clear();
+  for (auto id : ids_) {
+    if (motors_.find(id) != motors_.end())
+      speeds.push_back(motors_[id]->GetSpeed());
+  }
+}
+
 void Ddsm210Array::SetPosition(uint8_t id, float position) {
   if (motors_.find(id) != motors_.end()) motors_[id]->SetPosition(position);
 }

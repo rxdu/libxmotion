@@ -15,6 +15,7 @@ SwerveDriveRobot::SwerveDriveRobot(const SwerveDriveRobot::Config& config)
     : config_(config), kinematics_(config.kinematics_param) {}
 
 void SwerveDriveRobot::Update(const Twist& twist, double dt) {
+  //-------------------- update actuator commands --------------------//
   Twist twist_filtered = twist;
   if (std::abs(twist.linear.x()) <
       config_.kinematics_param.linear_vel_deadband) {
@@ -41,7 +42,35 @@ void SwerveDriveRobot::Update(const Twist& twist, double dt) {
   }
   SetSteeringCommand(cmd.angles);
   SetDrivingCommand(cmd.speeds);
+
+  //------------------------- update odometry -------------------------//
+  config_.driving_motors->GetSpeeds(driving_speeds_);
+  // convert speed rpm to m/s
+  for (int i = 0; i < 4; ++i) {
+    driving_speeds_[i] = driving_speeds_[i] * 2 * M_PI *
+                         config_.kinematics_param.wheel_radius / 60;
+  }
+  config_.steering_motors->GetPositions(steering_angles_);
+  // convert angle degree to radian
+  for (int i = 0; i < 4; ++i) {
+    steering_angles_[i] = steering_angles_[i] / 180.0f * M_PI;
+  }
+
+  XLOG_INFO_STREAM("Motor actual speeds: "
+                   << driving_speeds_[0] << ", " << driving_speeds_[1] << ", "
+                   << driving_speeds_[2] << ", " << driving_speeds_[3]);
+  XLOG_INFO_STREAM("Servo actual angles: "
+                   << steering_angles_[0] << ", " << steering_angles_[1] << ", "
+                   << steering_angles_[2] << ", " << steering_angles_[3]);
+
   XLOG_INFO("--------------------");
+}
+
+Odometry SwerveDriveRobot::GetOdometry() { return odom_; }
+
+void SwerveDriveRobot::ResetOdometry() {
+  odom_.pose = {{0, 0, 0}, {1, 0, 0, 0}};
+  odom_.twist = {{0, 0, 0}, {0, 0, 0}};
 }
 
 void SwerveDriveRobot::SetSteeringCommand(const std::array<float, 4>& angles) {
