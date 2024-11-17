@@ -32,9 +32,9 @@ void ManualMode::Update(ControlContext& context) {
 
   // convert from [-1,1] to actual speed and steering angle
   UserCommand cmd;
-  cmd.vx = vx_;
-  cmd.vy = vy_;
-  cmd.wz = wz_;
+  cmd.vx = vx_ * context.config.control_settings.manual_mode.driving_scale;
+  cmd.vy = vy_ * context.config.control_settings.manual_mode.driving_scale;
+  cmd.wz = wz_ * context.config.control_settings.manual_mode.steering_scale;
 
   //  command_queue
   context.command_queue->Push(cmd);

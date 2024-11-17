@@ -74,6 +74,7 @@ class SwerveDriveKinematics {
   double rx_;
   double ry_;
   Eigen::Matrix<double, 8, 3> coeff_matrix_;
+  const Eigen::Vector4i wheel_signs_ = {1, -1, -1, 1};
 };
 }  // namespace xmotion
 

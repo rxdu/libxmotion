@@ -39,6 +39,8 @@ void SwerveDriveRobot::Update(const Twist& twist, double dt) {
     XLOG_INFO_STREAM("Wheel " << i << ": speed = " << cmd.speeds[i]
                               << ", angle = " << cmd.angles[i]);
   }
+  SetSteeringCommand(cmd.angles);
+  SetDrivingCommand(cmd.speeds);
   XLOG_INFO("--------------------");
 }
 
@@ -52,6 +54,10 @@ void SwerveDriveRobot::SetSteeringCommand(const std::array<float, 4>& angles) {
   for (int i = 0; i < 4; ++i) {
     steering_angles.push_back(angles[i] / M_PI * 180.0f);
   }
+
+  XLOG_INFO_STREAM("Servo angles: "
+                   << steering_angles[0] << ", " << steering_angles[1] << ", "
+                   << steering_angles[2] << ", " << steering_angles[3]);
   config_.steering_motors->SetPositions(steering_angles);
 }
 
@@ -74,6 +80,9 @@ void SwerveDriveRobot::SetDrivingCommand(const std::array<float, 4>& speeds) {
       driving_speeds.push_back(rpm);
     }
   }
+  XLOG_INFO_STREAM("Motor speeds: "
+                   << driving_speeds[0] << ", " << driving_speeds[1] << ", "
+                   << driving_speeds[2] << ", " << driving_speeds[3]);
   config_.driving_motors->SetSpeeds(driving_speeds);
 }
 }  // namespace xmotion

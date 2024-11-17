@@ -43,7 +43,12 @@ bool WsSbotBase::Initialize() {
   config.kinematics_param.track_width = sbot_track_width;
   config.kinematics_param.wheel_base = sbot_wheel_base;
   config.kinematics_param.wheel_radius = sbot_wheel_radius;
-  config.kinematics_param.max_steering_angle = M_PI / 2.0;
+  
+  config.kinematics_param.max_driving_speed = config_.max_driving_speed;
+  config.kinematics_param.max_steering_angle = config_.max_steering_angle;
+  config.kinematics_param.linear_vel_deadband = config_.driving_deadzone;
+  config.kinematics_param.angular_vel_deadband = config_.steering_deadzone;
+
   config.steering_motors = steering_motor_;
   config.driving_motors = driving_motor_;
   config.reverse_right_wheels = true;

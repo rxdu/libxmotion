@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+#include "logging/xlogger.hpp"
+
 namespace xmotion {
 namespace {
 template <typename T>
@@ -50,8 +52,10 @@ SwerveDriveKinematics::Command SwerveDriveKinematics::ComputeWheelCommands(
                             twist.angular.z()};
   Eigen::VectorXd v_wheel = coeff_matrix_ * v_body;
 
+  //  XLOG_INFO_STREAM("v_wheel: \n" << v_wheel.transpose());
+
   for (int i = 0; i < 4; i++) {
-    // calculate steering angle
+    //-------------------- calculate steering angle --------------------//
     if (std::abs(v_wheel[i * 2]) < param_.linear_vel_deadband &&
         std::abs(v_wheel[i * 2 + 1]) < param_.linear_vel_deadband) {
       cmd.angles[i] = 0;
@@ -63,15 +67,19 @@ SwerveDriveKinematics::Command SwerveDriveKinematics::ComputeWheelCommands(
       }
     }
 
-    // calculate driving speed
+    //-------------------- calculate driving speed --------------------//
     Eigen::Vector2d body_v_vec(twist.linear.x(), twist.linear.y());
-    Eigen::Vector2d wheel_dir_vec =
-        Eigen::Vector2d(std::cos(cmd.angles[i]), std::sin(cmd.angles[i]));
-    int v_sign = body_v_vec.dot(wheel_dir_vec) > 0 ? 1 : -1;
-    cmd.speeds[i] = v_sign *
-                    std::sqrt(v_wheel[i * 2] * v_wheel[i * 2] +
-                              v_wheel[i * 2 + 1] * v_wheel[i * 2 + 1]) /
-                    param_.wheel_radius;
+    int v_sign = 1;
+    // no translation if body velocity is too small
+    if (body_v_vec.norm() < param_.linear_vel_deadband) {
+      v_sign = sign(twist.angular.z()) * wheel_signs_[i];
+    } else {
+      Eigen::Vector2d wheel_dir_vec =
+          Eigen::Vector2d(std::cos(cmd.angles[i]), std::sin(cmd.angles[i]));
+      v_sign = body_v_vec.dot(wheel_dir_vec) > 0 ? 1 : -1;
+    }
+    cmd.speeds[i] = v_sign * std::sqrt(v_wheel[i * 2] * v_wheel[i * 2] +
+                                       v_wheel[i * 2 + 1] * v_wheel[i * 2 + 1]);
   }
 
   return cmd;
