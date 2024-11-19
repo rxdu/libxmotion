@@ -34,8 +34,21 @@ bool LoadConfigFile(const std::string& file_path, SbotConfig* config) {
     // HID settings
     config->hid_settings.joystick_device =
         config_node["hid"]["joystick_device"].as<std::string>();
+    config->hid_settings.sbus_port =
+        config_node["hid"]["sbus_port"].as<std::string>();
 
     // control settings
+    std::string input_type =
+        config_node["control"]["input_type"].as<std::string>();
+    if (input_type == "joystick") {
+      config->control_settings.input_type =
+          SbotConfig::ControlInputType::kJoystick;
+    } else if (input_type == "sbus") {
+      config->control_settings.input_type = SbotConfig::ControlInputType::kSbus;
+    } else {
+      config->control_settings.input_type = SbotConfig::ControlInputType::kNone;
+    }
+
     config->control_settings.manual_mode.driving_scale =
         config_node["control"]["manual_mode"]["driving_scale"].as<float>();
     config->control_settings.manual_mode.steering_scale =

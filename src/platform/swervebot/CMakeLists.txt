@@ -15,11 +15,13 @@ add_library(swervebot
     src/ws_sbot_base.cpp)
 target_link_libraries(swervebot PUBLIC
     interface
+    async_port
     motor_waveshare
     robot_base
     fsm
     stopwatch
     event
+    input_sbus
     input_hid
     Eigen3::Eigen
     yaml-cpp

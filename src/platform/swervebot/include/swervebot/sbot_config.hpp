@@ -22,13 +22,22 @@ struct SbotConfig {
     float steering_deadzone;
   };
 
+  enum class ControlInputType {
+    kNone,
+    kJoystick,
+    kSbus,
+  };
+
   struct {
     std::string joystick_device;
+    std::string sbus_port;
   } hid_settings;
 
   BaseSettings base_settings;
 
   struct {
+    ControlInputType input_type;
+
     struct {
       float driving_scale;
       float steering_scale;

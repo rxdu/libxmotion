@@ -16,26 +16,45 @@ namespace xmotion {
 SbotSystem::SbotSystem(const SbotConfig& config) : config_(config) {}
 
 bool SbotSystem::Initialize() {
-  // initialize joystick
-  joystick_ =
-      std::make_unique<JoystickHandler>(config_.hid_settings.joystick_device);
-  if (!joystick_->Open()) {
-    XLOG_ERROR("Failed to open joystick device");
-    return false;
-  }
-  joystick_->RegisterJoystickButtonEventCallback(
-      std::bind(&SbotSystem::OnJsButtonEvent, this, std::placeholders::_1,
-                std::placeholders::_2));
-  joystick_->RegisterJoystickAxisEventCallback(
-      std::bind(&SbotSystem::OnJsAxisEvent, this, std::placeholders::_1,
-                std::placeholders::_2));
+  if (config_.control_settings.input_type ==
+      SbotConfig::ControlInputType::kJoystick) {
+    // initialize joystick
+    joystick_ =
+        std::make_unique<JoystickHandler>(config_.hid_settings.joystick_device);
+    if (!joystick_->Open()) {
+      XLOG_ERROR("Failed to open joystick device");
+      return false;
+    }
+    joystick_->RegisterJoystickButtonEventCallback(
+        std::bind(&SbotSystem::OnJsButtonEvent, this, std::placeholders::_1,
+                  std::placeholders::_2));
+    joystick_->RegisterJoystickAxisEventCallback(
+        std::bind(&SbotSystem::OnJsAxisEvent, this, std::placeholders::_1,
+                  std::placeholders::_2));
 
-  hid_event_listener_ = std::make_shared<HidEventListener>();
-  if (!hid_event_listener_->AddHidHandler(joystick_.get())) {
-    XLOG_ERROR("Failed to add joystick handler to event listener");
+    hid_event_listener_ = std::make_shared<HidEventListener>();
+    if (!hid_event_listener_->AddHidHandler(joystick_.get())) {
+      XLOG_ERROR("Failed to add joystick handler to event listener");
+      return false;
+    }
+    hid_event_listener_->StartListening();
+  } else if (config_.control_settings.input_type ==
+             SbotConfig::ControlInputType::kSbus) {
+    serial_ =
+        std::make_shared<AsyncSerial>(config_.hid_settings.sbus_port, 100000);
+    serial_->SetParity(AsyncSerial::Parity::kEven);
+    serial_->SetStopBits(AsyncSerial::StopBits::kTwo);
+    if (!serial_->Open()) {
+      XLOG_ERROR("Failed to open SBUS serial port");
+      return false;
+    }
+    serial_->SetReceiveCallback(
+        std::bind(&SbotSystem::OnSbusDataReceived, this, std::placeholders::_1,
+                  std::placeholders::_2, std::placeholders::_3));
+  } else {
+    XLOG_ERROR("Unsupported control input type specified");
     return false;
   }
-  hid_event_listener_->StartListening();
 
   // initialize robot base
   sbot_ = std::make_shared<WsSbotBase>(config_.base_settings);
@@ -119,6 +138,20 @@ void SbotSystem::OnJsAxisEvent(const JsAxis& axis, const float& value) {
     event.axis = axis;
     event.value = value;
     fsm_->GetContext().js_axis_queue->Push(event);
+  }
+}
+
+void SbotSystem::OnSbusDataReceived(uint8_t* data, const size_t bufsize,
+                                    size_t len) {
+  for (size_t i = 0; i < len; ++i) {
+    SbusMessage sbus_msg;
+    if (sbus_decoder_.SbusDecodeMessage(data[i], &sbus_msg)) {
+      std::cout << "---- New SBUS frame received" << std::endl;
+      for (int i = 0; i < 16; ++i) {
+        std::cout << "Channel " << i << ": " << sbus_msg.channels[i]
+                  << std::endl;
+      }
+    }
   }
 }
 
