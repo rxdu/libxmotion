@@ -29,8 +29,11 @@ class AsyncSerial : public std::enable_shared_from_this<AsyncSerial>,
   using ReceiveCallback =
       std::function<void(uint8_t *data, const size_t bufsize, size_t len)>;
 
+  enum class Parity { kNone, kOdd, kEven };
+  enum class StopBits { kOne, kTwo };
+
  public:
-  AsyncSerial(const std::string& port_name, uint32_t baud_rate = 115200);
+  AsyncSerial(const std::string &port_name, uint32_t baud_rate = 115200);
   ~AsyncSerial();
 
   // do not allow copy
@@ -40,6 +43,8 @@ class AsyncSerial : public std::enable_shared_from_this<AsyncSerial>,
   // Public API
   void SetBaudRate(unsigned baudrate) override;
   void SetHardwareFlowControl(bool enabled) override;
+  void SetParity(Parity parity);
+  void SetStopBits(StopBits stop_bits);
 
   bool Open() override;
   void Close() override;
@@ -65,6 +70,8 @@ class AsyncSerial : public std::enable_shared_from_this<AsyncSerial>,
   uint32_t baud_rate_ = 115200;
   bool hwflow_ = false;
   ReceiveCallback rcv_cb_ = nullptr;
+  Parity parity_ = Parity::kEven;
+  StopBits stop_bits_ = StopBits::kOne;
 
   // tx/rx buffering
   static constexpr uint32_t rxtx_buffer_size = 1024 * 8;

@@ -28,6 +28,10 @@ void AsyncSerial::SetBaudRate(unsigned baudrate) {
 
 void AsyncSerial::SetHardwareFlowControl(bool enabled) { hwflow_ = enabled; }
 
+void AsyncSerial::SetParity(Parity parity) { parity_ = parity; }
+
+void AsyncSerial::SetStopBits(StopBits stop_bits) { stop_bits_ = stop_bits; }
+
 bool AsyncSerial::Open() {
   using SPB = asio::serial_port_base;
 
@@ -37,8 +41,18 @@ bool AsyncSerial::Open() {
     // Set baudrate and 8N1 mode
     serial_port_.set_option(SPB::baud_rate(baud_rate_));
     serial_port_.set_option(SPB::character_size(8));
-    serial_port_.set_option(SPB::parity(SPB::parity::none));
-    serial_port_.set_option(SPB::stop_bits(SPB::stop_bits::one));
+    if (parity_ == Parity::kNone) {
+      serial_port_.set_option(SPB::parity(SPB::parity::none));
+    } else if (parity_ == Parity::kOdd) {
+      serial_port_.set_option(SPB::parity(SPB::parity::odd));
+    } else if (parity_ == Parity::kEven) {
+      serial_port_.set_option(SPB::parity(SPB::parity::even));
+    }
+    if (stop_bits_ == StopBits::kOne) {
+      serial_port_.set_option(SPB::stop_bits(SPB::stop_bits::one));
+    } else if (stop_bits_ == StopBits::kTwo) {
+      serial_port_.set_option(SPB::stop_bits(SPB::stop_bits::two));
+    }
     serial_port_.set_option(SPB::flow_control(
         (hwflow_) ? SPB::flow_control::hardware : SPB::flow_control::none));
 
