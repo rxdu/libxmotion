@@ -14,6 +14,10 @@ using namespace xmotion;
 SbusDecoder sbus_decoder;
 
 void HandleUart(uint8_t* data, const size_t bufsize, size_t len) {
+  // std::cout << "Received " << len << " bytes" << std::endl;
+  // for (int i = 0; i < len; ++i) {
+  //   std::cout << "0x" << std::hex << (int)data[i] << " ";
+  // }
   for (size_t i = 0; i < len; ++i) {
     SbusMessage sbus_msg;
     if (sbus_decoder.SbusDecodeMessage(data[i], &sbus_msg)) {
@@ -27,15 +31,17 @@ void HandleUart(uint8_t* data, const size_t bufsize, size_t len) {
 }
 
 int main(int argc, char* argv[]) {
-  AsyncSerial serial("/dev/ttyUSB0", 100000);
-  serial.SetParity(AsyncSerial::Parity::kEven);
-  serial.SetStopBits(AsyncSerial::StopBits::kTwo);
+  auto serial = std::make_shared<AsyncSerial>("/dev/ttyUSB1");
+  serial->SetParity(AsyncSerial::Parity::kEven);
+  serial->SetStopBits(AsyncSerial::StopBits::kTwo);
+  serial->SetReceiveCallback(HandleUart);
 
-  if (!serial.Open()) {
+  if (!serial->Open()) {
     std::cout << "Failed to open serial port" << std::endl;
     return -1;
   }
-  serial.SetReceiveCallback(HandleUart);
+
+  serial->ChangeBaudRate(100000);
 
   while (true) {
     std::this_thread::sleep_for(std::chrono::seconds(1));

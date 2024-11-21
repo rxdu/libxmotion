@@ -50,6 +50,7 @@ class AsyncSerial : public std::enable_shared_from_this<AsyncSerial>,
   void Close() override;
   bool IsOpened() const override;
 
+  bool ChangeBaudRate(unsigned baudrate);
   void SetReceiveCallback(ReceiveCallback cb) override { rcv_cb_ = cb; }
 
   void SendBytes(const uint8_t *bytes, size_t length) override;

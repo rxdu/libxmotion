@@ -22,8 +22,41 @@ AsyncSerial::AsyncSerial(const std::string &port_name, uint32_t baud_rate)
 
 AsyncSerial::~AsyncSerial() { Close(); }
 
-void AsyncSerial::SetBaudRate(unsigned baudrate) {
-  serial_port_.set_option(asio::serial_port_base::baud_rate(baudrate));
+void AsyncSerial::SetBaudRate(unsigned baudrate) { baud_rate_ = baudrate; }
+
+bool AsyncSerial::ChangeBaudRate(unsigned baudrate) {
+  int fd = serial_port_.native_handle();
+
+  struct serial_struct serial;
+  if (ioctl(fd, TIOCGSERIAL, &serial) < 0) {
+    perror("TIOCGSERIAL");
+    return false;
+  }
+
+  serial.flags &= ~ASYNC_SPD_MASK;  // Clear custom speed flags
+  serial.flags |= ASYNC_SPD_CUST;   // Enable custom speed
+  serial.custom_divisor = serial.baud_base / baudrate;
+
+  if (serial.custom_divisor == 0) {
+    fprintf(stderr, "Invalid custom divisor for baud rate %d\n", baudrate);
+    return false;
+  }
+
+  if (ioctl(fd, TIOCSSERIAL, &serial) < 0) {
+    perror("TIOCSSERIAL");
+    return false;
+  }
+
+  // Verify the settings
+  if (ioctl(fd, TIOCGSERIAL, &serial) < 0) {
+    perror("TIOCGSERIAL");
+    return false;
+  }
+
+  printf("Changed baudrate to: %d (divisor: %d, base: %d)\n", baudrate,
+         serial.custom_divisor, serial.baud_base);
+
+  return true;
 }
 
 void AsyncSerial::SetHardwareFlowControl(bool enabled) { hwflow_ = enabled; }
