@@ -4,7 +4,7 @@ add_library(input_sbus STATIC
     src/sbus_decoder.cpp
     src/sbus_receiver.cpp
     src/sbus_receiver_impl.cpp)
-target_link_libraries(input_sbus PUBLIC interface rpi_sbus)
+target_link_libraries(input_sbus PUBLIC interface rpi_sbus Threads::Threads)
 target_include_directories(input_sbus PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

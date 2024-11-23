@@ -15,6 +15,12 @@ OptionalStateVariant ModeTransition::Transit(ManualMode& state,
   if (context.js_button_queue->TryPop(btn)) {
     return AutoMode{context};
   }
+  SbusMessage sbus;
+  if (context.sbus_rc_queue->TryPop(sbus)) {
+    if (sbus.channels[6] > 1000) {
+      return AutoMode{context};
+    }
+  }
   //  return ManualMode{context};
   return std::nullopt;
 }
@@ -24,6 +30,12 @@ OptionalStateVariant ModeTransition::Transit(AutoMode& state,
   JsButton btn;
   if (context.js_button_queue->TryPop(btn)) {
     return ManualMode{context};
+  }
+  SbusMessage sbus;
+  if (context.sbus_rc_queue->TryPop(sbus)) {
+    if (sbus.channels[6] < 1000) {
+      return ManualMode{context};
+    }
   }
   return std::nullopt;
 }

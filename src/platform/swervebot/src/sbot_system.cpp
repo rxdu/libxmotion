@@ -40,17 +40,13 @@ bool SbotSystem::Initialize() {
     hid_event_listener_->StartListening();
   } else if (config_.control_settings.input_type ==
              SbotConfig::ControlInputType::kSbus) {
-    serial_ =
-        std::make_shared<AsyncSerial>(config_.hid_settings.sbus_port, 100000);
-    serial_->SetParity(AsyncSerial::Parity::kEven);
-    serial_->SetStopBits(AsyncSerial::StopBits::kTwo);
-    if (!serial_->Open()) {
+    sbus_rc_ = std::make_shared<SbusReceiver>(config_.hid_settings.sbus_port);
+    if (!sbus_rc_->Open()) {
       XLOG_ERROR("Failed to open SBUS serial port");
       return false;
     }
-    serial_->SetReceiveCallback(
-        std::bind(&SbotSystem::OnSbusDataReceived, this, std::placeholders::_1,
-                  std::placeholders::_2, std::placeholders::_3));
+    sbus_rc_->SetOnSbusMessageReceivedCallback(
+        std::bind(&SbotSystem::OnSbusMsgReceived, this, std::placeholders::_1));
   } else {
     XLOG_ERROR("Unsupported control input type specified");
     return false;
@@ -69,6 +65,7 @@ bool SbotSystem::Initialize() {
   context.robot_base = sbot_;
   context.js_axis_queue = std::make_shared<ThreadSafeQueue<AxisEvent>>();
   context.js_button_queue = std::make_shared<ThreadSafeQueue<JsButton>>();
+  context.sbus_rc_queue = std::make_shared<ThreadSafeQueue<SbusMessage>>();
   context.command_queue = std::make_shared<ThreadSafeQueue<UserCommand>>();
   context.feedback_queue = std::make_shared<ThreadSafeQueue<RobotFeedback>>();
 
@@ -105,11 +102,11 @@ void SbotSystem::ControlLoop() {
     last_time = now;
 
     // update control
-    UserCommand cmd;
-    while (context.command_queue->TryPop(cmd)) {
-      sbot_->SetMotionCommand({{cmd.vx, cmd.vy, 0}, {0, 0, cmd.wz}});
-    }
-    sbot_->Update(dt);
+    // UserCommand cmd;
+    // while (context.command_queue->TryPop(cmd)) {
+    //   sbot_->SetMotionCommand({{cmd.vx, cmd.vy, 0}, {0, 0, cmd.wz}});
+    // }
+    // sbot_->Update(dt);
 
     // time housekeeping
     if ((dt - 0.02) / 0.02 > 0.1) {
@@ -141,18 +138,38 @@ void SbotSystem::OnJsAxisEvent(const JsAxis& axis, const float& value) {
   }
 }
 
-void SbotSystem::OnSbusDataReceived(uint8_t* data, const size_t bufsize,
-                                    size_t len) {
-  for (size_t i = 0; i < len; ++i) {
-    SbusMessage sbus_msg;
-    if (sbus_decoder_.SbusDecodeMessage(data[i], &sbus_msg)) {
-      std::cout << "---- New SBUS frame received" << std::endl;
-      for (int i = 0; i < 16; ++i) {
-        std::cout << "Channel " << i << ": " << sbus_msg.channels[i]
-                  << std::endl;
-      }
-    }
+void SbotSystem::OnSbusMsgReceived(const SbusMessage& msg) {
+  static SbusMessage prev_msg;
+  if (prev_msg.channels[6] != msg.channels[6]) {
+    fsm_->GetContext().sbus_rc_queue->Push(msg);
   }
+
+  // mimic joystick axis event
+  if (prev_msg.channels[3] != msg.channels[3] ||
+      prev_msg.channels[2] != msg.channels[2] ||
+      prev_msg.channels[0] != msg.channels[0]) {
+    AxisEvent event;
+    float lx = (msg.channels[3] - 1023) / 800.0f;
+    float ly = (msg.channels[2] - 1023) / 800.0f;
+    float ax = (msg.channels[0] - 1023) / 800.0f;
+    {
+      event.axis = JsAxis::kX;
+      event.value = lx;
+      fsm_->GetContext().js_axis_queue->Push(event);
+    }
+    {
+      event.axis = JsAxis::kY;
+      event.value = ly;
+      fsm_->GetContext().js_axis_queue->Push(event);
+    }
+    {
+      event.axis = JsAxis::kRX;
+      event.value = ax;
+      fsm_->GetContext().js_axis_queue->Push(event);
+    }
+    // std::cout << "lx: " << lx << " ly: " << ly << " ax: " << ax << std::endl;
+  }
+  prev_msg = msg;
 }
 
 void SbotSystem::Run() {
@@ -174,8 +191,14 @@ void SbotSystem::Stop() {
   if (control_thread_.joinable()) control_thread_.join();
 
   // stop the hid input
-  hid_event_listener_.reset();
-  joystick_->Close();
+  if (config_.control_settings.input_type ==
+      SbotConfig::ControlInputType::kJoystick) {
+    hid_event_listener_.reset();
+    joystick_->Close();
+  } else if (config_.control_settings.input_type ==
+             SbotConfig::ControlInputType::kSbus) {
+    sbus_rc_->Close();
+  }
 
   // stop the robot
   sbot_->SetSteeringCommand({0, 0, 0, 0});

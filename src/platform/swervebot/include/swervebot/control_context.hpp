@@ -16,6 +16,7 @@
 #include "swervebot/sbot_config.hpp"
 #include "swervebot/ws_sbot_base.hpp"
 #include "robot_base/kinematics/swerve_drive_kinematics.hpp"
+#include "input_sbus/sbus_receiver.hpp"
 
 #include "event/thread_safe_queue.hpp"
 
@@ -43,6 +44,7 @@ struct ControlContext {
   // event thread -> main thread
   std::shared_ptr<ThreadSafeQueue<JsButton>> js_button_queue;
   std::shared_ptr<ThreadSafeQueue<AxisEvent>> js_axis_queue;
+  std::shared_ptr<ThreadSafeQueue<SbusMessage>> sbus_rc_queue;
   // main thread -> control thread
   std::shared_ptr<ThreadSafeQueue<UserCommand>> command_queue;
   // control thread -> main thread

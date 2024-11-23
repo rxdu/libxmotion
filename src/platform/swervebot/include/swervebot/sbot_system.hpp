@@ -15,8 +15,7 @@
 
 #include "input_hid/joystick_handler.hpp"
 #include "input_hid/hid_event_listener.hpp"
-#include "input_sbus/sbus_decoder.hpp"
-#include "async_port/async_serial.hpp"
+#include "input_sbus/sbus_receiver.hpp"
 
 #include "swervebot/sbot_fsm.hpp"
 
@@ -38,7 +37,7 @@ class SbotSystem {
   void ControlLoop();
   void OnJsButtonEvent(const JsButton& btn, const JxButtonEvent& event);
   void OnJsAxisEvent(const JsAxis& axis, const float& value);
-  void OnSbusDataReceived(uint8_t* data, const size_t bufsize, size_t len);
+  void OnSbusMsgReceived(const SbusMessage& msg);
 
   SbotConfig config_;
   std::atomic<bool> keep_main_loop_{false};
@@ -48,8 +47,7 @@ class SbotSystem {
   std::shared_ptr<HidEventListener> hid_event_listener_;
 
   // sbus rc
-  std::shared_ptr<AsyncSerial> serial_;
-  SbusDecoder sbus_decoder_;
+  std::shared_ptr<SbusReceiver> sbus_rc_;
 
   // robot base
   std::shared_ptr<WsSbotBase> sbot_;
