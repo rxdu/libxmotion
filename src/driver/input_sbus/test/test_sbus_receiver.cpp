@@ -17,10 +17,10 @@ using namespace xmotion;
 
 bool keep_running = true;
 
-void OnSbusMsgReceived(const SbusMessage &msg) {
+void OnSbusMsgReceived(const RcMessage &msg) {
   std::cout << "Sbus message received: " << std::endl;
   for (int i = 0; i < 18; ++i) {
-    std::cout << "ch" << i + 1 << ": " << msg.channels[i] << " ";
+    std::cout << "ch" << i << ": " << msg.channels[i] << " ";
   }
   if (msg.frame_loss) std::cout << "\tFrame lost";
   if (msg.fault_protection) std::cout << "\tFault protection";
@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
   std::signal(SIGINT, [](int signum) { keep_running = false; });
 
   SbusReceiver sbus_receiver("/dev/ttyUSB0");
-  sbus_receiver.SetOnSbusMessageReceivedCallback(OnSbusMsgReceived);
+  sbus_receiver.SetOnRcMessageReceivedCallback(OnSbusMsgReceived);
 
   if (!sbus_receiver.Open()) {
     std::cout << "failed to open sbus receiver" << std::endl;

@@ -5,11 +5,34 @@ robot_base:
   max_steering_angle: 1.57
   driving_deadzone: 0.005
   steering_deadzone: 0.005
-hid:
-  joystick_device: /dev/input/event21
-  sbus_port: /dev/ttyUSB0
 control:
-  input_type: sbus # joystick or sbus
+  user_input:
+    type: rc_receiver # joystick or rc_receiver
+    joystick:
+      device: /dev/input/event21
+    rc_receiver:
+      port: /dev/ttyS4
+      mapping:
+        mode:
+          channel: 5
+          min: 172
+          neutral: 1000
+          max: 1811
+        linear_x:
+          channel: 2
+          min: 172
+          neutral: 992
+          max: 1811
+        linear_y:
+          channel: 1
+          min: 172
+          neutral: 967
+          max: 1806
+        angular_z:
+          channel: 3
+          min: 172
+          neutral: 980
+          max: 1811
   manual_mode:
     driving_scale: 1.0
     steering_scale: 1.5

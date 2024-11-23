@@ -28,15 +28,15 @@ option(ENABLE_SWERVEBOT_APP "Enable swervebot app" OFF)
 option(ENABLE_QUADRUPED_APP "Enable quadruped app" OFF)
 option(ENABLE_VISUALIZATION "Enable visualization targets" ON)
 
-if (BUILD_AS_MODULE AND (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")))
-  message(STATUS "Disable visualization targets on non-x86_64 when built as module")
+if (BUILD_AS_MODULE OR (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")))
+  message(STATUS "Visualization targets are not build on non-x86_64 or when built as module")
   set(ENABLE_VISUALIZATION OFF)
 endif ()
 
 if (ENABLE_VISUALIZATION)
-  message(STATUS "Enable visualization targets")
+  message(STATUS "Visualization targets enabled")
 else ()
-  message(STATUS "Disable visualization targets")
+  message(STATUS "Visualization targets enabled")
 endif ()
 
 ## Generate symbols for IDE indexer
@@ -72,9 +72,9 @@ else ()
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 endif ()
 
-if(XMOTION_DEV_MODE)
+if (XMOTION_DEV_MODE)
   message(STATUS "xmotion development mode enabled")
-endif()
+endif ()
 
 ## Chosse build type
 set(default_build_type "Release")
@@ -153,7 +153,7 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xmotionConfig.cmake"
 # Packaging support
 set(CPACK_DEBIAN_PACKAGE_NAME "libxmotion")
 set(CPACK_PACKAGE_VENDOR "Ruixiang Du")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "xMotion Library - a library for motion planning and control")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "xMotion Library - a library for robot motion planning and control")
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})

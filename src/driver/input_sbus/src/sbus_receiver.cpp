@@ -20,8 +20,10 @@ bool SbusReceiver::Open() { return pimpl_->Open(); }
 
 void SbusReceiver::Close() { pimpl_->Close(); }
 
-void SbusReceiver::SetOnSbusMessageReceivedCallback(
-    OnSbusMessageReceivedCallback cb) {
-  pimpl_->SetOnSbusMessageReceivedCallback(cb);
+bool SbusReceiver::IsOpened() const { return pimpl_->IsOpened(); }
+
+void SbusReceiver::SetOnRcMessageReceivedCallback(
+    OnRcMessageReceivedCallback cb) {
+  pimpl_->SetOnRcMessageReceivedCallback(cb);
 }
 }  // namespace xmotion

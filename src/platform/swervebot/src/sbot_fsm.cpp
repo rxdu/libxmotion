@@ -15,9 +15,11 @@ OptionalStateVariant ModeTransition::Transit(ManualMode& state,
   if (context.js_button_queue->TryPop(btn)) {
     return AutoMode{context};
   }
-  SbusMessage sbus;
+  auto mode_chn_conf =
+      context.config.control_settings.user_input.rc_receiver.mapping.mode;
+  RcMessage sbus;
   if (context.sbus_rc_queue->TryPop(sbus)) {
-    if (sbus.channels[6] > 1000) {
+    if (sbus.channels[mode_chn_conf.channel] > 0) {
       return AutoMode{context};
     }
   }
@@ -31,9 +33,11 @@ OptionalStateVariant ModeTransition::Transit(AutoMode& state,
   if (context.js_button_queue->TryPop(btn)) {
     return ManualMode{context};
   }
-  SbusMessage sbus;
+  auto mode_chn_conf =
+      context.config.control_settings.user_input.rc_receiver.mapping.mode;
+  RcMessage sbus;
   if (context.sbus_rc_queue->TryPop(sbus)) {
-    if (sbus.channels[6] < 1000) {
+    if (sbus.channels[mode_chn_conf.channel] < 0) {
       return ManualMode{context};
     }
   }

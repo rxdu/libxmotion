@@ -14,33 +14,26 @@
 #include <chrono>
 
 namespace xmotion {
-template<typename T>
+template <typename T>
 struct vector3_t {
   T x;
   T y;
   T z;
 };
+
 using Vector3f = vector3_t<float>;
 using Vector3d = vector3_t<double>;
 
-template<typename T>
+template <typename T>
 struct vector4_t {
   T x;
   T y;
   T z;
   T w;
 };
+
 using Vector4f = vector4_t<float>;
 using Vector4d = vector4_t<double>;
-
-struct Euler {
-  float roll;
-  float pitch;
-  float yaw;
-};
-
-using Quaternionf = vector4_t<float>;
-using Quaterniond = vector4_t<double>;
 
 using RSClock = std::chrono::steady_clock;
 using RSTimePoint = std::chrono::time_point<RSClock>;

@@ -12,20 +12,21 @@
 #include <memory>
 #include <functional>
 
-#include "sbus_decoder.hpp"
+#include "interface/driver/rc_receiver_interface.hpp"
+#include "input_sbus/sbus_decoder.hpp"
 
 namespace xmotion {
-class SbusReceiver {
+class SbusReceiver : public RcReceiverInterface {
  public:
   SbusReceiver(const std::string& port);
   ~SbusReceiver();
 
   // public methods
-  bool Open();
-  void Close();
+  bool Open() override;
+  void Close() override;
+  bool IsOpened() const override;
 
-  using OnSbusMessageReceivedCallback = std::function<void(const SbusMessage&)>;
-  void SetOnSbusMessageReceivedCallback(OnSbusMessageReceivedCallback cb);
+  void SetOnRcMessageReceivedCallback(OnRcMessageReceivedCallback cb) override;
 
  private:
   class Impl;

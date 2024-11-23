@@ -22,21 +22,42 @@ struct SbotConfig {
     float steering_deadzone;
   };
 
-  enum class ControlInputType {
+  enum class UserInputType {
     kNone,
     kJoystick,
-    kSbus,
+    kRcReceiver,
   };
 
-  struct {
-    std::string joystick_device;
-    std::string sbus_port;
-  } hid_settings;
+  struct RcChannelMap {
+    int channel;
+    float min;
+    float neutral;
+    float max;
+  };
+
+  /////////////////////////////////////////////////////////////////////////////
 
   BaseSettings base_settings;
 
   struct {
-    ControlInputType input_type;
+    struct {
+      UserInputType type;
+
+      struct {
+        std::string device;
+      } joystick;
+
+      struct {
+        std::string port;
+
+        struct {
+          RcChannelMap mode;
+          RcChannelMap linear_x;
+          RcChannelMap linear_y;
+          RcChannelMap angular_z;
+        } mapping;
+      } rc_receiver;
+    } user_input;
 
     struct {
       float driving_scale;

@@ -16,11 +16,11 @@ namespace xmotion {
 SbotSystem::SbotSystem(const SbotConfig& config) : config_(config) {}
 
 bool SbotSystem::Initialize() {
-  if (config_.control_settings.input_type ==
-      SbotConfig::ControlInputType::kJoystick) {
+  if (config_.control_settings.user_input.type ==
+      SbotConfig::UserInputType::kJoystick) {
     // initialize joystick
-    joystick_ =
-        std::make_unique<JoystickHandler>(config_.hid_settings.joystick_device);
+    joystick_ = std::make_unique<JoystickHandler>(
+        config_.control_settings.user_input.joystick.device);
     if (!joystick_->Open()) {
       XLOG_ERROR("Failed to open joystick device");
       return false;
@@ -38,14 +38,15 @@ bool SbotSystem::Initialize() {
       return false;
     }
     hid_event_listener_->StartListening();
-  } else if (config_.control_settings.input_type ==
-             SbotConfig::ControlInputType::kSbus) {
-    sbus_rc_ = std::make_shared<SbusReceiver>(config_.hid_settings.sbus_port);
+  } else if (config_.control_settings.user_input.type ==
+             SbotConfig::UserInputType::kRcReceiver) {
+    sbus_rc_ = std::make_shared<SbusReceiver>(
+        config_.control_settings.user_input.rc_receiver.port);
     if (!sbus_rc_->Open()) {
       XLOG_ERROR("Failed to open SBUS serial port");
       return false;
     }
-    sbus_rc_->SetOnSbusMessageReceivedCallback(
+    sbus_rc_->SetOnRcMessageReceivedCallback(
         std::bind(&SbotSystem::OnSbusMsgReceived, this, std::placeholders::_1));
   } else {
     XLOG_ERROR("Unsupported control input type specified");
@@ -65,7 +66,7 @@ bool SbotSystem::Initialize() {
   context.robot_base = sbot_;
   context.js_axis_queue = std::make_shared<ThreadSafeQueue<AxisEvent>>();
   context.js_button_queue = std::make_shared<ThreadSafeQueue<JsButton>>();
-  context.sbus_rc_queue = std::make_shared<ThreadSafeQueue<SbusMessage>>();
+  context.sbus_rc_queue = std::make_shared<ThreadSafeQueue<RcMessage>>();
   context.command_queue = std::make_shared<ThreadSafeQueue<UserCommand>>();
   context.feedback_queue = std::make_shared<ThreadSafeQueue<RobotFeedback>>();
 
@@ -138,37 +139,52 @@ void SbotSystem::OnJsAxisEvent(const JsAxis& axis, const float& value) {
   }
 }
 
-void SbotSystem::OnSbusMsgReceived(const SbusMessage& msg) {
-  static SbusMessage prev_msg;
-  if (prev_msg.channels[6] != msg.channels[6]) {
+void SbotSystem::OnSbusMsgReceived(const RcMessage& msg) {
+  static RcMessage prev_msg;
+  auto mode_chn = config_.control_settings.user_input.rc_receiver.mapping.mode;
+  auto lx_chn =
+      config_.control_settings.user_input.rc_receiver.mapping.linear_x;
+  auto ly_chn =
+      config_.control_settings.user_input.rc_receiver.mapping.linear_y;
+  auto az_chn =
+      config_.control_settings.user_input.rc_receiver.mapping.angular_z;
+
+  if (prev_msg.channels[mode_chn.channel] != msg.channels[mode_chn.channel]) {
     fsm_->GetContext().sbus_rc_queue->Push(msg);
   }
 
   // mimic joystick axis event
-  if (prev_msg.channels[3] != msg.channels[3] ||
-      prev_msg.channels[2] != msg.channels[2] ||
-      prev_msg.channels[0] != msg.channels[0]) {
+  if (prev_msg.channels[lx_chn.channel] != msg.channels[lx_chn.channel]) {
     AxisEvent event;
-    float lx = (msg.channels[3] - 1023) / 800.0f;
-    float ly = (msg.channels[2] - 1023) / 800.0f;
-    float ax = (msg.channels[0] - 1023) / 800.0f;
-    {
-      event.axis = JsAxis::kX;
-      event.value = lx;
-      fsm_->GetContext().js_axis_queue->Push(event);
-    }
-    {
-      event.axis = JsAxis::kY;
-      event.value = ly;
-      fsm_->GetContext().js_axis_queue->Push(event);
-    }
-    {
-      event.axis = JsAxis::kRX;
-      event.value = ax;
-      fsm_->GetContext().js_axis_queue->Push(event);
-    }
+    float lx = RcReceiverInterface::ScaleChannelValue(
+        msg.channels[lx_chn.channel], lx_chn.min, lx_chn.neutral, lx_chn.max);
+    event.axis = JsAxis::kX;
+    event.value = lx;
+    fsm_->GetContext().js_axis_queue->Push(event);
     // std::cout << "lx: " << lx << " ly: " << ly << " ax: " << ax << std::endl;
   }
+
+  if (prev_msg.channels[ly_chn.channel] != msg.channels[ly_chn.channel]) {
+    AxisEvent event;
+    float ly = RcReceiverInterface::ScaleChannelValue(
+        msg.channels[ly_chn.channel], ly_chn.min, ly_chn.neutral, ly_chn.max);
+    event.axis = JsAxis::kY;
+    event.value = ly;
+    fsm_->GetContext().js_axis_queue->Push(event);
+    // std::cout << "lx: " << lx << " ly: " << ly << " ax: " << ax << std::endl;
+  }
+
+  if (prev_msg.channels[az_chn.channel] != msg.channels[az_chn.channel]) {
+    AxisEvent event;
+    float ax = RcReceiverInterface::ScaleChannelValue(
+        msg.channels[az_chn.channel], az_chn.min, az_chn.neutral, az_chn.max);
+    event.axis = JsAxis::kRX;
+    event.value = ax;
+    fsm_->GetContext().js_axis_queue->Push(event);
+
+    // std::cout << "lx: " << lx << " ly: " << ly << " ax: " << ax << std::endl;
+  }
+
   prev_msg = msg;
 }
 
@@ -191,12 +207,12 @@ void SbotSystem::Stop() {
   if (control_thread_.joinable()) control_thread_.join();
 
   // stop the hid input
-  if (config_.control_settings.input_type ==
-      SbotConfig::ControlInputType::kJoystick) {
+  if (config_.control_settings.user_input.type ==
+      SbotConfig::UserInputType::kJoystick) {
     hid_event_listener_.reset();
     joystick_->Close();
-  } else if (config_.control_settings.input_type ==
-             SbotConfig::ControlInputType::kSbus) {
+  } else if (config_.control_settings.user_input.type ==
+             SbotConfig::UserInputType::kRcReceiver) {
     sbus_rc_->Close();
   }
 

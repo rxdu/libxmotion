@@ -42,6 +42,12 @@ struct Pose {
   Quaterniond orientation;
 };
 
+struct Euler {
+  float roll;
+  float pitch;
+  float yaw;
+};
+
 struct Odometry {
   std::string child_frame_id;
   Pose pose;

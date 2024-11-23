@@ -37,7 +37,7 @@ class SbotSystem {
   void ControlLoop();
   void OnJsButtonEvent(const JsButton& btn, const JxButtonEvent& event);
   void OnJsAxisEvent(const JsAxis& axis, const float& value);
-  void OnSbusMsgReceived(const SbusMessage& msg);
+  void OnSbusMsgReceived(const RcMessage& msg);
 
   SbotConfig config_;
   std::atomic<bool> keep_main_loop_{false};

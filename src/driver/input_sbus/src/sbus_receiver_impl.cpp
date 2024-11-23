@@ -53,13 +53,15 @@ class SbusReceiver::Impl {
     sbus_.uninstall();
   }
 
-  void SetOnSbusMessageReceivedCallback(OnSbusMessageReceivedCallback cb) {
-    on_sbus_message_received_cb_ = cb;
+  bool IsOpened() const { return keep_running_; }
+
+  void SetOnRcMessageReceivedCallback(OnRcMessageReceivedCallback cb) {
+    callback_ = cb;
   }
 
  private:
   void OnPacket(const sbus_packet_t& packet) {
-    SbusMessage msg;
+    RcMessage msg;
     for (int i = 0; i < 16; ++i) {
       msg.channels[i] = packet.channels[i];
     }
@@ -68,12 +70,12 @@ class SbusReceiver::Impl {
     msg.frame_loss = packet.frameLost;
     msg.fault_protection = packet.failsafe;
 
-    if (on_sbus_message_received_cb_) on_sbus_message_received_cb_(msg);
+    if (callback_) callback_(msg);
   }
 
   std::string port_;
   SBUS sbus_;
-  OnSbusMessageReceivedCallback on_sbus_message_received_cb_;
+  OnRcMessageReceivedCallback callback_;
 
   std::atomic_bool keep_running_{false};
   std::thread sbus_thread_;
