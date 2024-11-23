@@ -28,3 +28,6 @@
 [submodule "third_party/stb"]
 	path = third_party/stb
 	url = https://github.com/rxdu/stb.git
+[submodule "third_party/rpi_sbus"]
+	path = third_party/rpi_sbus
+	url = https://github.com/rxdu/raspberry_sbus.git
