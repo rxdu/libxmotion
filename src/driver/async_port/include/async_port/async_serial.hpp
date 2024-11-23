@@ -71,7 +71,7 @@ class AsyncSerial : public std::enable_shared_from_this<AsyncSerial>,
   uint32_t baud_rate_ = 115200;
   bool hwflow_ = false;
   ReceiveCallback rcv_cb_ = nullptr;
-  Parity parity_ = Parity::kEven;
+  Parity parity_ = Parity::kNone;
   StopBits stop_bits_ = StopBits::kOne;
 
   // tx/rx buffering
