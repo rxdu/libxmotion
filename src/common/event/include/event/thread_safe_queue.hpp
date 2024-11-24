@@ -14,7 +14,7 @@
 #include <memory>
 
 namespace xmotion {
-template <typename T>
+template <typename T, int N = 64>
 class ThreadSafeQueue {
  public:
   ThreadSafeQueue() = default;
@@ -42,6 +42,7 @@ class ThreadSafeQueue {
   // push data into the queue
   void Push(const T& data) {
     std::lock_guard<std::mutex> lock(mutex_);
+    if (queue_.size() == N) queue_.pop();
     queue_.push(data);
     condition_.notify_one();  // Notify one waiting thread
   }
