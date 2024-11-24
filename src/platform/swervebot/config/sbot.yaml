@@ -1,6 +1,6 @@
 robot_base:
-  steering_motor_port: /dev/ttyUSB1
-  driving_motor_port: /dev/ttyUSB2
+  steering_motor_port: /dev/ttyS0
+  driving_motor_port: /dev/ttyS2
   max_driving_speed: 1.0
   max_steering_angle: 1.57
   driving_deadzone: 0.005
@@ -18,12 +18,12 @@ control:
           min: 172
           neutral: 1000
           max: 1811
-        linear_x:
+        linear_y:
           channel: 2
           min: 172
           neutral: 992
           max: 1811
-        linear_y:
+        linear_x:
           channel: 1
           min: 172
           neutral: 967

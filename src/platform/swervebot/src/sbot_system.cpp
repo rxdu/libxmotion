@@ -103,18 +103,18 @@ void SbotSystem::ControlLoop() {
     last_time = now;
 
     // update control
-    // UserCommand cmd;
-    // while (context.command_queue->TryPop(cmd)) {
-    //   sbot_->SetMotionCommand({{cmd.vx, cmd.vy, 0}, {0, 0, cmd.wz}});
-    // }
-    // sbot_->Update(dt);
+    UserCommand cmd;
+    while (context.command_queue->TryPop(cmd)) {
+      sbot_->SetMotionCommand({{cmd.vx, cmd.vy, 0}, {0, 0, cmd.wz}});
+    }
+    sbot_->Update(dt);
 
     // time housekeeping
-    if ((dt - 0.02) / 0.02 > 0.1) {
+    if ((dt - 0.05) / 0.05 > 0.1) {
       XLOG_WARN("SbotSystem: control loop running at {} ms", dt * 1000);
     }
 
-    timer.sleep_until_ms(20);
+    timer.sleep_until_ms(50);
   }
   XLOG_INFO("SbotSystem: control loop exited");
 }
@@ -161,7 +161,7 @@ void SbotSystem::OnSbusMsgReceived(const RcMessage& msg) {
     event.axis = JsAxis::kX;
     event.value = lx;
     fsm_->GetContext().js_axis_queue->Push(event);
-    // std::cout << "lx: " << lx << " ly: " << ly << " ax: " << ax << std::endl;
+    // std::cout << "lx: " << lx << std::endl;
   }
 
   if (prev_msg.channels[ly_chn.channel] != msg.channels[ly_chn.channel]) {
@@ -169,20 +169,19 @@ void SbotSystem::OnSbusMsgReceived(const RcMessage& msg) {
     float ly = RcReceiverInterface::ScaleChannelValue(
         msg.channels[ly_chn.channel], ly_chn.min, ly_chn.neutral, ly_chn.max);
     event.axis = JsAxis::kY;
-    event.value = ly;
+    event.value = -ly;
     fsm_->GetContext().js_axis_queue->Push(event);
-    // std::cout << "lx: " << lx << " ly: " << ly << " ax: " << ax << std::endl;
+    //std::cout << "ly: " << ly << std::endl;
   }
 
   if (prev_msg.channels[az_chn.channel] != msg.channels[az_chn.channel]) {
     AxisEvent event;
-    float ax = RcReceiverInterface::ScaleChannelValue(
+    float az = RcReceiverInterface::ScaleChannelValue(
         msg.channels[az_chn.channel], az_chn.min, az_chn.neutral, az_chn.max);
     event.axis = JsAxis::kRX;
-    event.value = ax;
+    event.value = az;
     fsm_->GetContext().js_axis_queue->Push(event);
-
-    // std::cout << "lx: " << lx << " ly: " << ly << " ax: " << ax << std::endl;
+    //std::cout << "az: " << az << std::endl;
   }
 
   prev_msg = msg;

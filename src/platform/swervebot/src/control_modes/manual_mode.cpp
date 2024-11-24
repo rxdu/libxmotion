@@ -34,6 +34,8 @@ void ManualMode::Update(ControlContext& context) {
   UserCommand cmd;
   cmd.vx = vx_ * context.config.control_settings.manual_mode.driving_scale;
   cmd.vy = vy_ * context.config.control_settings.manual_mode.driving_scale;
+  cmd.vy *= 0.5;
+  if(cmd.vy < 0.1 && cmd.vy > -0.1) cmd.vy = 0; 
   cmd.wz = wz_ * context.config.control_settings.manual_mode.steering_scale;
 
   //  command_queue

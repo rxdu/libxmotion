@@ -19,7 +19,7 @@ OptionalStateVariant ModeTransition::Transit(ManualMode& state,
       context.config.control_settings.user_input.rc_receiver.mapping.mode;
   RcMessage sbus;
   if (context.sbus_rc_queue->TryPop(sbus)) {
-    if (sbus.channels[mode_chn_conf.channel] > 0) {
+    if (sbus.channels[mode_chn_conf.channel] > mode_chn_conf.neutral) {
       return AutoMode{context};
     }
   }
@@ -37,7 +37,7 @@ OptionalStateVariant ModeTransition::Transit(AutoMode& state,
       context.config.control_settings.user_input.rc_receiver.mapping.mode;
   RcMessage sbus;
   if (context.sbus_rc_queue->TryPop(sbus)) {
-    if (sbus.channels[mode_chn_conf.channel] < 0) {
+    if (sbus.channels[mode_chn_conf.channel] < mode_chn_conf.neutral) {
       return ManualMode{context};
     }
   }
