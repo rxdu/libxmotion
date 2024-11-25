@@ -22,10 +22,10 @@ class MotorAkelc final : public MotorControllerInterface {
   MotorAkelc(std::shared_ptr<MotorAkelcInterface> impl);
 
   // public interface
-  void SetSpeed(int32_t rpm) override;
-  int32_t GetSpeed() override;
+  void SetSpeed(float rpm) override;
+  float GetSpeed() override;
 
-  void ApplyBrake(double brake) override;
+  void ApplyBrake(float brake) override;
   void ReleaseBrake() override;
 
   bool IsNormal() override;

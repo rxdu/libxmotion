@@ -30,6 +30,29 @@ using JointVelocity3d = Eigen::Vector3d;
 // force/torque
 using Force3d = Eigen::Vector3d;
 using Torque3d = Eigen::Vector3d;
+
+// common
+struct Twist {
+  Velocity3d linear;
+  Velocity3d angular;
+};
+
+struct Pose {
+  Position3d position;
+  Quaterniond orientation;
+};
+
+struct Euler {
+  float roll;
+  float pitch;
+  float yaw;
+};
+
+struct Odometry {
+  std::string child_frame_id;
+  Pose pose;
+  Twist twist;
+};
 }  // namespace xmotion
 
 #endif  // QUADRUPED_MOTION_GEOMETRY_TYPES_HPP

@@ -15,8 +15,6 @@
 
 #include "logging/xlogger.hpp"
 
-#include "input_hid/keyboard_mapping.hpp"
-
 namespace xmotion {
 Keyboard::~Keyboard() {
   keep_running_ = false;

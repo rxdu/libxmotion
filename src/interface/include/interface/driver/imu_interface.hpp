@@ -12,7 +12,8 @@
 
 #include <string>
 
-#include "interface/types.hpp"
+#include "interface/type/base_types.hpp"
+#include "interface/type/geometry_types.hpp"
 
 namespace xmotion {
 struct ImuData {

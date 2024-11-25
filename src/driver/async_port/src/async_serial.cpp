@@ -17,16 +17,53 @@
 #include <iostream>
 
 namespace xmotion {
-AsyncSerial::AsyncSerial(std::string port_name, uint32_t baud_rate)
+AsyncSerial::AsyncSerial(const std::string &port_name, uint32_t baud_rate)
     : port_(port_name), baud_rate_(baud_rate), serial_port_(io_context_) {}
 
 AsyncSerial::~AsyncSerial() { Close(); }
 
-void AsyncSerial::SetBaudRate(unsigned baudrate) {
-  serial_port_.set_option(asio::serial_port_base::baud_rate(baudrate));
+void AsyncSerial::SetBaudRate(unsigned baudrate) { baud_rate_ = baudrate; }
+
+bool AsyncSerial::ChangeBaudRate(unsigned baudrate) {
+  int fd = serial_port_.native_handle();
+
+  struct serial_struct serial;
+  if (ioctl(fd, TIOCGSERIAL, &serial) < 0) {
+    perror("TIOCGSERIAL");
+    return false;
+  }
+
+  serial.flags &= ~ASYNC_SPD_MASK;  // Clear custom speed flags
+  serial.flags |= ASYNC_SPD_CUST;   // Enable custom speed
+  serial.custom_divisor = serial.baud_base / baudrate;
+
+  if (serial.custom_divisor == 0) {
+    fprintf(stderr, "Invalid custom divisor for baud rate %d\n", baudrate);
+    return false;
+  }
+
+  if (ioctl(fd, TIOCSSERIAL, &serial) < 0) {
+    perror("TIOCSSERIAL");
+    return false;
+  }
+
+  // Verify the settings
+  if (ioctl(fd, TIOCGSERIAL, &serial) < 0) {
+    perror("TIOCGSERIAL");
+    return false;
+  }
+
+  printf("Changed baudrate to: %d (divisor: %d, base: %d)\n", baudrate,
+         serial.custom_divisor, serial.baud_base);
+
+  return true;
 }
 
 void AsyncSerial::SetHardwareFlowControl(bool enabled) { hwflow_ = enabled; }
+
+void AsyncSerial::SetParity(Parity parity) { parity_ = parity; }
+
+void AsyncSerial::SetStopBits(StopBits stop_bits) { stop_bits_ = stop_bits; }
 
 bool AsyncSerial::Open() {
   using SPB = asio::serial_port_base;
@@ -37,8 +74,18 @@ bool AsyncSerial::Open() {
     // Set baudrate and 8N1 mode
     serial_port_.set_option(SPB::baud_rate(baud_rate_));
     serial_port_.set_option(SPB::character_size(8));
-    serial_port_.set_option(SPB::parity(SPB::parity::none));
-    serial_port_.set_option(SPB::stop_bits(SPB::stop_bits::one));
+    if (parity_ == Parity::kNone) {
+      serial_port_.set_option(SPB::parity(SPB::parity::none));
+    } else if (parity_ == Parity::kOdd) {
+      serial_port_.set_option(SPB::parity(SPB::parity::odd));
+    } else if (parity_ == Parity::kEven) {
+      serial_port_.set_option(SPB::parity(SPB::parity::even));
+    }
+    if (stop_bits_ == StopBits::kOne) {
+      serial_port_.set_option(SPB::stop_bits(SPB::stop_bits::one));
+    } else if (stop_bits_ == StopBits::kTwo) {
+      serial_port_.set_option(SPB::stop_bits(SPB::stop_bits::two));
+    }
     serial_port_.set_option(SPB::flow_control(
         (hwflow_) ? SPB::flow_control::hardware : SPB::flow_control::none));
 
@@ -78,7 +125,7 @@ void AsyncSerial::Close() {
   io_context_.stop();
   if (io_thread_.joinable()) io_thread_.join();
   io_context_.reset();
-  
+
   if (IsOpened()) {
     serial_port_.cancel();
     serial_port_.close();
@@ -122,7 +169,9 @@ void AsyncSerial::WriteToPort(bool check_if_busy) {
 
   auto sthis = shared_from_this();
   tx_in_progress_ = true;
-  auto len = tx_rbuf_.Read(tx_buf_, tx_rbuf_.GetOccupiedSize());
+  std::vector<uint8_t> data(tx_rbuf_.GetOccupiedSize());
+  auto len = tx_rbuf_.Read(data, tx_rbuf_.GetOccupiedSize());
+  std::memcpy(tx_buf_, data.data(), len);
   serial_port_.async_write_some(
       asio::buffer(tx_buf_, len),
       [sthis](asio::error_code error, size_t bytes_transferred) {
@@ -152,7 +201,8 @@ void AsyncSerial::SendBytes(const uint8_t *bytes, size_t length) {
         "AsyncSerial::SendBytes: tx buffer overflow, try to slow down sending "
         "data");
   }
-  tx_rbuf_.Write(bytes, length);
+  std::vector<uint8_t> data(bytes, bytes + length);
+  tx_rbuf_.Write(data, length);
   io_context_.post(
       std::bind(&AsyncSerial::WriteToPort, shared_from_this(), true));
 }

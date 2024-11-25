@@ -13,7 +13,7 @@
 
 #include <vector>
 
-#include "robot_base/speed_actuator_group.hpp"
+#include "robot_base/actuator/speed_actuator_group.hpp"
 
 namespace xmotion {
 class DifferentialDriveRobot {
@@ -37,7 +37,7 @@ class DifferentialDriveRobot {
 
   // public interface
   void SetMotionCommand(double linear_vel, double angular_vel);
-  void GetMotionStatus(double &linear_vel, double &angular_vel);
+  void GetMotionState(double &linear_vel, double &angular_vel);
 
  private:
   Config config_;

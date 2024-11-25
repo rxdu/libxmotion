@@ -1,0 +1,5 @@
+add_executable(test_event_sync test_event.cpp)
+target_link_libraries(test_event_sync PRIVATE event)
+
+add_executable(test_event_async test_async_event.cpp)
+target_link_libraries(test_event_async PRIVATE event)

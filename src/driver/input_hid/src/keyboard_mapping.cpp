@@ -7,7 +7,7 @@
  * Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#include "input_hid/keyboard_mapping.hpp"
+#include "input_hid/details/keyboard_mapping.hpp"
 
 #include <linux/input.h>
 

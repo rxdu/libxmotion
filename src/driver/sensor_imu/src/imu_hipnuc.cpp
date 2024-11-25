@@ -44,10 +44,10 @@ void UnpackData(hipnuc_raw_t *data, ImuData *data_imu) {
   data_imu->euler.pitch = data->imu.eul[1];
   data_imu->euler.yaw = data->imu.eul[2];
 
-  data_imu->quat.w = data->imu.quat[0];
-  data_imu->quat.x = data->imu.quat[1];
-  data_imu->quat.y = data->imu.quat[2];
-  data_imu->quat.z = data->imu.quat[3];
+  data_imu->quat.w() = data->imu.quat[0];
+  data_imu->quat.x() = data->imu.quat[1];
+  data_imu->quat.y() = data->imu.quat[2];
+  data_imu->quat.z() = data->imu.quat[3];
 }
 }  // namespace
 

@@ -19,21 +19,24 @@ endif ()
 
 ## Project Options
 option(BUILD_TESTING "Build tests" OFF)
-option(FORCE_BUILD_TESTS "Force build tests" OFF)
+option(XMOTION_DEV_MODE "Development mode forces building tests" OFF)
 option(ENABLE_LOGGING "Enable logging" ON)
 option(STATIC_CHECK "Enable static check" OFF)
 
 option(ENABLE_TBOT_APP "Enable tbot app" OFF)
+option(ENABLE_SWERVEBOT_APP "Enable swervebot app" OFF)
 option(ENABLE_QUADRUPED_APP "Enable quadruped app" OFF)
 option(ENABLE_VISUALIZATION "Enable visualization targets" ON)
 
-if (BUILD_AS_MODULE AND (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")))
-  message(STATUS "Disable visualization targets on non-x86_64 when built as module")
+if (BUILD_AS_MODULE OR (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")))
+  message(STATUS "Visualization targets are not build on non-x86_64 or when built as module")
   set(ENABLE_VISUALIZATION OFF)
 endif ()
 
 if (ENABLE_VISUALIZATION)
-  message(STATUS "Enable visualization targets")
+  message(STATUS "Visualization targets enabled")
+else ()
+  message(STATUS "Visualization targets enabled")
 endif ()
 
 ## Generate symbols for IDE indexer
@@ -63,7 +66,15 @@ include(GNUInstallDirs)
 ## Put all binary files into /bin and libraries into /lib
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+if (XMOTION_DEV_MODE)
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+else ()
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+endif ()
+
+if (XMOTION_DEV_MODE)
+  message(STATUS "xmotion development mode enabled")
+endif ()
 
 ## Chosse build type
 set(default_build_type "Release")
@@ -86,14 +97,14 @@ else (ENABLE_LOGGING)
 endif (ENABLE_LOGGING)
 
 ## Enable test if requested
-if (((PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME) AND BUILD_TESTING) OR FORCE_BUILD_TESTS)
+if (((NOT BUILD_AS_MODULE) AND BUILD_TESTING) OR XMOTION_DEV_MODE)
   enable_testing()
   include(GoogleTest)
   set(BUILD_TESTS ON)
-  message(STATUS "Tests will be built")
+  message(STATUS "xmotion tests will be built")
 else ()
   set(BUILD_TESTS OFF)
-  message(STATUS "Tests will not be built")
+  message(STATUS "xmotion tests will not be built")
 endif ()
 
 ## Dependent libraries
@@ -142,7 +153,7 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xmotionConfig.cmake"
 # Packaging support
 set(CPACK_DEBIAN_PACKAGE_NAME "libxmotion")
 set(CPACK_PACKAGE_VENDOR "Ruixiang Du")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "xMotion Library - a library for motion planning and control")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "xMotion Library - a library for robot motion planning and control")
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
