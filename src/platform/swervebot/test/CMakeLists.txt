@@ -1,2 +1,0 @@
-#add_executable(test_ws_sbot_base test_ws_sbot_base.cpp)
-#target_link_libraries(test_ws_sbot_base PRIVATE swervebot)

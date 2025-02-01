@@ -23,9 +23,6 @@ option(XMOTION_DEV_MODE "Development mode forces building tests" OFF)
 option(ENABLE_LOGGING "Enable logging" ON)
 option(STATIC_CHECK "Enable static check" OFF)
 
-option(ENABLE_TBOT_APP "Enable tbot app" OFF)
-option(ENABLE_SWERVEBOT_APP "Enable swervebot app" OFF)
-option(ENABLE_QUADRUPED_APP "Enable quadruped app" OFF)
 option(ENABLE_VISUALIZATION "Enable visualization targets" ON)
 
 if (BUILD_AS_MODULE OR (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")))

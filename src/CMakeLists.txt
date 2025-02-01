@@ -1,7 +1,4 @@
 ## Add source directories
-# Robots
-add_subdirectory(platform)
-
 # Modules
 add_subdirectory(common)
 add_subdirectory(interface)
