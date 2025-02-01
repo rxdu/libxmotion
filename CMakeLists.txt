@@ -31,11 +31,7 @@ option(ENABLE_VISUALIZATION "Enable visualization targets" ON)
 if (BUILD_AS_MODULE OR (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")))
   message(STATUS "Visualization targets are not build on non-x86_64 or when built as module")
   set(ENABLE_VISUALIZATION OFF)
-endif ()
-
-if (ENABLE_VISUALIZATION)
-  message(STATUS "Visualization targets enabled")
-else ()
+else()
   message(STATUS "Visualization targets enabled")
 endif ()
 
