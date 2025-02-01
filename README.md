@@ -8,22 +8,21 @@ production.
 
 Many of the components were initially created and maintained in a few other repositories, such
 as [librav](https://bitbucket.org/rdu/librav/src/next/), [imtoolkit](https://github.com/rxdu/imtoolkit). As the number
-of repositories and the size of my code base keep
-growing, I find it more and more challenging to keep the code up-to-date and ready for use. So I decide to gradually
-port and update relevant code from those repositories and put them here at one place for convenience of use and ease of
-maintenance.
+of repositories and the size of my code base kept growing, I found it more and more challenging to keep the code
+up-to-date and ready for use. So I decided to gradually port and update relevant code from those repositories and put
+them here at one place for convenience of use and ease of maintenance.
 
 ## Repository structure
 
-| Folder  | Description         |
-|---------|---------------------|
-| cmake   | cmake configuration |
-| data    | map, results, logs  |
-| docs    | documentation       |
-| src     | C++ code            |
-| python  | Python code         |
-| extern  | external libraries  |
-| scripts | bash scripts        |
+| Folder      | Description           |
+|-------------|-----------------------|
+| cmake       | cmake configuration   |
+| data        | map, results, logs    |
+| docs        | documentation         |
+| python      | Python code           |
+| scripts     | bash scripts          |
+| src         | C++ code              |
+| third_party | third-party libraries |
 
 ## Build and run
 
@@ -34,8 +33,10 @@ maintenance.
 #### Install dependencies
 
 ```
-$ sudo apt-get install -y libboost-all-dev libeigen3-dev libgsl-dev libtbb-dev libopencv-dev \
-    libgl1-mesa-dev libglfw3-dev libcairo2-dev libasio-dev libyaml-cpp-dev libncurses-dev libevdev-dev 
+$ sudo apt-get install -y libgl1-mesa-dev \
+   libglfw3-dev libcairo2-dev libtbb-dev libasio-dev libboost-all-dev \
+   libgsl-dev libeigen3-dev libtbb-dev libopencv-dev libyaml-cpp-dev \
+   libncurses-dev libevdev-dev libmodbus-dev libpcl-dev libglm-dev
 ```
 
 #### Compile code
@@ -43,14 +44,15 @@ $ sudo apt-get install -y libboost-all-dev libeigen3-dev libgsl-dev libtbb-dev l
 ```
 $ mkdir build
 $ cmake ..
-$ make -j8
+$ make -j
 ```
 
-**Note**: If you get any building issues, please refer to the CI configuration ".github/workflows/cmake.yml" for
-the current build steps.
+**Note**: If you encounter any building issues, please refer to the CI configuration ".github/workflows/main.yml" for
+the up-to-date build steps.
 
 #### Logging configurations
 
 * XLOG_LEVEL: 0 - 6, 0: TRACE, 1: DEBUG, 2: INFO, 3: WARN, 4: ERROR, 5: FATAL, 6: OFF
 * XLOG_ENABLE_LOGFILE: 0 or 1
 * XLOG_FOLDER: folder to store log files, default folder: `~/.xmotion/log`
+
