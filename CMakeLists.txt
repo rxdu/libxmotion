@@ -18,12 +18,13 @@ if (CCACHE_PROGRAM)
 endif ()
 
 ## Project Options
-option(BUILD_TESTING "Build tests" OFF)
-option(XMOTION_DEV_MODE "Development mode forces building tests" OFF)
-option(ENABLE_LOGGING "Enable logging" ON)
+option(BUILD_TESTING "Build tests" ON)
 option(STATIC_CHECK "Enable static check" OFF)
 
+option(ENABLE_LOGGING "Enable logging" ON)
 option(ENABLE_VISUALIZATION "Enable visualization targets" ON)
+
+option(XMOTION_DEV_MODE "Development mode forces building tests" OFF)
 
 ## Enable -fPIC for all targets
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
