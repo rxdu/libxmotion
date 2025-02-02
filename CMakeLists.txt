@@ -25,6 +25,9 @@ option(STATIC_CHECK "Enable static check" OFF)
 
 option(ENABLE_VISUALIZATION "Enable visualization targets" ON)
 
+## Enable -fPIC for all targets
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 if (BUILD_AS_MODULE OR (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")))
   message(STATUS "Visualization targets are not build on non-x86_64 or when built as module")
   set(ENABLE_VISUALIZATION OFF)
