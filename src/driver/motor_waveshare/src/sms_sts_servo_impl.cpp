@@ -8,6 +8,8 @@
 
 #include "motor_waveshare/sms_sts_servo.hpp"
 
+#include <thread>
+
 #include "SCServo.h"
 
 #include "logging/xlogger.hpp"
