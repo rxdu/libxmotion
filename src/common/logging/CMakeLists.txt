@@ -22,7 +22,13 @@ if (BUILD_TESTS)
   add_subdirectory(test)
 endif ()
 
-install(TARGETS logging spdlog
+if (USE_SYS_SPDLOG)
+  set(libs logging)
+else ()
+  set(libs logging spdlog)
+endif ()
+
+install(TARGETS ${libs}
     EXPORT xmotionTargets
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib

@@ -6,7 +6,11 @@ if (BUILD_TESTS)
   endif ()
 endif ()
 
-add_subdirectory(spdlog)
+
+if (NOT USE_SYS_SPDLOG)
+  add_subdirectory(spdlog)
+endif ()
+
 add_subdirectory(rapidcsv)
 
 add_subdirectory(stb)

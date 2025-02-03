@@ -23,16 +23,18 @@ option(STATIC_CHECK "Enable static check" OFF)
 
 option(ENABLE_LOGGING "Enable logging" ON)
 option(ENABLE_VISUALIZATION "Enable visualization targets" ON)
-
+option(USE_SYS_SPDLOG "Use system spdlog" OFF)
 option(XMOTION_DEV_MODE "Development mode forces building tests" OFF)
 
-## Enable -fPIC for all targets
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+if (DEFINED ENV{ROS_DISTRO} AND "$ENV{ROS_DISTRO}" STREQUAL "humble")
+  message(STATUS "ROS_DISTRO is $ENV{ROS_DISTRO}, use system spdlog")
+  set(USE_SYS_SPDLOG ON)
+endif ()
 
 if (BUILD_AS_MODULE OR (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")))
   message(STATUS "Visualization targets are not build on non-x86_64 or when built as module")
   set(ENABLE_VISUALIZATION OFF)
-else()
+else ()
   message(STATUS "Visualization targets enabled")
 endif ()
 
@@ -103,6 +105,9 @@ else ()
   set(BUILD_TESTS OFF)
   message(STATUS "xmotion tests will not be built")
 endif ()
+
+## Enable -fPIC for all targets
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 ## Dependent libraries
 add_subdirectory(third_party)
