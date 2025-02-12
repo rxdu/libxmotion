@@ -10,7 +10,6 @@ find_dependency(Threads REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(Libevent REQUIRED IMPORTED_TARGET libevent)
 find_dependency(graph REQUIRED)
-find_dependency(yoga REQUIRED)
 
 if (DEFINED ENV{ROS_DISTRO})
     find_dependency(spdlog REQUIRED)
