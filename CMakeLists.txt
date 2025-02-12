@@ -18,7 +18,7 @@ if (CCACHE_PROGRAM)
 endif ()
 
 ## Project Options
-option(BUILD_TESTING "Build tests" ON)
+option(BUILD_TESTING "Build tests" OFF)
 option(STATIC_CHECK "Enable static check" OFF)
 
 option(ENABLE_LOGGING "Enable logging" ON)
@@ -26,12 +26,16 @@ option(ENABLE_VISUALIZATION "Enable visualization targets" ON)
 option(USE_SYS_SPDLOG "Use system spdlog" OFF)
 option(XMOTION_DEV_MODE "Development mode forces building tests" OFF)
 
-if (DEFINED ENV{ROS_DISTRO} AND "$ENV{ROS_DISTRO}" STREQUAL "humble")
-  message(STATUS "ROS_DISTRO is $ENV{ROS_DISTRO}, use system spdlog")
+if (DEFINED ENV{ROS_DISTRO})
+  set(BUILD_WITH_ROS ON)
+endif ()
+
+if (BUILD_WITH_ROS)
+  message(STATUS "Use spdlog from the system installation")
   set(USE_SYS_SPDLOG ON)
 endif ()
 
-if (BUILD_AS_MODULE OR (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")))
+if (BUILD_WITH_ROS OR BUILD_AS_MODULE OR (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")))
   message(STATUS "Visualization targets are not build on non-x86_64 or when built as module")
   set(ENABLE_VISUALIZATION OFF)
 else ()
