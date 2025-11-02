@@ -18,9 +18,9 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <filesystem>
 
 #include <eigen3/Eigen/Core>
-#include <boost/filesystem.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -79,8 +79,8 @@ bool EigenIO::WriteToFile(
     bool overwrite) {
   // check directory existence: create the directory if non-existent
   if (directory.empty()) return false;
-  if (!boost::filesystem::exists(directory)) {
-    if (!boost::filesystem::create_directories(directory)) {
+  if (!std::filesystem::exists(directory)) {
+    if (!std::filesystem::create_directories(directory)) {
       XLOG_ERROR("directory is not found and failed to be created - {}",
                  directory);
       return false;
@@ -89,7 +89,7 @@ bool EigenIO::WriteToFile(
 
   // get full file name and check file existence
   filename = directory + "/" + filename;
-  if (boost::filesystem::exists(filename)) {
+  if (std::filesystem::exists(filename)) {
     if (!overwrite) {
       // File exists, but overwriting is not allowed. Abort.
       XLOG_ERROR("file already exists - {}", filename);
@@ -167,8 +167,8 @@ bool EigenIO::WriteToImage(
     bool overwrite) {
   // check directory existence: create the directory if non-existent
   if (directory.empty()) return false;
-  if (!boost::filesystem::exists(directory)) {
-    if (!boost::filesystem::create_directories(directory)) {
+  if (!std::filesystem::exists(directory)) {
+    if (!std::filesystem::create_directories(directory)) {
       XLOG_ERROR("directory is not found and failed to be created - {}",
                  directory);
       return false;
@@ -177,7 +177,7 @@ bool EigenIO::WriteToImage(
 
   // get full file name and check file existence
   filename = directory + "/" + filename;
-  if (boost::filesystem::exists(filename)) {
+  if (std::filesystem::exists(filename)) {
     if (!overwrite) {
       // File exists, but overwriting is not allowed. Abort.
       XLOG_ERROR("file already exists - {}", filename);

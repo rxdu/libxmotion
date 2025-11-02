@@ -1,7 +1,5 @@
-find_package(Boost REQUIRED filesystem)
-
 add_library(math_utils STATIC src/matrix.cpp)
-target_link_libraries(math_utils PUBLIC logging stb Boost::filesystem)
+target_link_libraries(math_utils PUBLIC logging stb)
 target_include_directories(math_utils PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
