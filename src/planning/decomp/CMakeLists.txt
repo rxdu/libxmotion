@@ -19,7 +19,7 @@ endif ()
 
 ## installation configuration
 install(TARGETS decomp
-    EXPORT xmotionTargets
+    EXPORT xmNablaTargets
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin

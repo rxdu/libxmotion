@@ -7,7 +7,7 @@ target_include_directories(spatial INTERFACE
 	$<INSTALL_INTERFACE:include>)
 
 install(TARGETS spatial
-		EXPORT xmotionTargets
+		EXPORT xmNablaTargets
 		LIBRARY DESTINATION lib
 		ARCHIVE DESTINATION lib
 		RUNTIME DESTINATION bin

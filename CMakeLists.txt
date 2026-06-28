@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.2)
-project(xmotion VERSION 0.1.0)
+project(xmNabla VERSION 0.1.0)
 
 message(STATUS "------------------------------------------------")
 if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
@@ -116,8 +116,50 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 ## Dependent libraries
 add_subdirectory(third_party)
 
+## Foundation + drivers (external). A parent superbuild may already provide them.
+if (NOT TARGET xmotion::xmSigma)
+  find_package(xmSigma QUIET)
+  if (NOT xmSigma_FOUND)
+    if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xmSigma/CMakeLists.txt)
+      add_subdirectory(third_party/xmSigma)
+    else ()
+      message(FATAL_ERROR "xmNabla: xmSigma not found — install it or init third_party/xmSigma")
+    endif ()
+  endif ()
+endif ()
+if (NOT TARGET xmotion::xmMu)
+  find_package(xmMu QUIET)
+  if (NOT xmMu_FOUND)
+    if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xmMu/CMakeLists.txt)
+      add_subdirectory(third_party/xmMu)
+    else ()
+      message(FATAL_ERROR "xmNabla: xmMu not found — install it or init third_party/xmMu")
+    endif ()
+  endif ()
+endif ()
+
 ## Add source directories
 add_subdirectory(src)
+
+## Aggregate interface target: consumers link a single `xmotion::xmNabla` to pull
+## in the xMotion algorithm libraries (estimation, control, planning).
+add_library(xmNabla INTERFACE)
+target_link_libraries(xmNabla INTERFACE
+    estimation
+    robot_base
+    pid
+    fsm
+    model
+    geometry
+    decomp
+    sampling)
+add_library(xmotion::xmNabla ALIAS xmNabla)
+install(TARGETS xmNabla
+    EXPORT xmNablaTargets
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include)
 
 ## Installation setup
 # Offer the user the choice of overriding the installation directories
@@ -142,19 +184,19 @@ endforeach ()
 # export target configuration
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
-    xmotionConfigVersion.cmake
+    xmNablaConfigVersion.cmake
     VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH}"
     COMPATIBILITY SameMajorVersion)
 
-install(EXPORT xmotionTargets
-    FILE xmotionTargets.cmake
+install(EXPORT xmNablaTargets
+    FILE xmNablaTargets.cmake
     NAMESPACE xmotion::
-    DESTINATION lib/cmake/xmotion)
+    DESTINATION lib/cmake/xmNabla)
 
-configure_file(cmake/xmotionConfig.cmake.in xmotionConfig.cmake @ONLY)
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xmotionConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/xmotionConfigVersion.cmake"
-    DESTINATION lib/cmake/xmotion)
+configure_file(cmake/xmNablaConfig.cmake.in xmNablaConfig.cmake @ONLY)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xmNablaConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/xmNablaConfigVersion.cmake"
+    DESTINATION lib/cmake/xmNabla)
 
 # Packaging support
 set(CPACK_DEBIAN_PACKAGE_NAME "libxmotion")

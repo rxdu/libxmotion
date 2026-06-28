@@ -15,7 +15,7 @@ endif ()
 
 ## installation configuration
 install(TARGETS pid
-    EXPORT xmotionTargets
+    EXPORT xmNablaTargets
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin
