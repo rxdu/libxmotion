@@ -16,12 +16,6 @@ if (BUILD_TESTS)
   add_subdirectory(test)
 endif ()
 
-install(TARGETS event
-    EXPORT xmNablaTargets
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    RUNTIME DESTINATION bin
-    INCLUDES DESTINATION include)
-
-install(DIRECTORY include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+# Internal build-only library — not part of xmNabla's public/exported API, so it
+# is intentionally not installed/exported. Promote to xmSigma if a second
+# component ever needs it (see ADR 0001 — foundation charter).
