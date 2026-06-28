@@ -5,7 +5,7 @@ add_library(estimation STATIC
     src/mekf6.cpp
     src/mekf9.cpp)
 target_link_libraries(estimation PUBLIC
-    interface
+    xmotion::interface
     Eigen3::Eigen)
 target_include_directories(estimation PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -19,3 +19,14 @@ endif ()
 if (BUILD_TESTS)
   add_subdirectory(test)
 endif ()
+
+## installation configuration
+install(TARGETS estimation
+    EXPORT xmNablaTargets
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include)
+
+install(DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

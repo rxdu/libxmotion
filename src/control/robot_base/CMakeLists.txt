@@ -8,7 +8,7 @@ add_library(robot_base
     src/differential_drive_robot.cpp
     src/swerve_drive_robot.cpp
     src/swerve_drive_kinematics.cpp)
-target_link_libraries(robot_base PUBLIC interface logging Eigen3::Eigen)
+target_link_libraries(robot_base PUBLIC xmotion::interface xmotion::logging Eigen3::Eigen)
 target_include_directories(robot_base PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
@@ -20,7 +20,7 @@ endif ()
 
 ## installation configuration
 install(TARGETS robot_base
-    EXPORT xmotionTargets
+    EXPORT xmNablaTargets
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin

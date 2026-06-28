@@ -11,7 +11,7 @@ if (ament_cmake_FOUND)
       app_mekf_estimator.cpp
       mekf_ros_node.cpp)
   target_link_libraries(app_mekf_estimator PRIVATE
-      sensor_imu
+      xmotion::sensor_imu
       estimation
       ${rclcpp_LIBRARIES}
       ${sensor_msgs_LIBRARIES}

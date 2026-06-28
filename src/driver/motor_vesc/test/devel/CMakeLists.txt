@@ -1,2 +1,0 @@
-add_executable(test_vesc_driver test_vesc_driver.cpp)
-target_link_libraries(test_vesc_driver motor_vesc)
