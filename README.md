@@ -1,23 +1,32 @@
-# xMotion Library
+<h1 align="center">
+  <img src="docs/xmnabla.svg" width="96" alt="xmNabla"><br>
+  xmNabla&nbsp;·&nbsp;∇
+</h1>
 
-![GitHub Workflow Status](https://github.com/rxdu/robosw/workflows/Main/badge.svg)
+<p align="center"><b>Motion algorithms for mobile robots</b> — planning, control, state estimation and mapping.<br>
+The ∇ centerpiece of the <a href="https://github.com/rxdu/xmotion">xMotion</a> family.</p>
 
-This repository contains a collection of software packages for **mobile robot motion planning and motion control**. At
-the moment, this library is mainly used for study, research and other experimental purposes. It is not yet ready for
-production.
+---
 
-Many of the components were initially created and maintained in a few other repositories, such
-as [librav](https://bitbucket.org/rdu/librav/src/next/), [imtoolkit](https://github.com/rxdu/imtoolkit). As the number
-of repositories and the size of my code base kept growing, I found it more and more challenging to keep the code
-up-to-date and ready for use. So I decided to gradually port and update relevant code from those repositories and put
-them here at one place for convenience of use and ease of maintenance.
+`xmNabla` is the motion-algorithms core of the **xMotion** product family: trajectory and path
+planning, feedback and optimal control, state estimation, and mapping. It consolidates code that
+was previously spread across several repositories (notably `librav` and `imtoolkit`) and, most
+recently, lived in `libxmotion`. At the moment it is used mainly for study, research and
+experimentation — not yet production-hardened.
+
+> **Transition status (Phase 1).** This repo was renamed from `libxmotion` and still vendors
+> `src/common` and `src/driver`, which are being extracted into sibling components
+> **[xmSigma](https://github.com/rxdu/xmSigma)** (foundation/common) and
+> **[xmMu](https://github.com/rxdu/xmMu)** (host hardware drivers). Until the Phase-2 decoupling,
+> `xmNabla` builds standalone exactly as before. See the umbrella's
+> [transition ADR](https://github.com/rxdu/xmotion/blob/main/docs/adr/0002-repo-transition-plan.md).
 
 ## Repository structure
 
 | Folder      | Description           |
 |-------------|-----------------------|
 | cmake       | cmake configuration   |
-| data        | map, results, logs    |
+| data        | maps, results, logs   |
 | docs        | documentation         |
 | python      | Python code           |
 | scripts     | bash scripts          |
@@ -26,7 +35,7 @@ them here at one place for convenience of use and ease of maintenance.
 
 ## Build and run
 
-#### Compiler Requirements
+#### Compiler requirements
 
 * C++11
 
@@ -39,20 +48,24 @@ $ sudo apt-get install -y libgl1-mesa-dev \
    libncurses-dev libevdev-dev libmodbus-dev libpcl-dev libglm-dev
 ```
 
-#### Compile code
+#### Compile
 
 ```
-$ mkdir build
+$ mkdir build && cd build
 $ cmake ..
 $ make -j
 ```
 
-**Note**: If you encounter any building issues, please refer to the CI configuration ".github/workflows/main.yml" for
-the up-to-date build steps.
+**Note:** if you hit build issues, refer to the CI workflow under `.github/workflows/` for the
+up-to-date steps.
 
-#### Logging configurations
+#### Logging configuration
 
-* XLOG_LEVEL: 0 - 6, 0: TRACE, 1: DEBUG, 2: INFO, 3: WARN, 4: ERROR, 5: FATAL, 6: OFF
-* XLOG_ENABLE_LOGFILE: 0 or 1
-* XLOG_FOLDER: folder to store log files, default folder: `~/.xmotion/log`
+* `XLOG_LEVEL`: 0–6 (0: TRACE, 1: DEBUG, 2: INFO, 3: WARN, 4: ERROR, 5: FATAL, 6: OFF)
+* `XLOG_ENABLE_LOGFILE`: 0 or 1
+* `XLOG_FOLDER`: folder for log files (default `~/.xmotion/log`)
 
+## License
+
+Apache-2.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE). First-party code only; bundled
+third-party components retain their own licenses.
