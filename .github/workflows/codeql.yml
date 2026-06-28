@@ -1,0 +1,62 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [ main, devel ]
+  pull_request:
+    branches: [ main, devel ]
+  schedule:
+    - cron: '23 5 * * 1'   # weekly, Monday 05:23 UTC
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-24.04
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - language: cpp
+            build-mode: manual
+          - language: python
+            build-mode: none
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+
+      # C++ uses build-mode "manual": CodeQL observes a real build, so mirror
+      # the C++ CI (deps + cmake) to cover what actually compiles.
+      - name: Install C++ dependencies
+        if: matrix.build-mode == 'manual'
+        run: |
+          sudo apt-get update && sudo apt-get install -y \
+            libgl1-mesa-dev libglfw3-dev libcairo2-dev libtbb-dev libasio-dev \
+            libboost-all-dev libgsl-dev libeigen3-dev libopencv-dev libyaml-cpp-dev \
+            libncurses-dev libevdev-dev libmodbus-dev libpcl-dev libglm-dev
+
+      - name: Build C++
+        if: matrix.build-mode == 'manual'
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j
+
+      # Python (build-mode "none"): analyzed directly, no build step.
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{ matrix.language }}"
