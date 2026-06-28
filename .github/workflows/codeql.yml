@@ -20,7 +20,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ cpp, python ]
+        include:
+          - language: cpp
+            build-mode: manual
+          - language: python
+            build-mode: none
 
     steps:
       - name: Checkout
@@ -29,14 +33,15 @@ jobs:
           submodules: recursive
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
 
-      # C++ is a compiled language: CodeQL must observe a real build.
-      # Mirror the C++ CI so the analysis covers what actually builds.
+      # C++ uses build-mode "manual": CodeQL observes a real build, so mirror
+      # the C++ CI (deps + cmake) to cover what actually compiles.
       - name: Install C++ dependencies
-        if: matrix.language == 'cpp'
+        if: matrix.build-mode == 'manual'
         run: |
           sudo apt-get update && sudo apt-get install -y \
             libgl1-mesa-dev libglfw3-dev libcairo2-dev libtbb-dev libasio-dev \
@@ -44,14 +49,14 @@ jobs:
             libncurses-dev libevdev-dev libmodbus-dev libpcl-dev libglm-dev
 
       - name: Build C++
-        if: matrix.language == 'cpp'
+        if: matrix.build-mode == 'manual'
         run: |
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
           cmake --build build -j
 
-      # Python is interpreted: no build step needed.
+      # Python (build-mode "none"): analyzed directly, no build step.
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         with:
           category: "/language:${{ matrix.language }}"
