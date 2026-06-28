@@ -1,0 +1,57 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [ main, devel ]
+  pull_request:
+    branches: [ main, devel ]
+  schedule:
+    - cron: '23 5 * * 1'   # weekly, Monday 05:23 UTC
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-24.04
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ cpp, python ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+
+      # C++ is a compiled language: CodeQL must observe a real build.
+      # Mirror the C++ CI so the analysis covers what actually builds.
+      - name: Install C++ dependencies
+        if: matrix.language == 'cpp'
+        run: |
+          sudo apt-get update && sudo apt-get install -y \
+            libgl1-mesa-dev libglfw3-dev libcairo2-dev libtbb-dev libasio-dev \
+            libboost-all-dev libgsl-dev libeigen3-dev libopencv-dev libyaml-cpp-dev \
+            libncurses-dev libevdev-dev libmodbus-dev libpcl-dev libglm-dev
+
+      - name: Build C++
+        if: matrix.language == 'cpp'
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j
+
+      # Python is interpreted: no build step needed.
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
