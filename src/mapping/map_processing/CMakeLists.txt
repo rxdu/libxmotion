@@ -13,11 +13,11 @@ add_library(map_processing
     src/trajectory_processor.cpp
 )
 target_link_libraries(map_processing PUBLIC
-    xmotion::interface
+    xmotion::xmSigma
+    xmotion::xmnabla_common
     pnm
     rapidcsv
     math_utils
-    xmotion::logging
     Eigen3::Eigen
     ${OpenCV_LIBS}
     ${PCL_LIBRARIES})

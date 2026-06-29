@@ -13,7 +13,7 @@
 #include <sensor_msgs/msg/imu.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
 
-#include "interface/driver/imu_interface.hpp"
+#include "xmmu/hal/imu_interface.hpp"
 #include "estimation/mekf6.hpp"
 
 namespace xmotion {

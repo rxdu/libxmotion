@@ -31,8 +31,8 @@
 #include <array>
 #include <memory>
 
-#include "interface/type/geometry_types.hpp"
-#include "interface/driver/motor_controller_array_interface.hpp"
+#include "xmotion/types/geometry_types.hpp"
+#include "xmmu/hal/motor_controller_array_interface.hpp"
 
 #include "robot_base/kinematics/swerve_drive_kinematics.hpp"
 

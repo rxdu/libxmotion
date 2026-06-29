@@ -24,7 +24,7 @@ add_executable(test_markov_motion test_markov_motion.cpp)
 target_link_libraries(test_markov_motion reachability utilities)
 
 add_executable(test_bigaussian test_bigaussian.cpp)
-target_link_libraries(test_bigaussian reachability xmotion::logging)
+target_link_libraries(test_bigaussian reachability xmotion::xmSigma)
 
 add_executable(test_matrix test_matrix.cpp)
 # target_link_libraries(test_matrix)

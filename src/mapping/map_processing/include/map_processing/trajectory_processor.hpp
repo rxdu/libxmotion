@@ -11,7 +11,7 @@
 
 #include <string>
 
-#include "interface/type/trajectory_types.hpp"
+#include "xmnabla/types/trajectory.hpp"
 
 namespace xmotion {
 class TrajectoryProcessor {

@@ -5,7 +5,7 @@ add_library(estimation STATIC
     src/mekf6.cpp
     src/mekf9.cpp)
 target_link_libraries(estimation PUBLIC
-    xmotion::interface
+    xmotion::hal
     Eigen3::Eigen)
 target_include_directories(estimation PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
