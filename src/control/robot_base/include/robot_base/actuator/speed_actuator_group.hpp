@@ -13,7 +13,7 @@
 #include <vector>
 #include <memory>
 
-#include "interface/driver/motor_controller_interface.hpp"
+#include "xmmu/hal/motor_controller_interface.hpp"
 #include "logging/xlogger.hpp"
 
 namespace xmotion {

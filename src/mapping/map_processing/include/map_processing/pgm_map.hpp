@@ -19,7 +19,7 @@
 
 #include <opencv4/opencv2/opencv.hpp>
 
-#include "interface/type/geometry_types.hpp"
+#include "xmotion/types/geometry_types.hpp"
 
 namespace xmotion {
 class PgmMap {
