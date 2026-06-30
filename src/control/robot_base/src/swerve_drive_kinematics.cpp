@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-#include "logging/xlogger.hpp"
+#include "xmsigma/logging/xlogger.hpp"
 
 namespace xmotion {
 namespace {

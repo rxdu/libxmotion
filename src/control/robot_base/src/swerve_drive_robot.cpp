@@ -8,7 +8,7 @@
 
 #include "robot_base/swerve_drive_robot.hpp"
 
-#include "logging/xlogger.hpp"
+#include "xmsigma/logging/xlogger.hpp"
 
 namespace xmotion {
 SwerveDriveRobot::SwerveDriveRobot(const SwerveDriveRobot::Config& config)

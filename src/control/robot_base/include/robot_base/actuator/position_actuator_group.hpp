@@ -14,7 +14,7 @@
 #include <memory>
 
 #include "xmmu/hal/motor_controller_interface.hpp"
-#include "logging/xlogger.hpp"
+#include "xmsigma/logging/xlogger.hpp"
 
 namespace xmotion {
 class PositionActuatorGroup final : public MotorControllerInterface {

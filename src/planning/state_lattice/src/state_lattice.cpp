@@ -12,7 +12,7 @@
 #include <iostream>
 #include <cmath>
 
-#include "logging/loggers.hpp"
+#include "xmsigma/logging/loggers.hpp"
 
 using namespace xmotion;
 

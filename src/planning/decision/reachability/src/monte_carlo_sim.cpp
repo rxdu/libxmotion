@@ -8,7 +8,7 @@
  */
 
 #include "reachability/monte_carlo_sim.hpp"
-#include "logging/loggers.hpp"
+#include "xmsigma/logging/loggers.hpp"
 
 using namespace xmotion;
 

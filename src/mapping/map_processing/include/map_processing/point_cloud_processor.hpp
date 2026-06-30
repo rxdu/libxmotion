@@ -13,7 +13,7 @@
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 
-#include "xmotion/types/geometry_types.hpp"
+#include "xmsigma/types/geometry_types.hpp"
 
 namespace xmotion {
 class PointCloudProcessor {

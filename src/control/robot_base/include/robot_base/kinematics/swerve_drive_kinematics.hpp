@@ -19,7 +19,7 @@
 
 #include <eigen3/Eigen/Core>
 
-#include "xmotion/types/geometry_types.hpp"
+#include "xmsigma/types/geometry_types.hpp"
 
 namespace xmotion {
 class SwerveDriveKinematics {
