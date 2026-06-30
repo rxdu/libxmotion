@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "xmotion/types/geometry_types.hpp"
+#include "xmsigma/types/geometry_types.hpp"
 
 namespace xmotion {
 struct TrajectoryPoint3d {

@@ -28,7 +28,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-#include "logging/xlogger.hpp"
+#include "xmsigma/logging/xlogger.hpp"
 
 namespace xmotion {
 template <typename Scalar, int RowsAtCompileTime, int ColsAtCompileTime>

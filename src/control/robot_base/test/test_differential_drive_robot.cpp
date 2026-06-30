@@ -13,7 +13,7 @@
 #include <thread>
 #include <cmath>
 
-#include "logging/xlogger.hpp"
+#include "xmsigma/logging/xlogger.hpp"
 
 #include "input_hid/joystick.hpp"
 

@@ -11,7 +11,7 @@
 #include <Eigen/Dense>
 #include "rapidcsv.h"
 
-#include "logging/xlogger.hpp"
+#include "xmsigma/logging/xlogger.hpp"
 
 namespace xmotion {
 void TrajectoryProcessor::LoadData(const std::string& filename,
