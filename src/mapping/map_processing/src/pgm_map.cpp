@@ -9,7 +9,7 @@
 
 #include "map_processing/pgm_map.hpp"
 
-#include "xmsigma/logging/xlogger.hpp"
+#include "xmbase/logging/xlogger.hpp"
 #include "math_utils/eigen_io.hpp"
 
 #include "pnm/pnm.hpp"

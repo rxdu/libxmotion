@@ -11,7 +11,7 @@
 
 #include <cmath>
 
-#include "xmsigma/logging/xlogger.hpp"
+#include "xmbase/logging/xlogger.hpp"
 
 namespace xmotion {
 DifferentialDriveRobot::DifferentialDriveRobot(const Config& config)

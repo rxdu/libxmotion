@@ -31,11 +31,11 @@
 [submodule "third_party/rpi_sbus"]
 	path = third_party/rpi_sbus
 	url = https://github.com/rxdu/raspberry_sbus.git
-[submodule "third_party/xmSigma"]
-	path = third_party/xmSigma
-	url = https://github.com/rxdu/xmSigma.git
+[submodule "third_party/xmBase"]
+	path = third_party/xmBase
+	url = https://github.com/rxdu/xmBase.git
 	branch = main
-[submodule "third_party/xmMu"]
-	path = third_party/xmMu
-	url = https://github.com/rxdu/xmMu.git
+[submodule "third_party/xmDriver"]
+	path = third_party/xmDriver
+	url = https://github.com/rxdu/xmDriver.git
 	branch = main

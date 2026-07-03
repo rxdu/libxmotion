@@ -13,7 +13,7 @@
 
 #include "state_lattice/primitive_generator.hpp"
 
-#include "xmsigma/logging/loggers.hpp"
+#include "xmbase/logging/loggers.hpp"
 
 using namespace xmotion;
 

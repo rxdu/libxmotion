@@ -1,14 +1,14 @@
 <h1 align="center">
-  <img src="docs/xmnabla.svg" width="96" alt="xmNabla"><br>
-  xmNabla&nbsp;·&nbsp;∇
+  <img src="docs/xmnavigation.svg" width="96" alt="xmNavigation"><br>
+  xmNavigation&nbsp;·&nbsp;∇
 </h1>
 
 <p align="center"><b>Motion algorithms for mobile robots</b> — planning, control, state estimation and mapping.<br>
-The ∇ centerpiece of the <a href="https://github.com/rxdu/xmotion">xMotion</a> family.</p>
+The ∇ centerpiece of the <a href="https://github.com/rxdu/xmotion">XMotion</a> family.</p>
 
 ---
 
-`xmNabla` is the motion-algorithms core of the **xMotion** product family: trajectory and path
+`xmNavigation` is the motion-algorithms core of the **XMotion** product family: trajectory and path
 planning, feedback and optimal control, state estimation, and mapping. It consolidates code that
 was previously spread across several repositories (notably `librav` and `imtoolkit`) and, most
 recently, lived in `libxmotion`. At the moment it is used mainly for study, research and
@@ -16,9 +16,9 @@ experimentation — not yet production-hardened.
 
 > **Transition status (Phase 1).** This repo was renamed from `libxmotion` and still vendors
 > `src/common` and `src/driver`, which are being extracted into sibling components
-> **[xmSigma](https://github.com/rxdu/xmSigma)** (foundation/common) and
-> **[xmMu](https://github.com/rxdu/xmMu)** (host hardware drivers). Until the Phase-2 decoupling,
-> `xmNabla` builds standalone exactly as before. See the umbrella's
+> **[xmBase](https://github.com/rxdu/xmBase)** (foundation/common) and
+> **[xmDriver](https://github.com/rxdu/xmDriver)** (host hardware drivers). Until the Phase-2 decoupling,
+> `xmNavigation` builds standalone exactly as before. See the umbrella's
 > [transition ADR](https://github.com/rxdu/xmotion/blob/main/docs/adr/0002-repo-transition-plan.md).
 
 ## Repository structure

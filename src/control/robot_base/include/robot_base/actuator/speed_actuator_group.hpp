@@ -13,8 +13,8 @@
 #include <vector>
 #include <memory>
 
-#include "xmmu/hal/motor_controller_interface.hpp"
-#include "xmsigma/logging/xlogger.hpp"
+#include "xmdriver/hal/motor_controller_interface.hpp"
+#include "xmbase/logging/xlogger.hpp"
 
 namespace xmotion {
 class SpeedActuatorGroup final : public MotorControllerInterface {

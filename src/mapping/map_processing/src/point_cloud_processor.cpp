@@ -8,7 +8,7 @@
 
 #include "map_processing/point_cloud_processor.hpp"
 
-#include "xmsigma/logging/xlogger.hpp"
+#include "xmbase/logging/xlogger.hpp"
 
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/ply_io.h>

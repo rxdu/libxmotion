@@ -6,9 +6,9 @@ include(CMakeFindDependencyMacro)
 # Same syntax as find_package
 find_dependency(Threads REQUIRED)
 
-# Foundation + drivers (external xMotion components)
-find_dependency(xmSigma)
-find_dependency(xmMu)
+# Foundation + drivers (external XMotion components)
+find_dependency(xmBase)
+find_dependency(xmDriver)
 
 # Any extra setup
 find_package(PkgConfig REQUIRED)
@@ -20,4 +20,4 @@ if (DEFINED ENV{ROS_DISTRO})
 endif ()
 
 # Add the targets file
-include("${CMAKE_CURRENT_LIST_DIR}/xmNablaTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/xmNavigationTargets.cmake")

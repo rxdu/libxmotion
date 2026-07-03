@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.2)
-project(xmNabla VERSION 0.1.0)
+project(xmNavigation VERSION 0.1.0)
 
 message(STATUS "------------------------------------------------")
 if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
@@ -117,23 +117,23 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_subdirectory(third_party)
 
 ## Foundation + drivers (external). A parent superbuild may already provide them.
-if (NOT TARGET xmotion::xmSigma)
-  find_package(xmSigma QUIET)
-  if (NOT xmSigma_FOUND)
-    if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xmSigma/CMakeLists.txt)
-      add_subdirectory(third_party/xmSigma)
+if (NOT TARGET xmotion::xmBase)
+  find_package(xmBase QUIET)
+  if (NOT xmBase_FOUND)
+    if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xmBase/CMakeLists.txt)
+      add_subdirectory(third_party/xmBase)
     else ()
-      message(FATAL_ERROR "xmNabla: xmSigma not found — install it or init third_party/xmSigma")
+      message(FATAL_ERROR "xmNavigation: xmBase not found — install it or init third_party/xmBase")
     endif ()
   endif ()
 endif ()
-if (NOT TARGET xmotion::xmMu)
-  find_package(xmMu QUIET)
-  if (NOT xmMu_FOUND)
-    if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xmMu/CMakeLists.txt)
-      add_subdirectory(third_party/xmMu)
+if (NOT TARGET xmotion::xmDriver)
+  find_package(xmDriver QUIET)
+  if (NOT xmDriver_FOUND)
+    if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xmDriver/CMakeLists.txt)
+      add_subdirectory(third_party/xmDriver)
     else ()
-      message(FATAL_ERROR "xmNabla: xmMu not found — install it or init third_party/xmMu")
+      message(FATAL_ERROR "xmNavigation: xmDriver not found — install it or init third_party/xmDriver")
     endif ()
   endif ()
 endif ()
@@ -141,10 +141,10 @@ endif ()
 ## Add source directories
 add_subdirectory(src)
 
-## Aggregate interface target: consumers link a single `xmotion::xmNabla` to pull
-## in the xMotion algorithm libraries (estimation, control, planning).
-add_library(xmNabla INTERFACE)
-target_link_libraries(xmNabla INTERFACE
+## Aggregate interface target: consumers link a single `xmotion::xmNavigation` to pull
+## in the XMotion algorithm libraries (estimation, control, planning).
+add_library(xmNavigation INTERFACE)
+target_link_libraries(xmNavigation INTERFACE
     estimation
     robot_base
     pid
@@ -153,9 +153,9 @@ target_link_libraries(xmNabla INTERFACE
     geometry
     decomp
     sampling)
-add_library(xmotion::xmNabla ALIAS xmNabla)
-install(TARGETS xmNabla
-    EXPORT xmNablaTargets
+add_library(xmotion::xmNavigation ALIAS xmNavigation)
+install(TARGETS xmNavigation
+    EXPORT xmNavigationTargets
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin
@@ -184,24 +184,24 @@ endforeach ()
 # export target configuration
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
-    xmNablaConfigVersion.cmake
+    xmNavigationConfigVersion.cmake
     VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH}"
     COMPATIBILITY SameMajorVersion)
 
-install(EXPORT xmNablaTargets
-    FILE xmNablaTargets.cmake
+install(EXPORT xmNavigationTargets
+    FILE xmNavigationTargets.cmake
     NAMESPACE xmotion::
-    DESTINATION lib/cmake/xmNabla)
+    DESTINATION lib/cmake/xmNavigation)
 
-configure_file(cmake/xmNablaConfig.cmake.in xmNablaConfig.cmake @ONLY)
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xmNablaConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/xmNablaConfigVersion.cmake"
-    DESTINATION lib/cmake/xmNabla)
+configure_file(cmake/xmNavigationConfig.cmake.in xmNavigationConfig.cmake @ONLY)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xmNavigationConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/xmNavigationConfigVersion.cmake"
+    DESTINATION lib/cmake/xmNavigation)
 
 # Packaging support
 set(CPACK_DEBIAN_PACKAGE_NAME "libxmotion")
 set(CPACK_PACKAGE_VENDOR "Ruixiang Du")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "xMotion Library - a library for robot motion planning and control")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "XMotion Library - a library for robot motion planning and control")
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})

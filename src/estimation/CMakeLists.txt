@@ -22,7 +22,7 @@ endif ()
 
 ## installation configuration
 install(TARGETS estimation
-    EXPORT xmNablaTargets
+    EXPORT xmNavigationTargets
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin
