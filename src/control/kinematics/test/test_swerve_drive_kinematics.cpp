@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-#include "robot_base/kinematics/swerve_drive_kinematics.hpp"
+#include "kinematics/swerve_drive_kinematics.hpp"
 
 using namespace xmotion;
 

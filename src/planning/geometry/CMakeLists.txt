@@ -24,7 +24,7 @@ if (BUILD_TESTS)
 endif ()
 
 install(TARGETS geometry
-    EXPORT xmNablaTargets
+    EXPORT xmNavigationTargets
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin

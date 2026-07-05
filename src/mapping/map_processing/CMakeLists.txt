@@ -13,8 +13,8 @@ add_library(map_processing
     src/trajectory_processor.cpp
 )
 target_link_libraries(map_processing PUBLIC
-    xmotion::xmSigma
-    xmotion::xmnabla_common
+    xmotion::xmBase
+    xmotion::xmnavigation_common
     pnm
     rapidcsv
     math_utils

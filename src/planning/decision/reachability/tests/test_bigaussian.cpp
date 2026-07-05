@@ -5,7 +5,7 @@
 // #include <gsl/gsl_randist.h>
 #include "random/bigaussian_sampler.hpp"
 
-#include "xmsigma/logging/loggers.hpp"
+#include "xmbase/logging/loggers.hpp"
 
 using namespace xmotion;
 
