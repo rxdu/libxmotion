@@ -9,7 +9,7 @@
 
 #include "gtest/gtest.h"
 
-#include "xmnavigation/math_utils/eigen_io.hpp"
+#include "eigen_io.hpp"
 
 using namespace xmotion;
 

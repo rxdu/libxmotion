@@ -156,8 +156,6 @@ add_subdirectory(src)
 add_library(xmNavigation INTERFACE)
 target_link_libraries(xmNavigation INTERFACE
     xmnavigation_common
-    event
-    math_utils
     estimation
     kinematics
     pid

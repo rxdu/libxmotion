@@ -38,6 +38,6 @@ bool WriteToImage(
 }  // namespace EigenIO
 }  // namespace xmotion
 
-#include "details/eigen_io_impl.hpp"
+#include "eigen_io_impl.hpp"
 
 #endif /* FILE_IO_HPP */
