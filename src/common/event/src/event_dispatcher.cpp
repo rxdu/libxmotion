@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#include "event/event_dispatcher.hpp"
+#include "xmnavigation/event/event_dispatcher.hpp"
 
 namespace xmotion {
 EventDispatcher& EventDispatcher::GetInstance() {

@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "traffic_map/map_loader.hpp"
-#include "prediction/dynamic_threat_model.hpp"
+#include "xmnavigation/prediction/dynamic_threat_model.hpp"
 
 #include "stopwatch.hpp"
 

@@ -7,7 +7,7 @@
  * Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#include "estimation/mekf6.hpp"
+#include "xmnavigation/estimation/mekf6.hpp"
 
 #include <iostream>
 

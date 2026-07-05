@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "state_lattice/details/point_kinematics.hpp"
+#include "xmnavigation/state_lattice/details/point_kinematics.hpp"
 
 using namespace xmotion;
 

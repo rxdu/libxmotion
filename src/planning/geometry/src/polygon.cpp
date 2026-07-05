@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "geometry/polygon.hpp"
+#include "xmnavigation/geometry/polygon.hpp"
 
 #include <iterator>
 #include <cassert>

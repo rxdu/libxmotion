@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "reachability/details/tstate_transition_sim.hpp"
+#include "xmnavigation/reachability/details/tstate_transition_sim.hpp"
 
 #include <unordered_map>
 

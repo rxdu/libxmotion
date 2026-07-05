@@ -9,7 +9,7 @@
 
 #include "gtest/gtest.h"
 
-#include "geometry/polyline.hpp"
+#include "xmnavigation/geometry/polyline.hpp"
 
 using namespace xmotion;
 

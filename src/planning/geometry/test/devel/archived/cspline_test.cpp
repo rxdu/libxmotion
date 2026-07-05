@@ -13,7 +13,7 @@
 
 #include "gtest/gtest.h"
 
-#include "geometry/cspline.hpp"
+#include "xmnavigation/geometry/cspline.hpp"
 
 using namespace xmotion;
 

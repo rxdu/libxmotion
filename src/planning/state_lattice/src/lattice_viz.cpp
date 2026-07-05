@@ -7,10 +7,10 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "state_lattice/lattice_viz.hpp"
+#include "xmnavigation/state_lattice/lattice_viz.hpp"
 
 #include "cvdraw/cvdraw.hpp"
-#include "state_lattice/lattice_draw.hpp"
+#include "xmnavigation/state_lattice/lattice_draw.hpp"
 
 using namespace xmotion;
 

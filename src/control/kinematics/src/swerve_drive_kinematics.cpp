@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#include "kinematics/swerve_drive_kinematics.hpp"
+#include "xmnavigation/kinematics/swerve_drive_kinematics.hpp"
 
 #include <iostream>
 

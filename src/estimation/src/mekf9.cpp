@@ -7,6 +7,6 @@
  * Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#include "estimation/mekf9.hpp"
+#include "xmnavigation/estimation/mekf9.hpp"
 
 namespace xmotion {}  // namespace xmotion

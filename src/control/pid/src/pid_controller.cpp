@@ -7,7 +7,7 @@
  * Copyright (c) 2022 Ruixiang Du (rdu)
  */
 
-#include "pid/pid_controller.hpp"
+#include "xmnavigation/pid/pid_controller.hpp"
 
 #include <cmath>
 

@@ -7,10 +7,10 @@
  * Copyright (c) 2021 Ruixiang Du (rdu)
  */
 
-#include "map_processing/pgm_map.hpp"
+#include "xmnavigation/map_processing/pgm_map.hpp"
 
 #include "xmbase/telemetry/telemetry.hpp"
-#include "math_utils/eigen_io.hpp"
+#include "xmnavigation/math_utils/eigen_io.hpp"
 
 #include "pnm/pnm.hpp"
 

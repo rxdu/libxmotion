@@ -14,7 +14,7 @@
 
 #include "gtest/gtest.h"
 
-#include "markov/markov_chain_x.hpp"
+#include "xmnavigation/markov/markov_chain_x.hpp"
 
 using namespace xmotion;
 

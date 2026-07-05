@@ -7,7 +7,7 @@
  * Copyright (c) 2019 Ruixiang Du (rdu)
  */
 
-#include "random/uniform_sampler.hpp"
+#include "xmnavigation/random/uniform_sampler.hpp"
 
 using namespace xmotion;
 

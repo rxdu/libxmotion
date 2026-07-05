@@ -10,7 +10,7 @@
 #include <iostream>
 #include <opencv4/opencv2/opencv.hpp>
 
-#include "map_processing/pgm_map.hpp"
+#include "xmnavigation/map_processing/pgm_map.hpp"
 
 using namespace xmotion;
 
