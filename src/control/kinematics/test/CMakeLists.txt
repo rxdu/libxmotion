@@ -1,0 +1,2 @@
+add_executable(test_swerve_drive_kinematics test_swerve_drive_kinematics.cpp)
+target_link_libraries(test_swerve_drive_kinematics PRIVATE kinematics)

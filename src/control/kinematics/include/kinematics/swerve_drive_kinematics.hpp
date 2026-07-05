@@ -12,14 +12,14 @@
  * @copyright Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#ifndef XMOTION_SWERVE_DRIVE_KINEMATICS_HPP
-#define XMOTION_SWERVE_DRIVE_KINEMATICS_HPP
+#ifndef XMOTION_KINEMATICS_SWERVE_DRIVE_KINEMATICS_HPP
+#define XMOTION_KINEMATICS_SWERVE_DRIVE_KINEMATICS_HPP
 
 #include <array>
 
 #include <eigen3/Eigen/Core>
 
-#include "xmsigma/types/geometry_types.hpp"
+#include "xmbase/types/geometry_types.hpp"
 
 namespace xmotion {
 class SwerveDriveKinematics {
@@ -78,4 +78,4 @@ class SwerveDriveKinematics {
 };
 }  // namespace xmotion
 
-#endif  // XMOTION_SWERVE_DRIVE_KINEMATICS_HPP
+#endif  // XMOTION_KINEMATICS_SWERVE_DRIVE_KINEMATICS_HPP

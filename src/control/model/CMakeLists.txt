@@ -15,7 +15,7 @@ endif ()
 
 ## installation configuration
 install(TARGETS model
-    EXPORT xmNablaTargets
+    EXPORT xmNavigationTargets
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin

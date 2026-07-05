@@ -28,7 +28,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-#include "xmsigma/logging/xlogger.hpp"
+#include "xmbase/telemetry/telemetry.hpp"
 
 namespace xmotion {
 template <typename Scalar, int RowsAtCompileTime, int ColsAtCompileTime>
@@ -38,7 +38,7 @@ bool EigenIO::ReadFromFile(
   // check file
   std::ifstream input(filename.c_str());
   if (input.fail()) {
-    XLOG_ERROR("failed to find file - {}", filename);
+    XM_ERROR("failed to find file - {}", filename);
     m = Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime>(0, 0);
     return false;
   }
@@ -81,7 +81,7 @@ bool EigenIO::WriteToFile(
   if (directory.empty()) return false;
   if (!std::filesystem::exists(directory)) {
     if (!std::filesystem::create_directories(directory)) {
-      XLOG_ERROR("directory is not found and failed to be created - {}",
+      XM_ERROR("directory is not found and failed to be created - {}",
                  directory);
       return false;
     }
@@ -92,7 +92,7 @@ bool EigenIO::WriteToFile(
   if (std::filesystem::exists(filename)) {
     if (!overwrite) {
       // File exists, but overwriting is not allowed. Abort.
-      XLOG_ERROR("file already exists - {}", filename);
+      XM_ERROR("file already exists - {}", filename);
       return false;
     }
   }
@@ -101,7 +101,7 @@ bool EigenIO::WriteToFile(
   std::ofstream file;
   file.open(filename.c_str());
   if (!file.is_open()) {
-    XLOG_ERROR("failed to open file - {}", filename);
+    XM_ERROR("failed to open file - {}", filename);
     return false;
   }
 
@@ -119,7 +119,7 @@ bool EigenIO::ReadFromImage(
   // check file
   std::ifstream input(filename.c_str());
   if (input.fail()) {
-    XLOG_ERROR("failed to find file - {}", filename);
+    XM_ERROR("failed to find file - {}", filename);
     m = Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime>(0, 0);
     return false;
   }
@@ -137,7 +137,7 @@ bool EigenIO::ReadFromImage(
   m = Eigen::Matrix<Scalar, RowsAtCompileTime, ColsAtCompileTime>(row_num,
                                                                   col_num);
 
-  XLOG_DEBUG("read image size (w,y,d): {} , {} , {}", x, y, n);
+  XM_DEBUG("read image size (w,y,d): {} , {} , {}", x, y, n);
 
   if (n <= 2) {
     for (int32_t j = 0; j < y; ++j) {
@@ -169,7 +169,7 @@ bool EigenIO::WriteToImage(
   if (directory.empty()) return false;
   if (!std::filesystem::exists(directory)) {
     if (!std::filesystem::create_directories(directory)) {
-      XLOG_ERROR("directory is not found and failed to be created - {}",
+      XM_ERROR("directory is not found and failed to be created - {}",
                  directory);
       return false;
     }
@@ -180,7 +180,7 @@ bool EigenIO::WriteToImage(
   if (std::filesystem::exists(filename)) {
     if (!overwrite) {
       // File exists, but overwriting is not allowed. Abort.
-      XLOG_ERROR("file already exists - {}", filename);
+      XM_ERROR("file already exists - {}", filename);
       return false;
     }
   }

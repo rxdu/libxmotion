@@ -11,7 +11,7 @@
 #include <Eigen/Dense>
 #include "rapidcsv.h"
 
-#include "xmsigma/logging/xlogger.hpp"
+#include "xmbase/telemetry/telemetry.hpp"
 
 namespace xmotion {
 void TrajectoryProcessor::LoadData(const std::string& filename,
@@ -30,7 +30,7 @@ void TrajectoryProcessor::LoadData(const std::string& filename,
       point.orientation.y() = doc.GetCell<double>(5, i);
       point.orientation.z() = doc.GetCell<double>(6, i);
       point.orientation.w() = doc.GetCell<double>(7, i);
-      //    XLOG_INFO("Time: {}, Position: {},{},{}, Orientation: {},{},{},{}",
+      //    XM_INFO("Time: {}, Position: {},{},{}, Orientation: {},{},{},{}",
       //              point.time, point.position.x(), point.position.y(),
       //              point.position.z(), point.orientation.coeffs().x(),
       //              point.orientation.coeffs().y(),
@@ -39,7 +39,7 @@ void TrajectoryProcessor::LoadData(const std::string& filename,
       trajectory_.points.push_back(point);
     }
   } else {
-    XLOG_ERROR("Unsupported data format");
+    XM_ERROR("Unsupported data format");
   }
 }
 
@@ -48,7 +48,7 @@ bool TrajectoryProcessor::FindPlane(uint32_t traj_idx_start,
                                     PlaneDescriptor& plane) {
   if (traj_idx_start >= trajectory_.points.size() ||
       traj_idx_end >= trajectory_.points.size()) {
-    XLOG_ERROR("Trajectory index out of range");
+    XM_ERROR("Trajectory index out of range");
     return false;
   }
 
