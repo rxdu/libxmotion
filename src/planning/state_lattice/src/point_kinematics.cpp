@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "state_lattice/details/point_kinematics.hpp"
+#include "xmnavigation/state_lattice/details/point_kinematics.hpp"
 
 using namespace xmotion;
 
@@ -29,7 +29,7 @@ void PointKinematics::CalculateIntermediateParams(const Param &p)
 }
 
 // x0 = x, x1 = y
-void PointKinematics::operator()(const state_type &x, state_type &xd, const double s)
+void PointKinematics::operator()(const state_type & /*x*/, state_type &xd, const double s)
 {
     double s_squared = s * s;
     double theta_p = a_ * s + b_ * s_squared / 2.0 + c_ * s_squared * s / 3.0 + d_ * s_squared * s_squared / 4.0;

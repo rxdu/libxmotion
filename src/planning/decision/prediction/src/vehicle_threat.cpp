@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "prediction/vehicle_threat.hpp"
+#include "xmnavigation/prediction/vehicle_threat.hpp"
 
 // #include <tbb/tbb.h>
 

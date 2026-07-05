@@ -117,6 +117,15 @@ if (NOT TARGET xmotion::xmBase)
   endif ()
 endif ()
 
+## pnm/rapidcsv declare bare include paths (unexportable) and predate
+## install support; rewrap and install their headers here.
+set_target_properties(pnm PROPERTIES INTERFACE_INCLUDE_DIRECTORIES
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party/pnm/include>;$<INSTALL_INTERFACE:include>")
+set_target_properties(rapidcsv PROPERTIES INTERFACE_INCLUDE_DIRECTORIES
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party/rapidcsv/src>;$<INSTALL_INTERFACE:include>")
+install(DIRECTORY third_party/pnm/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES third_party/rapidcsv/src/rapidcsv.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
 if (XMOTION_WERROR)
   # Applied after third_party/xmBase so vendored code builds with its own
   # flags. -Wmaybe-uninitialized stays a visible warning but does not gate:
@@ -135,6 +144,10 @@ if (XMOTION_WERROR)
   endforeach ()
 endif ()
 
+## Vendored header-only libraries referenced by exported static targets
+## must be resolvable from the export set (their headers install already).
+install(TARGETS stb pnm rapidcsv stopwatch EXPORT xmNavigationTargets)
+
 ## Add source directories
 add_subdirectory(src)
 
@@ -142,6 +155,9 @@ add_subdirectory(src)
 ## in the XMotion algorithm libraries (estimation, control, planning).
 add_library(xmNavigation INTERFACE)
 target_link_libraries(xmNavigation INTERFACE
+    xmnavigation_common
+    event
+    math_utils
     estimation
     kinematics
     pid
@@ -149,7 +165,11 @@ target_link_libraries(xmNavigation INTERFACE
     model
     geometry
     decomp
-    sampling)
+    sampling
+    map_processing
+    lattice
+    markov
+    reachability)
 add_library(xmotion::xmNavigation ALIAS xmNavigation)
 install(TARGETS xmNavigation
     EXPORT xmNavigationTargets
@@ -207,7 +227,7 @@ set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 # Algorithm-centric dependency set (ADR 0005): no hardware I/O libraries.
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "libgl1-mesa-dev, libglfw3-dev, libcairo2-dev,
-    libtbb-dev, libboost-all-dev, libgsl-dev, libeigen3-dev,
+    libtbb-dev, libboost-all-dev, libeigen3-dev,
     libopencv-dev, libyaml-cpp-dev, libncurses-dev, libpcl-dev, libglm-dev")
 set(CPACK_GENERATOR "DEB")
 set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)

@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "reachability/details/car_longitudinal_model.hpp"
+#include "xmnavigation/reachability/details/car_longitudinal_model.hpp"
 
 using namespace xmotion;
 

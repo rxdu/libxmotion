@@ -1,4 +1,4 @@
-#include "decomp/square_grid.hpp"
+#include "xmnavigation/decomp/square_grid.hpp"
 
 using namespace xmotion;
 using namespace quickviz;

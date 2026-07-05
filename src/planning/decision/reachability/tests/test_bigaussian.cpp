@@ -3,7 +3,7 @@
 
 // #include <gsl/gsl_rng.h>
 // #include <gsl/gsl_randist.h>
-#include "random/bigaussian_sampler.hpp"
+#include "xmnavigation/random/bigaussian_sampler.hpp"
 
 
 using namespace xmotion;

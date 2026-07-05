@@ -1,5 +1,5 @@
 #include <iostream>
-#include "geometry/polynomial.hpp"
+#include "xmnavigation/geometry/polynomial.hpp"
 
 using namespace xmotion;
 

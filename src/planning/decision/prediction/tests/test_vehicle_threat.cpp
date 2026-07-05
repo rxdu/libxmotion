@@ -3,9 +3,9 @@
 #include <cmath>
 
 #include "traffic_map/map_loader.hpp"
-#include "prediction/vehicle_threat.hpp"
+#include "xmnavigation/prediction/vehicle_threat.hpp"
 
-#include "stopwatch.hpp"
+#include "stopwatch/stopwatch.hpp"
 // #include "lightviz/navviz.hpp"
 
 using namespace xmotion;
@@ -21,7 +21,7 @@ int main()
 
     VehicleThreat vthreat(veh3, loader.traffic_map);
 
-    stopwatch::StopWatch timer;
+    xmotion::StopWatch timer;
     vthreat.ComputeOccupancyDistribution(5);
     std::cout << "propagation finished in " << timer.toc() << " seconds." << std::endl;   
 

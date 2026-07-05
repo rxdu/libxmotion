@@ -3,7 +3,7 @@
 
 // #define ENABLE_VIZ
 
-#include "decomp/dense_grid.hpp"
+#include "xmnavigation/decomp/dense_grid.hpp"
 
 #ifdef ENABLE_VIZ
 #include "lightviz/matrix_viz.hpp"

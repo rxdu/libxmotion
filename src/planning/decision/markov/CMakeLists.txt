@@ -5,7 +5,7 @@ find_package(Boost REQUIRED)
 
 ## Add libraries
 add_library(markov src/markov_chain.cpp)
-target_link_libraries(markov utilities Eigen3::Eigen ${Boost_LIBRARIES})
+target_link_libraries(markov Eigen3::Eigen)
 target_include_directories(markov PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>
@@ -16,3 +16,13 @@ target_include_directories(markov PUBLIC
 if(BUILD_TESTS)
 	add_subdirectory(tests)
 endif()
+
+install(TARGETS markov
+    EXPORT xmNavigationTargets
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include)
+
+install(DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

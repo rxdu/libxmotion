@@ -2,7 +2,7 @@
 #include <vector>
 #include <cmath>
 
-#include "geometry/cubic_spline.hpp"
+#include "xmnavigation/geometry/cubic_spline.hpp"
 
 using namespace xmotion;
 using namespace quickviz;

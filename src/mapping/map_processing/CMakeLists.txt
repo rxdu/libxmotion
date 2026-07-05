@@ -15,12 +15,11 @@ add_library(map_processing
 target_link_libraries(map_processing PUBLIC
     xmotion::xmBase
     xmotion::xmnavigation_common
-    pnm
-    rapidcsv
     math_utils
     Eigen3::Eigen
     ${OpenCV_LIBS}
     ${PCL_LIBRARIES})
+target_link_libraries(map_processing PRIVATE pnm rapidcsv)
 target_compile_definitions(map_processing PUBLIC ENABLE_VISUAL)
 target_include_directories(map_processing PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -31,3 +30,13 @@ target_include_directories(map_processing PUBLIC
 if (BUILD_TESTS)
   add_subdirectory(test)
 endif ()
+
+install(TARGETS map_processing
+    EXPORT xmNavigationTargets
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include)
+
+install(DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

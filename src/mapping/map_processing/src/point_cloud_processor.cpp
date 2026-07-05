@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#include "map_processing/point_cloud_processor.hpp"
+#include "xmnavigation/map_processing/point_cloud_processor.hpp"
 
 #include "xmbase/telemetry/telemetry.hpp"
 

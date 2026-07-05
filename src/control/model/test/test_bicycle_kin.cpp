@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "model/bicycle_model.hpp"
+#include "xmnavigation/model/bicycle_model.hpp"
 
 using namespace xmotion;
 using namespace asc;

@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "geometry/polyline.hpp"
+#include "xmnavigation/geometry/polyline.hpp"
 
 using namespace xmotion;
 using namespace quickviz;

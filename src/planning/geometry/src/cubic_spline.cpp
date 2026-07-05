@@ -10,7 +10,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "geometry/cubic_spline.hpp"
+#include "xmnavigation/geometry/cubic_spline.hpp"
 
 #include <memory>
 #include <iostream>

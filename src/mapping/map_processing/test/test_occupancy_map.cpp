@@ -10,8 +10,8 @@
 
 #include <pcl/visualization/pcl_visualizer.h>
 
-#include "map_processing/point_cloud_processor.hpp"
-#include "map_processing/trajectory_processor.hpp"
+#include "xmnavigation/map_processing/point_cloud_processor.hpp"
+#include "xmnavigation/map_processing/trajectory_processor.hpp"
 
 #include "cvdraw/cvdraw.hpp"
 

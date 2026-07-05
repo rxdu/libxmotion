@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "state_lattice/motion_primitive.hpp"
+#include "xmnavigation/state_lattice/motion_primitive.hpp"
 
 using namespace xmotion;
 
@@ -15,7 +15,7 @@ MotionPrimitive::MotionPrimitive(MotionState state_s, MotionState state_f) : sta
 {
 }
 
-MotionPrimitive::MotionPrimitive(MotionState state_s, MotionState state_f, PointKinematics::Param p) : state_s_(state_s), state_f_(state_f), sf_(p.sf), params_(p)
+MotionPrimitive::MotionPrimitive(MotionState state_s, MotionState state_f, PointKinematics::Param p) : sf_(p.sf), state_s_(state_s), state_f_(state_f), params_(p)
 {
     model_.SetParameters(p);
 }

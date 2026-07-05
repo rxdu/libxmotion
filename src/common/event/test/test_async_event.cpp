@@ -8,9 +8,9 @@
 
 #include <iostream>
 
-#include "event/event.hpp"
-#include "event/async_event_dispatcher.hpp"
-#include "event/async_event_emitter.hpp"
+#include "xmnavigation/event/event.hpp"
+#include "xmnavigation/event/async_event_dispatcher.hpp"
+#include "xmnavigation/event/async_event_emitter.hpp"
 
 using namespace xmotion;
 

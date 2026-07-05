@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "state_lattice/primitive_generator.hpp"
+#include "xmnavigation/state_lattice/primitive_generator.hpp"
 
 #include <numeric>
 
@@ -132,7 +132,6 @@ bool PrimitiveGenerator::Calculate(MotionState state_s, MotionState state_f, Poi
     p_i << init_p.p1, init_p.p2, init_p.sf;
 
     StatePMatrix xp_i, xp_delta_i;
-    double cost_prev = std::numeric_limits<double>::max();
     for (int32_t i = 0; i < max_iter_; ++i)
     {
         xp_i = model_.PropagateP(start, PointKinematics::Param(init_p.p0, p_i(0), init_p.p2, p_i(1), p_i(2)));

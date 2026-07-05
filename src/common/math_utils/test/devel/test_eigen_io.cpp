@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "math_utils/eigen_io.hpp"
+#include "xmnavigation/math_utils/eigen_io.hpp"
 
 using namespace xmotion;
 

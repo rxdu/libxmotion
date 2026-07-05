@@ -9,8 +9,8 @@
 
 #include <iostream>
 
-#include "model/bicycle_model.hpp"
-#include "model/system_propagator.hpp"
+#include "xmnavigation/model/bicycle_model.hpp"
+#include "xmnavigation/model/system_propagator.hpp"
 
 using namespace xmotion;
 

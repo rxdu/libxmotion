@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include "decomp/curvilinear_grid.hpp"
+#include "xmnavigation/decomp/curvilinear_grid.hpp"
 
 using namespace xmotion;
 using namespace quickviz;

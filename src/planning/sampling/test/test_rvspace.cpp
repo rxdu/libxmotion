@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdint>
 
-#include "sampling/space/realvector_space.hpp"
+#include "xmnavigation/sampling/space/realvector_space.hpp"
 #include "stopwatch/stopwatch.hpp"
 
 using namespace xmotion;

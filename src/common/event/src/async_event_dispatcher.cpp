@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#include "event/async_event_dispatcher.hpp"
+#include "xmnavigation/event/async_event_dispatcher.hpp"
 
 namespace xmotion {
 AsyncEventDispatcher& AsyncEventDispatcher::GetInstance() {

@@ -1,13 +1,13 @@
 #include <iostream>
 
-#include "reachability/details/tstate_transition_sim.hpp"
-#include "stopwatch.hpp"
+#include "xmnavigation/reachability/details/tstate_transition_sim.hpp"
+#include "stopwatch/stopwatch.hpp"
 
 #define ENABLE_VIZ
 
 #ifdef ENABLE_VIZ
 #include "traffic_viz/reachability_viz.hpp"
-// #include "geometry/matrix_viz.hpp"
+// #include "xmnavigation/geometry/matrix_viz.hpp"
 #endif
 
 using namespace xmotion;
@@ -27,7 +27,7 @@ int main()
 
     sim.SetControlSet(control_set);
 
-    stopwatch::StopWatch timer;
+    xmotion::StopWatch timer;
 
     Eigen::MatrixXd Psi = sim.RunSim(5);
     Eigen::MatrixXd Psi_T = sim.RunIntervalSim(5, 10);

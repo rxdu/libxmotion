@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#include "math_utils/matrix.hpp"
+#include "xmnavigation/math_utils/matrix.hpp"
 
 namespace xmotion {
 Eigen::Matrix<double, 3, 3> MathUtils::SkewSymmetric(const Eigen::Vector3d &v) {

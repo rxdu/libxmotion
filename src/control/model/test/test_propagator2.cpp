@@ -11,7 +11,7 @@
 
 #include <boost/numeric/odeint.hpp>
 
-#include "model/bicycle_model.hpp"
+#include "xmnavigation/model/bicycle_model.hpp"
 
 using namespace xmotion;
 using namespace boost::numeric::odeint;

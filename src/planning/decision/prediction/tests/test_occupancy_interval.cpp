@@ -3,9 +3,9 @@
 #include <cmath>
 
 #include "traffic_map/map_loader.hpp"
-#include "prediction/dynamic_threat_model.hpp"
+#include "xmnavigation/prediction/dynamic_threat_model.hpp"
 
-#include "stopwatch.hpp"
+#include "stopwatch/stopwatch.hpp"
 
 #define ENABLE_VIZ
 
@@ -31,7 +31,7 @@ int main()
     auto ego_chn = loader.traffic_map->GetAllTrafficChannels().back();
     // UGVNavViz::ShowVehicleInChannel(veh1.GetFootprint(), *ego_chn.get());
 
-    stopwatch::StopWatch timer;
+    xmotion::StopWatch timer;
 
     // std::shared_ptr<DynamicThreatModel> ct1 = std::make_shared<DynamicThreatModel>(veh1, ego_chn);
     std::shared_ptr<VehicleThreat> ct1 = std::make_shared<VehicleThreat>(veh1, loader.traffic_map);

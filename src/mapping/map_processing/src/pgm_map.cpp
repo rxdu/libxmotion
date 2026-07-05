@@ -7,10 +7,10 @@
  * Copyright (c) 2021 Ruixiang Du (rdu)
  */
 
-#include "map_processing/pgm_map.hpp"
+#include "xmnavigation/map_processing/pgm_map.hpp"
 
 #include "xmbase/telemetry/telemetry.hpp"
-#include "math_utils/eigen_io.hpp"
+#include "xmnavigation/math_utils/eigen_io.hpp"
 
 #include "pnm/pnm.hpp"
 
@@ -38,8 +38,8 @@ bool PgmMap::LoadData() {
   auto height = pgm.y_size();
   XM_INFO("PGM image size: {}x{}", width, height);
   data_ = Eigen::MatrixXi::Zero(height, width);
-  for (long y = 0; y < height; ++y) {
-    for (long x = 0; x < width; ++x) {
+  for (long y = 0; y < static_cast<long>(height); ++y) {
+    for (long x = 0; x < static_cast<long>(width); ++x) {
       data_(y, x) = pgm[y][x].value;
     }
   }

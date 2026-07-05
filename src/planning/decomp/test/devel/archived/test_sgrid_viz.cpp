@@ -1,5 +1,5 @@
-#include "decomp/square_grid.hpp"
-#include "decomp/square_grid_viz.hpp"
+#include "xmnavigation/decomp/square_grid.hpp"
+#include "xmnavigation/decomp/square_grid_viz.hpp"
 
 using namespace xmotion;
 

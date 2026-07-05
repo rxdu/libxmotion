@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-#include "kinematics/swerve_drive_kinematics.hpp"
+#include "xmnavigation/kinematics/swerve_drive_kinematics.hpp"
 
 using namespace xmotion;
 

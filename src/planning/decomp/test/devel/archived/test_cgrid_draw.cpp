@@ -1,5 +1,5 @@
-#include "decomp/curvilinear_grid.hpp"
-#include "decomp/curvilinear_grid_draw.hpp"
+#include "xmnavigation/decomp/curvilinear_grid.hpp"
+#include "xmnavigation/decomp/curvilinear_grid_draw.hpp"
 
 using namespace xmotion;
 

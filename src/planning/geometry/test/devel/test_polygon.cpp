@@ -1,4 +1,4 @@
-#include "geometry/polygon.hpp"
+#include "xmnavigation/geometry/polygon.hpp"
 
 using namespace xmotion;
 using namespace quickviz;

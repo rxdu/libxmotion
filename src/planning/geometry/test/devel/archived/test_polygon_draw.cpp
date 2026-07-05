@@ -1,5 +1,5 @@
-#include "geometry/geometry_draw.hpp"
-#include "geometry/polygon.hpp"
+#include "xmnavigation/geometry/geometry_draw.hpp"
+#include "xmnavigation/geometry/polygon.hpp"
 
 using namespace xmotion;
 

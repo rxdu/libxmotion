@@ -14,3 +14,10 @@ add_subdirectory(stopwatch)
 
 add_subdirectory(spatial)
 add_subdirectory(quadprog++)
+
+# Visualization engine (vendored; used by viz-gated targets only)
+if (ENABLE_VISUALIZATION)
+  option(QUICKVIZ_DEV_MODE "Build quickviz in dev mode" ON)
+  option(BUILD_QUICKVIZ_APP "Build quickviz application" ON)
+  add_subdirectory(quickviz)
+endif ()
