@@ -47,7 +47,7 @@ int main()
     auto path = rrg.Search(sstate, gstate, 200);
 
     double distance = 0;
-    for (int i = 0; i < path.size() - 1; ++i)
+    for (int i = 0; i < static_cast<int>(path.size()) - 1; ++i)
         distance += rvspace.EvaluateDistance(path[i], path[i + 1]);
     std::cout << "path length: " << distance << std::endl;
 

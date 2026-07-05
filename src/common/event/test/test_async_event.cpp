@@ -14,7 +14,7 @@
 
 using namespace xmotion;
 
-int main(int argc, char* argv[]) {
+int main(int /*argc*/, char* /*argv*/[]) {
   AsyncEventDispatcher::GetInstance().RegisterHandler(
       "test_event", [](std::shared_ptr<BaseEvent> event) {
         auto data =

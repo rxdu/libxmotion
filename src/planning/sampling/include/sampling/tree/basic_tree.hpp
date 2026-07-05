@@ -79,7 +79,7 @@ class BasicTree
   }
 
   std::vector<std::shared_ptr<StateType>> FindNear(
-      std::shared_ptr<StateType> state, double radius) final {
+      std::shared_ptr<StateType> /*state*/, double /*radius*/) final {
     // TODO
     std::vector<std::shared_ptr<StateType>> empty;
     return empty;

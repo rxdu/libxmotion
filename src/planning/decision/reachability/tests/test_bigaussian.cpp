@@ -5,7 +5,6 @@
 // #include <gsl/gsl_randist.h>
 #include "random/bigaussian_sampler.hpp"
 
-#include "xmbase/logging/loggers.hpp"
 
 using namespace xmotion;
 
@@ -25,7 +24,10 @@ int main()
     {
         // gsl_ran_bivariate_gaussian(r, 0.1, 0.5, 0, &x, &y);
         sampler.Sample(&x, &y);
-        GlobalCsvLogger::GetLogger("bigaussian", "/home/rdu").LogData(x, y);
+        // TODO(revive): record samples through telemetry (XM_* / MCAP)
+        // instead of the removed ad-hoc CSV logger.
+        (void)x;
+        (void)y;
     }
 
     // gsl_rng_free(r);

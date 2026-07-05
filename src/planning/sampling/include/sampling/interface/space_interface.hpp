@@ -38,12 +38,12 @@ class SpaceInterface {
 
   // optional interface for space sampling
   virtual std::shared_ptr<T> SampleUniform() { return nullptr; }
-  virtual std::shared_ptr<T> SampleUniformAround(std::shared_ptr<T> center,
-                                                 double distance) {
+  virtual std::shared_ptr<T> SampleUniformAround(std::shared_ptr<T> /*center*/,
+                                                 double /*distance*/) {
     return nullptr;
   }
-  virtual std::shared_ptr<T> SampleGaussian(std::shared_ptr<T> mean,
-                                            double stdDev) {
+  virtual std::shared_ptr<T> SampleGaussian(std::shared_ptr<T> /*mean*/,
+                                            double /*stdDev*/) {
     return nullptr;
   }
 };

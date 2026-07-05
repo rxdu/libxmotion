@@ -123,8 +123,6 @@ class DenseGrid : public RectGridBase<double> {
     auto grid = std::make_shared<SquareGrid>(grid_size_x, grid_size_y);
 
     // determine occupancy of grid
-    int32_t half_size_x = grid_size_x / 2;
-    int32_t half_size_y = grid_size_y / 2;
     for (int64_t x = 0; x < grid->SizeX(); ++x)
       for (int64_t y = 0; y < grid->SizeY(); ++y) {
         bool occupied = false;

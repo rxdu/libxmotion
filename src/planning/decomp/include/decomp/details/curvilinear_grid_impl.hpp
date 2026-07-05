@@ -55,7 +55,7 @@ void CurvilinearGridBase<T, CurveType>::SetupGrid(CurveType pcurve,
   assert(sknots.size() > 1);
 
   int32_t x_idx = 0;
-  for (int32_t k = 0; k < sknots.size() - 1; ++k) {
+  for (int32_t k = 0; k < static_cast<int32_t>(sknots.size()) - 1; ++k) {
     std::vector<CellType *> rows;
     // generate knots along lateral direction
     for (int32_t i = -delta_half_num_; i <= delta_half_num_; ++i) {

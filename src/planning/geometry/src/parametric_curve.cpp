@@ -17,7 +17,7 @@ ParametricCurve::ParametricCurve(Polyline center_polyline)
 
 ParametricCurve::ParametricCurve(CubicSpline xspline, CubicSpline yspline,
                                  double sf)
-    : x_spline_(xspline), y_spline_(yspline), total_length_(sf) {}
+    : total_length_(sf), x_spline_(xspline), y_spline_(yspline) {}
 
 SimplePoint2 ParametricCurve::Evaluate(double s, int32_t derivative) const {
   return SimplePoint2(x_spline_.Evaluate(s, derivative),
@@ -68,7 +68,7 @@ ParametricCurve CurveFitting::FitTimedCurve(std::vector<double> x,
   assert((t.size() > 2) && (x.size() == t.size()) && (y.size() == t.size()));
 
   std::vector<CubicSpline::Knot> xknots, yknots;
-  for (int32_t i = 0; i < t.size(); ++i) {
+  for (std::size_t i = 0; i < t.size(); ++i) {
     xknots.emplace_back(t[i], x[i]);
     yknots.emplace_back(t[i], y[i]);
   }

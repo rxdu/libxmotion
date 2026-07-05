@@ -17,10 +17,6 @@ using namespace xmotion;
 using namespace boost::numeric::odeint;
 
 int main() {
-  double t0 = 0;
-  double tf = 10;
-  double dt = 0.01;
-
   BicycleKinematics::state_type x = {0.0, 0.0, 0.0, 0.0};
   BicycleKinematics model({0.8, 0});
 

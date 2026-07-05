@@ -67,8 +67,6 @@ SquareGridBase<T>::SquareGridBase(const Eigen::MatrixXd &matrix,
     }
 
   // determine occupancy of grid
-  int32_t half_size_x = grid_size_x / 2;
-  int32_t half_size_y = grid_size_y / 2;
   for (int64_t x = 0; x < RectGridBase<SquareCellBase<T> *>::SizeX(); ++x)
     for (int64_t y = 0; y < RectGridBase<SquareCellBase<T> *>::SizeY(); ++y) {
       bool occupied = false;

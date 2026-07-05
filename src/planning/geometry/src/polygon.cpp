@@ -39,7 +39,7 @@ bool Polygon::IsSimple() const { return false; }
 
 bool Polygon::IsConvex() const { return false; }
 
-bool Polygon::CheckInside(SimplePoint2 pt) const {
+bool Polygon::CheckInside(SimplePoint2 /*pt*/) const {
   // TODO
   //   if (CGAL::bounded_side_2(data_.vertices_begin(), data_.vertices_end(),
   //   pt,
@@ -48,7 +48,7 @@ bool Polygon::CheckInside(SimplePoint2 pt) const {
   return false;
 }
 
-int32_t Polygon::CheckRelativePosition(SimplePoint2 pt) const {
+int32_t Polygon::CheckRelativePosition(SimplePoint2 /*pt*/) const {
   // TODO
   //   switch (CGAL::bounded_side_2(data_.vertices_begin(),
   //   data_.vertices_end(), pt,
@@ -63,7 +63,7 @@ int32_t Polygon::CheckRelativePosition(SimplePoint2 pt) const {
   return 0;
 }
 
-bool Polygon::Intersect(const Polygon &other) const {
+bool Polygon::Intersect(const Polygon &/*other*/) const {
   //   return CGAL::do_intersect(data_, other.data_);
   // TODO
   return false;
@@ -161,9 +161,9 @@ void DrawPolygon(CvCanvas &canvas, const Polygon &polygon, bool show_dot,
   }
 }
 
-void FillPolygon(CvCanvas &canvas, const Polygon &polygon, bool show_dot,
-                 cv::Scalar fill_color, cv::Scalar ln_color,
-                 int32_t thickness) {
+void FillPolygon(CvCanvas &canvas, const Polygon &polygon, bool /*show_dot*/,
+                 cv::Scalar fill_color, cv::Scalar /*ln_color*/,
+                 int32_t /*thickness*/) {
   std::size_t pt_num = polygon.GetPointNumer();
 
   if (pt_num < 3) return;

@@ -13,7 +13,7 @@
 
 namespace xmotion {
 PidController::PidController(float kp, float ki, float kd, float umax, float ts)
-    : kp_(kp), ki_(ki), kd_(kd), u_max_(umax), ts_(ts) {}
+    : kp_(kp), ki_(ki), kd_(kd), ts_(ts), u_max_(umax) {}
 
 float PidController::Update(float reference, float measurement) {
   float error = reference - measurement;

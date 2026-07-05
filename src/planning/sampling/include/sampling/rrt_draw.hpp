@@ -68,7 +68,7 @@ void DrawStraightBranch(quickviz::CvCanvas &canvas,
 template <typename StateType>
 void DrawStraightPath(quickviz::CvCanvas &canvas,
                       std::vector<std::shared_ptr<StateType>> path) {
-  for (int i = 0; i < path.size() - 1; ++i) {
+  for (int i = 0; i < static_cast<int>(path.size()) - 1; ++i) {
     auto start = path[i];
     auto end = path[i + 1];
     quickviz::CPoint pt1(start->values_[0], start->values_[1]);

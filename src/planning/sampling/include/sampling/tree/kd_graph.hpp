@@ -78,7 +78,7 @@ class KdGraph
   }
 
   // Note: this function is ill-defined for a graph, can be ignored
-  PathType TraceBackToRoot(std::shared_ptr<StateType> state) final {
+  PathType TraceBackToRoot(std::shared_ptr<StateType> /*state*/) final {
     PathType path;
     // path.push_back(state);
     // auto parent = TreeType::GetParentVertex(state);

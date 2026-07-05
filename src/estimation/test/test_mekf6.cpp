@@ -4,7 +4,7 @@
 
 using namespace xmotion;
 
-int main(int argc, char* argv[]) {
+int main(int /*argc*/, char* /*argv*/[]) {
   std::cout << "Hello, World!" << std::endl;
 
   Mekf6::Params params;

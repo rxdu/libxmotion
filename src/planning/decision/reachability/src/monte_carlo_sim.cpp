@@ -8,7 +8,6 @@
  */
 
 #include "reachability/monte_carlo_sim.hpp"
-#include "xmbase/logging/loggers.hpp"
 
 using namespace xmotion;
 
@@ -45,6 +44,8 @@ void MonteCarloSim::RunSim(double t0, double tf, double step, int32_t iter_num)
         // asc::state_t state = propagator_.Propagate({y_random[i], 8.0}, 0.1, 0, 2.0, 0.01);
         std::vector<double> state = propagator_.Propagate({x_random[i], y_random[i], 8.0, 0}, {acc_random[i], ster_random[i]}, t0, tf, step);
 
-        GlobalCsvLogger::GetLogger("monte_carlo_kin", "/home/rdu").LogData(x_random[i], y_random[i], state[0], state[1]);
+        // TODO(revive): record sim samples through telemetry (XM_* / MCAP)
+        // instead of the removed ad-hoc CSV logger.
+        (void)state;
     }
 }
