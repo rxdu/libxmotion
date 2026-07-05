@@ -5,7 +5,7 @@ target_include_directories(fsm INTERFACE
 
 ## installation configuration
 install(TARGETS fsm
-    EXPORT xmNablaTargets
+    EXPORT xmNavigationTargets
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin

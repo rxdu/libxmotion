@@ -9,7 +9,7 @@
 
 #include "map_processing/pgm_map.hpp"
 
-#include "xmsigma/logging/xlogger.hpp"
+#include "xmbase/telemetry/telemetry.hpp"
 #include "math_utils/eigen_io.hpp"
 
 #include "pnm/pnm.hpp"
@@ -19,24 +19,24 @@ PgmMap::PgmMap(const Metadata& metadata) : metadata_(metadata) {}
 
 bool PgmMap::LoadData() {
   if (metadata_.image.empty()) {
-    XLOG_ERROR("Image file path is empty");
+    XM_ERROR("Image file path is empty");
     return false;
   }
 
-  XLOG_INFO("Loading PGM image: {}", metadata_.image);
+  XM_INFO("Loading PGM image: {}", metadata_.image);
   if (metadata_.image.substr(metadata_.image.size() - 3, 3) != "pgm") {
-    XLOG_ERROR("Invalid image file format, only PGM file is supported");
+    XM_ERROR("Invalid image file format, only PGM file is supported");
     return false;
   }
   pnm::pgm_image pgm = pnm::read_pgm_binary(metadata_.image);
   if (pgm.size() == 0) {
-    XLOG_ERROR("Failed to load PGM image");
+    XM_ERROR("Failed to load PGM image");
     return false;
   }
 
   auto width = pgm.x_size();
   auto height = pgm.y_size();
-  XLOG_INFO("PGM image size: {}x{}", width, height);
+  XM_INFO("PGM image size: {}x{}", width, height);
   data_ = Eigen::MatrixXi::Zero(height, width);
   for (long y = 0; y < height; ++y) {
     for (long x = 0; x < width; ++x) {
@@ -86,7 +86,7 @@ cv::Mat PgmMap::ToCvMat(int channel_num) {
     }
     return cv_image;
   } else {
-    XLOG_ERROR("Invalid channel number: {}", channel_num);
+    XM_ERROR("Invalid channel number: {}", channel_num);
     return cv::Mat();
   }
 }

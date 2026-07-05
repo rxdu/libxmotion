@@ -10,9 +10,6 @@
 [submodule "third_party/googletest"]
 	path = third_party/googletest
 	url = https://github.com/google/googletest.git
-[submodule "third_party/spdlog"]
-	path = third_party/spdlog
-	url = https://github.com/rxdu/spdlog.git
 [submodule "third_party/rapidcsv"]
 	path = third_party/rapidcsv
 	url = https://github.com/rxdu/rapidcsv.git
@@ -31,11 +28,7 @@
 [submodule "third_party/rpi_sbus"]
 	path = third_party/rpi_sbus
 	url = https://github.com/rxdu/raspberry_sbus.git
-[submodule "third_party/xmSigma"]
-	path = third_party/xmSigma
-	url = https://github.com/rxdu/xmSigma.git
-	branch = main
-[submodule "third_party/xmMu"]
-	path = third_party/xmMu
-	url = https://github.com/rxdu/xmMu.git
+[submodule "third_party/xmBase"]
+	path = third_party/xmBase
+	url = https://github.com/rxdu/xmBase.git
 	branch = main

@@ -2,14 +2,10 @@
 find_package(Eigen3 REQUIRED NO_MODULE)
 
 ## Add libraries
-add_library(robot_base
-    src/speed_actuator_group.cpp
-    src/position_actuator_group.cpp
-    src/differential_drive_robot.cpp
-    src/swerve_drive_robot.cpp
+add_library(kinematics
     src/swerve_drive_kinematics.cpp)
-target_link_libraries(robot_base PUBLIC xmotion::hal xmotion::xmSigma Eigen3::Eigen)
-target_include_directories(robot_base PUBLIC
+target_link_libraries(kinematics PUBLIC xmotion::xmBase Eigen3::Eigen)
+target_include_directories(kinematics PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
@@ -19,8 +15,8 @@ if (BUILD_TESTS)
 endif ()
 
 ## installation configuration
-install(TARGETS robot_base
-    EXPORT xmNablaTargets
+install(TARGETS kinematics
+    EXPORT xmNavigationTargets
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin
