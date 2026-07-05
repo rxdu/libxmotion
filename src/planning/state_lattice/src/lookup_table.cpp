@@ -10,10 +10,9 @@
 #include "state_lattice/details/lookup_table.hpp"
 
 #include <numeric>
+#include <fstream>
 
 #include "state_lattice/primitive_generator.hpp"
-
-#include "xmbase/logging/loggers.hpp"
 
 using namespace xmotion;
 
@@ -86,13 +85,19 @@ void LookupTable::GenerateLookupTable(bool save_to_file, std::string filename)
 void LookupTable::SaveLookupTableToFile(std::string filename)
 {
     std::string location = GetDataFolderPath() + "/lattice/lookup/";
-    CsvLogger logger(filename, location);
+    std::ofstream file(location + filename);
+    if (!file)
+    {
+        std::cerr << "failed to open lookup table file for writing: " << location + filename << std::endl;
+        return;
+    }
 
     for (auto &entry : entries_)
     {
         // data: x, y, theta, kappa, p0, p1, p2, p3, sf
-        logger.LogData(entry.target.x, entry.target.y, entry.target.theta, entry.target.kappa,
-                       entry.p.p0, entry.p.p1, entry.p.p2, entry.p.p3, entry.p.sf);
+        file << entry.target.x << ',' << entry.target.y << ',' << entry.target.theta << ','
+             << entry.target.kappa << ',' << entry.p.p0 << ',' << entry.p.p1 << ','
+             << entry.p.p2 << ',' << entry.p.p3 << ',' << entry.p.sf << '\n';
     }
 
     std::cout << "lookup table saved to: " << location << std::endl;

@@ -12,7 +12,6 @@
 #include <iostream>
 #include <cmath>
 
-#include "xmbase/logging/loggers.hpp"
 
 using namespace xmotion;
 
