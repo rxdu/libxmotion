@@ -135,44 +135,4 @@ void Polygon::PrintInfo() const {
 
 //---------------------------------------------------------------------------//
 
-#ifdef ENABLE_VISUAL
-using namespace quickviz;
-
-void DrawPolygon(CvCanvas &canvas, const Polygon &polygon, bool show_dot,
-                 cv::Scalar ln_color, int32_t thickness) {
-  std::size_t pt_num = polygon.GetPointNumer();
-
-  if (pt_num < 3) return;
-
-  for (std::size_t i = 0; i < pt_num - 1; ++i) {
-    CPoint pt1(polygon.GetPoint(i).x(), polygon.GetPoint(i).y());
-    CPoint pt2(polygon.GetPoint(i + 1).x(), polygon.GetPoint(i + 1).y());
-    canvas.DrawLine(pt1, pt2, ln_color, thickness);
-  }
-  CPoint last_pt(polygon.GetPoint(pt_num - 1).x(),
-                 polygon.GetPoint(pt_num - 1).y());
-  CPoint first_pt(polygon.GetPoint(0).x(), polygon.GetPoint(0).y());
-  canvas.DrawLine(last_pt, first_pt, ln_color, thickness);
-
-  if (show_dot) {
-    for (std::size_t i = 0; i < pt_num; ++i)
-      canvas.DrawPoint({polygon.GetPoint(i).x(), polygon.GetPoint(i).y()}, 1,
-                       CvColors::red_color);
-  }
-}
-
-void FillPolygon(CvCanvas &canvas, const Polygon &polygon, bool /*show_dot*/,
-                 cv::Scalar fill_color, cv::Scalar /*ln_color*/,
-                 int32_t /*thickness*/) {
-  std::size_t pt_num = polygon.GetPointNumer();
-
-  if (pt_num < 3) return;
-
-  std::vector<CPoint> pts;
-  for (int i = 0; i < polygon.GetPointNumer(); ++i)
-    pts.emplace_back(polygon.GetPoint(i).x(), polygon.GetPoint(i).y());
-
-  canvas.FillPoly(pts, fill_color);
-}
-#endif
 }  // namespace xmotion

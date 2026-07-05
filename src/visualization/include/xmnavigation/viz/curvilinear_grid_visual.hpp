@@ -15,7 +15,10 @@
 
 #include <Eigen/Dense>
 
+#include "cvdraw/cvdraw.hpp"
+
 #include "xmnavigation/decomp/curvilinear_grid.hpp"
+#include "xmnavigation/viz/geometry_draw.hpp"
 #include "xmnavigation/geometry/polygon.hpp"
 #include "cvdraw/cvdraw.hpp"
 

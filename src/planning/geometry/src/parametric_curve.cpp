@@ -78,21 +78,4 @@ ParametricCurve CurveFitting::FitTimedCurve(std::vector<double> x,
 
 //---------------------------------------------------------------------------//
 
-#ifdef ENABLE_VISUAL
-void DrawParametricCurve(quickviz::CvCanvas &canvas,
-                         const ParametricCurve &pcurve, double step,
-                         cv::Scalar ln_color, int32_t thickness) {
-  std::vector<cv::Point2d> pts;
-
-  for (double s = 0; s < pcurve.GetLength(); s += step)
-    pts.emplace_back(pcurve.GetXSpline().Evaluate(s),
-                     pcurve.GetYSpline().Evaluate(s));
-
-  // std::cout << "intermediate points: " << pts.size() << std::endl;
-
-  for (std::size_t i = 0; i < pts.size() - 1; ++i)
-    canvas.DrawLine({pts[i].x, pts[i].y}, {pts[i + 1].x, pts[i + 1].y},
-                    ln_color, thickness);
-}
-#endif
 }  // namespace xmotion

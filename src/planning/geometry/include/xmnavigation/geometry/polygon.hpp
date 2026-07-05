@@ -16,10 +16,6 @@
 
 #include "xmnavigation/geometry/simple_point.hpp"
 
-#ifdef ENABLE_VISUAL
-#include "cvdraw/cvdraw.hpp"
-#endif
-
 namespace xmotion {
 class Polygon {
  public:
@@ -90,17 +86,6 @@ class Polygon {
   void UpdateXYMinMax(double x, double y);
 };
 
-#ifdef ENABLE_VISUAL
-void DrawPolygon(quickviz::CvCanvas &canvas, const Polygon &polygon,
-                 bool show_dot = false,
-                 cv::Scalar ln_color = quickviz::CvColors::blue_color,
-                 int32_t thickness = 1);
-void FillPolygon(quickviz::CvCanvas &canvas, const Polygon &polygon,
-                 bool show_dot = false,
-                 cv::Scalar fill_color = quickviz::CvColors::aoi_color,
-                 cv::Scalar ln_color = quickviz::CvColors::blue_color,
-                 int32_t thickness = 1);
-#endif
 }  // namespace xmotion
 
 #endif /* POLYGON_HPP */

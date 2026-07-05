@@ -17,10 +17,6 @@
 
 #include "xmnavigation/geometry/simple_point.hpp"
 
-#ifdef ENABLE_VISUAL
-#include "cvdraw/cvdraw.hpp"
-#endif
-
 namespace xmotion {
 class CubicSpline {
  public:
@@ -51,12 +47,6 @@ class CubicSpline {
   Eigen::MatrixXd coefficients_;
 };
 
-#ifdef ENABLE_VISUAL
-void DrawCubicSpline(quickviz::CvCanvas &canvas, const CubicSpline &spline,
-                     double step = 0.01,
-                     cv::Scalar ln_color = quickviz::CvColors::blue_color,
-                     int32_t thickness = 1);
-#endif
 }  // namespace xmotion
 
 #endif /* CUBIC_SPLINE_HPP */

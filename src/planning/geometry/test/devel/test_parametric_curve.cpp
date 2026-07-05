@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "xmnavigation/geometry/parametric_curve.hpp"
+#include "xmnavigation/viz/geometry_draw.hpp"
 
 using namespace xmotion;
 using namespace quickviz;

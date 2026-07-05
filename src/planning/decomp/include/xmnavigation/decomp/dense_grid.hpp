@@ -147,28 +147,4 @@ class DenseGrid : public RectGridBase<double> {
 };
 }  // namespace xmotion
 
-#ifdef ENABLE_VISUAL
-#include "details/dense_grid_visual.hpp"
-
-namespace xmotion {
-void ShowDenseGridAsImage(const DenseGrid &grid, bool save_img = false,
-                          std::string img_name = "DenseGrid") {
-  ShowMatrixAsImage(grid.GetGridMatrix(true) * 128, img_name, save_img);
-}
-
-void ShowDenseGridAsColorMap(const DenseGrid &grid, bool save_img = false,
-                             std::string img_name = "DenseGrid") {
-  ShowMatrixAsColorMap(grid.GetGridMatrix(true), img_name, save_img);
-}
-
-void ShowPathOnDenseGrid(const DenseGrid &grid,
-                         std::vector<RectGridIndex> waypoints,
-                         bool save_img = false,
-                         std::string img_name = "DenseGrid") {
-  ShowPathOnMatrixAsColorMap(grid.GetGridMatrix(true), waypoints, img_name,
-                             save_img);
-}
-}  // namespace xmotion
-#endif
-
 #endif /* DENSE_GRID_HPP */

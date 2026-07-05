@@ -3,6 +3,7 @@
 #include <cmath>
 
 #include "xmnavigation/geometry/cubic_spline.hpp"
+#include "xmnavigation/viz/geometry_draw.hpp"
 
 using namespace xmotion;
 using namespace quickviz;

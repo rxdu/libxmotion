@@ -4,6 +4,7 @@
 // #define ENABLE_VIZ
 
 #include "xmnavigation/decomp/dense_grid.hpp"
+#include "xmnavigation/viz/dense_grid_visual.hpp"
 
 #ifdef ENABLE_VIZ
 #include "lightviz/matrix_viz.hpp"

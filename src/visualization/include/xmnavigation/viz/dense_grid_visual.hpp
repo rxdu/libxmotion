@@ -18,6 +18,8 @@
 #include <opencv2/core/eigen.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include "cvdraw/cvdraw.hpp"
+
 #include "xmnavigation/decomp/dense_grid.hpp"
 #include "cvdraw/cvdraw.hpp"
 
@@ -79,6 +81,29 @@ void ShowPathOnMatrixAsColorMap(const Eigen::MatrixXd &matrix,
   }
 
   quickviz::CvIO::ShowImage(color_img, window_name, save_img);
+}
+}  // namespace xmotion
+
+
+#include "xmnavigation/decomp/dense_grid.hpp"
+
+namespace xmotion {
+inline void ShowDenseGridAsImage(const DenseGrid &grid, bool save_img = false,
+                          std::string img_name = "DenseGrid") {
+  ShowMatrixAsImage(grid.GetGridMatrix(true) * 128, img_name, save_img);
+}
+
+inline void ShowDenseGridAsColorMap(const DenseGrid &grid, bool save_img = false,
+                             std::string img_name = "DenseGrid") {
+  ShowMatrixAsColorMap(grid.GetGridMatrix(true), img_name, save_img);
+}
+
+inline void ShowPathOnDenseGrid(const DenseGrid &grid,
+                         std::vector<RectGridIndex> waypoints,
+                         bool save_img = false,
+                         std::string img_name = "DenseGrid") {
+  ShowPathOnMatrixAsColorMap(grid.GetGridMatrix(true), waypoints, img_name,
+                             save_img);
 }
 }  // namespace xmotion
 

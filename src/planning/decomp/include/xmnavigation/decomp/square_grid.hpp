@@ -162,8 +162,5 @@ using SquareGrid = SquareGridBase<double>;
 }  // namespace xmotion
 
 #include "details/square_grid_impl.hpp"
-#ifdef ENABLE_VISUAL
-#include "details/square_grid_visual.hpp"
-#endif
 
 #endif /* SQUARE_GRID_HPP */

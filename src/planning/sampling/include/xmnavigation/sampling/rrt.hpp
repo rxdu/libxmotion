@@ -27,7 +27,7 @@
 // #define SHOW_TREE_GROWTH
 
 #ifdef SHOW_TREE_GROWTH
-#include "xmnavigation/sampling/rrt_draw.hpp"
+#include "xmnavigation/viz/rrt_draw.hpp"
 #define SHOW_INTERMEDIATE_STEPS
 #endif
 

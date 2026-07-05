@@ -140,28 +140,4 @@ void Polyline::UpdateXYMinMax(double x, double y) {
 
 //---------------------------------------------------------------------------//
 
-#ifdef ENABLE_VISUAL
-using namespace quickviz;
-
-void DrawPolyline(CvCanvas &canvas, const Polyline &polyline, bool show_dot,
-                  cv::Scalar ln_color, int32_t thickness) {
-  std::size_t pt_num = polyline.GetPointNumer();
-
-  if (pt_num == 0) return;
-
-  if (pt_num > 1) {
-    for (std::size_t i = 0; i < pt_num - 1; ++i) {
-      CPoint pt1(polyline.GetPoint(i).x(), polyline.GetPoint(i).y());
-      CPoint pt2(polyline.GetPoint(i + 1).x(), polyline.GetPoint(i + 1).y());
-      canvas.DrawLine(pt1, pt2, ln_color, thickness);
-    }
-  }
-
-  if (show_dot) {
-    for (std::size_t i = 0; i < pt_num; ++i)
-      canvas.DrawPoint({polyline.GetPoint(i).x(), polyline.GetPoint(i).y()}, 1,
-                       CvColors::red_color);
-  }
-}
-#endif
 }  // namespace xmotion

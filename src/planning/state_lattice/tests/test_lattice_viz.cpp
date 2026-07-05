@@ -4,7 +4,7 @@
 
 #include "xmnavigation/state_lattice/state_lattice.hpp"
 
-#include "xmnavigation/state_lattice/lattice_viz.hpp"
+#include "xmnavigation/viz/lattice_viz.hpp"
 #include "stopwatch/stopwatch.hpp"
 
 using namespace xmotion;

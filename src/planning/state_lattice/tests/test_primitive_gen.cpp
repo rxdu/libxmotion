@@ -7,7 +7,7 @@
 #define ENABLE_VIZ
 
 #ifdef ENABLE_VIZ
-#include "xmnavigation/state_lattice/lattice_viz.hpp"
+#include "xmnavigation/viz/lattice_viz.hpp"
 #endif
 
 using namespace xmotion;

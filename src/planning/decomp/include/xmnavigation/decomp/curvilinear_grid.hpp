@@ -355,8 +355,5 @@ using CurvilinearGrid = PCurveCurvilinearGrid<double>;
 }  // namespace xmotion
 
 #include "details/curvilinear_grid_impl.hpp"
-#ifdef ENABLE_VISUAL
-#include "details/curvilinear_grid_visual.hpp"
-#endif
 
 #endif /* CURVILINEAR_GRID_HPP */

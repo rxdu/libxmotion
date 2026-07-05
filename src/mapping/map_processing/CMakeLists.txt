@@ -20,7 +20,6 @@ target_link_libraries(map_processing PUBLIC
     ${OpenCV_LIBS}
     ${PCL_LIBRARIES})
 target_link_libraries(map_processing PRIVATE pnm rapidcsv)
-target_compile_definitions(map_processing PUBLIC ENABLE_VISUAL)
 target_include_directories(map_processing PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

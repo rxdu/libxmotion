@@ -4,9 +4,6 @@
 # Add libraries
 add_library(decomp INTERFACE)
 target_link_libraries(decomp INTERFACE geometry graph)
-if (ENABLE_VISUALIZATION)
-  target_compile_definitions(decomp INTERFACE ENABLE_VISUAL)
-endif ()
 target_include_directories(decomp INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>
