@@ -10,8 +10,7 @@
 #ifndef BIGAUSSIAN_SAMPLER_HPP
 #define BIGAUSSIAN_SAMPLER_HPP
 
-#include <gsl/gsl_rng.h>
-#include <gsl/gsl_randist.h>
+#include <random>
 
 namespace xmotion
 {
@@ -19,7 +18,7 @@ class BiGaussianSampler
 {
   public:
     BiGaussianSampler(double sigma_x, double sigma_y, double rho);
-    ~BiGaussianSampler();
+    ~BiGaussianSampler() = default;
 
     void Sample(double *x, double *y);
 
@@ -28,8 +27,9 @@ class BiGaussianSampler
     double sigma_y_;
     double rho_;
 
-    const gsl_rng_type *T_;
-    gsl_rng *r_;
+    std::random_device rd_{};
+    std::mt19937 generator_{rd_()};
+    std::normal_distribution<double> unit_normal_{0.0, 1.0};
 };
 }
 
