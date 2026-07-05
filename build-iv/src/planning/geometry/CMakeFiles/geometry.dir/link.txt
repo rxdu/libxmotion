@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../../lib/libgeometry.a CMakeFiles/geometry.dir/src/polyline.cpp.o CMakeFiles/geometry.dir/src/cubic_spline.cpp.o CMakeFiles/geometry.dir/src/parametric_curve.cpp.o CMakeFiles/geometry.dir/src/polygon.cpp.o
-/usr/bin/ranlib ../../../lib/libgeometry.a

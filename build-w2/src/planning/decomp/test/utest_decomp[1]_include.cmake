@@ -1,5 +1,0 @@
-if(EXISTS "/home/rdu/RduWs/robotics_toolbox/xmotion/components/navigation/build-w2/src/planning/decomp/test/utest_decomp[1]_tests.cmake")
-  include("/home/rdu/RduWs/robotics_toolbox/xmotion/components/navigation/build-w2/src/planning/decomp/test/utest_decomp[1]_tests.cmake")
-else()
-  add_test(utest_decomp_NOT_BUILT utest_decomp_NOT_BUILT)
-endif()

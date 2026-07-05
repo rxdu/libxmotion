@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/test_mekf6.dir/test_mekf6.cpp.o -o ../../../bin/test_mekf6  ../../../lib/libestimation.a

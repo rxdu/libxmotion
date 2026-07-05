@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/test_propagator.dir/test_propagator.cpp.o -o ../../../../bin/test_propagator

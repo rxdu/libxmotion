@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/test_eigen_io.dir/test_eigen_io.cpp.o -o ../../../../../bin/test_eigen_io  ../../../../../lib/libmath_utils.a ../../../../../lib/libxmBase.a

@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../../lib/libsampling.a CMakeFiles/sampling.dir/src/rand_num_gen.cpp.o
-/usr/bin/ranlib ../../../lib/libsampling.a

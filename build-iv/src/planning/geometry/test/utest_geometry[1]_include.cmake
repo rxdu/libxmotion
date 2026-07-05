@@ -1,5 +1,0 @@
-if(EXISTS "/home/rdu/RduWs/robotics_toolbox/xmotion/components/navigation/build-iv/src/planning/geometry/test/utest_geometry[1]_tests.cmake")
-  include("/home/rdu/RduWs/robotics_toolbox/xmotion/components/navigation/build-iv/src/planning/geometry/test/utest_geometry[1]_tests.cmake")
-else()
-  add_test(utest_geometry_NOT_BUILT utest_geometry_NOT_BUILT)
-endif()

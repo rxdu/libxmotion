@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/utest_fileio.dir/utest_fileio.cpp.o -o ../../../../bin/utest_fileio  ../../../../lib/libmath_utils.a ../../../../lib/libgtest.a ../../../../lib/libgmock.a ../../../../lib/libgtest_main.a ../../../../lib/libxmBase.a ../../../../lib/libgtest.a
