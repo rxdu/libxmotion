@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/test_event_sync.dir/test_event.cpp.o -o ../../../../bin/test_event_sync  ../../../../lib/libevent.a ../../../../lib/libxmBase.a

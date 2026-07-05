@@ -1,0 +1,18 @@
+include(CMakeFindDependencyMacro)
+
+# Capturing values from configure (optional)
+# set(my-config-var )
+
+# Same syntax as find_package
+find_dependency(Threads REQUIRED)
+
+# Foundation (external XMotion component)
+find_dependency(xmBase 0.3.0)
+
+# Any extra setup
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(Libevent REQUIRED IMPORTED_TARGET libevent)
+find_dependency(graph REQUIRED)
+
+# Add the targets file
+include("${CMAKE_CURRENT_LIST_DIR}/xmNavigationTargets.cmake")

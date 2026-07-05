@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/graph_type_demo.dir/graph_type_demo.cpp.o -o ../../bin/graph_type_demo

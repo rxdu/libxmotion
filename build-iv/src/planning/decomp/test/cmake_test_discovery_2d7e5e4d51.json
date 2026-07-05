@@ -1,0 +1,33 @@
+{
+  "tests": 3,
+  "name": "AllTests",
+  "testsuites": [
+    {
+      "name": "RectGridBaseTest",
+      "tests": 1,
+      "testsuite": [
+        {
+          "name": "GridDouble",
+          "file": "\/home\/rdu\/RduWs\/robotics_toolbox\/xmotion\/components\/navigation\/src\/planning\/decomp\/test\/utest_rect_grid_base.cpp",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "name": "SquareGridTest",
+      "tests": 2,
+      "testsuite": [
+        {
+          "name": "BasicConstruct",
+          "file": "\/home\/rdu\/RduWs\/robotics_toolbox\/xmotion\/components\/navigation\/src\/planning\/decomp\/test\/utest_square_grid.cpp",
+          "line": 16
+        },
+        {
+          "name": "MatrixConstruct",
+          "file": "\/home\/rdu\/RduWs\/robotics_toolbox\/xmotion\/components\/navigation\/src\/planning\/decomp\/test\/utest_square_grid.cpp",
+          "line": 24
+        }
+      ]
+    }
+  ]
+}

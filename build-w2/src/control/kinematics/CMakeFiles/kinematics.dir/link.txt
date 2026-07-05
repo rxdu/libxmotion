@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../../lib/libkinematics.a CMakeFiles/kinematics.dir/src/swerve_drive_kinematics.cpp.o
+/usr/bin/ranlib ../../../lib/libkinematics.a

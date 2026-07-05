@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/test_event_async.dir/test_async_event.cpp.o -o ../../../../bin/test_event_async  ../../../../lib/libevent.a ../../../../lib/libxmBase.a

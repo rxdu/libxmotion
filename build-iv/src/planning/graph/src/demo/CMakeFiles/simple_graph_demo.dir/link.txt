@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/simple_graph_demo.dir/simple_graph_demo.cpp.o -o ../../bin/simple_graph_demo
