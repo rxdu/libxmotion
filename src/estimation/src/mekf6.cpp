@@ -9,15 +9,14 @@
 
 #include "xmnavigation/estimation/mekf6.hpp"
 
+#include "xmbase/math/matrix_utils.hpp"
+
 #include <iostream>
 
 namespace xmotion {
 namespace {
-Eigen::Matrix<double, 3, 3> SkewSymmetric(const Eigen::Vector3d &v) {
-  Eigen::Matrix<double, 3, 3> m;
-  m << 0.0, -v(2), v(1), v(2), 0.0, -v(0), -v(1), v(0), 0.0;
-  return m;
-}
+using MathUtils::SkewSymmetric;
+
 }  // namespace
 
 void Mekf6::Initialize(const Params &params) {

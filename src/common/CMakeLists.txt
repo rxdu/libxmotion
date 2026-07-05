@@ -1,6 +1,4 @@
-# Add libraries
-add_subdirectory(event)
-add_subdirectory(math_utils)
+# Header-only navigation-stack vocabulary (types + interfaces)
 
 ## Header-only motion-domain types/interfaces re-homed into xmNavigation
 ## (trajectory types + controller interface). These left xmBase in the
