@@ -19,9 +19,9 @@ class Lorenz {
   using control_type = double;
   using state_type = std::vector<double>;
 
-  Lorenz(control_type u = 0){};
+  Lorenz(control_type /*u*/ = 0){};
 
-  void operator()(state_type &x, state_type &dxdt, double t) {
+  void operator()(state_type &x, state_type &dxdt, double /*t*/) {
     dxdt[0] = sigma * (x[1] - x[0]);
     dxdt[1] = R * x[0] - x[1] - x[0] * x[2];
     dxdt[2] = x[0] * x[1] - b * x[2];

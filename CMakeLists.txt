@@ -23,16 +23,19 @@ option(STATIC_CHECK "Enable static check" OFF)
 
 option(ENABLE_VISUALIZATION "Enable visualization targets" ON)
 option(XMOTION_DEV_MODE "Development mode forces building tests" OFF)
+option(XMOTION_WERROR "Treat warnings as errors (-Wall -Wextra -Werror)" OFF)
 
 if (DEFINED ENV{ROS_DISTRO})
   set(BUILD_WITH_ROS ON)
 endif ()
 
 if (BUILD_WITH_ROS OR BUILD_AS_MODULE OR (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")))
-  message(STATUS "Visualization targets are not build on non-x86_64 or when built as module")
+  message(STATUS "Visualization targets are not built on non-x86_64 or when built as module")
   set(ENABLE_VISUALIZATION OFF)
-else ()
+elseif (ENABLE_VISUALIZATION)
   message(STATUS "Visualization targets enabled")
+else ()
+  message(STATUS "Visualization targets disabled")
 endif ()
 
 ## Generate symbols for IDE indexer
@@ -114,6 +117,24 @@ if (NOT TARGET xmotion::xmBase)
   endif ()
 endif ()
 
+if (XMOTION_WERROR)
+  # Applied after third_party/xmBase so vendored code builds with its own
+  # flags. -Wmaybe-uninitialized stays a visible warning but does not gate:
+  # GCC's flow analysis has a documented false-positive record inside
+  # libstdc++ headers (std::function/std::regex internals under -O).
+  add_compile_options(-Wall -Wextra -Werror -Wno-error=maybe-uninitialized)
+  # Vendored header-only libraries are consumed from first-party TUs; mark
+  # their include directories SYSTEM so their headers never gate our build.
+  foreach (_vendored stb rapidcsv pnm)
+    if (TARGET ${_vendored})
+      get_target_property(_inc ${_vendored} INTERFACE_INCLUDE_DIRECTORIES)
+      set_target_properties(${_vendored} PROPERTIES
+          INTERFACE_SYSTEM_INCLUDE_DIRECTORIES "${_inc}")
+      unset(_inc)
+    endif ()
+  endforeach ()
+endif ()
+
 ## Add source directories
 add_subdirectory(src)
 
@@ -175,19 +196,19 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xmNavigationConfig.cmake"
     DESTINATION lib/cmake/xmNavigation)
 
 # Packaging support
-set(CPACK_DEBIAN_PACKAGE_NAME "libxmotion")
+set(CPACK_DEBIAN_PACKAGE_NAME "libxmotion-navigation")
 set(CPACK_PACKAGE_VENDOR "Ruixiang Du")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "XMotion Library - a library for robot motion planning and control")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "XMotion Navigation - robot motion algorithms (planning, estimation, control)")
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
 set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/xmotion")
 set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
-# set(CPACK_DEBIAN_PACKAGE_DEPENDS "abc (>= 0.1.2), xyz (<< 0.3.4)")
+# Algorithm-centric dependency set (ADR 0005): no hardware I/O libraries.
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "libgl1-mesa-dev, libglfw3-dev, libcairo2-dev,
-    libtbb-dev, libasio-dev, libboost-all-dev, libgsl-dev, libeigen3-dev, libtbb-dev,
-    libopencv-dev, libyaml-cpp-dev, libncurses-dev, libevdev-dev, libmodbus-dev, libpcl-dev")
+    libtbb-dev, libboost-all-dev, libgsl-dev, libeigen3-dev,
+    libopencv-dev, libyaml-cpp-dev, libncurses-dev, libpcl-dev, libglm-dev")
 set(CPACK_GENERATOR "DEB")
 set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Ruixiang Du (ruixiang.du@gmail.com)")

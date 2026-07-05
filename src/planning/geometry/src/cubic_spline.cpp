@@ -182,7 +182,7 @@ double CubicSpline::Evaluate(double x, uint32_t derivative) const {
 
   // find segment
   uint32_t idx = 0;
-  for (int i = 0; i < knots_.size(); ++i) {
+  for (std::size_t i = 0; i + 1 < knots_.size(); ++i) {
     if (x >= knots_[i].x() && x <= knots_[i + 1].x()) {
       idx = i;
       break;

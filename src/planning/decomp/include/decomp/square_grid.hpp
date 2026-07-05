@@ -48,7 +48,7 @@ struct SquareCellBase {
 
   SquareCellBase() = default;
   SquareCellBase(int32_t xval, int32_t yval, int64_t idval = -1)
-      : x(xval), y(yval), id(idval) {}
+      : id(idval), x(xval), y(yval) {}
 
   // for easy reference, maybe unnecessary for some applications
   int64_t id = -1;

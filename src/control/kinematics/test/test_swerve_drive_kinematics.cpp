@@ -12,7 +12,7 @@
 
 using namespace xmotion;
 
-int main(int argc, char* argv[]) {
+int main(int /*argc*/, char* /*argv*/[]) {
   SwerveDriveKinematics::Param param;
   param.track_width = 0.198;
   param.wheel_base = 0.245;
