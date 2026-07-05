@@ -61,7 +61,7 @@ void DrawCurvilinearGrid(quickviz::CvCanvas &canvas, const GridType &grid,
 template <typename GridType>
 void FillCurvilinearGrid(quickviz::CvCanvas &canvas, const GridType &grid,
                          cv::Scalar fill_color = quickviz::CvColors::lime_color,
-                         int32_t thickness = 1) {
+                         int32_t /*thickness*/ = 1) {
   Polygon polygon;
 
   // add points on the right bound

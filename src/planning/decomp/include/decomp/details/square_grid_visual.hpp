@@ -23,7 +23,6 @@
 namespace xmotion {
 template <typename GridType>
 quickviz::CvCanvas CreateCanvas(const GridType &grid, int32_t ppu = 100) {
-  int32_t vis_side_size = grid.GetCellSize() * ppu;
   quickviz::CvCanvas canvas(ppu);
   // reserve additional space outside the border
   canvas.Resize(

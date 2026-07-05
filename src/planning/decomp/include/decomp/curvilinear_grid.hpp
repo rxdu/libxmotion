@@ -98,7 +98,7 @@ struct CurvilinearCellBase {
 
   CurvilinearCellBase() = delete;
   CurvilinearCellBase(int32_t xval, int32_t yval, int64_t idval = -1)
-      : index(CurviGridIndex(xval, yval)), id(idval) {}
+      : id(idval), index(CurviGridIndex(xval, yval)) {}
   virtual ~CurvilinearCellBase() = default;
 
   // for easy reference, maybe unnecessary for some applications

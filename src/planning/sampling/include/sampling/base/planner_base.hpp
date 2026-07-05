@@ -78,8 +78,8 @@ class PlannerBase {
   }
 
   // default validity check function - always valid
-  bool DefaultStateValidityCheck(std::shared_ptr<StateType>state) { return true; }
-  bool DefaultPathValidityCheck(std::shared_ptr<StateType>sstate, std::shared_ptr<StateType>dstate) {
+  bool DefaultStateValidityCheck(std::shared_ptr<StateType> /*state*/) { return true; }
+  bool DefaultPathValidityCheck(std::shared_ptr<StateType> /*sstate*/, std::shared_ptr<StateType> /*dstate*/) {
     return true;
   }
 };

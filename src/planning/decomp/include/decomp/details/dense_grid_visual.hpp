@@ -70,7 +70,7 @@ void ShowPathOnMatrixAsColorMap(const Eigen::MatrixXd &matrix,
 
   quickviz::CvCanvas canvas(color_img);
 
-  for (int i = 0; i < waypoints.size() - 1; ++i) {
+  for (int i = 0; i < static_cast<int>(waypoints.size()) - 1; ++i) {
     canvas.DrawLine({static_cast<double>(waypoints[i].GetX()),
                      static_cast<double>(waypoints[i].GetY())},
                     {static_cast<double>(waypoints[i + 1].GetX()),
