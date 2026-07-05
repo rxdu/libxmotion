@@ -5,7 +5,7 @@
 #include "traffic_map/map_loader.hpp"
 #include "xmnavigation/prediction/threat_field.hpp"
 
-#include "stopwatch.hpp"
+#include "stopwatch/stopwatch.hpp"
 
 #define ENABLE_VIZ
 
@@ -88,7 +88,7 @@ int main()
 
     //////////////////////////////////////////////////
 
-    stopwatch::StopWatch timer;
+    xmotion::StopWatch timer;
 
     ThreatField field(loader.road_map, loader.traffic_map);
     field.AddVehicleEstimations({veh1, veh2, veh3, veh4, veh5});

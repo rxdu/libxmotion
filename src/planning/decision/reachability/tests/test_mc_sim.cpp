@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "xmnavigation/reachability/monte_carlo_sim.hpp"
-#include "stopwatch.hpp"
+#include "stopwatch/stopwatch.hpp"
 
 using namespace xmotion;
 
@@ -9,7 +9,7 @@ int main()
 {
     MonteCarloSim sim;
 
-    stopwatch::StopWatch timer;
+    xmotion::StopWatch timer;
 
     timer.tic();
     for (int i = 0; i < 20; ++i)

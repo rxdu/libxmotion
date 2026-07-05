@@ -19,3 +19,13 @@ endif ()
 # Internal build-only library — not part of xmNavigation's public/exported API, so it
 # is intentionally not installed/exported. Promote to xmBase if a second
 # component ever needs it (see ADR 0001 — foundation charter).
+
+install(TARGETS event
+    EXPORT xmNavigationTargets
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include)
+
+install(DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

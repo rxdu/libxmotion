@@ -55,7 +55,7 @@ class MarkovChain
 
     State operator[](int32_t k)
     {
-        if (states_.size() > k)
+        if (k >= 0 && states_.size() > static_cast<std::size_t>(k))
             return states_[k];
 
         return CalculateStateAt(k);

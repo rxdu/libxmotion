@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "xmnavigation/state_lattice/state_lattice.hpp"
-#include "stopwatch.hpp"
+#include "stopwatch/stopwatch.hpp"
 
 #define ENABLE_VIZ
 

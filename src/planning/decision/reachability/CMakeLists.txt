@@ -1,5 +1,4 @@
 # Dependency libraries
-find_package(GSL REQUIRED)
 find_package(Eigen3 REQUIRED NO_MODULE)
 
 # Eigen Flags
@@ -24,15 +23,26 @@ set(REACHABILITY_LIB_SRC
     src/car_longitudinal_model.cpp
 )
 add_library(reachability STATIC ${REACHABILITY_LIB_SRC})
-target_link_libraries(reachability markov control utilities Eigen3::Eigen ${GSL_LIBRARIES})
+target_link_libraries(reachability markov model stopwatch Eigen3::Eigen)
 # target_compile_definitions(reachability PUBLIC "-DEIGEN_STACK_ALLOCATION_LIMIT=0")
 target_include_directories(reachability PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
   PRIVATE src)
 
-add_subdirectory(apps)
+# apps/ excluded: gen_tstate_transition depends on the retired traffic_map
+# module; re-enable with the road-network revival.
 
-if(BUILD_TESTIS)
-#   add_subdirectory(tests)
-endif()
+if (BUILD_TESTS)
+  add_subdirectory(tests)
+endif ()
+
+install(TARGETS reachability
+    EXPORT xmNavigationTargets
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include)
+
+install(DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

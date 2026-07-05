@@ -5,7 +5,7 @@
 #include "xmnavigation/prediction/traffic_participant.hpp"
 #include "xmnavigation/prediction/threat_distribution.hpp"
 
-#include "stopwatch.hpp"
+#include "stopwatch/stopwatch.hpp"
 
 #define ENABLE_VIZ
 

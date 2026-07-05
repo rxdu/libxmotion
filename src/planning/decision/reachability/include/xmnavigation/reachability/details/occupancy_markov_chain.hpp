@@ -22,7 +22,7 @@
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Sparse>
 
-#include "stopwatch.hpp"
+#include "stopwatch/stopwatch.hpp"
 
 namespace xmotion
 {
@@ -102,7 +102,7 @@ class OccupancyMarkovChain
 
     void Propagate(int32_t k)
     {
-        // stopwatch::StopWatch timer;
+        // xmotion::StopWatch timer;
         states_.reserve(k + 1);
 
         // forward propagate for k steps
@@ -120,7 +120,7 @@ class OccupancyMarkovChain
 
     void PropagateWithIntervalDist(int32_t k)
     {
-        // stopwatch::StopWatch timer;
+        // xmotion::StopWatch timer;
         states_.reserve(k + 1);
         intv_states_.reserve(k);
 
@@ -144,7 +144,7 @@ class OccupancyMarkovChain
 
     State CalculateStateAt(int32_t k)
     {
-        // stopwatch::StopWatch timer;
+        // xmotion::StopWatch timer;
 
         Eigen::SparseMatrix<double> sparse_s = sparse_init_s_;
 

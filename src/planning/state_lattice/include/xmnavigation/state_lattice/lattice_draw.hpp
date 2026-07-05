@@ -20,13 +20,13 @@ namespace xmotion
 {
 namespace LatticeViz
 {
-void DrawTrajectoryPoints(CvCanvas &canvas, const std::vector<MotionState> &states, cv::Scalar ln_color = CvColors::orange_color, int32_t thickness = 1);
+void DrawTrajectoryPoints(quickviz::CvCanvas &canvas, const std::vector<MotionState> &states, cv::Scalar ln_color = quickviz::CvColors::orange_color, int32_t thickness = 1);
 
-void DrawMotionPrimitive(CvCanvas &canvas, MotionPrimitive mp, double step = 0.1, cv::Scalar ln_color = CvColors::orange_color, int32_t thickness = 1);
-void DrawMotionPrimitive(CvCanvas &canvas, std::vector<MotionPrimitive> &mps, double step = 0.1, cv::Scalar ln_color = CvColors::orange_color, int32_t thickness = 2);
+void DrawMotionPrimitive(quickviz::CvCanvas &canvas, MotionPrimitive mp, double step = 0.1, cv::Scalar ln_color = quickviz::CvColors::orange_color, int32_t thickness = 1);
+void DrawMotionPrimitive(quickviz::CvCanvas &canvas, std::vector<MotionPrimitive> &mps, double step = 0.1, cv::Scalar ln_color = quickviz::CvColors::orange_color, int32_t thickness = 2);
 
-void DrawStateLattice(CvCanvas &canvas, StateLattice sl, double step = 0.1, cv::Scalar ln_color = CvColors::orange_color, int32_t thickness = 1);
-void DrawStateLattice(CvCanvas &canvas, std::vector<StateLattice> &sls, double step = 0.1, cv::Scalar ln_color = CvColors::orange_color, int32_t thickness = 1);
+void DrawStateLattice(quickviz::CvCanvas &canvas, StateLattice sl, double step = 0.1, cv::Scalar ln_color = quickviz::CvColors::orange_color, int32_t thickness = 1);
+void DrawStateLattice(quickviz::CvCanvas &canvas, std::vector<StateLattice> &sls, double step = 0.1, cv::Scalar ln_color = quickviz::CvColors::orange_color, int32_t thickness = 1);
 }; // namespace LatticeViz
 } // namespace xmotion
 

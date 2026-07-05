@@ -29,7 +29,7 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev \
            libglfw3-dev libcairo2-dev libtbb-dev libboost-all-dev \
-           libgsl-dev libeigen3-dev libopencv-dev libyaml-cpp-dev \
+           libeigen3-dev libopencv-dev libyaml-cpp-dev \
            libncurses-dev libpcl-dev libglm-dev
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
@@ -53,7 +53,7 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev \
            libglfw3-dev libcairo2-dev libtbb-dev libboost-all-dev \
-           libgsl-dev libeigen3-dev libopencv-dev libyaml-cpp-dev \
+           libeigen3-dev libopencv-dev libyaml-cpp-dev \
            libncurses-dev libpcl-dev libglm-dev
       - name: Update submodules
         run: git submodule update --init --recursive
@@ -83,7 +83,7 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev \
            libglfw3-dev libcairo2-dev libtbb-dev libboost-all-dev \
-           libgsl-dev libeigen3-dev libopencv-dev libyaml-cpp-dev \
+           libeigen3-dev libopencv-dev libyaml-cpp-dev \
            libncurses-dev libpcl-dev libglm-dev
       - name: Update submodules
         run: git submodule update --init --recursive

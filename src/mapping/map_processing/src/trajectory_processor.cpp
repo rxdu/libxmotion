@@ -20,7 +20,7 @@ void TrajectoryProcessor::LoadData(const std::string& filename,
     rapidcsv::Document doc(filename, rapidcsv::LabelParams(-1, -1),
                            rapidcsv::SeparatorParams(' '));
     trajectory_.points.clear();
-    for (int i = 0; i < doc.GetRowCount(); i++) {
+    for (int i = 0; i < static_cast<int>(doc.GetRowCount()); i++) {
       TrajectoryPoint3d point;
       point.time = doc.GetCell<double>(0, i);
       point.position.x() = doc.GetCell<double>(1, i);

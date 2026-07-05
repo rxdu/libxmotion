@@ -8,6 +8,7 @@
  */
 
 #include "xmnavigation/state_lattice/state_lattice.hpp"
+#include "data_path.hpp"
 
 #include <iostream>
 #include <cmath>

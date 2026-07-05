@@ -8,6 +8,7 @@
  */
 
 #include "xmnavigation/state_lattice/details/lookup_table.hpp"
+#include "data_path.hpp"
 
 #include <numeric>
 #include <fstream>

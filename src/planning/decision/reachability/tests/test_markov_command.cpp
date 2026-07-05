@@ -2,7 +2,7 @@
 
 #include "xmnavigation/reachability/markov_occupancy.hpp"
 
-#include "stopwatch.hpp"
+#include "stopwatch/stopwatch.hpp"
 
 using namespace xmotion;
 

@@ -8,6 +8,12 @@ if(BUILD_TESTS)
   add_subdirectory(test)
 endif()
 
-# Internal build-only library (used only by the disabled mapping module) — not
-# part of xmNavigation's public/exported API, so intentionally not installed/exported.
-# This also keeps its public `stb` dependency out of xmNavigationTargets.
+install(TARGETS math_utils
+    EXPORT xmNavigationTargets
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include)
+
+install(DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
