@@ -6,11 +6,11 @@
  * @copyright Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#include "robot_base/kinematics/swerve_drive_kinematics.hpp"
+#include "kinematics/swerve_drive_kinematics.hpp"
 
 #include <iostream>
 
-#include "xmsigma/logging/xlogger.hpp"
+#include "xmbase/telemetry/telemetry.hpp"
 
 namespace xmotion {
 namespace {
@@ -52,7 +52,7 @@ SwerveDriveKinematics::Command SwerveDriveKinematics::ComputeWheelCommands(
                             twist.angular.z()};
   Eigen::VectorXd v_wheel = coeff_matrix_ * v_body;
 
-  //  XLOG_INFO_STREAM("v_wheel: \n" << v_wheel.transpose());
+  //  XM_INFO_STREAM("v_wheel: \n" << v_wheel.transpose());
 
   for (int i = 0; i < 4; i++) {
     //-------------------- calculate steering angle --------------------//
