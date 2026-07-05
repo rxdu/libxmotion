@@ -72,11 +72,8 @@ jobs:
         shell: bash
         run: ctest
 
-  # Advisory for now: the planning/estimation core predates sanitizer
-  # coverage. Findings are triaged before this lane is promoted to gating.
   sanitizers:
     runs-on: ubuntu-24.04
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v5
       - name: Install dependencies
