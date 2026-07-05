@@ -2,22 +2,13 @@
 # find_package(LIBRARY_NAME REQUIRED)
 
 # Add libraries
-set(LATTICE_LIB_SRC
+add_library(lattice STATIC
   src/point_kinematics.cpp
   src/motion_primitive.cpp
   src/lookup_table.cpp
   src/primitive_generator.cpp
-  src/state_lattice.cpp
-)
-if (ENABLE_VISUALIZATION)
-  list(APPEND LATTICE_LIB_SRC src/lattice_draw.cpp src/lattice_viz.cpp)
-endif ()
-add_library(lattice STATIC ${LATTICE_LIB_SRC})
+  src/state_lattice.cpp)
 target_link_libraries(lattice geometry)
-if (ENABLE_VISUALIZATION)
-  target_compile_definitions(lattice PUBLIC ENABLE_VISUAL)
-  target_link_libraries(lattice cvdraw)
-endif ()
 target_include_directories(lattice PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>

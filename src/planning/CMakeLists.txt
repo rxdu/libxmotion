@@ -17,4 +17,3 @@ add_subdirectory(decomp)
 add_subdirectory(sampling)
 
 add_subdirectory(state_lattice)
-add_subdirectory(decision)

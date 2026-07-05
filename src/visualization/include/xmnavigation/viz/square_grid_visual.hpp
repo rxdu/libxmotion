@@ -13,12 +13,10 @@
 
 #include <cstdint>
 
+#include "cvdraw/cvdraw.hpp"
+
 #include "xmnavigation/decomp/square_grid.hpp"
 #include "graph/graph.hpp"
-
-#ifdef ENABLE_VISUAL
-#include "cvdraw/cvdraw.hpp"
-#endif
 
 namespace xmotion {
 template <typename GridType>

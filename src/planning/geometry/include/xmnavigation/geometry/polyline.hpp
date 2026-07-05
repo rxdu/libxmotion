@@ -15,10 +15,6 @@
 
 #include "xmnavigation/geometry/simple_point.hpp"
 
-#ifdef ENABLE_VISUAL
-#include "cvdraw/cvdraw.hpp"
-#endif
-
 namespace xmotion {
 class LineSegment {
  public:
@@ -86,12 +82,6 @@ class Polyline {
   void UpdateXYMinMax(double x, double y);
 };
 
-#ifdef ENABLE_VISUAL
-void DrawPolyline(quickviz::CvCanvas& canvas, const Polyline& polyline,
-                  bool show_dot = false,
-                  cv::Scalar ln_color = quickviz::CvColors::blue_color,
-                  int32_t thickness = 1);
-#endif
 }  // namespace xmotion
 
 #endif /* POLYLINE_HPP */
