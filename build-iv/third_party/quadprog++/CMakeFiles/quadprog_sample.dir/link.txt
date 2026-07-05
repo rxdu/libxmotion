@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/quadprog_sample.dir/src/main.cc.o -o ../../bin/quadprog_sample  ../../lib/libquadprogpp.a

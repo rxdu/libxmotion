@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libestimation.a CMakeFiles/estimation.dir/src/mekf6.cpp.o CMakeFiles/estimation.dir/src/mekf9.cpp.o
+/usr/bin/ranlib ../../lib/libestimation.a

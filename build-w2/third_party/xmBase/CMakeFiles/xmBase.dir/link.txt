@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libxmBase.a CMakeFiles/xmBase.dir/src/telemetry_unbound.cpp.o CMakeFiles/xmBase.dir/src/telemetry_console_binding.cpp.o
+/usr/bin/ranlib ../../lib/libxmBase.a

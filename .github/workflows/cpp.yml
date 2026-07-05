@@ -19,12 +19,18 @@ jobs:
       - uses: actions/checkout@v5
       - name: Update submodules
         run: git submodule update --init --recursive
+      # ADR 0005: this is an algorithm component — no hardware component may
+      # appear in its dependency tree. Guard against regression.
+      - name: Assert the dependency tree is hardware-free
+        run: |
+          test ! -d third_party/xmDriver
+          ! grep -rq "xmdriver" src/ CMakeLists.txt cmake/
       - name: Install dependencies
         run: |
           sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev \
-           libglfw3-dev libcairo2-dev libtbb-dev libasio-dev libboost-all-dev \
-           libgsl-dev libeigen3-dev libtbb-dev libopencv-dev libyaml-cpp-dev \
-           libncurses-dev libevdev-dev libmodbus-dev libpcl-dev libglm-dev
+           libglfw3-dev libcairo2-dev libtbb-dev libboost-all-dev \
+           libgsl-dev libeigen3-dev libopencv-dev libyaml-cpp-dev \
+           libncurses-dev libpcl-dev libglm-dev
 #      - name: Install cyclonedds
 #        run: |
 #          git clone -b 0.9.1 https://github.com/eclipse-cyclonedds/cyclonedds.git
@@ -73,9 +79,9 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev \
-           libglfw3-dev libcairo2-dev libtbb-dev libasio-dev libboost-all-dev \
-           libgsl-dev libeigen3-dev libtbb-dev libopencv-dev libyaml-cpp-dev \
-           libncurses-dev libevdev-dev libmodbus-dev libpcl-dev libglm-dev
+           libglfw3-dev libcairo2-dev libtbb-dev libboost-all-dev \
+           libgsl-dev libeigen3-dev libopencv-dev libyaml-cpp-dev \
+           libncurses-dev libpcl-dev libglm-dev
       - name: Update submodules
         run: git submodule update --init --recursive
       - name: Create Build Environment

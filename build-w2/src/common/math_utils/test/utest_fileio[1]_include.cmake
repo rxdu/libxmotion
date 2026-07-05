@@ -1,0 +1,5 @@
+if(EXISTS "/home/rdu/RduWs/robotics_toolbox/xmotion/components/navigation/build-w2/src/common/math_utils/test/utest_fileio[1]_tests.cmake")
+  include("/home/rdu/RduWs/robotics_toolbox/xmotion/components/navigation/build-w2/src/common/math_utils/test/utest_fileio[1]_tests.cmake")
+else()
+  add_test(utest_fileio_NOT_BUILT utest_fileio_NOT_BUILT)
+endif()

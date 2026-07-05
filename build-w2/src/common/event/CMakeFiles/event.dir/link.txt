@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../../lib/libevent.a CMakeFiles/event.dir/src/async_event_dispatcher.cpp.o CMakeFiles/event.dir/src/event_dispatcher.cpp.o
+/usr/bin/ranlib ../../../lib/libevent.a
