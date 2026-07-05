@@ -1,9 +1,6 @@
 [submodule "src/planning/graph"]
 	path = src/planning/graph
 	url = https://github.com/rxdu/libgraph.git
-[submodule "src/ipc/ros2_idl"]
-	path = src/common/ipc/ros2_idl
-	url = https://github.com/rxdu/ros2_idl.git
 [submodule "src/quickviz"]
 	path = src/quickviz
 	url = https://github.com/rxdu/quickviz.git
