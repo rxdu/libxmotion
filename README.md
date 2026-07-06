@@ -22,29 +22,36 @@ experimentation — not yet production-hardened.
 
 ## Repository structure
 
-| Folder      | Description           |
-|-------------|-----------------------|
-| cmake       | cmake configuration   |
-| data        | maps, results, logs   |
-| docs        | documentation         |
-| python      | Python code           |
-| scripts     | bash scripts          |
-| src         | C++ code              |
-| third_party | third-party libraries |
+The source tree is organized around the five domain areas of a navigation stack, plus two
+supporting tiers:
+
+| Module               | Description                                                        |
+|----------------------|--------------------------------------------------------------------|
+| `src/estimation`     | state estimation (MEKF attitude/IMU filters)                       |
+| `src/mapping`        | world representation (occupancy/PGM maps, point clouds)            |
+| `src/decision`       | prediction & decision-making (markov models, reachability)         |
+| `src/planning`       | motion planning (geometry, space decomposition, sampling, lattice) |
+| `src/control`        | control laws & models (PID, FSM, dynamics models, kinematics)      |
+| `src/common`         | shared navigation-stack vocabulary (types, interfaces)             |
+| `src/visualization`  | drawing for all of the above — the only module linking a renderer  |
+
+Supporting folders: `cmake` (build configuration), `data` (test fixtures: maps, lookup tables),
+`docs` (documentation), `python` (analysis scripts), `third_party` (vendored dependencies —
+all permissively licensed).
 
 ## Build and run
 
 #### Compiler requirements
 
-* C++11
+* C++17
 
 #### Install dependencies
 
 ```
 $ sudo apt-get install -y libgl1-mesa-dev \
-   libglfw3-dev libcairo2-dev libtbb-dev libasio-dev libboost-all-dev \
-   libgsl-dev libeigen3-dev libtbb-dev libopencv-dev libyaml-cpp-dev \
-   libncurses-dev libevdev-dev libmodbus-dev libpcl-dev libglm-dev
+   libglfw3-dev libcairo2-dev libtbb-dev libboost-all-dev \
+   libeigen3-dev libopencv-dev libyaml-cpp-dev \
+   libncurses-dev libpcl-dev libglm-dev
 ```
 
 #### Compile
