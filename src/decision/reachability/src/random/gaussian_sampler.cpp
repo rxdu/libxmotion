@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "xmnavigation/random/gaussian_sampler.hpp"
+#include "xmnav/random/gaussian_sampler.hpp"
 
 using namespace xmotion;
 

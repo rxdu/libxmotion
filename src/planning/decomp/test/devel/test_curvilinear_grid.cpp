@@ -1,8 +1,8 @@
 #include <iostream>
 #include <iomanip>
 
-#include "xmnavigation/decomp/curvilinear_grid.hpp"
-#include "xmnavigation/viz/curvilinear_grid_visual.hpp"
+#include "xmnav/decomp/curvilinear_grid.hpp"
+#include "xmnav/viz/curvilinear_grid_visual.hpp"
 
 using namespace xmotion;
 using namespace quickviz;

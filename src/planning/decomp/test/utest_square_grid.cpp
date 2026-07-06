@@ -9,7 +9,7 @@
 
 #include "gtest/gtest.h"
 
-#include "xmnavigation/decomp/square_grid.hpp"
+#include "xmnav/decomp/square_grid.hpp"
 
 using namespace xmotion;
 

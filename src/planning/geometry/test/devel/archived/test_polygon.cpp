@@ -1,6 +1,6 @@
 #include <iostream>
-#include "xmnavigation/geometry/polyline.hpp"
-#include "xmnavigation/geometry/polygon.hpp"
+#include "xmnav/geometry/polyline.hpp"
+#include "xmnav/geometry/polygon.hpp"
 
 using namespace xmotion;
 

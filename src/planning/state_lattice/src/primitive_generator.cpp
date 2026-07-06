@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "xmnavigation/state_lattice/primitive_generator.hpp"
+#include "xmnav/state_lattice/primitive_generator.hpp"
 
 #include <numeric>
 

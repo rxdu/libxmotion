@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "xmnavigation/geometry/polyline.hpp"
+#include "xmnav/geometry/polyline.hpp"
 
 #include <cmath>
 #include <cassert>

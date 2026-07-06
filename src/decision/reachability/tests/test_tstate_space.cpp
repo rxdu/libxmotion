@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "xmnavigation/reachability/tstate_space.hpp"
+#include "xmnav/reachability/tstate_space.hpp"
 #include <eigen3/Eigen/Dense>
 
 using namespace xmotion;

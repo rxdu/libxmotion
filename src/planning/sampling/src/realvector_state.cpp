@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2023 Ruixiang Du (rdu)
  */
 
-#include "xmnavigation/sampling/space/realvector_state.hpp"
+#include "xmnav/sampling/space/realvector_state.hpp"
 
 namespace xmotion {
 template <int32_t N>

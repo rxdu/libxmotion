@@ -1,9 +1,9 @@
 #include <iostream>
 #include <iomanip>
 
-#include "xmnavigation/decomp/curvilinear_grid.hpp"
-#include "xmnavigation/decomp/dense_grid.hpp"
-#include "xmnavigation/decomp/square_grid.hpp"
+#include "xmnav/decomp/curvilinear_grid.hpp"
+#include "xmnav/decomp/dense_grid.hpp"
+#include "xmnav/decomp/square_grid.hpp"
 
 using namespace xmotion;
 

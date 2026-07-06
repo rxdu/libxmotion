@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "xmnavigation/reachability/monte_carlo_sim.hpp"
+#include "xmnav/reachability/monte_carlo_sim.hpp"
 
 using namespace xmotion;
 

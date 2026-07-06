@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include "xmnavigation/decomp/details/rect_grid_base.hpp"
+#include "xmnav/decomp/details/rect_grid_base.hpp"
 
 using namespace xmotion;
 

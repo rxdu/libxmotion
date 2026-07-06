@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "xmnavigation/state_lattice/state_lattice.hpp"
+#include "xmnav/state_lattice/state_lattice.hpp"
 #include "data_path.hpp"
 
 #include <iostream>

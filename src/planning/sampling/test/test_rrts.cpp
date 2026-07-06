@@ -3,10 +3,10 @@
 
 #define SHOW_TREE_GROWTH
 
-#include "xmnavigation/sampling/rrt_star.hpp"
-#include "xmnavigation/sampling/space/realvector_space.hpp"
-#include "xmnavigation/sampling/steer/rv_straight_steer.hpp"
-#include "xmnavigation/sampling/validity/rv_polygon_validity_checker.hpp"
+#include "xmnav/sampling/rrt_star.hpp"
+#include "xmnav/sampling/space/realvector_space.hpp"
+#include "xmnav/sampling/steer/rv_straight_steer.hpp"
+#include "xmnav/sampling/validity/rv_polygon_validity_checker.hpp"
 
 #include "stopwatch/stopwatch.hpp"
 

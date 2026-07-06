@@ -6,7 +6,7 @@
 #include "spatial/point_multiset.hpp"
 #include "spatial/neighbor_iterator.hpp"
 
-#include "xmnavigation/sampling/space/realvector_space.hpp"
+#include "xmnav/sampling/space/realvector_space.hpp"
 #include "stopwatch/stopwatch.hpp"
 
 using namespace xmotion;

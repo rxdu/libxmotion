@@ -7,7 +7,7 @@
  * Copyright (c) 2022 Ruixiang Du (rdu)
  */
 
-#include "xmnavigation/pid/pid_controller.hpp"
+#include "xmnav/pid/pid_controller.hpp"
 
 using namespace xmotion;
 

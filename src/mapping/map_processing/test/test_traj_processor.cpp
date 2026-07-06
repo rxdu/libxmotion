@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-#include "xmnavigation/map_processing/trajectory_processor.hpp"
+#include "xmnav/map_processing/trajectory_processor.hpp"
 
 #include "cvdraw/cvdraw.hpp"
 

@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "xmnavigation/estimation/mekf6.hpp"
+#include "xmnav/estimation/mekf6.hpp"
 
 using namespace xmotion;
 

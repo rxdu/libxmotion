@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "xmnavigation/prediction/dynamic_threat_model.hpp"
+#include "xmnav/prediction/dynamic_threat_model.hpp"
 
 #include "file_io/folder_path.hpp"
 

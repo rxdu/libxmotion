@@ -2,8 +2,8 @@
 #include <vector>
 #include <cmath>
 
-#include "xmnavigation/geometry/cubic_spline.hpp"
-#include "xmnavigation/viz/geometry_draw.hpp"
+#include "xmnav/geometry/cubic_spline.hpp"
+#include "xmnav/viz/geometry_draw.hpp"
 
 using namespace xmotion;
 using namespace quickviz;

@@ -7,13 +7,13 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "xmnavigation/state_lattice/details/lookup_table.hpp"
+#include "xmnav/state_lattice/details/lookup_table.hpp"
 #include "data_path.hpp"
 
 #include <numeric>
 #include <fstream>
 
-#include "xmnavigation/state_lattice/primitive_generator.hpp"
+#include "xmnav/state_lattice/primitive_generator.hpp"
 
 using namespace xmotion;
 
