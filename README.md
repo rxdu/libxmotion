@@ -32,7 +32,7 @@ supporting tiers:
 | `src/decision`       | prediction & decision-making (markov models, reachability)         |
 | `src/planning`       | motion planning (geometry, space decomposition, sampling, lattice) |
 | `src/control`        | control laws & models (PID, FSM, dynamics models, kinematics)      |
-| `src/common`         | shared navigation-stack vocabulary (types, interfaces)             |
+| `src/types`          | shared navigation-stack vocabulary (the inter-area contract types) |
 | `src/visualization`  | drawing for all of the above — the only module linking a renderer  |
 
 Supporting folders: `cmake` (build configuration), `data` (test fixtures: maps, lookup tables),
