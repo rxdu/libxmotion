@@ -155,7 +155,7 @@ add_subdirectory(src)
 ## in the XMotion algorithm libraries (estimation, control, planning).
 add_library(xmNavigation INTERFACE)
 target_link_libraries(xmNavigation INTERFACE
-    xmnavigation_common
+    navtypes
     estimation
     kinematics
     pid

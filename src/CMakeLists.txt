@@ -1,6 +1,6 @@
 ## Add source directories
 # Modules
-add_subdirectory(common)
+add_subdirectory(types)
 add_subdirectory(mapping)
 add_subdirectory(decision)
 add_subdirectory(estimation)
