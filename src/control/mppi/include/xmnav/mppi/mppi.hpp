@@ -55,8 +55,62 @@ inline void ShiftSequence(Sequence &u) {
   u.row(horizon - 1) = u.row(horizon - 2);
 }
 
+// Savitzky-Golay filter, window 5, quadratic fit: coefficients
+// (-3, 12, 17, 12, -3)/35; the two samples at each boundary are left
+// untouched (the head of the sequence is the command about to execute at
+// the next shift, so boundary bias matters more than boundary smoothness).
+template <typename Sequence>
+inline void SavitzkyGolay5(Sequence &u) {
+  const Eigen::Index horizon = u.rows();
+  if (horizon < 5) return;
+  Sequence s = u;
+  for (Eigen::Index t = 2; t + 2 < horizon; ++t) {
+    u.row(t) = (-3.0 * s.row(t - 2) + 12.0 * s.row(t - 1) + 17.0 * s.row(t) +
+                12.0 * s.row(t + 1) - 3.0 * s.row(t + 2)) /
+               35.0;
+  }
+}
+
 }  // namespace mppi_detail
 
+template <int ControlDim>
+struct MppiParams {
+using Control = Eigen::Matrix<double, ControlDim, 1>;
+
+  int num_samples = 1000;
+  int horizon_steps = 40;
+  double dt = 0.05;
+
+  // inverse temperature: divides cost differences in the weights
+  double lambda = 1.0;
+  // alpha in [0,1] of Williams 2018: gamma = lambda * (1 - alpha) scales
+  // the importance-sampling control-cost term. alpha = 1 disables the pull
+  // toward the base distribution entirely.
+  double control_cost_decoupling = 0.5;
+
+  // per-channel sampling standard deviation (must be > 0 on every channel:
+  // Sigma^{-1} appears in the control-cost term)
+  Control sigma = Control::Ones();
+
+  // actuator box constraints applied to every sampled control
+  Control u_min =
+      Control::Constant(-std::numeric_limits<double>::infinity());
+  Control u_max = Control::Constant(std::numeric_limits<double>::infinity());
+
+  std::uint64_t seed = 42;
+
+  // Normalize (S - rho) by the sample spread (mean - min) before the
+  // softmax, making lambda scale-free in the cost magnitude. Without it,
+  // lambda must be re-tuned to the per-horizon cost scale and easily
+  // degenerates into winner-take-all (effective sample size -> 1).
+  bool normalize_cost_spread = false;
+
+  // Savitzky-Golay smoothing (window 5, quadratic) applied to the updated
+  // control sequence. Cheap chattering mitigation (the Nav2 approach); for
+  // smoothness by construction prefer SplineKnotSampler or
+  // ColoredNoiseSampler.
+  bool smooth_output = false;
+};
 template <typename Model, typename Cost,
           typename Sampler = GaussianSampler<Model::kControlDim>>
 class Mppi {
@@ -69,35 +123,19 @@ class Mppi {
   // row t = control at step t
   using ControlSequence = Eigen::Matrix<double, Eigen::Dynamic, kControlDim>;
 
-  struct Params {
-    int num_samples = 1000;
-    int horizon_steps = 40;
-    double dt = 0.05;
+  using Params = MppiParams<kControlDim>;
 
-    // inverse temperature: divides cost differences in the weights
-    double lambda = 1.0;
-    // alpha in [0,1] of Williams 2018: gamma = lambda * (1 - alpha) scales
-    // the importance-sampling control-cost term. alpha = 1 disables the pull
-    // toward the base distribution entirely.
-    double control_cost_decoupling = 0.5;
-
-    // per-channel sampling standard deviation (must be > 0 on every channel:
-    // Sigma^{-1} appears in the control-cost term)
-    Control sigma = Control::Ones();
-
-    // actuator box constraints applied to every sampled control
-    Control u_min =
-        Control::Constant(-std::numeric_limits<double>::infinity());
-    Control u_max = Control::Constant(std::numeric_limits<double>::infinity());
-
-    std::uint64_t seed = 42;
-  };
 
   Mppi(Model model, Cost cost, const Params &params)
+      : Mppi(model, cost, params, Sampler(params.seed)) {}
+
+  // for samplers with configuration beyond the seed (colored noise, spline
+  // knots, log-MPPI)
+  Mppi(Model model, Cost cost, const Params &params, Sampler sampler)
       : model_(model),
         cost_(cost),
         params_(params),
-        sampler_(params.seed),
+        sampler_(std::move(sampler)),
         u_(ControlSequence::Zero(params.horizon_steps, kControlDim)),
         noise_(static_cast<std::size_t>(params.num_samples),
                ControlSequence::Zero(params.horizon_steps, kControlDim)),
@@ -132,7 +170,12 @@ class Mppi {
       costs_(k) = cost;
     }
 
-    mppi_detail::SoftmaxWeights(costs_, params_.lambda, weights_);
+    double lambda = params_.lambda;
+    if (params_.normalize_cost_spread) {
+      const double spread = costs_.mean() - costs_.minCoeff();
+      if (spread > 1e-12) lambda = params_.lambda * spread;
+    }
+    mppi_detail::SoftmaxWeights(costs_, lambda, weights_);
     last_best_cost_ = costs_.minCoeff();
     last_ess_ = 1.0 / weights_.squaredNorm();
 
@@ -144,6 +187,9 @@ class Mppi {
       }
     }
     u_ += u_delta_;
+    if (params_.smooth_output) {
+      mppi_detail::SavitzkyGolay5(u_);
+    }
     // the executed command must respect the box constraints too
     for (Eigen::Index t = 0; t < u_.rows(); ++t) {
       u_.row(t) = u_.row(t)
