@@ -28,6 +28,7 @@
 
 #include <eigen3/Eigen/Dense>
 
+#include "xmbase/telemetry/telemetry.hpp"
 #include "xmnav/mppi/sampler.hpp"
 
 namespace xmotion {
@@ -146,6 +147,7 @@ class Mppi {
   // One MPPI iteration from state x0: shift, sample, roll out, reweight.
   // Returns the updated control sequence (row 0 = the command to execute).
   const ControlSequence &Plan(const State &x0) {
+    XM_SPAN("control.mppi.plan");
     mppi_detail::ShiftSequence(u_);
     sampler_.SampleNoise(noise_, params_.sigma);
 
@@ -178,6 +180,8 @@ class Mppi {
     mppi_detail::SoftmaxWeights(costs_, lambda, weights_);
     last_best_cost_ = costs_.minCoeff();
     last_ess_ = 1.0 / weights_.squaredNorm();
+    ess_gauge_.Set(last_ess_);
+    best_cost_gauge_.Set(last_best_cost_);
 
     for (int k = 0; k < params_.num_samples; ++k) {
       if (k == 0) {
@@ -226,6 +230,13 @@ class Mppi {
 
   double last_best_cost_ = 0.0;
   double last_ess_ = 0.0;
+
+  // pre-acquired telemetry handles (atomic slot writes, wait-free; no-ops
+  // when no telemetry binding is installed)
+  telemetry::Gauge ess_gauge_ =
+      telemetry::GetGauge("control.mppi.effective_sample_size");
+  telemetry::Gauge best_cost_gauge_ =
+      telemetry::GetGauge("control.mppi.best_cost");
 };
 
 }  // namespace xmotion
