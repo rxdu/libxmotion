@@ -2,13 +2,13 @@
 #include <cstdint>
 #include <cmath>
 
-#include "xmnavigation/state_lattice/state_lattice.hpp"
+#include "xmnav/state_lattice/state_lattice.hpp"
 #include "stopwatch/stopwatch.hpp"
 
 #define ENABLE_VIZ
 
 #ifdef ENABLE_VIZ
-#include "xmnavigation/viz/lattice_viz.hpp"
+#include "xmnav/viz/lattice_viz.hpp"
 #endif
 
 using namespace xmotion;

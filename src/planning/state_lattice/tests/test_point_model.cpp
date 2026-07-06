@@ -1,12 +1,12 @@
 #include <iostream>
 #include <cstdint>
 
-#include "xmnavigation/state_lattice/details/point_kinematics.hpp"
+#include "xmnav/state_lattice/details/point_kinematics.hpp"
 
 #define ENABLE_VIZ
 
 #ifdef ENABLE_VIZ
-#include "xmnavigation/viz/lattice_viz.hpp"
+#include "xmnav/viz/lattice_viz.hpp"
 #endif
 
 using namespace xmotion;

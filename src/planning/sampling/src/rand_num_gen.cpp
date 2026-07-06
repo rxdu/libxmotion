@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "xmnavigation/sampling/random/rand_num_gen.hpp"
+#include "xmnav/sampling/random/rand_num_gen.hpp"
 
 namespace xmotion
 {

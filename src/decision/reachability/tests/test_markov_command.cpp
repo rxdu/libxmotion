@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "xmnavigation/reachability/markov_occupancy.hpp"
+#include "xmnav/reachability/markov_occupancy.hpp"
 
 #include "stopwatch/stopwatch.hpp"
 

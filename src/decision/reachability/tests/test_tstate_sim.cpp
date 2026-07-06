@@ -1,13 +1,13 @@
 #include <iostream>
 
-#include "xmnavigation/reachability/details/tstate_transition_sim.hpp"
+#include "xmnav/reachability/details/tstate_transition_sim.hpp"
 #include "stopwatch/stopwatch.hpp"
 
 #define ENABLE_VIZ
 
 #ifdef ENABLE_VIZ
 #include "traffic_viz/reachability_viz.hpp"
-// #include "xmnavigation/geometry/matrix_viz.hpp"
+// #include "xmnav/geometry/matrix_viz.hpp"
 #endif
 
 using namespace xmotion;

@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "xmnavigation/markov/markov_chain.hpp"
+#include "xmnav/markov/markov_chain.hpp"
 
 using namespace xmotion;
 

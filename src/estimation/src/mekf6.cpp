@@ -7,7 +7,7 @@
  * Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#include "xmnavigation/estimation/mekf6.hpp"
+#include "xmnav/estimation/mekf6.hpp"
 
 #include "xmbase/math/matrix_utils.hpp"
 

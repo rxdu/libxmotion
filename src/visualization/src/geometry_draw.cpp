@@ -4,7 +4,7 @@
  * Copyright (c) 2018-2026 Ruixiang Du (rdu)
  */
 
-#include "xmnavigation/viz/geometry_draw.hpp"
+#include "xmnav/viz/geometry_draw.hpp"
 
 #include <cassert>
 

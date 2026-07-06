@@ -1,9 +1,9 @@
 #include <iostream>
 #include <memory>
 
-#include "xmnavigation/prediction/collision_field.hpp"
-#include "xmnavigation/prediction/traffic_participant.hpp"
-#include "xmnavigation/prediction/threat_distribution.hpp"
+#include "xmnav/prediction/collision_field.hpp"
+#include "xmnav/prediction/traffic_participant.hpp"
+#include "xmnav/prediction/threat_distribution.hpp"
 
 #include "stopwatch/stopwatch.hpp"
 

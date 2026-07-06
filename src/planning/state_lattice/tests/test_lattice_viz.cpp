@@ -2,9 +2,9 @@
 #include <cstdint>
 #include <cmath>
 
-#include "xmnavigation/state_lattice/state_lattice.hpp"
+#include "xmnav/state_lattice/state_lattice.hpp"
 
-#include "xmnavigation/viz/lattice_viz.hpp"
+#include "xmnav/viz/lattice_viz.hpp"
 #include "stopwatch/stopwatch.hpp"
 
 using namespace xmotion;

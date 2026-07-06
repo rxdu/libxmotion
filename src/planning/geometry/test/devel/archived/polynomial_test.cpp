@@ -13,7 +13,7 @@
 
 #include "gtest/gtest.h"
 
-#include "xmnavigation/geometry/polynomial.hpp"
+#include "xmnav/geometry/polynomial.hpp"
 
 using namespace xmotion;
 

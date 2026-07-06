@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "xmnavigation/state_lattice/motion_primitive.hpp"
+#include "xmnav/state_lattice/motion_primitive.hpp"
 
 using namespace xmotion;
 

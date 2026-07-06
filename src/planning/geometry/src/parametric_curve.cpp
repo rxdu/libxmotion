@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "xmnavigation/geometry/parametric_curve.hpp"
+#include "xmnav/geometry/parametric_curve.hpp"
 
 #include <cassert>
 

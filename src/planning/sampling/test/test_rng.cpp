@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <map>
 
-#include "xmnavigation/sampling/random/rand_num_gen.hpp"
+#include "xmnav/sampling/random/rand_num_gen.hpp"
 
 using namespace xmotion;
 

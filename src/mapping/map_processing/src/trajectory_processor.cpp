@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
-#include "xmnavigation/map_processing/trajectory_processor.hpp"
+#include "xmnav/map_processing/trajectory_processor.hpp"
 
 #include <Eigen/Dense>
 #include "rapidcsv.h"

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdint>
 
-#include "xmnavigation/state_lattice/details/lookup_table.hpp"
+#include "xmnav/state_lattice/details/lookup_table.hpp"
 
 // #define ENABLE_VIZ
 

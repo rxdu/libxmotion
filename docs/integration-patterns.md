@@ -9,7 +9,7 @@ The snippets below were compile-checked against xmNavigation + xmDriver at the t
 One process, direct calls: kinematics (this library) computes; actuator groups (xmDriver) command; the application owns construction, the loop, and shutdown.
 
 ```cpp
-#include "xmnavigation/kinematics/swerve_drive_kinematics.hpp"   // xmNavigation: pure math
+#include "xmnav/kinematics/swerve_drive_kinematics.hpp"   // xmNavigation: pure math
 #include "xmdriver/hal/motor_factory.hpp"           // xmDriver: construction seam
 #include "xmdriver/hal/actuator_group.hpp"          // xmDriver: capability fan-out
 #include "xmbase/telemetry/telemetry.hpp"           // xmBase: one instrumentation surface

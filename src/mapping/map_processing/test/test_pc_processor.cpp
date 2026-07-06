@@ -8,7 +8,7 @@
 
 #include <thread>
 
-#include "xmnavigation/map_processing/point_cloud_processor.hpp"
+#include "xmnav/map_processing/point_cloud_processor.hpp"
 #include <pcl/visualization/pcl_visualizer.h>
 
 using namespace xmotion;

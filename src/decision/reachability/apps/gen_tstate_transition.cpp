@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "xmnavigation/reachability/details/tstate_transition_sim.hpp"
+#include "xmnav/reachability/details/tstate_transition_sim.hpp"
 
 // #define ENABLE_VIZ
 

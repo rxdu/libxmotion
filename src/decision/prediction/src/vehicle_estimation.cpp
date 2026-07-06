@@ -7,7 +7,7 @@
  * Copyright (c) 2018 Ruixiang Du (rdu)
  */
 
-#include "xmnavigation/prediction/vehicle_estimation.hpp"
+#include "xmnav/prediction/vehicle_estimation.hpp"
 
 using namespace xmotion;
 

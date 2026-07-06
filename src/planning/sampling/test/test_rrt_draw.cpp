@@ -1,11 +1,11 @@
 #include <iostream>
 #include <cstdint>
 
-#include "xmnavigation/sampling/rrt.hpp"
-#include "xmnavigation/sampling/space/realvector_space.hpp"
-#include "xmnavigation/sampling/steer/rv_straight_steer.hpp"
+#include "xmnav/sampling/rrt.hpp"
+#include "xmnav/sampling/space/realvector_space.hpp"
+#include "xmnav/sampling/steer/rv_straight_steer.hpp"
 
-#include "xmnavigation/viz/rrt_draw.hpp"
+#include "xmnav/viz/rrt_draw.hpp"
 
 using namespace xmotion;
 using namespace quickviz;

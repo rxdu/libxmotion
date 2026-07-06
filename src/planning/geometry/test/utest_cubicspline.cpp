@@ -9,7 +9,7 @@
 
 #include "gtest/gtest.h"
 
-#include "xmnavigation/geometry/cubic_spline.hpp"
+#include "xmnav/geometry/cubic_spline.hpp"
 
 using namespace xmotion;
 

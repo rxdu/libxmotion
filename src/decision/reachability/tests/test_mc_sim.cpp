@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "xmnavigation/reachability/monte_carlo_sim.hpp"
+#include "xmnav/reachability/monte_carlo_sim.hpp"
 #include "stopwatch/stopwatch.hpp"
 
 using namespace xmotion;
