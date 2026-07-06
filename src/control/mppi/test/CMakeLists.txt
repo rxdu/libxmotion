@@ -1,0 +1,7 @@
+add_executable(test_mppi_core test_mppi_core.cpp)
+target_link_libraries(test_mppi_core mppi gtest gtest_main)
+gtest_discover_tests(test_mppi_core)
+
+add_executable(test_mppi_control test_mppi_control.cpp)
+target_link_libraries(test_mppi_control mppi gtest gtest_main)
+gtest_discover_tests(test_mppi_control)
