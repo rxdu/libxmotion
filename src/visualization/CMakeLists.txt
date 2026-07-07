@@ -10,6 +10,7 @@ add_library(viz STATIC
     src/lattice_viz.cpp)
 target_link_libraries(viz PUBLIC
     cvdraw
+    mppi
     geometry
     decomp
     sampling
@@ -29,3 +30,7 @@ install(TARGETS viz
 
 install(DIRECTORY include/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+if (BUILD_TESTS)
+  add_subdirectory(test)
+endif ()

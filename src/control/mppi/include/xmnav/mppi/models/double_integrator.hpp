@@ -23,7 +23,7 @@ struct DoubleIntegratorModel {
   using State = Eigen::Matrix<double, kStateDim, 1>;
   using Control = Eigen::Matrix<double, kControlDim, 1>;
 
-  State Step(const State &x, const Control &u, double dt) const {
+  State Step(const State &x, const Control &u, int /*t*/, double dt) const {
     State next;
     next(0) = x(0) + x(1) * dt;
     next(1) = x(1) + u(0) * dt;
