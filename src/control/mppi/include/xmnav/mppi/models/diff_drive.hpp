@@ -16,8 +16,13 @@
 
 #include <eigen3/Eigen/Dense>
 
+#include "xmnav/mppi/model_core.hpp"
+
 namespace xmotion {
 
+// Wraps the shared raw-span core (model_core::DiffDriveStep) that the CUDA
+// rollout backend also compiles — one implementation of the dynamics for
+// both backends.
 struct DiffDriveModel {
   static constexpr int kStateDim = 3;
   static constexpr int kControlDim = 2;
@@ -27,9 +32,7 @@ struct DiffDriveModel {
 
   State Step(const State &x, const Control &u, int /*t*/, double dt) const {
     State next;
-    next(0) = x(0) + u(0) * std::cos(x(2)) * dt;
-    next(1) = x(1) + u(0) * std::sin(x(2)) * dt;
-    next(2) = x(2) + u(1) * dt;
+    model_core::DiffDriveStep(x.data(), u.data(), dt, next.data());
     return next;
   }
 };

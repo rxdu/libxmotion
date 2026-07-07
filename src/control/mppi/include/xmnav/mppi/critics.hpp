@@ -20,6 +20,10 @@
 
 #include <eigen3/Eigen/Dense>
 
+// raw-span cores shared with the CUDA rollout backend — the Eigen critics
+// below wrap them so both backends run one implementation of each formula
+#include "xmnav/mppi/critic_core.hpp"
+
 namespace xmotion {
 
 // (x - x_ref)^T Q (x - x_ref) per stage, scaled terminal weight at the end.
@@ -74,10 +78,8 @@ struct Se2GoalCost {
   double terminal_scale = 20.0;
 
   double StageCost(const State &x, const Control & /*u*/, int /*t*/) const {
-    const double dx = x(0) - goal(0);
-    const double dy = x(1) - goal(1);
-    return position_weight * (dx * dx + dy * dy) +
-           heading_weight * (1.0 - std::cos(x(2) - goal(2)));
+    return critic_core::Se2GoalStage(x.data(), goal.data(), position_weight,
+                                     heading_weight);
   }
   double TerminalCost(const State &x) const {
     return terminal_scale * StageCost(x, Control::Zero(), 0);
@@ -102,12 +104,9 @@ struct CircularObstacleCost {
 
   double StageCost(const State &x, const Control & /*u*/, int /*t*/) const {
     double cost = 0.0;
-    const Eigen::Vector2d p = x.head<2>();
     for (const auto &ob : obstacles) {
-      const double clearance = (p - ob.center).norm() - ob.radius - margin;
-      if (clearance < 0.0) {
-        cost += weight * clearance * clearance;
-      }
+      cost += critic_core::CircularObstaclePenalty(
+          x(0) - ob.center(0), x(1) - ob.center(1), ob.radius, margin, weight);
     }
     return cost;
   }
@@ -134,6 +133,13 @@ class CompositeCost {
     return std::apply(
         [&](const auto &...critic) { return (critic.TerminalCost(x) + ...); },
         critics_);
+  }
+
+  // access to the composed critics (rollout backends translate them into
+  // device-side programs; index order = construction order)
+  template <std::size_t I>
+  const auto &critic() const {
+    return std::get<I>(critics_);
   }
 
  private:

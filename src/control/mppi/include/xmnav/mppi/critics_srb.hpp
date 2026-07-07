@@ -13,6 +13,8 @@
 
 #include <eigen3/Eigen/Dense>
 
+// raw-span cores shared with the CUDA rollout backend
+#include "xmnav/mppi/critic_core.hpp"
 #include "xmnav/mppi/models/srb_quadruped.hpp"
 
 namespace xmotion {
@@ -35,15 +37,10 @@ struct SrbTrackingCost {
   double terminal_scale = 10.0;
 
   double StageCost(const State &x, const Control & /*u*/, int /*t*/) const {
-    const double dh = SrbQuadrupedModel::Position(x)(2) - height_ref;
-    const Eigen::Vector3d body_z =
-        SrbQuadrupedModel::Orientation(x) * Eigen::Vector3d::UnitZ();
-    const double tilt = 1.0 - body_z(2);  // 0 when level
-    const Eigen::Vector3d dv = SrbQuadrupedModel::Velocity(x) - velocity_ref;
-    const Eigen::Vector3d w = SrbQuadrupedModel::AngularVelocity(x);
-    return height_weight * dh * dh + tilt_weight * tilt +
-           velocity_weight * dv.squaredNorm() +
-           angular_rate_weight * w.squaredNorm();
+    return critic_core::SrbTrackingStage(x.data(), height_ref,
+                                         velocity_ref.data(), height_weight,
+                                         tilt_weight, velocity_weight,
+                                         angular_rate_weight);
   }
   double TerminalCost(const State &x) const {
     return terminal_scale * StageCost(x, Control::Zero(), 0);
@@ -73,11 +70,7 @@ struct FrictionConeCost {
     double cost = 0.0;
     for (int i = 0; i < SrbQuadrupedModel::kNumFeet; ++i) {
       if (!InStance(t, i)) continue;
-      const Eigen::Vector3d f = u.segment<3>(3 * i);
-      const double pull = std::max(0.0, -f(2));           // f_z >= 0
-      const double slip =
-          std::max(0.0, f.head<2>().norm() - mu * std::max(0.0, f(2)));
-      cost += weight * (pull * pull + slip * slip);
+      cost += critic_core::FrictionConePenalty(u.data() + 3 * i, mu, weight);
     }
     return cost;
   }
