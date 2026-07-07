@@ -8,6 +8,10 @@ on:
   schedule:
     - cron: '23 5 * * 1'   # weekly, Monday 05:23 UTC
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
