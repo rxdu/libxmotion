@@ -37,8 +37,8 @@ int main() {
   // grid.ResizeGrid(3, 3);
   // grid.PrintGrid();
 
-  // ShowDenseGridAsImage(grid);
-  ShowDenseGridAsColorMap(grid);
+  // quickviz::CvIO::ShowImage(DenseGridToImage(grid);
+  quickviz::CvIO::ShowImage(DenseGridToColorMap(grid));
 
   return 0;
 }
