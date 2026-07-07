@@ -35,7 +35,7 @@
 #include "viewer/viewer.hpp"
 
 #include "xmnav/mppi/critics.hpp"
-#include "xmnav/mppi/models/diff_drive.hpp"
+#include "xmnav/models/diff_drive.hpp"
 #include "xmnav/mppi/mppi.hpp"
 #include "xmnav/viz/mppi_draw_cairo.hpp"
 

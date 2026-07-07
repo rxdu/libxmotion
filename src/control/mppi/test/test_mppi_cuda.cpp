@@ -16,7 +16,7 @@
 
 #include "xmnav/mppi/cuda/cuda_rollout_backend.hpp"
 #include "xmnav/mppi/critics.hpp"
-#include "xmnav/mppi/models/diff_drive.hpp"
+#include "xmnav/models/diff_drive.hpp"
 #include "xmnav/mppi/mppi.hpp"
 
 using namespace xmotion;

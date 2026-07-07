@@ -12,8 +12,8 @@
 
 #include <cmath>
 
-#include "xmnav/model/bicycle_model.hpp"
-#include "xmnav/model/system_propagator.hpp"
+#include "xmnav/models/bicycle_accel.hpp"
+#include "xmnav/models/rk4.hpp"
 
 #include "xmnav/random/bigaussian_sampler.hpp"
 #include "xmnav/random/gaussian_sampler.hpp"
@@ -26,8 +26,9 @@ class MonteCarloSim
     void RunSim(double t0, double tf, double step, int32_t iter_num);
 
   private:
-    // SystemPropagator<LongitudinalDynamics, double> propagator_;
-    SystemPropagator<BicycleKinematics> propagator_;
+    // RK4 over the shared accel-bicycle model (retired model/ +
+    // boost::odeint SystemPropagator replaced by models/rk4.hpp)
+    BicycleAccelModel model_;
 
     BiGaussianSampler init_pos_sampler_ = {0.1, 0.05, 0};
     GaussianSampler acc_sampler_ = {0.0, 2.0};

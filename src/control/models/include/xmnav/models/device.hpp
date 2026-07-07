@@ -10,8 +10,8 @@
  * Copyright (c) 2026 Ruixiang Du (rdu)
  */
 
-#ifndef XMNAV_MPPI_DEVICE_HPP
-#define XMNAV_MPPI_DEVICE_HPP
+#ifndef XMNAV_MODELS_DEVICE_HPP
+#define XMNAV_MODELS_DEVICE_HPP
 
 #if defined(__CUDACC__)
 #define XMNAV_HD __host__ __device__
@@ -19,4 +19,4 @@
 #define XMNAV_HD
 #endif
 
-#endif  // XMNAV_MPPI_DEVICE_HPP
+#endif  // XMNAV_MODELS_DEVICE_HPP

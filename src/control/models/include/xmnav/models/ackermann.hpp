@@ -8,8 +8,8 @@
  * Copyright (c) 2026 Ruixiang Du (rdu)
  */
 
-#ifndef XMNAV_MPPI_MODELS_ACKERMANN_HPP
-#define XMNAV_MPPI_MODELS_ACKERMANN_HPP
+#ifndef XMNAV_MODELS_ACKERMANN_HPP
+#define XMNAV_MODELS_ACKERMANN_HPP
 
 #include <cmath>
 
@@ -37,4 +37,4 @@ struct AckermannModel {
 
 }  // namespace xmotion
 
-#endif  // XMNAV_MPPI_MODELS_ACKERMANN_HPP
+#endif  // XMNAV_MODELS_ACKERMANN_HPP

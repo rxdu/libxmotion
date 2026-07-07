@@ -15,7 +15,7 @@
 
 // raw-span cores shared with the CUDA rollout backend
 #include "xmnav/mppi/critic_core.hpp"
-#include "xmnav/mppi/models/srb_quadruped.hpp"
+#include "xmnav/models/srb_quadruped.hpp"
 
 namespace xmotion {
 

@@ -16,7 +16,7 @@
 
 #include "xmnav/mppi/critics.hpp"
 #include "xmnav/mppi/critics_srb.hpp"
-#include "xmnav/mppi/models/srb_quadruped.hpp"
+#include "xmnav/models/srb_quadruped.hpp"
 #include "xmnav/mppi/mppi.hpp"
 
 using namespace xmotion;

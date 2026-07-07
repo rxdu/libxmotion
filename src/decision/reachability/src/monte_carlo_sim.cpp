@@ -45,7 +45,12 @@ void MonteCarloSim::RunSim(double t0, double tf, double step, int32_t iter_num)
     for (int32_t i = 0; i < iter_num; ++i)
     {
         // asc::state_t state = propagator_.Propagate({y_random[i], 8.0}, 0.1, 0, 2.0, 0.01);
-        std::vector<double> state = propagator_.Propagate({x_random[i], y_random[i], 8.0, 0}, {acc_random[i], ster_random[i]}, t0, tf, step);
+        BicycleAccelModel::State x0;
+        x0 << x_random[i], y_random[i], 8.0, 0.0;
+        BicycleAccelModel::Control u;
+        u << acc_random[i], ster_random[i];
+        const BicycleAccelModel::State state =
+            Rk4Propagate(model_, x0, u, t0, tf, step);
 
         // TODO(revive): record sim samples through telemetry (XM_* / MCAP)
         // instead of the removed ad-hoc CSV logger.

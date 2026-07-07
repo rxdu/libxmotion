@@ -9,14 +9,14 @@
  * Copyright (c) 2026 Ruixiang Du (rdu)
  */
 
-#ifndef XMNAV_MPPI_MODELS_DIFF_DRIVE_HPP
-#define XMNAV_MPPI_MODELS_DIFF_DRIVE_HPP
+#ifndef XMNAV_MODELS_DIFF_DRIVE_HPP
+#define XMNAV_MODELS_DIFF_DRIVE_HPP
 
 #include <cmath>
 
 #include <eigen3/Eigen/Dense>
 
-#include "xmnav/mppi/model_core.hpp"
+#include "xmnav/models/model_core.hpp"
 
 namespace xmotion {
 
@@ -39,4 +39,4 @@ struct DiffDriveModel {
 
 }  // namespace xmotion
 
-#endif  // XMNAV_MPPI_MODELS_DIFF_DRIVE_HPP
+#endif  // XMNAV_MODELS_DIFF_DRIVE_HPP

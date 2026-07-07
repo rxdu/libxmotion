@@ -4,7 +4,7 @@
 # so the target must belong to an installed export set.
 set(CTFSM_INSTALL ON)
 add_subdirectory(fsm)
-add_subdirectory(model)
+add_subdirectory(models)
 add_subdirectory(pid)
 add_subdirectory(kinematics)
 add_subdirectory(mppi)
