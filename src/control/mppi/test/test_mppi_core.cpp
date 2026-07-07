@@ -105,3 +105,76 @@ TEST(MppiCoreTest, DiagnosticsAreSane) {
   EXPECT_LE(c.LastEffectiveSampleSize(), 256.0);
   EXPECT_TRUE(std::isfinite(c.LastBestCost()));
 }
+
+// --- rollout backend seam ---
+
+using GoalBackend = CpuRolloutBackend<DiffDriveModel, Se2GoalCost>;
+
+GoalMppi MakeControllerWithBackend(std::uint64_t seed, int num_threads) {
+  Se2GoalCost cost;
+  cost.goal << 1.0, 0.0, 0.0;
+  GoalMppi::Params p;
+  p.num_samples = 256;
+  p.horizon_steps = 20;
+  p.dt = 0.05;
+  p.lambda = 0.5;
+  p.sigma << 0.3, 0.6;
+  p.u_min << -0.5, -1.0;
+  p.u_max << 0.5, 1.0;
+  p.seed = seed;
+  return GoalMppi(DiffDriveModel{}, cost, p,
+                  GaussianSampler<GoalMppi::kControlDim>(seed),
+                  GoalBackend(num_threads));
+}
+
+TEST(MppiBackendTest, ThreadedRolloutsMatchSerialBitwise) {
+  // contiguous chunking preserves the per-sample operation order, so any
+  // thread count must reproduce the serial result exactly (not approx)
+  auto serial = MakeController(7);
+  auto threaded = MakeControllerWithBackend(7, 4);
+  GoalMppi::State x = GoalMppi::State::Zero();
+  for (int i = 0; i < 20; ++i) {
+    const auto &ua = serial.Plan(x);
+    const auto &ub = threaded.Plan(x);
+    ASSERT_TRUE((ua.array() == ub.array()).all()) << "iteration " << i;
+    x = DiffDriveModel{}.Step(x, serial.Command(), 0, 0.05);
+  }
+  EXPECT_DOUBLE_EQ(serial.LastBestCost(), threaded.LastBestCost());
+  EXPECT_DOUBLE_EQ(serial.LastEffectiveSampleSize(),
+                   threaded.LastEffectiveSampleSize());
+}
+
+TEST(MppiBackendTest, ThreadedBackendIsDeterministicAcrossRuns) {
+  auto a = MakeControllerWithBackend(7, 3);
+  auto b = MakeControllerWithBackend(7, 3);
+  const GoalMppi::State x0 = GoalMppi::State::Zero();
+  for (int i = 0; i < 5; ++i) {
+    a.Plan(x0);
+    b.Plan(x0);
+  }
+  EXPECT_TRUE((a.Sequence().array() == b.Sequence().array()).all());
+}
+
+TEST(MppiBackendTest, MoreWorkersThanSamplesIsSafe) {
+  Se2GoalCost cost;
+  cost.goal << 1.0, 0.0, 0.0;
+  GoalMppi::Params p;
+  p.num_samples = 3;  // fewer samples than workers: some chunks are empty
+  p.horizon_steps = 5;
+  p.dt = 0.05;
+  p.sigma << 0.3, 0.6;
+  GoalMppi c(DiffDriveModel{}, cost, p,
+             GaussianSampler<GoalMppi::kControlDim>(p.seed), GoalBackend(8));
+  const auto &u = c.Plan(GoalMppi::State::Zero());
+  EXPECT_TRUE(u.allFinite());
+  EXPECT_TRUE(std::isfinite(c.LastBestCost()));
+}
+
+TEST(MppiBackendTest, CopiedControllerOwnsItsOwnPool) {
+  auto a = MakeControllerWithBackend(7, 2);
+  auto b = a;  // configuration copy: independent workers, same behavior
+  const GoalMppi::State x0 = GoalMppi::State::Zero();
+  a.Plan(x0);
+  b.Plan(x0);
+  EXPECT_TRUE((a.Sequence().array() == b.Sequence().array()).all());
+}

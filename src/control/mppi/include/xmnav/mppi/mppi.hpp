@@ -8,12 +8,16 @@
  * derivation, symbol conventions, and implementation decisions are recorded
  * in docs/typst/mppi.typ.
  *
- * Design: the controller is templated on three seams —
+ * Design: the controller is templated on four seams —
  *   Model:   static kStateDim/kControlDim; State Step(State, Control, t, dt)
  *   Cost:    double StageCost(state, control, t); double TerminalCost(state)
  *   Sampler: void SampleNoise(noise_buffers, sigma)
+ *   Backend: void Evaluate(model, cost, params, gamma, x0, u, noise,
+ *            sigma_inv_sq, costs) — the per-sample rollout phase; CPU
+ *            serial/threaded now, CUDA next (see rollout_backend.hpp)
  * The hot path (Plan) performs no heap allocation: all rollout buffers are
- * sized at construction. Sampling is deterministic under a fixed seed.
+ * sized at construction. Sampling is deterministic under a fixed seed, and
+ * backends are required to be bitwise-deterministic too.
  *
  * Copyright (c) 2026 Ruixiang Du (rdu)
  */
@@ -30,6 +34,7 @@
 #include <eigen3/Eigen/Dense>
 
 #include "xmbase/telemetry/telemetry.hpp"
+#include "xmnav/mppi/rollout_backend.hpp"
 #include "xmnav/mppi/sampler.hpp"
 
 namespace xmotion {
@@ -160,7 +165,8 @@ using Control = Eigen::Matrix<double, ControlDim, 1>;
   bool smooth_output = false;
 };
 template <typename Model, typename Cost,
-          typename Sampler = GaussianSampler<Model::kControlDim>>
+          typename Sampler = GaussianSampler<Model::kControlDim>,
+          typename Backend = CpuRolloutBackend<Model, Cost>>
 class Mppi {
  public:
   static constexpr int kStateDim = Model::kStateDim;
@@ -181,10 +187,16 @@ class Mppi {
   // for samplers with configuration beyond the seed (colored noise, spline
   // knots, log-MPPI)
   Mppi(Model model, Cost cost, const Params &params, Sampler sampler)
+      : Mppi(model, cost, params, std::move(sampler), Backend{}) {}
+
+  // for configured rollout backends (threaded CPU pool, CUDA)
+  Mppi(Model model, Cost cost, const Params &params, Sampler sampler,
+       Backend backend)
       : model_(model),
         cost_(cost),
         params_(params),
         sampler_(std::move(sampler)),
+        backend_(std::move(backend)),
         u_(ControlSequence::Zero(params.horizon_steps, kControlDim)),
         noise_(static_cast<std::size_t>(params.num_samples),
                ControlSequence::Zero(params.horizon_steps, kControlDim)),
@@ -202,23 +214,10 @@ class Mppi {
     const double gamma =
         params_.lambda * (1.0 - params_.control_cost_decoupling);
 
-    for (int k = 0; k < params_.num_samples; ++k) {
-      const ControlSequence &eps = noise_[static_cast<std::size_t>(k)];
-      State x = x0;
-      double cost = 0.0;
-      for (int t = 0; t < params_.horizon_steps; ++t) {
-        Control v = u_.row(t).transpose() + eps.row(t).transpose();
-        v = v.cwiseMax(params_.u_min).cwiseMin(params_.u_max);
-        x = model_.Step(x, v, t, params_.dt);
-        cost += cost_.StageCost(x, v, t);
-        // importance-sampling correction (eq. corrected-cost in the note)
-        cost += gamma *
-                (u_.row(t).transpose().cwiseProduct(sigma_inv_sq_).dot(
-                    eps.row(t).transpose()));
-      }
-      cost += cost_.TerminalCost(x);
-      costs_(k) = cost;
-    }
+    // per-sample rollout + cost accumulation lives in the backend (the
+    // parallel phase); everything below is the serial reduction
+    backend_.Evaluate(model_, cost_, params_, gamma, x0, u_, noise_,
+                      sigma_inv_sq_, costs_);
 
     double lambda = params_.lambda;
     if (params_.normalize_cost_spread) {
@@ -356,6 +355,7 @@ class Mppi {
   Cost cost_;
   Params params_;
   Sampler sampler_;
+  Backend backend_;
 
   ControlSequence u_;
   ControlSequence u_delta_;
