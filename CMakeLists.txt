@@ -107,7 +107,7 @@ add_subdirectory(third_party)
 
 ## Foundation (external). A parent superbuild may already provide it.
 if (NOT TARGET xmotion::xmBase)
-  find_package(xmBase 0.3.0 QUIET)
+  find_package(xmBase 0.4.0 QUIET)
   if (NOT xmBase_FOUND)
     if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xmBase/CMakeLists.txt)
       add_subdirectory(third_party/xmBase)
