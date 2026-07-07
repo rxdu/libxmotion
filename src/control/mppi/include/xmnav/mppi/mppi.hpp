@@ -14,10 +14,14 @@
  *   Sampler: void SampleNoise(noise_buffers, sigma)
  *   Backend: void Evaluate(model, cost, params, gamma, x0, u, noise,
  *            sigma_inv_sq, costs) — the per-sample rollout phase; CPU
- *            serial/threaded now, CUDA next (see rollout_backend.hpp)
+ *            serial/threaded (rollout_backend.hpp) or CUDA (cuda/). A
+ *            backend declaring kGeneratesNoise = true samples on its own
+ *            device: Plan() then skips the host sampler and delegates the
+ *            weighted update and candidate-noise access to it.
  * The hot path (Plan) performs no heap allocation: all rollout buffers are
  * sized at construction. Sampling is deterministic under a fixed seed, and
- * backends are required to be bitwise-deterministic too.
+ * backends are required to be deterministic too (the CPU backends bitwise
+ * for any thread count; device-sampling backends per seed).
  *
  * Copyright (c) 2026 Ruixiang Du (rdu)
  */
@@ -29,6 +33,7 @@
 #include <cstdint>
 #include <limits>
 #include <stdexcept>
+#include <type_traits>
 #include <vector>
 
 #include <eigen3/Eigen/Dense>
@@ -124,6 +129,17 @@ inline void SavitzkyGolay5(Sequence &u) {
   }
 }
 
+// Backends that generate their own noise on their compute device declare
+// `static constexpr bool kGeneratesNoise = true`: Plan() then skips the
+// host sampler, delegates the weighted update to the backend, and fetches
+// candidate noise through DownloadNoiseSample() for introspection.
+template <typename Backend, typename = void>
+struct BackendGeneratesNoise : std::false_type {};
+template <typename Backend>
+struct BackendGeneratesNoise<Backend,
+                             std::enable_if_t<Backend::kGeneratesNoise>>
+    : std::true_type {};
+
 }  // namespace mppi_detail
 
 template <int ControlDim>
@@ -198,7 +214,9 @@ class Mppi {
         sampler_(std::move(sampler)),
         backend_(std::move(backend)),
         u_(ControlSequence::Zero(params.horizon_steps, kControlDim)),
-        noise_(static_cast<std::size_t>(params.num_samples),
+        noise_(mppi_detail::BackendGeneratesNoise<Backend>::value
+                   ? 0  // noise lives on the backend's device
+                   : static_cast<std::size_t>(params.num_samples),
                ControlSequence::Zero(params.horizon_steps, kControlDim)),
         costs_(params.num_samples),
         weights_(params.num_samples),
@@ -209,7 +227,9 @@ class Mppi {
   const ControlSequence &Plan(const State &x0) {
     XM_SPAN("control.mppi.plan");
     mppi_detail::ShiftSequence(u_);
-    sampler_.SampleNoise(noise_, params_.sigma);
+    if constexpr (!mppi_detail::BackendGeneratesNoise<Backend>::value) {
+      sampler_.SampleNoise(noise_, params_.sigma);
+    }
 
     const double gamma =
         params_.lambda * (1.0 - params_.control_cost_decoupling);
@@ -234,11 +254,15 @@ class Mppi {
       CaptureCandidates(x0);
     }
 
-    for (int k = 0; k < params_.num_samples; ++k) {
-      if (k == 0) {
-        u_delta_ = weights_(k) * noise_[static_cast<std::size_t>(k)];
-      } else {
-        u_delta_ += weights_(k) * noise_[static_cast<std::size_t>(k)];
+    if constexpr (mppi_detail::BackendGeneratesNoise<Backend>::value) {
+      backend_.ApplyWeightedUpdate(weights_, u_delta_);
+    } else {
+      for (int k = 0; k < params_.num_samples; ++k) {
+        if (k == 0) {
+          u_delta_ = weights_(k) * noise_[static_cast<std::size_t>(k)];
+        } else {
+          u_delta_ += weights_(k) * noise_[static_cast<std::size_t>(k)];
+        }
       }
     }
     u_ += u_delta_;
@@ -317,6 +341,17 @@ class Mppi {
   Control Sigma() const { return params_.sigma; }
 
  private:
+  // noise of one sample for introspection re-rolls: host-side buffer, or
+  // fetched from the backend's device when it generates the noise
+  const ControlSequence &CandidateNoise(int k) {
+    if constexpr (mppi_detail::BackendGeneratesNoise<Backend>::value) {
+      backend_.DownloadNoiseSample(k, candidate_noise_scratch_);
+      return candidate_noise_scratch_;
+    } else {
+      return noise_[static_cast<std::size_t>(k)];
+    }
+  }
+
   // roll a control sequence (clamped) and record the post-step states
   void RolloutStates(const State &x0, const ControlSequence &seq,
                      Eigen::Matrix<double, Eigen::Dynamic, kStateDim> &out,
@@ -346,8 +381,7 @@ class Mppi {
       auto &cand = snapshot_.candidates[s];
       cand.cost = costs_(k);
       cand.weight = weights_(k);
-      RolloutStates(x0, u_ + noise_[static_cast<std::size_t>(k)],
-                    cand.states, &cand.controls);
+      RolloutStates(x0, u_ + CandidateNoise(k), cand.states, &cand.controls);
     }
   }
 
@@ -372,6 +406,7 @@ class Mppi {
   int introspect_sub_n_ = 0;
   std::vector<int> selected_;
   Snapshot snapshot_;
+  ControlSequence candidate_noise_scratch_;
 
   // pre-acquired telemetry handles (atomic slot writes, wait-free; no-ops
   // when no telemetry binding is installed)

@@ -32,6 +32,9 @@
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Geometry>
 
+// raw-span step core shared with the CUDA rollout backend
+#include "xmnav/mppi/model_core.hpp"
+
 namespace xmotion {
 
 class SrbQuadrupedModel {
@@ -108,40 +111,26 @@ class SrbQuadrupedModel {
     return schedule_[idx][static_cast<std::size_t>(foot)];
   }
 
+  // Thin wrapper over the shared raw-span core (model_core::
+  // SrbQuadrupedStep) that the CUDA rollout backend also compiles: it
+  // flattens the per-step context and delegates all physics. The core
+  // applies the world-inertia solve as I_w^{-1} = R D^{-1} R^T, exactly
+  // equivalent to the previous LDLT solve for the SPD 3x3.
   State Step(const State &x, const Control &u, int t, double dt) const {
-    const Eigen::Vector3d p = Position(x);
-    const Eigen::Vector3d v = Velocity(x);
-    Eigen::Quaterniond q = Orientation(x);
-    q.normalize();
-    const Eigen::Vector3d omega = AngularVelocity(x);
-
-    // total force and torque about the CoM from stance feet only
-    Eigen::Vector3d force_sum = Eigen::Vector3d::Zero();
-    Eigen::Vector3d torque_sum = Eigen::Vector3d::Zero();
     const FootPositions &feet = FeetAt(t);
+    double feet_flat[3 * kNumFeet];
+    unsigned char stance[kNumFeet];
     for (int i = 0; i < kNumFeet; ++i) {
-      if (!InStance(t, i)) continue;  // swing feet transmit nothing
-      const Eigen::Vector3d f = u.segment<3>(3 * i);
-      force_sum += f;
-      torque_sum += (feet[static_cast<std::size_t>(i)] - p).cross(f);
+      for (int c = 0; c < 3; ++c) {
+        feet_flat[3 * i + c] = feet[static_cast<std::size_t>(i)](c);
+      }
+      stance[i] = InStance(t, i) ? 1 : 0;
     }
-
-    const Eigen::Matrix3d R = q.toRotationMatrix();
-    const Eigen::Matrix3d I_w =
-        R * params_.inertia_diag.asDiagonal() * R.transpose();
-
-    const Eigen::Vector3d accel =
-        force_sum / params_.mass + Eigen::Vector3d(0, 0, -params_.gravity);
-    const Eigen::Vector3d omega_dot =
-        I_w.ldlt().solve(torque_sum - omega.cross(I_w * omega));
-
-    // integrate (forward Euler; quaternion via the omega increment)
-    Eigen::Quaterniond dq(1.0, 0.5 * omega(0) * dt, 0.5 * omega(1) * dt,
-                          0.5 * omega(2) * dt);
-    Eigen::Quaterniond q_next = (dq * q).normalized();  // world-frame omega
-
-    return MakeState(p + v * dt, v + accel * dt, q_next,
-                     omega + omega_dot * dt);
+    State next;
+    model_core::SrbQuadrupedStep(x.data(), u.data(), feet_flat, stance,
+                                 params_.inertia_diag.data(), params_.mass,
+                                 params_.gravity, dt, next.data());
+    return next;
   }
 
  private:
