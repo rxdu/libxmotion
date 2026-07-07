@@ -24,6 +24,7 @@ option(STATIC_CHECK "Enable static check" OFF)
 option(ENABLE_VISUALIZATION "Enable visualization targets" ON)
 option(XMOTION_DEV_MODE "Development mode forces building tests" OFF)
 option(XMOTION_WERROR "Treat warnings as errors (-Wall -Wextra -Werror)" OFF)
+option(XMNAV_WITH_CUDA "Build CUDA rollout backends (requires CUDA toolkit)" OFF)
 
 if (DEFINED ENV{ROS_DISTRO})
   set(BUILD_WITH_ROS ON)

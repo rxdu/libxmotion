@@ -9,6 +9,35 @@ target_include_directories(mppi INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
 
+## CUDA rollout backend (optional): float32 device rollouts implementing
+## the same backend seam; the wheeled program reuses the model/critic cores.
+if (XMNAV_WITH_CUDA)
+  enable_language(CUDA)
+  if (NOT DEFINED CMAKE_CUDA_STANDARD)
+    set(CMAKE_CUDA_STANDARD 17)
+    set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+  endif ()
+  add_library(mppi_cuda STATIC
+      src/cuda_rollout_backend.cpp
+      src/cuda_rollout_backend.cu)
+  target_link_libraries(mppi_cuda PUBLIC mppi)
+  # the host .cpp uses the CUDA runtime API directly
+  target_include_directories(mppi_cuda PRIVATE
+      ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
+  # sm_75 = GTX 16xx/RTX 20xx (dev machine), sm_87 = Jetson Orin
+  set_target_properties(mppi_cuda PROPERTIES
+      CUDA_ARCHITECTURES "75;87"
+      POSITION_INDEPENDENT_CODE ON)
+  add_library(xmotion::mppi_cuda ALIAS mppi_cuda)
+
+  install(TARGETS mppi_cuda
+      EXPORT xmNavigationTargets
+      LIBRARY DESTINATION lib
+      ARCHIVE DESTINATION lib
+      RUNTIME DESTINATION bin
+      INCLUDES DESTINATION include)
+endif ()
+
 if (BUILD_TESTS)
   add_subdirectory(test)
 endif ()
