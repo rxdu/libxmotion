@@ -32,7 +32,53 @@
 #include "xmnav/mppi/sampler.hpp"
 
 namespace xmotion {
+
+// Introspection snapshot of one Plan() call: a decimated set of candidate
+// rollouts (top-weighted + a uniform subsample), their costs/weights, and
+// the updated nominal trajectory. Produced only when introspection is
+// enabled; see docs/typst/mppi.typ.
+template <int StateDim, int ControlDim>
+struct MppiSnapshot {
+  struct Candidate {
+    double cost = 0.0;
+    double weight = 0.0;
+    // rollout states, row t (T rows: the states AFTER each step)
+    Eigen::Matrix<double, Eigen::Dynamic, StateDim> states;
+    // the clamped controls that produced them
+    Eigen::Matrix<double, Eigen::Dynamic, ControlDim> controls;
+  };
+  std::vector<Candidate> candidates;
+  // states of the updated (executed) nominal sequence
+  Eigen::Matrix<double, Eigen::Dynamic, StateDim> nominal_states;
+  Eigen::Matrix<double, Eigen::Dynamic, ControlDim> nominal_controls;
+  double effective_sample_size = 0.0;
+  double best_cost = 0.0;
+  std::uint64_t plan_index = 0;
+};
+
+}  // namespace xmotion
+
+namespace xmotion {
 namespace mppi_detail {
+// selection for introspection: indices of the top_n lowest-cost samples
+// plus an even stride over the rest
+inline void SelectCandidates(const Eigen::VectorXd &costs, int top_n,
+                             int subsample_n, std::vector<int> &out) {
+  const int k = static_cast<int>(costs.size());
+  out.clear();
+  std::vector<int> order(static_cast<std::size_t>(k));
+  for (int i = 0; i < k; ++i) order[static_cast<std::size_t>(i)] = i;
+  const int n = std::min(top_n, k);
+  std::partial_sort(order.begin(), order.begin() + n, order.end(),
+                    [&](int a, int b) { return costs(a) < costs(b); });
+  out.assign(order.begin(), order.begin() + n);
+  const int stride = std::max(1, k / std::max(1, subsample_n));
+  for (int i = 0; i < k && static_cast<int>(out.size()) < n + subsample_n;
+       i += stride) {
+    out.push_back(i);
+  }
+}
+
 
 // w_k = exp(-(S_k - rho)/lambda) / eta, rho = min S (baseline subtraction —
 // mandatory numerically, see the note). Returns eta before normalization so
@@ -125,6 +171,7 @@ class Mppi {
   using ControlSequence = Eigen::Matrix<double, Eigen::Dynamic, kControlDim>;
 
   using Params = MppiParams<kControlDim>;
+  using Snapshot = MppiSnapshot<kStateDim, kControlDim>;
 
 
   Mppi(Model model, Cost cost, const Params &params)
@@ -183,6 +230,10 @@ class Mppi {
     ess_gauge_.Set(last_ess_);
     best_cost_gauge_.Set(last_best_cost_);
 
+    if (introspection_enabled_) {
+      CaptureCandidates(x0);
+    }
+
     for (int k = 0; k < params_.num_samples; ++k) {
       if (k == 0) {
         u_delta_ = weights_(k) * noise_[static_cast<std::size_t>(k)];
@@ -202,6 +253,13 @@ class Mppi {
                       .cwiseMin(params_.u_max)
                       .transpose();
     }
+    if (introspection_enabled_) {
+      RolloutStates(x0, u_, snapshot_.nominal_states);
+      snapshot_.nominal_controls = u_;
+      snapshot_.effective_sample_size = last_ess_;
+      snapshot_.best_cost = last_best_cost_;
+      ++snapshot_.plan_index;
+    }
     return u_;
   }
 
@@ -212,6 +270,22 @@ class Mppi {
   const ControlSequence &Sequence() const { return u_; }
 
   void Reset() { u_.setZero(); }
+
+  // Introspection: capture a decimated snapshot of each Plan() — the top_n
+  // best candidates plus subsample_n evenly-strided ones, with their costs,
+  // weights, and full state rollouts, and the updated nominal trajectory.
+  // Cost when enabled: (top_n + subsample_n + 1) extra rollouts per plan
+  // (e.g. 33/2048 = 1.6%); zero when disabled (a branch).
+  void EnableIntrospection(int top_n = 16, int subsample_n = 16) {
+    introspect_top_n_ = top_n;
+    introspect_sub_n_ = subsample_n;
+    snapshot_.candidates.reserve(
+        static_cast<std::size_t>(top_n + subsample_n));
+    introspection_enabled_ = true;
+  }
+  void DisableIntrospection() { introspection_enabled_ = false; }
+  // valid after Plan() when introspection is enabled
+  const Snapshot &LastSnapshot() const { return snapshot_; }
   // seed every step of the nominal sequence (e.g. gravity-compensating
   // stance forces) — the standard warm start for force-space sampling
   void SeedSequence(const Control &u0) { u_ = u0.transpose().replicate(u_.rows(), 1); }
@@ -222,6 +296,40 @@ class Mppi {
   double LastEffectiveSampleSize() const { return last_ess_; }
 
  private:
+  // roll a control sequence (clamped) and record the post-step states
+  void RolloutStates(const State &x0, const ControlSequence &seq,
+                     Eigen::Matrix<double, Eigen::Dynamic, kStateDim> &out,
+                     Eigen::Matrix<double, Eigen::Dynamic, kControlDim>
+                         *out_controls = nullptr) {
+    out.resize(seq.rows(), kStateDim);
+    if (out_controls != nullptr) out_controls->resize(seq.rows(), kControlDim);
+    State x = x0;
+    for (Eigen::Index t = 0; t < seq.rows(); ++t) {
+      Control v = seq.row(t).transpose();
+      v = v.cwiseMax(params_.u_min).cwiseMin(params_.u_max);
+      x = model_.Step(x, v, static_cast<int>(t), params_.dt);
+      out.row(t) = x.transpose();
+      if (out_controls != nullptr) out_controls->row(t) = v.transpose();
+    }
+  }
+
+  // re-roll the selected candidates (perturbed sequences around the
+  // pre-update nominal) — states are exact re-computations, so recorded
+  // trajectories are consistent with what the optimizer scored
+  void CaptureCandidates(const State &x0) {
+    mppi_detail::SelectCandidates(costs_, introspect_top_n_,
+                                  introspect_sub_n_, selected_);
+    snapshot_.candidates.resize(selected_.size());
+    for (std::size_t s = 0; s < selected_.size(); ++s) {
+      const int k = selected_[s];
+      auto &cand = snapshot_.candidates[s];
+      cand.cost = costs_(k);
+      cand.weight = weights_(k);
+      RolloutStates(x0, u_ + noise_[static_cast<std::size_t>(k)],
+                    cand.states, &cand.controls);
+    }
+  }
+
   Model model_;
   Cost cost_;
   Params params_;
@@ -236,6 +344,12 @@ class Mppi {
 
   double last_best_cost_ = 0.0;
   double last_ess_ = 0.0;
+
+  bool introspection_enabled_ = false;
+  int introspect_top_n_ = 0;
+  int introspect_sub_n_ = 0;
+  std::vector<int> selected_;
+  Snapshot snapshot_;
 
   // pre-acquired telemetry handles (atomic slot writes, wait-free; no-ops
   // when no telemetry binding is installed)

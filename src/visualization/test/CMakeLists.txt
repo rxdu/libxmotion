@@ -1,0 +1,3 @@
+add_executable(test_mppi_draw test_mppi_draw.cpp)
+target_link_libraries(test_mppi_draw viz gtest gtest_main)
+gtest_discover_tests(test_mppi_draw)
