@@ -16,3 +16,8 @@ Recorded per the self-improvement loop: concrete mistakes and the corrections th
 - **Pattern:** PR #47 (delete `controller_interface.hpp`) and PR #48 (rename `common/` → `types/`) were open concurrently; #48 branched before #47 merged, so its `git mv` carried the file to the new path and git's rename-vs-delete resolution silently resurrected it after both merges.
 - **Correction:** PRs touching overlapping paths must be stacked (later branched on the earlier) or serialized (second opened only after the first merges). After merging concurrent PRs, verify the composed tree matches both intents — git only guarantees textual, not semantic, composition.
 - **Context:** git merge semantics; multi-PR workflows in the XMotion family.
+
+### Release-sized workloads do not belong in sanitizer builds
+- **Pattern:** MPPI behavioral tests ran full convergence workloads (12–20M rollout steps) in every build configuration; under ASan+Debug they take 100–200× longer — the CI sanitizers lane burned 55 minutes before cancellation and local runs appeared hung. Earlier the same day, a wall-clock performance assertion failed under ASan for the same reason.
+- **Correction:** Sanitizer/Debug builds run reduced-scale workloads with finiteness assertions (they exist to catch memory errors on every code path); numerical convergence and timing assertions stay Release-only where they were validated. Gate with `!defined(NDEBUG) || __SANITIZE_ADDRESS__/__SANITIZE_THREAD__`.
+- **Context:** C++ test suites with heavy numerical closed loops; CI sanitizer lanes.

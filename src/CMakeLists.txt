@@ -6,6 +6,7 @@ add_subdirectory(decision)
 add_subdirectory(estimation)
 add_subdirectory(control)
 add_subdirectory(planning)
+add_subdirectory(simulation)
 
 if (ENABLE_VISUALIZATION)
   add_subdirectory(visualization)
