@@ -26,3 +26,6 @@
 	path = third_party/xmBase
 	url = https://github.com/rxdu/xmBase.git
 	branch = main
+[submodule "src/control/fsm"]
+	path = src/control/fsm
+	url = https://github.com/rxdu/ctfsm.git
