@@ -10,6 +10,7 @@ add_library(viz STATIC
     src/lattice_viz.cpp)
 target_link_libraries(viz PUBLIC
     image
+    canvas
     mppi
     geometry
     decomp

@@ -134,7 +134,9 @@ if (XMOTION_WERROR)
   add_compile_options(-Wall -Wextra -Werror -Wno-error=maybe-uninitialized)
   # Vendored header-only libraries are consumed from first-party TUs; mark
   # their include directories SYSTEM so their headers never gate our build.
-  foreach (_vendored stb rapidcsv pnm)
+  # (quickviz modules included: its headers reach first-party TUs the same
+  # way, and quickviz builds with its own flags, not ours)
+  foreach (_vendored stb rapidcsv pnm core viewer canvas plot image imcore)
     if (TARGET ${_vendored})
       get_target_property(_inc ${_vendored} INTERFACE_INCLUDE_DIRECTORIES)
       set_target_properties(${_vendored} PROPERTIES

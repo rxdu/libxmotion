@@ -24,6 +24,7 @@
 #include <cmath>
 #include <cstdint>
 #include <limits>
+#include <stdexcept>
 #include <vector>
 
 #include <eigen3/Eigen/Dense>
@@ -294,6 +295,27 @@ class Mppi {
   double LastBestCost() const { return last_best_cost_; }
   // effective sample size in [1, K]: near 1 means weight collapse
   double LastEffectiveSampleSize() const { return last_ess_; }
+
+  // Live-tuning setters (interactive tuner, adaptive schemes). Both are
+  // cheap and allocation-free but must be called from the planning thread
+  // between Plan() invocations — relay values through atomics if the knobs
+  // are driven from a UI thread.
+  void SetTemperature(double lambda) {
+    if (!(lambda > 0.0)) {
+      throw std::invalid_argument("MPPI temperature lambda must be > 0");
+    }
+    params_.lambda = lambda;
+  }
+  double Temperature() const { return params_.lambda; }
+  // updates the cached Sigma^{-1} used by the control-cost term with it
+  void SetSigma(const Control &sigma) {
+    if (!(sigma.minCoeff() > 0.0)) {
+      throw std::invalid_argument("MPPI sigma must be > 0 on every channel");
+    }
+    params_.sigma = sigma;
+    sigma_inv_sq_ = sigma.cwiseProduct(sigma).cwiseInverse();
+  }
+  Control Sigma() const { return params_.sigma; }
 
  private:
   // roll a control sequence (clamped) and record the post-step states
