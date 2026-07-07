@@ -137,7 +137,7 @@ if (XMOTION_WERROR)
   # their include directories SYSTEM so their headers never gate our build.
   # (quickviz modules included: its headers reach first-party TUs the same
   # way, and quickviz builds with its own flags, not ours)
-  foreach (_vendored stb rapidcsv pnm core viewer canvas plot image imcore)
+  foreach (_vendored stb rapidcsv pnm ctfsm core viewer canvas plot image imcore)
     if (TARGET ${_vendored})
       get_target_property(_inc ${_vendored} INTERFACE_INCLUDE_DIRECTORIES)
       set_target_properties(${_vendored} PROPERTIES
