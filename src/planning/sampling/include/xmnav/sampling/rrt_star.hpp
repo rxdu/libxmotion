@@ -21,6 +21,7 @@
 #include <cassert>
 
 #include "xmnav/sampling/base/planner_base.hpp"
+#include "xmbase/telemetry/telemetry.hpp"
 #include "xmnav/sampling/tree/kd_tree_motion.hpp"
 
 // #define SHOW_TREE_GROWTH
@@ -51,6 +52,7 @@ class RRTStar : public PlannerBase<Space, Tree> {
 
   PathType Search(std::shared_ptr<StateType> start,
                   std::shared_ptr<StateType> goal, int32_t iter = -1) override {
+    XM_SPAN("planning.rrt_star.search");
     assert(BaseType::Steer != nullptr);
 
 #ifdef SHOW_TREE_GROWTH
@@ -134,8 +136,8 @@ class RRTStar : public PlannerBase<Space, Tree> {
     }
 
     if (!state_to_goal_candidates.empty()) {
-      std::cout << "number of candidates: " << state_to_goal_candidates.size()
-                << std::endl;
+      XM_INFO("planning.rrt_star: {} goal candidates",
+              state_to_goal_candidates.size());
 
       std::map<double, std::shared_ptr<StateType>> candidate_map;
 
@@ -152,7 +154,7 @@ class RRTStar : public PlannerBase<Space, Tree> {
           BaseType::space_->EvaluateDistance(best_candidate, goal));
       path = BaseType::tree_.TraceBackToRoot(goal);
 
-      for (auto &wp : path) std::cout << *wp << std::endl;
+      XM_INFO("planning.rrt_star: path found, {} waypoints", path.size());
     }
 
 #ifdef SHOW_TREE_GROWTH
