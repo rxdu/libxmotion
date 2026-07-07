@@ -54,6 +54,60 @@ What the pattern encodes:
 - **The algorithm never sees hardware** — `ComputeWheelCommands` is pure math; the application converts to HAL units at the boundary.
 - **Telemetry is one spine**: the application's span, the group's fault counter, and any driver-internal events share one clock and one trace identity. Binding the xmTelemetry SDK (production integrations) requires no change to this code.
 
+## The reactive-control pattern (MPPI example)
+
+The MPPI controller (`xmnav/mppi/`, derivation in `docs/typst/mppi.typ`) composes with the hardware layer through the same shape: the controller plans over a kinematic model, the application converts the head of the plan into actuator commands.
+
+```cpp
+#include "xmnav/mppi/mppi.hpp"                      // xmNavigation: sampling MPC core
+#include "xmnav/mppi/models/diff_drive.hpp"         //   kinematic rollout model
+#include "xmnav/mppi/critics.hpp"                   //   composable cost terms
+#include "xmdriver/hal/motor_factory.hpp"           // xmDriver: construction seam
+#include "xmdriver/hal/actuator_group.hpp"          // xmDriver: capability fan-out
+
+int main() {
+  // 1. Hardware, from configuration (ADR 0005: the application owns this).
+  auto left = hal::MotorFactory::Create(cfg.motor("left"));
+  auto right = hal::MotorFactory::Create(cfg.motor("right"));
+  hal::SpeedActuatorGroup drive({*left, *right});
+
+  // 2. The controller: model + critics + sampler are compile-time seams.
+  xmotion::Se2GoalCost goal_cost;
+  goal_cost.goal << 2.0, 1.0, 0.0;
+  xmotion::CircularObstacleCost obstacles;   // fed from the map / perception
+
+  auto cost = xmotion::MakeCompositeCost(goal_cost, obstacles);
+  using Controller = xmotion::Mppi<xmotion::DiffDriveModel, decltype(cost)>;
+  Controller::Params p;
+  p.num_samples = 1024;
+  p.horizon_steps = 56;                       // ~2.8 s at dt = 0.05
+  p.sigma << 0.3, 0.8;                        // exploration per channel (v, w)
+  p.u_min << -0.8, -2.0;                      // actuator envelope
+  p.u_max << 0.8, 2.0;
+  p.normalize_cost_spread = true;             // scale-free temperature
+  Controller mppi(xmotion::DiffDriveModel{}, cost, p);
+
+  // 3. The loop: estimate -> plan -> actuate. Plan() allocates nothing and
+  //    emits its own telemetry (control.mppi.effective_sample_size,
+  //    control.mppi.best_cost) under the application's trace.
+  while (running) {
+    XM_SPAN("app.control.cycle");
+    mppi.Plan(estimator.LatestSe2());
+    const auto u = mppi.Command();             // (v, w) for the model
+    if (auto s = drive.SetSpeed(ToWheelRpm(u)); !s.ok()) {
+      XM_WARN("drive fan-out degraded: {}", s.message());
+    }
+  }
+  drive.Stop();
+}
+```
+
+What the pattern encodes beyond the in-process composition above:
+
+- **The rollout model is the platform seam.** Swapping `DiffDriveModel` for an Ackermann or single-rigid-body model changes the platform; the sampling core, critics, and this wiring do not change (see the technical note for the multi-platform architecture).
+- **Costs are composable critics** — perception feeds the obstacle critic's data; the controller never sees a map type.
+- **Diagnostics are metrics**: watch `control.mppi.effective_sample_size` in the telemetry tooling — a collapse toward 1 means the temperature/covariance need retuning or the task left the sampled distribution's reach.
+
 ## The middleware bridge pattern (ROS 2 example)
 
 Middleware stays at the application boundary ([ADR 0004](https://github.com/rxdu/xmotion/blob/main/docs/adr/0004-telemetry-layering.md) stance). The one non-obvious piece is carrying the telemetry trace identity through the message so cross-node causality survives:
