@@ -16,7 +16,7 @@
 
 #include <algorithm>
 
-#include "cvdraw/cvdraw.hpp"
+#include "image/image.hpp"
 
 #include "xmnav/mppi/mppi.hpp"
 #include "xmnav/viz/style.hpp"

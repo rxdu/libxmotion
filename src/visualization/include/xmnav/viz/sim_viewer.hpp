@@ -29,7 +29,7 @@
 
 #include <opencv2/imgcodecs.hpp>
 
-#include "cvdraw/cvdraw.hpp"
+#include "image/image.hpp"
 
 #include "xmnav/viz/style.hpp"
 

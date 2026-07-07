@@ -14,7 +14,7 @@
 #include <cstdint>
 
 #include "graph/tree.hpp"
-#include "cvdraw/cvdraw.hpp"
+#include "image/image.hpp"
 
 namespace xmotion {
 namespace RRTViz {

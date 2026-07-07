@@ -10,7 +10,7 @@
 
 #include "xmnav/map_processing/trajectory_processor.hpp"
 
-#include "cvdraw/cvdraw.hpp"
+#include "image/image.hpp"
 
 using namespace xmotion;
 

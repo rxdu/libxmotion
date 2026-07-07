@@ -15,12 +15,12 @@
 
 #include <Eigen/Dense>
 
-#include "cvdraw/cvdraw.hpp"
+#include "image/image.hpp"
 
 #include "xmnav/decomp/curvilinear_grid.hpp"
 #include "xmnav/viz/geometry_draw.hpp"
 #include "xmnav/geometry/polygon.hpp"
-#include "cvdraw/cvdraw.hpp"
+#include "image/image.hpp"
 
 namespace xmotion {
 // geometric grid

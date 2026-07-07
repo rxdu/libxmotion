@@ -11,7 +11,7 @@
 
 #include <algorithm>
 
-#include "cvdraw/cvdraw.hpp"
+#include "image/image.hpp"
 
 namespace xmotion {
 namespace viz_style {

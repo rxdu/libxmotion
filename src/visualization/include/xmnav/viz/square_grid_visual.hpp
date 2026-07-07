@@ -13,7 +13,7 @@
 
 #include <cstdint>
 
-#include "cvdraw/cvdraw.hpp"
+#include "image/image.hpp"
 
 #include "xmnav/decomp/square_grid.hpp"
 #include "graph/graph.hpp"

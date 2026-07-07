@@ -13,7 +13,7 @@
 #include "xmnav/map_processing/point_cloud_processor.hpp"
 #include "xmnav/map_processing/trajectory_processor.hpp"
 
-#include "cvdraw/cvdraw.hpp"
+#include "image/image.hpp"
 
 using namespace xmotion;
 using namespace std::chrono_literals;

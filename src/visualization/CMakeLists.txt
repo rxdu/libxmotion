@@ -9,7 +9,7 @@ add_library(viz STATIC
     src/lattice_draw.cpp
     src/lattice_viz.cpp)
 target_link_libraries(viz PUBLIC
-    cvdraw
+    image
     mppi
     geometry
     decomp
