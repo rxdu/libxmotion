@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.2)
-project(xmNavigation VERSION 0.1.0)
+project(xmNavigation VERSION 0.2.0)
 
 message(STATUS "------------------------------------------------")
 if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
