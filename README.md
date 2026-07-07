@@ -34,6 +34,7 @@ supporting tiers:
 | `src/control`        | control laws & models (PID, FSM, dynamics models, kinematics)      |
 | `src/types`          | shared navigation-stack vocabulary (the inter-area contract types) |
 | `src/visualization`  | drawing for all of the above — the only module linking a renderer  |
+| `src/simulation`     | deterministic sim loop for algorithm development (headless + visual) |
 
 Supporting folders: `cmake` (build configuration), `data` (test fixtures: maps, lookup tables),
 `docs` (documentation), `python` (analysis scripts), `third_party` (vendored dependencies —
