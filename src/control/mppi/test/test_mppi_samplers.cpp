@@ -151,7 +151,7 @@ TEST(MppiSamplerTest, CostNormalizationRestoresEffectiveSampleSize) {
     double min_ess = 1e18;
     for (int i = 0; i < 60; ++i) {
       mppi.Plan(x);
-      x = m.Step(x, mppi.Command(), dt);
+      x = m.Step(x, mppi.Command(), 0, dt);
       min_ess = std::min(min_ess, mppi.LastEffectiveSampleSize());
     }
     return min_ess;
@@ -179,7 +179,7 @@ TEST(MppiSamplerTest, SplineSamplerYieldsSmootherCommandsOnDiffDrive) {
       for (Eigen::Index t = 0; t + 1 < seq.rows(); ++t) {
         sum += (seq.row(t + 1) - seq.row(t)).cwiseAbs().sum();
       }
-      x = m.Step(x, mppi.Command(), 0.05);
+      x = m.Step(x, mppi.Command(), 0, 0.05);
     }
     return sum;
   };

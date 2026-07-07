@@ -39,7 +39,7 @@ TEST(MppiControlTest, DiffDriveReachesGoalPose) {
   Controller::State x = Controller::State::Zero();
   for (int i = 0; i < 400; ++i) {  // 20 s
     mppi.Plan(x);
-    x = model.Step(x, mppi.Command(), p.dt);
+    x = model.Step(x, mppi.Command(), 0, p.dt);
   }
 
   EXPECT_NEAR(x(0), 2.0, 0.15);
@@ -71,7 +71,7 @@ TEST(MppiControlTest, DiffDriveAvoidsObstacleEnRoute) {
   double min_clearance = 1e9;
   for (int i = 0; i < 500; ++i) {
     mppi.Plan(x);
-    x = model.Step(x, mppi.Command(), p.dt);
+    x = model.Step(x, mppi.Command(), 0, p.dt);
     min_clearance = std::min(
         min_clearance, (x.head<2>() - Eigen::Vector2d(1.5, 0.0)).norm() - 0.4);
   }
@@ -152,7 +152,7 @@ TEST(MppiControlTest, MatchesLqrOnDoubleIntegrator) {
       mppi.Plan(x);
       const double u = mppi.Command()(0);
       mppi_cost += x.dot(Q * x) + R * u * u;
-      x = model.Step(x, mppi.Command(), dt);
+      x = model.Step(x, mppi.Command(), 0, dt);
     }
   }
 

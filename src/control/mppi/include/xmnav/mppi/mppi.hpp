@@ -9,7 +9,7 @@
  * in docs/typst/mppi.typ.
  *
  * Design: the controller is templated on three seams —
- *   Model:   static kStateDim/kControlDim; State Step(State, Control, dt)
+ *   Model:   static kStateDim/kControlDim; State Step(State, Control, t, dt)
  *   Cost:    double StageCost(state, control, t); double TerminalCost(state)
  *   Sampler: void SampleNoise(noise_buffers, sigma)
  * The hot path (Plan) performs no heap allocation: all rollout buffers are
@@ -161,7 +161,7 @@ class Mppi {
       for (int t = 0; t < params_.horizon_steps; ++t) {
         Control v = u_.row(t).transpose() + eps.row(t).transpose();
         v = v.cwiseMax(params_.u_min).cwiseMin(params_.u_max);
-        x = model_.Step(x, v, params_.dt);
+        x = model_.Step(x, v, t, params_.dt);
         cost += cost_.StageCost(x, v, t);
         // importance-sampling correction (eq. corrected-cost in the note)
         cost += gamma *
@@ -206,9 +206,15 @@ class Mppi {
   }
 
   Control Command() const { return u_.row(0).transpose(); }
+  // mutable access for models carrying per-cycle context (contact schedules,
+  // foot positions) that the application updates before each Plan()
+  Model &model() { return model_; }
   const ControlSequence &Sequence() const { return u_; }
 
   void Reset() { u_.setZero(); }
+  // seed every step of the nominal sequence (e.g. gravity-compensating
+  // stance forces) — the standard warm start for force-space sampling
+  void SeedSequence(const Control &u0) { u_ = u0.transpose().replicate(u_.rows(), 1); }
 
   // diagnostics (telemetry hooks)
   double LastBestCost() const { return last_best_cost_; }

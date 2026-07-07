@@ -9,3 +9,7 @@ gtest_discover_tests(test_mppi_control)
 add_executable(test_mppi_samplers test_mppi_samplers.cpp)
 target_link_libraries(test_mppi_samplers mppi gtest gtest_main)
 gtest_discover_tests(test_mppi_samplers)
+
+add_executable(test_mppi_quadruped test_mppi_quadruped.cpp)
+target_link_libraries(test_mppi_quadruped mppi gtest gtest_main)
+gtest_discover_tests(test_mppi_quadruped)

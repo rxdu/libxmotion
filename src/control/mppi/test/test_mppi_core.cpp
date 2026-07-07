@@ -94,7 +94,7 @@ TEST(MppiCoreTest, CommandsRespectBoxConstraints) {
       EXPECT_LE(seq(t, 1), 1.0 + 1e-12);
       EXPECT_GE(seq(t, 1), -1.0 - 1e-12);
     }
-    x = DiffDriveModel{}.Step(x, c.Command(), 0.05);
+    x = DiffDriveModel{}.Step(x, c.Command(), 0, 0.05);
   }
 }
 
