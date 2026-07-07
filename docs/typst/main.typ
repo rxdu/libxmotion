@@ -30,7 +30,7 @@
 
 = MEKF
 
-This section is about the MEKF implementation in libxmotion. Most of the equations and derivation steps are taken from @Maley2013-it.
+This section is about the MEKF implementation in xmNavigation. The multiplicative extended Kalman filter originates with Lefferts, Markley and Shuster @Lefferts1982-mekf; @Markley2003-aer discusses the attitude error representations it builds on, and @Trawny2005-ikf gives a widely used derivation of the quaternion indirect (error-state) Kalman filter. Most of the equations and derivation steps in this section are taken from @Maley2013-it, with the continuous-to-discrete noise derivation following Appendix E of @Sola2017-cy.
 
 == Quaternion 
 
@@ -445,13 +445,13 @@ where $bold(Q)_d$ is the discrete-time process noise covariance matrix and is gi
 $ bold(Q)_d &= integral^(Delta t)_0 e^(bold(F(t-tau)))bold(Q)_c e^(bold(F^T (t-tau)))d tau \
 &= mat(
   // first row
-  Lambda(bold(sigma^2_omega)) Delta t + Lambda(bold(sigma^2_omega)) Delta t^3 / 3, bold(0), bold(0), -Lambda(bold(sigma^2_(beta omega)))frac(Delta t^2,2), bold(0), bold(0);
+  Lambda(bold(sigma^2_omega)) Delta t + Lambda(bold(sigma^2_(beta omega))) Delta t^3 / 3, bold(0), bold(0), -Lambda(bold(sigma^2_(beta omega)))frac(Delta t^2,2), bold(0), bold(0);
   // second row
-  bold(0), Lambda(bold(sigma^2_f)) Delta t + Lambda(bold(sigma^2_(beta f))) frac(Delta t^3, 3), Lambda(bold(sigma^2_(beta f))) frac(Delta t^4,8) + Lambda(bold(sigma^2_(beta f))) Delta t^2 / 2, bold(0), -Lambda(bold(sigma^2_(beta f))) Delta t^2 / 2, bold(0);
+  bold(0), Lambda(bold(sigma^2_f)) Delta t + Lambda(bold(sigma^2_(beta f))) frac(Delta t^3, 3), Lambda(bold(sigma^2_f)) Delta t^2 / 2 + Lambda(bold(sigma^2_(beta f))) frac(Delta t^4,8), bold(0), -Lambda(bold(sigma^2_(beta f))) Delta t^2 / 2, bold(0);
   // third row
   bold(0), Lambda(bold(sigma^2_f)) frac(Delta t^2,2) + Lambda(bold(sigma^2_(beta f))) frac(Delta t^4, 8), Lambda(bold(sigma^2_(f))) frac(Delta t^3,3) + Lambda(bold(sigma^2_(beta f))) frac(Delta t^5, 20), bold(0), -Lambda(bold(sigma^2_(beta f))) frac(Delta t^3, 6), bold(0);
   // forth row
-  -Lambda(bold(sigma^2_(beta omega))) frac(Delta t^2,2), bold(0), bold(0), Lambda(bold(sigma^2_(beta omega))) frac(Delta t^2,2), bold(0), bold(0);
+  -Lambda(bold(sigma^2_(beta omega))) frac(Delta t^2,2), bold(0), bold(0), Lambda(bold(sigma^2_(beta omega))) Delta t, bold(0), bold(0);
   // fifth row
   bold(0), -Lambda(bold(sigma^2_(beta f))) Delta t^2 / 2, -Lambda(bold(sigma^2_(beta f))) frac(Delta t^3, 6), bold(0), Lambda(bold(sigma^2_(beta f))) Delta t, bold(0);
   // sixth row
@@ -519,7 +519,9 @@ $ bold(P)^+_0 = bold(E)[(delta bold(x)_0 - delta hat(bold(x))^+_0)  (delta bold(
 
   - Update the error state and error-state covariance matrix
 
-  $ delta hat(bold(x))^+_k = delta hat(bold(x))^-_k + bold(K)_k bold(H)_k delta bold(x)^-_k $
+  $ delta hat(bold(x))^+_k = delta hat(bold(x))^-_k + bold(K)_k (delta bold(z)_k - bold(H)_k delta hat(bold(x))^-_k) $
+
+  Since the error state is reset to zero after every fold (see below), $delta hat(bold(x))^-_k = bold(0)$ and the update reduces to $delta hat(bold(x))^+_k = bold(K)_k delta bold(z)_k$, with $delta bold(z)_k$ the measurement residual (innovation).
   $ bold(P)^+_k = (bold(I) - bold(K)_k bold(H)_k) bold(P)^-_k $
 
   - Update the full states
@@ -527,101 +529,11 @@ $ bold(P)^+_0 = bold(E)[(delta bold(x)_0 - delta hat(bold(x))^+_0)  (delta bold(
   $ hat(bold(q))^+_k = hat(bold(q))^-_k times.circle mat(1; bold(alpha^+_k)/2) $
   $ hat(bold(r))^+_k = hat(bold(r))^-_k + delta bold(r)^+_k $
   $ hat(bold(v))^+_k = hat(bold(v))^-_k + delta bold(v)^+_k $
+  $ hat(bold(beta))^+_(omega,k) = hat(bold(beta))^-_(omega,k) + bold(beta)^+_(omega,k) $
+  $ hat(bold(beta))^+_(f,k) = hat(bold(beta))^-_(f,k) + bold(beta)^+_(f,k) $
+  $ hat(bold(beta))^+_(m,k) = hat(bold(beta))^-_(m,k) + bold(beta)^+_(m,k) $
 
-#pagebreak()
-
-= Math
-
-*Inline:* Let $a$, $b$, and $c$ be the side
-lengths of right-angled triangle. Then, we know that: $a^2 + b^2 = c^2$
-
-*Block without numbering:*
-
-#math.equation(block: true, numbering: none, [
-    $
-    sum_(k=1)^n k = (n(n+1)) / 2
-    $
-  ]
-)
-
-*Block with numbering:*
-
-As shown in @equation.
-
-$
-sum_(k=1)^n k = (n(n+1)) / 2
-$ <equation>
-
-*More information:*
-- #link("https://typst.app/docs/reference/math/equation/")
-
-
-= Citation
-
-You can use citations by using the `#cite` function with the key for the reference and adding a bibliography. Typst supports BibLateX and Hayagriva.
-
-```typst
-#bibliography("bibliography.bib")
-```
-
-Single citation @Vaswani2017AttentionIA. Multiple citations @Vaswani2017AttentionIA @hinton2015distilling. In text #cite(<Vaswani2017AttentionIA>, form: "prose")
-
-*More information:*
-- #link("https://typst.app/docs/reference/meta/bibliography/")
-- #link("https://typst.app/docs/reference/meta/cite/")
-
-= Figures and Tables
-
-
-#figure(
-  table(
-    align: center,
-    columns: (auto, auto),
-    row-gutter: (2pt, auto),
-    stroke: 0.5pt,
-    inset: 5pt,
-    [header 1], [header 2],
-    [cell 1], [cell 2],
-    [cell 3], [cell 4],
-  ),
-  caption: [#lorem(5)]
-) <table>
-
-#figure(
-  image("figure/image.png", width: 30%),
-  caption: [#lorem(7)]
-) <figure>
-
-*More information*
-
-- #link("https://typst.app/docs/reference/meta/figure/")
-- #link("https://typst.app/docs/reference/layout/table/")
-
-= Referencing
-
-@figure #lorem(10), @table.
-
-*More information:*
-
-- #link("https://typst.app/docs/reference/meta/ref/")
-
-= Lists
-
-*Unordered list*
-
-- #lorem(10)
-- #lorem(8)
-
-*Numbered list*
-
-+ #lorem(10)
-+ #lorem(8)
-+ #lorem(12)
-
-*More information:*
-- #link("https://typst.app/docs/reference/layout/enum/")
-- #link("https://typst.app/docs/reference/meta/cite/")
-
+  - Reset the error state for the next cycle: $delta hat(bold(x))^+_k arrow.l bold(0)$. The bias terms must be folded into persistent nominal states here — the error-state estimate does not accumulate across cycles.
 
 // Add bibliography and create Bibiliography section
 #bibliography("bibliography.bib")

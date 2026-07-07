@@ -2,161 +2,145 @@
  * mekf6.cpp
  *
  * Created on 3/31/24 8:16 PM
- * Description:
+ * Description: error-state MEKF update cycle. Equation references point to
+ * docs/typst/main.typ (which follows Maley 2013 / Sola 2017).
  *
  * Copyright (c) 2024 Ruixiang Du (rdu)
  */
 
 #include "xmnav/estimation/mekf6.hpp"
 
-#include "xmbase/math/matrix_utils.hpp"
+#include <cmath>
 
-#include <iostream>
+#include "xmbase/math/matrix_utils.hpp"
 
 namespace xmotion {
 namespace {
 using MathUtils::SkewSymmetric;
 
+using Mat3 = Eigen::Matrix<double, 3, 3>;
+
+Mat3 DiagSq(const Eigen::Vector3d &sigma) {
+  return sigma.cwiseProduct(sigma).asDiagonal();
+}
 }  // namespace
 
 void Mekf6::Initialize(const Params &params) {
   params_ = params;
-  q_hat_ = params.init_quaternion;
-  x_ = params.init_state;
+  q_hat_ = params.init_quaternion.normalized();
+  b_omega_ = params.init_gyro_bias;
+  b_f_ = params.init_accel_bias;
   P_ = params.init_state_cov;
   R_ = params.init_observation_noise_cov;
+  last_obs_used_ = false;
 }
 
-Eigen::Matrix<double, Mekf6::StateDimension, Mekf6::StateDimension>
-Mekf6::GetQMatrix(double dt) {
-  Eigen::Matrix<double, StateDimension, StateDimension> Q =
-      Eigen::Matrix<double, StateDimension, StateDimension>::Zero();
-  Eigen::Matrix<double, 3, 3> m_sigma_omega, m_sigma_f;
-  m_sigma_omega << params_.sigma_omega(0) * params_.sigma_omega(0), 0, 0, 0,
-      params_.sigma_omega(1) * params_.sigma_omega(1), 0, 0, 0,
-      params_.sigma_omega(2) * params_.sigma_omega(2);
-  m_sigma_f << params_.sigma_f(0) * params_.sigma_f(0), 0, 0, 0,
-      params_.sigma_f(1) * params_.sigma_f(1), 0, 0, 0,
-      params_.sigma_f(2) * params_.sigma_f(2);
+// Discrete process noise Q_d = int_0^dt Phi(tau) Q_c Phi(tau)^T dtau for the
+// error-state dynamics, first-order Phi. Symmetric by construction: the
+// lower-triangular blocks mirror the upper ones.
+Mekf6::ProcessNoiseCovariance Mekf6::GetQMatrix(double dt) const {
+  ProcessNoiseCovariance Q = ProcessNoiseCovariance::Zero();
 
-  Eigen::Matrix<double, 3, 3> m_sigma_beta_omega, m_sigma_beta_f;
-  m_sigma_beta_omega << params_.sigma_beta_omega(0) *
-                            params_.sigma_beta_omega(0),
-      0, 0, 0, params_.sigma_beta_omega(1) * params_.sigma_beta_omega(1), 0, 0,
-      0, params_.sigma_beta_omega(2) * params_.sigma_beta_omega(2);
-  m_sigma_beta_f << params_.sigma_beta_f(0) * params_.sigma_beta_f(0), 0, 0, 0,
-      params_.sigma_beta_f(1) * params_.sigma_beta_f(1), 0, 0, 0,
-      params_.sigma_beta_f(2) * params_.sigma_beta_f(2);
+  const Mat3 s_w = DiagSq(params_.sigma_omega);
+  const Mat3 s_f = DiagSq(params_.sigma_f);
+  const Mat3 s_bw = DiagSq(params_.sigma_beta_omega);
+  const Mat3 s_bf = DiagSq(params_.sigma_beta_f);
 
-  Q.block<3, 3>(0, 0) =
-      m_sigma_omega * dt + m_sigma_beta_omega * dt * dt * dt / 3.0f;
-  Q.block<3, 3>(0, 9) = -m_sigma_beta_omega * dt * dt / 2.0f;
+  const double dt2 = dt * dt;
+  const double dt3 = dt2 * dt;
+  const double dt4 = dt3 * dt;
+  const double dt5 = dt4 * dt;
 
-  Q.block<3, 3>(3, 3) = m_sigma_f * dt + m_sigma_beta_f * dt * dt * dt / 3.0f;
-  Q.block<3, 3>(3, 6) =
-      m_sigma_beta_f * dt * dt * dt * dt / 8.0 + m_sigma_beta_f * dt * dt / 2.0;
-  Q.block<3, 3>(3, 12) = -m_sigma_beta_f * dt * dt / 2.0;
+  // attitude error <-> gyro bias
+  Q.block<3, 3>(0, 0) = s_w * dt + s_bw * dt3 / 3.0;
+  Q.block<3, 3>(0, 9) = -s_bw * dt2 / 2.0;
+  Q.block<3, 3>(9, 0) = Q.block<3, 3>(0, 9).transpose();
+  Q.block<3, 3>(9, 9) = s_bw * dt;
 
-  Q.block<3, 3>(6, 3) =
-      m_sigma_f * dt * dt / 2.0f + m_sigma_beta_f * dt * dt * dt * dt / 8.0f;
-  Q.block<3, 3>(6, 6) = m_sigma_f * dt * dt * dt / 3.0f +
-                        m_sigma_beta_f * dt * dt * dt * dt * dt / 20.0f;
-  Q.block<3, 3>(6, 12) = -m_sigma_beta_f * dt * dt * dt / 6.0f;
-
-  Q.block<3, 3>(9, 0) = -m_sigma_beta_omega * dt * dt / 2.0f;
-  Q.block<3, 3>(9, 9) = m_sigma_beta_omega * dt * dt / 2.0f;
-
-  Q.block<3, 3>(12, 3) = -m_sigma_beta_f * dt * dt / 2.0f;
-  Q.block<3, 3>(12, 6) = -m_sigma_beta_f * dt * dt * dt / 6.0f;
-  Q.block<3, 3>(12, 12) = m_sigma_beta_f * dt;
+  // velocity/position error <-> accel bias
+  Q.block<3, 3>(3, 3) = s_f * dt + s_bf * dt3 / 3.0;
+  Q.block<3, 3>(3, 6) = s_f * dt2 / 2.0 + s_bf * dt4 / 8.0;
+  Q.block<3, 3>(6, 3) = Q.block<3, 3>(3, 6).transpose();
+  Q.block<3, 3>(3, 12) = -s_bf * dt2 / 2.0;
+  Q.block<3, 3>(12, 3) = Q.block<3, 3>(3, 12).transpose();
+  Q.block<3, 3>(6, 6) = s_f * dt3 / 3.0 + s_bf * dt5 / 20.0;
+  Q.block<3, 3>(6, 12) = -s_bf * dt3 / 6.0;
+  Q.block<3, 3>(12, 6) = Q.block<3, 3>(6, 12).transpose();
+  Q.block<3, 3>(12, 12) = s_bf * dt;
 
   return Q;
 }
 
-void Mekf6::Update(const ControlInput &gyro_tilde,
+bool Mekf6::Update(const ControlInput &gyro_tilde,
                    const Observation &accel_tilde, double dt) {
-  // subtract bias from gyro measurement
-  ControlInput gyro = gyro_tilde - x_.segment<ControlInputDimension>(9);
-  Observation accel = accel_tilde - x_.segment<ObservationDimension>(12);
+  if (!(dt > 0.0) || !gyro_tilde.allFinite() || !accel_tilde.allFinite()) {
+    return false;
+  }
 
-  // reset the error state
-  x_ = Eigen::Matrix<double, StateDimension, 1>::Zero();
+  // bias-corrected measurements against the nominal bias states
+  const Eigen::Vector3d gyro = gyro_tilde - b_omega_;
+  const Eigen::Vector3d accel = accel_tilde - b_f_;
 
-  std::cout << "gyro_tilde: " << gyro_tilde.transpose() << std::endl;
-  std::cout << "accel_tilde: " << accel_tilde.transpose() << std::endl;
-  std::cout << "gyro: " << gyro.transpose() << std::endl;
-  std::cout << "accel: " << accel.transpose() << std::endl;
-
-  // predict state by propagating gyro data as control input
+  // --- propagate the nominal attitude with the gyro (first-order) ---
   q_hat_ = Eigen::Quaterniond(
       q_hat_.coeffs() +
       0.5 * dt *
           (q_hat_ * Eigen::Quaterniond(0, gyro(0), gyro(1), gyro(2))).coeffs());
   q_hat_.normalize();
 
-  // update state transition matrix
-  Eigen::Matrix<double, StateDimension, StateDimension> F =
-      Eigen::Matrix<double, StateDimension, StateDimension>::Zero();
+  // --- propagate the error-state covariance ---
+  // (the error-state mean is zero after every fold/reset, so only P moves)
+  const Mat3 C_i_b = q_hat_.toRotationMatrix();  // body -> inertial
+
+  StateCovariance F = StateCovariance::Zero();
   F.block<3, 3>(0, 0) = -SkewSymmetric(gyro);
-  F.block<3, 3>(0, 9) = -Eigen::Matrix<double, 3, 3>::Identity();
-  F.block<3, 3>(3, 0) = -q_hat_.toRotationMatrix() * SkewSymmetric(accel);
-  F.block<3, 3>(3, 12) = -q_hat_.toRotationMatrix();
-  F.block<3, 3>(6, 3) = Eigen::Matrix<double, 3, 3>::Identity();
+  F.block<3, 3>(0, 9) = -Mat3::Identity();
+  F.block<3, 3>(3, 0) = -C_i_b * SkewSymmetric(accel);
+  F.block<3, 3>(3, 12) = -C_i_b;
+  F.block<3, 3>(6, 3) = Mat3::Identity();
 
-  Eigen::Matrix<double, StateDimension, StateDimension> Phi =
-      Eigen::Matrix<double, StateDimension, StateDimension>::Identity() +
-      F * dt;
-
-  //  std::cout << "x: \n" << x_.transpose() << std::endl;
-  //  std::cout << "F: \n" << F << std::endl;
-  //  std::cout << "Phi: \n" << Phi << std::endl;
-  //  std::cout << "P^-: \n" << P_ << std::endl;
-  //  std::cout << "Q_d: \n" << GetQMatrix(dt) << std::endl;
-
-  // predict the state and covariance
+  const StateCovariance Phi = StateCovariance::Identity() + F * dt;
   P_ = Phi * P_ * Phi.transpose() + GetQMatrix(dt);
-  x_ = Phi * x_;
 
-  //  std::cout << "P^-: \n" << P_ << std::endl;
-  //  std::cout << "x^-: \n" << x_.block<3, 1>(0, 0).transpose() << std::endl;
+  // --- gravity observation (gated: only valid when not accelerating) ---
+  const Eigen::Vector3d g_i(0.0, 0.0, -params_.gravity_constant);
+  last_obs_used_ =
+      params_.accel_gate_threshold <= 0.0 ||
+      std::abs(accel.norm() - params_.gravity_constant) <=
+          params_.accel_gate_threshold;
+  if (!last_obs_used_) {
+    P_ = 0.5 * (P_ + P_.transpose());
+    return true;  // prediction-only cycle
+  }
 
-  // update the kalman gain
+  const Eigen::Vector3d h = q_hat_.conjugate() * g_i;  // predicted accel
+
   Eigen::Matrix<double, ObservationDimension, StateDimension> H =
       Eigen::Matrix<double, ObservationDimension, StateDimension>::Zero();
-  Eigen::Matrix<double, ObservationDimension, 1> h =
-      q_hat_.inverse().toRotationMatrix() *
-      Eigen::Vector3d(0, 0, -params_.gravity_constant);
   H.block<3, 3>(0, 0) = SkewSymmetric(h);
-  H.block<3, 3>(0, 12) = Eigen::Matrix<double, 3, 3>::Identity();
+  H.block<3, 3>(0, 12) = Mat3::Identity();
 
-  Eigen::Matrix<double, StateDimension, ObservationDimension> K =
-      P_ * H.transpose() * (H * P_ * H.transpose() + R_).inverse();
+  const Eigen::Matrix<double, ObservationDimension, ObservationDimension> S =
+      H * P_ * H.transpose() + R_;
+  const Eigen::Matrix<double, StateDimension, ObservationDimension> K =
+      (S.ldlt().solve(H * P_)).transpose();
 
-  //  std::cout << "K: \n" << K << std::endl;
-  //  std::cout << "H: \n" << H << std::endl;
+  // innovation and error-state estimate (prior error mean is zero)
+  const Eigen::Vector3d delta_y = accel - h;
+  const State x = K * delta_y;
 
-  // update the state and covariance
-  Eigen::Vector3d delta_y =
-      accel - q_hat_.inverse().toRotationMatrix() *
-                  Eigen::Vector3d(0, 0, -params_.gravity_constant);
+  // Joseph-form covariance update, then re-symmetrize
+  const StateCovariance IKH = StateCovariance::Identity() - K * H;
+  P_ = IKH * P_ * IKH.transpose() + K * R_ * K.transpose();
+  P_ = 0.5 * (P_ + P_.transpose());
 
-  //  std::cout << "delta y: \n" << delta_y.transpose() << std::endl;
-  //  std::cout << "K * delta_y: \n" << (K * delta_y).transpose() << std::endl;
-
-  x_ = x_ + K * delta_y;
-  P_ = (Eigen::Matrix<double, StateDimension, StateDimension>::Identity() -
-        K * H) *
-       P_;
-
-  //  std::cout << "x^+: \n" << x_.transpose() << std::endl;
-  //  std::cout << "P^+: \n" << P_ << std::endl;
-
-  // calculate q_hat_plus
-  q_hat_ =
-      q_hat_ * Eigen::Quaterniond(1, x_(0) / 2.0f, x_(1) / 2.0f, x_(2) / 2.0f);
+  // --- fold the error estimate into the nominal states, reset the error ---
+  q_hat_ = q_hat_ * Eigen::Quaterniond(1.0, x(0) / 2.0, x(1) / 2.0, x(2) / 2.0);
   q_hat_.normalize();
+  b_omega_ += x.segment<3>(9);
+  b_f_ += x.segment<3>(12);
+  // (delta v / delta r fold when nominal velocity/position tracking lands)
 
-  x_.block<3, 1>(0, 0) += x_.block<3, 1>(9, 0);
-  x_.block<3, 1>(3, 0) += x_.block<3, 1>(12, 0);
+  return true;
 }
 }  // namespace xmotion
