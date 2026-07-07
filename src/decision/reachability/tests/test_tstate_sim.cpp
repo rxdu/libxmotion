@@ -38,9 +38,9 @@ int main()
 
 #ifdef ENABLE_VIZ
     LightViz::ShowTStateSpace(*sim.state_space_.get());
-    // LightViz::ShowMatrixAsColorMap(Psi, "Psi_matrix", false);
-    // LightViz::ShowMatrixAsImage(Psi);
-    // LightViz::ShowMatrixAsColorMap(Psi_T, "Psi_T_matrix", false);
+    // LightViz::quickviz::CvIO::ShowImage(MatrixToColorMap(Psi, "Psi_matrix", false);
+    // LightViz::quickviz::CvIO::ShowImage(MatrixToImage(Psi);
+    // LightViz::quickviz::CvIO::ShowImage(MatrixToColorMap(Psi_T, "Psi_T_matrix", false);
 #endif
 
     return 0;

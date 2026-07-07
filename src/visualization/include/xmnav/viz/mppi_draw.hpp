@@ -19,6 +19,7 @@
 #include "cvdraw/cvdraw.hpp"
 
 #include "xmnav/mppi/mppi.hpp"
+#include "xmnav/viz/style.hpp"
 
 namespace xmotion {
 
@@ -31,9 +32,7 @@ void DrawMppiSnapshot2D(quickviz::CvCanvas &canvas,
 
   for (const auto &c : snap.candidates) {
     // weight -> intensity: influential candidates draw bright
-    const double a = std::min(1.0, c.weight / w_max);
-    const int shade = 230 - static_cast<int>(190.0 * a);
-    const cv::Scalar color(shade, shade, 255);  // faint red -> strong red
+    const cv::Scalar color = viz_style::WeightColor(c.weight / w_max);
     for (Eigen::Index t = 0; t + 1 < c.states.rows(); ++t) {
       canvas.DrawLine({c.states(t, x_col), c.states(t, y_col)},
                       {c.states(t + 1, x_col), c.states(t + 1, y_col)}, color,
@@ -46,7 +45,7 @@ void DrawMppiSnapshot2D(quickviz::CvCanvas &canvas,
     canvas.DrawLine(
         {snap.nominal_states(t, x_col), snap.nominal_states(t, y_col)},
         {snap.nominal_states(t + 1, x_col), snap.nominal_states(t + 1, y_col)},
-        quickviz::CvColors::blue_color, 2);
+        viz_style::kChosenTrajectory, 2);
   }
 }
 

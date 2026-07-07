@@ -14,10 +14,12 @@ was previously spread across several repositories (notably `librav` and `imtoolk
 recently, lived in `libxmotion`. At the moment it is used mainly for study, research and
 experimentation — not yet production-hardened.
 
-> **Algorithm-centric.** `xmNavigation` is a pure algorithms library: it depends only on
-> **[xmBase](https://github.com/rxdu/xmBase)** (foundation/common) and math libraries — no hardware
-> dependencies. Composing algorithms with drivers into runnable robot applications happens in
-> external application repos. See the umbrella's
+> **Algorithm-centric.** `xmNavigation` is a pure algorithms library: its **runtime** dependency
+> set is **[xmBase](https://github.com/rxdu/xmBase)** (foundation/common) and math libraries — no
+> hardware dependencies. For **development only**, the visualization-gated modules and demos use
+> **[xmViewer](https://github.com/rxdu/quickviz)** (the family's viewer component); deployment
+> builds carry none of it. Composing algorithms with drivers into runnable robot applications
+> happens in external application repos. See the umbrella's
 > [transition ADR](https://github.com/rxdu/xmotion/blob/main/docs/adr/0002-repo-transition-plan.md).
 
 ## Repository structure
