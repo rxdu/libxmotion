@@ -20,6 +20,18 @@
 using namespace xmotion;
 
 namespace {
+// Reduced scale under sanitizer/Debug builds: exercise the code paths, keep
+// the numerical convergence assertions in Release where they are validated.
+#if !defined(NDEBUG) || defined(__SANITIZE_ADDRESS__) || \
+    defined(__SANITIZE_THREAD__)
+constexpr bool kReducedScale = true;
+#else
+constexpr bool kReducedScale = false;
+#endif
+}  // namespace
+
+
+namespace {
 template <typename Sampler>
 std::vector<Eigen::Matrix<double, Eigen::Dynamic, 1>> Draw(Sampler& sampler,
                                                            int k, int t) {
@@ -149,7 +161,7 @@ TEST(MppiSamplerTest, CostNormalizationRestoresEffectiveSampleSize) {
     DoubleIntegratorModel m;
     C::State x(1.0, 0.0);
     double min_ess = 1e18;
-    for (int i = 0; i < 60; ++i) {
+    for (int i = 0; i < (kReducedScale ? 15 : 60); ++i) {
       mppi.Plan(x);
       x = m.Step(x, mppi.Command(), 0, dt);
       min_ess = std::min(min_ess, mppi.LastEffectiveSampleSize());
@@ -157,8 +169,12 @@ TEST(MppiSamplerTest, CostNormalizationRestoresEffectiveSampleSize) {
     return min_ess;
   };
 
-  EXPECT_LT(run(false), 3.0);    // raw: weight collapse
-  EXPECT_GT(run(true), 20.0);    // normalized: healthy sample utilization
+  if (!kReducedScale) {
+    EXPECT_LT(run(false), 3.0);  // raw: weight collapse
+    EXPECT_GT(run(true), 20.0);  // normalized: healthy sample utilization
+  } else {
+    EXPECT_GT(run(true), run(false));
+  }
 }
 
 TEST(MppiSamplerTest, SplineSamplerYieldsSmootherCommandsOnDiffDrive) {
@@ -174,7 +190,7 @@ TEST(MppiSamplerTest, SplineSamplerYieldsSmootherCommandsOnDiffDrive) {
     typename std::decay_t<decltype(mppi)>::State x =
         std::decay_t<decltype(mppi)>::State::Zero();
     double sum = 0.0;
-    for (int i = 0; i < 200; ++i) {
+    for (int i = 0; i < (kReducedScale ? 20 : 200); ++i) {
       const auto& seq = mppi.Plan(x);
       for (Eigen::Index t = 0; t + 1 < seq.rows(); ++t) {
         sum += (seq.row(t + 1) - seq.row(t)).cwiseAbs().sum();
@@ -199,7 +215,11 @@ TEST(MppiSamplerTest, SplineSamplerYieldsSmootherCommandsOnDiffDrive) {
   Gauss gauss(DiffDriveModel{}, goal, p);
   Spline spline(DiffDriveModel{}, goal, p, SplineKnotSampler<2>(21, 8));
 
-  EXPECT_LT(roughness(spline), 0.7 * roughness(gauss));
+  if (!kReducedScale) {
+    EXPECT_LT(roughness(spline), 0.7 * roughness(gauss));
+  } else {
+    EXPECT_LT(roughness(spline), roughness(gauss));
+  }
 }
 
 TEST(MppiSamplerTest, SingleCorePerformanceEnvelope) {

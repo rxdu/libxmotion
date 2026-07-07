@@ -23,6 +23,18 @@ using namespace xmotion;
 
 namespace {
 
+// Sanitizer/Debug builds exercise the code paths for memory errors but run
+// the physics at reduced scale: full convergence workloads (12M rollout
+// steps) take 100-200x longer under ASan and add nothing to what the
+// Release suite already asserts numerically.
+#if !defined(NDEBUG) || defined(__SANITIZE_ADDRESS__) ||     defined(__SANITIZE_THREAD__)
+constexpr bool kReducedScale = true;
+#else
+constexpr bool kReducedScale = false;
+#endif
+constexpr int kSamples = kReducedScale ? 128 : 2048;
+inline int Cycles(int full) { return kReducedScale ? 20 : full; }
+
 constexpr double kDt = 0.02;
 constexpr int kHorizon = 20;  // 0.4 s
 constexpr double kHeight = 0.28;
@@ -137,7 +149,7 @@ struct Setup {
     // 12-dim GRF control needs coverage: 512 samples leaves 8-13 deg
     // attitude transients under disturbance; 2048 brings them under 5 deg
     // (see the sweep record in the PR). CPU cost: ~4 ms/plan.
-    p.num_samples = 2048;
+    p.num_samples = kSamples;
     p.horizon_steps = kHorizon;
     p.dt = kDt;
     p.lambda = 0.1;
@@ -175,7 +187,7 @@ TEST(MppiQuadrupedTest, StandingBalanceHoldsHeightAndAttitude) {
                                 Eigen::Quaterniond::Identity(),
                                 Eigen::Vector3d::Zero());
   double mean_fz = 0.0;
-  const int cycles = 200;  // 4 s
+  const int cycles = Cycles(200);  // 4 s in Release
   for (int i = 0; i < cycles; ++i) {
     mppi.model().SetContext(FeetUnderBody(Srb::Position(x)), AllStance());
     plant.SetContext(FeetUnderBody(Srb::Position(x)), AllStance());
@@ -185,13 +197,18 @@ TEST(MppiQuadrupedTest, StandingBalanceHoldsHeightAndAttitude) {
     x = plant.Step(x, u, 0, kDt);
   }
 
-  EXPECT_NEAR(Srb::Position(x)(2), kHeight, 0.04);
-  const Eigen::Vector3d body_z =
-      Srb::Orientation(x) * Eigen::Vector3d::UnitZ();
-  EXPECT_GT(body_z(2), std::cos(5.0 * M_PI / 180.0));  // tilt < 5 deg
-  // stance forces carry the weight: mg/4 per foot on average
-  const double mg4 = 15.0 * 9.81 / 4.0;
-  EXPECT_NEAR(mean_fz, mg4, 0.3 * mg4);
+  if (!kReducedScale) {
+    EXPECT_NEAR(Srb::Position(x)(2), kHeight, 0.04);
+    const Eigen::Vector3d body_z =
+        Srb::Orientation(x) * Eigen::Vector3d::UnitZ();
+    EXPECT_GT(body_z(2), std::cos(5.0 * M_PI / 180.0));  // tilt < 5 deg
+    // stance forces carry the weight: mg/4 per foot on average
+    const double mg4 = 15.0 * 9.81 / 4.0;
+    EXPECT_NEAR(mean_fz, mg4, 0.3 * mg4);
+  } else {
+    (void)mean_fz;
+    EXPECT_TRUE(x.allFinite());
+  }
 }
 
 TEST(MppiQuadrupedTest, RecoversFromLateralPush) {
@@ -204,14 +221,18 @@ TEST(MppiQuadrupedTest, RecoversFromLateralPush) {
   Srb::State x = Srb::MakeState(
       Eigen::Vector3d(0, 0, kHeight), Eigen::Vector3d(0.0, 0.4, 0.0),
       Eigen::Quaterniond::Identity(), Eigen::Vector3d::Zero());
-  for (int i = 0; i < 150; ++i) {  // 3 s
+  for (int i = 0; i < Cycles(150); ++i) {  // 3 s in Release
     mppi.model().SetContext(FeetUnderBody(Srb::Position(x)), AllStance());
     plant.SetContext(FeetUnderBody(Srb::Position(x)), AllStance());
     mppi.Plan(x);
     x = plant.Step(x, mppi.Command(), 0, kDt);
   }
-  EXPECT_LT(Srb::Velocity(x).norm(), 0.10);
-  EXPECT_NEAR(Srb::Position(x)(2), kHeight, 0.05);
+  if (!kReducedScale) {
+    EXPECT_LT(Srb::Velocity(x).norm(), 0.10);
+    EXPECT_NEAR(Srb::Position(x)(2), kHeight, 0.05);
+  } else {
+    EXPECT_TRUE(x.allFinite());
+  }
 }
 
 TEST(MppiQuadrupedTest, TrotTracksForwardVelocity) {
@@ -232,7 +253,7 @@ TEST(MppiQuadrupedTest, TrotTracksForwardVelocity) {
   TrotGait gait(Srb::Position(x), phase_steps);
   double mean_vx = 0.0;
   int samples = 0;
-  const int cycles = 300;  // 6 s
+  const int cycles = Cycles(300);  // 6 s in Release
   for (int i = 0; i < cycles; ++i) {
     const auto schedule = TrotSchedule(i, phase_steps);
     const auto feet_plan =
@@ -249,9 +270,14 @@ TEST(MppiQuadrupedTest, TrotTracksForwardVelocity) {
   }
   mean_vx /= samples;
 
-  EXPECT_NEAR(mean_vx, 0.3, 0.12);
-  EXPECT_NEAR(Srb::Position(x)(2), kHeight, 0.05);
-  EXPECT_GT(Srb::Position(x)(0), 0.6);  // actually moved forward
+  if (!kReducedScale) {
+    EXPECT_NEAR(mean_vx, 0.3, 0.12);
+    EXPECT_NEAR(Srb::Position(x)(2), kHeight, 0.05);
+    EXPECT_GT(Srb::Position(x)(0), 0.6);  // actually moved forward
+  } else {
+    (void)mean_vx;
+    EXPECT_TRUE(x.allFinite());
+  }
 }
 
 TEST(MppiQuadrupedTest, FrictionConeRespectedInStance) {
@@ -266,7 +292,7 @@ TEST(MppiQuadrupedTest, FrictionConeRespectedInStance) {
       Eigen::Quaterniond::Identity(), Eigen::Vector3d::Zero());
   const double mu = 0.6;
   double worst_slip = 0.0;
-  for (int i = 0; i < 100; ++i) {
+  for (int i = 0; i < Cycles(100); ++i) {
     mppi.model().SetContext(FeetUnderBody(Srb::Position(x)), AllStance());
     plant.SetContext(FeetUnderBody(Srb::Position(x)), AllStance());
     mppi.Plan(x);
