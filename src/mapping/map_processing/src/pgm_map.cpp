@@ -48,6 +48,7 @@ bool PgmMap::LoadData() {
 }
 
 bool PgmMap::LoadFromFile(const std::string& file_path) {
+  XM_SPAN("mapping.pgm.load");
   metadata_.image = file_path;
   return LoadData();
 }

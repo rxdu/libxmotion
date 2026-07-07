@@ -104,8 +104,10 @@ void Mekf9::ApplyVectorObservation(const Eigen::Vector3d &delta_y,
 bool Mekf9::Update(const ControlInput &gyro_tilde,
                    const Observation &accel_tilde, const Observation &mag_tilde,
                    double dt) {
+  XM_SPAN("estimation.mekf9.update");
   if (!(dt > 0.0) || !gyro_tilde.allFinite() || !accel_tilde.allFinite() ||
       !mag_tilde.allFinite()) {
+    invalid_input_counter_.Add();
     return false;
   }
 
@@ -143,6 +145,8 @@ bool Mekf9::Update(const ControlInput &gyro_tilde,
   if (last_accel_used_) {
     const Eigen::Vector3d h_a = q_hat_.conjugate() * g_i;
     ApplyVectorObservation(accel - h_a, h_a, 12, params_.accel_noise_cov);
+  } else {
+    accel_reject_counter_.Add();
   }
 
   // --- magnetometer observation (gated) ---
@@ -152,7 +156,10 @@ bool Mekf9::Update(const ControlInput &gyro_tilde,
   if (last_mag_used_) {
     const Eigen::Vector3d h_m = q_hat_.conjugate() * params_.mag_reference;
     ApplyVectorObservation(mag - h_m, h_m, 15, params_.mag_noise_cov);
+  } else {
+    mag_reject_counter_.Add();
   }
+  gyro_bias_gauge_.Set(b_omega_.norm());
 
   return true;
 }

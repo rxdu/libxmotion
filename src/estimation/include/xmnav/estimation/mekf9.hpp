@@ -26,6 +26,8 @@
 
 #include <eigen3/Eigen/Geometry>
 
+#include "xmbase/telemetry/telemetry.hpp"
+
 namespace xmotion {
 class Mekf9 {
  public:
@@ -110,6 +112,16 @@ class Mekf9 {
 
   bool last_accel_used_ = false;
   bool last_mag_used_ = false;
+
+  // pre-acquired wait-free telemetry handles (no-ops when unbound)
+  telemetry::Gauge gyro_bias_gauge_ =
+      telemetry::GetGauge("estimation.mekf9.gyro_bias_norm");
+  telemetry::Counter accel_reject_counter_ =
+      telemetry::GetCounter("estimation.mekf9.accel_gate_rejections");
+  telemetry::Counter mag_reject_counter_ =
+      telemetry::GetCounter("estimation.mekf9.mag_gate_rejections");
+  telemetry::Counter invalid_input_counter_ =
+      telemetry::GetCounter("estimation.mekf9.invalid_inputs");
 };
 }  // namespace xmotion
 

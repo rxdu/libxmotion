@@ -20,6 +20,7 @@
 #include <cassert>
 
 #include "xmnav/sampling/base/planner_base.hpp"
+#include "xmbase/telemetry/telemetry.hpp"
 #include "xmnav/sampling/tree/kd_graph.hpp"
 
 #include "graph/search/dijkstra.hpp"
@@ -53,6 +54,7 @@ class RRG : public PlannerBase<Space, KdGraph<Space>> {
 
   PathType Search(std::shared_ptr<StateType> start,
                   std::shared_ptr<StateType> goal, int32_t iter = -1) override {
+    XM_SPAN("planning.rrg.search");
     assert(BaseType::Steer != nullptr);
 
 #ifdef SHOW_TREE_GROWTH
@@ -160,9 +162,9 @@ class RRG : public PlannerBase<Space, KdGraph<Space>> {
       RRTViz::DrawStraightPath(canvas, path);
       quickviz::CvIO::ShowImageFrame(canvas.GetPaintArea(), "RRG", 0);
 #endif
-      for (auto &wp : path) std::cout << *wp << std::endl;
+      XM_INFO("planning.rrg: path found, {} waypoints", path.size());
     } else {
-      std::cout << "failed to find a path" << std::endl;
+      XM_WARN("planning.rrg: failed to find a path");
     }
 
     return path;

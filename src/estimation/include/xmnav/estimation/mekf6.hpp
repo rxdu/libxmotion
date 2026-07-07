@@ -27,6 +27,8 @@
 
 #include <eigen3/Eigen/Geometry>
 
+#include "xmbase/telemetry/telemetry.hpp"
+
 namespace xmotion {
 class Mekf6 {
  public:
@@ -98,6 +100,18 @@ class Mekf6 {
   Eigen::Vector3d b_f_ = Eigen::Vector3d::Zero();
 
   bool last_obs_used_ = false;
+
+  // pre-acquired wait-free telemetry handles (no-ops when unbound)
+  telemetry::Gauge innovation_gauge_ =
+      telemetry::GetGauge("estimation.mekf6.innovation_norm");
+  telemetry::Gauge gyro_bias_gauge_ =
+      telemetry::GetGauge("estimation.mekf6.gyro_bias_norm");
+  telemetry::Counter gate_reject_counter_ =
+      telemetry::GetCounter("estimation.mekf6.gate_rejections");
+  telemetry::Counter invalid_input_counter_ =
+      telemetry::GetCounter("estimation.mekf6.invalid_inputs");
+
+  friend class Mekf6TelemetryAccess;
 };
 }  // namespace xmotion
 

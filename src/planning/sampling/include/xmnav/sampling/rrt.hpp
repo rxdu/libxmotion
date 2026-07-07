@@ -21,6 +21,7 @@
 #include <cassert>
 
 #include "xmnav/sampling/base/planner_base.hpp"
+#include "xmbase/telemetry/telemetry.hpp"
 #include "xmnav/sampling/tree/basic_tree.hpp"
 #include "xmnav/sampling/tree/kd_tree.hpp"
 
@@ -45,6 +46,7 @@ class RRT : public PlannerBase<Space, Tree> {
  public:
   PathType Search(std::shared_ptr<StateType> start,
                   std::shared_ptr<StateType> goal, int32_t iter = -1) override {
+    XM_SPAN("planning.rrt.search");
     assert(BaseType::Steer != nullptr);
 
 #ifdef SHOW_TREE_GROWTH
@@ -95,8 +97,8 @@ class RRT : public PlannerBase<Space, Tree> {
               BaseType::space_->EvaluateDistance(new_state, goal));
           path = BaseType::tree_.TraceBackToRoot(goal);
 
-          std::cout << "path found at iteration " << k << std::endl;
-          for (auto &wp : path) std::cout << *wp << std::endl;
+          XM_INFO("planning.rrt: path found after {} iterations, {} waypoints",
+                  k, path.size());
 
 #ifdef SHOW_TREE_GROWTH
           RRTViz::DrawStraightBranch(canvas, new_state, goal);

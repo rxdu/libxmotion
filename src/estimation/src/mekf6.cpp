@@ -73,7 +73,9 @@ Mekf6::ProcessNoiseCovariance Mekf6::GetQMatrix(double dt) const {
 
 bool Mekf6::Update(const ControlInput &gyro_tilde,
                    const Observation &accel_tilde, double dt) {
+  XM_SPAN("estimation.mekf6.update");
   if (!(dt > 0.0) || !gyro_tilde.allFinite() || !accel_tilde.allFinite()) {
+    invalid_input_counter_.Add();
     return false;
   }
 
@@ -109,6 +111,7 @@ bool Mekf6::Update(const ControlInput &gyro_tilde,
       std::abs(accel.norm() - params_.gravity_constant) <=
           params_.accel_gate_threshold;
   if (!last_obs_used_) {
+    gate_reject_counter_.Add();
     P_ = 0.5 * (P_ + P_.transpose());
     return true;  // prediction-only cycle
   }
@@ -127,6 +130,7 @@ bool Mekf6::Update(const ControlInput &gyro_tilde,
 
   // innovation and error-state estimate (prior error mean is zero)
   const Eigen::Vector3d delta_y = accel - h;
+  innovation_gauge_.Set(delta_y.norm());
   const State x = K * delta_y;
 
   // Joseph-form covariance update, then re-symmetrize
@@ -139,6 +143,7 @@ bool Mekf6::Update(const ControlInput &gyro_tilde,
   q_hat_.normalize();
   b_omega_ += x.segment<3>(9);
   b_f_ += x.segment<3>(12);
+  gyro_bias_gauge_.Set(b_omega_.norm());
   // (delta v / delta r fold when nominal velocity/position tracking lands)
 
   return true;

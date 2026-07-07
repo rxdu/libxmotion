@@ -9,10 +9,13 @@
 
 #include "xmnav/reachability/monte_carlo_sim.hpp"
 
+#include "xmbase/telemetry/telemetry.hpp"
+
 using namespace xmotion;
 
 void MonteCarloSim::RunSim(double t0, double tf, double step, int32_t iter_num)
 {
+    XM_SPAN("decision.monte_carlo.run_sim");
     double x = 0, y = 0;
     double acc = -1, phi = 0;
 
