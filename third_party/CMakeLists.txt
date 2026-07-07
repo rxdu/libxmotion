@@ -19,7 +19,15 @@ add_subdirectory(quadprog++)
 # third-party code — consumed by the visualization-gated modules and demos
 # only, never part of the deployment closure (ADR 0005 dependency classes).
 if (ENABLE_VISUALIZATION)
-  option(QUICKVIZ_DEV_MODE "Build quickviz in dev mode" ON)
-  option(BUILD_QUICKVIZ_APP "Build quickviz application" ON)
+  # library modules only — upstream samples, apps, and tests are not part
+  # of this build (xmViewer has its own CI)
+  option(QUICKVIZ_DEV_MODE "Build quickviz in dev mode" OFF)
+  option(BUILD_QUICKVIZ_APP "Build quickviz application" OFF)
+  set(_xm_build_testing ${BUILD_TESTING})
+  set(BUILD_TESTING OFF)
+  # honor normal variables over option() in the subtree (CMP0077)
+  set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
   add_subdirectory(quickviz)
+  set(BUILD_TESTING ${_xm_build_testing})
+  unset(_xm_build_testing)
 endif ()

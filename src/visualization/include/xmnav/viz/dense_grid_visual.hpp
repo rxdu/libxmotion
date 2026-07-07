@@ -22,7 +22,7 @@
 #include <opencv2/core/eigen.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "cvdraw/cvdraw.hpp"
+#include "image/image.hpp"
 
 #include "xmnav/decomp/dense_grid.hpp"
 

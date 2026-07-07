@@ -10,7 +10,7 @@
 #ifndef XMNAV_VIZ_GEOMETRY_DRAW_HPP
 #define XMNAV_VIZ_GEOMETRY_DRAW_HPP
 
-#include "cvdraw/cvdraw.hpp"
+#include "image/image.hpp"
 
 #include "xmnav/geometry/polyline.hpp"
 #include "xmnav/geometry/cubic_spline.hpp"

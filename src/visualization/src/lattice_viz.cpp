@@ -9,7 +9,7 @@
 
 #include "xmnav/viz/lattice_viz.hpp"
 
-#include "cvdraw/cvdraw.hpp"
+#include "image/image.hpp"
 #include "xmnav/viz/lattice_draw.hpp"
 
 using namespace xmotion;

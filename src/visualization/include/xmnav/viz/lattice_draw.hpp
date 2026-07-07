@@ -14,7 +14,7 @@
 #include "xmnav/state_lattice/motion_primitive.hpp"
 #include "xmnav/state_lattice/state_lattice.hpp"
 
-#include "cvdraw/cvdraw.hpp"
+#include "image/image.hpp"
 
 namespace xmotion
 {
