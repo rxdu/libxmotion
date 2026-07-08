@@ -1,0 +1,3 @@
+add_executable(test_shield_scenarios test_shield_scenarios.cpp)
+target_link_libraries(test_shield_scenarios shield gtest gtest_main)
+gtest_discover_tests(test_shield_scenarios)
