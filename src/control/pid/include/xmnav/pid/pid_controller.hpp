@@ -17,6 +17,14 @@
  *  - defensive boundary: a non-finite input or dt <= 0 leaves the state
  *    untouched and returns the last output (system-level degradation is
  *    the safety shield's job)
+ *  - setpoint weighting (2-DOF form): the P term acts on
+ *    setpoint_weight * r - y; 1 is the classic 1-DOF behavior, 0 removes
+ *    the proportional jump on setpoint steps entirely
+ *  - bumpless transfer: AlignOutput() seeds the integral so the first
+ *    Update() after switching from manual (or another controller)
+ *    continues from the current actuator output
+ *  - observability: a non-empty Config::name exports
+ *    control.pid.<name>.{output,error} gauges and a .saturated counter
  *
  * Units are the caller's; kp/ki/kd follow the parallel form
  * u = kp e + integral(ki e dt) - kd d(y)/dt.
@@ -30,6 +38,10 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <optional>
+#include <string>
+
+#include "xmbase/telemetry/telemetry.hpp"
 
 namespace xmotion {
 
@@ -53,9 +65,20 @@ class PidController {
     // integral bleed rate toward the saturated output [1/s]
     // (kBackCalculation only)
     double back_calc_gain = 1.0;
+    // P-term setpoint weight b in [0, 1]: P = kp (b r - y)
+    double setpoint_weight = 1.0;
+    // instance name for telemetry (control.pid.<name>.*); empty disables
+    std::string name{};
   };
 
-  explicit PidController(const Config &config) : config_(config) {}
+  explicit PidController(const Config &config) : config_(config) {
+    if (!config_.name.empty()) {
+      const std::string prefix = "control.pid." + config_.name;
+      output_gauge_ = telemetry::GetGauge(prefix + ".output");
+      error_gauge_ = telemetry::GetGauge(prefix + ".error");
+      saturated_counter_ = telemetry::GetCounter(prefix + ".saturated");
+    }
+  }
 
   double Update(double reference, double measurement, double dt) {
     if (!std::isfinite(reference) || !std::isfinite(measurement) ||
@@ -79,7 +102,8 @@ class PidController {
     has_previous_ = true;
 
     const double candidate_integral = integral_ + config_.ki * error * dt;
-    const double p = config_.kp * error;
+    const double p =
+        config_.kp * (config_.setpoint_weight * reference - measurement);
     const double d = -config_.kd * derivative_;
     const double unsat = p + candidate_integral + d;
     const double sat = std::clamp(unsat, config_.u_min, config_.u_max);
@@ -99,7 +123,30 @@ class PidController {
     }
 
     last_output_ = sat;
+    if (output_gauge_) {
+      output_gauge_->Set(sat);
+      error_gauge_->Set(error);
+      if (sat != unsat) saturated_counter_->Add();
+    }
     return sat;
+  }
+
+  // Bumpless transfer: seed the internal state so the next Update() at
+  // the same operating point continues from u_current (e.g. switching
+  // from manual mode or handing over from another controller). The
+  // derivative state restarts settled.
+  void AlignOutput(double u_current, double reference, double measurement) {
+    if (!std::isfinite(u_current) || !std::isfinite(reference) ||
+        !std::isfinite(measurement)) {
+      return;
+    }
+    previous_measurement_ = measurement;
+    has_previous_ = true;
+    derivative_ = 0.0;
+    const double u = std::clamp(u_current, config_.u_min, config_.u_max);
+    integral_ = u - config_.kp * (config_.setpoint_weight * reference -
+                                  measurement);
+    last_output_ = u;
   }
 
   void Reset() {
@@ -130,6 +177,9 @@ class PidController {
   double previous_measurement_ = 0.0;
   bool has_previous_ = false;
   double last_output_ = 0.0;
+  std::optional<telemetry::Gauge> output_gauge_;
+  std::optional<telemetry::Gauge> error_gauge_;
+  std::optional<telemetry::Counter> saturated_counter_;
 };
 
 }  // namespace xmotion

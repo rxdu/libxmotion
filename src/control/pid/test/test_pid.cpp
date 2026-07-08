@@ -213,3 +213,83 @@ TEST(StateFeedbackTest, SaturationFreezesTheIntegrator) {
   // deep saturation from the first tick: the integrator never advances
   EXPECT_DOUBLE_EQ(ctrl.integrator()(0), 0.0);
 }
+
+// --- production gaps closed on review: telemetry path, 2-DOF weighting,
+// bumpless transfer, integrator-limit clamp, varying-dt D filter ---
+
+TEST(PidTest, DerivativeFilterTracksSlopeUnderVaryingDt) {
+  PidController::Config cfg;
+  cfg.kd = 1.0;
+  cfg.d_filter_tau = 0.05;
+  cfg.name = "test_axis";  // exercises the telemetry path (no-op binding)
+  PidController pid(cfg);
+  // measurement ramps at slope 2.0 with jittering dt
+  double y = 0.0, t = 0.0;
+  for (int i = 0; i < 500; ++i) {
+    const double dt = (i % 2 == 0) ? 0.01 : 0.02;
+    t += dt;
+    y = 2.0 * t;
+    pid.Update(0.0, y, dt);
+  }
+  EXPECT_NEAR(pid.derivative(), 2.0, 0.05);
+}
+
+TEST(PidTest, SetpointWeightingRemovesProportionalJump) {
+  PidController::Config cfg;
+  cfg.kp = 5.0;
+  cfg.ki = 1.0;
+  cfg.setpoint_weight = 0.0;  // P acts on -y only
+  PidController pid(cfg);
+  for (int i = 0; i < 100; ++i) pid.Update(0.0, 0.0, kDt);
+  const double before = pid.last_output();
+  const double after = pid.Update(10.0, 0.0, kDt);  // setpoint step
+  // no kp*10 jump; only the integral advances (ki * e * dt = 0.1)
+  EXPECT_NEAR(after - before, 1.0 * 10.0 * kDt, 1e-12);
+}
+
+TEST(PidTest, AlignOutputIsBumpless) {
+  PidController::Config cfg;
+  cfg.kp = 2.0;
+  cfg.ki = 4.0;
+  cfg.kd = 0.5;
+  cfg.u_min = -3.0;
+  cfg.u_max = 3.0;
+  PidController pid(cfg);
+  // controller was in manual; actuator currently at 1.5
+  pid.AlignOutput(1.5, /*reference=*/1.0, /*measurement=*/0.5);
+  const double u = pid.Update(1.0, 0.5, kDt);
+  // continuous up to one integral increment ki*e*dt = 4*0.5*0.01
+  EXPECT_NEAR(u, 1.5, 4.0 * 0.5 * kDt + 1e-12);
+  // aligning beyond the box clamps to it
+  pid.AlignOutput(100.0, 1.0, 0.5);
+  EXPECT_NEAR(pid.Update(1.0, 0.5, kDt), 3.0, 1e-9);
+}
+
+TEST(StateFeedbackTest, IntegratorLimitClampsExactly) {
+  StateFeedbackController<2, 1, 1>::Config cfg;
+  cfg.K.setZero();  // isolate the integrator (output never saturates)
+  cfg.C << 1.0, 0.0;
+  cfg.Ki << 0.1;
+  cfg.integrator_limit = 0.5;
+  cfg.name = "test_sf";  // exercises the telemetry path
+  StateFeedbackController<2, 1, 1> ctrl(cfg);
+  const Eigen::Vector2d x_ref{10.0, 0.0};
+  const Eigen::Vector2d x{0.0, 0.0};
+  for (int i = 0; i < 100; ++i) ctrl.Update(x_ref, x, kDt);  // 10/s of e
+  EXPECT_DOUBLE_EQ(ctrl.integrator()(0), 0.5);
+}
+
+TEST(StateFeedbackTest, AlignOutputIsBumpless) {
+  StateFeedbackController<2, 1, 1>::Config cfg;
+  cfg.K << 1.0, 0.5;
+  cfg.C << 1.0, 0.0;
+  cfg.Ki << 2.0;
+  StateFeedbackController<2, 1, 1> ctrl(cfg);
+  const Eigen::Vector2d x_ref{1.0, 0.0};
+  const Eigen::Vector2d x{0.4, 0.1};
+  ctrl.AlignOutput((Eigen::Matrix<double, 1, 1>() << 0.9).finished(), x_ref,
+                   x);
+  const auto u = ctrl.Update(x_ref, x, kDt);
+  // continuous up to one integrator increment Ki*C*e*dt
+  EXPECT_NEAR(u(0), 0.9, 2.0 * 0.6 * kDt + 1e-12);
+}

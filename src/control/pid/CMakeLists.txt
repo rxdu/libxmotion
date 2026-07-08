@@ -5,7 +5,7 @@ find_package(Eigen3 REQUIRED NO_MODULE)
 ## feedback with optional integral action (multi-dimensional states),
 ## and DLQR gain synthesis. Header-only.
 add_library(pid INTERFACE)
-target_link_libraries(pid INTERFACE Eigen3::Eigen)
+target_link_libraries(pid INTERFACE xmotion::xmBase Eigen3::Eigen)
 target_include_directories(pid INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
