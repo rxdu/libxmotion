@@ -27,8 +27,8 @@
 #include <type_traits>
 
 #include "xmnav/mppi/critic_core.hpp"
-#include "xmnav/mppi/device.hpp"
-#include "xmnav/mppi/model_core.hpp"
+#include "xmnav/models/device.hpp"
+#include "xmnav/models/model_core.hpp"
 
 namespace xmotion {
 

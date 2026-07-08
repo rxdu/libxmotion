@@ -15,7 +15,7 @@
 
 #include <cmath>
 
-#include "xmnav/mppi/device.hpp"
+#include "xmnav/models/device.hpp"
 
 namespace xmotion {
 namespace critic_core {

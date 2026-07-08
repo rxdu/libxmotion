@@ -13,8 +13,8 @@
 #include <cmath>
 
 #include "xmnav/mppi/critics.hpp"
-#include "xmnav/mppi/models/diff_drive.hpp"
-#include "xmnav/mppi/models/double_integrator.hpp"
+#include "xmnav/models/diff_drive.hpp"
+#include "xmnav/models/double_integrator.hpp"
 #include "xmnav/mppi/mppi.hpp"
 
 using namespace xmotion;

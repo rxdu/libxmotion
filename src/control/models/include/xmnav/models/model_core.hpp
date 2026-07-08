@@ -10,12 +10,12 @@
  * Copyright (c) 2026 Ruixiang Du (rdu)
  */
 
-#ifndef XMNAV_MPPI_MODEL_CORE_HPP
-#define XMNAV_MPPI_MODEL_CORE_HPP
+#ifndef XMNAV_MODELS_MODEL_CORE_HPP
+#define XMNAV_MODELS_MODEL_CORE_HPP
 
 #include <cmath>
 
-#include "xmnav/mppi/device.hpp"
+#include "xmnav/models/device.hpp"
 
 namespace xmotion {
 namespace model_core {
@@ -151,4 +151,4 @@ XMNAV_HD inline void SrbQuadrupedStep(const Scalar x[13], const Scalar u[12],
 }  // namespace model_core
 }  // namespace xmotion
 
-#endif  // XMNAV_MPPI_MODEL_CORE_HPP
+#endif  // XMNAV_MODELS_MODEL_CORE_HPP

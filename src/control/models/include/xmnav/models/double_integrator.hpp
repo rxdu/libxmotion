@@ -9,8 +9,8 @@
  * Copyright (c) 2026 Ruixiang Du (rdu)
  */
 
-#ifndef XMNAV_MPPI_MODELS_DOUBLE_INTEGRATOR_HPP
-#define XMNAV_MPPI_MODELS_DOUBLE_INTEGRATOR_HPP
+#ifndef XMNAV_MODELS_DOUBLE_INTEGRATOR_HPP
+#define XMNAV_MODELS_DOUBLE_INTEGRATOR_HPP
 
 #include <eigen3/Eigen/Dense>
 
@@ -33,4 +33,4 @@ struct DoubleIntegratorModel {
 
 }  // namespace xmotion
 
-#endif  // XMNAV_MPPI_MODELS_DOUBLE_INTEGRATOR_HPP
+#endif  // XMNAV_MODELS_DOUBLE_INTEGRATOR_HPP

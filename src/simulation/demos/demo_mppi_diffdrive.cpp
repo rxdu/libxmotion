@@ -14,7 +14,7 @@
 #include <cstdio>
 
 #include "xmnav/mppi/critics.hpp"
-#include "xmnav/mppi/models/diff_drive.hpp"
+#include "xmnav/models/diff_drive.hpp"
 #include "xmnav/mppi/mppi.hpp"
 #include "xmnav/sim/sim_loop.hpp"
 #include "xmnav/viz/mppi_draw.hpp"

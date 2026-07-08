@@ -12,7 +12,7 @@
 
 #include "xmnav/mppi/critics.hpp"
 #include "xmnav/mppi/critics_srb.hpp"
-#include "xmnav/mppi/models/srb_quadruped.hpp"
+#include "xmnav/models/srb_quadruped.hpp"
 #include "xmnav/mppi/mppi.hpp"
 #include "xmnav/sim/sim_loop.hpp"
 #include "xmnav/viz/mppi_draw.hpp"

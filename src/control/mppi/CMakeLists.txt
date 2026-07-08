@@ -4,7 +4,7 @@ find_package(Eigen3 REQUIRED NO_MODULE)
 ## MPPI is a header-only templated controller (model/cost/sampler seams
 ## resolve at compile time so the rollout loop fully inlines).
 add_library(mppi INTERFACE)
-target_link_libraries(mppi INTERFACE xmotion::xmBase Eigen3::Eigen)
+target_link_libraries(mppi INTERFACE xmotion::xmBase models Eigen3::Eigen)
 target_include_directories(mppi INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)

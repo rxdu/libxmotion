@@ -23,8 +23,8 @@
  * Copyright (c) 2026 Ruixiang Du (rdu)
  */
 
-#ifndef XMNAV_MPPI_MODELS_SRB_QUADRUPED_HPP
-#define XMNAV_MPPI_MODELS_SRB_QUADRUPED_HPP
+#ifndef XMNAV_MODELS_SRB_QUADRUPED_HPP
+#define XMNAV_MODELS_SRB_QUADRUPED_HPP
 
 #include <array>
 #include <vector>
@@ -33,7 +33,7 @@
 #include <eigen3/Eigen/Geometry>
 
 // raw-span step core shared with the CUDA rollout backend
-#include "xmnav/mppi/model_core.hpp"
+#include "xmnav/models/model_core.hpp"
 
 namespace xmotion {
 
@@ -141,4 +141,4 @@ class SrbQuadrupedModel {
 
 }  // namespace xmotion
 
-#endif  // XMNAV_MPPI_MODELS_SRB_QUADRUPED_HPP
+#endif  // XMNAV_MODELS_SRB_QUADRUPED_HPP
