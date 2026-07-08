@@ -49,6 +49,9 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
+      # let each distro finish: a compiler-specific failure on one must not
+      # cancel (and mask) the other's result
+      fail-fast: false
       matrix:
         os: [ ubuntu-22.04, ubuntu-24.04 ]
     steps:

@@ -132,7 +132,12 @@ if (XMOTION_WERROR)
   # flags. -Wmaybe-uninitialized stays a visible warning but does not gate:
   # GCC's flow analysis has a documented false-positive record inside
   # libstdc++ headers (std::function/std::regex internals under -O).
-  add_compile_options(-Wall -Wextra -Werror -Wno-error=maybe-uninitialized)
+  # -Warray-bounds / -Wstringop-overread likewise stay visible but do not
+  # gate: GCC 12/13 fire them on Eigen's SSE vectorization of small
+  # fixed-size matrices (16-byte __m128d loads from 8-byte 1x1 objects),
+  # a documented upstream false positive.
+  add_compile_options(-Wall -Wextra -Werror -Wno-error=maybe-uninitialized
+      -Wno-error=array-bounds -Wno-error=stringop-overread)
   # Vendored header-only libraries are consumed from first-party TUs; mark
   # their include directories SYSTEM so their headers never gate our build.
   # (quickviz modules included: its headers reach first-party TUs the same
