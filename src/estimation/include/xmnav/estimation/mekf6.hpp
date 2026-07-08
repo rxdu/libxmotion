@@ -110,8 +110,6 @@ class Mekf6 {
       telemetry::GetCounter("estimation.mekf6.gate_rejections");
   telemetry::Counter invalid_input_counter_ =
       telemetry::GetCounter("estimation.mekf6.invalid_inputs");
-
-  friend class Mekf6TelemetryAccess;
 };
 }  // namespace xmotion
 
