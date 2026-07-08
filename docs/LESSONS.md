@@ -21,3 +21,8 @@ Recorded per the self-improvement loop: concrete mistakes and the corrections th
 - **Pattern:** MPPI behavioral tests ran full convergence workloads (12–20M rollout steps) in every build configuration; under ASan+Debug they take 100–200× longer — the CI sanitizers lane burned 55 minutes before cancellation and local runs appeared hung. Earlier the same day, a wall-clock performance assertion failed under ASan for the same reason.
 - **Correction:** Sanitizer/Debug builds run reduced-scale workloads with finiteness assertions (they exist to catch memory errors on every code path); numerical convergence and timing assertions stay Release-only where they were validated. Gate with `!defined(NDEBUG) || __SANITIZE_ADDRESS__/__SANITIZE_THREAD__`.
 - **Context:** C++ test suites with heavy numerical closed loops; CI sanitizer lanes.
+
+### Matrix fail-fast masks the real CI failure
+- **Pattern:** A GitHub Actions matrix job failed (GCC 13 warning-as-error) and fail-fast cancelled its sibling mid-build. `gh pr checks` showed both legs as "fail"; inspecting the first one found only "Build → cancelled" and pointed at infrastructure flakiness — twice in a row, wasting a rerun.
+- **Correction:** When a matrix job fails, inspect EVERY leg before concluding: the leg with `conclusion: failure` on a step holds the real error; `cancelled` legs are fail-fast collateral. Set `fail-fast: false` on validation matrices so a compiler-specific failure never hides the other leg's result. Also: local WERROR on GCC 11 does not cover GCC 13 diagnostics (Ubuntu 24.04 CI) — Eigen small-fixed-size vectorization trips -Warray-bounds/-Wstringop-overread there.
+- **Context:** GitHub Actions matrices; GCC version-dependent warnings; xmNavigation CI.
