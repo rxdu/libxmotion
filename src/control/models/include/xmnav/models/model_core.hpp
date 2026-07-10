@@ -148,6 +148,94 @@ XMNAV_HD inline void SrbQuadrupedStep(const Scalar x[13], const Scalar u[12],
   for (int i = 0; i < 3; ++i) next[10 + i] = omega[i] + omega_dot[i] * dt;
 }
 
+// Cart-pole (inverted pendulum on a cart), the classical underactuated
+// benchmark, in the exact formulation of Barto, Sutton & Anderson 1983
+// (uniform pole, frictionless; pole_half_length is l, the pivot-to-CoM
+// distance). State [x, x_dot, theta, theta_dot] with theta measured FROM
+// UPRIGHT (theta = 0 is the unstable equilibrium); control [force].
+template <typename Scalar>
+XMNAV_HD inline void CartPoleDeriv(const Scalar x[4], const Scalar u[1],
+                                   Scalar cart_mass, Scalar pole_mass,
+                                   Scalar pole_half_length, Scalar gravity,
+                                   Scalar xd[4]) {
+  const Scalar st = std::sin(x[2]);
+  const Scalar ct = std::cos(x[2]);
+  const Scalar total = cart_mass + pole_mass;
+  const Scalar tmp =
+      (u[0] + pole_mass * pole_half_length * x[3] * x[3] * st) / total;
+  const Scalar theta_dd =
+      (gravity * st - ct * tmp) /
+      (pole_half_length *
+       (Scalar(4.0 / 3.0) - pole_mass * ct * ct / total));
+  const Scalar x_dd =
+      tmp - pole_mass * pole_half_length * theta_dd * ct / total;
+  xd[0] = x[1];
+  xd[1] = x_dd;
+  xd[2] = x[3];
+  xd[3] = theta_dd;
+}
+
+// Single-track ("bicycle") model with linear tires, Rajamani ch. 2:
+// body-frame lateral dynamics with front/rear cornering stiffness. State
+// [X, Y, psi, vx, vy, r] (world position/heading, body velocities, yaw
+// rate); control [ax, delta] (longitudinal acceleration command, front
+// steering angle). Denominators use max(vx, vx_min) — the linear tire
+// model is meaningless near standstill.
+template <typename Scalar>
+XMNAV_HD inline void DynamicBicycleDeriv(
+    const Scalar x[6], const Scalar u[2], Scalar mass, Scalar yaw_inertia,
+    Scalar lf, Scalar lr, Scalar cornering_front, Scalar cornering_rear,
+    Scalar vx_min, Scalar xd[6]) {
+  const Scalar vx = x[3] > vx_min ? x[3] : vx_min;
+  const Scalar alpha_f = (x[4] + lf * x[5]) / vx - u[1];
+  const Scalar alpha_r = (x[4] - lr * x[5]) / vx;
+  const Scalar fyf = -cornering_front * alpha_f;
+  const Scalar fyr = -cornering_rear * alpha_r;
+  const Scalar cd = std::cos(u[1]);
+  const Scalar cp = std::cos(x[2]);
+  const Scalar sp = std::sin(x[2]);
+  xd[0] = x[3] * cp - x[4] * sp;
+  xd[1] = x[3] * sp + x[4] * cp;
+  xd[2] = x[5];
+  xd[3] = u[0] + x[4] * x[5];
+  xd[4] = (fyf * cd + fyr) / mass - x[3] * x[5];
+  xd[5] = (lf * fyf * cd - lr * fyr) / yaw_inertia;
+}
+
+// Quadrotor rigid-body dynamics, Mellinger & Kumar 2011. State
+// [p(3), v(3), q(4, wxyz body->world), omega(3, BODY frame — note the
+// SRB quadruped uses world-frame omega)]; control [thrust, tau(3)]
+// (total thrust along body z, body-frame moments). Derivative of the
+// quaternion is returned in xd[6..9] (q_dot = 0.5 q (x) (0, omega));
+// integrators must renormalize q after stepping.
+template <typename Scalar>
+XMNAV_HD inline void QuadrotorDeriv(const Scalar x[13], const Scalar u[4],
+                                    Scalar mass,
+                                    const Scalar inertia_diag[3],
+                                    Scalar gravity, Scalar xd[13]) {
+  const Scalar *q = x + 6;
+  const Scalar *w = x + 10;
+  Scalar R[9];
+  QuatToRotation(q, R);
+  // v_dot = -g e3 + (thrust/m) R e3
+  xd[0] = x[3];
+  xd[1] = x[4];
+  xd[2] = x[5];
+  xd[3] = (u[0] / mass) * R[2];
+  xd[4] = (u[0] / mass) * R[5];
+  xd[5] = (u[0] / mass) * R[8] - gravity;
+  // q_dot = 0.5 q (x) (0, omega_body)
+  const Scalar half_w[4] = {Scalar(0), Scalar(0.5) * w[0],
+                            Scalar(0.5) * w[1], Scalar(0.5) * w[2]};
+  QuatMultiply(q, half_w, xd + 6);
+  // omega_dot = I^-1 (tau - omega x I omega)
+  const Scalar Iw[3] = {inertia_diag[0] * w[0], inertia_diag[1] * w[1],
+                        inertia_diag[2] * w[2]};
+  xd[10] = (u[1] - (w[1] * Iw[2] - w[2] * Iw[1])) / inertia_diag[0];
+  xd[11] = (u[2] - (w[2] * Iw[0] - w[0] * Iw[2])) / inertia_diag[1];
+  xd[12] = (u[3] - (w[0] * Iw[1] - w[1] * Iw[0])) / inertia_diag[2];
+}
+
 }  // namespace model_core
 }  // namespace xmotion
 

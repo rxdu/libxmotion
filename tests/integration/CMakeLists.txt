@@ -17,3 +17,15 @@ add_executable(campaign_diffdrive campaign_diffdrive.cpp)
 target_link_libraries(campaign_diffdrive
     mppi shield sim gtest gtest_main)
 gtest_discover_tests(campaign_diffdrive PROPERTIES LABELS campaign)
+
+add_executable(test_pipeline_cartpole test_pipeline_cartpole.cpp)
+target_link_libraries(test_pipeline_cartpole models mppi pid gtest gtest_main)
+gtest_discover_tests(test_pipeline_cartpole PROPERTIES LABELS integration)
+
+add_executable(test_pipeline_quadrotor test_pipeline_quadrotor.cpp)
+target_link_libraries(test_pipeline_quadrotor models mppi gtest gtest_main)
+gtest_discover_tests(test_pipeline_quadrotor PROPERTIES LABELS integration)
+
+add_executable(campaign_bicycle_mismatch campaign_bicycle_mismatch.cpp)
+target_link_libraries(campaign_bicycle_mismatch models mppi gtest gtest_main)
+gtest_discover_tests(campaign_bicycle_mismatch PROPERTIES LABELS campaign)

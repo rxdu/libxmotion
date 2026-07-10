@@ -8,6 +8,9 @@
  * continuous derivative (for RK4, see rk4.hpp) and the discrete Step
  * concept the rest of the stack uses (forward Euler).
  *
+ * Equations, conventions, parameters, and validation oracles:
+ * docs/typst/models.typ (compiled: models.pdf).
+ *
  * Copyright (c) 2026 Ruixiang Du (rdu)
  */
 
