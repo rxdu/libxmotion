@@ -536,6 +536,19 @@ $ bold(P)^+_0 = bold(E)[(delta bold(x)_0 - delta hat(bold(x))^+_0)  (delta bold(
   - Reset the error state for the next cycle: $delta hat(bold(x))^+_k arrow.l bold(0)$. The bias terms must be folded into persistent nominal states here — the error-state estimate does not accumulate across cycles.
 
 // Add bibliography and create Bibiliography section
+== Initialization and Validation
+
+*Initialization.* Starting the filter at identity with a large $P_0$ is both slow and, more importantly, outside the regime where a first-order filter is statistically honest (below). `attitude_init.hpp` provides the deterministic bootstrap: Shuster's TRIAD @Shuster1981-triad from a simultaneous accelerometer/magnetometer pair (full attitude, for MEKF9; the gravity pair anchors the primary axis), and accelerometer-only leveling (roll/pitch with zero yaw, the honest bootstrap for MEKF6, whose yaw is unobservable). `MagReferenceEnu` builds the inertial field reference from the local declination/inclination (e.g. from the World Magnetic Model for the deployment site); the ENU frame and sign conventions are documented in the header.
+
+*Statistical consistency (NEES).* Both filters are validated by the standard normalized-estimation-error-squared criterion @BarShalom2001: Monte-Carlo truth generated exactly per the filters' noise model (continuous PSDs for gyro/accel noise, discrete observation covariances, random-walking biases), NEES computed on the $[bold(alpha); bold(beta)_omega]$ marginal against the filter's own covariance blocks. Findings, recorded in `test_mekf_consistency.cpp`:
+
+- Open-loop error-state propagation is exact: empirical attitude variance matches the propagated $P$ to a ratio of 1.00.
+- In the bootstrapped regime (attitude $sigma lt.eq 3 degree$, bias $sigma lt.eq 0.01$), both filters are consistent, erring mildly conservative in the marginals; the joint NEES carries $tilde 1.4 times$ optimism in the cross-correlations under sustained rotation — inherent first-order behavior, budgeted at $1.5 times$ dof in the regression.
+- With large initial uncertainty ($sigma_alpha = 0.1 "rad"$, $sigma_(beta omega) = 0.1 "rad/s"$) the linearization breaks chi-square consistency ($tilde 2.4 times$ overconfident attitude): initialize with TRIAD/leveling rather than relying on a large $P_0$.
+- Observability caveat: on a non-tumbling (planar) platform, yaw and the z gyro-bias are structurally unobservable to MEKF6 — their estimates wander and the covariance honestly grows. Use MEKF9 whenever heading matters; on tumbling trajectories all bias axes become observable and MEKF6 is consistent.
+
+Remaining validation step (recorded, pending hardware data): replay of real IMU MCAP recordings as golden-log regressions.
+
 #bibliography("bibliography.bib")
 
 // // Create appendix section
