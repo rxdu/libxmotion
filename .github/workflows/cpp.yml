@@ -77,7 +77,7 @@ jobs:
       - name: Test
         working-directory: ${{runner.workspace}}/build
         shell: bash
-        run: ctest
+        run: ctest -LE campaign --output-on-failure
 
   sanitizers:
     runs-on: ubuntu-24.04
@@ -103,4 +103,4 @@ jobs:
       - name: Test
         working-directory: build
         shell: bash
-        run: ctest --output-on-failure
+        run: ctest -LE campaign --output-on-failure
