@@ -1,41 +1,32 @@
-# TODO List
+# Backlog — deferred and dormant
 
-## Modules
+Active near-term work is tracked in the root [TODO.md](../TODO.md). Items here are recorded but not scheduled; each is gated on a revival decision or an external trigger.
 
-- [ ] Remove CGAL dependency if possible
-- [ ] Add memory leak check tests for all modules in "kernel"
-- [*] Cleanup dependencies on LCM, create a comm package 
-- [*] Put all finding folder path function into one place 
+## Road-network revival (gates the state_lattice apps)
 
-## Planning
+- Re-enable `state_lattice/apps` — `gen_lookup_table` depends on the retired `traffic_map` module (src/planning/state_lattice/CMakeLists.txt)
+- Fix CSV loading in `LookupTable::LoadLookupTableFromFile` (src/planning/state_lattice/src/lookup_table.cpp)
+- Make state_lattice data locations explicit configuration instead of path probing (src/planning/state_lattice/src/data_path.hpp)
+- OSM-defined paths, traffic sim, and Monte-Carlo AV scenarios (carried over from the pre-reorg backlog; only meaningful after the revival)
 
-- [ ] Extend roadmap and traffic sim to support definition of path in osm file
-- [ ] Memory management of ReferenceTrajectory/LookaheadZone
-- [ ] Monte Carlo simulation for autonomous vehicles
-- [ ] Priority queue that supports element priority update
-- [ ] RRT and RRT* with Dubins model  
-- [*] Use line strip instead of points to represent center line (strip won't work due to ambiguity in direction)
-- [*] Check possible memory leak issue of SquareGrid
-- [*] Remove the requirement of friendship inside Graph_t for search algorithms
-- [*] Remove dependency on OpenCV (now only visualization depends on OpenCV)
-- [*] Road network model
-- [*] Iterators for Vertex_t and Edge_t
+## Decision
+
+- Verify `prediction` threat-model behavior and re-enable it in the build (src/decision/CMakeLists.txt; static_threat_model.hpp / vehicle_threat.hpp carry "not sure if behavior is correct" markers)
+- Record reachability Monte-Carlo samples through telemetry (XM_* / MCAP) (src/decision/reachability/src/monte_carlo_sim.cpp)
+
+## Geometry
+
+- Reimplement the stubbed polygon predicates (bounded-side, intersection, optimal convex partition) without CGAL (src/planning/geometry/src/polygon.cpp)
 
 ## Control
 
-- [ ] Kalman filter for RC Car
+- Preallocated QP solver for the safety shield — only if QuadProg++ per-solve allocation ever shows in traces (docs/control/safety_shield.md)
 
-## Simulation
+## Deferred until a second platform exists
 
-- [*] Finish RC Car simulation interface with LCM/FastRTPS
+- Per-platform template integration scenarios
+- Cross-engine simulation validation vs MuJoCo
 
-## Visualization
+---
 
-- [ ] Better surface visualization
-- [*] ~~Graph visualization using Cairo~~ new visualization is now built on top of CvDraw
-
-## Misc
-
-- ~~Update the command to invoke uavcan type generator~~
-- ~~Fix "ENABLE_LOGGING" macro definition~~
-- ~~Gurobi related code is broken under Ubuntu 16.04/Debian Stretch~~
+The historical checklist previously in this file (LCM cleanup, RC-Car Kalman filter and LCM/FastRTPS sim interface, CGAL removal, kernel leak checks, uavcan/Gurobi items) was either completed or superseded by the estimation (MEKF6/9), simulation-tier, and telemetry arcs; see git history for the old list.
