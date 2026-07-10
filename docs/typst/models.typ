@@ -13,7 +13,7 @@
 
 = Conventions
 
-Every model exposes the discrete `Step` concept used across the stack (`x_(t+1) = "Step"(x_t, u_t, t, Delta t)`, forward Euler unless noted) and, where the dynamics are continuous, the derivative `Deriv` used with the fixed-step classical RK4 propagator (`rk4.hpp`) for high-fidelity simulation. The numerical cores are scalar-templated raw-span functions in `model_core.hpp`, shared verbatim between the CPU implementations and the CUDA rollout programs (see the MPPI note). Units are SI (m, s, rad, N, kg) throughout; frames are stated per model.
+Every model exposes the discrete `Step` concept used across the stack (`x_(t+1) = "Step"(x_t, u_t, t, Delta t)`, forward Euler unless noted) and, where the dynamics are continuous, the derivative `Deriv` used with the fixed-step classical RK4 propagator (`rk4.hpp`) for high-fidelity simulation. The numerical cores are scalar-templated raw-span functions in `model_core.hpp`, shared verbatim between the CPU implementations and the CUDA rollout programs (see the MPPI note). Units are SI (m, s, rad, N, kg) throughout; frames are stated per model. `linearize.hpp` provides central-difference Jacobians of any `Deriv` model about an operating point — the standard bridge to the linear tools (`SolveDlqr`, `StateFeedbackController`): linearize, Euler-discretize ($A_d = I + A Delta t$, $B_d = B Delta t$, consistent with `Step`), synthesize.
 
 = Wheeled platforms
 

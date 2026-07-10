@@ -194,3 +194,32 @@ TEST(BenchmarkModelsTest, QuadrotorFreeFallAndYawSpin) {
               1e-3 / model.inertia_diag(2) * 2.0, 1e-6);
   EXPECT_NEAR(QuadrotorModel::Orientation(s).norm(), 1.0, 1e-9);
 }
+
+#include "xmnav/models/linearize.hpp"
+
+// numeric linearization pins the known analytic Jacobian structure of
+// the double integrator exactly (Deriv is linear: differences are exact)
+TEST(BenchmarkModelsTest, NumericLinearizationMatchesLinearModel) {
+  BicycleAccelModel model;  // nonlinear check: bicycle at a straight run
+  BicycleAccelModel::State x0;
+  x0 << 0.0, 0.0, 5.0, 0.0;
+  const auto lin =
+      LinearizeNumeric(model, x0, BicycleAccelModel::Control::Zero());
+  // d(x_dot)/d(v) = cos(theta) = 1; d(y_dot)/d(theta) = v = 5
+  EXPECT_NEAR(lin.A(0, 2), 1.0, 1e-6);
+  EXPECT_NEAR(lin.A(1, 3), 5.0, 1e-6);
+  // d(v_dot)/d(a) = 1; d(theta_dot)/d(delta) = v/L at delta = 0
+  EXPECT_NEAR(lin.B(2, 0), 1.0, 1e-6);
+  EXPECT_NEAR(lin.B(3, 1), 5.0 / model.wheelbase, 1e-5);
+}
+
+TEST(BenchmarkModelsTest, DynamicBicycleSlipAnglesConsistent) {
+  DynamicBicycleModel model;
+  DynamicBicycleModel::State x = DynamicBicycleModel::State::Zero();
+  x(3) = 20.0;
+  x(4) = 0.3;
+  x(5) = 0.1;
+  const auto alphas = model.SlipAngles(x, 0.05);
+  EXPECT_NEAR(alphas(0), (0.3 + model.lf * 0.1) / 20.0 - 0.05, 1e-12);
+  EXPECT_NEAR(alphas(1), (0.3 - model.lr * 0.1) / 20.0, 1e-12);
+}

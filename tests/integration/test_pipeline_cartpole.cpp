@@ -22,6 +22,7 @@
 #include <cmath>
 
 #include "xmnav/models/cartpole.hpp"
+#include "xmnav/models/linearize.hpp"
 #include "xmnav/models/rk4.hpp"
 #include "xmnav/mppi/mppi.hpp"
 #include "xmnav/pid/dlqr.hpp"
@@ -60,24 +61,6 @@ struct SwingUpCost {
   }
 };
 
-// numeric Jacobians of the continuous dynamics at the upright equilibrium
-void LinearizeUpright(const CartPoleModel &model, Eigen::Matrix4d *A,
-                      Eigen::Vector4d *B) {
-  const CartPoleModel::State x0 = CartPoleModel::State::Zero();
-  const CartPoleModel::Control u0 = CartPoleModel::Control::Zero();
-  const double eps = 1e-6;
-  for (int j = 0; j < 4; ++j) {
-    CartPoleModel::State xp = x0, xm = x0;
-    xp(j) += eps;
-    xm(j) -= eps;
-    A->col(j) = (model.Deriv(xp, u0) - model.Deriv(xm, u0)) / (2.0 * eps);
-  }
-  CartPoleModel::Control up = u0, um = u0;
-  up(0) += eps;
-  um(0) -= eps;
-  *B = (model.Deriv(x0, up) - model.Deriv(x0, um)) / (2.0 * eps);
-}
-
 }  // namespace
 
 TEST(PipelineIntegrationTest, CartPoleSwingUpThenDlqrCatch) {
@@ -97,11 +80,10 @@ TEST(PipelineIntegrationTest, CartPoleSwingUpThenDlqrCatch) {
   Controller mppi(CartPoleModel{}, SwingUpCost{}, p);
 
   // --- local controller: DLQR catch, gain synthesized in-test ---
-  Eigen::Matrix4d Ac;
-  Eigen::Vector4d Bc;
-  LinearizeUpright(model, &Ac, &Bc);
-  const Eigen::Matrix4d Ad = Eigen::Matrix4d::Identity() + Ac * kDt;
-  const Eigen::Vector4d Bd = Bc * kDt;
+  const auto lin = LinearizeNumeric(model, CartPoleModel::State::Zero(),
+                                    CartPoleModel::Control::Zero());
+  const Eigen::Matrix4d Ad = Eigen::Matrix4d::Identity() + lin.A * kDt;
+  const Eigen::Vector4d Bd = lin.B * kDt;
   Eigen::Matrix4d Q = Eigen::Matrix4d::Zero();
   Q.diagonal() << 10.0, 1.0, 100.0, 10.0;
   const auto lqr = SolveDlqr<4, 1>(Ad, Bd, Q,
