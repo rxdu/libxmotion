@@ -1,0 +1,44 @@
+# Nightly validation: the campaign-labeled robustness suites (Monte-Carlo
+# closed loops under plant-model mismatch) that are too long for PR CI.
+# Scheduled runs execute on the default branch (devel).
+name: Nightly
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  campaigns:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-22.04, ubuntu-24.04 ]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev \
+           libglfw3-dev libcairo2-dev libtbb-dev libboost-all-dev \
+           libeigen3-dev libopencv-dev libyaml-cpp-dev \
+           libncurses-dev libpcl-dev libglm-dev
+      - name: Update submodules
+        run: git submodule update --init --recursive
+      - name: Configure CMake
+        shell: bash
+        run: cmake -B build -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TESTING=ON -DXMOTION_WERROR=ON
+      - name: Build
+        shell: bash
+        run: cmake --build build -j
+      - name: Campaigns
+        working-directory: build
+        shell: bash
+        run: ctest -L campaign --output-on-failure

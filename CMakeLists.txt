@@ -159,6 +159,13 @@ install(TARGETS stb pnm rapidcsv stopwatch EXPORT xmNavigationTargets)
 ## Add source directories
 add_subdirectory(src)
 
+## Cross-module integration tests (composed algorithm pipelines against
+## the simulation tier). Campaign-labeled tests are excluded from PR CI
+## and run by the nightly workflow.
+if (BUILD_TESTS)
+  add_subdirectory(tests)
+endif ()
+
 ## Aggregate interface target: consumers link a single `xmotion::xmNavigation` to pull
 ## in the XMotion algorithm libraries (estimation, control, planning).
 add_library(xmNavigation INTERFACE)
