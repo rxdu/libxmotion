@@ -5,3 +5,11 @@ gtest_discover_tests(test_mekf6)
 add_executable(test_mekf9 test_mekf9.cpp)
 target_link_libraries(test_mekf9 estimation gtest gtest_main)
 gtest_discover_tests(test_mekf9)
+
+add_executable(test_attitude_init test_attitude_init.cpp)
+target_link_libraries(test_attitude_init estimation gtest gtest_main)
+gtest_discover_tests(test_attitude_init)
+
+add_executable(test_mekf_consistency test_mekf_consistency.cpp)
+target_link_libraries(test_mekf_consistency estimation gtest gtest_main)
+gtest_discover_tests(test_mekf_consistency)
