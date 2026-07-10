@@ -4,7 +4,7 @@ Active near-term work. Status: `[ ]` open · `[~]` in progress · `[x]` done. De
 
 ## Verification & CI (IHMC study "adopt now" items — docs/research/ihmc-open-robotics-software.md §6)
 
-- [ ] Allocation-testing category: malloc-hook counters around steady-state `Mppi::Plan()`, `WheeledShield::Filter()`, and MEKF/PID `Update()`; nightly `allocation` ctest label
+- [x] Allocation-testing category: malloc-hook counters around steady-state `Mppi::Plan()`, `WheeledShield::Filter()`, and MEKF/PID `Update()`; nightly `allocation` ctest label
 - [ ] Rewindability regression: run → rewind `SimLog` → re-simulate → diff-to-zero
 - [ ] Self-hosted CUDA runner so the CUDA rollout backends build and test in CI
 
