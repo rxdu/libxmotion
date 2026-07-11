@@ -42,6 +42,7 @@ class SimLog {
     return controls_.row(i).transpose();
   }
   const Eigen::MatrixXd &states() const { return states_; }
+  const Eigen::MatrixXd &measurements() const { return measurements_; }
   const Eigen::MatrixXd &controls() const { return controls_; }
 
   // one JSON object per run
