@@ -62,11 +62,24 @@ class SimLoop {
   // records the true state, measurement, and control per step.
   State Run(const State &x0, const Agent &agent, SimLog *log = nullptr,
             const Observer &observer = {}) {
+    return RunFrom(0, config_.steps, x0, agent, log, observer);
+  }
+
+  // run a segment: ticks t0..t0+steps-1 from state x0. Agent, plant, and
+  // logged times all see the GLOBAL tick index, so time-dependent behavior
+  // matches a full run. Resume contract (rewindability): the observer fires
+  // at a clean RNG boundary — all of tick t's noise draws are complete when
+  // it is called — so a COPY of this loop taken in the observer at tick k-1
+  // carries the RNG mid-stream, and RunFrom(k, ...) on that copy from the
+  // tick-(k-1) logged state reproduces the original run's tail bitwise.
+  State RunFrom(int t0, int steps, const State &x0, const Agent &agent,
+                SimLog *log = nullptr, const Observer &observer = {}) {
     if (log != nullptr) {
-      log->Reset(config_.steps, kStateDim, kControlDim);
+      log->Reset(steps, kStateDim, kControlDim);
     }
     State x = x0;
-    for (int t = 0; t < config_.steps; ++t) {
+    for (int i = 0; i < steps; ++i) {
+      const int t = t0 + i;
       const State z = x + Noise(config_.measurement_noise);
       const Control u = agent(z, t);
       x = plant_.Step(x, u, t, config_.dt);

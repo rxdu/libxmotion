@@ -7,11 +7,20 @@
 ##   campaign    — Monte-Carlo robustness with plant-model mismatch;
 ##                 excluded from PR ctest (-LE campaign), run nightly.
 ##                 Campaign binaries still BUILD on PRs so they cannot rot.
+##
+## Rewindability contract (test_rewindability): every stack component is a
+## self-contained value — a mid-run COPY of the SimLoop + algorithm stack,
+## resumed via SimLoop::RunFrom, must reproduce the recorded tail bitwise.
 
 add_executable(test_pipeline_diffdrive test_pipeline_diffdrive.cpp)
 target_link_libraries(test_pipeline_diffdrive
     estimation mppi shield sim gtest gtest_main)
 gtest_discover_tests(test_pipeline_diffdrive PROPERTIES LABELS integration)
+
+add_executable(test_rewindability test_rewindability.cpp)
+target_link_libraries(test_rewindability
+    mppi shield sim gtest gtest_main)
+gtest_discover_tests(test_rewindability PROPERTIES LABELS integration)
 
 add_executable(campaign_diffdrive campaign_diffdrive.cpp)
 target_link_libraries(campaign_diffdrive
