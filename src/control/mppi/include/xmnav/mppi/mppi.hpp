@@ -109,7 +109,10 @@ template <typename Sequence>
 inline void ShiftSequence(Sequence &u) {
   const Eigen::Index horizon = u.rows();
   if (horizon < 2) return;
-  u.topRows(horizon - 1) = u.bottomRows(horizon - 1).eval();
+  // in-place row-wise shift: copying row t <- t+1 in ascending order has
+  // no aliasing hazard, unlike the overlapping block assignment whose
+  // .eval() would heap-allocate a temporary every Plan()
+  for (Eigen::Index t = 0; t + 1 < horizon; ++t) u.row(t) = u.row(t + 1);
   u.row(horizon - 1) = u.row(horizon - 2);
 }
 

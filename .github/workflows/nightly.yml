@@ -1,5 +1,7 @@
 # Nightly validation: the campaign-labeled robustness suites (Monte-Carlo
-# closed loops under plant-model mismatch) that are too long for PR CI.
+# closed loops under plant-model mismatch) that are too long for PR CI,
+# plus the allocation-labeled zero-heap-allocation contracts of the
+# steady-state hot paths (tests/allocation/).
 # Scheduled runs execute on the default branch (devel).
 name: Nightly
 
@@ -42,3 +44,7 @@ jobs:
         working-directory: build
         shell: bash
         run: ctest -L campaign --output-on-failure
+      - name: Allocation tests
+        working-directory: build
+        shell: bash
+        run: ctest -L allocation --output-on-failure
