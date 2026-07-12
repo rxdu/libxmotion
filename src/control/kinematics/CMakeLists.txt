@@ -4,7 +4,7 @@ find_package(Eigen3 REQUIRED NO_MODULE)
 ## Add libraries
 add_library(kinematics
     src/swerve_drive_kinematics.cpp)
-target_link_libraries(kinematics PUBLIC xmotion::xmBase Eigen3::Eigen)
+target_link_libraries(kinematics PUBLIC xmotion::xmBase xmotion::xmBaseGeometry Eigen3::Eigen)
 target_include_directories(kinematics PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
