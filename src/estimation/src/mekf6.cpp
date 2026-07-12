@@ -12,7 +12,7 @@
 
 #include <cmath>
 
-#include "xmbase/math/matrix_utils.hpp"
+#include "xmnav/estimation/matrix_utils.hpp"
 
 namespace xmotion {
 namespace {
