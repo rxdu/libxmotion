@@ -7,7 +7,7 @@ add_library(navtypes INTERFACE)
 target_include_directories(navtypes INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
-target_link_libraries(navtypes INTERFACE xmotion::xmBase)
+target_link_libraries(navtypes INTERFACE xmotion::xmBase xmotion::xmBaseGeometry)
 add_library(xmotion::navtypes ALIAS navtypes)
 
 install(TARGETS navtypes

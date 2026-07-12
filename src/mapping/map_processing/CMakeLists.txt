@@ -14,6 +14,7 @@ add_library(map_processing
 )
 target_link_libraries(map_processing PUBLIC
     xmotion::xmBase
+    xmotion::xmBaseGeometry
     xmotion::navtypes
     Eigen3::Eigen
     ${OpenCV_LIBS}
