@@ -1,11 +1,19 @@
 ## Add source directories
-# Modules
+# Modules. types/estimation/control/simulation are always built (the control +
+# estimation foundation). The higher planning-stack tiers are opt-in (see the
+# XMNAV_WITH_* options) so a control-only consumer configures just what it uses.
 add_subdirectory(types)
-add_subdirectory(mapping)
-add_subdirectory(decision)
+if (XMNAV_WITH_MAPPING)
+  add_subdirectory(mapping)
+endif ()
+if (XMNAV_WITH_DECISION)
+  add_subdirectory(decision)
+endif ()
 add_subdirectory(estimation)
 add_subdirectory(control)
-add_subdirectory(planning)
+if (XMNAV_WITH_PLANNING)
+  add_subdirectory(planning)
+endif ()
 add_subdirectory(simulation)
 
 if (ENABLE_VISUALIZATION)

@@ -26,6 +26,15 @@ option(XMOTION_DEV_MODE "Development mode forces building tests" OFF)
 option(XMOTION_WERROR "Treat warnings as errors (-Wall -Wextra -Werror)" OFF)
 option(XMNAV_WITH_CUDA "Build CUDA rollout backends (requires CUDA toolkit)" OFF)
 
+# Per-tier opt-in gating (default ON). A consumer that only needs the control +
+# estimation algorithms (e.g. a locomotion-controller app) can turn the higher
+# planning-stack tiers OFF so they are never configured or built — narrow
+# ingestion to match narrow linkage, without splitting the repo (family stays
+# coarse; the CMake target is the dependency unit).
+option(XMNAV_WITH_PLANNING "Build the planning tier (graph/sampling/lattice/decomp/geometry)" ON)
+option(XMNAV_WITH_MAPPING "Build the mapping tier (occupancy / point-cloud processing)" ON)
+option(XMNAV_WITH_DECISION "Build the decision tier (markov / reachability / prediction)" ON)
+
 if (DEFINED ENV{ROS_DISTRO})
   set(BUILD_WITH_ROS ON)
 endif ()
@@ -168,21 +177,29 @@ endif ()
 
 ## Aggregate interface target: consumers link a single `xmotion::xmNavigation` to pull
 ## in the XMotion algorithm libraries (estimation, control, planning).
-add_library(xmNavigation INTERFACE)
-target_link_libraries(xmNavigation INTERFACE
+# Core (always present): types + estimation + control foundation. The higher
+# tiers are appended only when their XMNAV_WITH_* option is ON, so the aggregate
+# never references a target that gating removed. (`ctfsm`/`models` fixed here:
+# the list previously named `fsm`/`model`, which are not defined targets —
+# they resolved to phantom `-lfsm -lmodel` link flags for aggregate consumers.)
+set(_xmnav_targets
     navtypes
     estimation
     kinematics
     pid
-    fsm
-    model
-    geometry
-    decomp
-    sampling
-    map_processing
-    lattice
-    markov
-    reachability)
+    ctfsm
+    models)
+if (XMNAV_WITH_PLANNING)
+  list(APPEND _xmnav_targets geometry decomp sampling lattice)
+endif ()
+if (XMNAV_WITH_MAPPING)
+  list(APPEND _xmnav_targets map_processing)
+endif ()
+if (XMNAV_WITH_DECISION)
+  list(APPEND _xmnav_targets markov reachability)
+endif ()
+add_library(xmNavigation INTERFACE)
+target_link_libraries(xmNavigation INTERFACE ${_xmnav_targets})
 add_library(xmotion::xmNavigation ALIAS xmNavigation)
 install(TARGETS xmNavigation
     EXPORT xmNavigationTargets
