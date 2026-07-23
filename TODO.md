@@ -14,7 +14,7 @@ Active near-term work. Status: `[ ]` open · `[~]` in progress · `[x]` done. De
 
 ## Control / MPPI
 
-- [ ] Per-sample counter-seeded noise streams on the CPU rollout backend (lifts the sampling Amdahl cap — docs/typst/mppi.typ)
+- [ ] Per-sample counter-seeded noise streams on the CPU rollout backend (lifts the sampling Amdahl cap — docs/typst/main.typ § MPPI)
 - [ ] On-device spline-knot sampling for the SRB CUDA program
 - [ ] Jetson Orin deployment pass (unified memory: pinned staging maps zero-copy)
 - [ ] Safety shield S5: quadruped GRF friction-cone projection, with the SRB shield (docs/control/safety_shield.md)

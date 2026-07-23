@@ -56,7 +56,7 @@ What the pattern encodes:
 
 ## The reactive-control pattern (MPPI example)
 
-The MPPI controller (`xmnav/mppi/`, derivation in `docs/typst/mppi.typ`) composes with the hardware layer through the same shape: the controller plans over a kinematic model, the application converts the head of the plan into actuator commands.
+The MPPI controller (`xmnav/mppi/`, derivation in `docs/typst/main.typ`, MPPI section) composes with the hardware layer through the same shape: the controller plans over a kinematic model, the application converts the head of the plan into actuator commands.
 
 ```cpp
 #include "xmnav/mppi/mppi.hpp"                      // xmNavigation: sampling MPC core
