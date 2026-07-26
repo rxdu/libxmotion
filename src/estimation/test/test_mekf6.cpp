@@ -172,3 +172,22 @@ TEST(Mekf6Test, RejectsInvalidInput) {
                            GravityReading(Eigen::Quaterniond::Identity()), 0.01));
   EXPECT_TRUE(before.coeffs().isApprox(mekf.GetQuaternion().coeffs()));
 }
+
+// Regression: a diverged accel-bias estimate must not lock the gravity
+// observation out. The gate is a quasi-static detector on the RAW measurement
+// magnitude; keying it on the bias-corrected |a - b_f| let a runaway b_f reject
+// clean gravity forever, so the attitude could never re-level. See
+// docs/typst/mekf-errata.typ (C9).
+TEST(Mekf6Test, GravityGateUsesRawMagnitudeNotBiasCorrected) {
+  Mekf6 mekf;
+  Mekf6::Params p = DefaultParams();
+  p.accel_gate_threshold = 0.5;
+  p.init_accel_bias = Eigen::Vector3d(0.0, 0.0, 3.0);  // large, wrong accel bias
+  mekf.Initialize(p);
+
+  // Device is static: the raw accelerometer reads pure gravity (|a| = g), so the
+  // gate must accept it regardless of the (diverged) bias estimate.
+  const Eigen::Quaterniond q = Eigen::Quaterniond::Identity();
+  ASSERT_TRUE(mekf.Update(Eigen::Vector3d::Zero(), GravityReading(q), 0.01));
+  EXPECT_TRUE(mekf.LastUpdateUsedObservation());  // false under the |a - b_f| gate
+}

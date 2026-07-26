@@ -105,10 +105,17 @@ bool Mekf6::Update(const ControlInput &gyro_tilde,
   P_ = Phi * P_ * Phi.transpose() + GetQMatrix(dt);
 
   // --- gravity observation (gated: only valid when not accelerating) ---
+  // Gate on the RAW specific-force magnitude, not the bias-corrected
+  // |accel - b_f|. The gate is a quasi-static detector, a property of the
+  // measurement rather than the estimate; keying it on the accel bias lets a
+  // diverged b_f reject clean gravity even while stationary, and since the
+  // gravity update is the only observation that corrects both the attitude and
+  // b_f, the estimate self-locks with roll/pitch offset from level (errata C9).
+  // The update below still uses the bias-corrected accel.
   const Eigen::Vector3d g_i(0.0, 0.0, -params_.gravity_constant);
   last_obs_used_ =
       params_.accel_gate_threshold <= 0.0 ||
-      std::abs(accel.norm() - params_.gravity_constant) <=
+      std::abs(accel_tilde.norm() - params_.gravity_constant) <=
           params_.accel_gate_threshold;
   if (!last_obs_used_) {
     gate_reject_counter_.Add();
