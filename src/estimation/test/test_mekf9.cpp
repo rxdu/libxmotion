@@ -152,3 +152,36 @@ TEST(Mekf9Test, RejectsInvalidInput) {
                            Eigen::Vector3d(NAN, 0, 0), 0.01));
   EXPECT_TRUE(before.coeffs().isApprox(mekf.GetQuaternion().coeffs()));
 }
+
+// Regression: a diverged inertial-bias estimate must not lock its own sensor
+// out of the filter. The observation gate is a quasi-static / interference
+// detector on the RAW measurement magnitude; keying it on the bias-corrected
+// magnitude let a runaway bias reject a clean measurement forever, so the
+// attitude could never re-level. See docs/typst/mekf-errata.typ.
+TEST(Mekf9Test, AccelGateUsesRawMagnitudeNotBiasCorrected) {
+  Mekf9 mekf;
+  Mekf9::Params p = DefaultParams();
+  p.accel_gate_threshold = 0.5;
+  p.init_accel_bias = Eigen::Vector3d(0.0, 0.0, 3.0);  // large, wrong accel bias
+  mekf.Initialize(p);
+
+  // Device is static: the raw accelerometer reads pure gravity (|a| = g), so the
+  // gate must accept it regardless of the (diverged) bias estimate.
+  const Eigen::Quaterniond q = Eigen::Quaterniond::Identity();
+  ASSERT_TRUE(mekf.Update(Eigen::Vector3d::Zero(), GravityReading(q),
+                          MagReading(q), 0.01));
+  EXPECT_TRUE(mekf.LastUpdateUsedAccel());  // false under the |a - b_f| gate
+}
+
+TEST(Mekf9Test, MagGateUsesRawMagnitudeNotBiasCorrected) {
+  Mekf9 mekf;
+  Mekf9::Params p = DefaultParams();
+  p.mag_gate_threshold = 0.2 * kMagRef.norm();
+  p.init_mag_bias = kMagRef;  // large, wrong mag bias (~100% of the field)
+  mekf.Initialize(p);
+
+  const Eigen::Quaterniond q = Eigen::Quaterniond::Identity();
+  ASSERT_TRUE(mekf.Update(Eigen::Vector3d::Zero(), GravityReading(q),
+                          MagReading(q), 0.01));
+  EXPECT_TRUE(mekf.LastUpdateUsedMag());  // false under the |m - b_m| gate
+}
