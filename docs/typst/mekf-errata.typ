@@ -13,7 +13,7 @@
 
 = Summary
 
-Five errors were found in the derivation document and eight in the implementation. They fall into three classes: (1) *process-noise errors* in the document, copied into the code, that break the covariance's symmetry and consistency; (2) a *structural bookkeeping error* — the document omitted the bias fold-in and error-state reset, and the code consequently never accumulated bias estimates; (3) *production defects* in the code only (console I/O in the hot path, numerically fragile covariance update, no observation gating, no input validation).
+Five errors were found in the derivation document and nine in the implementation. They fall into three classes: (1) *process-noise errors* in the document, copied into the code, that break the covariance's symmetry and consistency; (2) a *structural bookkeeping error* — the document omitted the bias fold-in and error-state reset, and the code consequently never accumulated bias estimates; (3) *production defects* in the code only (console I/O in the hot path, numerically fragile covariance update, no observation gating, no input validation).
 
 = Errors in the derivation document
 
@@ -129,6 +129,10 @@ The gravity observation was applied unconditionally. Under dynamic acceleration 
 
 Float literals (`2.0f`, `3.0f`) mixed into double expressions; `q.inverse()` where `conjugate()` suffices on a normalized quaternion; no input validation (`dt <= 0`, NaN propagate silently — now rejected with the state untouched, pinned by `Mekf6Test.RejectsInvalidInput`).
 
+== C9 — Observation gate keyed on the bias-corrected magnitude (self-lock)
+
+The gate added in C7 (and the magnetometer gate) test the *bias-corrected* magnitude, $|thin| ||bold(a) - bold(beta)_f|| - g thin| <= tau$, coupling each gate to the very bias it helps estimate. This creates a feedback lock. Under sustained motion the accelerometer is (correctly) gated out, yet the magnetometer update still runs and, through the covariance cross-terms, drives $bold(beta)_f$ away from zero while the attitude is uncorrected. Once $bold(beta)_f$ has drifted, $||bold(a) - bold(beta)_f||$ no longer resembles $g$ *even when the device is static with clean gravity* — so the accelerometer stays gated, and since it is the only observation that corrects both the attitude and $bold(beta)_f$, the estimate cannot recover: roll and pitch lock at a tilted offset. *Fix:* gate on the *raw* measured magnitude, $|thin| ||tilde(bold(a))|| - g thin| <= tau$ (and likewise $||tilde(bold(m))||$ for the magnetometer) — the gate is a quasi-static / interference detector on the measurement, not the estimate; the innovation still uses the bias-corrected value. *Pinned by:* `Mekf9Test.AccelGateUsesRawMagnitudeNotBiasCorrected` and `Mekf9Test.MagGateUsesRawMagnitudeNotBiasCorrected` — a large seeded bias with a clean static reading must still be accepted. *Related:* the failure is most acute for a factory-calibrated IMU whose true bias is $approx 0$; such sensors should additionally pin the bias states with tight priors (cf. `CleanSensorParams`) so the bias never drifts to begin with.
+
 = Error-to-fix map
 
 #table(
@@ -145,6 +149,7 @@ Float literals (`2.0f`, `3.0f`) mixed into double expressions; `q.inverse()` whe
   [C6 covariance update form], [code], [CovarianceStaysSymmetricPositive],
   [C7 no gating], [code], [AccelGateRejectsDynamicAcceleration],
   [C8 validation/hygiene], [code], [RejectsInvalidInput],
+  [C9 gate self-lock on diverged bias], [code (Mekf9)], [AccelGate/MagGateUsesRawMagnitude],
 )
 
 Behavioral correctness of the whole is additionally pinned by `StaticAttitudeConvergence` (12° initial error converging below 0.5°, with the attitude/accel-bias observability manifold documented in the test) and `TracksSlowRollRotation` (sustained-motion tracking, gravity-direction error below 1°).

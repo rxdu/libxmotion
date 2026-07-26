@@ -137,10 +137,19 @@ bool Mekf9::Update(const ControlInput &gyro_tilde,
   P_ = 0.5 * (P_ + P_.transpose());
 
   // --- gravity observation (gated) ---
+  // Gate on the RAW specific-force magnitude, not the bias-corrected
+  // |accel - b_f|. The gate is a quasi-static detector ("is |a| ~ g right
+  // now?"), which is a property of the measurement, not of the estimated bias.
+  // Keying it on b_f creates a feedback lock: if b_f diverges (e.g. it absorbed
+  // error while the accel was gated out during motion), the bias-corrected
+  // magnitude no longer looks like gravity, so the filter rejects the
+  // accelerometer even while stationary with clean gravity -- and since the
+  // accelerometer is the only observation that corrects both attitude and b_f,
+  // it can never recover. The update below still uses the bias-corrected accel.
   const Eigen::Vector3d g_i(0.0, 0.0, -params_.gravity_constant);
   last_accel_used_ =
       params_.accel_gate_threshold <= 0.0 ||
-      std::abs(accel.norm() - params_.gravity_constant) <=
+      std::abs(accel_tilde.norm() - params_.gravity_constant) <=
           params_.accel_gate_threshold;
   if (last_accel_used_) {
     const Eigen::Vector3d h_a = q_hat_.conjugate() * g_i;
@@ -150,8 +159,10 @@ bool Mekf9::Update(const ControlInput &gyro_tilde,
   }
 
   // --- magnetometer observation (gated) ---
+  // Same rationale as the accelerometer: gate on the raw magnitude so a diverged
+  // magnetometer bias b_m cannot lock the magnetometer out.
   last_mag_used_ = params_.mag_gate_threshold <= 0.0 ||
-                   std::abs(mag.norm() - params_.mag_reference.norm()) <=
+                   std::abs(mag_tilde.norm() - params_.mag_reference.norm()) <=
                        params_.mag_gate_threshold;
   if (last_mag_used_) {
     const Eigen::Vector3d h_m = q_hat_.conjugate() * params_.mag_reference;
