@@ -20,6 +20,7 @@
 
 #include "xmnav/models/quadrotor.hpp"
 #include "xmnav/mppi/mppi.hpp"
+#include "xmnav/mppi/portable_normal.hpp"
 
 using namespace xmotion;
 
@@ -79,7 +80,9 @@ TEST(PipelineIntegrationTest, QuadrotorReachesAndHoldsWaypoint) {
   mppi.SeedSequence(hover);
 
   std::mt19937_64 rng(5);
-  std::normal_distribution<double> unit;
+  // Portable: std::normal_distribution's sequence is implementation-defined,
+  // so the injected disturbance would otherwise differ per platform too.
+  xmotion::PortableNormal unit;
 
   auto x = QuadrotorModel::MakeState(
       Eigen::Vector3d::Zero(), Eigen::Vector3d::Zero(),

@@ -21,6 +21,8 @@
 
 #include <eigen3/Eigen/Dense>
 
+#include "xmnav/mppi/portable_normal.hpp"
+
 namespace xmotion {
 
 // i.i.d. Gaussian perturbations, N(0, diag(sigma^2)) per channel — the base
@@ -45,7 +47,7 @@ class GaussianSampler {
 
  private:
   std::mt19937_64 generator_;
-  std::normal_distribution<double> unit_normal_{0.0, 1.0};
+  PortableNormal unit_normal_;
 };
 
 // Time-correlated (low-pass / Ornstein-Uhlenbeck style) perturbations:
@@ -77,7 +79,7 @@ class ColoredNoiseSampler {
  private:
   std::mt19937_64 generator_;
   double beta_;
-  std::normal_distribution<double> unit_normal_{0.0, 1.0};
+  PortableNormal unit_normal_;
 };
 
 // Normal-log-normal mixture perturbations (log-MPPI, Mohamed et al. 2022,
@@ -109,7 +111,7 @@ class LogMppiSampler {
  private:
   std::mt19937_64 generator_;
   double ln_sigma_;
-  std::normal_distribution<double> unit_normal_{0.0, 1.0};
+  PortableNormal unit_normal_;
 };
 
 // Spline-knot perturbations: noise is sampled at a small number of knots and
@@ -153,7 +155,7 @@ class SplineKnotSampler {
  private:
   std::mt19937_64 generator_;
   int num_knots_;
-  std::normal_distribution<double> unit_normal_{0.0, 1.0};
+  PortableNormal unit_normal_;
   Eigen::Matrix<double, Eigen::Dynamic, ControlDim> knots_;
 };
 
