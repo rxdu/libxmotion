@@ -8,7 +8,18 @@ add_library(lattice STATIC
   src/lookup_table.cpp
   src/primitive_generator.cpp
   src/state_lattice.cpp)
-target_link_libraries(lattice geometry)
+# Boost (header-only here: odeint). Previously resolved implicitly because
+# Debian installs Boost into /usr/include; link the imported target so any
+# prefix works. BoostConfig exports Boost::headers; the older FindBoost module
+# calls the same thing Boost::boost.
+find_package(Boost REQUIRED)
+if (TARGET Boost::headers)
+  set(XMNAV_BOOST Boost::headers)
+else ()
+  set(XMNAV_BOOST Boost::boost)
+endif ()
+
+target_link_libraries(lattice geometry ${XMNAV_BOOST})
 target_include_directories(lattice PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>

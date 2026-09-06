@@ -5,7 +5,12 @@ find_package(Boost REQUIRED)
 
 ## Add libraries
 add_library(markov src/markov_chain.cpp)
-target_link_libraries(markov Eigen3::Eigen)
+if (TARGET Boost::headers)
+  set(XMNAV_BOOST Boost::headers)
+else ()
+  set(XMNAV_BOOST Boost::boost)
+endif ()
+target_link_libraries(markov Eigen3::Eigen ${XMNAV_BOOST})
 target_include_directories(markov PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${EIGEN3_INCLUDE_DIR}>
