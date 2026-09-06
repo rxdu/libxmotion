@@ -23,8 +23,10 @@ public:
   void Sample(double *val);
 
 private:
-  double mean_;
-  double variance_;
+  // Retained copies of the distribution's parameters; Sample() reads
+  // distribution_ itself, so Clang flags these as unused.
+  [[maybe_unused]] double mean_;
+  [[maybe_unused]] double variance_;
 
   std::random_device rd_{};
   std::mt19937 generator_{rd_()};

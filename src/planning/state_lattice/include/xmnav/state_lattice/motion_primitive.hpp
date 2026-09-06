@@ -35,8 +35,10 @@ class MotionPrimitive
     MotionPrimitive(MotionState state_s, MotionState state_f);
     MotionPrimitive(MotionState state_s, MotionState state_f, PointKinematics::Param p);
 
-    // Defaulted big five
-    ~MotionPrimitive() = default;
+    // Defaulted big five. The destructor is virtual because Evaluate() is
+    // and StateLattice derives from this -- destroying a derived object
+    // through a MotionPrimitive handle would otherwise be undefined.
+    virtual ~MotionPrimitive() = default;
     MotionPrimitive(const MotionPrimitive &other) = default;
     MotionPrimitive &operator=(const MotionPrimitive &other) = default;
     MotionPrimitive(MotionPrimitive &&other) = default;

@@ -23,8 +23,10 @@ public:
   void Sample(double *val);
 
 private:
-  double min_;
-  double max_;
+  // Retained copies of the distribution's parameters; Sample() reads
+  // distribution_ itself, so Clang flags these as unused.
+  [[maybe_unused]] double min_;
+  [[maybe_unused]] double max_;
 
   std::random_device rd_{};
   std::mt19937 generator_{rd_()};
