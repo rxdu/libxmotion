@@ -166,6 +166,37 @@ endif ()
 install(TARGETS stb pnm rapidcsv stopwatch EXPORT xmNavigationTargets)
 
 ## Add source directories
+## Debian-style include prefixes
+# The sources include <eigen3/Eigen/...> and <opencv4/opencv2/...>, which
+# resolve out of the box only on Debian/Ubuntu, where eigen3/ and opencv4/ sit
+# directly in /usr/include. On any other prefix (Homebrew, vcpkg, a local
+# install) those directories live somewhere that is not itself on the search
+# path, so derive the parent from the package's own include dir and add it.
+#
+# Keeping the prefixes (rather than rewriting to <Eigen/...>) is deliberate:
+# they make the include unambiguous, which matters where a second Eigen is
+# present -- Homebrew's PCL pulls in Eigen 5 alongside the eigen@3 this project
+# builds against, and an unprefixed <Eigen/Core> can bind to either.
+function(xmnav_add_parent_include_dir dir)
+  if (dir AND EXISTS "${dir}")
+    get_filename_component(_parent "${dir}" DIRECTORY)
+    include_directories(SYSTEM "${_parent}")
+  endif ()
+endfunction()
+
+find_package(Eigen3 QUIET NO_MODULE)
+if (TARGET Eigen3::Eigen)
+  get_target_property(_xmnav_eigen_inc Eigen3::Eigen INTERFACE_INCLUDE_DIRECTORIES)
+  list(GET _xmnav_eigen_inc 0 _xmnav_eigen_inc0)
+  xmnav_add_parent_include_dir("${_xmnav_eigen_inc0}")
+endif ()
+
+find_package(OpenCV QUIET)
+if (OpenCV_INCLUDE_DIRS)
+  list(GET OpenCV_INCLUDE_DIRS 0 _xmnav_ocv_inc0)
+  xmnav_add_parent_include_dir("${_xmnav_ocv_inc0}")
+endif ()
+
 add_subdirectory(src)
 
 ## Cross-module integration tests (composed algorithm pipelines against
