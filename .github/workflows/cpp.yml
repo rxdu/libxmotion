@@ -79,6 +79,37 @@ jobs:
         shell: bash
         run: ctest -LE "campaign|allocation" --output-on-failure
 
+  # macOS coverage: AppleClang + libc++ on arm64. Clang reports a set of
+  # diagnostics GCC does not (-Wunused-private-field,
+  # -Wdelete-non-abstract-non-virtual-dtor), so this lane is what keeps the
+  # -Werror build honest beyond GCC's warning set. It also exercises the
+  # MPPI sampler's cross-platform reproducibility, which is the whole point
+  # of PortableNormal.
+  macos:
+    name: macOS (arm64)
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v5
+      - name: Update submodules
+        run: git submodule update --init --recursive
+      - name: Install dependencies
+        # eigen@3 and opencv@4 are keg-only: Homebrew defaults to Eigen 5 and
+        # OpenCV 5, and this project targets the 3.x/4.x APIs.
+        run: brew install eigen@3 opencv@4 pcl boost abseil re2 glm glfw cairo fontconfig
+      - name: Configure CMake
+        shell: bash
+        run: >
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+          -DBUILD_TESTING=ON -DXMOTION_WERROR=ON
+          -DCMAKE_PREFIX_PATH="$(brew --prefix eigen@3);$(brew --prefix opencv@4)"
+      - name: Build
+        shell: bash
+        run: cmake --build build -j"$(sysctl -n hw.ncpu)" --config $BUILD_TYPE
+      - name: Test
+        working-directory: build
+        shell: bash
+        run: ctest --output-on-failure --no-tests=error
+
   sanitizers:
     runs-on: ubuntu-24.04
     steps:

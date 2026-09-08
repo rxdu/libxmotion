@@ -23,8 +23,8 @@ public:
   void Sample(double *val);
 
 private:
-  double mean_;
-  double variance_;
+  // The distribution owns the parameters; read them back with
+  // distribution_.mean() / .stddev() if ever needed.
 
   std::random_device rd_{};
   std::mt19937 generator_{rd_()};

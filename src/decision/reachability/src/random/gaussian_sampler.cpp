@@ -11,7 +11,7 @@
 
 using namespace xmotion;
 
-GaussianSampler::GaussianSampler(double mean, double variance) : mean_(mean), variance_(variance), distribution_(mean, variance)
+GaussianSampler::GaussianSampler(double mean, double variance) : distribution_(mean, variance)
 {
 }
 

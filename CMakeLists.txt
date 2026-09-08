@@ -115,6 +115,19 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 ## Dependent libraries
 add_subdirectory(third_party)
 
+## The vendored googletest headers must win over any system-installed copy.
+## PCL and OpenCV export their whole dependency prefix (Homebrew's
+## /opt/homebrew/include, say) onto the search path. If a different googletest
+## is installed there, its headers are found first while the vendored
+## libgtest.a is what actually gets linked -- an ABI mismatch that surfaces
+## only as undefined testing::internal symbols at link time. Prepending keeps
+## the vendored headers ahead of anything a dependency drags in.
+if (TARGET gtest)
+  include_directories(BEFORE SYSTEM
+      ${CMAKE_CURRENT_SOURCE_DIR}/third_party/googletest/googletest/include
+      ${CMAKE_CURRENT_SOURCE_DIR}/third_party/googletest/googlemock/include)
+endif ()
+
 ## Foundation (external). A parent superbuild may already provide it.
 if (NOT TARGET xmotion::xmBase)
   find_package(xmBase 0.4.0 QUIET)
@@ -145,13 +158,19 @@ if (XMOTION_WERROR)
   # gate: GCC 12/13 fire them on Eigen's SSE vectorization of small
   # fixed-size matrices (16-byte __m128d loads from 8-byte 1x1 objects),
   # a documented upstream false positive.
-  add_compile_options(-Wall -Wextra -Werror -Wno-error=maybe-uninitialized
-      -Wno-error=array-bounds -Wno-error=stringop-overread)
+  add_compile_options(-Wall -Wextra -Werror)
+  # The -Wno-error= entries below name GCC-only diagnostics. Clang rejects
+  # unknown warning options outright (-Wunknown-warning-option), and under
+  # -Werror that fails the build, so gate them on the compiler.
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    add_compile_options(-Wno-error=maybe-uninitialized
+        -Wno-error=array-bounds -Wno-error=stringop-overread)
+  endif ()
   # Vendored header-only libraries are consumed from first-party TUs; mark
   # their include directories SYSTEM so their headers never gate our build.
   # (quickviz modules included: its headers reach first-party TUs the same
   # way, and quickviz builds with its own flags, not ours)
-  foreach (_vendored stb rapidcsv pnm ctfsm core viewer canvas plot image imcore)
+  foreach (_vendored stb rapidcsv pnm ctfsm quadprogpp core viewer canvas plot image imcore)
     if (TARGET ${_vendored})
       get_target_property(_inc ${_vendored} INTERFACE_INCLUDE_DIRECTORIES)
       set_target_properties(${_vendored} PROPERTIES
@@ -166,6 +185,37 @@ endif ()
 install(TARGETS stb pnm rapidcsv stopwatch EXPORT xmNavigationTargets)
 
 ## Add source directories
+## Debian-style include prefixes
+# The sources include <eigen3/Eigen/...> and <opencv4/opencv2/...>, which
+# resolve out of the box only on Debian/Ubuntu, where eigen3/ and opencv4/ sit
+# directly in /usr/include. On any other prefix (Homebrew, vcpkg, a local
+# install) those directories live somewhere that is not itself on the search
+# path, so derive the parent from the package's own include dir and add it.
+#
+# Keeping the prefixes (rather than rewriting to <Eigen/...>) is deliberate:
+# they make the include unambiguous, which matters where a second Eigen is
+# present -- Homebrew's PCL pulls in Eigen 5 alongside the eigen@3 this project
+# builds against, and an unprefixed <Eigen/Core> can bind to either.
+function(xmnav_add_parent_include_dir dir)
+  if (dir AND EXISTS "${dir}")
+    get_filename_component(_parent "${dir}" DIRECTORY)
+    include_directories(SYSTEM "${_parent}")
+  endif ()
+endfunction()
+
+find_package(Eigen3 QUIET NO_MODULE)
+if (TARGET Eigen3::Eigen)
+  get_target_property(_xmnav_eigen_inc Eigen3::Eigen INTERFACE_INCLUDE_DIRECTORIES)
+  list(GET _xmnav_eigen_inc 0 _xmnav_eigen_inc0)
+  xmnav_add_parent_include_dir("${_xmnav_eigen_inc0}")
+endif ()
+
+find_package(OpenCV QUIET)
+if (OpenCV_INCLUDE_DIRS)
+  list(GET OpenCV_INCLUDE_DIRS 0 _xmnav_ocv_inc0)
+  xmnav_add_parent_include_dir("${_xmnav_ocv_inc0}")
+endif ()
+
 add_subdirectory(src)
 
 ## Cross-module integration tests (composed algorithm pipelines against

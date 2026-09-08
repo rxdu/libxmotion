@@ -23,8 +23,8 @@ public:
   void Sample(double *val);
 
 private:
-  double min_;
-  double max_;
+  // The distribution owns the parameters; read them back with
+  // distribution_.a() / .b() if ever needed.
 
   std::random_device rd_{};
   std::mt19937 generator_{rd_()};

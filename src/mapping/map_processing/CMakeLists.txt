@@ -2,7 +2,12 @@ find_package(PCL REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(Eigen3 REQUIRED NO_MODULE)
 
-include_directories(${PCL_INCLUDE_DIRS})
+# SYSTEM: PCL's include dirs pull in the whole dependency prefix (Homebrew's
+# /opt/homebrew/include, say). Without SYSTEM those precede this project's
+# own -I paths and can shadow the vendored googletest headers, which then
+# mismatch the vendored libgtest at link time. SYSTEM also keeps PCL's
+# warnings from gating, matching how the other vendored deps are treated.
+include_directories(SYSTEM ${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 

@@ -11,7 +11,7 @@
 
 using namespace xmotion;
 
-UniformSampler::UniformSampler(double min, double max) : min_(min), max_(max), distribution_(min, max)
+UniformSampler::UniformSampler(double min, double max) : distribution_(min, max)
 {
 }
 

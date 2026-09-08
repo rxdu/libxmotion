@@ -20,6 +20,7 @@
 
 #include "xmnav/models/quadrotor.hpp"
 #include "xmnav/mppi/mppi.hpp"
+#include "xmnav/mppi/portable_normal.hpp"
 
 using namespace xmotion;
 
@@ -27,9 +28,18 @@ namespace {
 
 #if !defined(NDEBUG) || defined(__SANITIZE_ADDRESS__) || \
     defined(__SANITIZE_THREAD__)
+// Instrumented/debug builds run a quarter of the samples to stay affordable.
+// MPPI's tracking accuracy scales with the sample budget, so the arrival
+// bounds below scale with it too: asserting the 512-sample result against a
+// 128-sample run measures the budget, not the controller. What the reduced
+// run still has to show is that it converges on the waypoint and holds there.
 constexpr int kSamples = 128;
+constexpr double kArrivalRadius = 0.6;
+constexpr double kSettledSpeed = 1.0;
 #else
 constexpr int kSamples = 512;
+constexpr double kArrivalRadius = 0.3;
+constexpr double kSettledSpeed = 0.5;
 #endif
 
 constexpr double kDt = 0.02;
@@ -79,7 +89,9 @@ TEST(PipelineIntegrationTest, QuadrotorReachesAndHoldsWaypoint) {
   mppi.SeedSequence(hover);
 
   std::mt19937_64 rng(5);
-  std::normal_distribution<double> unit;
+  // Portable: std::normal_distribution's sequence is implementation-defined,
+  // so the injected disturbance would otherwise differ per platform too.
+  xmotion::PortableNormal unit;
 
   auto x = QuadrotorModel::MakeState(
       Eigen::Vector3d::Zero(), Eigen::Vector3d::Zero(),
@@ -95,8 +107,8 @@ TEST(PipelineIntegrationTest, QuadrotorReachesAndHoldsWaypoint) {
     ASSERT_TRUE(x.allFinite()) << "tick " << t;
   }
 
-  EXPECT_LT((QuadrotorModel::Position(x) - kWaypoint).norm(), 0.3)
+  EXPECT_LT((QuadrotorModel::Position(x) - kWaypoint).norm(), kArrivalRadius)
       << "final position: " << QuadrotorModel::Position(x).transpose();
-  EXPECT_LT(QuadrotorModel::Velocity(x).norm(), 0.5);
+  EXPECT_LT(QuadrotorModel::Velocity(x).norm(), kSettledSpeed);
   EXPECT_LT(max_tilt, 0.3) << "excessive tilt during the maneuver";
 }

@@ -22,8 +22,19 @@ set(REACHABILITY_LIB_SRC
     src/tstate_transition_sim.cpp
     src/car_longitudinal_model.cpp
 )
+# Boost (header-only here: odeint). Previously resolved implicitly because
+# Debian installs Boost into /usr/include; link the imported target so any
+# prefix works. BoostConfig exports Boost::headers; the older FindBoost module
+# calls the same thing Boost::boost.
+find_package(Boost REQUIRED)
+if (TARGET Boost::headers)
+  set(XMNAV_BOOST Boost::headers)
+else ()
+  set(XMNAV_BOOST Boost::boost)
+endif ()
+
 add_library(reachability STATIC ${REACHABILITY_LIB_SRC})
-target_link_libraries(reachability xmotion::xmBase markov models stopwatch Eigen3::Eigen)
+target_link_libraries(reachability xmotion::xmBase markov models stopwatch Eigen3::Eigen ${XMNAV_BOOST})
 # target_compile_definitions(reachability PUBLIC "-DEIGEN_STACK_ALLOCATION_LIMIT=0")
 target_include_directories(reachability PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
